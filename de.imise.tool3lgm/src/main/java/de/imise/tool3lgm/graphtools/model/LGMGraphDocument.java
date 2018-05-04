@@ -168,7 +168,7 @@ public class LGMGraphDocument extends GraphDocument {
     public final List<ElementContainer> getSortedSelection() {
         List<NodeContainer>[] sortingElements = new List[layer.length];
         for (int i = 0; i < layer.length; i++) {
-            sortingElements[i] = layer[i].getNodeContainers();
+            sortingElements[i] = layer[i].getNodeContainer();
         }
         return selectedContainer.getSortedSelection(sortingElements);
     }

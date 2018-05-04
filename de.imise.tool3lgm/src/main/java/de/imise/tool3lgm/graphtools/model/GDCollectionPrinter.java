@@ -39,13 +39,13 @@ public class GDCollectionPrinter {
             appendln("Layer ", layerIndex, " Knoten: ", lc.getNodeContainerCount(), " Kanten: ", lc.getEdgeContainerCount(), " Knickpunkte: ", lc.getBendpointContainerCount());
             appendln("Knoten");
             increaseIndent();
-            for (NodeContainer nc : lc.getNodeContainers()) {
+            for (NodeContainer nc : lc.getNodeContainer()) {
                 appendElementContainer(nc);
             }
             decreaseIndent();
             appendln("Kanten");
             increaseIndent();
-            for (EdgeContainer ec : lc.getEdgeContainers()) {
+            for (EdgeContainer ec : lc.getEdgeContainer()) {
                 appendElementContainer(ec);
             }
             decreaseIndent();

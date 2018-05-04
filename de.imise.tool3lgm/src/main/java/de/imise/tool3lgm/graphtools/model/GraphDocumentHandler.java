@@ -160,11 +160,11 @@ public class GraphDocumentHandler {
             }
             //Node, die keine Knickpunkte sind
             if (searchNodes) {
-                layerElements.add(alphabetical ? lc.getNodeContainersAlphabetical() : lc.getNodeContainers());
+                layerElements.add(alphabetical ? lc.getNodeContainersAlphabetical() : lc.getNodeContainer());
             }
             //Kanten
             if (searchEdges) {
-                layerElements.add(lc.getEdgeContainers());
+                layerElements.add(lc.getEdgeContainer());
             }
             //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefügt
             for (List<? extends ElementContainer> ecList : layerElements) {

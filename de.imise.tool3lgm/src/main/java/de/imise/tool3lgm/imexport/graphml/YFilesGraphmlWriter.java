@@ -131,13 +131,13 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         for (int layer : ModelConstants.VISIBLE_LAYERS) {
             LayerContainer lc = szenario.getLayer(layer);
             writeLabelStyleAsSharedData(lc);
-            for (NodeContainer nc : lc.getNodeContainers()) {
+            for (NodeContainer nc : lc.getNodeContainer()) {
                 writeLabelStyleAsSharedData(nc);
                 if (!writeIconAsSharedData(nc)) {
                     writeNodeStyleAsSharedData(nc);
                 }
             }
-            for (EdgeContainer ec : lc.getEdgeContainers()) {
+            for (EdgeContainer ec : lc.getEdgeContainer()) {
                 writeEdgeStyleAsSharedData(ec);
             }
         }

@@ -360,7 +360,7 @@ public final class GDCollection extends UserFieldTarget {
         //bei allen Elementen, die mit dem zu löschenden Teilmodell verknüpft sind
         //den Verweis auf dieses Teilmodell löschen (das passiert im Hauptmodell)
         for (LayerContainer layer : doc.getLayers()) {
-            for (NodeContainer nc : layer.getNodeContainers()) {
+            for (NodeContainer nc : layer.getNodeContainer()) {
                 Node node = nc.getKnoten();
                 String associatedDoc = node.getAssociatedDoc();
                 if (associatedDoc != null && associatedDoc.equals(szenHash)) {
@@ -372,8 +372,8 @@ public final class GDCollection extends UserFieldTarget {
         List<ElementContainer> elementsToDelete = new ArrayList<>();
         for (LayerContainer layer : szen.getLayers()) {
             elementsToDelete.addAll(layer.getBendpointContainers());
-            elementsToDelete.addAll(layer.getEdgeContainers());
-            elementsToDelete.addAll(layer.getNodeContainers());
+            elementsToDelete.addAll(layer.getEdgeContainer());
+            elementsToDelete.addAll(layer.getNodeContainer());
         }
         removeContainerFromSubmodel(elementsToDelete, pid);
         szenarios.remove(szen);
@@ -1893,7 +1893,7 @@ public final class GDCollection extends UserFieldTarget {
     public void resolveCopyDependencies(final List<? extends GraphDocument> export, final List<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
         /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
         for (LayerContainer lc : doc.getLayers()) {
-            for (NodeContainer nc : lc.getNodeContainers()) {
+            for (NodeContainer nc : lc.getNodeContainer()) {
                 Node node = nc.getKnoten();
                 for (GraphDocument doc : export) {
                     if (doc.isMyElement(node)) {
@@ -1909,7 +1909,7 @@ public final class GDCollection extends UserFieldTarget {
                     }
                 }
             }
-            for (EdgeContainer ec : lc.getEdgeContainers()) {
+            for (EdgeContainer ec : lc.getEdgeContainer()) {
                 Edge edge = ec.getEdge();
                 for (GraphDocument doc : export) {
                     if (doc.isMyElement(edge)) {

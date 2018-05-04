@@ -94,8 +94,8 @@ public class ModelCleaner {
         // Mist und wird hier berichtigt.
         for (GraphDocument doc : docs) {
             for (LayerContainer lc : doc.getLayers()) {
-                List<ElementContainer> allEc = new ArrayList<>(lc.getNodeContainers());
-                allEc.addAll(lc.getEdgeContainers());
+                List<ElementContainer> allEc = new ArrayList<>(lc.getNodeContainer());
+                allEc.addAll(lc.getEdgeContainer());
                 allEc.addAll(lc.getBendpointContainers());
                 // für alle Container des aktuellen GraphDocuments
                 for (ElementContainer layerElemCont : allEc) {
@@ -159,14 +159,14 @@ public class ModelCleaner {
                             lc.add(ec);
                         }
                     } else if (me instanceof Node) {
-                        if (!lc.getNodeContainers().contains(ec)) {
+                        if (!lc.getNodeContainer().contains(ec)) {
                             if (PRINT_ERRORS) {
                                 print(me, doc, 5);
                             }
                             lc.add(ec);
                         }
                     } else if (me instanceof Edge) {
-                        if (!lc.getEdgeContainers().contains(ec)) {
+                        if (!lc.getEdgeContainer().contains(ec)) {
                             if (PRINT_ERRORS) {
                                 print(me, doc, 6);
                             }

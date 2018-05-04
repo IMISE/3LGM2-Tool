@@ -52,22 +52,22 @@ public class LayerContainer extends ElementContainer {
     /**
      * Liste, aus der die Grafik aufgebaut wird (Reihenfolge der Elemente bestimmt, welches zuerst gemalt wird)
      */
-    private List<NodeContainer> nodeContainer;
+    private List<NodeContainer> nodeContainers;
 
     /**
      * Liste, aus der der Baum aufgebaut wird (Reihenfolge der Elemente wird alphabetisch gehalten)
      */
-    private List<NodeContainer> alphabeticalNodeContainer;
+    private List<NodeContainer> alphabeticalNodeContainers;
 
     /**
      *
      */
-    private List<EdgeContainer> edgeContainer;
+    private List<EdgeContainer> edgeContainers;
 
     /**
      *
      */
-    private List<BendpointContainer> bendpointContainer;
+    private List<BendpointContainer> bendpointContainers;
 
     /**
      * Liste aller NodeContainer, fuer die die Kanten sortiert werden muessen (momentan nur Prozesse)
@@ -132,7 +132,7 @@ public class LayerContainer extends ElementContainer {
      * in der Regel falsch einsortiert wurden.
      */
     public void refreshAlpahbetical() {
-        Alphabetical.sort(alphabeticalNodeContainer);
+        Alphabetical.sort(alphabeticalNodeContainers);
     }
 
     /**
@@ -140,15 +140,15 @@ public class LayerContainer extends ElementContainer {
      */
     private void init() {
         if (doc instanceof Szenario) {
-            nodeContainer = new ArrayList<>(100);
-            alphabeticalNodeContainer = new ArrayList<>(100);
-            edgeContainer = new ArrayList<>(100);
-            bendpointContainer = new ArrayList<>(50);
+            nodeContainers = new ArrayList<>(100);
+            alphabeticalNodeContainers = new ArrayList<>(100);
+            edgeContainers = new ArrayList<>(100);
+            bendpointContainers = new ArrayList<>(50);
         } else {
-            nodeContainer = new ArrayList<>(500);
-            alphabeticalNodeContainer = new ArrayList<>(500);
-            edgeContainer = new ArrayList<>(500);
-            bendpointContainer = new ArrayList<>(1000);
+            nodeContainers = new ArrayList<>(500);
+            alphabeticalNodeContainers = new ArrayList<>(500);
+            edgeContainers = new ArrayList<>(500);
+            bendpointContainers = new ArrayList<>(1000);
         }
         numberedEdgesNodeContainer = new ArrayList<>(10);
         tmpEdgeContainer = new ArrayList<>(100);
@@ -178,13 +178,13 @@ public class LayerContainer extends ElementContainer {
         int counter = 0;
 
         if (ReflectionUtils.isAssignable(elementClass, Node.class)) {
-            counter += countType(alphabeticalNodeContainer, Node.class);
+            counter += countType(alphabeticalNodeContainers, Node.class);
         }
         if (ReflectionUtils.isAssignable(elementClass, Edge.class)) {
-            counter += countType(edgeContainer, Edge.class);
+            counter += countType(edgeContainers, Edge.class);
         }
         if (ReflectionUtils.isAssignable(elementClass, Knickpunkt.class)) {
-            counter += countType(bendpointContainer, Knickpunkt.class);
+            counter += countType(bendpointContainers, Knickpunkt.class);
         }
         return counter;
     }
@@ -216,7 +216,7 @@ public class LayerContainer extends ElementContainer {
     public void z_move_up(final ElementContainer ec) {
         boolean visible = ec.isVisible();
         remove(ec);
-        add(ec, nodeContainer.size());
+        add(ec, nodeContainers.size());
         raiseSlaves(ec, 0);
         ec.setVisible(visible);
     }
@@ -229,7 +229,7 @@ public class LayerContainer extends ElementContainer {
         if (!(ec instanceof NodeContainer)) {
             return;
         }
-        if (position < 0 || position > nodeContainer.size()) {
+        if (position < 0 || position > nodeContainers.size()) {
             return;
         }
         int index = indexOf(ec);
@@ -451,11 +451,11 @@ public class LayerContainer extends ElementContainer {
 
         tmpEdgeContainer.clear();
 
-        for (NodeContainer ec : nodeContainer) {
+        for (NodeContainer ec : nodeContainers) {
             ec.paint(g);
         }
         boolean isPaintEdgesOnlyForSelectedElements = UserProperties.is(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS);
-        for (EdgeContainer ec : edgeContainer) {
+        for (EdgeContainer ec : edgeContainers) {
             if (isPaintEdgesOnlyForSelectedElements) {
                 Edge edge = (Edge) ec.getElement();
                 ModelElement start = edge.getStart();
@@ -475,7 +475,7 @@ public class LayerContainer extends ElementContainer {
         }
 
         if (!isPaintEdgesOnlyForSelectedElements) {
-            for (BendpointContainer ec : bendpointContainer) {
+            for (BendpointContainer ec : bendpointContainers) {
                 ec.paint(g);
             }
             paintingSurrogates = true;
@@ -525,17 +525,17 @@ public class LayerContainer extends ElementContainer {
      */
     public boolean containsHashString(final String hashString) {
         if (!doc.getCollection().isBulkMode()) {
-            for (NodeContainer ec : nodeContainer) {
+            for (NodeContainer ec : nodeContainers) {
                 if (ec.getHashString().equals(hashString)) {
                     return true;
                 }
             }
-            for (EdgeContainer ec : edgeContainer) {
+            for (EdgeContainer ec : edgeContainers) {
                 if (ec.getHashString().equals(hashString)) {
                     return true;
                 }
             }
-            for (BendpointContainer ec : bendpointContainer) {
+            for (BendpointContainer ec : bendpointContainers) {
                 if (ec.getHashString().equals(hashString)) {
                     return true;
                 }
@@ -548,8 +548,8 @@ public class LayerContainer extends ElementContainer {
      * @param kc
      */
     public void resetPositionOf(final NodeContainer kc) {
-        if (alphabeticalNodeContainer.remove(kc)) {
-            Alphabetical.insert(alphabeticalNodeContainer, kc);
+        if (alphabeticalNodeContainers.remove(kc)) {
+            Alphabetical.insert(alphabeticalNodeContainers, kc);
         }
     }
 
@@ -566,24 +566,24 @@ public class LayerContainer extends ElementContainer {
         //		comp = super.add(comp);
         if (comp instanceof BendpointContainer) {
             if (pos != -1) {
-                bendpointContainer.add(pos, (BendpointContainer) comp);
+                bendpointContainers.add(pos, (BendpointContainer) comp);
             } else {
-                bendpointContainer.add((BendpointContainer) comp);
+                bendpointContainers.add((BendpointContainer) comp);
             }
         } else if (comp instanceof EdgeContainer) {
             if (pos != -1) {
-                edgeContainer.add(pos, (EdgeContainer) comp);
+                edgeContainers.add(pos, (EdgeContainer) comp);
             } else {
-                edgeContainer.add((EdgeContainer) comp);
+                edgeContainers.add((EdgeContainer) comp);
             }
         } else {
             NodeContainer nc = (NodeContainer) comp;
             if (pos != -1) {
-                nodeContainer.add(pos, nc);
+                nodeContainers.add(pos, nc);
             } else {
-                nodeContainer.add(nc);
+                nodeContainers.add(nc);
             }
-            Alphabetical.insert(alphabeticalNodeContainer, nc);
+            Alphabetical.insert(alphabeticalNodeContainers, nc);
             Node node = nc.getKnoten();
             if (ModelConstants.hasSortedEdgeClassesToPaintable(node.getClass())) {
                 numberedEdgesNodeContainer.add(nc);
@@ -603,22 +603,22 @@ public class LayerContainer extends ElementContainer {
             return;
         }
         if (comp instanceof BendpointContainer) {
-            bendpointContainer.remove(comp);
+            bendpointContainers.remove(comp);
         } else if (comp instanceof EdgeContainer) {
-            edgeContainer.remove(comp);
+            edgeContainers.remove(comp);
         } else {
-            nodeContainer.remove(comp);
-            alphabeticalNodeContainer.remove(comp);
+            nodeContainers.remove(comp);
+            alphabeticalNodeContainers.remove(comp);
             numberedEdgesNodeContainer.remove(comp);
         }
     }
 
     @Override
     public void removeAll() {
-        nodeContainer.clear();
-        alphabeticalNodeContainer.clear();
-        edgeContainer.clear();
-        bendpointContainer.clear();
+        nodeContainers.clear();
+        alphabeticalNodeContainers.clear();
+        edgeContainers.clear();
+        bendpointContainers.clear();
         numberedEdgesNodeContainer.clear();
     }
 
@@ -634,9 +634,9 @@ public class LayerContainer extends ElementContainer {
                 //hole ihren Container
                 EdgeContainer kantCont = (EdgeContainer) egde.getContainer(doc);
                 //loesche ihn aus kanten
-                edgeContainer.remove(kantCont);
+                edgeContainers.remove(kantCont);
                 //fuege ihn am Ende wieder hinzu
-                edgeContainer.add(kantCont);
+                edgeContainers.add(kantCont);
             }
         }
     }
@@ -654,51 +654,51 @@ public class LayerContainer extends ElementContainer {
      * @return
      */
     public int indexOf(final ElementContainer ec) {
-        return nodeContainer.indexOf(ec);
+        return nodeContainers.indexOf(ec);
     }
 
     /**
      * @return
      */
     public List<NodeContainer> getNodeContainersAlphabetical() {
-        return alphabeticalNodeContainer;
+        return alphabeticalNodeContainers;
     }
 
     /**
      * @return
      */
-    public List<NodeContainer> getNodeContainers() {
-        return nodeContainer;
+    public List<NodeContainer> getNodeContainer() {
+        return nodeContainers;
     }
 
     /**
      * @return
      */
-    public List<EdgeContainer> getEdgeContainers() {
-        return edgeContainer;
+    public List<EdgeContainer> getEdgeContainer() {
+        return edgeContainers;
     }
 
     /**
      * @return
      */
     public List<BendpointContainer> getBendpointContainers() {
-        return bendpointContainer;
+        return bendpointContainers;
     }
 
-    public Iterable<NodeContainer> getNodeContainer() {
-        return () -> nodeContainer.listIterator();
+    public Iterable<NodeContainer> getNodeContainers() {
+        return () -> nodeContainers.listIterator();
     }
 
     public Iterable<NodeContainer> getNodeContainersBackward() {
-        return CollectionUtils.getBackwardIterable(nodeContainer);
+        return CollectionUtils.getBackwardIterable(nodeContainers);
     }
 
-    public Iterable<EdgeContainer> getEdgeContainer() {
-        return () -> edgeContainer.listIterator();
+    public Iterable<EdgeContainer> getEdgeContainers() {
+        return () -> edgeContainers.listIterator();
     }
 
     public Iterable<EdgeContainer> getEdgeContainersBackward() {
-        return CollectionUtils.getBackwardIterable(edgeContainer);
+        return CollectionUtils.getBackwardIterable(edgeContainers);
     }
 
     /**
@@ -714,7 +714,7 @@ public class LayerContainer extends ElementContainer {
      * @return
      */
     public EdgeContainer getEdgeContainer(final int i) {
-        return edgeContainer.get(i);
+        return edgeContainers.get(i);
     }
 
     /**
@@ -722,7 +722,7 @@ public class LayerContainer extends ElementContainer {
      * @return
      */
     public EdgeContainer getEdgeContainer(final String hashString) {
-        for (EdgeContainer kc : edgeContainer) {
+        for (EdgeContainer kc : edgeContainers) {
             if (kc.getHashString().equals(hashString)) {
                 return kc;
             }
@@ -735,28 +735,28 @@ public class LayerContainer extends ElementContainer {
      * @return
      */
     public BendpointContainer getBendpointContainer(final int i) {
-        return bendpointContainer.get(i);
+        return bendpointContainers.get(i);
     }
 
     /**
      * @return
      */
     public int getNodeContainerCount() {
-        return nodeContainer.size();
+        return nodeContainers.size();
     }
 
     /**
      * @return
      */
     public int getEdgeContainerCount() {
-        return edgeContainer.size();
+        return edgeContainers.size();
     }
 
     /**
      * @return
      */
     public int getBendpointContainerCount() {
-        return bendpointContainer.size();
+        return bendpointContainers.size();
     }
 
     /**
@@ -765,13 +765,13 @@ public class LayerContainer extends ElementContainer {
      */
     public boolean isMyElement(final ElementContainer ec) {
         if (ec instanceof BendpointContainer) {
-            return bendpointContainer.contains(ec);
+            return bendpointContainers.contains(ec);
         }
         if (ec instanceof NodeContainer) {
-            return nodeContainer.contains(ec);
+            return nodeContainers.contains(ec);
         }
         if (ec instanceof EdgeContainer) {
-            return edgeContainer.contains(ec);
+            return edgeContainers.contains(ec);
         }
         return false;
     }
@@ -793,7 +793,7 @@ public class LayerContainer extends ElementContainer {
      */
     public void setShowInterLayerConnections(final boolean showInterLayerConnections) {
         this.showInterLayerConnections = showInterLayerConnections;
-        for (NodeContainer ec : nodeContainer) {
+        for (NodeContainer ec : nodeContainers) {
             setShowInterLayerConnections(showInterLayerConnections, ec);
         }
     }
@@ -909,7 +909,7 @@ public class LayerContainer extends ElementContainer {
     }
 
     public void printStatistics() {
-        System.err.println("Layer " + layerNumber + "    nodeContainer: " + nodeContainer.size() + " -> " + ReflectionUtils.getCommonSuperClass(nodeContainer));
+        System.err.println("Layer " + layerNumber + "    nodeContainer: " + nodeContainers.size() + " -> " + ReflectionUtils.getCommonSuperClass(nodeContainers));
     }
 
 }

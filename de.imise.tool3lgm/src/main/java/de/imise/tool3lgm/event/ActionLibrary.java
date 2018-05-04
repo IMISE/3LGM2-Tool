@@ -406,7 +406,7 @@ public class ActionLibrary {
                         return false;
                     }
                     LayerContainer lc = Static.getSelectedDoc().getActiveLayer();
-                    for (ElementContainer ec : lc.getNodeContainers()) {
+                    for (ElementContainer ec : lc.getNodeContainer()) {
                         if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
                             boolean hasVisibleConfigs = ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections();
                             if (visible != hasVisibleConfigs) {

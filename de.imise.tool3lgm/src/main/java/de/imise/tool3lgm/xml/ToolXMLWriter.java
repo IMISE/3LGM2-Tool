@@ -362,11 +362,11 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         } else {
             LGMGraphDocument doc = gdcoll.getMainGraphDocument();
             for (LayerContainer lc : doc.getLayers()) {
-                for (NodeContainer kc : lc.getNodeContainers()) {
+                for (NodeContainer kc : lc.getNodeContainer()) {
                     writeModelElement(kc.getElement());
                 }
                 doc.sortKanten();
-                for (EdgeContainer kc : lc.getEdgeContainers()) {
+                for (EdgeContainer kc : lc.getEdgeContainer()) {
                     writeModelElement(kc.getElement());
                 }
                 for (BendpointContainer kc : lc.getBendpointContainers()) {
@@ -482,12 +482,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeStartElement("layer"); //<layer>
             writeAttribute("number", lc.getLayerNumber());
             writeGraphElementLayout(null, lc.get3LGMLayout(), true);
-            for (NodeContainer kc : lc.getNodeContainers()) {
+            for (NodeContainer kc : lc.getNodeContainer()) {
                 if (elements == null || elements.contains(kc.getElement())) {
                     writeElementContainer(kc);
                 }
             }
-            for (EdgeContainer kc : lc.getEdgeContainers()) {
+            for (EdgeContainer kc : lc.getEdgeContainer()) {
                 if (elements == null || elements.contains(kc.getElement())) {
                     writeElementContainer(kc);
                 }
