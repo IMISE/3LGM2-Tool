@@ -153,7 +153,7 @@ public class GraphDocumentHandler {
             //Ebene holen
             LayerContainer lc = doc.getLayer(i);
             //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
-            List<List<? extends ElementContainer>> layerElements = new ArrayList<>();
+            List<Iterable<? extends ElementContainer>> layerElements = new ArrayList<>();
             //Knickpunkte
             if (searchBendpoints) {
                 layerElements.add(lc.getBendpointContainers());
@@ -167,7 +167,7 @@ public class GraphDocumentHandler {
                 layerElements.add(lc.getEdgeContainer());
             }
             //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefügt
-            for (List<? extends ElementContainer> ecList : layerElements) {
+            for (Iterable<? extends ElementContainer> ecList : layerElements) {
                 //für jede dieser ElementContainerlisten
                 for (ElementContainer ec : ecList) {
                     ModelElement me = ec.getElement();
