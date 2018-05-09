@@ -52,12 +52,12 @@ public class LayerContainer extends ElementContainer {
     /**
      * Liste, aus der die Grafik aufgebaut wird (Reihenfolge der Elemente bestimmt, welches zuerst gemalt wird)
      */
-    private List<NodeContainer> nodeContainers;
+    private List<NodeContainer> graphNodeContainers;
 
     /**
      * Liste, aus der der Baum aufgebaut wird (Reihenfolge der Elemente wird alphabetisch gehalten)
      */
-    private List<NodeContainer> alphabeticalNodeContainers;
+    private List<NodeContainer> treeNodeContainers;
 
     /**
      *
@@ -132,7 +132,7 @@ public class LayerContainer extends ElementContainer {
      * in der Regel falsch einsortiert wurden.
      */
     public void refreshAlpahbetical() {
-        Alphabetical.sort(alphabeticalNodeContainers);
+        Alphabetical.sort(treeNodeContainers);
     }
 
     /**
@@ -140,13 +140,13 @@ public class LayerContainer extends ElementContainer {
      */
     private void init() {
         if (doc instanceof Szenario) {
-            nodeContainers = new ArrayList<>(100);
-            alphabeticalNodeContainers = new ArrayList<>(100);
+            graphNodeContainers = new ArrayList<>(100);
+            treeNodeContainers = new ArrayList<>(100);
             edgeContainers = new ArrayList<>(100);
             bendpointContainers = new ArrayList<>(50);
         } else {
-            nodeContainers = new ArrayList<>(500);
-            alphabeticalNodeContainers = new ArrayList<>(500);
+            graphNodeContainers = new ArrayList<>(500);
+            treeNodeContainers = new ArrayList<>(500);
             edgeContainers = new ArrayList<>(500);
             bendpointContainers = new ArrayList<>(1000);
         }
@@ -178,7 +178,7 @@ public class LayerContainer extends ElementContainer {
         int counter = 0;
 
         if (ReflectionUtils.isAssignable(elementClass, Node.class)) {
-            counter += countType(treeNodeContainers, elementClass);
+            counter += countType(graphNodeContainers, elementClass);
         }
         if (ReflectionUtils.isAssignable(elementClass, Edge.class)) {
             counter += countType(edgeContainers, elementClass);
@@ -216,7 +216,7 @@ public class LayerContainer extends ElementContainer {
     public void z_move_up(final ElementContainer ec) {
         boolean visible = ec.isVisible();
         remove(ec);
-        add(ec, nodeContainers.size());
+        add(ec, graphNodeContainers.size());
         raiseSlaves(ec, 0);
         ec.setVisible(visible);
     }
@@ -229,7 +229,7 @@ public class LayerContainer extends ElementContainer {
         if (!(ec instanceof NodeContainer)) {
             return;
         }
-        if (position < 0 || position > nodeContainers.size()) {
+        if (position < 0 || position > graphNodeContainers.size()) {
             return;
         }
         int index = indexOf(ec);
@@ -451,7 +451,7 @@ public class LayerContainer extends ElementContainer {
 
         tmpEdgeContainer.clear();
 
-        for (NodeContainer ec : nodeContainers) {
+        for (NodeContainer ec : graphNodeContainers) {
             ec.paint(g);
         }
         boolean isPaintEdgesOnlyForSelectedElements = UserProperties.is(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS);
@@ -525,7 +525,7 @@ public class LayerContainer extends ElementContainer {
      */
     public boolean containsHashString(final String hashString) {
         if (!doc.getCollection().isBulkMode()) {
-            for (NodeContainer ec : nodeContainers) {
+            for (NodeContainer ec : graphNodeContainers) {
                 if (ec.getHashString().equals(hashString)) {
                     return true;
                 }
@@ -548,8 +548,8 @@ public class LayerContainer extends ElementContainer {
      * @param kc
      */
     public void resetPositionOf(final NodeContainer kc) {
-        if (alphabeticalNodeContainers.remove(kc)) {
-            Alphabetical.insert(alphabeticalNodeContainers, kc);
+        if (treeNodeContainers.remove(kc)) {
+            Alphabetical.insert(treeNodeContainers, kc);
         }
     }
 
@@ -579,11 +579,11 @@ public class LayerContainer extends ElementContainer {
         } else {
             NodeContainer nc = (NodeContainer) comp;
             if (pos != -1) {
-                nodeContainers.add(pos, nc);
+                graphNodeContainers.add(pos, nc);
             } else {
-                nodeContainers.add(nc);
+                graphNodeContainers.add(nc);
             }
-            Alphabetical.insert(alphabeticalNodeContainers, nc);
+            Alphabetical.insert(treeNodeContainers, nc);
             Node node = nc.getKnoten();
             if (ModelConstants.hasSortedEdgeClassesToPaintable(node.getClass())) {
                 numberedEdgesNodeContainer.add(nc);
@@ -607,16 +607,16 @@ public class LayerContainer extends ElementContainer {
         } else if (comp instanceof EdgeContainer) {
             edgeContainers.remove(comp);
         } else {
-            nodeContainers.remove(comp);
-            alphabeticalNodeContainers.remove(comp);
+            graphNodeContainers.remove(comp);
+            treeNodeContainers.remove(comp);
             numberedEdgesNodeContainer.remove(comp);
         }
     }
 
     @Override
     public void removeAll() {
-        nodeContainers.clear();
-        alphabeticalNodeContainers.clear();
+        graphNodeContainers.clear();
+        treeNodeContainers.clear();
         edgeContainers.clear();
         bendpointContainers.clear();
         numberedEdgesNodeContainer.clear();
@@ -654,21 +654,21 @@ public class LayerContainer extends ElementContainer {
      * @return
      */
     public int indexOf(final ElementContainer ec) {
-        return nodeContainers.indexOf(ec);
+        return graphNodeContainers.indexOf(ec);
     }
 
     /**
      * @return
      */
     public List<NodeContainer> getNodeContainersAlphabetical() {
-        return alphabeticalNodeContainers;
+        return treeNodeContainers;
     }
 
     /**
      * @return
      */
     public List<NodeContainer> getNodeContainer() {
-        return nodeContainers;
+        return graphNodeContainers;
     }
 
     /**
@@ -686,11 +686,11 @@ public class LayerContainer extends ElementContainer {
     }
 
     public Iterable<NodeContainer> getNodeContainers() {
-        return () -> nodeContainers.listIterator();
+        return () -> graphNodeContainers.listIterator();
     }
 
     public Iterable<NodeContainer> getNodeContainersBackward() {
-        return CollectionUtils.getBackwardIterable(nodeContainers);
+        return CollectionUtils.getBackwardIterable(graphNodeContainers);
     }
 
     public Iterable<EdgeContainer> getEdgeContainers() {
@@ -742,7 +742,7 @@ public class LayerContainer extends ElementContainer {
      * @return
      */
     public int getNodeContainerCount() {
-        return nodeContainers.size();
+        return graphNodeContainers.size();
     }
 
     /**
@@ -768,7 +768,7 @@ public class LayerContainer extends ElementContainer {
             return bendpointContainers.contains(ec);
         }
         if (ec instanceof NodeContainer) {
-            return nodeContainers.contains(ec);
+            return graphNodeContainers.contains(ec);
         }
         if (ec instanceof EdgeContainer) {
             return edgeContainers.contains(ec);
@@ -793,7 +793,7 @@ public class LayerContainer extends ElementContainer {
      */
     public void setShowInterLayerConnections(final boolean showInterLayerConnections) {
         this.showInterLayerConnections = showInterLayerConnections;
-        for (NodeContainer ec : nodeContainers) {
+        for (NodeContainer ec : graphNodeContainers) {
             setShowInterLayerConnections(showInterLayerConnections, ec);
         }
     }
@@ -909,7 +909,7 @@ public class LayerContainer extends ElementContainer {
     }
 
     public void printStatistics() {
-        System.err.println("Layer " + layerNumber + "    nodeContainer: " + nodeContainers.size() + " -> " + ReflectionUtils.getCommonSuperClass(nodeContainers));
+        System.err.println("Layer " + layerNumber + "    nodeContainer: " + graphNodeContainers.size() + " -> " + ReflectionUtils.getCommonSuperClass(graphNodeContainers));
     }
 
 }
