@@ -10,7 +10,7 @@ import java.util.Locale;
 /**
  * Klasse zum alphabetischen Sortieren von Objektlisten in Abhängigkeit von
  * der eingestellten Locale.
- * 
+ *
  * @author AXS
  *         created on 15.08.2007
  */
@@ -29,15 +29,16 @@ public class Alphabetical {
 
     /**
      * Liefert einen <code>Comparator</code> für die vom Benutzer gewählte Locale.
-     * Dieser <code>Comparator</code> möglichst nur holen, wenn er sich ändert.
-     * 
+     *
      * @return
      */
     public static final Comparator<Object> getLocalizedComparator() {
         //wenn die Locale zwischenzeitlich geändert wurde -> neu setzen und somit auch wieder den
         //richtigen Comparator holen
-        if (locale != Locale.getDefault()) {
-            setLocale(Locale.getDefault());
+        Locale defaultLocale = Locale.getDefault();
+        if (locale != defaultLocale) {
+            locale = defaultLocale;
+            localizedComparator = null;
         }
         if (localizedComparator == null) {
             localizedComparator = new ObjectToStringComparator(Collator.getInstance(locale));
@@ -45,19 +46,9 @@ public class Alphabetical {
         return localizedComparator;
     }
 
-    /**
-     * Setzt die Locale und setzt den Comparator zurück.
-     * 
-     * @param l
-     */
-    public static final void setLocale(final Locale l) {
-        locale = l;
-        localizedComparator = null;
-    }
-
-    ////////////////////////////////////
-    // Hilfsklasse für den Comparator //
-    ////////////////////////////////////
+    ////////////////////////////////
+    // Der eigentliche Comparator //
+    ////////////////////////////////
     /**
      * Ein <code>Comparator</code>, der einen anderen <code>Comparator</code> umschließt und
      * für die in compare(Object, Object) übergebenen Objecte erst toString() aufruft und
@@ -73,12 +64,18 @@ public class Alphabetical {
          */
         private Comparator<Object> realComparator = null;
 
+        private static final char[] CHAR_33 = {
+                33
+        }; // = '!'
+
+        private static final String STIRNG_CHAR_33 = new String(CHAR_33);
+
         /**
          * Legt einen neuen Comparator an, der in seiner Compare-Methode einfach
          * für die übergebenen Objekte <code>toString()</code> aufruft und dann
          * die Strings über die <code>compare()</code>-Methode des übergebenen
          * Komparators vergleicht.
-         * 
+         *
          * @param stringComparator
          */
         public ObjectToStringComparator(final Comparator<Object> realComparator) {
@@ -88,16 +85,12 @@ public class Alphabetical {
 
         @Override
         public int compare(final Object arg0, final Object arg1) {
-            //Leerzeichen und auch alle anderen Zeichen <32 werden Default-mäßig nach allen anderen Zeichen 
+            //Leerzeichen und auch alle anderen Zeichen <32 werden Default-mäßig nach allen anderen Zeichen
             //einsortiert (warum auch immer). Um Listen mit Zahlen der Form [1. a, 1.1. a, 1.2. a] in genau
             //dieser Reiehnfolge sortiert zu bekommen (und nicht [1.1. a, 1.2 a., 1. a]), muss man Leerzeichen
             //durch Ausrufezeichen mit char = 33 ersetzen. Die werden als erstes Zeichen "richtig" einsortiert.
-            char[] c = {
-                33
-            }; // = '!'
-            String s = new String(c);
-            String s1 = arg0.toString().replaceAll("[\\s]", s);
-            String s2 = arg1.toString().replaceAll("[\\s]", s);
+            String s1 = String.valueOf(arg0).replaceAll("[\\s]", STIRNG_CHAR_33);
+            String s2 = String.valueOf(arg1).replaceAll("[\\s]", STIRNG_CHAR_33);
             return realComparator.compare(s1, s2);
         }
 
@@ -105,7 +98,7 @@ public class Alphabetical {
 
     /**
      * Sortiert das Element elementToAdd in die uebergebene breits sortierte ArrayList alphabetisch ein.
-     * 
+     *
      * @param list
      * @param elementToInsert
      */
@@ -115,7 +108,7 @@ public class Alphabetical {
 
     /**
      * Sortiert die Liste aplhabetisch mit nach den Vorgaben der Systemlocale.
-     * 
+     *
      * @param list
      *            Liste, die sortiert werden soll
      */
@@ -125,7 +118,7 @@ public class Alphabetical {
 
     /**
      * Sortiert die Liste aplhabetisch mit nach den Vorgaben der Systemlocale.
-     * 
+     *
      * @param list
      *            Liste, die sortiert werden soll
      */
@@ -136,7 +129,7 @@ public class Alphabetical {
     /**
      * Liefert die Position, an der das übergebene Object in die bereits sortierte
      * Liste eingefügt werden müsste.
-     * 
+     *
      * @param list
      *            sortierte Liste, in die das Objekt <code>o</code> eingefügt werden soll
      * @param o
@@ -155,7 +148,7 @@ public class Alphabetical {
     /**
      * Liefert die Position, an der das übergebene Object in das bereits sortierte
      * Array eingefügt werden müsste.
-     * 
+     *
      * @param array
      *            sortiertes Array, in die das Objekt <code>o</code> eingefügt werden soll
      * @param o
@@ -174,7 +167,7 @@ public class Alphabetical {
     /**
      * Liefert das Ergebnis der Funktion <code>binarySerach()</code> von <code>Collections</code> mit dem <code>Comparator</code>, den die
      * System-Locale vorgibt.
-     * 
+     *
      * @param list
      *            alphabetisch sortierte Liste, in der die Einfüge-Position des Objektes <code>o</code> ermittelt werden soll
      * @param o
