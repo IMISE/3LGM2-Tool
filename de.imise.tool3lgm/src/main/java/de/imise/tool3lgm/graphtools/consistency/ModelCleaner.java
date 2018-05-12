@@ -151,28 +151,12 @@ public class ModelCleaner {
                 } else {
                     ElementContainer ec = me.getContainer(doc);
                     LayerContainer lc = doc.getLayer(me.layerFor());
-                    if (me instanceof Knickpunkt) {
-                        if (!lc.getBendpointContainers().contains(ec)) {
+                    if (!lc.isMyElement(ec)) {
                             if (PRINT_ERRORS) {
                                 print(me, doc, 4);
                             }
                             lc.add(ec);
                         }
-                    } else if (me instanceof Node) {
-                        if (!lc.getNodeContainer().contains(ec)) {
-                            if (PRINT_ERRORS) {
-                                print(me, doc, 5);
-                            }
-                            lc.add(ec);
-                        }
-                    } else if (me instanceof Edge) {
-                        if (!lc.getEdgeContainer().contains(ec)) {
-                            if (PRINT_ERRORS) {
-                                print(me, doc, 6);
-                            }
-                            lc.add(ec);
-                        }
-                    }
                 }
             }
         }
