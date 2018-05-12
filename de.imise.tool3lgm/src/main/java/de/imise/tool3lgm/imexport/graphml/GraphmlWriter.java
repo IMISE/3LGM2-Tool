@@ -110,7 +110,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
     private void writeNodes(final int layer, final String idPrefix) throws XMLStreamException {
         String fullIdPrefix = Strings.isNullOrEmpty(idPrefix) ? null : idPrefix + ":";
         LayerContainer lc = szenario.getLayer(layer);
-        for (NodeContainer nc : lc.getNodeContainer()) {
+        for (NodeContainer nc : lc.getNodeContainers()) {
             if (nc.isVisible()) {
                 writeNode(nc, fullIdPrefix);
             }
@@ -174,7 +174,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
     private void writeEdges(final int layer, final String idPrefix) throws XMLStreamException {
         String fullIdPrefix = Strings.isNullOrEmpty(idPrefix) ? null : idPrefix + ":";
         LayerContainer lc = szenario.getLayer(layer);
-        for (EdgeContainer ec : lc.getEdgeContainer()) {
+        for (EdgeContainer ec : lc.getEdgeContainers()) {
             Edge edge = ec.getEdge();
             if (ec.isVisible(false, true)) {
                 String id = edge.getHashString();

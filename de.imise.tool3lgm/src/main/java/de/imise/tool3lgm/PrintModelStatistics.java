@@ -58,14 +58,14 @@ public class PrintModelStatistics {
                                 class2ContainerCountFromGraphDocuments.put(meClass, count);
                             }
                         }
-                        for (ElementContainer layerEc : lcc.getNodeContainer()) {
+                        for (ElementContainer layerEc : lcc.getNodeContainers()) {
                             if (layerEc.getElement() == me) {
                                 count = class2ContainerCountFromGraphDocuments.get(meClass);
                                 count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);
                                 class2ContainerCountFromGraphDocuments.put(meClass, count);
                             }
                         }
-                        for (ElementContainer layerEc : lcc.getEdgeContainer()) {
+                        for (ElementContainer layerEc : lcc.getEdgeContainers()) {
                             if (layerEc.getElement() == me) {
                                 count = class2ContainerCountFromGraphDocuments.get(meClass);
                                 count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);

@@ -371,9 +371,7 @@ public final class GDCollection extends UserFieldTarget {
         //alle Elemente des Szenarios löschen -> das kann man dann auch wieder zurück nehmen
         List<ElementContainer> elementsToDelete = new ArrayList<>();
         for (LayerContainer layer : szen.getLayers()) {
-            elementsToDelete.addAll(layer.getBendpointContainers());
-            elementsToDelete.addAll(layer.getEdgeContainer());
-            elementsToDelete.addAll(layer.getNodeContainer());
+            layer.addAllContainers(elementsToDelete);
         }
         removeContainerFromSubmodel(elementsToDelete, pid);
         szenarios.remove(szen);

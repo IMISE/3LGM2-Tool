@@ -41,9 +41,9 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.collections.CollectionUtils;
@@ -362,11 +362,11 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         } else {
             LGMGraphDocument doc = gdcoll.getMainGraphDocument();
             for (LayerContainer lc : doc.getLayers()) {
-                for (NodeContainer kc : lc.getNodeContainer()) {
+                for (NodeContainer kc : lc.getNodeContainers()) {
                     writeModelElement(kc.getElement());
                 }
                 doc.sortKanten();
-                for (EdgeContainer kc : lc.getEdgeContainer()) {
+                for (EdgeContainer kc : lc.getEdgeContainers()) {
                     writeModelElement(kc.getElement());
                 }
                 for (BendpointContainer kc : lc.getBendpointContainers()) {
@@ -482,12 +482,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeStartElement("layer"); //<layer>
             writeAttribute("number", lc.getLayerNumber());
             writeGraphElementLayout(null, lc.get3LGMLayout(), true);
-            for (NodeContainer kc : lc.getNodeContainer()) {
+            for (NodeContainer kc : lc.getNodeContainers()) {
                 if (elements == null || elements.contains(kc.getElement())) {
                     writeElementContainer(kc);
                 }
             }
-            for (EdgeContainer kc : lc.getEdgeContainer()) {
+            for (EdgeContainer kc : lc.getEdgeContainers()) {
                 if (elements == null || elements.contains(kc.getElement())) {
                     writeElementContainer(kc);
                 }

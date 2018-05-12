@@ -665,24 +665,36 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * @return
+     * @param list
      */
-    public List<NodeContainer> getNodeContainer() {
-        return graphNodeContainers;
+    public void addAllContainers(final List<ElementContainer> list) {
+        //Die Reihenfolge der Listen ist Absicht, da diese Funktion insbesondere beim Löschen von Elementen gebraucht wird
+        //und man ohne irgendwelche Konflikte erst Knickpunkte, dann Kanten und dann Knoten löschen kann
+        list.addAll(bendpointContainers);
+        list.addAll(edgeContainers);
+        list.addAll(treeNodeContainers);
     }
 
     /**
-     * @return
+     * @param list
+     * @param alphabetical
      */
-    public List<EdgeContainer> getEdgeContainer() {
-        return edgeContainers;
+    public void addNodeContainers(final List<ElementContainer> list, final boolean alphabetical) {
+        list.addAll(alphabetical ? treeNodeContainers : graphNodeContainers);
     }
 
     /**
-     * @return
+     * @param list
      */
-    public List<BendpointContainer> getBendpointContainers() {
-        return bendpointContainers;
+    public void addEdgeContainers(final List<ElementContainer> list) {
+        list.addAll(edgeContainers);
+    }
+
+    /**
+     * @param list
+     */
+    public void addBendpointContainers(final List<ElementContainer> list) {
+        list.addAll(bendpointContainers);
     }
 
     public Iterable<NodeContainer> getNodeContainers() {
@@ -699,6 +711,10 @@ public class LayerContainer extends ElementContainer {
 
     public Iterable<EdgeContainer> getEdgeContainersBackward() {
         return CollectionUtils.getBackwardIterable(edgeContainers);
+    }
+
+    public Iterable<BendpointContainer> getBendpointContainers() {
+        return () -> bendpointContainers.listIterator();
     }
 
     /**

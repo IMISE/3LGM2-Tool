@@ -94,9 +94,8 @@ public class ModelCleaner {
         // Mist und wird hier berichtigt.
         for (GraphDocument doc : docs) {
             for (LayerContainer lc : doc.getLayers()) {
-                List<ElementContainer> allEc = new ArrayList<>(lc.getNodeContainer());
-                allEc.addAll(lc.getEdgeContainer());
-                allEc.addAll(lc.getBendpointContainers());
+                List<ElementContainer> allEc = new ArrayList<>(lc.getNodeContainerCount() + lc.getEdgeContainerCount() + lc.getBendpointContainerCount());
+                lc.addAllContainers(allEc);
                 // für alle Container des aktuellen GraphDocuments
                 for (ElementContainer layerElemCont : allEc) {
                     ModelElement layerElemMe = layerElemCont.getElement();
@@ -152,11 +151,11 @@ public class ModelCleaner {
                     ElementContainer ec = me.getContainer(doc);
                     LayerContainer lc = doc.getLayer(me.layerFor());
                     if (!lc.isMyElement(ec)) {
-                            if (PRINT_ERRORS) {
-                                print(me, doc, 4);
-                            }
-                            lc.add(ec);
+                        if (PRINT_ERRORS) {
+                            print(me, doc, 4);
                         }
+                        lc.add(ec);
+                    }
                 }
             }
         }
@@ -170,10 +169,9 @@ public class ModelCleaner {
         allDocs.add(mainDoc);
         for (GraphDocument doc : allDocs) {
             for (LayerContainer lc : doc.getLayers()) {
-                List<BendpointContainer> benpoints = lc.getBendpointContainers();
-                for (int i = benpoints.size() - 1; i >= 0; i--) {
+                for (int i = lc.getBendpointContainerCount() - 1; i >= 0; i--) {
                     boolean ok = true;
-                    BendpointContainer bpc = benpoints.get(i);
+                    BendpointContainer bpc = lc.getBendpointContainer(i);
                     Knickpunkt bp = bpc.getKnickpunktKnoten(); //das hier ist der Container aus dem Hauptdokument
                     if (bp.getContainerCount() != 2) {
                         ok = false;
@@ -201,7 +199,7 @@ public class ModelCleaner {
                     }
 
                     if (!ok) {
-                        benpoints.remove(i);
+                        lc.remove(bpc);
                     }
                 }
             }

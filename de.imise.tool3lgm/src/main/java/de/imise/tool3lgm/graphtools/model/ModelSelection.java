@@ -136,11 +136,11 @@ public class ModelSelection implements Set<ElementContainer> {
      * @param orderSources
      * @return
      */
-    public final List<ElementContainer> getSortedSelection(final List<NodeContainer>... orderSources) {
+    public final List<ElementContainer> getSortedSelection(final Iterable<NodeContainer>... orderSources) {
         List<ElementContainer> returnList = new ArrayList<>(size());
         returnList.addAll(selectedRealNodeContainer);
         int insertIndex = 0;
-        for (List<NodeContainer> orderSource : orderSources) {
+        for (Iterable<NodeContainer> orderSource : orderSources) {
             for (NodeContainer nc : orderSource) {
                 if (returnList.remove(nc)) {
                     returnList.add(insertIndex++, nc);
