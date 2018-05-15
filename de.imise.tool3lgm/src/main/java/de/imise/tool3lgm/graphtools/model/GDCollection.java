@@ -360,7 +360,7 @@ public final class GDCollection extends UserFieldTarget {
         //bei allen Elementen, die mit dem zu löschenden Teilmodell verknüpft sind
         //den Verweis auf dieses Teilmodell löschen (das passiert im Hauptmodell)
         for (LayerContainer layer : doc.getLayers()) {
-            for (NodeContainer nc : layer.getNodeContainers()) {
+            for (NodeContainer nc : layer.getNodeContainersAlphabetical()) {
                 Node node = nc.getKnoten();
                 String associatedDoc = node.getAssociatedDoc();
                 if (associatedDoc != null && associatedDoc.equals(szenHash)) {
@@ -1891,7 +1891,7 @@ public final class GDCollection extends UserFieldTarget {
     public void resolveCopyDependencies(final List<? extends GraphDocument> export, final List<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
         /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
         for (LayerContainer lc : doc.getLayers()) {
-            for (NodeContainer nc : lc.getNodeContainers()) {
+            for (NodeContainer nc : lc.getGraphNodeContainers()) {
                 Node node = nc.getKnoten();
                 for (GraphDocument doc : export) {
                     if (doc.isMyElement(node)) {

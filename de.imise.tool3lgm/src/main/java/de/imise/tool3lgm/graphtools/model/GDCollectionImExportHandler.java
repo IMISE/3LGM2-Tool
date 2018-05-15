@@ -144,7 +144,7 @@ public final class GDCollectionImExportHandler {
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 LayerContainer importLayerContainer = importDoc.getLayer(ModelConstants.LAYERS[i]);
                 newSzenario.getLayer(ModelConstants.LAYERS[i]).set3LGMLayout(importLayerContainer.get3LGMLayout());
-                for (NodeContainer importKC : importLayerContainer.getNodeContainers()) {
+                for (NodeContainer importKC : importLayerContainer.getGraphNodeContainers()) {
                     ModelElement element = mainDoc.findKnotenCoded(importKC.getElement().getHashString());
                     ElementContainer container = element.createContainer(newSzenario);
                     container.set3LGMLayout(importKC.get3LGMLayout());

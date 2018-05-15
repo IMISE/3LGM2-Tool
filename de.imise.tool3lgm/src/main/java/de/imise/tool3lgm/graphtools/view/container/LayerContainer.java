@@ -697,7 +697,7 @@ public class LayerContainer extends ElementContainer {
         list.addAll(bendpointContainers);
     }
 
-    public Iterable<NodeContainer> getNodeContainers() {
+    public Iterable<NodeContainer> getGraphNodeContainers() {
         return () -> graphNodeContainers.listIterator();
     }
 

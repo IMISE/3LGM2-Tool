@@ -1420,7 +1420,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void adaptMapping(final ElementsLayoutDefinition map) {
         mapping.adapt(map);
         for (LayerContainer lc : layer) {
-            for (NodeContainer kc : lc.getNodeContainers()) {
+            for (NodeContainer kc : lc.getGraphNodeContainers()) {
                 kc.refreshFont();
                 kc.refreshText();
             }
@@ -2680,7 +2680,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         start_transaction(PID, false);
         deselectAll(true);
         //alle Node im angegebenen Bereich selektieren
-        for (NodeContainer kn : layer[gdcoll.getActiveLayer()].getNodeContainers()) {
+        for (NodeContainer kn : layer[gdcoll.getActiveLayer()].getGraphNodeContainers()) {
             if (!kn.getElement().isPaintable()) {
                 continue;
             }
@@ -3112,7 +3112,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         if (hashString != null) {
             for (LayerContainer lc : layer) {
-                for (ElementContainer ec : lc.getNodeContainers()) {
+                for (ElementContainer ec : lc.getNodeContainersAlphabetical()) {
                     String ecHash = ec.getHashString();
                     if (hashString.equals(ecHash)) {
                         return ec.getElement();
@@ -4065,7 +4065,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void clearHightLighted(final boolean removeAllSpecialInfos) {
         if (removeAllSpecialInfos) {
             for (LayerContainer lc : layer) {
-                for (ElementContainer ec : lc.getNodeContainers()) {
+                for (ElementContainer ec : lc.getGraphNodeContainers()) {
                     ec.removeAllSpecialInfosFromThisContainer();
                 }
                 for (ElementContainer ec : lc.getEdgeContainers()) {
@@ -4378,11 +4378,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * Unterklassen werden nicht beachtet.
      *
      * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
-     * @param subClassElements wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
+     * @param includeSubClasses wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
      * @return Liste mit ElementContainer oder <code>null</code>
      */
-    public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean subClassElements) {
-        return getElementContainer(clazz, subClassElements, false);
+    public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
+        return getElementContainer(clazz, includeSubClasses, false);
     }
 
     /**
@@ -4396,7 +4396,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param alphabetical
      * @return
      */
-    public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean alphabetical) {
+    public final List<ElementContainer> getElementContainers(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean alphabetical) {
 
         //		long start = System.currentTimeMillis();
 
@@ -4423,7 +4423,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             if (clazz == Knickpunkt.class) {
                 layerElements.add(lc.getBendpointContainers());
             } else if (ModelConstants.isNodeType(clazz)) {
-                layerElements.add(alphabetical ? lc.getNodeContainersAlphabetical() : lc.getNodeContainers());
+                layerElements.add(alphabetical ? lc.getNodeContainersAlphabetical() : lc.getGraphNodeContainers());
                 //Kanten
             } else if (ModelConstants.isEdgeType(clazz)) {
                 layerElements.add(lc.getEdgeContainers());
@@ -4591,7 +4591,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public void initKnotContainers() {
         for (int i = 0; i < layer.length; i++) {
-            for (NodeContainer kc : layer[i].getNodeContainers()) {
+            for (NodeContainer kc : layer[i].getGraphNodeContainers()) {
                 if (kc != null) {
                     kc.refreshText();
                     Font f = kc.getFont();

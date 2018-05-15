@@ -110,7 +110,7 @@ public abstract class GraphmlWriter extends IntendingXMLWriter {
     private void writeNodes(final int layer, final String idPrefix) throws XMLStreamException {
         String fullIdPrefix = Strings.isNullOrEmpty(idPrefix) ? null : idPrefix + ":";
         LayerContainer lc = szenario.getLayer(layer);
-        for (NodeContainer nc : lc.getNodeContainers()) {
+        for (NodeContainer nc : lc.getGraphNodeContainers()) {
             if (nc.isVisible()) {
                 writeNode(nc, fullIdPrefix);
             }

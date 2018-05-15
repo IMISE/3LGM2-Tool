@@ -362,7 +362,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         } else {
             LGMGraphDocument doc = gdcoll.getMainGraphDocument();
             for (LayerContainer lc : doc.getLayers()) {
-                for (NodeContainer kc : lc.getNodeContainers()) {
+                for (NodeContainer kc : lc.getNodeContainersAlphabetical()) {
                     writeModelElement(kc.getElement());
                 }
                 doc.sortKanten();
@@ -482,7 +482,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeStartElement("layer"); //<layer>
             writeAttribute("number", lc.getLayerNumber());
             writeGraphElementLayout(null, lc.get3LGMLayout(), true);
-            for (NodeContainer kc : lc.getNodeContainers()) {
+            for (NodeContainer kc : lc.getGraphNodeContainers()) {
                 if (elements == null || elements.contains(kc.getElement())) {
                     writeElementContainer(kc);
                 }

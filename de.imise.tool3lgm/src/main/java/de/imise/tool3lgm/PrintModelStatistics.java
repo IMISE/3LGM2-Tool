@@ -58,7 +58,7 @@ public class PrintModelStatistics {
                                 class2ContainerCountFromGraphDocuments.put(meClass, count);
                             }
                         }
-                        for (ElementContainer layerEc : lcc.getNodeContainers()) {
+                        for (ElementContainer layerEc : lcc.getNodeContainersAlphabetical()) {
                             if (layerEc.getElement() == me) {
                                 count = class2ContainerCountFromGraphDocuments.get(meClass);
                                 count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);
