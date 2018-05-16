@@ -68,7 +68,7 @@ public class LGMGraphDocument extends GraphDocument {
         case MODEL_ACTION_HIDE_UNASSOCIATED: {
             Class<? extends ModelElement> elementClass = getClassForName(argv[0]);
             Class<? extends Edge> egdeClass = getClassForName(argv[1]).asSubclass(Edge.class);
-            for (ElementContainer ec : getElementContainer(elementClass, true)) {
+            for (ElementContainer ec : getElementContainers(elementClass, true)) {
                 ModelElement me = ec.getElement();
                 List<ElementContainer> connectedContainer = me.getConnectedContainer(this, egdeClass);
                 if (connectedContainer.isEmpty()) {
@@ -80,7 +80,7 @@ public class LGMGraphDocument extends GraphDocument {
         }
         case MODEL_ACTION_UNHIDE_ALL: {
             Class<? extends ModelElement> elementClass = getClassForName(argv[0]);
-            for (ElementContainer ec : getElementContainer(elementClass, true)) {
+            for (ElementContainer ec : getElementContainers(elementClass, true)) {
                 ec.setVisible(true);
             }
             distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED, pid);
@@ -166,7 +166,7 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     public final List<ElementContainer> getSortedSelection() {
-        Iterable<NodeContainer>[] sortingElements = new List[layer.length];
+        Iterable<NodeContainer>[] sortingElements = new Iterable[layer.length];
         for (int i = 0; i < layer.length; i++) {
             sortingElements[i] = layer[i].getGraphNodeContainers();
         }
