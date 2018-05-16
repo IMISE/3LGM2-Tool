@@ -11,7 +11,6 @@ import javax.swing.InputMap;
 import javax.swing.JComponent;
 import javax.swing.KeyStroke;
 
-import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.ActionLibrary.AnalysisActions;
 import de.imise.tool3lgm.event.ActionLibrary.EditActions;
 import de.imise.tool3lgm.event.ActionLibrary.FileActions;
@@ -48,16 +47,6 @@ public class KeyStrokes {
 
     private static void put(final Action action, final int keyCode, final int modifiers) {
         KEYSTROKES.put(action, KeyStroke.getKeyStroke(keyCode, modifiers));
-    }
-
-    /**
-     * Liefert den auslösenden {@link KeyStroke} für die durch <code>key</code> identifizierte {@link Action}.
-     *
-     * @param identifier
-     * @return
-     */
-    public static KeyStroke getKeyStroke(final ActionIdentifier key) {
-        return KEYSTROKES.get(key);
     }
 
     /**
