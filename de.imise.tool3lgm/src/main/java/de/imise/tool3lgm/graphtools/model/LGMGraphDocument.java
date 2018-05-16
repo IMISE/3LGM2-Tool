@@ -552,7 +552,7 @@ public class LGMGraphDocument extends GraphDocument {
                     oldKC = findEdgeContainerCoded(kC.getHashString());
                 }
                 if (kC != null) {
-                    if (!edges.contains(kC)) {
+                    if (!edges.contains(kC.getElement())) {
                         edgeConts.add(kC);
                     }
                     kp.getKnickpunktKnoten().setOwner(kC);
