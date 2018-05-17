@@ -186,7 +186,7 @@ public class UserProperties {
 
     private static void remove(final StringProperty property) {
         String propertyName = property.toString();
-        Integer sizeI = listKeyToListSize.get(propertyName);
+        Integer sizeI = listKeyToListSize.get(property);
         if (sizeI == null) {
             properties.remove(propertyName);
             return;
@@ -195,7 +195,7 @@ public class UserProperties {
         for (int i = 0; i < size; i++) {
             properties.remove(propertyName + i);
         }
-        listKeyToListSize.remove(property.toString());
+        listKeyToListSize.remove(property);
     }
 
     public static List<String> getListValues(final StringProperty property) {
