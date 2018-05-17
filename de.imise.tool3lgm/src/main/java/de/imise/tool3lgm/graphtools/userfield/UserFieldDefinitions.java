@@ -267,7 +267,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
             }
 
             for (UserField field : userFieldsToDelete) {
-                hashStringToUserFieldMap.remove(field);
+                hashStringToUserFieldMap.remove(field.getHashCode());
                 ufl = classToUserFieldListMap.get(field.getTargetClass());
                 ufl.remove(field);
             }
