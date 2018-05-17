@@ -48,7 +48,7 @@ public class ErrorSolutionLibraryVersion {
     // neuen anlegen (Anwendungsparogramm bei AWB, Orgplan bei KAWB)
     // Kanten ohne start und end einfach löschen (das macht der ModelCleaner beim Einlesen und Speichern)
 
-    @SuppressWarnings("unchecked")
+    //@SuppressWarnings("unchecked")
     private final ErrorSolution[] CARDINALITY_ERROR_SOLUTIONS = {
             //            new ErrorSolution(ABKonfiguration.class, AwbAwbkVerbindung.class, new MetaPath(ABKonfiguration.class, Aufgabe.class, abKonfigToAufgabeEdgeClasses), PathConnectionPanel.class, "ABKonfiguration"),
             //            new ErrorSolution(ABKonfiguration.class, AwbkAufOrgVerbindung.class, new MetaPath(ABKonfiguration.class, Anwendungsbaustein.class, abKonfigToAnwendungsbausteinEdgeClasses), PathConnectionPanel.class, "Aufgabe_p"),
