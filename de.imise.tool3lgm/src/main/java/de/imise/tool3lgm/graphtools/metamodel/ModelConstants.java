@@ -255,7 +255,7 @@ public final class ModelConstants {
     private static Set<Class<? extends ModelElement>> elementClassesWithLayout;
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse ein LAyout besitzt (und damit nicht unique ist).
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse ein Layout besitzt (und damit nicht unique ist).
      * Das trifft auf alle Elemenklassen zu, die paintable sind oder ihre Kantennummern an paintable-Elemente schreiben.
      * Auérdem brauchen die Layer-Knoten ein Layout.
      *
