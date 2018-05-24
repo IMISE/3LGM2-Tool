@@ -655,7 +655,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             }
         }
         if (available == null) {
-            available = mainDoc.getElementContainer(searchElementClass, true, true);
+            available = mainDoc.getElementContainers(searchElementClass, true);
         }
         return available;
     }

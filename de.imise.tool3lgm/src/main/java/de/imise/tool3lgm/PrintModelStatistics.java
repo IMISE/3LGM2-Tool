@@ -22,12 +22,12 @@ public class PrintModelStatistics {
      * @param gdc
      *            {@link GDCollection} to print or <code>null</code> if all {@link GDCollection}s should be printed
      */
-    public static final void printStatistic(final List<GDCollection> collections, final boolean useElements, final boolean alphabetic) {
+    public static final void printStatistic(final List<GDCollection> collections, final boolean useElements) {
         for (GDCollection gdcoll : collections) {
             GraphDocument mainDoc = gdcoll.getMainGraphDocument();
 
-            List<ElementContainer> allContainer = useElements ? null : mainDoc.getElementContainer(ModelElement.class, true, alphabetic);
-            List<ModelElement> allElements = useElements ? mainDoc.getModelItems(ModelElement.class, true, alphabetic) : null;
+            List<ElementContainer> allContainer = useElements ? null : mainDoc.getElementContainers(ModelElement.class, true);
+            List<ModelElement> allElements = useElements ? mainDoc.getModelItems(ModelElement.class, true, true) : null;
 
             Map<Class<? extends ModelElement>, Integer> class2ElementCount = new HashMap<>();
             Map<Class<? extends ModelElement>, Integer> class2ContainerCountFromGraphDocuments = new HashMap<>();

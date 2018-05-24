@@ -384,10 +384,10 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             return;
         }
 
-        List<ElementContainer> searchSet = doc.getElementContainer((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true, true);
+        List<ElementContainer> searchSet = doc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true);
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
         if (doc != mainDoc) {
-            for (ElementContainer ec : mainDoc.getElementContainer((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true, true)) {
+            for (ElementContainer ec : mainDoc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true)) {
                 if (ModelConstants.isUnique(ec.getElement().getClass())) {
                     Alphabetical.insert(searchSet, ec);
                 }

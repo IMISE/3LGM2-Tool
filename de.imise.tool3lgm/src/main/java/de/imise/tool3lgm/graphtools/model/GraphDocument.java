@@ -4369,21 +4369,21 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @return Liste mit ElementContainer oder <code>null</code>
      */
     public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz) {
-        return getElementContainer(clazz, true);
+        return getElementContainers(clazz, true);
     }
 
-    /**
-     * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement von
-     * der übergebenen Klasse ist.<br>
-     * Unterklassen werden nicht beachtet.
-     *
-     * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
-     * @param includeSubClasses wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
-     * @return Liste mit ElementContainer oder <code>null</code>
-     */
-    public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
-        return getElementContainer(clazz, includeSubClasses, false);
-    }
+    //    /**
+    //     * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement von
+    //     * der übergebenen Klasse ist.<br>
+    //     * Unterklassen werden nicht beachtet.
+    //     *
+    //     * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
+    //     * @param includeSubClasses wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
+    //     * @return Liste mit ElementContainer oder <code>null</code>
+    //     */
+    //    public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
+    //        return getElementContainer(clazz, includeSubClasses, false);
+    //    }
 
     /**
      * Gibt alle eine nach der <code>toString()</code>-Methode der ElementContainer
@@ -4393,10 +4393,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param clazz
      * @param includeSubClasseswenn <code>true</code> wird ist die Rückgabeliste alphabetisch
      *            sortiert (das betrifft nur die KnotenContainer, aber nicht die KantenContainer)
-     * @param alphabetical
      * @return
      */
-    public final List<ElementContainer> getElementContainers(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean alphabetical) {
+    public final List<ElementContainer> getElementContainers(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
 
         //		long start = System.currentTimeMillis();
 
@@ -4423,7 +4422,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             if (clazz == Knickpunkt.class) {
                 layerElements.add(lc.getBendpointContainers());
             } else if (ModelConstants.isNodeType(clazz)) {
-                layerElements.add(alphabetical ? lc.getNodeContainersAlphabetical() : lc.getGraphNodeContainers());
+                layerElements.add(lc.getNodeContainersAlphabetical());
                 //Kanten
             } else if (ModelConstants.isEdgeType(clazz)) {
                 layerElements.add(lc.getEdgeContainers());
@@ -4438,7 +4437,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 //alle Elemente sind Unterklassen von ModelElement -> alle Containerlisten können zur Rückgabeliste hinzugefügt werden
                 lc.addBendpointContainers(objects);
                 lc.addEdgeContainers(objects);
-                lc.addNodeContainers(objects, alphabetical);
+                lc.addNodeContainers(objects, true);
                 //wenn eine Unterklasse von ModelElement gesucht werden soll
             } else {
                 //dann wurde oben in layerElements wenigstens eine ElementContainerliste hinzugefügt
@@ -4458,7 +4457,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         //wenn alphabetisch sortiert werden soll und andere Elemente als die bereits in der aplhabetisch sortierten
         //Knotenliste enthaltenen zur Rückgabeliste hinzugefügt wurden
-        if (alphabetical && (clazz == Knickpunkt.class || !ModelConstants.isNodeType(clazz))) {
+        if (clazz == Knickpunkt.class || !ModelConstants.isNodeType(clazz)) {
             //aplhabetisch sortieren
             Alphabetical.sort(objects);
         }

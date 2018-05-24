@@ -136,7 +136,7 @@ public class SimpleRedundancyAnalysis {
     private List<ElementContainer> getAllAbsolutePartContainer() {
         MetaPath metaPath = definition.getMetaPath();
         Class<? extends ModelElement> startClass = metaPath.getStartClass();
-        List<ElementContainer> allElemCont = doc.getElementContainer(startClass, true);
+        List<ElementContainer> allElemCont = doc.getElementContainers(startClass, true);
         for (int i = allElemCont.size() - 1; i >= 0; i--) {
             ElementContainer ec = allElemCont.get(i);
             ModelElement me = ec.getElement();
