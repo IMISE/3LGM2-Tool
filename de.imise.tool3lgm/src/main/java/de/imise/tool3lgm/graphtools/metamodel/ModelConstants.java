@@ -265,8 +265,12 @@ public final class ModelConstants {
     public static final boolean hasLayout(final Class<? extends ModelElement> elementClass) {
         if (elementClassesWithLayout == null) {
             ImmutableSet.Builder<Class<? extends ModelElement>> elementClassesWithLayoutBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
+            //LayerKnoten
+            elementClassesWithLayoutBuilder.add(LayerKnoten.class);
+            //alle Knoten die Paintable sind oder ihre Kantennummern an andere Knoten schreiben
+            GraphViewDefinition graphViewDefinition = getGraphViewDefinition();
             for (Class<? extends ModelElement> clazz : ALL_NODES) {
-                if (getGraphViewDefinition().isPaintable(clazz)) {
+                if (graphViewDefinition.isPaintable(clazz)) {
                     elementClassesWithLayoutBuilder.add(clazz);
                     continue;
                 }
@@ -275,7 +279,6 @@ public final class ModelConstants {
                     continue;
                 }
             }
-            elementClassesWithLayoutBuilder.add(LayerKnoten.class);
             elementClassesWithLayout = elementClassesWithLayoutBuilder.build();
         }
         return elementClassesWithLayout.contains(elementClass);
