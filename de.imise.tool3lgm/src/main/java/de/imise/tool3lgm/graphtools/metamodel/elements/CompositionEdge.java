@@ -18,6 +18,12 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
  */
 public abstract class CompositionEdge extends SubordinationEdge {
 
+    /** Richtung, in der die Kante vom Oberelement auf das Unterelement zeigt */
+    public static final int MASTER_TO_SLAVE_DIRECTION = SUPER_TO_SUB_DIRECTION;
+
+    /** Richtung, in der die Kante vom Unterelement auf das Oberelement zeigt */
+    public static final int SLAVE_TO_MASTER_DIRECTION = SUB_TO_SUPER_DIRECTION;
+
     /**
      * Die Slave-Kardinalität zum Master ist immer 1..1. ALso ein Slave muss genau einen Master haben.
      */
