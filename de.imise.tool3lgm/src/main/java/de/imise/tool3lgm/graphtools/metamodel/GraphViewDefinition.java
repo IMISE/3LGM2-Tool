@@ -70,6 +70,7 @@ public abstract class GraphViewDefinition {
     protected abstract MetaPath[] getConfigurationPaths();
 
     public MetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
+    public final MetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
         //es muss ein lazy-init sein, weil es sonst zu einer Init-Exception in der Reflection-Methode Edge.getStartClass(...)
         if (classToConfigurationPaths == null) {
             classToConfigurationPaths = new HashMap<>();
