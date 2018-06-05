@@ -810,7 +810,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
                 userField.putXMLFieldString(qName, elementValue.toString());
 
-            } else if (qName.equals("modell_3lgm_2")) {
+            } else if (qName.equals("modell_3lgm_2") || qName.equals("tool3lgm_clipboard")) {
                 //jetzt erst ganz zum Schluss die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten
                 Static.setProgressDialogStatusLabel("labelConnectTraces2");
                 for (Edge edge : edges) {
@@ -819,12 +819,6 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
                 /* Icons in den Container einlesen */
                 Static.setProgressDialogStatusLabel("labelReferenceIcons");
-                for (NodeContainer kc : containerWithIcon) {
-                    kc.setIcon();
-                }
-
-            } else if (qName.equals("tool3lgm_clipboard")) {
-                /* Icons in den Container einlesen */
                 for (NodeContainer kc : containerWithIcon) {
                     kc.setIcon();
                 }
