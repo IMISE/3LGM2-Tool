@@ -344,6 +344,15 @@ public abstract class Edge extends ModelElement {
         return " - ";
     }
 
+    @Override
+    public final String getDebugString() {
+        String startName = k1 == null ? "null" : k1.getName();
+        String endName = k2 == null ? "null" : k2.getName();
+        String startHash = start_hash != null ? start_hash : k1 == null ? "null" : k1.getHashString();
+        String endHash = end_hash != null ? end_hash : k2 == null ? "null" : k2.getHashString();
+        return startHash + " <-> " + endHash + " " + getClass().getSimpleName() + ": " + getName() + " " + startName + " <-> " + endName;
+    }
+
     /**
      * Prüft die Validität der Kanten und stellt sie wenn möglich her. Die Prüfung betrifft die Art der Kantenelemente
      *

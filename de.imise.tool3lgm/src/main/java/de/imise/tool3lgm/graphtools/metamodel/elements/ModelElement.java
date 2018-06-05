@@ -250,6 +250,10 @@ public abstract class ModelElement extends UserFieldTarget {
         return toStringName;
     }
 
+    public String getDebugString() {
+        return getClass().getSimpleName() + ": " + name;
+    }
+
     /**
      * @return
      */
