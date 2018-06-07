@@ -546,6 +546,12 @@ public class LGMGraphDocument extends GraphDocument {
             while (!knickpunkte.isEmpty()) {
                 BendpointContainer kp = knickpunkte.remove(0);
                 BendpointContainer oldKP = findBendpointContainerCoded(kp.getHashString());
+                //der Container kann null sein, wenn die zu kopierende Kante auch noch mind. einen Knickpunkt in einem
+                //anderen Teilmodell hat, denn es werden beim resolven der CopyDependencies alle Knickpunkte der Kante aus
+                //allen Teilmodellen eingesammelt
+                if (oldKP == null) {
+                    continue;
+                }
                 EdgeContainer kC = dest.findEdgeContainerCoded(kp.getKnickpunktKnoten().getKantenHash());
                 EdgeContainer oldKC = oldKP.getKnickpunktKnoten().getOwner();
                 if (oldKC == null) {
