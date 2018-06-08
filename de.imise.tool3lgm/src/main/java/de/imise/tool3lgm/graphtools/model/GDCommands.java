@@ -163,7 +163,7 @@ public enum GDCommands implements ActionSource {
     static {
         ActionSource.put(SelectionAction.class, MODEL_ACTION_COPY);
         ActionSource.put(SelectionAction.class, MODEL_ACTION_CUT);
-        ActionSource.put(SelectionAction.class, MODEL_ACTION_PASTE);
+        ActionSource.put(GraphDocumentAction.class, MODEL_ACTION_PASTE);
         ActionSource.put(SelectionAction.class, MODEL_ACTION_DELETE_FROM_MODEL);
         ActionSource.putInteractive(SelectionAction.class, MODEL_ACTION_DELETE); //Dialog mit Frage, ob im Teilmodell oder Modell gelöscht werden soll
         ActionSource.put(SubmodelSelectionAction.class, MODEL_ACTION_DELETE_FROM_SUBMODEL);
