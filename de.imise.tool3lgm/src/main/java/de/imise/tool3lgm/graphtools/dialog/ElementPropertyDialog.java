@@ -194,9 +194,13 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     private List<Class<? extends HasPartEdge>> getRecursiveHasPartEdges() {
         List<Class<? extends HasPartEdge>> recursiveHasPartEdges = new ArrayList<>();
         Class<? extends ModelElement> elementClass = modelElement.getClass();
-        for (Class<? extends Edge> edgeClass : ModelConstants.getEdgeTypes(elementClass)) {
+        Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass);
+        for (Class<? extends Edge> edgeClass : edgeTypes) {
             if (ModelConstants.isRecursiveHasPartEdge(edgeClass)) {
-                recursiveHasPartEdges.add(edgeClass.asSubclass(HasPartEdge.class));
+                Class<? extends HasPartEdge> hasPartEdgeClass = edgeClass.asSubclass(HasPartEdge.class);
+                if (HasPartEdge.isParentClass(hasPartEdgeClass, elementClass)) {
+                    recursiveHasPartEdges.add(hasPartEdgeClass);
+                }
             }
         }
         return recursiveHasPartEdges;
