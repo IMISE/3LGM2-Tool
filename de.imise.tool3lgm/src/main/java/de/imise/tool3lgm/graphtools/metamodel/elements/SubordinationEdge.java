@@ -55,7 +55,7 @@ public abstract class SubordinationEdge extends Edge {
      * @return
      */
     public static final Class<? extends ModelElement> getSuperClass(final Class<? extends SubordinationEdge> subordinationEdgeClass) {
-        return getEndClass(subordinationEdgeClass);
+        return getStartClass(subordinationEdgeClass);
     }
 
     /**
