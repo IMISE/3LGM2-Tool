@@ -23,8 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
-import com.google.common.collect.ImmutableList;
-
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -76,7 +74,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
 
         GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
 
-        wieviele = graphViewDefinition.getPaintableNodesCount() + 4; // Sicherheit geht vor!
+        wieviele = graphViewDefinition.getMetaModelSpecificPaintableNodes().size();
 
         insets = new Insets(0, 0, 0, 0);
         knoten = new NodeContainer[wieviele];
@@ -141,31 +139,31 @@ public class LayoutEditor extends JDialog implements ActionListener {
 
         flaeche.setLayout(null);
 
-        List<Class<? extends ModelElement>[]> layerClasses = ImmutableList.of(ModelConstants.ALL_DOMAIN_LAYER_NODES, ModelConstants.ALL_LOGICAL_LAYER_NODES, ModelConstants.ALL_PHYSICAL_LAYER_NODES);
-
         offset = 0;
         counter = 0;
         int maxInRow = 0;
-        for (int i = 0; i < layerClasses.size(); i++) {
-            Class<? extends ModelElement>[] classes = layerClasses.get(i);
-            for (c = 0; c < classes.length; c++) {
-                if (ModelConstants.isAbstract(classes[c])) {
-                    continue;
-                }
-                if (!graphViewDefinition.isPaintable(classes[c])) {
+        List<Class<? extends ModelElement>> metaModelSpecificPaintableNodes = graphViewDefinition.getMetaModelSpecificPaintableNodes();
+        for (int l = 0; l < ModelConstants.VISIBLE_LAYERS.length; l++) {
+            int currentLayer = ModelConstants.VISIBLE_LAYERS[l];
+            for (int c = 0; c < metaModelSpecificPaintableNodes.size(); c++) {
+                Class<? extends ModelElement> paintbaleClass = metaModelSpecificPaintableNodes.get(c);
+                if (ModelConstants.isAbstract(paintbaleClass)) {
                     continue;
                 }
                 // nur für Node kann man das Layout im Moment festlegen -> Kanten auslassen
-                if (!Node.class.isAssignableFrom(classes[c])) {
+                if (!Node.class.isAssignableFrom(paintbaleClass)) {
+                    continue;
+                }
+                if (ModelConstants.layerFor(paintbaleClass) != currentLayer) {
                     continue;
                 }
                 if (c > maxInRow) {
                     maxInRow = c;
                 }
                 int index = counter + offset;
-                NodeContainer kc = new NodeContainer((Node) ModelConstants.createElement(classes[c], true), mydoc);
+                NodeContainer kc = new NodeContainer((Node) ModelConstants.createElement(paintbaleClass, true), mydoc);
                 knoten[index] = kc;
-                kc.getKnoten().setName(ModelConstants.getDisplayableName(classes[c]));
+                kc.getKnoten().setName(ModelConstants.getDisplayableName(paintbaleClass));
                 kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
                 kc.setFont(mydoc.getMapping().getStandardFont(kc));
 

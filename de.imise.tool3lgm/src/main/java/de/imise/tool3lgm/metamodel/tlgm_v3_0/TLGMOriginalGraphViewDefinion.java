@@ -36,6 +36,7 @@ public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
     protected final Class[] getPaintableNodes() {
         //diese Funtkion wird nur ein einziges Mal aufgerufen, daher ist es ok,
         //dass das Array hier in der Funktion immer wieder neu angelegt wird
+        //Die Reihenfolge in dieser Liste legt fest, in welcher Reihenfolge die Elemente in dem gloabeln LayoutEditor angezeigt werden
         Class[] graphViewVisibleNodes = {
                 Aufgabe.class,
                 Objekttyp.class,

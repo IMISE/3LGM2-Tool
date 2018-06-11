@@ -250,36 +250,24 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     // --- Methoden zur Statusveraenderung --- Ende ---
 
+    private JMenu createLayerMenu(final Iterable<Class<? extends ModelElement>> createableLayerNodes) {
+        JMenu layerMenu = new JMenu(getResString("el_neu"));
+        for (Class<? extends ModelElement> elementClass : createableLayerNodes) {
+            JMenuItem item = new JMenuItem(getDisplayableName(elementClass));
+            item.addActionListener(this);
+            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + elementClass.getName());
+            layerMenu.add(item);
+        }
+        return layerMenu;
+    }
+
     /**
      *
      */
     private void init() {
-        int c;
-        JMenuItem item;
-
-        new_domain_tree = new JMenu(getResString("el_neu"));
-        for (c = 0; c < CREATABLE_DOMAIN_LAYER_NODES.length; c++) {
-            item = new JMenuItem(getDisplayableName(CREATABLE_DOMAIN_LAYER_NODES[c]));
-            item.addActionListener(this);
-            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + CREATABLE_DOMAIN_LAYER_NODES[c].getName());
-            new_domain_tree.add(item);
-        }
-        new_logical_tree = new JMenu(getResString("el_neu"));
-        for (c = 0; c < CREATABLE_LOGICAL_LAYER_NODES.length; c++) {
-            item = new JMenuItem(getDisplayableName(CREATABLE_LOGICAL_LAYER_NODES[c]));
-            item.addActionListener(this);
-            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + CREATABLE_LOGICAL_LAYER_NODES[c].getName());
-            new_logical_tree.add(item);
-        }
-
-        new_physical_tree = new JMenu(getResString("el_neu"));
-        for (c = 0; c < CREATABLE_PHYSICAL_LAYER_NODES.length; c++) {
-            item = new JMenuItem(getDisplayableName(CREATABLE_PHYSICAL_LAYER_NODES[c]));
-            item.addActionListener(this);
-            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + CREATABLE_PHYSICAL_LAYER_NODES[c].getName());
-            new_physical_tree.add(item);
-        }
-
+        new_domain_tree = createLayerMenu(CREATABLE_DOMAIN_LAYER_NODES);
+        new_logical_tree = createLayerMenu(CREATABLE_LOGICAL_LAYER_NODES);
+        new_physical_tree = createLayerMenu(CREATABLE_PHYSICAL_LAYER_NODES);
         new_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, Textfield.class.getName());
 
         properties = getItem(ActionLibrary.ContextActions.ACTION_SHOW_ELEMENT_PROPERTY_DIALOG);

@@ -21,6 +21,8 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -676,23 +678,22 @@ public class ActionLibrary {
     public static class CreateElementActions {
 
         /** Array aller Insert-Actions für die Fachliche Ebene */
-        public static final Action[] DOMAIN_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES);
+        public static final List<Action> DOMAIN_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES);
 
         /** Array aller Insert-Actions für die Logische Werkzeugebene */
-        public static final Action[] LOGICAL_TOOL_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_LOGICAL_LAYER_NODES);
+        public static final List<Action> LOGICAL_TOOL_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_LOGICAL_LAYER_NODES);
 
         /** Array aller Insert-Actions für die Physische Werkzeugebene */
-        public static final Action[] PHYSICAL_TOOL_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES);
+        public static final List<Action> PHYSICAL_TOOL_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES);
 
         /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der spezifizierten Klassen wieder */
-        private static Action[] getActions(final Class<? extends ModelElement>[] treeCreatableLayerNodes) {
-            GraphDocumentAction[] actions = new GraphDocumentAction[treeCreatableLayerNodes.length];
-            for (int c = 0; c < treeCreatableLayerNodes.length; c++) {
-                String actionName = ModelConstants.getDisplayableName(treeCreatableLayerNodes[c]);
-                actions[c] = new GraphDocumentAction(GDCommands.MODEL_ACTION_CREATE_NODE, treeCreatableLayerNodes[c].getName(), actionName, null);
+        private static List<Action> getActions(final Iterable<Class<? extends ModelElement>> creatableLayerNodes) {
+            List<Action> actions = new ArrayList<>();
+            for (Class<? extends ModelElement> creatableClass : creatableLayerNodes) {
+                String actionName = ModelConstants.getDisplayableName(creatableClass);
+                actions.add(new GraphDocumentAction(GDCommands.MODEL_ACTION_CREATE_NODE, creatableClass.getName(), actionName, null));
             }
-            Alphabetical.sort(actions);
-            return actions;
+            return ImmutableList.sortedCopyOf(Alphabetical.getLocalizedComparator(), actions);
         }
 
     }

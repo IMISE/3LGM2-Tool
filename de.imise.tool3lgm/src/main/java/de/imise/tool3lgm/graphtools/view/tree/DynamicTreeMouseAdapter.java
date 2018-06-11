@@ -26,6 +26,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.util.collections.CollectionUtils;
 
 public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
 
@@ -152,28 +153,17 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
                     if (right_button) {
                         String label = path.getLastPathComponent().toString();
                         Class<? extends ModelElement> elementClass = null;
-                        for (int c = 0; c < ModelConstants.CREATABLE_DOMAIN_LAYER_NODES.length; c++) {
-                            String displayName = ModelConstants.getDisplayableName(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES[c]);
+                        for (Class<? extends ModelElement> creatableElementClass : CollectionUtils.getCommonIterable(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES, ModelConstants.CREATABLE_LOGICAL_LAYER_NODES,
+                                ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES)) {
+                            String displayName = ModelConstants.getDisplayableName(creatableElementClass);
                             if (displayName.equals(label)) {
-                                elementClass = ((Class<?>) ModelConstants.CREATABLE_DOMAIN_LAYER_NODES[c]).asSubclass(ModelElement.class);
-                            }
-                        }
-                        for (int c = 0; c < ModelConstants.CREATABLE_LOGICAL_LAYER_NODES.length; c++) {
-                            String displayName = ModelConstants.getDisplayableName(ModelConstants.CREATABLE_LOGICAL_LAYER_NODES[c]);
-                            if (displayName.equals(label)) {
-                                elementClass = ((Class<?>) ModelConstants.CREATABLE_LOGICAL_LAYER_NODES[c]).asSubclass(ModelElement.class);
-                            }
-                        }
-                        for (int c = 0; c < ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES.length; c++) {
-                            String displayName = ModelConstants.getDisplayableName(ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES[c]);
-                            if (displayName.equals(label)) {
-                                elementClass = ((Class<?>) ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES[c]).asSubclass(ModelElement.class);
+                                elementClass = creatableElementClass;
+                                break;
                             }
                         }
                         if (elementClass == null) {
                             return;
                         }
-
                         showNewInstanceContextMenu(elementClass.getSimpleName(), xin + 3, yin + 3);
                     }
                 }

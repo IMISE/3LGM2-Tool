@@ -138,35 +138,20 @@ public final class ModelConstants {
      */
     public static final int STANDARD_ERROR_INT_VALUE = new Integer(-1);
 
-    /** Alle Node der FE als Array */
-    public static final Class<? extends ModelElement>[] ALL_DOMAIN_LAYER_NODES = metaModel.getAllDomainLayerNodes();
-
     /** Alle Node der FE als HashSet */
-    public static final Set<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_DOMAIN_LAYER_NODES));
-
-    /** Alle Node zw. FE und LWE als Array */
-    public static final Class<? extends ModelElement>[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = metaModel.getAllInterDomainLogicalLayerNodes();
+    public static final Set<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllDomainLayerNodes()));
 
     /** Alle Node zw. FE und LWE als HashSet */
-    public static final Set<Class<? extends ModelElement>> ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES));
-
-    /** Alle Node der LWE als Array */
-    public static final Class<? extends ModelElement>[] ALL_LOGICAL_LAYER_NODES = metaModel.getAllLogicalLayerNodes();
+    public static final Set<Class<? extends ModelElement>> ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllInterDomainLogicalLayerNodes()));
 
     /** Alle Node der LWE als HashSet */
-    public static final Set<Class<? extends ModelElement>> ALL_LOGICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_LOGICAL_LAYER_NODES));
-
-    /** Alle Node zw. LWE und PWE als Array */
-    public static final Class<? extends ModelElement>[] ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES = metaModel.getAllInterLogicalPhysicalLayerNodes();
+    public static final Set<Class<? extends ModelElement>> ALL_LOGICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllLogicalLayerNodes()));
 
     /** Alle Node zw. LWE und PWE als HashSet */
-    public static final Set<Class<? extends ModelElement>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES));
-
-    /** Alle Node der PWE als Array */
-    public static final Class<? extends ModelElement>[] ALL_PHYSICAL_LAYER_NODES = metaModel.getAllPhysicalLayerNodes();
+    public static final Set<Class<? extends ModelElement>> ALL_INTER_LOGICAL_PHYSICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllInterLogicalPhysicalLayerNodes()));
 
     /** Alle Node der PWE als HashSet */
-    public static final Set<Class<? extends ModelElement>> ALL_PHYSICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(ALL_PHYSICAL_LAYER_NODES));
+    public static final Set<Class<? extends ModelElement>> ALL_PHYSICAL_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllPhysicalLayerNodes()));
 
     /** Set aller Knotenklassen */
     public static final Set<Class<? extends ModelElement>> ALL_NODES_SET = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(ALL_DOMAIN_LAYER_NODES_SET).addAll(ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES_SET).addAll(ALL_LOGICAL_LAYER_NODES_SET)
@@ -323,7 +308,7 @@ public final class ModelConstants {
      *            anlegen kann
      * @return
      */
-    private static Class<? extends ModelElement>[] getTreeVisibleNodes(final Class<? extends ModelElement>[] elementClasses, final boolean creatableOnly) {
+    private static Set<Class<? extends ModelElement>> getTreeVisibleNodes(final Iterable<Class<? extends ModelElement>> elementClasses, final boolean creatableOnly) {
         ImmutableSet.Builder<Class<? extends ModelElement>> creatableNodes = new ImmutableSet.Builder<>();
         for (Class<? extends ModelElement> elementClass : elementClasses) {
             if (!ModelConstants.isEdgeType(elementClass)) {
@@ -336,11 +321,7 @@ public final class ModelConstants {
                 }
             }
         }
-        ImmutableSet<Class<? extends ModelElement>> treeVisibleClassesSet = creatableNodes.build();
-        @SuppressWarnings("unchecked")
-        Class<? extends ModelElement>[] treeVisibleClasses = new Class[treeVisibleClassesSet.size()];
-        System.arraycopy(treeVisibleClassesSet.toArray(), 0, treeVisibleClasses, 0, treeVisibleClasses.length);
-        return treeVisibleClasses;
+        return creatableNodes.build();
     }
 
     /** Alle abstracten Klassen, die im Baum aus der FE auftauchen sollen */
@@ -575,22 +556,22 @@ public final class ModelConstants {
     // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException
 
     /** Alle im Baum auf der FE sichtbaren Node */
-    public static final Class<? extends ModelElement>[] TREE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(ALL_DOMAIN_LAYER_NODES, false);
+    public static final Iterable<Class<? extends ModelElement>> TREE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(ALL_DOMAIN_LAYER_NODES_SET, false);
 
     /** Alle im Baum auf der FE anlegbaren Node */
-    public static final Class<? extends ModelElement>[] CREATABLE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(TREE_DOMAIN_LAYER_NODES, true);
+    public static final Iterable<Class<? extends ModelElement>> CREATABLE_DOMAIN_LAYER_NODES = getTreeVisibleNodes(TREE_DOMAIN_LAYER_NODES, true);
 
     /** Alle im Baum auf der LWE sichtbaren Node */
-    public static final Class<? extends ModelElement>[] TREE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(ALL_LOGICAL_LAYER_NODES, false);
+    public static final Iterable<Class<? extends ModelElement>> TREE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(ALL_LOGICAL_LAYER_NODES_SET, false);
 
     /** Alle im Baum auf der FE anlegbaren Node */
-    public static final Class<? extends ModelElement>[] CREATABLE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(TREE_LOGICAL_LAYER_NODES, true);
+    public static final Iterable<Class<? extends ModelElement>> CREATABLE_LOGICAL_LAYER_NODES = getTreeVisibleNodes(TREE_LOGICAL_LAYER_NODES, true);
 
     /** Alle im Baum auf der PWE sichtbaren Node */
-    public static final Class<? extends ModelElement>[] TREE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(ALL_PHYSICAL_LAYER_NODES, false);
+    public static final Iterable<Class<? extends ModelElement>> TREE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(ALL_PHYSICAL_LAYER_NODES_SET, false);
 
     /** Alle im Baum auf der PWE anlegbaren Node */
-    public static final Class<? extends ModelElement>[] CREATABLE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(TREE_PHYSICAL_LAYER_NODES, true);
+    public static final Iterable<Class<? extends ModelElement>> CREATABLE_PHYSICAL_LAYER_NODES = getTreeVisibleNodes(TREE_PHYSICAL_LAYER_NODES, true);
 
     //	static {
     //		HashSet<Class<? extends ModelElement>> allElements= new HashSet<Class<? extends ModelElement>>(ALL_NODES_SET.size() + ALL_EDGES_SET.size());

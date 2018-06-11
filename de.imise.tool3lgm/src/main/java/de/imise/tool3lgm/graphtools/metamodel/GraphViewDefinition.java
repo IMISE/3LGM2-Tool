@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -22,15 +23,29 @@ import de.imise.util.Pair;
  */
 public abstract class GraphViewDefinition {
 
+    /**
+     * Liefert eine Liste aller metamodellabhängigen Knoten, die in der Grafik dargestellt werden.
+     * Die Reihenfolge in dieser Liste legt fest, in welcher Reihenfolge die Elemente in dem gloabeln LayoutEditor angezeigt werden
+     *
+     * @return
+     */
     protected abstract Class<? extends ModelElement>[] getPaintableNodes();
 
+    /**
+     * Liste aller Knoten, die in der Grafik sichtbar sind. Das sind alle Knoten metammodellabhängigen Knoten aus paintableNodes plus die
+     * metamodellunabhängigen Knickpunkte, Layer und Textfelder.
+     */
     private final Set<Class<? extends ModelElement>> allPaintableNodes;
+
+    /** Liste aller metmodellabhängigen Knoten, die in der Grafik angezeigt werden */
+    private final List<Class<? extends ModelElement>> metaModelSpecificPaintableNodes;
 
     private Map<Class<? extends ModelElement>, MetaPath> classToConfigurationPaths = null;
 
     public GraphViewDefinition() {
         ImmutableSet.Builder<Class<? extends ModelElement>> allPaintableNodesSetBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
-        for (Class<? extends ModelElement> paintableNodeClass : getPaintableNodes()) {
+        metaModelSpecificPaintableNodes = ImmutableList.copyOf(getPaintableNodes());
+        for (Class<? extends ModelElement> paintableNodeClass : metaModelSpecificPaintableNodes) {
             allPaintableNodesSetBuilder.add(paintableNodeClass);
         }
         //Diese Klassen müssen noch hinzugefügt werden, da sie auch dargestellt werden
@@ -54,12 +69,10 @@ public abstract class GraphViewDefinition {
     }
 
     /**
-     * Liefert die Anzahl der nicht dargestellten instanziierbaren Unterklassen von {@link ModelElement}
-     *
-     * @return
+     * @return Liste aller metmodellabhängigen Knoten, die in der Grafik angezeigt werden
      */
-    public final int getPaintableNodesCount() {
-        return allPaintableNodes.size();
+    public List<Class<? extends ModelElement>> getMetaModelSpecificPaintableNodes() {
+        return metaModelSpecificPaintableNodes;
     }
 
     /**

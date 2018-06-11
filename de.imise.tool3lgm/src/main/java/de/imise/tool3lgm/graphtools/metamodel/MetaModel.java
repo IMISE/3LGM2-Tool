@@ -192,7 +192,7 @@ public abstract class MetaModel {
     ////////////
 
     /** Alle Node der FE als Array */
-    public abstract Class<? extends ModelElement>[] getAllDomainLayerNodes();
+    protected abstract Class<? extends ModelElement>[] getAllDomainLayerNodes();
 
     /**
      * Alle abstracten Klassen, die im Baum auf der FE auftauchen sollen. Werden hier irgendwelche
