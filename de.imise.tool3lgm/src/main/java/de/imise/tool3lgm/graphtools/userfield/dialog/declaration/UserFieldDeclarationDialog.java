@@ -270,12 +270,11 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         boolean delete = true;
         if (showWarningForDeletingUserFields) {
             Boolean answer = MultipleOptionPane.showSingleCheckboxDialog(this, getResString("warnung"), getResString("userFieldDeclarationDialog_allValuesWillBeDeleted"), getResString("dont_ask_again"), false);
-            //OK wurde gedrückt
-            if (answer != null) {
+            if (answer != null) { // OK wurde gedrückt
                 showWarningForDeletingUserFields = answer;
-                return true;
+            } else { //Abbrechen oder Schließen wurde gedrückt
+                delete = false;
             }
-            return false;
         }
         return delete;
     }
