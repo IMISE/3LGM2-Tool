@@ -687,6 +687,7 @@ public abstract class CollectionUtils {
      * @param iterables
      * @return
      */
+    @SafeVarargs
     public static <T> Iterable<T> getCommonIterable(final Iterable<? extends T>... iterables) {
         return () -> new Iterator<T>() {
 
