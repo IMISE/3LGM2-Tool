@@ -59,7 +59,7 @@ public final class ModelConstants {
 
     public static MetaModel initMetaModel() {
         try {
-            return Tool3lgmMain.metaModelClass.newInstance();
+            return Tool3lgmMain.getMetaModelClass().newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }

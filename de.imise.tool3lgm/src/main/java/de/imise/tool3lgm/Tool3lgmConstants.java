@@ -179,9 +179,9 @@ public abstract class Tool3lgmConstants {
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
 
     /**
-     * ResourceBundle mit den Metamodell-spezifischen Daten
+     * ResourceBundle mit den metamodell-spezifischen Daten
      */
-    private static ResourceBundle metamodelBundle = ResourceBundle.getBundle(getMetamodelBundleName());
+    private static ResourceBundle metamodelBundle = null;
 
     private static String getMetamodelBundleName() {
         //das Metamodel-Resourcebundle liegt im resource-package unter demselben Pfad, wie die Metamodellklasse des Packages.
@@ -191,7 +191,7 @@ public abstract class Tool3lgmConstants {
         //geladen werden. Also muss man vom package-Namen des Metamodells den package-Namen der Tool3lgmConstants abziehen und den
         //vorgegebenen Bundle-Name "MetamodelResources" anhängen (mit Punkt dazwischen).
         String mainPackageName = Tool3lgmConstants.class.getPackage().getName();
-        String metaModelPackageName = Tool3lgmMain.metaModelClass.getPackage().getName();
+        String metaModelPackageName = Tool3lgmMain.getMetaModelClass().getPackage().getName();
         String bundleName = metaModelPackageName.substring(mainPackageName.length() + 1) + "." + METAMODEL_RESOURCE_BASE_NAME;
         return bundleName;
     }
@@ -410,6 +410,10 @@ public abstract class Tool3lgmConstants {
         try {
             return resourceBundle.getString(key);
         } catch (Exception e) {
+            //es muss lazy initialisiert werden!
+            if (metamodelBundle == null) {
+                metamodelBundle = ResourceBundle.getBundle(getMetamodelBundleName());
+            }
             return metamodelBundle.getString(key);
         }
     }

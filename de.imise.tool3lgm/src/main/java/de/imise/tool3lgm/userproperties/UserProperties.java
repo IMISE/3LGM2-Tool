@@ -137,6 +137,16 @@ public class UserProperties {
         return value == null ? property.getDefault() : Integer.parseInt(value);
     }
 
+    public static String set(final StringProperty property, final String value) {
+        Object oldValue = put(property, value);
+        return oldValue == null ? null : oldValue.toString();
+    }
+
+    public static final String get(final StringProperty property) {
+        String value = properties.getProperty(property.toString());
+        return value == null ? null : value;
+    }
+
     //Da es nur 2 Listenschlüssel gibt, kann man hier eine Flat3Map nehmen
     private static final Map<StringProperty, Integer> listKeyToListSize = new Flat3Map<>();
 
@@ -146,12 +156,13 @@ public class UserProperties {
      *
      * @param property
      * @param value
+     * @return letzten Wert, der ganz vorne stand
      */
-    public static void addListValue(final StringProperty property, final String value) {
+    public static String addListValue(final StringProperty property, final String value) {
         //wenn das gar kein Listenwert ist -> einfach den einzigen Wert für den Key setzen
         int maxSize = property.getMaxListSize();
         if (maxSize == 1) {
-            put(property, value);
+            return set(property, value);
         } else {
             String propertyName = property.toString();
             Integer sizeI = listKeyToListSize.get(property);
@@ -174,6 +185,8 @@ public class UserProperties {
                 Object oldValue = put(propertyName + i, currentValue);
                 currentValue = String.valueOf(oldValue);
             }
+            //gib des jetzt zweiten Listenwert als alten Wert zurück
+            return size > 1 ? properties.getProperty(propertyName + "1") : null;
         }
     }
 
@@ -184,7 +197,7 @@ public class UserProperties {
         }
     }
 
-    private static void remove(final StringProperty property) {
+    public static void remove(final StringProperty property) {
         String propertyName = property.toString();
         Integer sizeI = listKeyToListSize.get(property);
         if (sizeI == null) {
@@ -401,6 +414,7 @@ public class UserProperties {
         LOCALE,
         WORKING_DIRECTORY,
         ICON_PATH,
+        META_MODEL,
         /** Liste der zuletzt benutzten ModellDateien */
         LAST_USED_MODEL_FILES {
             @Override
@@ -423,6 +437,7 @@ public class UserProperties {
         public int getMaxListSize() {
             return 1;
         }
+
     }
 
     ////////////

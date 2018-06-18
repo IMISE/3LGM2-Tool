@@ -7,26 +7,32 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.List;
 
 import javax.swing.DebugGraphics;
 import javax.swing.JOptionPane;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.graphtools.dialog.RMIErrorPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.metamodel.tlgm_service.TLGMServiceMetaModel;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
 import de.imise.tool3lgm.rmi.Tool3lgmServer;
 import de.imise.tool3lgm.rmi.Tool3lgmServerImpl;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
+import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 
 public class Tool3lgmMain {
 
-    //public static final Class<? extends MetaModel> metaModelClass = TLGMOriginalMetaModel.class;
-    public static final Class<? extends MetaModel> metaModelClass = TLGMServiceMetaModel.class;
+    private static Class<? extends MetaModel> metaModelClass = null;
+
+    public static List<Class<? extends MetaModel>> META_MODEL_CLASSES = ImmutableList.of(TLGMOriginalMetaModel.class, TLGMServiceMetaModel.class);
 
     /**
      * Debug- Optionen fuer Swing-Komponenten; muss fuer Komponente mit setDebugGraphicsOption(int) gesetzt werden
@@ -64,6 +70,8 @@ public class Tool3lgmMain {
         //als allererstes müssen die statischen Felder der Tool3lgm-Klasse initialisert werden, damit
         //die Ressourcen gefunden werden
         Tool3lgm.init();
+
+        initMetaModel();
 
         // Erkennbare Argumente
         boolean visible = true;
@@ -311,6 +319,25 @@ public class Tool3lgmMain {
         if (BUFFERED) {
             debugGraphicsOption |= DebugGraphics.BUFFERED_OPTION;
         }
+    }
+
+    private static void initMetaModel() {
+        metaModelClass = Tool3lgmMetaModelChooser.getLastMetaModel();
+        while (metaModelClass == null) {
+            metaModelClass = Tool3lgmMetaModelChooser.chooseMetaModel(true);
+        }
+    }
+
+    public static final Class<? extends MetaModel> getMetaModelClass() {
+        if (Static.getTool() == null) {
+
+        }
+        return metaModelClass == null ? TLGMOriginalMetaModel.class : metaModelClass;
+    }
+
+    public static final void setMetaModelClass(final Class<? extends MetaModel> metaModelClass, final boolean askAgainAtNextStart) {
+        Tool3lgmMain.metaModelClass = metaModelClass;
+        UserProperties.set(StringProperty.META_MODEL, metaModelClass == null || askAgainAtNextStart ? null : metaModelClass.getSimpleName());
     }
 
 }
