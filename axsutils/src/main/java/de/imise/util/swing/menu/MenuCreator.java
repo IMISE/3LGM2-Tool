@@ -2,6 +2,7 @@ package de.imise.util.swing.menu;
 
 import java.awt.Component;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.AbstractButton;
@@ -89,6 +90,21 @@ public class MenuCreator {
      *            <code>false</code>: es werden keine Mnemonics gesetzt.
      */
     public static final Component[] createMenuEntries(final Object[] menuEntries, final boolean setMnemonics) {
+        return createMenuEntries(Arrays.asList(menuEntries), setMnemonics);
+    }
+
+    /**
+     * Erzeugt eine Array von Menu-Einträgen entsprechend der spezifizierten Werte.
+     * <p>
+     * Diese Methode tut das gleiche wie {@link #createMenuEntries(boolean, Object...)}
+     *
+     * @param menuEntries
+     *            siehe Klassen-Doku
+     * @param setMnemonics
+     *            <code>true</code>: setze Mnemonics für die Einträge wenn möglich <br>
+     *            <code>false</code>: es werden keine Mnemonics gesetzt.
+     */
+    public static final Component[] createMenuEntries(final Iterable<?> menuEntries, final boolean setMnemonics) {
         List<Object> allMenuEntries = new ArrayList<>();
         for (Object entry : menuEntries) {
             if (entry == null) {
