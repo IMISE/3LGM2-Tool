@@ -736,7 +736,9 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("icon")) {
                 layout.icon = elementValue.toString();
-                containerWithIcon.add((NodeContainer) container);
+                if (container != null) {
+                    containerWithIcon.add((NodeContainer) container);
+                }
 
             } else if (qName.equals("layer")) {
                 layer = null;
