@@ -15,6 +15,8 @@ import javax.swing.JSeparator;
 
 import com.google.common.base.Strings;
 
+import de.imise.util.Pair;
+
 /**
  * Stellt einen Dialog bereit, der untereinander CheckBoxen für übergebene Optionen darstellt,
  * die alle einzeln selektiert werden können. Der Dialog gibt die Selektion der Optionen in
@@ -81,7 +83,7 @@ public class MultipleOptionPane extends JOptionPane {
     }
 
     /**
-     * Zeigt einen Ok-Cancel-Dialog mit einer CHeckbix an.
+     * Zeigt einen Ok-Cancel-Dialog mit einer Checkbox an.
      *
      * @param parentComponent
      *            Besitzerkomponente des Dialoges
@@ -96,12 +98,49 @@ public class MultipleOptionPane extends JOptionPane {
      * @return
      *         Boolean-Wert mit der Selektion der angezeigten Chekcbox oder <code>null</code> bei Abbrechen oder Schließen über das Kreuz
      */
-    public static Boolean showSingleCheckboxDialog(final Component parentComponent, final String title, final String message, final String option, final boolean selected) {
+    public static final Boolean showSingleCheckboxDialog(final Component parentComponent, final String title, final String message, final String option, final boolean selected) {
         Object[] answer = showCheckBoxOptionDialog(parentComponent, title, message, null, null, false, option, selected);
         if (answer == null) {
             return null;
         }
         return answer[0] == null;
+    }
+
+    /**
+     * Das hier sollte man eigentlich über eine DropDown-Auswahl machen, statt über untereinander liegende Chekcboxen, aber das mit den Checkboxen war
+     * schon da.
+     * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine Checkbox darstellt.<br>
+     * Es kann immer nur eine Chekcbox gleichzeitig selektiert sein. Zusätlich kann separat in einer
+     * weiteren Checkbox eine Option wie "Diesen Dialog nicht mehr zeigen" angezeigt und der Eingabewert zurück geliefert werden.
+     *
+     * @param parentComponent
+     * @param title
+     * @param message
+     * @param options
+     * @param selected
+     * @param additionalSeparatedOption
+     * @param additionalSeparatedOptionSelected
+     * @return <code>null</code> wenn nichts gewählt wurde sonst ein Paar, das als erstes Elenent die gewählte Option enthält und als zweites den
+     *         Selektionszustand der Zusatzfrage. Dieser ist immer <code>null</code>, wenn die Zusatzfrage gar nicht angezeigt werden sollte.
+     */
+    public static final <T> Pair<T, Boolean> showSingleSelectionOptionDialog(final Component parentComponent, final String title, final String message, final T[] options, final Object selected, final String additionalSeparatedOption,
+            final boolean additionalSeparatedOptionSelected) {
+        boolean selectedOptions[] = new boolean[options.length];
+        for (int i = 0; i < selectedOptions.length; i++) {
+            selectedOptions[i] = options[i] == null ? selected == null : options[i].equals(selected);
+            if (selectedOptions[i]) {
+                break;
+            }
+        }
+        Object[] answer = showCheckBoxOptionDialog(parentComponent, title, message, options, selectedOptions, true, additionalSeparatedOption, additionalSeparatedOptionSelected);
+        if (answer != null) {
+            for (int i = 0; i < options.length; i++) {
+                if (answer[i] != null) {
+                    return new Pair<>((T) answer[i], Strings.isNullOrEmpty(additionalSeparatedOption) ? null : answer[answer.length - 1] != null);
+                }
+            }
+        }
+        return null;
     }
 
     /**
