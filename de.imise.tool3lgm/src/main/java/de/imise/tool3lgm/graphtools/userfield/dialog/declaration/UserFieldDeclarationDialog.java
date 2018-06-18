@@ -269,15 +269,13 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         //Wenn die Siocherheitsabfrage nicht bestätigt wird, wird cancel true. D.h. das Löschen wird abgebrochen.
         boolean delete = true;
         if (showWarningForDeletingUserFields) {
-            String[] frage = {
-                    getResString("userFieldDeclarationDialog_dontShowAgain")
-            };
-            Object[] result = MultipleOptionPane.showCheckBoxOptionDialog(this, getResString("warnung"), getResString("userFieldDeclarationDialog_allValuesWillBeDeleted"), frage);
-            if (result == null) { //Cancel gedrückt
-                delete = false;
-            } else if (result[0] != null) {
-                showWarningForDeletingUserFields = false;
+            Boolean answer = MultipleOptionPane.showSingleCheckboxDialog(this, getResString("warnung"), getResString("userFieldDeclarationDialog_allValuesWillBeDeleted"), getResString("dont_ask_again"), false);
+            //OK wurde gedrückt
+            if (answer != null) {
+                showWarningForDeletingUserFields = answer;
+                return true;
             }
+            return false;
         }
         return delete;
     }
