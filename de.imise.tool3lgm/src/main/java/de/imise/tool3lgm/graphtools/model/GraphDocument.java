@@ -31,7 +31,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -74,6 +73,7 @@ import de.imise.util.Alphabetical;
 import de.imise.util.OptionsSupport;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.dialog.ImageChooser;
+import de.imise.util.swing.dialog.MultipleOptionPane;
 
 public abstract class GraphDocument extends ElementSelectionContext implements SwingConstants {
 
@@ -515,17 +515,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         // - das Element ist ein untergeordnetes Element, aber sein übergeordnetes ist auch in dem Teilmodell
         else if (this == gdcoll.getMainGraphDocument() || isSelectedOnlyUnique() || isSelectedOnlySlaveRealNodes()) {
             if (UserProperties.is(BooleanProperty.OPTION_SHOW_REMOVE_WARNING)) {
-                JCheckBox dontAskAgain = new JCheckBox(getResString("dont_ask_again"));
-                dontAskAgain.setSelected(false);
-                Object[] cont = new Object[] {
-                        getResString("remove_element_warning"), dontAskAgain
-                };
-                int value = JOptionPane.showConfirmDialog(Static.getMainFrame(), cont, getResString("attention"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (value == JOptionPane.YES_OPTION) {
+                Boolean answer = MultipleOptionPane.showSingleCheckboxDialog(Static.getMainFrame(), getResString("attention"), getResString("remove_element_warning"), getResString("dont_ask_again"), false);
+                //es wurde nicht Abbrechen sonder Ok gedrückt
+                if (answer != null) {
                     dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
-                }
-                if (dontAskAgain.isSelected()) {
-                    BooleanProperty.OPTION_SHOW_REMOVE_WARNING.getAction().perform();
+                    if (!answer) { // die Checkbox ist nicht selektiert -> Globale Option "Warnmeldung vor dem Löschen" soll true sein
+                        BooleanProperty.OPTION_SHOW_REMOVE_WARNING.getAction().perform();
+                    }
                 }
             } else {
                 dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
