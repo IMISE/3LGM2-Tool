@@ -2,12 +2,16 @@ package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
-import java.awt.Frame;
+import java.awt.Component;
+import java.util.List;
 
-import javax.swing.JDialog;
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.metamodel.tlgm_service.TLGMServiceMetaModel;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.Pair;
@@ -18,16 +22,32 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  *
  * @author AXS (12.06.2018)
  */
-public class Tool3lgmMetaModelChooser extends JDialog {
+public class Tool3lgmMetaModelChooser {
 
-    private Tool3lgmMetaModelChooser(final Frame owner) {
-        super(owner);
+    private static Class<? extends MetaModel> metaModelClass = null;
+
+    private static List<Class<? extends MetaModel>> META_MODEL_CLASSES = ImmutableList.of(TLGMOriginalMetaModel.class, TLGMServiceMetaModel.class);
+
+    private static void initMetaModel() {
+        if (!UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START)) {
+            metaModelClass = getUserpropertiesStoredMetaModel();
+        }
+        while (metaModelClass == null) {
+            metaModelClass = chooseMetaModel(true);
+        }
     }
 
-    public static final Class<? extends MetaModel> getLastMetaModel() {
+    public static final Class<? extends MetaModel> getMetaModelClass() {
+        if (metaModelClass == null) {
+            initMetaModel();
+        }
+        return metaModelClass;
+    }
+
+    private static final Class<? extends MetaModel> getUserpropertiesStoredMetaModel() {
         String metaModelClassName = UserProperties.get(StringProperty.META_MODEL);
         if (metaModelClassName != null) {
-            for (Class<? extends MetaModel> metaModelClass : Tool3lgmMain.META_MODEL_CLASSES) {
+            for (Class<? extends MetaModel> metaModelClass : META_MODEL_CLASSES) {
                 if (metaModelClass.getName().endsWith(metaModelClassName)) {
                     return metaModelClass;
                 }
@@ -36,32 +56,41 @@ public class Tool3lgmMetaModelChooser extends JDialog {
         return null;
     }
 
-    public static final Class<? extends MetaModel> chooseMetaModel(final boolean showDontAskAgain) {
-        int optionsCount = Tool3lgmMain.META_MODEL_CLASSES.size();
+    public static void chooseNextStartMetaModel() {
+        Class<? extends MetaModel> oldMetaModelClass = metaModelClass;
+        Class<? extends MetaModel> choosedMetaModelClass = chooseMetaModel(false);
+        if (choosedMetaModelClass != null && choosedMetaModelClass != oldMetaModelClass) {
+            //            JOptionPane.showMessageDialog(Static.getTool(), getResString("metamodel_info"), getResString("metamodel_info_title"), JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+
+    private static final Class<? extends MetaModel> chooseMetaModel(final boolean initialSelection) {
+        int optionsCount = META_MODEL_CLASSES.size();
+        Class<? extends MetaModel> lastMetaModel = getUserpropertiesStoredMetaModel();
+        Component owner = initialSelection ? null : Static.getMainFrame();
+        String title = getResString("CHOOSE_META_MODEL_DIALOG_TITLE");
+        String message = initialSelection ? null : getResString("CHOOSE_META_MODEL_DIALOG_MESSAGE");
         @SuppressWarnings("unchecked")
         NamedObjectContainer<Class<? extends MetaModel>>[] options = new NamedObjectContainer[optionsCount];
+        NamedObjectContainer<Class<? extends MetaModel>> selectedOption = null;
         for (int i = 0; i < optionsCount; i++) {
-            Class<? extends MetaModel> metaModelClass = Tool3lgmMain.META_MODEL_CLASSES.get(i);
+            Class<? extends MetaModel> metaModelClass = META_MODEL_CLASSES.get(i);
             options[i] = new NamedObjectContainer<>(metaModelClass, getResString(metaModelClass.getSimpleName()));
+            if (i == 0 || lastMetaModel == metaModelClass) {
+                selectedOption = options[i];
+            }
         }
-        Class<? extends MetaModel> lastMetaModel = getLastMetaModel();
-        Pair<NamedObjectContainer<Class<? extends MetaModel>>, Boolean> choosedMetaModelAnswer = MultipleOptionPane.showSingleSelectionOptionDialog(Static.getMainFrame(), getResString("CHOOSE_META_MODEL_DIALOG_TITLE"), null, options, lastMetaModel,
-                showDontAskAgain ? getResString("dont_ask_again") : null, false);
+        String showAgainQuestion = getResString("show_this_dialog_at_start");
+        boolean showAgainQuestionSelection = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START) || initialSelection;
+        Pair<NamedObjectContainer<Class<? extends MetaModel>>, Boolean> choosedMetaModelAnswer = MultipleOptionPane.showSingleSelectionOptionDialog(owner, title, message, options, selectedOption, showAgainQuestion, showAgainQuestionSelection);
         if (choosedMetaModelAnswer == null) {
             return null;
         }
         NamedObjectContainer<Class<? extends MetaModel>> choosedMetaModelClassContainer = choosedMetaModelAnswer.getFirstItem();
         Class<? extends MetaModel> choosedMetaModelClass = choosedMetaModelClassContainer.getObject();
-        if (!showDontAskAgain || Boolean.TRUE.equals(choosedMetaModelAnswer.getSecondItem())) {
-            UserProperties.set(StringProperty.META_MODEL, choosedMetaModelClass.getSimpleName());
-        } else {
-            UserProperties.remove(StringProperty.META_MODEL);
-        }
+        UserProperties.set(StringProperty.META_MODEL, choosedMetaModelClass.getSimpleName());
+        UserProperties.set(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START, Boolean.TRUE.equals(choosedMetaModelAnswer.getSecondItem()));
         return choosedMetaModelClass;
-    }
-
-    public static final void setMetaModel(final Class<? extends MetaModel> metaModelClass) {
-        Tool3lgmMain.setMetaModelClass(metaModelClass, false);
     }
 
 }

@@ -26,6 +26,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Tool3lgmMetaModelChooser;
 import de.imise.tool3lgm.event.action.GlobalOptionAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
@@ -46,6 +47,7 @@ import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
 import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -844,6 +846,14 @@ public class ActionLibrary {
                     JOptionPane.showMessageDialog(getTool(), getResString("RMI_SETTINGS_INFO"));
                 }
             }
+        };
+
+        public static final Action ACTIONS_CHOOSE_META_MODEL = new StaticAction(MetaModel.class, "", getResString("metamodelOptionsMenu")) {
+            @Override
+            protected void actionPerformed() {
+                Tool3lgmMetaModelChooser.chooseNextStartMetaModel();
+            };
+
         };
     }
 
