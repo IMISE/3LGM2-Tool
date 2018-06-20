@@ -5,6 +5,8 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.Component;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -60,7 +62,7 @@ public class Tool3lgmMetaModelChooser {
         Class<? extends MetaModel> oldMetaModelClass = metaModelClass;
         Class<? extends MetaModel> choosedMetaModelClass = chooseMetaModel(false);
         if (choosedMetaModelClass != null && choosedMetaModelClass != oldMetaModelClass) {
-            //            JOptionPane.showMessageDialog(Static.getTool(), getResString("metamodel_info"), getResString("metamodel_info_title"), JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(Static.getTool(), getResString("metamodel_changed_info"), getResString("restart_required"), JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -68,8 +70,8 @@ public class Tool3lgmMetaModelChooser {
         int optionsCount = META_MODEL_CLASSES.size();
         Class<? extends MetaModel> lastMetaModel = getUserpropertiesStoredMetaModel();
         Component owner = initialSelection ? null : Static.getMainFrame();
-        String title = getResString("CHOOSE_META_MODEL_DIALOG_TITLE");
-        String message = initialSelection ? null : getResString("CHOOSE_META_MODEL_DIALOG_MESSAGE");
+        String title = getResString("choose_meta_model_dialog_title");
+        String message = null;
         @SuppressWarnings("unchecked")
         NamedObjectContainer<Class<? extends MetaModel>>[] options = new NamedObjectContainer[optionsCount];
         NamedObjectContainer<Class<? extends MetaModel>> selectedOption = null;

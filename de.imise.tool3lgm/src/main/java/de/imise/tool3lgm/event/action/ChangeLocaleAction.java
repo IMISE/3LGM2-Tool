@@ -75,12 +75,12 @@ public class ChangeLocaleAction extends ExtendedAction {
         ResourceBundle newLocaleBundle = ResourceBundle.getBundle(Tool3lgmConstants.RESOURCE_BASE_NAME);
         Locale.setDefault(oldLocale);
 
-        String info_oldLocale = getResString("language_info");
-        String info_newLocale = newLocaleBundle.getString("language_info");
+        String info_oldLocale = getResString("language_changed_info");
+        String info_newLocale = newLocaleBundle.getString("language_changed_info");
         String info = info_oldLocale + "\n\n" + info_newLocale;
 
-        String info_title_oldLocale = getResString("language_info_title");
-        String info_title_newLocale = newLocaleBundle.getString("language_info_title");
+        String info_title_oldLocale = getResString("restart_required");
+        String info_title_newLocale = newLocaleBundle.getString("restart_required");
         String info_title = info_title_oldLocale + " / " + info_title_newLocale;
 
         JOptionPane.showMessageDialog(Static.getTool(), info, info_title, JOptionPane.INFORMATION_MESSAGE);

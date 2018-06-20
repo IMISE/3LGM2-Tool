@@ -122,7 +122,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
      * @return
      */
     public static final void getInfoDialog() {
-        infoDialog = new JDialog(Static.getMainFrame(), getResString("SPLASH_SCRREN_TITLE"), true);
+        infoDialog = new JDialog(Static.getMainFrame(), getResString("splash_screen_title"), true);
         infoDialog.setSize(200, 100);
         infoDialog.setLocationRelativeTo(infoDialog.getOwner());
 
