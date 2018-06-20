@@ -848,7 +848,7 @@ public class ActionLibrary {
             }
         };
 
-        public static final Action ACTIONS_CHOOSE_META_MODEL = new StaticAction(MetaModel.class, "", getResString("metamodelOptionsMenu")) {
+        public static final Action ACTIONS_CHOOSE_META_MODEL = new StaticAction(MetaModel.class, "", getResString("metamodelOptionsMenu"), PPP) {
             @Override
             protected void actionPerformed() {
                 Tool3lgmMetaModelContext.chooseNextStartMetaModel();
