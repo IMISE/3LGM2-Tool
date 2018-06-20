@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.swing.Icon;
@@ -81,9 +80,6 @@ public abstract class Tool3lgmConstants {
     /** path for temp-files */
     public static final String TEMP_PATH = USER_HOME_DIR_NAME + "/";
 
-    /** Pfad zur Datei mit den Optionen eines Benutzers */
-    public static final File USER_INFO_FILE = new File(USER_HOME_DIR_NAME, ".tool3lgm2UserInfo");
-
     /**
      * Datei-Endung für große Icons.
      * <p>
@@ -139,9 +135,6 @@ public abstract class Tool3lgmConstants {
     public static final String WEB_EXPORT_RESOURCE_DIR_NAME = "webexport/";
 
     // Anfang FileFilter
-
-    /** Pfad zur Default-Datei in den Ressourcen mit den Optionen für einen Benutzer */
-    public static final URL DEFAULT_USER_INFO_FILE = ClassLoader.getSystemResource("DefaultUserProperties");
 
     /** Anzahl der im Menü angezeigten zu letzt benutzen Dateien */
     public static final int LAST_USED_MODEL_FILES_IN_MENU = 10;
@@ -333,58 +326,6 @@ public abstract class Tool3lgmConstants {
             return null;
         }
         return icon;
-    }
-
-    /**
-     * Liefert alle <code>Locale</code>s, für die Resourcen hinterlegt wurden.<br>
-     * Diese werden durch Auslesen der Dateien "Tool3lgmResources_LANGUAGECODE.properties" aus dem resource-Package ermittelt.
-     * Es wird davon ausgegangen, dass auf jeden Fall englische Ressourcen existieren, die in der Datei
-     * "Tool3lgmResources.properties" hinterlegt sind.<br>
-     *
-     * @return alle Locales, für die Ressourcen existieren
-     */
-    public static final Locale[] getInstalledLanguages() {
-        StringBuilder sb = new StringBuilder(RESOURCE_BASE_NAME);
-        // den Namen vervollständigen; die Zeichen an "XX" werden immer durch einen Ländercode ersetzt
-        sb.append("_");
-        String appendix = "XX";
-        sb.append(appendix);
-        // Positionen der Xe bestimmen
-        int firstXIndex = sb.length() - appendix.length();
-        // alle im System verfügbaren Locale-Sprachcodes holen (die sind immer 2 Zeichen lang)
-        String[] allLocales = Locale.getISOLanguages();
-        // Array für die gefundenen Ergebnislocales
-        Locale[] allFoundLocales = new Locale[allLocales.length];
-        // Anzahl der gefundenen Ergebnislocales
-        int foundLocales = 0;
-        // die erste immer auf Englisch setzen
-        allFoundLocales[foundLocales++] = Locale.ENGLISH;
-
-        Locale[] systemLocales = Locale.getAvailableLocales();
-
-        // alle Locales durchprobieren und nach den Ressourcendateien suchen
-        for (int i = 0; i < allLocales.length; i++) {
-            sb.setCharAt(firstXIndex, allLocales[i].charAt(0));
-            sb.setCharAt(firstXIndex + 1, allLocales[i].charAt(1));
-            boolean found = false;
-            try {
-                ResourceBundle.getBundle(sb.toString());
-                found = true;
-            } catch (MissingResourceException e) {
-            }
-            // wenn ein ResoruceBundle für die aktuelle Sprache gefunden wurde
-            if (found) {
-                // Suche die Systemlocale zum gefundenen ResourceBundle
-                for (int j = 0; j < systemLocales.length; j++) {
-                    if (systemLocales[j].toString().equals(allLocales[i])) {
-                        allFoundLocales[foundLocales++] = systemLocales[j];
-                    }
-                }
-            }
-        }
-        Locale[] returnArray = new Locale[foundLocales];
-        System.arraycopy(allFoundLocales, 0, returnArray, 0, foundLocales);
-        return returnArray;
     }
 
     /**

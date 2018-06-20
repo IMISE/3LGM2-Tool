@@ -6,6 +6,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -22,6 +23,7 @@ import org.apache.commons.collections4.map.Flat3Map;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.util.io.FileHandler;
 import de.imise.util.swing.event.ActionSource;
@@ -31,6 +33,12 @@ import de.imise.util.swing.event.ActionSource;
  *         created on 16.08.2007
  */
 public class UserProperties {
+
+    /** Pfad zur Default-Datei in den Ressourcen mit den Optionen für einen Benutzer */
+    private static final URL DEFAULT_USER_INFO_FILE = ClassLoader.getSystemResource("DefaultUserProperties");
+
+    /** Pfad zur Datei mit den Optionen eines Benutzers */
+    private static final File USER_INFO_FILE = new File(System.getProperty("user.home"), ".tool3lgm2UserInfo");
 
     private static final String TRANSIENT_PROPERTY_NAME_PREFIX = "TRANSIENT_";
 
@@ -227,11 +235,11 @@ public class UserProperties {
      * oder die Defaultdatei aus den Ressourcen.
      */
     private static void readUserInfo() {
-        File userInfoFile = Tool3lgmConstants.USER_INFO_FILE;
+        File userInfoFile = USER_INFO_FILE;
         //wird true, wenn die Default-Benutzereinstellungen aus den Ressourcen geladen wurden
         boolean isDefault = false;
         if (!userInfoFile.canRead()) {
-            FileHandler.copyFile(Tool3lgmConstants.DEFAULT_USER_INFO_FILE, userInfoFile);
+            FileHandler.copyFile(DEFAULT_USER_INFO_FILE, userInfoFile);
             isDefault = true;
         }
 
@@ -279,10 +287,10 @@ public class UserProperties {
 
     public static void save() {
         try {
-            if (!Tool3lgmConstants.USER_INFO_FILE.exists()) {
-                Tool3lgmConstants.USER_INFO_FILE.createNewFile();
+            if (!USER_INFO_FILE.exists()) {
+                USER_INFO_FILE.createNewFile();
             }
-            FileOutputStream out = new FileOutputStream(Tool3lgmConstants.USER_INFO_FILE);
+            FileOutputStream out = new FileOutputStream(USER_INFO_FILE);
             //vor dem Speichern alle transienten Properties entfernen und danach wieder hinzufügen
             Properties transientProperties = new Properties();
             for (Object key : properties.keySet()) {
@@ -471,7 +479,7 @@ public class UserProperties {
         if (language == null) {
             return UserProperties.locale;
         }
-        Locale[] locales = Tool3lgmConstants.getInstalledLanguages();
+        Locale[] locales = ChangeLocaleAction.getInstalledLanguages();
         Locale l = Locale.ENGLISH;
         for (int i = 0; i < locales.length; i++) {
             if (locales[i].getLanguage().equals(language)) {

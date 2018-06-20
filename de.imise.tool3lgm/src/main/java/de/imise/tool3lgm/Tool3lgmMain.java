@@ -48,11 +48,11 @@ public class Tool3lgmMain {
      */
     public static void main(final String args[]) {
 
-        //In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
-        ToolSplashScreen.update();
-
         //UserProperties initialisieren, damit die richige Locale gesetzt ist
         UserProperties.init();
+
+        //In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
+        ToolSplashScreen.update();
 
         setUIDefaults();
 

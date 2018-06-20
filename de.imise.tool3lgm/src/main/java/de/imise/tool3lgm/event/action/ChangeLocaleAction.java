@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
 import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
@@ -62,8 +63,12 @@ public class ChangeLocaleAction extends ExtendedAction {
             setSelected(true);
             return;
         }
-
         UserProperties.setLocale(locale.getLanguage());
+        showLocaleChangeNeedsRestartMessage();
+        setSelected(true);
+    }
+
+    private void showLocaleChangeNeedsRestartMessage() {
         // Meldung mit neuer und alter Locale anzeigen
         Locale oldLocale = Locale.getDefault();
         Locale.setDefault(locale);
@@ -79,8 +84,6 @@ public class ChangeLocaleAction extends ExtendedAction {
         String info_title = info_title_oldLocale + " / " + info_title_newLocale;
 
         JOptionPane.showMessageDialog(Static.getTool(), info, info_title, JOptionPane.INFORMATION_MESSAGE);
-
-        setSelected(true);
     }
 
     private void setSelected(final boolean b) {
@@ -93,7 +96,7 @@ public class ChangeLocaleAction extends ExtendedAction {
 
     /** Gibt ein Array von {@link ChangeLocaleAction}s zu jeder installierten Sprache wieder */
     public static final ChangeLocaleAction[] getAllActions() {
-        Locale[] locales = Tool3lgmConstants.getInstalledLanguages();
+        Locale[] locales = getInstalledLanguages();
         Alphabetical.sort(locales);
         ChangeLocaleAction[] allActions = new ChangeLocaleAction[locales.length];
         for (int i = 0; i < locales.length; i++) { // Wähle die Standard-Sprache aus den UserProperties
@@ -110,4 +113,57 @@ public class ChangeLocaleAction extends ExtendedAction {
     public String toString() {
         return super.toString() + "[locale=" + locale + ", selected=" + isSelected() + "]";
     }
+
+    /**
+     * Liefert alle <code>Locale</code>s, für die Resourcen hinterlegt wurden.<br>
+     * Diese werden durch Auslesen der Dateien "Tool3lgmResources_LANGUAGECODE.properties" aus dem resource-Package ermittelt.
+     * Es wird davon ausgegangen, dass auf jeden Fall englische Ressourcen existieren, die in der Datei
+     * "Tool3lgmResources.properties" hinterlegt sind.<br>
+     *
+     * @return alle Locales, für die Ressourcen existieren
+     */
+    public static final Locale[] getInstalledLanguages() {
+        StringBuilder sb = new StringBuilder(Tool3lgmConstants.RESOURCE_BASE_NAME);
+        // den Namen vervollständigen; die Zeichen an "XX" werden immer durch einen Ländercode ersetzt
+        sb.append("_");
+        String appendix = "XX";
+        sb.append(appendix);
+        // Positionen der Xe bestimmen
+        int firstXIndex = sb.length() - appendix.length();
+        // alle im System verfügbaren Locale-Sprachcodes holen (die sind immer 2 Zeichen lang)
+        String[] allLocales = Locale.getISOLanguages();
+        // Array für die gefundenen Ergebnislocales
+        Locale[] allFoundLocales = new Locale[allLocales.length];
+        // Anzahl der gefundenen Ergebnislocales
+        int foundLocales = 0;
+        // die erste immer auf Englisch setzen
+        allFoundLocales[foundLocales++] = Locale.ENGLISH;
+
+        Locale[] systemLocales = Locale.getAvailableLocales();
+
+        // alle Locales durchprobieren und nach den Ressourcendateien suchen
+        for (int i = 0; i < allLocales.length; i++) {
+            sb.setCharAt(firstXIndex, allLocales[i].charAt(0));
+            sb.setCharAt(firstXIndex + 1, allLocales[i].charAt(1));
+            boolean found = false;
+            try {
+                ResourceBundle.getBundle(sb.toString());
+                found = true;
+            } catch (MissingResourceException e) {
+            }
+            // wenn ein ResoruceBundle für die aktuelle Sprache gefunden wurde
+            if (found) {
+                // Suche die Systemlocale zum gefundenen ResourceBundle
+                for (int j = 0; j < systemLocales.length; j++) {
+                    if (systemLocales[j].toString().equals(allLocales[i])) {
+                        allFoundLocales[foundLocales++] = systemLocales[j];
+                    }
+                }
+            }
+        }
+        Locale[] returnArray = new Locale[foundLocales];
+        System.arraycopy(allFoundLocales, 0, returnArray, 0, foundLocales);
+        return returnArray;
+    }
+
 }
