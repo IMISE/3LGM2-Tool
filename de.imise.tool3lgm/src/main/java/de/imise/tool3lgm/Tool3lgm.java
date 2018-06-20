@@ -172,9 +172,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen können
         Rectangle maxBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         Dimension screenSize = new Dimension(maxBounds.width, maxBounds.height);
-        // TODO:____###### Größenänderung des Tools
-        //        screenSize.height -= 400;
-        //        screenSize.width -= 50;
         setSize(screenSize);
 
         //Arbeitsfläche mit SplitPane (rechts JDesktopPane für InternalFrame,
