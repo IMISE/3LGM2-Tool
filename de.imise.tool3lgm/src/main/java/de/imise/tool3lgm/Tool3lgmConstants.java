@@ -184,7 +184,7 @@ public abstract class Tool3lgmConstants {
         //geladen werden. Also muss man vom package-Namen des Metamodells den package-Namen der Tool3lgmConstants abziehen und den
         //vorgegebenen Bundle-Name "MetamodelResources" anhängen (mit Punkt dazwischen).
         String mainPackageName = Tool3lgmConstants.class.getPackage().getName();
-        String metaModelPackageName = Tool3lgmMetaModelChooser.getMetaModelClass().getPackage().getName();
+        String metaModelPackageName = Tool3lgmMetaModelContext.getMetaModelClass().getPackage().getName();
         String bundleName = metaModelPackageName.substring(mainPackageName.length() + 1) + "." + METAMODEL_RESOURCE_BASE_NAME;
         return bundleName;
     }

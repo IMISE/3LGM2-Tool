@@ -24,7 +24,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  *
  * @author AXS (12.06.2018)
  */
-public class Tool3lgmMetaModelChooser {
+public class Tool3lgmMetaModelContext {
 
     private static Class<? extends MetaModel> metaModelClass = null;
 

@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.Tool3lgmMetaModelChooser;
+import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -59,7 +59,7 @@ public final class ModelConstants {
 
     public static MetaModel initMetaModel() {
         try {
-            return Tool3lgmMetaModelChooser.getMetaModelClass().newInstance();
+            return Tool3lgmMetaModelContext.getMetaModelClass().newInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }

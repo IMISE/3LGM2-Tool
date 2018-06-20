@@ -26,7 +26,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.Tool3lgmMetaModelChooser;
+import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.event.action.GlobalOptionAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
@@ -851,7 +851,7 @@ public class ActionLibrary {
         public static final Action ACTIONS_CHOOSE_META_MODEL = new StaticAction(MetaModel.class, "", getResString("metamodelOptionsMenu")) {
             @Override
             protected void actionPerformed() {
-                Tool3lgmMetaModelChooser.chooseNextStartMetaModel();
+                Tool3lgmMetaModelContext.chooseNextStartMetaModel();
             };
 
         };
