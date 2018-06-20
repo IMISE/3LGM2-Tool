@@ -6,11 +6,13 @@ package de.imise.util.swing.dialog;
 import java.awt.Component;
 import java.awt.GridLayout;
 
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 
 import com.google.common.base.Strings;
@@ -201,7 +203,7 @@ public class MultipleOptionPane extends JOptionPane {
             final boolean additionalSeparatedOptionSelected) {
         JOptionPane optionPane = new MultipleOptionPane();
         int optionsCount = options == null ? 0 : options.length;
-        JCheckBox[] boxes = new JCheckBox[optionsCount];
+        AbstractButton[] boxes = new AbstractButton[optionsCount];
         ButtonGroup buttonGroup = singleSelection ? new ButtonGroup() : null;
         boolean showAdditionalOption = !Strings.isNullOrEmpty(additionalSeparatedOption);
         //Anzahl der Zeilen im Panel:
@@ -212,7 +214,8 @@ public class MultipleOptionPane extends JOptionPane {
         int panelLength = showAdditionalOption ? optionsCount > 0 ? optionsCount + 2 : 1 : optionsCount > 0 ? optionsCount : 0;
         JPanel checkBoxPanel = panelLength > 0 ? new JPanel(new GridLayout(panelLength, 1)) : null;
         for (int i = 0; i < optionsCount; i++) {
-            JCheckBox checkBox = new JCheckBox(options[i].toString());
+            String name = options[i].toString();
+            AbstractButton checkBox = singleSelection ? new JRadioButton(name) : new JCheckBox(name);
             boxes[i] = checkBox;
             if (buttonGroup != null) {
                 buttonGroup.add(checkBox);
