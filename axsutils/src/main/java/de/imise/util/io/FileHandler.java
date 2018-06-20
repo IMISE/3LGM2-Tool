@@ -16,6 +16,8 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.List;
 
+import com.google.common.base.Strings;
+
 /**
  * Diese Klasse stellt allgemeine Funktionen für den Umgang mit Dateien zur Verfügung.
  *
@@ -63,6 +65,40 @@ public class FileHandler {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn der Pfad zum übergebenen Verzeichnis existiert und man daraus lesen darf. Wird ein File und kein Directory
+     * übergeben,
+     * dann wird das Directory dieses Files geprüft.
+     *
+     * @param path
+     * @return
+     */
+    public static File getReadableDirectory(final File path) {
+        if (path == null) {
+            return null;
+        }
+        File dir = !path.isDirectory() ? path.getParentFile() : path;
+        if (dir.canRead()) {
+            return dir;
+        }
+        return null;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn der Pfad zum übergebenen Verzeichnis existiert und man daraus lesen darf. Wird ein File und kein Directory
+     * übergeben,
+     * dann wird das Directory dieses Files geprüft.
+     *
+     * @param path
+     * @return
+     */
+    public static File getReadableDirectory(final String path) {
+        if (Strings.isNullOrEmpty(path)) {
+            return null;
+        }
+        return getReadableDirectory(new File(path));
     }
 
     /**
