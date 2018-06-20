@@ -159,7 +159,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         //den Hauptframe in die Mitte setzen
         //setLocationRelativeTo(null);
-        setTitle(getResString("tool3lgm"));
+        setTitle(getResString("tool3lgm") + " " + getResString("tool3lgm_title_extension") + " " + getResString(Tool3lgmMetaModelContext.getMetaModelClass().getSimpleName()));
         //den Hauptframe initialisieren, damit die JOption-Panes der Lizenzanfrage an der richtigen Stelle sind.
         //        setVisible(true);
         //        LicenseHandler.checkLicenses();
