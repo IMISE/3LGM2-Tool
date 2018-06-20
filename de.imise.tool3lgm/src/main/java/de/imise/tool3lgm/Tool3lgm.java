@@ -296,10 +296,11 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             ExtendedFileChooser chooser = new ExtendedFileChooser(null, UserProperties.getWorkingDirectory());
             chooser.setMultiSelectionEnabled(false);
             FileNameExtensionFilter[] lgmFileFilter = Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED);
-            if (chooser.showOpenDialog(this, false, lgmFileFilter) == ExtendedFileChooser.APPROVE_OPTION) {
+            int chooserAnswer = chooser.showOpenDialog(this, false, lgmFileFilter);
+            UserProperties.setWorkingDirectory(chooser.getCurrentDirectory());
+            if (chooserAnswer == ExtendedFileChooser.APPROVE_OPTION) {
                 file = chooser.getSelectedFile();
                 Static.showProgressDialog(true);
-                UserProperties.setWorkingDirectory(file);
                 chooser.setVisible(false);
                 if (!loadFile(file, gdcoll)) {
                     Static.closeProgressDialog();
@@ -309,6 +310,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                 return false;
             }
         }
+        UserProperties.setWorkingDirectory(file);
 
         Static.setProgressDialogStatusLabel("finish_progress");
         modelBrowserPanel.addCollection(gdcoll);

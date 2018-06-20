@@ -529,9 +529,6 @@ public class UserProperties {
     // workingDirectory //
     //////////////////////
 
-    /** users home directory */
-    private static File workingDirectory = FileSystemView.getFileSystemView().getDefaultDirectory();
-
     /**
      * setzt das Standardverzeichnis zum Laden und Speichern von Modellen und
      * Exportdateien
@@ -539,14 +536,11 @@ public class UserProperties {
      * @param path File mit Pfandangabe
      */
     public static void setWorkingDirectory(final File path) {
-        File directory = path.isDirectory() ? path : path.getParentFile();
-        try {
-            if (directory != null && directory.canRead()) {
-                workingDirectory = directory;
-            }
-        } catch (Exception e) {
-            // mache nichts -> behalte altes Verzeichnis
+        File readableDirectory = FileHandler.getReadableDirectory(path);
+        if (readableDirectory == null) {
+            return;
         }
+        set(StringProperty.WORKING_DIRECTORY, readableDirectory.toString());
     }
 
     /**
@@ -556,6 +550,11 @@ public class UserProperties {
      * @return File des Standardverzeichnisses
      */
     public static File getWorkingDirectory() {
+        String workingDirectoryName = get(StringProperty.WORKING_DIRECTORY);
+        File workingDirectory = FileHandler.getReadableDirectory(workingDirectoryName);
+        if (workingDirectory == null) {
+            FileSystemView.getFileSystemView().getDefaultDirectory();
+        }
         return workingDirectory;
     }
 
