@@ -95,4 +95,18 @@ public class Tool3lgmMetaModelContext {
         return choosedMetaModelClass;
     }
 
+    public static final Class<? extends MetaModel> getMetaModelClassForName(final String simpleClassName) {
+        for (Class<? extends MetaModel> metaModelClass : META_MODEL_CLASSES) {
+            String name = metaModelClass.getSimpleName();
+            if (name.equals(simpleClassName)) {
+                return metaModelClass;
+            }
+        }
+        return null;
+    }
+
+    public static final String getDisplayableName(final Class<? extends MetaModel> metaModelClass) {
+        return getResString(metaModelClass.getSimpleName());
+    }
+
 }
