@@ -93,6 +93,44 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbVirtualPdvbVerbindung;
 })
 public class TLGMServiceMetaModel extends MetaModel {
 
+    @Override
+    protected final void putOldToNewClassNames() {
+        putOldToNewClassName("KnickpunktKnoten", "Knickpunkt");
+        putOldToNewClassName("TextfeldFach", "Textfield");
+        putOldToNewClassName("TextfeldLog", "Textfield");
+        putOldToNewClassName("TextfeldPhy", "Textfield");
+
+        putOldToNewClassName("Aufgabe", "Function");
+        putOldToNewClassName("Objekttyp", "ObjectType");
+        putOldToNewClassName("Organisationseinheit", "OrganisationalUnit");
+        putOldToNewClassName("AufOrgKombination", "Use");
+        putOldToNewClassName("RechAnwendungsbaustein", "ApplicationSystem");
+        putOldToNewClassName("KonAnwendungsbaustein", "OrganisationSystem");
+        putOldToNewClassName("Standort", "Location");
+        putOldToNewClassName("PhysischerDVBaustein", "PhysicalDataProcessingComponent");
+        putOldToNewClassName("Prozess", "Process");
+        putOldToNewClassName("Softwareprodukt", "SoftwareProduct");
+
+        putOldToNewClassName("AufAufOrgVerbindung", "Function_Use_Edge");
+        putOldToNewClassName("AufAufVerbindung", "Function_HasPartEdge");
+        putOldToNewClassName("AufObjVerbindung", "Function_ObjectType_Edge");
+        putOldToNewClassName("KawbAwbVerbindung", "ApplicationComponent_HasPartEdge");
+        putOldToNewClassName("ObjObjVerbindung", "ObjectType_HasPartEdge");
+        putOldToNewClassName("", "");
+        putOldToNewClassName("", "");
+        putOldToNewClassName("", "");
+        putOldToNewClassName("", "");
+        putOldToNewClassName("", "");
+        putOldToNewClassName("", "");
+
+        //        putOldToNewClassName("RawbAwbVerbindung", "RawbRawbVerbindung");
+        //        putOldToNewClassName("EtntKombination", "EreignisNachrichtenTyp");
+        //        putOldToNewClassName("EtdtKombination", "EreignisDokumentenTyp");
+        //        putOldToNewClassName("ETNTKombination", "EreignisNachrichtenTyp");
+        //        putOldToNewClassName("ETDTKombination", "EreignisDokumentenTyp");
+        //        putOldToNewClassName("AwbKawbVerbindung", "KawbAwbVerbindung");
+    }
+
     /////////////////////
     // PathsDefinition //
     /////////////////////
@@ -145,12 +183,7 @@ public class TLGMServiceMetaModel extends MetaModel {
 
     /** Alle Node der FE als Array */
     private static final Class[] ALL_DOMAIN_LAYER_NODES = {
-            Function.class,
-            ObjectType.class,
-            OrganisationalUnit.class,
-            Use.class,
-            SystemOfConcepts.class,
-            de.imise.tool3lgm.metamodel.tlgm_service.node.Process.class, // es gibt im lang-package ebenfalls eine Klasse Process
+            Function.class, ObjectType.class, OrganisationalUnit.class, Use.class, SystemOfConcepts.class, de.imise.tool3lgm.metamodel.tlgm_service.node.Process.class, // es gibt im lang-package ebenfalls eine Klasse Process
     };
 
     /** Alle Node zw. FE und LWE als Array */
@@ -195,11 +228,7 @@ public class TLGMServiceMetaModel extends MetaModel {
 
     /** Alle Node der PWE als Array */
     private final Class[] ALL_PHYSICAL_LAYER_NODES = {
-            PhysicalDataProcessingComponent.class,
-            DeviceClass.class,
-            Location.class,
-            DataTransmissionLink_Edge.class,
-            TransmissionMedium.class,
+            PhysicalDataProcessingComponent.class, DeviceClass.class, Location.class, DataTransmissionLink_Edge.class, TransmissionMedium.class,
     };
 
     @Override
