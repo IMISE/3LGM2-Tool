@@ -159,11 +159,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     private int page_width = INITIAL_PAGE_WIDTH;
 
     /**
-     * Faktor um den das Seitenverhältnis dieses GraphDocumentes von der urspünglichen Größe abweicht
-     */
-    private double pageSizeFactor = 1.0;
-
-    /**
      * COMMENTME
      */
     protected File process_file;
@@ -204,7 +199,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             layer[c] = new LayerContainer(new LayerKnoten(c), this, c);
             layer[c].setColor(Color.white);
         }
-        setPageSizeFactor(getPageSizeFactor());
+        setPageSizeFactor(1.0);
     }
 
     // Verwaltung globaler Modelldaten --- Anfang ---
@@ -216,7 +211,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *         <code>double</code>-Wert des Zoomfaktors
      */
     public double getPageSizeFactor() {
-        return pageSizeFactor;
+        return page_height / INITIAL_PAGE_HEIGHT;
     }
 
     /**
@@ -243,7 +238,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_SIZE_FACTOR + " " + hashString, newPageSizeFactor, pid);
             finish_transaction(pid);
         }
-        pageSizeFactor = newPageSizeFactor;
         if (frame != null) {
             frame.layoutChanged(this);
         }
@@ -4108,7 +4102,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         Static.getTool().createSzenarioFrame(szen);
-        szen.setPageSizeFactor(pageSizeFactor);
+        szen.setPageSizeFactor(getPageSizeFactor());
         szen.getMapping().adapt(getMapping());
         szen.getFrame().getInputGraphArea().adaptSettings(frame.getInputGraphArea());
         addElementsToSzenario(szen.getHashString(), elements, pid);
