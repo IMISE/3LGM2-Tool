@@ -91,8 +91,7 @@ public class DataImportModule {
         String message = "The model must be saved to run an import.";
         String title = "Save model?";
         Object[] options = {
-                "Save",
-                "Cancel"
+                "Save", "Cancel"
         };
         int answer = showOptionDialog(Static.getMainFrame(), message, title, YES_NO_OPTION, QUESTION_MESSAGE, null, //do not use a custom Icon
                 options, //the titles of buttons
@@ -532,6 +531,7 @@ public class DataImportModule {
     //            e.printStackTrace();
     //        }
     //
+    // TODO: AXS: 03.07.2018: falls dieser Code hier wieder aktiviert wird, müssen die Streams eigentlich am Ende auch wieder geschlossen werden, was meiner Meinung nach nirgends passiert
     //        //		doc.pasteInputStream(new StringBufferInputStream(xmlBuffer.toString()));
     //        doc.pasteInputStream(new ByteArrayInputStream(boas.toByteArray()));
     //        doc.finish_transaction(PID);
