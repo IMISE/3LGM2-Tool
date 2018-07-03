@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -2239,7 +2240,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *         die alte Selektion
      */
     private List<ElementContainer> expandSelection(final boolean addAllParts) {
-        List<ElementContainer> container2Select = new ArrayList<>();
+        Collection<ElementContainer> container2Select = new HashSet<>();
         for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
             ModelElement me = nc.getElement();
             for (ElementContainer partNc : me.getSubordinatedContainer(this, addAllParts)) {
@@ -2257,6 +2258,30 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             addSimpleToSelection(ec);
         }
         addSimpleToSelection(lastSelected);
+        //Knickpunkte aller Kanten dazuselektieren, bei denen beide Elemente selektiert sind
+        container2Select.clear();
+        for (ElementContainer ec : selectedContainer) {
+            ModelElement me = ec.getElement();
+            if (ModelConstants.isPaintable(me.getClass())) {
+                for (Edge edge : me.getEdges()) {
+                    ModelElement other = edge.getOther(me);
+                    if (ModelConstants.isPaintable(other.getClass())) {
+                        ElementContainer otherEc = other.getContainer(this);
+                        if (selectedContainer.contains(otherEc)) {
+                            EdgeContainer edgeC = (EdgeContainer) edge.getContainer(this);
+                            if (edgeC != null) {
+                                for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
+                                    container2Select.add(bc);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (ElementContainer ec : container2Select) {
+            addSimpleToSelection(ec);
+        }
         return oldSelection;
     }
 
