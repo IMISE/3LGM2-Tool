@@ -368,29 +368,16 @@ public final class ModelConstants {
         return DOUBLE_MEANING_EDGE_CLASSES.contains(edgeClass);
     }
 
-    //    /**
-    //     * Prüft, ob bei der Edge die Richtung egal ist bzw. immer DOUBLE sein sollte, damit auch alle Verbindungen
-    //     * zwischen den Elementen gefunden werden. Das gilt für alle einfachen Doppelkanten, die dieselben
-    //     * Elementarten verbinden sowie keine DoubleMeaningEdges, keine HasPartEdges und keine Compositions sind.
-    //     *
-    //     * @return
-    //     */
-    //    public static final boolean isAlwaysDoubleConnectedEdge(final Class<? extends Edge> edgeClass) {
-    //        //        return Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && !(isDoubleMeaningEdge(edgeClass) || HasPartEdge.class.isAssignableFrom(edgeClass) || CompositionEdge.class.isAssignableFrom(edgeClass));
-    //        //nochmal geändert: wenn die Kante dieselbe Elementart verbindet und in beide Richtungen gleich heißt -> immer doppelt
-    //        //return Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && getForwardMetaAssociationName(edgeClass).equals(getBackwardMetaAssociationName(edgeClass));
-    //        //return !isDirectedEdge(edgeClass);
-    //    }
-
     /**
-     * Prüft, ob Kante gerichtet ist. Das ist sie, wenn sie nicht dieselben Elementarten verbindet und in beide Richtungen einen unterwchiedlichen
-     * Anzeigenamen hat.
+     * Prüft, ob Kante gerichtet ist. Das ist sie, wenn sie nicht dieselben Elementarten verbindet oder in beide Richtungen einen unterschiedlichen
+     * Anzeigenamen hat oder eine doppelte Bedeutung hat. Im originalen Metamodell heißen die KommBeziehungen in beide Richtungen gleich, haben
+     * aber eine doppelte Bedeutung und sollen somit gerichtet dargestellt werden.
      *
      * @param edgeClass
      * @return
      */
     public static final boolean isDirectedEdge(final Class<? extends Edge> edgeClass) {
-        return Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass) || !getForwardMetaAssociationName(edgeClass).equals(getBackwardMetaAssociationName(edgeClass));
+        return Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass) || isDoubleMeaningEdge(edgeClass) || !getForwardMetaAssociationName(edgeClass).equals(getBackwardMetaAssociationName(edgeClass));
     }
 
     /**
