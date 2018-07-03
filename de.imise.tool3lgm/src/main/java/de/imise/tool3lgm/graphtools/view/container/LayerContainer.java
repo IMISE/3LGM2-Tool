@@ -448,9 +448,7 @@ public class LayerContainer extends ElementContainer {
     @Override
     protected void paintChildren(final Graphics g) {
         //		synchronized (getTreeLock()) {
-
         tmpEdgeContainer.clear();
-
         for (NodeContainer ec : graphNodeContainers) {
             ec.paint(g);
         }
@@ -473,7 +471,6 @@ public class LayerContainer extends ElementContainer {
                 ec.paint(g);
             }
         }
-
         if (!isPaintEdgesOnlyForSelectedElements) {
             for (BendpointContainer ec : bendpointContainers) {
                 ec.paint(g);
@@ -484,7 +481,6 @@ public class LayerContainer extends ElementContainer {
             }
             paintingSurrogates = false;
         }
-
         //		if (doc.isVerificationMode()){
         //			Rectangle r = InputGraphArea.grabbedElementsFullRect;
         //			if (r!=null) {

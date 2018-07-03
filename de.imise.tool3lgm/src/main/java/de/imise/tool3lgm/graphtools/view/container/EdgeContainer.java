@@ -586,7 +586,7 @@ public class EdgeContainer extends ElementContainer {
         if (!k1.isPaintable()) {
             return false;
         }
-        ModelElement k2 = kc1.getElement();
+        ModelElement k2 = kc2.getElement();
         if (!k2.isPaintable()) {
             return false;
         }
