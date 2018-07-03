@@ -11,8 +11,8 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransactionLink_Edge;
 public class IheActorOfIntegrationProfile extends IheConcept {
 
     @Override
-    public ElementPropertyDialog getPropertyDialog() {
-        ElementPropertyDialog dialog = super.getPropertyDialog();
+    public ElementPropertyDialog createPropertyDialog() {
+        ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripSingleConnectionPanel(IheIntegrationProfile_IheActorOfIntegrationProfile_Edge.class);
         dialog.addEdgePanel(IheTransactionLink_Edge.class);
         dialog.addEdgePanel(IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge.class);
