@@ -321,68 +321,14 @@ public class ToolXMLParser {
         return version.xmlVersionIndex >= 0 && version.lgmVersionIndex >= 0 && version.metaModelClass != null;
     }
 
-    /**
-     * @param file
-     * @return int[0] = xmlVersion, int[1] = fileVersion
-     * @throws IOException, FileNotFoundException
-     */
-    @SuppressWarnings("deprecation")
-    private static int[] _getVersion(final InputStream inputStream) throws FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
-        String line;
-        int[] version = {
-                -1, -1
-        };
-
-        ///*
-        //		byte[] byteBuffer = new byte[30];
-        //		inputStream.read(byteBuffer);
-        //		String s = new String(byteBuffer);
-        //		System.err.println(s);
-        //*/
-        DataInputStream dataStream = new DataInputStream(inputStream) {
-
-            @Override
-            public void close() {
-            }
-        };
-
-        ///*Das hier geht aus irgend einem Grund nicht. Der Stream haut beim Parser nicht mehr hin. Wahrscheinlich wird
-        // * der Zeiger innerhalb der Datei nicht mehr korrekt weitergesetzt.
-        //		InputStreamReader is = new InputStreamReader(inputStream) {public void close() {}};
-        //		BufferedReader dataStream = new BufferedReader(is) {public void close() {}};
-        //*/
-        line = dataStream.readLine();
-        for (int i = 0; i < supportedXMLVersions.length; i++) {
-            if (line.toLowerCase().equals(supportedXMLVersions[i].toLowerCase())) {
-                version[0] = i;
-                break;
-            }
-        }
-        if (version[0] == -1) {
-            throw new XMLVersionException(getResString("xmlversionsfehler"));
-        }
-
-        line = dataStream.readLine();
-        if (!line.startsWith("<!--Tool3lgmFile version=")) {
-            return version;
-        }
-        for (int i = 0; i < supportedFileVersions.length; i++) {
-            if (line.toLowerCase().equals(supportedFileVersions[i].toLowerCase())) {
-                version[1] = i;
-                break;
-            }
-        }
-        if (version[1] == -1) {
-            throw new LGMVersionException(getResString("lgmversionsfehler"));
-        }
-
-        return version;
-    }
-
     private static class FileVersion {
         int xmlVersionIndex = -1;
         int lgmVersionIndex = -1;
         Class<? extends MetaModel> metaModelClass = TLGMOriginalMetaModel.class; // das hier ist bei allen Modellen das Metamodell, bei denen es nicht explizit angegeben ist
+        @Override
+        public String toString() {
+            return metaModelClass.getSimpleName() + " xmlVersion='" + supportedXMLVersions[xmlVersionIndex] + "' lgmVersion='" + supportedFileVersions[lgmVersionIndex] + "'";
+        }
     }
 
     /**
@@ -393,11 +339,7 @@ public class ToolXMLParser {
     @SuppressWarnings("deprecation")
     private static FileVersion extractVersionAndMetaModel(final InputStream inputStream) throws FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
         String line;
-        DataInputStream dataStream = new DataInputStream(inputStream) {
-            @Override
-            public void close() {
-            }
-        };
+        DataInputStream dataStream = new DataInputStream(inputStream);
         FileVersion result = new FileVersion();
         line = dataStream.readLine();
         for (int i = 0; i < supportedXMLVersions.length; i++) {
