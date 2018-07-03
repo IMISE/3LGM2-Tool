@@ -266,7 +266,7 @@ public final class ModelConstants {
             }
             elementClassesWithLayout = elementClassesWithLayoutBuilder.build();
         }
-        return elementClassesWithLayout.contains(elementClass);
+        return elementClassesWithLayout.contains(elementClass) || Textfield.class.isAssignableFrom(elementClass);
     }
 
     private static Set<Class<? extends ModelElement>> elementClassesWithSortedEdges;
