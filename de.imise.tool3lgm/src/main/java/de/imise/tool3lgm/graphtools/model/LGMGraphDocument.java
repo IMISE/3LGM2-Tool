@@ -505,7 +505,9 @@ public class LGMGraphDocument extends GraphDocument {
                             newMainC.setExpanded(true);
                             newMainC.setHighLight(false);
                             newMainC.refreshText();
-                            destMainDoc.getLayer(newE.layerFor()).add(newMainC);
+                            int layerIndex = insertC.layerFor();
+                            LayerContainer layer = destMainDoc.getLayer(layerIndex);
+                            layer.add(newMainC);
                             if (newE instanceof Edge) {
                                 edges.add((Edge) newE);
                             } else if (newE instanceof Knickpunkt) {
