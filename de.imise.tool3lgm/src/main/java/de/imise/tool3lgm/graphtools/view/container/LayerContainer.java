@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
@@ -350,7 +352,12 @@ public class LayerContainer extends ElementContainer {
 
     @Override
     protected void paintComponent(final Graphics g) {
-        if (layerNumber != 1 && layerNumber != 3) {
+        //        if (layerNumber == 0) {
+        //            int page_width = getWidth();
+        //            int page_height = getHeight();
+        //            System.err.println("#########  Layer: x1=" + -page_width / 2 + "  y1=" + -page_height / 2 + "  x2=" + page_width / 2 + "  y2=" + page_height / 2);
+        //        }
+        if (layerNumber % 2 == 0) {
             int page_width = getWidth();
             int page_height = getHeight();
 
@@ -449,8 +456,25 @@ public class LayerContainer extends ElementContainer {
     protected void paintChildren(final Graphics g) {
         //		synchronized (getTreeLock()) {
         tmpEdgeContainer.clear();
+        boolean sizeIsOk = true;
+        //        if (layerNumber == 0) {
+        //            System.err.print("currentPageWidth=" + doc.getPageWidth() + "  currentPageHeigth=" + doc.getPageHeight());
+        //        }
         for (NodeContainer ec : graphNodeContainers) {
-            ec.paint(g);
+            if (!doc.ensureSize(ec)) {
+                sizeIsOk = false;
+            }
+            if (sizeIsOk) {
+                ec.paint(g);
+            }
+        }
+        //        if (layerNumber == 0) {
+        //            System.err.println(" ---->  pageWidth=" + doc.getPageWidth() + "  page_height=" + doc.getPageHeight());
+        //        }
+        if (!sizeIsOk) {
+            revalidate();
+            repaint();
+            return;
         }
         boolean isPaintEdgesOnlyForSelectedElements = UserProperties.is(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS);
         for (EdgeContainer ec : edgeContainers) {

@@ -21,6 +21,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SWAP_ED
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.io.File;
@@ -229,8 +230,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public void setPageSizeFactor(final double oldPageSizeFactor, final double newPageSizeFactor, final boolean logUndoRedo, final int pid) {
-        page_height = new Double(INITIAL_PAGE_HEIGHT * newPageSizeFactor).intValue();
-        page_width = new Double(INITIAL_PAGE_WIDTH * newPageSizeFactor).intValue();
+        double correctWidth = newPageSizeFactor * INITIAL_PAGE_WIDTH;
+        double correctHeight = newPageSizeFactor * INITIAL_PAGE_HEIGHT;
+        page_width = (int) correctWidth;
+        page_height = (int) correctHeight;
+        //wegen der Rundungsfehler einfach die Ebene immer mind. 1 Pixel größer setzen
+        page_width = correctWidth > page_width ? page_width + 1 : page_width;
+        page_height = correctHeight > page_height ? page_height + 1 : page_height;
         //wenn der Wert sich geändert hat, dann die UNDO/REDO-Kommandos hinzufügen
         if (logUndoRedo) {
             start_transaction(pid);
@@ -241,6 +247,35 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (frame != null) {
             frame.layoutChanged(this);
         }
+    }
+
+    public boolean ensureSize(final Component c) {
+        boolean w = correctSize(c.getX(), c.getWidth(), page_width, INITIAL_PAGE_WIDTH);
+        boolean h = correctSize(c.getY(), c.getHeight(), page_height, INITIAL_PAGE_HEIGHT);
+        //System.err.println(c.getClass().getSimpleName() + " " + c + " x1=" + (c.getX() - c.getWidth() / 2) + " y1=" + (c.getY() - c.getHeight() / 2) + " x2=" + (c.getX() + c.getWidth() / 2) + " y2=" + (c.getY() + c.getHeight() / 2));
+        return w && h;
+    }
+
+    private boolean correctSize(int xy, int wh, final int currentSize, final int initialSize) {
+        xy -= wh / 2; //übergebener Paramter ist der Mittelpunkt -> linke obere Ecke ist Mittelpunkt - halbe Weite bzw. Höhe
+        wh = xy + wh; //übergebener Parameter ist die Weite bzw. Höhe -> untere Ecke ist obere Ecke plus Weite bzw. Höhe
+        if (xy < 0) { //negative Werte positiv machen
+            xy = -xy;
+        }
+        if (wh < 0) { //negative Werte positiv machen
+            wh = -wh;
+        }
+        if (xy < wh) { //je nachdem, ob obere oder untere Ecke größere Koordinaten haben, dann den größeren Wert nehmen
+            xy = wh;
+        }
+        xy *= 2; //da die Zeichenfläche immer im Mittelpunkt (0,0) hat, muss der maximale x- bzw. y-Wert kleiner sein, als die halbe Ebenengröße. Ist er größer -> Ebene vergrößern
+        if (xy > currentSize) {
+            //            System.err.println("xy=" + xy + "   maxX=" + currentSize / 2);
+            //            System.err.println(xy * 2 + " / " + initialSize + " = " + xy * 2.0 / initialSize);
+            setPageSizeFactor(xy / initialSize);
+            return false;
+        }
+        return true;
     }
 
     /**
