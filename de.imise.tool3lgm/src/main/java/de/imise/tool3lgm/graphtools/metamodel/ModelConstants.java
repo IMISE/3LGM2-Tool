@@ -377,6 +377,7 @@ public final class ModelConstants {
      * @return
      */
     public static final boolean isDirectedEdge(final Class<? extends Edge> edgeClass) {
+        //man muss explizit auf Kanten mit doppelter Bedeutung testen!
         return Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass) || isDoubleMeaningEdge(edgeClass) || !getForwardMetaAssociationName(edgeClass).equals(getBackwardMetaAssociationName(edgeClass));
     }
 
