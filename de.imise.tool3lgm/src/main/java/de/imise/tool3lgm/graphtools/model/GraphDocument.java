@@ -212,15 +212,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *         <code>double</code>-Wert des Zoomfaktors
      */
     public double getPageSizeFactor() {
-        return page_height / INITIAL_PAGE_HEIGHT;
+        return (double) page_height / (double) INITIAL_PAGE_HEIGHT;
     }
 
     /**
-     * Setzt den pageSizeFactor auf den übergebenen Wert ohne es UndoRedo-mäßig zu loggen.
+     * Setzt den pageSizeFactor auf den übergebenen Wert ohne es UndoRedo-mäßig zu loggen. Ist dieser Wert kleiner als gebraucht wird, um alle
+     * Elemente in der Ebene darzustellen, dann wird der minimale Wert gesetzt, den man unbedingt braucht.
      *
      * @param newPageSizeFactor
      */
     public void setPageSizeFactor(final double newPageSizeFactor) {
+        //der erste Parameter ist völlig egal, da er nur bei UndoRedo loggen gebraucht wird
         setPageSizeFactor(newPageSizeFactor, newPageSizeFactor, false, TransactionManager.STANDARD_PID);
     }
 
@@ -229,7 +231,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param logUndoRedo
      * @param pid
      */
-    public void setPageSizeFactor(final double oldPageSizeFactor, final double newPageSizeFactor, final boolean logUndoRedo, final int pid) {
+    private void setPageSizeFactor(final double oldPageSizeFactor, double newPageSizeFactor, final boolean logUndoRedo, final int pid) {
+        double minPageSizeFactor = getMinimalPageSizeFactor();
+        if (minPageSizeFactor > newPageSizeFactor) {
+            newPageSizeFactor = minPageSizeFactor;
+        }
         double correctWidth = newPageSizeFactor * INITIAL_PAGE_WIDTH;
         double correctHeight = newPageSizeFactor * INITIAL_PAGE_HEIGHT;
         page_width = (int) correctWidth;
@@ -249,14 +255,32 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
     }
 
-    public boolean ensureSize(final Component c) {
-        boolean w = correctSize(c.getX(), c.getWidth(), page_width, INITIAL_PAGE_WIDTH);
-        boolean h = correctSize(c.getY(), c.getHeight(), page_height, INITIAL_PAGE_HEIGHT);
-        //System.err.println(c.getClass().getSimpleName() + " " + c + " x1=" + (c.getX() - c.getWidth() / 2) + " y1=" + (c.getY() - c.getHeight() / 2) + " x2=" + (c.getX() + c.getWidth() / 2) + " y2=" + (c.getY() + c.getHeight() / 2));
-        return w && h;
+    /**
+     * Prüft, ob die übergebene Komponente in die Ebene passt
+     *
+     * @param c
+     * @return <code>true</code>, wenn die übergebene Komponente in die Ebene passt, sonst <code>false</code>
+     */
+    public boolean pageHasSize(final Component c) {
+        double neededPageSizeFactor = getMinimalPageSizeFactor(c);
+        //System.err.println("pageSizeFactor=" + getPageSizeFactor() + "   neededPageSizeFactor=" + neededPageSizeFactor);
+        if (neededPageSizeFactor > getPageSizeFactor()) {
+            return false;
+        }
+        return true;
     }
 
-    private boolean correctSize(int xy, int wh, final int currentSize, final int initialSize) {
+    /**
+     * Liefert den minimalen PageSizeFacor, den man braucht damit eine Komponene in die Ebene passt. Um sinnvolle Werte zu erhalten muss eine
+     * Kombination aus x-Wert der Komponente, deren Breite und die Breite der Ebene ODER y-Wert der Komponente, deren Höhe und die Höhe der Ebene
+     * übergeben werden.
+     *
+     * @param xy x- bzw. y-Wert der Komponente
+     * @param wh Breite bzw. Höhe der Komponente
+     * @param initialSize initiale Breite bzw. Höhe der Ebene
+     * @return
+     */
+    private double getMinimalPageSizeFactor(int xy, int wh, final int initialSize) {
         xy -= wh / 2; //übergebener Paramter ist der Mittelpunkt -> linke obere Ecke ist Mittelpunkt - halbe Weite bzw. Höhe
         wh = xy + wh; //übergebener Parameter ist die Weite bzw. Höhe -> untere Ecke ist obere Ecke plus Weite bzw. Höhe
         if (xy < 0) { //negative Werte positiv machen
@@ -269,13 +293,39 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             xy = wh;
         }
         xy *= 2; //da die Zeichenfläche immer im Mittelpunkt (0,0) hat, muss der maximale x- bzw. y-Wert kleiner sein, als die halbe Ebenengröße. Ist er größer -> Ebene vergrößern
-        if (xy > currentSize) {
-            //            System.err.println("xy=" + xy + "   maxX=" + currentSize / 2);
-            //            System.err.println(xy * 2 + " / " + initialSize + " = " + xy * 2.0 / initialSize);
-            setPageSizeFactor(xy / initialSize);
-            return false;
+        return (double) xy / (double) initialSize;
+    }
+
+    /**
+     * Liefert den minimalen pageSizeFactor, der gebraucht wird, um die übergebene Komponente auf der Ebene darzustellen
+     *
+     * @param c
+     * @return
+     */
+    private double getMinimalPageSizeFactor(final Component c) {
+        double neededPageSizeFactorX = getMinimalPageSizeFactor(c.getX(), c.getWidth(), INITIAL_PAGE_WIDTH);
+        double neededPageSizeFactorY = getMinimalPageSizeFactor(c.getY(), c.getHeight(), INITIAL_PAGE_HEIGHT);
+        return neededPageSizeFactorX > neededPageSizeFactorY ? neededPageSizeFactorX : neededPageSizeFactorY;
+    }
+
+    /**
+     * Liefert den minimalen pageSizeFactor, der gebraucht wird, um alle Elemente und Knickpunkte auf der Ebene darzustellen
+     *
+     * @return
+     */
+    private double getMinimalPageSizeFactor() {
+        double minPageSizeFactor = 1.0;
+        for (int l : ModelConstants.VISIBLE_LAYERS) {
+            LayerContainer lc = layer[l];
+            Iterable<NodeContainer> visibleElements = CollectionUtils.getCommonIterable(lc.getGraphNodeContainers(), lc.getBendpointContainers());
+            for (ElementContainer c : visibleElements) {
+                double neededPageSizeFactor = getMinimalPageSizeFactor(c);
+                if (neededPageSizeFactor > minPageSizeFactor) {
+                    minPageSizeFactor = neededPageSizeFactor;
+                }
+            }
         }
-        return true;
+        return minPageSizeFactor;
     }
 
     /**

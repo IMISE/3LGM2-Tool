@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
@@ -456,25 +454,14 @@ public class LayerContainer extends ElementContainer {
     protected void paintChildren(final Graphics g) {
         //		synchronized (getTreeLock()) {
         tmpEdgeContainer.clear();
-        boolean sizeIsOk = true;
-        //        if (layerNumber == 0) {
-        //            System.err.print("currentPageWidth=" + doc.getPageWidth() + "  currentPageHeigth=" + doc.getPageHeight());
-        //        }
         for (NodeContainer ec : graphNodeContainers) {
-            if (!doc.ensureSize(ec)) {
-                sizeIsOk = false;
+            //hier wird bei jedem Element nochmal geprüft, ob es in die Ebene passt. Wenn nicht, wird die
+            //Ebenengröße hochgesetzt und das Zeichen neu angestoßen
+            if (!doc.pageHasSize(ec)) {
+                doc.setPageSizeFactor(-1.0);
+                return;
             }
-            if (sizeIsOk) {
-                ec.paint(g);
-            }
-        }
-        //        if (layerNumber == 0) {
-        //            System.err.println(" ---->  pageWidth=" + doc.getPageWidth() + "  page_height=" + doc.getPageHeight());
-        //        }
-        if (!sizeIsOk) {
-            revalidate();
-            repaint();
-            return;
+            ec.paint(g);
         }
         boolean isPaintEdgesOnlyForSelectedElements = UserProperties.is(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS);
         for (EdgeContainer ec : edgeContainers) {
@@ -497,6 +484,12 @@ public class LayerContainer extends ElementContainer {
         }
         if (!isPaintEdgesOnlyForSelectedElements) {
             for (BendpointContainer ec : bendpointContainers) {
+                //hier wird bei jedem Knickpunkt nochmal geprüft, ob er in die Ebene passt. Wenn nicht, wird die
+                //Ebenengröße hochgesetzt und das Zeichen neu angestoßen
+                if (!doc.pageHasSize(ec)) {
+                    doc.setPageSizeFactor(-1.0);
+                    return;
+                }
                 ec.paint(g);
             }
             paintingSurrogates = true;
