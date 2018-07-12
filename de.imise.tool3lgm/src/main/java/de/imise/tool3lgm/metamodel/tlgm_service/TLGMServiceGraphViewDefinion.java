@@ -44,10 +44,10 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
                 InvokingInterface.class,
                 ProvidingInterface.class,
                 PhysicalDataProcessingComponent.class,
-                IheActorOfIntegrationProfile.class,
+                //                IheActorOfIntegrationProfile.class,
                 IheActorApplicationSystem.class,
-                IheInvokingInterface.class,
-                IheProvidingInterface.class,
+                //                IheInvokingInterface.class,
+                //                IheProvidingInterface.class,
         };
         return graphViewVisibleNodes;
     }
@@ -77,7 +77,8 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         setDefaultLayout(InvokingInterface.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.LIGHTGREEN], 15, 15);
         setDefaultLayout(ProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE], 20, 20);
         setDefaultLayout(PhysicalDataProcessingComponent.class, GraphElementLayout.SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
-        setDefaultLayout(IheActorOfIntegrationProfile.class, GraphElementLayout.SHAPE.wabe, GraphElementLayout.COLORS[GraphElementLayout.LIGHTPURPLE]);
+        setDefaultLayout(IheActorOfIntegrationProfile.class, GraphElementLayout.SHAPE.wabe,
+                GraphElementLayout.COLORS[/* GraphElementLayout.LIGHTPURPLE */GraphElementLayout.YELLOW]);
         setDefaultLayout(IheActorApplicationSystem.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTBLUE]);
         setDefaultLayout(IheInvokingInterface.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.RED], 15, 15);
         setDefaultLayout(IheProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.RED], 20, 20);

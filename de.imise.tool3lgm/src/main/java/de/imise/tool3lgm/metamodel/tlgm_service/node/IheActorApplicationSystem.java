@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_service.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge;
 
 public class IheActorApplicationSystem extends ApplicationComponent {
@@ -11,4 +12,12 @@ public class IheActorApplicationSystem extends ApplicationComponent {
         dialog.addEdgePanel(IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge.class);
         return dialog;
     }
+
+    private static final MetaPath NAME_EXTENSION_PATH = new MetaPath(IheActorApplicationSystem.class, IheActorOfIntegrationProfile.class, IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge.class);
+
+    @Override
+    protected MetaPath getNameExtensionPath() {
+        return NAME_EXTENSION_PATH;
+    }
+
 }

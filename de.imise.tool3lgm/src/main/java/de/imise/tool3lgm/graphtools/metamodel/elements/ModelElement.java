@@ -15,6 +15,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,6 +41,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.util.Alphabetical;
 import de.imise.util.HashStringGenerator;
 import de.imise.util.htmlxml.HTMLConverter;
@@ -409,13 +411,12 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     public String getNameExtension() {
-        updateHTMLNameSuffixBuffer();
+        updateHTMLNameSuffixBuffer(getNameExtensionPath());
         return suffixBuf.toString();
     }
 
-    private void updateHTMLNameSuffixBuffer() {
+    private void updateHTMLNameSuffixBuffer(final MetaPath nameExtension) {
         suffixBuf.setLength(0);
-        MetaPath nameExtension = getNameExtensionPath();
         if (nameExtension != null) {
             Collection<ModelElement> directConnectedElements = PathFinder.getDirectConnectedElements(this, nameExtension);
             //Kein Element, dessen Namen in Klammern angezeigt werden soll verbunden -> weiter
@@ -443,7 +444,8 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     private void updateHTMLName() {
-        updateHTMLNameSuffixBuffer();
+        MetaPath nameExtension = getNameExtensionPath();
+        updateHTMLNameSuffixBuffer(nameExtension);
         textBuf.setLength(0);
         textBuf.append("<HTML><CENTER>");
         if (isHyperlink()) {
@@ -455,7 +457,17 @@ public abstract class ModelElement extends UserFieldTarget {
         }
         textBuf.append(suffixBuf.length() > 0 ? "<BR>" : "");
         if (suffixBuf.length() > 0) {
+            GraphElementLayout standardElementLayout = ModelConstants.getGraphViewDefinition().getDefaultElementsLayout().getStandardElementLayout(nameExtension.getEndClass());
+            Color bg_color = standardElementLayout == null ? null : standardElementLayout.bg_color;
+            if (bg_color != null) {
+                textBuf.append("<span style=\"background-color: #");
+                HTMLConverter.appendHTMLColor(textBuf, bg_color);
+                textBuf.append("\">");
+            }
             HTMLConverter.appendDecimalEncodedHTMLString(textBuf, suffixBuf.toString());
+            if (bg_color != null) {
+                textBuf.append("</span>");
+            }
         }
         textBuf.append("</CENTER></HTML>");
         htmlName = textBuf.toString();
