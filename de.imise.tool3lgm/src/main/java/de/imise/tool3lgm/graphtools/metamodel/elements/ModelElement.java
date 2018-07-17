@@ -30,6 +30,7 @@ import org.apache.commons.collections4.map.Flat3Map;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
@@ -41,6 +42,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.util.Alphabetical;
 import de.imise.util.HashStringGenerator;
@@ -457,8 +459,11 @@ public abstract class ModelElement extends UserFieldTarget {
         }
         textBuf.append(suffixBuf.length() > 0 ? "<BR>" : "");
         if (suffixBuf.length() > 0) {
-            GraphElementLayout standardElementLayout = ModelConstants.getGraphViewDefinition().getDefaultElementsLayout().getStandardElementLayout(nameExtension.getEndClass());
-            Color bg_color = standardElementLayout == null ? null : standardElementLayout.bg_color;
+            GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
+            ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+            Class<? extends ModelElement> nameExtendsionClass = nameExtension.getEndClass();
+            GraphElementLayout nameExtendsionClassLayout = defaultElementsLayout.getStandardElementLayout(nameExtendsionClass);
+            Color bg_color = nameExtendsionClassLayout == null || nameExtendsionClassLayout == defaultElementsLayout.getStandardElementLayout() ? null : nameExtendsionClassLayout.bg_color;
             if (bg_color != null) {
                 textBuf.append("<span style=\"background-color: #");
                 HTMLConverter.appendHTMLColor(textBuf, bg_color);
