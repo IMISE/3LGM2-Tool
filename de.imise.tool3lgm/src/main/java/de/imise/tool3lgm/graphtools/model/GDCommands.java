@@ -10,7 +10,6 @@ import de.imise.tool3lgm.event.action.SelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectionAction;
 import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.event.action.SubmodelSelectionAction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.util.swing.event.ActionSource;
 
@@ -136,7 +135,6 @@ public enum GDCommands implements ActionSource {
     public static final String INVALID_DESCRIPTION = "";
     public static final int INVALID_BENDPOINT_INDEX = -1;
     public static final int INVALID_EDGE_INDEX = -1;
-    public static final Class<? extends Edge> INVALID_EDGE_CLASS = null;
     public static final String INVALID_EDGE_CLASS_NAME = "";
 
     @Override

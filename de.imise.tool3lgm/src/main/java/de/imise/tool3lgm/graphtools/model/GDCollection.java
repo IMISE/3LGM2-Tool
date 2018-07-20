@@ -35,7 +35,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ACTIVE_L
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS_NAME;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
@@ -1424,25 +1423,6 @@ public final class GDCollection extends UserFieldTarget {
         ModelElement me1 = doc.findElementCoded(knothash1);
         ModelElement me2 = doc.findElementCoded(knothash2);
         unlink(me1, me2, edgeClass, edgeIndex, pid);
-    }
-
-    /**
-     * @param k1
-     * @param k2
-     * @param pid
-     */
-    public final void unlink(final ModelElement k1, final ModelElement k2, final int pid) {
-        unlink(k1, k2, INVALID_EDGE_INDEX, pid);
-    }
-
-    /**
-     * @param k1
-     * @param k2
-     * @param edgeIndex
-     * @param pid
-     */
-    public final void unlink(final ModelElement k1, final ModelElement k2, final int edgeIndex, final int pid) {
-        unlink(k1, k2, INVALID_EDGE_CLASS, edgeIndex, pid);
     }
 
     /**
