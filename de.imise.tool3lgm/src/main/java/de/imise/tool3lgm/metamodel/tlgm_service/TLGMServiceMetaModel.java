@@ -260,7 +260,7 @@ public class TLGMServiceMetaModel extends MetaModel {
     public Class[] getTreeLogicalLayerVisibleAbstractNodes() {
         return new Class[] {
                 //nur bei Anwendungsbausteinen und IIH-Konzepten soll die abstrakte Oberklasse im Baum angezeigt werden
-                ApplicationComponent.class, IheConcept.class,
+                //ApplicationComponent.class, IheConcept.class,
         };
     }
 
