@@ -9,7 +9,7 @@ public class IheActorApplicationSystem extends ApplicationComponent {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addEdgePanel(IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge.class);
+        dialog.addDescripSingleConnectionPanel(IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge.class);
         return dialog;
     }
 
