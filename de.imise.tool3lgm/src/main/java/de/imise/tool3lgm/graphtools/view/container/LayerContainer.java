@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
@@ -498,33 +500,32 @@ public class LayerContainer extends ElementContainer {
             }
             paintingSurrogates = false;
         }
-        //		if (doc.isVerificationMode()){
-        //			Rectangle r = InputGraphArea.grabbedElementsFullRect;
-        //			if (r!=null) {
-        //				g.setColor(Color.red);
-        //				g.drawLine(r.x, r.y, r.x, r.height);
-        //				g.drawLine(r.x, r.height, r.width, r.height);
-        //				g.drawLine(r.width, r.height, r.width, r.y);
-        //				g.drawLine(r.width, r.y, r.x, r.y);
-        //			}
-        //			r = InputGraphArea.grabbedElementsRasteredRect;
-        //			if (r!=null) {
-        //				g.setColor(Color.green);
-        //				g.drawLine(r.x, r.y, r.x, r.height);
-        //				g.drawLine(r.x, r.height, r.width, r.height);
-        //				g.drawLine(r.width, r.height, r.width, r.y);
-        //				g.drawLine(r.width, r.y, r.x, r.y);
-        //			}
-        //			r = InputGraphArea.grabbedElementsRealRect;
-        //			if (r!=null) {
-        //				g.setColor(Color.blue);
-        //				g.drawLine(r.x, r.y, r.x, r.height);
-        //				g.drawLine(r.x, r.height, r.width, r.height);
-        //				g.drawLine(r.width, r.height, r.width, r.y);
-        //				g.drawLine(r.width, r.y, r.x, r.y);
-        //			}
-        //
-        //		}
+        if (doc.isVerificationMode()) {
+            Rectangle r = InputGraphArea.grabbedElementsFullRect;
+            if (r != null) {
+                g.setColor(Color.red);
+                g.drawLine(r.x, r.y, r.x, r.height);
+                g.drawLine(r.x, r.height, r.width, r.height);
+                g.drawLine(r.width, r.height, r.width, r.y);
+                g.drawLine(r.width, r.y, r.x, r.y);
+            }
+            r = InputGraphArea.grabbedElementsRasteredRect;
+            if (r != null) {
+                g.setColor(Color.green);
+                g.drawLine(r.x, r.y, r.x, r.height);
+                g.drawLine(r.x, r.height, r.width, r.height);
+                g.drawLine(r.width, r.height, r.width, r.y);
+                g.drawLine(r.width, r.y, r.x, r.y);
+            }
+            r = InputGraphArea.grabbedElementsRealRect;
+            if (r != null) {
+                g.setColor(Color.blue);
+                g.drawLine(r.x, r.y, r.x, r.height);
+                g.drawLine(r.x, r.height, r.width, r.height);
+                g.drawLine(r.width, r.height, r.width, r.y);
+                g.drawLine(r.width, r.y, r.x, r.y);
+            }
+        }
     }
 
     @Override
