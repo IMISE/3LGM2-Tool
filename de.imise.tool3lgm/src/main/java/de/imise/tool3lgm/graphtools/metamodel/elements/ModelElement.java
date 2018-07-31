@@ -360,7 +360,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * Name der Funtkion, die den MetaPfad zu verbundenen Elementen angibt, von denen der Name
      * zusätzlich zum eigenen Elementnamen in der Grafik angezeigt werden soll.
      */
-    public static final String GET_NAME_EXTENSION_METHOD_NAME = "getNameExtension";
+    public static final String GET_NAME_EXTENSION_METHOD_NAME = "getNameExtensionPath";
 
     /**
      * Liefert für alle Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern
