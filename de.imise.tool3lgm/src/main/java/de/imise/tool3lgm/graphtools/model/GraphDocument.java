@@ -3338,6 +3338,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         doc.finish_transaction(pid);
         doc.distributeEvent(DATA_CHANGED, slaveContainer, null, pid);
+        if (doc != mainDoc) {
+            mainDoc.distributeEvent(DATA_CHANGED, slaveContainer, null, pid); //das hier muss auch noch sein, weil die Dialoge nur am mainDoc lauschen
+        }
         doc.select(slaveContainer, pid);
         return slaveContainer.getElement();
     }
