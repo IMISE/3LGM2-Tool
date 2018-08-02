@@ -86,6 +86,9 @@ public class Tool3lgmMetaModelContext {
         boolean showAgainQuestionSelection = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START) || initialSelection;
         Pair<NamedObjectContainer<Class<? extends MetaModel>>, Boolean> choosedMetaModelAnswer = MultipleOptionPane.showSingleSelectionOptionDialog(owner, title, message, options, selectedOption, showAgainQuestion, showAgainQuestionSelection);
         if (choosedMetaModelAnswer == null) {
+            if (initialSelection) {
+                System.exit(0);
+            }
             return null;
         }
         NamedObjectContainer<Class<? extends MetaModel>> choosedMetaModelClassContainer = choosedMetaModelAnswer.getFirstItem();
