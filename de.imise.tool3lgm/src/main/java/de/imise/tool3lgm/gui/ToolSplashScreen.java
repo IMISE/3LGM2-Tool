@@ -14,7 +14,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.util.Calendar;
 
 import javax.swing.ImageIcon;
@@ -126,8 +125,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
         infoDialog.setSize(200, 100);
         infoDialog.setLocationRelativeTo(infoDialog.getOwner());
 
-        File splashFile = new File(Tool3lgmConstants.APPLICATION_DIR, "splash.gif");
-        ImageIcon ii = new ImageIcon(splashFile.getPath());
+        ImageIcon ii = Tool3lgmConstants.getImageIcon("splash.gif");
 
         imageLabel = new JLabel();
 

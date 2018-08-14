@@ -314,7 +314,7 @@ public abstract class Tool3lgmConstants {
      *            Verzeichnis des tatsächlichen Bilds
      * @return
      */
-    private static ImageIcon getImageIcon(final String dir) {
+    public static ImageIcon getImageIcon(final String dir) {
         URL url = ClassLoader.getSystemClassLoader().getResource(dir);
         ImageIcon icon;
         if (url != null) {
