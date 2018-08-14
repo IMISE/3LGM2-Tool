@@ -44,9 +44,9 @@
 		</dependency> 
  		<dependency>
 			<groupId>de.axs</groupId>
-			<artifactId>de.axs.utils</artifactId>
+			<artifactId>de-axs-utils</artifactId>
 			<version>1.0.0</version>
-		</dependency>
+ 		</dependency>
 <!--		<dependency>
 			<groupId>de.imise</groupId>
 			<artifactId>de.imise.twatd</artifactId>
