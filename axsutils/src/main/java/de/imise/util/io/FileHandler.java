@@ -80,7 +80,8 @@ public class FileHandler {
             return null;
         }
         File dir = !path.isDirectory() ? path.getParentFile() : path;
-        if (dir.canRead()) {
+        //kann null sein, wenn einfach nur ein Filename übergeben wurde
+        if (dir != null && dir.canRead()) {
             return dir;
         }
         return null;
