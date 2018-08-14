@@ -3,6 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.imise</groupId>
 	<artifactId>tool3lgm</artifactId>
+ 	<version>1.0</version>
+	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>org.testng</groupId>
@@ -121,6 +123,22 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- http://maven.apache.org/shared/maven-archiver/index.html -->
+ 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>de.imise.tool3lgm.Tool3lgmMain</mainClass>
+						</manifest>
+						<manifestEntries>
+							<SplashScreen-Image>splash.gif</SplashScreen-Image>
+                        </manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
 		</plugins>
  		<resources>
 			<resource>
@@ -145,5 +163,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
- 	<version>1.0</version>
 </project>
