@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
 import java.awt.Color;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,10 @@ public abstract class GraphViewDefinition {
         ImmutableSet.Builder<Class<? extends ModelElement>> allPaintableNodesSetBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
         metaModelSpecificPaintableNodes = ImmutableList.copyOf(getPaintableNodes());
         for (Class<? extends ModelElement> paintableNodeClass : metaModelSpecificPaintableNodes) {
+            //alle Paintbale-Klassen müssen instanziierbar sein. Hier dürfen keine abstrakten Klassen angegeben werden
+            if (Modifier.isAbstract(paintableNodeClass.getModifiers())) {
+                throw new Error("Only non abstract classes are allowed as paintable element classes! " + paintableNodeClass.getName() + " is abstract!");
+            }
             allPaintableNodesSetBuilder.add(paintableNodeClass);
         }
         //Diese Klassen müssen noch hinzugefügt werden, da sie auch dargestellt werden
