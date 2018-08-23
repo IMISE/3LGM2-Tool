@@ -134,9 +134,9 @@ public class Szenario extends LGMGraphDocument {
      * @param pid
      */
     public void createEdgeContainer(final ElementContainer egdeStartOrEndContainer, final GraphDocument sourceDoc, final boolean select, final int pid) {
-        start_transaction(pid, false);
         //wenn das Element, dessen Kanten hinzugefügt werden sollen, nicht leer und nicht einmalig ist
         if (egdeStartOrEndContainer != null && !egdeStartOrEndContainer.getElement().isUnique()) {
+            start_transaction(pid, false);
             //für alle Kanten des Elements
             for (Edge ka : egdeStartOrEndContainer.getElement().getEdges()) {
                 //wenn die Edge nicht bereits in diesem Szenario vorkommt
@@ -168,9 +168,9 @@ public class Szenario extends LGMGraphDocument {
                     }
                 }
             }
+            finish_transaction(pid, false);
+            distributeEvent(GDCollectionChangeType.DATA_CHANGED);
         }
-        finish_transaction(pid, false);
-        distributeEvent(GDCollectionChangeType.DATA_CHANGED);
     }
 
     /**
