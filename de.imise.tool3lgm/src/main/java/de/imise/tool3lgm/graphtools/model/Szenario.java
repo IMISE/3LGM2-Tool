@@ -95,12 +95,12 @@ public class Szenario extends LGMGraphDocument {
      * @param k
      * @param sourceDoc
      */
-    private final void updateSlaveContainers(final CompositionEdge com, final GraphDocument sourceDoc) {
-        ModelElement master = com.getMaster();
+    private final void updateSlaveContainers(final Edge edge, final boolean forward, final GraphDocument sourceDoc) {
+        ModelElement master = forward ? edge.getStart() : edge.getEnd();
         if (master == null || master.isUnique()) {
             return;
         }
-        ModelElement slave = com.getSlave();
+        ModelElement slave = edge.getOther(master);
         if (slave == null || slave.isUnique()) {
             return;
         }
@@ -116,7 +116,7 @@ public class Szenario extends LGMGraphDocument {
                 addElementToSzenario(getHashString(), (NodeContainer) slaveCont, TransactionManager.STANDARD_PID);
                 //wenn der Container aus dem Hauptdokument übernommen wurde -> initiale Grafik setzen
                 if (sourceDoc == getCollection().getMainGraphDocument()) {
-                    addict(hashString, com.getClass().getName(), com.getHashString(), master, slave, GDCommands.INVALID_EDGE_INDEX, TransactionManager.STANDARD_PID);
+                    addict(hashString, edge.getClass().getName(), edge.getHashString(), master, slave, GDCommands.INVALID_EDGE_INDEX, TransactionManager.STANDARD_PID);
                 }
             }
         }
@@ -144,7 +144,7 @@ public class Szenario extends LGMGraphDocument {
                 if (b) {
                     //bei Compositions auch das Slave-Element in dieses Szenario holen (wenn sie es nicht unique ist)
                     if (ka instanceof CompositionEdge) {
-                        updateSlaveContainers((CompositionEdge) ka, sourceDoc);
+                        updateSlaveContainers(ka, CompositionEdge.MASTER_TO_SLAVE_DIRECTION == Edge.FORWARD, sourceDoc);
                     }
                     //wenn Start und End-Element der Edge einen Container in diesem Szenario haben
 
