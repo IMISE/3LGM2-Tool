@@ -8,6 +8,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
@@ -66,6 +67,7 @@ import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
+import de.imise.util.robot.ScreenRobot;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /** Hauptklasse der Anwendung 3lgm */
@@ -322,6 +324,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         createMainFrame(gdcoll.getMainGraphDocument());
 
         LGMGraphDocument selectedDoc = gdcoll.getMainGraphDocument();
+        AbstractInternalFrame lastFrame = null;
         for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
             Szenario szen = gdcoll.getSzenario(i);
             Static.setProgressDialogStatusLabel("create_frame", szen.getTitle());
@@ -331,7 +334,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             if (szen.getViewParameter().selected) {
                 selectedDoc = szen;
             }
-            createSzenarioFrame(szen);
+            lastFrame = createSzenarioFrame(szen);
         }
 
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
@@ -352,6 +355,18 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //		printStatistic(gdcoll, false, true);
         //		System.err.println("###########################################################################");
 
+        //Dieser Spass hier dient nur dazu, nach dem Öffnen einer Modelldatei nochmal ein
+        //neu Zeichnen auszulösen, was nur mit einem Klick in den Frame zuverlässig passiert
+        //Erst dadurch fällt der Swing-Bug mit der am Anfanng nicht korrekt positionierten
+        //Schrift nicht mehr auf.
+        Point location = MouseInfo.getPointerInfo().getLocation();
+        if (lastFrame != null && lastFrame.isVisible()) {
+            Point locationOnScreen = lastFrame.getLocationOnScreen();
+            Dimension size = lastFrame.getSize();
+            ScreenRobot.setMouse(locationOnScreen.x + size.width / 2, locationOnScreen.y + size.height / 2);
+            ScreenRobot.click();
+        }
+        ScreenRobot.setMouse(location);
         return true;
     }
 
