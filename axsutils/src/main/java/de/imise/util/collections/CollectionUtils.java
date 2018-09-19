@@ -819,7 +819,7 @@ public abstract class CollectionUtils {
 
             @Override
             public T previous() {
-                return originalIterator.previous();
+                return originalIterator.next();
             }
 
             @Override
