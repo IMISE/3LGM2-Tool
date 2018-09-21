@@ -312,11 +312,9 @@ public final class ModelConstants {
         ImmutableSet.Builder<Class<? extends ModelElement>> creatableNodes = new ImmutableSet.Builder<>();
         for (Class<? extends ModelElement> elementClass : elementClasses) {
             if (!ModelConstants.isEdgeType(elementClass)) {
-                if (!creatableOnly || creatableOnly && !ModelConstants.isSlaveType(elementClass)) {
-                    if (!ModelConstants.isAbstract(elementClass)) {
-                        if (!ModelConstants.isExistenceDependent(elementClass, true)) {
-                            creatableNodes.add(elementClass);
-                        }
+                if (!ModelConstants.isAbstract(elementClass)) {
+                    if (!creatableOnly || !ModelConstants.isExistenceDependent(elementClass, false)) {
+                        creatableNodes.add(elementClass);
                     }
                 }
             }
