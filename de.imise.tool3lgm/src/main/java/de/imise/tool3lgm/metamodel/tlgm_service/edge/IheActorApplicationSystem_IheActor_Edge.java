@@ -7,12 +7,12 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorApplicationSystem;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfile;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActor;
 
 /**
  * @author AXS (31.01.2018)
  */
-public class IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge extends SubordinationEdge {
+public class IheActorApplicationSystem_IheActor_Edge extends SubordinationEdge {
 
     public static final Class<? extends ModelElement> stcl = IheActorApplicationSystem.class;
 
@@ -20,6 +20,6 @@ public class IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge extends
 
     public static final EdgeCardinality ecard = ONE_ONE;
 
-    public static final Class<? extends ModelElement> etcl = IheActorOfIntegrationProfile.class;
+    public static final Class<? extends ModelElement> etcl = IheActor.class;
 
 }

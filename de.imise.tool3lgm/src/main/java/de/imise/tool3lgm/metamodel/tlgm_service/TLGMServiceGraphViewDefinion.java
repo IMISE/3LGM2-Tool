@@ -18,8 +18,8 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.CommunicationInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Function;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActor;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorApplicationSystem;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfile;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheInvokingInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.InvokingInterface;
@@ -44,7 +44,7 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
                 InvokingInterface.class,
                 ProvidingInterface.class,
                 PhysicalDataProcessingComponent.class,
-                //                IheActorOfIntegrationProfile.class,
+                //                IheActor.class,
                 IheActorApplicationSystem.class,
                 //                IheInvokingInterface.class,
                 //                IheProvidingInterface.class,
@@ -77,8 +77,7 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         setDefaultLayout(InvokingInterface.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.LIGHTGREEN], 15, 15);
         setDefaultLayout(ProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE], 20, 20);
         setDefaultLayout(PhysicalDataProcessingComponent.class, GraphElementLayout.SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
-        setDefaultLayout(IheActorOfIntegrationProfile.class, GraphElementLayout.SHAPE.wabe,
-                GraphElementLayout.COLORS[/* GraphElementLayout.LIGHTPURPLE */GraphElementLayout.YELLOW]);
+        setDefaultLayout(IheActor.class, GraphElementLayout.SHAPE.wabe, GraphElementLayout.COLORS[/* GraphElementLayout.LIGHTPURPLE */GraphElementLayout.YELLOW]);
         setDefaultLayout(IheActorApplicationSystem.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTBLUE]);
         setDefaultLayout(IheInvokingInterface.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.RED], 15, 15);
         setDefaultLayout(IheProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.RED], 20, 20);

@@ -6,20 +6,20 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfile;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActor;
 
 /**
  * @author AXS (31.01.2018)
  */
 public class IheTransactionLink_Edge extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = IheActorOfIntegrationProfile.class;
+    public static final Class<? extends ModelElement> stcl = IheActor.class;
 
     public static final EdgeCardinality scard = ZERO_UNIMITED;
 
     public static final EdgeCardinality ecard = ZERO_UNIMITED;
 
-    public static final Class<? extends ModelElement> etcl = IheActorOfIntegrationProfile.class;
+    public static final Class<? extends ModelElement> etcl = IheActor.class;
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {
