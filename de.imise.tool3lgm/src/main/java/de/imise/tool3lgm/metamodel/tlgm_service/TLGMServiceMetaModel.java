@@ -29,7 +29,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_Use_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorInstance_IheActor_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheConcept_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheActor_Edge;
@@ -299,7 +299,7 @@ public class TLGMServiceMetaModel extends MetaModel {
                 Service_ServiceClass_Edge.class,
                 ServiceUses_Edge.class,
                 //IHE-Kanten
-                IheActorInstance_IheActor_Edge.class,
+                IheActor_IheActorInstance_Edge.class,
                 IheActor_IheInterface_Edge.class,
                 ApplicationSystem_IheActorInstance_Edge.class,
                 IheConcept_IheDomain_Edge.class,
@@ -382,10 +382,10 @@ public class TLGMServiceMetaModel extends MetaModel {
 
     //IheInvokingInterface_InvokingInterface_Edge
     public static final MetaPath CONDITION_METAPATH_1 = new MetaPath(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class), IheActor_IheInterface_Edge.class,
-            IheActorInstance_IheActor_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
+            IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
     //IheProvidingInterface_ProvidingInterface_Edge
     public static final MetaPath CONDITION_METAPATH_2 = new MetaPath(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class), Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class), IheActor_IheInterface_Edge.class,
-            IheActorInstance_IheActor_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
+            IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
 
     @Override
     public final MetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
