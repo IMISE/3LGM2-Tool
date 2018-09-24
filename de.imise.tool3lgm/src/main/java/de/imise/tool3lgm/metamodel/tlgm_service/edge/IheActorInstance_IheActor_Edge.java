@@ -6,15 +6,15 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMIT
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorApplicationSystem;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorInstance;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActor;
 
 /**
  * @author AXS (31.01.2018)
  */
-public class IheActorApplicationSystem_IheActor_Edge extends SubordinationEdge {
+public class IheActorInstance_IheActor_Edge extends SubordinationEdge {
 
-    public static final Class<? extends ModelElement> stcl = IheActorApplicationSystem.class;
+    public static final Class<? extends ModelElement> stcl = IheActorInstance.class;
 
     public static final EdgeCardinality scard = ZERO_UNIMITED;
 

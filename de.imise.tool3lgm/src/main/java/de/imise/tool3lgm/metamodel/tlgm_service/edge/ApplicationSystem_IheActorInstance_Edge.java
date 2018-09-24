@@ -6,9 +6,9 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ApplicationSystem;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorApplicationSystem;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorInstance;
 
-public class ApplicationSystem_IheActorApplicationSystem_Edge extends SubordinationEdge {
+public class ApplicationSystem_IheActorInstance_Edge extends SubordinationEdge {
 
     public static final Class<? extends ModelElement> stcl = ApplicationSystem.class;
 
@@ -16,6 +16,6 @@ public class ApplicationSystem_IheActorApplicationSystem_Edge extends Subordinat
 
     public static final EdgeCardinality ecard = ZERO_UNIMITED;
 
-    public static final Class<? extends ModelElement> etcl = IheActorApplicationSystem.class;
+    public static final Class<? extends ModelElement> etcl = IheActorInstance.class;
 
 }

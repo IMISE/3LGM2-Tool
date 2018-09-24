@@ -2,7 +2,7 @@ package de.imise.tool3lgm.metamodel.tlgm_service.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_IheActorApplicationSystem_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_SoftwareProduct_Edge;
 
 /**
@@ -14,7 +14,7 @@ public final class ApplicationSystem extends ApplicationComponent {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addEdgePanel(ApplicationSystem_SoftwareProduct_Edge.class);
-        dialog.addEdgePanel(ApplicationSystem_IheActorApplicationSystem_Edge.class);
+        dialog.addEdgePanel(ApplicationSystem_IheActorInstance_Edge.class);
         return dialog;
     }
 
