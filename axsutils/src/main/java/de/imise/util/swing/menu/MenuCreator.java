@@ -115,7 +115,7 @@ public class MenuCreator {
                     allMenuEntries.add(subEntry);
                 }
             } else {
-                allMenuEntries.add(entry instanceof ActionSource ? ((ActionSource) entry).getAction() : entry);
+                allMenuEntries.add(entry instanceof ActionSource ? ((ActionSource) entry).createAction() : entry);
             }
         }
 

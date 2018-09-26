@@ -30,7 +30,7 @@ public interface ActionSource {
      *
      * @return
      */
-    public default ExtendedAction getAction() {
+    public default ExtendedAction createAction() {
         Class<? extends ExtendedAction> actionClass = getActionClass();
         Class<?> constructorParameterClass = getClass();
         ExtendedAction action = null;
