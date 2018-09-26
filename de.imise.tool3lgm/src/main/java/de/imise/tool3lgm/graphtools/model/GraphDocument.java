@@ -600,7 +600,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 if (answer != null) {
                     dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
                     if (!answer) { // die Checkbox ist nicht selektiert -> Globale Option "Warnmeldung vor dem Löschen" soll true sein
-                        BooleanProperty.OPTION_SHOW_REMOVE_WARNING.getAction().perform();
+                        BooleanProperty.OPTION_SHOW_REMOVE_WARNING.createAction().perform();
                     }
                 }
             } else {

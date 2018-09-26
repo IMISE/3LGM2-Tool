@@ -369,7 +369,7 @@ public class UserProperties {
         private UserPropertyBooleanChangeAction action;
 
         @Override
-        public UserPropertyBooleanChangeAction getAction() {
+        public UserPropertyBooleanChangeAction createAction() {
             //Keine der Options hat eine InteractiveAction. Also kann man hier einfach direkt
             //die Action instanziieren und muss nicht über die default-Implementierung gehen.
             //Will man über die default-Implementierung gehen, muss man die Funktion getActionClass()

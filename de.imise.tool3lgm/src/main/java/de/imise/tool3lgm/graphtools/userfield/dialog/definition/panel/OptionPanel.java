@@ -43,7 +43,7 @@ public class OptionPanel extends AbstractInputPanel {
 
         //bei allen UserFields die mit Kennzahlen zu tun haben, die Option zum Einschalten der Berechnung anbieten
         if (userField.isClassificationUserField()) {
-            enableClassificationNumberCalculationCheckBox = new JCheckBox(BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION.getAction());
+            enableClassificationNumberCalculationCheckBox = new JCheckBox(BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION.createAction());
             add(enableClassificationNumberCalculationCheckBox);
         }
     }

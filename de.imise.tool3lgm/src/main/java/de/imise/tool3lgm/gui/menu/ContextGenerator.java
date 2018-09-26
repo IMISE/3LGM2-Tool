@@ -390,7 +390,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private JMenuItem getItem(final GDCommands command) {
         if (command.isModelOption()) {
-            return new JCheckBoxMenuItem(command.getAction());
+            return new JCheckBoxMenuItem(command.createAction());
         }
         return getItem(command.name(), command);
     }
