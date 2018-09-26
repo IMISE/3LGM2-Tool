@@ -26,6 +26,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SEL
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_INSTANCIATION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
@@ -78,6 +79,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -523,6 +525,29 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         if (!(ec instanceof BendpointContainer)) {
             addMenuItem(menu, properties);
             menu.addSeparator();
+
+            //InstaciationEdges -> neue Instanz der verbundenen Klasse erzeugen anbieten
+            Class<? extends ModelElement> meClass = me.getClass();
+            JLabel connectLabel = null;
+            for (Class<? extends Edge> edgeClass : getEdgeTypes(meClass)) {
+                if (InstanciationEdge.class.isAssignableFrom(edgeClass) && Edge.isStartClass(edgeClass, meClass)) {
+                    if (connectLabel == null) {
+                        connectLabel = new JLabel(getResString("verbinden"));
+                        menu.add(connectLabel);
+                    }
+                    String label = getForwardMetaAssociationName(edgeClass, true, false);
+                    String toolTip = getFullForwardMetaAssociationName(edgeClass);
+                    JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, edgeClass.getSimpleName(), verbindung_anlegen, true, toolTip);
+                    item.setIcon(verbindung_anlegen);
+                    menu.add(item);
+                    //;
+
+                }
+            }
+            if (connectLabel != null) {
+                menu.addSeparator();
+            }
+
             JMenu subElems = getSubElemMenu();
             if (subElems.getItemCount() > 0) {
                 menu.add(subElems);
@@ -636,6 +661,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                 for (Class<? extends Edge> edgeClass : getEdgeTypes(lastSelectedClass, me2Class)) {
+                    //Hat-Teil-Kante
                     if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
                         if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
                             String label = getForwardMetaAssociationName(edgeClass, false, true);
@@ -681,6 +707,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectable, toolTip), label));
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
                         }
+                        //Kante mit Doppelter Bedeutung
                     } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
                         if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
                             int actDir = FORWARD;
@@ -808,6 +835,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                         connectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectableBackward, toolTipBackward), labelBackward));
                         disconnectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectableBackward, toolTipBackward), labelBackward));
 
+                    } else if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
+                        //diese Kanten sind bei Mehrfachauswahl zu ignorieren!
                     } else /* if (Edge.isConnecting(edgeClass, lastSelectedClass, me2Class)) */ {
                         int direction;
                         String label;

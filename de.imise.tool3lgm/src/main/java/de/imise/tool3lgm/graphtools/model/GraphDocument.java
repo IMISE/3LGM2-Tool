@@ -729,6 +729,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             createAddicted(doc, master, edgeClass.asSubclass(CompositionEdge.class), slaveClass, pid);
             break;
 
+        case MODEL_ACTION_CREATE_INSTANCIATION:
+            System.err.println("MODEL_ACTION_CREATE_INSTANCIATION müsset jetzt laufen... " + Arrays.asList(argv));
+            break;
+
         case MODEL_ACTION_SET_ELEMENT_COLOR:
             switch (argc) {
             case 0:
