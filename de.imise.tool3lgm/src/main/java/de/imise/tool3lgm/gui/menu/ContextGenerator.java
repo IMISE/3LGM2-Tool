@@ -532,7 +532,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             for (Class<? extends Edge> edgeClass : getEdgeTypes(meClass)) {
                 if (InstanciationEdge.class.isAssignableFrom(edgeClass) && Edge.isStartClass(edgeClass, meClass)) {
                     if (connectLabel == null) {
-                        connectLabel = new JLabel(getResString("verbinden"));
+                        connectLabel = new JLabel(getResString("LABEL_CONNECT"));
                         menu.add(connectLabel);
                     }
                     String label = getForwardMetaAssociationName(edgeClass, true, false);
@@ -880,7 +880,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             if (connectableItems.size() > 0) {
                 Alphabetical.sort(connectableItems);
-                menu.add(new JLabel(getResString("verbinden")));
+                menu.add(new JLabel(getResString("LABEL_CONNECT")));
                 for (NamedObjectContainer<JMenuItem> itemContainer : connectableItems) {
                     menu.add(itemContainer.getObject());
                 }
@@ -888,7 +888,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             }
             if (disconnectableItems.size() > 0) {
                 Alphabetical.sort(disconnectableItems);
-                menu.add(new JLabel(getResString("trennen")));
+                menu.add(new JLabel(getResString("LABEL_DISCONNECT")));
                 for (NamedObjectContainer<JMenuItem> itemContainer : disconnectableItems) {
                     menu.add(itemContainer.getObject());
                 }
