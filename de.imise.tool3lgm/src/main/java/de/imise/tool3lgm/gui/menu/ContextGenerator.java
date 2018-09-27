@@ -532,16 +532,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             for (Class<? extends Edge> edgeClass : getEdgeTypes(meClass)) {
                 if (InstanciationEdge.class.isAssignableFrom(edgeClass) && Edge.isStartClass(edgeClass, meClass)) {
                     if (connectLabel == null) {
-                        connectLabel = new JLabel(getResString("LABEL_CONNECT"));
+                        connectLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
                         menu.add(connectLabel);
                     }
-                    String label = getForwardMetaAssociationName(edgeClass, true, false);
                     String toolTip = getFullForwardMetaAssociationName(edgeClass);
+                    Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+                    String label = ModelConstants.getDisplayableName(endClass);
                     JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, edgeClass.getSimpleName(), verbindung_anlegen, true, toolTip);
-                    item.setIcon(verbindung_anlegen);
                     menu.add(item);
-                    //;
-
                 }
             }
             if (connectLabel != null) {
