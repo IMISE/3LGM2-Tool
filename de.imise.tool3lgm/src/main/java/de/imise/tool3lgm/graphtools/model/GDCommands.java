@@ -160,6 +160,7 @@ public enum GDCommands implements ActionSource {
     }
 
     static {
+        ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_NODE);
         ActionSource.put(SelectionAction.class, MODEL_ACTION_COPY);
         ActionSource.put(SelectionAction.class, MODEL_ACTION_CUT);
         ActionSource.put(GraphDocumentAction.class, MODEL_ACTION_PASTE);

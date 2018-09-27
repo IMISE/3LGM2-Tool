@@ -3,12 +3,10 @@ package de.imise.tool3lgm.graphtools.view.tree;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.StringTokenizer;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
@@ -21,14 +19,16 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.swing.event.ExtendedAction;
 
-public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
+public class DynamicTreeMouseAdapter implements MouseListener {
 
     private final DynamicTree tree;
 
@@ -195,36 +195,17 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
      */
     private final JPopupMenu showNewInstanceContextMenu(final String str, final int x, final int y) {
         JPopupMenu menu = new JPopupMenu();
+        ExtendedAction action = GDCommands.MODEL_ACTION_CREATE_NODE.createAction();
+        String actionCommand = action.getActionCommand();
+        actionCommand += " " + str;
+        action.setActionCommand(actionCommand);
 
-        JMenuItem item;
+        menu.add(new JMenuItem(action));
 
-        item = new JMenuItem(getResString("neue_instanz"));
-        item.addActionListener(this);
-        item.setActionCommand("newInstanze " + str);
-        menu.add(item);
         Tool3lgm.setLastActionPosition(x + tree.getX(), y + tree.getY());
         menu.show(tree, x, y);
 
         return menu;
-    }
-
-    @Override
-    public final void actionPerformed(final ActionEvent e) {
-        GraphDocument doc = tree.getGraphDocument();
-        if (doc == null) {
-            return;
-        }
-        String str = e.getActionCommand();
-        if (str.startsWith("newInstanze ")) {
-            StringTokenizer s = new StringTokenizer(str, " ");
-            if (s.countTokens() < 2) {
-                return;
-            }
-            s.nextToken();
-            String klassenname = s.nextToken();
-            doc.createKnotenWithContainer(ModelConstants.NODE_PACKAGE_NAME + klassenname, DynamicTree.PID);
-            return;
-        }
     }
 
 }
