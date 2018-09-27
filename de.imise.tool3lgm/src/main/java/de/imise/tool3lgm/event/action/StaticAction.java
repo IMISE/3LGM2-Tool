@@ -232,8 +232,7 @@ public abstract class StaticAction extends ExtendedAction {
         }
         if (perform) {
             if (identifier instanceof GDCommands) {
-                Object arguments = getValue(ARGUMENT_KEY);
-                Static.getSelectedDoc().exec(identifier.toString() + (arguments != null ? " " + arguments : ""), TransactionManager.STANDARD_PID);
+                Static.getSelectedDoc().exec(getActionCommand(), TransactionManager.STANDARD_PID);
             }
             actionPerformed();
             actionPerformedWithEvent(e);
