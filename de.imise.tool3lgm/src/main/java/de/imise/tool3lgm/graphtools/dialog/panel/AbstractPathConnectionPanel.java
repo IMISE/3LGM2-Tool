@@ -71,6 +71,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param dialog
      * @param edgeClasses
      */
+    @SafeVarargs
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
         this(dialog, null, edgeClasses);
     }
@@ -82,6 +83,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param searchElementClass
      * @param edgeClasss
      */
+    @SafeVarargs
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         this(dialog, false, searchElementClass, edgeClasses);
     }
@@ -94,6 +96,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            Elementart der Name der letzten Edge selbst ans Label geschrieben.
      * @param edgeClasses
      */
+    @SafeVarargs
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends Edge>... edgeClasses) {
         this(dialog, edgeClasses.length - 1, labelEdgeName, edgeClasses);
     }
@@ -107,6 +110,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param searchElementClass
      * @param edgeClasses
      */
+    @SafeVarargs
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         this(dialog, edgeClasses.length - 1, labelEdgeName, searchElementClass, edgeClasses);
     }
@@ -122,6 +126,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            festgelegt.
      * @param edgeClasses
      */
+    @SafeVarargs
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final Class<? extends Edge>... edgeClasses) {
         this(dialog, searchEdgeIndex, labelEdgeName, null, edgeClasses);
 
@@ -140,6 +145,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            Klasse genommen
      * @param edgeClasses
      */
+    @SafeVarargs
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog);
         this.edgeClasses = edgeClasses;
@@ -168,10 +174,12 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         setName(westLabelText);
     }
 
+    @SafeVarargs
     public static String generateName(final Class<? extends ModelElement> startClass, final Class<? extends Edge>... edgeClasses) {
         return generateName(startClass, edgeClasses.length - 1, false, null, edgeClasses);
     }
 
+    @SafeVarargs
     private static String generateName(final Class<? extends ModelElement> startClass, final int labelEdgeIndex, final boolean labelEdgeName, final int[] directions, final Class<? extends Edge>... edgeClasses) {
         int[] usedEdgeDirections = directions != null ? directions : getEdgeDirections(startClass, edgeClasses);
         String name;
