@@ -48,10 +48,12 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.path.MetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.CommandParser;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -730,7 +732,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             break;
 
         case MODEL_ACTION_CREATE_INSTANCIATION:
-            System.err.println("MODEL_ACTION_CREATE_INSTANCIATION müsset jetzt laufen... " + Arrays.asList(argv));
+            Class<? extends InstanciationEdge> instanciationClass = ModelConstants.getClassForName(argv[0]).asSubclass(InstanciationEdge.class);
+            doc = null;
+            master = null;
+            try {
+                doc = getCollection().getGraphDocumentCoded(argv[1]);
+                master = doc.findElementCoded(argv[2]);
+            } catch (Exception e) {
+                //die letzten beiden sind optional. Wird ein doc angegeben, dann wird in dem gesucht, sonst im gerade aktiven doc. Wird ein Hash für das Ausgangselement der Kante angegeben, dann wird nur das genommen, sonst die Selektion.
+            }
+            createInstance(doc, instanciationClass, master, pid);
             break;
 
         case MODEL_ACTION_SET_ELEMENT_COLOR:
@@ -3627,6 +3638,26 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
 
         return retVal;
+    }
+
+    /**
+     * @param doc
+     * @param instanciationEdge
+     * @param master
+     */
+    private void createInstance(GraphDocument doc, final Class<? extends InstanciationEdge> instanciationEdgeClass, ModelElement master, final int pid) {
+        doc = doc == null ? this : doc;
+        master = master == null ? doc.getLastSelected().getElement() : master;
+        doc.start_transaction(pid);
+        Class<? extends ModelElement> class2Create = Edge.getEndClass(instanciationEdgeClass);
+        NodeContainer instanceC = doc.createKnotenWithContainer(class2Create, pid);
+        InstanciationEdge instanciationEdge = (InstanciationEdge) gdcoll.link(instanciationEdgeClass, master, instanceC.getElement(), pid);
+        for (MetaPath metaPath : instanciationEdge.iterateInstanciableMetaPaths()) {
+
+        }
+
+        doc.finish_transaction(pid);
+        doc.distributeEvent(DATA_CHANGED, pid);
     }
 
     public final void linkSelected(final Class<? extends Edge> edgeClass, final int direction, final int pid) {
