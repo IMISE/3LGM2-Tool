@@ -24,8 +24,10 @@ public class IheActor_IheActorInstance_Edge extends InstanciationEdge {
     public static final Class<? extends ModelElement> etcl = IheActorInstance.class;
 
     static {
-        addInstanciableMetaPath(new MetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_InvokingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
-        addInstanciableMetaPath(new MetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+        addInstanciableMetaPath(IheActor_IheActorInstance_Edge.class,
+                new MetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_InvokingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+        addInstanciableMetaPath(IheActor_IheActorInstance_Edge.class,
+                new MetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
     }
 
 }

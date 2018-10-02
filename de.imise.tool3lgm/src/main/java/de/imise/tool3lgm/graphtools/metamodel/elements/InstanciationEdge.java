@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
-import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.graphtools.path.MetaPath;
 
@@ -29,21 +29,20 @@ public abstract class InstanciationEdge extends Edge {
      * die letzte Verbindung bzw. die letzte Kante hin zum EndElementdieser Kante erzeugt und nicht nochmal ein Element der Endelementart angelegt.
      * Damit kann man "Nebenbedingungspfade" für das Startelement gleich mit anlegen, wenn man das Startelement über diese Kante hier intsanziiert.
      */
-    private static ImmutableCollection<MetaPath> instanciableMetaPaths = ImmutableList.of();
+    private static Multimap<Class<? extends InstanciationEdge>, MetaPath> instanciableMetaPaths = ArrayListMultimap.create();
 
-    public static void addInstanciableMetaPath(final MetaPath... metaPaths) {
-        ImmutableList.Builder<MetaPath> listBuilder = ImmutableList.builder();
-        for (MetaPath metaPath : instanciableMetaPaths) {
-            listBuilder.add(metaPath);
-        }
+    public static void addInstanciableMetaPath(final Class<? extends InstanciationEdge> keyClass, final MetaPath... metaPaths) {
         for (MetaPath metaPath : metaPaths) {
-            listBuilder.add(metaPath);
+            instanciableMetaPaths.put(keyClass, metaPath);
         }
-        instanciableMetaPaths = listBuilder.build();
+    }
+
+    public static Iterable<MetaPath> iterateInstanciableMetaPaths(final Class<? extends InstanciationEdge> keyClass) {
+        return instanciableMetaPaths.get(keyClass);
     }
 
     public Iterable<MetaPath> iterateInstanciableMetaPaths() {
-        return instanciableMetaPaths;
+        return instanciableMetaPaths.get(getClass());
     }
 
 }
