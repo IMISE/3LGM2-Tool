@@ -78,10 +78,6 @@ public abstract class Edge extends ModelElement {
 
     protected int direction = FORWARD;
 
-    public static final int[] DIRECTION = {
-            NOTCONNECTED, DOUBLE, FORWARD, BACKWARD
-    };
-
     public static final String[] DIRECTION_STR = {
             "NOTCONNECTED", "DOUBLE", "FORWARD", "BACKWARD"
     };
