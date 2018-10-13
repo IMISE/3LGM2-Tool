@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
@@ -53,7 +54,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.CommandParser;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -3645,17 +3647,81 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param instanciationEdge
      * @param master
      */
-    private void createInstance(GraphDocument doc, final Class<? extends InstanciationEdge> instanciationEdgeClass, ModelElement master, final int pid) {
+    private NodeContainer createInstance(GraphDocument doc, final Class<? extends InstanciationEdge> instanciationEdgeClass, ModelElement master, final int pid) {
         doc = doc == null ? this : doc;
         master = master == null ? doc.getLastSelected().getElement() : master;
         doc.start_transaction(pid);
+        //Hauptkante anlegen
         Class<? extends ModelElement> class2Create = Edge.getEndClass(instanciationEdgeClass);
-        NodeContainer instanceC = doc.createKnotenWithContainer(class2Create, pid);
-        InstanciationEdge instanciationEdge = (InstanciationEdge) gdcoll.link(instanciationEdgeClass, master, instanceC.getElement(), pid);
-        for (MetaPath metaPath : instanciationEdge.iterateInstanciableMetaPaths()) {
+        NodeContainer instanceContainer = doc.createKnotenWithContainer(class2Create, pid);
+        ModelElement instanceElement = instanceContainer.getElement();
+        InstanciationEdge instanciationEdge = (InstanciationEdge) gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
 
+        //Ebenfalls zu instanziierende Nebenpfade anlegen
+        for (SimpleMetaPath metaPath : instanciationEdge.iterateInstanciableMetaPaths()) {
+            int path2CreateStartIndex = 0;
+            for (; path2CreateStartIndex < metaPath.getLength(); path2CreateStartIndex++) {
+                Class<? extends Edge> edgeClass = metaPath.getEdgeClasses()[path2CreateStartIndex];
+                if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
+                    break;
+                }
+            }
+            //für diesen Pfadteil müssen die verbundenen Elemente herausgesucht werden
+            SimpleMetaPath subPathConnected = metaPath.getSubPath(0, path2CreateStartIndex);
+            Set<ModelElement> connectedElements = PathFinder.getConnectedElements(master, subPathConnected);
+            for (ModelElement me : connectedElements) {
+                //ab diesem Pfadteil muss neu angelegt werden
+                SimpleMetaPath subPathCreate = metaPath.getSubPath(path2CreateStartIndex);
+                createPath(me, instanceElement, subPathCreate, doc, pid);
+            }
         }
 
+        doc.finish_transaction(pid);
+        doc.distributeEvent(DATA_CHANGED, pid);
+        return instanceContainer;
+    }
+
+    private static final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final GraphDocument doc, final int pid) {
+        doc.start_transaction(pid);
+        GDCollection gdcoll = doc.getCollection();
+        ModelElement pathStepStartElement = startElement;
+        ModelElement pathStepEndElement = null;
+        int pathStepCount = metaPath.getLength();
+        for (int i = 0; i < pathStepCount; i++) {
+            //wenn ein endElement angegeben wurde, dann das im letzten Pfadschritt verknüpfen
+            boolean lastPathStepLinksEndElement = endElement != null && i + 1 == pathStepCount; //true, wenn ein endElemnt verknüpft werden soll und das hier der letzte Pfadschritt ist
+            boolean alreadyLinked = false;
+            Class<? extends Edge> edgeClass = metaPath.getEdgeClasses()[i];
+            if (lastPathStepLinksEndElement) {
+                pathStepEndElement = endElement;
+                //wenn eine InstanciationEdge in dem Pfad auftaucht und das nicht die letzte Kante hin zu einem bestehenden endElement ist und
+                //diese Kante vorwärts im Pfad liegt (also vom zu instanzieerenden Element auf das Instanz-Element zeigt), dann wird diese auch
+                //selbst über den Instanziierungsmechanismus initialisiert
+            } else if (InstanciationEdge.class.isAssignableFrom(edgeClass) && metaPath.pathStepEdgeIsForward(i)) {
+                boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
+                NodeContainer createdInstance = doc.createInstance(doc, edgeClass.asSubclass(InstanciationEdge.class), pathStepStartElement, pid);
+                gdcoll.setInteractiveMode(oldInteractiveMode);
+                pathStepEndElement = createdInstance.getElement();
+                alreadyLinked = true;
+            } else { // nächstes Pfadschrittelement anlegen
+                Class<? extends ModelElement> pathStepEndClass = metaPath.getPathStepEndClass(i);
+                boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
+                NodeContainer pathStepEndElementContainer = doc.createKnotenWithContainer(pathStepEndClass, pid);
+                gdcoll.setInteractiveMode(oldInteractiveMode);
+                pathStepEndElement = pathStepEndElementContainer.getElement();
+            }
+            if (!alreadyLinked) {
+                gdcoll.link(edgeClass, pathStepStartElement, pathStepEndElement, pid);
+            }
+            if (CompositionEdge.class.isAssignableFrom(edgeClass)) {
+                if (metaPath.pathStepEdgeIsForward(i)) {
+                    doc.addict(pathStepStartElement, pathStepEndElement, edgeClass.asSubclass(CompositionEdge.class), pid);
+                } else {
+                    doc.addict(pathStepEndElement, pathStepStartElement, edgeClass.asSubclass(CompositionEdge.class), pid);
+                }
+            }
+            pathStepStartElement = pathStepEndElement;
+        }
         doc.finish_transaction(pid);
         doc.distributeEvent(DATA_CHANGED, pid);
     }
