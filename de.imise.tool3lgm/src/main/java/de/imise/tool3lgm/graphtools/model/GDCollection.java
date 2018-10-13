@@ -1844,9 +1844,12 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * @param flag
+     * @return previous interactive mode
      */
-    public void setInteractiveMode(final boolean flag) {
+    public boolean setInteractiveMode(final boolean flag) {
+        boolean oldMode = interactive_mode;
         interactive_mode = flag;
+        return oldMode;
     }
 
     /**
