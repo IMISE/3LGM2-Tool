@@ -6,7 +6,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMIT
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActor;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorInstance;
 
@@ -25,9 +25,9 @@ public class IheActor_IheActorInstance_Edge extends InstanciationEdge {
 
     static {
         addInstanciableMetaPath(IheActor_IheActorInstance_Edge.class,
-                new MetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_InvokingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+                new SimpleMetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_InvokingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
         addInstanciableMetaPath(IheActor_IheActorInstance_Edge.class,
-                new MetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+                new SimpleMetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
     }
 
 }
