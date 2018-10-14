@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.metamodel.tlgm_service.edge;
 
+import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_ONE;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
@@ -12,7 +13,7 @@ public class ApplicationSystem_IheActorInstance_Edge extends SubordinationEdge {
 
     public static final Class<? extends ModelElement> stcl = ApplicationSystem.class;
 
-    public static final EdgeCardinality scard = ZERO_UNIMITED;
+    public static final EdgeCardinality scard = ZERO_ONE;
 
     public static final EdgeCardinality ecard = ZERO_UNIMITED;
 
