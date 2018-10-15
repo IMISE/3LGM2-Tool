@@ -3681,8 +3681,22 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         return instanceContainer;
     }
 
-    private static final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final GraphDocument doc, final int pid) {
+    public static final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final GraphDocument doc, final int pid) {
         doc.start_transaction(pid);
+
+        int lastPathStepIndex = metaPath.getLength() - 1;
+        //wenn ein EndElement ex. und die letzte Kante eine InstanciationEdge ist, wobei das EndElement der Master dieser InstanciationEdge ist, dann
+        //wird das EndElement über diese Kante instanziiert und der Restpfad bis zu dieser Instanz dann wieder über diese Funktion angelegt
+        if (metaPath.getLength() > 1 && endElement != null && !metaPath.pathStepEdgeIsForward(lastPathStepIndex)) {
+            Class<? extends Edge> edgeClass = metaPath.getEdgeClasses()[lastPathStepIndex];
+            if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
+                NodeContainer createdInstance = doc.createInstance(doc, edgeClass.asSubclass(InstanciationEdge.class), endElement, pid);
+                SimpleMetaPath subPath = metaPath.getSubPath(0, lastPathStepIndex);
+                createPath(startElement, createdInstance.getElement(), subPath, doc, pid);
+                return;
+            }
+        }
+
         GDCollection gdcoll = doc.getCollection();
         ModelElement pathStepStartElement = startElement;
         ModelElement pathStepEndElement = null;
