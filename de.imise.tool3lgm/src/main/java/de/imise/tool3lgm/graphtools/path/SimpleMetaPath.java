@@ -116,4 +116,10 @@ public class SimpleMetaPath extends MetaPath {
         return edgeDirections[pathStepIndex] == Edge.FORWARD;
     }
 
+    @Override
+    public SimpleMetaPath getReversePath() {
+        MetaPath reverseMetaPath = super.getReversePath();
+        return new SimpleMetaPath(reverseMetaPath.getStartClass(), reverseMetaPath.getEndClass(), reverseMetaPath.getEdgeClasses());
+    }
+
 }
