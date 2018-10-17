@@ -26,6 +26,7 @@ import java.util.Set;
 
 import javax.swing.Action;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -43,6 +44,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -59,7 +61,9 @@ public final class ModelConstants {
 
     public static MetaModel initMetaModel() {
         try {
-            return Tool3lgmMetaModelContext.getMetaModelClass().newInstance();
+            Class<? extends MetaModel> metaModelClass = Tool3lgmMetaModelContext.getMetaModelClass();
+            MetaModel metaModel = metaModelClass.newInstance();
+            return metaModel;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1678,6 +1682,23 @@ public final class ModelConstants {
      */
     public static final Action[] getExtrasActions(final boolean plugins) {
         return metaModel.getExtrasActions(plugins);
+    }
+
+    /**
+     * Liefert alle anlegbaren MetaPfade die zwischen den übergebenen Elementarten im Metamodell definiert sind.
+     *
+     * @param elementClass1
+     * @param elementClass2
+     */
+    public static Collection<SimpleMetaPath> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+        ImmutableList.Builder<SimpleMetaPath> createableMetaPaths = ImmutableList.builder();
+        for (SimpleMetaPath metaPath : metaModel.getCreateableMetaPaths(elementClass1)) {
+            Class<? extends ModelElement> endClass = metaPath.getEndClass();
+            if (endClass.isAssignableFrom(elementClass2)) {
+                createableMetaPaths.add(metaPath);
+            }
+        }
+        return createableMetaPaths.build();
     }
 
 }
