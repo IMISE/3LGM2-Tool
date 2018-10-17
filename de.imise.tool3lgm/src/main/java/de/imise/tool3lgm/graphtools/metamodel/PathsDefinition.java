@@ -62,7 +62,7 @@ public abstract class PathsDefinition {
      * @param registerPathForSubClasses wenn true, dann wird der Pfad auch für alle Unterklassen der übergebenen Start- und
      *            Zielklassen angelegt. Wenn <code>false</code>, dann nur für die übergebenen Klassen.
      */
-    public final void put(final MetaPath metaPath, final boolean registerPathForSubClasses) {
+    private final void put(final MetaPath metaPath, final boolean registerPathForSubClasses) {
         if (!registerPathForSubClasses) {
             registerPath(metaPath);
         } else {
@@ -187,9 +187,7 @@ public abstract class PathsDefinition {
                                         edgeClass
                                 }
                         }, new String[] {
-                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.DOUBLE, false, false, " " + s("und") + " "),
-                                forwardName,
-                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.BACKWARD),
+                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.DOUBLE, false, false, " " + s("und") + " "), forwardName, ModelConstants.getMetaAssociationName(edgeClass, false, Edge.BACKWARD),
                         });
                     } else {
                         metaPath = new MetaPath(startClass, endClass, new Class[][] {
