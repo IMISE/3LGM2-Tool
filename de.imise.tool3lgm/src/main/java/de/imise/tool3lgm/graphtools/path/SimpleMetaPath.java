@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.path;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
@@ -27,7 +29,23 @@ public class SimpleMetaPath extends MetaPath {
      * @param associations
      */
     public SimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
-        super(startClass, endClass, associations);
+        this(startClass, endClass, null, associations);
+    }
+
+    /**
+     * @param startClass
+     * @param endClass
+     * @param forwardAndBackwardResourceKeyPrefix
+     * @param associations
+     */
+    public SimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String forwardAndBackwardResourceKeyPrefix, final Class<? extends Edge>... associations) {
+        this(Strings.isNullOrEmpty(forwardAndBackwardResourceKeyPrefix) ? null : forwardAndBackwardResourceKeyPrefix + "_f", startClass, endClass, associations);
+        reversePath = new SimpleMetaPath(Strings.isNullOrEmpty(forwardAndBackwardResourceKeyPrefix) ? null : forwardAndBackwardResourceKeyPrefix + "_b", endClass, startClass, createReverseAssociations()[0]);
+        reversePath.reversePath = this;
+    }
+
+    private SimpleMetaPath(final String forwardResourceKeyOrPathName, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
+        super(startClass, endClass, forwardResourceKeyOrPathName, associations);
         init();
     }
 
@@ -118,8 +136,12 @@ public class SimpleMetaPath extends MetaPath {
 
     @Override
     public SimpleMetaPath getReversePath() {
-        MetaPath reverseMetaPath = super.getReversePath();
-        return new SimpleMetaPath(reverseMetaPath.getStartClass(), reverseMetaPath.getEndClass(), reverseMetaPath.getEdgeClasses());
+        return (SimpleMetaPath) super.getReversePath();
+    }
+
+    @Override
+    public boolean isCreateable() {
+        return true;
     }
 
 }
