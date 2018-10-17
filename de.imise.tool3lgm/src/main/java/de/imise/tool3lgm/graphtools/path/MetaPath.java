@@ -58,7 +58,7 @@ public class MetaPath {
             ModelConstants.getForwardMetaAssociationName(Edge.class)
     };
 
-    private MetaPath reversePath;
+    protected MetaPath reversePath;
 
     /**
      * Erzeugt einen MetaPath, der zu dem übergebenen MetaPath identisch ist, nur mit der neuen übergebenen Start- und Endklasse.
@@ -581,19 +581,33 @@ public class MetaPath {
         return true;
     }
 
+    protected Class<? extends Edge>[][] createReverseAssociations() {
+        Class<? extends Edge>[][] reverseAssociations = Arrays.copyOf(associations, associations.length);
+        for (int subPathIndex = 0; subPathIndex < reverseAssociations.length; subPathIndex++) {
+            Class<? extends Edge>[] subPath = reverseAssociations[subPathIndex];
+            Class<? extends Edge>[] reverseSubPathAssociations = Arrays.copyOf(subPath, subPath.length);
+            Collections.reverse(Arrays.asList(reverseSubPathAssociations));
+            reverseAssociations[subPathIndex] = reverseSubPathAssociations;
+        }
+        return reverseAssociations;
+    }
+
+    protected MetaPath createReversePath() {
+        Class<? extends Edge>[][] reverseAssociations = createReverseAssociations();
+        MetaPath reversePath = new MetaPath(endClass, startClass, reverseAssociations);
+        return reversePath;
+    }
+
     public MetaPath getReversePath() {
         if (reversePath == null) {
-            Class<? extends Edge>[][] reverseAssociations = Arrays.copyOf(associations, associations.length);
-            for (int subPathIndex = 0; subPathIndex < reverseAssociations.length; subPathIndex++) {
-                Class<? extends Edge>[] subPath = reverseAssociations[subPathIndex];
-                Class<? extends Edge>[] reverseSubPathAssociations = Arrays.copyOf(subPath, subPath.length);
-                Collections.reverse(Arrays.asList(reverseSubPathAssociations));
-                reverseAssociations[subPathIndex] = reverseSubPathAssociations;
-            }
-            reversePath = new MetaPath(endClass, startClass, reverseAssociations);
+            reversePath = createReversePath();
             reversePath.reversePath = this;
         }
         return reversePath;
+    }
+
+    public boolean isCreateable() {
+        return false;
     }
 
 }
