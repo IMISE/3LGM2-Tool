@@ -1,7 +1,9 @@
 package de.imise.tool3lgm.metamodel.tlgm_service;
 
+import java.util.Collection;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
@@ -13,6 +15,7 @@ import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_HasPartEdge;
@@ -406,6 +409,12 @@ public class TLGMServiceMetaModel extends MetaModel {
     @Override
     public Set<Class<? extends ModelElement>> getGenerateNameClasses() {
         return GENERATE_NAME_CLASSES;
+    }
+
+    @Override
+    protected Collection<SimpleMetaPath> getCreateablePaths() {
+        SimpleMetaPath path1 = new SimpleMetaPath(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
+        return ImmutableList.of(path1);
     }
 
 }

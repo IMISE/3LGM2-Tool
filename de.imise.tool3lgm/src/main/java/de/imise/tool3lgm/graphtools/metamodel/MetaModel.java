@@ -3,14 +3,18 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import javax.swing.Action;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -18,6 +22,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.path.InvalidPathException;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -30,6 +35,7 @@ public abstract class MetaModel {
 
     public MetaModel() {
         putOldToNewClassNames();
+        initCreateableMetaPaths();
     }
 
     /**
@@ -346,7 +352,7 @@ public abstract class MetaModel {
     ///////////////////////////////////////////////////////////////////
 
     //    /**
-    //     * Um Festzustellen, ob ein gegebener Klassenname bereits voll qulaifiziert ist, wird geschaut, ob der Klassenname mit
+    //     * Um Festzustellen, ob ein gegebener Klassenname bereits voll qualifiziert ist, wird geschaut, ob der Klassenname mit
     //     * diesem Prefix beginnt. Ein Metamodell dessen Element-Klassen außerhalb von "de.imise.tool3lgm." liegen, müsste über
     //     * diese Funktion den tatsächlichen Prefix ausgeben. Da das aber in absehbarer Zeit nicht passieren wird, ist diese
     //     * Funktion hier ertsmal final.
@@ -360,5 +366,33 @@ public abstract class MetaModel {
 
     /** Liefert ein Set aller Elementklassen, bei denen der Name nicht vom Nutzer eingegeben sondern generiert wird. */
     public abstract Set<Class<? extends ModelElement>> getGenerateNameClasses();
+
+    /**
+     * @return Liefert eine Sammlung aller {@link SimpleMetaPath}, die man zwischen 2 Elementen anlegen kann, wobei die Zwischenelemente ebenfalls neu
+     *         angelegt werden.
+     */
+    protected abstract Collection<SimpleMetaPath> getCreateablePaths();
+
+    private final Multimap<Class<? extends ModelElement>, SimpleMetaPath> elementClassToCreateableMetaPaths = ArrayListMultimap.create();
+
+    private final void initCreateableMetaPaths() {
+        Collection<SimpleMetaPath> createablePaths = getCreateablePaths();
+        if (createablePaths != null) {
+            for (SimpleMetaPath metaPath : createablePaths) {
+                elementClassToCreateableMetaPaths.put(metaPath.getStartClass(), metaPath);
+                elementClassToCreateableMetaPaths.put(metaPath.getEndClass(), metaPath.getReversePath());
+            }
+        }
+    }
+
+    /**
+     * Liefert alle anlegbaren MetaPfade die für die übergebene Elementart im Metamodell definiert sind.
+     *
+     * @param elementClass
+     */
+    public Collection<SimpleMetaPath> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass) {
+        Collection<SimpleMetaPath> createablePaths = elementClassToCreateableMetaPaths.get(elementClass);
+        return createablePaths == null ? ImmutableList.of() : createablePaths;
+    }
 
 }

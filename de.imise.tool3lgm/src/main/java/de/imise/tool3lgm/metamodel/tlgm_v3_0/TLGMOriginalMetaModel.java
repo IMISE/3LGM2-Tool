@@ -1,7 +1,9 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0;
 
+import java.util.Collection;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
@@ -12,6 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
@@ -90,8 +93,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Standort;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Subnetz;
 
 @SuppressWarnings({
-        "unchecked",
-        "rawtypes"
+        "unchecked", "rawtypes"
 })
 public class TLGMOriginalMetaModel extends MetaModel {
 
@@ -379,6 +381,11 @@ public class TLGMOriginalMetaModel extends MetaModel {
     @Override
     public Set<Class<? extends ModelElement>> getGenerateNameClasses() {
         return GENERATE_NAME_CLASSES;
+    }
+
+    @Override
+    protected Collection<SimpleMetaPath> getCreateablePaths() {
+        return ImmutableList.of();
     }
 
 }
