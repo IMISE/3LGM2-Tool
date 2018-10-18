@@ -154,6 +154,8 @@ public class MetaPath {
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final int pathDirectionSourceEdgeIndex) {
         this(startClass, endClass, path, isDoubleMeaningEdge(path[0][pathDirectionSourceEdgeIndex]) ? new String[] {
+                //der Parameter switchEdgeDirection müsste eigentlich über die Richtung der Kante mit dem speziellen Index im Pfad ermittelt werden. Da bisher alle Pfade, die
+                //über diesen Konstrktor hier initialisiert werden immer dieselben Elementarten verbinden, braucht man die Kantenrichtung nicht drehen, daher steht unten immer false.
                 getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], isStartClass(path[0][pathDirectionSourceEdgeIndex], startClass) && isEndClass(path[0][pathDirectionSourceEdgeIndex], endClass), Edge.DOUBLE, false, false,
                         " " + getResString("und") + " "),
                 getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, Edge.FORWARD),
