@@ -144,6 +144,20 @@ public class MetaPath {
     }
 
     /**
+     * @param startClass
+     * @param endClass
+     * @param edgeClass
+     */
+    @SuppressWarnings("unchecked")
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge> edgeClass) {
+        this(startClass, endClass, new Class[][] {
+                {
+                        edgeClass
+                }
+        }, 0);
+    }
+
+    /**
      * Dieser Pfad reimt sich selbst die Bezeichnung zusammen anhand der Kante, deren Index die Richtung des Pfades bestimmt. Diesen Konsruktor darf
      * man natürlich nur nehmen, wenn dieser Kantenname als Pfadname auch stimmt.
      *

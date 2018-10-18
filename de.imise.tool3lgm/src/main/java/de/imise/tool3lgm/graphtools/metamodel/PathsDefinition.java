@@ -171,7 +171,6 @@ public abstract class PathsDefinition {
         return metaPathes.get(calculateKey(startClass, endClass));
     }
 
-    @SuppressWarnings("unchecked")
     private final void putSimpleMetaPaths(final Class<? extends Edge> edgeClass) {
         Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
         Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
@@ -183,11 +182,7 @@ public abstract class PathsDefinition {
             Class<? extends ModelElement> startClass = start.asSubclass(ModelElement.class);
             for (Class<?> end : allEndClasses) {
                 Class<? extends ModelElement> endClass = end.asSubclass(ModelElement.class);
-                MetaPath metaPath = new MetaPath(startClass, endClass, new Class[][] {
-                            {
-                                    edgeClass
-                            }
-                    }, 0);
+                MetaPath metaPath = new MetaPath(startClass, endClass, edgeClass);
                 put(metaPath);
             }
         }
