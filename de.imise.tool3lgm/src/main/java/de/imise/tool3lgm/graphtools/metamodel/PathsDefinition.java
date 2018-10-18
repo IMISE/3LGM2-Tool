@@ -94,6 +94,17 @@ public abstract class PathsDefinition {
         put(metaPath, true);
     }
 
+    /**
+     * @param startClass
+     * @param endClass
+     * @param resourceKeyOrPathName
+     * @param associations
+     */
+    public final void put(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String resourceKeyOrPathName, final Class<? extends Edge>... associations) {
+        MetaPath metaPath = new MetaPath(startClass, endClass, resourceKeyOrPathName, associations);
+        put(metaPath);
+    }
+
     private void registerPath(final MetaPath metaPath) {
         Class<? extends ModelElement> startClass = metaPath.getStartClass();
         Class<? extends ModelElement> endClass = metaPath.getEndClass();
