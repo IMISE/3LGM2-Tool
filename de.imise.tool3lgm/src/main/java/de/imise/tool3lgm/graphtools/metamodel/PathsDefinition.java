@@ -183,24 +183,11 @@ public abstract class PathsDefinition {
             Class<? extends ModelElement> startClass = start.asSubclass(ModelElement.class);
             for (Class<?> end : allEndClasses) {
                 Class<? extends ModelElement> endClass = end.asSubclass(ModelElement.class);
-                MetaPath metaPath = null;
-                if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                    metaPath = new MetaPath(startClass, endClass, new Class[][] {
+                MetaPath metaPath = new MetaPath(startClass, endClass, new Class[][] {
                             {
                                     edgeClass
                             }
-                    }, new String[] {
-                            ModelConstants.getMetaAssociationName(edgeClass, false, Edge.DOUBLE, false, false, " " + s("und") + " "),
-                            ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD),
-                            ModelConstants.getMetaAssociationName(edgeClass, false, Edge.BACKWARD),
-                    });
-                } else {
-                    metaPath = new MetaPath(startClass, endClass, new Class[][] {
-                            {
-                                    edgeClass
-                            }
-                    }, ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD));
-                }
+                    }, 0);
                 put(metaPath);
             }
         }
