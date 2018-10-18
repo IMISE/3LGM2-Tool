@@ -171,6 +171,7 @@ public abstract class PathsDefinition {
         return metaPathes.get(calculateKey(startClass, endClass));
     }
 
+    @SuppressWarnings("unchecked")
     private final void putSimpleMetaPaths(final Class<? extends Edge> edgeClass) {
         Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
         Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
@@ -183,30 +184,22 @@ public abstract class PathsDefinition {
             for (Class<?> end : allEndClasses) {
                 Class<? extends ModelElement> endClass = end.asSubclass(ModelElement.class);
                 MetaPath metaPath = null;
-                if (ModelConstants.isHasPartEdge(edgeClass)) {
+                if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+                    metaPath = new MetaPath(startClass, endClass, new Class[][] {
+                            {
+                                    edgeClass
+                            }
+                    }, new String[] {
+                            ModelConstants.getMetaAssociationName(edgeClass, false, Edge.DOUBLE, false, false, " " + s("und") + " "),
+                            ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD),
+                            ModelConstants.getMetaAssociationName(edgeClass, false, Edge.BACKWARD),
+                    });
+                } else {
                     metaPath = new MetaPath(startClass, endClass, new Class[][] {
                             {
                                     edgeClass
                             }
                     }, ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD));
-
-                } else {
-                    String forwardName = ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD);
-                    if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                        metaPath = new MetaPath(startClass, endClass, new Class[][] {
-                                {
-                                        edgeClass
-                                }
-                        }, new String[] {
-                                ModelConstants.getMetaAssociationName(edgeClass, false, Edge.DOUBLE, false, false, " " + s("und") + " "), forwardName, ModelConstants.getMetaAssociationName(edgeClass, false, Edge.BACKWARD),
-                        });
-                    } else {
-                        metaPath = new MetaPath(startClass, endClass, new Class[][] {
-                                {
-                                        edgeClass
-                                }
-                        }, forwardName);
-                    }
                 }
                 put(metaPath);
             }
