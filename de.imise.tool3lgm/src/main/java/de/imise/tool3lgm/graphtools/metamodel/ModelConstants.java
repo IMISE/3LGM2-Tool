@@ -317,7 +317,7 @@ public final class ModelConstants {
         for (Class<? extends ModelElement> elementClass : elementClasses) {
             if (!ModelConstants.isEdgeType(elementClass)) {
                 if (!ModelConstants.isAbstract(elementClass)) {
-                    if (!creatableOnly || !ModelConstants.isExistenceDependent(elementClass, false)) {
+                    if (!creatableOnly || !ModelConstants.isExistenceDependent(elementClass)) {
                         creatableNodes.add(elementClass);
                     }
                 }
@@ -1528,21 +1528,15 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert true, wenn die übergebenen Klasse wenigstens eine Kante beseitzt, bei der die minimale Kardinalität zu der
-     * verbundenen Klasse > 0 ist. Die Existenz des übergebenen Elementes ist also abhängig von dem anderen Element.
-     * Das tifft automatisch bei allen {@link CompositionEdge}s zu, bei denen das übergebene Element der Slave ist, aber kann
-     * auch bei allen anderen Kanten zutreffen.
+     * Liefert <code>true</code>, wenn die übergebene Elementart der Slave einer {@link CompositionEdge} ist
      *
      * @param elementClass
-     * @param ignoreCompositions wenn true, werden Kanten nicht beachtet, bei denen die übergebene Elementklasse Master einer Composition ist
      * @return
      */
-    public static boolean isExistenceDependent(final Class<? extends ModelElement> elementClass, final boolean ignoreCompositions) {
+    private static boolean isExistenceDependent(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends Edge> edgeClass : ModelConstants.getEdgeTypes(elementClass)) {
-            if (!ignoreCompositions || ignoreCompositions && !isComposition(edgeClass)) {
-                if (Edge.getMinCardinality(elementClass, edgeClass) > 0) {
-                    return true;
-                }
+            if (isComposition(edgeClass) && CompositionEdge.isSlaveType(edgeClass.asSubclass(CompositionEdge.class), elementClass)) {
+                return true;
             }
         }
         return false;
