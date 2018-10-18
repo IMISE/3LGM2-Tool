@@ -11,7 +11,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartOrEndC
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -103,32 +102,29 @@ public final class PathFinder {
      * @return NOTCONNECTED / FORWARD / BACKWARD / DOUBLE if path.isImmediate otherwise
      *         NOTCONNECTED / DOUBLE
      */
-    public static final int isConnected(ModelElement element1, ModelElement element2, final MetaPath metaPath) {
+    public static final int isConnected(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
         boolean searchParts = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
         boolean searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
         if (!searchParts && !searchParents || element1 == element2 || metaPath.isRecursiveSubordinationPath()) { //statt isRecursiveSubordinationPath() wurde hier mal auf HasPartEdge getestet. Was genau das macht ist mir (AXS) nicht (mehr) klar. Deswegen habe ich es jetzt von der Bedeutung so gleich wie mäglich gemacht
             return isConnected(element1, element2, metaPath, false);
         }
         int retVal = NOTCONNECTED;
-        Set<ModelElement> list1 = new HashSet<>();
-        Set<ModelElement> list2 = new HashSet<>();
-        list1.add(element1);
-        list2.add(element2);
+        Set<ModelElement> set1 = new HashSet<>();
+        Set<ModelElement> set2 = new HashSet<>();
+        set1.add(element1);
+        set2.add(element2);
         if (searchParts) {
-            list1.addAll(element1.getPartElements());
-            list2.addAll(element2.getPartElements());
+            set1.addAll(element1.getPartElements());
+            set2.addAll(element2.getPartElements());
         }
         if (searchParents) {
-            list1.addAll(element1.getParentElements());
-            list2.addAll(element2.getParentElements());
+            set1.addAll(element1.getParentElements());
+            set2.addAll(element2.getParentElements());
         }
-        Iterator<ModelElement> iterator1 = list1.iterator();
-        while (iterator1.hasNext()) {
-            element1 = iterator1.next();
-            Iterator<ModelElement> iterator2 = list2.iterator();
-            while (iterator2.hasNext()) {
-                element2 = iterator2.next();
-                int con = isConnected(element1, element2, metaPath, false);
+
+        for (ModelElement me1 : set1) {
+            for (ModelElement me2 : set2) {
+                int con = isConnected(me1, me2, metaPath, false);
                 switch (con) {
                 case DOUBLE:
                     return DOUBLE;
