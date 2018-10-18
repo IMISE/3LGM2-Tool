@@ -130,7 +130,7 @@ public class TLGMOriginalPathsDefinition extends PathsDefinition {
                 }
         }, new String[] {
                 "text_empfaengt_sendet", "text_sendet", "text_empfaengt"
-        }, 1, true));
+        }, 1));
 
     }
 

@@ -106,7 +106,7 @@ public final class PathFinder {
         boolean searchParts = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
         boolean searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
         if (!searchParts && !searchParents || element1 == element2 || metaPath.isRecursiveSubordinationPath()) { //statt isRecursiveSubordinationPath() wurde hier mal auf HasPartEdge getestet. Was genau das macht ist mir (AXS) nicht (mehr) klar. Deswegen habe ich es jetzt von der Bedeutung so gleich wie mäglich gemacht
-            return isConnected(element1, element2, metaPath, false);
+            return isConnectedInternal(element1, element2, metaPath);
         }
         int retVal = NOTCONNECTED;
         Set<ModelElement> set1 = new HashSet<>();
@@ -124,7 +124,7 @@ public final class PathFinder {
 
         for (ModelElement me1 : set1) {
             for (ModelElement me2 : set2) {
-                int con = isConnected(me1, me2, metaPath, false);
+                int con = isConnectedInternal(me1, me2, metaPath);
                 switch (con) {
                 case DOUBLE:
                     return DOUBLE;
@@ -148,13 +148,12 @@ public final class PathFinder {
      * @param element1
      * @param element2
      * @param metaPath
-     * @param reverse
      * @return
      */
-    private static final int isConnected(final ModelElement element1, final ModelElement element2, final MetaPath metaPath, final boolean reverse) {
+    private static final int isConnectedInternal(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
         if (!metaPath.getStartClass().isAssignableFrom(element1.getClass()) || !metaPath.getEndClass().isAssignableFrom(element2.getClass())) {
             if (metaPath.getEndClass().isAssignableFrom(element1.getClass()) && metaPath.getStartClass().isAssignableFrom(element2.getClass())) {
-                return isConnected(element2, element1, metaPath, !reverse);
+                return isConnectedInternal(element2, element1, metaPath);
             }
             return NOTCONNECTED;
         }
@@ -166,19 +165,12 @@ public final class PathFinder {
                 if (element1.isConnectedTo(element2, edgeClass) && element1.isConnectedFrom(element2, edgeClass)) {
                     return DOUBLE;
                 } else if (element1.isConnectedTo(element2, edgeClass)) {
-                    return reverse && metaPath.isDirectional() ? BACKWARD : FORWARD;
+                    return FORWARD;
                 } else if (element1.isConnectedFrom(element2, edgeClass)) {
-                    return reverse && metaPath.isDirectional() ? FORWARD : HasPartEdge.class.isAssignableFrom(edgeClass) ? NOTCONNECTED : BACKWARD;
+                    return HasPartEdge.class.isAssignableFrom(edgeClass) ? NOTCONNECTED : BACKWARD;
                 }
             } else {
-                switch (isConnected(element1, element2, metaPath, 0, pathIndex)) {
-                case DOUBLE:
-                    return DOUBLE;
-                case FORWARD:
-                    return reverse && metaPath.isDirectional() ? BACKWARD : FORWARD;
-                case BACKWARD:
-                    return reverse && metaPath.isDirectional() ? FORWARD : BACKWARD;
-                }
+                return isConnected(element1, element2, metaPath, 0, pathIndex);
             }
         }
         return NOTCONNECTED;

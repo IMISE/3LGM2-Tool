@@ -49,11 +49,6 @@ public class MetaPath {
     /**
      * COMMENTME
      */
-    private final boolean directional;
-
-    /**
-     * COMMENTME
-     */
     private static final String[] defaultPathName = {
             ModelConstants.getForwardMetaAssociationName(Edge.class)
     };
@@ -69,7 +64,7 @@ public class MetaPath {
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath originalMetaPath) {
-        this(newStartClass, newEndClass, originalMetaPath.associations, originalMetaPath.pathNames, originalMetaPath.control, originalMetaPath.directional);
+        this(newStartClass, newEndClass, originalMetaPath.associations, originalMetaPath.pathNames, originalMetaPath.control);
     }
 
     /**
@@ -127,7 +122,7 @@ public class MetaPath {
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String resourceKeyOrPathName, final boolean directional) {
-        this(startClass, endClass, path, CollectionUtils.toStringArray(resourceKeyOrPathName), 0, directional);
+        this(startClass, endClass, path, CollectionUtils.toStringArray(resourceKeyOrPathName), 0);
     }
 
     /**
@@ -152,7 +147,7 @@ public class MetaPath {
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames) {
-        this(startClass, endClass, path, resourceKeyOrPathNames, 0, false);
+        this(startClass, endClass, path, resourceKeyOrPathNames, 0);
     }
 
     /**
@@ -162,15 +157,11 @@ public class MetaPath {
      *            end)
      * @param description String[] with descriptions for associations (in legend) (one description for DOUBLE / FORWARD / BACKWARD)
      * @parma int control index of connections in associations, which control direction of associations
-     * @param directional boolean with true, if it is important which element is in row an which in column (exp: row is part of col; but not for
-     *            function reads objecttype )
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames, final int control, final boolean directional) {
-        this.directional = directional;
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames, final int control) {
         this.startClass = startClass;
         this.endClass = endClass;
-        //        this.control = path[0].length - (control + 1);
         this.control = control;
         associations = path;
         ensureAssociationOrder();
@@ -401,13 +392,6 @@ public class MetaPath {
      */
     public final int getControl() {
         return control;
-    }
-
-    /**
-     * @return
-     */
-    public final boolean isDirectional() {
-        return directional;
     }
 
     @Override
