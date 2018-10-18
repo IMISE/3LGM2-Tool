@@ -113,11 +113,11 @@ public abstract class PathsDefinition {
         int hash2 = elementClass2.hashCode();
         StringBuilder sb = new StringBuilder();
         if (hash1 < hash2) {
-            sb.append(elementClass1.hashCode());
-            sb.append(elementClass2.hashCode());
+            sb.append(hash1);
+            sb.append(hash2);
         } else {
-            sb.append(elementClass2.hashCode());
-            sb.append(elementClass1.hashCode());
+            sb.append(hash2);
+            sb.append(hash1);
         }
         return sb.toString();
     }
