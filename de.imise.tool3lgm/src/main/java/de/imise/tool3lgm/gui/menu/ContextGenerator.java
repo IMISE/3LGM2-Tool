@@ -1072,47 +1072,26 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
+     * @param menu
+     * @param enabled
+     * @return null, wenn enabled == false, sonst menu
+     */
+    private JMenu setItemsEnabled(final JMenu menu, final boolean enabled) {
+        for (int i = 0; i < menu.getItemCount(); i++) {
+            menu.getItem(i).setEnabled(enabled);
+        }
+        return enabled ? menu : null;
+    }
+
+    /**
      * @return
      */
     private JMenu getNewKnotMenu() {
-        int i;
-        switch (doc.getCollection().getActiveLayer()) {
-        case ModelConstants.DOMAIN_LAYER:
-            for (i = 0; i < new_domain_tree.getItemCount(); i++) {
-                new_domain_tree.getItem(i).setEnabled(true);
-            }
-            for (i = 0; i < new_logical_tree.getItemCount(); i++) {
-                new_logical_tree.getItem(i).setEnabled(false);
-            }
-            for (i = 0; i < new_physical_tree.getItemCount(); i++) {
-                new_physical_tree.getItem(i).setEnabled(false);
-            }
-            return new_domain_tree;
-        case ModelConstants.LOGICAL_LAYER:
-            for (i = 0; i < new_domain_tree.getItemCount(); i++) {
-                new_domain_tree.getItem(i).setEnabled(false);
-            }
-            for (i = 0; i < new_logical_tree.getItemCount(); i++) {
-                new_logical_tree.getItem(i).setEnabled(true);
-            }
-            for (i = 0; i < new_physical_tree.getItemCount(); i++) {
-                new_physical_tree.getItem(i).setEnabled(false);
-            }
-            return new_logical_tree;
-        case ModelConstants.PHYSICAL_LAYER:
-            for (i = 0; i < new_domain_tree.getItemCount(); i++) {
-                new_domain_tree.getItem(i).setEnabled(false);
-            }
-            for (i = 0; i < new_logical_tree.getItemCount(); i++) {
-                new_logical_tree.getItem(i).setEnabled(false);
-            }
-            for (i = 0; i < new_physical_tree.getItemCount(); i++) {
-                new_physical_tree.getItem(i).setEnabled(true);
-            }
-            return new_physical_tree;
-        default:
-            return new_domain_tree;
-        }
+        int activeLayer = doc.getCollection().getActiveLayer();
+        JMenu menu = setItemsEnabled(new_domain_tree, activeLayer == ModelConstants.DOMAIN_LAYER);
+        menu = menu != null ? menu : setItemsEnabled(new_logical_tree, activeLayer == ModelConstants.LOGICAL_LAYER);
+        menu = menu != null ? menu : setItemsEnabled(new_physical_tree, activeLayer == ModelConstants.PHYSICAL_LAYER);
+        return menu != null ? menu : new_domain_tree;
     }
 
     /**
