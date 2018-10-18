@@ -3,7 +3,12 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMeaningEdge;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartOrEndClass;
 
 import java.awt.Color;
@@ -42,9 +47,11 @@ public class MetaPath {
     private final String[] pathNames;
 
     /**
-     * COMMENTME
+     * Index der Kante im Pfad, die vorgibt, welche Richtung (FORWARD, BACKWARD, DOUBLE) für den Gesamtpfad ermittelt werden soll. Dieser Index nur
+     * bei Pfaden relevant, die eine Kante mit doppelter Bedeutung haben können, da nur diese Kanten einen anderen connectionState als FORWARD haben
+     * können.
      */
-    private final int control;
+    private final int pathDirectionSourceEdgeIndex;
 
     /**
      * COMMENTME
@@ -64,7 +71,7 @@ public class MetaPath {
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath originalMetaPath) {
-        this(newStartClass, newEndClass, originalMetaPath.associations, originalMetaPath.pathNames, originalMetaPath.control);
+        this(newStartClass, newEndClass, originalMetaPath.associations, originalMetaPath.pathNames, originalMetaPath.pathDirectionSourceEdgeIndex);
     }
 
     /**
@@ -108,20 +115,6 @@ public class MetaPath {
      * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String resourceKeyOrPathName) {
-        this(startClass, endClass, path, resourceKeyOrPathName, false);
-    }
-
-    /**
-     * @param startClass ModelElement class where associations starts
-     * @param endClass ModelElement class where associations ends
-     * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
-     *            end)
-     * @param resourceKeyOrPathName String with description for associations or the resource key for this description
-     * @param directional boolean with true, if it is important which element is in row an which in column (exp: row is part of col; but not for
-     *            function reads objecttype )
-     * @throws InvalidPathException
-     */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String resourceKeyOrPathName, final boolean directional) {
         this(startClass, endClass, path, CollectionUtils.toStringArray(resourceKeyOrPathName), 0);
     }
 
@@ -151,18 +144,38 @@ public class MetaPath {
     }
 
     /**
+     * Dieser Pfad reimt sich selbst die Bezeichnung zusammen anhand der Kante, deren Index die Richtung des Pfades bestimmt. Diesen Konsruktor darf
+     * man natürlich nur nehmen, wenn dieser Kantenname als Pfadname auch stimmt.
+     *
+     * @param startClass
+     * @param endClass
+     * @param path
+     * @param pathDirectionSourceEdgeIndex
+     */
+    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final int pathDirectionSourceEdgeIndex) {
+        this(startClass, endClass, path, isDoubleMeaningEdge(path[0][pathDirectionSourceEdgeIndex]) ? new String[] {
+                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], isStartClass(path[0][pathDirectionSourceEdgeIndex], startClass) && isEndClass(path[0][pathDirectionSourceEdgeIndex], endClass), Edge.DOUBLE, false, false,
+                        " " + getResString("und") + " "),
+                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, Edge.FORWARD),
+                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, Edge.BACKWARD)
+        } : new String[] {
+                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, Edge.FORWARD),
+        }, pathDirectionSourceEdgeIndex);
+    }
+
+    /**
      * @param startClass ModelElement class where associations starts
      * @param endClass ModelElement class where associations ends
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
      * @param description String[] with descriptions for associations (in legend) (one description for DOUBLE / FORWARD / BACKWARD)
-     * @parma int control index of connections in associations, which control direction of associations
+     * @parma pathDirectionSourceEdgeIndex index of connections in associations, which control direction of associations
      * @throws InvalidPathException
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames, final int control) {
+    private MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames, final int pathDirectionSourceEdgeIndex) {
         this.startClass = startClass;
         this.endClass = endClass;
-        this.control = control;
+        this.pathDirectionSourceEdgeIndex = pathDirectionSourceEdgeIndex;
         associations = path;
         ensureAssociationOrder();
         pathNames = resourceKeyOrPathNames;
@@ -170,7 +183,7 @@ public class MetaPath {
             pathNames[i] = Tool3lgmConstants.getResStringWithoutError(pathNames[i]);
         }
         for (int i = 0; i < countPathes(); i++) {
-            if (control >= getLength(i)) {
+            if (pathDirectionSourceEdgeIndex >= getLength(i)) {
                 throw new Error("MetaPath: controlIndex is out of range!");
             }
         }
@@ -390,8 +403,8 @@ public class MetaPath {
     /**
      * @return
      */
-    public final int getControl() {
-        return control;
+    public final int getPathDirectionSourceEdgeIndex() {
+        return pathDirectionSourceEdgeIndex;
     }
 
     @Override

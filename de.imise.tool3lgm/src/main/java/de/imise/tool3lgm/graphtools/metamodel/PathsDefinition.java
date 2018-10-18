@@ -188,7 +188,7 @@ public abstract class PathsDefinition {
                             {
                                     edgeClass
                             }
-                    }, ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD), true);
+                    }, ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD));
 
                 } else {
                     String forwardName = ModelConstants.getMetaAssociationName(edgeClass, false, Edge.FORWARD);

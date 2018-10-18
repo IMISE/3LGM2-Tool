@@ -195,7 +195,7 @@ public final class PathFinder {
         List<ModelElement> elements = current.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[position]);
         for (ModelElement me : elements) {
             if ((retVal = isConnected(me, end, metaPath, position + 1, pathIndex)) != NOTCONNECTED) {
-                if (metaPath.getControl() == position) {
+                if (metaPath.getPathDirectionSourceEdgeIndex() == position) {
                     if (current.isConnectedTo(me) && current.isConnectedFrom(me)) {
                         return DOUBLE;
                     } else if (current.isConnectedTo(me)) {

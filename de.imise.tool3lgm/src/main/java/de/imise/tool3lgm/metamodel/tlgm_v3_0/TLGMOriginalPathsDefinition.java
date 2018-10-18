@@ -122,14 +122,12 @@ public class TLGMOriginalPathsDefinition extends PathsDefinition {
                 }, {
                         KawbAwbVerbindung.class
                 }
-        }, "text_hat_teil", true));
+        }, 0));
 
         put(new MetaPath(Anwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
                 {
                         AwbKommssVerbindung.class, KommBeziehung.class, AwbKommssVerbindung.class
                 }
-        }, new String[] {
-                "text_empfaengt_sendet", "text_sendet", "text_empfaengt"
         }, 1));
 
     }
