@@ -1077,7 +1077,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private JMenu getNewKnotMenu() {
         int i;
         switch (doc.getCollection().getActiveLayer()) {
-        case 4:
+        case ModelConstants.DOMAIN_LAYER:
             for (i = 0; i < new_domain_tree.getItemCount(); i++) {
                 new_domain_tree.getItem(i).setEnabled(true);
             }
@@ -1088,7 +1088,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 new_physical_tree.getItem(i).setEnabled(false);
             }
             return new_domain_tree;
-        case 2:
+        case ModelConstants.LOGICAL_LAYER:
             for (i = 0; i < new_domain_tree.getItemCount(); i++) {
                 new_domain_tree.getItem(i).setEnabled(false);
             }
@@ -1099,7 +1099,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 new_physical_tree.getItem(i).setEnabled(false);
             }
             return new_logical_tree;
-        case 0:
+        case ModelConstants.PHYSICAL_LAYER:
             for (i = 0; i < new_domain_tree.getItemCount(); i++) {
                 new_domain_tree.getItem(i).setEnabled(false);
             }
