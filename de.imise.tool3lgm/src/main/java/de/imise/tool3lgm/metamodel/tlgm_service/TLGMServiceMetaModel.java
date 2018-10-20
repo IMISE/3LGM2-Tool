@@ -362,26 +362,9 @@ public class TLGMServiceMetaModel extends MetaModel {
         return IMPORTABLE_NODES;
     }
 
-    ///////////////////////////////////
-    // spezielle Kanteneigenschaften //
-    ///////////////////////////////////
-
-    /**
-     * Liste aller Kantenklassen, die auch 2 gerichtete Assoziationen im Metamodell sein könnten, aber in eine Assoziation verpackt wurden,
-     * bei denen die Richtung der Edge (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Wegen dieser
-     * Kanten braucht man den ganzen Kanten-Richtungsmechanismus. Wenn sie grafisch dargestellt werden, dann werden sie als eine Edge dargestellt,die
-     * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt.
-     */
-    @Override
-    public final Set<Class<? extends Edge>> getDoubleMeaningEdgeClasses() {
-        return ImmutableSet.<Class<? extends Edge>> of(
-                //vorwärts1: bearbeitet; rückwärts1: wird bearbeitet von
-                //vorwärts2: interpretiert; rückwärts2: wird interpretiert von
-                Function_ObjectType_Edge.class,
-                //vorwärts1: hat als Ergebnis; rückwärts1: ist Ergebnis von
-                //vorwärts2: hat als Parameter; rückwärts2: ist Parameter von
-                Service_ObjectType_Edge.class);
-    }
+    ///////////////////////////////////////////////////////////////////////
+    // Bedingungspfade für Kanten (siehe Beschreibung getConditionPath() //
+    ///////////////////////////////////////////////////////////////////////
 
     //IheInvokingInterface_InvokingInterface_Edge
     public static final MetaPath CONDITION_METAPATH_1 = new MetaPath(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class), IheActor_IheInterface_Edge.class,
