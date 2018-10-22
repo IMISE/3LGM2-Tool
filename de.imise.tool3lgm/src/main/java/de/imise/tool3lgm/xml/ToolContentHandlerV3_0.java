@@ -506,7 +506,11 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         //wird, dann kommt es zu einem Fehler, wenn man dieses Attribut gar nicht auswertet
                     } else if (!ToolContentHandlerV3_0_DeprecatedValuesHandler.putDeprecatedXMLFieldString(collection, element, field, elementValue.toString())) {
                         if (!element.putXMLFieldString(field, elementValue.toString())) {
-                            throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
+                            if (!field.equals("state")) {
+                                //Tue nichts bei state. Bei Modellen bis zur 3.6 hatten alle Kanten einen State = die Richtung. Jetzt haben nur noch DoubleMeaningEdges den State, da man ihn bei den anderen nicht braucht.
+                                //bei allen anderen nicht verarbeitbaren Values -> gib einen Fehler aus
+                                throw new SAXException("ModelElement konnte field nicht verarbeiten!\n ModelElement=" + element.getHashString() + "\n field=" + field + "\n Wert=" + elementValue);
+                            }
                         }
                     }
                 }

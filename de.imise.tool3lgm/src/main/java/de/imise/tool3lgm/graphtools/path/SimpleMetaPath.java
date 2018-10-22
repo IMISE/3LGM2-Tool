@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.path;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
 
@@ -15,7 +16,7 @@ public class SimpleMetaPath extends MetaPath {
      * Für jede Kante die einmal am Anfang ermittelte Richtung, in der die Kante den nächsten Pfadschritt beschreibt. Es wird immer zuerst auf
      * FORWARD getestet und wenn das nicht passt, dann wird automatisch BACKWARD gesetzt.
      */
-    private int[] edgeDirections;
+    private Direction[] edgeDirections;
 
     /**
      * Für jeden Pfadschritt die speziellste der beiden Klassen, die die Verbindung zwischen 2 Schritten sind. Dieses Array ist immer genau 1 größer
@@ -28,6 +29,7 @@ public class SimpleMetaPath extends MetaPath {
      * @param endClass
      * @param associations
      */
+    @SafeVarargs
     public SimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
         this(startClass, endClass, null, associations);
     }
@@ -38,12 +40,14 @@ public class SimpleMetaPath extends MetaPath {
      * @param forwardAndBackwardResourceKeyPrefix
      * @param associations
      */
+    @SafeVarargs
     public SimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String forwardAndBackwardResourceKeyPrefix, final Class<? extends Edge>... associations) {
         this(Strings.isNullOrEmpty(forwardAndBackwardResourceKeyPrefix) ? null : forwardAndBackwardResourceKeyPrefix + "_f", startClass, endClass, associations);
         reversePath = new SimpleMetaPath(Strings.isNullOrEmpty(forwardAndBackwardResourceKeyPrefix) ? null : forwardAndBackwardResourceKeyPrefix + "_b", endClass, startClass, createReverseAssociations()[0]);
         reversePath.reversePath = this;
     }
 
+    @SafeVarargs
     private SimpleMetaPath(final String forwardResourceKeyOrPathName, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
         super(startClass, endClass, forwardResourceKeyOrPathName, associations);
         init();
@@ -52,7 +56,7 @@ public class SimpleMetaPath extends MetaPath {
     @SuppressWarnings("unchecked")
     private void init() {
         Class<? extends Edge>[] edgeClasses = getEdgeClasses();
-        edgeDirections = new int[edgeClasses.length];
+        edgeDirections = new Direction[edgeClasses.length];
         realPathStepClasses = new Class[edgeClasses.length + 1];
         Class<? extends ModelElement> lastStepEndClass = getStartClass();
         for (int i = 0; i < edgeClasses.length; i++) {
@@ -60,14 +64,14 @@ public class SimpleMetaPath extends MetaPath {
             Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
             Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
             Class<?> pathStepStartClass = ReflectionUtils.getMostSpecialElementClass(lastStepEndClass, edgeStartClass);
-            int direction = Edge.FORWARD;
+            Direction direction = Direction.FORWARDS;
             if (pathStepStartClass == null) {
                 pathStepStartClass = ReflectionUtils.getMostSpecialElementClass(lastStepEndClass, edgeEndClass).asSubclass(ModelElement.class);
-                direction = Edge.BACKWARD;
+                direction = Direction.BACKWARDS;
             }
             edgeDirections[i] = direction;
             realPathStepClasses[i] = pathStepStartClass.asSubclass(ModelElement.class);
-            lastStepEndClass = direction == Edge.FORWARD ? edgeEndClass : edgeStartClass;
+            lastStepEndClass = direction == Direction.FORWARDS ? edgeEndClass : edgeStartClass;
             //Endklasse des letzten Pfades und Endklasse des Gesamt-Pfades -> Speziellere beider Klassen ermitteln und in der Liste speichern
             if (i == edgeClasses.length - 1) {
                 lastStepEndClass = ReflectionUtils.getMostSpecialElementClass(getEndClass(), lastStepEndClass).asSubclass(ModelElement.class);
@@ -119,6 +123,7 @@ public class SimpleMetaPath extends MetaPath {
         if (pathStepStartIndex >= pathStepEndIndex || pathStepStartIndex < 0 || pathStepStartIndex >= edgeDirections.length || pathStepEndIndex < 0 || pathStepEndIndex > edgeDirections.length) {
             throw new IllegalArgumentException("Invalid pathStepStartIndex=" + pathStepStartIndex + " and pathStepEndIndex=" + pathStepEndIndex);
         }
+        @SuppressWarnings("unchecked")
         Class<? extends Edge>[] associations = new Class[pathStepEndIndex - pathStepStartIndex];
         System.arraycopy(getEdgeClasses(), pathStepStartIndex, associations, 0, associations.length);
         return new SimpleMetaPath(realPathStepClasses[pathStepStartIndex], realPathStepClasses[pathStepEndIndex], associations);
@@ -131,7 +136,7 @@ public class SimpleMetaPath extends MetaPath {
      * @return
      */
     public boolean pathStepEdgeIsForward(final int pathStepIndex) {
-        return edgeDirections[pathStepIndex] == Edge.FORWARD;
+        return edgeDirections[pathStepIndex] == Direction.FORWARDS;
     }
 
     @Override

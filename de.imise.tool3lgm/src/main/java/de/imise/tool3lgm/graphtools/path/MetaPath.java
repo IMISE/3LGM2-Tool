@@ -17,6 +17,7 @@ import java.util.Collections;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
@@ -135,7 +136,7 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
-     * @param resourceKeyOrPathNames String[] with descriptions for associations (one description for DOUBLE / FORWARD / BACKWARD) or the resource
+     * @param resourceKeyOrPathNames String[] with descriptions for associations (one description for FORWARD / BACKWARD / DOUBLE) or the resource
      *            keys for this strings
      * @throws InvalidPathException
      */
@@ -170,12 +171,12 @@ public class MetaPath {
         this(startClass, endClass, path, isDoubleMeaningEdge(path[0][pathDirectionSourceEdgeIndex]) ? new String[] {
                 //der Parameter switchEdgeDirection müsste eigentlich über die Richtung der Kante mit dem speziellen Index im Pfad ermittelt werden. Da bisher alle Pfade, die
                 //über diesen Konstrktor hier initialisiert werden immer dieselben Elementarten verbinden, braucht man die Kantenrichtung nicht drehen, daher steht unten immer false.
-                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], isStartClass(path[0][pathDirectionSourceEdgeIndex], startClass) && isEndClass(path[0][pathDirectionSourceEdgeIndex], endClass), Edge.DOUBLE, false, false,
-                        " " + getResString("und") + " "),
-                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, Edge.FORWARD),
-                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, Edge.BACKWARD)
+                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, MeaningState.FORWARD),
+                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, MeaningState.BACKWARD),
+                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], isStartClass(path[0][pathDirectionSourceEdgeIndex], startClass) && isEndClass(path[0][pathDirectionSourceEdgeIndex], endClass), MeaningState.DOUBLE, false, false,
+                        " " + getResString("und") + " ")
         } : new String[] {
-                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, Edge.FORWARD),
+                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false),
         }, pathDirectionSourceEdgeIndex);
     }
 
@@ -184,7 +185,7 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
-     * @param description String[] with descriptions for associations (in legend) (one description for DOUBLE / FORWARD / BACKWARD)
+     * @param description String[] with descriptions for associations (in legend) (one description for FORWARD / BACKWARD / DOUBLE)
      * @parma pathDirectionSourceEdgeIndex index of connections in associations, which control direction of associations
      * @throws InvalidPathException
      */

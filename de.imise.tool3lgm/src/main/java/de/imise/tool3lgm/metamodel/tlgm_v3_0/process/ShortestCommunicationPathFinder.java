@@ -1,8 +1,5 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
@@ -241,20 +239,20 @@ public class ShortestCommunicationPathFinder {
             reprSet.addAll(otParent.getConnectedElements(Repraesentationsform.class, ObjReprVerbindung.class));
         }
 
+        PathConnectionState[] connectionStates = {
+                PathConnectionState.FROM_ELEMENT, PathConnectionState.TO_ELEMENT
+        };
+
         // für jede Repräsentationsform
         for (ModelElement ntdt : reprSet) {
             // ETNTKombinationen und ETDTKombinationen der Repräsentationsform holen
             // für jede ETNTKombination und ETDTKombination alle Kommunikationsbeziehungen
             // einsammeln
             for (ModelElement etntdtKombi : ntdt.getConnectedElements(EtntEtdtKombination.class)) {
-                int[] directions = {
-                        FORWARD,
-                        BACKWARD
-                };
-                for (int d = 0; d < directions.length; d++) {
+                for (int d = 0; d < connectionStates.length; d++) {
                     // für alle Kommunikationsverbindungen, die den Objekttyp in der jewieligen
                     // Richtung verschicken können
-                    for (ModelElement commBezMe : etntdtKombi.getConnectedElements(KommBeziehung.class, KommbezEtntVerbindung.class, directions[d])) {
+                    for (ModelElement commBezMe : etntdtKombi.getConnectedElements(KommBeziehung.class, KommbezEtntVerbindung.class, connectionStates[d])) {
                         KommBeziehung commBez = (KommBeziehung) commBezMe;
                         ModelElement start = commBez.getStart();
                         if (!interfaces.contains(start)) {
@@ -264,7 +262,7 @@ public class ShortestCommunicationPathFinder {
                         if (!interfaces.contains(end)) {
                             interfaces.add(end);
                         }
-                        if (directions[d] == FORWARD) {
+                        if (connectionStates[d] == PathConnectionState.FROM_ELEMENT) {
                             sendToReceiveInterfacePairs.add(new SameTypePair<>(start, end));
                         } else {
                             sendToReceiveInterfacePairs.add(new SameTypePair<>(end, start));

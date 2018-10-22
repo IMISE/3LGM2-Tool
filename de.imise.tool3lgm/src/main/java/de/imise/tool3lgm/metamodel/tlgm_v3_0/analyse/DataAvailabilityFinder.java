@@ -4,9 +4,6 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.analyse;
 
 import static de.imise.tool3lgm.Static.getSelectedDoc;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -298,15 +295,8 @@ public class DataAvailabilityFinder {
         for (ModelElement me : readUpdateEdges) {
             Edge edge = (Edge) me;
             // bei allen Interprtiert-Bezeihungen
-            Aufgabe auf = null;
-            Objekttyp ot = null;
-            if (edge.getStart() instanceof Aufgabe && (edge.getDirection() == BACKWARD || edge.getDirection() == DOUBLE)) {
-                auf = (Aufgabe) edge.getStart();
-                ot = (Objekttyp) edge.getEnd();
-            } else if (edge.getEnd() instanceof Aufgabe && (edge.getDirection() == FORWARD || edge.getDirection() == DOUBLE)) {
-                auf = (Aufgabe) edge.getEnd();
-                ot = (Objekttyp) edge.getStart();
-            }
+            Aufgabe auf = (Aufgabe) edge.getStart();
+            Objekttyp ot = (Objekttyp) edge.getEnd();
             // wenn es keine Interpretiert-Beziehung war -> nächste Edge
             if (auf == null) {
                 continue;
@@ -365,15 +355,8 @@ public class DataAvailabilityFinder {
         for (ModelElement me : readUpdateEdges) {
             Edge edge = (Edge) me;
             // bei allen Interprtiert-Bezeihungen
-            Aufgabe auf = null;
-            Objekttyp ot = null;
-            if (edge.getStart() instanceof Aufgabe && (edge.getDirection() == FORWARD || edge.getDirection() == DOUBLE)) {
-                auf = (Aufgabe) edge.getStart();
-                ot = (Objekttyp) edge.getEnd();
-            } else if (edge.getEnd() instanceof Aufgabe && (edge.getDirection() == BACKWARD || edge.getDirection() == DOUBLE)) {
-                auf = (Aufgabe) edge.getEnd();
-                ot = (Objekttyp) edge.getStart();
-            }
+            ModelElement auf = edge.getStart();
+            Objekttyp ot = (Objekttyp) edge.getEnd();
             // wenn es keine Bearbeitet-Beziehung war -> nächste Edge
             if (auf == null) {
                 continue;

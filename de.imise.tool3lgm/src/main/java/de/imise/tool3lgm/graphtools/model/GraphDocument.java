@@ -7,7 +7,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_NAME_CHANGED;
@@ -48,6 +47,7 @@ import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
@@ -676,7 +676,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case MODEL_ACTION_LINK:
             switch (argc) {
             case 2:
-                linkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), Integer.parseInt(argv[1]), pid);
+                Direction direction = Enum.valueOf(Direction.class, argv[1]);
+                linkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), direction, pid);
                 break;
             case 6:
                 //Parameter: link(String edgeClassName, String edgeHash, ModelElement k1, ModelElement k2, int edgeIndex, int pid) {
@@ -695,7 +696,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             Class<? extends Edge> edgeClass = null;
             switch (argc) {
             case 2:
-                unlinkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), Integer.parseInt(argv[1]), pid);
+                Direction direction = Enum.valueOf(Direction.class, argv[1]);
+                unlinkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), direction, pid);
                 break;
             case 4:
                 edgeClass = ModelConstants.getClassForName(argv[2]).asSubclass(Edge.class);
@@ -3740,10 +3742,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         doc.distributeEvent(DATA_CHANGED, pid);
     }
 
-    public final void linkSelected(final Class<? extends Edge> edgeClass, final int direction, final int pid) {
+    public final void linkSelected(final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
-        if (direction == BACKWARD) {
+        if (direction == Direction.BACKWARDS) {
             for (ElementContainer ec : selectedContainer) {
                 gdcoll.link(edgeClass, ec.getElement(), lastSelecedElement, pid);
             }
@@ -3759,10 +3761,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @param pid
      */
-    public final void unlinkSelected(final Class<? extends Edge> edgeClass, final int direction, final int pid) {
+    public final void unlinkSelected(final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
-        if (direction == BACKWARD) {
+        if (direction == Direction.BACKWARDS) {
             for (ElementContainer ec : selectedContainer) {
                 gdcoll.unlink(ec.getElement(), lastSelecedElement, edgeClass, pid);
             }

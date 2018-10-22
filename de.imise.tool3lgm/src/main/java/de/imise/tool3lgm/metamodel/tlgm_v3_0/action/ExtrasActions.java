@@ -1,14 +1,12 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.action;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
-
 import java.util.List;
 
 import javax.swing.Action;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
@@ -44,15 +42,15 @@ public class ExtrasActions {
                     Bausteinschnittstelle bs1 = (Bausteinschnittstelle) kz.getStart();
                     Bausteinschnittstelle bs2 = (Bausteinschnittstelle) kz.getEnd();
                     //hin
-                    List<ElementContainer> empf = bs2.getConnectedContainer(EtntEtdtKombination.class, doc, null, FORWARD);
-                    for (ElementContainer kc : bs1.getConnectedContainer(EtntEtdtKombination.class, doc, null, BACKWARD)) {
+                    List<ElementContainer> empf = bs2.getConnectedContainer(EtntEtdtKombination.class, doc, null, PathConnectionState.FROM_ELEMENT);
+                    for (ElementContainer kc : bs1.getConnectedContainer(EtntEtdtKombination.class, doc, null, PathConnectionState.TO_ELEMENT)) {
                         if (empf.contains(kc)) {
                             gdcoll.link(KommbezEtntVerbindung.class, kc.getElement(), kz, TransactionManager.STANDARD_PID);
                         }
                     }
                     //zurück
-                    empf = bs1.getConnectedContainer(EtntEtdtKombination.class, doc, null, FORWARD);
-                    for (ElementContainer kc : bs2.getConnectedContainer(EtntEtdtKombination.class, doc, null, BACKWARD)) {
+                    empf = bs1.getConnectedContainer(EtntEtdtKombination.class, doc, null, PathConnectionState.FROM_ELEMENT);
+                    for (ElementContainer kc : bs2.getConnectedContainer(EtntEtdtKombination.class, doc, null, PathConnectionState.TO_ELEMENT)) {
                         if (empf.contains(kc)) {
                             gdcoll.link(KommbezEtntVerbindung.class, kz, kc.getElement(), TransactionManager.STANDARD_PID);
                         }

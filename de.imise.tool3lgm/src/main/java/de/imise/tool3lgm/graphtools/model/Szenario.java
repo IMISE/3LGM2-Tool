@@ -5,6 +5,7 @@ import java.util.Date;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -144,7 +145,7 @@ public class Szenario extends LGMGraphDocument {
                 if (b) {
                     //bei Compositions auch das Slave-Element in dieses Szenario holen (wenn sie es nicht unique ist)
                     if (ka instanceof CompositionEdge) {
-                        updateSlaveContainers(ka, CompositionEdge.MASTER_TO_SLAVE_DIRECTION == Edge.FORWARD, sourceDoc);
+                        updateSlaveContainers(ka, CompositionEdge.MASTER_TO_SLAVE_DIRECTION == PathConnectionState.FROM_ELEMENT, sourceDoc);
                     }
                     //wenn Start und End-Element der Edge einen Container in diesem Szenario haben
 

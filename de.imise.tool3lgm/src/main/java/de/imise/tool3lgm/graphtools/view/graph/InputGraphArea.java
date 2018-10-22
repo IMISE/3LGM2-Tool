@@ -7,7 +7,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.layerFor;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
@@ -30,6 +29,7 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -622,7 +622,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 ka = chooseObject(layer, xreal[layerIndex], yreal[layerIndex]);
                 if (ka != null) {
                     szenario.addToSelection(ka, STANDARD_PID);
-                    szenario.linkSelected(null, FORWARD, STANDARD_PID);
+                    szenario.linkSelected(null, Direction.FORWARDS, STANDARD_PID);
                     revalidate();
                     repaint();
                     break;

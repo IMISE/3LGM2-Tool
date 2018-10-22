@@ -5,8 +5,6 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
 
 import java.awt.GridBagConstraints;
@@ -36,6 +34,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
@@ -226,7 +225,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      */
     private void appendObjectTypes(final LGMTreeNode aufgabenContainerNode) {
         ModelElement me = ((NodeContainer) aufgabenContainerNode.getUserObject()).getElement();
-        List<ElementContainer> ots = me.getConnectedContainer(Objekttyp.class, doc, null, BACKWARD, false);
+        List<ElementContainer> ots = me.getConnectedContainer(Objekttyp.class, doc, null, PathConnectionState.TO_ELEMENT, false);
         if (ots.size() > 0) {
             LGMTreeNode tmpNode = new LGMTreeNode(getResString("AufObjVerbindung_f_b"), false);
             tmpNode.setSelectable(false);
@@ -237,7 +236,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
             }
             aufgabenContainerNode.add(tmpNode);
         }
-        ots = me.getConnectedContainer(Objekttyp.class, doc, null, FORWARD, false);
+        ots = me.getConnectedContainer(Objekttyp.class, doc, null, PathConnectionState.FROM_ELEMENT, false);
         if (ots.size() > 0) {
             LGMTreeNode tmpNode = new LGMTreeNode(getResString("AufObjVerbindung_f_f"), false);
             tmpNode.setSelectable(false);

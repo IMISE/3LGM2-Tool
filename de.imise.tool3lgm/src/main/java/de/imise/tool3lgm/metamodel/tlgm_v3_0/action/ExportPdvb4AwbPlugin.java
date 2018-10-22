@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.action;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.ANY;
-
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -18,6 +16,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbPdvbkVerbindung;
@@ -104,10 +103,10 @@ public class ExportPdvb4AwbPlugin {
      * @return
      */
     private static final String addEntry(final ModelElement applicationSystem, final StringBuilder entryBuilder) {
-        for (ModelElement pdvbKonf : applicationSystem.getConnectedElements(DBKonfiguration.class, PdvbkAwbVerbindung.class, ANY, true)) {
+        for (ModelElement pdvbKonf : applicationSystem.getConnectedElements(DBKonfiguration.class, PdvbkAwbVerbindung.class, PathConnectionState.FROM_OR_TO_ELEMENT, true)) {
 
             //Alle verbundenen Phys. Datenbverarbeitungsbausteine holen und davon alle absoluten Parts
-            List<ModelElement> pdvbList = pdvbKonf.getConnectedElements(PhysischerDVBaustein.class, PdvbPdvbkVerbindung.class, ANY, true);
+            List<ModelElement> pdvbList = pdvbKonf.getConnectedElements(PhysischerDVBaustein.class, PdvbPdvbkVerbindung.class, PathConnectionState.FROM_OR_TO_ELEMENT, true);
             Set<ModelElement> absolutePartPdvbs = new HashSet<>();
             for (int i = 0; i < pdvbList.size(); i++) {
                 ModelElement pdvb = pdvbList.get(i);

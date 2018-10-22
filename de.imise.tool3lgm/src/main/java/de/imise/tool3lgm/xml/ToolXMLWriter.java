@@ -25,6 +25,7 @@ import javax.xml.stream.XMLStreamException;
 import com.google.common.base.Strings;
 import com.google.common.collect.Table.Cell;
 
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -398,7 +399,9 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             Edge edge = (Edge) me;
             writeModelElementField("start", edge.getStart().getHashString());
             writeModelElementField("end", edge.getEnd().getHashString());
-            writeModelElementField("state", edge.getDirectionName());
+            if (me instanceof DoubleMeaningEdge) {
+                writeModelElementField("state", ((DoubleMeaningEdge) edge).getMeaningStateName());
+            }
         } else if (me instanceof Knickpunkt) {
             Knickpunkt bendpoint = (Knickpunkt) me;
             EdgeContainer edgeContainer = bendpoint.getOwner();

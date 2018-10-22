@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,7 +20,9 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
@@ -64,7 +64,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        String lolabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(BACKWARD));
+        String lolabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(MeaningState.BACKWARD));
         JLabel lolabel = new JLabel(lolabeltext);
 
         //hier niemals das this löschen, weil die globale searchElementClass im super-Konsturktor richtig gesetzt wird
@@ -79,7 +79,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         lotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         JScrollPane sp1 = new JScrollPane(lotree);
 
-        String lulabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(FORWARD));
+        String lulabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(MeaningState.FORWARD));
         JLabel lulabel = new JLabel(lulabeltext);
 
         luroot = new LGMTreeNode("luroot", false);
@@ -170,12 +170,12 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         showFullDialog(true);
     }
 
-    protected String getEdgeDisplayName(final int connectionState) {
+    protected String getEdgeDisplayName(final MeaningState meaningState) {
         boolean isDoubleMeaningEdge = ModelConstants.isDoubleMeaningEdge(edgeClass);
         //dieses Panel war urspünglich nur für Kanten mit doppelter Bedeutung. Danach hat AXS das auch für Kanten zwischen denselben Elementen, die aber eine Richtung haben, angepasst.
         //Kanten ohne doppelte Bedeutung haben immer die Richtung FORWARD, aber der connectionState muss hier als Lesrichtung der Kante interpretiert werden, damit über den beiden Bäumen jeweils eine Richtung steht
-        boolean forward = isDoubleMeaningEdge && edgeIsForward || !isDoubleMeaningEdge && connectionState == FORWARD;
-        return forward ? ModelConstants.getForwardMetaAssociationName(edgeClass, connectionState, false, false) : ModelConstants.getBackwardMetaAssociationName(edgeClass, connectionState, false, false);
+        boolean forward = isDoubleMeaningEdge && edgeIsForward || !isDoubleMeaningEdge && meaningState == MeaningState.FORWARD;
+        return forward ? ModelConstants.getForwardMetaAssociationName(edgeClass, meaningState, false, false) : ModelConstants.getBackwardMetaAssociationName(edgeClass, meaningState, false, false);
     }
 
     ArrayList<ElementContainer> childrenToExcludeFromRotree = new ArrayList<>();
@@ -197,14 +197,14 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         childrenToExcludeFromRutree.clear();
 
         ModelElement modelElement = getModelElement();
-        for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
+        for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, edgeClass, PathConnectionState.TO_ELEMENT)) {
             lotree.addObject(ec, loroot, null, true, false, false);
             childrenToExcludeFromRotree.add(ec);
         }
         boolean searchParts = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
         boolean searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
         if (searchParts) {
-            for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
+            for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, edgeClass, PathConnectionState.TO_ELEMENT)) {
                 LGMTreeNode node = lotree.addObject(ec, loroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
@@ -213,7 +213,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             }
         }
         if (searchParents) {
-            for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
+            for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, edgeClass, PathConnectionState.TO_ELEMENT)) {
                 LGMTreeNode node = lotree.addObject(ec, loroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
@@ -222,12 +222,12 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             }
         }
 
-        for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
+        for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, edgeClass, PathConnectionState.FROM_ELEMENT)) {
             lutree.addObject(ec, luroot, null, true, false, false);
             childrenToExcludeFromRutree.add(ec);
         }
         if (searchParts) {
-            for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
+            for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, edgeClass, PathConnectionState.FROM_ELEMENT)) {
                 LGMTreeNode node = lutree.addObject(ec, luroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
@@ -236,7 +236,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             }
         }
         if (searchParents) {
-            for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
+            for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, edgeClass, PathConnectionState.FROM_ELEMENT)) {
                 LGMTreeNode node = lutree.addObject(ec, luroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
@@ -315,20 +315,14 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         DragNDropActionChain tac4 = DragNDropInitializer.createNewDragNDropActionChain(lutree, rutree, luremoveAction);
 
         return new DragNDropActionChain[] {
-                tac1,
-                tac2,
-                tac3,
-                tac4
+                tac1, tac2, tac3, tac4
         };
     }
 
     @Override
     public JTree[] getAllDragNDropTrees() {
         return new JTree[] {
-                lotree,
-                rotree,
-                lutree,
-                rutree
+                lotree, rotree, lutree, rutree
         };
     }
 }

@@ -66,8 +66,8 @@ public class ToolXMLParser {
             "<!--Tool3lgmFile version='3.2'-->", //6
             "<!--Tool3lgmFile version='3.3'-->", //7
             "<!--Tool3lgmFile version='3.4'-->", //8
-            "<!--Tool3lgmFile version='3.5'-->",//9
-            //            "<!--Tool3lgmFile version='3.6'-->",//10
+            "<!--Tool3lgmFile version='3.5'-->", //9
+            "<!--Tool3lgmFile version='3.6'-->",//10
     };
 
     /**
@@ -138,7 +138,9 @@ public class ToolXMLParser {
         case 6:
         case 7:
         case 8:
-        case 9: //3.1 bis 3.5 haben denselben Parser, aber alte Baukastenversionen können neuere
+        case 9:
+        case 10: //Version 3.6 -> nur noch die DoubleMeaningEdges haben einen State und alle anderen nicht mehr
+            //3.1 bis 3.6 haben denselben Parser, aber alte Baukastenversionen können neuere
             //Modelldateien nicht lesen, weil Elementklassen umbenannt wurden (was aber den Parser
             //nicht kümmert)
             parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_1(collection, paste));

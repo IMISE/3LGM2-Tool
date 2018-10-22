@@ -3,10 +3,6 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.NOTCONNECTED;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartOrEndClass;
 
 import java.util.Collection;
@@ -17,6 +13,7 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -102,13 +99,13 @@ public final class PathFinder {
      * @return NOTCONNECTED / FORWARD / BACKWARD / DOUBLE if path.isImmediate otherwise
      *         NOTCONNECTED / DOUBLE
      */
-    public static final int isConnected(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
+    public static final PathConnectionState isConnected(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
         boolean searchParts = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
         boolean searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
         if (!searchParts && !searchParents || element1 == element2 || metaPath.isRecursiveSubordinationPath()) { //statt isRecursiveSubordinationPath() wurde hier mal auf HasPartEdge getestet. Was genau das macht ist mir (AXS) nicht (mehr) klar. Deswegen habe ich es jetzt von der Bedeutung so gleich wie mäglich gemacht
             return isConnectedInternal(element1, element2, metaPath);
         }
-        int retVal = NOTCONNECTED;
+        PathConnectionState retVal = null;
         Set<ModelElement> set1 = new HashSet<>();
         Set<ModelElement> set2 = new HashSet<>();
         set1.add(element1);
@@ -121,23 +118,26 @@ public final class PathFinder {
             set1.addAll(element1.getParentElements());
             set2.addAll(element2.getParentElements());
         }
-
         for (ModelElement me1 : set1) {
             for (ModelElement me2 : set2) {
-                int con = isConnectedInternal(me1, me2, metaPath);
-                switch (con) {
-                case DOUBLE:
-                    return DOUBLE;
-                case FORWARD:
-                    if (retVal == BACKWARD) {
-                        return DOUBLE;
+                PathConnectionState con = isConnectedInternal(me1, me2, metaPath);
+                if (con != null) {
+                    switch (con) {
+                    case FROM_AND_TO_ELEMENT:
+                        return PathConnectionState.FROM_AND_TO_ELEMENT;
+                    case FROM_ELEMENT:
+                        if (retVal == PathConnectionState.TO_ELEMENT) {
+                            return PathConnectionState.FROM_AND_TO_ELEMENT;
+                        }
+                        retVal = PathConnectionState.FROM_ELEMENT;
+                        break;
+                    case TO_ELEMENT:
+                        if (retVal == PathConnectionState.FROM_ELEMENT) {
+                            return PathConnectionState.FROM_AND_TO_ELEMENT;
+                        }
+                        retVal = PathConnectionState.TO_ELEMENT;
+                        break;
                     }
-                    return FORWARD;
-                case BACKWARD:
-                    if (retVal == FORWARD) {
-                        return DOUBLE;
-                    }
-                    return BACKWARD;
                 }
             }
         }
@@ -150,30 +150,32 @@ public final class PathFinder {
      * @param metaPath
      * @return
      */
-    private static final int isConnectedInternal(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
+    private static final PathConnectionState isConnectedInternal(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
         if (!metaPath.getStartClass().isAssignableFrom(element1.getClass()) || !metaPath.getEndClass().isAssignableFrom(element2.getClass())) {
             if (metaPath.getEndClass().isAssignableFrom(element1.getClass()) && metaPath.getStartClass().isAssignableFrom(element2.getClass())) {
                 return isConnectedInternal(element2, element1, metaPath);
             }
-            return NOTCONNECTED;
+            return null;
         }
 
         for (int pathIndex = 0; pathIndex < metaPath.countPathes(); pathIndex++) {
             // direkt vebunden?
             if (metaPath.isImmediate(pathIndex)) {
                 Class<? extends Edge> edgeClass = metaPath.getEdgeClasses(pathIndex)[0];
-                if (element1.isConnectedTo(element2, edgeClass) && element1.isConnectedFrom(element2, edgeClass)) {
-                    return DOUBLE;
-                } else if (element1.isConnectedTo(element2, edgeClass)) {
-                    return FORWARD;
-                } else if (element1.isConnectedFrom(element2, edgeClass)) {
-                    return HasPartEdge.class.isAssignableFrom(edgeClass) ? NOTCONNECTED : BACKWARD;
+                boolean connectedTo = element1.isConnectedTo(element2, edgeClass);
+                boolean connectedFrom = element1.isConnectedFrom(element2, edgeClass);
+                if (connectedTo && connectedFrom) {
+                    return PathConnectionState.FROM_AND_TO_ELEMENT;
+                } else if (connectedTo) {
+                    return PathConnectionState.FROM_ELEMENT;
+                } else if (connectedFrom) {
+                    return HasPartEdge.class.isAssignableFrom(edgeClass) ? null : PathConnectionState.TO_ELEMENT;
                 }
             } else {
                 return isConnected(element1, element2, metaPath, 0, pathIndex);
             }
         }
-        return NOTCONNECTED;
+        return null;
     }
 
     /**
@@ -184,32 +186,32 @@ public final class PathFinder {
      * @param pathIndex
      * @return
      */
-    private static final int isConnected(final ModelElement current, final ModelElement end, final MetaPath metaPath, final int position, final int pathIndex) {
+    private static final PathConnectionState isConnected(final ModelElement current, final ModelElement end, final MetaPath metaPath, final int position, final int pathIndex) {
         if (position == metaPath.getLength(pathIndex)) {
             if (current.equals(end)) {
-                return DOUBLE;
+                return PathConnectionState.FROM_AND_TO_ELEMENT;
             }
-            return NOTCONNECTED;
+            return null;
         }
-        int retVal;
+        PathConnectionState retVal;
         List<ModelElement> elements = current.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[position]);
         for (ModelElement me : elements) {
-            if ((retVal = isConnected(me, end, metaPath, position + 1, pathIndex)) != NOTCONNECTED) {
+            if ((retVal = isConnected(me, end, metaPath, position + 1, pathIndex)) != null) {
                 if (metaPath.getPathDirectionSourceEdgeIndex() == position) {
                     if (current.isConnectedTo(me) && current.isConnectedFrom(me)) {
-                        return DOUBLE;
+                        return PathConnectionState.FROM_AND_TO_ELEMENT;
                     } else if (current.isConnectedTo(me)) {
-                        return FORWARD;
+                        return PathConnectionState.FROM_ELEMENT;
                     } else if (current.isConnectedFrom(me)) {
-                        return BACKWARD;
+                        return PathConnectionState.TO_ELEMENT;
                     } else {
-                        return NOTCONNECTED;
+                        return null;
                     }
                 }
                 return retVal;
             }
         }
-        return NOTCONNECTED;
+        return null;
     }
 
     //	/**

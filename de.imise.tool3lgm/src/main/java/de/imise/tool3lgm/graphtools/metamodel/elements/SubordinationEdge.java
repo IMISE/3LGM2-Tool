@@ -3,6 +3,8 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState.FROM_ELEMENT;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState.TO_ELEMENT;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.log.Log;
@@ -17,10 +19,10 @@ import de.imise.tool3lgm.log.Log;
 public abstract class SubordinationEdge extends Edge {
 
     /** Richtung, in der die Kante vom Oberelement auf das Unterelement zeigt */
-    public static final int SUPER_TO_SUB_DIRECTION = FORWARD;
+    public static final PathConnectionState SUPER_TO_SUB_DIRECTION = FROM_ELEMENT;
 
     /** Richtung, in der die Kante vom Unterelement auf das Oberelement zeigt */
-    public static final int SUB_TO_SUPER_DIRECTION = BACKWARD;
+    public static final PathConnectionState SUB_TO_SUPER_DIRECTION = TO_ELEMENT;
 
     public ModelElement getSubElement() {
         return k2;
@@ -79,35 +81,6 @@ public abstract class SubordinationEdge extends Edge {
      */
     public static final boolean isSuperClass(final Class<? extends SubordinationEdge> subordinationEdgeClass, final Class<? extends ModelElement> meClass) {
         return getSuperClass(subordinationEdgeClass).isAssignableFrom(meClass);
-    }
-
-    @Override
-    public final int getDirection() {
-        return FORWARD;
-    }
-
-    @Override
-    public final void setDirection(final int _state) {
-        ModelElement start = k1;
-        ModelElement end = k2;
-        switch (_state) {
-        case DOUBLE:
-            break;
-        case FORWARD:
-            super.setDirection(FORWARD);
-            break;
-        case BACKWARD:
-            ModelElement temp = k1;
-            k1 = k2;
-            k2 = temp;
-            super.setDirection(FORWARD);
-            break;
-        }
-        if (isInCircle()) {
-            k1 = start;
-            k2 = end;
-        }
-        return;
     }
 
     @Override

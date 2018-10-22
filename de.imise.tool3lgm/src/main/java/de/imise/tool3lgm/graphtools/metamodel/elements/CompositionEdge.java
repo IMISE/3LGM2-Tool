@@ -4,6 +4,8 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ONE_ONE;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState.FROM_ELEMENT;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState.TO_ELEMENT;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 
@@ -19,10 +21,10 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 public abstract class CompositionEdge extends SubordinationEdge {
 
     /** Richtung, in der die Kante vom Oberelement auf das Unterelement zeigt */
-    public static final int MASTER_TO_SLAVE_DIRECTION = SUPER_TO_SUB_DIRECTION;
+    public static final PathConnectionState MASTER_TO_SLAVE_DIRECTION = FROM_ELEMENT;
 
     /** Richtung, in der die Kante vom Unterelement auf das Oberelement zeigt */
-    public static final int SLAVE_TO_MASTER_DIRECTION = SUB_TO_SUPER_DIRECTION;
+    public static final PathConnectionState SLAVE_TO_MASTER_DIRECTION = TO_ELEMENT;
 
     /**
      * Die Slave-Kardinalität zum Master ist immer 1..1. ALso ein Slave muss genau einen Master haben.
@@ -119,15 +121,6 @@ public abstract class CompositionEdge extends SubordinationEdge {
      */
     public static final int getMaxSlaveToMasterCardinality(final Class<? extends Edge> edgeClass) {
         return getMaxBackwardCardinality(edgeClass);
-    }
-
-    @Override
-    public boolean checkValidity() {
-        if (!super.checkValidity()) {
-            return false;
-        }
-        direction = FORWARD;
-        return true;
     }
 
 }

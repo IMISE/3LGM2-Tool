@@ -1,9 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.FAT_STROKE;
 
 import java.awt.BasicStroke;
@@ -17,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
@@ -657,8 +656,14 @@ public class EdgeContainer extends ElementContainer {
             }
 
             if (i == 0) {
-                Edge dlk = getEdge();
-                if (dlk.getDirection() == BACKWARD || dlk.getDirection() == DOUBLE) {
+                Edge edge = getEdge();
+                boolean backward = !ModelConstants.isDirectedEdge(edge.getClass()); // außer bei DoubleMeaningEdges wird der Rückwärts-Pfeil auch bei unberichteten Kanten gezeichnet
+                if (edge instanceof DoubleMeaningEdge) {
+                    DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
+                    MeaningState meaningState = doubleMeaningEdge.getMeaningState();
+                    backward = meaningState == MeaningState.BACKWARD || meaningState == MeaningState.DOUBLE;
+                }
+                if (backward) {
                     gc.rotate(rad1, startx, starty);
                     // try {
                     g.drawPolygon(p2);
@@ -673,8 +678,14 @@ public class EdgeContainer extends ElementContainer {
                 }
             }
             if (i == numKKnots) {
-                Edge dlk = getEdge();
-                if (dlk.getDirection() == FORWARD || dlk.getDirection() == DOUBLE) {
+                boolean forward = true; //alle Kanten
+                Edge edge = getEdge();
+                if (edge instanceof DoubleMeaningEdge) {
+                    DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
+                    MeaningState meaningState = doubleMeaningEdge.getMeaningState();
+                    forward = meaningState == MeaningState.FORWARD || meaningState == MeaningState.DOUBLE;
+                }
+                if (forward) {
                     gc.rotate(rad2, endx, endy);
                     // try {
                     g.drawPolygon(p1);

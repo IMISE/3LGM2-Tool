@@ -66,21 +66,18 @@ public abstract class Edge extends ModelElement {
     ///////////////////////////////////////////
     // Richtungskram aus ehemals Doppelkante //
     ///////////////////////////////////////////
-    public static final int FORWARD = 1;
 
-    public static final int BACKWARD = 2;
+    public enum Direction {
+        FORWARDS,
+        BACKWARDS
+    }
 
-    public static final int DOUBLE = 0;
-
-    public static final int ANY = -2;
-
-    public static final int NOTCONNECTED = -1;
-
-    protected int direction = FORWARD;
-
-    public static final String[] DIRECTION_STR = {
-            "NOTCONNECTED", "DOUBLE", "FORWARD", "BACKWARD"
-    };
+    public enum PathConnectionState {
+        FROM_ELEMENT,
+        TO_ELEMENT,
+        FROM_AND_TO_ELEMENT,
+        FROM_OR_TO_ELEMENT
+    }
 
     @Override
     public final Edge clone() {
@@ -261,7 +258,7 @@ public abstract class Edge extends ModelElement {
     }
 
     @Override
-    public final boolean putXMLFieldString(final String field, final String value) {
+    public boolean putXMLFieldString(final String field, final String value) {
         if (field.equals("start")) {
             start_hash = value;
             return true;
@@ -275,15 +272,6 @@ public abstract class Edge extends ModelElement {
         }
         if (field.equals("master_slave")) {
             return true;
-        }
-        if (field.equals("state")) {
-            for (int i = 0; i < DIRECTION_STR.length; i++) {
-                if (value.equals(DIRECTION_STR[i])) {
-                    setDirection(i - 1);
-                    return true;
-                }
-            }
-            return false;
         }
         return super.putXMLFieldString(field, value);
     }
@@ -315,12 +303,16 @@ public abstract class Edge extends ModelElement {
         return true;
     }
 
+    public boolean isDirecting(final ModelElement _k1, final ModelElement _k2) {
+        return isDirectingForward(_k1, _k2);
+    }
+
     /**
      * @param _k1
      * @param _k2
      * @return
      */
-    private final boolean isDirectingForward(final ModelElement _k1, final ModelElement _k2) {
+    protected final boolean isDirectingForward(final ModelElement _k1, final ModelElement _k2) {
         return k1 == _k1 && k2 == _k2;
     }
 
@@ -390,19 +382,10 @@ public abstract class Edge extends ModelElement {
             }
             switchClasses = true;
         }
-        //bei allen Kanten, bei denen die Richtung egal ist, wird sie immer auf DOUBLE gesetzt (das macht die GDCollection in link auch!)
-        if (!ModelConstants.isDirectedEdge(getClass())) {
-            direction = DOUBLE;
-        }
         if (switchClasses) {
             ModelElement dummy = k1;
             k1 = k2;
             k2 = dummy;
-            if (direction == FORWARD) {
-                direction = BACKWARD;
-            } else if (direction == BACKWARD) {
-                direction = FORWARD;
-            }
             return true;
         }
         //Es musste nichts vertauscht werden -> hier kommt nur true zurück, wenn die Klassen
@@ -748,40 +731,6 @@ public abstract class Edge extends ModelElement {
             return k1.isPaintable() && k2.isPaintable();
         }
         return false;
-    }
-
-    ///////////////////////////////////////////
-    // Richtungskram aus ehemals Doppelkante //
-    ///////////////////////////////////////////
-    /**
-     * @return
-     */
-    public int getDirection() {
-        return direction;
-    }
-
-    /**
-     * @param dir
-     */
-    public void setDirection(final int dir) {
-        direction = dir;
-    }
-
-    public final String getDirectionName() {
-        return DIRECTION_STR[direction + 1];
-    }
-
-    public final boolean isDirecting(final ModelElement _k1, final ModelElement _k2) {
-        switch (direction) {
-        case DOUBLE:
-            return isConnecting(_k1, _k2);
-        case FORWARD:
-            return isDirectingForward(_k1, _k2);
-        case BACKWARD:
-            return isDirectingForward(_k2, _k1);
-        default:
-            return false;
-        }
     }
 
     @Override
