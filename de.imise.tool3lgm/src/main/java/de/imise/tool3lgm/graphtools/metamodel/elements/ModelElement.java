@@ -1645,8 +1645,8 @@ public abstract class ModelElement extends UserFieldTarget {
                             knot = edge.isEnd(this) ? null : edge.getEnd();
                             break;
                         default:
+                            knot = edge.getOther(this);
                         }
-                        knot = edge.getOther(this);
                     }
                 } else {
                     //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
