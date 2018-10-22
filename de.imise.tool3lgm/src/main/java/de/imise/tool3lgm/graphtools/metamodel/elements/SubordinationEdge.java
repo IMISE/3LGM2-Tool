@@ -3,8 +3,8 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState.FROM_ELEMENT;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState.TO_ELEMENT;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.log.Log;
@@ -19,10 +19,10 @@ import de.imise.tool3lgm.log.Log;
 public abstract class SubordinationEdge extends Edge {
 
     /** Richtung, in der die Kante vom Oberelement auf das Unterelement zeigt */
-    public static final PathConnectionState SUPER_TO_SUB_DIRECTION = FROM_ELEMENT;
+    public static final Direction SUPER_TO_SUB_DIRECTION = FORWARD;
 
     /** Richtung, in der die Kante vom Unterelement auf das Oberelement zeigt */
-    public static final PathConnectionState SUB_TO_SUPER_DIRECTION = TO_ELEMENT;
+    public static final Direction SUB_TO_SUPER_DIRECTION = BACKWARD;
 
     public ModelElement getSubElement() {
         return k2;

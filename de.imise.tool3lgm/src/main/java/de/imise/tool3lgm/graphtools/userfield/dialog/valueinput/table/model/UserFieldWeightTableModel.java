@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +57,8 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * @return
      */
     private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Edge> edgeClass, final Direction direction) {
-        Class<? extends ModelElement> rowElementClass = direction == Direction.FORWARDS ? getStartClass(edgeClass) : getEndClass(edgeClass);
-        Class<? extends ModelElement> colElementClass = direction == Direction.FORWARDS ? getEndClass(edgeClass) : getStartClass(edgeClass);
+        Class<? extends ModelElement> rowElementClass = direction == FORWARD ? getStartClass(edgeClass) : getEndClass(edgeClass);
+        Class<? extends ModelElement> colElementClass = direction == FORWARD ? getEndClass(edgeClass) : getStartClass(edgeClass);
         List<ModelElement> allRowElements = doc.getModelItems(rowElementClass, false, true);
         List<ModelElement> allColumnElements = doc.getModelItems(colElementClass, false, true);
 
@@ -88,7 +89,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
     private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Edge> edgeClass, final Direction direction, final ModelElement columnElement) {
         List<Edge> edges;
         if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
-            if (direction == Direction.FORWARDS) {
+            if (direction == FORWARD) {
                 edges = columnElement.getEdgesFrom(getStartClass(edgeClass), edgeClass);
             } else {
                 edges = columnElement.getEdgesTo(getEndClass(edgeClass), edgeClass);
@@ -151,7 +152,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
                 Edge edge = null;
 
                 if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
-                    if (direction == Direction.FORWARDS) {
+                    if (direction == FORWARD) {
                         edge = re.getEdgeTo(ce, edgeClass);
                     } else {
                         edge = ce.getEdgeTo(re, edgeClass);

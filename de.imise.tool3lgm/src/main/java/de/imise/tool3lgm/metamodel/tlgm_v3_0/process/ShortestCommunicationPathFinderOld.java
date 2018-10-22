@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,8 +10,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -454,17 +457,14 @@ public class ShortestCommunicationPathFinderOld {
 
         // für jede Kommunikationsbeziehung = Kanten von einer Bss zu einer Bss (das sind alles
         // Doppelkanten)
-        PathConnectionState[] connectionStates = {
-                PathConnectionState.FROM_ELEMENT, PathConnectionState.TO_ELEMENT
-        };
-
         for (int r = 0; r < communicationLinks.size(); r++) {
             Edge commLink = (Edge) communicationLinks.get(r);
 
-            for (int d = 0; d < connectionStates.length; d++) {
+            for (Direction direction : Direction.values()) {
 
-                List<ModelElement> ntAndDtOfKante = commLink.getConnectedElements(EreignisNachrichtenTyp.class, mainDoc, KommbezEtntVerbindung.class, connectionStates[d], false);
-                ntAndDtOfKante.addAll(commLink.getConnectedElements(EreignisDokumentenTyp.class, mainDoc, KommbezEtntVerbindung.class, connectionStates[d], false));
+                ConnectionState connectionState = direction.getConnectionState();
+                List<ModelElement> ntAndDtOfKante = commLink.getConnectedElements(EreignisNachrichtenTyp.class, mainDoc, KommbezEtntVerbindung.class, connectionState, false);
+                ntAndDtOfKante.addAll(commLink.getConnectedElements(EreignisDokumentenTyp.class, mainDoc, KommbezEtntVerbindung.class, connectionState, false));
 
                 // für jede dieser EtNt-Kombinationen
                 for (ModelElement nt : ntAndDtOfKante) {
@@ -492,7 +492,7 @@ public class ShortestCommunicationPathFinderOld {
                                 objekttypToInterfacePairList.put(objekttyp, sendToReceiveInterfaceList);
                             }
                             ModelElement sendInterface, receiveInterface;
-                            if (connectionStates[d] == PathConnectionState.TO_ELEMENT) {
+                            if (direction == FORWARD) {
                                 sendInterface = commLink.getStart();
                                 receiveInterface = commLink.getEnd();
                             } else {

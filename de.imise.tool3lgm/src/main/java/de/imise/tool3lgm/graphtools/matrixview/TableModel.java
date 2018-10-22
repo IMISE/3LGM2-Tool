@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -186,7 +186,7 @@ public class TableModel implements Iterable<TableCell> {
         for (int i = 0; i < rowHeader.size(); i++) {
             for (int j = 0; j < colHeader.size(); j++) {
                 try {
-                    PathConnectionState connectionState = PathFinder.isConnected(rowHeader.get(i), colHeader.get(j), metaPath);
+                    ConnectionState connectionState = PathFinder.isConnected(rowHeader.get(i), colHeader.get(j), metaPath);
                     if (connectionState != null) {
                         cellsSet.add(new TableCell(i, j, getColor(metaPath, connectionState.ordinal())));
                     }

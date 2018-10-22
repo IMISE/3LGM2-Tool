@@ -69,6 +69,13 @@ public final class ModelConstants {
         return null;
     }
 
+    public enum ConnectionState {
+        FORWARD,
+        BACKWARD,
+        DOUBLE,
+        ANY
+    }
+
     /**
      * Leeres Array als Standardrückgabetyp für zu überschreibende Funktionen.
      */

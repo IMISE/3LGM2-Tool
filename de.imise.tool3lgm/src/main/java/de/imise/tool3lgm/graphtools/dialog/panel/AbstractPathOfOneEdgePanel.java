@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+
 import java.util.EventObject;
 
 import javax.swing.JTree;
@@ -9,7 +11,6 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -52,7 +53,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
     public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         super(dialog, labelEdgeName, searchElementClass, edgeClass);
         this.edgeClass = edgeClass;
-        edgeIsForward = directions[0] == Direction.FORWARDS;
+        edgeIsForward = directions[0] == FORWARD;
     }
 
     /**

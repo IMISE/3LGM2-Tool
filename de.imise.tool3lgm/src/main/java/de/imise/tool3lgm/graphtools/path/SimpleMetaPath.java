@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.path;
 
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -64,14 +67,14 @@ public class SimpleMetaPath extends MetaPath {
             Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
             Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
             Class<?> pathStepStartClass = ReflectionUtils.getMostSpecialElementClass(lastStepEndClass, edgeStartClass);
-            Direction direction = Direction.FORWARDS;
+            Direction direction = FORWARD;
             if (pathStepStartClass == null) {
                 pathStepStartClass = ReflectionUtils.getMostSpecialElementClass(lastStepEndClass, edgeEndClass).asSubclass(ModelElement.class);
-                direction = Direction.BACKWARDS;
+                direction = BACKWARD;
             }
             edgeDirections[i] = direction;
             realPathStepClasses[i] = pathStepStartClass.asSubclass(ModelElement.class);
-            lastStepEndClass = direction == Direction.FORWARDS ? edgeEndClass : edgeStartClass;
+            lastStepEndClass = direction == FORWARD ? edgeEndClass : edgeStartClass;
             //Endklasse des letzten Pfades und Endklasse des Gesamt-Pfades -> Speziellere beider Klassen ermitteln und in der Liste speichern
             if (i == edgeClasses.length - 1) {
                 lastStepEndClass = ReflectionUtils.getMostSpecialElementClass(getEndClass(), lastStepEndClass).asSubclass(ModelElement.class);
@@ -136,7 +139,7 @@ public class SimpleMetaPath extends MetaPath {
      * @return
      */
     public boolean pathStepEdgeIsForward(final int pathStepIndex) {
-        return edgeDirections[pathStepIndex] == Direction.FORWARDS;
+        return edgeDirections[pathStepIndex] == FORWARD;
     }
 
     @Override

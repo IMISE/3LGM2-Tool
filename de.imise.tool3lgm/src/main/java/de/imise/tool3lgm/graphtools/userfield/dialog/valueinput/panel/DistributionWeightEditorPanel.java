@@ -4,6 +4,8 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
@@ -299,14 +301,14 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
     private Edge getEdge(final ModelElement rowElement, final ModelElement columnElement) {
         Edge edge = null;
         // Richtung der Edge und die Edge selbst ermitteln
-        if (choosedEdgeDirection == Direction.FORWARDS) {
+        if (choosedEdgeDirection == FORWARD) {
             edge = columnElement.getEdgeTo(rowElement, elementTypeBoxSelection);
 
             if (edge == null) {
                 edge = rowElement.getEdgeTo(columnElement, elementTypeBoxSelection);
             }
         }
-        if (edge == null && choosedEdgeDirection == Direction.BACKWARDS) {
+        if (edge == null && choosedEdgeDirection == BACKWARD) {
             edge = rowElement.getEdgeTo(columnElement, elementTypeBoxSelection);
 
             if (edge == null) {
@@ -362,10 +364,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         }
         Class<? extends Edge> selectedEdgeClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(Edge.class);
         String selectedEdgeName = elementTypeBox.getSelectedItem().toString();
-        choosedEdgeDirection = Direction.FORWARDS;
-        if (!selectedEdgeName.equals(ModelConstants.getFullForwardMetaAssociationName(selectedEdgeClass))) {
-            choosedEdgeDirection = Direction.BACKWARDS;
-        }
+        choosedEdgeDirection = selectedEdgeName.equals(ModelConstants.getFullForwardMetaAssociationName(selectedEdgeClass)) ? FORWARD : BACKWARD;
         UserField selectedWeigthUserField = (UserField) weightBox.getSelectedObject();
         AbstractUserFieldTableModel uftm = new UserFieldWeightTableModel(getDialog().getGraphDocument(), selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField, columnFilterBoxSelection);
         UserFieldTableController tec = UserFieldTableController.getNewDistributionWeightTableController(uftm);

@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.awt.Component;
 /**
@@ -36,9 +37,8 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -111,7 +111,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (ltreeLabelString == null) {
             //schreibe den Namen der Edge in der richtigen Richtung über den linken Baum
             Class<? extends Edge> lastEdge = edgeClasses[lastEdgeIndex];
-            ltreeLabelString = directions[lastEdgeIndex] == Direction.FORWARDS ? ModelConstants.getForwardMetaAssociationName(lastEdge) : ModelConstants.getBackwardMetaAssociationName(lastEdge);
+            ltreeLabelString = directions[lastEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(lastEdge) : ModelConstants.getBackwardMetaAssociationName(lastEdge);
         }
         String rtreeLabelString = getResString("frei");
         ltreeLabelString = StringUtils.capitalizeFirstChar(ltreeLabelString);
@@ -311,7 +311,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         int edgeIndex = 0;
         Class<? extends ModelElement> pathStepEndClass = getPathStepEndElementClass(edgeIndex);
         ModelElement me = getModelElement();
-        PathConnectionState connectionState = directions[edgeIndex] == Direction.FORWARDS ? PathConnectionState.FROM_ELEMENT : PathConnectionState.TO_ELEMENT;
+        ConnectionState connectionState = directions[edgeIndex].getConnectionState();
         List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], connectionState);
         addChildrenToExcludeFromRtree(edgeIndex, all, true);
         // nur Node für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
@@ -330,7 +330,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
         List<LGMTreeNode> nextStepStartNodes = firstLevelNodes;
         for (edgeIndex = 1; edgeIndex < edgeClasses.length; edgeIndex++) {
-            connectionState = directions[edgeIndex] == Direction.FORWARDS ? PathConnectionState.FROM_ELEMENT : PathConnectionState.TO_ELEMENT;
+            connectionState = directions[edgeIndex].getConnectionState();
             pathStepEndClass = getPathStepEndElementClass(edgeIndex);
             List<LGMTreeNode> newNextStartNodes = new ArrayList<>();
             for (LGMTreeNode node : nextStepStartNodes) {
@@ -493,7 +493,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         int nextEdgeIndexInPath = edgeIndexInPath + 1;
         if (nextEdgeIndexInPath < edgeClasses.length) {
             Class<? extends Edge> nextEdgeClass = edgeClasses[nextEdgeIndexInPath];
-            Class<? extends ModelElement> nextElementClassInPath = directions[nextEdgeIndexInPath] == Direction.FORWARDS ? getEndClass(nextEdgeClass) : getStartClass(nextEdgeClass);
+            Class<? extends ModelElement> nextElementClassInPath = directions[nextEdgeIndexInPath] == FORWARD ? getEndClass(nextEdgeClass) : getStartClass(nextEdgeClass);
             List<ModelElement> connectedElements = endInPath.getConnectedElements(nextElementClassInPath, nextEdgeClass);
             for (ModelElement connectedElement : connectedElements) {
                 disconnect(endInPath, connectedElement, nextEdgeIndexInPath);
@@ -554,7 +554,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 if (isConnectionPointUnique) {
                     connectToFirstPath(null);
                 } else { //es ist nicht klar, wohin ein neues Element gehängt werden sollte -> nur neu erzeugen und nicht verknüpfen
-                    createNodeWithContainerAndDependents(doc.getCollection().getSelectedDoc(), null, edgeClasses[lastEdgeIndex], directions[lastEdgeIndex], null, Direction.FORWARDS, getTransactionID());
+                    createNodeWithContainerAndDependents(doc.getCollection().getSelectedDoc(), null, edgeClasses[lastEdgeIndex], directions[lastEdgeIndex], null, FORWARD, getTransactionID());
                 }
             }
         };

@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERR
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -63,20 +64,28 @@ public abstract class Edge extends ModelElement {
      */
     private String start_hash, end_hash;
 
-    ///////////////////////////////////////////
-    // Richtungskram aus ehemals Doppelkante //
-    ///////////////////////////////////////////
-
     public enum Direction {
-        FORWARDS,
-        BACKWARDS
-    }
+        FORWARD(ConnectionState.FORWARD),
+        BACKWARD(ConnectionState.BACKWARD);
 
-    public enum PathConnectionState {
-        FROM_ELEMENT,
-        TO_ELEMENT,
-        FROM_AND_TO_ELEMENT,
-        FROM_OR_TO_ELEMENT
+        private final ConnectionState correspondingConnectionState;
+
+        private Direction(final ConnectionState correspondingConnectionState) {
+            this.correspondingConnectionState = correspondingConnectionState;
+        }
+
+        public ConnectionState getConnectionState() {
+            return correspondingConnectionState;
+        }
+
+        public static Direction get(final ConnectionState correspondingConnectionState) {
+            for (Direction direction : Direction.values()) {
+                if (direction.getConnectionState() == correspondingConnectionState) {
+                    return direction;
+                }
+            }
+            return null;
+        }
     }
 
     @Override

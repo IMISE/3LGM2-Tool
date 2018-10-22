@@ -6,6 +6,12 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
  */
 public abstract class HasPartEdge extends SubordinationEdge {
 
+    /** Richtung, in der die Kante vom Oberelement auf das Unterelement zeigt */
+    public static final Direction PARENT_TO_PART_DIRECTION = SUPER_TO_SUB_DIRECTION;
+
+    /** Richtung, in der die Kante vom Unterelement auf das Oberelement zeigt */
+    public static final Direction PART_TO_PARENT_DIRECTION = SUB_TO_SUPER_DIRECTION;
+
     /**
      * Gibt das Element zurück, welches durch diese Edge Teil des anderen Elementes ist.
      *

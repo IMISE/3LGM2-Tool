@@ -1,13 +1,15 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 
 import java.util.List;
 import java.util.Vector;
 
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -60,9 +62,9 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
 
         Class<? extends ModelElement> fractionValueSumSourceClass = edgeForwardDirection ? getEndClass(edgeClass) : getStartClass(edgeClass);
 
-        PathConnectionState direction = edgeForwardDirection ? PathConnectionState.FROM_ELEMENT : PathConnectionState.TO_ELEMENT;
+        ConnectionState connectionState = edgeForwardDirection ? FORWARD : BACKWARD;
         //alle mit dem Element über die Edge verbundenen Elemente holen
-        List<ModelElement> modelElements = me.getConnectedElements(fractionValueSumSourceClass, edgeClass, direction, true);
+        List<ModelElement> modelElements = me.getConnectedElements(fractionValueSumSourceClass, edgeClass, connectionState, true);
 
         removeNotVisibleHierarchyElements(modelElements, showTopLevel, showInner, showLeafs);
 

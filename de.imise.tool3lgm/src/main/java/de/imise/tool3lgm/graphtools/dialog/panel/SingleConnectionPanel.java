@@ -15,10 +15,9 @@ import java.util.List;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
@@ -234,7 +233,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
         connectedElements.add(dialog.getModelElement().getContainer(mainDoc));
         int edgeSearchStopIndex = forelastInPath ? edgeClasses.length - 1 : edgeClasses.length;
         for (int i = 0; i < edgeSearchStopIndex; i++) {
-            PathConnectionState connectionState = directions[i] == Direction.FORWARDS ? PathConnectionState.FROM_ELEMENT : PathConnectionState.TO_ELEMENT;
+            ConnectionState connectionState = directions[i].getConnectionState();
             List<ElementContainer> tempConnectedElements = new ArrayList<>();
             for (ElementContainer ec : connectedElements) {
                 tempConnectedElements.addAll(ec.getElement().getConnectedContainer(ModelElement.class, mainDoc, edgeClasses[i], connectionState));
@@ -272,7 +271,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
         List<ElementContainer> searchElementConnectedContainer = getSearchElementConnectedContainer();
         GDCollection gdcoll = mainDoc.getCollection();
         Class<? extends Edge> lastEdgeInPath = edgeClasses[lastEdgeIndex];
-        PathConnectionState connectionState = directions[lastEdgeIndex] == Direction.FORWARDS ? PathConnectionState.FROM_ELEMENT : PathConnectionState.TO_ELEMENT;
+        ConnectionState connectionState = directions[lastEdgeIndex].getConnectionState();
         for (ElementContainer ec : searchElementConnectedContainer) {
             ModelElement me = ec.getElement();
             List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, connectionState);

@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_NAME_CHANGED;
@@ -3745,7 +3746,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void linkSelected(final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
-        if (direction == Direction.BACKWARDS) {
+        if (direction == BACKWARD) {
             for (ElementContainer ec : selectedContainer) {
                 gdcoll.link(edgeClass, ec.getElement(), lastSelecedElement, pid);
             }
@@ -3764,7 +3765,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void unlinkSelected(final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
-        if (direction == Direction.BACKWARDS) {
+        if (direction == BACKWARD) {
             for (ElementContainer ec : selectedContainer) {
                 gdcoll.unlink(ec.getElement(), lastSelecedElement, edgeClass, pid);
             }

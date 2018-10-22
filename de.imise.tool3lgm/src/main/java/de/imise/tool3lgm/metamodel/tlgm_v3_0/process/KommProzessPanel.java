@@ -5,6 +5,9 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.ANY;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.FORWARD;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -33,7 +36,6 @@ import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassExcept
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -44,6 +46,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.ABKonfiguration;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.AufOrgKombination;
@@ -338,7 +341,7 @@ public class KommProzessPanel extends ElementDialogPanel {
     public void updateTable(final boolean checkRowCount) {
         // System.out.println("updateTable");
         // Aufgaben des Prozesses in holen (NICHT alphabetisch sortiert)
-        List<ModelElement> aufgabenListe = prozess.getConnectedElements(Aufgabe.class, doc, null, PathConnectionState.FROM_OR_TO_ELEMENT, false);
+        List<ModelElement> aufgabenListe = prozess.getConnectedElements(Aufgabe.class, doc, PrzAufVerbindung.class, ANY, false);
 
         // Prozess enthält keine Aufgaben und die Zeilenanzahl könnte sich
         // geändert haben
@@ -813,7 +816,7 @@ public class KommProzessPanel extends ElementDialogPanel {
         Set<ModelElement> setOfInterpretedObjectTypes = new HashSet<>();
         //Alle von den Parts und Parents der Aufgabe interpretierten OT diesem Set hinzufügen
         for (ModelElement auf : aufgabe.getPartAndParentElements()) {
-            setOfInterpretedObjectTypes.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, PathConnectionState.TO_ELEMENT));
+            setOfInterpretedObjectTypes.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, BACKWARD));
         }
 
         //für alle Aufgaben in der ProzessListe vor der übergebenen Position
@@ -822,7 +825,7 @@ public class KommProzessPanel extends ElementDialogPanel {
             //hole die bearbeiteten Objekttypen der i-ten Aufgabe in der Aufgabenliste des Prozesses
             Set<ModelElement> usedObjekttypenOfAufgabe = new HashSet<>();
             for (ModelElement auf : startAufgabe.getPartAndParentElements()) {
-                usedObjekttypenOfAufgabe.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, PathConnectionState.FROM_ELEMENT));
+                usedObjekttypenOfAufgabe.addAll(auf.getConnectedElements(Objekttyp.class, AufObjVerbindung.class, FORWARD));
             }
             //für jeden dieser Objekttypen
             for (ModelElement usedObjekttyp : usedObjekttypenOfAufgabe) {

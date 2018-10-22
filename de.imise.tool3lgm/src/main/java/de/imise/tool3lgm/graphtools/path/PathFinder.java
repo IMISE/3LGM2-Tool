@@ -3,6 +3,9 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartOrEndClass;
 
 import java.util.Collection;
@@ -11,9 +14,9 @@ import java.util.List;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.PathConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -96,16 +99,16 @@ public final class PathFinder {
      * @param element2
      * @param metaPath
      * @param doc
-     * @return NOTCONNECTED / FORWARD / BACKWARD / DOUBLE if path.isImmediate otherwise
-     *         NOTCONNECTED / DOUBLE
+     * @return FORWARD / BACKWARD / DOUBLE if path.isImmediate otherwise <code>null</code>
      */
-    public static final PathConnectionState isConnected(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
+    @SuppressWarnings("incomplete-switch") //ANY ist egal, weil das hier nie passiert
+    public static final ConnectionState isConnected(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
         boolean searchParts = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
         boolean searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
         if (!searchParts && !searchParents || element1 == element2 || metaPath.isRecursiveSubordinationPath()) { //statt isRecursiveSubordinationPath() wurde hier mal auf HasPartEdge getestet. Was genau das macht ist mir (AXS) nicht (mehr) klar. Deswegen habe ich es jetzt von der Bedeutung so gleich wie mäglich gemacht
             return isConnectedInternal(element1, element2, metaPath);
         }
-        PathConnectionState retVal = null;
+        ConnectionState retVal = null;
         Set<ModelElement> set1 = new HashSet<>();
         Set<ModelElement> set2 = new HashSet<>();
         set1.add(element1);
@@ -120,22 +123,22 @@ public final class PathFinder {
         }
         for (ModelElement me1 : set1) {
             for (ModelElement me2 : set2) {
-                PathConnectionState con = isConnectedInternal(me1, me2, metaPath);
+                ConnectionState con = isConnectedInternal(me1, me2, metaPath);
                 if (con != null) {
                     switch (con) {
-                    case FROM_AND_TO_ELEMENT:
-                        return PathConnectionState.FROM_AND_TO_ELEMENT;
-                    case FROM_ELEMENT:
-                        if (retVal == PathConnectionState.TO_ELEMENT) {
-                            return PathConnectionState.FROM_AND_TO_ELEMENT;
+                    case DOUBLE:
+                        return DOUBLE;
+                    case FORWARD:
+                        if (retVal == BACKWARD) {
+                            return DOUBLE;
                         }
-                        retVal = PathConnectionState.FROM_ELEMENT;
+                        retVal = FORWARD;
                         break;
-                    case TO_ELEMENT:
-                        if (retVal == PathConnectionState.FROM_ELEMENT) {
-                            return PathConnectionState.FROM_AND_TO_ELEMENT;
+                    case BACKWARD:
+                        if (retVal == FORWARD) {
+                            return DOUBLE;
                         }
-                        retVal = PathConnectionState.TO_ELEMENT;
+                        retVal = BACKWARD;
                         break;
                     }
                 }
@@ -150,7 +153,7 @@ public final class PathFinder {
      * @param metaPath
      * @return
      */
-    private static final PathConnectionState isConnectedInternal(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
+    private static final ConnectionState isConnectedInternal(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
         if (!metaPath.getStartClass().isAssignableFrom(element1.getClass()) || !metaPath.getEndClass().isAssignableFrom(element2.getClass())) {
             if (metaPath.getEndClass().isAssignableFrom(element1.getClass()) && metaPath.getStartClass().isAssignableFrom(element2.getClass())) {
                 return isConnectedInternal(element2, element1, metaPath);
@@ -165,11 +168,11 @@ public final class PathFinder {
                 boolean connectedTo = element1.isConnectedTo(element2, edgeClass);
                 boolean connectedFrom = element1.isConnectedFrom(element2, edgeClass);
                 if (connectedTo && connectedFrom) {
-                    return PathConnectionState.FROM_AND_TO_ELEMENT;
+                    return DOUBLE;
                 } else if (connectedTo) {
-                    return PathConnectionState.FROM_ELEMENT;
+                    return FORWARD;
                 } else if (connectedFrom) {
-                    return HasPartEdge.class.isAssignableFrom(edgeClass) ? null : PathConnectionState.TO_ELEMENT;
+                    return HasPartEdge.class.isAssignableFrom(edgeClass) ? null : BACKWARD;
                 }
             } else {
                 return isConnected(element1, element2, metaPath, 0, pathIndex);
@@ -186,24 +189,24 @@ public final class PathFinder {
      * @param pathIndex
      * @return
      */
-    private static final PathConnectionState isConnected(final ModelElement current, final ModelElement end, final MetaPath metaPath, final int position, final int pathIndex) {
+    private static final ConnectionState isConnected(final ModelElement current, final ModelElement end, final MetaPath metaPath, final int position, final int pathIndex) {
         if (position == metaPath.getLength(pathIndex)) {
             if (current.equals(end)) {
-                return PathConnectionState.FROM_AND_TO_ELEMENT;
+                return DOUBLE;
             }
             return null;
         }
-        PathConnectionState retVal;
+        ConnectionState retVal;
         List<ModelElement> elements = current.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[position]);
         for (ModelElement me : elements) {
             if ((retVal = isConnected(me, end, metaPath, position + 1, pathIndex)) != null) {
                 if (metaPath.getPathDirectionSourceEdgeIndex() == position) {
                     if (current.isConnectedTo(me) && current.isConnectedFrom(me)) {
-                        return PathConnectionState.FROM_AND_TO_ELEMENT;
+                        return DOUBLE;
                     } else if (current.isConnectedTo(me)) {
-                        return PathConnectionState.FROM_ELEMENT;
+                        return FORWARD;
                     } else if (current.isConnectedFrom(me)) {
-                        return PathConnectionState.TO_ELEMENT;
+                        return BACKWARD;
                     } else {
                         return null;
                     }
