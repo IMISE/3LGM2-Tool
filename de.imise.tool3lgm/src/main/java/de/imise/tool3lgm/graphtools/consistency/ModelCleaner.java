@@ -1,25 +1,19 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
-import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_ELEMENTS_SET;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_NODES_SET;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getInitialSubtypes;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.createTransactionId;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.RADIO_BUTTON;
-import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import javax.swing.JOptionPane;
 
 import com.google.common.collect.Lists;
 
@@ -159,9 +153,6 @@ public class ModelCleaner {
                 }
             }
         }
-        // Alle ABKonfigurationen löschen, die keiner AufOrgKombination zugeordnet sind. Davon gibt
-        // es in alten Modellen aus irgend einem Grund sehr viele removeInconsistentElements(gdcoll,
-        // ABKonfiguration.class, AufOrgKombination.class, null);
 
         // Alle Knickpunkte löschen, die keiner Edge zugeordnet sind. So etwas trat in alten Modellen
         // auf und sollte gleich am Anfang ausgeschlossen werden
@@ -461,78 +452,6 @@ public class ModelCleaner {
     // /////////////////////////
     // Allgemeine Funktionen //
     // /////////////////////////
-
-    /**
-     * @param gdcoll
-     * @param searchElementClass
-     * @param connectedElementClass
-     * @param resultStringKey
-     * @see #removeInconsistentElements(GraphDocument, int, int[], String)
-     */
-    @SuppressWarnings("unchecked")
-    public static final void removeInconsistentElements(final GDCollection gdcoll, final Class<? extends ModelElement> searchElementClass, final Class<? extends ModelElement> connectedElementClass, final String resultStringKey) {
-        @SuppressWarnings("rawtypes")
-        Class[] connectedElementClasses = {
-                connectedElementClass
-        };
-        removeInconsistentElements(gdcoll, searchElementClass, connectedElementClasses, resultStringKey);
-    }
-
-    /**
-     * Löscht alle Elemente der Art <code>searchType</code> aus dem Modell <code>doc</code>, das
-     * keine Verbindung zu einem der in <code>connectedTypes</code> angegebenen Elementarten
-     * besitzt.<br>
-     * Das Ergebnis wird ausgegeben, wenn ein nicht leerer <code>resultStringKey</code> angegeben
-     * wird, der aus den Resourcen einen String lädt, wlcher beschreibt, was gelöscht wurde. Die
-     * Anzahl der gelöschten Elemente wird diesem String in der Ausgabe vorangestellt.
-     *
-     * @param doc
-     * @param searchElementClass
-     * @param connectedElementClasses
-     * @param resultStringKey
-     */
-    public static final void removeInconsistentElements(final GDCollection gdcoll, final Class<? extends ModelElement> searchElementClass, final Class<? extends ModelElement>[] connectedElementClasses, final String resultStringKey) {
-        Set<ModelElement> elems = getNotConnected(gdcoll.getMainGraphDocument(), searchElementClass, connectedElementClasses);
-        if (elems.size() > 0) {
-            String[] hashesToDelete = new String[elems.size()];
-            int i = 0;
-            for (ModelElement me : elems) {
-                hashesToDelete[i++] = me.getHashString();
-            }
-            gdcoll.deleteElements(hashesToDelete, createTransactionId());
-        }
-        String resultString = null;
-        if (resultStringKey != null && !resultStringKey.trim().equals("")) {
-            resultString = elems.size() + " " + getResString(resultStringKey);
-            JOptionPane.showMessageDialog(getMainFrame(), resultString, getResString("clean_model"), INFORMATION_MESSAGE);
-        }
-    }
-
-    /**
-     * Liefert alle Elemente der Art <code>searchType</code>, die im angegebenen Modell nicht mit
-     * Elementen der Art <code>connectedTypes</code> verbunden sind.
-     *
-     * @param doc Modell in dem gesucht wird
-     * @param searchElementClass Art der Elemente, die gesucht werden sollen
-     * @param connectedTypes Arten der Elemente, mit denen die gesuchten Elemente nicht verbunden
-     *            sein dürfen
-     * @return Liste aller gefundenen Elemente
-     */
-    private static Set<ModelElement> getNotConnected(final GraphDocument doc, final Class<? extends ModelElement> searchElementClass, final Class<? extends ModelElement>[] connectedElementClasses) {
-        List<ModelElement> searchElems = doc.getModelItems(searchElementClass, true);
-        Set<ModelElement> returnList = new HashSet<>();
-        // zählt die Anzahl der zu zu löschenden Konfigurationen
-        for (ModelElement elem : searchElems) {
-            List<ModelElement> connectedElems = elem.getConnectedElements(connectedElementClasses[0]);
-            for (int i = 1; i < connectedElementClasses.length && connectedElems.size() == 0; i++) {
-                connectedElems.addAll(elem.getConnectedElements(connectedElementClasses[i]));
-            }
-            if (connectedElems.size() == 0) {
-                returnList.add(elem);
-            }
-        }
-        return returnList;
-    }
 
     /**
      * Bis Datei-Version 3.4 (siehe {@link ToolXMLParser}) gab es IsPartOfBeziehungen, bei denen das Teil-Element StartElement
