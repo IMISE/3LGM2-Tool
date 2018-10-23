@@ -8,6 +8,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_DO
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_LOGICAL_LAYER_NODES;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getBackwardMetaAssociationName;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getForwardMetaAssociationName;
@@ -51,6 +52,9 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDCOLL_INTERACTIVE_MODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static javax.swing.BoxLayout.Y_AXIS;
+import static javax.swing.JOptionPane.DEFAULT_OPTION;
+import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -60,12 +64,18 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.Action;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
@@ -2126,6 +2136,43 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             //			menu.add(item);
         }
         return menu.getItemCount() > 0 ? menu : null;
+    }
+
+    /**
+     * Liefert eine Kanteart zwischen den beiden übergebenen Elementarte zurück, wenn es mind. eine gibt. Gibt es mehrere, wird der Benutzer mit einem
+     * Dialog vor die Auswahl gestellt.
+     *
+     * @param elementClass1
+     * @param elementClass2
+     * @return
+     */
+    public static Class<? extends Edge> requestCurrentEdgeType(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+        Class<? extends Edge> edgeClass = null;
+        Class<? extends Edge>[] edgeClasses = getEdgeTypes(elementClass1, elementClass2);
+        if (edgeClasses == null || edgeClasses.length == 0) {
+            return null;
+        }
+        edgeClass = edgeClasses[0];
+        if (edgeClasses.length > 1) {
+            JPanel messagePanel = new JPanel();
+            messagePanel.setLayout(new BoxLayout(messagePanel, Y_AXIS));
+            ButtonGroup buttonGroup = new ButtonGroup();
+            for (int i = 0; i < edgeClasses.length; i++) {
+                JRadioButton b = new JRadioButton(getForwardMetaAssociationName(edgeClasses[i]));
+                b.setActionCommand(edgeClasses[i].getName());
+                messagePanel.add(b);
+                buttonGroup.add(b);
+                if (i == 0) {
+                    b.setSelected(true);
+                }
+            }
+            JOptionPane optionPane = new JOptionPane(messagePanel, PLAIN_MESSAGE, DEFAULT_OPTION);
+            JDialog dialog = optionPane.createDialog(Static.getMainFrame(), getResString("choose_trace"));
+            dialog.setVisible(true);
+            String edgeClassName = buttonGroup.getSelection().getActionCommand();
+            edgeClass = getClassForName(edgeClassName).asSubclass(Edge.class);
+        }
+        return edgeClass;
     }
 
 }
