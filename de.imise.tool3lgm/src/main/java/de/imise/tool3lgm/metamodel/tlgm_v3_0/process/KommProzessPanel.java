@@ -5,7 +5,6 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.ANY;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.FORWARD;
 
@@ -341,7 +340,7 @@ public class KommProzessPanel extends ElementDialogPanel {
     public void updateTable(final boolean checkRowCount) {
         // System.out.println("updateTable");
         // Aufgaben des Prozesses in holen (NICHT alphabetisch sortiert)
-        List<ModelElement> aufgabenListe = prozess.getConnectedElements(Aufgabe.class, doc, PrzAufVerbindung.class, ANY, false);
+        List<ModelElement> aufgabenListe = prozess.getConnectedElements(Aufgabe.class, PrzAufVerbindung.class, false);
 
         // Prozess enthält keine Aufgaben und die Zeilenanzahl könnte sich
         // geändert haben

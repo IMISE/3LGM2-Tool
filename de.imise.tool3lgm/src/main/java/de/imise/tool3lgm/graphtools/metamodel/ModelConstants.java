@@ -72,7 +72,6 @@ public final class ModelConstants {
         FORWARD,
         BACKWARD,
         DOUBLE,
-        ANY
     }
 
     /**

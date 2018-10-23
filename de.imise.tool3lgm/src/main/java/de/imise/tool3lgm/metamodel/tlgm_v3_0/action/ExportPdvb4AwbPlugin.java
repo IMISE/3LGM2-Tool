@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.action;
 
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.ANY;
-
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -104,10 +102,10 @@ public class ExportPdvb4AwbPlugin {
      * @return
      */
     private static final String addEntry(final ModelElement applicationSystem, final StringBuilder entryBuilder) {
-        for (ModelElement pdvbKonf : applicationSystem.getConnectedElements(DBKonfiguration.class, PdvbkAwbVerbindung.class, ANY, true)) {
+        for (ModelElement pdvbKonf : applicationSystem.getConnectedElements(DBKonfiguration.class, PdvbkAwbVerbindung.class, null, true)) {
 
             //Alle verbundenen Phys. Datenbverarbeitungsbausteine holen und davon alle absoluten Parts
-            List<ModelElement> pdvbList = pdvbKonf.getConnectedElements(PhysischerDVBaustein.class, PdvbPdvbkVerbindung.class, ANY, true);
+            List<ModelElement> pdvbList = pdvbKonf.getConnectedElements(PhysischerDVBaustein.class, PdvbPdvbkVerbindung.class, null, true);
             Set<ModelElement> absolutePartPdvbs = new HashSet<>();
             for (int i = 0; i < pdvbList.size(); i++) {
                 ModelElement pdvb = pdvbList.get(i);
