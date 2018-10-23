@@ -7,7 +7,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.layerFor;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
@@ -24,6 +24,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.Set;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
@@ -44,6 +45,7 @@ import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
+import de.imise.util.ReflectionUtils;
 
 /**
  * COMMENTME
@@ -622,7 +624,15 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 ka = chooseObject(layer, xreal[layerIndex], yreal[layerIndex]);
                 if (ka != null) {
                     szenario.addToSelection(ka, STANDARD_PID);
-                    szenario.linkSelected(null, FORWARD, STANDARD_PID);
+                    Class<? extends ModelElement> lastSelectedClass = szenario.getLastSelected().getElement().getClass();
+                    Set<Class<? extends ModelElement>> selectedRealElementClasses = szenario.getSelectedRealElementClasses();
+                    if (!selectedRealElementClasses.isEmpty()) {
+                        Class<? extends ModelElement> otherSelectedClass = ReflectionUtils.getCommonSuperClass(selectedRealElementClasses).asSubclass(ModelElement.class);
+                        Class<? extends Edge> edgeClass = ContextGenerator.requestCurrentEdgeType(lastSelectedClass, otherSelectedClass);
+                        if (edgeClass != null) {
+                            szenario.linkSelected(edgeClass, BACKWARD, STANDARD_PID);
+                        }
+                    }
                     revalidate();
                     repaint();
                     break;
