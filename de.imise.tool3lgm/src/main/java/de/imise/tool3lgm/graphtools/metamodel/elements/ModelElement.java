@@ -1514,6 +1514,16 @@ public abstract class ModelElement extends UserFieldTarget {
     //////////////////////
 
     /**
+     * Gibt alle ModellElemente zurück, die mit diesem <code>ModelElement</code> über die angegebene Kantenklasse verbunden sind.
+     *
+     * @param edgeClass
+     * @return
+     */
+    public final List<ModelElement> getConnectedElements(final Class<? extends Edge> edgeClass, final boolean alphabetical) {
+        return getConnectedElements(ModelElement.class, edgeClass, ANY, true);
+    }
+
+    /**
      * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementOrTraceClass</code>
      * zurueck.
      *

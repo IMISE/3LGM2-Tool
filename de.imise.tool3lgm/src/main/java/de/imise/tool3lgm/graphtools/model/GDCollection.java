@@ -1504,6 +1504,21 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public boolean join(final String hashString1, final String hashString2, final GraphDocument source, final int pid) {
+        Collection<String> elementHashes2ExcludeFromJoin = new ArrayList<>();
+        elementHashes2ExcludeFromJoin.add(hashString1);
+        elementHashes2ExcludeFromJoin.add(hashString2);
+        return joinRecursive(hashString1, hashString2, source, elementHashes2ExcludeFromJoin, pid);
+    }
+
+    /**
+     * @param hashString1
+     * @param hashString2
+     * @param source
+     * @param elementHashes2ExcludeFromJoin
+     * @param pid
+     * @return
+     */
+    private boolean joinRecursive(final String hashString1, final String hashString2, final GraphDocument source, final Collection<String> elementHashes2ExcludeFromJoin, final int pid) {
         ModelElement modelElement1 = doc.findElementCoded(hashString1);
         ModelElement modelElement2 = doc.findElementCoded(hashString2);
         if (modelElement1 == null || modelElement2 == null || modelElement1 == modelElement2) {
@@ -1514,9 +1529,10 @@ public final class GDCollection extends UserFieldTarget {
             JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             return false;
         }
-        Node knoten1 = (Node) modelElement1;
-        Node knoten2 = (Node) modelElement2;
-        if (knoten1.getClass() != knoten2.getClass()) {
+        Node node1 = (Node) modelElement1;
+        Node node2 = (Node) modelElement2;
+        Class<? extends ModelElement> nodeClass = node1.getClass();
+        if (nodeClass != node2.getClass()) {
             JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             return false;
         }
@@ -1527,20 +1543,31 @@ public final class GDCollection extends UserFieldTarget {
         }
         //Namen und Beschreibung des zu löschenden Node an den verbleibenden anhängen
         //und ExtIDs und benutzerdef. Eigenschaftsfelder zusammenführen
-        knoten2.join(knoten1, false);
+        node2.join(node1, false);
         //knoten2.createNameWithSzens(doc);
-        for (Class<? extends ModelElement> clazz : getSubordinatedJoinbleTypes(knoten2.getClass())) {
-            List<ModelElement> sjt1 = knoten1.getConnectedElements(clazz);
-            List<ModelElement> sjt2 = knoten2.getConnectedElements(clazz);
-            if (sjt1.size() > 0 && sjt2.size() > 0) {
+
+        for (Class<? extends Edge> edgeClass : getSubordinatedJoinbleTypes(node2.getClass())) {
+            List<ModelElement> sjt1 = node1.getConnectedElements(edgeClass, true);
+            List<ModelElement> sjt2 = node2.getConnectedElements(edgeClass, true);
+            if (sjt1.size() == 1 && sjt2.size() == 1) {
                 ModelElement me1 = sjt1.get(0);
-                ModelElement me2 = knoten2.getConnectedElements(clazz).get(0);
-                join(me1.getHashString(), me2.getHashString(), source, pid);
+                ModelElement me2 = sjt2.get(0);
+                String hash1 = me1.getHashString();
+                if (elementHashes2ExcludeFromJoin.contains(hash1)) {
+                    continue;
+                }
+                String hash2 = me2.getHashString();
+                if (elementHashes2ExcludeFromJoin.contains(hash2)) {
+                    continue;
+                }
+                elementHashes2ExcludeFromJoin.add(hash1);
+                elementHashes2ExcludeFromJoin.add(hash2);
+                joinRecursive(hash1, hash2, source, elementHashes2ExcludeFromJoin, pid);
             }
         }
         //Das hier ist Hardcore, weil hier das IterableObject zurück auf List gecastet wird-> eigentlich müsste sich Edge selbst irgenwie darum kümmern!
-        List<Edge> kantenVector1 = (List<Edge>) knoten1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
-        List<Edge> kantenVector2 = (List<Edge>) knoten2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
+        List<Edge> kantenVector1 = (List<Edge>) node1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
+        List<Edge> kantenVector2 = (List<Edge>) node2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
         ModelElement startKnoten, endKnoten;
         //für jede Edge vom zu löschenden Node
         while (kantenVector1.size() > 0) {
@@ -1548,12 +1575,12 @@ public final class GDCollection extends UserFieldTarget {
             startKnoten = kante.getStart(); //Startknoten der zu übernehmenden Edge merken
             endKnoten = kante.getEnd(); //Endknoten -"-
             //zu löschenden Node durch den verbleibenden ersetzen
-            if (startKnoten == knoten1) {
-                startKnoten = knoten2;
+            if (startKnoten == node1) {
+                startKnoten = node2;
                 endKnoten = kante.getEnd();
             } else {
                 startKnoten = kante.getStart();
-                endKnoten = knoten2;
+                endKnoten = node2;
             }
             boolean deleteKante = false;
             if (startKnoten == endKnoten) {
@@ -1580,21 +1607,21 @@ public final class GDCollection extends UserFieldTarget {
             }
             if (deleteKante) { //wenn die Edge doppelt vorkommen würde
                 deleteElement(kante, doc, pid);
-                //				doc.removeEdge(kante, pid);//Edge einfach komplett löschen
+                //              doc.removeEdge(kante, pid);//Edge einfach komplett löschen
             } else { //Edge muss umgehängt werden
-                knoten1.removeEdge(kante); //im zu löschenden Node die Edge entfernen
+                node1.removeEdge(kante); //im zu löschenden Node die Edge entfernen
                 kante.setKnots(startKnoten, endKnoten);//die Edge wirklich an knoten2 binden
             }
         }
         for (Szenario szen : szenarios) {
-            NodeContainer kc1 = (NodeContainer) knoten1.getContainer(szen);
-            NodeContainer kc2 = (NodeContainer) knoten2.getContainer(szen);
+            NodeContainer kc1 = (NodeContainer) node1.getContainer(szen);
+            NodeContainer kc2 = (NodeContainer) node2.getContainer(szen);
             // jetzt umhängen aller Container von knoten1 auf knoten2 in allen Teilmodellen
             if (kc2 == null && kc1 != null) {
-                //				szen.removeKnotContainer((NodeContainer) knoten1.getContainer(szen), pid);
-                removeContainerFromSubmodel(knoten1.getContainer(szen), pid);
-                kc1.setElement(knoten2);
-                szen.getLayer(knoten2.layerFor()).add(kc1);
+                //              szen.removeKnotContainer((NodeContainer) knoten1.getContainer(szen), pid);
+                removeContainerFromSubmodel(node1.getContainer(szen), pid);
+                kc1.setElement(node2);
+                szen.getLayer(node2.layerFor()).add(kc1);
             }
             NodeContainer nc = null;
             if (kc2 != null) {
@@ -1611,8 +1638,8 @@ public final class GDCollection extends UserFieldTarget {
                 szen.finish_transaction(TransactionManager.STANDARD_PID, false);
             }
         }
-        deleteElement(knoten1, doc, pid);
-        //		doc.removeNode((NodeContainer)knoten1.getContainer(doc), pid); //alle Kanten umgehängt -> wegfallenden Node komplett löschen
+        deleteElement(node1, doc, pid);
+        //      doc.removeNode((NodeContainer)knoten1.getContainer(doc), pid); //alle Kanten umgehängt -> wegfallenden Node komplett löschen
         for (Szenario szen : szenarios) {
             szen.finish_transaction(pid, false);
         }

@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.UNLIMITED;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
@@ -1555,27 +1554,23 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert für die übergebene Elementklasse alle Elementtypen, die ihr untergeordnet sind und die nicht unendlich oft
-     * an ihr hängen dürfen. Diese müssen beim Join ebenfalls zusammengeführt werden. Z.B. darf ein Rechanwendungsbaustein
-     * laut Metamodell nur ein Datenbanksystem besitzen. Werden zwei Rechanwendungsbausteine mit jeweils einem Datenbanksystem
-     * gejoined, dann müssen auch die Datenbanksysteme gejoined werden.
+     * Liefert für die übergebene Elementklasse alle Kantenklassen, die nur einmal an ihr hängen dürfen. Diese müssen beim Join ebenfalls
+     * zusammengeführt werden. Z.B. darf ein Rechanwendungsbaustein laut Metamodell nur ein Datenbanksystem besitzen. Werden zwei
+     * Rechanwendungsbausteine mit jeweils einem Datenbanksystem gejoined, dann müssen auch die Datenbanksysteme gejoined werden.
      *
      * @param elementClass
      * @return
      */
-    public static final Set<Class<? extends ModelElement>> getSubordinatedJoinbleTypes(final Class<? extends ModelElement> elementClass) {
-        ImmutableSet.Builder<Class<? extends ModelElement>> subordinatedJoinbleTypes = ImmutableSet.<Class<? extends ModelElement>> builder();
-        Class<? extends CompositionEdge>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
-        for (Class<? extends CompositionEdge> compositionEdgeType : compositionEdgeTypes) {
-            if (CompositionEdge.getMaxMasterToSlaveCardinality(compositionEdgeType) < UNLIMITED) {
-                Class<? extends ModelElement> slaveType = CompositionEdge.getSlaveType(compositionEdgeType);
-                Class<? extends ModelElement>[] instanciableAssignableClasses = getInstanciableAssignableClasses(slaveType);
-                for (Class<? extends ModelElement> instanciableAssignableClass : instanciableAssignableClasses) {
-                    subordinatedJoinbleTypes.add(instanciableAssignableClass);
-                }
+    public static final Set<Class<? extends Edge>> getSubordinatedJoinbleTypes(final Class<? extends ModelElement> elementClass) {
+        Set<Class<? extends Edge>> edgeClassesToSubordinatedJoinbleTypes = new HashSet<>();
+        for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass)) {
+            Edge.getOther(edgeClass, elementClass);
+            int maxCardinality = Edge.getMaxCardinality(elementClass, edgeClass);
+            if (maxCardinality == 1) {
+                edgeClassesToSubordinatedJoinbleTypes.add(edgeClass);
             }
         }
-        return subordinatedJoinbleTypes.build();
+        return edgeClassesToSubordinatedJoinbleTypes;
     }
 
     /** Cache für die Funktion {@link #getInitialSubtypes(Class)} */
