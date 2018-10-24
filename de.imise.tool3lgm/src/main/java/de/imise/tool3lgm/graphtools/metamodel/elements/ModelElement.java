@@ -1513,24 +1513,19 @@ public abstract class ModelElement extends UserFieldTarget {
     //////////////////////
 
     /**
-     * Gibt alle ModellElemente zurück, die mit diesem <code>ModelElement</code> über die angegebene Kantenklasse verbunden sind.
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s zurück. Wenn eine Kantenklasse übergeben wurde,
+     * die zu diesem ModelElement passt, wird nach Elementen gesucht, die über diese Kantenklasse mit diesem Element verbunden sind.
+     * Wenn eine Elementklasse übergeben wurde, wird nach allen Elementen dieser Art gesucht, die über irgendeine Kante in beliebiger Richtung mit dem
+     * Element verbunden sind.
      *
-     * @param edgeClass
+     * @param edgeOrElementClass
      * @return
      */
-    public final List<ModelElement> getConnectedElements(final Class<? extends Edge> edgeClass, final boolean alphabetical) {
-        return getConnectedElements(ModelElement.class, edgeClass, null, true);
-    }
-
-    /**
-     * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementOrTraceClass</code>
-     * zurueck.
-     *
-     * @param searchElementClass
-     * @return
-     */
-    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass) {
-        return getConnectedElements(searchElementClass, (Class<? extends Edge>) null);
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> edgeOrElementClass) {
+        if (Edge.class.isAssignableFrom(edgeOrElementClass) && Edge.isStartOrEndClass(edgeOrElementClass.asSubclass(Edge.class), getClass())) {
+            return getConnectedElements(ModelElement.class, edgeOrElementClass.asSubclass(Edge.class));
+        }
+        return getConnectedElements(edgeOrElementClass, (Class<? extends Edge>) null);
     }
 
     /**

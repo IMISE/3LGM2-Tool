@@ -1547,8 +1547,8 @@ public final class GDCollection extends UserFieldTarget {
         //knoten2.createNameWithSzens(doc);
 
         for (Class<? extends Edge> edgeClass : getSubordinatedJoinbleTypes(node2.getClass())) {
-            List<ModelElement> sjt1 = node1.getConnectedElements(edgeClass, true);
-            List<ModelElement> sjt2 = node2.getConnectedElements(edgeClass, true);
+            List<ModelElement> sjt1 = node1.getConnectedElements(edgeClass);
+            List<ModelElement> sjt2 = node2.getConnectedElements(edgeClass);
             if (sjt1.size() == 1 && sjt2.size() == 1) {
                 ModelElement me1 = sjt1.get(0);
                 ModelElement me2 = sjt2.get(0);
