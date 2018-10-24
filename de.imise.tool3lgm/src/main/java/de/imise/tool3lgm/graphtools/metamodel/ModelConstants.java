@@ -31,7 +31,7 @@ import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
@@ -864,7 +864,7 @@ public final class ModelConstants {
     /**
      * @param edgeClass
      * @return
-     * @see #getMetaAssociationName(Class, boolean, MeaningState, boolean, boolean, String)
+     * @see #getMetaAssociationName(Class, boolean, ConnectionState, boolean, boolean, String)
      */
     public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getForwardMetaAssociationName(edgeClass, false, false);
@@ -875,7 +875,7 @@ public final class ModelConstants {
      *
      * @param edgeClass
      * @return
-     * @see #getMetaAssociationName(Class, boolean, MeaningState, boolean, boolean, String)
+     * @see #getMetaAssociationName(Class, boolean, ConnectionState, boolean, boolean, String)
      */
     public static String getFullForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getForwardMetaAssociationName(edgeClass, true, true);
@@ -886,10 +886,10 @@ public final class ModelConstants {
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see #getMetaAssociationName(Class, boolean, MeaningState, boolean, boolean, String)
+     * @see #getMetaAssociationName(Class, boolean, ConnectionState, boolean, boolean, String)
      */
     public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return getForwardMetaAssociationName(edgeClass, MeaningState.DOUBLE, appendPrefixClass, appendPostfixClass);
+        return getForwardMetaAssociationName(edgeClass, ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
     }
 
     /**
@@ -898,16 +898,16 @@ public final class ModelConstants {
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see #getMetaAssociationName(Class, boolean, MeaningState, boolean, boolean, String)
+     * @see #getMetaAssociationName(Class, boolean, ConnectionState, boolean, boolean, String)
      */
-    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final MeaningState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ConnectionState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return getMetaAssociationName(edgeClass, false, doubleMeaningEdgeMeaningDirection, appendPrefixClass, appendPostfixClass);
     }
 
     /**
      * @param edgeClass
      * @return
-     * @see #getMetaAssociationName(Class, boolean, MeaningState, boolean, boolean, String)
+     * @see #getMetaAssociationName(Class, boolean, ConnectionState, boolean, boolean, String)
      */
     public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getBackwardMetaAssociationName(edgeClass, false, false);
@@ -918,7 +918,7 @@ public final class ModelConstants {
      *
      * @param edgeClass
      * @return
-     * @see #getMetaAssociationName(Class, boolean, MeaningState, boolean, boolean, String)
+     * @see #getMetaAssociationName(Class, boolean, ConnectionState, boolean, boolean, String)
      */
     public static String getFullBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return getBackwardMetaAssociationName(edgeClass, true, true);
@@ -929,10 +929,10 @@ public final class ModelConstants {
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see #getMetaAssociationName(Class, boolean, MeaningState, boolean, boolean, String)
+     * @see #getMetaAssociationName(Class, boolean, ConnectionState, boolean, boolean, String)
      */
     public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return getBackwardMetaAssociationName(edgeClass, MeaningState.DOUBLE, appendPrefixClass, appendPostfixClass);
+        return getBackwardMetaAssociationName(edgeClass, ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
     }
 
     /**
@@ -941,9 +941,9 @@ public final class ModelConstants {
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see #getMetaAssociationName(Class, boolean, MeaningState, boolean, boolean, String)
+     * @see #getMetaAssociationName(Class, boolean, ConnectionState, boolean, boolean, String)
      */
-    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final MeaningState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ConnectionState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return getMetaAssociationName(edgeClass, true, doubleMeaningEdgeMeaningDirection, appendPrefixClass, appendPostfixClass);
     }
 
@@ -952,9 +952,9 @@ public final class ModelConstants {
      * @param switchDefinedDirection
      * @param doubleMeaningEdgeMeaningDirection
      * @return
-     * @see #getMetaAssociationName(Class, boolean, MeaningState, boolean, boolean, String)
+     * @see #getMetaAssociationName(Class, boolean, ConnectionState, boolean, boolean, String)
      */
-    public static String getFullMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final MeaningState doubleMeaningEdgeMeaningDirection) {
+    public static String getFullMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final ConnectionState doubleMeaningEdgeMeaningDirection) {
         return getMetaAssociationName(edgeClass, switchDefinedDirection, doubleMeaningEdgeMeaningDirection, true, true);
     }
 
@@ -969,7 +969,7 @@ public final class ModelConstants {
      * @return
      */
     public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection) {
-        return getMetaAssociationName(edgeClass, switchDefinedDirection, MeaningState.DOUBLE, false, false);
+        return getMetaAssociationName(edgeClass, switchDefinedDirection, ConnectionState.DOUBLE, false, false);
     }
 
     /**
@@ -1001,7 +1001,7 @@ public final class ModelConstants {
      *            </ul>
      * @return
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final MeaningState doubleMeaningEdgeMeaningDirection) {
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final ConnectionState doubleMeaningEdgeMeaningDirection) {
         return getMetaAssociationName(edgeClass, switchDefinedDirection, doubleMeaningEdgeMeaningDirection, false, false);
     }
 
@@ -1036,7 +1036,7 @@ public final class ModelConstants {
      *            sollen zwischen die beiden Bedeutungen geschrieben wird.
      * @return
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final MeaningState doubleMeaningEdgeMeaningDirection, final String doubleMeaningEdgeDelimiter) {
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final ConnectionState doubleMeaningEdgeMeaningDirection, final String doubleMeaningEdgeDelimiter) {
         //alle Kantenamen müssen mit SimplerKantenklassenName_f oder SimplerKantenklassenName_b angegeben sein oder bei Kanten mit doppelter Bedeutung SimplerKantenklassenName_f_f,
         //SimplerKantenklassenName_f_b, SimplerKantenklassenName_b_f und SimplerKantenklassenName_b_b
         String edgeClassName = edgeClass.getSimpleName();
@@ -1048,7 +1048,7 @@ public final class ModelConstants {
         //bei Kanten mit doppelter Bedeutung
         if (DoubleMeaningEdge.class.isAssignableFrom(edgeClass)) {
             if (edgeName == null) {
-                String interpretedDirection = doubleMeaningEdgeMeaningDirection == MeaningState.FORWARD ? "_f" : doubleMeaningEdgeMeaningDirection == MeaningState.BACKWARD ? "_b" : null;
+                String interpretedDirection = doubleMeaningEdgeMeaningDirection == ConnectionState.FORWARD ? "_f" : doubleMeaningEdgeMeaningDirection == ConnectionState.BACKWARD ? "_b" : null;
                 if (interpretedDirection != null) {
                     edgeName = getEdgeName(edgeClassName, mainEdgeDirection, interpretedDirection);
                     if (edgeName != null) {
@@ -1091,7 +1091,7 @@ public final class ModelConstants {
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final MeaningState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final ConnectionState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return getMetaAssociationName(edgeClass, switchDefinedDirection, doubleMeaningEdgeMeaningDirection, appendPostfixClass, appendPrefixClass, " / ");
     }
 
@@ -1106,7 +1106,7 @@ public final class ModelConstants {
      * @return
      * @see #getMetaAssociationName(Class, boolean, int)
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final MeaningState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass, final boolean appendPostfixClass,
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final ConnectionState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass, final boolean appendPostfixClass,
             final String doubleMeaningEdgeDelimiter) {
         if (!appendPrefixClass && !appendPostfixClass) {
             return getMetaAssociationName(edgeClass, switchDefinedDirection, doubleMeaningEdgeMeaningDirection, doubleMeaningEdgeDelimiter);

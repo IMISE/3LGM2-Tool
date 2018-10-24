@@ -400,7 +400,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeModelElementField("start", edge.getStart().getHashString());
             writeModelElementField("end", edge.getEnd().getHashString());
             if (me instanceof DoubleMeaningEdge) {
-                writeModelElementField("state", ((DoubleMeaningEdge) edge).getMeaningStateName());
+                writeModelElementField("state", ((DoubleMeaningEdge) edge).getConnectionStateName());
             }
         } else if (me instanceof Knickpunkt) {
             Knickpunkt bendpoint = (Knickpunkt) me;

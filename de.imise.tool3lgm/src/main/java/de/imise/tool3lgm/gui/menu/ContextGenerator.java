@@ -86,8 +86,8 @@ import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
@@ -720,9 +720,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                         //Kante mit Doppelter Bedeutung
                     } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
                         if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-                            MeaningState meaningState = MeaningState.get(FORWARD.getConnectionState());
-                            String label = getMetaAssociationName(edgeClass, false, meaningState, false, true);
-                            String toolTip = getFullMetaAssociationName(edgeClass, false, meaningState);
+                            ConnectionState connectionState = FORWARD.getConnectionState();
+                            String label = getMetaAssociationName(edgeClass, false, connectionState, false, true);
+                            String toolTip = getFullMetaAssociationName(edgeClass, false, connectionState);
                             boolean connectable = false;
                             boolean disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -741,9 +741,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
 
-                            meaningState = MeaningState.get(BACKWARD.getConnectionState());
-                            label = getMetaAssociationName(edgeClass, false, meaningState, false, true);
-                            toolTip = getFullMetaAssociationName(edgeClass, false, meaningState);
+                            connectionState = BACKWARD.getConnectionState();
+                            label = getMetaAssociationName(edgeClass, false, connectionState, false, true);
+                            toolTip = getFullMetaAssociationName(edgeClass, false, connectionState);
                             connectable = false;
                             disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -765,9 +765,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                         // Doppeldeutige Kanten mit identischer Start- und
                         // Endklasse brauchen nur 1x angeboten werden
                         if (isConnectingForward(edgeClass, me2Class, lastSelectedClass) && getStartClass(edgeClass) != getEndClass(edgeClass)) {
-                            MeaningState meaningState = MeaningState.get(FORWARD.getConnectionState());
-                            String label = getMetaAssociationName(edgeClass, true, meaningState, false, true);
-                            String toolTip = getFullMetaAssociationName(edgeClass, true, meaningState);
+                            ConnectionState connectionState = FORWARD.getConnectionState();
+                            String label = getMetaAssociationName(edgeClass, true, connectionState, false, true);
+                            String toolTip = getFullMetaAssociationName(edgeClass, true, connectionState);
                             boolean connectable = false;
                             boolean disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -786,9 +786,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
 
-                            meaningState = MeaningState.get(BACKWARD.getConnectionState());
-                            label = getMetaAssociationName(edgeClass, true, meaningState, false, true);
-                            toolTip = getFullMetaAssociationName(edgeClass, true, meaningState);
+                            connectionState = BACKWARD.getConnectionState();
+                            label = getMetaAssociationName(edgeClass, true, connectionState, false, true);
+                            toolTip = getFullMetaAssociationName(edgeClass, true, connectionState);
                             connectable = false;
                             disconnectable = false;
                             for (ModelElement me2 : selectedElements) {

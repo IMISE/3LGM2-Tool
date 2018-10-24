@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -65,7 +65,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        String lolabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(MeaningState.BACKWARD));
+        String lolabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(ConnectionState.BACKWARD));
         JLabel lolabel = new JLabel(lolabeltext);
 
         //hier niemals das this löschen, weil die globale searchElementClass im super-Konsturktor richtig gesetzt wird
@@ -80,7 +80,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         lotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
         JScrollPane sp1 = new JScrollPane(lotree);
 
-        String lulabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(MeaningState.FORWARD));
+        String lulabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(ConnectionState.FORWARD));
         JLabel lulabel = new JLabel(lulabeltext);
 
         luroot = new LGMTreeNode("luroot", false);
@@ -171,12 +171,12 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         showFullDialog(true);
     }
 
-    protected String getEdgeDisplayName(final MeaningState meaningState) {
+    protected String getEdgeDisplayName(final ConnectionState connectionState) {
         boolean isDoubleMeaningEdge = ModelConstants.isDoubleMeaningEdge(edgeClass);
         //dieses Panel war urspünglich nur für Kanten mit doppelter Bedeutung. Danach hat AXS das auch für Kanten zwischen denselben Elementen, die aber eine Richtung haben, angepasst.
         //Kanten ohne doppelte Bedeutung haben immer die Richtung FORWARD, aber der connectionState muss hier als Lesrichtung der Kante interpretiert werden, damit über den beiden Bäumen jeweils eine Richtung steht
-        boolean forward = isDoubleMeaningEdge && edgeIsForward || !isDoubleMeaningEdge && meaningState == MeaningState.FORWARD;
-        return forward ? ModelConstants.getForwardMetaAssociationName(edgeClass, meaningState, false, false) : ModelConstants.getBackwardMetaAssociationName(edgeClass, meaningState, false, false);
+        boolean forward = isDoubleMeaningEdge && edgeIsForward || !isDoubleMeaningEdge && connectionState == ConnectionState.FORWARD;
+        return forward ? ModelConstants.getForwardMetaAssociationName(edgeClass, connectionState, false, false) : ModelConstants.getBackwardMetaAssociationName(edgeClass, connectionState, false, false);
     }
 
     ArrayList<ElementContainer> childrenToExcludeFromRotree = new ArrayList<>();

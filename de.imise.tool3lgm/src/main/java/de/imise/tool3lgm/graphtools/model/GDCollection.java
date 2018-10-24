@@ -20,9 +20,9 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.hasObjektDia
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMeaningEdge;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isGenerateName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayerStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
@@ -107,7 +107,7 @@ import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
@@ -863,8 +863,8 @@ public final class GDCollection extends UserFieldTarget {
                     String endHash = ke.getHashString();
                     int startEdgeIndex = ks.getEdgeIndex(edge);
                     int endEdgeIndex = ke.getEdgeIndex(edge);
-                    MeaningState meaningState = edge instanceof DoubleMeaningEdge ? ((DoubleMeaningEdge) edge).getMeaningState() : MeaningState.FORWARD;
-                    switch (meaningState) {
+                    ConnectionState connectionState = edge instanceof DoubleMeaningEdge ? ((DoubleMeaningEdge) edge).getConnectionState() : ConnectionState.FORWARD;
+                    switch (connectionState) {
                     case FORWARD:
                         doc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
                         doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
@@ -1285,7 +1285,7 @@ public final class GDCollection extends UserFieldTarget {
             edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
             //wenn es schon eine Kante in der Gegenrichtung gibt und diese Kante eine Kante mit doppelter Bedeutung ist -> dann Richtung auf DOUBLE setzen
             if (isDoubleMeaningEdge(edgeClass) && edge != null) {
-                ((DoubleMeaningEdge) edge).setMeaningState(DOUBLE);
+                ((DoubleMeaningEdge) edge).setConnectionState(DOUBLE);
             } else {
                 try {
                     edge = edgeClass.newInstance();
@@ -1297,15 +1297,15 @@ public final class GDCollection extends UserFieldTarget {
                 if (edgeHash != null && !edgeHash.equals("")) {
                     edge.setHashString(edgeHash);
                 }
-                MeaningState meaningState = FORWARD; // wird nur für die DoubleMeaningEdges gebraucht
+                ConnectionState connectionState = FORWARD; // wird nur für die DoubleMeaningEdges gebraucht
                 if (!isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
                     ModelElement dummy = startElement;
                     startElement = endElement;
                     endElement = dummy;
-                    meaningState = BACKWARD;
+                    connectionState = BACKWARD;
                 }
                 if (isDoubleMeaningEdge(edgeClass)) {
-                    ((DoubleMeaningEdge) edge).setMeaningState(meaningState);
+                    ((DoubleMeaningEdge) edge).setConnectionState(connectionState);
                 }
                 edge.setKnotsAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
                 if (edge.getStart() != null && edge.getEnd() != null) {
@@ -1477,13 +1477,13 @@ public final class GDCollection extends UserFieldTarget {
         Class<? extends Edge> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
         if (isDoubleMeaningEdge(absoluteEdgeClass)) {
             DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
-            if (doubleMeaningEdge.getMeaningState() == DOUBLE) {
+            if (doubleMeaningEdge.getConnectionState() == DOUBLE) {
                 if (edge.getStart() == me1) {
                     doc.addUndoCommand(MODEL_ACTION_LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me1Hash + " " + me2Hash + " " + me1.getEdgeIndex(edge) + " " + me2.getEdgeIndex(edge), pid);
-                    doubleMeaningEdge.setMeaningState(BACKWARD);
+                    doubleMeaningEdge.setConnectionState(BACKWARD);
                 } else {
                     doc.addUndoCommand(MODEL_ACTION_LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me2Hash + " " + me1Hash + " " + me2.getEdgeIndex(edge) + " " + me1.getEdgeIndex(edge), pid);
-                    doubleMeaningEdge.setMeaningState(FORWARD);
+                    doubleMeaningEdge.setConnectionState(FORWARD);
                 }
             } else {
                 deleteElement(edge, doc, pid);

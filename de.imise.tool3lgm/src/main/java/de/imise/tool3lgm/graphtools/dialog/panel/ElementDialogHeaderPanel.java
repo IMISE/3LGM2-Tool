@@ -139,7 +139,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             String startElementName = edge.getStart().getClearName();
             // bei DoubleMeaning-Edges nur die tatsächliche Richtung hinschreiben
             if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                forwardEdgeClassName = "&nbsp;&nbsp;<i>" + getMetaAssociationName(edgeClass, false, ((DoubleMeaningEdge) edge).getMeaningState()) + "</i>&nbsp;&nbsp;";
+                forwardEdgeClassName = "&nbsp;&nbsp;<i>" + getMetaAssociationName(edgeClass, false, ((DoubleMeaningEdge) edge).getConnectionState()) + "</i>&nbsp;&nbsp;";
             }
             String endElementName = edge.getEnd().getClearName();
 

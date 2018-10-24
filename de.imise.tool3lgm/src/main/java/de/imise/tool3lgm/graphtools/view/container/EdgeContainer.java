@@ -15,7 +15,7 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
@@ -660,8 +660,8 @@ public class EdgeContainer extends ElementContainer {
                 boolean backward = !ModelConstants.isDirectedEdge(edge.getClass()); // außer bei DoubleMeaningEdges wird der Rückwärts-Pfeil auch bei unberichteten Kanten gezeichnet
                 if (edge instanceof DoubleMeaningEdge) {
                     DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
-                    MeaningState meaningState = doubleMeaningEdge.getMeaningState();
-                    backward = meaningState == MeaningState.BACKWARD || meaningState == MeaningState.DOUBLE;
+                    ConnectionState connectionState = doubleMeaningEdge.getConnectionState();
+                    backward = connectionState == ConnectionState.BACKWARD || connectionState == ConnectionState.DOUBLE;
                 }
                 if (backward) {
                     gc.rotate(rad1, startx, starty);
@@ -682,8 +682,8 @@ public class EdgeContainer extends ElementContainer {
                 Edge edge = getEdge();
                 if (edge instanceof DoubleMeaningEdge) {
                     DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
-                    MeaningState meaningState = doubleMeaningEdge.getMeaningState();
-                    forward = meaningState == MeaningState.FORWARD || meaningState == MeaningState.DOUBLE;
+                    ConnectionState connectionState = doubleMeaningEdge.getConnectionState();
+                    forward = connectionState == ConnectionState.FORWARD || connectionState == ConnectionState.DOUBLE;
                 }
                 if (forward) {
                     gc.rotate(rad2, endx, endy);

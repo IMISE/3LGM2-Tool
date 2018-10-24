@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.FORWARD;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
@@ -20,44 +20,18 @@ public abstract class DoubleMeaningEdge extends Edge {
     //
     //    public static final ConnectionState DOUBLE = ConnectionState.DOUBLE;
     //
-    //    public static final ConnectionState[] MeaningStates = {
+    //    public static final ConnectionState[] ConnectionStates = {
     //            FORWARD, BACKWARD, DOUBLE
     //    };
     //
-    private MeaningState meaningState = FORWARD; //null als Wert ist ausgeschlossen!
-
-    public enum MeaningState {
-        FORWARD(ConnectionState.FORWARD),
-        BACKWARD(ConnectionState.BACKWARD),
-        DOUBLE(ConnectionState.DOUBLE);
-
-        private final ConnectionState correspondingConnectionState;
-
-        private MeaningState(final ConnectionState correspondingConnectionState) {
-            this.correspondingConnectionState = correspondingConnectionState;
-        }
-
-        public ConnectionState getConnectionState() {
-            return correspondingConnectionState;
-        }
-
-        public static MeaningState get(final ConnectionState correspondingConnectionState) {
-            for (MeaningState state : MeaningState.values()) {
-                if (state.getConnectionState() == correspondingConnectionState) {
-                    return state;
-                }
-            }
-            return null;
-        }
-
-    }
+    private ConnectionState connectionState = FORWARD; //null als Wert ist ausgeschlossen!
 
     @Override
     public final boolean putXMLFieldString(final String field, final String value) {
         if (field.equals("state")) {
-            for (MeaningState meaningState : MeaningState.values()) {
-                if (meaningState.name().equals(value)) {
-                    this.meaningState = meaningState;
+            for (ConnectionState connectionState : ConnectionState.values()) {
+                if (connectionState.name().equals(value)) {
+                    this.connectionState = connectionState;
                     return true;
                 }
             }
@@ -95,26 +69,26 @@ public abstract class DoubleMeaningEdge extends Edge {
     /**
      * @return
      */
-    public MeaningState getMeaningState() {
-        return meaningState;
+    public ConnectionState getConnectionState() {
+        return connectionState;
     }
 
     /**
-     * @param meaningState
+     * @param connectionState
      */
-    public void setMeaningState(final MeaningState meaningState) {
-        if (meaningState != null) {
-            this.meaningState = meaningState;
+    public void setConnectionState(final ConnectionState connectionState) {
+        if (connectionState != null) {
+            this.connectionState = connectionState;
         }
     }
 
-    public final String getMeaningStateName() {
-        return meaningState.name();
+    public final String getConnectionStateName() {
+        return connectionState.name();
     }
 
     @Override
     public final boolean isDirecting(final ModelElement _k1, final ModelElement _k2) {
-        switch (meaningState) {
+        switch (connectionState) {
         case DOUBLE:
             return isConnecting(_k1, _k2);
         case FORWARD:
@@ -170,16 +144,16 @@ public abstract class DoubleMeaningEdge extends Edge {
         }
         //bei allen Kanten, bei denen die Richtung egal ist, wird sie immer auf DOUBLE gesetzt (das macht die GDCollection in link auch!)
         if (!ModelConstants.isDirectedEdge(getClass())) {
-            meaningState = DOUBLE;
+            connectionState = DOUBLE;
         }
         if (switchClasses) {
             ModelElement dummy = k1;
             k1 = k2;
             k2 = dummy;
-            if (meaningState == FORWARD) {
-                meaningState = BACKWARD;
-            } else if (meaningState == BACKWARD) {
-                meaningState = FORWARD;
+            if (connectionState == FORWARD) {
+                connectionState = BACKWARD;
+            } else if (connectionState == BACKWARD) {
+                connectionState = FORWARD;
             }
             return true;
         }

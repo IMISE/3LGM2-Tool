@@ -17,7 +17,7 @@ import java.util.Collections;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
@@ -171,9 +171,9 @@ public class MetaPath {
         this(startClass, endClass, path, isDoubleMeaningEdge(path[0][pathDirectionSourceEdgeIndex]) ? new String[] {
                 //der Parameter switchEdgeDirection müsste eigentlich über die Richtung der Kante mit dem speziellen Index im Pfad ermittelt werden. Da bisher alle Pfade, die
                 //über diesen Konstrktor hier initialisiert werden immer dieselben Elementarten verbinden, braucht man die Kantenrichtung nicht drehen, daher steht unten immer false.
-                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, MeaningState.FORWARD),
-                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, MeaningState.BACKWARD),
-                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], isStartClass(path[0][pathDirectionSourceEdgeIndex], startClass) && isEndClass(path[0][pathDirectionSourceEdgeIndex], endClass), MeaningState.DOUBLE, false, false,
+                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, ConnectionState.FORWARD),
+                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, ConnectionState.BACKWARD),
+                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], isStartClass(path[0][pathDirectionSourceEdgeIndex], startClass) && isEndClass(path[0][pathDirectionSourceEdgeIndex], endClass), ConnectionState.DOUBLE, false, false,
                         " " + getResString("und") + " ")
         } : new String[] {
                 getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false),

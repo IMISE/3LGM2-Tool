@@ -1628,7 +1628,7 @@ public abstract class ModelElement extends UserFieldTarget {
                     if (ModelConstants.isDirectedEdge(edgeClass)) {
                         //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
                         if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                            switch (((DoubleMeaningEdge) edge).getMeaningState()) {
+                            switch (((DoubleMeaningEdge) edge).getConnectionState()) {
                             case FORWARD:
                                 knot = edge.isEnd(this) ? null : edge.getEnd();
                                 break;
@@ -1652,7 +1652,7 @@ public abstract class ModelElement extends UserFieldTarget {
                     if (ModelConstants.isDirectedEdge(edgeClass)) {
                         //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
                         if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                            switch (((DoubleMeaningEdge) edge).getMeaningState()) {
+                            switch (((DoubleMeaningEdge) edge).getConnectionState()) {
                             case FORWARD:
                                 knot = edge.isEnd(this) ? edge.getStart() : null;
                                 break;
@@ -1669,7 +1669,7 @@ public abstract class ModelElement extends UserFieldTarget {
                     }
                     break;
                 case DOUBLE: //das hier geht nur bei DoubleMeaningEdges oder Kanten, die dieselben Elementarten verbinden
-                    if (ModelConstants.isDoubleMeaningEdge(edgeClass) && ((DoubleMeaningEdge) edge).getMeaningState().getConnectionState() == DOUBLE) {
+                    if (ModelConstants.isDoubleMeaningEdge(edgeClass) && ((DoubleMeaningEdge) edge).getConnectionState() == DOUBLE) {
                         knot = edge.getOther(this);
                     } else if (ModelConstants.isDirectedEdge(edgeClass)) {
                         break;
