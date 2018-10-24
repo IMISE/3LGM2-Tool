@@ -144,6 +144,7 @@ public class Szenario extends LGMGraphDocument {
                 if (b) {
                     //bei Compositions auch das Slave-Element in dieses Szenario holen (wenn sie es nicht unique ist)
                     if (ka instanceof CompositionEdge) {
+                        //hier werden mit Absicht identische Konstanten verglichen, falls sich MASTER_TO_SLAVE_DIRECTION mal auf BACKWARD ändert (was sehr unwarhscheinlich ist)
                         updateSlaveContainers(ka, CompositionEdge.MASTER_TO_SLAVE_DIRECTION == Edge.FORWARD, sourceDoc);
                     }
                     //wenn Start und End-Element der Edge einen Container in diesem Szenario haben
