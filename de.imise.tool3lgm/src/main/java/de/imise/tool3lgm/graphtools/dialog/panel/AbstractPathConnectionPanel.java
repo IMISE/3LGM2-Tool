@@ -31,6 +31,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
@@ -345,6 +346,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * Liefert <code>true</code>, wenn der durch die Kanten vorgegebene Pfad eindeitig festlegt, wo zu verbindende Elemente verknüpft werden.
      * Sobald in einem Pfad der Länge > 1 (also mind. aus 2 Kanten) eines der mittleren Elemente mehrfach mit dem Ausgangselement verbunden
      * sein kann, ist nicht mehr eindeutig, wo die Endelemente angehängt werden sollen.
+     * Außerdem ist der Pfad nicht eindeutig, wenn die letzte Kante eine {@link MultipleEdge} ist, also eine Kante, bei der dieselben Elemente
+     * mehrfach miteinander verbunden sein können.
      *
      * @return
      */
@@ -359,7 +362,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 return false;
             }
         }
-        return true;
+        System.err.println(edgeClasses[lastEdgeIndex].getSimpleName() + " " + !MultipleEdge.class.isAssignableFrom(edgeClasses[lastEdgeIndex]));
+        return !MultipleEdge.class.isAssignableFrom(edgeClasses[lastEdgeIndex]);
     }
 
     /**

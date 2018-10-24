@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
@@ -44,8 +45,8 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     @Override
     protected boolean isConnectionPointUnique() {
-        //es wird immer an root angehängt
-        return true;
+        //bei MultipleEdges wird im rechten Baum nichts ausgeschlossen, bei allen anderen, darf man jedes Element nur einmal verknüpfen -> sie werden im rechten Baum deaktiviert, wenn sie im linken verknüpft sind
+        return !MultipleEdge.class.isAssignableFrom(edgeClasses[lastEdgeIndex]);
     }
 
     /**
