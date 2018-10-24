@@ -11,10 +11,8 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYERS;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.UNIQUE_NODES;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getCopyDependencies;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getForwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getInitialSubtypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSubordinatedJoinbleTypes;
@@ -113,6 +111,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.Meaning
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
@@ -1256,51 +1255,31 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      *         die neu angelegte Edge zwischen den beiden Elementen oder die Edge, die bereits existierte
      */
-    public Edge link(String edgeClassName, final String edgeHash, ModelElement startElement, ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency, final int pid) {
+    public Edge link(final String edgeClassName, final String edgeHash, ModelElement startElement, ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency, final int pid) {
         //		System.err.println("GDCollection.link() " + me1 + "\t" + me2);
         if (startElement == null || endElement == null || startElement == endElement) {
             return null;
         }
+
         Edge edge = null;
         EdgeContainer kac = null;
         Class<? extends ModelElement> edgeClassOrNull = ModelConstants.getClassForName(edgeClassName);
+        if (edgeClassOrNull == null) {
+            return null;
+        }
         Class<? extends Edge> edgeClass = edgeClassOrNull == null ? null : edgeClassOrNull.asSubclass(Edge.class);
         if (edgeClass != null && !isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
             return null;
         }
+
         doc.start_transaction(pid);
         try {
-            //wenn keine Kantenklasse angegeben wurde, muss diese ermittelt werden. Wenn sie nicht eindeutig ist, wird der Benutzer per Dialog gefragt.
-            if (edgeClass == null) {
-                Class<? extends Edge>[] edgeClasses = getEdgeTypes(startElement.getClass(), endElement.getClass());
-                if (edgeClasses == null || edgeClasses.length == 0) {
-                    return null;
+            if (!MultipleEdge.class.isAssignableFrom(edgeClass)) {
+                edge = startElement.getEdgeTo(endElement, edgeClass, startElementEdgeIndex);
+                if (edge != null) {
+                    doc.finish_transaction(pid);
+                    return edge;
                 }
-                edgeClass = edgeClasses[0];
-                if (edgeClasses.length > 1) {
-                    JPanel messagePanel = new JPanel();
-                    messagePanel.setLayout(new BoxLayout(messagePanel, Y_AXIS));
-                    ButtonGroup buttonGroup = new ButtonGroup();
-                    for (int i = 0; i < edgeClasses.length; i++) {
-                        JRadioButton b = new JRadioButton(getForwardMetaAssociationName(edgeClasses[i]));
-                        b.setActionCommand(edgeClasses[i].getName());
-                        messagePanel.add(b);
-                        buttonGroup.add(b);
-                        if (i == 0) {
-                            b.setSelected(true);
-                        }
-                    }
-                    JOptionPane optionPane = new JOptionPane(messagePanel, PLAIN_MESSAGE, DEFAULT_OPTION);
-                    JDialog dialog = optionPane.createDialog(Static.getMainFrame(), getResString("choose_trace"));
-                    dialog.setVisible(true);
-                    edgeClassName = buttonGroup.getSelection().getActionCommand();
-                    edgeClass = getClassForName(edgeClassName).asSubclass(Edge.class);
-                }
-            }
-            edge = startElement.getEdgeTo(endElement, edgeClass, startElementEdgeIndex);
-            if (edge != null) {
-                doc.finish_transaction(pid);
-                return edge;
             }
             edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
             //wenn es schon eine Kante in der Gegenrichtung gibt und diese Kante eine Kante mit doppelter Bedeutung ist -> dann Richtung auf DOUBLE setzen
