@@ -49,6 +49,10 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
+ * 24.10.2018: Dieses Panel funktioniert im Moment überhaupt nicht mehr richtig. Die Aufgaben des Prozesses werden alphabetisch sortiert und die
+ * Umbenennung mit den Nummern davor findet auch nicht mehr statt. Die Objekttypen werden auch nicht mehr angehängt und das Verifizieren geht auch
+ * nicht mehr.
+ *
  * @author AXS
  */
 public class ProzessStructurePanel extends PathConnectionLeafPanel implements TreeWillExpandListener {
