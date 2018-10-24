@@ -1626,62 +1626,62 @@ public abstract class ModelElement extends UserFieldTarget {
             }
 
             ModelElement knot = null;
-            switch (connectionState) {
-            case FORWARD:
-                //bei allen gerichteten Kanten
-                if (ModelConstants.isDirectedEdge(edgeClass)) {
-                    //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                    if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                        switch (((DoubleMeaningEdge) edge).getMeaningState()) {
-                        case FORWARD:
+            if (connectionState != null) {
+                switch (connectionState) {
+                case FORWARD:
+                    //bei allen gerichteten Kanten
+                    if (ModelConstants.isDirectedEdge(edgeClass)) {
+                        //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
+                        if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+                            switch (((DoubleMeaningEdge) edge).getMeaningState()) {
+                            case FORWARD:
+                                knot = edge.isEnd(this) ? null : edge.getEnd();
+                                break;
+                            case BACKWARD:
+                                knot = edge.isEnd(this) ? edge.getStart() : null;
+                                break;
+                            default:
+                                knot = edge.getOther(this);
+                            }
+                        } else {
+                            //bei allen anderen gerichteten Kanten wird hier immer in Vorwärts-Richtung geschaut
                             knot = edge.isEnd(this) ? null : edge.getEnd();
-                            break;
-                        case BACKWARD:
-                            knot = edge.isEnd(this) ? edge.getStart() : null;
-                            break;
-                        default:
-                            knot = edge.getOther(this);
                         }
                     } else {
-                        //bei allen anderen gerichteten Kanten wird hier immer in Vorwärts-Richtung geschaut
-                        knot = edge.isEnd(this) ? null : edge.getEnd();
+                        //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
+                        knot = edge.getOther(this);
                     }
-                } else {
-                    //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
-                    knot = edge.getOther(this);
-                }
-                break;
-            case BACKWARD:
-                //bei allen gerichteten Kanten
-                if (ModelConstants.isDirectedEdge(edgeClass)) {
-                    //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                    if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                        switch (((DoubleMeaningEdge) edge).getMeaningState()) {
-                        case FORWARD:
-                            knot = edge.isEnd(this) ? edge.getStart() : null;
-                            break;
-                        case BACKWARD:
-                            knot = edge.isEnd(this) ? null : edge.getEnd();
-                            break;
-                        default:
-                            knot = edge.getOther(this);
-                        }
-                    }
-                } else {
-                    //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
-                    knot = edge.getOther(this);
-                }
-                break;
-            case DOUBLE: //das hier geht nur bei DoubleMeaningEdges oder Kanten, die dieselben Elementarten verbinden
-                if (ModelConstants.isDoubleMeaningEdge(edgeClass) && ((DoubleMeaningEdge) edge).getMeaningState().getConnectionState() == DOUBLE) {
-                    knot = edge.getOther(this);
-                } else if (ModelConstants.isDirectedEdge(edgeClass)) {
                     break;
+                case BACKWARD:
+                    //bei allen gerichteten Kanten
+                    if (ModelConstants.isDirectedEdge(edgeClass)) {
+                        //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
+                        if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+                            switch (((DoubleMeaningEdge) edge).getMeaningState()) {
+                            case FORWARD:
+                                knot = edge.isEnd(this) ? edge.getStart() : null;
+                                break;
+                            case BACKWARD:
+                                knot = edge.isEnd(this) ? null : edge.getEnd();
+                                break;
+                            default:
+                                knot = edge.getOther(this);
+                            }
+                        }
+                    } else {
+                        //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
+                        knot = edge.getOther(this);
+                    }
+                    break;
+                case DOUBLE: //das hier geht nur bei DoubleMeaningEdges oder Kanten, die dieselben Elementarten verbinden
+                    if (ModelConstants.isDoubleMeaningEdge(edgeClass) && ((DoubleMeaningEdge) edge).getMeaningState().getConnectionState() == DOUBLE) {
+                        knot = edge.getOther(this);
+                    } else if (ModelConstants.isDirectedEdge(edgeClass)) {
+                        break;
+                    }
                 }
-            default:
+            } else {
                 knot = edge.getEnd() == this ? edge.getStart() : edge.getEnd();
-                break;
-
             }
 
             if (knot == null) {
