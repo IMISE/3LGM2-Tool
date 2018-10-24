@@ -109,6 +109,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.MeaningState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
@@ -1390,6 +1391,35 @@ public final class GDCollection extends UserFieldTarget {
      */
     public final void unlink(final ModelElement k1, final ModelElement k2, final Class<? extends Edge> edgeClass, final int pid) {
         unlink(k1, k2, edgeClass, INVALID_EDGE_INDEX, pid);
+    }
+
+    /**
+     * ACHTUNG: DIESE BEIDEN UNINK-FUNKTIONEN HABE ICH AM 24.10.2018 HINZUGEFÜGT. DAS PROZESSSTRUKTURPANEL MÜSSTE ÜBER EINE SOLCHE FUNKTION ARBEITEN.
+     * DAS HIER IST DAZU DA, MICH DARAN ZU ERINNERN!
+     * 
+     * @param edge
+     * @param pid
+     */
+    public final void _unlink(final Edge edge, final int pid) {
+        _unlink(edge, Direction.FORWARD, pid);
+    }
+
+    /**
+     * ACHTUNG: DIESE BEIDEN UNINK-FUNKTIONEN HABE ICH AM 24.10.2018 HINZUGEFÜGT. DAS PROZESSSTRUKTURPANEL MÜSSTE ÜBER EINE SOLCHE FUNKTION ARBEITEN.
+     * DAS HIER IST DAZU DA, MICH DARAN ZU ERINNERN!
+     *
+     * @param edge
+     * @param direction
+     * @param pid
+     */
+    public final void _unlink(final Edge edge, final Direction direction, final int pid) {
+        ModelElement start = edge.getStart();
+        ModelElement end = edge.getEnd();
+        if (direction == Direction.FORWARD) {
+            unlink(start, end, edge.getClass(), start.getEdgeIndex(edge), pid);
+        } else {
+            unlink(end, start, edge.getClass(), end.getEdgeIndex(edge), pid);
+        }
     }
 
     /**
