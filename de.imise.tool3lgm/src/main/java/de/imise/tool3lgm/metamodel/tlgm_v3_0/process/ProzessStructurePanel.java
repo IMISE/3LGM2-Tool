@@ -1062,7 +1062,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ElementDialogPanel pane = edp;
         final LGMTreeNode lroot = (LGMTreeNode) tree.getModel().getRoot();
         if (edp instanceof ProzessStructurePanel) {
-            return new LGMAction(getResString("verif")) {
+            return new LGMAction(getResString("verify")) {
 
                 @Override
                 public void execute(final EventObject e) {
