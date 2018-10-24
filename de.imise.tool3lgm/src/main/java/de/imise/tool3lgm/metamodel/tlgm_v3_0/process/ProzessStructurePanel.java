@@ -37,6 +37,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -126,7 +127,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     /**
      * @param dialog
      */
-    public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends Edge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
+    public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
         super(dialog, true, getOther(multipleConnectionEgdeClass, dialog.getModelElement().getClass()), multipleConnectionEgdeClass);
         this.doubleMeaningEdgeClass = doubleMeaningEdgeClass;
 
@@ -1264,8 +1265,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
 
             @Override
             public void execute(final EventObject eo) {
-                // Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat
-                // die 1)
+                // Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat die 1)
                 TreePath selPath = ltree.getSelectionPath();
                 // wenn links eine Aufgabe selektiert ist
                 if (selPath != null && selPath.getPathCount() == 2) {
@@ -1273,8 +1273,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                     int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
                     // wenn nicht die erste sondern eine Aufgabe dahinter selektiert ist
                     if (pos1 > 0) {
-                        // jetzt die Position der über der selektierten Aufgabe liegenden
-                        // Aufgabe holen
+                        // jetzt die Position der über der selektierten Aufgabe liegenden Aufgabe holen
                         // -> von dieser alle evtl. expandierten Unterknoten merken
                         // -> sie removen und unter der selektierten wieder einfügen
                         // -> alles was von ihr expandiert war, wieder expandieren
@@ -1285,26 +1284,18 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                             path = ltree.getPathForRow(pos2);
                         }
 
-                        // wenn die selektierte Aufgabe expandierte Unterknoten hat (können max.
-                        // 2 sein, nämlich
-                        // "Interpretiert" und "Bearbeitet"), dann sind diese TreePathes jetzt
-                        // in enum
+                        // wenn die selektierte Aufgabe expandierte Unterknoten hat (können max. 2 sein, nämlich
+                        // "Interpretiert" und "Bearbeitet"), dann sind diese TreePathes jetzt in enum
                         Enumeration<TreePath> en = ltree.getExpandedDescendants(path);
 
-                        // jetzt den Baum anpassen (DER WIRD IN DIESEM FALL IN buildLeftTree()
-                        // NICHT VERÄNDERT)
-                        // und weil hier noch die Expasionen anpasst werden (über enum), soll
-                        // das auch hier bleiben!
+                        // jetzt den Baum anpassen (DER WIRD IN DIESEM FALL IN buildLeftTree() NICHT VERÄNDERT)
+                        // und weil hier noch die Expasionen anpasst werden (über enum), soll das auch hier bleiben!
                         LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 - 1); // den
                         // oberen Node holen
                         lmodel.removeNodeFromParent(node); // ihn entfernen
-                        lmodel.insertNodeInto(node, lroot, pos1); // ihn einen tiefer als vorher
-                                                                  // einfügen, wenn die
-                                                                  // selektierte Aufgabe
-                                                                  // expandiert war
+                        lmodel.insertNodeInto(node, lroot, pos1); // ihn einen tiefer als vorher einfügen, wenn die selektierte Aufgabe expandiert war
                         if (en != null) {
-                            panel.expandFullPath(true); // muss sein wegen treeWillExpand,
-                                                        // damits auch wirklich expandiert wird
+                            panel.expandFullPath(true); // muss sein wegen treeWillExpand, damits auch wirklich expandiert wird
                             ltree.expandRow(pos1 + 1); // den Node wieder expandieren
                             while (en.hasMoreElements()) {
                                 ltree.expandPath(en.nextElement()); // seine Unterknoten auch
