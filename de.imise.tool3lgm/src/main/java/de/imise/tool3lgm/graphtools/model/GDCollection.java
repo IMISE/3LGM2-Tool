@@ -105,9 +105,9 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
@@ -1396,7 +1396,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * ACHTUNG: DIESE BEIDEN UNINK-FUNKTIONEN HABE ICH AM 24.10.2018 HINZUGEFÜGT. DAS PROZESSSTRUKTURPANEL MÜSSTE ÜBER EINE SOLCHE FUNKTION ARBEITEN.
      * DAS HIER IST DAZU DA, MICH DARAN ZU ERINNERN!
-     * 
+     *
      * @param edge
      * @param pid
      */
@@ -1535,14 +1535,18 @@ public final class GDCollection extends UserFieldTarget {
         }
         //prüfen, ob es sich um Node gleichen Typs handelt (nur diese können vereint werden)
         if (!(modelElement1 instanceof Node && modelElement2 instanceof Node)) {
-            JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
+            if (interactive_mode) {
+                JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
+            }
             return false;
         }
         Node node1 = (Node) modelElement1;
         Node node2 = (Node) modelElement2;
         Class<? extends ModelElement> nodeClass = node1.getClass();
         if (nodeClass != node2.getClass()) {
-            JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
+            if (interactive_mode) {
+                JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
+            }
             return false;
         }
         //Beginne umhängen der Kanten
