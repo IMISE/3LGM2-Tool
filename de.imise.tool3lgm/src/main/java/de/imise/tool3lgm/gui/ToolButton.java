@@ -13,6 +13,7 @@ import javax.swing.JToggleButton;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -62,7 +63,7 @@ public class ToolButton extends JToggleButton {
                 }
             }
         });
-        button.setToolTipText(ModelConstants.getDisplayableName(paintableElementClass));
+        button.setToolTipText(ElementsNameBuilder.getDisplayableName(paintableElementClass));
         button.setIcon("ICON_LARGE_BACKGROUND_NORMAL.gif");
         button.setSelectedIcon("ICON_LARGE_BACKGROUND_SELECTED.gif");
         CSH.setHelpIDString(button, "GRAPH_TOOLBAR_" + paintableElementClass.getSimpleName());
@@ -87,7 +88,7 @@ public class ToolButton extends JToggleButton {
                 }
             }
         });
-        button.setToolTipText(ModelConstants.getDisplayableName(Edge.class));
+        button.setToolTipText(ElementsNameBuilder.getDisplayableName(Edge.class));
         button.setIcon("ICON_LARGE_BACKGROUND_NORMAL.gif");
         button.setSelectedIcon("ICON_LARGE_BACKGROUND_SELECTED.gif");
         return button;

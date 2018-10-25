@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -162,14 +163,14 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         Class<? extends Edge> edgeClass = edgeClasses[labelEdgeIndex];
 
         if (labelEdgeName) {
-            westLabelText = directions[labelEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(edgeClass) : ModelConstants.getBackwardMetaAssociationName(edgeClass);
+            westLabelText = directions[labelEdgeIndex] == FORWARD ? ElementsNameBuilder.getForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
         } else {
             Class<? extends ModelElement> labelPathStepEndClass = getPathStepEndClass(labelEdgeIndex);
             //zur Beschriftung des Labels wird immer die speziellere Klasse genommen aus Endklasse des Pfades und searchElementClass. Weil immer nur davon können die verbundenen Elemente sein.
             if (searchElementClass != null && labelPathStepEndClass.isAssignableFrom(this.searchElementClass)) {
                 labelPathStepEndClass = searchElementClass;
             }
-            westLabelText = isSingleConnectionPath() ? ModelConstants.getDisplayableName(labelPathStepEndClass) : ModelConstants.getDisplayablePluralName(labelPathStepEndClass);
+            westLabelText = isSingleConnectionPath() ? ElementsNameBuilder.getDisplayableName(labelPathStepEndClass) : ElementsNameBuilder.getDisplayablePluralName(labelPathStepEndClass);
         }
         westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Den ersten Buchstaben des Labels immer groß schreiben
         westLabel.setText(westLabelText);
@@ -188,10 +189,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         Class<? extends Edge> edgeClass = edgeClasses[labelEdgeIndex];
 
         if (labelEdgeName) {
-            name = directions[labelEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(edgeClass) : ModelConstants.getBackwardMetaAssociationName(edgeClass);
+            name = directions[labelEdgeIndex] == FORWARD ? ElementsNameBuilder.getForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
         } else {
             Class<? extends ModelElement> labelPathStepEndClass = getPathStepEndClass(labelEdgeIndex, usedEdgeDirections, edgeClasses);
-            name = isSingleConnectionPath(usedEdgeDirections, edgeClasses) ? ModelConstants.getDisplayableName(labelPathStepEndClass) : ModelConstants.getDisplayablePluralName(labelPathStepEndClass);
+            name = isSingleConnectionPath(usedEdgeDirections, edgeClasses) ? ElementsNameBuilder.getDisplayableName(labelPathStepEndClass) : ElementsNameBuilder.getDisplayablePluralName(labelPathStepEndClass);
         }
         name = StringUtils.capitalizeFirstChar(name); // Den ersten Buchstaben des Labels immer groß schreiben
         return name;

@@ -2,8 +2,6 @@ package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullBackwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullForwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 
@@ -17,6 +15,7 @@ import java.util.HashSet;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
@@ -248,8 +247,8 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             //Zielklassen-Arrays gleich, aber die Namen in Vorwärts- und Rückwärtsrichtung
             //sind unterscheidlich. Bei der Beziehung "Phys.-DV-Baustein ist verbunden mit
             //Phys.-DV-Baustein" kann man keine eindeutige Richtung zuordnen.
-            String forwardName = getFullForwardMetaAssociationName(tmpEdgeClass);
-            String backwardName = getFullBackwardMetaAssociationName(tmpEdgeClass);
+            String forwardName = ElementsNameBuilder.getFullForwardMetaAssociationName(tmpEdgeClass);
+            String backwardName = ElementsNameBuilder.getFullBackwardMetaAssociationName(tmpEdgeClass);
             if (forwardName.equals(backwardName) && (startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass))) {
                 continue;
             }
@@ -331,7 +330,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
                 return;
             }
             String displayName = associationBox.getSelectedItem().toString();
-            String tmp_string = getFullForwardMetaAssociationName(edgeClass);
+            String tmp_string = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
             if (displayName.equals(tmp_string)) {
                 updateFieldListAttributesOfAssociatedClass(getEndClass(edgeClass));
             } else {

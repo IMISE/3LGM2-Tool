@@ -12,8 +12,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.UNIQUE_NODES;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getCopyDependencies;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getForwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getInitialSubtypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSubordinatedJoinbleTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.hasObjektDialog;
@@ -102,6 +100,7 @@ import javax.swing.JRadioButton;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -1103,9 +1102,9 @@ public final class GDCollection extends UserFieldTarget {
                 String name;
                 //wenn mehrere Unterelemene existieren können, dann durchnummerieren
                 if (minCardForSubType > 1) {
-                    name = getNextIndicatedName(getDisplayableName(subType) + " ", " " + getResString("fuer") + " " + me.getName(), connectedSubTypes);
+                    name = getNextIndicatedName(ElementsNameBuilder.getDisplayableName(subType) + " ", " " + getResString("fuer") + " " + me.getName(), connectedSubTypes);
                 } else {
-                    name = getDisplayableName(subType) + " " + getResString("fuer") + " " + me.getName();
+                    name = ElementsNameBuilder.getDisplayableName(subType) + " " + getResString("fuer") + " " + me.getName();
                 }
                 ModelElement skC = createKnotenWithContainer(subType.asSubclass(Node.class), name, "", null, pid).getElement();
                 link(subTypeEdgeClass, me, skC, pid);
@@ -1449,7 +1448,7 @@ public final class GDCollection extends UserFieldTarget {
             messagePanel.setLayout(new BoxLayout(messagePanel, Y_AXIS));
             ButtonGroup buttonGroup = new ButtonGroup();
             for (int i = 0; i < edges.size(); i++) {
-                JRadioButton b = new JRadioButton(getForwardMetaAssociationName(edges.get(i).getClass()));
+                JRadioButton b = new JRadioButton(ElementsNameBuilder.getForwardMetaAssociationName(edges.get(i).getClass()));
                 if (i == 0) {
                     b.setSelected(true);
                 }

@@ -43,6 +43,7 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -2996,7 +2997,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (prefix == null) {
             prefix = "";
         }
-        String name = prefix + ModelConstants.getDisplayableName(elementClass) + " ";
+        String name = prefix + ElementsNameBuilder.getDisplayableName(elementClass) + " ";
         String newName = CollectionUtils.getNextIndicatedName(name, gdcoll.getMainGraphDocument().getModelItems(elementClass));
         return newName;
     }

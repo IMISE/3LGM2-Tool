@@ -7,15 +7,8 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_DOMAIN_LAYER_NODES;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_LOGICAL_LAYER_NODES;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getBackwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getForwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullBackwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullForwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
@@ -83,6 +76,7 @@ import javax.swing.event.PopupMenuListener;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.event.ActionLibrary;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -267,7 +261,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private JMenu createLayerMenu(final Iterable<Class<? extends ModelElement>> createableLayerNodes) {
         JMenu layerMenu = new JMenu(getResString("el_neu"));
         for (Class<? extends ModelElement> elementClass : createableLayerNodes) {
-            JMenuItem item = new JMenuItem(getDisplayableName(elementClass));
+            JMenuItem item = new JMenuItem(ElementsNameBuilder.getDisplayableName(elementClass));
             item.addActionListener(this);
             item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + elementClass.getName());
             layerMenu.add(item);
@@ -547,9 +541,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                         connectLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
                         menu.add(connectLabel);
                     }
-                    String toolTip = getFullForwardMetaAssociationName(edgeClass);
+                    String toolTip = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                     Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
-                    String label = ModelConstants.getDisplayableName(endClass);
+                    String label = ElementsNameBuilder.getDisplayableName(endClass);
                     JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, edgeClass.getSimpleName(), verbindung_anlegen, true, toolTip);
                     menu.add(item);
                 }
@@ -674,8 +668,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     //Hat-Teil-Kante
                     if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
                         if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-                            String label = getForwardMetaAssociationName(edgeClass, false, true);
-                            String toolTip = getFullForwardMetaAssociationName(edgeClass);
+                            String label = ElementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
+                            String toolTip = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                             boolean connectable = false;
                             boolean disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -696,8 +690,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
                         }
                         if (isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
-                            String label = getBackwardMetaAssociationName(edgeClass, false, true);
-                            String toolTip = getFullBackwardMetaAssociationName(edgeClass);
+                            String label = ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
+                            String toolTip = ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
                             boolean connectable = false;
                             boolean disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -721,8 +715,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
                         if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
                             ConnectionState connectionState = FORWARD.getConnectionState();
-                            String label = getMetaAssociationName(edgeClass, false, connectionState, false, true);
-                            String toolTip = getFullMetaAssociationName(edgeClass, false, connectionState);
+                            String label = ElementsNameBuilder.getMetaAssociationName(edgeClass, false, connectionState, false, true);
+                            String toolTip = ElementsNameBuilder.getFullMetaAssociationName(edgeClass, false, connectionState);
                             boolean connectable = false;
                             boolean disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -742,8 +736,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
 
                             connectionState = BACKWARD.getConnectionState();
-                            label = getMetaAssociationName(edgeClass, false, connectionState, false, true);
-                            toolTip = getFullMetaAssociationName(edgeClass, false, connectionState);
+                            label = ElementsNameBuilder.getMetaAssociationName(edgeClass, false, connectionState, false, true);
+                            toolTip = ElementsNameBuilder.getFullMetaAssociationName(edgeClass, false, connectionState);
                             connectable = false;
                             disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -766,8 +760,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                         // Endklasse brauchen nur 1x angeboten werden
                         if (isConnectingForward(edgeClass, me2Class, lastSelectedClass) && getStartClass(edgeClass) != getEndClass(edgeClass)) {
                             ConnectionState connectionState = FORWARD.getConnectionState();
-                            String label = getMetaAssociationName(edgeClass, true, connectionState, false, true);
-                            String toolTip = getFullMetaAssociationName(edgeClass, true, connectionState);
+                            String label = ElementsNameBuilder.getMetaAssociationName(edgeClass, true, connectionState, false, true);
+                            String toolTip = ElementsNameBuilder.getFullMetaAssociationName(edgeClass, true, connectionState);
                             boolean connectable = false;
                             boolean disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -787,8 +781,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
 
                             connectionState = BACKWARD.getConnectionState();
-                            label = getMetaAssociationName(edgeClass, true, connectionState, false, true);
-                            toolTip = getFullMetaAssociationName(edgeClass, true, connectionState);
+                            label = ElementsNameBuilder.getMetaAssociationName(edgeClass, true, connectionState, false, true);
+                            toolTip = ElementsNameBuilder.getFullMetaAssociationName(edgeClass, true, connectionState);
                             connectable = false;
                             disconnectable = false;
                             for (ModelElement me2 : selectedElements) {
@@ -810,10 +804,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                         }
                         //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
                     } else if (Edge.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && Edge.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && ModelConstants.isDirectedEdge(edgeClass)) {
-                        String labelForward = getForwardMetaAssociationName(edgeClass, false, true);
-                        String toolTipForward = getFullForwardMetaAssociationName(edgeClass);
-                        String labelBackward = getBackwardMetaAssociationName(edgeClass, false, true);
-                        String toolTipBackward = getFullBackwardMetaAssociationName(edgeClass);
+                        String labelForward = ElementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
+                        String toolTipForward = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+                        String labelBackward = ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
+                        String toolTipBackward = ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
                         boolean connectableForward = false;
                         boolean disconnectableForward = false;
                         boolean connectableBackward = false;
@@ -849,12 +843,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                         String toolTip;
                         if (isStartClass(edgeClass, lastSelectedClass)) {
                             direction = FORWARD;
-                            label = getForwardMetaAssociationName(edgeClass, false, true);
-                            toolTip = getFullForwardMetaAssociationName(edgeClass);
+                            label = ElementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
+                            toolTip = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                         } else {
                             direction = BACKWARD;
-                            label = getBackwardMetaAssociationName(edgeClass, false, true);
-                            toolTip = getFullBackwardMetaAssociationName(edgeClass);
+                            label = ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
+                            toolTip = ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
                         }
                         boolean connectable = false;
                         boolean disconnectable = false;
@@ -2158,7 +2152,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             messagePanel.setLayout(new BoxLayout(messagePanel, Y_AXIS));
             ButtonGroup buttonGroup = new ButtonGroup();
             for (int i = 0; i < edgeClasses.length; i++) {
-                JRadioButton b = new JRadioButton(getForwardMetaAssociationName(edgeClasses[i]));
+                JRadioButton b = new JRadioButton(ElementsNameBuilder.getForwardMetaAssociationName(edgeClasses[i]));
                 b.setActionCommand(edgeClasses[i].getName());
                 messagePanel.add(b);
                 buttonGroup.add(b);

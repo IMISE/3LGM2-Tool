@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -222,7 +222,7 @@ public class DataImportVerifier {
             //prüfen, ob im Modell ein Element einer anderen Art vorkommt, das denselben Hash hat
             ModelElement me = gdcoll.getMainGraphDocument().findElementCoded(hash);
             if (me != null && me.getClass() != elementClass) {
-                String displayableName = ModelConstants.getDisplayableName(me.getClass());
+                String displayableName = ElementsNameBuilder.getDisplayableName(me.getClass());
                 errors.add(line, COLUMN_INDEX_HASH, HASH_CONFLICT, displayableName, me.getName(), hash);
             }
         }

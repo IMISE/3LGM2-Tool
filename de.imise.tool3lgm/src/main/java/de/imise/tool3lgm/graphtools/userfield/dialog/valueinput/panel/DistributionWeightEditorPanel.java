@@ -16,7 +16,7 @@ import java.util.Vector;
 
 import javax.swing.AbstractAction;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -364,7 +364,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         }
         Class<? extends Edge> selectedEdgeClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(Edge.class);
         String selectedEdgeName = elementTypeBox.getSelectedItem().toString();
-        choosedEdgeDirection = selectedEdgeName.equals(ModelConstants.getFullForwardMetaAssociationName(selectedEdgeClass)) ? FORWARD : BACKWARD;
+        choosedEdgeDirection = selectedEdgeName.equals(ElementsNameBuilder.getFullForwardMetaAssociationName(selectedEdgeClass)) ? FORWARD : BACKWARD;
         UserField selectedWeigthUserField = (UserField) weightBox.getSelectedObject();
         AbstractUserFieldTableModel uftm = new UserFieldWeightTableModel(getDialog().getGraphDocument(), selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField, columnFilterBoxSelection);
         UserFieldTableController tec = UserFieldTableController.getNewDistributionWeightTableController(uftm);

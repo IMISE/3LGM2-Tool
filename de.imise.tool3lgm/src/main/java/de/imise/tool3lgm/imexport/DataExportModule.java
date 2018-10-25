@@ -6,8 +6,6 @@ package de.imise.tool3lgm.imexport;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_EDGES_SET;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_NODES_SET;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullForwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isEdgeType;
 
 import java.io.BufferedWriter;
@@ -21,6 +19,7 @@ import java.util.Set;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -100,11 +99,11 @@ public class DataExportModule {
                     }
                     if (elementClass != classElement) {
                         classElement = elementClass;
-                        String displayableClassName = isEdgeType(elementClass) ? getFullForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : getDisplayableName(elementClass);
+                        String displayableClassName = isEdgeType(elementClass) ? ElementsNameBuilder.getFullForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : ElementsNameBuilder.getDisplayableName(elementClass);
                         caption = displayableClassName + "\tName\tDescription\tHashString";
                         for (MetaPath metaPath : metaPaths2Export) {
                             if (metaPath.getStartClass().isAssignableFrom(elementClass)) {
-                                caption += "\t" + getDisplayableName(metaPath.getEndClass());
+                                caption += "\t" + ElementsNameBuilder.getDisplayableName(metaPath.getEndClass());
                             }
                         }
                         for (UserField uf : ufDef.getUserFields(classElement)) {

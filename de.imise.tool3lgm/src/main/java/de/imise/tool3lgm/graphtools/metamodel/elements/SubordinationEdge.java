@@ -1,11 +1,10 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.log.Log;
 
@@ -145,7 +144,7 @@ public abstract class SubordinationEdge extends Edge {
         if (k1 != null && k2 != null) {
             boolean retVal = k2.isSuperElementOf(k1, getClass());
             if (retVal) {
-                Log.show(Log.INFO, getResString("part_of_circle_error") + "\n" + getDisplayablePluralName(ModelElement.class) + ":\n" + getDisplayableName(k1) + ": " + k1.getName() + "\n" + getDisplayableName(k2) + ": " + k2.getName());
+                Log.show(Log.INFO, getResString("part_of_circle_error") + "\n" + ElementsNameBuilder.getDisplayablePluralName(ModelElement.class) + ":\n" + ElementsNameBuilder.getDisplayableName(k1) + ": " + k1.getName() + "\n" + ElementsNameBuilder.getDisplayableName(k2) + ": " + k2.getName());
             }
             return retVal;
         }

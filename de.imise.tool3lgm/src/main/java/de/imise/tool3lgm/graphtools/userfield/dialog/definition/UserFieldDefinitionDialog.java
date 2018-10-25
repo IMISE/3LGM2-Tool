@@ -18,6 +18,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.AbstractPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
@@ -118,7 +119,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
             sb.append(getResString(userField.getTargetClass().getSimpleName()));
         } else {
             if (ModelConstants.isEdgeType(userField.getTargetClass())) {
-                sb.append(ModelConstants.getMetaAssociationName(userField.getTargetClass().asSubclass(Edge.class), false, ConnectionState.DOUBLE, true, true));
+                sb.append(ElementsNameBuilder.getMetaAssociationName(userField.getTargetClass().asSubclass(Edge.class), false, ConnectionState.DOUBLE, true, true));
             } else if (userField.isGlobalOrFormat()) {
                 sb.append(UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName());
             }

@@ -53,6 +53,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.google.common.base.Strings;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -190,7 +191,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
         Class<? extends ModelElement> elementClass = ModelElement.class.isAssignableFrom(targetClass) ? targetClass.asSubclass(ModelElement.class) : null;
         ModelConstants.isNodeType(targetClass);
-        String targetClassDisplayName = elementClass == null || ModelConstants.isEdgeType(targetClass) ? "" : "  -  " + ModelConstants.getDisplayableName(elementClass);
+        String targetClassDisplayName = elementClass == null || ModelConstants.isEdgeType(targetClass) ? "" : "  -  " + ElementsNameBuilder.getDisplayableName(elementClass);
         setTitle(getResString("formulaEditorDialog") + targetClassDisplayName + "  -  " + newUserFieldName);
         setLocationByPlatform(true);
 

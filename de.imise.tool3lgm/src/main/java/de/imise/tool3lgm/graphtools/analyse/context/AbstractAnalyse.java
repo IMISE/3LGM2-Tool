@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.analyse.context;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -57,10 +58,10 @@ public abstract class AbstractAnalyse {
         }
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < startknoten.size() - 1; i++) {
-            sb.append(ModelConstants.getDisplayableName(ModelConstants.getClassForName(startknoten.get(i).getName())));
+            sb.append(ElementsNameBuilder.getDisplayableName(ModelConstants.getClassForName(startknoten.get(i).getName())));
             sb.append(", ");
         }
-        sb.append(ModelConstants.getDisplayableName(ModelConstants.getClassForName(startknoten.get(startknoten.size() - 1).getName())));
+        sb.append(ElementsNameBuilder.getDisplayableName(ModelConstants.getClassForName(startknoten.get(startknoten.size() - 1).getName())));
         return sb.toString();
     }
 

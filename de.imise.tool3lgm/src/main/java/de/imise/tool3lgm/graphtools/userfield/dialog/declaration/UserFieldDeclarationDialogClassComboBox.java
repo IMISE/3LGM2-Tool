@@ -1,12 +1,10 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_NODES;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullBackwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getFullForwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -28,7 +26,7 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
         //alle nicht abstracten Knotenklassen hinzufügen
         for (Class<? extends ModelElement> elementClass : ALL_NODES) {
             if (!ModelConstants.isAbstract(elementClass)) {
-                addItem(elementClass, getDisplayableName(elementClass));
+                addItem(elementClass, ElementsNameBuilder.getDisplayableName(elementClass));
             }
         }
         addSeparator(true);
@@ -39,8 +37,8 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
             //Da weder druchdacht ist noch ausprobiert wurde, was passiert, wenn man Kanten mehrfach verknüpft
             //und dann mit Verteilungegewichten bestückt, sind diese Kanten hier erstmal ausßen vor.
             if (!ModelConstants.isMultipleEdgeClass(edgeClass)) {
-                addItem(edgeClass, getFullForwardMetaAssociationName(edgeClass));
-                addItem(edgeClass, getFullBackwardMetaAssociationName(edgeClass));
+                addItem(edgeClass, ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
+                addItem(edgeClass, ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
             }
         }
     }

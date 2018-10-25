@@ -4,12 +4,12 @@
 package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -194,9 +194,9 @@ public class SimpleRedundancyAnalysis {
     private String getRedundanceString(final float redundance, final float saturation) {
         MetaPath metaPath = definition.getMetaPath();
         StringBuilder sb = new StringBuilder();
-        sb.append(getDisplayablePluralName(metaPath.getStartClass()));
+        sb.append(ElementsNameBuilder.getDisplayablePluralName(metaPath.getStartClass()));
         sb.append(" -> ");
-        sb.append(getDisplayablePluralName(metaPath.getEndClass()));
+        sb.append(ElementsNameBuilder.getDisplayablePluralName(metaPath.getEndClass()));
         sb.append(": ");
         sb.append(getResString("SIMPLE_REDUNDNANCY_ANALYSIS_redundancy_factor"));
         sb.append("=");

@@ -17,6 +17,7 @@ import javax.swing.JTree;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
@@ -176,7 +177,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         //dieses Panel war urspünglich nur für Kanten mit doppelter Bedeutung. Danach hat AXS das auch für Kanten zwischen denselben Elementen, die aber eine Richtung haben, angepasst.
         //Kanten ohne doppelte Bedeutung haben immer die Richtung FORWARD, aber der connectionState muss hier als Lesrichtung der Kante interpretiert werden, damit über den beiden Bäumen jeweils eine Richtung steht
         boolean forward = isDoubleMeaningEdge && edgeIsForward || !isDoubleMeaningEdge && connectionState == ConnectionState.FORWARD;
-        return forward ? ModelConstants.getForwardMetaAssociationName(edgeClass, connectionState, false, false) : ModelConstants.getBackwardMetaAssociationName(edgeClass, connectionState, false, false);
+        return forward ? ElementsNameBuilder.getForwardMetaAssociationName(edgeClass, connectionState, false, false) : ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass, connectionState, false, false);
     }
 
     ArrayList<ElementContainer> childrenToExcludeFromRotree = new ArrayList<>();

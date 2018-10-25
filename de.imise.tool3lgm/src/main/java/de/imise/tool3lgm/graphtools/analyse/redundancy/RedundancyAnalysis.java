@@ -5,7 +5,6 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -23,6 +22,7 @@ import javax.swing.WindowConstants;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
@@ -124,7 +124,7 @@ public class RedundancyAnalysis extends WindowAdapter {
                 MetaPath metaPath = singleRedundancyAnalysisDefinition.getMetaPath();
                 Class<? extends ModelElement> startClass = metaPath.getStartClass();
                 Class<? extends ModelElement> endClass = metaPath.getEndClass();
-                options[i] = getDisplayablePluralName(startClass) + con + getDisplayablePluralName(endClass);
+                options[i] = ElementsNameBuilder.getDisplayablePluralName(startClass) + con + ElementsNameBuilder.getDisplayablePluralName(endClass);
             }
             options[analyseCount] = getResString("ana_fr_self_defined_analysis");
 

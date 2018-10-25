@@ -31,6 +31,7 @@ import javax.swing.tree.TreeSelectionModel;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
@@ -111,7 +112,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (ltreeLabelString == null) {
             //schreibe den Namen der Edge in der richtigen Richtung über den linken Baum
             Class<? extends Edge> lastEdge = edgeClasses[lastEdgeIndex];
-            ltreeLabelString = directions[lastEdgeIndex] == FORWARD ? ModelConstants.getForwardMetaAssociationName(lastEdge) : ModelConstants.getBackwardMetaAssociationName(lastEdge);
+            ltreeLabelString = directions[lastEdgeIndex] == FORWARD ? ElementsNameBuilder.getForwardMetaAssociationName(lastEdge) : ElementsNameBuilder.getBackwardMetaAssociationName(lastEdge);
         }
         String rtreeLabelString = getResString("frei");
         ltreeLabelString = StringUtils.capitalizeFirstChar(ltreeLabelString);

@@ -4,7 +4,6 @@ import static de.imise.tool3lgm.Static.getSelectedDoc;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -34,6 +33,7 @@ import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
 import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.event.action.SubmodelAction;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
@@ -692,7 +692,7 @@ public class ActionLibrary {
         private static List<Action> getActions(final Iterable<Class<? extends ModelElement>> creatableLayerNodes) {
             List<Action> actions = new ArrayList<>();
             for (Class<? extends ModelElement> creatableClass : creatableLayerNodes) {
-                String actionName = ModelConstants.getDisplayableName(creatableClass);
+                String actionName = ElementsNameBuilder.getDisplayableName(creatableClass);
                 actions.add(new GraphDocumentAction(GDCommands.MODEL_ACTION_CREATE_NODE, creatableClass.getName(), actionName, null));
             }
             return ImmutableList.sortedCopyOf(Alphabetical.getLocalizedComparator(), actions);
@@ -764,8 +764,8 @@ public class ActionLibrary {
                     };
                     String resKey = ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS.name();
                     MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
-                    String startClassPluralName = getDisplayablePluralName(metaPath.getStartClass());
-                    String endClassPluralName = getDisplayablePluralName(metaPath.getEndClass());
+                    String startClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getStartClass());
+                    String endClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getEndClass());
                     String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);
                     action.setText(fullActionDisplayName);
                     returnActions[i] = action;
@@ -820,7 +820,7 @@ public class ActionLibrary {
                         arguments = elementClass.getSimpleName();
                     }
                     GraphFrameAction hideAction = new GraphFrameAction(command, arguments, null);
-                    hideAction.setReplacedText(getDisplayablePluralName(elementClass));
+                    hideAction.setReplacedText(ElementsNameBuilder.getDisplayablePluralName(elementClass));
                     actions[i] = hideAction;
                 }
                 return actions;

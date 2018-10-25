@@ -6,7 +6,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LOGICAL_LAYE
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
@@ -25,6 +24,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.KeyStrokes;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -187,11 +187,11 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         //Liste von Knoten für die abstrakten Klassen in derselben Reihenfolge wie die abstrakten Klassen
         List<LGMTreeNode> abstractClassNodes = new ArrayList<>();
         for (Class<? extends ModelElement> abstractClass : abstractClasses) {
-            abstractClassNodes.add(new LGMTreeNode(ModelConstants.getDisplayablePluralName(abstractClass), false, true));
+            abstractClassNodes.add(new LGMTreeNode(ElementsNameBuilder.getDisplayablePluralName(abstractClass), false, true));
         }
         //jetzt die ElementKnoten unter die abstrakten Knoten hängen oder unter den LayerKnoten selbst, wenn es keinen abstakten Oberklassenkoten gibt
         for (Class<? extends ModelElement> elementClass : treeLayerVisibleInstancialeNodes) {
-            LGMTreeNode instanciableClassNode = new LGMTreeNode(getDisplayableName(elementClass), false, false);
+            LGMTreeNode instanciableClassNode = new LGMTreeNode(ElementsNameBuilder.getDisplayableName(elementClass), false, false);
             elementClassToParentNode.put(elementClass, instanciableClassNode);
             boolean superClassFound = false;
             for (int i = abstractClasses.size() - 1; i >= 0; i--) {
@@ -431,7 +431,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
 
     private LGMTreeNode getOrCreateTextFieldNode(final LGMTreeNode layerNode, LGMTreeNode textFieldNode) {
         if (textFieldNode == null) {
-            textFieldNode = new LGMTreeNode(getDisplayableName(Textfield.class), false, false);
+            textFieldNode = new LGMTreeNode(ElementsNameBuilder.getDisplayableName(Textfield.class), false, false);
         }
         if (textFieldNode.getParent() == null) {
             textFieldNode.removeAllChildren();

@@ -16,7 +16,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.list.AlphabeticalJList;
@@ -69,7 +69,7 @@ public class MetaPathSelector implements ActionListener {
 
         class1ComboBox = new AlphabeticalComboBox();
         for (Class<? extends ModelElement> elementClass : PathFinder.getElementClassesInPathes()) {
-            String name = ModelConstants.getDisplayableName(elementClass);
+            String name = ElementsNameBuilder.getDisplayableName(elementClass);
             if (name != null && name != "") {
                 class1ComboBox.addItem(elementClass, name);
             }
@@ -107,7 +107,7 @@ public class MetaPathSelector implements ActionListener {
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             for (Class<? extends ModelElement> elementClass : PathFinder.getElementClassesInPathes()) {
                 if (!PathFinder.getMetaPathes(elementClass, class1BoxSelection).isEmpty()) {
-                    class2ComboBox.addItem(elementClass, ModelConstants.getDisplayableName(elementClass));
+                    class2ComboBox.addItem(elementClass, ElementsNameBuilder.getDisplayableName(elementClass));
                 }
             }
             metaPathJList.removeAllElements();

@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
@@ -105,7 +105,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             add(connectedElementsBox, BorderLayout.CENTER);
         }
 
-        createNew = isPathCreatable() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getDisplayableName(searchElementClass)) : null;
+        createNew = isPathCreatable() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + ElementsNameBuilder.getDisplayableName(searchElementClass)) : null;
     }
 
     @Override

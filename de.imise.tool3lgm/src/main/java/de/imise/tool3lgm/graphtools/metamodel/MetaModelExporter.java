@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getBackwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxBackwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxForwardCardinality;
@@ -17,6 +16,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.Alphabetical;
@@ -76,7 +76,7 @@ public class MetaModelExporter {
         List<Class<?>> elementClassList = noc.getObject();
         Class<? extends ModelElement> elementClass = elementClassList.get(classIndex).asSubclass(ModelElement.class);
         StringBuilder sb = new StringBuilder();
-        String displayableName = ModelConstants.getDisplayableName(elementClass);
+        String displayableName = ElementsNameBuilder.getDisplayableName(elementClass);
         String elementClassName = elementClass.getSimpleName();
         if (!elementClassName.equals(displayableName)) {
             sb.append(" (");
@@ -180,7 +180,7 @@ public class MetaModelExporter {
         }
         if (appendDisplayableName) {
             sb.append(" (");
-            sb.append(ModelConstants.getDisplayableName(elementClass));
+            sb.append(ElementsNameBuilder.getDisplayableName(elementClass));
             sb.append(")");
         }
         NamedObjectContainer<List<Class<?>>> noc = new NamedObjectContainer<>(classAndSuperClasses, sb.toString());
@@ -217,9 +217,9 @@ public class MetaModelExporter {
         int maxForwardCardinality = forward ? getMaxForwardCardinality(edgeClass) : getMaxBackwardCardinality(edgeClass);
         String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
 
-        String startClassName = forward ? ModelConstants.getDisplayableName(getStartClass(edgeClass)) : ModelConstants.getDisplayableName(getEndClass(edgeClass));
-        String endClassName = forward ? ModelConstants.getDisplayableName(getEndClass(edgeClass)) : ModelConstants.getDisplayableName(getStartClass(edgeClass));
-        String metaAssociationName = forward ? ModelConstants.getForwardMetaAssociationName(edgeClass) : getBackwardMetaAssociationName(edgeClass);
+        String startClassName = forward ? ElementsNameBuilder.getDisplayableName(getStartClass(edgeClass)) : ElementsNameBuilder.getDisplayableName(getEndClass(edgeClass));
+        String endClassName = forward ? ElementsNameBuilder.getDisplayableName(getEndClass(edgeClass)) : ElementsNameBuilder.getDisplayableName(getStartClass(edgeClass));
+        String metaAssociationName = forward ? ElementsNameBuilder.getForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
 
         sb.append(startClassName);
         sb.append(" ");
@@ -240,7 +240,7 @@ public class MetaModelExporter {
         int minForwardCardinality = forward ? getMinForwardCardinality(edgeClass) : getMinBackwardCardinality(edgeClass);
         int maxForwardCardinality = forward ? getMaxForwardCardinality(edgeClass) : getMaxBackwardCardinality(edgeClass);
         String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
-        String fulldMetaAssociationName = forward ? ModelConstants.getFullForwardMetaAssociationName(edgeClass) : ModelConstants.getFullBackwardMetaAssociationName(edgeClass);
+        String fulldMetaAssociationName = forward ? ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
         sb.append(intention).append(edgeClassName).append(": [").append(minBackwardCardinality).append(", ").append(maxBackwardCardinalityString).append("] ");
         sb.append(fulldMetaAssociationName).append(" [").append(minForwardCardinality).append(", ").append(maxForwardCardinalityString).append("]");
         return sb.toString();
@@ -254,7 +254,7 @@ public class MetaModelExporter {
         int minForwardCardinality = getMinForwardCardinality(edgeClass);
         int maxForwardCardinality = getMaxForwardCardinality(edgeClass);
         String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
-        String fullForwardMetaAssociationName = ModelConstants.getFullForwardMetaAssociationName(edgeClass);
+        String fullForwardMetaAssociationName = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
         StringBuilder sb = new StringBuilder();
         sb.append(intention).append(edgeClassName).append(": [").append(minBackwardCardinality).append(", ").append(maxBackwardCardinalityString).append("] ");
         sb.append(fullForwardMetaAssociationName).append(" [").append(minForwardCardinality).append(", ").append(maxForwardCardinalityString).append("]");

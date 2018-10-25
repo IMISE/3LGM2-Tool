@@ -4,7 +4,6 @@
 package de.imise.tool3lgm.graphtools.path;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMeaningEdge;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
@@ -16,6 +15,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -58,7 +58,7 @@ public class MetaPath {
      * COMMENTME
      */
     private static final String[] defaultPathName = {
-            ModelConstants.getForwardMetaAssociationName(Edge.class)
+            ElementsNameBuilder.getForwardMetaAssociationName(Edge.class)
     };
 
     protected MetaPath reversePath;
@@ -171,12 +171,12 @@ public class MetaPath {
         this(startClass, endClass, path, isDoubleMeaningEdge(path[0][pathDirectionSourceEdgeIndex]) ? new String[] {
                 //der Parameter switchEdgeDirection müsste eigentlich über die Richtung der Kante mit dem speziellen Index im Pfad ermittelt werden. Da bisher alle Pfade, die
                 //über diesen Konstrktor hier initialisiert werden immer dieselben Elementarten verbinden, braucht man die Kantenrichtung nicht drehen, daher steht unten immer false.
-                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, ConnectionState.FORWARD),
-                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, ConnectionState.BACKWARD),
-                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], isStartClass(path[0][pathDirectionSourceEdgeIndex], startClass) && isEndClass(path[0][pathDirectionSourceEdgeIndex], endClass), ConnectionState.DOUBLE, false, false,
+                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, ConnectionState.FORWARD),
+                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, ConnectionState.BACKWARD),
+                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], isStartClass(path[0][pathDirectionSourceEdgeIndex], startClass) && isEndClass(path[0][pathDirectionSourceEdgeIndex], endClass), ConnectionState.DOUBLE, false, false,
                         " " + getResString("und") + " ")
         } : new String[] {
-                getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false),
+                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false),
         }, pathDirectionSourceEdgeIndex);
     }
 
@@ -511,7 +511,7 @@ public class MetaPath {
      * @return
      */
     public final String getFullDescription(final int descriptionIndex) {
-        return getDescription(descriptionIndex, ModelConstants.getDisplayableName(startClass), ModelConstants.getDisplayableName(endClass));
+        return getDescription(descriptionIndex, ElementsNameBuilder.getDisplayableName(startClass), ElementsNameBuilder.getDisplayableName(endClass));
     }
 
     /**

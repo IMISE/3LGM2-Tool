@@ -17,6 +17,7 @@ import javax.swing.tree.TreePath;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
@@ -155,7 +156,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                         Class<? extends ModelElement> elementClass = null;
                         for (Class<? extends ModelElement> creatableElementClass : CollectionUtils.getCommonIterable(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES, ModelConstants.CREATABLE_LOGICAL_LAYER_NODES,
                                 ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES)) {
-                            String displayName = ModelConstants.getDisplayableName(creatableElementClass);
+                            String displayName = ElementsNameBuilder.getDisplayableName(creatableElementClass);
                             if (displayName.equals(label)) {
                                 elementClass = creatableElementClass;
                                 break;

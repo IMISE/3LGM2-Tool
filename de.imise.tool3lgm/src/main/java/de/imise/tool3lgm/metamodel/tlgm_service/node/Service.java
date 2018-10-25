@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_service.node;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransaction_Service_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ServiceUses_Edge;
@@ -21,7 +21,7 @@ public final class Service extends Node {
         dialog.addDescripSingleConnectionPanel(Service_ServiceClass_Edge.class);
         dialog.addEdgePanel(ServiceUses_Edge.class);
         dialog.addEdgePanel(Service_ObjectType_Edge.class);
-        dialog.addTabbedPanel(ModelConstants.getDisplayablePluralName(CommunicationInterface.class));
+        dialog.addTabbedPanel(ElementsNameBuilder.getDisplayablePluralName(CommunicationInterface.class));
         dialog.addTabbedPanelPathConnectionPanel(Service_InvokingInterface_Edge.class);
         dialog.addTabbedPanelPathConnectionPanel(Service_ProvidingInterface_Edge.class);
         dialog.addEdgePanel(Service_ObjectType_Edge.class);

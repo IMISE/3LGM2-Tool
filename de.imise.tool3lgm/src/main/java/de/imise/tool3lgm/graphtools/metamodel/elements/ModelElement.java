@@ -27,6 +27,7 @@ import org.apache.commons.collections4.map.Flat3Map;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -156,7 +157,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     private static final String getNewHashString(final ModelElement me) {
-        return HashStringGenerator.getHash(ModelConstants.getShortName(me.getClass()));
+        return HashStringGenerator.getHash(ElementsNameBuilder.getShortName(me.getClass()));
     }
 
     /**

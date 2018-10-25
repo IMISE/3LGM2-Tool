@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 
 import com.google.common.collect.ImmutableSet;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -182,14 +183,14 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
             }
 
             if (insertType == AS_MODELELEMENT) {
-                elementTypeBox.addItem(elementClass, ModelConstants.getDisplayableName(elementClass));
+                elementTypeBox.addItem(elementClass, ElementsNameBuilder.getDisplayableName(elementClass));
             } else if (insertType != NO) {
                 Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
                 if (insertType == InsertType.AS_EDGE_FORWARD || insertType == AS_EDGE_FORWARD_AND_BACKWARD) {
-                    elementTypeBox.addItem(edgeClass, ModelConstants.getFullForwardMetaAssociationName(edgeClass));
+                    elementTypeBox.addItem(edgeClass, ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
                 }
                 if (insertType == InsertType.AS_EDGE_BACKWARD || insertType == AS_EDGE_FORWARD_AND_BACKWARD) {
-                    elementTypeBox.addItem(edgeClass, ModelConstants.getFullBackwardMetaAssociationName(edgeClass));
+                    elementTypeBox.addItem(edgeClass, ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
                 }
             }
 

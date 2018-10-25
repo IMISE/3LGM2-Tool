@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -163,7 +164,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
                 int index = counter + offset;
                 NodeContainer kc = new NodeContainer((Node) ModelConstants.createElement(paintbaleClass, true), mydoc);
                 knoten[index] = kc;
-                kc.getKnoten().setName(ModelConstants.getDisplayableName(paintbaleClass));
+                kc.getKnoten().setName(ElementsNameBuilder.getDisplayableName(paintbaleClass));
                 kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
                 kc.setFont(mydoc.getMapping().getStandardFont(kc));
 
