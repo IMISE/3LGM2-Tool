@@ -161,7 +161,7 @@ public class ShortestCommunicationPathFinderOld {
             // für alle Einzel-AWB eines Gesamt-AWB
             for (ModelElement sameAWB : sameAWBList) {
                 // hole alle seine Schnittstellen und füge sie zur Gesamtliste hinzu
-                sameSSList.addAll(sameAWB.getConnectedElementsByEdge(AwbKommssVerbindung.class));
+                sameSSList.addAll(sameAWB.getConnectedElements(AwbKommssVerbindung.class));
                 // lege die Gesamtliste für den Einzel-AWB in die globale HashMap
                 awbToBSSList.put(sameAWB, sameSSList);
             }
@@ -468,10 +468,10 @@ public class ShortestCommunicationPathFinderOld {
 
                 // für jede dieser EtNt-Kombinationen
                 for (ModelElement nt : ntAndDtOfKante) {
-                    List<ModelElement> ntOfEtnt = nt.getConnectedElementsByEdge(EtntNatVerbindung.class);
-                    ntOfEtnt.addAll(nt.getConnectedElementsByEdge(EtntDotVerbindung.class));
+                    List<ModelElement> ntOfEtnt = nt.getConnectedElements(EtntNatVerbindung.class);
+                    ntOfEtnt.addAll(nt.getConnectedElements(EtntDotVerbindung.class));
                     for (ModelElement nachrichtentyp : ntOfEtnt) {
-                        List<ModelElement> objekttypes = nachrichtentyp.getConnectedElementsByEdge(ObjReprVerbindung.class);
+                        List<ModelElement> objekttypes = nachrichtentyp.getConnectedElements(ObjReprVerbindung.class);
                         int z = objekttypes.size();
                         for (int l = 0; l < z; l++) {
                             objekttypes.addAll(objekttypes.get(l).getPartElements(false));

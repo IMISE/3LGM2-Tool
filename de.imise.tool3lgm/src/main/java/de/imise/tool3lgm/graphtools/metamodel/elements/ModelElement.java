@@ -8,7 +8,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxBackwar
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxForwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinForwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
@@ -1706,37 +1705,6 @@ public abstract class ModelElement extends UserFieldTarget {
             }
         }
         return knoten;
-    }
-
-    /**
-     * Gibt alle <code>ModelElement</code>s zurück, die mit diesem <code>ModelElement</code> im angegebenen <code>GraphDocument</code> verbunden sind.
-     *
-     * @param edgeClass alle Kanten des Types
-     * @return List mit den verbundenen ModelElementen
-     */
-    public List<ModelElement> getConnectedElementsByEdge(final Class<? extends Edge> edgeClass) {
-        return getConnectedElementsByEdge(getOther(edgeClass, getClass()), edgeClass);
-    }
-
-    /**
-     * Gibt alle <code>ModelElement</code>s zurück, die mit diesem <code>ModelElement</code> im angegebenen <code>GraphDocument</code> verbunden sind.
-     *
-     * @param edgeClass alle Kanten des Types
-     * @param targetElementClass Klasse, von der die Zielelemente sein sollen. Diese muss nicht mit der letzten Elementklasse des Metapfades
-     *            übereinstimmen, sondern kann eine spezielle Unterklasse sein.
-     * @return List mit den verbundenen ModelElementen
-     */
-    public List<ModelElement> getConnectedElementsByEdge(final Class<? extends ModelElement> targetElementClass, final Class<? extends Edge> edgeClass) {
-        List<ModelElement> retVal = new ArrayList<>(getEdgesCount());
-        for (Edge edge : getEdges()) {
-            if (edgeClass.isAssignableFrom(edge.getClass())) {
-                ModelElement me = edge.getOther(this);
-                if (targetElementClass.isAssignableFrom(me.getClass())) {
-                    retVal.add(me);
-                }
-            }
-        }
-        return retVal;
     }
 
     /**

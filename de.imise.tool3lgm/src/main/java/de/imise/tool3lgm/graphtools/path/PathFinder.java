@@ -197,7 +197,7 @@ public final class PathFinder {
             return null;
         }
         ConnectionState retVal;
-        List<ModelElement> elements = current.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[position]);
+        List<ModelElement> elements = current.getConnectedElements(metaPath.getEdgeClasses(pathIndex)[position]);
         for (ModelElement me : elements) {
             if ((retVal = isConnected(me, end, metaPath, position + 1, pathIndex)) != null) {
                 if (metaPath.getPathDirectionSourceEdgeIndex() == position) {
@@ -266,7 +266,7 @@ public final class PathFinder {
                             pathStepEndClass = metaPathEndClass;
                         }
                     }
-                    endElements.addAll(startElem.getConnectedElementsByEdge(pathStepEndClass, subPathEdgeClass));
+                    endElements.addAll(startElem.getConnectedElements(pathStepEndClass, subPathEdgeClass));
                 }
             }
             startElements.clear();
@@ -346,7 +346,7 @@ public final class PathFinder {
                 int index = pathStartClass ? assoIndex : metaPath.getLength() - 1 - assoIndex;
                 //zu allen Endelementen alle über die aktuelle Assoziation verbunenen Elemente hinzufügen
                 for (ModelElement startElem : startElements) {
-                    endElements.addAll(startElem.getConnectedElementsByEdge(metaPath.getEdgeClasses(pathIndex)[index]));
+                    endElements.addAll(startElem.getConnectedElements(metaPath.getEdgeClasses(pathIndex)[index]));
                 }
             }
             //Startelemente auf die Endelemente setzen

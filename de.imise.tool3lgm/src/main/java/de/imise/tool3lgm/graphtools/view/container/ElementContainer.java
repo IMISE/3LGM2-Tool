@@ -319,7 +319,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
                     if (additionalLabelTextGenerator == null) {
                         additionalLabelTextGenerator = new AdditionalLabelTextGenerator(this, get3LGMLayout());
                     }
-                    additionalLabelTextGenerator.writeNumberListToTargets(me.getConnectedElementsByEdge(edgeClass), doc);
+                    additionalLabelTextGenerator.writeNumberListToTargets(me.getConnectedElements(edgeClass), doc);
                 }
             }
         } else if (additionalLabelTextGenerator != null) {
