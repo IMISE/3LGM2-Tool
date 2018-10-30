@@ -70,7 +70,7 @@ public final class ModelConstants {
     public enum ConnectionState {
         FORWARD,
         BACKWARD,
-        DOUBLE,
+        DOUBLE
     }
 
     /**
@@ -791,8 +791,6 @@ public final class ModelConstants {
 
         return clazz;
     }
-
-    
 
     public static final Set<Class<? extends ModelElement>> ELEMENT_CLASSES_WITH_HAS_PART_EDGE_CLASSES = new HashSet<>();
 
