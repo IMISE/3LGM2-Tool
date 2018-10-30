@@ -49,9 +49,6 @@ public abstract class PathsDefinition {
      */
     protected abstract void init() throws InvalidPathException;
 
-    private void initInternal() {
-    }
-
     static int metaPathCount = 1;
 
     /**
@@ -62,9 +59,9 @@ public abstract class PathsDefinition {
      * @param registerPathForSubClasses wenn true, dann wird der Pfad auch für alle Unterklassen der übergebenen Start- und
      *            Zielklassen angelegt. Wenn <code>false</code>, dann nur für die übergebenen Klassen.
      */
-    private final void put(final MetaPath metaPath, final boolean registerPathForSubClasses) {
+    private final void put(final MetaPath metaPath, final boolean registerPathForSubClasses, final boolean checkOtherDirection) {
         if (!registerPathForSubClasses) {
-            registerPath(metaPath);
+            registerPath(metaPath, checkOtherDirection && metaPath.getReversePath() == null);
         } else {
             Class<? extends ModelElement> pathStartClass = metaPath.getStartClass();
             Class<? extends ModelElement> pathEndClass = metaPath.getEndClass();
@@ -78,9 +75,12 @@ public abstract class PathsDefinition {
                     Class<? extends ModelElement> endClass = end.asSubclass(ModelElement.class);
                     //wenn die Start- und Endklassen die vom übergebenen Pfad sind, muss man keinen neuen Pfad anlegen
                     MetaPath newMetaPath = pathStartClass == startClass && pathEndClass == endClass ? metaPath : new MetaPath(startClass, endClass, metaPath);
-                    registerPath(newMetaPath);
+                    registerPath(newMetaPath, checkOtherDirection && metaPath.getReversePath() == null);
                 }
             }
+        }
+        if (checkOtherDirection && metaPath.getReversePath() != null) {
+            put(metaPath.getReversePath(), registerPathForSubClasses, false);
         }
     }
 
@@ -91,7 +91,7 @@ public abstract class PathsDefinition {
      * @param metaPath
      */
     public final void put(final MetaPath metaPath) {
-        put(metaPath, true);
+        put(metaPath, true, true);
     }
 
     /**
@@ -105,11 +105,15 @@ public abstract class PathsDefinition {
         put(metaPath);
     }
 
-    private void registerPath(final MetaPath metaPath) {
+    private void registerPath(final MetaPath metaPath, final boolean registerBothDirections) {
         Class<? extends ModelElement> startClass = metaPath.getStartClass();
         Class<? extends ModelElement> endClass = metaPath.getEndClass();
         String pathsKey = calculateKey(startClass, endClass);
         metaPathes.put(pathsKey, metaPath);
+        if (registerBothDirections) {
+            pathsKey = calculateKey(endClass, startClass);
+            metaPathes.put(pathsKey, metaPath);
+        }
     }
 
     /**
@@ -123,13 +127,15 @@ public abstract class PathsDefinition {
         int hash1 = elementClass1.hashCode();
         int hash2 = elementClass2.hashCode();
         StringBuilder sb = new StringBuilder();
-        if (hash1 < hash2) {
-            sb.append(hash1);
-            sb.append(hash2);
-        } else {
-            sb.append(hash2);
-            sb.append(hash1);
-        }
+        sb.append(hash1);
+        sb.append(hash2);
+        //        if (hash1 < hash2) {
+        //            sb.append(hash1);
+        //            sb.append(hash2);
+        //        } else {
+        //            sb.append(hash2);
+        //            sb.append(hash1);
+        //        }
         return sb.toString();
     }
 
@@ -147,7 +153,6 @@ public abstract class PathsDefinition {
      * @return
      */
     public final Set<Class<? extends ModelElement>> getElementClassesInPathes() {
-        initInternal();
         return elementClassesInPathes;
     }
 
@@ -167,25 +172,31 @@ public abstract class PathsDefinition {
      * @return
      */
     public final Collection<MetaPath> getMetaPathes(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
-        initInternal();
         return metaPathes.get(calculateKey(startClass, endClass));
     }
 
     private final void putSimpleMetaPaths(final Class<? extends Edge> edgeClass) {
-        Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
-        Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
-        Class<? extends ModelElement>[] startClasses = ModelConstants.getInstanciableAssignableClasses(edgeStartClass);
-        Class<? extends ModelElement>[] endClasses = ModelConstants.getInstanciableAssignableClasses(edgeEndClass);
-        Set<Class<?>> allStartClasses = ReflectionUtils.getClassesWithSuperClasses(startClasses, edgeStartClass.getSuperclass());
-        Set<Class<?>> allEndClasses = ReflectionUtils.getClassesWithSuperClasses(endClasses, edgeEndClass.getSuperclass());
-        for (Class<?> start : allStartClasses) {
-            Class<? extends ModelElement> startClass = start.asSubclass(ModelElement.class);
-            for (Class<?> end : allEndClasses) {
-                Class<? extends ModelElement> endClass = end.asSubclass(ModelElement.class);
-                MetaPath metaPath = new MetaPath(startClass, endClass, edgeClass);
-                put(metaPath);
-            }
-        }
+        Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
+        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+        MetaPath metaPath = new MetaPath(startClass, endClass, edgeClass);
+        put(metaPath);
     }
+
+    //    private final void putSimpleMetaPaths(final Class<? extends Edge> edgeClass) {
+    //        Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
+    //        Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
+    //        Class<? extends ModelElement>[] startClasses = ModelConstants.getInstanciableAssignableClasses(edgeStartClass);
+    //        Class<? extends ModelElement>[] endClasses = ModelConstants.getInstanciableAssignableClasses(edgeEndClass);
+    //        Set<Class<?>> allStartClasses = ReflectionUtils.getClassesWithSuperClasses(startClasses, edgeStartClass.getSuperclass());
+    //        Set<Class<?>> allEndClasses = ReflectionUtils.getClassesWithSuperClasses(endClasses, edgeEndClass.getSuperclass());
+    //        for (Class<?> start : allStartClasses) {
+    //            Class<? extends ModelElement> startClass = start.asSubclass(ModelElement.class);
+    //            for (Class<?> end : allEndClasses) {
+    //                Class<? extends ModelElement> endClass = end.asSubclass(ModelElement.class);
+    //                MetaPath metaPath = new MetaPath(startClass, endClass, edgeClass);
+    //                put(metaPath);
+    //            }
+    //        }
+    //    }
 
 }

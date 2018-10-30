@@ -18,6 +18,7 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
@@ -51,7 +52,7 @@ public class MetaPath {
      * bei Pfaden relevant, die eine Kante mit doppelter Bedeutung haben können, da nur diese Kanten einen anderen connectionState als FORWARD haben
      * können.
      */
-    private final int pathDirectionSourceEdgeIndex;
+    protected final int pathDirectionSourceEdgeIndex;
 
     /**
      * COMMENTME
@@ -185,7 +186,7 @@ public class MetaPath {
      * @parma pathDirectionSourceEdgeIndex index of connections in associations, which control direction of associations
      * @throws InvalidPathException
      */
-    private MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames, final int pathDirectionSourceEdgeIndex) {
+    protected MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames, final int pathDirectionSourceEdgeIndex) {
         this.startClass = startClass;
         this.endClass = endClass;
         this.pathDirectionSourceEdgeIndex = pathDirectionSourceEdgeIndex;
@@ -200,6 +201,21 @@ public class MetaPath {
                 throw new Error("MetaPath: controlIndex is out of range!");
             }
         }
+    }
+
+    private static final Direction getDirection(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
+        return isStartClass(edgeClass, endClass) && isEndClass(edgeClass, startClass) ? Direction.BACKWARD : Direction.FORWARD;
+    }
+
+    /**
+     * Liefert einen Pfad mit denselben Assoziationen aber den übergebenen Start- und Endklassen.
+     *
+     * @param startClass Startklasse des erzeugten Clones
+     * @param endClass Endklasse des erzeugten Clones
+     * @return
+     */
+    public MetaPath getCloneWithChangedStartEnd(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
+        return new MetaPath(startClass, endClass, associations, pathNames, pathDirectionSourceEdgeIndex);
     }
 
     /**

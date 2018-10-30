@@ -3,6 +3,7 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0;
 import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.path.InvalidPathException;
 import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
@@ -46,7 +47,7 @@ public class TLGMOriginalPathsDefinition extends PathsDefinition {
     protected final void init() throws InvalidPathException {
 
         /* Aufgabe - Organisationseinheit */
-        put(Aufgabe.class, Organisationseinheit.class, "text_wird_erledigt_in", AufAufOrgVerbindung.class, OrgAufOrgVerbindung.class);
+        put(new SimpleMetaPath(Aufgabe.class, Organisationseinheit.class, "text_wird_erledigt_in", AufAufOrgVerbindung.class, OrgAufOrgVerbindung.class));
 
         /* Aufgabe - Anwendungsbaustein */
         put(Aufgabe.class, Anwendungsbaustein.class, "text_unterstuetzt", AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class);
