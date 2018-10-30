@@ -86,6 +86,8 @@ public abstract class Edge extends ModelElement {
             }
             return null;
         }
+
+        //ACHTUNG: toString() darf nicht überschreiben werden und muss dasselbe wie name() zurück liefern, weil das in den UNDO-REDO-Kommandos genutzt wird
     }
 
     @Override
