@@ -16,6 +16,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -126,7 +127,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             Class<? extends Edge> edgeClass = edge.getClass();
 
             String startElementClassName = ElementsNameBuilder.getDisplayableName(getStartClass(edgeClass));
-            String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ElementsNameBuilder.getMetaAssociationName(edgeClass, false) + "</i>&nbsp;&nbsp;";
+            String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ElementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD) + "</i>&nbsp;&nbsp;";
             String endElementClassName = ElementsNameBuilder.getDisplayableName(getEndClass(edgeClass));
 
             if (ModelConstants.isAssociationClass(getModelElement().getClass())) {
@@ -138,7 +139,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             String startElementName = edge.getStart().getClearName();
             // bei DoubleMeaning-Edges nur die tatsächliche Richtung hinschreiben
             if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ElementsNameBuilder.getMetaAssociationName(edgeClass, false, ((DoubleMeaningEdge) edge).getConnectionState()) + "</i>&nbsp;&nbsp;";
+                forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ElementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ((DoubleMeaningEdge) edge).getConnectionState()) + "</i>&nbsp;&nbsp;";
             }
             String endElementName = edge.getEnd().getClearName();
 

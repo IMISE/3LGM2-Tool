@@ -3,21 +3,31 @@ package de.imise.tool3lgm.graphtools;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.MissingResourceException;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.util.Alphabetical;
 
 /**
  * @author AXS (25.10.2018)
  */
 public class ElementsNameBuilder {
+
+    public static final String STANDARD_DOUBLE_MEANING_EDGE_DELIMITER = " / ";
 
     /**
      * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die HashString der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht
@@ -110,22 +120,22 @@ public class ElementsNameBuilder {
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
     public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return ElementsNameBuilder.getForwardMetaAssociationName(edgeClass, ModelConstants.ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
+        return ElementsNameBuilder.getForwardMetaAssociationName(edgeClass, ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
     }
 
     /**
      * @param edgeClass
-     * @param doubleMeaningEdgeMeaningDirection
+     * @param connectionState
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
-    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ModelConstants.ConnectionState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return ElementsNameBuilder.getMetaAssociationName(edgeClass, false, doubleMeaningEdgeMeaningDirection, appendPrefixClass, appendPostfixClass);
+    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ModelConstants.ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        return ElementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, connectionState, appendPrefixClass, appendPostfixClass);
     }
 
     /**
@@ -142,7 +152,7 @@ public class ElementsNameBuilder {
      *
      * @param edgeClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
     public static String getFullBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
         return ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass, true, true);
@@ -153,90 +163,57 @@ public class ElementsNameBuilder {
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
     public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass, ModelConstants.ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
+        return ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass, ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
     }
 
     /**
      * @param edgeClass
-     * @param doubleMeaningEdgeMeaningDirection
+     * @param connectionState
      * @param appendPrefixClass
      * @param appendPostfixClass
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
-    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ModelConstants.ConnectionState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return ElementsNameBuilder.getMetaAssociationName(edgeClass, true, doubleMeaningEdgeMeaningDirection, appendPrefixClass, appendPostfixClass);
+    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        return ElementsNameBuilder.getMetaAssociationName(edgeClass, Direction.BACKWARD, connectionState, appendPrefixClass, appendPostfixClass);
     }
 
     /**
      * @param edgeClass
-     * @param switchDefinedDirection
-     * @param doubleMeaningEdgeMeaningDirection
+     * @param direction
+     * @param connectionState
      * @return
-     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
+     * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
-    public static String getFullMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final ModelConstants.ConnectionState doubleMeaningEdgeMeaningDirection) {
-        return ElementsNameBuilder.getMetaAssociationName(edgeClass, switchDefinedDirection, doubleMeaningEdgeMeaningDirection, true, true);
+    public static String getFullMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
+        return ElementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, true, true);
     }
 
     /**
-     * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse. Bei Kanten mit doppelter Bedeutung kommt hier der Name mit beiden
      * Bedeutungen zurück.
+     * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse. Bei Kanten mit doppelter Bedeutung kommt hier der Name mit beiden
      *
      * @param edgeClass
-     * @param switchDefinedDirection gibt an, ob die Bedeutung der Edge von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse
-     *            zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
+     * @param direction gibt an, ob die Bedeutung der Edge von der Startklasse zur Endklasse (Direction.FORWARD) oder von der Endklasse
+     *            zur Startklasse (Direction.BACKWARD) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
      *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
      * @return
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection) {
-        return ElementsNameBuilder.getMetaAssociationName(edgeClass, switchDefinedDirection, ModelConstants.ConnectionState.DOUBLE, false, false);
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction) {
+        return ElementsNameBuilder.getMetaAssociationName(edgeClass, direction, ModelConstants.ConnectionState.DOUBLE, false, false);
     }
 
     /**
      * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse
      *
      * @param edgeClass
-     * @param switchDefinedDirection gibt an, ob die Bedeutung der Edge von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse
-     *            zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
+     * @param direction gibt an, ob die Bedeutung der Edge von der Startklasse zur Endklasse (Direction.FORWARD) oder von der Endklasse
+     *            zur Startklasse (Direction.BACKWARD) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
      *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
-     * @param doubleMeaningEdgeMeaningDirection Doppelkante.FORWARD, Doppelkante.BACKWARD oder Doppelkante.DOUBLE - Bei allen Assoziationen, die in
-     *            jede Richtung nur eine Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine Bedeutung haben, kann hier
-     *            die Richtung angegeben werden für die die bedeutung zurück gegeben werden soll.<br>
-     *            Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die eigentlich 2
-     *            Assoziationen sind, aber aus allerlei Gründen in eine gepackt wurden.<br>
-     *            Beispiel 1: AufObjVerbindung = Assoziation zw. Startklasse Aufgabe und Endklasse Objekttyp.<br>
-     *            <ul>
-     *            <li>
-     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
-     *            "Aufgabe bearbeitet Objekttyp"</li>
-     *            <li>
-     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
-     *            "Aufgabe interpretiert Objekttyp"</li>
-     *            <li>
-     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
-     *            "Objekttyp wird interpretiert von Aufgabe "</li>
-     *            <li>
-     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
-     *            "Objekttyp wird bearbeitet von Aufgabe"</li>
-     *            </ul>
-     * @return
-     */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final ModelConstants.ConnectionState doubleMeaningEdgeMeaningDirection) {
-        return ElementsNameBuilder.getMetaAssociationName(edgeClass, switchDefinedDirection, doubleMeaningEdgeMeaningDirection, false, false);
-    }
-
-    /**
-     * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse
-     *
-     * @param edgeClass
-     * @param switchDefinedDirection gibt an, ob die Bedeutung der Edge von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse
-     *            zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
-     *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
-     * @param doubleMeaningEdgeMeaningDirection MeaningDirection.FORWARD, MeaningDirection.BACKWARD oder MeaningDirection.DOUBLE - Bei allen
+     * @param connectionState MeaningDirection.FORWARD, MeaningDirection.BACKWARD oder MeaningDirection.DOUBLE - Bei allen
      *            Assoziationen, die in jede Richtung nur eine Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine
      *            Bedeutung haben, kann hier die Richtung angegeben werden für die die bedeutung zurück gegeben werden soll.<br>
      *            Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die eigentlich 2
@@ -260,94 +237,163 @@ public class ElementsNameBuilder {
      *            sollen zwischen die beiden Bedeutungen geschrieben wird.
      * @return
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final ModelConstants.ConnectionState doubleMeaningEdgeMeaningDirection, final String doubleMeaningEdgeDelimiter) {
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
         //alle Kantenamen müssen mit SimplerKantenklassenName_f oder SimplerKantenklassenName_b angegeben sein oder bei Kanten mit doppelter Bedeutung SimplerKantenklassenName_f_f,
         //SimplerKantenklassenName_f_b, SimplerKantenklassenName_b_f und SimplerKantenklassenName_b_b
         String edgeClassName = edgeClass.getSimpleName();
-        final String mainEdgeDirection = !switchDefinedDirection ? "_f" : "_b";
-        String edgeName = ElementsNameBuilder.getEdgeName(edgeClassName, mainEdgeDirection);
-        if (edgeName != null) {
-            return edgeName;
-        }
-        //bei Kanten mit doppelter Bedeutung
-        if (DoubleMeaningEdge.class.isAssignableFrom(edgeClass)) {
-            if (edgeName == null) {
-                String interpretedDirection = doubleMeaningEdgeMeaningDirection == ModelConstants.ConnectionState.FORWARD ? "_f" : doubleMeaningEdgeMeaningDirection == ModelConstants.ConnectionState.BACKWARD ? "_b" : null;
-                if (interpretedDirection != null) {
-                    edgeName = ElementsNameBuilder.getEdgeName(edgeClassName, mainEdgeDirection, interpretedDirection);
-                    if (edgeName != null) {
-                        return edgeName;
-                    }
-                } else {
-                    edgeName = ElementsNameBuilder.getEdgeName(edgeClassName, mainEdgeDirection, "_f");
-                    if (edgeName != null) {
-                        //wenn es einen Vorwärtsnamen gibt, dann muss auch ein Rückwärtsname angegeben sein!
-                        return edgeName + doubleMeaningEdgeDelimiter + ElementsNameBuilder.getEdgeName(edgeClassName, mainEdgeDirection, "_b");
-                    }
-                }
-            }
+        String metaAssociationName = getDirectedName(edgeClassName, direction, connectionState);
+        if (metaAssociationName != null) {
+            return metaAssociationName;
         }
         //wenn für den aktuellen Klassennamen kein Name gefunden wurde -> nimm die Oberklasse -> irgendwann kommt man bei Edge.class an, für die auf jeden Fall ein Namen ex.
-        return getMetaAssociationName(edgeClass.getSuperclass().asSubclass(Edge.class), switchDefinedDirection, doubleMeaningEdgeMeaningDirection, doubleMeaningEdgeDelimiter);
+        return getMetaAssociationName(edgeClass.getSuperclass().asSubclass(Edge.class), direction, connectionState);
     }
 
-    private static final String getEdgeName(final String simpleEdgeClassName, final String mainEdgeDirection) {
-        return ElementsNameBuilder.getEdgeName(simpleEdgeClassName, mainEdgeDirection, null);
+    /**
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @param appendPrefixClass
+     * @param appendPostfixClass
+     * @return
+     * @see getMetaAssociationName
+     */
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        boolean forward = direction != Direction.BACKWARD;
+        Class<? extends ModelElement> prefixClass = !appendPrefixClass ? null : forward ? getStartClass(edgeClass) : getEndClass(edgeClass);
+        Class<? extends ModelElement> postfixClass = !appendPostfixClass ? null : forward ? getEndClass(edgeClass) : getStartClass(edgeClass);
+        return getMetaAssociationName(edgeClass, direction, connectionState, prefixClass, postfixClass);
     }
 
-    private static final String getEdgeName(final String simpleEdgeClassName, final String mainEdgeDirection, final String interpretedDirection) {
-        try {
-            if (interpretedDirection == null) {
-                return getResString(simpleEdgeClassName + mainEdgeDirection);
+    /**
+     * @param edgeClass
+     * @param switchDefinedDirection
+     * @param connectionState
+     * @param prefixClass
+     * @param postfixClass
+     * @return
+     * @see getMetaAssociationName
+     */
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ModelConstants.ConnectionState connectionState, final Class<? extends ModelElement> prefixClass,
+            final Class<? extends ModelElement> postfixClass) {
+        return getMetaAssociationName(edgeClass, direction, connectionState, prefixClass == null ? null : getDisplayableName(prefixClass), postfixClass == null ? null : getDisplayableName(postfixClass));
+    }
+
+    /**
+     * @param edgeClass
+     * @param direction
+     * @param doubleMeaningEdgeMeaningDirection
+     * @param prefix
+     * @param postfix
+     * @return
+     */
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ModelConstants.ConnectionState connectionState, final String prefix, final String postfix) {
+        boolean emptyPrefix = Strings.isNullOrEmpty(prefix);
+        boolean emptyPostfix = Strings.isNullOrEmpty(postfix);
+        if (emptyPrefix && emptyPostfix) {
+            return getMetaAssociationName(edgeClass, direction, connectionState);
+        }
+        StringBuilder sb = new StringBuilder();
+        if (!emptyPrefix) {
+            sb.append(prefix);
+            sb.append(" ");
+        }
+        sb.append(getMetaAssociationName(edgeClass, direction, connectionState));
+        if (!emptyPostfix) {
+            sb.append(" ");
+            sb.append(postfix);
+        }
+        return sb.toString();
+    }
+
+    public static final String getDirectedName(final String baseResKey, final Direction direction) {
+        return getDirectedName(baseResKey, direction, null);
+    }
+
+    /**
+     * Setzt aus dem übergebenen String und den beiden anderen Parametern einen Gesamt-ResourceKey zusammen. Ist der connectionState null oder leer,
+     * wird er nicht mit angehängt.
+     *
+     * @param baseResKey
+     * @param direction
+     * @param connectionState
+     * @return
+     */
+    public static final String getDirectedName(final String baseResKey, final Direction direction, final ConnectionState connectionState) {
+        String directionPostfix = direction == BACKWARD ? "_b" : "_f"; //direction == null oder FORWARD werden als forward interpretiert
+        String directedName = getDirectedName(baseResKey, directionPostfix);//bei einfachen Kanten kommt hier nicht null zurück
+        if (directedName != null) {
+            return directedName;
+        }
+        //bei einem ResourceKey mit doppelter Bedeutung suchen
+        if (connectionState != null) {
+            String connectionStatePostfix = connectionState == ConnectionState.FORWARD ? "_f" : connectionState == ConnectionState.BACKWARD ? "_b" : "_d";
+            directedName = getDirectedName(baseResKey, directionPostfix, connectionStatePostfix); //falls in den Resourcen ein Name für den ConnectionState.DOUBLE ("_d") angegeben sein sollte, kommt der hier zurück! Falls nicht, wird unten einer zusammengebaut
+            if (directedName != null) {
+                return directedName;
             }
-            return getResString(simpleEdgeClassName + mainEdgeDirection + interpretedDirection);
+
+        }
+        if (connectionState == ConnectionState.DOUBLE || connectionState == null) {
+            directedName = getDirectedName(baseResKey, directionPostfix, "_f"); //hier braucht man immer beide Namen -> hole den Vorwärtsnamen
+            if (directedName != null) {
+                String doubleMeaningEdgeDelimiter = connectionState == null ? getResString("oder") : getResString("und");
+                //wenn es einen Vorwärtsnamen gibt, dann muss auch ein Rückwärtsname angegeben sein!
+                return directedName + " " + doubleMeaningEdgeDelimiter + " " + getDirectedName(baseResKey, directionPostfix, "_b");
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Erzeugt aus dem übergbenen <code>baseResKey</code> und dem 2. String einen Gesamt-ResourceKey, dessen String geladen wird.
+     *
+     * @param baseResKey
+     * @param direction
+     * @return
+     */
+    private static final String getDirectedName(final String baseResKey, final String direction) {
+        return getDirectedName(baseResKey, direction, null);
+    }
+
+    /**
+     * Hängt die übergebenen Strings hintereinander und versucht den daraus enstandenen ResourceKey zu laden. Ist der connectionState null oder leer,
+     * wird er nicht mit angehängt.
+     *
+     * @param baseResKey
+     * @param direction
+     * @param connectionState
+     * @return
+     */
+    private static final String getDirectedName(final String baseResKey, final String direction, final String connectionState) {
+        try {
+            if (Strings.isNullOrEmpty(connectionState)) {
+                return getResString(baseResKey + direction);
+            }
+            return getResString(baseResKey + direction + connectionState);
         } catch (Exception e) {
             return null;
         }
     }
 
     /**
-     * @param edgeClass
-     * @param switchDefinedDirection
-     * @param doubleMeaningEdgeMeaningDirection
-     * @param appendPrefixClass
-     * @param appendPostfixClass
+     * Erzeugt einen String, in dem die Namen der Elementklassen kommasepariert in aplhabetischer Reihenfolge zurück kommen.
+     *
+     * @param classes
      * @return
-     * @see getMetaAssociationName
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final ModelConstants.ConnectionState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass,
-            final boolean appendPostfixClass) {
-        return ElementsNameBuilder.getMetaAssociationName(edgeClass, switchDefinedDirection, doubleMeaningEdgeMeaningDirection, appendPostfixClass, appendPrefixClass, " / ");
+    public static String getDisplayableClassesNames(final Collection<Class<? extends ModelElement>> classes) {
+        List<String> names = new ArrayList<>();
+        for (Class<? extends ModelElement> c : classes) {
+            String name = ElementsNameBuilder.getDisplayableName(c);
+            Alphabetical.insert(names, name);
+        }
+        String s = names.toString(); //ArrayList erzeugt einen String mit eckigen Klammern wie [name1, name2]
+        s = s.substring(1, s.length() - 2);//eckige Klammern weglassen
+        return s;
     }
 
-    /**
-     * @param edgeClass
-     * @param switchDefinedDirection
-     * @param doubleMeaningEdgeMeaningDirection
-     * @param appendPrefixClass
-     * @param appendPostfixClass
-     * @param doubleMeaningEdgeDelimiter String der bei Kanten mit doppelter Bedeutung, bei denen beide Bedeutungen gleichzeitig ausgegeben werden
-     *            sollen zwischen die beiden Bedeutungen geschrieben wird.
-     * @return
-     * @see getMetaAssociationName
-     */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final ModelConstants.ConnectionState doubleMeaningEdgeMeaningDirection, final boolean appendPrefixClass,
-            final boolean appendPostfixClass, final String doubleMeaningEdgeDelimiter) {
-        if (!appendPrefixClass && !appendPostfixClass) {
-            return getMetaAssociationName(edgeClass, switchDefinedDirection, doubleMeaningEdgeMeaningDirection, doubleMeaningEdgeDelimiter);
-        }
-        StringBuilder sb = new StringBuilder();
-        if (appendPrefixClass) {
-            sb.append(getDisplayableName(!switchDefinedDirection ? getStartClass(edgeClass) : getEndClass(edgeClass)));
-            sb.append(" ");
-        }
-        sb.append(getMetaAssociationName(edgeClass, switchDefinedDirection, doubleMeaningEdgeMeaningDirection, doubleMeaningEdgeDelimiter));
-        if (appendPostfixClass) {
-            sb.append(" ");
-            sb.append(getDisplayableName(!switchDefinedDirection ? getEndClass(edgeClass) : getStartClass(edgeClass)));
-        }
-        return sb.toString();
-    }
+    //################################################################################################################################################
 
     /**
      * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren nicht, dass man von ihnen auf die Klasse zurückschließen kann.

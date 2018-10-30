@@ -3,7 +3,6 @@
  */
 package de.imise.tool3lgm.graphtools.path;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMeaningEdge;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
@@ -169,14 +168,11 @@ public class MetaPath {
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final int pathDirectionSourceEdgeIndex) {
         this(startClass, endClass, path, isDoubleMeaningEdge(path[0][pathDirectionSourceEdgeIndex]) ? new String[] {
-                //der Parameter switchEdgeDirection müsste eigentlich über die Richtung der Kante mit dem speziellen Index im Pfad ermittelt werden. Da bisher alle Pfade, die
-                //über diesen Konstrktor hier initialisiert werden immer dieselben Elementarten verbinden, braucht man die Kantenrichtung nicht drehen, daher steht unten immer false.
-                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, ConnectionState.FORWARD),
-                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false, ConnectionState.BACKWARD),
-                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], isStartClass(path[0][pathDirectionSourceEdgeIndex], startClass) && isEndClass(path[0][pathDirectionSourceEdgeIndex], endClass), ConnectionState.DOUBLE, false, false,
-                        " " + getResString("und") + " ")
+                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], getDirection(path[0][pathDirectionSourceEdgeIndex], startClass, endClass), ConnectionState.FORWARD),
+                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], getDirection(path[0][pathDirectionSourceEdgeIndex], startClass, endClass), ConnectionState.BACKWARD),
+                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], getDirection(path[0][pathDirectionSourceEdgeIndex], startClass, endClass), ConnectionState.DOUBLE, false, false),
         } : new String[] {
-                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], false),
+                ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], getDirection(path[0][pathDirectionSourceEdgeIndex], startClass, endClass)),
         }, pathDirectionSourceEdgeIndex);
     }
 
