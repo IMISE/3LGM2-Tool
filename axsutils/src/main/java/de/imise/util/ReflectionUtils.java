@@ -4,6 +4,7 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -209,15 +210,29 @@ public class ReflectionUtils {
      * @param excludeSuperClass
      * @see ReflectionUtils#getClassWithSuperClasses(Class, Class)
      */
-    public static Set<Class<?>> getClassesWithSuperClasses(final Class<?>[] classes, final Class<?> excludeSuperClass) {
-        if (classes.length == 1) {
-            return getClassWithSuperClasses(classes[0], excludeSuperClass);
+    public static Set<Class<?>> getClassesWithSuperClasses(final Collection<Class<?>> classes, final Class<?> excludeSuperClass) {
+        if (classes.size() == 1) {
+            return getClassWithSuperClasses(classes.iterator().next(), excludeSuperClass);
         }
         Set<Class<?>> classedWithSuperClasses = new HashSet<>();
         for (Class<?> clazz : classes) {
             classedWithSuperClasses.addAll(getClassWithSuperClasses(clazz, excludeSuperClass));
         }
         return classedWithSuperClasses;
+    }
+
+    /**
+     * Liefert für die übergebenen Klassen diese Klassen selbst und bis hin zur übergebenen excludeSuperClass
+     * auch alle Superklassen. Die excludeSuperClass selbst ist nicht mehr mit dabei. Wird als excludeSuperClass
+     * null übergeben, dann geht die Hierarchie hoch bis zu Object.class.
+     * ACHTUNG: Das hier funktionier nicht für Interfaces sondern nur für direkte Sub- und Superklassen.
+     *
+     * @param class
+     * @param excludeSuperClass
+     * @see ReflectionUtils#getClassWithSuperClasses(Class, Class)
+     */
+    public static Set<Class<?>> getClassesWithSuperClasses(final Class<?>[] classes, final Class<?> excludeSuperClass) {
+        return getClassesWithSuperClasses(Arrays.asList(classes), excludeSuperClass);
     }
 
     /**
