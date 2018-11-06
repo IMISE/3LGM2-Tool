@@ -69,7 +69,6 @@ public class MetaPath {
      * @param newStartClass ModelElement class where associations starts
      * @param newEndClass ModelElement class where associations ends
      * @param originalMetaPath
-     * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath originalMetaPath) {
         this(newStartClass, newEndClass, originalMetaPath.associations, originalMetaPath.pathNames, originalMetaPath.pathDirectionSourceEdgeIndex);
@@ -80,7 +79,6 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param description of the path or the resource key of the desciption
      * @param associations EdgeClasses for this path
-     * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String resourceKeyOrPathName, final Class<? extends Edge>... associations) {
         this(startClass, endClass, getPathForAssociations(associations), Tool3lgmConstants.getResStringWithoutError(resourceKeyOrPathName));
@@ -90,7 +88,6 @@ public class MetaPath {
      * @param startClass ModelElement class where associations starts
      * @param endClass ModelElement class where associations ends
      * @param associations EdgeClasses for this path
-     * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
         this(startClass, endClass, getPathForAssociations(associations), defaultPathName);
@@ -101,7 +98,6 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param associations int[][] with type-constants for connections to come from start to end (int[] different possibilities to come from start to
      *            end)
-     * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path) {
         this(startClass, endClass, path, defaultPathName);
@@ -113,7 +109,6 @@ public class MetaPath {
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
      * @param resourceKeyOrPathName String with description for associations or the resource key for this
-     * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String resourceKeyOrPathName) {
         this(startClass, endClass, path, CollectionUtils.toStringArray(resourceKeyOrPathName), 0);
@@ -125,7 +120,6 @@ public class MetaPath {
      * @param associations int[][] with type-constants for connections to come from start to end (int[] diverent possibilities to come from start to
      *            end)
      * @param resourceKeyOrPathName String with description for associations or the resource key for this description
-     * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final Color color, final String resourceKeyOrPathName) {
         this(startClass, endClass, path, CollectionUtils.toStringArray(resourceKeyOrPathName));
@@ -138,7 +132,6 @@ public class MetaPath {
      *            end)
      * @param resourceKeyOrPathNames String[] with descriptions for associations (one description for FORWARD / BACKWARD / DOUBLE) or the resource
      *            keys for this strings
-     * @throws InvalidPathException
      */
     public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames) {
         this(startClass, endClass, path, resourceKeyOrPathNames, 0);
@@ -184,7 +177,6 @@ public class MetaPath {
      *            end)
      * @param description String[] with descriptions for associations (in legend) (one description for FORWARD / BACKWARD / DOUBLE)
      * @parma pathDirectionSourceEdgeIndex index of connections in associations, which control direction of associations
-     * @throws InvalidPathException
      */
     protected MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames, final int pathDirectionSourceEdgeIndex) {
         this.startClass = startClass;
