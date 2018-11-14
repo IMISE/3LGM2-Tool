@@ -22,8 +22,8 @@ import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
+import de.imise.tool3lgm.graphtools.path.MetaPathSelectorOld;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
@@ -31,7 +31,7 @@ import de.imise.util.swing.component.UnfloatableToolBar;
  *
  * @author Thomas Rudert, AXS (22.10.07)
  */
-public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements ChangeListener, ActionListener {
+public class MatrixViewPathSelectorToolBarOld extends UnfloatableToolBar implements ChangeListener, ActionListener {
 
     /**
      * Label für die ComboBox zur Klassenauswahl der Matrixzeilen
@@ -61,7 +61,7 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
     /**
      * Selektor, der die Comboboxen und die Metapfadauswahlliste zur Festlegung des darzustellenden Metapfades bereitstellt
      */
-    private final MetaPathSelector metaPathSelector;
+    private final MetaPathSelectorOld metaPathSelector;
 
     /**
      * Chekcbox über die eingestellt werden kann, ob nur absolute Kindelemente (also Elemente ohne eigene Teilelemente) angezeigt werden soll. Diese
@@ -79,12 +79,12 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
     /**
      * Frame dessen Darstellung durch diese Toolbar beeinfluss wird
      */
-    private MatrixViewInternalFrame controlledFrame;
+    private MatrixViewInternalFrameOld controlledFrame;
 
     /**
      * @param controlledFrame Frame dessen Darstellung durch diese Toolbar beeinfluss wird.
      */
-    public MatrixViewPathSelectorToolBar(final MatrixViewInternalFrame controlledFrame) {
+    public MatrixViewPathSelectorToolBarOld(final MatrixViewInternalFrameOld controlledFrame) {
         super();
 
         this.controlledFrame = controlledFrame;
@@ -103,7 +103,7 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
         rowElementLabel = new JLabel("");
         colElementLabel = new JLabel("");
 
-        metaPathSelector = MetaPathSelector.createComponents();
+        metaPathSelector = MetaPathSelectorOld.createComponents();
         metaPathSelector.addChangeListener(this);
 
         legendPanel.setPreferredSize(((TitledBorder) legendPanel.getBorder()).getMinimumSize(legendPanel));
@@ -112,20 +112,12 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
         showPartsOnlyCheckBox.addActionListener(this);
 
         JComponent[] child1 = {
-                rowLabel,
-                metaPathSelector.getClass1ComboBox(),
-                colLabel,
-                metaPathSelector.getClass2ComboBox(),
-                null,
-                showPartsOnlyCheckBox
+                rowLabel, metaPathSelector.getClass1ComboBox(), colLabel, metaPathSelector.getClass2ComboBox(), null, showPartsOnlyCheckBox
         };
         setGridBagLayout(choicePanel, child1, 2);
 
         JComponent[] child2 = {
-                new JLabel(getResString("zeile") + ":"),
-                rowElementLabel,
-                new JLabel(getResString("spalte") + ":"),
-                colElementLabel
+                new JLabel(getResString("zeile") + ":"), rowElementLabel, new JLabel(getResString("spalte") + ":"), colElementLabel
         };
         setGridBagLayout(positionPanel, child2, 2);
 
@@ -135,12 +127,12 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
         add(positionPanel, BorderLayout.EAST);
     }
 
-    public void setFrame(final MatrixViewInternalFrame frame) {
+    public void setFrame(final MatrixViewInternalFrameOld frame) {
         controlledFrame = frame;
     }
 
     /**
-     * erstellt fügt einer Componente das GridBagLayout und eine Menge von child- Componenten hinzu. Bei Anordnung der child-Componenten wird in der
+     * Erstellt fügt einer Componente das GridBagLayout und eine Menge von child- Componenten hinzu. Bei Anordnung der child-Componenten wird in der
      * linken oberen Ecke angefangen und dann zeilenweise angeordnet
      *
      * @param owner Componente, die die child-Componenten besitzen soll
@@ -185,17 +177,17 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
         //Tabelle updaten
         Class<? extends ModelElement> c1 = metaPathSelector.getSelectedClass1();
         Class<? extends ModelElement> c2 = metaPathSelector.getSelectedClass2();
-        MetaPath mp = metaPathSelector.getSelectedMetaPath();
+        AbstractMetaPath mp = metaPathSelector.getSelectedMetaPath();
         //den Frame und somit die Tabelle mit den gewählten Klassen und dem MetaPfad neu aufbauen
         controlledFrame.update(c1, c2, mp, lastShowPartsOnlyChoice);
 
         //Legende updaten
         legendPanel.removeAll();
-        MetaPath metaPath = metaPathSelector.getSelectedMetaPath();
+        AbstractMetaPath metaPath = metaPathSelector.getSelectedMetaPath();
         if (metaPath != null) {
             for (int i = 0; i < metaPath.countOptions(); i++) {
                 String description = metaPath.hasAssignableStartEndClass() ? metaPath.getDescription(i, getResString("zeile"), getResString("spalte")) : metaPath.getFullDescription(i);
-                legendPanel.add(new TableToolBarLegendItem(description, TableModel.getColor(metaPath, i)));
+                legendPanel.add(new TableToolBarLegendItemOld(description, TableModelOld.getColor(metaPath, i)));
             }
         }
         legendPanel.revalidate();
@@ -217,7 +209,7 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
     /**
      * @return Returns the metaPathSelector.
      */
-    public MetaPathSelector getMetaPathSelector() {
+    public MetaPathSelectorOld getMetaPathSelector() {
         return metaPathSelector;
     }
 
@@ -227,8 +219,7 @@ public class MatrixViewPathSelectorToolBar extends UnfloatableToolBar implements
             //Dialog anzeigen, in dem man einen Pfad auswählen kann
             if (metaPathSelector.getSelectableMetaPathes() != null && metaPathSelector.getSelectableMetaPathes().size() > 1) {
                 Object[] msg = {
-                        getResString("text_path"),
-                        metaPathSelector.getMetaPathJList()
+                        getResString("text_path"), metaPathSelector.getMetaPathJList()
                 };
                 JOptionPane optionPane = new JOptionPane();
                 optionPane.setMessage(msg);

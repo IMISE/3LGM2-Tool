@@ -3,22 +3,24 @@ package de.imise.tool3lgm.graphtools.matrixview;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
-import javax.swing.JPanel;
+import de.imise.util.swing.component.BlockScrollableJPanel;
 
 /**
  * @author Thomas Rudert
  */
-public class CellPanel extends JPanel {
+public class CellPanelOld extends BlockScrollableJPanel implements MouseMotionListener {
 
     /** Das Model nach dem die Zellen sich aufbauen */
-    private final TableModel tableModel;
+    private final TableModelOld tableModel;
 
     /** Panel mit Spaltenüberschriften */
-    private final ColPanel colHeaderPanel;
+    private final ColPanelOld colHeaderPanel;
 
     /** Panel mit Zeilenüberschriften */
-    private final RowPanel rowHeaderPanel;
+    private final RowPanelOld rowHeaderPanel;
 
     /** Parameter gesetzt ? */
     private boolean initialized = false;
@@ -30,7 +32,7 @@ public class CellPanel extends JPanel {
      * @param colHeaderPanel Panel mit Spaltenüberschriften
      * @param rowHeaderPanel Panel mit Zeilenüberschriften
      */
-    public CellPanel(final TableModel tableModel, final ColPanel colHeaderPanel, final RowPanel rowHeaderPanel) {
+    public CellPanelOld(final TableModelOld tableModel, final ColPanelOld colHeaderPanel, final RowPanelOld rowHeaderPanel) {
         super();
 
         this.colHeaderPanel = colHeaderPanel;
@@ -71,7 +73,7 @@ public class CellPanel extends JPanel {
         int dx = (width - a) / 2;
         int dy = (height - a) / 2;
 
-        for (TableCell cell : tableModel) {
+        for (TableCellOld cell : tableModel) {
             x = cell.getColIndex() * width + dx;
             y = cell.getRowIndex() * height + dy;
             g.setColor(cell.getColor());
@@ -92,11 +94,20 @@ public class CellPanel extends JPanel {
      */
     private void setParameter(final Graphics g) {
         Dimension dim = new Dimension(colHeaderPanel.getWidth(), rowHeaderPanel.getHeight());
-
+        setMaxUnitIncrement(rowHeaderPanel.getRowHeight());
         setSize(dim);
         setPreferredSize(dim);
 
         initialized = true;
+    }
+
+    @Override
+    public void mouseDragged(final MouseEvent e) {
+    }
+
+    @Override
+    public void mouseMoved(final MouseEvent e) {
+
     }
 
 }

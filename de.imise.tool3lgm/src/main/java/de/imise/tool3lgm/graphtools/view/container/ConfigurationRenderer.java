@@ -17,8 +17,8 @@ import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.PathFinderOld;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -87,8 +87,8 @@ public class ConfigurationRenderer {
                     ModelElement me = configurationStart.getElement();
                     Class<? extends ModelElement> elementClass = me.getClass();
                     GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
-                    MetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(elementClass);
-                    Set<ModelElement> directConnectedElements = PathFinder.getDirectConnectedElements(me, interLayerMetaPath);
+                    MetaPathOld interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(elementClass);
+                    Set<ModelElement> directConnectedElements = PathFinderOld.getDirectConnectedElements(me, interLayerMetaPath);
                     for (ModelElement connected : directConnectedElements) {
                         ElementContainer connectedEc = connected.getContainer(doc);
                         if (connectedEc != null) {

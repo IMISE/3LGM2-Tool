@@ -1,21 +1,13 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0;
 
-import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
-import de.imise.tool3lgm.graphtools.path.InvalidPathException;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbKommssVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwbkAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AwpSwpVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.BssEtntVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.BssKommstVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.DbsDatVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntDotVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.EtntNatVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KawbAwbVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.KommBeziehung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjLogspVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.ObjReprVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.OrgAufOrgVerbindung;
@@ -24,7 +16,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbStoVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbkAwbVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.RawbAwpVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.RawbDbsVerbindung;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.RawbRawbVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Datenbanksystem;
@@ -37,17 +28,14 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Softwareprodukt;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Standort;
 
-public class TLGMOriginalPathsDefinition extends PathsDefinition {
+public class TLGMOriginalPathsDefinition extends MetaPathDefinition {
 
-    /**
-     * @throws InvalidPathException
-     */
     @Override
     @SuppressWarnings("unchecked")
-    protected final void init() throws InvalidPathException {
+    protected final void init() {
 
         /* Aufgabe - Organisationseinheit */
-        put(new SimpleMetaPath(Aufgabe.class, Organisationseinheit.class, "text_wird_erledigt_in", AufAufOrgVerbindung.class, OrgAufOrgVerbindung.class));
+        put(Aufgabe.class, Organisationseinheit.class, "text_wird_erledigt_in", AufAufOrgVerbindung.class, OrgAufOrgVerbindung.class);
 
         /* Aufgabe - Anwendungsbaustein */
         put(Aufgabe.class, Anwendungsbaustein.class, "text_unterstuetzt", AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class);
@@ -108,28 +96,28 @@ public class TLGMOriginalPathsDefinition extends PathsDefinition {
 
         put(Objekttyp.class, RechAnwendungsbaustein.class, "text_speichert", ObjReprVerbindung.class, DbsDatVerbindung.class, RawbDbsVerbindung.class);
 
-        put(new MetaPath(Objekttyp.class, Anwendungsbaustein.class, new Class[][] {
-                {
-                        ObjReprVerbindung.class, EtntNatVerbindung.class, BssEtntVerbindung.class, AwbKommssVerbindung.class
-                }, {
-                        ObjReprVerbindung.class, EtntDotVerbindung.class, BssEtntVerbindung.class, AwbKommssVerbindung.class
-                }
-        }, "text_kommuniziert"));
-
-        /* Anwendungsbaustein - Anwendungsbaustein */
-        put(new MetaPath(Anwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
-                {
-                        RawbRawbVerbindung.class
-                }, {
-                        KawbAwbVerbindung.class
-                }
-        }, 0));
-
-        put(new MetaPath(Anwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
-                {
-                        AwbKommssVerbindung.class, KommBeziehung.class, AwbKommssVerbindung.class
-                }
-        }, 1));
+        //        put(new MetaPath(Objekttyp.class, Anwendungsbaustein.class, new Class[][] {
+        //                {
+        //                        ObjReprVerbindung.class, EtntNatVerbindung.class, BssEtntVerbindung.class, AwbKommssVerbindung.class
+        //                }, {
+        //                        ObjReprVerbindung.class, EtntDotVerbindung.class, BssEtntVerbindung.class, AwbKommssVerbindung.class
+        //                }
+        //        }, "text_kommuniziert"));
+        //
+        //        /* Anwendungsbaustein - Anwendungsbaustein */
+        //        put(new MetaPath(Anwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
+        //                {
+        //                        RawbRawbVerbindung.class
+        //                }, {
+        //                        KawbAwbVerbindung.class
+        //                }
+        //        }, 0));
+        //
+        //        put(new MetaPath(Anwendungsbaustein.class, Anwendungsbaustein.class, new Class[][] {
+        //                {
+        //                        AwbKommssVerbindung.class, KommBeziehung.class, AwbKommssVerbindung.class
+        //                }
+        //        }, 1));
 
     }
 

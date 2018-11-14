@@ -20,9 +20,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.path.InvalidPathException;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPathOld;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -99,9 +99,9 @@ public abstract class MetaModel {
     // PathsDefinition //
     /////////////////////
 
-    private PathsDefinition pathsDefinition;
+    private MetaPathDefinition pathsDefinition;
 
-    public final PathsDefinition getPathsDefinition() {
+    public final MetaPathDefinition getPathsDefinition() {
         //immer lazy initialisieren, weil die PathsDefinition die kompeltten ModelConstants braucht, um sich selbst
         //zu initialisieren und die ModelConstants aber dieses Metamodel initialisieren -> wenn nicht lazy => InitializationException
         if (pathsDefinition == null) {
@@ -115,11 +115,8 @@ public abstract class MetaModel {
      *
      * @return
      */
-    protected PathsDefinition createPathsDefinition() {
-        return new PathsDefinition() {
-            @Override
-            protected void init() throws InvalidPathException {
-            }
+    protected MetaPathDefinition createPathsDefinition() {
+        return new MetaPathDefinition() {
         };
     }
 
@@ -331,7 +328,7 @@ public abstract class MetaModel {
      * @param edgeClass
      * @return
      */
-    public MetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
+    public MetaPathOld getConditionPath(final Class<? extends Edge> edgeClass) {
         //aus Performancegründen sollte hier keine Map zum Einsatz kommen. Es wird für die allerwenigsten Kanten einen solchen Pfad geben
         //und Unterklasse sollten das einfach über eine if-then-Abfrage regeln
         return null;
@@ -358,17 +355,17 @@ public abstract class MetaModel {
     public abstract Set<Class<? extends ModelElement>> getGenerateNameClasses();
 
     /**
-     * @return Liefert eine Sammlung aller {@link SimpleMetaPath}, die man zwischen 2 Elementen anlegen kann, wobei die Zwischenelemente ebenfalls neu
+     * @return Liefert eine Sammlung aller {@link SimpleMetaPathOld}, die man zwischen 2 Elementen anlegen kann, wobei die Zwischenelemente ebenfalls neu
      *         angelegt werden.
      */
-    protected abstract Collection<SimpleMetaPath> getCreateablePaths();
+    protected abstract Collection<SimpleMetaPathOld> getCreateablePaths();
 
-    private final Multimap<Class<? extends ModelElement>, SimpleMetaPath> elementClassToCreateableMetaPaths = ArrayListMultimap.create();
+    private final Multimap<Class<? extends ModelElement>, SimpleMetaPathOld> elementClassToCreateableMetaPaths = ArrayListMultimap.create();
 
     private final void initCreateableMetaPaths() {
-        Collection<SimpleMetaPath> createablePaths = getCreateablePaths();
+        Collection<SimpleMetaPathOld> createablePaths = getCreateablePaths();
         if (createablePaths != null) {
-            for (SimpleMetaPath metaPath : createablePaths) {
+            for (SimpleMetaPathOld metaPath : createablePaths) {
                 elementClassToCreateableMetaPaths.put(metaPath.getStartClass(), metaPath);
                 elementClassToCreateableMetaPaths.put(metaPath.getEndClass(), metaPath.getReversePath());
             }
@@ -380,8 +377,8 @@ public abstract class MetaModel {
      *
      * @param elementClass
      */
-    public Collection<SimpleMetaPath> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass) {
-        Collection<SimpleMetaPath> createablePaths = elementClassToCreateableMetaPaths.get(elementClass);
+    public Collection<SimpleMetaPathOld> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass) {
+        Collection<SimpleMetaPathOld> createablePaths = elementClassToCreateableMetaPaths.get(elementClass);
         return createablePaths == null ? ImmutableList.of() : createablePaths;
     }
 

@@ -35,8 +35,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.PathFinderOld;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
@@ -655,13 +655,13 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         //Pfad des Panels besteht aus genau einer Kante
         if (edgeClasses.length == 1) {
             Class<? extends Edge> edgeClass = edgeClasses[0];
-            MetaPath conditionPath = ModelConstants.getConditionPath(edgeClass);
+            MetaPathOld conditionPath = ModelConstants.getConditionPath(edgeClass);
             //für diese eine Kante ist ein ConditionPath angegeben
             if (conditionPath != null) {
                 if (directions[0] == BACKWARD) {
                     conditionPath = conditionPath.getReversePath();
                 }
-                Set<ModelElement> conditionElements = PathFinder.getDirectConnectedElements(getModelElement(), conditionPath);
+                Set<ModelElement> conditionElements = PathFinderOld.getDirectConnectedElements(getModelElement(), conditionPath);
                 available = new ArrayList<>(conditionElements.size());
                 for (ModelElement conditionElement : conditionElements) {
                     available.add(conditionElement.getContainer(mainDoc));

@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path.v4;
+package de.imise.tool3lgm.graphtools.path.meta;
 
 import java.util.List;
 
@@ -49,6 +49,16 @@ public class SequenceMetaPath extends AbstractMetaPath {
     private final Direction direction;
 
     /**
+     * @see {@link #isDirected()}
+     */
+    private final boolean directed;
+
+    /**
+     * @see #isCreateable()
+     */
+    private final boolean createable;
+
+    /**
      * @param metaPaths
      */
     public SequenceMetaPath(final AbstractMetaPath... metaPaths) {
@@ -80,16 +90,8 @@ public class SequenceMetaPath extends AbstractMetaPath {
         if (!isValid()) {
             throw new Error("Metapfad ist nicht korrekt");
         }
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (!super.equals(obj)) {
-            return false;
-        }
-        // Klassengleichheit wird in super.equals() schon getestet
-        SequenceMetaPath other = (SequenceMetaPath) obj;
-        return other.metaPaths.equals(metaPaths);
+        directed = getIsDirected();
+        createable = getIsCreateable();
     }
 
     @Override
@@ -109,6 +111,60 @@ public class SequenceMetaPath extends AbstractMetaPath {
                     return false;
                 }
             }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (createable ? 1231 : 1237);
+        result = prime * result + (directed ? 1231 : 1237);
+        result = prime * result + (direction == null ? 0 : direction.hashCode());
+        result = prime * result + (metaPaths == null ? 0 : metaPaths.hashCode());
+        result = prime * result + (simpleMetaPath == null ? 0 : simpleMetaPath.hashCode());
+        result = prime * result + (simplePathInitialized ? 1231 : 1237);
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        SequenceMetaPath other = (SequenceMetaPath) obj;
+        if (createable != other.createable) {
+            return false;
+        }
+        if (directed != other.directed) {
+            return false;
+        }
+        if (direction != other.direction) {
+            return false;
+        }
+        if (metaPaths == null) {
+            if (other.metaPaths != null) {
+                return false;
+            }
+        } else if (!metaPaths.equals(other.metaPaths)) {
+            return false;
+        }
+        if (simpleMetaPath == null) {
+            if (other.simpleMetaPath != null) {
+                return false;
+            }
+        } else if (!simpleMetaPath.equals(other.simpleMetaPath)) {
+            return false;
+        }
+        if (simplePathInitialized != other.simplePathInitialized) {
+            return false;
         }
         return true;
     }
@@ -174,7 +230,11 @@ public class SequenceMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    protected final boolean getIsCreateable() {
+    public final boolean isCreateable() {
+        return createable;
+    }
+
+    private final boolean getIsCreateable() {
         if (!isValid()) {
             return false;
         }
@@ -237,12 +297,16 @@ public class SequenceMetaPath extends AbstractMetaPath {
     }
 
     @Override
+    public boolean isDirected() {
+        return directed;
+    }
+
     public boolean getIsDirected() {
         //Start- und Zielklassen müssen in jedem Fall gleich sein, falls die Kante
         if (!getStartClasses().equals(getEndClasses())) {
             return false;
         }
-        int metaPathCount = metaPaths.size();
+        int metaPathCount = metaPaths == null ? 0 : metaPaths.size();
         //bei einer ungeraden Anzahl von Pfaden muss der mittlere Pfad selbst undirected sein
         if (metaPathCount % 2 == 1 && metaPaths.get(metaPathCount / 2 + 1).isDirected()) {
             return false;

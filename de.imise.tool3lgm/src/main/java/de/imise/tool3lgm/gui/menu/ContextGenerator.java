@@ -102,7 +102,7 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -891,7 +891,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + direction, verbindung_trennen, disconnectable, toolTip), label));
                         }
                     } else {
-                        MetaPath metaPath = (MetaPath) edgeClassOrMetaPath;
+                        MetaPathOld metaPath = (MetaPathOld) edgeClassOrMetaPath;
                     }
                 }
             }

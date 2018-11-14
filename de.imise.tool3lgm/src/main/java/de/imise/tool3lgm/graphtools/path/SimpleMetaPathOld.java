@@ -13,7 +13,7 @@ import de.imise.util.ReflectionUtils;
 /**
  * @author AXS (01.10.2018)
  */
-public class SimpleMetaPath extends MetaPath {
+public class SimpleMetaPathOld extends MetaPathOld {
 
     /**
      * Für jede Kante die einmal am Anfang ermittelte Richtung, in der die Kante den nächsten Pfadschritt beschreibt. Es wird immer zuerst auf
@@ -33,7 +33,7 @@ public class SimpleMetaPath extends MetaPath {
      * @param associations
      */
     @SafeVarargs
-    public SimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
+    public SimpleMetaPathOld(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
         this(startClass, endClass, null, associations);
     }
 
@@ -44,14 +44,14 @@ public class SimpleMetaPath extends MetaPath {
      * @param associations
      */
     @SafeVarargs
-    public SimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String forwardAndBackwardResourceKeyPrefix, final Class<? extends Edge>... associations) {
+    public SimpleMetaPathOld(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String forwardAndBackwardResourceKeyPrefix, final Class<? extends Edge>... associations) {
         this(Strings.isNullOrEmpty(forwardAndBackwardResourceKeyPrefix) ? null : forwardAndBackwardResourceKeyPrefix + "_f", startClass, endClass, associations);
-        reversePath = new SimpleMetaPath(Strings.isNullOrEmpty(forwardAndBackwardResourceKeyPrefix) ? null : forwardAndBackwardResourceKeyPrefix + "_b", endClass, startClass, createReverseAssociations()[0]);
+        reversePath = new SimpleMetaPathOld(Strings.isNullOrEmpty(forwardAndBackwardResourceKeyPrefix) ? null : forwardAndBackwardResourceKeyPrefix + "_b", endClass, startClass, createReverseAssociations()[0]);
         reversePath.reversePath = this;
     }
 
     @SafeVarargs
-    private SimpleMetaPath(final String forwardResourceKeyOrPathName, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
+    private SimpleMetaPathOld(final String forwardResourceKeyOrPathName, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
         super(startClass, endClass, forwardResourceKeyOrPathName, associations);
         init();
     }
@@ -111,7 +111,7 @@ public class SimpleMetaPath extends MetaPath {
      * @param pathStepStartIndex
      * @return
      */
-    public SimpleMetaPath getSubPath(final int pathStepStartIndex) {
+    public SimpleMetaPathOld getSubPath(final int pathStepStartIndex) {
         return getSubPath(pathStepStartIndex, getLength());
     }
 
@@ -122,14 +122,14 @@ public class SimpleMetaPath extends MetaPath {
      * @param pathStepEndIndex
      * @return
      */
-    public SimpleMetaPath getSubPath(final int pathStepStartIndex, final int pathStepEndIndex) {
+    public SimpleMetaPathOld getSubPath(final int pathStepStartIndex, final int pathStepEndIndex) {
         if (pathStepStartIndex >= pathStepEndIndex || pathStepStartIndex < 0 || pathStepStartIndex >= edgeDirections.length || pathStepEndIndex < 0 || pathStepEndIndex > edgeDirections.length) {
             throw new IllegalArgumentException("Invalid pathStepStartIndex=" + pathStepStartIndex + " and pathStepEndIndex=" + pathStepEndIndex);
         }
         @SuppressWarnings("unchecked")
         Class<? extends Edge>[] associations = new Class[pathStepEndIndex - pathStepStartIndex];
         System.arraycopy(getEdgeClasses(), pathStepStartIndex, associations, 0, associations.length);
-        return new SimpleMetaPath(realPathStepClasses[pathStepStartIndex], realPathStepClasses[pathStepEndIndex], associations);
+        return new SimpleMetaPathOld(realPathStepClasses[pathStepStartIndex], realPathStepClasses[pathStepEndIndex], associations);
     }
 
     /**
@@ -143,8 +143,8 @@ public class SimpleMetaPath extends MetaPath {
     }
 
     @Override
-    public SimpleMetaPath getReversePath() {
-        return (SimpleMetaPath) super.getReversePath();
+    public SimpleMetaPathOld getReversePath() {
+        return (SimpleMetaPathOld) super.getReversePath();
     }
 
     @Override

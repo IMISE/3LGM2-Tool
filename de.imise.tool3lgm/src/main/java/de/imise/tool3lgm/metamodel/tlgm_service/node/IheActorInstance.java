@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_service.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheActorInstance_Edge;
 
 public class IheActorInstance extends ApplicationComponent {
@@ -13,10 +13,10 @@ public class IheActorInstance extends ApplicationComponent {
         return dialog;
     }
 
-    private static final MetaPath NAME_EXTENSION_PATH = new MetaPath(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class);
+    private static final MetaPathOld NAME_EXTENSION_PATH = new MetaPathOld(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class);
 
     @Override
-    protected MetaPath getNameExtensionPath() {
+    protected MetaPathOld getNameExtensionPath() {
         return NAME_EXTENSION_PATH;
     }
 

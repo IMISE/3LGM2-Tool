@@ -33,9 +33,9 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.MetaPathSelectorOld;
+import de.imise.tool3lgm.graphtools.path.PathFinderOld;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.collections.AlphabeticalSet;
@@ -121,7 +121,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             String[] options = new String[analyseCount + 1];
             for (int i = 0; i < analyseCount; i++) {
                 SingleRedundancyAnalysisDefinition singleRedundancyAnalysisDefinition = redundancyAnalysisDefinitions.get(i);
-                MetaPath metaPath = singleRedundancyAnalysisDefinition.getMetaPath();
+                MetaPathOld metaPath = singleRedundancyAnalysisDefinition.getMetaPath();
                 Class<? extends ModelElement> startClass = metaPath.getStartClass();
                 Class<? extends ModelElement> endClass = metaPath.getEndClass();
                 options[i] = ElementsNameBuilder.getDisplayablePluralName(startClass) + con + ElementsNameBuilder.getDisplayablePluralName(endClass);
@@ -151,12 +151,12 @@ public class RedundancyAnalysis extends WindowAdapter {
 
             // selbst definierte XMLAnalyse
             if (result == null && selectedOptions[selectedOptions.length - 1] != null) {
-                MetaPathSelector mps = MetaPathSelector.showDialog(getResString("ana_fr_class1_label"), getResString("ana_fr_class2_label"), getResString("metapath"));
+                MetaPathSelectorOld mps = MetaPathSelectorOld.showDialog(getResString("ana_fr_class1_label"), getResString("ana_fr_class2_label"), getResString("metapath"));
                 if (mps.isValid()) {
                     Class<? extends ModelElement> c1 = mps.getSelectedClass1();
                     Class<? extends ModelElement> c2 = mps.getSelectedClass2();
-                    MetaPath mp = mps.getSelectedMetaPath();
-                    MetaPath metaPath = new MetaPath(c1, c2, mp.getEdgeClasses());
+                    MetaPathOld mp = mps.getSelectedMetaPath();
+                    MetaPathOld metaPath = new MetaPathOld(c1, c2, mp.getEdgeClasses());
                     SingleRedundancyAnalysisDefinition definition = new RedundancyAnalysisDefinitions().add(metaPath);
                     String resultName = c2.getSimpleName() + " " + mp.toString();
                     result = new RedundancyAnalysisResult(gdcoll, definition, resultName);
@@ -192,7 +192,7 @@ public class RedundancyAnalysis extends WindowAdapter {
         CardinalityDefinition cardinalityDefinition = consistencyDefinition.getCardinalityDefinition();
 
         SingleRedundancyAnalysisDefinition definition = result.getDefinition();
-        MetaPath metaPath = definition.getMetaPath();
+        MetaPathOld metaPath = definition.getMetaPath();
         for (int i = 0; i < metaPath.countPathes(); i++) {
             Class<? extends Edge>[] internalMetaPath = metaPath.getEdgeClasses(i);
             for (int j = 0; j < internalMetaPath.length; j++) {
@@ -382,11 +382,11 @@ public class RedundancyAnalysis extends WindowAdapter {
      */
     private static String getElementName(final ModelElement me, final SingleRedundancyAnalysisDefinition analysisDefinition) {
         String retVal = me.toString().replace("-\n", "").replace('\n', ' ');
-        MetaPath expandedNamePath = analysisDefinition.getExpandedNamePath(me.getClass());
+        MetaPathOld expandedNamePath = analysisDefinition.getExpandedNamePath(me.getClass());
         if (expandedNamePath != null) {
             StringBuilder sb = new StringBuilder(retVal);
             sb.append(" (");
-            for (ModelElement connected : PathFinder.getConnectedElements(me, expandedNamePath)) {
+            for (ModelElement connected : PathFinderOld.getConnectedElements(me, expandedNamePath)) {
                 sb.append(getElementName(connected, analysisDefinition));
                 sb.append(", ");
             }

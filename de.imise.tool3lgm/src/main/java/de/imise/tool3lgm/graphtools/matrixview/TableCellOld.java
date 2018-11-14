@@ -5,7 +5,7 @@ import java.awt.Color;
 /**
  * @author Thomas Rudert
  */
-public class TableCell {
+public class TableCellOld {
 
     /**
      * COMMENTME
@@ -26,7 +26,7 @@ public class TableCell {
      * @param _rowIndex
      * @param _colIndex
      */
-    public TableCell(final int _rowIndex, final int _colIndex) {
+    public TableCellOld(final int _rowIndex, final int _colIndex) {
         this(_rowIndex, _colIndex, Color.BLUE);
     }
 
@@ -35,7 +35,7 @@ public class TableCell {
      * @param _colIndex
      * @param _color
      */
-    public TableCell(final int _rowIndex, final int _colIndex, final Color _color) {
+    public TableCellOld(final int _rowIndex, final int _colIndex, final Color _color) {
         rowIndex = _rowIndex;
         colIndex = _colIndex;
         color = _color;
@@ -53,8 +53,8 @@ public class TableCell {
      */
     @Override
     public boolean equals(final Object other) {
-        if (other instanceof TableCell) {
-            return rowIndex == ((TableCell) other).getRowIndex() && colIndex == ((TableCell) other).getColIndex();
+        if (other instanceof TableCellOld) {
+            return rowIndex == ((TableCellOld) other).getRowIndex() && colIndex == ((TableCellOld) other).getColIndex();
         }
         return false;
     }

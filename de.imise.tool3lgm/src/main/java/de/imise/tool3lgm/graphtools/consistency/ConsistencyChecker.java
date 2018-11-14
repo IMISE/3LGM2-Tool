@@ -32,8 +32,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentAdapter;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.PathFinderOld;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 
@@ -362,10 +362,10 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         if (es == null) {
             return new HashSet<>();
         }
-        MetaPath pathToDialogElement = es.getPathToPropertyDialogElement();
+        MetaPathOld pathToDialogElement = es.getPathToPropertyDialogElement();
         ModelElement me = error.getModelElement();
         if (pathToDialogElement != null) {
-            Set<ModelElement> connected = PathFinder.getDirectConnectedElements(me, pathToDialogElement);
+            Set<ModelElement> connected = PathFinderOld.getDirectConnectedElements(me, pathToDialogElement);
             if (connected.size() == 0) {
                 return null;
             }

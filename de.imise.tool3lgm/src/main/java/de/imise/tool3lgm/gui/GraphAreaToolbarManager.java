@@ -4,8 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewPathSelectorToolBar;
+import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrameOld;
+import de.imise.tool3lgm.graphtools.matrixview.MatrixViewPathSelectorToolBarOld;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -50,14 +50,14 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
                     }
                 }
                 setToolBarVisible(UserProperties.is(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR));
-            } else if (activeFrame instanceof MatrixViewInternalFrame) {
-                MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) activeFrame;
-                if (currentToolBar == null || !(currentToolBar instanceof MatrixViewPathSelectorToolBar)) {
+            } else if (activeFrame instanceof MatrixViewInternalFrameOld) {
+                MatrixViewInternalFrameOld matrixFrame = (MatrixViewInternalFrameOld) activeFrame;
+                if (currentToolBar == null || !(currentToolBar instanceof MatrixViewPathSelectorToolBarOld)) {
                     removeToolBar();
-                    currentToolBar = new MatrixViewPathSelectorToolBar(matrixFrame);
+                    currentToolBar = new MatrixViewPathSelectorToolBarOld(matrixFrame);
                     addToolBar();
                 }
-                MatrixViewPathSelectorToolBar matrixViewToolBar = (MatrixViewPathSelectorToolBar) currentToolBar;
+                MatrixViewPathSelectorToolBarOld matrixViewToolBar = (MatrixViewPathSelectorToolBarOld) currentToolBar;
                 matrixViewToolBar.setFrame(matrixFrame);
                 matrixFrame.setMatrixViewToolBar(matrixViewToolBar);
                 if (matrixViewToolBar.getParent() == null) {

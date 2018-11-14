@@ -12,8 +12,8 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.PathFinderOld;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -21,7 +21,7 @@ import de.imise.tool3lgm.log.Log;
  *
  * @author Thomas Rudert, AXS (23.10.07)
  */
-public class TableModel implements Iterable<TableCell> {
+public class TableModelOld implements Iterable<TableCellOld> {
 
     /**
      * ArrayList mit den ModelElementen für die Spalten. <br>
@@ -31,7 +31,7 @@ public class TableModel implements Iterable<TableCell> {
     /** ArrayList mit den ModelElementen für die Zeilen */
     private List<ModelElement> rowHeader;
 
-    private Set<TableCell> cellsSet = null;
+    private Set<TableCellOld> cellsSet = null;
 
     /** das zugehörige (Teil-)Modell */
     private final GraphDocument graphDocument;
@@ -43,7 +43,7 @@ public class TableModel implements Iterable<TableCell> {
     private Class<? extends ModelElement> colClass;
 
     /** MetaPfad über den Zeilen- und Spaltenklasse verbunden sein sollen */
-    private MetaPath metaPath;
+    private AbstractMetaPath metaPath;
 
     /**
      * Legt fest, ob nur absolte Teilelemente angezeigt werden sollen
@@ -56,7 +56,7 @@ public class TableModel implements Iterable<TableCell> {
      *
      * @param graphDocument das (Teil-)Modell
      */
-    public TableModel(final GraphDocument graphDocument) {
+    public TableModelOld(final GraphDocument graphDocument) {
         this(graphDocument, null, null, null, false);
     }
 
@@ -71,7 +71,7 @@ public class TableModel implements Iterable<TableCell> {
      * @param metaPath MetaPfad über den Zeilen- und Spaltenklasse verbunden sein sollen
      * @param absolutePartsOnly legt fest, ob in der Matrix nur Elemente auftauchen sollen, die im Gesamtmodell keine Teilelemente besitzen
      */
-    public TableModel(final GraphDocument graphDocument, final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final MetaPath metaPath, final boolean absolutePartsOnly) {
+    public TableModelOld(final GraphDocument graphDocument, final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final AbstractMetaPath metaPath, final boolean absolutePartsOnly) {
         this.graphDocument = graphDocument;
         fillTableModel(rowClass, colClass, metaPath, absolutePartsOnly);
     }
@@ -82,7 +82,7 @@ public class TableModel implements Iterable<TableCell> {
      * @param metaPath MetaPfad über den Zeilen- und Spaltenklasse verbunden sein sollen
      * @param absolutePartsOnly legt fest, ob in der Matrix nur Elemente auftauchen sollen, die im Gesamtmodell keine Teilelemente besitzen
      */
-    public void fillTableModel(final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final MetaPath metaPath, final boolean absolutePartsOnly) {
+    public void fillTableModel(final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final AbstractMetaPath metaPath, final boolean absolutePartsOnly) {
         this.rowClass = rowClass;
         this.colClass = colClass;
         this.metaPath = metaPath;
@@ -137,7 +137,7 @@ public class TableModel implements Iterable<TableCell> {
     }
 
     @Override
-    public Iterator<TableCell> iterator() {
+    public Iterator<TableCellOld> iterator() {
         return cellsSet.iterator();
     }
 
@@ -186,9 +186,9 @@ public class TableModel implements Iterable<TableCell> {
         for (int i = 0; i < rowHeader.size(); i++) {
             for (int j = 0; j < colHeader.size(); j++) {
                 try {
-                    ConnectionState connectionState = PathFinder.isConnected(rowHeader.get(i), colHeader.get(j), metaPath);
+                    ConnectionState connectionState = PathFinderOld.isConnected(rowHeader.get(i), colHeader.get(j), metaPath);
                     if (connectionState != null) {
-                        cellsSet.add(new TableCell(i, j, getColor(metaPath, connectionState.ordinal())));
+                        cellsSet.add(new TableCellOld(i, j, getColor(metaPath, connectionState.ordinal())));
                     }
                 } catch (StackOverflowError err) {
                     Log.show(Log.ERROR, getResString("FehlerAllgemein"), err);
@@ -210,17 +210,18 @@ public class TableModel implements Iterable<TableCell> {
      * @param direction
      * @return
      */
-    public static final Color getColor(final MetaPath metaPath, final int i) {
+    public static final Color getColor(final AbstractMetaPath metaPath, final int i) {
         if (i < 0 || i > ALL_METAPATH_CONNETION_STATE_COLORS.length) {
             return null;
         }
-        return metaPath.countOptions() == 1 ? ALL_METAPATH_CONNETION_STATE_COLORS[0] : ALL_METAPATH_CONNETION_STATE_COLORS[i];
+        return ALL_METAPATH_CONNETION_STATE_COLORS[0];
+        //        return metaPath.countOptions() == 1 ? ALL_METAPATH_CONNETION_STATE_COLORS[0] : ALL_METAPATH_CONNETION_STATE_COLORS[i];
     }
 
     /**
      * @return Returns the MetaPath of the metaPathSelector.
      */
-    public MetaPath getMetaPath() {
+    public AbstractMetaPath getMetaPath() {
         return metaPath;
     }
 

@@ -10,7 +10,7 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
 
 /**
  * Definition aller {@link RedundancyAnalysis}
@@ -28,7 +28,7 @@ public class RedundancyAnalysisDefinitions {
      *            Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
      *            die potenziell redundanten Elemente.
      */
-    public SingleRedundancyAnalysisDefinition add(final MetaPath metaPath) {
+    public SingleRedundancyAnalysisDefinition add(final MetaPathOld metaPath) {
         if (redundancyAnalysisDefinitionData == null) {
             redundancyAnalysisDefinitionData = new ArrayList<>();
         }
@@ -65,16 +65,16 @@ public class RedundancyAnalysisDefinitions {
          * hin zu den Softwareprodukten. Wird das getan dann hat der Anzeigename des Anwendungsbausteins die Form
          * "Name des Anwendungsbausteins (Softwareprodukt1, Softwareprodukt2, ...)"
          */
-        private Map<Class<? extends ModelElement>, MetaPath> elementClassToExpandedNamePath;
+        private Map<Class<? extends ModelElement>, MetaPathOld> elementClassToExpandedNamePath;
 
         /**
          * Pfad, der angibt, für welche Elementart welche verbundenen Elemente als redundant angesehen werden sollen.
          * Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
          * die potenziell redundanten Elemente.
          */
-        private final MetaPath metaPath;
+        private final MetaPathOld metaPath;
 
-        public SingleRedundancyAnalysisDefinition(final MetaPath metaPath) {
+        public SingleRedundancyAnalysisDefinition(final MetaPathOld metaPath) {
             this.metaPath = metaPath;
             cardinalityDefinition = new CardinalityDefinition();
             cardinalityDefinition.filterNewCardinalities = true;
@@ -85,7 +85,7 @@ public class RedundancyAnalysisDefinitions {
             }
         }
 
-        public MetaPath getMetaPath() {
+        public MetaPathOld getMetaPath() {
             return metaPath;
         }
 
@@ -148,7 +148,7 @@ public class RedundancyAnalysisDefinitions {
          *
          * @param metaPath
          */
-        public void addExpandedNamePath(final MetaPath metaPath) {
+        public void addExpandedNamePath(final MetaPathOld metaPath) {
             if (elementClassToExpandedNamePath == null) {
                 elementClassToExpandedNamePath = new HashMap<>();
             }
@@ -158,7 +158,7 @@ public class RedundancyAnalysisDefinitions {
             }
         }
 
-        public MetaPath getExpandedNamePath(final Class<? extends ModelElement> elementClass) {
+        public MetaPathOld getExpandedNamePath(final Class<? extends ModelElement> elementClass) {
             return elementClassToExpandedNamePath != null ? elementClassToExpandedNamePath.get(elementClass) : null;
         }
 

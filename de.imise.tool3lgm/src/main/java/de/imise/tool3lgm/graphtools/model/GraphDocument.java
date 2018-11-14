@@ -56,8 +56,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
-import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.PathFinderOld;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPathOld;
 import de.imise.tool3lgm.graphtools.undoredo.CommandParser;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -3662,7 +3662,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         InstanciationEdge instanciationEdge = (InstanciationEdge) gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
 
         //Ebenfalls zu instanziierende Nebenpfade anlegen
-        for (SimpleMetaPath metaPath : instanciationEdge.iterateInstanciableMetaPaths()) {
+        for (SimpleMetaPathOld metaPath : instanciationEdge.iterateInstanciableMetaPaths()) {
             int path2CreateStartIndex = 0;
             for (; path2CreateStartIndex < metaPath.getLength(); path2CreateStartIndex++) {
                 Class<? extends Edge> edgeClass = metaPath.getEdgeClasses()[path2CreateStartIndex];
@@ -3671,11 +3671,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 }
             }
             //für diesen Pfadteil müssen die verbundenen Elemente herausgesucht werden
-            SimpleMetaPath subPathConnected = metaPath.getSubPath(0, path2CreateStartIndex);
-            Set<ModelElement> connectedElements = PathFinder.getConnectedElements(master, subPathConnected);
+            SimpleMetaPathOld subPathConnected = metaPath.getSubPath(0, path2CreateStartIndex);
+            Set<ModelElement> connectedElements = PathFinderOld.getConnectedElements(master, subPathConnected);
             for (ModelElement me : connectedElements) {
                 //ab diesem Pfadteil muss neu angelegt werden
-                SimpleMetaPath subPathCreate = metaPath.getSubPath(path2CreateStartIndex);
+                SimpleMetaPathOld subPathCreate = metaPath.getSubPath(path2CreateStartIndex);
                 createPath(me, instanceElement, subPathCreate, doc, pid);
             }
         }
@@ -3685,7 +3685,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         return instanceContainer;
     }
 
-    public static final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final GraphDocument doc, final int pid) {
+    public static final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPathOld metaPath, final GraphDocument doc, final int pid) {
         doc.start_transaction(pid);
 
         int lastPathStepIndex = metaPath.getLength() - 1;
@@ -3695,7 +3695,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             Class<? extends Edge> edgeClass = metaPath.getEdgeClasses()[lastPathStepIndex];
             if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
                 NodeContainer createdInstance = doc.createInstance(doc, edgeClass.asSubclass(InstanciationEdge.class), endElement, pid);
-                SimpleMetaPath subPath = metaPath.getSubPath(0, lastPathStepIndex);
+                SimpleMetaPathOld subPath = metaPath.getSubPath(0, lastPathStepIndex);
                 createPath(startElement, createdInstance.getElement(), subPath, doc, pid);
                 return;
             }

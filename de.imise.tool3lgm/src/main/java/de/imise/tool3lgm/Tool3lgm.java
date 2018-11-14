@@ -37,7 +37,7 @@ import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
+import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrameOld;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -422,7 +422,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (_graphDocument == null) {
             return false;
         }
-        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(_graphDocument);
+        MatrixViewInternalFrameOld matrixView = new MatrixViewInternalFrameOld(_graphDocument);
         String title = _graphDocument.getCollection().getName() + " - " + _graphDocument.getTitle() + " - " + getResString("matrix") + " #";
 
         matrixView.setTitle(title.concat(String.valueOf(countFramesWithSameTitle(title) + 1)));
@@ -787,7 +787,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         AbstractInternalFrame frame = findFirstInternalFrame(szen);
         while (frame != null) {
             toolbar.removeWindow(frame);
-            if (frame instanceof MatrixViewInternalFrame) {
+            if (frame instanceof MatrixViewInternalFrameOld) {
                 frame.dispose();
             } else {
                 //erst das dispose und erst dann als Tab removen, sonst haut
@@ -1012,7 +1012,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     public void internalFrameClosed(final InternalFrameEvent e) {
         JInternalFrame[] frames = desktop.getAllFrames();
         AbstractInternalFrame frame = (AbstractInternalFrame) e.getSource();
-        if (!(frame instanceof MatrixViewInternalFrame)) {
+        if (!(frame instanceof MatrixViewInternalFrameOld)) {
             workarea.revalidate();
         }
 

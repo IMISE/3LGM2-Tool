@@ -13,7 +13,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 
 import javax.swing.BorderFactory;
@@ -276,7 +275,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         }
         HashSet<Class<? extends ModelElement>> allNonAbstractClasses = new HashSet<>(connectedTypes.size());
         for (Class<? extends ModelElement> c : connectedTypes) {
-            allNonAbstractClasses.addAll(Arrays.asList(ModelConstants.getInstanciableAssignableClasses(c)));
+            allNonAbstractClasses.addAll(ModelConstants.getInstanciableAssignableClasses(c));
         }
         Class<? extends ModelElement>[] returnClasses = new Class[allNonAbstractClasses.size()];
         System.arraycopy(allNonAbstractClasses.toArray(), 0, returnClasses, 0, returnClasses.length);

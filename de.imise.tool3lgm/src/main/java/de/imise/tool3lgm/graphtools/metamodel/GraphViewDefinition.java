@@ -14,7 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.util.Pair;
@@ -41,7 +41,7 @@ public abstract class GraphViewDefinition {
     /** Liste aller metmodellabhängigen Knoten, die in der Grafik angezeigt werden */
     private final List<Class<? extends ModelElement>> metaModelSpecificPaintableNodes;
 
-    private Map<Class<? extends ModelElement>, MetaPath> classToConfigurationPaths = null;
+    private Map<Class<? extends ModelElement>, MetaPathOld> classToConfigurationPaths = null;
 
     public GraphViewDefinition() {
         ImmutableSet.Builder<Class<? extends ModelElement>> allPaintableNodesSetBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
@@ -85,16 +85,15 @@ public abstract class GraphViewDefinition {
      *
      * @return
      */
-    protected abstract MetaPath[] getConfigurationPaths();
+    protected abstract MetaPathOld[] getConfigurationPaths();
 
-    public final MetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
+    public final MetaPathOld getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
         //es muss ein lazy-init sein, weil es sonst zu einer Init-Exception in der Reflection-Methode Edge.getStartClass(...)
         if (classToConfigurationPaths == null) {
             classToConfigurationPaths = new HashMap<>();
             //Map mit den Klassen zu ihren Konfigurationspfaden speichern
-            for (MetaPath metaPath : getConfigurationPaths()) {
-                Class<? extends ModelElement>[] instanciableAssignableClasses = ModelConstants.getInstanciableAssignableClasses(metaPath.getStartClass());
-                for (Class<? extends ModelElement> instanciableElementClass : instanciableAssignableClasses) {
+            for (MetaPathOld metaPath : getConfigurationPaths()) {
+                for (Class<? extends ModelElement> instanciableElementClass : ModelConstants.getInstanciableAssignableClasses(metaPath.getStartClass())) {
                     classToConfigurationPaths.put(instanciableElementClass, metaPath);
                 }
             }

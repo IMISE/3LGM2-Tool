@@ -24,8 +24,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.PathFinderOld;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.log.Log;
@@ -38,7 +38,7 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 public class DataExportModule {
 
     //@SuppressWarnings("unchecked")
-    public static final MetaPath[] metaPaths2Export = {
+    public static final MetaPathOld[] metaPaths2Export = {
             //Über diese Angaben kann man abweichend vom Standardexport verbundene Elemente ebenfalls exportieren.
             //Das macht aber Probleme in dem Fall, dass man denselben Datensatz wieder importieren möchte, da man nun anhand des Namens
             //eines über einen Pfad verbundenen Elementes auch noch die Zwischenelemente rekonrtuieren müsste. Daher einfach alle
@@ -101,7 +101,7 @@ public class DataExportModule {
                         classElement = elementClass;
                         String displayableClassName = isEdgeType(elementClass) ? ElementsNameBuilder.getFullForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : ElementsNameBuilder.getDisplayableName(elementClass);
                         caption = displayableClassName + "\tName\tDescription\tHashString";
-                        for (MetaPath metaPath : metaPaths2Export) {
+                        for (MetaPathOld metaPath : metaPaths2Export) {
                             if (metaPath.getStartClass().isAssignableFrom(elementClass)) {
                                 caption += "\t" + ElementsNameBuilder.getDisplayableName(metaPath.getEndClass());
                             }
@@ -130,9 +130,9 @@ public class DataExportModule {
                     lineBuf.append("\t" + v.replaceAll("\t", "\\\\t"));
 
                     v = "";
-                    for (MetaPath metaPath : metaPaths2Export) {
+                    for (MetaPathOld metaPath : metaPaths2Export) {
                         if (metaPath.getStartClass().isAssignableFrom(elementClass)) {
-                            Set<ModelElement> connected = PathFinder.getDirectConnectedElements(me, metaPath);
+                            Set<ModelElement> connected = PathFinderOld.getDirectConnectedElements(me, metaPath);
                             for (ModelElement con : connected) {
                                 v += con.getName() + ", ";
                             }

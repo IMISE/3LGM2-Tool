@@ -1,0 +1,58 @@
+package de.imise.tool3lgm.graphtools.path.meta;
+
+import java.util.Iterator;
+
+import com.google.common.collect.ImmutableSet;
+
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+
+/**
+ * @author AXS
+ * @create 13.10.2010
+ */
+public class DifferenceMetaPath extends ParallelMetaPath {
+
+    /**
+     * @param metaPaths
+     */
+    public DifferenceMetaPath(final AbstractMetaPath... metaPaths) {
+        super(metaPaths);
+    }
+
+    /**
+     * @param name
+     * @param metaPaths
+     */
+    public DifferenceMetaPath(final String name, final AbstractMetaPath... metaPaths) {
+        super(name, metaPaths);
+    }
+
+    @Override
+    protected void initStartEndClasses() {
+        ImmutableSet.Builder<Class<? extends ModelElement>> startElementClassesBuilder = ImmutableSet.builder();
+        ImmutableSet.Builder<Class<? extends ModelElement>> endElementClassesBuilder = ImmutableSet.builder();
+        startElementClassesBuilder.addAll(metaPaths.get(0).startElementClasses);
+        endElementClassesBuilder.addAll(metaPaths.get(0).endElementClasses);
+    }
+
+    @Override
+    protected String createName() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("(");
+        Iterator<AbstractMetaPath> it = metaPaths.iterator();
+        if (it.hasNext()) {
+            sb.append(it.next().getFullName());
+        }
+        sb.append(")");
+        if (it.hasNext()) {
+            sb.append(" ABER NICHT {auslagern !!!} (");
+        }
+        sb.append(it.next());
+        while (it.hasNext()) {
+            sb.append(" UND {auslagern !!!} ");
+            sb.append(it.next().getFullName());
+        }
+        sb.append(")");
+        return sb.toString();
+    }
+}

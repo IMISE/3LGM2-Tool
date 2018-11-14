@@ -14,7 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
  *
  * @author Thomas Rudert
  */
-public class RowPanel extends JPanel {
+public class RowPanelOld extends JPanel {
 
     /** ArrayList mit Strings der Namen der Zeilenelement */
     private List<? extends ModelElement> rows;
@@ -38,7 +38,7 @@ public class RowPanel extends JPanel {
      *
      * @param _rows ArrayList mit Strings der Zeilenüberschriften
      */
-    public RowPanel(final List<ModelElement> _rows) {
+    public RowPanelOld(final List<ModelElement> _rows) {
         super();
         rows = _rows;
     }

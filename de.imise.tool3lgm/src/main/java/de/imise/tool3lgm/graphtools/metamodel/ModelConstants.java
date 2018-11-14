@@ -21,9 +21,11 @@ import java.util.Set;
 
 import javax.swing.Action;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
@@ -40,8 +42,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPathOld;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -84,6 +87,8 @@ public final class ModelConstants {
 
     @SuppressWarnings("unchecked")
     public static final Class<? extends CompositionEdge>[] EMPTY_COMPOSITION_CLASS_ARRAY = new Class[0];
+
+    public static final Collection<Class<? extends ModelElement>> EMPTY_ELEMENT_CLASS_COLLECTION = ImmutableList.of();
 
     //Bei Gelegenheit mal ersetzen (Das ist aber schon etwas mehr Arbeit)
     //public enum LAYER {NO_LAYER, PHYSICAL_LAYER, INTER_LOGICAL_PHYSICAL_LAYER, LOGICAL_LAYER, INTER_DOMAIN_LOGICAL_LAYER, DOMAIN_LAYER};
@@ -183,6 +188,29 @@ public final class ModelConstants {
     public static final Class<? extends ModelElement>[] ALL_ELEMENTS = new Class[ALL_ELEMENTS_SET.size()];
     static {
         System.arraycopy(ALL_ELEMENTS_SET.toArray(), 0, ALL_ELEMENTS, 0, ALL_ELEMENTS.length);
+    }
+
+    /**
+     * Sammlung, die alle Elementklassen inklusive aller Kantenklassen enthält einschließlich aller
+     * ihrer Oberklassen bis hin zu ModelElement.class.
+     */
+    public static final Set<Class<? extends ModelElement>> ALL_MODELELEMENT_CLASSES_WITH_SUPER_CLASSES = new HashSet<>();
+    static {
+        //Menge aller Elementklassen und aller ihrer Oberklassen bis hin zu ModelElement zusammenbauen
+        ArrayList<Class<? extends ModelElement>> allElementClasses = new ArrayList<>(ModelConstants.ALL_NODES_SET.size() + ModelConstants.ALL_EDGES_SET.size() + 20);
+        allElementClasses.addAll(ModelConstants.ALL_NODES_SET);
+        allElementClasses.addAll(ModelConstants.ALL_EDGES_SET);
+        for (int i = 0; i < allElementClasses.size(); i++) {
+            Class<? extends ModelElement> elementClass = allElementClasses.get(i);
+            do {
+                if (!allElementClasses.contains(elementClass)) {
+                    allElementClasses.add(elementClass);
+                }
+                elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
+            } while (elementClass != ModelElement.class);
+        }
+        allElementClasses.add(ModelElement.class);
+        ALL_MODELELEMENT_CLASSES_WITH_SUPER_CLASSES.addAll(allElementClasses);
     }
 
     ///////////////////////////////////
@@ -375,7 +403,7 @@ public final class ModelConstants {
      * @param edgeClass
      * @return
      */
-    public static MetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
+    public static MetaPathOld getConditionPath(final Class<? extends Edge> edgeClass) {
         return metaModel.getConditionPath(edgeClass);
     }
 
@@ -386,7 +414,7 @@ public final class ModelConstants {
     /**
      * Mappt von einer Elementklasse auf das Array aller instanziierbaren und zu dieser Klasse zuweisungskompatiblen ModelElement-Klassen.
      */
-    public static final HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]> ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES = new HashMap<>();
+    public static final Multimap<Class<? extends ModelElement>, Class<? extends ModelElement>> ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES = HashMultimap.create();
 
     /**
      * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
@@ -395,31 +423,23 @@ public final class ModelConstants {
      * @param elementClass
      * @return
      */
-    @SuppressWarnings("unchecked")
-    public static final Class<? extends ModelElement>[] getInstanciableAssignableClasses(final Class<? extends ModelElement> elementClass) {
-        Class<? extends ModelElement>[] elementClasses = ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.get(elementClass);
-        if (elementClasses != null) {
-            return elementClasses;
+    public static final Collection<Class<? extends ModelElement>> getInstanciableAssignableClasses(final Class<? extends ModelElement> elementClass) {
+        if (ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.containsKey(elementClass)) {
+            Collection<Class<? extends ModelElement>> classes = ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.get(elementClass);
+            if (classes.size() == 1 && classes.iterator().next() == null) {
+                return EMPTY_ELEMENT_CLASS_COLLECTION;
+            }
+            return classes;
         }
-        HashSet<Class<? extends ModelElement>> al = new HashSet<>();
-        for (Class<? extends ModelElement> clazz : ALL_NODES) {
+        for (Class<? extends ModelElement> clazz : ALL_ELEMENTS) {
             if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz)) {
-                al.add(clazz);
+                ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, clazz);
             }
         }
-        for (Class<? extends ModelElement> clazz : ALL_EDGES_SET) {
-            if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz)) {
-                al.add(clazz);
-            }
+        if (!ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.containsKey(elementClass)) {
+            ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, null);
         }
-        if (al.size() == 0) {
-            ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, EMPTY_ELEMENT_CLASS_ARRAY);
-            return EMPTY_ELEMENT_CLASS_ARRAY;
-        }
-        elementClasses = new Class[al.size()];
-        System.arraycopy(al.toArray(), 0, elementClasses, 0, elementClasses.length);
-        ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, elementClasses);
-        return elementClasses;
+        return getInstanciableAssignableClasses(elementClass);
     }
 
     /**
@@ -562,15 +582,6 @@ public final class ModelConstants {
     //			}
     //		}
     //	}
-
-    static {
-        //    	System.err.println(MetaPathDefinitions.AUFGABE_BEARBEITET_OBJEKTTYP.toString());
-        //    	System.err.println(MetaPathDefinitions.AUFGABE_WIRD_ERLEDIGT_IN_ORGANISATIONSEINHEIT.toString());
-        //    	System.err.println(MetaPathDefinitions.AUFGABE_WIRD_UNTERSTUETZT_DURCH_PHYSICHER_DV_BAUSTEIN.toString());
-        //    	System.err.println(MetaPathDefinitions.TESTPFAD.toString());
-        //    	System.err.println(MetaPathDefinitions.OBJEKTTYP_WIRD_GESPEICHERT_VON_LOGICSCHEM_SPEICHER.toString());
-        //    	System.exit(0);
-    }
 
     /**
      * Liefert <code>true</code>, wenn die übergebenen Klasse eine Knotenklassen ist, die in jedem Teilmodell vorkommt, also nicht in jedem Teilmodell
@@ -1187,11 +1198,11 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert die {@link PathsDefinition} des Metamodells
+     * Liefert die {@link MetaPathDefinition} des Metamodells
      *
      * @return
      */
-    public static final PathsDefinition getPathsDefinition() {
+    public static final MetaPathDefinition getPathsDefinition() {
         return metaModel.getPathsDefinition();
     }
 
@@ -1239,9 +1250,9 @@ public final class ModelConstants {
      * @param elementClass1
      * @param elementClass2
      */
-    public static Collection<SimpleMetaPath> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
-        ImmutableList.Builder<SimpleMetaPath> createableMetaPaths = ImmutableList.builder();
-        for (SimpleMetaPath metaPath : metaModel.getCreateableMetaPaths(elementClass1)) {
+    public static Collection<SimpleMetaPathOld> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+        ImmutableList.Builder<SimpleMetaPathOld> createableMetaPaths = ImmutableList.builder();
+        for (SimpleMetaPathOld metaPath : metaModel.getCreateableMetaPaths(elementClass1)) {
             Class<? extends ModelElement> endClass = metaPath.getEndClass();
             if (endClass.isAssignableFrom(elementClass2)) {
                 createableMetaPaths.add(metaPath);

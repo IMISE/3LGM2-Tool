@@ -14,8 +14,8 @@ import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisD
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.PathFinderOld;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -106,7 +106,7 @@ public class SimpleRedundancyAnalysis {
             //das hier musste dekativiert werden, damit nach dem entfernen der Funktion aus Node keine Fehler entstehen. Bei Raktivierung -> Umschreiben
             String s = getRedundanceString(redundanceFak, saturationFak);
             //#################################
-            MetaPath metaPath = definition.getMetaPath();
+            MetaPathOld metaPath = definition.getMetaPath();
             Class<? extends ModelElement> elementClass = metaPath.getStartClass();
             int layer = ModelConstants.layerFor(elementClass);
             LayerContainer lc = doc.getLayer(layer);
@@ -120,7 +120,7 @@ public class SimpleRedundancyAnalysis {
      * Entfernt die Ausgaben dieser Analyse an den Elementen und am Layer.
      */
     public void removeGraphTexts() {
-        MetaPath metaPath = definition.getMetaPath();
+        MetaPathOld metaPath = definition.getMetaPath();
         Class<? extends ModelElement> elementClass = metaPath.getStartClass();
         int layer = ModelConstants.layerFor(elementClass);
         LayerContainer lc = doc.getLayer(layer);
@@ -134,7 +134,7 @@ public class SimpleRedundancyAnalysis {
     }
 
     private List<ElementContainer> getAllAbsolutePartContainer() {
-        MetaPath metaPath = definition.getMetaPath();
+        MetaPathOld metaPath = definition.getMetaPath();
         Class<? extends ModelElement> startClass = metaPath.getStartClass();
         List<ElementContainer> allElemCont = doc.getElementContainers(startClass, true);
         for (int i = allElemCont.size() - 1; i >= 0; i--) {
@@ -147,10 +147,10 @@ public class SimpleRedundancyAnalysis {
         return allElemCont;
     }
 
-    private List<ElementContainer> getConnectedInDoc(final ElementContainer ec, final MetaPath metaPath) {
+    private List<ElementContainer> getConnectedInDoc(final ElementContainer ec, final MetaPathOld metaPath) {
         List<ElementContainer> connectedElements = new ArrayList<>();
         ModelElement me = ec.getElement();
-        Set<ModelElement> allConnectedElements = PathFinder.getConnectedElements(me, metaPath);
+        Set<ModelElement> allConnectedElements = PathFinderOld.getConnectedElements(me, metaPath);
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
         for (ModelElement connected : allConnectedElements) {
             ElementContainer connectedEc = connected.getContainer(connected.isUnique() ? mainDoc : doc);
@@ -162,8 +162,8 @@ public class SimpleRedundancyAnalysis {
     }
 
     private List<ElementContainer> getDifferentRedundanceElements(final ElementContainer ec) {
-        MetaPath metaPath = definition.getMetaPath();
-        MetaPath pathToDifferences = definition.getPathToDifferences();
+        MetaPathOld metaPath = definition.getMetaPath();
+        MetaPathOld pathToDifferences = definition.getPathToDifferences();
         List<ElementContainer> redundantElements = getConnectedInDoc(ec, metaPath);
         if (pathToDifferences != null) {
             List<List<ElementContainer>> connectedDifferent = new ArrayList<>(redundantElements.size());
@@ -192,7 +192,7 @@ public class SimpleRedundancyAnalysis {
     }
 
     private String getRedundanceString(final float redundance, final float saturation) {
-        MetaPath metaPath = definition.getMetaPath();
+        MetaPathOld metaPath = definition.getMetaPath();
         StringBuilder sb = new StringBuilder();
         sb.append(ElementsNameBuilder.getDisplayablePluralName(metaPath.getStartClass()));
         sb.append(" -> ");

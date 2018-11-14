@@ -27,7 +27,7 @@ import de.imise.util.collections.CollectionUtils;
  * @author Thomas Rudert
  * @author AXS (5.10.2007)
  */
-public class MetaPath {
+public class MetaPathOld {
 
     /** Startelementtyp des Pfades */
     private final Class<? extends ModelElement> startClass;
@@ -61,7 +61,7 @@ public class MetaPath {
             ElementsNameBuilder.getForwardMetaAssociationName(Edge.class)
     };
 
-    protected MetaPath reversePath;
+    protected MetaPathOld reversePath;
 
     /**
      * Erzeugt einen MetaPath, der zu dem übergebenen MetaPath identisch ist, nur mit der neuen übergebenen Start- und Endklasse.
@@ -70,7 +70,7 @@ public class MetaPath {
      * @param newEndClass ModelElement class where associations ends
      * @param originalMetaPath
      */
-    public MetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPath originalMetaPath) {
+    public MetaPathOld(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final MetaPathOld originalMetaPath) {
         this(newStartClass, newEndClass, originalMetaPath.associations, originalMetaPath.pathNames, originalMetaPath.pathDirectionSourceEdgeIndex);
     }
 
@@ -80,7 +80,7 @@ public class MetaPath {
      * @param description of the path or the resource key of the desciption
      * @param associations EdgeClasses for this path
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String resourceKeyOrPathName, final Class<? extends Edge>... associations) {
+    public MetaPathOld(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String resourceKeyOrPathName, final Class<? extends Edge>... associations) {
         this(startClass, endClass, getPathForAssociations(associations), Tool3lgmConstants.getResStringWithoutError(resourceKeyOrPathName));
     }
 
@@ -89,7 +89,7 @@ public class MetaPath {
      * @param endClass ModelElement class where associations ends
      * @param associations EdgeClasses for this path
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
+    public MetaPathOld(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
         this(startClass, endClass, getPathForAssociations(associations), defaultPathName);
     }
 
@@ -99,7 +99,7 @@ public class MetaPath {
      * @param associations int[][] with type-constants for connections to come from start to end (int[] different possibilities to come from start to
      *            end)
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path) {
+    public MetaPathOld(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path) {
         this(startClass, endClass, path, defaultPathName);
     }
 
@@ -110,7 +110,7 @@ public class MetaPath {
      *            end)
      * @param resourceKeyOrPathName String with description for associations or the resource key for this
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String resourceKeyOrPathName) {
+    public MetaPathOld(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String resourceKeyOrPathName) {
         this(startClass, endClass, path, CollectionUtils.toStringArray(resourceKeyOrPathName), 0);
     }
 
@@ -121,7 +121,7 @@ public class MetaPath {
      *            end)
      * @param resourceKeyOrPathName String with description for associations or the resource key for this description
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final Color color, final String resourceKeyOrPathName) {
+    public MetaPathOld(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final Color color, final String resourceKeyOrPathName) {
         this(startClass, endClass, path, CollectionUtils.toStringArray(resourceKeyOrPathName));
     }
 
@@ -133,7 +133,7 @@ public class MetaPath {
      * @param resourceKeyOrPathNames String[] with descriptions for associations (one description for FORWARD / BACKWARD / DOUBLE) or the resource
      *            keys for this strings
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames) {
+    public MetaPathOld(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames) {
         this(startClass, endClass, path, resourceKeyOrPathNames, 0);
     }
 
@@ -143,7 +143,7 @@ public class MetaPath {
      * @param edgeClass
      */
     @SuppressWarnings("unchecked")
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge> edgeClass) {
+    public MetaPathOld(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge> edgeClass) {
         this(startClass, endClass, new Class[][] {
                 {
                         edgeClass
@@ -160,7 +160,7 @@ public class MetaPath {
      * @param path
      * @param pathDirectionSourceEdgeIndex
      */
-    public MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final int pathDirectionSourceEdgeIndex) {
+    public MetaPathOld(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final int pathDirectionSourceEdgeIndex) {
         this(startClass, endClass, path, isDoubleMeaningEdge(path[0][pathDirectionSourceEdgeIndex]) ? new String[] {
                 ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], getDirection(path[0][pathDirectionSourceEdgeIndex], startClass, endClass), ConnectionState.FORWARD),
                 ElementsNameBuilder.getMetaAssociationName(path[0][pathDirectionSourceEdgeIndex], getDirection(path[0][pathDirectionSourceEdgeIndex], startClass, endClass), ConnectionState.BACKWARD),
@@ -178,7 +178,7 @@ public class MetaPath {
      * @param description String[] with descriptions for associations (in legend) (one description for FORWARD / BACKWARD / DOUBLE)
      * @parma pathDirectionSourceEdgeIndex index of connections in associations, which control direction of associations
      */
-    protected MetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames, final int pathDirectionSourceEdgeIndex) {
+    protected MetaPathOld(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>[][] path, final String[] resourceKeyOrPathNames, final int pathDirectionSourceEdgeIndex) {
         this.startClass = startClass;
         this.endClass = endClass;
         this.pathDirectionSourceEdgeIndex = pathDirectionSourceEdgeIndex;
@@ -206,8 +206,8 @@ public class MetaPath {
      * @param endClass Endklasse des erzeugten Clones
      * @return
      */
-    public MetaPath getCloneWithChangedStartEnd(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
-        return new MetaPath(startClass, endClass, associations, pathNames, pathDirectionSourceEdgeIndex);
+    public MetaPathOld getCloneWithChangedStartEnd(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
+        return new MetaPathOld(startClass, endClass, associations, pathNames, pathDirectionSourceEdgeIndex);
     }
 
     /**
@@ -446,10 +446,10 @@ public class MetaPath {
         if (obj == null) {
             return false;
         }
-        if (!MetaPath.class.isAssignableFrom(obj.getClass())) {
+        if (!MetaPathOld.class.isAssignableFrom(obj.getClass())) {
             return false;
         }
-        MetaPath mp = (MetaPath) obj;
+        MetaPathOld mp = (MetaPathOld) obj;
         //Start- und Endklasse müssen gleich sein
         if (mp.startClass != startClass || mp.endClass != endClass) {
             return false;
@@ -610,13 +610,13 @@ public class MetaPath {
         return reverseAssociations;
     }
 
-    protected MetaPath createReversePath() {
+    protected MetaPathOld createReversePath() {
         Class<? extends Edge>[][] reverseAssociations = createReverseAssociations();
-        MetaPath reversePath = new MetaPath(endClass, startClass, reverseAssociations);
+        MetaPathOld reversePath = new MetaPathOld(endClass, startClass, reverseAssociations);
         return reversePath;
     }
 
-    public MetaPath getReversePath() {
+    public MetaPathOld getReversePath() {
         if (reversePath == null) {
             reversePath = createReversePath();
             reversePath.reversePath = this;

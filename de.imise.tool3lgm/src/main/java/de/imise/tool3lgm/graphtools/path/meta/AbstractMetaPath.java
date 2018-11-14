@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path.v4;
+package de.imise.tool3lgm.graphtools.path.meta;
 
 import java.util.Collection;
 import java.util.List;
@@ -87,8 +87,6 @@ public abstract class AbstractMetaPath {
         this.startElementClasses = startElementClasses == null ? ImmutableSet.of() : ImmutableSet.class.isAssignableFrom(startElementClasses.getClass()) ? startElementClasses : ImmutableSet.copyOf(startElementClasses);
         this.endElementClasses = endElementClasses == null ? ImmutableSet.of() : ImmutableSet.class.isAssignableFrom(endElementClasses.getClass()) ? endElementClasses : ImmutableSet.copyOf(endElementClasses);
         this.name = name;
-        createable = getIsCreateable();
-        directed = getIsDirected();
     }
 
     /**
@@ -328,15 +326,6 @@ public abstract class AbstractMetaPath {
      */
     public abstract boolean isValid();
 
-    //    @Override
-    //    public int hashCode() {
-    //        final int prime = 31;
-    //        int result = 1;
-    //        result = prime * result + (endElementClasses == null ? 0 : endElementClasses.hashCode());
-    //        result = prime * result + (startElementClasses == null ? 0 : startElementClasses.hashCode());
-    //        return result;
-    //    }
-    //
     /**
      * Liefert <code>true</code>, wenn das übergebene Objekt dieselben Eigenschaften hat, wie this.
      *
@@ -356,12 +345,6 @@ public abstract class AbstractMetaPath {
             return false;
         }
         AbstractMetaPath other = (AbstractMetaPath) obj;
-        if (createable != other.createable) {
-            return false;
-        }
-        if (directed != other.directed) {
-            return false;
-        }
         if (endElementClasses == null) {
             if (other.endElementClasses != null) {
                 return false;
@@ -399,8 +382,6 @@ public abstract class AbstractMetaPath {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + (createable ? 1231 : 1237);
-        result = prime * result + (directed ? 1231 : 1237);
         result = prime * result + (endElementClasses == null ? 0 : endElementClasses.hashCode());
         result = prime * result + (fullName == null ? 0 : fullName.hashCode());
         result = prime * result + (name == null ? 0 : name.hashCode());
@@ -444,12 +425,6 @@ public abstract class AbstractMetaPath {
         return getName();
     }
 
-    protected final boolean createable;
-
-    public final boolean isCreateable() {
-        return createable;
-    }
-
     /**
      * Liefert <code>true</code>, wenn der Pfad prinzipiell angelegt werden kann. Das ist der Fall, wenn es sich um eine
      * einfache Assoziationsfolge ohne parallele Pfade oder Verweigungen zu Assoziationsklassen dazwischen handelt und alle
@@ -457,7 +432,7 @@ public abstract class AbstractMetaPath {
      *
      * @return
      */
-    protected abstract boolean getIsCreateable();
+    public abstract boolean isCreateable();
 
     /**
      * Liefert <code>true</code>, wenn der Pfad zwischen Elementen der Start- und Zielklasse den prinzipiell angelegt werden kann.
@@ -524,11 +499,6 @@ public abstract class AbstractMetaPath {
     }
 
     /**
-     * Speicher den Wert von {@link #getIsDirected()}
-     */
-    protected final boolean directed;
-
-    /**
      * Liefert <code>false</code>, wenn der Pfad in beide Richtungen dasselbe bedeutet. Dafür muss
      * er dieselben Elementarten miteinander verbinden und denselben Namen in beiden Richtungen
      * tragen. Z.B können 2 physische DV-Bausteine über Datenübertragungsverbindungen miteinander
@@ -544,16 +514,6 @@ public abstract class AbstractMetaPath {
      * @return
      *         <code>true</code> wenn Vorwärts- und Rückwärtsrichtungen unterschiedliche Bedeutung haben
      */
-    public final boolean isDirected() {
-        return directed;
-    }
-
-    /**
-     * Liefert dasselbe wie {@link #isDirected()}
-     *
-     * @return
-     * @see #isDirected()
-     */
-    protected abstract boolean getIsDirected();
+    public abstract boolean isDirected();
 
 }

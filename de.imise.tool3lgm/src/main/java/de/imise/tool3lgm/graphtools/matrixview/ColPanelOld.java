@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 /**
  * @author Thomas Rudert
  */
-public class ColPanel extends JPanel {
+public class ColPanelOld extends JPanel {
 
     /** ArrayList mit den Strings der Namen der Spaltenelemente */
     private List<ModelElement> cols;
@@ -49,7 +49,7 @@ public class ColPanel extends JPanel {
      *
      * @param _cols ArrayList mit Strings der Spaltenüberschriften
      */
-    public ColPanel(final List<ModelElement> _cols) {
+    public ColPanelOld(final List<ModelElement> _cols) {
         super();
         cols = _cols;
     }
@@ -85,12 +85,16 @@ public class ColPanel extends JPanel {
         g2.setTransform(nullTransform);
     }
 
+    /**
+     * @param value
+     * @return
+     */
     private static int round(final double value) {
         return (int) Math.round(value);
     }
 
     /**
-     * bestimmt die benötigten Parameter delta und max_height und legt die Größe der Component fest
+     * Bestimmt die benötigten Parameter delta und max_height und legt die Größe der Component fest
      *
      * @param g Graphics
      */

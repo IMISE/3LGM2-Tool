@@ -11,9 +11,9 @@ import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPathOld;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
@@ -115,7 +115,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
     /////////////////////
 
     @Override
-    public PathsDefinition createPathsDefinition() {
+    public MetaPathDefinition createPathsDefinition() {
         return new TLGMOriginalPathsDefinition();
     }
 
@@ -344,7 +344,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
     }
 
     @Override
-    protected Collection<SimpleMetaPath> getCreateablePaths() {
+    protected Collection<SimpleMetaPathOld> getCreateablePaths() {
         return ImmutableList.of();
     }
 

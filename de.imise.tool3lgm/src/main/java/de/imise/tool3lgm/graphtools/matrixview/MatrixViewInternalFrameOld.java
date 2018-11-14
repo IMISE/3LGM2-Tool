@@ -14,7 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.util.swing.component.UnfloatableToolBar;
@@ -24,22 +24,22 @@ import de.imise.util.swing.component.UnfloatableToolBar;
  *
  * @author Thomas Rudert, AXS
  */
-public final class MatrixViewInternalFrame extends AbstractInternalFrame implements MouseMotionListener, MouseListener {
+public final class MatrixViewInternalFrameOld extends AbstractInternalFrame implements MouseMotionListener, MouseListener {
 
     /**
      * Panel für die Zeilenbeschriftungen (Elementnamen)
      */
-    private final RowPanel rowHeaderPanel;
+    private final RowPanelOld rowHeaderPanel;
 
     /**
      * Panel für die Spaltenbeschriftungen (Elementnamen)
      */
-    private final ColPanel colHeaderPanel;
+    private final ColPanelOld colHeaderPanel;
 
     /**
      * Panel für die Darstellung der Verbindungen
      */
-    private final CellPanel cellPanel;
+    private final CellPanelOld cellPanel;
 
     /**
      * Panel, das angezeigt wird, solange kein korrekter MetaPfad ausgewählt ist.
@@ -49,21 +49,21 @@ public final class MatrixViewInternalFrame extends AbstractInternalFrame impleme
     /**
      * Das Model nach dem die Tabelle aufgebaut wird
      */
-    private final TableModel tableModel;
+    private final TableModelOld tableModel;
 
     /**
      * @param graphDocument
      */
-    public MatrixViewInternalFrame(final LGMGraphDocument graphDocument) {
+    public MatrixViewInternalFrameOld(final LGMGraphDocument graphDocument) {
         super(graphDocument, "");
         setClosable(true);
-        tableModel = new TableModel(getGraphDocument());
+        tableModel = new TableModelOld(getGraphDocument());
 
         msgPanel = new JPanel();
 
-        rowHeaderPanel = new RowPanel(tableModel.getRowHeaders());
-        colHeaderPanel = new ColPanel(tableModel.getColHeaders());
-        cellPanel = new CellPanel(tableModel, colHeaderPanel, rowHeaderPanel);
+        rowHeaderPanel = new RowPanelOld(tableModel.getRowHeaders());
+        colHeaderPanel = new ColPanelOld(tableModel.getColHeaders());
+        cellPanel = new CellPanelOld(tableModel, colHeaderPanel, rowHeaderPanel);
         cellPanel.addMouseMotionListener(this);
         cellPanel.addMouseListener(this);
         setComponents();
@@ -78,7 +78,7 @@ public final class MatrixViewInternalFrame extends AbstractInternalFrame impleme
      * @param showPartsOnly legt fest, ob nur absolute Teilelemente angezeigt werden sollen (absolut heiß, dass sie im Gesamtmodell keine Teile haben
      *            dürfen)
      */
-    public void update(final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final MetaPath metaPath, final boolean showPartsOnly) {
+    public void update(final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final AbstractMetaPath metaPath, final boolean showPartsOnly) {
         tableModel.fillTableModel(rowClass, colClass, metaPath, showPartsOnly);
         rowHeaderPanel.setRows(tableModel.getRowHeaders());
         colHeaderPanel.setCols(tableModel.getColHeaders());
@@ -116,7 +116,7 @@ public final class MatrixViewInternalFrame extends AbstractInternalFrame impleme
     }
 
     /** Werkzeugleiste zu diesem Fenster */
-    private MatrixViewPathSelectorToolBar matrixViewToolBar = null;
+    private MatrixViewPathSelectorToolBarOld matrixViewToolBar = null;
 
     /**
      * gibt die Werkzeugleise zu diesem Fenster zurück
@@ -127,7 +127,7 @@ public final class MatrixViewInternalFrame extends AbstractInternalFrame impleme
         return matrixViewToolBar;
     }
 
-    public void setMatrixViewToolBar(final MatrixViewPathSelectorToolBar matrixViewToolBar) {
+    public void setMatrixViewToolBar(final MatrixViewPathSelectorToolBarOld matrixViewToolBar) {
         this.matrixViewToolBar = matrixViewToolBar;
     }
 

@@ -45,7 +45,7 @@ import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
+import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrameOld;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -56,8 +56,8 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.PathFinderOld;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -212,7 +212,7 @@ public class ActionLibrary {
                         iga.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
                         ComponentAsImageExportHandler.createFile(iga);
                         iga.setPaintState(PaintState.REGULAR);
-                    } else if (selframe instanceof MatrixViewInternalFrame) {
+                    } else if (selframe instanceof MatrixViewInternalFrameOld) {
                         JScrollPane sp = selframe.getScrollPane();
                         Dimension size = sp.getSize();
                         sp.setSize(sp.getMaximumSize());
@@ -381,9 +381,9 @@ public class ActionLibrary {
                     for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
                         if (ec instanceof InterLayerConnectedNodeContainer) {
                             ModelElement me = ec.getElement();
-                            MetaPath interLayerMetaPath = ModelConstants.getGraphViewDefinition().getInterLayerMetaPath(ec.getElement().getClass());
+                            MetaPathOld interLayerMetaPath = ModelConstants.getGraphViewDefinition().getInterLayerMetaPath(ec.getElement().getClass());
                             if (interLayerMetaPath != null) {
-                                Set<ModelElement> interLayerConnectedElements = PathFinder.getDirectConnectedElements(me, interLayerMetaPath);
+                                Set<ModelElement> interLayerConnectedElements = PathFinderOld.getDirectConnectedElements(me, interLayerMetaPath);
                                 if (!interLayerConnectedElements.isEmpty()) {
                                     boolean hasVisibleConfigs = ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections();
                                     if (show != hasVisibleConfigs) {
@@ -763,7 +763,7 @@ public class ActionLibrary {
                         }
                     };
                     String resKey = ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS.name();
-                    MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
+                    MetaPathOld metaPath = singleSimpleRedundancyDefinition.getMetaPath();
                     String startClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getStartClass());
                     String endClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getEndClass());
                     String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);

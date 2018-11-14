@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path.v4;
+package de.imise.tool3lgm.graphtools.path.meta;
 
 import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getFullBackwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getFullForwardMetaAssociationName;
@@ -13,7 +13,8 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.SimpleMetaPathOld;
+import de.imise.util.ReflectionUtils;
 
 /**
  * Elementarer MetaPfad, aus dem alle anderen MetaPfade aufgebaut sind.
@@ -86,9 +87,19 @@ public class ElementaryMetaPath extends AbstractMetaPath {
 
     /**
      * Liste aller {@link ElementaryMetaPath}, die sich evtl. aus diesem Pfad bilden lässt, wenn er im Grunde nur {@link ElementaryMetaPath} und
-     * andere {@link SimpleMetaPath}, die ebenso aufgebaut sind, enthält.
+     * andere {@link SimpleMetaPathOld}, die ebenso aufgebaut sind, enthält.
      */
     private List<ElementaryMetaPath> simpleMetaPath;
+
+    /**
+     * @see {@link #isDirected()}
+     */
+    private final boolean directed;
+
+    /**
+     * @see #isCreateable()
+     */
+    private final boolean createable;
 
     /**
      * Ein MetaPfad kann nur aus einer Elementklasse bestehen. Dies beschreibt den Pfad zu allen Elementen dieser Klasse.
@@ -98,6 +109,7 @@ public class ElementaryMetaPath extends AbstractMetaPath {
      * @param elementClass
      */
     public ElementaryMetaPath(final Class<? extends ModelElement> elementClass) {
+        super(elementClass, elementClass);
         startClass = elementClass;
         endClass = elementClass;
         edgeClass = null;
@@ -107,6 +119,8 @@ public class ElementaryMetaPath extends AbstractMetaPath {
         if (elementClass == null) {
             invalidReason = InvalidReason.INVALID_START_CLASS;
         }
+        directed = false;
+        createable = false;
     }
 
     /**
@@ -117,19 +131,26 @@ public class ElementaryMetaPath extends AbstractMetaPath {
         this(edgeClass, direction, null);
     }
 
+    private static final Direction getDirection(final Direction direction) {
+        return direction != null ? direction : Direction.FORWARD;
+    }
+
+    private static final boolean isForward(final Direction direction) {
+        return getDirection(direction) == Direction.FORWARD;
+    }
+
     /**
      * @param edgeClass
      * @param direction
      */
     public ElementaryMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
-        this((Class<? extends ModelElement>) null, edgeClass, (Class<? extends ModelElement>) null, direction == null ? Direction.FORWARD : Direction.BACKWARD, (ConnectionState) null, Type.ELEMENT_EDGE_ELEMENT);
-        otherDirection = new ElementaryMetaPath((Class<? extends ModelElement>) null, edgeClass, (Class<? extends ModelElement>) null, this.direction == Direction.BACKWARD ? Direction.FORWARD : Direction.BACKWARD, connectionState,
-                Type.ELEMENT_EDGE_ELEMENT);
+        this((Class<? extends ModelElement>) null, edgeClass, (Class<? extends ModelElement>) null, getDirection(direction), connectionState, Type.ELEMENT_EDGE_ELEMENT);
+        otherDirection = new ElementaryMetaPath(endClass, edgeClass, startClass, this.direction == Direction.BACKWARD ? Direction.FORWARD : Direction.BACKWARD, connectionState, Type.ELEMENT_EDGE_ELEMENT);
         otherDirection.otherDirection = this;
     }
 
     private ElementaryMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final Direction direction, final ConnectionState connectionState, final Type type) {
-        super(startClass, endClass);
+        super(startClass == null ? isForward(direction) ? Edge.getStartClass(edgeClass) : Edge.getEndClass(edgeClass) : startClass, endClass == null ? isForward(direction) ? Edge.getEndClass(edgeClass) : Edge.getStartClass(edgeClass) : endClass);
         Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
         Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
         if (direction == Direction.FORWARD) {
@@ -142,6 +163,8 @@ public class ElementaryMetaPath extends AbstractMetaPath {
         this.edgeClass = edgeClass;
         this.direction = direction;
         this.type = type;
+        directed = startClass != endClass && getFullForwardMetaAssociationName(edgeClass) != getFullBackwardMetaAssociationName(edgeClass);
+        createable = getIsCreateable();
         //TODO: hier müsste noch der invalidReason geprüft werden!
     }
 
@@ -280,7 +303,11 @@ public class ElementaryMetaPath extends AbstractMetaPath {
     //    }
     //
     @Override
-    protected final boolean getIsCreateable() {
+    public final boolean isCreateable() {
+        return createable;
+    }
+
+    private final boolean getIsCreateable() {
         if (type != Type.ELEMENT_EDGE_ELEMENT) {
             return false;
         }
@@ -294,8 +321,8 @@ public class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public boolean getIsDirected() {
-        return startClass != endClass && getFullForwardMetaAssociationName(edgeClass) != getFullBackwardMetaAssociationName(edgeClass);
+    public boolean isDirected() {
+        return directed;
     }
 
     @Override
@@ -304,6 +331,112 @@ public class ElementaryMetaPath extends AbstractMetaPath {
             simpleMetaPath = ImmutableList.of(this);
         }
         return simpleMetaPath;
+    }
+
+    ////////////////////////
+    // Factory-Funktionen //
+    ////////////////////////
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getEdgeToStartElementMetaPath(final Class<? extends Edge> edgeClass) {
+        return getEdgeToStartElementMetaPath(edgeClass, null);
+    }
+
+    /**
+     * @param edgeClass
+     * @param connectionState
+     * @return
+     */
+    public final ElementaryMetaPath getEdgeToStartElementMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+        return new ElementaryMetaPath(edgeClass, edgeClass, Edge.getStartClass(edgeClass), Direction.BACKWARD, connectionState, Type.START_WITH_EDGE);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getEdgeToEndElementMetaPath(final Class<? extends Edge> edgeClass) {
+        return getEdgeToEndElementMetaPath(edgeClass, null);
+    }
+
+    /**
+     * @param edgeClass
+     * @param connectionState
+     * @return
+     */
+    public final ElementaryMetaPath getEdgeToEndElementMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+        return new ElementaryMetaPath(edgeClass, edgeClass, Edge.getStartClass(edgeClass), Direction.FORWARD, connectionState, Type.START_WITH_EDGE);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getEdgeToStartAndEndElementMetaPath(final Class<? extends Edge> edgeClass) {
+        return getEdgeToStartAndEndElementMetaPath(edgeClass, null);
+    }
+
+    /**
+     * @param edgeClass
+     * @param connectionState
+     * @return
+     */
+    public final ElementaryMetaPath getEdgeToStartAndEndElementMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+        return new ElementaryMetaPath(edgeClass, edgeClass, Edge.getStartClass(edgeClass), null, connectionState, Type.START_WITH_EDGE);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getStartElementToEdgeMetaPath(final Class<? extends Edge> edgeClass) {
+        return getStartElementToEdgeMetaPath(edgeClass, null);
+    }
+
+    /**
+     * @param edgeClass
+     * @param connectionState
+     * @return
+     */
+    public final ElementaryMetaPath getStartElementToEdgeMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+        return new ElementaryMetaPath(Edge.getStartClass(edgeClass), edgeClass, edgeClass, Direction.FORWARD, connectionState, Type.END_WITH_EDGE);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass) {
+        return getEndElementToEdgeMetaPath(edgeClass, null);
+    }
+
+    /**
+     * @param edgeClass
+     * @param connectionState
+     * @return
+     */
+    public final ElementaryMetaPath getEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+        return new ElementaryMetaPath(Edge.getStartClass(edgeClass), edgeClass, edgeClass, Direction.BACKWARD, connectionState, Type.END_WITH_EDGE);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getStartAndEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass) {
+        return getStartAndEndElementToEdgeMetaPath(edgeClass, null);
+    }
+
+    /**
+     * @param edgeClass
+     * @param connectionState
+     * @return
+     */
+    public final ElementaryMetaPath getStartAndEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+        return new ElementaryMetaPath(edgeClass, edgeClass, ReflectionUtils.getCommonSuperClass(Edge.getStartClass(edgeClass), Edge.getEndClass(edgeClass)), null, connectionState, Type.END_WITH_EDGE);
     }
 
 }

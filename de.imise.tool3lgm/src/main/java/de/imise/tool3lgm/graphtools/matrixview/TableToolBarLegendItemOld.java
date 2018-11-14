@@ -11,7 +11,7 @@ import javax.swing.JPanel;
  * 
  * @author Thomas Rudert
  */
-public class TableToolBarLegendItem extends JPanel {
+public class TableToolBarLegendItemOld extends JPanel {
 
     /**
      * Farbe der Felder, die dieses Legenden-Item erklärt
@@ -27,7 +27,7 @@ public class TableToolBarLegendItem extends JPanel {
      * @param description
      * @param color
      */
-    public TableToolBarLegendItem(final String description, final Color color) {
+    public TableToolBarLegendItemOld(final String description, final Color color) {
         this.description = description;
         this.color = color;
     }

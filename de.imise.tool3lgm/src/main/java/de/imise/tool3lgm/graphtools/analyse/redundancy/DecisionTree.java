@@ -14,8 +14,8 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.PathFinderOld;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.AlphabeticalSet;
 
@@ -148,7 +148,7 @@ public class DecisionTree {
         GraphDocument doc = result.getGDCollection().getMainGraphDocument();
 
         SingleRedundancyAnalysisDefinition definition = result.getDefinition();
-        MetaPath metaPath = definition.getMetaPath();
+        MetaPathOld metaPath = definition.getMetaPath();
 
         // alle Aufgaben des doc ohne Teilaufgaben in einer alphabetischen Liste holen
         // ArrayList<ModelElement> functions = doc.getModelItems(result.getEndClass(), true, true,
@@ -174,7 +174,7 @@ public class DecisionTree {
             // Set aller Aufgaben, die der AWB unterstützt
             AlphabeticalSet<ModelElement> funcsOfAWB = new AlphabeticalSet<>();
             awbToFuncsSets.put(as, funcsOfAWB);
-            Set<ModelElement> funcsAwb = PathFinder.getConnectedElements(as, metaPath);
+            Set<ModelElement> funcsAwb = PathFinderOld.getConnectedElements(as, metaPath);
             Set<ModelElement> leafFuncAwb = new HashSet<>(funcsAwb.size());
             for (ModelElement func : funcsAwb) {
                 leafFuncAwb.addAll(func.getAbsolutePartElements());
@@ -867,11 +867,11 @@ public class DecisionTree {
      */
     private final AlphabeticalSet<ModelElement> getSameSupporter(final ModelElement me) {
         SingleRedundancyAnalysisDefinition definition = result.getDefinition();
-        MetaPath metaPath = definition.getMetaPath();
-        Collection<ModelElement> supported = PathFinder.getConnectedElements(me, metaPath.getEndClass(), metaPath);
+        MetaPathOld metaPath = definition.getMetaPath();
+        Collection<ModelElement> supported = PathFinderOld.getConnectedElements(me, metaPath.getEndClass(), metaPath);
         AlphabeticalSet<ModelElement> returnSet = new AlphabeticalSet<>();
         for (ModelElement supped : supported) {
-            Collection<ModelElement> supporter = PathFinder.getConnectedElements(supped, metaPath.getStartClass(), metaPath);
+            Collection<ModelElement> supporter = PathFinderOld.getConnectedElements(supped, metaPath.getStartClass(), metaPath);
             for (ModelElement supper : supporter) {
                 if (!result.uselessAWB.contains(supper) && !result.moreUselessAWB.contains(supper)) {
                     returnSet.add(supper);

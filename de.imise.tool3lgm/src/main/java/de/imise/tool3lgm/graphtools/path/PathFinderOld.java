@@ -15,10 +15,10 @@ import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
-import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
@@ -28,7 +28,7 @@ import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
  * @author Thomas Rudert
  * @author AXS (5.10.2007)
  */
-public final class PathFinder {
+public final class PathFinderOld {
 
     /**
      * Liefert alle <code>MetaPath</code>es, die zwischen Elementen der Art <code>startClass</code> und <code>endClass</code> definiert sind.
@@ -37,17 +37,17 @@ public final class PathFinder {
      * @param endClass
      * @return
      */
-    public static final Collection<MetaPath> getMetaPathes(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
-        PathsDefinition pathsDefinition = ModelConstants.getPathsDefinition();
-        return pathsDefinition.getMetaPathes(startClass, endClass);
+    public static final Collection<AbstractMetaPath> getMetaPathes(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
+        MetaPathDefinition pathsDefinition = ModelConstants.getPathsDefinition();
+        return pathsDefinition.getMetaPaths(startClass, endClass, true, true);
     }
 
     /**
      * @return
      */
     public static final Set<Class<? extends ModelElement>> getElementClassesInPathes() {
-        PathsDefinition pathsDefinition = ModelConstants.getPathsDefinition();
-        return pathsDefinition.getElementClassesInPathes();
+        MetaPathDefinition pathsDefinition = ModelConstants.getPathsDefinition();
+        return pathsDefinition.getStartElementClassesWithPaths(true, true);
     }
 
     //	/**
@@ -102,7 +102,7 @@ public final class PathFinder {
      * @return FORWARD / BACKWARD / DOUBLE if path.isImmediate otherwise <code>null</code>
      */
     @SuppressWarnings("incomplete-switch") //ANY ist egal, weil das hier nie passiert
-    public static final ConnectionState isConnected(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
+    public static final ConnectionState isConnected(final ModelElement element1, final ModelElement element2, final MetaPathOld metaPath) {
         boolean searchParts = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
         boolean searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
         if (!searchParts && !searchParents || element1 == element2 || metaPath.isRecursiveSubordinationPath()) { //statt isRecursiveSubordinationPath() wurde hier mal auf HasPartEdge getestet. Was genau das macht ist mir (AXS) nicht (mehr) klar. Deswegen habe ich es jetzt von der Bedeutung so gleich wie mäglich gemacht
@@ -153,7 +153,7 @@ public final class PathFinder {
      * @param metaPath
      * @return
      */
-    private static final ConnectionState isConnectedInternal(final ModelElement element1, final ModelElement element2, final MetaPath metaPath) {
+    private static final ConnectionState isConnectedInternal(final ModelElement element1, final ModelElement element2, final MetaPathOld metaPath) {
         if (!metaPath.getStartClass().isAssignableFrom(element1.getClass()) || !metaPath.getEndClass().isAssignableFrom(element2.getClass())) {
             if (metaPath.getEndClass().isAssignableFrom(element1.getClass()) && metaPath.getStartClass().isAssignableFrom(element2.getClass())) {
                 return isConnectedInternal(element2, element1, metaPath);
@@ -189,7 +189,7 @@ public final class PathFinder {
      * @param pathIndex
      * @return
      */
-    private static final ConnectionState isConnected(final ModelElement current, final ModelElement end, final MetaPath metaPath, final int position, final int pathIndex) {
+    private static final ConnectionState isConnected(final ModelElement current, final ModelElement end, final MetaPathOld metaPath, final int position, final int pathIndex) {
         if (position == metaPath.getLength(pathIndex)) {
             if (current.equals(end)) {
                 return DOUBLE;
@@ -247,7 +247,7 @@ public final class PathFinder {
      * @param metaPath
      * @return
      */
-    public static final Set<ModelElement> getDirectConnectedElements(final ModelElement me, final MetaPath metaPath) {
+    public static final Set<ModelElement> getDirectConnectedElements(final ModelElement me, final MetaPathOld metaPath) {
         Set<ModelElement> startElements = new HashSet<>();
         startElements.add(me);
         Set<ModelElement> endElements = new HashSet<>();
@@ -317,7 +317,7 @@ public final class PathFinder {
      * @param metaPath
      * @return
      */
-    public static final Set<ModelElement> getConnectedElements(final ModelElement me, final MetaPath metaPath) {
+    public static final Set<ModelElement> getConnectedElements(final ModelElement me, final MetaPathOld metaPath) {
         return getConnectedElements(me, metaPath.getEndClass(), metaPath);
     }
 
@@ -330,7 +330,7 @@ public final class PathFinder {
      * @param metaPath
      * @return
      */
-    public static final Set<ModelElement> getConnectedElements(final ModelElement me, final Class<? extends ModelElement> targetElementClass, final MetaPath metaPath) {
+    public static final Set<ModelElement> getConnectedElements(final ModelElement me, final Class<? extends ModelElement> targetElementClass, final MetaPathOld metaPath) {
         Set<ModelElement> startElements = me.getParentElements();
         startElements.add(me);
         Set<ModelElement> endElements = null;
