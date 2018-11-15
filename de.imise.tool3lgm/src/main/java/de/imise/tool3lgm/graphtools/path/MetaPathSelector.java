@@ -22,14 +22,11 @@ import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
- * Diese Klasse stellt 3 zusammengehörige Komponenten bereit, mit denen ein Benutzter einen
- * speziellen Metapfad auswählen kann.<br>
- * In die erste ComboBox kann man eine Klasse des Meta-Pfades eingeben, in die zweite die andere
- * Klasse und, falls es zw. diesen Klassen mehrere MetaPfade gibt, kann man aus einer Liste einen
- * auswählen.<br>
+ * Diese Klasse stellt 3 zusammengehörige Komponenten bereit, mit denen ein Benutzter einen speziellen Metapfad auswählen kann.<br>
+ * In die erste ComboBox kann man eine Klasse des Meta-Pfades eingeben, in die zweite die andere Klasse und, falls es zw. diesen Klassen mehrere
+ * MetaPfade gibt, kann man aus einer Liste einen auswählen.<br>
  * Dieser Mechanismus wird in der Matrix-Sicht verwendet.
- * Diesen Selector gab es schon für die alten Pfade der Matrixsicht und hiermit wurde er für die
- * neuen PFade adaptiert.
+ * Diesen Selector gab es schon für die alten Pfade der Matrixsicht und hiermit wurde er für die neuen Pfade adaptiert.
  *
  * @author AXS
  * @create 13.11.2007
@@ -47,11 +44,6 @@ public class MetaPathSelector implements ActionListener {
     private final AlphabeticalComboBox class2ComboBox;
 
     /**
-     * Listenkomponente zur Auswahl des Metapfades zwischen den in den ComboBoxen ausgewählten
-     * Klassen.
-     * /
-     * private AlphabeticalJList metaPathJList;
-     * /**
      * Metapaths that can be choosed in the <code>metaPathJList</code>
      */
     private Set<AbstractMetaPath> selectableMetaPathes;
@@ -67,8 +59,7 @@ public class MetaPathSelector implements ActionListener {
     private final ArrayList<ChangeListener> changeListenerList = new ArrayList<>();
 
     /**
-     * Selektor der in allen Dialigen benutzt wird, die statisch von dieser Klasse angezeigt werden.
-     * Dadurch bleibt eine alte Auswahl immer erhalten.
+     * Selektor der in allen Dialigen benutzt wird, die statisch von dieser Klasse angezeigt werden. Dadurch bleibt eine alte Auswahl immer erhalten.
      */
     private static MetaPathSelector dialogMetaPathSelecor;
 

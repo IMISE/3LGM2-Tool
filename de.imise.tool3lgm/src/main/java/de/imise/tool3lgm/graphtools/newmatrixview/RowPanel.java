@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.newmatrixview;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -17,7 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 public class RowPanel extends JPanel {
 
     /** ArrayList mit Strings der Namen der Zeilenelement */
-    private ArrayList<? extends ModelElement> rows;
+    private List<? extends ModelElement> rows;
 
     /** Integer der die Zeilenhöhe definiert */
     private int delta = -1;
@@ -39,7 +39,7 @@ public class RowPanel extends JPanel {
      * @param _rows
      *            ArrayList mit Strings der Zeilenüberschriften
      */
-    public RowPanel(final ArrayList<ModelElement> _rows) {
+    public RowPanel(final List<ModelElement> _rows) {
         super();
         rows = _rows;
     }
@@ -126,7 +126,7 @@ public class RowPanel extends JPanel {
     /**
      * @param rows
      */
-    public void setRows(final ArrayList<? extends ModelElement> rows) {
+    public void setRows(final List<? extends ModelElement> rows) {
         this.rows = rows;
         initialized = false;
     }

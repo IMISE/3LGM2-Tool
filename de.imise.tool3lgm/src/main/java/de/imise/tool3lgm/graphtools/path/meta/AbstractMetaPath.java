@@ -516,4 +516,11 @@ public abstract class AbstractMetaPath {
      */
     public abstract boolean isDirected();
 
+    /**
+     * Liefert <code>true</code>, wenn der Metapfad irgendwo eine {@link PartOfVerbindung} enthält.
+     *
+     * @return
+     */
+    public abstract boolean containsHasPartEdge();
+
 }

@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.SimpleMetaPathOld;
 import de.imise.util.ReflectionUtils;
@@ -331,6 +332,11 @@ public class ElementaryMetaPath extends AbstractMetaPath {
             simpleMetaPath = ImmutableList.of(this);
         }
         return simpleMetaPath;
+    }
+
+    @Override
+    public boolean containsHasPartEdge() {
+        return HasPartEdge.class.isAssignableFrom(getEdgeClass());
     }
 
     ////////////////////////

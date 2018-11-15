@@ -85,9 +85,9 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
     private static boolean lastShowPartsOnlyChoice = false;
 
     /**
-     * Frame dessen Darstellung durch diese Toolbar beeinfluss wird
+     * Frame dessen Darstellung durch diese Toolbar beeinflusst wird
      */
-    private final MatrixViewInternalFrame controlledFrame;
+    private MatrixViewInternalFrame controlledFrame;
 
     /**
      * Das Model mit den auswählbaren Elementklassen und Pfaden für den {@link MetaPathSelector}
@@ -152,6 +152,10 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
 
     }
 
+    public void setFrame(final MatrixViewInternalFrame frame) {
+        controlledFrame = frame;
+    }
+
     /**
      * Erstellt fügt einer Componente das GridBagLayout und eine Menge von child- Componenten hinzu.
      * Bei Anordnung der child-Componenten wird in der linken oberen Ecke angefangen und dann
@@ -208,7 +212,7 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
         legendPanel.removeAll();
         if (metaPathSelector.isValidSelection()) {
             int combinations = (1 << metaPaths.length) - 1;
-            String and = " " + Tool3lgmConstants.getResString("and") + " ";
+            String and = " " + Tool3lgmConstants.getResString("und") + " ";
             for (int i = 0; i < combinations; i++) {
                 String startClassName = ElementsNameBuilder.getDisplayableName(c1);
                 StringBuilder sb = new StringBuilder();

@@ -324,4 +324,14 @@ public class SequenceMetaPath extends AbstractMetaPath {
         return true;
     }
 
+    @Override
+    public boolean containsHasPartEdge() {
+        for (AbstractMetaPath metaPath : metaPaths) {
+            if (metaPath.containsHasPartEdge()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

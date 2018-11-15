@@ -16,12 +16,12 @@ import javax.swing.SwingUtilities;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrameOld;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
@@ -157,7 +157,7 @@ public class Static {
     /** Gibt zurück, ob ein aktiver, sichtbarer Matrix-Frame existiert */
     public static boolean isActiveFrameMatrixFrame() {
         AbstractInternalFrame f = getActiveFrame();
-        return f != null && f instanceof MatrixViewInternalFrameOld && f.isVisible();
+        return f != null && f instanceof MatrixViewInternalFrame && f.isVisible();
     }
 
     private static boolean paintSimpleGraph = false;

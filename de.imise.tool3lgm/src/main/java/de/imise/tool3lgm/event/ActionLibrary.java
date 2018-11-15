@@ -45,7 +45,6 @@ import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrameOld;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -56,6 +55,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.path.MetaPathOld;
 import de.imise.tool3lgm.graphtools.path.PathFinderOld;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
@@ -212,7 +212,7 @@ public class ActionLibrary {
                         iga.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
                         ComponentAsImageExportHandler.createFile(iga);
                         iga.setPaintState(PaintState.REGULAR);
-                    } else if (selframe instanceof MatrixViewInternalFrameOld) {
+                    } else if (selframe instanceof MatrixViewInternalFrame) {
                         JScrollPane sp = selframe.getScrollPane();
                         Dimension size = sp.getSize();
                         sp.setSize(sp.getMaximumSize());

@@ -4,11 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrameOld;
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewPathSelectorToolBarOld;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.newmatrixview.InternalMatrixFrameToolBar;
+import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
@@ -50,14 +50,14 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
                     }
                 }
                 setToolBarVisible(UserProperties.is(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR));
-            } else if (activeFrame instanceof MatrixViewInternalFrameOld) {
-                MatrixViewInternalFrameOld matrixFrame = (MatrixViewInternalFrameOld) activeFrame;
-                if (currentToolBar == null || !(currentToolBar instanceof MatrixViewPathSelectorToolBarOld)) {
+            } else if (activeFrame instanceof MatrixViewInternalFrame) {
+                MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) activeFrame;
+                if (currentToolBar == null || !(currentToolBar instanceof InternalMatrixFrameToolBar)) {
                     removeToolBar();
-                    currentToolBar = new MatrixViewPathSelectorToolBarOld(matrixFrame);
+                    currentToolBar = new InternalMatrixFrameToolBar(matrixFrame);
                     addToolBar();
                 }
-                MatrixViewPathSelectorToolBarOld matrixViewToolBar = (MatrixViewPathSelectorToolBarOld) currentToolBar;
+                InternalMatrixFrameToolBar matrixViewToolBar = (InternalMatrixFrameToolBar) currentToolBar;
                 matrixViewToolBar.setFrame(matrixFrame);
                 matrixFrame.setMatrixViewToolBar(matrixViewToolBar);
                 if (matrixViewToolBar.getParent() == null) {

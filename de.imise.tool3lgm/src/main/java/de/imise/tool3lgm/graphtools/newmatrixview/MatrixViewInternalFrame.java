@@ -71,10 +71,6 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
         cellPanel.addMouseListener(this);
         setComponents();
 
-        if (getInternalFrameToolBar() == null) {
-            setToolBar(new InternalMatrixFrameToolBar(this));
-        }
-
     }
 
     /**
@@ -123,6 +119,22 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
             scrollPane.setVisible(true);
             revalidate();
         }
+    }
+
+    /** Werkzeugleiste zu diesem Fenster */
+    private InternalMatrixFrameToolBar matrixViewToolBar = null;
+
+    /**
+     * gibt die Werkzeugleise zu diesem Fenster zurück
+     *
+     * @return Werkzeugleiste des Fensters
+     */
+    public UnfloatableToolBar getMatrixViewToolBar() {
+        return matrixViewToolBar;
+    }
+
+    public void setMatrixViewToolBar(final InternalMatrixFrameToolBar matrixViewToolBar) {
+        this.matrixViewToolBar = matrixViewToolBar;
     }
 
     @Override
@@ -215,10 +227,7 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
      */
     @Override
     public void mouseExited(final MouseEvent arg0) {
-        UnfloatableToolBar toolbar = Static.getTool().getToolBar();
-        if (toolbar instanceof InternalMatrixFrameToolBar) {
-            ((InternalMatrixFrameToolBar) toolbar).positionChanged(null, null, null);
-        }
+        matrixViewToolBar.positionChanged(null, null, null);
     }
 
     //  Methoden des Interfaces GraphDocumentListener --- Anfang ---
@@ -257,6 +266,15 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
 
     @Override
     public void selectionChanged(final GraphDocument source) {
+    }
+
+    @Override
+    public void elementNameChanged(final ElementContainer ec) {
+        dataChanged(ec.getGraphDocument());
+    }
+
+    @Override
+    public void userFieldValueChanged(final ElementContainer ec) {
     }
 
 }

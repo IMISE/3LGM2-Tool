@@ -77,7 +77,7 @@ public class MatrixViewPathSelectorToolBarOld extends UnfloatableToolBar impleme
     private static boolean lastShowPartsOnlyChoice = false;
 
     /**
-     * Frame dessen Darstellung durch diese Toolbar beeinfluss wird
+     * Frame dessen Darstellung durch diese Toolbar beeinflusst wird
      */
     private MatrixViewInternalFrameOld controlledFrame;
 
@@ -92,7 +92,7 @@ public class MatrixViewPathSelectorToolBarOld extends UnfloatableToolBar impleme
         legendPanel = new JPanel();
         JPanel positionPanel = new JPanel(new GridLayout(2, 2, 0, 0));
         JPanel choicePanel = new JPanel();
-        legendPanel.setLayout(new BoxLayout(legendPanel, BoxLayout.Y_AXIS));
+        legendPanel.setLayout(new BoxLayout(legendPanelLayout.Y_AXIS));
 
         legendPanel.setBorder(new TitledBorder(getResString("legend")));
         positionPanel.setBorder(new TitledBorder(getResString("position")));

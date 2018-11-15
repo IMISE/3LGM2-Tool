@@ -1,18 +1,22 @@
 package de.imise.tool3lgm.graphtools.newmatrixview;
 
+import static de.imise.tool3lgm.userproperties.UserProperties.is;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
+
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
  * Beschreibt und verwaltet die Daten einer Matrixsicht über eine (Teil-) Modell
@@ -24,10 +28,10 @@ public class TableModel implements Iterable<TableCell> {
     /**
      * ArrayList mit den ModelElementen für die Spalten. <br>
      */
-    private ArrayList<ModelElement> colHeader;
+    private List<ModelElement> colHeader;
 
     /** ArrayList mit den ModelElementen für die Zeilen */
-    private ArrayList<ModelElement> rowHeader;
+    private List<ModelElement> rowHeader;
 
     private Set<TableCell> cellsSet = null;
 
@@ -122,7 +126,7 @@ public class TableModel implements Iterable<TableCell> {
      *
      * @return ArrayList mit Strings der Zeilenüberschriften
      */
-    public ArrayList<ModelElement> getRowHeaders() {
+    public List<ModelElement> getRowHeaders() {
         return rowHeader;
     }
 
@@ -131,7 +135,7 @@ public class TableModel implements Iterable<TableCell> {
      *
      * @return ArrayList mit STrings der Spaltenüberschriften
      */
-    public ArrayList<ModelElement> getColHeaders() {
+    public List<ModelElement> getColHeaders() {
         return colHeader;
     }
 
@@ -236,12 +240,12 @@ public class TableModel implements Iterable<TableCell> {
                 try {
                     int connectionBitPattern = -1;
                     for (int k = 0; k < metaPaths.length; k++) {
-                        boolean containsPartOf = metaPaths[k].containsPartOfEdge();
+                        boolean containsPartOf = metaPaths[k].containsHasPartEdge();
                         boolean connected = false;
                         if (containsPartOf) {
                             connected = MetaPathFunctions.getConnectionState(rowHeader.get(i), colHeader.get(j), metaPaths[k], false, false) != null;
                         } else {
-                            connected = MetaPathFunctions.getConnectionState(rowHeader.get(i), colHeader.get(j), metaPaths[k], UserProperties.isSearchParents(), UserProperties.isSearchParts()) != null;
+                            connected = MetaPathFunctions.getConnectionState(rowHeader.get(i), colHeader.get(j), metaPaths[k], is(OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS), is(OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS)) != null;
                         }
                         if (connected) {
                             connectionBitPattern += 1 << k;
