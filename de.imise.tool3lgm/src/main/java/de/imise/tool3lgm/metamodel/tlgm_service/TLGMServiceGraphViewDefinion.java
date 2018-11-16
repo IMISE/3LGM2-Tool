@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_service;
 
+import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath.create;
+
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -7,7 +9,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
@@ -53,12 +55,11 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
     }
 
     @Override
-    protected final MetaPathOld[] getConfigurationPaths() {
-        MetaPathOld[] configurationPaths = {
+    protected final SimpleMetaPath[] getConfigurationPaths() {
+        SimpleMetaPath[] configurationPaths = {
                 //Testpfad über alle Ebenen hinweg
                 //new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
-                new MetaPathOld(Function.class, ApplicationComponent.class, Function_Use_Edge.class, SupportLink_Edge.class),
-                new MetaPathOld(ApplicationComponent.class, PhysicalDataProcessingComponent.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class),
+                create(Function.class, ApplicationComponent.class, Function_Use_Edge.class, SupportLink_Edge.class), create(ApplicationComponent.class, PhysicalDataProcessingComponent.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class),
         };
         return configurationPaths;
     }

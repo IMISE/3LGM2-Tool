@@ -103,9 +103,7 @@ public class SequenceMetaPath extends AbstractMetaPath {
             if (!metaPath.isValid()) {
                 return false;
             }
-            // wenn nach dem aktuellen noch ein weiterer MetaPfad in der Liste steht, dann
-            // muss wenigstens eine Endklasse des aktuellen zu den Startklassen des folgenden
-            // Metapfades passen
+            // wenn nach dem aktuellen noch ein weiterer MetaPfad in der Liste steht, dann muss wenigstens eine Endklasse des aktuellen zu den Startklassen des folgenden Metapfades passen
             if (i < metaPathCount - 1) {
                 if (!metaPaths.get(i + 1).isStartClass(metaPath.getEndClasses(), true, true)) {
                     return false;

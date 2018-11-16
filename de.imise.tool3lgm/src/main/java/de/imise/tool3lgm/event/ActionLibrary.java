@@ -11,8 +11,8 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -56,8 +56,9 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.MetaPathOld;
-import de.imise.tool3lgm.graphtools.path.PathFinderOld;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -381,9 +382,9 @@ public class ActionLibrary {
                     for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
                         if (ec instanceof InterLayerConnectedNodeContainer) {
                             ModelElement me = ec.getElement();
-                            MetaPathOld interLayerMetaPath = ModelConstants.getGraphViewDefinition().getInterLayerMetaPath(ec.getElement().getClass());
+                            AbstractMetaPath interLayerMetaPath = ModelConstants.getGraphViewDefinition().getInterLayerMetaPath(ec.getElement().getClass());
                             if (interLayerMetaPath != null) {
-                                Set<ModelElement> interLayerConnectedElements = PathFinderOld.getDirectConnectedElements(me, interLayerMetaPath);
+                                Collection<ModelElement> interLayerConnectedElements = MetaPathFunctions.getConnectedElements(me, interLayerMetaPath);
                                 if (!interLayerConnectedElements.isEmpty()) {
                                     boolean hasVisibleConfigs = ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections();
                                     if (show != hasVisibleConfigs) {

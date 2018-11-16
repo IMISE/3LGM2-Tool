@@ -12,10 +12,11 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.util.Alphabetical;
 
 /**
@@ -132,31 +133,47 @@ public class MetaPathDefinition {
      * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
      * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
      * rückwärts dreht, dann wird immer vorwärts angenommen.
+     * Dieser Metapfad wird in die Definition mit aufgenommen.
      *
      * @param startClass
      * @param endClass
      * @param baseResKeyOrName
      * @param associations
+     * @see #createSimpleMetaPath(Class, Class, String, Class...)
      */
-    protected final SequenceMetaPath put(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) {
-        Class<? extends ModelElement> start = startClass;
-        if (!Edge.isStartOrEndClass(associations[0], startClass)) {
-            return null;
-        }
-        AbstractMetaPath[] metaPaths = new AbstractMetaPath[associations.length];
-        for (int i = 0; i < associations.length; i++) {
-            Direction direction = Edge.isStartClass(associations[i], start) ? Direction.FORWARD : Direction.BACKWARD;
-            ElementaryMetaPath metaPath = getMetaPath(associations[i], direction);
-            metaPaths[i] = metaPath;
-            start = metaPath.getEndClass();
-        }
-        //die übergebene Endklasse muss auch eine Endklasse des letzten MetaPfades sein
-        if (!AbstractMetaPath.isEndClass(metaPaths[metaPaths.length - 1], endClass, true, true)) {
-            return null;
-        }
-        SequenceMetaPath sequenceMetaPath = new SequenceMetaPath(baseResKeyOrName, metaPaths);
-        put(sequenceMetaPath);
-        return sequenceMetaPath;
+    protected final SimpleMetaPath put(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) {
+        SimpleMetaPath simpleMetaPath = createSimpleMetaPath(startClass, endClass, baseResKeyOrName, associations);
+        put(simpleMetaPath);
+        return simpleMetaPath;
+    }
+
+    /**
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
+     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
+     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     *
+     * @param startClass
+     * @param endClass
+     * @param associations
+     * @return
+     */
+    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
+        return createSimpleMetaPath(startClass, endClass, null, associations);
+    }
+
+    /**
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
+     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
+     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     *
+     * @param startClass
+     * @param endClass
+     * @param baseResKeyOrName
+     * @param associations
+     * @return
+     */
+    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) {
+        return SimpleMetaPath.create(startClass, endClass, baseResKeyOrName, this, associations);
     }
 
     /**
