@@ -37,7 +37,7 @@ public class SimpleMetaPath extends SequenceMetaPath {
      * @param metaPaths
      */
     public SimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final ElementaryMetaPath... metaPaths) {
-        super(initFullPath(startClass, endClass, metaPaths));
+        super(baseResKeyOrName, initFullPath(startClass, endClass, metaPaths));
     }
 
     /**
