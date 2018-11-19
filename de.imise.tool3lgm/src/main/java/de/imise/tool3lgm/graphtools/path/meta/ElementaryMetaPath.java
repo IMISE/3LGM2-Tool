@@ -336,7 +336,8 @@ public class ElementaryMetaPath extends AbstractMetaPath {
 
     @Override
     public boolean containsHasPartEdge() {
-        return HasPartEdge.class.isAssignableFrom(getEdgeClass());
+        Class<? extends Edge> edgeClass = getEdgeClass();
+        return edgeClass != null && HasPartEdge.class.isAssignableFrom(getEdgeClass());
     }
 
     ////////////////////////
