@@ -389,7 +389,7 @@ public class ElementsNameBuilder {
             Alphabetical.insert(names, name);
         }
         String s = names.toString(); //ArrayList erzeugt einen String mit eckigen Klammern wie [name1, name2]
-        s = s.substring(1, s.length() - 2);//eckige Klammern weglassen
+        s = s.substring(1, s.length() - 1);//eckige Klammern weglassen
         return s;
     }
 
