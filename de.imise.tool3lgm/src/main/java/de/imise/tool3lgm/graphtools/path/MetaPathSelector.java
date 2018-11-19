@@ -17,6 +17,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -148,6 +149,12 @@ public class MetaPathSelector implements ActionListener {
                     selectedMetaPathes.add(selectableMetaPathes.iterator().next());
                 } else if (selectableMetaPathes.size() > 1) {
                     Object[] selected = new Object[selectableMetaPathes.size()];
+                    @SuppressWarnings("unchecked")
+                    NamedObjectContainer<AbstractMetaPath>[] pathNames = new NamedObjectContainer[selected.length];
+                    int i = 0;
+                    for (AbstractMetaPath metaPath : selectableMetaPathes) {
+                        pathNames[i++] = new NamedObjectContainer<>(metaPath, metaPath.getFullName());
+                    }
                     StringBuilder sb = new StringBuilder(Tool3lgmConstants.getResString("text_path_1"));
                     sb.append(" ");
                     //beliebig viele Pfade sind auswählbar
@@ -166,10 +173,12 @@ public class MetaPathSelector implements ActionListener {
                     }
                     while (selected != null && (selectedMetaPathes.size() == 0 || selectedMetaPathes.size() > maxParallelSelectedPaths)) {
                         selectedMetaPathes.clear();
-                        selected = MultipleOptionPane.showCheckBoxOptionDialog(Static.getTool(), Tool3lgmConstants.getResString("choice"), sb.toString(), selectableMetaPathes.toArray(), null, false);
-                        for (int i = 0; selected != null && i < selected.length; i++) {
+                        selected = MultipleOptionPane.showCheckBoxOptionDialog(Static.getTool(), Tool3lgmConstants.getResString("choice"), sb.toString(), pathNames, null, false);
+                        for (i = 0; selected != null && i < selected.length; i++) {
                             if (selected[i] != null) {
-                                selectedMetaPathes.add((AbstractMetaPath) selected[i]);
+                                @SuppressWarnings("unchecked")
+                                NamedObjectContainer<AbstractMetaPath> metaPathCont = (NamedObjectContainer<AbstractMetaPath>) selected[i];
+                                selectedMetaPathes.add(metaPathCont.getObject());
                             }
                         }
                     }
