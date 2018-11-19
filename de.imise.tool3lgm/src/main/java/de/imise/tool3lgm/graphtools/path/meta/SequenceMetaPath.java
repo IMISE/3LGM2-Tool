@@ -175,19 +175,16 @@ public class SequenceMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    protected String createName() {
-        String name = baseResKeyOrName;
-        name = Tool3lgmConstants.getResStringWithoutError(name);
-        if (Strings.isNullOrEmpty(name)) {
-            name = Edge.class.getSimpleName();//das sorgt dafür , dass der "ist verbunden mit"-Eintrag gefunden wird und der String nicht null ist
-        }
-        //es gibt einen Resouceneintrag mit dem übergebenen Schlüssel, aber ohne "_f" oder "_b" am Ende -> setze den und gehe davon aus, dass es keine Rückrichtung gibt
-        if (!name.equals(baseResKeyOrName)) {
-            this.name = name;
-        }
-        name = ElementsNameBuilder.getDirectedName(name, direction);
-        if (Strings.isNullOrEmpty(name)) {
-            name = baseResKeyOrName;
+    protected final String createName() {
+        //zuerst versuche, den Resouceneintrag mit dem übergebenen Schlüssel zu finden, aber ohne "_f" oder "_b" am Ende -> setze den und gehe davon aus, dass es keine Rückrichtung gibt (wenn es ihn gibt)
+        String name = Tool3lgmConstants.getResStringWithoutError(baseResKeyOrName);
+        if (Strings.isNullOrEmpty(name)) {//das passiert nur, wenn der baseResKeyOrName null oder leer ist
+            name = ElementsNameBuilder.getDirectedName(Edge.class.getSimpleName(), direction); //das sorgt dafür , dass der "ist verbunden mit"-Eintrag gefunden wird und der String nicht null ist
+        } else if (name.equals(baseResKeyOrName)) { //wenn der Key nicht leer war und nicht schon ein Resourceneintrag ohne "_f" oder "_b" gefunden wurde
+            name = ElementsNameBuilder.getDirectedName(name, direction);//versuche einen mit "_f" oder "_b" zu finden (je nach Richtung)
+            if (Strings.isNullOrEmpty(name)) { //wenn keiner gefunden wurde
+                name = baseResKeyOrName; // setzte den übergbenen nicht leeren Resourcen-String als Namen
+            }
         }
         this.name = name;
         return name;
