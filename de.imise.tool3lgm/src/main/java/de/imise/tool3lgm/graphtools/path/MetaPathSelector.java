@@ -117,6 +117,8 @@ public class MetaPathSelector implements ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
+        boolean addPathesFromSubClasses = true;
+        boolean addPathesFromSuperClasses = subClassPathsForSuperClasses;
         if (e.getSource() == class1ComboBox) {
             class2ComboBox.removeAllItems();
             if (class1ComboBox.getSelectedItem() == null) {
@@ -126,7 +128,7 @@ public class MetaPathSelector implements ActionListener {
             class2ComboBox.setEnabled(true);
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             for (Class<? extends ModelElement> elementClass : elementClassesWithPaths) {
-                Set<AbstractMetaPath> metaPathes = model.getMetaPaths(elementClass, class1BoxSelection, true, subClassPathsForSuperClasses);
+                Set<AbstractMetaPath> metaPathes = model.getMetaPaths(elementClass, class1BoxSelection, addPathesFromSubClasses, addPathesFromSuperClasses);
                 if (metaPathes != null && metaPathes.size() > 0) {
                     class2ComboBox.addItem(elementClass, getDisplayableName(elementClass));
                 }
@@ -142,7 +144,7 @@ public class MetaPathSelector implements ActionListener {
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             Class<? extends ModelElement> class2BoxSelection = ((Class<?>) class2ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             selectedMetaPathes.clear();
-            selectableMetaPathes = model.getMetaPaths(class1BoxSelection, class2BoxSelection, true, subClassPathsForSuperClasses);
+            selectableMetaPathes = model.getMetaPaths(class1BoxSelection, class2BoxSelection, addPathesFromSubClasses, addPathesFromSuperClasses);
 
             if (selectableMetaPathes != null) {
                 if (selectableMetaPathes.size() == 1) {
