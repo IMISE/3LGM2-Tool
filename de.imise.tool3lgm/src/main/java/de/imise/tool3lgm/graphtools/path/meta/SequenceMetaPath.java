@@ -177,10 +177,10 @@ public class SequenceMetaPath extends AbstractMetaPath {
     @Override
     protected String createName() {
         String name = baseResKeyOrName;
+        name = Tool3lgmConstants.getResStringWithoutError(name);
         if (Strings.isNullOrEmpty(name)) {
             name = Edge.class.getSimpleName();//das sorgt dafür , dass der "ist verbunden mit"-Eintrag gefunden wird und der String nicht null ist
         }
-        name = Tool3lgmConstants.getResStringWithoutError(name);
         //es gibt einen Resouceneintrag mit dem übergebenen Schlüssel, aber ohne "_f" oder "_b" am Ende -> setze den und gehe davon aus, dass es keine Rückrichtung gibt
         if (!name.equals(baseResKeyOrName)) {
             this.name = name;
@@ -189,6 +189,7 @@ public class SequenceMetaPath extends AbstractMetaPath {
         if (Strings.isNullOrEmpty(name)) {
             name = baseResKeyOrName;
         }
+        this.name = name;
         return name;
     }
 
