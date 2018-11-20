@@ -112,18 +112,9 @@ public class MetaPathDefinition {
             return;
         }
         for (AbstractMetaPath metaPath : metaPaths) {
-            AbstractMetaPath origialMetaPath = metaPath;
-            // den Pfad und seine Gegenrichtung hinzufügen (wenn es diese gibt und sie hinzugefügt werden soll)
-            for (int i = 0; i < 2; i++) {
-                // im 2. Durchlauf die Gegenrichtungspfad nehmen
-                if (i == 1) {
-                    origialMetaPath = metaPath;
-                    // es gibt keine Gegenrichtung oder der Gegenrichtungspfad ist der selbe wie der Hinpfad
-                    metaPath = metaPath.getOtherDirection();
-                    if (metaPath == null || metaPath == origialMetaPath) {
-                        return;
-                    }
-                }
+            definedMetaPaths.add(metaPath);
+            metaPath = metaPath.getOtherDirection();
+            if (metaPath != null) {
                 definedMetaPaths.add(metaPath);
             }
         }
@@ -307,43 +298,43 @@ public class MetaPathDefinition {
      * @param resKey
      * @return
      */
-    public static final String s(final String resKey) {
+    public static final String _s(final String resKey) {
         return Tool3lgmConstants.getResString(resKey);
     }
 
-    public ElementaryMetaPath eF(final Class<? extends Edge> edgeClass) {
+    public ElementaryMetaPath _eF(final Class<? extends Edge> edgeClass) {
         return getMetaPath(edgeClass, Direction.FORWARD);
     }
 
-    public ElementaryMetaPath eB(final Class<? extends Edge> edgeClass) {
+    public ElementaryMetaPath _eB(final Class<? extends Edge> edgeClass) {
         return getMetaPath(edgeClass, Direction.BACKWARD);
     }
 
-    public ElementaryMetaPath eFF(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    public ElementaryMetaPath _eFF(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
         return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, ConnectionState.FORWARD);
     }
 
-    public ElementaryMetaPath eBF(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    public ElementaryMetaPath _eBF(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
         return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, ConnectionState.FORWARD);
     }
 
-    public ElementaryMetaPath eFB(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    public ElementaryMetaPath _eFB(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
         return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, ConnectionState.BACKWARD);
     }
 
-    public ElementaryMetaPath eBB(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    public ElementaryMetaPath _eBB(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
         return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, ConnectionState.BACKWARD);
     }
 
-    public ElementaryMetaPath eFD(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    public ElementaryMetaPath _eFD(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
         return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, ConnectionState.DOUBLE);
     }
 
-    public ElementaryMetaPath eBD(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    public ElementaryMetaPath _eBD(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
         return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, ConnectionState.DOUBLE);
     }
 
-    public SequenceMetaPath s(final String baseResKeyOrName, final AbstractMetaPath... metaPaths) {
+    public SequenceMetaPath _s(final String baseResKeyOrName, final AbstractMetaPath... metaPaths) {
         return new SequenceMetaPath(baseResKeyOrName, metaPaths);
     }
 
