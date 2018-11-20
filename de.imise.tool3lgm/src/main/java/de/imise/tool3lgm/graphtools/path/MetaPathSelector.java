@@ -97,17 +97,17 @@ public class MetaPathSelector implements ActionListener {
      *            Model, das die auswählbaren Elementklassen und Pfade festlegt.
      * @param maxParallelSelectedPaths
      *            Maximale Anzahl gleichzeitig auswählbarer Pfade, wenn es mehrere gibt
-     * @param subClassPathsForSuperClasses
+     * @param pathsForSuperClasses
      *            Wenn <code>true</code> werden auch alle MetaPfade zurück gegeben, die für Unterklassen der Startklasse definiert wurden.
      *            Bei <code>false</code> werden nur die Metapfade zurück gegeben, die für die Startklasse selbst und ihre Oberklassen definiert
      *            wurden.
      */
-    public MetaPathSelector(final MetaPathDefinition model, final int maxParallelSelectedPaths, final boolean subClassPathsForSuperClasses) {
+    public MetaPathSelector(final MetaPathDefinition model, final int maxParallelSelectedPaths, final boolean pathsForSuperClasses) {
         super();
-        elementClassesWithPaths = model.getStartElementClassesWithPaths(pathsForSubClasses, subClassPathsForSuperClasses);
+        elementClassesWithPaths = model.getStartElementClassesWithPaths(pathsForSubClasses, pathsForSuperClasses);
         this.model = model;
         this.maxParallelSelectedPaths = maxParallelSelectedPaths;
-        pathsForSuperClasses = subClassPathsForSuperClasses;
+        this.pathsForSuperClasses = pathsForSuperClasses;
         class1ComboBox = new AlphabeticalComboBox();
         for (Class<? extends ModelElement> elementClass : elementClassesWithPaths) {
             String name = getDisplayableName(elementClass);
