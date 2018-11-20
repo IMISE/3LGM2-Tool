@@ -73,43 +73,37 @@ public class MetaPathSelector implements ActionListener {
     private int maxParallelSelectedPaths = -1;
 
     /**
-     * Wenn nichts anderes angegeben wurde, ist dieser Wert der Default von {@link #pathsForSuperClasses}
+     * Wenn <code>true</code> werden auch alle MetaPfade zurück gegeben, die für Oberklassen der Startklasse definiert wurden.
+     * Bei <code>false</code> werden nur die Metepfade zurück gegeben, die für die Startklasse definiert wurden.
+     * Dieser Parameter sorgt dafür, dass ein Pfad auch die Unterklassen der eigentlichen Pfadstart- und Pfadenklassen angeboten wird.
      */
-    private static final boolean DEFAULT_PATHS_FOR_SUPER_CLASSES = false;
+    private final boolean pathsForSubClasses = true;
 
     /**
      * Wenn <code>true</code> werden auch alle MetaPfade zurück gegeben, die für Unterklassen der Startklasse definiert wurden.
      * Bei <code>false</code> werden nur die Metepfade zurück gegeben, die für die Startklasse selbst definiert wurden.
+     * Dieser Parameter sorgt dafür, dass ein Pfad auch die Oberklassen der eigentlichen Pfadstart- und Pfadenklassen angeboten wird.
+     * DAS IST NUR BEDINGT SINNVOLL UND DESWEGEN FALSE. Wenn man diese Nach-Oben-Vererbung doch mal brauchen sollte, muss man diesen
+     * Wert über einen Konstruktor-Paramter setzen.
      */
-    private boolean pathsForSuperClasses = DEFAULT_PATHS_FOR_SUPER_CLASSES;
+    private final boolean pathsForSuperClasses = false;
 
-    /**
-     * Wenn <code>true</code> werden auch alle MetaPfade zurück gegeben, die für Oberklassen der Startklasse definiert wurden.
-     * Bei <code>false</code> werden nur die Metepfade zurück gegeben, die für die Startklasse definiert wurden.
-     */
-    private final boolean pathsForSubClasses = true;
-
-    /** Alle Elementklasse, für die laut {@link MetaPathDefinition} Pfade definiert sind. */
-    private final Set<Class<? extends ModelElement>> elementClassesWithPaths;
+    /** Alle Elementklasse, bei denenlaut {@link MetaPathDefinition} Pfade enden. */
+    private final Set<Class<? extends ModelElement>> endElementClassesInPaths;
 
     /**
      * @param model
      *            Model, das die auswählbaren Elementklassen und Pfade festlegt.
      * @param maxParallelSelectedPaths
      *            Maximale Anzahl gleichzeitig auswählbarer Pfade, wenn es mehrere gibt
-     * @param pathsForSuperClasses
-     *            Wenn <code>true</code> werden auch alle MetaPfade zurück gegeben, die für Unterklassen der Startklasse definiert wurden.
-     *            Bei <code>false</code> werden nur die Metapfade zurück gegeben, die für die Startklasse selbst und ihre Oberklassen definiert
-     *            wurden.
      */
-    public MetaPathSelector(final MetaPathDefinition model, final int maxParallelSelectedPaths, final boolean pathsForSuperClasses) {
-        super();
-        elementClassesWithPaths = model.getStartElementClassesWithPaths(pathsForSubClasses, pathsForSuperClasses);
+    public MetaPathSelector(final MetaPathDefinition model, final int maxParallelSelectedPaths) {
         this.model = model;
         this.maxParallelSelectedPaths = maxParallelSelectedPaths;
-        this.pathsForSuperClasses = pathsForSuperClasses;
         class1ComboBox = new AlphabeticalComboBox();
-        for (Class<? extends ModelElement> elementClass : elementClassesWithPaths) {
+        Set<Class<? extends ModelElement>> startElementClassesInPaths = model.getStartElementClassesInPaths(pathsForSubClasses, pathsForSuperClasses);
+        endElementClassesInPaths = model.getEndElementClassesInPaths(pathsForSubClasses, pathsForSuperClasses);
+        for (Class<? extends ModelElement> elementClass : startElementClassesInPaths) {
             String name = getDisplayableName(elementClass);
             if (name != null && name != "") {
                 class1ComboBox.addItem(elementClass, name);
@@ -136,7 +130,7 @@ public class MetaPathSelector implements ActionListener {
             }
             class2ComboBox.setEnabled(true);
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
-            for (Class<? extends ModelElement> elementClass : elementClassesWithPaths) {
+            for (Class<? extends ModelElement> elementClass : endElementClassesInPaths) {
                 Set<AbstractMetaPath> metaPathes = model.getMetaPaths(class1BoxSelection, elementClass, pathsForSubClasses, pathsForSuperClasses);
                 if (metaPathes != null && metaPathes.size() > 0) {
                     class2ComboBox.addItem(elementClass, getDisplayableName(elementClass));
@@ -234,7 +228,7 @@ public class MetaPathSelector implements ActionListener {
      */
     public static final MetaPathSelector showDialog(final MetaPathDefinition model, final String class1Label, final String class2Label, final String metaPathListLabel, final int maxParallelSelectedPaths) {
         if (dialogMetaPathSelecor == null) {
-            dialogMetaPathSelecor = new MetaPathSelector(model, maxParallelSelectedPaths, DEFAULT_PATHS_FOR_SUPER_CLASSES);
+            dialogMetaPathSelecor = new MetaPathSelector(model, maxParallelSelectedPaths);
         }
         AlphabeticalJList metaPathJList = new AlphabeticalJList(dialogMetaPathSelecor.selectableMetaPathes);
         if (maxParallelSelectedPaths <= 1) {

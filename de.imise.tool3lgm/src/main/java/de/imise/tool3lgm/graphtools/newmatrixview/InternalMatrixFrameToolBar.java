@@ -126,7 +126,7 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
         pathNameLabel = new JLabel("");
         pathNameLabel.setFont(pathNameLabel.getFont().deriveFont(Font.BOLD));
 
-        metaPathSelector = new MetaPathSelector(METAPATH_SELECTOR_MODEL, MAX_PARALLEL_SELECTED_METAPATHS, false);
+        metaPathSelector = new MetaPathSelector(METAPATH_SELECTOR_MODEL, MAX_PARALLEL_SELECTED_METAPATHS);
         metaPathSelector.addChangeListener(this);
 
         //ab 6 Legendeneinträgen ist diese Einstellung nicht mehr hoch genug

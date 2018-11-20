@@ -241,7 +241,7 @@ public class MetaPathDefinition {
     }
 
     /**
-     * Liefert alle Elementklassen, für die Pfade definiert sind.
+     * Liefert alle Elementklassen, für die Pfade als Startklasse definiert sind.
      *
      * @param subClasses
      *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Unterklassen einer Startklasse eines Pfades sind.
@@ -249,47 +249,74 @@ public class MetaPathDefinition {
      *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Oberklassen einer Startklasse eines Pfades sind.
      * @return
      */
-    public final Set<Class<? extends ModelElement>> getStartElementClassesWithPaths(final boolean subClasses, final boolean superClasses) {
-        Set<Class<? extends ModelElement>> pathsStartClassesSet = new HashSet<>();
+    public final Set<Class<? extends ModelElement>> getStartElementClassesInPaths(final boolean subClasses, final boolean superClasses) {
+        return getElementClassesInPaths(true, subClasses, superClasses);
+    }
+
+    /**
+     * Liefert alle Elementklassen, für die Pfade als Startklasse definiert sind.
+     *
+     * @param subClasses
+     *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Unterklassen einer Startklasse eines Pfades sind.
+     * @param superClasses
+     *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Oberklassen einer Startklasse eines Pfades sind.
+     * @return
+     */
+    public final Set<Class<? extends ModelElement>> getEndElementClassesInPaths(final boolean subClasses, final boolean superClasses) {
+        return getElementClassesInPaths(false, subClasses, superClasses);
+    }
+
+    /**
+     * Liefert alle Elementklassen, für die Pfade definiert sind.
+     *
+     * @param start wenn <code>true</code> werden alle Startklassen aller Pfade rausgesucht, bei <code>false</code> alle Endklassen
+     * @param subClasses
+     *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Unterklassen einer Startklasse eines Pfades sind.
+     * @param superClasses
+     *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Oberklassen einer Startklasse eines Pfades sind.
+     * @return
+     */
+    private final Set<Class<? extends ModelElement>> getElementClassesInPaths(final boolean start, final boolean subClasses, final boolean superClasses) {
+        Set<Class<? extends ModelElement>> pathsElementClassesSet = new HashSet<>();
         //alle Metapfade durchlaufen und alle neu gefundenen Startklassen zur Rückgabeliste hinzufügen
         for (AbstractMetaPath metaPath : definedMetaPaths) {
-            ArrayList<Class<? extends ModelElement>> newStartClasses = new ArrayList<>();
+            ArrayList<Class<? extends ModelElement>> newElementClasses = new ArrayList<>();
             //Für alle Startklassen des aktuellen Metapfades
-            for (Class<? extends ModelElement> startClass : metaPath.getStartClasses()) {
+            for (Class<? extends ModelElement> elementClass : start ? metaPath.getStartClasses() : metaPath.getEndClasses()) {
                 //wenn diese Klasse noch neu ist -> merken
-                if (!pathsStartClassesSet.contains(startClass)) {
-                    newStartClasses.add(startClass);
+                if (!pathsElementClassesSet.contains(elementClass)) {
+                    newElementClasses.add(elementClass);
                 }
             }
             //wenn der aktuelle MetaPfad keine bisher nicht bekannte Startklasse hatte -> nächster Metapfad
-            if (newStartClasses.size() == 0) {
+            if (newElementClasses.size() == 0) {
                 continue;
             }
             //alle neuen Startklassen in der Gesamtliste speichern
-            pathsStartClassesSet.addAll(newStartClasses);
+            pathsElementClassesSet.addAll(newElementClasses);
             //wenn auch die Unter- oder Oberklassen der Startklassen zurück gegeben werden sollen
             if (subClasses || superClasses) {
                 //für jede der neuen Startklasse aus allen Elementklassen alle Unter- oder Oberklassen bestimmen
-                for (Class<? extends ModelElement> startClass : newStartClasses) {
+                for (Class<? extends ModelElement> newElementClass : newElementClasses) {
                     //ModelConstants.ALL_MODELELEMENT_CLASSES enthält alle Elementklassen (auch alle abstracten bis hin zu ModelElement.class)
                     for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_MODELELEMENT_CLASSES_WITH_SUPER_CLASSES) {
                         //die Startklasse selbst ist schon in der Liste -> weiter
-                        if (elementClass == startClass) {
+                        if (elementClass == newElementClass) {
                             continue;
                         }
                         //wenn Unterklassen auch zurück gegeben werden sollen und die Startklasse eine Oberklasse der Elementklasse ist
-                        if (subClasses && startClass.isAssignableFrom(elementClass)) {
-                            pathsStartClassesSet.add(elementClass);
+                        if (subClasses && newElementClass.isAssignableFrom(elementClass)) {
+                            pathsElementClassesSet.add(elementClass);
                         }
                         //wenn Oberklassen auch zurück gegeben werden sollen und die Startklasse eine Unterklasse der Elementklasse ist
-                        if (superClasses && elementClass.isAssignableFrom(startClass)) {
-                            pathsStartClassesSet.add(elementClass);
+                        if (superClasses && elementClass.isAssignableFrom(newElementClass)) {
+                            pathsElementClassesSet.add(elementClass);
                         }
                     }
                 }
             }
         }
-        return pathsStartClassesSet;
+        return pathsElementClassesSet;
     }
 
     /**

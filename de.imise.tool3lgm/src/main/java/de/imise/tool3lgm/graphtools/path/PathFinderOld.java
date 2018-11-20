@@ -47,7 +47,7 @@ public final class PathFinderOld {
      */
     public static final Set<Class<? extends ModelElement>> getElementClassesInPathes() {
         MetaPathDefinition pathsDefinition = ModelConstants.getPathsDefinition();
-        return pathsDefinition.getStartElementClassesWithPaths(true, true);
+        return pathsDefinition.getStartElementClassesInPaths(true, true);
     }
 
     //	/**
