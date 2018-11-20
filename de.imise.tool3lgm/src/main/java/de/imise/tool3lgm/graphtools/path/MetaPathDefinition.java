@@ -185,25 +185,20 @@ public class MetaPathDefinition {
             boolean isDoubleMeaningEdge = ModelConstants.isDoubleMeaningEdge(edgeClass);
             //Kanten mit doppelter Bedeutung haben für jeden ConnectionState (null, FORWARD, BACKWARD, DOUBLE) und jede Richtung (FORWARD,
             //BACKWARD) je einen Elementarmetapfad mit eigener Bedeutung. Alle anderen haben nur für jede Richtung eine Bedeutung.
-            //Index des Elementarpfades ergibt sich aus Direction und ConnectionState:
-            //cs = (connectionState == null ? 0 : connectionState.ordinal() + 1)
-            //dir = direction.ordinal();
-            //Index = dir + 2 * cs
-            metaPathes = new ElementaryMetaPath[isDoubleMeaningEdge ? 8 : 2];
+            //Index des Elementarpfades ergibt sich aus dem ConnectionState = connectionState == null ? 0 : connectionState.ordinal() + 1
+            metaPathes = new ElementaryMetaPath[isDoubleMeaningEdge ? 4 : 1];
             metaPathes[0] = new ElementaryMetaPath(edgeClass, Direction.FORWARD); //0 = Index des Pfades = Direction.FORWARD.ordinal(). Das hier entspricht bei DoubleMeaningEdges dem ConnectionState.null
-            metaPathes[1] = new ElementaryMetaPath(edgeClass, Direction.BACKWARD); //1 = Index des Pfades = Direction.BACKWARD.ordinal(). Das hier entspricht bei DoubleMeaningEdges dem ConnectionState.null
             if (isDoubleMeaningEdge) {
-                metaPathes[2] = new ElementaryMetaPath(edgeClass, Direction.FORWARD, ConnectionState.FORWARD);
-                metaPathes[3] = new ElementaryMetaPath(edgeClass, Direction.BACKWARD, ConnectionState.FORWARD);
-                metaPathes[4] = new ElementaryMetaPath(edgeClass, Direction.FORWARD, ConnectionState.BACKWARD);
-                metaPathes[5] = new ElementaryMetaPath(edgeClass, Direction.BACKWARD, ConnectionState.BACKWARD);
-                metaPathes[6] = new ElementaryMetaPath(edgeClass, Direction.FORWARD, ConnectionState.DOUBLE);
-                metaPathes[7] = new ElementaryMetaPath(edgeClass, Direction.BACKWARD, ConnectionState.DOUBLE);
+                metaPathes[1] = new ElementaryMetaPath(edgeClass, Direction.FORWARD, ConnectionState.FORWARD);
+                metaPathes[2] = new ElementaryMetaPath(edgeClass, Direction.FORWARD, ConnectionState.BACKWARD);
+                metaPathes[3] = new ElementaryMetaPath(edgeClass, Direction.FORWARD, ConnectionState.DOUBLE);
             }
             edge_class_to_forward_and_backward_metapathes.put(edgeClass, metaPathes);
         }
-        int metaPathIndex = direction.ordinal() + 2 * (connectionState == null ? 0 : connectionState.ordinal() + 1);
-        return metaPathes[metaPathIndex];
+        int metaPathIndex = connectionState == null ? 0 : connectionState.ordinal() + 1;
+        //je nach Richtung den Backward-Pfad zurück geben
+        ElementaryMetaPath returnPath = direction != Direction.FORWARD ? metaPathes[metaPathIndex].getOtherDirection() : metaPathes[metaPathIndex];
+        return returnPath;
     }
 
     /**
