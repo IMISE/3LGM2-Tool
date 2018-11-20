@@ -169,6 +169,11 @@ public class ElementaryMetaPath extends AbstractMetaPath {
         return getDirection(direction) == Direction.FORWARD;
     }
 
+    @Override
+    public ElementaryMetaPath getOtherDirection() {
+        return (ElementaryMetaPath) super.getOtherDirection();
+    }
+
     /**
      * @return the startClass
      */
