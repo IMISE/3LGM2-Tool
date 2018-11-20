@@ -137,7 +137,7 @@ public class MetaPathSelector implements ActionListener {
             class2ComboBox.setEnabled(true);
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             for (Class<? extends ModelElement> elementClass : elementClassesWithPaths) {
-                Set<AbstractMetaPath> metaPathes = model.getMetaPaths(elementClass, class1BoxSelection, pathsForSubClasses, pathsForSuperClasses);
+                Set<AbstractMetaPath> metaPathes = model.getMetaPaths(class1BoxSelection, elementClass, pathsForSubClasses, pathsForSuperClasses);
                 if (metaPathes != null && metaPathes.size() > 0) {
                     class2ComboBox.addItem(elementClass, getDisplayableName(elementClass));
                 }
