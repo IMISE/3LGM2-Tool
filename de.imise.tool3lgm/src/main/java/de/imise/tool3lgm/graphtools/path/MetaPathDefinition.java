@@ -17,6 +17,7 @@ import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
 import de.imise.util.Alphabetical;
 
 /**
@@ -51,7 +52,15 @@ public class MetaPathDefinition {
         Iterable<Class<? extends Edge>> edgeClassesIt = edgeClasses == null || edgeClasses.length == 0 ? ModelConstants.ALL_EDGES_SET : Arrays.asList(edgeClasses);
         //Alle Edgen in beiden Richtungen für alle direkten Startklassen und ihre Unterklassen als MetaPfade hinzufügen
         for (Class<? extends Edge> edgeClass : edgeClassesIt) {
-            put(getForwardMetaPath(edgeClass));
+            if (AufObjVerbindung.class.isAssignableFrom(edgeClass)) {
+                if (DoubleMeaningEdge.class.isAssignableFrom(edgeClass)) {
+                    Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass = edgeClass.asSubclass(DoubleMeaningEdge.class);
+                    put(getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.FORWARD));
+                    put(getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.BACKWARD));
+                } else {
+                    put(getForwardMetaPath(edgeClass));
+                }
+            }
         }
         init();
     }
@@ -179,7 +188,7 @@ public class MetaPathDefinition {
         return getMetaPath(edgeClass, direction, null);
     }
 
-    public final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
+    private final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
         ElementaryMetaPath[] metaPathes = edge_class_to_forward_and_backward_metapathes.get(edgeClass);
         if (metaPathes == null) {
             boolean isDoubleMeaningEdge = ModelConstants.isDoubleMeaningEdge(edgeClass);
@@ -215,6 +224,24 @@ public class MetaPathDefinition {
      */
     public final ElementaryMetaPath getBackwardMetaPath(final Class<? extends Edge> edgeClass) {
         return getMetaPath(edgeClass, Direction.BACKWARD);
+    }
+
+    /**
+     * @param doubleMeaningEdgeClass
+     * @param connectionState
+     * @return
+     */
+    public final ElementaryMetaPath getForwardMetaPath(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass, final ConnectionState connectionState) {
+        return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, connectionState);
+    }
+
+    /**
+     * @param doubleMeaningEdgeClass
+     * @param connectionState
+     * @return
+     */
+    public final ElementaryMetaPath getBackwardMetaPath(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass, final ConnectionState connectionState) {
+        return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, connectionState);
     }
 
     /**
