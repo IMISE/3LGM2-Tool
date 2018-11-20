@@ -164,7 +164,7 @@ public class ElementaryMetaPath extends AbstractMetaPath {
         this.edgeClass = edgeClass;
         this.direction = direction;
         this.type = type;
-        directed = startClass != endClass && getFullForwardMetaAssociationName(edgeClass) != getFullBackwardMetaAssociationName(edgeClass);
+        directed = this.startClass != this.endClass && getFullForwardMetaAssociationName(edgeClass) != getFullBackwardMetaAssociationName(edgeClass);
         createable = getIsCreateable();
         //TODO: hier müsste noch der invalidReason geprüft werden!
     }
