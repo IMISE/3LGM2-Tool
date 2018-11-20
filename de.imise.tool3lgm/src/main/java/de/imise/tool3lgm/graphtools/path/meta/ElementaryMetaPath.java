@@ -132,14 +132,6 @@ public class ElementaryMetaPath extends AbstractMetaPath {
         this(edgeClass, direction, null);
     }
 
-    private static final Direction getDirection(final Direction direction) {
-        return direction != null ? direction : Direction.FORWARD;
-    }
-
-    private static final boolean isForward(final Direction direction) {
-        return getDirection(direction) == Direction.FORWARD;
-    }
-
     /**
      * @param edgeClass
      * @param direction
@@ -167,6 +159,14 @@ public class ElementaryMetaPath extends AbstractMetaPath {
         directed = this.startClass != this.endClass && getFullForwardMetaAssociationName(edgeClass) != getFullBackwardMetaAssociationName(edgeClass);
         createable = getIsCreateable();
         //TODO: hier müsste noch der invalidReason geprüft werden!
+    }
+
+    private static final Direction getDirection(final Direction direction) {
+        return direction != null ? direction : Direction.FORWARD;
+    }
+
+    private static final boolean isForward(final Direction direction) {
+        return getDirection(direction) == Direction.FORWARD;
     }
 
     /**
