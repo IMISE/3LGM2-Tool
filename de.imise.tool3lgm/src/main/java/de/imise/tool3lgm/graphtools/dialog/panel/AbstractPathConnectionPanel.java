@@ -573,7 +573,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         //für den gesamten Pfad der angelegt werden muss
         for (int i = 0; i < edgeClasses.length; i++) {
             //hole die mit dem aktuellen me verbundenen Elemente der aktuellen Kantenart
-            List<ModelElement> connectedElements = me.getConnectedElements(ModelElement.class, edgeClasses[i], directions[i].getConnectionState());
+            List<ModelElement> connectedElements = me.getConnectedElements(ModelElement.class, edgeClasses[i], directions[i]);
             //wenn bereits mind. ein verbundenes Element ex.
             if (i < lastEdgeIndex && !connectedElements.isEmpty()) {
                 //hole das erste

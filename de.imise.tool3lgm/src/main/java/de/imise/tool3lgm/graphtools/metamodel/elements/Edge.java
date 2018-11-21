@@ -4,7 +4,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERR
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -65,28 +64,8 @@ public abstract class Edge extends ModelElement {
     private String start_hash, end_hash;
 
     public enum Direction {
-        FORWARD(ConnectionState.FORWARD),
-        BACKWARD(ConnectionState.BACKWARD);
-
-        private final ConnectionState correspondingConnectionState;
-
-        private Direction(final ConnectionState correspondingConnectionState) {
-            this.correspondingConnectionState = correspondingConnectionState;
-        }
-
-        public ConnectionState getConnectionState() {
-            return correspondingConnectionState;
-        }
-
-        public static Direction get(final ConnectionState correspondingConnectionState) {
-            for (Direction direction : Direction.values()) {
-                if (direction.getConnectionState() == correspondingConnectionState) {
-                    return direction;
-                }
-            }
-            return null;
-        }
-
+        FORWARD,
+        BACKWARD;
         //ACHTUNG: toString() darf nicht überschreiben werden und muss dasselbe wie name() zurück liefern, weil das in den UNDO-REDO-Kommandos genutzt wird
     }
 

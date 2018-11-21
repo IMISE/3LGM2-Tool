@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxBackwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxForwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwardCardinality;
@@ -10,6 +8,8 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinForward
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 
 import java.awt.Color;
@@ -30,7 +30,6 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
@@ -908,10 +907,10 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param modelElement
      * @param edgeClass
      * @param edgeIndex
-     * @param connectionState
+     * @param direction
      * @return
      */
-    private final List<Edge> getEdgesWith(final ModelElement modelElement, final Class<? extends Edge> edgeClass, final int edgeIndex, final ConnectionState connectionState) {
+    private final List<Edge> getEdgesWith(final ModelElement modelElement, final Class<? extends Edge> edgeClass, final int edgeIndex, final Direction direction) {
         List<Edge> retVal = new ArrayList<>();
         if (modelElement == null || edges == null) {
             return retVal;
@@ -928,12 +927,10 @@ public abstract class ModelElement extends UserFieldTarget {
                 continue;
             }
             boolean add = false;
-            if (connectionState == FORWARD) {
+            if (direction == FORWARD) {
                 add = edge.isDirecting(this, modelElement);
-            } else if (connectionState == ConnectionState.BACKWARD) {
+            } else if (direction == BACKWARD) {
                 add = edge.isDirecting(modelElement, this);
-            } else if (connectionState == ConnectionState.DOUBLE) {
-                add = edge.isDirecting(modelElement, this) && edge.isDirecting(this, modelElement);
             } else {
                 add = edge.isConnecting(this, modelElement);
             }
@@ -975,7 +972,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit allen gefundenen Kanten
      */
     public final List<Edge> getEdgesTo(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return getEdgesWith(elementClass, edgeClass, Direction.FORWARD);
+        return getEdgesWith(elementClass, edgeClass, FORWARD);
     }
 
     /**
@@ -987,7 +984,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit allen gefundenen Kanten
      */
     public final List<Edge> getEdgesFrom(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return getEdgesWith(elementClass, edgeClass, Direction.BACKWARD);
+        return getEdgesWith(elementClass, edgeClass, BACKWARD);
     }
 
     /**
@@ -1006,11 +1003,11 @@ public abstract class ModelElement extends UserFieldTarget {
             if (edgeClass != null && !edgeClass.isAssignableFrom(o_kante.getClass())) {
                 continue;
             }
-            if (direction == Direction.FORWARD) {
+            if (direction == FORWARD) {
                 if (o_kante.getStart() == this && elementClass.isAssignableFrom(o_kante.getEnd().getClass())) {
                     l_connections.add(o_kante);
                 }
-            } else if (direction == Direction.BACKWARD) {
+            } else if (direction == BACKWARD) {
                 if (o_kante.getEnd() == this && elementClass.isAssignableFrom(o_kante.getStart().getClass())) {
                     l_connections.add(o_kante);
                 }
@@ -1063,7 +1060,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction
      * @return
      */
-    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final ConnectionState direction) {
+    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
         return getConnectedContainer(searchElementClass, doc, edgeClass, direction, true);
     }
 
@@ -1078,7 +1075,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit ElementContainer der gefundenen Node
      */
     @SuppressWarnings("unchecked")
-    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final ConnectionState direction, final boolean alphabetical) {
+    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
         return (List<ElementContainer>) getConnected(searchElementClass, doc, edgeClass, direction, true, alphabetical);
     }
 
@@ -1114,7 +1111,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction Richtung, die die Kanten haben sollen, über die die verbundenen Elemente gesucht werden
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
-    public final List<ElementContainer> getPartConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final ConnectionState direction) {
+    public final List<ElementContainer> getPartConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
         //Rückgabeliste
         List<ElementContainer> connected = new ArrayList<>();
         //Liste aller Teile holen (direkte und indirekte)
@@ -1149,7 +1146,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction Richtung, die die Kanten haben sollen, über die die verbundenen Elemente gesucht werden
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
-    public final List<ElementContainer> getParentConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final ConnectionState direction) {
+    public final List<ElementContainer> getParentConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
         //Rückgabeliste
         List<ElementContainer> connected = new ArrayList<>();
         //für alle Oberelemente
@@ -1169,7 +1166,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Liste mit den Containern der direkten Teilelemente
      */
     public List<ElementContainer> getDirectPartContainer(final GraphDocument doc) {
-        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUPER_TO_SUB_DIRECTION.getConnectionState());
+        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUPER_TO_SUB_DIRECTION);
     }
 
     /**
@@ -1179,7 +1176,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return Liste mit den Containern der direkten oberelemente
      */
     public List<ElementContainer> getDirectParentContainer(final GraphDocument doc) {
-        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUB_TO_SUPER_DIRECTION.getConnectionState());
+        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUB_TO_SUPER_DIRECTION);
     }
 
     /**
@@ -1232,7 +1229,7 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     private final void getSubordinatedContainer(final Set<ElementContainer> returnSet, final ModelElement lastAddedSubElement, final GraphDocument doc, final boolean withParts) {
         Class<? extends SubordinationEdge> subordinationEdgeClass = withParts ? SubordinationEdge.class : CompositionEdge.class;
-        for (ElementContainer subEc : lastAddedSubElement.getConnectedContainer(ModelElement.class, doc, subordinationEdgeClass, SubordinationEdge.SUPER_TO_SUB_DIRECTION.getConnectionState())) {
+        for (ElementContainer subEc : lastAddedSubElement.getConnectedContainer(ModelElement.class, doc, subordinationEdgeClass, SubordinationEdge.SUPER_TO_SUB_DIRECTION)) {
             if (!returnSet.contains(subEc)) {
                 returnSet.add(subEc);
                 getSubordinatedContainer(returnSet, subEc.getElement(), doc, withParts);
@@ -1364,7 +1361,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ModelElement> getDirectPartElements() {
-        return getConnectedElements(ModelElement.class, HasPartEdge.class, HasPartEdge.PARENT_TO_PART_DIRECTION.getConnectionState());
+        return getConnectedElements(ModelElement.class, HasPartEdge.class, HasPartEdge.PARENT_TO_PART_DIRECTION);
     }
 
     /**
@@ -1373,7 +1370,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ModelElement> getDirectParentElements() {
-        return getConnectedElements(ModelElement.class, HasPartEdge.class, HasPartEdge.PART_TO_PARENT_DIRECTION.getConnectionState());
+        return getConnectedElements(ModelElement.class, HasPartEdge.class, HasPartEdge.PART_TO_PARENT_DIRECTION);
     }
 
     /**
@@ -1556,11 +1553,11 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param searchElementClass
      * @param edgeClass
-     * @param connectionState
+     * @param direction
      * @return
      */
-    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
-        return getConnectedElements(searchElementClass, edgeClass, connectionState, false);
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final Direction direction) {
+        return getConnectedElements(searchElementClass, edgeClass, direction, false);
     }
 
     /**
@@ -1568,12 +1565,12 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @param searchElementClass
      * @param edgeClass
-     * @param connectionState
+     * @param direction
      * @param alphabetical
      * @return List mit allen verbundenen Node
      */
-    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final ConnectionState connectionState, final boolean alphabetical) {
-        return getConnectedElements(searchElementClass, null, edgeClass, connectionState, alphabetical);
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
+        return getConnectedElements(searchElementClass, null, edgeClass, direction, alphabetical);
     }
 
     /**
@@ -1583,13 +1580,13 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc <code>GraphDocument</code> in dem verbundene Elemente gesucht werden sollen. Wird <code>null</code> übergeben, werden alle
      *            verbundenen Elemente zurück gegeben, was der Suche im Hauptmodell entspricht.
      * @param edgeClass
-     * @param connectionState
+     * @param direction
      * @param alphabetical
      * @return List mit allen verbundenen <code>ModelElement</code>s oder <code>ElementContainer</code>n
      */
     @SuppressWarnings("unchecked")
-    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final ConnectionState connectionState, final boolean alphabetical) {
-        return (List<ModelElement>) getConnected(searchElementClass, doc, edgeClass, connectionState, false, alphabetical);
+    public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
+        return (List<ModelElement>) getConnected(searchElementClass, doc, edgeClass, direction, false, alphabetical);
     }
 
     /**
@@ -1601,13 +1598,13 @@ public abstract class ModelElement extends UserFieldTarget {
      *            verbundenen Elemente zurück gegeben, was der Suche im Hauptmodell entspricht. Will man aber <code>ElementContainer</code> aus dem
      *            Hauptmodell haben, muss man ein gültiges Haupt- <code>GraphDocument</code> übergeben.
      * @param edgeClass
-     * @param connectionState
+     * @param direction
      * @param container wenn <code>true</code>, werden die <code>ElementContainer</code> der gefundenen Elemente zurück gegeben; sonst die Elemente
      *            selbst
      * @param alphabetical
      * @return List mit allen verbundenen <code>ModelElement</code>s oder <code>ElementContainer</code>n
      */
-    private final List<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final ConnectionState connectionState, final boolean container, final boolean alphabetical) {
+    private final List<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean container, final boolean alphabetical) {
         List<Object> knoten = new ArrayList<>(getEdgesCount());
 
         if (doc == null && container) {
@@ -1621,8 +1618,8 @@ public abstract class ModelElement extends UserFieldTarget {
             }
 
             ModelElement knot = null;
-            if (connectionState != null) {
-                switch (connectionState) {
+            if (direction != null) {
+                switch (direction) {
                 case FORWARD:
                     //bei allen gerichteten Kanten
                     if (ModelConstants.isDirectedEdge(edgeClass)) {
@@ -1668,12 +1665,6 @@ public abstract class ModelElement extends UserFieldTarget {
                         knot = edge.getOther(this);
                     }
                     break;
-                case DOUBLE: //das hier geht nur bei DoubleMeaningEdges oder Kanten, die dieselben Elementarten verbinden
-                    if (ModelConstants.isDoubleMeaningEdge(edgeClass) && ((DoubleMeaningEdge) edge).getConnectionState() == DOUBLE) {
-                        knot = edge.getOther(this);
-                    } else if (ModelConstants.isDirectedEdge(edgeClass)) {
-                        break;
-                    }
                 }
             } else {
                 knot = edge.getEnd() == this ? edge.getStart() : edge.getEnd();

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -462,9 +461,8 @@ public class ShortestCommunicationPathFinderOld {
 
             for (Direction direction : Direction.values()) {
 
-                ConnectionState connectionState = direction.getConnectionState();
-                List<ModelElement> ntAndDtOfKante = commLink.getConnectedElements(EreignisNachrichtenTyp.class, mainDoc, KommbezEtntVerbindung.class, connectionState, false);
-                ntAndDtOfKante.addAll(commLink.getConnectedElements(EreignisDokumentenTyp.class, mainDoc, KommbezEtntVerbindung.class, connectionState, false));
+                List<ModelElement> ntAndDtOfKante = commLink.getConnectedElements(EreignisNachrichtenTyp.class, mainDoc, KommbezEtntVerbindung.class, direction, false);
+                ntAndDtOfKante.addAll(commLink.getConnectedElements(EreignisDokumentenTyp.class, mainDoc, KommbezEtntVerbindung.class, direction, false));
 
                 // für jede dieser EtNt-Kombinationen
                 for (ModelElement nt : ntAndDtOfKante) {

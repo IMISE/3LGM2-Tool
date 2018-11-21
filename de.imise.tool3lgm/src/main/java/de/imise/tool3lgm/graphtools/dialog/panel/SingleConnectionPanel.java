@@ -15,7 +15,6 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -233,10 +232,9 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
         connectedElements.add(dialog.getModelElement().getContainer(mainDoc));
         int edgeSearchStopIndex = forelastInPath ? edgeClasses.length - 1 : edgeClasses.length;
         for (int i = 0; i < edgeSearchStopIndex; i++) {
-            ConnectionState connectionState = directions[i].getConnectionState();
             List<ElementContainer> tempConnectedElements = new ArrayList<>();
             for (ElementContainer ec : connectedElements) {
-                tempConnectedElements.addAll(ec.getElement().getConnectedContainer(ModelElement.class, mainDoc, edgeClasses[i], connectionState));
+                tempConnectedElements.addAll(ec.getElement().getConnectedContainer(ModelElement.class, mainDoc, edgeClasses[i], directions[i]));
             }
             connectedElements = tempConnectedElements;
         }
@@ -271,10 +269,9 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
         List<ElementContainer> searchElementConnectedContainer = getSearchElementConnectedContainer();
         GDCollection gdcoll = mainDoc.getCollection();
         Class<? extends Edge> lastEdgeInPath = edgeClasses[lastEdgeIndex];
-        ConnectionState connectionState = directions[lastEdgeIndex].getConnectionState();
         for (ElementContainer ec : searchElementConnectedContainer) {
             ModelElement me = ec.getElement();
-            List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, connectionState);
+            List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, directions[lastEdgeIndex]);
             for (ModelElement connected : connectedElements) {
                 gdcoll.unlink(me, connected, lastEdgeInPath, dialog.getTransactionID());
             }

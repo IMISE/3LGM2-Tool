@@ -250,7 +250,7 @@ public class ShortestCommunicationPathFinder {
                 for (Direction direction : Direction.values()) {
                     // für alle Kommunikationsverbindungen, die den Objekttyp in der jewieligen
                     // Richtung verschicken können
-                    for (ModelElement commBezMe : etntdtKombi.getConnectedElements(KommBeziehung.class, KommbezEtntVerbindung.class, direction.getConnectionState())) {
+                    for (ModelElement commBezMe : etntdtKombi.getConnectedElements(KommBeziehung.class, KommbezEtntVerbindung.class, direction)) {
                         KommBeziehung commBez = (KommBeziehung) commBezMe;
                         ModelElement start = commBez.getStart();
                         if (!interfaces.contains(start)) {

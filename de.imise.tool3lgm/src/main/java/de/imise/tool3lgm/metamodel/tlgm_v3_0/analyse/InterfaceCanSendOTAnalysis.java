@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.analyse;
 
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,8 +13,8 @@ import javax.swing.BorderFactory;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -156,8 +156,8 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
      */
     private static final List<ModelElement> getSendableObjectTypes(final ModelElement bs, final Edge communicationLink) {
         List<ModelElement> returnList = new ArrayList<>();
-        ConnectionState connectionState = communicationLink.getStart() == bs ? BACKWARD : FORWARD;
-        for (ModelElement etnt : communicationLink.getConnectedElements(EtntEtdtKombination.class, KommbezEtntVerbindung.class, connectionState)) {
+        Direction direction = communicationLink.getStart() == bs ? BACKWARD : FORWARD;
+        for (ModelElement etnt : communicationLink.getConnectedElements(EtntEtdtKombination.class, KommbezEtntVerbindung.class, direction)) {
             for (ModelElement ntdt : etnt.getConnectedElements(Repraesentationsform.class)) {
                 returnList.addAll(ntdt.getConnectedElements(Objekttyp.class));
             }

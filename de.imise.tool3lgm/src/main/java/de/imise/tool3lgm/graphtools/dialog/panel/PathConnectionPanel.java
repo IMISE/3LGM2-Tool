@@ -38,7 +38,6 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -312,16 +311,15 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         int edgeIndex = 0;
         Class<? extends ModelElement> pathStepEndClass = getPathStepEndElementClass(edgeIndex);
         ModelElement me = getModelElement();
-        ConnectionState connectionState = directions[edgeIndex].getConnectionState();
-        List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], connectionState);
+        List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]);
         addChildrenToExcludeFromRtree(edgeIndex, all, true);
         // nur Node für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
         int firstNonSelectableIndex = all.size();
         if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS)) {
-            all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], connectionState));
+            all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]));
         }
         if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS)) {
-            all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], connectionState));
+            all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]));
         }
         ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();
         List<LGMTreeNode> firstLevelNodes = new ArrayList<>(all.size());
@@ -331,13 +329,12 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
         List<LGMTreeNode> nextStepStartNodes = firstLevelNodes;
         for (edgeIndex = 1; edgeIndex < edgeClasses.length; edgeIndex++) {
-            connectionState = directions[edgeIndex].getConnectionState();
             pathStepEndClass = getPathStepEndElementClass(edgeIndex);
             List<LGMTreeNode> newNextStartNodes = new ArrayList<>();
             for (LGMTreeNode node : nextStepStartNodes) {
                 ElementContainer nodeElementContainer = (ElementContainer) node.getUserObject();
                 me = nodeElementContainer.getElement();
-                List<ElementContainer> connected = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], connectionState);
+                List<ElementContainer> connected = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]);
                 addChildrenToExcludeFromRtree(edgeIndex, connected, false);
                 for (ElementContainer ec : connected) {
                     LGMTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
