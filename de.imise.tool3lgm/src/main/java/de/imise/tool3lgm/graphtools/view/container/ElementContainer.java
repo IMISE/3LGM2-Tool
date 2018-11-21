@@ -637,7 +637,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
             //		} else if (layout == null) {
             //			System.err.println("layout ist null \"" + text + "\" " + me.getClass().getSimpleName() + " " + me + " " + doc);
         } else if (text != null && getWidth() < 35 && getHeight() < 30) {
-            System.err.println("Element zu klein \"" + text + "\" " + me.getClass().getSimpleName() + " " + me + " " + doc);
+            //System.err.println("Element zu klein \"" + text + "\" " + me.getClass().getSimpleName() + " " + me + " " + doc);
         }
 
         super.setText(text);
