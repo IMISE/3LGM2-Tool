@@ -363,7 +363,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 return false;
             }
         }
-        System.err.println(edgeClasses[lastEdgeIndex].getSimpleName() + " " + !MultipleEdge.class.isAssignableFrom(edgeClasses[lastEdgeIndex]));
+        //System.err.println(edgeClasses[lastEdgeIndex].getSimpleName() + " " + !MultipleEdge.class.isAssignableFrom(edgeClasses[lastEdgeIndex]));
         return !MultipleEdge.class.isAssignableFrom(edgeClasses[lastEdgeIndex]);
     }
 
