@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxBackwardCardinality;
@@ -32,6 +31,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -975,7 +975,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit allen gefundenen Kanten
      */
     public final List<Edge> getEdgesTo(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return getEdgesWith(elementClass, edgeClass, FORWARD);
+        return getEdgesWith(elementClass, edgeClass, Direction.FORWARD);
     }
 
     /**
@@ -987,7 +987,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit allen gefundenen Kanten
      */
     public final List<Edge> getEdgesFrom(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return getEdgesWith(elementClass, edgeClass, BACKWARD);
+        return getEdgesWith(elementClass, edgeClass, Direction.BACKWARD);
     }
 
     /**
@@ -1000,17 +1000,17 @@ public abstract class ModelElement extends UserFieldTarget {
      *            <code>BACKWARD</code>)
      * @return List mit allen gefundenen Kanten
      */
-    public final List<Edge> getEdgesWith(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    private final List<Edge> getEdgesWith(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass, final Direction direction) {
         List<Edge> l_connections = new ArrayList<>();
         for (Edge o_kante : getEdges()) {
             if (edgeClass != null && !edgeClass.isAssignableFrom(o_kante.getClass())) {
                 continue;
             }
-            if (connectionState == FORWARD) {
+            if (direction == Direction.FORWARD) {
                 if (o_kante.getStart() == this && elementClass.isAssignableFrom(o_kante.getEnd().getClass())) {
                     l_connections.add(o_kante);
                 }
-            } else if (connectionState == BACKWARD) {
+            } else if (direction == Direction.BACKWARD) {
                 if (o_kante.getEnd() == this && elementClass.isAssignableFrom(o_kante.getStart().getClass())) {
                     l_connections.add(o_kante);
                 }
