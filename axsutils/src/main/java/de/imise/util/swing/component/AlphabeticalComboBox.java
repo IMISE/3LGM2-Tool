@@ -35,7 +35,7 @@ public class AlphabeticalComboBox extends JComboBox {
      * Referenz auf den Vector der Einträge der Combobox. (Der Parent-Vector hat
      * die Sichtbarkeit 'package').
      */
-    private final Vector<Object> items = new Vector<Object>();
+    private final Vector<Object> items = new Vector<>();
 
     /**
      * Eintrag für eine Leerzeile, um "keine Auswahl" zu treffen.
@@ -97,6 +97,9 @@ public class AlphabeticalComboBox extends JComboBox {
      * @param shift
      *            Anzahl der Leerzeichen, die vor jedem Listeneintrag dargestellt werden sollen
      */
+    @SuppressWarnings({
+            "unchecked"
+    })
     public AlphabeticalComboBox(final int shift) {
         super();
         setModel(new DefaultComboBoxModel(items));
@@ -154,6 +157,7 @@ public class AlphabeticalComboBox extends JComboBox {
         repaint();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void insertItemAt(final Object anObject, final int index) {
         if (newListStartIndex > 0) {
@@ -308,7 +312,7 @@ public class AlphabeticalComboBox extends JComboBox {
             sb.append(" ");
         }
         sb.append(displayName);
-        insertItemAt(new NamedObjectContainer<Object>(anObject, sb.toString()), 0);
+        insertItemAt(new NamedObjectContainer<>(anObject, sb.toString()), 0);
     }
 
     /*

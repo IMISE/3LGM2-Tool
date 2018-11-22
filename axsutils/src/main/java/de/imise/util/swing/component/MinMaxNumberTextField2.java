@@ -53,6 +53,7 @@ public class MinMaxNumberTextField2 extends JFormattedTextField implements Caret
         oldText = getText();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public void caretUpdate(final CaretEvent e) {
         String text = getText();
@@ -66,7 +67,9 @@ public class MinMaxNumberTextField2 extends JFormattedTextField implements Caret
             Double value = new Double(Double.parseDouble(parseableText));
             NumberFormatter formatter = (NumberFormatter) getFormatter();
             //Unterschreiten des Minimums und Unterschreiten des Maximums bei der Eingabe verhindern
-            if (formatter.getMinimum().compareTo(value) > 0 || formatter.getMaximum().compareTo(value) < 0) {
+            Comparable<Double> minimum = formatter.getMinimum();
+            Comparable<Double> maximum = formatter.getMaximum();
+            if (minimum.compareTo(value) > 0 || maximum.compareTo(value) < 0) {
                 throw new Exception();
             }
             //Genauigkeit wurde überschritten
