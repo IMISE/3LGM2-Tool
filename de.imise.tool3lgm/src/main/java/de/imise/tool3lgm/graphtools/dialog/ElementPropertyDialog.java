@@ -400,17 +400,19 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     private TabbedPanel lastCreatedTabbedPanel;
 
-    public void addTabbedPanel(final String nameResKey) {
+    public final void addTabbedPanel(final String nameResKey) {
         lastCreatedTabbedPanel = new TabbedPanel(this);
         lastCreatedTabbedPanel.setName(Tool3lgmConstants.getResStringWithoutError(nameResKey));
         addTab(lastCreatedTabbedPanel);
     }
 
-    public void addTabbedPanelPathConnectionPanel(final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addTabbedPanelPathConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addTabbedPanelPathConnectionPanel(null, edgeClasses);
     }
 
-    public void addTabbedPanelPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addTabbedPanelPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         if (edgeClasses.length == 1) {
             addEdgePanel(searchElementClass, edgeClasses[0], true);
         } else {
@@ -418,63 +420,78 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         }
     }
 
-    public void addDescripSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addDescripSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addDescripSingleConnectionPanel(null, edgeClasses);
     }
 
-    public void addDescripSingleConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addDescripSingleConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         addDescripSingleConnectionPanel(false, searchElementClass, edgeClasses);
     }
 
-    public void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addDescripSingleConnectionPanel(labelLastEdgeName, null, edgeClasses);
     }
 
-    public void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         descripPanel.addSingleConnectionPanel(labelLastEdgeName, edgeClasses);
     }
 
-    public void addDescripDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addDescripDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addDescripDescriptedSingleConnectionPanel(false, edgeClasses);
     }
 
-    public void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addDescripDescriptedSingleConnectionPanel(labelLastEdgeName, null, edgeClasses);
     }
 
-    public void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         descripPanel.addDescriptedSingleConnectionPanel(labelLastEdgeName, edgeClasses);
     }
 
-    public void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addTab(new DescriptedSingleConnectionPanel(this, edgeClasses));
     }
 
-    public void addPathConnectionPanel(final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addPathConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addPathConnectionPanel(false, edgeClasses);
     }
 
-    public void addPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         addPathConnectionPanel(false, searchElementClass, edgeClasses);
     }
 
-    public void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addPathConnectionPanel(labelLastEdgeName, null, edgeClasses);
     }
 
-    public void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         addTab(new PathConnectionPanel(this, labelLastEdgeName, true, searchElementClass, edgeClasses));
     }
 
-    public void addPathConnectionLeafPanel(final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addPathConnectionLeafPanel(final Class<? extends Edge>... edgeClasses) {
         addPathConnectionLeafPanel(false, edgeClasses);
     }
 
-    public void addPathConnectionLeafPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addPathConnectionLeafPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addTab(new PathConnectionLeafPanel(this, labelLastEdgeName, true, edgeClasses));
     }
 
-    public void addPathConnectionInfoPanel(final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addPathConnectionInfoPanel(final Class<? extends Edge>... edgeClasses) {
         addTab(new PathConnectionPanel(this, false, edgeClasses));
     }
 

@@ -33,6 +33,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      */
     protected LGMAction showPartlyAction;
 
+    @SafeVarargs
     public AbstractExpandablePanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelLastEdgeName, searchElementClass, edgeClasses);
     }
