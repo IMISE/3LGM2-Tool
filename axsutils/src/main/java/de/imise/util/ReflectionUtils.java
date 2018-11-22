@@ -46,17 +46,19 @@ public class ReflectionUtils {
      * @param class2
      * @return
      */
-    public static final <T> Class<? extends T> getCommonSuperClass(Class<? extends T> class1, final Class<? extends T> class2) {
+    @SuppressWarnings("unchecked")
+    public static final <T> Class<? extends T> getCommonSuperClass(final Class<? extends T> class1, final Class<? extends T> class2) {
         if (class1 == null) {
             return class2;
         }
         if (class2 == null) {
             return class1;
         }
-        while (!class1.isAssignableFrom(class2) && class1 != Object.class) {
-            class1 = (Class<? extends T>) class1.getSuperclass();
+        Class<? extends T> classX = class1;
+        while (!classX.isAssignableFrom(class2) && classX != Object.class) {
+            classX = (Class<? extends T>) class1.getSuperclass();
         }
-        return class1;
+        return classX;
     }
 
     /**
@@ -210,7 +212,7 @@ public class ReflectionUtils {
      * @param excludeSuperClass
      * @see ReflectionUtils#getClassWithSuperClasses(Class, Class)
      */
-    public static Set<Class<?>> getClassesWithSuperClasses(final Collection<Class<?>> classes, final Class<?> excludeSuperClass) {
+    public static <T> Set<Class<?>> getClassesWithSuperClasses(final Collection<Class<? extends T>> classes, final Class<?> excludeSuperClass) {
         if (classes.size() == 1) {
             return getClassWithSuperClasses(classes.iterator().next(), excludeSuperClass);
         }
