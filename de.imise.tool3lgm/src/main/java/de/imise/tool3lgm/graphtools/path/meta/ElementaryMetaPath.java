@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
@@ -23,7 +24,7 @@ import de.imise.util.ReflectionUtils;
  * @author AXS
  * @create 12.10.2010
  */
-public class ElementaryMetaPath extends AbstractMetaPath {
+public final class ElementaryMetaPath extends AbstractMetaPath {
 
     /**
      * Mögliche Arten eines {@link ElementaryMetaPath}.
@@ -53,18 +54,18 @@ public class ElementaryMetaPath extends AbstractMetaPath {
      * Klasse, bei der der Pfad startet. Sie darf in einem validen Pfad niemals <code>null</code> sein und muss eine
      * Ober- oder Unterklasse des jeweiligen Kantenendes sein, auf das sich die Startklasse laut Richtungsangabe bezieht.
      */
-    protected Class<? extends ModelElement> startClass;
+    private Class<? extends ModelElement> startClass;
 
     /**
      * Klasse, bei der der Pfad endet. Sie darf in einem validen Pfad niemals <code>null</code> sein und muss eine
      * Ober- oder Unterklasse des jeweiligen Kantenendes sein, auf das sich die Endklasse laut Richtungsangabe bezieht.
      */
-    protected Class<? extends ModelElement> endClass;
+    private Class<? extends ModelElement> endClass;
 
     /**
      * Kantenklasse des Pfades
      */
-    protected Class<? extends Edge> edgeClass;
+    private final Class<? extends Edge> edgeClass;
 
     /**
      * Richtung, die festlegt, wie herum die Kantenklasse gelesen werden soll.
@@ -72,19 +73,19 @@ public class ElementaryMetaPath extends AbstractMetaPath {
      * der Kantenklasse verstanden wird und die Endklasse der Kante auch Endklasse des Pfades ist.
      * Bei Direction.BACKWARD wird es andersherum verstanden.
      */
-    protected Direction direction = Direction.FORWARD;
+    private Direction direction = Direction.FORWARD;
 
     /**
      * Richtung, die die Kante ausgehend von der durch die <code>direction</code> festgelegten Richtung haben soll. Dieser Parameter
      * ist nur bei DoubleMeaningEdges relevant.
      */
-    protected ConnectionState connectionState = null;
+    private final ConnectionState connectionState;
 
     /**
      * Typ des MetaPfades. Ist er nach dem setzen der Richtung immer noch <code>null</code>, dann ist der
      * Pfad nicht valide.
      */
-    protected Type type = null;
+    private Type type = null;
 
     /**
      * Liste aller {@link ElementaryMetaPath}, die sich evtl. aus diesem Pfad bilden lässt, wenn er im Grunde nur {@link ElementaryMetaPath} und
@@ -115,6 +116,7 @@ public class ElementaryMetaPath extends AbstractMetaPath {
         endClass = elementClass;
         edgeClass = null;
         direction = null;
+        connectionState = null;
         otherDirection = this;
         type = Type.SINGLE_ELEMENT;
         if (elementClass == null) {
@@ -155,7 +157,7 @@ public class ElementaryMetaPath extends AbstractMetaPath {
         }
         this.edgeClass = edgeClass;
         this.direction = direction;
-        this.connectionState = connectionState;
+        this.connectionState = DoubleMeaningEdge.class.isAssignableFrom(edgeClass) ? connectionState : null; //nur bei DoubleMeaningEdges darf ein gültiger connectionState gesetzt werden, sonst muss er null sein!
         this.type = type;
         directed = this.startClass != this.endClass && getFullForwardMetaAssociationName(edgeClass) != getFullBackwardMetaAssociationName(edgeClass);
         createable = getIsCreateable();
