@@ -1,11 +1,10 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 
 /**
  * Oberklasse für alle Kantenklassen mit doppelter Bedeutung. Also Kanten, die 2 Assoziationen in einer zwischen 2 Klassen sind.
@@ -14,16 +13,12 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
  */
 public abstract class DoubleMeaningEdge extends Edge {
 
-    //    public static final ConnectionState FORWARD = ConnectionState.FORWARD;
-    //
-    //    public static final ConnectionState BACKWARD = ConnectionState.BACKWARD;
-    //
-    //    public static final ConnectionState DOUBLE = ConnectionState.DOUBLE;
-    //
-    //    public static final ConnectionState[] ConnectionStates = {
-    //            FORWARD, BACKWARD, DOUBLE
-    //    };
-    //
+    public enum ConnectionState {
+        FORWARD,
+        BACKWARD,
+        DOUBLE
+    }
+
     private ConnectionState connectionState = FORWARD; //null als Wert ist ausgeschlossen!
 
     @Override

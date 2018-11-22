@@ -15,7 +15,7 @@ import java.util.MissingResourceException;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -134,7 +134,7 @@ public class ElementsNameBuilder {
      * @return
      * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
-    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ModelConstants.ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         return ElementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, connectionState, appendPrefixClass, appendPostfixClass);
     }
 
@@ -203,7 +203,7 @@ public class ElementsNameBuilder {
      * @return
      */
     public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction) {
-        return ElementsNameBuilder.getMetaAssociationName(edgeClass, direction, ModelConstants.ConnectionState.DOUBLE, false, false);
+        return ElementsNameBuilder.getMetaAssociationName(edgeClass, direction, ConnectionState.DOUBLE, false, false);
     }
 
     /**
@@ -274,8 +274,7 @@ public class ElementsNameBuilder {
      * @return
      * @see getMetaAssociationName
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ModelConstants.ConnectionState connectionState, final Class<? extends ModelElement> prefixClass,
-            final Class<? extends ModelElement> postfixClass) {
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final Class<? extends ModelElement> prefixClass, final Class<? extends ModelElement> postfixClass) {
         return getMetaAssociationName(edgeClass, direction, connectionState, prefixClass == null ? null : getDisplayableName(prefixClass), postfixClass == null ? null : getDisplayableName(postfixClass));
     }
 
@@ -287,7 +286,7 @@ public class ElementsNameBuilder {
      * @param postfix
      * @return
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ModelConstants.ConnectionState connectionState, final String prefix, final String postfix) {
+    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final String prefix, final String postfix) {
         boolean emptyPrefix = Strings.isNullOrEmpty(prefix);
         boolean emptyPostfix = Strings.isNullOrEmpty(postfix);
         if (emptyPrefix && emptyPostfix) {

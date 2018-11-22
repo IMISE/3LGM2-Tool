@@ -1,6 +1,9 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.FAT_STROKE;
 
 import java.awt.BasicStroke;
@@ -14,8 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
@@ -661,7 +664,7 @@ public class EdgeContainer extends ElementContainer {
                 if (edge instanceof DoubleMeaningEdge) {
                     DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
                     ConnectionState connectionState = doubleMeaningEdge.getConnectionState();
-                    backward = connectionState == ConnectionState.BACKWARD || connectionState == ConnectionState.DOUBLE;
+                    backward = connectionState == BACKWARD || connectionState == DOUBLE;
                 }
                 if (backward) {
                     gc.rotate(rad1, startx, starty);
@@ -683,7 +686,7 @@ public class EdgeContainer extends ElementContainer {
                 if (edge instanceof DoubleMeaningEdge) {
                     DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
                     ConnectionState connectionState = doubleMeaningEdge.getConnectionState();
-                    forward = connectionState == ConnectionState.FORWARD || connectionState == ConnectionState.DOUBLE;
+                    forward = connectionState == FORWARD || connectionState == DOUBLE;
                 }
                 if (forward) {
                     gc.rotate(rad2, endx, endy);
