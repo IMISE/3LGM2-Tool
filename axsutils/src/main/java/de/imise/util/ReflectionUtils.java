@@ -401,6 +401,7 @@ public class ReflectionUtils {
      * @param classes
      * @return
      */
+    @SafeVarargs
     public static <T> Set<Class<? extends T>> hasMethod(final String name, final Class<? extends T>... classes) {
         ImmutableSet.Builder<Class<? extends T>> returnClasses = new ImmutableSet.Builder<>();
         for (Class<? extends T> clazz : classes) {
