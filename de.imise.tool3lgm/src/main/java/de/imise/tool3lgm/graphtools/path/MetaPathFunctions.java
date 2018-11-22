@@ -38,7 +38,7 @@ public class MetaPathFunctions {
      * EndElement</li>
      * </ul>
      */
-    public static enum ConnectionState {
+    public static enum PathConnectionState {
         SELF,
         PARENT,
         PART,
@@ -305,14 +305,14 @@ public class MetaPathFunctions {
     }
 
     /**
-     * Liefert <code>true</code>, wenn der übergebene {@link ConnectionState} angibt, dass das Element selbst mit einem
+     * Liefert <code>true</code>, wenn der übergebene {@link PathConnectionState} angibt, dass das Element selbst mit einem
      * anderen Element verbunden ist und nicht nur seine Partents oder Parts.
      *
      * @param state
      * @return
      */
-    public static final boolean isSelfConnected(final ConnectionState state) {
-        return state == ConnectionState.SELF || state == ConnectionState.SELF_PARENT || state == ConnectionState.SELF_PART || state == ConnectionState.SELF_PARENT_PART;
+    public static final boolean isSelfConnected(final PathConnectionState state) {
+        return state == PathConnectionState.SELF || state == PathConnectionState.SELF_PARENT || state == PathConnectionState.SELF_PART || state == PathConnectionState.SELF_PARENT_PART;
     }
 
     /**
@@ -321,7 +321,7 @@ public class MetaPathFunctions {
      * @param metaPath
      * @return
      */
-    public static final ConnectionState getConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
+    public static final PathConnectionState getConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
         return getConnectionState(startElement, endElement, metaPath, UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS), UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS));
     }
 
@@ -333,7 +333,7 @@ public class MetaPathFunctions {
      * @param searchParts
      * @return
      */
-    public static final ConnectionState getConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean searchParents, final boolean searchParts) {
+    public static final PathConnectionState getConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean searchParents, final boolean searchParts) {
         List<ModelElement> startElements = null;
         startElements = new ArrayList<>(1);
         startElements.add(startElement);
@@ -363,25 +363,25 @@ public class MetaPathFunctions {
             part = isConnected(startElements, endElements, metaPath);
         }
         if (self && parent && part) {
-            return ConnectionState.SELF_PARENT_PART;
+            return PathConnectionState.SELF_PARENT_PART;
         }
         if (self && parent) {
-            return ConnectionState.SELF_PARENT;
+            return PathConnectionState.SELF_PARENT;
         }
         if (self && part) {
-            return ConnectionState.SELF_PART;
+            return PathConnectionState.SELF_PART;
         }
         if (self) {
-            return ConnectionState.SELF;
+            return PathConnectionState.SELF;
         }
         if (parent && part) {
-            return ConnectionState.PARENT_PART;
+            return PathConnectionState.PARENT_PART;
         }
         if (parent) {
-            return ConnectionState.PARENT;
+            return PathConnectionState.PARENT;
         }
         if (part) {
-            return ConnectionState.PART;
+            return PathConnectionState.PART;
         }
         return null;
     }
