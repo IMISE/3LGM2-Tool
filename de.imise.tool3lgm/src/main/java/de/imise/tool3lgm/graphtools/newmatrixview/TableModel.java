@@ -75,31 +75,8 @@ public class TableModel implements Iterable<TableCell> {
      *            das (Teil-)Modell
      */
     public TableModel(final GraphDocument graphDocument) {
-        this(graphDocument, null, null, null, false);
-    }
-
-    /**
-     * Legt ein neues <code>TableModel</code> an, das in den Zeilen alle
-     * Elemente der Klasse <code>rowElementClass</code> und in den Spalten
-     * alle Elemente der Klasse <code>colElementClass</code> sowie alle ihre
-     * Verbindungen darstellt, wenn die beiden Klassen gültige Elementklassen
-     * sind. Sind sie ungültig, wird nichts dargestellt.
-     *
-     * @param graphDocument
-     *            das (Teil-)Modell
-     * @param rowClass
-     *            Zeilenklasse
-     * @param colClass
-     *            Spaltenklasse
-     * @param metaPaths
-     *            MetaPfade über den Zeilen- und Spaltenklasse verbunden sein sollen
-     * @param absolutePartsOnly
-     *            legt fest, ob in der Matrix nur Elemente auftauchen sollen, die im
-     *            Gesamtmodell keine Teilelemente besitzen
-     */
-    public TableModel(final GraphDocument graphDocument, final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final AbstractMetaPath[] metaPaths, final boolean absolutePartsOnly) {
         this.graphDocument = graphDocument;
-        fillTableModel(rowClass, colClass, metaPaths, absolutePartsOnly);
+        fillTableModel(null, null, null, false);
     }
 
     /**
