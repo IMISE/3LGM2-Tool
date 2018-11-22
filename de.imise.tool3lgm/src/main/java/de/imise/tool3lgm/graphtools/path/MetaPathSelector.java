@@ -5,6 +5,7 @@ import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getDisplayableNam
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
@@ -13,10 +14,13 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.list.AlphabeticalJList;
@@ -47,7 +51,7 @@ public class MetaPathSelector implements ActionListener {
     /**
      * Metapaths that can be choosed in the <code>metaPathJList</code>
      */
-    private Set<AbstractMetaPath> selectableMetaPathes;
+    private List<AbstractMetaPath> selectableMetaPathes;
 
     /**
      * Choosed metapaths
@@ -147,11 +151,13 @@ public class MetaPathSelector implements ActionListener {
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             Class<? extends ModelElement> class2BoxSelection = ((Class<?>) class2ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             selectedMetaPathes.clear();
-            selectableMetaPathes = model.getMetaPaths(class1BoxSelection, class2BoxSelection, pathsForSubClasses, pathsForSuperClasses);
-
+            selectableMetaPathes = new ArrayList<>(model.getMetaPaths(class1BoxSelection, class2BoxSelection, pathsForSubClasses, pathsForSuperClasses));
+            Alphabetical.sort(selectableMetaPathes);
             if (selectableMetaPathes != null) {
                 if (selectableMetaPathes.size() == 1) {
-                    selectedMetaPathes.add(selectableMetaPathes.iterator().next());
+                    AbstractMetaPath metaPath = selectableMetaPathes.iterator().next();
+                    selectableMetaPathes = ImmutableList.of(metaPath);
+                    selectedMetaPathes.add(metaPath);
                 } else if (selectableMetaPathes.size() > 1) {
                     Object[] selected = new Object[selectableMetaPathes.size()];
                     @SuppressWarnings("unchecked")
@@ -160,6 +166,7 @@ public class MetaPathSelector implements ActionListener {
                     for (AbstractMetaPath metaPath : selectableMetaPathes) {
                         pathNames[i++] = new NamedObjectContainer<>(metaPath, metaPath.getFullName());
                     }
+
                     StringBuilder sb = new StringBuilder(Tool3lgmConstants.getResString("text_path_1"));
                     sb.append(" ");
                     //beliebig viele Pfade sind auswählbar
@@ -304,7 +311,7 @@ public class MetaPathSelector implements ActionListener {
     /**
      * @return Returns the selectableMetaPathes.
      */
-    public Set<AbstractMetaPath> getSelectableMetaPathes() {
+    public List<AbstractMetaPath> getSelectableMetaPathes() {
         return selectableMetaPathes;
     }
 
