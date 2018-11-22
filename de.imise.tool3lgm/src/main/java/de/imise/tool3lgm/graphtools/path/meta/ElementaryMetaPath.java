@@ -206,6 +206,13 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     /**
+     * @return the connectionState
+     */
+    public ConnectionState getConnectionState() {
+        return connectionState;
+    }
+
+    /**
      * @return the type
      */
     public Type getType() {

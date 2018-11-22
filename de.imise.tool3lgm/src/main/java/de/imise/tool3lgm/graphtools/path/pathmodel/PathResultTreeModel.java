@@ -8,6 +8,8 @@ import java.util.List;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ConnectionState;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -481,6 +483,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
         Class<? extends Edge> edgeClass = metaPath.getEdgeClass();
         Class<? extends ModelElement> endClass = metaPath.getEndClass();
         Direction dir = metaPath.getDirection();
+        ConnectionState connectionState = metaPath.getConnectionState();
         //wenn der MetaPfad eine 'normale' Verbindung zwischen 2 Elementarten über eine Kantenart beschreibt
         NodeType nodeType = isSubStep ? PathResultTreeNode.NodeType.SUBSTEP : PathResultTreeNode.NodeType.SUPERSTEP;
         if (metaPath.getType() == Type.ELEMENT_EDGE_ELEMENT) {
@@ -493,6 +496,13 @@ public class PathResultTreeModel extends DefaultTreeModel {
                 edges = me.getEdgesWith(endClass, edgeClass);
             }
             for (Edge edge : edges) {
+                if (connectionState != null) {// nur bei DoubleMeaningEdges kann der ConnectionState überhaupt nicht null sein
+                    DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
+                    ConnectionState edgeConnectionState = doubleMeaningEdge.getConnectionState();
+                    if (edgeConnectionState != ConnectionState.DOUBLE && connectionState != edgeConnectionState) {
+                        continue;
+                    }
+                }
                 resultNodes.add(new PathResultTreeNode(new ElementaryPath(me, edge.getOther(me), edge, metaPath), nodeType));
                 //wenn der MetaPfad nur eine Elementart beschreibt (Start und Endklasse sind gleich und die Kantenklasse ist null)
             }
