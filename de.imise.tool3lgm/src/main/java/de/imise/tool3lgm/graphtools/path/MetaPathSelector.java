@@ -51,12 +51,12 @@ public class MetaPathSelector implements ActionListener {
     /**
      * Metapaths that can be choosed in the <code>metaPathJList</code>
      */
-    private List<AbstractMetaPath> selectableMetaPathes;
+    private List<AbstractMetaPath> selectableMetaPaths;
 
     /**
      * Choosed metapaths
      */
-    private final ArrayList<AbstractMetaPath> selectedMetaPathes;
+    private final ArrayList<AbstractMetaPath> selectedMetaPaths;
 
     /**
      * Listeners for change events
@@ -121,7 +121,7 @@ public class MetaPathSelector implements ActionListener {
         class2ComboBox.setEnabled(false);
         class2ComboBox.setPreferredSize(class1ComboBox.getPreferredSize());
 
-        selectedMetaPathes = new ArrayList<>();
+        selectedMetaPaths = new ArrayList<>();
     }
 
     @Override
@@ -140,8 +140,8 @@ public class MetaPathSelector implements ActionListener {
                     class2ComboBox.addItem(elementClass, getDisplayableName(elementClass));
                 }
             }
-            selectedMetaPathes.clear();
-            selectableMetaPathes = null;
+            selectedMetaPaths.clear();
+            selectableMetaPaths = null;
             deliverChangeEvent(class1ComboBox);
         } else if (e.getSource() == class2ComboBox) {
             class2ComboBox.setPopupVisible(false);
@@ -150,27 +150,27 @@ public class MetaPathSelector implements ActionListener {
             }
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             Class<? extends ModelElement> class2BoxSelection = ((Class<?>) class2ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
-            selectedMetaPathes.clear();
-            selectableMetaPathes = new ArrayList<>(model.getMetaPaths(class1BoxSelection, class2BoxSelection, pathsForSubClasses, pathsForSuperClasses));
-            Alphabetical.sort(selectableMetaPathes);
-            if (selectableMetaPathes != null) {
-                if (selectableMetaPathes.size() == 1) {
-                    AbstractMetaPath metaPath = selectableMetaPathes.iterator().next();
-                    selectableMetaPathes = ImmutableList.of(metaPath);
-                    selectedMetaPathes.add(metaPath);
-                } else if (selectableMetaPathes.size() > 1) {
-                    Object[] selected = new Object[selectableMetaPathes.size()];
+            selectedMetaPaths.clear();
+            selectableMetaPaths = new ArrayList<>(model.getMetaPaths(class1BoxSelection, class2BoxSelection, pathsForSubClasses, pathsForSuperClasses));
+            Alphabetical.sort(selectableMetaPaths);
+            if (selectableMetaPaths != null) {
+                if (selectableMetaPaths.size() == 1) {
+                    AbstractMetaPath metaPath = selectableMetaPaths.iterator().next();
+                    selectableMetaPaths = ImmutableList.of(metaPath);
+                    selectedMetaPaths.add(metaPath);
+                } else if (selectableMetaPaths.size() > 1) {
+                    Object[] selected = new Object[selectableMetaPaths.size()];
                     @SuppressWarnings("unchecked")
                     NamedObjectContainer<AbstractMetaPath>[] pathNames = new NamedObjectContainer[selected.length];
                     int i = 0;
-                    for (AbstractMetaPath metaPath : selectableMetaPathes) {
+                    for (AbstractMetaPath metaPath : selectableMetaPaths) {
                         pathNames[i++] = new NamedObjectContainer<>(metaPath, metaPath.getFullName());
                     }
 
                     StringBuilder sb = new StringBuilder(Tool3lgmConstants.getResString("text_path_1"));
                     sb.append(" ");
                     //beliebig viele Pfade sind auswählbar
-                    if (maxParallelSelectedPaths <= 0 || maxParallelSelectedPaths >= selectableMetaPathes.size()) {
+                    if (maxParallelSelectedPaths <= 0 || maxParallelSelectedPaths >= selectableMetaPaths.size()) {
                         sb.append(Tool3lgmConstants.getResString("text_path_2"));
                         //maximal 1 Pfad ist auswählbar
                     } else if (maxParallelSelectedPaths == 1) {
@@ -183,14 +183,14 @@ public class MetaPathSelector implements ActionListener {
                         sb.append(" ");
                         sb.append(Tool3lgmConstants.getResString("text_path_4_2"));
                     }
-                    while (selected != null && (selectedMetaPathes.size() == 0 || selectedMetaPathes.size() > maxParallelSelectedPaths)) {
-                        selectedMetaPathes.clear();
+                    while (selected != null && (selectedMetaPaths.size() == 0 || selectedMetaPaths.size() > maxParallelSelectedPaths)) {
+                        selectedMetaPaths.clear();
                         selected = MultipleOptionPane.showCheckBoxOptionDialog(Static.getTool(), Tool3lgmConstants.getResString("choice"), sb.toString(), pathNames, null, false);
                         for (i = 0; selected != null && i < selected.length; i++) {
                             if (selected[i] != null) {
                                 @SuppressWarnings("unchecked")
                                 NamedObjectContainer<AbstractMetaPath> metaPathCont = (NamedObjectContainer<AbstractMetaPath>) selected[i];
-                                selectedMetaPathes.add(metaPathCont.getObject());
+                                selectedMetaPaths.add(metaPathCont.getObject());
                             }
                         }
                     }
@@ -237,7 +237,7 @@ public class MetaPathSelector implements ActionListener {
         if (dialogMetaPathSelecor == null) {
             dialogMetaPathSelecor = new MetaPathSelector(model, maxParallelSelectedPaths);
         }
-        AlphabeticalJList metaPathJList = new AlphabeticalJList(dialogMetaPathSelecor.selectableMetaPathes);
+        AlphabeticalJList metaPathJList = new AlphabeticalJList(dialogMetaPathSelecor.selectableMetaPaths);
         if (maxParallelSelectedPaths <= 1) {
             metaPathJList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         } else {
@@ -249,10 +249,10 @@ public class MetaPathSelector implements ActionListener {
         JOptionPane op = new JOptionPane();
         op.setMessage(metaPathSelectorMessage);
         op.createDialog(null, Tool3lgmConstants.getResString("metapath_selection")).setVisible(true);
-        dialogMetaPathSelecor.selectedMetaPathes.clear();
+        dialogMetaPathSelecor.selectedMetaPaths.clear();
         Object selectedMetaPath = metaPathJList.getSelectedObject();
         if (selectedMetaPath != null) {
-            dialogMetaPathSelecor.selectedMetaPathes.add((AbstractMetaPath) selectedMetaPath);
+            dialogMetaPathSelecor.selectedMetaPaths.add((AbstractMetaPath) selectedMetaPath);
         }
         return dialogMetaPathSelecor;
     }
@@ -301,9 +301,9 @@ public class MetaPathSelector implements ActionListener {
      * @return
      */
     public AbstractMetaPath[] getSelectedMetaPaths() {
-        AbstractMetaPath[] selectedPaths = new AbstractMetaPath[selectedMetaPathes.size()];
+        AbstractMetaPath[] selectedPaths = new AbstractMetaPath[selectedMetaPaths.size()];
         for (int i = 0; i < selectedPaths.length; i++) {
-            selectedPaths[i] = selectedMetaPathes.get(i);
+            selectedPaths[i] = selectedMetaPaths.get(i);
         }
         return selectedPaths;
     }
@@ -312,7 +312,7 @@ public class MetaPathSelector implements ActionListener {
      * @return Returns the selectableMetaPathes.
      */
     public List<AbstractMetaPath> getSelectableMetaPathes() {
-        return selectableMetaPathes;
+        return selectableMetaPaths;
     }
 
     /**
