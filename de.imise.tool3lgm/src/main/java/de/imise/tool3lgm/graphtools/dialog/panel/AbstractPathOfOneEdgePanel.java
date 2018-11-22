@@ -49,7 +49,6 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param searchElementClass
      * @param edgeClass
      */
-    @SuppressWarnings("unchecked")
     public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         super(dialog, labelEdgeName, searchElementClass, edgeClass);
         this.edgeClass = edgeClass;

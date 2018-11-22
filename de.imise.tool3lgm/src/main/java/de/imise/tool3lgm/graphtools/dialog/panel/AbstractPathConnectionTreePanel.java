@@ -24,26 +24,32 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
  */
 public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnectionPanel {
 
+    @SafeVarargs
     public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
         super(dialog, edgeClasses);
     }
 
+    @SafeVarargs
     public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog, searchElementClass, edgeClasses);
     }
 
+    @SafeVarargs
     public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelEdgeName, edgeClasses);
     }
 
+    @SafeVarargs
     public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelEdgeName, searchElementClass, edgeClasses);
     }
 
+    @SafeVarargs
     public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final Class<? extends Edge>... edgeClasses) {
         super(dialog, searchEdgeIndex, labelEdgeName, edgeClasses);
     }
 
+    @SafeVarargs
     public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelEdgeIndex, labelEdgeName, searchElementClass, edgeClasses);
     }
