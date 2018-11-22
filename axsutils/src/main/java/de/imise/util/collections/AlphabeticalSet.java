@@ -21,7 +21,7 @@ import de.imise.util.Alphabetical;
  * derselben Funktionalität. Im Unterscheid zu TreeSet oder TreeBag wird hier der Alphabetical-Comparator nur fürs Ordering
  * genutzt und nicht um festzustellen, ob Elemente bereits vorhanden sidn oder nicht! Das wird hier über die equals-Methode
  * der enthaltenen Elemente entschieden.
- * 
+ *
  * @author AXS
  */
 public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
@@ -32,11 +32,11 @@ public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
     private ArrayList<E> elements;
 
     /**
-    	 * 
+    	 *
     	 */
     public AlphabeticalSet() {
         super();
-        elements = new ArrayList<E>();
+        elements = new ArrayList<>();
     }
 
     /**
@@ -44,7 +44,7 @@ public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
      */
     public AlphabeticalSet(final int initialCapacity) {
         super();
-        elements = new ArrayList<E>(initialCapacity);
+        elements = new ArrayList<>(initialCapacity);
     }
 
     /**
@@ -265,7 +265,7 @@ public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
     }
 
     /**
-    	 * 
+    	 *
     	 */
     public void trimToSize() {
         elements.trimToSize();
@@ -273,10 +273,11 @@ public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
 
     /**
      * Clont dieses Set. Die enthaltenen Elemente werden dabei nicht geclont.
-     * 
+     *
      * @see java.lang.Object#clone()
      */
     @Override
+    @SuppressWarnings("unchecked")
     public AlphabeticalSet<E> clone() {
         try {
             AlphabeticalSet<E> clone = (AlphabeticalSet<E>) super.clone();
