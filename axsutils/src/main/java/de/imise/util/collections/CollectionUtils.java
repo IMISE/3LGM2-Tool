@@ -188,6 +188,7 @@ public abstract class CollectionUtils {
      * @param arrays
      * @return
      */
+    @SafeVarargs
     public static <T> T[] joinArrays(final T[]... arrays) {
         final Class<?> type1 = arrays[0].getClass().getComponentType();
         int fullSize = 0;
@@ -861,6 +862,7 @@ public abstract class CollectionUtils {
         return key -> !specialKeys.contains(key);
     };
 
+    @SuppressWarnings("unused")
     private static void testMapIterable() {
         Map<MapKey, Iterable<String>> map = new HashMap<>();
         List<String> list = new ArrayList<>();
