@@ -17,7 +17,6 @@ import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
 import de.imise.util.Alphabetical;
 
 /**
@@ -52,14 +51,12 @@ public class MetaPathDefinition {
         Iterable<Class<? extends Edge>> edgeClassesIt = edgeClasses == null || edgeClasses.length == 0 ? ModelConstants.ALL_EDGES_SET : Arrays.asList(edgeClasses);
         //Alle Edgen in beiden Richtungen für alle direkten Startklassen und ihre Unterklassen als MetaPfade hinzufügen
         for (Class<? extends Edge> edgeClass : edgeClassesIt) {
-            if (AufObjVerbindung.class.isAssignableFrom(edgeClass)) {
-                if (DoubleMeaningEdge.class.isAssignableFrom(edgeClass)) {
-                    Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass = edgeClass.asSubclass(DoubleMeaningEdge.class);
-                    put(getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.FORWARD));
-                    put(getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.BACKWARD));
-                } else {
-                    put(getForwardMetaPath(edgeClass));
-                }
+            if (DoubleMeaningEdge.class.isAssignableFrom(edgeClass)) {
+                Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass = edgeClass.asSubclass(DoubleMeaningEdge.class);
+                put(getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.FORWARD));
+                put(getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.BACKWARD));
+            } else {
+                put(getForwardMetaPath(edgeClass));
             }
         }
         init();
