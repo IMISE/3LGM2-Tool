@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.newmatrixview;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,6 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -55,6 +57,11 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
     private final TableModel tableModel;
 
     /**
+     * Einstellungen, welche Klassen und welche Pfade in der Matrix dargestellt werden sollen
+     */
+    private MetaPathSelection metaPathSelection;
+
+    /**
      * @param graphDocument
      */
     public MatrixViewInternalFrame(final LGMGraphDocument graphDocument) {
@@ -74,21 +81,10 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
     }
 
     /**
-     * Füllt das TableModel
-     *
-     * @param rowClass
-     *            Zeilenelementklasse
-     * @param colClass
-     *            Spaltenelementklasse
-     * @param metaPaths
-     *            Metapfade über den Elemente der Zeilen und Splaten miteinander
-     *            verbunden sein können
-     * @param showPartsOnly
-     *            legt fest, ob nur absolute Teilelemente angezeigt werden sollen
-     *            (absolut heiß, dass sie im Gesamtmodell keine Teile haben dürfen)
+     * @param metaPathSelection
      */
-    public void update(final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final AbstractMetaPath[] metaPaths, final boolean showPartsOnly) {
-        tableModel.fillTableModel(rowClass, colClass, metaPaths, showPartsOnly);
+    public void setMetaPathSelection(final MetaPathSelection metaPathSelection) {
+        tableModel.fillTableModel(metaPathSelection);
         rowHeaderPanel.setRows(tableModel.getRowHeaders());
         colHeaderPanel.setCols(tableModel.getColHeaders());
         cellPanel.revalidate();
@@ -123,15 +119,6 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
 
     /** Werkzeugleiste zu diesem Fenster */
     private InternalMatrixFrameToolBar matrixViewToolBar = null;
-
-    /**
-     * gibt die Werkzeugleise zu diesem Fenster zurück
-     *
-     * @return Werkzeugleiste des Fensters
-     */
-    public UnfloatableToolBar getMatrixViewToolBar() {
-        return matrixViewToolBar;
-    }
 
     public void setMatrixViewToolBar(final InternalMatrixFrameToolBar matrixViewToolBar) {
         this.matrixViewToolBar = matrixViewToolBar;
@@ -178,14 +165,14 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
 
     private void mouseEventRoutine(final MouseEvent e) {
         /* nur anlegbare Verbindungen */
-        AbstractMetaPath[] metaPaths = tableModel.getMetaPaths();
+        List<AbstractMetaPath> metaPaths = tableModel.getMetaPaths();
         if (metaPaths == null) {
             return;
         }
 
         /* nur anlgebare Verbindungen */
-        for (int i = 0; i < metaPaths.length; i++) {
-            if (!metaPaths[i].isCreateable()) {
+        for (AbstractMetaPath metaPath : metaPaths) {
+            if (!metaPath.isCreateable()) {
                 return;
             }
         }

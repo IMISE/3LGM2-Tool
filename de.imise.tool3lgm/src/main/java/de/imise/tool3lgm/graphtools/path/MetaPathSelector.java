@@ -56,12 +56,12 @@ public class MetaPathSelector implements ActionListener {
     /**
      * Choosed metapaths
      */
-    private final ArrayList<AbstractMetaPath> selectedMetaPaths;
+    private final List<AbstractMetaPath> selectedMetaPaths;
 
     /**
      * Listeners for change events
      */
-    private final ArrayList<ChangeListener> changeListenerList = new ArrayList<>();
+    private final List<ChangeListener> changeListenerList = new ArrayList<>();
 
     /**
      * Selektor der in allen Dialigen benutzt wird, die statisch von dieser Klasse angezeigt werden. Dadurch bleibt eine alte Auswahl immer erhalten.
@@ -284,38 +284,6 @@ public class MetaPathSelector implements ActionListener {
     }
 
     /**
-     * @return Selected class in <code>class1ComboBox</code> or <code>null</code>
-     */
-    public Class<? extends ModelElement> getSelectedClass1() {
-        return getSelectedClass(class1ComboBox);
-    }
-
-    /**
-     * @return Selected class in <code>class2ComboBox</code> or <code>null</code>
-     */
-    public Class<? extends ModelElement> getSelectedClass2() {
-        return getSelectedClass(class2ComboBox);
-    }
-
-    /**
-     * @return
-     */
-    public AbstractMetaPath[] getSelectedMetaPaths() {
-        AbstractMetaPath[] selectedPaths = new AbstractMetaPath[selectedMetaPaths.size()];
-        for (int i = 0; i < selectedPaths.length; i++) {
-            selectedPaths[i] = selectedMetaPaths.get(i);
-        }
-        return selectedPaths;
-    }
-
-    /**
-     * @return Returns the selectableMetaPathes.
-     */
-    public List<AbstractMetaPath> getSelectableMetaPathes() {
-        return selectableMetaPaths;
-    }
-
-    /**
      * Liefert <code>true</code>, wenn gültige Elementklassen und ein gültiger MetaPfad (jeweils
      * ungleich <code>null</code>) gesetzt sind.
      *
@@ -323,10 +291,8 @@ public class MetaPathSelector implements ActionListener {
      *         sonst <code>false</code>
      */
     public boolean isValidSelection() {
-        if (getSelectedClass1() == null || getSelectedClass2() == null || getSelectedMetaPaths() == null) {
-            return false;
-        }
-        return true;
+        MetaPathSelection selection = getSelection();
+        return selection.class1 != null && selection.class2 != null && selection.selectedMetaPaths != null && selection.selectedMetaPaths.size() > 0;
     }
 
     /**
@@ -351,6 +317,47 @@ public class MetaPathSelector implements ActionListener {
         for (ChangeListener cl : changeListenerList) {
             cl.stateChanged(e);
         }
+    }
+
+    public MetaPathSelection getSelection() {
+        MetaPathSelection selection = new MetaPathSelection();
+        selection.class1 = getSelectedClass(class1ComboBox);
+        selection.class2 = getSelectedClass(class2ComboBox);
+        selection.selectedMetaPaths = ImmutableList.copyOf(selectedMetaPaths); // es muss unbedingt eine Kopie sein!
+        return selection;
+    }
+
+    public void setSelection(final MetaPathSelection selection) {
+        class1ComboBox.removeActionListener(this);
+        class2ComboBox.removeActionListener(this);
+        class1ComboBox.setSelectedObject(selection.class1);
+        class2ComboBox.setSelectedObject(selection.class2);
+        class1ComboBox.addActionListener(this);
+        class2ComboBox.addActionListener(this);
+        selectedMetaPaths.clear();
+        selectedMetaPaths.addAll(selection.selectedMetaPaths);
+        deliverChangeEvent(class2ComboBox);
+    }
+
+    /**
+     * Spiegelt genau eine Auswahl der Einstellungsmöglichkeiten des Selektors wieder
+     *
+     * @author AXS (23 Nov 2018)
+     */
+    public static final class MetaPathSelection {
+
+        /** Selected Class 1 */
+        public Class<? extends ModelElement> class1;
+
+        /** Selected Class 2 */
+        public Class<? extends ModelElement> class2;
+
+        /** Choosed metapaths */
+        public List<AbstractMetaPath> selectedMetaPaths;
+
+        /** Show parts only in matrix rows and columns **/
+        public boolean showPartsOnly;
+
     }
 
 }

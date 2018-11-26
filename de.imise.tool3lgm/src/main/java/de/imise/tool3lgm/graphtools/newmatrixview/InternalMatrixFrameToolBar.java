@@ -8,6 +8,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
@@ -23,6 +24,7 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
+import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalPathsDefinition;
 import de.imise.util.swing.component.UnfloatableToolBar;
@@ -104,8 +106,6 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
      *            Frame dessen Darstellung durch diese Toolbar beeinfluss wird.
      */
     public InternalMatrixFrameToolBar(final MatrixViewInternalFrame controlledFrame) {
-        super();
-
         // dieser Constructor sollte nur mit TableInternalFrames aufgerufen werden. ACHTUNG: der
         // wird per Refelction aufgerufen, daher findet man im Code keine 'direkte' Verwendung
         this.controlledFrame = controlledFrame;
@@ -130,7 +130,7 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
         metaPathSelector.addChangeListener(this);
 
         //ab 6 Legendeneinträgen ist diese Einstellung nicht mehr hoch genug
-        //      legendPanel.setPreferredSize(((TitledBorder) legendPanel.getBorder()).getMinimumSize(legendPanel));
+        //legendPanel.setPreferredSize(((TitledBorder) legendPanel.getBorder()).getMinimumSize(legendPanel));
 
         showPartsOnlyCheckBox = new JCheckBox(Tool3lgmConstants.getResString("showAbsolutePartsOnly"), lastShowPartsOnlyChoice);
         showPartsOnlyCheckBox.addActionListener(this);
@@ -202,28 +202,28 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
      */
     private void update() {
         // Tabelle updaten
-        Class<? extends ModelElement> c1 = metaPathSelector.getSelectedClass1();
-        Class<? extends ModelElement> c2 = metaPathSelector.getSelectedClass2();
-        AbstractMetaPath[] metaPaths = metaPathSelector.getSelectedMetaPaths();
         // den Frame und somit die Tabelle mit den gewählten Klassen und dem MetaPfad neu aufbauen
-        controlledFrame.update(c1, c2, metaPaths, lastShowPartsOnlyChoice);
+        controlledFrame.setMetaPathSelection(metaPathSelector.getSelection());
 
         // Legende updaten
         legendPanel.removeAll();
         if (metaPathSelector.isValidSelection()) {
-            int combinations = (1 << metaPaths.length) - 1;
+            MetaPathSelection metaPathSelection = metaPathSelector.getSelection();
+            String startClassName = ElementsNameBuilder.getDisplayableName(metaPathSelection.class1);
+            String endClassName = ElementsNameBuilder.getDisplayableName(metaPathSelection.class2);
             String and = " " + Tool3lgmConstants.getResString("und") + " ";
+            List<AbstractMetaPath> metaPaths = metaPathSelection.selectedMetaPaths;
+            int metaPathCount = metaPaths.size();
+            int combinations = (1 << metaPathCount) - 1;
             for (int i = 0; i < combinations; i++) {
-                String startClassName = ElementsNameBuilder.getDisplayableName(c1);
                 StringBuilder sb = new StringBuilder();
-                for (int j = 0; j < metaPaths.length; j++) {
+                for (int j = 0; j < metaPathCount; j++) {
                     if ((i + 1 >> j & 1) == 1) {
-                        sb.append(metaPaths[j].getName());
+                        sb.append(metaPaths.get(j).getName());
                         sb.append(and);
                     }
                 }
                 sb.setLength(sb.length() - and.length());
-                String endClassName = ElementsNameBuilder.getDisplayableName(c2);
                 legendPanel.add(new TableToolBarLegendItem(startClassName, sb.toString(), endClassName, TableModel.pathColors[i]));
             }
         }
