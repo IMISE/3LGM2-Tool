@@ -484,8 +484,11 @@ public class PathResultTreeModel extends DefaultTreeModel {
         Class<? extends ModelElement> endClass = metaPath.getEndClass();
         Direction dir = metaPath.getDirection();
         ConnectionState connectionState = metaPath.getConnectionState();
+
         //wenn die Richtung BACKWARD ist, muss der connectionState umgedreht werden (wenn er FORWARD oder BACKWARD ist), damit die interpretierte Richtung stimmt
-        connectionState = dir == Direction.BACKWARD ? connectionState == ConnectionState.FORWARD ? ConnectionState.BACKWARD : ConnectionState.FORWARD : connectionState;
+        if (connectionState != null && dir == Direction.BACKWARD) {
+            connectionState = connectionState == ConnectionState.FORWARD ? ConnectionState.BACKWARD : connectionState == ConnectionState.BACKWARD ? ConnectionState.FORWARD : connectionState;
+        }
         //wenn der MetaPfad eine 'normale' Verbindung zwischen 2 Elementarten über eine Kantenart beschreibt
         NodeType nodeType = isSubStep ? PathResultTreeNode.NodeType.SUBSTEP : PathResultTreeNode.NodeType.SUPERSTEP;
         if (metaPath.getType() == Type.ELEMENT_EDGE_ELEMENT) {
