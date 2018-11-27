@@ -18,16 +18,16 @@ import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalPathsDefinition;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
- * *Klasse für die Toolbar eines InternalFrame mit Matrixdarstellung
+ * Klasse für die Toolbar eines InternalFrame mit Matrixdarstellung
  *
  * @author Thomas Rudert, AXS (22.10.07)
  */
@@ -77,7 +77,7 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
     /**
      * Das Model mit den auswählbaren Elementklassen und Pfaden für den {@link MetaPathSelector}
      */
-    public static final MetaPathDefinition METAPATH_SELECTOR_MODEL = new TLGMOriginalPathsDefinition();
+    private static final MetaPathDefinition METAPATH_SELECTOR_MODEL = ModelConstants.getPathsDefinition();
 
     /**
      * Maximale Anzahle gleichzeitig auswählbarer Metapfade, wenn es mehrere gibt
