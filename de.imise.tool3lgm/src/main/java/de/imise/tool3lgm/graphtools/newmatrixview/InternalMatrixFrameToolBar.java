@@ -6,12 +6,9 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.BoxLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -34,7 +31,7 @@ import de.imise.util.swing.component.UnfloatableToolBar;
  *
  * @author Thomas Rudert, AXS (22.10.07)
  */
-public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements ChangeListener, ActionListener {
+public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements ChangeListener {
 
     /**
      * Label für die ComboBox zur Klassenauswahl der Matrixzeilen
@@ -71,20 +68,6 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
      * Metapfades bereitstellt
      */
     private final MetaPathSelector metaPathSelector;
-
-    /**
-     * Chekcbox über die eingestellt werden kann, ob nur absolute Kindelemente (also Elemente ohne
-     * eigene Teilelemente) angezeigt werden soll. Diese Box ist disabled, wenn weder in den Zeilen
-     * noch in den Spalten Elemente angezeigt werden, die in Teil-Von-Beziehung stehen können.
-     */
-    private final JCheckBox showPartsOnlyCheckBox;
-
-    /**
-     * über diesen <code>boolean</code> wird sich die zuletzt gewählte Option aller geöffneten <code>showPartsOnlyCheckBox</code>es gemerkt, so dass
-     * eine neue Checkbox gleich mit diesem
-     * Wert initialisiert werden kann.
-     */
-    private static boolean lastShowPartsOnlyChoice = false;
 
     /**
      * Frame dessen Darstellung durch diese Toolbar beeinflusst wird
@@ -132,11 +115,8 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
         //ab 6 Legendeneinträgen ist diese Einstellung nicht mehr hoch genug
         //legendPanel.setPreferredSize(((TitledBorder) legendPanel.getBorder()).getMinimumSize(legendPanel));
 
-        showPartsOnlyCheckBox = new JCheckBox(Tool3lgmConstants.getResString("showAbsolutePartsOnly"), lastShowPartsOnlyChoice);
-        showPartsOnlyCheckBox.addActionListener(this);
-
         JComponent[] child1 = {
-                rowLabel, metaPathSelector.getClass1ComboBox(), colLabel, metaPathSelector.getClass2ComboBox(), null, showPartsOnlyCheckBox
+                rowLabel, metaPathSelector.getClass1ComboBox(), colLabel, metaPathSelector.getClass2ComboBox(), null, metaPathSelector.getShowPartsOnlyCheckBox()
         };
         setGridBagLayout(choicePanel, child1, 2);
 
@@ -274,12 +254,6 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
 
     @Override
     public void stateChanged(final ChangeEvent e) {
-        update();
-    }
-
-    @Override
-    public void actionPerformed(final ActionEvent e) {
-        lastShowPartsOnlyChoice = showPartsOnlyCheckBox.isSelected();
         update();
     }
 

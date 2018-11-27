@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
@@ -47,6 +48,13 @@ public class MetaPathSelector implements ActionListener {
      * ComboBox für die zweite Klasse
      */
     private final AlphabeticalComboBox class2ComboBox;
+
+    /**
+     * Chekcbox über die eingestellt werden kann, ob nur absolute Kindelemente (also Elemente ohne
+     * eigene Teilelemente) angezeigt werden soll. Diese Box ist disabled, wenn weder in den Zeilen
+     * noch in den Spalten Elemente angezeigt werden, die in Teil-Von-Beziehung stehen können.
+     */
+    private final JCheckBox showPartsOnlyCheckBox;
 
     /**
      * Metapaths that can be choosed in the <code>metaPathJList</code>
@@ -120,6 +128,9 @@ public class MetaPathSelector implements ActionListener {
         class2ComboBox.addActionListener(this);
         class2ComboBox.setEnabled(false);
         class2ComboBox.setPreferredSize(class1ComboBox.getPreferredSize());
+
+        showPartsOnlyCheckBox = new JCheckBox(Tool3lgmConstants.getResString("showAbsolutePartsOnly"));
+        showPartsOnlyCheckBox.addActionListener(this);
 
         selectedMetaPaths = new ArrayList<>();
     }
@@ -197,6 +208,8 @@ public class MetaPathSelector implements ActionListener {
                 }
             }
             deliverChangeEvent(class2ComboBox);
+        } else {
+            deliverChangeEvent(e.getSource());
         }
     }
 
@@ -272,6 +285,13 @@ public class MetaPathSelector implements ActionListener {
     }
 
     /**
+     * @return Returns the showPartsOnlyCheckBox
+     */
+    public JCheckBox getShowPartsOnlyCheckBox() {
+        return showPartsOnlyCheckBox;
+    }
+
+    /**
      * @param classComboBox
      * @return selected class of <code>classComboBox</code>
      */
@@ -323,6 +343,7 @@ public class MetaPathSelector implements ActionListener {
         MetaPathSelection selection = new MetaPathSelection();
         selection.class1 = getSelectedClass(class1ComboBox);
         selection.class2 = getSelectedClass(class2ComboBox);
+        selection.showPartsOnly = showPartsOnlyCheckBox.isSelected();
         selection.selectedMetaPaths = ImmutableList.copyOf(selectedMetaPaths); // es muss unbedingt eine Kopie sein!
         return selection;
     }
@@ -336,6 +357,7 @@ public class MetaPathSelector implements ActionListener {
         if (selection != null) {
             selectedMetaPaths.addAll(selection.selectedMetaPaths);
         }
+        showPartsOnlyCheckBox.setSelected(selection != null && selection.showPartsOnly);
         deliverChangeEvent(class2ComboBox);//Tabelle aufbauen
     }
 
