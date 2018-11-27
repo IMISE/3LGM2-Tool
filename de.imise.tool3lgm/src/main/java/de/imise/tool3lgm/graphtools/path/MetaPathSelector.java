@@ -328,17 +328,15 @@ public class MetaPathSelector implements ActionListener {
     }
 
     public void setSelection(final MetaPathSelection selection) {
-        //class1ComboBox.removeActionListener(this);
-        class2ComboBox.removeActionListener(this);
+        class2ComboBox.removeActionListener(this);//von der 2. Combobox muss der ActionListener entfernt werden, damit nicht die MetaPfad-Auswahl an den Benutzer gestellt wird
         class1ComboBox.setSelectedObject(selection == null ? null : selection.class1);
         class2ComboBox.setSelectedObject(selection == null ? null : selection.class2);
-        //class1ComboBox.addActionListener(this);
-        class2ComboBox.addActionListener(this);
+        class2ComboBox.addActionListener(this);//ActionListener wieder hinzufügen
         selectedMetaPaths.clear();
         if (selection != null) {
             selectedMetaPaths.addAll(selection.selectedMetaPaths);
         }
-        deliverChangeEvent(class2ComboBox);
+        deliverChangeEvent(class2ComboBox);//Tabelle aufbauen
     }
 
     /**
