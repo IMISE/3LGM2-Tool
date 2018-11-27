@@ -215,6 +215,9 @@ public class AlphabeticalComboBox extends JComboBox {
                 return i;
             }
         }
+        if (o == null) {
+            setSelectedIndex(-1);
+        }
         return -1;
     }
 
