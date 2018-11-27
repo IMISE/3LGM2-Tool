@@ -328,14 +328,16 @@ public class MetaPathSelector implements ActionListener {
     }
 
     public void setSelection(final MetaPathSelection selection) {
-        class1ComboBox.removeActionListener(this);
+        //class1ComboBox.removeActionListener(this);
         class2ComboBox.removeActionListener(this);
-        class1ComboBox.setSelectedObject(selection.class1);
-        class2ComboBox.setSelectedObject(selection.class2);
-        class1ComboBox.addActionListener(this);
+        class1ComboBox.setSelectedObject(selection == null ? null : selection.class1);
+        class2ComboBox.setSelectedObject(selection == null ? null : selection.class2);
+        //class1ComboBox.addActionListener(this);
         class2ComboBox.addActionListener(this);
         selectedMetaPaths.clear();
-        selectedMetaPaths.addAll(selection.selectedMetaPaths);
+        if (selection != null) {
+            selectedMetaPaths.addAll(selection.selectedMetaPaths);
+        }
         deliverChangeEvent(class2ComboBox);
     }
 
@@ -357,6 +359,13 @@ public class MetaPathSelector implements ActionListener {
 
         /** Show parts only in matrix rows and columns **/
         public boolean showPartsOnly;
+
+        @Override
+        public String toString() {
+            String class1Name = class1 == null ? "null" : class1.getSimpleName();
+            String class2Name = class2 == null ? "null" : class2.getSimpleName();
+            return class1Name + " " + selectedMetaPaths + " " + class2Name + " (" + showPartsOnly + ")";
+        }
 
     }
 

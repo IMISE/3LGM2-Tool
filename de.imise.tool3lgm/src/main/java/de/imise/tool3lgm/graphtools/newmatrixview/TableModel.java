@@ -77,16 +77,15 @@ public class TableModel implements Iterable<TableCell> {
      */
     public TableModel(final GraphDocument graphDocument) {
         this.graphDocument = graphDocument;
-        fillTableModel(null);
+        fillTableModelIntern(null, null, null, false);
     }
 
+    /**
+     * @param metaPathSelection Selektion, die vorgibt, für welche Klassen und Pfade die Tabelle dargestellt werden soll. Dieser Paramter darf nicht
+     *            null sein!
+     */
     public void fillTableModel(final MetaPathSelection metaPathSelection) {
-        if (metaPathSelection != null) {
-            fillTableModelIntern(metaPathSelection.class1, metaPathSelection.class2, metaPathSelection.selectedMetaPaths, metaPathSelection.showPartsOnly);
-        } else {
-            fillTableModelIntern(null, null, null, false);
-        }
-        update();
+        fillTableModelIntern(metaPathSelection.class1, metaPathSelection.class2, metaPathSelection.selectedMetaPaths, metaPathSelection.showPartsOnly);
     }
 
     /**
@@ -182,9 +181,7 @@ public class TableModel implements Iterable<TableCell> {
     public void update() {
         if (rowClass != null && colClass != null) {
             rowHeader = graphDocument.getModelItems(rowClass, true, absolutePartsOnly, true);
-
             colHeader = graphDocument.getModelItems(colClass, true, absolutePartsOnly, true);
-
             updateAllCellEntries();
         }
     }
@@ -212,13 +209,10 @@ public class TableModel implements Iterable<TableCell> {
      * aktuelle überschriften neu
      */
     private void updateAllCellEntries() {
-
         cellsSet = new HashSet<>(colHeader.size() * rowHeader.size());
-
         if (metaPaths == null) {
             return;
         }
-
         if (colHeader.size() * rowHeader.size() == 0) {
             return;
         }

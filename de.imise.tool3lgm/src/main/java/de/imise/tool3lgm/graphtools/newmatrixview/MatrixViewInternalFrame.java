@@ -84,11 +84,19 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
      * @param metaPathSelection
      */
     public void setMetaPathSelection(final MetaPathSelection metaPathSelection) {
+        this.metaPathSelection = metaPathSelection;
         tableModel.fillTableModel(metaPathSelection);
         rowHeaderPanel.setRows(tableModel.getRowHeaders());
         colHeaderPanel.setCols(tableModel.getColHeaders());
         cellPanel.revalidate();
         setComponents();
+    }
+
+    /**
+     * @return
+     */
+    public MetaPathSelection getMetaPathSelection() {
+        return metaPathSelection;
     }
 
     /**

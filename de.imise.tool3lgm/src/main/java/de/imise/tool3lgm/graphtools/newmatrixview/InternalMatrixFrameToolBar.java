@@ -154,6 +154,7 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
 
     public void setFrame(final MatrixViewInternalFrame frame) {
         controlledFrame = frame;
+        metaPathSelector.setSelection(frame.getMetaPathSelection());
     }
 
     /**
