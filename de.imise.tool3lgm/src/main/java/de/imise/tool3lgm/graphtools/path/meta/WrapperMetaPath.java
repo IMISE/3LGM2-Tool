@@ -28,10 +28,10 @@ public class WrapperMetaPath extends SequenceMetaPath {
     private static final AbstractMetaPath[] getWrappedMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final AbstractMetaPath wrappedMetaPath) {
         int wrappedMetaPathSize = 3;
         int startClassPathIndex = newStartClass == null ? -1 : 0; // -1 oder 0
-        wrappedMetaPathSize += startClassPathIndex; // 0 oder 1
-        int edgePathIndex = startClassPathIndex + 1; // -1 oder 1 oder 2
-        int endClassPathIndex = newEndClass == null ? -1 : edgePathIndex + 1;
-        wrappedMetaPathSize += endClassPathIndex;
+        wrappedMetaPathSize += startClassPathIndex; // bleibt 3 oder wird 2
+        int edgePathIndex = startClassPathIndex + 1; // 0 oder 1
+        int endClassPathIndex = newEndClass == null ? -1 : edgePathIndex + 1; // -1 oder 1 oder 2
+        wrappedMetaPathSize += endClassPathIndex < 0 ? endClassPathIndex : 0; // bleibt 3 oder wird 2 oder wird 1
         AbstractMetaPath[] wrapped = new AbstractMetaPath[wrappedMetaPathSize];
         if (startClassPathIndex == 0) {
             wrapped[0] = new ElementaryMetaPath(newStartClass);
