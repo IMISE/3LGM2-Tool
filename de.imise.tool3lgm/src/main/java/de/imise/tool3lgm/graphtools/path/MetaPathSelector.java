@@ -146,7 +146,7 @@ public class MetaPathSelector implements ActionListener {
             class2ComboBox.setEnabled(true);
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             for (Class<? extends ModelElement> elementClass : endElementClassesInPaths) {
-                Set<AbstractMetaPath> metaPathes = model.getMetaPaths(class1BoxSelection, elementClass, pathsForSubClasses, pathsForSuperClasses);
+                Set<AbstractMetaPath> metaPathes = model.getMetaPaths(class1BoxSelection, elementClass, pathsForSubClasses, pathsForSuperClasses, false);
                 if (metaPathes != null && metaPathes.size() > 0) {
                     class2ComboBox.addItem(elementClass, getDisplayableName(elementClass));
                 }
@@ -162,7 +162,7 @@ public class MetaPathSelector implements ActionListener {
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             Class<? extends ModelElement> class2BoxSelection = ((Class<?>) class2ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             selectedMetaPaths.clear();
-            selectableMetaPaths = new ArrayList<>(model.getMetaPaths(class1BoxSelection, class2BoxSelection, pathsForSubClasses, pathsForSuperClasses));
+            selectableMetaPaths = new ArrayList<>(model.getMetaPaths(class1BoxSelection, class2BoxSelection, pathsForSubClasses, pathsForSuperClasses, true));
             Alphabetical.sort(selectableMetaPaths);
             if (selectableMetaPaths != null) {
                 if (selectableMetaPaths.size() == 1) {

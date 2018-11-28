@@ -17,6 +17,7 @@ import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.WrapperMetaPath;
 import de.imise.util.Alphabetical;
 
 /**
@@ -95,16 +96,45 @@ public class MetaPathDefinition {
      *            Wenn <code>true</code> dürfen die übergebenen Elementklassen auch Unterklasse der Pfadklassen sein
      * @param asSuperClass
      *            Wenn <code>true</code> dürfen die übergebenen Elementklassen auch Oberklasse der Pfadklassen sein
+     * @param wrap
+     *            Wenn <code>true</code>, dann werden bei den gefundenen MetaPfaden die Start- und Endklasse(n) durch die übergebene Start- und
+     *            Endklasse ersetzt, wenn sie nicht bereits übereinstimmen
      * @return
      */
-    public final Set<AbstractMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean asSubClass, final boolean asSuperClass) {
+    public final Set<AbstractMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean asSubClass, final boolean asSuperClass, final boolean wrap) {
         Set<AbstractMetaPath> metaPaths = new HashSet<>();
         for (AbstractMetaPath metaPath : definedMetaPaths) {
             if (AbstractMetaPath.isStartAndEndClass(metaPath, startClass, endClass, asSubClass, asSuperClass)) {
+                if (wrap) {
+                    metaPath = wrapMetaPath(startClass, endClass, metaPath);
+                }
                 metaPaths.add(metaPath);
             }
         }
         return metaPaths;
+    }
+
+    /**
+     * Wenn die übergebenen und aktuell ausgewählten Klassen nicht die Start- und Endklasse des Pfades ist, dann werden die Start- und Endklassen
+     * durch diese übergebenen ersetzt.
+     * Das Ersetzten geschieht durch das Anlegen eines Wrapper-Pfades, der den originalen MetaPfad in der Mitte hat und einen einfachen Elementarpfad
+     * mit der neuen Startklasse davor bzw. mit der Endlasse danach.
+     *
+     * @param newStartClass
+     * @param newEndClass
+     * @param orginalMetaPath
+     */
+    private final AbstractMetaPath wrapMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final AbstractMetaPath orginalMetaPath) {
+        Set<Class<? extends ModelElement>> startClasses = orginalMetaPath.getStartClasses();
+        boolean wrap = startClasses.size() != 1 || !startClasses.contains(newStartClass);
+        if (!wrap) {
+            Set<Class<? extends ModelElement>> endClasses = orginalMetaPath.getEndClasses();
+            wrap = endClasses.size() != 1 || !endClasses.contains(newEndClass);
+        }
+        if (wrap) {
+            return new WrapperMetaPath(newStartClass, newEndClass, orginalMetaPath);
+        }
+        return orginalMetaPath;
     }
 
     /**
