@@ -175,7 +175,7 @@ public class SequenceMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    protected final String createName() {
+    protected String createName() {
         //zuerst versuche, den Resouceneintrag mit dem übergebenen Schlüssel zu finden, aber ohne "_f" oder "_b" am Ende -> setze den und gehe davon aus, dass es keine Rückrichtung gibt (wenn es ihn gibt)
         String name = Tool3lgmConstants.getResStringWithoutError(baseResKeyOrName);
         if (Strings.isNullOrEmpty(name)) {//das passiert nur, wenn der baseResKeyOrName null oder leer ist
@@ -186,7 +186,6 @@ public class SequenceMetaPath extends AbstractMetaPath {
                 name = baseResKeyOrName; // setzte den übergbenen nicht leeren Resourcen-String als Namen
             }
         }
-        this.name = name;
         return name;
     }
 
