@@ -106,35 +106,12 @@ public class MetaPathDefinition {
         for (AbstractMetaPath metaPath : definedMetaPaths) {
             if (AbstractMetaPath.isStartAndEndClass(metaPath, startClass, endClass, asSubClass, asSuperClass)) {
                 if (wrap) {
-                    metaPath = wrapMetaPath(startClass, endClass, metaPath);
+                    metaPath = WrapperMetaPath.wrapMetaPath(startClass, endClass, metaPath);
                 }
                 metaPaths.add(metaPath);
             }
         }
         return metaPaths;
-    }
-
-    /**
-     * Wenn die übergebenen und aktuell ausgewählten Klassen nicht die Start- und Endklasse des Pfades ist, dann werden die Start- und Endklassen
-     * durch diese übergebenen ersetzt.
-     * Das Ersetzten geschieht durch das Anlegen eines Wrapper-Pfades, der den originalen MetaPfad in der Mitte hat und einen einfachen Elementarpfad
-     * mit der neuen Startklasse davor bzw. mit der Endlasse danach.
-     *
-     * @param newStartClass
-     * @param newEndClass
-     * @param orginalMetaPath
-     */
-    private final AbstractMetaPath wrapMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final AbstractMetaPath orginalMetaPath) {
-        Set<Class<? extends ModelElement>> startClasses = orginalMetaPath.getStartClasses();
-        boolean wrap = startClasses.size() != 1 || !startClasses.contains(newStartClass);
-        if (!wrap) {
-            Set<Class<? extends ModelElement>> endClasses = orginalMetaPath.getEndClasses();
-            wrap = endClasses.size() != 1 || !endClasses.contains(newEndClass);
-        }
-        if (wrap) {
-            return new WrapperMetaPath(newStartClass, newEndClass, orginalMetaPath);
-        }
-        return orginalMetaPath;
     }
 
     /**
