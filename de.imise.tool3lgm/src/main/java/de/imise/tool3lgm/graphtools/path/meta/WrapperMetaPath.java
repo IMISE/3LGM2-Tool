@@ -26,10 +26,22 @@ public class WrapperMetaPath extends SequenceMetaPath {
      * @return
      */
     private static final AbstractMetaPath[] getWrappedMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final AbstractMetaPath wrappedMetaPath) {
-        AbstractMetaPath[] wrapped = new AbstractMetaPath[3];
-        wrapped[0] = new ElementaryMetaPath(newStartClass);
-        wrapped[1] = wrappedMetaPath;
-        wrapped[2] = new ElementaryMetaPath(newEndClass);
+        int wrappedMetaPathSize = 3;
+        int startClassPathIndex = newStartClass == null ? -1 : 0; // -1 oder 0
+        wrappedMetaPathSize += startClassPathIndex; // 0 oder 1
+        int edgePathIndex = startClassPathIndex + 1; // -1 oder 1 oder 2
+        int endClassPathIndex = newEndClass == null ? -1 : edgePathIndex + 1;
+        wrappedMetaPathSize += endClassPathIndex;
+        AbstractMetaPath[] wrapped = new AbstractMetaPath[wrappedMetaPathSize];
+        if (startClassPathIndex == 0) {
+            wrapped[0] = new ElementaryMetaPath(newStartClass);
+            wrapped[1] = wrappedMetaPath;
+        } else {
+            wrapped[0] = wrappedMetaPath;
+        }
+        if (endClassPathIndex > 0) {
+            wrapped[endClassPathIndex] = new ElementaryMetaPath(newEndClass);
+        }
         return wrapped;
     }
 
@@ -46,20 +58,22 @@ public class WrapperMetaPath extends SequenceMetaPath {
      */
     public static final AbstractMetaPath wrapMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final AbstractMetaPath orginalMetaPath) {
         Set<Class<? extends ModelElement>> startClasses = orginalMetaPath.getStartClasses();
-        boolean wrap = startClasses.size() != 1 || !startClasses.contains(newStartClass);
-        if (!wrap) {
-            Set<Class<? extends ModelElement>> endClasses = orginalMetaPath.getEndClasses();
-            wrap = endClasses.size() != 1 || !endClasses.contains(newEndClass);
-        }
-        if (wrap) {
-            return new WrapperMetaPath(newStartClass, newEndClass, orginalMetaPath);
+        Class<? extends ModelElement> startClass = newStartClass != null && (startClasses.size() != 1 || !startClasses.contains(newStartClass)) ? newStartClass : null;
+        Set<Class<? extends ModelElement>> endClasses = orginalMetaPath.getEndClasses();
+        Class<? extends ModelElement> endClass = newEndClass != null && (endClasses.size() != 1 || !endClasses.contains(newEndClass)) ? newEndClass : null;
+        if (startClass != null && endClass != null) {
+            return new WrapperMetaPath(startClass, endClass, orginalMetaPath);
         }
         return orginalMetaPath;
     }
 
     @Override
     protected final String createName() {
-        return metaPaths.get(1).getName();
+        AbstractMetaPath firstMetaPath = metaPaths.get(0);
+        if (firstMetaPath instanceof ElementaryMetaPath && ((ElementaryMetaPath) firstMetaPath).getType() == ElementaryMetaPath.Type.SINGLE_ELEMENT) {
+            return metaPaths.get(1).createName();
+        }
+        return firstMetaPath.createName();
     }
 
 }
