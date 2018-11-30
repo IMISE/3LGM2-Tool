@@ -4748,6 +4748,30 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
+     * @param classes
+     *            Klassen der gesuchten Elementart (Node oder Kanten). Steht dieselbe Elementart (oder eine Ober- bzw. Unterklasse) mehrfach darin,
+     *            sind dieselben Elemente mehrfach in der Ergebnisliste.
+     * @param includeSubClasses
+     *            boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt
+     *            auch RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
+     * @param absolutePartsOnly
+     *            wenn <code>true</code> werden keine Elemente zurückgegeben, denen über eine Part-Of-Beziehung
+     *            Teilelemente zugewiesen sind. Die Teil-Von-Eigenschaft wird nicht für dieses Teilmodell sondern
+     *            für das Gesamtmodell geprüft.
+     * @param alphabetical
+     *            wenn <code>true</code> wird eine alphabetisch sortierte Liste zurückgegeben
+     * @return List mit allen gefundenen Elementen
+     * @see #getModelItems(Class, boolean, boolean, boolean)
+     */
+    public final List<ModelElement> getModelItems(final Iterable<Class<? extends ModelElement>> classes, final boolean includeSubClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
+        List<ModelElement> elements = new ArrayList<>();
+        for (Class<? extends ModelElement> elementClass : classes) {
+            elements.addAll(GraphDocumentHandler.getModelItems(this, elementClass, includeSubClasses, absolutePartsOnly, alphabetical));
+        }
+        return elements;
+    }
+
+    /**
      * Liefert den Container in diesem GraphDocument für ein übergebenes ModellElement.
      *
      * @param modelElement
