@@ -6,9 +6,11 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
 
@@ -37,51 +39,94 @@ public class ElementsNameBuilder {
     private static HashMap<Class<? extends ModelElement>, String> elementClassToHashShortName = null;
 
     /**
-     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
      *
-     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
+     * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
      * @return String aus dem geladenen ResourcenBundle
      */
-    private static final String getDisplayableName(Class<? extends ModelElement> clazz, final boolean plural) {
-        if (clazz == null) {
-            return null;
+    @SafeVarargs
+    private static final String getDisplayableName(final boolean plural, final Class<? extends ModelElement>... classes) {
+        if (classes == null || classes.length == 0) {
+            return "";
         }
-        while (ModelElement.class.isAssignableFrom(clazz)) {
-            try {
-                String resKey = clazz.getSimpleName();
-                if (plural) {
-                    resKey += ModelConstants.PLURAL_NAME_RES_KEY_SUFFIX;
+        return getDisplayableName(plural, Arrays.asList(classes));
+    }
+
+    private static final String getDisplayableName(final boolean plural, final Collection<Class<? extends ModelElement>> classes) {
+        if (classes == null) {
+            return "";
+        }
+        int classCount = classes.size();
+        StringBuilder names = new StringBuilder();
+        Iterator<Class<? extends ModelElement>> classIt = classes.iterator();
+        for (int i = 0; i < classCount; i++) {
+            Class<? extends ModelElement> clazz = classIt.next();
+            while (ModelElement.class.isAssignableFrom(clazz)) {
+                try {
+                    String resKey = clazz.getSimpleName();
+                    if (plural) {
+                        resKey += ModelConstants.PLURAL_NAME_RES_KEY_SUFFIX;
+                    }
+                    String name = getResString(resKey);
+                    names.append(name);
+                    if (i < classCount - 1) {
+                        names.append(", ");
+                    } else {
+                        break;
+                    }
+                } catch (MissingResourceException mre) {
+                    clazz = clazz.getSuperclass().asSubclass(ModelElement.class);
                 }
-                return getResString(resKey);
-            } catch (MissingResourceException mre) {
-                clazz = clazz.getSuperclass().asSubclass(ModelElement.class);
             }
         }
-        return null;
+        return names.toString();
     }
 
     /**
      * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
      * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
      *
-     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
+     * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
-    public static final String getDisplayablePluralName(final Class<? extends ModelElement> clazz) {
-        return getDisplayableName(clazz, true);
+    @SafeVarargs
+    public static final String getDisplayablePluralName(final Class<? extends ModelElement>... classes) {
+        return getDisplayableName(true, classes);
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     *
+     * @param classes Klassen für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    public static final String getDisplayablePluralName(final Collection<Class<? extends ModelElement>> classes) {
+        return getDisplayableName(true, classes);
     }
 
     /**
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
      * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
      *
-     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
+     * @param classes Klasse für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
-    public static final String getDisplayableName(final Class<? extends ModelElement> clazz) {
-        return getDisplayableName(clazz, false);
+    @SafeVarargs
+    public static final String getDisplayableName(final Class<? extends ModelElement>... classes) {
+        return getDisplayableName(false, classes);
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     *
+     * @param classes Klassen für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    public static final String getDisplayableName(final Collection<Class<? extends ModelElement>> classes) {
+        return getDisplayableName(false, classes);
     }
 
     /**
