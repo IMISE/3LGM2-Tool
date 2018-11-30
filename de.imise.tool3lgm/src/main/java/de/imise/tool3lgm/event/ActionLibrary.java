@@ -57,7 +57,6 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.MetaPathOld;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
@@ -764,9 +763,9 @@ public class ActionLibrary {
                         }
                     };
                     String resKey = ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS.name();
-                    MetaPathOld metaPath = singleSimpleRedundancyDefinition.getMetaPath();
-                    String startClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getStartClass());
-                    String endClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getEndClass());
+                    AbstractMetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
+                    String startClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getStartClasses());
+                    String endClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getEndClasses());
                     String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);
                     action.setText(fullActionDisplayName);
                     returnActions[i] = action;

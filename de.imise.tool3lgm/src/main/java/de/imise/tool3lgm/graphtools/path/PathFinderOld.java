@@ -8,7 +8,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartOrEndClass;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +17,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.Connect
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
@@ -30,18 +28,18 @@ import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
  */
 public final class PathFinderOld {
 
-    /**
-     * Liefert alle <code>MetaPath</code>es, die zwischen Elementen der Art <code>startClass</code> und <code>endClass</code> definiert sind.
-     *
-     * @param startClass
-     * @param endClass
-     * @return
-     */
-    public static final Collection<AbstractMetaPath> getMetaPathes(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
-        MetaPathDefinition pathsDefinition = ModelConstants.getPathsDefinition();
-        return pathsDefinition.getMetaPaths(startClass, endClass, true, true);
-    }
-
+    //    /**
+    //     * Liefert alle <code>MetaPath</code>es, die zwischen Elementen der Art <code>startClass</code> und <code>endClass</code> definiert sind.
+    //     *
+    //     * @param startClass
+    //     * @param endClass
+    //     * @return
+    //     */
+    //    public static final Collection<AbstractMetaPath> getMetaPathes(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
+    //        MetaPathDefinition pathsDefinition = ModelConstants.getPathsDefinition();
+    //        return pathsDefinition.getMetaPaths(startClass, endClass, true, true);
+    //    }
+    //
     /**
      * @return
      */

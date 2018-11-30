@@ -465,7 +465,7 @@ public abstract class AbstractMetaPath {
     }
 
     /**
-     * Liefert den MetaPfad der die gegenricthung beschreibt oder <code>null</code>, wenn es einen solchen nith gibt.
+     * Liefert den MetaPfad der die Gegenricthung beschreibt oder <code>null</code>, wenn es einen solchen nicht gibt.
      *
      * @return the otherDirectionPath
      */

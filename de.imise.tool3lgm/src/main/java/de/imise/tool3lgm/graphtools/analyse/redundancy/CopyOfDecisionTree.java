@@ -14,8 +14,8 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathOld;
-import de.imise.tool3lgm.graphtools.path.PathFinderOld;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.AlphabeticalSet;
 
@@ -152,15 +152,15 @@ public class CopyOfDecisionTree {
         // true);
         // alle Teil-Anwendungsbausteine des doc in einer alphabetischen Liste holen
         SingleRedundancyAnalysisDefinition definition = result.getDefinition();
-        MetaPathOld metaPath = definition.getMetaPath();
-        applicationSystems = doc.getModelItems(metaPath.getStartClass(), true, true, true);
+        AbstractMetaPath metaPath = definition.getMetaPath();
+        applicationSystems = doc.getModelItems(metaPath.getStartClasses(), true, true, true);
 
         // Set aller Aufgaben, die von mehr als einem AWB unterstützt werden und von keinem AWB, der
         // mind. eine Aufgabe exklusiv unterstützt
-        AlphabeticalSet<ModelElement> notExclusiveFuncSet = new AlphabeticalSet<>();
+        Set<ModelElement> notExclusiveFuncSet = new AlphabeticalSet<>();
         // Set aller AWB, die mind. eine Aufgabe unterstützen, die auch von anderen AWB unterstützt
         // wird
-        AlphabeticalSet<ModelElement> notExclusiveAWBSet = new AlphabeticalSet<>();
+        Set<ModelElement> notExclusiveAWBSet = new AlphabeticalSet<>();
 
         // für jeden AWB
         for (ModelElement as : applicationSystems) {
@@ -168,7 +168,7 @@ public class CopyOfDecisionTree {
             // Set aller Aufgaben, die der AWB unterstützt
             AlphabeticalSet<ModelElement> funcsOfAWB = new AlphabeticalSet<>();
             awbToFuncsSets.put(as, funcsOfAWB);
-            Set<ModelElement> funcsAwb = PathFinderOld.getConnectedElements(as, metaPath);
+            Collection<ModelElement> funcsAwb = MetaPathFunctions.getConnectedElements(as, metaPath);
             Set<ModelElement> leafFuncAwb = new HashSet<>(funcsAwb.size());
             for (ModelElement func : funcsAwb) {
                 leafFuncAwb.addAll(func.getAbsolutePartElements());
@@ -234,14 +234,14 @@ public class CopyOfDecisionTree {
         // für alle AWB, die mind. eine aber keine Aufgabe exklusiv unterstützen prüfe, ob schon
         // alle
         // ihre Aufgaben von exklusiv unterstützenden AWBs unterstützt werden
-        AlphabeticalSet<ModelElement> reallyNotExclusiveAWB = new AlphabeticalSet<>();
+        Set<ModelElement> reallyNotExclusiveAWB = new AlphabeticalSet<>();
         for (ModelElement as : notExclusiveAWBSet) {
             // wird true, wenn der AWB mind. eine Aufgabe unterstützt, die von keinem AWB
             // unterstützt
             // wird, die eine Aufgabe als einziger unterstützt
             boolean allAlreadySupported = true;
             // alle vom as unterstützten Aufgaben holen
-            AlphabeticalSet<ModelElement> funcsOfAWB = awbToFuncsSets.get(as);
+            Set<ModelElement> funcsOfAWB = awbToFuncsSets.get(as);
             // für jede dieser Aufgaben
             for (ModelElement f : funcsOfAWB) {
                 // wenn sie noch nicht von den exklusiv unterstützenden AWBs erledigt wird
@@ -275,9 +275,8 @@ public class CopyOfDecisionTree {
 
         // System.err.println("Anzahl der verbliebenen relevanten Aufgaben: " +
         // notExclusiveFuncSet.size());
-        /*
-         * Die Verbindungsmatrix erzeugen
-         */
+
+        // Die Verbindungsmatrix erzeugen
         notExclusiveAWB = new ModelElement[result.equalsSets.size()];
         int i = 0;
         for (AlphabeticalSet<ModelElement> set : result.equalsSets) {
@@ -380,10 +379,9 @@ public class CopyOfDecisionTree {
 
         }
 
-        /*
-         * //////////////////////////////////////////////////////////////////* Jetzt mit einem
-         * Greedy-Algortithmus eine beste Lösung bestimmen. *
-         */// ///////////////////////////////////////////////////////////////*
+        // ////////////////////////////////////////////////////////////////////
+        // Jetzt mit einem Greedy-Algortithmus eine beste Lösung bestimmen. //
+        // ////////////////////////////////////////////////////////////////////
 
         // jede Aufgabe, die durch das bisher gefundene Set von AWB unterstützt wird, ist hier 1
         // gesetzt, sonst 0
@@ -683,7 +681,6 @@ public class CopyOfDecisionTree {
                 if (actNode == root) {
                     return true;
                 }
-
                 awb--;
                 goBack = true;
             }
@@ -832,7 +829,7 @@ public class CopyOfDecisionTree {
 
         // System.err.println("Anzahl der durch den Enscheidungsbaum ebenfalls als ueberfluessig erkannte AWB: "
         // + result.moreUselessAWB.size());
-        // for (int i=0; i<result.moreUselessAWB.size(); i++)
+        // for (int i=0; i < result.moreUselessAWB.size(); i++)
         // System.err.println(result.moreUselessAWB.get(i));
 
     }
@@ -862,11 +859,11 @@ public class CopyOfDecisionTree {
      */
     private final AlphabeticalSet<ModelElement> getSameSupporter(final ModelElement me) {
         SingleRedundancyAnalysisDefinition definition = result.getDefinition();
-        MetaPathOld metaPath = definition.getMetaPath();
-        Collection<ModelElement> supported = PathFinderOld.getConnectedElements(me, metaPath.getEndClass(), metaPath);
+        AbstractMetaPath metaPath = definition.getMetaPath();
+        Collection<ModelElement> supported = MetaPathFunctions.getConnectedElements(me, metaPath);
         AlphabeticalSet<ModelElement> returnSet = new AlphabeticalSet<>();
         for (ModelElement supped : supported) {
-            Collection<ModelElement> supporter = PathFinderOld.getConnectedElements(supped, metaPath.getStartClass(), metaPath);
+            Collection<ModelElement> supporter = MetaPathFunctions.getConnectedElements(supped, metaPath.getOtherDirection());
             for (ModelElement supper : supporter) {
                 if (!result.uselessAWB.contains(supper) && !result.moreUselessAWB.contains(supper)) {
                     returnSet.add(supper);
@@ -882,7 +879,7 @@ public class CopyOfDecisionTree {
      *
      * @param Set aller bisher als nicht exklusiv und nicht überflüssig erkannten AWB
      */
-    private final void initEqualsSets(final AlphabeticalSet<ModelElement> notExclusiveAWBSet) {
+    private final void initEqualsSets(final Set<ModelElement> notExclusiveAWBSet) {
         // Liste für alle nicht exklusiven, aber in jedem Kombinationsset enthaltenen AWBs
         List<ModelElement> maybeNotrequiredAWB = new ArrayList<>();
 
@@ -894,7 +891,7 @@ public class CopyOfDecisionTree {
             Alphabetical.insert(maybeNotrequiredAWB, notExclusiveAWB);
             // aus dem Set der vom AWB unterstützten Aufgaben all die entfernen, die schon
             // von den exklusiven AWBs erledigt werden (die braucht man nicht beachten)
-            AlphabeticalSet<ModelElement> funcOfAWB = awbToFuncsSets.get(notExclusiveAWB);
+            Set<ModelElement> funcOfAWB = awbToFuncsSets.get(notExclusiveAWB);
             funcOfAWB.removeAll(exclusiveFuncs);
         }
         // aus notExclusiveButNeededAWB alle AWB entfernen, die dasselbe tun, d.h. es bleibt genau

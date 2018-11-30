@@ -200,7 +200,7 @@ public class SequenceMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public AbstractMetaPath getOtherDirection() {
+    public SequenceMetaPath getOtherDirection() {
         // wenn noch nicht bereits einmal versucht wurde den Gegenrichtungspfad zusammenzubauen
         if (!otherDirectionInitilized) {
             otherDirectionInitilized = true;
@@ -221,7 +221,7 @@ public class SequenceMetaPath extends AbstractMetaPath {
             other.otherDirectionInitilized = true;
             super.otherDirection = other;
         }
-        return otherDirection;
+        return (SequenceMetaPath) super.otherDirection;
     }
 
     @Override
