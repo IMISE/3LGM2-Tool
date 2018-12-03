@@ -5,7 +5,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 
 public class ErrorSolution {
 
@@ -30,7 +30,7 @@ public class ErrorSolution {
      * das keinen eigenen Eigenschaftsdialog hat, wie zum Beipsiel <code>AWBKonfiguration</code>.
      * Sie werden im Eigenschaftsdialog von Aufgaben angezeigt und zusammengesetzt.
      */
-    private final MetaPathOld pathToPropertyDialogElement;
+    private final SimpleMetaPath pathToPropertyDialogElement;
 
     /**
      * Klasse des Panels, in dem man den Fehler anzeigen bzw. beheben kann. Die Kombination aus
@@ -51,7 +51,7 @@ public class ErrorSolution {
      * @param panelClass
      * @param panelNameResKey
      */
-    public ErrorSolution(final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final MetaPathOld pathToPropertyDialogElement, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
+    public ErrorSolution(final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final SimpleMetaPath pathToPropertyDialogElement, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
         super();
         this.targetClass = targetClass;
         this.edgeClass = edgeClass;
@@ -79,7 +79,7 @@ public class ErrorSolution {
      * @param panelNameResKey
      */
     public ErrorSolution(final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
-        this(targetClass, edgeClass, (MetaPathOld) null, panelClass, panelNameResKey);
+        this(targetClass, edgeClass, (SimpleMetaPath) null, panelClass, panelNameResKey);
     }
 
     /**
@@ -99,7 +99,7 @@ public class ErrorSolution {
     /**
      * @return the pathToPropertyDialogElement
      */
-    public MetaPathOld getPathToPropertyDialogElement() {
+    public SimpleMetaPath getPathToPropertyDialogElement() {
         return pathToPropertyDialogElement;
     }
 

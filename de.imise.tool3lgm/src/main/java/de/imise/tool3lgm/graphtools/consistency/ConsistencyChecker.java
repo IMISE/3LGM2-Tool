@@ -32,8 +32,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentAdapter;
-import de.imise.tool3lgm.graphtools.path.MetaPathOld;
-import de.imise.tool3lgm.graphtools.path.PathFinderOld;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 
@@ -354,7 +354,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * @param error
      * @return
      */
-    private Set<ModelElement> getSolutionPropertyDialogElement(final AbstractError error) {
+    private Collection<ModelElement> getSolutionPropertyDialogElement(final AbstractError error) {
         if (error == null) {
             return null;
         }
@@ -362,10 +362,10 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
         if (es == null) {
             return new HashSet<>();
         }
-        MetaPathOld pathToDialogElement = es.getPathToPropertyDialogElement();
+        SimpleMetaPath pathToDialogElement = es.getPathToPropertyDialogElement();
         ModelElement me = error.getModelElement();
         if (pathToDialogElement != null) {
-            Set<ModelElement> connected = PathFinderOld.getDirectConnectedElements(me, pathToDialogElement);
+            Collection<ModelElement> connected = MetaPathFunctions.getConnectedElements(me, pathToDialogElement);
             if (connected.size() == 0) {
                 return null;
             }
@@ -415,7 +415,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 }
                 dialog.showDialog();
             } else {
-                Set<ModelElement> solutionPropertyDialogElement = getSolutionPropertyDialogElement(error);
+                Collection<ModelElement> solutionPropertyDialogElement = getSolutionPropertyDialogElement(error);
                 if (solutionPropertyDialogElement == null || solutionPropertyDialogElement.size() == 0) {
                     return;
                 }
