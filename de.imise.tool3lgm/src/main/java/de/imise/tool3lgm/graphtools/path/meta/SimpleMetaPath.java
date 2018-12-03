@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
+import java.util.Arrays;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -45,7 +46,16 @@ public class SimpleMetaPath extends SequenceMetaPath {
      * @param metaPaths
      */
     public SimpleMetaPath(final String baseResKeyOrName, final ElementaryMetaPath... metaPaths) {
-        super(baseResKeyOrName, metaPaths);
+        this(baseResKeyOrName, Direction.FORWARD, metaPaths);
+    }
+
+    /**
+     * @param baseResKeyOrName
+     * @param direction
+     * @param metaPaths
+     */
+    protected SimpleMetaPath(final String baseResKeyOrName, final Direction direction, final ElementaryMetaPath... metaPaths) {
+        super(baseResKeyOrName, direction, metaPaths);
     }
 
     /**
@@ -176,6 +186,27 @@ public class SimpleMetaPath extends SequenceMetaPath {
     public static final Direction getEdgeDirection(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {
         Direction direction = Edge.isStartClass(edgeClass, startClass) ? Direction.FORWARD : Edge.isEndClass(edgeClass, startClass) ? Direction.BACKWARD : null;
         return direction;
+    }
+
+    @Override
+    public SimpleMetaPath getOtherDirection() {
+        return (SimpleMetaPath) super.getOtherDirection();
+    }
+
+    @Override
+    protected SimpleMetaPath createOtherDirection(final String baseResKeyOrName) {
+        ElementaryMetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
+        return otherDirectionMetaPaths != null ? new SimpleMetaPath(baseResKeyOrName, Direction.BACKWARD, getOtherDirectionMetaPaths()) : null;
+    }
+
+    @Override
+    protected ElementaryMetaPath[] getOtherDirectionMetaPaths() {
+        ElementaryMetaPath[] otherDirectionElementaryMetaPaths = null;
+        AbstractMetaPath[] otherDirectionMetaPaths = super.getOtherDirectionMetaPaths();
+        if (otherDirectionMetaPaths != null) {
+            otherDirectionElementaryMetaPaths = Arrays.copyOf(otherDirectionMetaPaths, otherDirectionMetaPaths.length, ElementaryMetaPath[].class);
+        }
+        return otherDirectionElementaryMetaPaths;
     }
 
 }

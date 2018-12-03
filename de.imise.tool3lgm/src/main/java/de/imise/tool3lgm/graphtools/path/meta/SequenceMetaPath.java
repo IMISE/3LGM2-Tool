@@ -13,9 +13,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
- * @author AXS (26.10.2018)
- * @author AXS
- * @create 13.10.2010
+ * Pfad der aus einer Hintereianderreihung (Liste) anderer Pfade besteht.
+ *
+ * @author AXS (26.10.2018) (original AXS (13.10.2010))
  */
 public class SequenceMetaPath extends AbstractMetaPath {
 
@@ -27,7 +27,7 @@ public class SequenceMetaPath extends AbstractMetaPath {
     /**
      * Wahr, wenn sobald einmal verscht wurde, die Gegenrichtung dieses Pfades anzulegen
      */
-    private boolean otherDirectionInitilized = false;
+    protected boolean otherDirectionInitilized = false;
 
     /**
      * Liste von Elementarpfaden, aus denen dieser Pfad besteht. Diese Liste lässt sich nur anlegen,
@@ -44,9 +44,17 @@ public class SequenceMetaPath extends AbstractMetaPath {
      */
     private boolean simplePathInitialized = false;
 
+    /**
+     * BasisResourcenschlüssel oder Name des Pfades. Wenn dieser Schlüssel nicht mit der jeweiligen Richtung "_f" (FORWARD) pder "_b" (BACKWARD) und
+     * auch nicht so wie hier übergeben in den Resourcen gefunden wird, dann wird er selbst als Name gesetzt.
+     */
     private final String baseResKeyOrName;
 
-    private final Direction direction;
+    /**
+     * Diese Richtung wird nur zum Erzeugen des Namens gebraucht. Je nachdem welche Rictung hier vermerkt ist, wird an den {@link #baseResKeyOrName}
+     * noch "_f" (FORWARD) pder "_b" (BACKWARD) angehängt.
+     */
+    protected final Direction direction;
 
     /**
      * @see {@link #isDirected()}
@@ -78,7 +86,7 @@ public class SequenceMetaPath extends AbstractMetaPath {
      * @param direction
      * @param metaPaths
      */
-    private SequenceMetaPath(final String baseResKeyOrName, final Direction direction, final AbstractMetaPath... metaPaths) {
+    protected SequenceMetaPath(final String baseResKeyOrName, final Direction direction, final AbstractMetaPath... metaPaths) {
         super();
         this.baseResKeyOrName = baseResKeyOrName;
         this.direction = direction;
@@ -205,23 +213,43 @@ public class SequenceMetaPath extends AbstractMetaPath {
         if (!otherDirectionInitilized) {
             otherDirectionInitilized = true;
             // versuchen, die Gegenrichtung zusammen zu bauen
-            AbstractMetaPath[] otherDirectionMetaPaths = new AbstractMetaPath[metaPaths.size()];
-            // Gegenrichtung der enthaltenen Einzelpfade in umgekehrter Reihenfolge einfügen
-            for (int i = otherDirectionMetaPaths.length - 1; i >= 0; i--) {
-                AbstractMetaPath actualMetaPath = metaPaths.get(i);
-                AbstractMetaPath otherDirection = actualMetaPath.getOtherDirection();
-                if (otherDirection == null) {
-                    break;
-                }
-                otherDirectionMetaPaths[otherDirectionMetaPaths.length - i - 1] = otherDirection;
+            AbstractMetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
+            // Gegenrichtung für diesen und den Gegenrichtungspfad setzen, wenn es die Gegenrichtung gibt
+            if (otherDirectionMetaPaths != null) {
+                SequenceMetaPath other = createOtherDirection(baseResKeyOrName);
+                other.otherDirection = this;
+                other.otherDirectionInitilized = true;
+                super.otherDirection = other;
             }
-            // Gegenrichtung für diesen und den Gegenrichtungspfad setzen
-            SequenceMetaPath other = new SequenceMetaPath(baseResKeyOrName, Direction.BACKWARD, otherDirectionMetaPaths);
-            other.otherDirection = this;
-            other.otherDirectionInitilized = true;
-            super.otherDirection = other;
         }
         return (SequenceMetaPath) super.otherDirection;
+    }
+
+    /**
+     * Legt den eigentlichen Gegenrichtungspfad an, wenn es ihn gibt (also wenn sich jeder Pfad in der Liste auch umdrehen lässt)
+     *
+     * @param baseResKeyOrName
+     * @return
+     */
+    protected SequenceMetaPath createOtherDirection(final String baseResKeyOrName) {
+        AbstractMetaPath[] otherDirectionMetaPaths = getOtherDirectionMetaPaths();
+        return new SequenceMetaPath(baseResKeyOrName, Direction.BACKWARD, otherDirectionMetaPaths);
+    }
+
+    protected AbstractMetaPath[] getOtherDirectionMetaPaths() {
+        // versuchen, die Gegenrichtung zusammen zu bauen
+        AbstractMetaPath[] otherDirectionMetaPaths = new AbstractMetaPath[metaPaths.size()];
+        // Gegenrichtung der enthaltenen Einzelpfade in umgekehrter Reihenfolge einfügen
+        for (int i = otherDirectionMetaPaths.length - 1; i >= 0; i--) {
+            AbstractMetaPath actualMetaPath = metaPaths.get(i);
+            AbstractMetaPath otherDirection = actualMetaPath.getOtherDirection();
+            if (otherDirection == null) {
+                otherDirectionMetaPaths = null;
+                break;
+            }
+            otherDirectionMetaPaths[otherDirectionMetaPaths.length - i - 1] = otherDirection;
+        }
+        return otherDirectionMetaPaths;
     }
 
     @Override
