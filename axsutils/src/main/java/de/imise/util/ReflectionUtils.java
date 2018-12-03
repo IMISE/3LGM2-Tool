@@ -56,7 +56,7 @@ public class ReflectionUtils {
         }
         Class<? extends T> classX = class1;
         while (!classX.isAssignableFrom(class2) && classX != Object.class) {
-            classX = (Class<? extends T>) class1.getSuperclass();
+            classX = (Class<? extends T>) classX.getSuperclass();
         }
         return classX;
     }
