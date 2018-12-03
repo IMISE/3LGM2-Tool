@@ -432,35 +432,38 @@ public class PathResultTreeModel extends DefaultTreeModel {
         }
     }
 
+    //    /**
+    //     * @param startNode
+    //     * @param metaPath
+    //     * @param isSubStep
+    //     * @return
+    //     */
+    //    private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final ParallelMetaPath metaPath, final boolean isSubStep) {
+    //        List<PathResultTreeNode> resultNodes = new ArrayList<>();
+    //        if (metaPath instanceof UnionMetaPath) {
+    //            for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
+    //                resultNodes.addAll(resultNodes);
+    //            }
+    //        } else {
+    //            List<AbstractMetaPath> metaPaths = metaPath.getMetaPaths();
+    //            AbstractMetaPath firstSubMetaPath = metaPaths.get(0);
+    //            if (firstSubMetaPath instanceof ElementaryMetaPath) {
+    //                if (metaPath instanceof DifferenceMetaPath) {
+    //                    for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
+    //                    }
+    //                } else if (metaPath instanceof SectionMetaPath) {
+    //                    for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
+    //                    }
+    //                }
+    //            }
+    //        }
+    //        return resultNodes;
+    //    }
+
     /**
-     * @param startNode
-     * @param metaPath
-     * @param isSubStep
-     * @return
-     *         /
-     *         private List<PathResultTreeNode> addPath(PathResultTreeNode startNode, ParallelMetaPath metaPath, boolean isSubStep) {
-     *         List<PathResultTreeNode> resultNodes = new ArrayList<PathResultTreeNode>();
-     *         if (metaPath instanceof UnionMetaPath) {
-     *         for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
-     *         resultNodes.addAll(resultNodes);
-     *         }
-     *         } else {
-     *         List<AbstractMetaPath> metaPaths = metaPath.getMetaPaths();
-     *         AbstractMetaPath firstSubMetaPath = metaPaths.get(0);
-     *         if (firstSubMetaPath instanceof ElementaryMetaPath)
-     *         if (metaPath instanceof DifferenceMetaPath) {
-     *         for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
-     *         }
-     *         } else if (metaPath instanceof SectionMetaPath) {
-     *         for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
-     *         }
-     *         }
-     *         }
-     *         return resultNodes;
-     *         }
-     *         /**
-     *         Liefert alle mit dem übergebenen Element verbundenen Elemente und Kanten als Ergebnisknoten zum einhängen in den
-     *         Ergebnisbaum zurück.
+     * Liefert alle mit dem übergebenen Element verbundenen Elemente und Kanten als Ergebnisknoten zum einhängen in den
+     * Ergebnisbaum zurück.
+     *
      * @param me
      *            Element, für das die verbundenen Elemente gesucht werden sollen
      * @param metaPath
