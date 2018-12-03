@@ -43,8 +43,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.MetaPathOld;
-import de.imise.tool3lgm.graphtools.path.SimpleMetaPathOld;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -397,7 +396,7 @@ public final class ModelConstants {
      * @param edgeClass
      * @return
      */
-    public static MetaPathOld getConditionPath(final Class<? extends Edge> edgeClass) {
+    public static SimpleMetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
         return metaModel.getConditionPath(edgeClass);
     }
 
@@ -1244,9 +1243,9 @@ public final class ModelConstants {
      * @param elementClass1
      * @param elementClass2
      */
-    public static Collection<SimpleMetaPathOld> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
-        ImmutableList.Builder<SimpleMetaPathOld> createableMetaPaths = ImmutableList.builder();
-        for (SimpleMetaPathOld metaPath : metaModel.getCreateableMetaPaths(elementClass1)) {
+    public static Collection<SimpleMetaPath> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+        ImmutableList.Builder<SimpleMetaPath> createableMetaPaths = ImmutableList.builder();
+        for (SimpleMetaPath metaPath : metaModel.getCreateableMetaPaths(elementClass1)) {
             Class<? extends ModelElement> endClass = metaPath.getEndClass();
             if (endClass.isAssignableFrom(elementClass2)) {
                 createableMetaPaths.add(metaPath);

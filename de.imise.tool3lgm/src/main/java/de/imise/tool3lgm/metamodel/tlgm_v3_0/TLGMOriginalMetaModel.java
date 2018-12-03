@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.SimpleMetaPathOld;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
@@ -344,7 +344,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
     }
 
     @Override
-    protected Collection<SimpleMetaPathOld> getCreateablePaths() {
+    protected Collection<SimpleMetaPath> getCreateablePaths() {
         return ImmutableList.of();
     }
 

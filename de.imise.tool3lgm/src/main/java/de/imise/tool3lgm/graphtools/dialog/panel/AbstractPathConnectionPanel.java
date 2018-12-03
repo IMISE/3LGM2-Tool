@@ -14,9 +14,9 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FOR
 import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JLabel;
 
@@ -35,8 +35,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathOld;
-import de.imise.tool3lgm.graphtools.path.PathFinderOld;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
@@ -655,13 +655,13 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         //Pfad des Panels besteht aus genau einer Kante
         if (edgeClasses.length == 1) {
             Class<? extends Edge> edgeClass = edgeClasses[0];
-            MetaPathOld conditionPath = ModelConstants.getConditionPath(edgeClass);
+            SimpleMetaPath conditionPath = ModelConstants.getConditionPath(edgeClass);
             //für diese eine Kante ist ein ConditionPath angegeben
             if (conditionPath != null) {
                 if (directions[0] == BACKWARD) {
-                    conditionPath = conditionPath.getReversePath();
+                    conditionPath = conditionPath.getOtherDirection();
                 }
-                Set<ModelElement> conditionElements = PathFinderOld.getDirectConnectedElements(getModelElement(), conditionPath);
+                Collection<ModelElement> conditionElements = MetaPathFunctions.getConnectedElements(getModelElement(), conditionPath);
                 available = new ArrayList<>(conditionElements.size());
                 for (ModelElement conditionElement : conditionElements) {
                     available.add(conditionElement.getContainer(mainDoc));

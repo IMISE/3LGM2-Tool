@@ -14,8 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.MetaPathOld;
-import de.imise.tool3lgm.graphtools.path.SimpleMetaPathOld;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_HasPartEdge;
@@ -367,14 +366,15 @@ public class TLGMServiceMetaModel extends MetaModel {
     ///////////////////////////////////////////////////////////////////////
 
     //IheInvokingInterface_InvokingInterface_Edge
-    public static final MetaPathOld CONDITION_METAPATH_1 = new MetaPathOld(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class), IheActor_IheInterface_Edge.class,
-            IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
+    public static final SimpleMetaPath CONDITION_METAPATH_1 = SimpleMetaPath.create(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class),
+            IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
     //IheProvidingInterface_ProvidingInterface_Edge
-    public static final MetaPathOld CONDITION_METAPATH_2 = new MetaPathOld(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class), Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class), IheActor_IheInterface_Edge.class,
-            IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
+    public static final SimpleMetaPath CONDITION_METAPATH_2 = SimpleMetaPath.create(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class), Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class),
+            IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
 
     @Override
-    public final MetaPathOld getConditionPath(final Class<? extends Edge> edgeClass) {
+    public final SimpleMetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
+        //Sind nur 2 -> muss keine Map sein
         if (IheInvokingInterface_InvokingInterface_Edge.class.isAssignableFrom(edgeClass)) {
             return CONDITION_METAPATH_1;
         } else if (IheProvidingInterface_ProvidingInterface_Edge.class.isAssignableFrom(edgeClass)) {
@@ -395,8 +395,8 @@ public class TLGMServiceMetaModel extends MetaModel {
     }
 
     @Override
-    protected Collection<SimpleMetaPathOld> getCreateablePaths() {
-        SimpleMetaPathOld path1 = new SimpleMetaPathOld(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
+    protected Collection<SimpleMetaPath> getCreateablePaths() {
+        SimpleMetaPath path1 = SimpleMetaPath.create(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         return ImmutableList.of(path1);
     }
 
