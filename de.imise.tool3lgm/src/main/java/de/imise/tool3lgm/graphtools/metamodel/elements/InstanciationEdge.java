@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
-import de.imise.tool3lgm.graphtools.path.SimpleMetaPathOld;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 
 /**
  * Oberklasse für alle Kantenklassen, die ein Element von einem anderen ableiten, also eine Instanz bilden. Das Instanzelement ist immer das
@@ -29,19 +29,19 @@ public abstract class InstanciationEdge extends Edge {
      * die letzte Verbindung bzw. die letzte Kante hin zum EndElementdieser Kante erzeugt und nicht nochmal ein Element der Endelementart angelegt.
      * Damit kann man "Nebenbedingungspfade" für das Startelement gleich mit anlegen, wenn man das Startelement über diese Kante hier intsanziiert.
      */
-    private static Multimap<Class<? extends InstanciationEdge>, SimpleMetaPathOld> instanciableMetaPaths = ArrayListMultimap.create();
+    private static Multimap<Class<? extends InstanciationEdge>, SimpleMetaPath> instanciableMetaPaths = ArrayListMultimap.create();
 
-    public static void addInstanciableMetaPath(final Class<? extends InstanciationEdge> keyClass, final SimpleMetaPathOld... metaPaths) {
-        for (SimpleMetaPathOld metaPath : metaPaths) {
+    public static void addInstanciableMetaPath(final Class<? extends InstanciationEdge> keyClass, final SimpleMetaPath... metaPaths) {
+        for (SimpleMetaPath metaPath : metaPaths) {
             instanciableMetaPaths.put(keyClass, metaPath);
         }
     }
 
-    public static Iterable<SimpleMetaPathOld> iterateInstanciableMetaPaths(final Class<? extends InstanciationEdge> keyClass) {
+    public static Iterable<SimpleMetaPath> iterateInstanciableMetaPaths(final Class<? extends InstanciationEdge> keyClass) {
         return instanciableMetaPaths.get(keyClass);
     }
 
-    public Iterable<SimpleMetaPathOld> iterateInstanciableMetaPaths() {
+    public Iterable<SimpleMetaPath> iterateInstanciableMetaPaths() {
         return instanciableMetaPaths.get(getClass());
     }
 
