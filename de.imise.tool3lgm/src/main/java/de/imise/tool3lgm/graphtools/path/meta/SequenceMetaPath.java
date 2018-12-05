@@ -178,8 +178,15 @@ public class SequenceMetaPath extends AbstractMetaPath {
     /**
      * @return the metaPaths
      */
-    public List<AbstractMetaPath> getMetaPaths() {
+    public final List<AbstractMetaPath> getMetaPaths() {
         return metaPaths;
+    }
+
+    /**
+     * @return
+     */
+    public final int getLength() {
+        return metaPaths.size();
     }
 
     @Override
