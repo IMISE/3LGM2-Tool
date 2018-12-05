@@ -110,7 +110,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      *
      * @param elementClass
      */
-    public ElementaryMetaPath(final Class<? extends ModelElement> elementClass) {
+    ElementaryMetaPath(final Class<? extends ModelElement> elementClass) {
         super(elementClass, elementClass);
         startClass = elementClass;
         endClass = elementClass;
@@ -130,7 +130,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @param direction
      */
-    public ElementaryMetaPath(final Class<? extends Edge> edgeClass, final Direction direction) {
+    ElementaryMetaPath(final Class<? extends Edge> edgeClass, final Direction direction) {
         this(edgeClass, direction, null);
     }
 
@@ -138,13 +138,21 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @param direction
      */
-    public ElementaryMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
+    ElementaryMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
         this((Class<? extends ModelElement>) null, edgeClass, (Class<? extends ModelElement>) null, getDirection(direction), connectionState, Type.ELEMENT_EDGE_ELEMENT);
         otherDirection = new ElementaryMetaPath(endClass, edgeClass, startClass, this.direction == Direction.BACKWARD ? Direction.FORWARD : Direction.BACKWARD, connectionState, Type.ELEMENT_EDGE_ELEMENT);
         otherDirection.otherDirection = this;
     }
 
-    private ElementaryMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final Direction direction, final ConnectionState connectionState, final Type type) {
+    /**
+     * @param startClass
+     * @param edgeClass
+     * @param endClass
+     * @param direction
+     * @param connectionState
+     * @param type
+     */
+    ElementaryMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final Direction direction, final ConnectionState connectionState, final Type type) {
         super(startClass == null ? isForward(direction) ? Edge.getStartClass(edgeClass) : Edge.getEndClass(edgeClass) : startClass, endClass == null ? isForward(direction) ? Edge.getEndClass(edgeClass) : Edge.getStartClass(edgeClass) : endClass);
         Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
         Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
@@ -162,6 +170,18 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         directed = this.startClass != this.endClass && getFullForwardMetaAssociationName(edgeClass) != getFullBackwardMetaAssociationName(edgeClass);
         createable = getIsCreateable();
         //TODO: hier müsste noch der invalidReason geprüft werden!
+    }
+
+    /**
+     * Gibt einen neuen ElementaryMetaPath zurück, der bis auf die Start- und Zielklasse identisch ist mit dem übergebenen Elementarpfad, wenn sich
+     * diese vom OriginalPfad unterscheiden.
+     *
+     * @param startClass
+     * @param originalElementaryMetaPath
+     * @param endClass
+     */
+    ElementaryMetaPath(final Class<? extends ModelElement> startClass, final ElementaryMetaPath originalElementaryMetaPath, final Class<? extends ModelElement> endClass) {
+        this(startClass, originalElementaryMetaPath.edgeClass, endClass, originalElementaryMetaPath.direction, originalElementaryMetaPath.connectionState, originalElementaryMetaPath.type);
     }
 
     private static final Direction getDirection(final Direction direction) {
