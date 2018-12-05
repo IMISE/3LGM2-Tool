@@ -73,11 +73,6 @@ public class SimpleMetaPath extends SequenceMetaPath {
         return simpleMetaPath.get(simpleMetaPath.size() - 1).getEndClass();
     }
 
-    @Override
-    public boolean isValid() {
-        return super.isValid();
-    }
-
     /**
      * Wenn die übergebene Startklasse nicht dieselbe Klasse ist, wie die Startklasse des ersten Metapfades, dann wird im Ergebis-Array aller
      * MetaPfade ein MetaPfad vorangestellt, der nur die übergebene Startklasse enthält. Dasselbe gilt für die Endklasse und die Endklasse des letzten
