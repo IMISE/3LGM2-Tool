@@ -54,17 +54,21 @@ public class WrapperMetaPath extends SequenceMetaPath {
      *
      * @param newStartClass
      * @param newEndClass
-     * @param orginalMetaPath
+     * @param originalMetaPath
      */
-    public static final AbstractMetaPath wrapMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final AbstractMetaPath orginalMetaPath) {
-        Set<Class<? extends ModelElement>> startClasses = orginalMetaPath.getStartClasses();
+    public static final AbstractMetaPath wrapMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final AbstractMetaPath originalMetaPath) {
+        Set<Class<? extends ModelElement>> startClasses = originalMetaPath.getStartClasses();
         Class<? extends ModelElement> startClass = newStartClass != null && (startClasses.size() != 1 || !startClasses.contains(newStartClass)) ? newStartClass : null;
-        Set<Class<? extends ModelElement>> endClasses = orginalMetaPath.getEndClasses();
+        Set<Class<? extends ModelElement>> endClasses = originalMetaPath.getEndClasses();
         Class<? extends ModelElement> endClass = newEndClass != null && (endClasses.size() != 1 || !endClasses.contains(newEndClass)) ? newEndClass : null;
         if (startClass != null && endClass != null) {
-            return new WrapperMetaPath(startClass, endClass, orginalMetaPath);
+            if (originalMetaPath instanceof ElementaryMetaPath) {
+                //Elementarpfade werden nicht gewrapped sondern neu angelegt, d.h. sie 'wrappen sich selbst'
+                return ElementaryMetaPathHandler.getMetaPath(startClass, (ElementaryMetaPath) originalMetaPath, endClass);
+            }
+            return new WrapperMetaPath(startClass, endClass, originalMetaPath);
         }
-        return orginalMetaPath;
+        return originalMetaPath;
     }
 
     @Override
