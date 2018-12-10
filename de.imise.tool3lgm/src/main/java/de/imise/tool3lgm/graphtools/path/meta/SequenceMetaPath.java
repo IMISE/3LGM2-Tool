@@ -5,7 +5,6 @@ import java.util.List;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -17,12 +16,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
  *
  * @author AXS (26.10.2018) (original AXS (13.10.2010))
  */
-public class SequenceMetaPath extends AbstractMetaPath {
-
-    /**
-     * Liste der Pfade, die dieser Metapfad hintereinander enthält.
-     */
-    protected List<AbstractMetaPath> metaPaths;
+public class SequenceMetaPath extends ListMetaPath {
 
     /**
      * Wahr, wenn sobald einmal verscht wurde, die Gegenrichtung dieses Pfades anzulegen
@@ -43,12 +37,6 @@ public class SequenceMetaPath extends AbstractMetaPath {
      * ihn zu initilaisieren.
      */
     private boolean simplePathInitialized = false;
-
-    /**
-     * BasisResourcenschlüssel oder Name des Pfades. Wenn dieser Schlüssel nicht mit der jeweiligen Richtung "_f" (FORWARD) pder "_b" (BACKWARD) und
-     * auch nicht so wie hier übergeben in den Resourcen gefunden wird, dann wird er selbst als Name gesetzt.
-     */
-    private final String baseResKeyOrName;
 
     /**
      * Diese Richtung wird nur zum Erzeugen des Namens gebraucht. Je nachdem welche Rictung hier vermerkt ist, wird an den {@link #baseResKeyOrName}
@@ -87,38 +75,18 @@ public class SequenceMetaPath extends AbstractMetaPath {
      * @param metaPaths
      */
     protected SequenceMetaPath(final String baseResKeyOrName, final Direction direction, final AbstractMetaPath... metaPaths) {
-        super();
-        this.baseResKeyOrName = baseResKeyOrName;
+        super(baseResKeyOrName, metaPaths);
         this.direction = direction;
-        if (metaPaths != null && metaPaths.length > 0) {
-            this.metaPaths = ImmutableList.copyOf(metaPaths);
-            startElementClasses = metaPaths[0].startElementClasses;
-            endElementClasses = metaPaths[metaPaths.length - 1].endElementClasses;
-        }
-        if (!isValid()) {
-            throw new Error("Metapfad ist nicht korrekt");
-        }
         directed = getIsDirected();
         createable = getIsCreateable();
     }
 
     @Override
-    public boolean isValid() {
-        int metaPathCount = metaPaths.size();
-        for (int i = 0; i < metaPathCount; i++) {
-            AbstractMetaPath metaPath = metaPaths.get(i);
-            // alle enthaltenen Pfade müssen selbst valide sein
-            if (!metaPath.isValid()) {
-                return false;
-            }
-            // wenn nach dem aktuellen noch ein weiterer MetaPfad in der Liste steht, dann muss wenigstens eine Endklasse des aktuellen zu den Startklassen des folgenden Metapfades passen
-            if (i < metaPathCount - 1) {
-                if (!metaPaths.get(i + 1).isStartClass(metaPath.getEndClasses(), true, true)) {
-                    return false;
-                }
-            }
+    protected void initStartEndClasses() {
+        if (metaPaths != null && metaPaths.size() > 0) {
+            startElementClasses = metaPaths.get(0).startElementClasses;
+            endElementClasses = metaPaths.get(metaPaths.size() - 1).endElementClasses;
         }
-        return true;
     }
 
     @Override
@@ -175,24 +143,10 @@ public class SequenceMetaPath extends AbstractMetaPath {
         return true;
     }
 
-    /**
-     * @return the metaPaths
-     */
-    public final List<AbstractMetaPath> getMetaPaths() {
-        return metaPaths;
-    }
-
-    /**
-     * @return
-     */
-    public final int getLength() {
-        return metaPaths.size();
-    }
-
     @Override
     protected String createName() {
         //zuerst versuche, den Resouceneintrag mit dem übergebenen Schlüssel zu finden, aber ohne "_f" oder "_b" am Ende -> setze den und gehe davon aus, dass es keine Rückrichtung gibt (wenn es ihn gibt)
-        String name = Tool3lgmConstants.getResStringWithoutError(baseResKeyOrName);
+        String name = super.createName();
         if (Strings.isNullOrEmpty(name)) {//das passiert nur, wenn der baseResKeyOrName null oder leer ist
             name = ElementsNameBuilder.getDirectedName(Edge.class.getSimpleName(), direction); //das sorgt dafür , dass der "ist verbunden mit"-Eintrag gefunden wird und der String nicht null ist
         } else if (name.equals(baseResKeyOrName)) { //wenn der Key nicht leer war und nicht schon ein Resourceneintrag ohne "_f" oder "_b" gefunden wurde

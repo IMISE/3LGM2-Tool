@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.collect.ImmutableSet;
@@ -14,12 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
  * @author AXS
  * @create 12.10.2010
  */
-public abstract class ParallelMetaPath extends AbstractMetaPath {
-
-    /**
-     * Liste der Pfade, die dieser Metapfad parallel enthält.
-     */
-    protected List<AbstractMetaPath> metaPaths;
+public abstract class ParallelMetaPath extends ListMetaPath {
 
     /**
      * @param metaPaths
@@ -29,17 +23,14 @@ public abstract class ParallelMetaPath extends AbstractMetaPath {
     }
 
     /**
-     * @param name
+     * @param baseResKeyOrName
      * @param metaPaths
      */
-    public ParallelMetaPath(final String name, final AbstractMetaPath... metaPaths) {
-        super(name);
-        if (metaPaths != null && metaPaths.length > 0) {
-            this.metaPaths = Arrays.asList(metaPaths);
-            initStartEndClasses();
-        }
+    public ParallelMetaPath(final String baseResKeyOrName, final AbstractMetaPath... metaPaths) {
+        super(baseResKeyOrName, metaPaths);
     }
 
+    @Override
     protected void initStartEndClasses() {
         ImmutableSet.Builder<Class<? extends ModelElement>> startElementClassesBuilder = ImmutableSet.builder();
         ImmutableSet.Builder<Class<? extends ModelElement>> endElementClassesBuilder = ImmutableSet.builder();
@@ -51,13 +42,6 @@ public abstract class ParallelMetaPath extends AbstractMetaPath {
         endElementClasses = endElementClassesBuilder.build();
     }
 
-    /**
-     * @return the metaPaths
-     */
-    public final List<AbstractMetaPath> getMetaPaths() {
-        return metaPaths;
-    }
-
     @Override
     public final boolean equals(final Object obj) {
         if (!super.equals(obj)) {
@@ -66,16 +50,6 @@ public abstract class ParallelMetaPath extends AbstractMetaPath {
         //Klassengleichheit wird in super.equals() schon getestet
         ParallelMetaPath other = (ParallelMetaPath) obj;
         return other.metaPaths.equals(metaPaths);
-    }
-
-    @Override
-    public boolean isValid() {
-        for (AbstractMetaPath metaPath : metaPaths) {
-            if (!metaPath.isValid()) {
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override

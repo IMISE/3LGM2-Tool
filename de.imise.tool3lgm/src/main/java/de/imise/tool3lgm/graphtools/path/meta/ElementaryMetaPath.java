@@ -48,19 +48,17 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         INVALID_TYPE
     }
 
-    private InvalidReason invalidReason = null;
-
     /**
      * Klasse, bei der der Pfad startet. Sie darf in einem validen Pfad niemals <code>null</code> sein und muss eine
      * Ober- oder Unterklasse des jeweiligen Kantenendes sein, auf das sich die Startklasse laut Richtungsangabe bezieht.
      */
-    private Class<? extends ModelElement> startClass;
+    private final Class<? extends ModelElement> startClass;
 
     /**
      * Klasse, bei der der Pfad endet. Sie darf in einem validen Pfad niemals <code>null</code> sein und muss eine
      * Ober- oder Unterklasse des jeweiligen Kantenendes sein, auf das sich die Endklasse laut Richtungsangabe bezieht.
      */
-    private Class<? extends ModelElement> endClass;
+    private final Class<? extends ModelElement> endClass;
 
     /**
      * Kantenklasse des Pfades
@@ -73,7 +71,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * der Kantenklasse verstanden wird und die Endklasse der Kante auch Endklasse des Pfades ist.
      * Bei Direction.BACKWARD wird es andersherum verstanden.
      */
-    private Direction direction = Direction.FORWARD;
+    private final Direction direction;
 
     /**
      * Richtung, die die Kante ausgehend von der durch die <code>direction</code> festgelegten Richtung haben soll. Dieser Parameter
@@ -85,7 +83,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * Typ des MetaPfades. Ist er nach dem setzen der Richtung immer noch <code>null</code>, dann ist der
      * Pfad nicht valide.
      */
-    private Type type = null;
+    private final Type type;
 
     /**
      * Liste aller {@link ElementaryMetaPath}, die sich evtl. aus diesem Pfad bilden lässt, wenn er im Grunde nur {@link ElementaryMetaPath} und
@@ -118,12 +116,9 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         direction = null;
         connectionState = null;
         otherDirection = this;
-        type = Type.SINGLE_ELEMENT;
-        if (elementClass == null) {
-            invalidReason = InvalidReason.INVALID_START_CLASS;
-        }
         directed = false;
         createable = false;
+        type = Type.SINGLE_ELEMENT;
     }
 
     /**
@@ -247,7 +242,6 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         result = prime * result + (direction == null ? 0 : direction.hashCode());
         result = prime * result + (edgeClass == null ? 0 : edgeClass.hashCode());
         result = prime * result + (endClass == null ? 0 : endClass.hashCode());
-        result = prime * result + (invalidReason == null ? 0 : invalidReason.hashCode());
         result = prime * result + (directed ? 1231 : 1237);
         result = prime * result + (startClass == null ? 0 : startClass.hashCode());
         result = prime * result + (type == null ? 0 : type.hashCode());
@@ -286,9 +280,6 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         } else if (!endClass.equals(other.endClass)) {
             return false;
         }
-        if (invalidReason != other.invalidReason) {
-            return false;
-        }
         if (directed != other.directed) {
             return false;
         }
@@ -306,38 +297,28 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public boolean isValid() {
-        //Der invalidReason kann z.B. schon beim zuweisen der Richtung gesetzt worden sein
-        if (invalidReason != null) {
-            return false;
+    public InvalidityCheckResult getInvalidityCheckResult() {
+        if (super.getInvalidityCheckResult().invalidReason == null) {
+            InvalidReason invalidReason = null;
+            if (type == null) {
+                invalidReason = InvalidReason.INVALID_TYPE;
+            } else if (startClass == null || de.imise.tool3lgm.graphtools.path.meta.Direction.class.isAssignableFrom(startClass)) {
+                invalidReason = InvalidReason.INVALID_START_CLASS;
+            } else if (endClass == null || de.imise.tool3lgm.graphtools.path.meta.Direction.class.isAssignableFrom(endClass)) {
+                invalidReason = InvalidReason.INVALID_END_CLASS;
+            } else if (direction != null && edgeClass == null) {
+                invalidReason = InvalidReason.INVALID_DIRECTION;
+            }
+            invalidityCheckResult = new InvalidityCheckResult(invalidReason);
         }
-        if (type == null) {
-            invalidReason = InvalidReason.INVALID_TYPE;
-        } else if (startClass == null) {
-            invalidReason = InvalidReason.INVALID_START_CLASS;
-        } else if (endClass == null) {
-            invalidReason = InvalidReason.INVALID_END_CLASS;
-        } else if (direction != null && edgeClass == null) {
-            invalidReason = InvalidReason.INVALID_DIRECTION;
-        }
-        return invalidReason == null;
+        return invalidityCheckResult;
     }
 
-    //    @Override
-    //    protected String createFullName() {
-    //        return createName(direction, connectionState, true);
-    //    }
-    //
     @Override
     protected String createName() {
-        //        return createName(direction, connectionState, false);
         return ElementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState);
     }
 
-    //    private String createName(final Direction direction, final ConnectionState connectionState, final boolean full) {
-    //        return ElementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, full ? startClass : null, full ? endClass : null);
-    //    }
-    //
     @Override
     public final boolean isCreateable() {
         return createable;
