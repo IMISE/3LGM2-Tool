@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_service;
 
+import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.createSimpleMetaPath;
+
 import java.util.Collection;
 import java.util.Set;
 
@@ -366,10 +368,10 @@ public class TLGMServiceMetaModel extends MetaModel {
     ///////////////////////////////////////////////////////////////////////
 
     //IheInvokingInterface_InvokingInterface_Edge
-    public static final SimpleMetaPath CONDITION_METAPATH_1 = SimpleMetaPath.create(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class),
-            IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
+    public static final SimpleMetaPath CONDITION_METAPATH_1 = createSimpleMetaPath(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class), IheActor_IheInterface_Edge.class,
+            IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
     //IheProvidingInterface_ProvidingInterface_Edge
-    public static final SimpleMetaPath CONDITION_METAPATH_2 = SimpleMetaPath.create(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class), Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class),
+    public static final SimpleMetaPath CONDITION_METAPATH_2 = createSimpleMetaPath(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class), Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class),
             IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
 
     @Override
@@ -396,7 +398,7 @@ public class TLGMServiceMetaModel extends MetaModel {
 
     @Override
     protected Collection<SimpleMetaPath> getCreateablePaths() {
-        SimpleMetaPath path1 = SimpleMetaPath.create(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
+        SimpleMetaPath path1 = createSimpleMetaPath(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         return ImmutableList.of(path1);
     }
 

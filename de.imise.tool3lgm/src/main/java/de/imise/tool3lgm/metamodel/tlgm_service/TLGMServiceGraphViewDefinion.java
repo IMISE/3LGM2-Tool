@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.metamodel.tlgm_service;
 
-import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath.create;
+import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.createSimpleMetaPath;
 
 import java.util.List;
 
@@ -59,7 +59,8 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         SimpleMetaPath[] configurationPaths = {
                 //Testpfad über alle Ebenen hinweg
                 //new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
-                create(Function.class, ApplicationComponent.class, Function_Use_Edge.class, SupportLink_Edge.class), create(ApplicationComponent.class, PhysicalDataProcessingComponent.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class),
+                createSimpleMetaPath(Function.class, ApplicationComponent.class, Function_Use_Edge.class, SupportLink_Edge.class),
+                createSimpleMetaPath(ApplicationComponent.class, PhysicalDataProcessingComponent.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class),
         };
         return configurationPaths;
     }

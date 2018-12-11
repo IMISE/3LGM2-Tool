@@ -35,7 +35,7 @@ public class ElementaryMetaPathHandler {
      * @return
      */
     public static final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction) {
-        return getMetaPath(edgeClass, direction, null);
+        return getMetaPath(edgeClass, direction, (ConnectionState) null);
     }
 
     private static final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
@@ -78,6 +78,28 @@ public class ElementaryMetaPathHandler {
     }
 
     /**
+     * @param startClass
+     * @param edgeClass
+     * @param direction
+     * @return
+     */
+    public static final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Direction direction) {
+        ElementaryMetaPath metaPath = getMetaPath(edgeClass, direction);
+        return getMetaPath(startClass, metaPath, metaPath.getEndClass());
+    }
+
+    /**
+     * @param edgeClass
+     * @param direction
+     * @param endClass
+     * @return
+     */
+    public static final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final Class<? extends ModelElement> endClass) {
+        ElementaryMetaPath metaPath = getMetaPath(edgeClass, direction);
+        return getMetaPath(metaPath.getStartClass(), metaPath, endClass);
+    }
+
+    /**
      * @param edgeClass
      * @return
      */
@@ -85,13 +107,13 @@ public class ElementaryMetaPathHandler {
         return getMetaPath(edgeClass, Direction.FORWARD);
     }
 
-    /**
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath getBackwardMetaPath(final Class<? extends Edge> edgeClass) {
-        return getMetaPath(edgeClass, Direction.BACKWARD);
-    }
+    //    /**
+    //     * @param edgeClass
+    //     * @return
+    //     */
+    //    public static final ElementaryMetaPath getBackwardMetaPath(final Class<? extends Edge> edgeClass) {
+    //        return getMetaPath(edgeClass, Direction.BACKWARD);
+    //    }
 
     /**
      * @param doubleMeaningEdgeClass
@@ -102,45 +124,45 @@ public class ElementaryMetaPathHandler {
         return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, connectionState);
     }
 
-    /**
-     * @param doubleMeaningEdgeClass
-     * @param connectionState
-     * @return
-     */
-    public static final ElementaryMetaPath getBackwardMetaPath(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass, final ConnectionState connectionState) {
-        return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, connectionState);
-    }
-
-    public static final ElementaryMetaPath _eF(final Class<? extends Edge> edgeClass) {
-        return getMetaPath(edgeClass, Direction.FORWARD);
-    }
-
-    public static final ElementaryMetaPath _eB(final Class<? extends Edge> edgeClass) {
-        return getMetaPath(edgeClass, Direction.BACKWARD);
-    }
-
-    public static final ElementaryMetaPath _eFF(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
-        return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, ConnectionState.FORWARD);
-    }
-
-    public static final ElementaryMetaPath _eBF(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
-        return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, ConnectionState.FORWARD);
-    }
-
-    public static final ElementaryMetaPath _eFB(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
-        return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, ConnectionState.BACKWARD);
-    }
-
-    public static final ElementaryMetaPath _eBB(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
-        return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, ConnectionState.BACKWARD);
-    }
-
-    public static final ElementaryMetaPath _eFD(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
-        return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, ConnectionState.DOUBLE);
-    }
-
-    public static final ElementaryMetaPath _eBD(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
-        return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, ConnectionState.DOUBLE);
-    }
+    //    /**
+    //     * @param doubleMeaningEdgeClass
+    //     * @param connectionState
+    //     * @return
+    //     */
+    //    public static final ElementaryMetaPath getBackwardMetaPath(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass, final ConnectionState connectionState) {
+    //        return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, connectionState);
+    //    }
+    //
+    //    public static final ElementaryMetaPath _eF(final Class<? extends Edge> edgeClass) {
+    //        return getMetaPath(edgeClass, Direction.FORWARD);
+    //    }
+    //
+    //    public static final ElementaryMetaPath _eB(final Class<? extends Edge> edgeClass) {
+    //        return getMetaPath(edgeClass, Direction.BACKWARD);
+    //    }
+    //
+    //    public static final ElementaryMetaPath _eFF(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    //        return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, ConnectionState.FORWARD);
+    //    }
+    //
+    //    public static final ElementaryMetaPath _eBF(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    //        return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, ConnectionState.FORWARD);
+    //    }
+    //
+    //    public static final ElementaryMetaPath _eFB(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    //        return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, ConnectionState.BACKWARD);
+    //    }
+    //
+    //    public static final ElementaryMetaPath _eBB(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    //        return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, ConnectionState.BACKWARD);
+    //    }
+    //
+    //    public static final ElementaryMetaPath _eFD(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    //        return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, ConnectionState.DOUBLE);
+    //    }
+    //
+    //    public static final ElementaryMetaPath _eBD(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
+    //        return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, ConnectionState.DOUBLE);
+    //    }
 
 }

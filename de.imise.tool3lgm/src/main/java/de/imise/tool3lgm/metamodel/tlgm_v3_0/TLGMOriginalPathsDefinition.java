@@ -30,7 +30,6 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Standort;
 public class TLGMOriginalPathsDefinition extends MetaPathDefinition {
 
     @Override
-    @SuppressWarnings("unchecked")
     protected final void init() {
 
         /* Aufgabe - Organisationseinheit */

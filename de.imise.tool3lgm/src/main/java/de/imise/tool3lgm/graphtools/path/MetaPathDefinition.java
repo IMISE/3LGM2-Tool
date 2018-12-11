@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.path;
 
 import static de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler.getForwardMetaPath;
+import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.createSimpleMetaPath;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -140,37 +141,6 @@ public class MetaPathDefinition {
         SimpleMetaPath simpleMetaPath = createSimpleMetaPath(startClass, endClass, baseResKeyOrName, associations);
         put(simpleMetaPath);
         return simpleMetaPath;
-    }
-
-    /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
-     *
-     * @param startClass
-     * @param endClass
-     * @param associations
-     * @return
-     */
-    @SafeVarargs
-    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
-        return createSimpleMetaPath(startClass, endClass, null, associations);
-    }
-
-    /**
-     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
-     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
-     * rückwärts dreht, dann wird immer vorwärts angenommen.
-     *
-     * @param startClass
-     * @param endClass
-     * @param baseResKeyOrName
-     * @param associations
-     * @return
-     */
-    @SafeVarargs
-    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) {
-        return SimpleMetaPath.create(startClass, endClass, baseResKeyOrName, this, associations);
     }
 
     /**
