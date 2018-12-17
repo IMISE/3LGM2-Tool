@@ -62,7 +62,7 @@ public class ElementaryMetaPathHandler {
 
     /**
      * Gibt einen ElementaryMetaPath zurück, der bis auf die Start- und Zielklasse identisch ist mit dem übergebenen Elementarpfad. Sind die Start-
-     * und Zielklassen dieselben wie beim übergebenen ELementarpfad, so kommt dieser unverändert zurück.
+     * und Zielklassen dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert zurück.
      *
      * @param startClass
      * @param originalElementaryMetaPath
@@ -75,6 +75,30 @@ public class ElementaryMetaPathHandler {
             return originalElementaryMetaPath;
         }
         return new ElementaryMetaPath(startClass, originalElementaryMetaPath, endClass);
+    }
+
+    /**
+     * Gibt einen ElementaryMetaPath zurück, der bis auf die Startklasse identisch ist mit dem übergebenen Elementarpfad. Ist die Startklasse
+     * dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert zurück.
+     *
+     * @param startClass
+     * @param originalElementaryMetaPath
+     * @return
+     */
+    public static final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final ElementaryMetaPath originalElementaryMetaPath) {
+        return getMetaPath(startClass, originalElementaryMetaPath, originalElementaryMetaPath.getEndClass());
+    }
+
+    /**
+     * Gibt einen ElementaryMetaPath zurück, der bis auf die Endklasse identisch ist mit dem übergebenen Elementarpfad. Ist die Endklasse
+     * dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert zurück.
+     *
+     * @param originalElementaryMetaPath
+     * @param endClass
+     * @return
+     */
+    public static final ElementaryMetaPath getMetaPath(final ElementaryMetaPath originalElementaryMetaPath, final Class<? extends ModelElement> endClass) {
+        return getMetaPath(originalElementaryMetaPath.getStartClass(), originalElementaryMetaPath, endClass);
     }
 
     /**
