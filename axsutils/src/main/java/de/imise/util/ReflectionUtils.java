@@ -159,6 +159,23 @@ public class ReflectionUtils {
     }
 
     /**
+     * Liefert die speziellere von den beiden übergebenen Klassen oder <code>null</code>, wenn sie nicht in der Vererbungshierarchie zusammen hängen.
+     *
+     * @param class1
+     * @param class2
+     * @return
+     */
+    public static final <T> Class<? extends T> getMostSpecialElementClass(final Class<? extends T> class1, final Class<? extends T> class2) {
+        if (class1.isAssignableFrom(class2)) {
+            return class2;
+        }
+        if (class2.isAssignableFrom(class1)) {
+            return class1;
+        }
+        return null;
+    }
+
+    /**
      * Entfernt alle Klassen aus der übergebenen Klassenliste,
      * von denen eine Oberklasse in der Liste vorkommt.
      *
@@ -322,7 +339,7 @@ public class ReflectionUtils {
      * @return
      */
     public static final boolean isAssignable(final Class<?> class1, final Class<?> class2) {
-        return class1.isAssignableFrom(class2) || class2.isAssignableFrom(class1);
+        return class1 != null && class2 != null && class1.isAssignableFrom(class2) || class2.isAssignableFrom(class1);
     }
 
     /**
