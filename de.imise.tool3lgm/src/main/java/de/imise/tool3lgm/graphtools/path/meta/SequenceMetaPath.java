@@ -262,7 +262,7 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     @Override
-    public List<ElementaryMetaPath> getSimpleMetaPath() {
+    public final List<ElementaryMetaPath> getSimpleMetaPath() {
         if (!simplePathInitialized) {
             simplePathInitialized = true;
             ImmutableList.Builder<ElementaryMetaPath> simpleMetaPathBuilder = ImmutableList.builder();
