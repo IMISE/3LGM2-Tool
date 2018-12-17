@@ -2,9 +2,7 @@ package de.imise.tool3lgm.graphtools.metamodel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnecting;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
@@ -839,9 +837,7 @@ public final class ModelConstants {
     }
 
     public static boolean isRecursive(final Class<? extends Edge> edgeClass) {
-        Class<? extends ModelElement> startClass = getStartClass(edgeClass);
-        Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
+        return Edge.isRecursive(edgeClass);
     }
 
     public static boolean isRecursiveHasPartEdge(final Class<? extends Edge> edgeClass) {

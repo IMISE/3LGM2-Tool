@@ -441,7 +441,7 @@ public abstract class Edge extends ModelElement {
      */
     public static final boolean isStartClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         Class<? extends ModelElement> startClass = getStartClass(edgeClass);
-        return startClass.isAssignableFrom(elementClass) || elementClass.isAssignableFrom(startClass);
+        return ReflectionUtils.isAssignable(startClass, elementClass);
     }
 
     /**
@@ -463,7 +463,7 @@ public abstract class Edge extends ModelElement {
      */
     public static final boolean isEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return endClass.isAssignableFrom(elementClass) || elementClass.isAssignableFrom(endClass);
+        return ReflectionUtils.isAssignable(endClass, elementClass);
     }
 
     /**
@@ -520,10 +520,10 @@ public abstract class Edge extends ModelElement {
      * @param edgeClass
      * @return
      */
-    public static boolean isConnectingSameElementClasses(final Class<? extends Edge> edgeClass) {
+    public static boolean isRecursive(final Class<? extends Edge> edgeClass) {
         Class<? extends ModelElement> startClass = getStartClass(edgeClass);
         Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
+        return ReflectionUtils.isAssignable(startClass, endClass);
     }
 
     ////////////////////
