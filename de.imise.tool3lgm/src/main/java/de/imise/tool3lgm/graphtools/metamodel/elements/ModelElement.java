@@ -34,8 +34,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathOld;
-import de.imise.tool3lgm.graphtools.path.PathFinderOld;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -368,7 +368,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * Diese Funktion darf nicht einfach refactored werden und wenn doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME
      * ebenfalls umbenannt werden.
      */
-    protected MetaPathOld getNameExtensionPath() {
+    protected SimpleMetaPath getNameExtensionPath() {
         return null;
     }
 
@@ -416,10 +416,10 @@ public abstract class ModelElement extends UserFieldTarget {
         return suffixBuf.toString();
     }
 
-    private void updateHTMLNameSuffixBuffer(final MetaPathOld nameExtension) {
+    private void updateHTMLNameSuffixBuffer(final SimpleMetaPath nameExtension) {
         suffixBuf.setLength(0);
         if (nameExtension != null) {
-            Collection<ModelElement> directConnectedElements = PathFinderOld.getDirectConnectedElements(this, nameExtension);
+            Collection<ModelElement> directConnectedElements = MetaPathFunctions.getConnectedElements(this, nameExtension);
             //Kein Element, dessen Namen in Klammern angezeigt werden soll verbunden -> weiter
             if (!directConnectedElements.isEmpty()) {
                 //genau ein Element verbunden, das denselben Namen hat wie dieses Element -> weiter (damit in der Grafik nicht
@@ -445,7 +445,7 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     private void updateHTMLName() {
-        MetaPathOld nameExtension = getNameExtensionPath();
+        SimpleMetaPath nameExtension = getNameExtensionPath();
         updateHTMLNameSuffixBuffer(nameExtension);
         textBuf.setLength(0);
         textBuf.append("<HTML><CENTER>");
