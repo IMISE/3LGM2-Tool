@@ -351,4 +351,26 @@ public class SequenceMetaPath extends ListMetaPath {
         return pathStepClasses;
     }
 
+    public enum InvalidReason {
+        INVALID_SEQUENCE_INCOMPATIBLE_PATH_STEP_END_START_CLASSES,
+    }
+
+    @Override
+    public InvalidityCheckResult getInvalidityCheckResult() {
+        //wenn der Pfad aus Sicht des AbstractMetaPath valide ist
+        if (super.getInvalidityCheckResult().invalidReason == null) {
+            //jeden Einzelpfad durchgehen
+            for (int i = 0; i < metaPaths.size(); i++) {
+                //Hole alle Elementklassen die einen Pfad mit dem nächsten verbinden
+                Set<Class<? extends ModelElement>> pathStepElementClasses = getPathStepElementClasses(i);
+                //2 aufienanderfolgende Pfade passen nicht zusmammen
+                if (pathStepElementClasses.size() == 0) {
+                    invalidityCheckResult = new InvalidityCheckResult(InvalidReason.INVALID_SEQUENCE_INCOMPATIBLE_PATH_STEP_END_START_CLASSES, i);
+                    break;
+                }
+            }
+        }
+        return invalidityCheckResult;
+    }
+
 }
