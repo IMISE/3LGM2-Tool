@@ -223,11 +223,12 @@ public class SequenceMetaPath extends ListMetaPath {
             return false;
         }
         List<ElementaryMetaPath> simpleMetaPath = getSimpleMetaPath();
-        if (simpleMetaPath == null) {
+        if (simpleMetaPath == null || simpleMetaPath.size() == 0) {
             return false;
         }
         // prüfen, ob die Zwischenelemente angelegt werden können
         for (int i = 0; i < simpleMetaPath.size() - 1; i++) {
+            //nur Elementarpfade mit einer Kante dazwischen sind anlegbar, wenn die Kantenklasse nicht abstract ist
             if (!simpleMetaPath.get(i).isCreateable()) {
                 return false;
             }
