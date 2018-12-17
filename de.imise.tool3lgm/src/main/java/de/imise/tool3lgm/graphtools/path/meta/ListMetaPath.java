@@ -61,20 +61,28 @@ public abstract class ListMetaPath extends AbstractMetaPath {
         return Tool3lgmConstants.getResStringWithoutError(baseResKeyOrName);
     }
 
+    public enum InvalidReason {
+        INVALID_LIST_PATH_EMPTY
+    }
+
     @Override
-    public final InvalidityCheckResult getInvalidityCheckResult() {
+    public InvalidityCheckResult getInvalidityCheckResult() {
         //wenn der Pfad aus Sicht des AbstractMetaPath valide ist
         if (super.getInvalidityCheckResult().invalidReason == null) {
-            //jeden Einzelpfad durchgehen
-            for (int i = 0; i < metaPaths.size(); i++) {
-                AbstractMetaPath metaPath = metaPaths.get(i);
-                InvalidityCheckResult innerInvalidityCheckResult = metaPath.getInvalidityCheckResult();
-                //wenn der Einzelpfad nicht valide ist
-                if (innerInvalidityCheckResult.invalidReason != null) {
-                    //GesamtResult mit Pfadindex versehen
-                    invalidityCheckResult = innerInvalidityCheckResult.index1 < 0 ? new InvalidityCheckResult(innerInvalidityCheckResult.invalidReason, i)
-                            : new InvalidityCheckResult(innerInvalidityCheckResult.invalidReason, i, innerInvalidityCheckResult.index1);
-                    break;
+            if (metaPaths.size() == 0) {
+                invalidityCheckResult = new InvalidityCheckResult(InvalidReason.INVALID_LIST_PATH_EMPTY);
+            } else {
+                //jeden Einzelpfad durchgehen
+                for (int i = 0; i < metaPaths.size(); i++) {
+                    AbstractMetaPath metaPath = metaPaths.get(i);
+                    InvalidityCheckResult innerInvalidityCheckResult = metaPath.getInvalidityCheckResult();
+                    //wenn der Einzelpfad nicht valide ist
+                    if (innerInvalidityCheckResult.invalidReason != null) {
+                        //GesamtResult mit Pfadindex versehen
+                        invalidityCheckResult = innerInvalidityCheckResult.index1 < 0 ? new InvalidityCheckResult(innerInvalidityCheckResult.invalidReason, i)
+                                : new InvalidityCheckResult(innerInvalidityCheckResult.invalidReason, i, innerInvalidityCheckResult.index1);
+                        break;
+                    }
                 }
             }
         }
