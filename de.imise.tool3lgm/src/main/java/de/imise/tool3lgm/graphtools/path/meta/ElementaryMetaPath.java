@@ -218,10 +218,30 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     /**
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse eine Ober- oder Unterklasse der im Elementarpfad einthaltenen Kantenklasse ist.
+     *
+     * @param edgeClass Kantenklasse, deren Zuweisungskompatibilität
+     * @return
+     */
+    public boolean hasEdgeClass(final Class<? extends Edge> edgeClass) {
+        return edgeClass != null && this.edgeClass != null && ReflectionUtils.isAssignable(this.edgeClass, edgeClass);
+    }
+
+    /**
      * @return the direction
      */
     public Direction getDirection() {
         return direction;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die im Elementarpfad enthaltene Kante die Richtung vorwärts hat, also wenn direction == Direction.FORWARD ist,
+     * sonst <code>false</code>.
+     *
+     * @return
+     */
+    public boolean hasDirectionForward() {
+        return direction == Direction.FORWARD;
     }
 
     /**
@@ -328,6 +348,13 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         return createable;
     }
 
+    /**
+     * Nur ElementarMetaPfade, die eine Kante zwischen 2 Knoten repräsentieren, wobei die Kantenklasse nicht abstract sein darf, sind anlegtbar. Alle
+     * anderen nicht. Die Elementklassen können abstract sein. Ob sie anlegbar sind, ist hier (bei einem einzelnen Elementarpfad) egal, da es nur um
+     * die Anlegbarkeit der Kante geht.
+     *
+     * @return
+     */
     private final boolean getIsCreateable() {
         if (type != Type.ELEMENT_EDGE_ELEMENT) {
             return false;
