@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
@@ -10,6 +12,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.util.ReflectionUtils;
 
 /**
  * Pfad der aus einer Hintereianderreihung (Liste) anderer Pfade besteht.
@@ -317,6 +320,35 @@ public class SequenceMetaPath extends ListMetaPath {
             }
         }
         return false;
+    }
+
+    /**
+     * Liefert die Verbindungsklasse des Pfadschrittes mit dem übergebenen Index. Dies ist beim Index 0 die speziellere der Endklasse des ersten
+     * Elementarpfades und der Startklasse des nächsten Elementarpfades. Der Pfadschritt mit dem Index der Pfadlänge -1 ist die Endklasse des letzten
+     * Elementarpfades = Endklasse des Gesamten Pfades. An die Startklasse des Gesamtpfades kommt man mit dieser Funktion nicht.
+     *
+     * @param pathStepIndex
+     * @return
+     */
+    public final Set<Class<? extends ModelElement>> getPathStepElementClasses(final int pathStepIndex) {
+        AbstractMetaPath metaPathPre = metaPaths.get(pathStepIndex);
+        if (pathStepIndex == metaPaths.size() - 1) {
+            return metaPathPre.getEndClasses();
+        }
+        AbstractMetaPath elementaryMetaPathPost = metaPaths.get(pathStepIndex + 1);
+        Set<Class<? extends ModelElement>> endClasses = metaPathPre.getEndClasses();
+        Set<Class<? extends ModelElement>> startClasses = elementaryMetaPathPost.getStartClasses();
+        Set<Class<? extends ModelElement>> pathStepClasses = new HashSet<>();
+        for (Class<? extends ModelElement> endClass : endClasses) {
+            for (Class<? extends ModelElement> startClass : startClasses) {
+                Class<? extends ModelElement> pathStepClass = ReflectionUtils.getMostSpecialElementClass(endClass, startClass);
+                //null tritt ein, wenn die Elemente der aufeinanderfolgenden Elementarpfade nicht zusammenpassen
+                if (pathStepClass != null) {
+                    pathStepClasses.add(pathStepClass);
+                }
+            }
+        }
+        return pathStepClasses;
     }
 
 }
