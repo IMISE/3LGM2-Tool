@@ -458,7 +458,7 @@ public class MetaPathFunctions {
             //Sequencepfad anlegen
         } else if (metaPath instanceof SequenceMetaPath) {
             //die Elementarmetapfade vom Metapfad holen
-            List<ElementaryMetaPath> simpleMetaPath = metaPath.getSimpleMetaPath();
+            List<ElementaryMetaPath> simpleMetaPath = metaPath.getElementaryMetaPaths();
             //wenn isCreateble() oben true liefert, sollte es diese Metapfadfolge eigentlich immer geben
             if (simpleMetaPath == null) {
                 return null;

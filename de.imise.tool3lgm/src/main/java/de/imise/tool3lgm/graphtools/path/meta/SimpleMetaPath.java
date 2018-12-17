@@ -42,14 +42,14 @@ public class SimpleMetaPath extends SequenceMetaPath {
      * @return the startClass
      */
     public Class<? extends ModelElement> getStartClass() {
-        return getSimpleMetaPath().get(0).getStartClass();
+        return getElementaryMetaPaths().get(0).getStartClass();
     }
 
     /**
      * @return the endClass
      */
     public Class<? extends ModelElement> getEndClass() {
-        List<ElementaryMetaPath> simpleMetaPath = getSimpleMetaPath();
+        List<ElementaryMetaPath> simpleMetaPath = getElementaryMetaPaths();
         return simpleMetaPath.get(simpleMetaPath.size() - 1).getEndClass();
     }
 
@@ -119,7 +119,7 @@ public class SimpleMetaPath extends SequenceMetaPath {
      * @return
      */
     public Class<? extends ModelElement> getPathStepElementClass(final int pathStepIndex) {
-        List<ElementaryMetaPath> elementaryMetaPaths = getSimpleMetaPath();
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
         ElementaryMetaPath elementaryMetaPathPre = elementaryMetaPaths.get(pathStepIndex);
         if (pathStepIndex == elementaryMetaPaths.size() - 1) {
             return elementaryMetaPathPre.getEndClass();

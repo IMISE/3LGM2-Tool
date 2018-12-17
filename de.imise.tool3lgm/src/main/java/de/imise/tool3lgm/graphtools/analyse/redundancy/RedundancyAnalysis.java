@@ -198,7 +198,7 @@ public class RedundancyAnalysis extends WindowAdapter {
 
         SingleRedundancyAnalysisDefinition definition = result.getDefinition();
         AbstractMetaPath metaPath = definition.getMetaPath();
-        for (ElementaryMetaPath elementaryMetaPath : metaPath.getSimpleMetaPath()) {
+        for (ElementaryMetaPath elementaryMetaPath : metaPath.getElementaryMetaPaths()) {
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
             //jetzt die Kardinalitätsvorgaben der gewählten Analyse in die Kardinalitäten der Konsitenzprüfung übertragen
             cardinalityDefinition.setNewForwardCardinality(edgeClass, definition.getNewForwardCardinality(edgeClass));

@@ -32,14 +32,14 @@ public class SequenceMetaPath extends ListMetaPath {
      * aus {@link ElementaryMetaPath}s besteht oder aus anderen {@link SequenceMetaPath}s, die selbst
      * keine parallelen und keine rekursiven Metapfade enthalten.
      */
-    private ImmutableList<ElementaryMetaPath> simpleMetaPath = null;
+    private ImmutableList<ElementaryMetaPath> elementaryMetaPaths = null;
 
     /**
-     * <code>true</code> sobald einmal versucht wurde, den simpleMetaPath anzulegen. Falls das nicht
+     * <code>true</code> sobald einmal versucht wurde, die elementaryMetaPaths anzulegen. Falls das nicht
      * geklappt hat, ist er weiterhin <code>null</code>, aber es muss nicht noch einmal versucht werden,
      * ihn zu initilaisieren.
      */
-    private boolean simplePathInitialized = false;
+    private boolean elementaryMetaPathsInitialized = false;
 
     /**
      * Diese Richtung wird nur zum Erzeugen des Namens gebraucht. Je nachdem welche Rictung hier vermerkt ist, wird an den {@link #baseResKeyOrName}
@@ -100,8 +100,8 @@ public class SequenceMetaPath extends ListMetaPath {
         result = prime * result + (directed ? 1231 : 1237);
         result = prime * result + (direction == null ? 0 : direction.hashCode());
         result = prime * result + (metaPaths == null ? 0 : metaPaths.hashCode());
-        result = prime * result + (simpleMetaPath == null ? 0 : simpleMetaPath.hashCode());
-        result = prime * result + (simplePathInitialized ? 1231 : 1237);
+        result = prime * result + (elementaryMetaPaths == null ? 0 : elementaryMetaPaths.hashCode());
+        result = prime * result + (elementaryMetaPathsInitialized ? 1231 : 1237);
         return result;
     }
 
@@ -133,14 +133,14 @@ public class SequenceMetaPath extends ListMetaPath {
         } else if (!metaPaths.equals(other.metaPaths)) {
             return false;
         }
-        if (simpleMetaPath == null) {
-            if (other.simpleMetaPath != null) {
+        if (elementaryMetaPaths == null) {
+            if (other.elementaryMetaPaths != null) {
                 return false;
             }
-        } else if (!simpleMetaPath.equals(other.simpleMetaPath)) {
+        } else if (!elementaryMetaPaths.equals(other.elementaryMetaPaths)) {
             return false;
         }
-        if (simplePathInitialized != other.simplePathInitialized) {
+        if (elementaryMetaPathsInitialized != other.elementaryMetaPathsInitialized) {
             return false;
         }
         return true;
@@ -225,17 +225,17 @@ public class SequenceMetaPath extends ListMetaPath {
         if (!isValid()) {
             return false;
         }
-        List<ElementaryMetaPath> simpleMetaPath = getSimpleMetaPath();
-        if (simpleMetaPath == null || simpleMetaPath.size() == 0) {
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        if (elementaryMetaPaths == null || elementaryMetaPaths.size() == 0) {
             return false;
         }
         // prüfen, ob die Zwischenelemente angelegt werden können
-        for (int i = 0; i < simpleMetaPath.size() - 1; i++) {
+        for (int i = 0; i < elementaryMetaPaths.size() - 1; i++) {
             //nur Elementarpfade mit einer Kante dazwischen sind anlegbar, wenn die Kantenklasse nicht abstract ist
-            if (!simpleMetaPath.get(i).isCreateable()) {
+            if (!elementaryMetaPaths.get(i).isCreateable()) {
                 return false;
             }
-            if (i < simpleMetaPath.size() - 2) {
+            if (i < elementaryMetaPaths.size() - 2) {
                 Class<? extends ModelElement> connectingClass = getConnectingClass(i);
                 if (ModelConstants.isAbstract(connectingClass)) {
                     return false;
@@ -249,12 +249,12 @@ public class SequenceMetaPath extends ListMetaPath {
      * Liefert die speziellere der beiden Elementklassen, die sich aus der Endklasse des einen Elementarpfadschrittes und der Anfangsklasse des
      * nächsten Elementarpfadschrittes ergeben.
      *
-     * @param simpleMetaPathStepIndex Indexs des Pfadschrittes. 0 = der erste und simpleMetaPath.length() - 2 = der letzte
+     * @param elementaryMetaPathStepIndex Indexs des Pfadschrittes. 0 = der erste und simpleMetaPath.length() - 2 = der letzte
      * @return die speziellere der beiden Elementklasse zwischen 2 Elementarpfadschritten
      */
-    private Class<? extends ModelElement> getConnectingClass(final int simpleMetaPathStepIndex) {
-        ElementaryMetaPath elementaryMetaPath = simpleMetaPath.get(simpleMetaPathStepIndex);
-        ElementaryMetaPath nextElementaryMetaPath = simpleMetaPath.get(simpleMetaPathStepIndex + 1);
+    private Class<? extends ModelElement> getConnectingClass(final int elementaryMetaPathStepIndex) {
+        ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(elementaryMetaPathStepIndex);
+        ElementaryMetaPath nextElementaryMetaPath = elementaryMetaPaths.get(elementaryMetaPathStepIndex + 1);
         Class<? extends ModelElement> lastEndClass = elementaryMetaPath.getEndClass();
         Class<? extends ModelElement> nextStartClass = nextElementaryMetaPath.getStartClass();
         if (lastEndClass.isAssignableFrom(nextStartClass)) {
@@ -266,12 +266,12 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     @Override
-    public final List<ElementaryMetaPath> getSimpleMetaPath() {
-        if (!simplePathInitialized) {
-            simplePathInitialized = true;
+    public final List<ElementaryMetaPath> getElementaryMetaPaths() {
+        if (!elementaryMetaPathsInitialized) {
+            elementaryMetaPathsInitialized = true;
             ImmutableList.Builder<ElementaryMetaPath> simpleMetaPathBuilder = ImmutableList.builder();
             for (AbstractMetaPath metaPath : metaPaths) {
-                List<ElementaryMetaPath> innerMetaPaths = metaPath.getSimpleMetaPath();
+                List<ElementaryMetaPath> innerMetaPaths = metaPath.getElementaryMetaPaths();
                 if (innerMetaPaths == null) {
                     return null;
                 }
@@ -279,9 +279,9 @@ public class SequenceMetaPath extends ListMetaPath {
                     simpleMetaPathBuilder.add(innerMetaPath);
                 }
             }
-            simpleMetaPath = simpleMetaPathBuilder.build();
+            elementaryMetaPaths = simpleMetaPathBuilder.build();
         }
-        return simpleMetaPath;
+        return elementaryMetaPaths;
     }
 
     @Override

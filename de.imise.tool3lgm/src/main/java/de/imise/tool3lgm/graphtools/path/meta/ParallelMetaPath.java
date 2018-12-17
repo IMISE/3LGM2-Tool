@@ -58,7 +58,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
     }
 
     @Override
-    public List<ElementaryMetaPath> getSimpleMetaPath() {
+    public List<ElementaryMetaPath> getElementaryMetaPaths() {
         return null;
     }
 

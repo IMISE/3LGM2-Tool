@@ -3667,7 +3667,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         for (SimpleMetaPath metaPath : instanciationEdge.iterateInstanciableMetaPaths()) {
             int path2CreateStartIndex = 0;
             for (; path2CreateStartIndex < metaPath.getMetaPathCount(); path2CreateStartIndex++) {
-                List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getSimpleMetaPath();
+                List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
                 ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(path2CreateStartIndex);
                 if (elementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
                     break;
@@ -3694,7 +3694,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         final int lastPathStepIndex = metaPath.getMetaPathCount() - 1;
         //wenn ein EndElement ex. und die letzte Kante eine InstanciationEdge ist, wobei das EndElement der Master dieser InstanciationEdge ist, dann
         //wird das EndElement über diese Kante instanziiert und der Restpfad bis zu dieser Instanz dann wieder über diese Funktion angelegt
-        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getSimpleMetaPath();
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         if (lastPathStepIndex > 0 && endElement != null) {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(lastPathStepIndex);
             if (!elementaryMetaPath.hasDirectionForward()) {

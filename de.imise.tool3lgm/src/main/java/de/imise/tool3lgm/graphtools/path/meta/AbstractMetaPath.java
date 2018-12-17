@@ -551,7 +551,7 @@ public abstract class AbstractMetaPath {
      *
      * @return
      */
-    public abstract List<ElementaryMetaPath> getSimpleMetaPath();
+    public abstract List<ElementaryMetaPath> getElementaryMetaPaths();
 
     /**
      * Liefert <code>true</code>, wenn dieser Pfad Elementarten miteinander verbindet, die

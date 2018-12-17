@@ -15,7 +15,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.SimpleMetaPathOld;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -86,10 +85,9 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     private final Type type;
 
     /**
-     * Liste aller {@link ElementaryMetaPath}, die sich evtl. aus diesem Pfad bilden lässt, wenn er im Grunde nur {@link ElementaryMetaPath} und
-     * andere {@link SimpleMetaPathOld}, die ebenso aufgebaut sind, enthält.
+     * Liste die als einziges Element <code>this</code> enthält.
      */
-    private List<ElementaryMetaPath> simpleMetaPath;
+    private List<ElementaryMetaPath> elementaryMetaPaths;
 
     /**
      * @see {@link #isDirected()}
@@ -374,11 +372,11 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public List<ElementaryMetaPath> getSimpleMetaPath() {
-        if (simpleMetaPath == null) {
-            simpleMetaPath = ImmutableList.of(this);
+    public List<ElementaryMetaPath> getElementaryMetaPaths() {
+        if (elementaryMetaPaths == null) {
+            elementaryMetaPaths = ImmutableList.of(this);
         }
-        return simpleMetaPath;
+        return elementaryMetaPaths;
     }
 
     @Override
