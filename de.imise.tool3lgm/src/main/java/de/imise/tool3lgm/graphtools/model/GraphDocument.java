@@ -3679,7 +3679,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             for (ModelElement me : connectedElements) {
                 //ab diesem Pfadteil muss neu angelegt werden
                 SimpleMetaPath subPathCreate = metaPath.getSubPath(path2CreateStartIndex);
-                createPath(me, instanceElement, subPathCreate, doc, pid);
+                doc.createPath(me, instanceElement, subPathCreate, pid);
             }
         }
 
@@ -3688,8 +3688,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         return instanceContainer;
     }
 
-    public static final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final GraphDocument doc, final int pid) {
-        doc.start_transaction(pid);
+    public final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final int pid) {
+        start_transaction(pid);
 
         final int lastPathStepIndex = metaPath.getMetaPathCount() - 1;
         //wenn ein EndElement ex. und die letzte Kante eine InstanciationEdge ist, wobei das EndElement der Master dieser InstanciationEdge ist, dann
@@ -3699,15 +3699,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(lastPathStepIndex);
             if (!elementaryMetaPath.hasDirectionForward()) {
                 if (elementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
-                    NodeContainer createdInstance = doc.createInstance(doc, elementaryMetaPath.getEdgeClass().asSubclass(InstanciationEdge.class), endElement, pid);
+                    NodeContainer createdInstance = createInstance(this, elementaryMetaPath.getEdgeClass().asSubclass(InstanciationEdge.class), endElement, pid);
                     SimpleMetaPath subPath = metaPath.getSubPath(0, lastPathStepIndex);
-                    createPath(startElement, createdInstance.getElement(), subPath, doc, pid);
+                    createPath(startElement, createdInstance.getElement(), subPath, pid);
                     return;
                 }
             }
         }
 
-        GDCollection gdcoll = doc.getCollection();
+        GDCollection gdcoll = getCollection();
         ModelElement pathStepStartElement = startElement;
         ModelElement pathStepEndElement = null;
         for (int i = 0; i <= lastPathStepIndex; i++) {
@@ -3723,14 +3723,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 //selbst über den Instanziierungsmechanismus initialisiert
             } else if (InstanciationEdge.class.isAssignableFrom(edgeClass) && elementaryMetaPath.hasDirectionForward()) {
                 boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
-                NodeContainer createdInstance = doc.createInstance(doc, edgeClass.asSubclass(InstanciationEdge.class), pathStepStartElement, pid);
+                NodeContainer createdInstance = createInstance(this, edgeClass.asSubclass(InstanciationEdge.class), pathStepStartElement, pid);
                 gdcoll.setInteractiveMode(oldInteractiveMode);
                 pathStepEndElement = createdInstance.getElement();
                 alreadyLinked = true;
             } else { // nächstes Pfadschrittelement anlegen
                 Class<? extends ModelElement> pathStepEndClass = metaPath.getPathStepElementClass(i);
                 boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
-                NodeContainer pathStepEndElementContainer = doc.createKnotenWithContainer(pathStepEndClass, pid);
+                NodeContainer pathStepEndElementContainer = createKnotenWithContainer(pathStepEndClass, pid);
                 gdcoll.setInteractiveMode(oldInteractiveMode);
                 pathStepEndElement = pathStepEndElementContainer.getElement();
             }
@@ -3739,15 +3739,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             if (CompositionEdge.class.isAssignableFrom(edgeClass)) {
                 if (elementaryMetaPath.hasDirectionForward()) {
-                    doc.addict(pathStepStartElement, pathStepEndElement, edgeClass.asSubclass(CompositionEdge.class), pid);
+                    addict(pathStepStartElement, pathStepEndElement, edgeClass.asSubclass(CompositionEdge.class), pid);
                 } else {
-                    doc.addict(pathStepEndElement, pathStepStartElement, edgeClass.asSubclass(CompositionEdge.class), pid);
+                    addict(pathStepEndElement, pathStepStartElement, edgeClass.asSubclass(CompositionEdge.class), pid);
                 }
             }
             pathStepStartElement = pathStepEndElement;
         }
-        doc.finish_transaction(pid);
-        doc.distributeEvent(DATA_CHANGED, pid);
+        finish_transaction(pid);
+        distributeEvent(DATA_CHANGED, pid);
     }
 
     public final void linkSelected(final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
