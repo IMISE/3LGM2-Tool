@@ -159,7 +159,7 @@ public class ModelSelection implements Set<ElementContainer> {
      * @return
      *         Liste der ModellElemente der selektierten ElementContainer
      */
-    public final ArrayList<ModelElement> getSelectedElements() {
+    public final List<ModelElement> getSelectedElements() {
         ArrayList<ModelElement> returnList = new ArrayList<>(size());
         returnList.addAll(GDCollection.getModelElements(selectedRealNodeContainer));
         returnList.addAll(GDCollection.getModelElements(selectedEdgeContainer));
