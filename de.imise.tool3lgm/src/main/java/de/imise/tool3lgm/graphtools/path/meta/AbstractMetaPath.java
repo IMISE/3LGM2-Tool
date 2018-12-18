@@ -467,10 +467,6 @@ public abstract class AbstractMetaPath {
 
     protected abstract String createName();
 
-    protected final String createFullName() {
-        return ElementsNameBuilder.getDisplayableClassesNames(getStartClasses()) + " " + createName() + " " + ElementsNameBuilder.getDisplayableClassesNames(getEndClasses());
-    }
-
     /**
      * @return
      */
@@ -486,9 +482,25 @@ public abstract class AbstractMetaPath {
      */
     public final String getFullName() {
         if (Strings.isNullOrEmpty(fullName)) {
-            fullName = createFullName();
+            fullName = getName(true, true);
         }
         return fullName;
+    }
+
+    /**
+     * @param withStartClasses
+     * @param withEndClasses
+     * @return
+     */
+    public String getName(final boolean withStartClasses, final boolean withEndClasses) {
+        if (withStartClasses && withEndClasses) {
+            return ElementsNameBuilder.getDisplayableClassesNames(getStartClasses()) + " " + getName() + " " + ElementsNameBuilder.getDisplayableClassesNames(getEndClasses());
+        } else if (withStartClasses) {
+            return ElementsNameBuilder.getDisplayableClassesNames(getStartClasses()) + " " + getName();
+        } else if (withEndClasses) {
+            return getName() + " " + ElementsNameBuilder.getDisplayableClassesNames(getEndClasses());
+        }
+        return getName();
     }
 
     @Override
