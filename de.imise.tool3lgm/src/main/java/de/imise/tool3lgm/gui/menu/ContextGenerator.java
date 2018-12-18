@@ -63,6 +63,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -82,6 +83,7 @@ import javax.swing.event.PopupMenuListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
@@ -102,7 +104,7 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.path.MetaPathOld;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -887,7 +889,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + direction, verbindung_trennen, disconnectable, toolTip), label));
                         }
                     } else {
-                        MetaPathOld metaPath = (MetaPathOld) edgeClassOrMetaPath;
+                        SimpleMetaPath metaPath = (SimpleMetaPath) edgeClassOrMetaPath;
+                        Action createPathAction = createPathAction(metaPath);
+                        JMenuItem createPathItem = getItem(createPathAction);
+                        connectableItems.add(new NamedObjectContainer<>(createPathItem, createPathAction.toString()));
                     }
                 }
             }
@@ -2038,6 +2043,37 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             menu.setEnabled(false);
         }
         return menu;
+    }
+
+    /**
+     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem zuletzt selektierten Element und allen zum Endelement des Pfades passenden anderen
+     * selektierten Elementen angelegt wird.
+     *
+     * @param path2create
+     * @return
+     */
+    private Action createPathAction(final SimpleMetaPath path2create) {
+        return new AbstractAction(path2create.getName(), verbindung_anlegen) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                Class<? extends ModelElement> startClass = path2create.getStartClass();
+                Class<? extends ModelElement> endClass = path2create.getEndClass();
+                ModelElement lastSelected = doc.getLastSelected().getElement();
+                if (!startClass.isAssignableFrom(lastSelected.getClass())) {
+                    return;
+                }
+                List<ModelElement> selectedElements = doc.getSelectedElements();
+                for (ModelElement me : selectedElements) {
+                    if (lastSelected == me || !endClass.isAssignableFrom(me.getClass())) {
+                        continue;
+                    }
+                    GDCollection gdcoll = doc.getCollection();
+                    boolean lastInteractiveMode = gdcoll.setInteractiveMode(false);
+                    doc.createPath(lastSelected, me, path2create, STANDARD_PID);
+                    gdcoll.setInteractiveMode(lastInteractiveMode);
+                }
+            }
+        };
     }
 
     @Override
