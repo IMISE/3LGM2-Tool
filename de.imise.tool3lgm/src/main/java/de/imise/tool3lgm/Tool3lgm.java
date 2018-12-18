@@ -109,7 +109,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     private final List<GDCollection> collections = new ArrayList<>();
 
     /** Position of divider betweeen the tree and the graph view in pixel from the left side */
-    int dividerLocation = 200;
+    private int dividerLocation = getToolkit().getScreenSize().width / 5;
 
     /** Holds the actual context and generates context menus */
     public static ContextGenerator contextGenerator;
@@ -1195,15 +1195,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * return the verticalSplitPane of application
-     *
-     * @return JSplitPane
-     */
-    public JSplitPane getVerticalSplitPane() {
-        return verticalSplitPane;
-    }
-
-    /**
      * return the horizontalSplitPane of application
      *
      * @return JSplitPane
@@ -1224,12 +1215,12 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /** (De-)Aktiviert den ModelBrowser */
     private void showModelBrowser(final boolean b) {
         if (b) {
-            getVerticalSplitPane().setLeftComponent(getModelBrowserPanel());
-            getVerticalSplitPane().setDividerLocation(200);
+            verticalSplitPane.setLeftComponent(getModelBrowserPanel());
+            verticalSplitPane.setDividerLocation(dividerLocation);
             getWorkArea().revalidate();
         } else {
-            JSplitPane pane = getVerticalSplitPane();
-            pane.remove(pane.getLeftComponent());
+            dividerLocation = verticalSplitPane.getDividerLocation();
+            verticalSplitPane.remove(verticalSplitPane.getLeftComponent());
             getWorkArea().revalidate();
         }
     }
