@@ -2053,7 +2053,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private Action createPathAction(final SimpleMetaPath path2create) {
-        return new AbstractAction(path2create.getName(), verbindung_anlegen) {
+        return new AbstractAction(path2create.getName(false, true), verbindung_anlegen) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 Class<? extends ModelElement> startClass = path2create.getStartClass();
