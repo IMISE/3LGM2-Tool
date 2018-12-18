@@ -351,11 +351,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private JMenuItem getItem(final String resKeyOrString, final GDCommands command, final String arguments, final ImageIcon icon, final boolean enabled, final String toolTip) {
         String label = null;
-        try {
-            label = getResString(resKeyOrString);
-        } catch (Exception e) {
-            label = resKeyOrString;
-        }
+        label = Tool3lgmConstants.getResStringWithoutError(resKeyOrString);
         JMenuItem item = new JMenuItem(label, icon);
         item.addActionListener(this);
         if (arguments == null) {
