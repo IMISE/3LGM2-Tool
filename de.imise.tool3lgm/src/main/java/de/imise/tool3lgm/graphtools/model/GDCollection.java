@@ -1323,24 +1323,18 @@ public final class GDCollection extends UserFieldTarget {
                 //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
                 //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
                 if (ensureConsistency) {
-                    Class<? extends ModelElement> startClass = startElement.getClass();
-                    Class<? extends ModelElement> endClass = endElement.getClass();
-                    boolean startElementIsEdgeStart = edge.isStartClass(startClass);
-                    boolean endElementIsEdgeStart = edge.isStartClass(endClass);
-                    Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
                     Class<? extends ModelElement> edgeEndClass = edge.getEndClass();
                     int maxForwardCardinality = edge.getMaxForwardCardinality();
-                    int maxBackwardCardinality = edge.getMaxBackwardCardinality();
-                    int maxElemCardinality = startElementIsEdgeStart ? maxForwardCardinality : maxBackwardCardinality;
-                    List<Edge> edgeList = startElement.getEdgesWith(startElementIsEdgeStart ? edgeEndClass : edgeStartClass, edgeClass);
+                    List<Edge> edgeList = startElement.getEdgesTo(edgeEndClass, edgeClass);
                     edgeList.remove(edge);
-                    if (edgeList.size() > 0 && edgeList.size() == maxElemCardinality) {
+                    if (edgeList.size() == maxForwardCardinality) {
                         deleteElement(edgeList.get(0), doc, pid);
                     }
-                    maxElemCardinality = endElementIsEdgeStart ? maxForwardCardinality : maxBackwardCardinality;
-                    edgeList = endElement.getEdgesWith(endElementIsEdgeStart ? edgeEndClass : edgeStartClass, edgeClass);
+                    Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
+                    int maxBackwardCardinality = edge.getMaxBackwardCardinality();
+                    edgeList = endElement.getEdgesFrom(edgeStartClass, edgeClass);
                     edgeList.remove(edge);
-                    if (edgeList.size() > 0 && edgeList.size() == maxElemCardinality) {
+                    if (edgeList.size() == maxBackwardCardinality) {
                         deleteElement(edgeList.get(0), doc, pid);
                     }
                 }
