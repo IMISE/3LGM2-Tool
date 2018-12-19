@@ -15,9 +15,9 @@ public final class PhysicalDataProcessingComponent_HasPartEdge extends HasPartEd
 
     public static final Class<? extends ModelElement> stcl = DeviceClass.class;
 
-    public static final EdgeCardinality scard = ZERO_UNIMITED;
+    public static final EdgeCardinality scard = ZERO_ONE;
 
-    public static final EdgeCardinality ecard = ZERO_ONE;
+    public static final EdgeCardinality ecard = ZERO_UNIMITED;
 
     public static final Class<? extends ModelElement> etcl = DeviceClass.class;
 

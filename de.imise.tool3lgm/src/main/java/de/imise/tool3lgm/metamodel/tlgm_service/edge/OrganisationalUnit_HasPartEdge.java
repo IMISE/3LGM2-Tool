@@ -15,9 +15,9 @@ public final class OrganisationalUnit_HasPartEdge extends HasPartEdge {
 
     public static final Class<? extends ModelElement> stcl = OrganisationalUnit.class;
 
-    public static final EdgeCardinality scard = ZERO_UNIMITED;
+    public static final EdgeCardinality scard = ZERO_ONE;
 
-    public static final EdgeCardinality ecard = ZERO_ONE;
+    public static final EdgeCardinality ecard = ZERO_UNIMITED;
 
     public static final Class<? extends ModelElement> etcl = OrganisationalUnit.class;
 
