@@ -1659,6 +1659,9 @@ public abstract class ModelElement extends UserFieldTarget {
                             default:
                                 knot = edge.getOther(this);
                             }
+                        } else {
+                            //bei allen anderen gerichteten Kanten wird hier immer in Rückwärts-Richtung geschaut
+                            knot = edge.isStart(this) ? null : edge.getStart();
                         }
                     } else {
                         //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
