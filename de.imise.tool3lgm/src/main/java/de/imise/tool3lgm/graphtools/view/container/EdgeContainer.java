@@ -660,11 +660,13 @@ public class EdgeContainer extends ElementContainer {
 
             if (i == 0) {
                 Edge edge = getEdge();
-                boolean backward = !ModelConstants.isDirectedEdge(edge.getClass()); // außer bei DoubleMeaningEdges wird der Rückwärts-Pfeil auch bei unberichteten Kanten gezeichnet
+                boolean backward; // außer bei DoubleMeaningEdges und HasPartEdges wird der Rückwärts-Pfeil auch bei unberichteten Kanten gezeichnet
                 if (edge instanceof DoubleMeaningEdge) {
                     DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
                     ConnectionState connectionState = doubleMeaningEdge.getConnectionState();
                     backward = connectionState == BACKWARD || connectionState == DOUBLE;
+                } else {
+                    backward = edge instanceof HasPartEdge || !ModelConstants.isDirectedEdge(edge.getClass());
                 }
                 if (backward) {
                     gc.rotate(rad1, startx, starty);
@@ -681,13 +683,16 @@ public class EdgeContainer extends ElementContainer {
                 }
             }
             if (i == numKKnots) {
-                boolean forward = true; //alle Kanten
+                boolean forward; //alle Kanten sollen Vorwärts gemalt werden außer DoubleMeaning Edges und HasPart
                 Edge edge = getEdge();
                 if (edge instanceof DoubleMeaningEdge) {
                     DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
                     ConnectionState connectionState = doubleMeaningEdge.getConnectionState();
                     forward = connectionState == FORWARD || connectionState == DOUBLE;
+                } else {
+                    forward = !(edge instanceof HasPartEdge);
                 }
+
                 if (forward) {
                     gc.rotate(rad2, endx, endy);
                     // try {
