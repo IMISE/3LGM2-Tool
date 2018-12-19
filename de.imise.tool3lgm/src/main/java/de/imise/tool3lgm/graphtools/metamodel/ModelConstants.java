@@ -374,6 +374,8 @@ public final class ModelConstants {
         return DoubleMeaningEdge.class.isAssignableFrom(edgeClass);
     }
 
+    //    private static final boolean DEBUG = true;
+
     /**
      * Prüft, ob Kante gerichtet ist. Das ist sie, wenn sie nicht dieselben Elementarten verbindet oder in beide Richtungen einen unterschiedlichen
      * Anzeigenamen hat oder eine doppelte Bedeutung hat. Im originalen Metamodell heißen die KommBeziehungen in beide Richtungen gleich, haben
@@ -384,6 +386,15 @@ public final class ModelConstants {
      */
     public static final boolean isDirectedEdge(final Class<? extends Edge> edgeClass) {
         //man muss explizit auf Kanten mit doppelter Bedeutung testen!
+        //        if (DEBUG) {
+        //            Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
+        //            Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+        //            boolean isDoubleMeaningEdge = isDoubleMeaningEdge(edgeClass);
+        //            String forwardMetaAssociationName = ElementsNameBuilder.getForwardMetaAssociationName(edgeClass);
+        //            String backwardMetaAssociationName = ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
+        //            Sys.err1("isDirectedEdge:   edgeClass=" + edgeClass.getSimpleName() + "   startClass=" + startClass + "   endClass=" + endClass + "   isDoubleMeaningEdge=" + isDoubleMeaningEdge + "   forwardMetaAssociationName='" + forwardMetaAssociationName
+        //                    + "'   backwardMetaAssociationName='" + backwardMetaAssociationName + "'\n\t-> " + (startClass != endClass) + " || " + isDoubleMeaningEdge + " || " + !forwardMetaAssociationName.equals(backwardMetaAssociationName));
+        //        }
         return Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass) || isDoubleMeaningEdge(edgeClass) || !ElementsNameBuilder.getForwardMetaAssociationName(edgeClass).equals(ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass));
     }
 
