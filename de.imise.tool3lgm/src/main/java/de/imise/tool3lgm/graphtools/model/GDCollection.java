@@ -1323,6 +1323,8 @@ public final class GDCollection extends UserFieldTarget {
                 //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
                 //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
                 if (ensureConsistency) {
+                    //beim Startelement eine alte Kante löschen, falls die neue Kante die Anzahl der Verbindungen auf dem MAX-Wert gebracht hat
+                    //War der Wert vorher schon höher, wird hier nicht gelöscht! Das wäre ein Fall für die Konsistenzprüfung
                     Class<? extends ModelElement> edgeEndClass = edge.getEndClass();
                     int maxForwardCardinality = edge.getMaxForwardCardinality();
                     List<Edge> edgeList = startElement.getEdgesTo(edgeEndClass, edgeClass);
@@ -1330,6 +1332,7 @@ public final class GDCollection extends UserFieldTarget {
                     if (edgeList.size() == maxForwardCardinality) {
                         deleteElement(edgeList.get(0), doc, pid);
                     }
+                    //beim Endelement dasselbe nur in Rückwärtsrichtung
                     Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
                     int maxBackwardCardinality = edge.getMaxBackwardCardinality();
                     edgeList = endElement.getEdgesFrom(edgeStartClass, edgeClass);
