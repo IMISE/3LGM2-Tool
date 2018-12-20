@@ -1965,25 +1965,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    public ArrayList<JMenuItem> getEinfuegenMenu() {
-        ArrayList<JMenuItem> eintraege = new ArrayList<>();
-        if (getDoc() == null) {
-            return eintraege;
-        }
-        JMenu newKnotMenu = getNewKnotMenu();
-        int anzahl = newKnotMenu.getItemCount();
-        for (int n = 0; n < anzahl; n++) {
-            JMenuItem neu = new JMenuItem(newKnotMenu.getItem(n).getText());
-            neu.setActionCommand(getNewKnotMenu().getItem(n).getActionCommand());
-            neu.addActionListener(this);
-            eintraege.add(neu);
-        }
-        return eintraege;
-    }
-
-    /**
-     * @return
-     */
     public JPopupMenu getTreeKnotContextMenu() {
         JPopupMenu menu = new JPopupMenu();
         addMenuItem(menu, properties);
