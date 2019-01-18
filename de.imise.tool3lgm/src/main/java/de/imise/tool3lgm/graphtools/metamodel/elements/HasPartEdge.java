@@ -1,8 +1,10 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 /**
- * Die HastPart-Beziehung ist eine Bezihung zwischen zwei Elementklasse. Start der Edge ist immer das Elternelement,
+ * Die HasPart-Beziehung ist eine Beziehung zwischen zwei Elementklasse. Start der Edge ist immer das Elternelement,
  * das Ende der Edge ist immer das Kindelement. Dir Richtung der Edge ist immer FORWARD.
+ *
+ * @author AXS (29 Aug 2018) aus der IsPartOfEdge von anno dazumal
  */
 public abstract class HasPartEdge extends SubordinationEdge {
 
