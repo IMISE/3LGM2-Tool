@@ -262,20 +262,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
         } else {
             for (ModelElement me : startElements.get(0)) {
                 PathResultTreeNode node = new PathResultTreeNode(new ElementaryPath(me, null), PathResultTreeNode.NodeType.START_ELEMENT);
-                /*
-                 * if (metaPath instanceof ElementaryMetaPath)
-                 * completePathLeafs.addAll(addPath(node, (ElementaryMetaPath)metaPath, false));
-                 * else if (metaPath instanceof SequenceMetaPath)
-                 * completePathLeafs.addAll(addPath(node, (SequenceMetaPath)metaPath, false));
-                 * else if (metaPath instanceof UnionMetaPath)
-                 * completePathLeafs.addAll(addPath(node, (UnionMetaPath)metaPath, false));
-                 * else if (metaPath instanceof SectionMetaPath)
-                 * completePathLeafs.addAll(addPath(node, (SectionMetaPath)metaPath, false));
-                 * else if (metaPath instanceof DifferenceMetaPath)
-                 * completePathLeafs.addAll(addPath(node, (DifferenceMetaPath)metaPath, false));
-                 */
                 completePathLeafs.addAll(addPath(node, metaPath, false));
-
                 if (node.getChildCount() > 0) {
                     root.add(node);
                 }
