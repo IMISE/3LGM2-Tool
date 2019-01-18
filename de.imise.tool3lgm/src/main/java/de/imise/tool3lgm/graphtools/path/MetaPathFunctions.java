@@ -124,7 +124,7 @@ public class MetaPathFunctions {
      *            Ausgangliste über diesen Pfad verbunden sind. Bei <code>false</code> ist jedes Element nur einmal enthalten.
      * @return
      */
-    public static final Collection<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final AbstractMetaPath metaPath, final boolean multiple) {
+    private static final Collection<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final AbstractMetaPath metaPath, final boolean multiple) {
         return getResultTree(modelElements, metaPath).getConnectedElements(multiple);
     }
 
