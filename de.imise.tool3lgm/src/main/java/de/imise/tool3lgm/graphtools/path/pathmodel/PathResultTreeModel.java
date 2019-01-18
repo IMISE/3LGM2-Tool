@@ -317,12 +317,11 @@ public class PathResultTreeModel extends DefaultTreeModel {
      */
     private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final ElementaryMetaPath metaPath, final boolean isSubStep) {
         ModelElement endElement = startNode.getEndElement();
-        List<PathResultTreeNode> resultNodes = new ArrayList<>();
-        for (PathResultTreeNode connectedNode : getConnectedNodes(endElement, metaPath, isSubStep)) {
+        List<PathResultTreeNode> connectedNodes = getConnectedNodes(endElement, metaPath, isSubStep);
+        for (PathResultTreeNode connectedNode : connectedNodes) {
             startNode.add(connectedNode);
-            resultNodes.add(connectedNode);
         }
-        return resultNodes;
+        return connectedNodes;
     }
 
     /**
