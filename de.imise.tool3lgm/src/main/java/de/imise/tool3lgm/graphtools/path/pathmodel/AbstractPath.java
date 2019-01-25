@@ -72,4 +72,50 @@ public abstract class AbstractPath {
      */
     public abstract boolean isValid();
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (endElement == null ? 0 : endElement.hashCode());
+        result = prime * result + (metaPath == null ? 0 : metaPath.hashCode());
+        result = prime * result + (startElement == null ? 0 : startElement.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        AbstractPath other = (AbstractPath) obj;
+        if (endElement == null) {
+            if (other.endElement != null) {
+                return false;
+            }
+        } else if (!endElement.equals(other.endElement)) {
+            return false;
+        }
+        if (metaPath == null) {
+            if (other.metaPath != null) {
+                return false;
+            }
+        } else if (!metaPath.equals(other.metaPath)) {
+            return false;
+        }
+        if (startElement == null) {
+            if (other.startElement != null) {
+                return false;
+            }
+        } else if (!startElement.equals(other.startElement)) {
+            return false;
+        }
+        return true;
+    }
+
 }
