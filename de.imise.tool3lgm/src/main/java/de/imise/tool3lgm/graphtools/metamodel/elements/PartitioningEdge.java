@@ -1,0 +1,80 @@
+package de.imise.tool3lgm.graphtools.metamodel.elements;
+
+/**
+ * Das hier ist war die HasPartBeziehung, die beim Einführen der PropertyTransferEdges in diese Klasse überführt wurde, damit alle Stellen, an denen
+ * vorher die HasPartEdge relevant war, sauber erkannt und geändert werden konnten.
+ * Die HasPart-Beziehung ist eine Bezihung zwischen zwei Elementklasse. Start der Edge ist immer das Elternelement,
+ * das Ende der Edge ist immer das Kindelement. Dir Richtung der Edge ist immer FORWARD.
+ * 
+ * @author AXS (29 Dec 2018)
+ */
+public abstract class PartitioningEdge extends PropertyTransferEdgeFixedEndToStart {
+
+    /** Richtung, in der die Kante vom Oberelement auf das Unterelement zeigt */
+    public static final Direction PARENT_TO_PART_DIRECTION = SUPER_TO_SUB_DIRECTION;
+
+    /** Richtung, in der die Kante vom Unterelement auf das Oberelement zeigt */
+    public static final Direction PART_TO_PARENT_DIRECTION = SUB_TO_SUPER_DIRECTION;
+
+    /**
+     * Gibt das Element zurück, welches durch diese Edge Teil des anderen Elementes ist.
+     *
+     * @return Partelement der Edge
+     */
+    public final ModelElement getPart() {
+        return getSubElement();
+    }
+
+    /**
+     * Gibt das Element zurück, welches durch diese Edge das Oberelement des anderen Elementes ist.
+     *
+     * @return Parentelement der Edge
+     */
+    public final ModelElement getParent() {
+        return getSuperElement();
+    }
+
+    /**
+     * Gibt die untergeordnete Teil-Klasse der Beziehung zurück
+     *
+     * @param hasPartEdgeClass
+     * @return
+     */
+    public static Class<? extends ModelElement> getPartClass(final Class<? extends HasPartEdge> hasPartEdgeClass) {
+        return getSubClass(hasPartEdgeClass);
+    }
+
+    /**
+     * Gibt die übergeordnete Ober-Klasse der Beziehung zurück
+     *
+     * @param hasPartEdgeClass
+     * @return
+     */
+    public static Class<? extends ModelElement> getParentClass(final Class<? extends HasPartEdge> hasPartEdgeClass) {
+        return getSuperClass(hasPartEdgeClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Unterlementklasse der übergebenen Edge zuweisungskompatibel ist.
+     *
+     * @param hasPartEdgeClass
+     * @param meClass
+     * @return
+     */
+    public static final boolean isPartClass(final Class<? extends HasPartEdge> hasPartEdgeClass, final Class<? extends ModelElement> meClass) {
+        return getSubClass(hasPartEdgeClass).isAssignableFrom(meClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse mit der Elementklasse der übergebenen Edge zuweisungskompatibel ist, die
+     * nicht die Teilelementklasse ist.
+     *
+     * @param hasPartEdgeClass
+     * @param meClass
+     * @return
+     */
+    public static final boolean isParentClass(final Class<? extends HasPartEdge> hasPartEdgeClass, final Class<? extends ModelElement> meClass) {
+        return getSuperClass(hasPartEdgeClass).isAssignableFrom(meClass);
+    }
+
+}
