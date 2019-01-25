@@ -3,15 +3,15 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SpecialisationEdge;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.KonAnwendungsbaustein;
 
 /**
  * @author Thomas (16.01.2004)
  */
-public final class KawbAwbVerbindung extends HasPartEdge {
+public final class KawbAwbVerbindung extends SpecialisationEdge {
 
     public static final Class<? extends ModelElement> stcl = KonAnwendungsbaustein.class;
 

@@ -3,14 +3,14 @@ package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.PartitioningEdge;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
 
 /**
  * @author Thomas (16.01.2004)
  */
-public class PdvbPdvbVerbindung extends HasPartEdge {
+public class PdvbPdvbVerbindung extends PartitioningEdge {
 
     public static final Class<? extends ModelElement> stcl = PhysischerDVBaustein.class;
 
