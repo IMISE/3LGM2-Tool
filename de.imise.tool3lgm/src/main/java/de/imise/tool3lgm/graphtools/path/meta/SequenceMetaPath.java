@@ -312,16 +312,6 @@ public class SequenceMetaPath extends ListMetaPath {
         return true;
     }
 
-    @Override
-    public boolean containsHasPartEdge() {
-        for (AbstractMetaPath metaPath : metaPaths) {
-            if (metaPath.containsHasPartEdge()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * Liefert die Verbindungsklasse des Pfadschrittes mit dem übergebenen Index. Dies ist beim Index 0 die speziellere der Endklasse des ersten
      * Elementarpfades und der Startklasse des nächsten Elementarpfades. Der Pfadschritt mit dem Index der Pfadlänge -1 ist die Endklasse des letzten

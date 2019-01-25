@@ -94,9 +94,4 @@ public class RecursiveMetaPath extends AbstractMetaPath {
         return realMetaPath.isDirected();
     }
 
-    @Override
-    public boolean containsHasPartEdge() {
-        return realMetaPath.containsHasPartEdge();
-    }
-
 }

@@ -72,14 +72,4 @@ public abstract class ParallelMetaPath extends ListMetaPath {
         return true;
     }
 
-    @Override
-    public boolean containsHasPartEdge() {
-        for (AbstractMetaPath metaPath : metaPaths) {
-            if (metaPath.containsHasPartEdge()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }
