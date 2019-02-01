@@ -1105,9 +1105,12 @@ public final class ModelConstants {
      */
     private static boolean isExistenceDependent(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends Edge> edgeClass : ModelConstants.getEdgeTypes(elementClass)) {
-            if (isComposition(edgeClass) && CompositionEdge.isSlaveType(edgeClass.asSubclass(CompositionEdge.class), elementClass)) {
+            if (Edge.getMinCardinality(elementClass, edgeClass) > 0) {
                 return true;
             }
+            //            if (isComposition(edgeClass) && CompositionEdge.isSlaveType(edgeClass.asSubclass(CompositionEdge.class), elementClass)) {
+            //                return true;
+            //            }
         }
         return false;
     }
