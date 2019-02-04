@@ -1105,12 +1105,16 @@ public final class ModelConstants {
      */
     private static boolean isExistenceDependent(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends Edge> edgeClass : ModelConstants.getEdgeTypes(elementClass)) {
+            //System.err.print(elementClass.getSimpleName() + "  --->  " + edgeClass.getSimpleName() + "  --->  " + Edge.getMinCardinality(elementClass, edgeClass) + "  --->  ");
+            //minimale Kardinalität von 1 zu anderen Elementen -> dieses Element braucht mind. ein anderes, damit es konsistent ist
             if (Edge.getMinCardinality(elementClass, edgeClass) > 0) {
-                return true;
+                //wenn das andere, benötigte Element aber mit einer Compostion untergeordnet ist, dann wird dieses benötigte, untergeordnete Element in der GDCollection-Funktion createInitialSubtypes(...) auomatisch erzeugt und somit die Konsistenz automatisch hergestellt und damit gilt dieses Element nicht als anhängig
+                if (!isComposition(edgeClass) || CompositionEdge.isSlaveType(edgeClass.asSubclass(CompositionEdge.class), elementClass)) {
+                    //System.err.println(true);
+                    return true;
+                }
             }
-            //            if (isComposition(edgeClass) && CompositionEdge.isSlaveType(edgeClass.asSubclass(CompositionEdge.class), elementClass)) {
-            //                return true;
-            //            }
+            //System.err.println(false);
         }
         return false;
     }
