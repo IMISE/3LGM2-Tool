@@ -389,7 +389,7 @@ public class TLGMServiceMetaModel extends MetaModel {
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
     ///////////////////////////////////////////////////////////////////
 
-    private final Set<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = ImmutableSet.<Class<? extends ModelElement>> of();
+    private final Set<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = ImmutableSet.<Class<? extends ModelElement>> of(Use.class);
 
     @Override
     public Set<Class<? extends ModelElement>> getGenerateNameClasses() {
