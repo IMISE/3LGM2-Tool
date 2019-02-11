@@ -5,6 +5,6 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
  *
  * @author AXS (29 Dec 2018)
  */
-public abstract class PartitioningEdge extends HasPartPropertyTransferEndToStartEdge {
+public abstract class PartitioningEdge extends HasPartPropertyTransferStartToEndEdge {
 
 }
