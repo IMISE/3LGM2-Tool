@@ -222,7 +222,7 @@ public class TableModel implements Iterable<TableCell> {
                     int connectionBitPattern = -1;
                     for (int k = 0; k < metaPaths.size(); k++) {
                         AbstractMetaPath metaPath = metaPaths.get(k);
-                        boolean containsPartOf = metaPath.containsHasPartEdge();
+                        boolean containsPartOf = metaPath.containsPropertyTransferEdge();
                         boolean connected = false;
                         if (containsPartOf) {
                             connected = MetaPathFunctions.getConnectionState(rowHeader.get(i), colHeader.get(j), metaPath, false, false) != null;

@@ -95,8 +95,8 @@ public class RecursiveMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public boolean containsHasPartEdge() {
-        return realMetaPath.containsHasPartEdge();
+    public boolean containsPropertyTransferEdge() {
+        return realMetaPath.containsPropertyTransferEdge();
     }
 
 }

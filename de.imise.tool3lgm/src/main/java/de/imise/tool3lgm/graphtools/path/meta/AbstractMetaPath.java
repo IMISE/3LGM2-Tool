@@ -604,6 +604,6 @@ public abstract class AbstractMetaPath {
      *
      * @return
      */
-    public abstract boolean containsHasPartEdge();
+    public abstract boolean containsPropertyTransferEdge();
 
 }

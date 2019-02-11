@@ -313,9 +313,9 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     @Override
-    public boolean containsHasPartEdge() {
+    public boolean containsPropertyTransferEdge() {
         for (AbstractMetaPath metaPath : metaPaths) {
-            if (metaPath.containsHasPartEdge()) {
+            if (metaPath.containsPropertyTransferEdge()) {
                 return true;
             }
         }

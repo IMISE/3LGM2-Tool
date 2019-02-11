@@ -13,8 +13,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.PropertyTransferEdge;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -380,9 +380,9 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public boolean containsHasPartEdge() {
+    public boolean containsPropertyTransferEdge() {
         Class<? extends Edge> edgeClass = getEdgeClass();
-        return edgeClass != null && HasPartEdge.class.isAssignableFrom(getEdgeClass());
+        return edgeClass != null && PropertyTransferEdge.class.isAssignableFrom(getEdgeClass());
     }
 
     ////////////////////////
