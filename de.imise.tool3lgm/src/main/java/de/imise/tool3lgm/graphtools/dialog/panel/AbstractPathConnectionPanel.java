@@ -644,7 +644,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
 
     /**
      * Liefert eine Liste aller Elementcontainer, die zum Verbinden zur Verfügung stehen. In der Regel sind das alle Elemente der
-     * <code>searrchElementClass</code>. Besteht, der Pfad des Panels aber nur aus einer einzigen Kante und diese hat zusätlich einen
+     * <code>searchElementClass</code>. Besteht, der Pfad des Panels aber nur aus einer einzigen Kante und diese hat zusätzlich einen
      * ConditionPath (also einen Pfad, über den das startElement außerdem noch mit den Zielelementen verbunden sein muss), dann
      * werden nur diese Zielelemente als zum Verbinden verfügbare Elemente zurück gegeben, die auch über diesen ConditonPath verbunden sind.
      *
