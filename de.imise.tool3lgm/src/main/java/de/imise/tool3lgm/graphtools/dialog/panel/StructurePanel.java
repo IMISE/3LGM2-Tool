@@ -22,6 +22,7 @@ import javax.swing.tree.TreeSelectionModel;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -56,7 +57,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
      * @param hasPartEdgeClass
      */
     public StructurePanel(final ElementPropertyDialog dialog, final Class<? extends HasPartEdge> hasPartEdgeClass) {
-        super(dialog, true, dialog.getModelElement().getClass(), hasPartEdgeClass);
+        super(dialog, true, Edge.getEndClass(hasPartEdgeClass), hasPartEdgeClass);
         internalInit();
     }
 
@@ -182,7 +183,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
             rtree.saveExpansionAndSelection();
             rroot.removeAllChildren();
             rtree.reset();
-            List<ElementContainer> all = mainDoc.getElementContainer(me.getClass());
+            List<ElementContainer> all = mainDoc.getElementContainer(searchElementClass);
             all.remove(meContainer);
             for (ElementContainer ec : all) {
                 rtree.addObject(ec, rroot, childrenToExcludeFromRtree, false, false, true);
