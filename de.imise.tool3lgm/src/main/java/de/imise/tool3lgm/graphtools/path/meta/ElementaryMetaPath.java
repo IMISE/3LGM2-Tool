@@ -379,6 +379,12 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         return elementaryMetaPaths;
     }
 
+    @Override
+    public boolean containsHasPartEdge() {
+        Class<? extends Edge> edgeClass = getEdgeClass();
+        return edgeClass != null && HasPartEdge.class.isAssignableFrom(getEdgeClass());
+    }
+
     ////////////////////////
     // Factory-Funktionen //
     ////////////////////////
