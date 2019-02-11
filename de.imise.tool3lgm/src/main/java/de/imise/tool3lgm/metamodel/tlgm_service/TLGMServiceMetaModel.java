@@ -17,13 +17,13 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.AbstractApplicationSystem_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_SupportLink_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.CommunicationLink_Edge;
@@ -45,8 +45,6 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransactionLink_IheTrans
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransaction_Service_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Location_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ObjectType_HasPartEdge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.OrganisationSystem_ApplicationSystem_HasPartEdge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.OrganisationSystem_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.OrganisationalUnit_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.OrganisationalUnit_SupportLink_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.OrganisationalUnit_Use_Edge;
@@ -294,13 +292,11 @@ public class TLGMServiceMetaModel extends MetaModel {
                 StorageLink_Edge.class,
                 SupportLink_Edge.class,
                 //LWE
+                AbstractApplicationSystem_HasPartEdge.class,
                 ApplicationComponent_CommunicationInterface_Edge.class,
                 ApplicationComponent_CommunicationLink_Edge.class,
-                ApplicationSystem_HasPartEdge.class,
                 ApplicationSystem_SoftwareProduct_Edge.class,
                 CommunicationLink_Edge.class,
-                OrganisationSystem_ApplicationSystem_HasPartEdge.class,
-                OrganisationSystem_HasPartEdge.class,
                 Service_CommunicationLink_Edge.class,
                 Service_InvokingInterface_Edge.class,
                 Service_ProvidingInterface_Edge.class,

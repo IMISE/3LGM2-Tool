@@ -9,7 +9,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_SoftwareP
 /**
  * @author AXS (26.12.2017)
  */
-public final class ApplicationSystem extends ApplicationComponent {
+public final class ApplicationSystem extends AbstractApplicationSystem {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {
