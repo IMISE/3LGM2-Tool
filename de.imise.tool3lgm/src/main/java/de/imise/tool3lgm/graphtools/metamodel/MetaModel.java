@@ -355,7 +355,7 @@ public abstract class MetaModel {
 
     /**
      * @return Liefert eine Sammlung aller {@link SimpleMetaPath}, die man zwischen 2 Elementen anlegen kann, wobei die Zwischenelemente ebenfalls neu
-     *         angelegt werden.
+     *         angelegt werden. Diese Pfade werden im Kontextmenü bei Mehrfachselektion oder Einfachselektion angeboten.
      */
     protected abstract Collection<SimpleMetaPath> getCreateablePaths();
 

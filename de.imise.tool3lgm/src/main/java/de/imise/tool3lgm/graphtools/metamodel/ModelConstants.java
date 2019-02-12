@@ -1252,7 +1252,19 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert alle anlegbaren MetaPfade die zwischen den übergebenen Elementarten im Metamodell definiert sind.
+     * Liefert alle anlegbaren MetaPfade, bei denen für selektierte Elemente der übergebenen Elementart im Kontextmenü eine Liste aller existierenden
+     * Elemente angeboten werden soll, zu denen ein Pfad angelegt werden soll.
+     *
+     * @param elementClass
+     */
+    public static Collection<SimpleMetaPath> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass) {
+        return metaModel.getCreateableMetaPaths(elementClass);
+    }
+
+    /**
+     * Liefert alle anlegbaren MetaPfade die zwischen den übergebenen Elementarten im Metamodell definiert sind. Alle diese Pfade werden als
+     * verbindbare Pfade im Kontextmenü angeboten, wenn das zuletzt markierte Element und ein anderes markiertes Element zuwesiungskompatibel zu den
+     * übergebenen Elementklassen sind. Diese Pfade werden dann mit allen Zwischenelementen zwischen den beiden Elementen angelegt.
      *
      * @param elementClass1
      * @param elementClass2
