@@ -440,7 +440,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     @SafeVarargs
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final boolean showOnlyInExpertMode, final Class<? extends Edge>... edgeClasses) {
         if (!showOnlyInExpertMode || UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE)) {
-            addDescripSingleConnectionPanel(labelLastEdgeName, null, edgeClasses);
+            addDescripSingleConnectionPanel(labelLastEdgeName, edgeClasses);
         }
     }
 
