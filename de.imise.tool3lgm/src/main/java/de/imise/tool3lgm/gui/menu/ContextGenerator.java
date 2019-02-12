@@ -60,6 +60,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -67,6 +68,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
@@ -80,6 +82,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
@@ -538,14 +542,35 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             addMenuItem(menu, properties);
             menu.addSeparator();
 
-            //InstaciationEdges -> neue Instanz der verbundenen Klasse erzeugen anbieten
             Class<? extends ModelElement> meClass = me.getClass();
+
+            //Anlegbare Pfade zu anderen Elementen anbieten
             JLabel connectLabel = null;
+            for (SimpleMetaPath metaPath : ModelConstants.getCreateableMetaPaths(meClass)) {
+                if (connectLabel == null) {
+                    connectLabel = new JLabel(getResString("LABEL_CONNECT"));
+                    menu.add(connectLabel);
+                }
+                Class<? extends ModelElement> endClass = metaPath.getEndClass();
+                JMenu pathConnectableElements = new JMenu(metaPath.getName(false, true));
+                pathConnectableElements.setIcon(verbindung_anlegen);
+                List<ModelElement> endElements = doc.getModelItems(endClass, true, true);
+                pathConnectableElements.setEnabled(!endElements.isEmpty());
+                menu.add(pathConnectableElements);
+                for (ModelElement endMe : endElements) {
+                    Action createPathAction = createPathAction(metaPath, endMe);
+                    JMenuItem createPathItem = getItem(createPathAction);
+                    pathConnectableElements.add(createPathItem);
+                }
+            }
+
+            //InstaciationEdges -> "Neue Instanz" der verbundenen Klasse erzeugen anbieten
+            JLabel newInstanceLabel = null;
             for (Class<? extends Edge> edgeClass : getEdgeTypes(meClass)) {
                 if (InstanciationEdge.class.isAssignableFrom(edgeClass) && Edge.isStartClass(edgeClass, meClass)) {
-                    if (connectLabel == null) {
-                        connectLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
-                        menu.add(connectLabel);
+                    if (newInstanceLabel == null) {
+                        newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
+                        menu.add(newInstanceLabel);
                     }
                     String toolTip = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                     Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
@@ -554,7 +579,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     menu.add(item);
                 }
             }
-            if (connectLabel != null) {
+
+            if (newInstanceLabel != null || connectLabel != null) {
                 menu.addSeparator();
             }
 
@@ -2034,7 +2060,32 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private Action createPathAction(final SimpleMetaPath path2create) {
-        return new AbstractAction(path2create.getName(false, true), verbindung_anlegen) {
+        return createPathAction(path2create, doc.getSelectedElements(), path2create.getName(false, true), verbindung_anlegen);
+    }
+
+    /**
+     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem zuletzt selektierten Element und allen zum Endelement des Pfades passenden anderen
+     * selektierten Elementen angelegt wird.
+     *
+     * @param path2create
+     * @return
+     */
+    private Action createPathAction(final SimpleMetaPath path2create, final ModelElement endElement) {
+        return createPathAction(path2create, ImmutableList.of(endElement), endElement.getName(), null);
+    }
+
+    /**
+     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem zuletzt selektierten Element und allen zum Endelement des Pfades passenden anderen
+     * übergebenen Elementen angelegt wird.
+     *
+     * @param path2create Pfad der angelegt werden soll
+     * @param endElements Elemente, zu denen der Pfad vom zuletzt selektierten Element aus angelegt werden soll
+     * @param name Name der Action
+     * @param icon Icon der Sction
+     * @return
+     */
+    private Action createPathAction(final SimpleMetaPath path2create, final Collection<ModelElement> endElements, final String name, final Icon icon) {
+        return new AbstractAction(name, icon) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 Class<? extends ModelElement> startClass = path2create.getStartClass();
@@ -2043,8 +2094,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 if (!startClass.isAssignableFrom(lastSelected.getClass())) {
                     return;
                 }
-                List<ModelElement> selectedElements = doc.getSelectedElements();
-                for (ModelElement me : selectedElements) {
+                for (ModelElement me : endElements) {
                     if (lastSelected == me || !endClass.isAssignableFrom(me.getClass())) {
                         continue;
                     }
