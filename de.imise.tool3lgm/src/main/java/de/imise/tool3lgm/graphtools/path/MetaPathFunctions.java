@@ -468,12 +468,12 @@ public class MetaPathFunctions {
                 return createPath(startElement, endElement, simpleMetaPath.get(0), doc, pid);
             }
             //StartElement des ersten Pfades ist das übergebene StartElement
-            ModelElement actualStartElement = startElement;
+            ModelElement currentStartElement = startElement;
             //Liste aller tatsächlich angelegten Pfade
             returnPath = new ElementaryPath[pathLength];
             //alle MetaPfade durchlaufen und anlegen
             for (int i = 0; i < pathLength; i++) {
-                ModelElement actualEndElement = null; //Endelement, das außer für die letzte Edge immer neu angelet werden muss
+                ModelElement currentEndElement = null; //Endelement, das außer für die letzte Edge immer neu angelet werden muss
                 Edge edge = null; //neu angelegte Edge
                 ElementaryMetaPath elementaryMetaPath = simpleMetaPath.get(i);
                 //wenn das noch nicht der letzte MetaPfad in der Liste ist
@@ -483,22 +483,22 @@ public class MetaPathFunctions {
                     if (nc == null) {
                         break;
                     }
-                    actualEndElement = nc.getElement();
+                    currentEndElement = nc.getElement();
                     //beim letzten Metapfad ist das übergebene EndElement und kein neues das EndElement des Pfades
                 } else {
-                    actualEndElement = endElement;
+                    currentEndElement = endElement;
                 }
                 //je nach Richtung des MetaPfades in der Collection die Edge anlegen
                 if (elementaryMetaPath.getDirection() == Direction.FORWARD) {
-                    edge = gdcoll.link(elementaryMetaPath.getEdgeClass(), actualStartElement, actualEndElement, pid);
+                    edge = gdcoll.link(elementaryMetaPath.getEdgeClass(), currentStartElement, currentEndElement, pid);
                 } else {
-                    edge = gdcoll.link(elementaryMetaPath.getEdgeClass(), actualEndElement, actualStartElement, pid);
+                    edge = gdcoll.link(elementaryMetaPath.getEdgeClass(), currentEndElement, currentStartElement, pid);
                 }
                 if (edge == null) {
                     break;
                 }
-                returnPath[i] = new ElementaryPath(actualStartElement, actualEndElement, edge, elementaryMetaPath);
-                actualStartElement = actualEndElement;
+                returnPath[i] = new ElementaryPath(currentStartElement, currentEndElement, edge, elementaryMetaPath);
+                currentStartElement = currentEndElement;
             }
             //wenn nicht alle Verbindungen bis zur letzten angelegt wurden, dann alle angelegten zurückrollen
             if (returnPath[returnPath.length - 1] == null) {
