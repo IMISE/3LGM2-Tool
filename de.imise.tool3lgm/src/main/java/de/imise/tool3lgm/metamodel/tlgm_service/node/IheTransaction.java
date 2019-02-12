@@ -2,6 +2,8 @@ package de.imise.tool3lgm.metamodel.tlgm_service.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheTransaction_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInvokingInterface_IheTransaction_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheProvidingInterface_IheTransaction_Edge;
 
 /**
  * @author AXS (31.01.2018)
@@ -11,6 +13,8 @@ public class IheTransaction extends IheConcept {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
+        dialog.addDescripSingleConnectionPanel(true, true, IheInvokingInterface_IheTransaction_Edge.class);
+        dialog.addDescripSingleConnectionPanel(true, true, IheProvidingInterface_IheTransaction_Edge.class);
         dialog.addEdgePanel(IheIntegrationProfile_IheTransaction_Edge.class);
         return dialog;
     }
