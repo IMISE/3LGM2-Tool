@@ -566,17 +566,19 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             //InstaciationEdges -> "Neue Instanz" der verbundenen Klasse erzeugen anbieten
             JLabel newInstanceLabel = null;
-            for (Class<? extends Edge> edgeClass : getEdgeTypes(meClass)) {
-                if (InstanciationEdge.class.isAssignableFrom(edgeClass) && Edge.isStartClass(edgeClass, meClass)) {
-                    if (newInstanceLabel == null) {
-                        newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
-                        menu.add(newInstanceLabel);
+            if (!ModelConstants.isSlaveType(meClass)) {
+                for (Class<? extends Edge> edgeClass : getEdgeTypes(meClass)) {
+                    if (InstanciationEdge.class.isAssignableFrom(edgeClass) && Edge.isStartClass(edgeClass, meClass)) {
+                        if (newInstanceLabel == null) {
+                            newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
+                            menu.add(newInstanceLabel);
+                        }
+                        String toolTip = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+                        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+                        String label = ElementsNameBuilder.getDisplayableName(endClass);
+                        JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, edgeClass.getSimpleName(), verbindung_anlegen, true, toolTip);
+                        menu.add(item);
                     }
-                    String toolTip = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
-                    Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
-                    String label = ElementsNameBuilder.getDisplayableName(endClass);
-                    JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, edgeClass.getSimpleName(), verbindung_anlegen, true, toolTip);
-                    menu.add(item);
                 }
             }
 
