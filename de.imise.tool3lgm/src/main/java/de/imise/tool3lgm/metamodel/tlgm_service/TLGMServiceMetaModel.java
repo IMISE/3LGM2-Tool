@@ -81,6 +81,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ObjectType;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.OrganisationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.OrganisationalUnit;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.PhysicalDataProcessingComponent;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.Process;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ProvidingInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Service;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ServiceClass;
@@ -88,7 +89,6 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.SoftwareProduct;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.SystemOfConcepts;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.TransmissionMedium;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Use;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbVirtualPdvbVerbindung;
 
 @SuppressWarnings({
         "unchecked", "rawtypes"
@@ -185,7 +185,7 @@ public class TLGMServiceMetaModel extends MetaModel {
 
     /** Alle Node der FE als Array */
     private static final Class[] ALL_DOMAIN_LAYER_NODES = {
-            Function.class, ObjectType.class, OrganisationalUnit.class, Use.class, SystemOfConcepts.class, de.imise.tool3lgm.metamodel.tlgm_service.node.Process.class, // es gibt im lang-package ebenfalls eine Klasse Process
+            Function.class, ObjectType.class, OrganisationalUnit.class, Use.class, SystemOfConcepts.class, Process.class, // es gibt im lang-package ebenfalls eine Klasse Process
     };
 
     /** Alle Node zw. FE und LWE als Array */
@@ -260,8 +260,8 @@ public class TLGMServiceMetaModel extends MetaModel {
     @Override
     public Class[] getTreeLogicalLayerVisibleAbstractNodes() {
         return new Class[] {
-                //nur bei Anwendungsbausteinen und IIH-Konzepten soll die abstrakte Oberklasse im Baum angezeigt werden
-                //ApplicationComponent.class, IheConcept.class,
+                //nur bei Anwendungsbausteinen und IHE-Konzepten soll die abstrakte Oberklasse im Baum angezeigt werden
+                //ApplicationComponent.class, IheConcept.class, //im Moment deaktiviert
         };
     }
 
@@ -324,7 +324,6 @@ public class TLGMServiceMetaModel extends MetaModel {
                 Location_HasPartEdge.class,
                 PhysicalDataProcessingComponent_DeviceClass_Edge.class,
                 PhysicalDataProcessingComponent_HasPartEdge.class,
-                PdvbVirtualPdvbVerbindung.class,
                 PhysicalDataProcessingComponent_Location_Edge.class,
                 PhysicalDataProcessingComponentVirtualises_Edge.class,
                 TransmissionMedium_DataTransmissionLink_Edge.class,
