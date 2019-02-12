@@ -343,6 +343,22 @@ public class ReflectionUtils {
     }
 
     /**
+     * Liefert true, wenn die übergebene Klasse gleich sind oder eine die Oberklasse einer in der Collection enthaltenen Klassen ist.
+     *
+     * @param class1
+     * @param classes
+     * @return
+     */
+    public static final <T> boolean isAssignable(final Class<?> class1, final Collection<Class<? extends T>> classes) {
+        for (Class<?> class2 : classes) {
+            if (isAssignable(class1, class2)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Gibt wieder, ob die übergebene Klasse <code>abstract</code> ist.
      *
      * @param clazz
