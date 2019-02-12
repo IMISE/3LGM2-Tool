@@ -167,13 +167,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * COMMENTME
      */
-    private JMenuItem interactive;
-
-    private JMenuItem verify;
-
-    /**
-     * COMMENTME
-     */
     private JMenuItem nicht_trans_layer, halb_trans_layer, voll_trans_layer;
 
     /**
@@ -301,8 +294,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         join_selected = getItem(MODEL_ACTION_JOIN_SELECTED);
 
-        verify = getItem(MODEL_OPTION_GDOC_VERIFICATION_MODE);
-        interactive = getItem(MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
+        JMenuItem verify = getItem(MODEL_OPTION_GDOC_VERIFICATION_MODE);
+        JMenuItem interactive = getItem(MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
+        JMenuItem expertMode = UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE.createAction().createMenuItem();
 
         command_line = getItem(MODEL_ACTION_COMMAND_LINE);
         queue = getItem(MODEL_ACTION_PRINT_QUEUE);
@@ -311,6 +305,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         internals = new DynamicMenu(getResString("intern"));
         internals.add(verify);
         internals.add(interactive);
+        internals.add(expertMode);
         internals.addSeparator();
         internals.add(command_line);
         internals.addSeparator();
