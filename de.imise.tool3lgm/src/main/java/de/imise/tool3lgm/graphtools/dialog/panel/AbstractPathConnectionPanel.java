@@ -31,6 +31,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -338,6 +339,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      */
     protected boolean isLastPathElementNeededForExistence() {
         Class<? extends Edge> edgeClass = edgeClasses[lastEdgeIndex];
+        //Verbindungen, die durch InstanciationEgdes bestehen, kann man nicht einfach lösen/ändern und gelten als existenznotwendig
+        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
+            return true;
+        }
         Direction direction = directions[lastEdgeIndex];
         int minCardinality = direction == BACKWARD ? getMinBackwardCardinality(edgeClass) : getMinForwardCardinality(edgeClass);
         return minCardinality > 0;
