@@ -44,6 +44,8 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * Eigenschaftsdialog für Modellelemnte, also Node und Kanten.<br>
@@ -433,6 +435,13 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     @SafeVarargs
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addDescripSingleConnectionPanel(labelLastEdgeName, null, edgeClasses);
+    }
+
+    @SafeVarargs
+    public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final boolean showOnlyInExpertMode, final Class<? extends Edge>... edgeClasses) {
+        if (!showOnlyInExpertMode || UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE)) {
+            addDescripSingleConnectionPanel(labelLastEdgeName, null, edgeClasses);
+        }
     }
 
     @SafeVarargs
