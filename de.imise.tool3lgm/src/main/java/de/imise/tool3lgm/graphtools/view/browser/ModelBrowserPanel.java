@@ -204,4 +204,17 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
         }
     }
 
+    /**
+     * Ruft update für alle SubModelBrowser auf, die alle Bäume komplett neu aufbauen
+     */
+    public void updateModelBrowsers() {
+        for (int i = 0; i < getComponentCount(); i++) {
+            Component comp = getComponent(i);
+            if (comp instanceof ModelBrowser) {
+                ModelBrowser browser = (ModelBrowser) comp;
+                browser.updateAllSubModelBrowsers();
+            }
+        }
+    }
+
 }

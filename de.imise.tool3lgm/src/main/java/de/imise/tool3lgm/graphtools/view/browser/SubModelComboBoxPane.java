@@ -99,12 +99,13 @@ public class SubModelComboBoxPane extends SubModelsBrowser implements ItemListen
     @Override
     public void update() {
         GraphDocument mySelDoc = getSelectedDoc();
-        //das muss extra abgefragt werden und darf nicht einfach mit der unteren if-Abfrage zusammen erledigt werden,
+        //Das muss extra abgefragt werden und darf nicht einfach mit der unteren if-Abfrage zusammen erledigt werden,
         //beim Starten des Baukastens der Baum sonst gar kein Doc hat, solange man nicht wenigstens 1 Mal das Teilmodell
-        //wechselt
-        if (tree.getGraphDocument() != mySelDoc) {
-            tree.setGraphDocument(mySelDoc);
-        }
+        //wechselt.
+        //Außerdem muss dieser Aufruf auch stattfinden, wenn das selDoc dasselbe ist, das der tree schon hat, damit der
+        //Tree sich in jedem Fall neu aufbaut, falls sich die Option UserProperties.OPTION_ENABLE_EXPERT_MODE geändert
+        //hat und der Baum einige Klassenknoten aus- oder einblenden soll.
+        tree.setGraphDocument(mySelDoc);
         if (mySelDoc != Static.getSelectedDoc()) {
             Static.setSelectedDoc(mySelDoc, true);
         }

@@ -1416,7 +1416,13 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             setShowStandardToolbar(UserProperties.is(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR));
         } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_MODEL_BROWSER_SHOW, evt)) {
             showModelBrowser(UserProperties.is(BooleanProperty.OPTION_MODEL_BROWSER_SHOW));
+        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_ENABLE_EXPERT_MODE, evt)) {
+            setExpertMode(UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE));
         }
+    }
+
+    private void setExpertMode(final boolean enabled) {
+        modelBrowserPanel.updateModelBrowsers();
     }
 
 }

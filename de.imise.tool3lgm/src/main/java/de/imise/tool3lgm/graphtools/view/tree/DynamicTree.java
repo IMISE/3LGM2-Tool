@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JTree;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
@@ -248,10 +249,29 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         transactionListener.setActive(active);
     }
 
+    private final Map<DefaultMutableTreeNode, DefaultMutableTreeNode> onlyExperModeVisibleNodesToParent = new HashMap<>();
+
     /**
      * Der allgemeine Baum wird erzeugt oder zurueckgesetzt
      */
     private void createTree() {
+        //alle Knoten entfernen/einblenden, die nicht/nur im ExpertMode zu sehen sein sollen
+        for (Class<? extends ModelElement> onlyExperModeVisibleNodeClass : ModelConstants.getOnlyExpertModeVisibleNodes()) {
+            LGMTreeNode node = elementClassToParentNode.get(onlyExperModeVisibleNodeClass);
+            if (UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE)) {
+                DefaultMutableTreeNode parent = onlyExperModeVisibleNodesToParent.remove(node);
+                if (parent != null) {
+                    parent.add(node);
+                }
+            } else {
+                DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
+                if (parent != null) {
+                    onlyExperModeVisibleNodesToParent.put(node, parent);
+                    parent.remove(node);
+                }
+            }
+        }
+
         for (LGMTreeNode node : nodesToClear) {
             node.removeAllChildren();
         }
