@@ -46,6 +46,7 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
@@ -158,6 +159,17 @@ public final class ModelConstants {
     public static final Class<? extends ModelElement>[] ALL_NODES = new Class[ALL_NODES_SET.size()];
     static {
         System.arraycopy(ALL_NODES_SET.toArray(), 0, ALL_NODES, 0, ALL_NODES.length);
+    }
+
+    /**
+     * Liefert alle Elementklassen, die nur im Baum angezeigt werden sollen, wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
+     * auf <code>true</code> gestellt ist.
+     *
+     * @return alle Elementklassen, die nur im ExpertMode im Baum angezeigt werden
+     * @see MetaModel#getOnlyExpertModeVisibleNodes()
+     */
+    public static final Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
+        return metaModel.getOnlyExpertModeVisibleNodes();
     }
 
     ////////////

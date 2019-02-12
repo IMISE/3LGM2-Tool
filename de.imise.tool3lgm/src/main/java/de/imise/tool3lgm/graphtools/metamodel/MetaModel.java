@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -246,6 +247,16 @@ public abstract class MetaModel {
             allNodes = CollectionUtils.joinArrays(getAllDomainLayerNodes(), getAllInterDomainLogicalLayerNodes(), getAllLogicalLayerNodes(), getAllInterLogicalPhysicalLayerNodes(), getAllPhysicalLayerNodes());
         }
         return allNodes;
+    }
+
+    /**
+     * Liefert alle Elementklassen, die nur im Baum angezeigt werden sollen, wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
+     * auf <code>true</code> gestellt ist.
+     *
+     * @return alle Elementklassen, die nur im ExpertMode im Baum angezeigt werden
+     */
+    public Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
+        return ImmutableSet.of();
     }
 
     ////////////

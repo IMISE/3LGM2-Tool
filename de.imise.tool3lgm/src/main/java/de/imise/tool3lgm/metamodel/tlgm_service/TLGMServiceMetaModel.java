@@ -265,6 +265,11 @@ public class TLGMServiceMetaModel extends MetaModel {
         };
     }
 
+    @Override
+    public Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
+        return ImmutableSet.of(IheInvokingInterface.class, IheProvidingInterface.class);
+    }
+
     ////////////
     // Kanten //
     ////////////
