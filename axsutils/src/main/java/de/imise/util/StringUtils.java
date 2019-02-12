@@ -1,6 +1,7 @@
 package de.imise.util;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -325,5 +326,26 @@ public class StringUtils {
             }
         }
         return true;
+    }
+
+    /**
+     * Hängt an den übergebenen StringBuilder kommasepariert die Strings der toString()-Methode der in der Collection enthaltenen Elemente
+     *
+     * @param sb StringBuilder, an den angehängt werden soll
+     * @param collection Objecte, deren toString() kommasepariert angehänt werden soll
+     * @return den übergebenen {@link StringBuilder}
+     */
+    public static StringBuilder appendCollectionString(final StringBuilder sb, final Collection<?> collection) {
+        boolean first = true;
+        for (Object o : collection) {
+            if (!first) {
+                sb.append(", ");
+            } else {
+                first = false;
+            }
+            sb.append(o);
+        }
+        return sb;
+
     }
 }
