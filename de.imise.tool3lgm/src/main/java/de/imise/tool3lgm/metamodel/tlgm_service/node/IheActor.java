@@ -16,7 +16,8 @@ public class IheActor extends IheConcept {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripSingleConnectionPanel(false, true, false, IheIntegrationProfile_IheActor_Edge.class);
         dialog.addEdgePanel(true, IheActor_IheActorInstance_Edge.class);
-        dialog.addTabbedPanel(ElementsNameBuilder.getDisplayablePluralName(IheInterface.class));
+        //dieses tabbedPane wird nur im ExpertMode angezeigt! Und damit auch die darin enthaltenen Interface-Panels
+        dialog.addTabbedPanel(ElementsNameBuilder.getDisplayablePluralName(IheInterface.class), true);
         dialog.addTabbedPanelPathConnectionPanel(IheInvokingInterface.class, IheActor_IheInterface_Edge.class);
         dialog.addTabbedPanelPathConnectionPanel(IheProvidingInterface.class, IheActor_IheInterface_Edge.class);
         return dialog;

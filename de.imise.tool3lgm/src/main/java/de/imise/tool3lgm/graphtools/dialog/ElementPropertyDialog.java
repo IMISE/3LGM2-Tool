@@ -44,8 +44,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * Eigenschaftsdialog für Modellelemnte, also Node und Kanten.<br>
@@ -403,9 +401,15 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     private TabbedPanel lastCreatedTabbedPanel;
 
     public final void addTabbedPanel(final String nameResKey) {
+        addTabbedPanel(nameResKey, false);
+    }
+
+    public final void addTabbedPanel(final String nameResKey, final boolean showOnlyInExpertMode) {
         lastCreatedTabbedPanel = new TabbedPanel(this);
         lastCreatedTabbedPanel.setName(Tool3lgmConstants.getResStringWithoutError(nameResKey));
-        addTab(lastCreatedTabbedPanel);
+        if (!showOnlyInExpertMode || Static.isExpertMode()) {
+            addTab(lastCreatedTabbedPanel);
+        }
     }
 
     @SafeVarargs
@@ -444,7 +448,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     @SafeVarargs
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final boolean editableOnlyInExpertMode, final boolean showOnlyInExpertMode, final Class<? extends Edge>... edgeClasses) {
-        if (UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE)) {
+        if (Static.isExpertMode()) {
             addDescripSingleConnectionPanel(labelLastEdgeName, edgeClasses);
         } else if (!showOnlyInExpertMode) {
             if (editableOnlyInExpertMode) {
@@ -528,7 +532,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     private void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final boolean editableOnlyInExpertMode, final boolean add2SubTab) {
-        boolean editable = !editableOnlyInExpertMode || UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
+        boolean editable = !editableOnlyInExpertMode || Static.isExpertMode();
         ElementDialogPanel panel2Add = null;
         if (ModelConstants.isComposition(edgeClass)) {
             panel2Add = new MutipleCompositionPanel(this, editable, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
