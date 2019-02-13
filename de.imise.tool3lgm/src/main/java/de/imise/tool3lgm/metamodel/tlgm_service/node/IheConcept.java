@@ -12,7 +12,7 @@ public abstract class IheConcept extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(IheConcept_IheDomain_Edge.class);
+        dialog.addDescripSingleConnectionPanel(false, true, false, IheConcept_IheDomain_Edge.class);
         return dialog;
     }
 }

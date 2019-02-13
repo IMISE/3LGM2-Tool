@@ -14,7 +14,7 @@ public class IheActor extends IheConcept {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(IheIntegrationProfile_IheActor_Edge.class);
+        dialog.addDescripSingleConnectionPanel(false, true, false, IheIntegrationProfile_IheActor_Edge.class);
         dialog.addPathConnectionInfoPanel(IheActor_IheActorInstance_Edge.class);
         dialog.addTabbedPanel(ElementsNameBuilder.getDisplayablePluralName(IheInterface.class));
         dialog.addTabbedPanelPathConnectionPanel(IheInvokingInterface.class, IheActor_IheInterface_Edge.class);
