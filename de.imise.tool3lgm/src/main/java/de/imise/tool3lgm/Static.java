@@ -25,6 +25,8 @@ import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.dialog.OutputDialog;
 import de.imise.util.swing.dialog.ProgressDialog;
 
@@ -158,6 +160,11 @@ public class Static {
     public static boolean isActiveFrameMatrixFrame() {
         AbstractInternalFrame f = getActiveFrame();
         return f != null && f instanceof MatrixViewInternalFrame && f.isVisible();
+    }
+
+    /** Gibt zurück, ob der ExpertMode aktiv ist */
+    public static boolean isExpertMode() {
+        return UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
     }
 
     private static boolean paintSimpleGraph = false;

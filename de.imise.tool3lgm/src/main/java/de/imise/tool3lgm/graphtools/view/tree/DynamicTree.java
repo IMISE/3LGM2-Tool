@@ -25,6 +25,7 @@ import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.KeyStrokes;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -258,7 +259,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         //alle Knoten entfernen/einblenden, die nicht/nur im ExpertMode zu sehen sein sollen
         for (Class<? extends ModelElement> onlyExperModeVisibleNodeClass : ModelConstants.getOnlyExpertModeVisibleNodes()) {
             LGMTreeNode node = elementClassToParentNode.get(onlyExperModeVisibleNodeClass);
-            if (UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE)) {
+            if (Static.isExpertMode()) {
                 DefaultMutableTreeNode parent = onlyExperModeVisibleNodesToParent.remove(node);
                 if (parent != null) {
                     parent.add(node);
