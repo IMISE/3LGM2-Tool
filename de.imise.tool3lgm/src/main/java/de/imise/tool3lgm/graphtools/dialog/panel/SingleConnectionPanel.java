@@ -71,6 +71,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      * @param dialog
      * @param edgeClasses
      */
+    @SafeVarargs
     public SingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
         this(dialog, false, false, edgeClasses);
     }
@@ -81,6 +82,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      *            letzten Edge aus den edgeClasses geschrieben.
      * @param edgeClasses
      */
+    @SafeVarargs
     public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean disableEdit, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelLastEdgeName, edgeClasses);
         setLayout(new BorderLayout());

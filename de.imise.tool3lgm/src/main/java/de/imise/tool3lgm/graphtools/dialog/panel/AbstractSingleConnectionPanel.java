@@ -21,10 +21,12 @@ public abstract class AbstractSingleConnectionPanel extends AbstractPathConnecti
 
     private final MouseListener mouseListener = createMouseListener();
 
+    @SafeVarargs
     public AbstractSingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
         this(dialog, false, edgeClasses);
     }
 
+    @SafeVarargs
     public AbstractSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelLastEdgeName, edgeClasses);
         addMouseActions(westLabel);

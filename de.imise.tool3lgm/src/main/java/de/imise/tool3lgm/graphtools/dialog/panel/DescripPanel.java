@@ -100,27 +100,32 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         }
     }
 
-    public void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addDescriptedSingleConnectionPanel(false, edgeClasses);
     }
 
-    public void addDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addSubPanel(new DescriptedSingleConnectionPanel(dialog, labelLastEdgeName, edgeClasses));
     }
 
-    public void addSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addSingleConnectionPanel(false, false, edgeClasses);
     }
 
-    public void addSingleConnectionInfoPanel(final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addSingleConnectionInfoPanel(final Class<? extends Edge>... edgeClasses) {
         addSingleConnectionPanel(false, true, edgeClasses);
     }
 
-    public void addSingleConnectionPanel(final boolean labelLastEdgeName, final boolean disableEdit, final Class<? extends Edge>... edgeClasses) {
+    @SafeVarargs
+    public final void addSingleConnectionPanel(final boolean labelLastEdgeName, final boolean disableEdit, final Class<? extends Edge>... edgeClasses) {
         addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, disableEdit, edgeClasses));
     }
 
-    private void addSubPanel(final AbstractPathConnectionPanel panel) {
+    private final void addSubPanel(final AbstractPathConnectionPanel panel) {
         panels.add(panel);
         if (panel instanceof DescriptedSingleConnectionPanel) {
             addSeparator();
@@ -136,12 +141,12 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         }
     }
 
-    public void addSeparator() {
+    public final void addSeparator() {
         add(this, new JSeparator(), gbc, 0, gridy++, 2, 1);
     }
 
     @Override
-    public void commit() {
+    public final void commit() {
         ModelElement me = getModelElement();
         String newName = nameTextPane.getText();
         // nur wenn der Name explizit geändert wurde, dann auch den Namen in einer Transaktion ändern
