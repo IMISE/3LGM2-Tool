@@ -416,7 +416,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     @SafeVarargs
     public final void addTabbedPanelPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         if (edgeClasses.length == 1) {
-            addEdgePanel(searchElementClass, edgeClasses[0], true);
+            addEdgePanel(searchElementClass, edgeClasses[0], false, true);
         } else {
             lastCreatedTabbedPanel.addTab(new PathConnectionPanel(this, true, searchElementClass, edgeClasses));
         }
@@ -519,21 +519,26 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         addEdgePanel(null, edgeClass);
     }
 
-    public void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        addEdgePanel(searchElementClass, edgeClass, false);
+    public void addEdgePanel(final boolean editableOnlyInExpertMode, final Class<? extends Edge> edgeClass) {
+        addEdgePanel(null, edgeClass, editableOnlyInExpertMode, false);
     }
 
-    private void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final boolean add2SubTab) {
+    public void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        addEdgePanel(searchElementClass, edgeClass, false, false);
+    }
+
+    private void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final boolean editableOnlyInExpertMode, final boolean add2SubTab) {
+        boolean editable = !editableOnlyInExpertMode || UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
         ElementDialogPanel panel2Add = null;
         if (ModelConstants.isComposition(edgeClass)) {
-            panel2Add = new MutipleCompositionPanel(this, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
+            panel2Add = new MutipleCompositionPanel(this, editable, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
         } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-            panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
+            panel2Add = new DoubleMeaningEdgePanel(this, editable, searchElementClass, edgeClass);
             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
         } else if (Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && ModelConstants.isDirectedEdge(edgeClass)) {
-            panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
+            panel2Add = new DoubleMeaningEdgePanel(this, editable, searchElementClass, edgeClass);
         } else {
-            panel2Add = new PathConnectionPanel(this, true, searchElementClass, edgeClass);
+            panel2Add = new PathConnectionPanel(this, editable, searchElementClass, edgeClass);
         }
         if (add2SubTab) {
             lastCreatedTabbedPanel.addTab(panel2Add);

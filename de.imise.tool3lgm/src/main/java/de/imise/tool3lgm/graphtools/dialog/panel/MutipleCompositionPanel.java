@@ -51,15 +51,15 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
      */
     private final LGMTreeNode root;
 
-    private final JPanel buttonpanel;
+    private JPanel buttonpanel;
 
     /**
      * @param dialog
+     * @param editable
      * @param searchElementClass
      * @param edgeClass
      */
-    @SuppressWarnings("unchecked")
-    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
+    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final boolean editable, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
         super(dialog, searchElementClass, edgeClass);
 
         GridBagLayout gbl = new GridBagLayout();
@@ -82,12 +82,14 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
 
         JScrollPane sp = new JScrollPane(tree);
 
-        constraints.anchor = GridBagConstraints.CENTER;
-        buttonpanel = new JPanel();
-        buttonpanel.setLayout(new GridLayout(1, 2));
-        buttonpanel.add(removeButton);
-        buttonpanel.add(addButton);
-        add(this, buttonpanel, constraints, 0, 2, 3, 1);
+        if (editable) {
+            constraints.anchor = GridBagConstraints.CENTER;
+            buttonpanel = new JPanel();
+            buttonpanel.setLayout(new GridLayout(1, 2));
+            buttonpanel.add(removeButton);
+            buttonpanel.add(addButton);
+            add(this, buttonpanel, constraints, 0, 2, 3, 1);
+        }
 
         // add(this, viewButton, constraints, 2, 3, 1, 1);
         constraints.ipadx = 0;

@@ -47,19 +47,23 @@ import de.imise.util.StringUtils;
 public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
     private final LGMTree lotree, lutree;
-    private final LGMTree rotree, rutree;
-    private final DefaultTreeModel lomodel, lumodel, romodel, rumodel;
-    private final LGMTreeNode loroot, luroot, roroot, ruroot;
-    private final JPanel buttonpanel1, buttonpanel2;
-    private final JLabel rolabel, rulabel;
-    private final JScrollPane sp3, sp4;
+    private LGMTree rotree, rutree;
+    private final DefaultTreeModel lomodel, lumodel;
+    private DefaultTreeModel romodel;
+    private DefaultTreeModel rumodel;
+    private final LGMTreeNode loroot, luroot;
+    private LGMTreeNode roroot;
+    private LGMTreeNode ruroot;
+    private JPanel buttonpanel1, buttonpanel2;
+    private JLabel rolabel, rulabel;
+    private JScrollPane sp3, sp4;
 
-    private final LGMAction loaddAction;
-    private final LGMAction loremoveAction;
-    private final LGMAction luaddAction;
-    private final LGMAction luremoveAction;
+    private LGMAction loaddAction;
+    private LGMAction loremoveAction;
+    private LGMAction luaddAction;
+    private LGMAction luremoveAction;
 
-    public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+    public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final boolean editable, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         super(dialog, searchElementClass, edgeClass);
 
         GridBagLayout gbl = new GridBagLayout();
@@ -94,13 +98,16 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
         JScrollPane sp2 = new JScrollPane(lutree);
 
-        constraints.anchor = GridBagConstraints.EAST;
-        //das hier braucht man wahrscheinlich nur unter Windows. Auf dem Mac sieht das komisch aus
-        //            constraints.ipadx = -30;
-        //            constraints.ipady = -10;
-        add(this, viewButton, constraints, 0, 6, 1, 1);
-        constraints.ipadx = 0;
-        constraints.ipady = 0;
+        if (editable) {
+            constraints.anchor = GridBagConstraints.EAST;
+            //das hier braucht man wahrscheinlich nur unter Windows. Auf dem Mac sieht das komisch aus
+            //            constraints.ipadx = -30;
+            //            constraints.ipady = -10;
+            add(this, viewButton, constraints, 0, 6, 1, 1);
+            constraints.ipadx = 0;
+            constraints.ipady = 0;
+        }
+
         constraints.anchor = GridBagConstraints.WEST;
         add(this, lolabel, constraints, 0, 0, 1, 1);
         add(this, lulabel, constraints, 0, 2, 1, 1);
@@ -111,65 +118,67 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         add(this, sp1, constraints, 0, 1, 1, 1);
         add(this, sp2, constraints, 0, 3, 1, 1);
 
-        roroot = new LGMTreeNode("roroot", false);
-        romodel = new DefaultTreeModel(roroot);
-        rotree = new LGMTree(romodel, mainDoc);
-        rotree.setRootVisible(false);
-        rotree.setShowsRootHandles(showRootHandles);
-        rotree.setCellRenderer(treeRenderer);
-        rotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        sp3 = new JScrollPane(rotree);
+        if (editable) {
+            roroot = new LGMTreeNode("roroot", false);
+            romodel = new DefaultTreeModel(roroot);
+            rotree = new LGMTree(romodel, mainDoc);
+            rotree.setRootVisible(false);
+            rotree.setShowsRootHandles(showRootHandles);
+            rotree.setCellRenderer(treeRenderer);
+            rotree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+            sp3 = new JScrollPane(rotree);
 
-        String unconnected = getResString("frei");
-        rolabel = new JLabel(unconnected);
-        rulabel = new JLabel(unconnected);
-        ruroot = new LGMTreeNode("ruroot", false);
-        rumodel = new DefaultTreeModel(ruroot);
-        rutree = new LGMTree(rumodel, mainDoc);
-        rutree.setRootVisible(false);
-        rutree.setShowsRootHandles(showRootHandles);
-        rutree.setCellRenderer(treeRenderer);
-        rutree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        sp4 = new JScrollPane(rutree);
+            String unconnected = getResString("frei");
+            rolabel = new JLabel(unconnected);
+            rulabel = new JLabel(unconnected);
+            ruroot = new LGMTreeNode("ruroot", false);
+            rumodel = new DefaultTreeModel(ruroot);
+            rutree = new LGMTree(rumodel, mainDoc);
+            rutree.setRootVisible(false);
+            rutree.setShowsRootHandles(showRootHandles);
+            rutree.setCellRenderer(treeRenderer);
+            rutree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+            sp4 = new JScrollPane(rutree);
 
-        /*
-         * Start: Buttons & Actions erstellen und registrieren ...
-         */
-        JButton addUeberButton = new JButton();
-        JButton removeUeberButton = new JButton();
-        JButton addUnterButton = new JButton();
-        JButton removeUnterButton = new JButton();
+            /*
+             * Start: Buttons & Actions erstellen und registrieren ...
+             */
+            JButton addUeberButton = new JButton();
+            JButton removeUeberButton = new JButton();
+            JButton addUnterButton = new JButton();
+            JButton removeUnterButton = new JButton();
 
-        loaddAction = getConnectAction(rotree, lotree, false);
-        loremoveAction = getDisconnectAction(lotree, rotree, false);
-        luaddAction = getConnectAction(rutree, lutree, true);
-        luremoveAction = getDisconnectAction(lutree, rutree, true);
+            loaddAction = getConnectAction(rotree, lotree, false);
+            loremoveAction = getDisconnectAction(lotree, rotree, false);
+            luaddAction = getConnectAction(rutree, lutree, true);
+            luremoveAction = getDisconnectAction(lutree, rutree, true);
 
-        addUeberButton.setAction(loaddAction);
-        removeUeberButton.setAction(loremoveAction);
-        addUnterButton.setAction(luaddAction);
-        removeUnterButton.setAction(luremoveAction);
+            addUeberButton.setAction(loaddAction);
+            removeUeberButton.setAction(loremoveAction);
+            addUnterButton.setAction(luaddAction);
+            removeUnterButton.setAction(luremoveAction);
 
-        /*
-         * ... end: Buttons & Actions erstellen und registrieren
-         */
+            /*
+             * ... end: Buttons & Actions erstellen und registrieren
+             */
 
-        buttonpanel1 = new JPanel();
-        buttonpanel1.setSize(30, 250);
-        buttonpanel1.setLayout(new GridLayout(3, 1));
+            buttonpanel1 = new JPanel();
+            buttonpanel1.setSize(30, 250);
+            buttonpanel1.setLayout(new GridLayout(3, 1));
 
-        buttonpanel2 = new JPanel();
-        buttonpanel2.setSize(30, 250);
-        buttonpanel2.setLayout(new GridLayout(3, 1));
+            buttonpanel2 = new JPanel();
+            buttonpanel2.setSize(30, 250);
+            buttonpanel2.setLayout(new GridLayout(3, 1));
 
-        buttonpanel1.add(addUeberButton);
-        buttonpanel1.add(removeUeberButton);
-        buttonpanel2.add(addUnterButton);
-        buttonpanel2.add(removeUnterButton);
+            buttonpanel1.add(addUeberButton);
+            buttonpanel1.add(removeUeberButton);
+            buttonpanel2.add(addUnterButton);
+            buttonpanel2.add(removeUnterButton);
 
-        initTreeListenerAndDragNDrop();
+            initTreeListenerAndDragNDrop();
 
-        showFullDialog(true);
+            showFullDialog(true);
+        }
     }
 
     protected String getEdgeDisplayName(final ConnectionState connectionState) {
