@@ -439,14 +439,25 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     @SafeVarargs
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final boolean showOnlyInExpertMode, final Class<? extends Edge>... edgeClasses) {
-        if (!showOnlyInExpertMode || UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE)) {
+        addDescripSingleConnectionPanel(labelLastEdgeName, false, showOnlyInExpertMode, edgeClasses);
+    }
+
+    @SafeVarargs
+    public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final boolean editableOnlyInExpertMode, final boolean showOnlyInExpertMode, final Class<? extends Edge>... edgeClasses) {
+        if (UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE)) {
             addDescripSingleConnectionPanel(labelLastEdgeName, edgeClasses);
+        } else if (!showOnlyInExpertMode) {
+            if (editableOnlyInExpertMode) {
+                descripPanel.addSingleConnectionInfoPanel(edgeClasses);
+            } else {
+                addDescripSingleConnectionPanel(labelLastEdgeName, edgeClasses);
+            }
         }
     }
 
     @SafeVarargs
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        descripPanel.addSingleConnectionPanel(labelLastEdgeName, edgeClasses);
+        descripPanel.addSingleConnectionPanel(labelLastEdgeName, false, edgeClasses);
     }
 
     @SafeVarargs

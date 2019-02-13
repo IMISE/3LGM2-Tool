@@ -109,11 +109,15 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
     }
 
     public void addSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
-        addSingleConnectionPanel(false, edgeClasses);
+        addSingleConnectionPanel(false, false, edgeClasses);
     }
 
-    public void addSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, edgeClasses));
+    public void addSingleConnectionInfoPanel(final Class<? extends Edge>... edgeClasses) {
+        addSingleConnectionPanel(false, true, edgeClasses);
+    }
+
+    public void addSingleConnectionPanel(final boolean labelLastEdgeName, final boolean disableEdit, final Class<? extends Edge>... edgeClasses) {
+        addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, disableEdit, edgeClasses));
     }
 
     private void addSubPanel(final AbstractPathConnectionPanel panel) {

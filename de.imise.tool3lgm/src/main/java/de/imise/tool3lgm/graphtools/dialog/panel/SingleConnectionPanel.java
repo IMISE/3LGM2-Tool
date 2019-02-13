@@ -72,7 +72,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      * @param edgeClasses
      */
     public SingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, false, edgeClasses);
+        this(dialog, false, false, edgeClasses);
     }
 
     /**
@@ -81,11 +81,11 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      *            letzten Edge aus den edgeClasses geschrieben.
      * @param edgeClasses
      */
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean disableEdit, final Class<? extends Edge>... edgeClasses) {
         super(dialog, labelLastEdgeName, edgeClasses);
         setLayout(new BorderLayout());
 
-        if (isLastPathElementNeededForExistence()) {
+        if (disableEdit || isLastPathElementNeededForExistence()) {
             connectedElementsBox = null;
             itemListener = null;
             connectedElementName = new LimitedSizeScrollTextPane(4);

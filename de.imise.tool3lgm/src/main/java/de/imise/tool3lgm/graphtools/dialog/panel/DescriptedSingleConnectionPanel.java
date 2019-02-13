@@ -44,7 +44,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      * @param edgeClasses
      */
     public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelLastEdgeName, edgeClasses);
+        super(dialog, labelLastEdgeName, false, edgeClasses);
     }
 
     @Override
