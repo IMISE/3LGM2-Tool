@@ -12,7 +12,7 @@ public class IheDomain extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addEdgePanel(IheConcept_IheDomain_Edge.class);
+        dialog.addEdgePanel(true, IheConcept_IheDomain_Edge.class);
         return dialog;
     }
 

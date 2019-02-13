@@ -12,8 +12,9 @@ public class IheProvidingInterface extends IheInterface {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(IheProvidingInterface_IheTransaction_Edge.class);
-        dialog.addEdgePanel(IheProvidingInterface_ProvidingInterface_Edge.class);
+        //showOnlyInExpertMode ist auf false, aber diese Knoten sollten sowieso nur im Expert Mode zu sehen sein
+        dialog.addDescripSingleConnectionPanel(true, true, false, IheProvidingInterface_IheTransaction_Edge.class);
+        dialog.addEdgePanel(true, IheProvidingInterface_ProvidingInterface_Edge.class);
         return dialog;
     }
 }

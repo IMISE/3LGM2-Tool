@@ -12,8 +12,8 @@ public class IheIntegrationProfile extends IheConcept {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addEdgePanel(IheIntegrationProfile_IheTransaction_Edge.class);
-        dialog.addEdgePanel(IheIntegrationProfile_IheActor_Edge.class);
+        dialog.addEdgePanel(true, IheIntegrationProfile_IheTransaction_Edge.class);
+        dialog.addEdgePanel(true, IheIntegrationProfile_IheActor_Edge.class);
         return dialog;
     }
 

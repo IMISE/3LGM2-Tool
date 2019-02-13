@@ -15,7 +15,7 @@ public class IheTransaction extends IheConcept {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripSingleConnectionPanel(true, true, IheInvokingInterface_IheTransaction_Edge.class);
         dialog.addDescripSingleConnectionPanel(true, true, IheProvidingInterface_IheTransaction_Edge.class);
-        dialog.addEdgePanel(IheIntegrationProfile_IheTransaction_Edge.class);
+        dialog.addEdgePanel(true, IheIntegrationProfile_IheTransaction_Edge.class);
         return dialog;
     }
 
