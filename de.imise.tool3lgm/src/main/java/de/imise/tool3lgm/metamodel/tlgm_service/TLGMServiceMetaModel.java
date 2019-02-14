@@ -272,6 +272,11 @@ public class TLGMServiceMetaModel extends MetaModel {
         return ImmutableSet.of(IheInvokingInterface.class, IheProvidingInterface.class);
     }
 
+    @Override
+    public Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes() {
+        return ImmutableSet.of(IheActor.class, IheConcept.class, IheDomain.class, IheIntegrationProfile.class, IheInterface.class, IheInvokingInterface.class, IheProvidingInterface.class, IheTransaction.class);
+    }
+
     ////////////
     // Kanten //
     ////////////

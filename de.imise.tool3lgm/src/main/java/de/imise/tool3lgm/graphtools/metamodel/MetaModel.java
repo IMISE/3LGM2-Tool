@@ -259,6 +259,16 @@ public abstract class MetaModel {
         return ImmutableSet.of();
     }
 
+    /**
+     * Liefert alle Elementklassen, die nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true) angelegt und verändert werden
+     * können.
+     *
+     * @return alle Elementklassen, die nur im ExpertMode geändert werden können
+     */
+    public Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes() {
+        return ImmutableSet.of();
+    }
+
     ////////////
     // Kanten //
     ////////////

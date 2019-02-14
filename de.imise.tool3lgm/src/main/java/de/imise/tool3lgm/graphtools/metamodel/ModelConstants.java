@@ -172,6 +172,29 @@ public final class ModelConstants {
         return metaModel.getOnlyExpertModeVisibleNodes();
     }
 
+    /**
+     * Liefert alle Elementklassen, die nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true) angelegt und verändert werden
+     * können.
+     *
+     * @return alle Elementklassen, die nur im ExpertMode geändert werden können
+     * @see MetaModel#getOnlyExpertModeEditableNodes()
+     */
+    public static Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes() {
+        return metaModel.getOnlyExpertModeEditableNodes();
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true)
+     * angelegt und verändert werden kann.
+     *
+     * @param elementClass
+     * @return <code>true</code>, wenn die Elementklasse, nur im ExpertMode geändert werden kann
+     * @see MetaModel#getOnlyExpertModeEditableNodes()
+     */
+    public static boolean isOnlyExpertModeEditableNode(final Class<? extends ModelElement> elementClass) {
+        return getOnlyExpertModeEditableNodes().contains(elementClass);
+    }
+
     ////////////
     // Kanten //
     ////////////
