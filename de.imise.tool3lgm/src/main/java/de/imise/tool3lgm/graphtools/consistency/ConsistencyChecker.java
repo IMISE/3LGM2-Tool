@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
+import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getDisplayableName;
+import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getDisplayablePluralName;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
@@ -22,7 +24,6 @@ import de.imise.tool3lgm.graphtools.consistency.error.ErrorSolutionLibraryVersio
 import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.MinCardinalityError;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -33,6 +34,8 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentAdapter;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
@@ -288,46 +291,51 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 int maxStartCard = forwardCardinality.max();
                 int minEndCard = backwardCardinality.min();
                 int maxEndCard = backwardCardinality.max();
-                boolean meHasStartClass = isStartClass(edgeClass, me.getClass());
-                boolean meHasEndClass = isEndClass(edgeClass, me.getClass());
+                boolean meHasStartClass = isStartClass(edgeClass, meClass);
+                boolean meHasEndClass = isEndClass(edgeClass, meClass);
 
+                ElementaryMetaPath forwardElementaryMetaPath = ElementaryMetaPathHandler.getForwardMetaPath(edgeClass);
                 // Bei Teil-Von-Beziehungen oder Beziehungen bei denen meClass
                 // sowohl Start- als auch Endklasse sein können
                 if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
-                    if (meHasStartClass && meIsStartConnections.size() < minStartCard) {
-                        returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, minEndCard));
+                    if (meHasStartClass) {
+                        if (meIsStartConnections.size() < minStartCard) {
+                            returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, minEndCard));
+                        }
+                        if (meIsStartConnections.size() > maxStartCard) {
+                            returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, meIsStartConnections, gdcoll, maxEndCard));
+                        }
                     }
-                    if (meHasStartClass && meIsStartConnections.size() > maxStartCard) {
-                        returnList.add(new MaxCardinalityError(me, edgeClass, meIsStartConnections, gdcoll, maxEndCard));
-                    }
-                    if (meHasEndClass && meIsEndConnections.size() < minEndCard) {
-                        returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, minStartCard));
-                    }
-                    if (meHasEndClass && meIsEndConnections.size() > maxEndCard) {
-                        returnList.add(new MaxCardinalityError(me, edgeClass, meIsEndConnections, gdcoll, maxStartCard));
+                    if (meHasEndClass) {
+                        if (meIsEndConnections.size() < minEndCard) {
+                            returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), gdcoll, minStartCard));
+                        }
+                        if (meIsEndConnections.size() > maxEndCard) {
+                            returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), meIsEndConnections, gdcoll, maxStartCard));
+                        }
                     }
                 } else if (meHasStartClass && meHasEndClass) {
                     int card = minStartCard < minEndCard ? minEndCard : minStartCard;
                     if (connections.size() < card) {
-                        returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, card));
+                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, card));
                     }
                     card = maxStartCard < maxEndCard ? maxStartCard : maxEndCard;
                     if (connections.size() > card) {
-                        returnList.add(new MaxCardinalityError(me, edgeClass, connections, gdcoll, card));
+                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, connections, gdcoll, card));
                     }
                 } else if (meHasStartClass) {
                     if (connections.size() < minStartCard) {
-                        returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, minStartCard));
+                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, minStartCard));
                     }
                     if (connections.size() > maxStartCard) {
-                        returnList.add(new MaxCardinalityError(me, edgeClass, connections, gdcoll, maxStartCard));
+                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, connections, gdcoll, maxStartCard));
                     }
                 } else if (meHasEndClass) {
                     if (connections.size() < minEndCard) {
-                        returnList.add(new MinCardinalityError(me, edgeClass, gdcoll, minEndCard));
+                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), gdcoll, minEndCard));
                     }
                     if (connections.size() > maxEndCard) {
-                        returnList.add(new MaxCardinalityError(me, edgeClass, connections, gdcoll, maxEndCard));
+                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), connections, gdcoll, maxEndCard));
                     }
                 } else {
                     System.err.println("Die Edge darf gar nicht für dieses Element existieren!");
@@ -398,14 +406,15 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
             ErrorSolution es = solutionsLibrary.getSolution(error);
             if (es == null) {
                 AbstractCardinalityError cardError = (AbstractCardinalityError) error;
-                Class<? extends Edge> edgeClass = cardError.getEdgeClass();
+                ElementaryMetaPath elementaryMetaPath = cardError.getElementaryMetaPath();
                 ModelElement me = cardError.getModelElement();
                 ElementPropertyDialog dialog = me.getPropertyDialog();
-                String tabName = AbstractPathConnectionPanel.generateName(me.getClass(), edgeClass);
+                Class<? extends ModelElement> errorConnectedClass = elementaryMetaPath.getEndClass();
+                String tabName = elementaryMetaPath.isSingleConnection() ? getDisplayableName(errorConnectedClass) : getDisplayablePluralName(errorConnectedClass);
                 int existingTabIndex = dialog.selectTab(tabName, PathConnectionPanel.class);
                 ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
                 if (existingTabIndex < 0) {
-                    dialog.addPathConnectionPanel(edgeClass);
+                    dialog.addPathConnectionPanel(elementaryMetaPath.getEdgeClass());
                     dialog.setLastTabIcon(Tool3lgmConstants.getIcon("error.gif"));
                     dialog.setLastTabTitle(tabName);
                     dialog.selectTab(tabName, PathConnectionPanel.class);

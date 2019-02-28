@@ -4,6 +4,7 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 
 /**
  * @author AXS
@@ -18,12 +19,12 @@ public abstract class AbstractCardinalityError extends AbstractError {
 
     /**
      * @param me
-     * @param edgeClass
+     * @param elementaryMetaPath
      * @param cardValue
      * @param gdcoll
      */
-    public AbstractCardinalityError(final ModelElement me, final Class<? extends Edge> edgeClass, final GDCollection gdcoll, final int cardValue) {
-        super(me, edgeClass, gdcoll);
+    public AbstractCardinalityError(final ModelElement me, final ElementaryMetaPath elementaryMetaPath, final GDCollection gdcoll, final int cardValue) {
+        super(me, elementaryMetaPath, gdcoll);
         this.cardValue = cardValue;
     }
 
@@ -45,6 +46,13 @@ public abstract class AbstractCardinalityError extends AbstractError {
     public String getErrorFieldString() {
         Class<? extends Edge> edgeClass = getEdgeClass();
         return edgeClass != null ? ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass) : "";
+    }
+
+    /**
+     * @return
+     */
+    public ElementaryMetaPath getElementaryMetaPath() {
+        return (ElementaryMetaPath) errorField;
     }
 
 }
