@@ -393,7 +393,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public final ElementaryMetaPath getEdgeToStartElementMetaPath(final Class<? extends Edge> edgeClass) {
+    public static final ElementaryMetaPath getEdgeToStartElementMetaPath(final Class<? extends Edge> edgeClass) {
         return getEdgeToStartElementMetaPath(edgeClass, null);
     }
 
@@ -402,7 +402,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public final ElementaryMetaPath getEdgeToStartElementMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath getEdgeToStartElementMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(edgeClass, edgeClass, Edge.getStartClass(edgeClass), Direction.BACKWARD, connectionState, Type.START_WITH_EDGE);
     }
 
@@ -410,7 +410,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public final ElementaryMetaPath getEdgeToEndElementMetaPath(final Class<? extends Edge> edgeClass) {
+    public static final ElementaryMetaPath getEdgeToEndElementMetaPath(final Class<? extends Edge> edgeClass) {
         return getEdgeToEndElementMetaPath(edgeClass, null);
     }
 
@@ -419,7 +419,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public final ElementaryMetaPath getEdgeToEndElementMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath getEdgeToEndElementMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(edgeClass, edgeClass, Edge.getStartClass(edgeClass), Direction.FORWARD, connectionState, Type.START_WITH_EDGE);
     }
 
@@ -427,7 +427,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public final ElementaryMetaPath getEdgeToStartAndEndElementMetaPath(final Class<? extends Edge> edgeClass) {
+    public static final ElementaryMetaPath getEdgeToStartAndEndElementMetaPath(final Class<? extends Edge> edgeClass) {
         return getEdgeToStartAndEndElementMetaPath(edgeClass, null);
     }
 
@@ -436,7 +436,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public final ElementaryMetaPath getEdgeToStartAndEndElementMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath getEdgeToStartAndEndElementMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(edgeClass, edgeClass, Edge.getStartClass(edgeClass), null, connectionState, Type.START_WITH_EDGE);
     }
 
@@ -444,7 +444,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public final ElementaryMetaPath getStartElementToEdgeMetaPath(final Class<? extends Edge> edgeClass) {
+    public static final ElementaryMetaPath getStartElementToEdgeMetaPath(final Class<? extends Edge> edgeClass) {
         return getStartElementToEdgeMetaPath(edgeClass, null);
     }
 
@@ -453,7 +453,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public final ElementaryMetaPath getStartElementToEdgeMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath getStartElementToEdgeMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(Edge.getStartClass(edgeClass), edgeClass, edgeClass, Direction.FORWARD, connectionState, Type.END_WITH_EDGE);
     }
 
@@ -461,7 +461,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public final ElementaryMetaPath getEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass) {
+    public static final ElementaryMetaPath getEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass) {
         return getEndElementToEdgeMetaPath(edgeClass, null);
     }
 
@@ -470,7 +470,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public final ElementaryMetaPath getEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath getEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(Edge.getStartClass(edgeClass), edgeClass, edgeClass, Direction.BACKWARD, connectionState, Type.END_WITH_EDGE);
     }
 
@@ -478,7 +478,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public final ElementaryMetaPath getStartAndEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass) {
+    public static final ElementaryMetaPath getStartAndEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass) {
         return getStartAndEndElementToEdgeMetaPath(edgeClass, null);
     }
 
@@ -487,7 +487,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public final ElementaryMetaPath getStartAndEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath getStartAndEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(edgeClass, edgeClass, ReflectionUtils.getCommonSuperClass(Edge.getStartClass(edgeClass), Edge.getEndClass(edgeClass)), null, connectionState, Type.END_WITH_EDGE);
     }
 
