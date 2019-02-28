@@ -84,13 +84,10 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
             cardinalityDefinition = new CardinalityDefinition();
             cardinalityDefinition.filterNewCardinalities = true;
             //alle Standardkardinalitäten der Kanten des MetaPfades zur cardinalityDefinition hinzufügen
-            List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-            if (elementaryMetaPaths != null) {
-                for (ElementaryMetaPath elementaryMetaPath : elementaryMetaPaths) {
-                    Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-                    cardinalityDefinition.setNewForwardCardinality(edgeClass, Edge.getForwardCardinality(edgeClass));
-                    cardinalityDefinition.setNewBackwardCardinality(edgeClass, Edge.getBackwardCardinality(edgeClass));
-                }
+            for (ElementaryMetaPath elementaryMetaPath : metaPath.getElementaryMetaPaths()) {
+                Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+                cardinalityDefinition.setNewForwardCardinality(edgeClass, Edge.getForwardCardinality(edgeClass));
+                cardinalityDefinition.setNewBackwardCardinality(edgeClass, Edge.getBackwardCardinality(edgeClass));
             }
         }
 

@@ -372,7 +372,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public List<ElementaryMetaPath> getElementaryMetaPaths() {
+    public final List<ElementaryMetaPath> getElementaryMetaPaths() {
         if (elementaryMetaPaths == null) {
             elementaryMetaPaths = ImmutableList.of(this);
         }

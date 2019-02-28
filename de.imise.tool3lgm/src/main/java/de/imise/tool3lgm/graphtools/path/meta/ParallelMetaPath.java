@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
-import java.util.List;
-
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -55,11 +53,6 @@ public abstract class ParallelMetaPath extends ListMetaPath {
     @Override
     public boolean isCreateable() {
         return false;
-    }
-
-    @Override
-    public List<ElementaryMetaPath> getElementaryMetaPaths() {
-        return null;
     }
 
     @Override

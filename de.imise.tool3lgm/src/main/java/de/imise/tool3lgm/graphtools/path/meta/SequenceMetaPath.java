@@ -35,13 +35,6 @@ public class SequenceMetaPath extends ListMetaPath {
     private ImmutableList<ElementaryMetaPath> elementaryMetaPaths = null;
 
     /**
-     * <code>true</code> sobald einmal versucht wurde, die elementaryMetaPaths anzulegen. Falls das nicht
-     * geklappt hat, ist er weiterhin <code>null</code>, aber es muss nicht noch einmal versucht werden,
-     * ihn zu initilaisieren.
-     */
-    private boolean elementaryMetaPathsInitialized = false;
-
-    /**
      * Diese Richtung wird nur zum Erzeugen des Namens gebraucht. Je nachdem welche Rictung hier vermerkt ist, wird an den {@link #baseResKeyOrName}
      * noch "_f" (FORWARD) pder "_b" (BACKWARD) angehängt.
      */
@@ -101,7 +94,6 @@ public class SequenceMetaPath extends ListMetaPath {
         result = prime * result + (direction == null ? 0 : direction.hashCode());
         result = prime * result + (metaPaths == null ? 0 : metaPaths.hashCode());
         result = prime * result + (elementaryMetaPaths == null ? 0 : elementaryMetaPaths.hashCode());
-        result = prime * result + (elementaryMetaPathsInitialized ? 1231 : 1237);
         return result;
     }
 
@@ -138,9 +130,6 @@ public class SequenceMetaPath extends ListMetaPath {
                 return false;
             }
         } else if (!elementaryMetaPaths.equals(other.elementaryMetaPaths)) {
-            return false;
-        }
-        if (elementaryMetaPathsInitialized != other.elementaryMetaPathsInitialized) {
             return false;
         }
         return true;
@@ -226,7 +215,7 @@ public class SequenceMetaPath extends ListMetaPath {
             return false;
         }
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
-        if (elementaryMetaPaths == null || elementaryMetaPaths.size() == 0) {
+        if (elementaryMetaPaths.isEmpty()) {
             return false;
         }
         // prüfen, ob die Zwischenelemente angelegt werden können
@@ -267,19 +256,21 @@ public class SequenceMetaPath extends ListMetaPath {
 
     @Override
     public final List<ElementaryMetaPath> getElementaryMetaPaths() {
-        if (!elementaryMetaPathsInitialized) {
-            elementaryMetaPathsInitialized = true;
+        if (elementaryMetaPaths == null) {
             ImmutableList.Builder<ElementaryMetaPath> simpleMetaPathBuilder = ImmutableList.builder();
             for (AbstractMetaPath metaPath : metaPaths) {
                 List<ElementaryMetaPath> innerMetaPaths = metaPath.getElementaryMetaPaths();
-                if (innerMetaPaths == null) {
-                    return null;
+                if (innerMetaPaths.isEmpty()) { //der aktuelle innere Pfad hat keine einfache Elementarpfadliste
+                    elementaryMetaPaths = EMPTY_ELEMENTARY_PATH_LIST;
+                    break;
                 }
                 for (ElementaryMetaPath innerMetaPath : innerMetaPaths) {
                     simpleMetaPathBuilder.add(innerMetaPath);
                 }
             }
-            elementaryMetaPaths = simpleMetaPathBuilder.build();
+            if (elementaryMetaPaths == null) {
+                elementaryMetaPaths = simpleMetaPathBuilder.build();
+            }
         }
         return elementaryMetaPaths;
     }

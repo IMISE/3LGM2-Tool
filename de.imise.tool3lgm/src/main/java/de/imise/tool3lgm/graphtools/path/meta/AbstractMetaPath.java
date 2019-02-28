@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -17,6 +18,11 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
  * @create 12.10.2010
  */
 public abstract class AbstractMetaPath {
+
+    /**
+     * Leere Elementarpfadliste
+     */
+    protected static final ImmutableList<ElementaryMetaPath> EMPTY_ELEMENTARY_PATH_LIST = ImmutableList.of();
 
     /**
      * Liste aller Startklassen dieses Pfades.
@@ -557,13 +563,15 @@ public abstract class AbstractMetaPath {
     }
 
     /**
-     * Liefert eine Folge von Elementarpfaden, wenn sich dieser Pfad so bilden lässt, ansonsten kommt <code>null</code> zurück. Alle parallelen Pfade
-     * geben hier <code>null</code> zurück. {@link SequenceMetaPath} geben nur nicht <code>null</code> zurück, wenn sie im innersten ein einzelner
-     * Pfad sind ohne parallele oder rekursive Pfade sind.
+     * Liefert eine Folge von Elementarpfaden, wenn sich dieser Pfad so bilden lässt, ansonsten kommt eine leere Liste zurück. Alle parallelen Pfade
+     * geben hier leere Liste zurück. {@link SequenceMetaPath} geben nur leine leere Liste zurück, wenn sie im innersten ein einzelner Pfad sind ohne
+     * parallele oder rekursive Pfade sind.
      *
      * @return
      */
-    public abstract List<ElementaryMetaPath> getElementaryMetaPaths();
+    public List<ElementaryMetaPath> getElementaryMetaPaths() {
+        return EMPTY_ELEMENTARY_PATH_LIST;
+    }
 
     /**
      * Liefert <code>true</code>, wenn dieser Pfad Elementarten miteinander verbindet, die

@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
-import java.util.List;
-
 /**
  * @author AXS
  * @create 13.10.2010
@@ -81,12 +79,6 @@ public class RecursiveMetaPath extends AbstractMetaPath {
     @Override
     public boolean isCreateable() {
         return false;
-    }
-
-    @Override
-    public List<ElementaryMetaPath> getElementaryMetaPaths() {
-        return null; // realMetaPath.getSimpleMetaPath(); ist hier nicht richtig, weil es in einem SequenceMetaPath
-                     // nicht mehr eindeutig ist, dass es sich hier um einen sich wiederholenden Pfad gehandelt hat
     }
 
     @Override

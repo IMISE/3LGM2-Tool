@@ -460,7 +460,7 @@ public class MetaPathFunctions {
             //die Elementarmetapfade vom Metapfad holen
             List<ElementaryMetaPath> simpleMetaPath = metaPath.getElementaryMetaPaths();
             //wenn isCreateble() oben true liefert, sollte es diese Metapfadfolge eigentlich immer geben
-            if (simpleMetaPath == null) {
+            if (simpleMetaPath.isEmpty()) {
                 return null;
             }
             int pathLength = simpleMetaPath.size();
