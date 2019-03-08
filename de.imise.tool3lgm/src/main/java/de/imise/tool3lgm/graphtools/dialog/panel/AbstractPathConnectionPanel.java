@@ -1,22 +1,14 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxBackwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxForwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinForwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
-import java.awt.dnd.DropTarget;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JLabel;
 
@@ -27,8 +19,8 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
+import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
@@ -37,11 +29,13 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
-import de.imise.util.Sys;
 
 /**
  * Panel für alle einfachen Verbindungen zwischen 2 Elementen
@@ -51,17 +45,11 @@ import de.imise.util.Sys;
  */
 public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel {
 
-    /** Die Kantenklasse zum anderen Element */
-    protected final Class<? extends Edge>[] edgeClasses;
-
-    //die sind entweder FORWARD oder BACKWARD
-    protected final Direction[] directions;
+    /** Der MetaPfad zu anderen Elementen */
+    protected final AbstractMetaPath metaPath;
 
     /** Label vor dem verbundenen Element mit der Art des Elementes */
     protected final JLabel westLabel;
-
-    /** Index der letzten Edge im Pfad */
-    protected final int lastEdgeIndex;
 
     /**
      * Indikator, ob über den Pfad verbundene Elemente immer eindeutig an einem Punkt angehängt werden können (=<code>true</code>) oder
@@ -152,10 +140,15 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     @SafeVarargs
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         super(dialog);
-        this.edgeClasses = edgeClasses;
-        directions = getEdgeDirections();
-        this.searchElementClass = searchElementClass != null ? searchElementClass : getPathStepEndClass(edgeClasses.length - 1);
-        lastEdgeIndex = edgeClasses.length - 1;
+        Class<? extends ModelElement> startClass = dialog.getModelElement().getClass();
+        metaPath = SimpleMetaPathCreator.createSimpleMetaPath(startClass, searchElementClass, edgeClasses);
+        if (searchElementClass != null) {
+            this.searchElementClass = searchElementClass;
+        } else {
+            Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
+            Class<?> superEndClass = ReflectionUtils.getCommonSuperClass(endClasses);
+            this.searchElementClass = superEndClass.asSubclass(ModelElement.class);
+        }
         isConnectionPointUnique = isConnectionPointUnique();
 
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
@@ -164,108 +157,57 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         Class<? extends Edge> edgeClass = edgeClasses[labelEdgeIndex];
 
         if (labelEdgeName) {
-            westLabelText = directions[labelEdgeIndex] == FORWARD ? ElementsNameBuilder.getForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
+            westLabelText = getDirectionInPath(labelEdgeIndex) == FORWARD ? ElementsNameBuilder.getForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
         } else {
-            Class<? extends ModelElement> labelPathStepEndClass = getPathStepEndClass(labelEdgeIndex);
+            Class<? extends ModelElement> labelPathStepEndClass = MetaPathFunctions.getElementaryPathsConnectingClass((SimpleMetaPath) metaPath, labelEdgeIndex);
             //zur Beschriftung des Labels wird immer die speziellere Klasse genommen aus Endklasse des Pfades und searchElementClass. Weil immer nur davon können die verbundenen Elemente sein.
             if (searchElementClass != null && labelPathStepEndClass.isAssignableFrom(this.searchElementClass)) {
                 labelPathStepEndClass = searchElementClass;
             }
-            westLabelText = isSingleConnectionPath() ? ElementsNameBuilder.getDisplayableName(labelPathStepEndClass) : ElementsNameBuilder.getDisplayablePluralName(labelPathStepEndClass);
+            westLabelText = metaPath.isSingleConnection() ? ElementsNameBuilder.getDisplayableName(labelPathStepEndClass) : ElementsNameBuilder.getDisplayablePluralName(labelPathStepEndClass);
         }
         westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Den ersten Buchstaben des Labels immer groß schreiben
         westLabel.setText(westLabelText);
         setName(westLabelText);
     }
 
-    @SafeVarargs
-    public static String generateName(final Class<? extends ModelElement> startClass, final Class<? extends Edge>... edgeClasses) {
-        return generateName(startClass, edgeClasses.length - 1, false, null, edgeClasses);
+    public Class<? extends Edge> getLastEdgeClassInPath() {
+        return getEdgeClassInPath(-1);
     }
 
-    @SafeVarargs
-    private static String generateName(final Class<? extends ModelElement> startClass, final int labelEdgeIndex, final boolean labelEdgeName, final Direction[] directions, final Class<? extends Edge>... edgeClasses) {
-        Direction[] usedEdgeDirections = directions != null ? directions : getEdgeDirections(startClass, edgeClasses);
-        String name;
-        Class<? extends Edge> edgeClass = edgeClasses[labelEdgeIndex];
-
-        if (labelEdgeName) {
-            name = directions[labelEdgeIndex] == FORWARD ? ElementsNameBuilder.getForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
-        } else {
-            Class<? extends ModelElement> labelPathStepEndClass = getPathStepEndClass(labelEdgeIndex, usedEdgeDirections, edgeClasses);
-            name = isSingleConnectionPath(usedEdgeDirections, edgeClasses) ? ElementsNameBuilder.getDisplayableName(labelPathStepEndClass) : ElementsNameBuilder.getDisplayablePluralName(labelPathStepEndClass);
-        }
-        name = StringUtils.capitalizeFirstChar(name); // Den ersten Buchstaben des Labels immer groß schreiben
-        return name;
-    }
-
-    private Direction[] getEdgeDirections() {
-        return getEdgeDirections(dialog.getModelElement().getClass(), edgeClasses);
-    }
-
-    private static Direction[] getEdgeDirections(final Class<? extends ModelElement> startClass, final Class<? extends Edge>[] edgeClasses) {
-        Direction[] returnValue = new Direction[edgeClasses.length];
-        for (int i = 0; i < edgeClasses.length; i++) {
-            Class<? extends ModelElement> clazz = i == 0 ? startClass : null;
-            clazz = clazz == null ? returnValue[i - 1] == FORWARD ? getEndClass(edgeClasses[i - 1]) : getStartClass(edgeClasses[i - 1]) : clazz;
-            boolean isStartClass = isStartClass(edgeClasses[i], clazz);
-            boolean isEndClass = isEndClass(edgeClasses[i], clazz);
-            //für den außergewöhnlichen Fall, dass die übergebene Startklasse sowohl Start- als auch Endelement der aktuellen Kante sein könnte, wird
-            //die Richtung so bestimmt, dass dann die speziellere der beiden Klassen als Startklasse der Kante angesehen wird. Sind beide gleich, wird
-            //die Richtung der Kante auf FORWARD gesetzt.
-            if (isStartClass && isEndClass) {
-                Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClasses[i]);
-                Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClasses[i]);
-                Class<?> startOrEndClass = ReflectionUtils.getMostSpecialElementClass(edgeStartClass, edgeEndClass);
-                returnValue[i] = startOrEndClass == edgeStartClass ? FORWARD : BACKWARD;
-            } else {
-                returnValue[i] = isStartClass ? FORWARD : BACKWARD;
-            }
-        }
-        return returnValue;
-    }
-
-    private static Class<? extends ModelElement> getPathStepStartClass(final int edgeIndex, final Direction[] directions, final Class<? extends Edge>[] edgeClasses) {
-        return directions[edgeIndex] == FORWARD ? getStartClass(edgeClasses[edgeIndex]) : getEndClass(edgeClasses[edgeIndex]);
-    }
-
-    private static Class<? extends ModelElement> getPathStepEndClass(final int edgeIndex, final Direction[] directions, final Class<? extends Edge>[] edgeClasses) {
-        return directions[edgeIndex] == FORWARD ? getEndClass(edgeClasses[edgeIndex]) : getStartClass(edgeClasses[edgeIndex]);
-    }
-
-    private Class<? extends ModelElement> getPathStepStartClass(final int edgeIndex) {
-        return getPathStepStartClass(edgeIndex, directions, edgeClasses);
-    }
-
-    private Class<? extends ModelElement> getPathStepEndClass(final int edgeIndex) {
-        return getPathStepEndClass(edgeIndex, directions, edgeClasses);
-    }
-
-    protected Class<? extends ModelElement> getPathStepEndElementClass(final int edgeIndex) {
-        Class<? extends ModelElement> pathStepEndElementClass = getPathStepEndClass(edgeIndex);
-        Class<? extends ModelElement> nextPathStepStartElementClass = edgeIndex + 1 < edgeClasses.length ? getPathStepStartClass(edgeIndex + 1) : searchElementClass;
-        pathStepEndElementClass = ReflectionUtils.getMostSpecialElementClass(pathStepEndElementClass, nextPathStepStartElementClass).asSubclass(ModelElement.class);
-        return pathStepEndElementClass;
-    }
-
-    private boolean isSingleConnectionPath() {
-        return isSingleConnectionPath(directions, edgeClasses);
+    public Direction getLastDirectionInPath() {
+        return getDirectionInPath(-1);
     }
 
     /**
-     * @return <code>true</code>, wenn maximal 1 Element der {@link #searchElementClass} mit dem Ausgangselement über den
-     *         angegebenen Pfad verbunden sein kann. Wenn irgendeine Edge des Pfades mehrfach verbunden sein kann, dann
-     *         ist es kein SingleConnectionPath
+     * Gibt einen Elementarpfad anhand eines übergebenen Index zurück. Ist der Index >= 0, dann wird genau der Index zurück gegeben. Ist der Index <
+     * 0, dann wird der übergebene Index von der Länge der Geamtliste der Elementarfade abgezogen. Möchte man also den letzten Elementarpfad haben,
+     * muss man -1 übergeben, für den vorletzten -2 usw.
+     *
+     * @param index
+     * @return
      */
-    private static boolean isSingleConnectionPath(final Direction[] directions, final Class<? extends Edge>[] edgeClasses) {
-        for (int i = 0; i < edgeClasses.length; i++) {
-            Class<? extends Edge> edgeClass = edgeClasses[i];
-            int maxCard = directions[i] == FORWARD ? getMaxForwardCardinality(edgeClass) : getMaxBackwardCardinality(edgeClass);
-            if (maxCard > 1) {
-                return false;
-            }
+    public ElementaryMetaPath getElementaryMetaPathInPath(final int index) {
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        if (elementaryMetaPaths.isEmpty()) {
+            return null;
         }
-        return true;
+        ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(index < 0 ? elementaryMetaPaths.size() + index : index);
+        return elementaryMetaPath;
+    }
+
+    public Direction getDirectionInPath(final int index) {
+        ElementaryMetaPath elementaryMetaPathInPath = getElementaryMetaPathInPath(index);
+        return elementaryMetaPathInPath == null ? null : elementaryMetaPathInPath.getDirection();
+    }
+
+    public Class<? extends Edge> getEdgeClassInPath(final int index) {
+        ElementaryMetaPath elementaryMetaPathInPath = getElementaryMetaPathInPath(index);
+        return elementaryMetaPathInPath == null ? null : elementaryMetaPathInPath.getEdgeClass();
+    }
+
+    public int getEdgesInPathCount() {
+        return metaPath.getElementaryMetaPaths().size();
     }
 
     /**
@@ -276,47 +218,6 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Liefert true, wenn die übergebene Kantenklasse eine Composition ist und die
-     * zugehörige Richtung (direction) vom Master auf den Slave zeigt.
-     *
-     * @param edgeClass
-     * @param direction
-     * @return
-     */
-    protected static boolean isCompositionFromMasterToSlave(final Class<? extends Edge> edgeClass, final Direction direction) {
-        boolean isEdgeComposition = ModelConstants.isComposition(edgeClass);
-        isEdgeComposition &= direction == FORWARD;
-        return isEdgeComposition;
-    }
-
-    /**
-     * Liefert true, wenn die Kantenklasse am übergebenen Index eine Composition ist und die
-     * zugehörige Richtung (direction) vom Master auf den Slave zeigt.
-     *
-     * @param index
-     * @return
-     */
-    protected boolean isCompositionFromMasterToSlave(final int index) {
-        return isCompositionFromMasterToSlave(edgeClasses[index], directions[index]);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn der durch die Kanten angegebene Pfad anlegbar ist (also nicht über abstracte Klassen läuft).
-     *
-     * @return
-     */
-    protected boolean isPathCreatable() {
-        int pathLength = edgeClasses.length;
-        for (int edgeIndex = 0; edgeIndex < pathLength; edgeIndex++) {
-            Class<? extends ModelElement> class2Create = getPathStepEndElementClass(edgeIndex);
-            if (ModelConstants.isAbstract(class2Create) || ModelConstants.getConditionPath(edgeClasses[edgeIndex]) != null) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
      * Liefert <code>true</code>, wenn das letzte Element des Pfades nur existieren kann, wenn es mit einem
      * auf dem Pfad davor liegenden Element verbunden ist. Das wird gebraucht, um zu entscheiden, ob ein neu
      * angelegtes EndElement des Pfades immer sofort verbunden werden muss.
@@ -324,27 +225,36 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @return
      */
     protected boolean isLastPathElementDependent() {
-        Class<? extends Edge> edgeClass = edgeClasses[lastEdgeIndex];
-        Direction direction = directions[lastEdgeIndex];
-        int minCardinality = direction == FORWARD ? getMinBackwardCardinality(edgeClass) : getMinForwardCardinality(edgeClass);
+        ElementaryMetaPath lastElementaryMetaPathInPath = getElementaryMetaPathInPath(-1);
+        if (lastElementaryMetaPathInPath == null) {
+            return false;
+        }
+        EdgeCardinality forwardCardinality = lastElementaryMetaPathInPath.getForwardCardinality();
+        int minCardinality = forwardCardinality.min();
         return minCardinality > 0;
     }
 
     /**
-     * Liefert <code>true</code>, wenn das Element des Panels/Dialoges nur existieren kann, wenn es eine Verbindung
-     * über die letzte Edge des Pfades hat . Das wird gebarucht, um zu entscheiden, ob man anbieten kann, diese
-     * Verbindung zu lösen oder nicht.
+     * Liefert <code>true</code>, wenn das Element des Panels/Dialoges nur existieren kann, wenn es eine Verbindung über die letzte Edge des Pfades
+     * hat . Das wird gebarucht, um zu entscheiden, ob man anbieten kann, diese Verbindung zu lösen oder nicht. Wenn der Pfad keine einfache Liste von
+     * Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
      *
      * @return
      */
     protected boolean isLastPathElementNeededForExistence() {
-        Class<? extends Edge> edgeClass = edgeClasses[lastEdgeIndex];
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
+        if (elementaryMetaPaths.isEmpty()) {
+            return true;
+        }
+        ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(elementaryMetaPaths.size() - 1);
         //Verbindungen, die durch InstanciationEgdes bestehen, kann man nicht einfach lösen/ändern und gelten als existenznotwendig
+        Class<? extends Edge> edgeClass = lastElementaryMetaPath.getEdgeClass();
         if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
             return true;
         }
-        Direction direction = directions[lastEdgeIndex];
-        int minCardinality = direction == BACKWARD ? getMinBackwardCardinality(edgeClass) : getMinForwardCardinality(edgeClass);
+        EdgeCardinality forwardCardinality = lastElementaryMetaPath.getForwardCardinality();
+        int minCardinality = forwardCardinality.min();
         return minCardinality > 0;
     }
 
@@ -358,10 +268,17 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @return
      */
     protected boolean isConnectionPointUnique() {
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass das der Verbindungspunkt nicht eindeutig ist
+        if (elementaryMetaPaths.isEmpty()) {
+            return false;
+        }
+        int lastElementaryMetaPathIndex = elementaryMetaPaths.size() - 1;
         //für alle Kanten außer der letzten
-        for (int i = 0; i < lastEdgeIndex; i++) {
+        for (int i = 0; i < lastElementaryMetaPathIndex; i++) {
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
             //hole die maximale Verbindungsanzahl zum nächsten Element
-            int maxCardinality = directions[i] == FORWARD ? getMaxForwardCardinality(edgeClasses[i]) : getMaxBackwardCardinality(edgeClasses[i]);
+            int maxCardinality = elementaryMetaPath.getForwardCardinality().max();
             //wenn dieses Zwischenelement mehrfach verbunden sein kann
             if (maxCardinality > 1) {
                 //nicht eindeutig
@@ -369,7 +286,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             }
         }
         //System.err.println(edgeClasses[lastEdgeIndex].getSimpleName() + " " + !MultipleEdge.class.isAssignableFrom(edgeClasses[lastEdgeIndex]));
-        return !MultipleEdge.class.isAssignableFrom(edgeClasses[lastEdgeIndex]);
+        ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(lastElementaryMetaPathIndex);
+        Class<? extends Edge> lastEdgeClass = lastElementaryMetaPath.getEdgeClass();
+        return !MultipleEdge.class.isAssignableFrom(lastEdgeClass);
     }
 
     /**
@@ -386,19 +305,24 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         int pid = getTransactionID();
         //wenn ein gültiges Element2Connect übergeben wurde, dann muss man den Pfad nur bis zur vorletzten Edge
         //anlegen, sonst bis einschließlich zur letzten
-        int edgeSearchStopIndex = elements2Connect != null ? edgeClasses.length - 1 : edgeClasses.length;
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        int elementaryMetaPathCount = elementaryMetaPaths.size();
+        int edgeSearchStopIndex = elements2Connect != null ? elementaryMetaPathCount - 1 : elementaryMetaPathCount;
         for (int i = startEdgeIndex; i < edgeSearchStopIndex; i++) {
-            Class<? extends Edge> edgeClass2Create = edgeClasses[i];
-            Direction edgeClass2CreateDirection = directions[i];
-            Class<? extends Edge> nextEdgeClass2Create = i + 1 < edgeClasses.length ? edgeClasses[i + 1] : null;
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
+            Class<? extends Edge> edgeClass2Create = elementaryMetaPath.getEdgeClass();
+            Direction edgeClass2CreateDirection = elementaryMetaPath.getDirection();
+            elementaryMetaPath = i + 1 < elementaryMetaPathCount ? elementaryMetaPaths.get(i + 1) : null;
+            Class<? extends Edge> nextEdgeClass2Create = elementaryMetaPath != null ? elementaryMetaPath.getEdgeClass() : null;
             //wenn es noch eine nächte Edge gibt, dann gibt es auch noch eine nächste direction. Wenn nicht wird einfach FORWARD übergeben, weil das egal ist
-            Direction nextEdgeClass2CreateDirection = nextEdgeClass2Create != null ? directions[i + 1] : FORWARD;
-            targetElement = createNodeWithContainerAndDependents(selDoc, targetElement, edgeClass2Create, edgeClass2CreateDirection, nextEdgeClass2Create, nextEdgeClass2CreateDirection, pid);
+            Direction nextEdgeClass2CreateDirection = elementaryMetaPath != null ? elementaryMetaPath.getDirection() : FORWARD;
+            targetElement = MetaPathFunctions.createNodeWithContainerAndDependents(selDoc, targetElement, edgeClass2Create, edgeClass2CreateDirection, nextEdgeClass2Create, nextEdgeClass2CreateDirection, pid);
         }
         //wenn gültige elments2Connect übergeben wurde, dann müssen sie an das vorletzte Pfadelement angehängt werden
-        if (edgeSearchStopIndex < edgeClasses.length) {
-            Direction direction = directions[edgeSearchStopIndex];
-            Class<? extends Edge> edgeClass2Create = edgeClasses[edgeSearchStopIndex];
+        if (edgeSearchStopIndex < elementaryMetaPathCount) {
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(edgeSearchStopIndex);
+            Class<? extends Edge> edgeClass2Create = elementaryMetaPath.getEdgeClass();
+            Direction direction = elementaryMetaPath.getDirection();
             for (ModelElement element2Connect : elements2Connect) {
                 link(gdcoll, targetElement, element2Connect, edgeClass2Create, direction, pid);
             }
@@ -425,147 +349,6 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Erzeugt ein neues Element und verknüpft es mit dem übergebenen Startelelement. Für das neue Element werden alle anderen
-     * Elemente angelegt, die es braucht, damit keine Verletzung irgendwelcher Kardinalitäten bestehen.
-     *
-     * @param doc GraphDocument, in dem die anzulegenden Container landen sollen (wenn sie teilmodellspezifisch sind)
-     * @param startElement Element, von dem aus die Kanten angelegt werden sollen. Ist dieses Element null, dann wird nur das neue Element angelegt,
-     *            aber nichts verknüpft.
-     * @param edgeClassToNewElement Kantenklasse, die zwischen dem startElement und dem anzulegenden Element bestehen soll. Diese Klasse und die
-     *            directionToNewElement geben vor, welche Elementart neu angelegt werden soll
-     * @param directionToNewElement Richtung der neu anzulegenden Edge ausgehend vom startContainer
-     * @param edgeClassFromNewElement Kantenklasse, die nicht neu angelegt wird, auch wenn die Kardinalität das bedingen würde. Da diese Funktion hier
-     *            für einen anzulegenden Pfad aufgerufen wird, dürfen die Edge, dieses Pfades eben nicht schon hier automatisch angelegt werden.
-     * @param pid Process-ID des Dialoges
-     * @return den neu angelegtes ModelElement mit allen davon abhängigen Elementen (außer denen, die evtl. auf dem Pfad liegen, der insgesamt
-     *         angelegt werden soll)
-     */
-    protected ModelElement createNodeWithContainerAndDependents(final GraphDocument doc, final ModelElement startElement, final Class<? extends Edge> edgeClassToNewElement, final Direction directionToNewElement,
-            final Class<? extends Edge> edgeClassFromNewElement, final Direction directionFromNewElement, final int pid) {
-        //Collection des übergebenen doc holen
-        GDCollection gdcoll = doc.getCollection();
-        //den interactiveMode auf false setzen, damit man nicht nach den Namen für die Zwischenelemente gefragt wird,
-        //bei denen der Namen normalerweise nicht generiert wird
-        boolean isInteractiveMode = gdcoll.isInteractiveMode();
-
-        boolean lastEdge = edgeClassFromNewElement == null;
-
-        //bei der letzten Edge sollte man bei neuen Elementen nach dem Namen fragen
-        boolean newInteractiveMode = lastEdge;
-        //Ausnahme für Mac-Java-Bug: wenn Dialoge aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
-        //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach nicht angezeigt und der Name generiert.
-        if (System.getProperty("os.name").toLowerCase().contains("mac") && Sys.stackTraceContains(DropTarget.class)) {
-            newInteractiveMode = false;
-        }
-        gdcoll.setInteractiveMode(newInteractiveMode);
-
-        //Richtung der Edge FORWARD -> die Endklasse muss angelegt werden, sonst die Startklasse
-        Class<? extends ModelElement> elementClass2Create = directionToNewElement == FORWARD ? getEndClass(edgeClassToNewElement) : getStartClass(edgeClassToNewElement);
-        //wenn die anzulegende Klasse abstract ist, dann sollte sie aus der ncähsten Edge ermittelt werden können.
-        if (ModelConstants.isAbstract(elementClass2Create)) {
-            //Richtung der nächsten Edge FORWARD -> die Startklasse muss angelegt werden, sonst die Endklasse
-            elementClass2Create = lastEdge ? searchElementClass : directionFromNewElement == FORWARD ? getStartClass(edgeClassFromNewElement) : getEndClass(edgeClassFromNewElement);
-        }
-        //abstracte Elemente können nicht angelegt werden!
-        if (ModelConstants.isAbstract(elementClass2Create)) {
-            return null;
-        }
-
-        ModelElement createdDependent;
-        ElementContainer createdContainer = null;
-        //wenn ein gültiges startElement übergeben wurde und die Kantenart eine Composition ist
-        if (startElement != null && isCompositionFromMasterToSlave(edgeClassToNewElement, directionToNewElement)) {
-            //erzeuge ein untergeordnetes Element
-            createdDependent = GraphDocument.createAddicted(doc, startElement, edgeClassToNewElement.asSubclass(CompositionEdge.class), elementClass2Create, pid);
-        } else {
-            //das neue Element gleich mit Container im doc anlegen
-            createdContainer = doc.createKnotenWithContainer(elementClass2Create, pid);
-            if (createdContainer == null) {
-                return null;
-            }
-            //das Element des neu angelgten Containers holen
-            createdDependent = createdContainer.getElement();
-
-            //das neue Element mit dem startElement verknüpfen. Dast Startelement kann null sein, wenn nur das neue Element angelegt werden soll
-            if (startElement != null) {
-                link(gdcoll, startElement, createdDependent, edgeClassToNewElement, directionToNewElement, pid);
-            }
-        }
-
-        //falls hier beim Anlegen irgendwas schief gegangen ist -> raus
-        if (createdDependent == null) {
-            return null;
-        }
-
-        //wenn das neu angelegte Element ein übergerodnetes Element von dem startElement ist, dann sollte es in der Grafik unter dem startElement liegen
-        if (startElement.isSubElementOf(createdDependent)) {
-            if (createdContainer == null) {
-                createdContainer = createdDependent.getContainer(doc);
-            }
-            doc.raiseSlaves(createdContainer);
-        }
-
-        //alle Kantentpyen der neu angelegten Elementart holen
-        Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass2Create);
-        //für jede dieser Kantenarten
-        boolean interrupted = false;
-        for (int i = 0; i < edgeTypes.length && !interrupted; i++) {
-            //aktuelle Kantenart holen
-            Class<? extends Edge> edgeType = edgeTypes[i];
-            //die Kanten, die über den Pfad als nächstes angelegt werden sollen, dürfen hier nicht angelegt werden
-            if (edgeType == edgeClassFromNewElement) {
-                continue;
-            }
-            //wenn das neu angelegte Element StartElement der Edge ist
-            if (isStartClass(edgeType, elementClass2Create)) {
-                //hole die MinKardnalität zu dem anderen Element der Edge
-                int minCardinalityForwardToOther = getMinForwardCardinality(edgeType);
-                if (minCardinalityForwardToOther > 0) {
-                    //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
-                    List<Edge> edgesForwardTo = createdDependent.getEdgesTo(ModelElement.class, edgeType);
-                    //Anzahl der bestehenden Kanten der aktuellen Kantenart zu anderen Elementen
-                    int edgesForwardToCount = edgesForwardTo.size();
-                    //wenn weitere Kanten angelegt werden müssen
-                    while (minCardinalityForwardToOther - edgesForwardToCount > 0) {
-                        //für das neu angelegte Element müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
-                        //geht, ist die edgeCLassFromNewElement null.
-                        ModelElement created = createNodeWithContainerAndDependents(doc, createdDependent, edgeType, FORWARD, null, null, pid);
-                        if (created == null) {
-                            interrupted = true;
-                            break;
-                        }
-                        edgesForwardToCount++;
-                    }
-                }
-                //wenn das neu angelegte Element EndElement der Edge ist
-            } else {
-                //hole die MinKardnalität zu dem anderen Element der Edge
-                int minCardinalityBackwardToOther = getMinBackwardCardinality(edgeType);
-                if (minCardinalityBackwardToOther > 0) {
-                    //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
-                    List<Edge> edgesBackwardTo = createdDependent.getEdgesFrom(ModelElement.class, edgeType);
-                    //Anzahl der bestehenden Kanten der aktuellen Kantenart zu anderen Elementen
-                    int edgesBackwardToCount = edgesBackwardTo.size();
-                    //wenn weitere Kanten angelegt werden müssen
-                    while (minCardinalityBackwardToOther - edgesBackwardToCount > 0) {
-                        //für das neu angelegte Elemente, müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
-                        //geht, ist die edgeClassFromNewElement null.
-                        ModelElement created = createNodeWithContainerAndDependents(doc, createdDependent, edgeType, BACKWARD, null, null, pid);
-                        if (created == null) {
-                            interrupted = true;
-                            break;
-                        }
-                        edgesBackwardToCount++;
-                    }
-                }
-            }
-
-        }
-        gdcoll.setInteractiveMode(isInteractiveMode);
-        return createdDependent;
-    }
-
-    /**
      * Legt den kompletten Pfad bei jeweils dem ersten Element an, das ausgehend vom ModelElement des Dialoges
      * gefunden wird. Wenn der Pfad schon existiert, passiert nichts. Wenn er zu Teilen besteht, wird der Rest
      * angelegt.
@@ -576,11 +359,16 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected void connectToFirstPath(final ModelElement element2Connect) {
         ModelElement me = dialog.getModelElement();
         //für den gesamten Pfad der angelegt werden muss
-        for (int i = 0; i < edgeClasses.length; i++) {
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        int elementaryMetaPathCount = elementaryMetaPaths.size();
+        for (int i = 0; i < elementaryMetaPathCount; i++) {
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
+            Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+            Direction direction = elementaryMetaPath.getDirection();
             //hole die mit dem aktuellen me verbundenen Elemente der aktuellen Kantenart
-            List<ModelElement> connectedElements = me.getConnectedElements(ModelElement.class, edgeClasses[i], directions[i]);
+            List<ModelElement> connectedElements = me.getConnectedElements(ModelElement.class, edgeClass, direction);
             //wenn bereits mind. ein verbundenes Element ex.
-            if (i < lastEdgeIndex && !connectedElements.isEmpty()) {
+            if (i + 1 < elementaryMetaPathCount && !connectedElements.isEmpty()) {
                 //hole das erste
                 me = connectedElements.get(0);
                 continue;
@@ -658,12 +446,14 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected List<ElementContainer> getAvailableConnectables() {
         List<ElementContainer> available = null;
         //Pfad des Panels besteht aus genau einer Kante
-        if (edgeClasses.length == 1) {
-            Class<? extends Edge> edgeClass = edgeClasses[0];
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        if (elementaryMetaPaths.size() == 1) {
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(0);
+            Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
             SimpleMetaPath conditionPath = ModelConstants.getConditionPath(edgeClass);
             //für diese eine Kante ist ein ConditionPath angegeben
             if (conditionPath != null) {
-                if (directions[0] == BACKWARD) {
+                if (elementaryMetaPath.getDirection() == BACKWARD) {
                     conditionPath = conditionPath.getOtherDirection();
                 }
                 Collection<ModelElement> conditionElements = MetaPathFunctions.getConnectedElements(getModelElement(), conditionPath);

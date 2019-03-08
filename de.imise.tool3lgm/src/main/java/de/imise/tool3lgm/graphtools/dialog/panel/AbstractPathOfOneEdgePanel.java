@@ -52,7 +52,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
     public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         super(dialog, labelEdgeName, searchElementClass, edgeClass);
         this.edgeClass = edgeClass;
-        edgeIsForward = directions[0] == FORWARD;
+        edgeIsForward = getLastDirectionInPath() == FORWARD;
     }
 
     /**

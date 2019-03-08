@@ -1,9 +1,8 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+import static de.imise.tool3lgm.graphtools.path.MetaPathFunctions.createNodeWithContainerAndDependents;
 
 import java.awt.Component;
 /**
@@ -31,7 +30,6 @@ import javax.swing.tree.TreeSelectionModel;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
@@ -39,9 +37,12 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
@@ -105,14 +106,9 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        //wenn der Pfad aus mehr als einer Edge besteht, dann soll über dem linken Baum einfach "verbunden" stehen
-        String ltreeLabelString = lastEdgeIndex > 0 ? getResString("verb") : null;
-        //wenn der Pfad aus nur einer Edge besteht
-        if (ltreeLabelString == null) {
-            //schreibe den Namen der Edge in der richtigen Richtung über den linken Baum
-            Class<? extends Edge> lastEdge = edgeClasses[lastEdgeIndex];
-            ltreeLabelString = directions[lastEdgeIndex] == FORWARD ? ElementsNameBuilder.getForwardMetaAssociationName(lastEdge) : ElementsNameBuilder.getBackwardMetaAssociationName(lastEdge);
-        }
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        //wenn der Pfad aus mehr als einer Edge besteht, dann soll über dem linken Baum einfach "verbunden" stehen, sonst der Elementarpfadname
+        String ltreeLabelString = elementaryMetaPaths.size() == 1 ? getElementaryMetaPathInPath(0).getName() : getResString("verb");
         String rtreeLabelString = getResString("frei");
         ltreeLabelString = StringUtils.capitalizeFirstChar(ltreeLabelString);
         rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
@@ -287,7 +283,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 childrenToExcludeFromRtree.clear();
             }
             //wenn es der Index der letzten Edge ist -> zu den Ausschlusselementen hinzufügen
-            if (edgeIndex == lastEdgeIndex) {
+            if (edgeIndex == metaPath.getElementaryMetaPaths().size() - 1) {
                 childrenToExcludeFromRtree.addAll(potentialExcludeChildren);
             }
         }
@@ -309,17 +305,23 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      */
     protected Collection<LGMTreeNode> buildLeftTree() {
         int edgeIndex = 0;
-        Class<? extends ModelElement> pathStepEndClass = getPathStepEndElementClass(edgeIndex);
+        //Durch diesen Aufruf hier geht das erstmal nicht für parallele Pfade, zumindes nicht für Vereinigungspfade. Aber im Moment gibt es dafür keinen Anwendungsfall
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        int elemetaryMetaPathCount = elementaryMetaPaths.size();
+        ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(edgeIndex);
+        Class<? extends ModelElement> pathStepEndClass = elementaryMetaPath.getEndClass();
+        Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+        Direction direction = elementaryMetaPath.getDirection();
         ModelElement me = getModelElement();
-        List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]);
+        List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClass, direction);
         addChildrenToExcludeFromRtree(edgeIndex, all, true);
         // nur Node für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
         int firstNonSelectableIndex = all.size();
         if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS)) {
-            all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]));
+            all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc, edgeClass, direction));
         }
         if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS)) {
-            all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]));
+            all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc, edgeClass, direction));
         }
         ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();
         List<LGMTreeNode> firstLevelNodes = new ArrayList<>(all.size());
@@ -328,17 +330,20 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             firstLevelNodes.add(node);
         }
         List<LGMTreeNode> nextStepStartNodes = firstLevelNodes;
-        for (edgeIndex = 1; edgeIndex < edgeClasses.length; edgeIndex++) {
-            pathStepEndClass = getPathStepEndElementClass(edgeIndex);
+        for (edgeIndex = 1; edgeIndex < elemetaryMetaPathCount; edgeIndex++) {
+            elementaryMetaPath = elementaryMetaPaths.get(edgeIndex);
+            pathStepEndClass = elementaryMetaPath.getEndClass();
+            edgeClass = elementaryMetaPath.getEdgeClass();
+            direction = elementaryMetaPath.getDirection();
             List<LGMTreeNode> newNextStartNodes = new ArrayList<>();
             for (LGMTreeNode node : nextStepStartNodes) {
                 ElementContainer nodeElementContainer = (ElementContainer) node.getUserObject();
                 me = nodeElementContainer.getElement();
-                List<ElementContainer> connected = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClasses[edgeIndex], directions[edgeIndex]);
+                List<ElementContainer> connected = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClass, direction);
                 addChildrenToExcludeFromRtree(edgeIndex, connected, false);
                 for (ElementContainer ec : connected) {
                     LGMTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);
-                    if (edgeIndex + 1 == edgeClasses.length) {
+                    if (edgeIndex + 1 == elemetaryMetaPathCount) {
                         leafs.add(newNode);
                     }
                     newNextStartNodes.add(newNode);
@@ -482,16 +487,19 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     protected final void disconnect(final ModelElement startInPath, final ModelElement endInPath, final int edgeIndexInPath) {
         GraphDocument selDoc = getSelectedGraphDocument();
         GDCollection gdcoll = selDoc.getCollection();
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(edgeIndexInPath);
         int pid = getTransactionID();
-        Class<? extends Edge> edgeClass = edgeClasses[edgeIndexInPath];
+        Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
         gdcoll.unlink(startInPath, endInPath, edgeClass, pid);
         if (!startInPath.isConsistent()) {
             gdcoll.deleteElement(startInPath, selDoc, pid);
         }
         int nextEdgeIndexInPath = edgeIndexInPath + 1;
-        if (nextEdgeIndexInPath < edgeClasses.length) {
-            Class<? extends Edge> nextEdgeClass = edgeClasses[nextEdgeIndexInPath];
-            Class<? extends ModelElement> nextElementClassInPath = directions[nextEdgeIndexInPath] == FORWARD ? getEndClass(nextEdgeClass) : getStartClass(nextEdgeClass);
+        if (nextEdgeIndexInPath < elementaryMetaPaths.size()) {
+            ElementaryMetaPath nextElementaryMetaPath = elementaryMetaPaths.get(nextEdgeIndexInPath);
+            Class<? extends Edge> nextEdgeClass = nextElementaryMetaPath.getEdgeClass();
+            Class<? extends ModelElement> nextElementClassInPath = MetaPathFunctions.getElementaryPathsConnectingClass(elementaryMetaPath, nextElementaryMetaPath);
             List<ModelElement> connectedElements = endInPath.getConnectedElements(nextElementClassInPath, nextEdgeClass);
             for (ModelElement connectedElement : connectedElements) {
                 disconnect(endInPath, connectedElement, nextEdgeIndexInPath);
@@ -519,7 +527,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         TreePath realTargetTreePath = targetTreePath;
         //falls der TargetPath bis zum letzten Element angegeben wurde, dann soll eigenlich an den Parent angehängt werden, weil
         //die letzte Elemente im Pfad immer die anzuhängenden selbst sind, die auch auf der rechten Seite ausgewählt werden können
-        if (targetTreePathEdgeIndex == edgeClasses.length) {
+        if (targetTreePathEdgeIndex == getEdgesInPathCount()) {
             //nimm vom aktuell auf der linken Seite ausgewählten Pfad das vorletzte Pfadelement
             realTargetTreePath = realTargetTreePath.getParentPath();
             targetTreePathEdgeIndex--;
@@ -537,7 +545,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     private LGMAction getNewConnectedElementAction() {
-        if (!isPathCreatable()) {
+        if (!metaPath.isCreateable()) {
             return null;
         }
         if (ModelConstants.isSlaveType(searchElementClass)) {
@@ -552,7 +560,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 if (isConnectionPointUnique) {
                     connectToFirstPath(null);
                 } else { //es ist nicht klar, wohin ein neues Element gehängt werden sollte -> nur neu erzeugen und nicht verknüpfen
-                    createNodeWithContainerAndDependents(doc.getCollection().getSelectedDoc(), null, edgeClasses[lastEdgeIndex], directions[lastEdgeIndex], null, FORWARD, getTransactionID());
+                    createNodeWithContainerAndDependents(doc.getCollection().getSelectedDoc(), null, getLastEdgeClassInPath(), getLastDirectionInPath(), null, FORWARD, getTransactionID());
                 }
             }
         };

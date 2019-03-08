@@ -148,7 +148,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 ModelElement me = getModelElement();
                 ElementContainer ec = me.getContainer(mainDoc);
                 doc.select(ec, pid);
-                GraphDocument.createAddicted(selectedDoc, me, edgeClasses[0].asSubclass(CompositionEdge.class), searchElementClass, pid);
+                GraphDocument.createAddicted(selectedDoc, me, getLastEdgeClassInPath().asSubclass(CompositionEdge.class), searchElementClass, pid);
                 doc.select(ec, pid);
             }
         };
@@ -173,7 +173,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                         ModelElement topLevelModelElement;
                         topLevelModelElement = getModelElement();
                         GDCollection gdcoll = getGraphDocument().getCollection();
-                        gdcoll.unlink(topLevelModelElement, knot.getElement(), edgeClasses[lastEdgeIndex], getTransactionID());
+                        gdcoll.unlink(topLevelModelElement, knot.getElement(), getLastEdgeClassInPath(), getTransactionID());
                     }
                 }
             }

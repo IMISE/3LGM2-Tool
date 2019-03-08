@@ -46,7 +46,8 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
     @Override
     protected boolean isConnectionPointUnique() {
         //bei MultipleEdges wird im rechten Baum nichts ausgeschlossen, bei allen anderen, darf man jedes Element nur einmal verknüpfen -> sie werden im rechten Baum deaktiviert, wenn sie im linken verknüpft sind
-        return !MultipleEdge.class.isAssignableFrom(edgeClasses[lastEdgeIndex]);
+        Class<? extends Edge> lastEdgeClassInPath = getLastEdgeClassInPath();
+        return !MultipleEdge.class.isAssignableFrom(lastEdgeClassInPath);
     }
 
     /**
@@ -57,7 +58,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
         Collection<LGMTreeNode> leafNodes = super.buildLeftTree();
         //wenn dieses Panel mit einem Pfad der Länge 1 initialisiert wurde, dann gibt es hier nichts zu tun,
         //da es keine Zwischenelemente gibt, die nicht angezeigt werden sollen
-        if (edgeClasses.length == 1) {
+        if (getEdgesInPathCount() == 1) {
             return leafNodes;
         }
         if (nodeToParentModelElement == null) {
@@ -99,12 +100,12 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
                     return;
                 }
                 TreePath[] path2disconnect = ltree.getSelectionPaths();
+                int treePathEdgeIndex = getEdgesInPathCount() - 1;
                 for (int i = 0; i < path2disconnect.length; i++) {
                     LGMTreeNode node = (LGMTreeNode) path2disconnect[i].getLastPathComponent();
                     ModelElement element2Disconnect = getNodeModelElement(node);
                     //immer nur die letzte Edge im Pfad entfernen
                     //das ist der Index der Edge im Pfad, ab der entfernt werden soll
-                    int treePathEdgeIndex = edgeClasses.length - 1;
                     ModelElement parentOfElement2Disconnect = nodeToParentModelElement.get(node);
                     disconnect(parentOfElement2Disconnect, element2Disconnect, treePathEdgeIndex);
                 }

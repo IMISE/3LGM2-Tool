@@ -7,7 +7,7 @@ import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
 
@@ -21,6 +21,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.NamedObjectContainer;
@@ -106,13 +107,13 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             add(connectedElementsBox, BorderLayout.CENTER);
         }
 
-        createNew = isPathCreatable() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + ElementsNameBuilder.getDisplayableName(searchElementClass)) : null;
+        createNew = metaPath.isCreateable() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + ElementsNameBuilder.getDisplayableName(searchElementClass)) : null;
     }
 
     @Override
     public void update() {
-        List<ElementContainer> allConnectedContainers = getConnectedContainer();
-        ElementContainer connectedContainer = allConnectedContainers.isEmpty() ? null : allConnectedContainers.get(0);
+        Collection<ElementContainer> allConnectedContainers = getConnectedContainer();
+        ElementContainer connectedContainer = allConnectedContainers.isEmpty() ? null : allConnectedContainers.iterator().next();
         connectedElement = connectedContainer == null ? null : connectedContainer.getElement();
 
         if (connectedElementsBox != null) {
@@ -121,7 +122,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             connectedElementsBox.removeAllItems();
             connectedElementsBox.addItem(" ");
             //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle bzw. alle, die über den ConditionPath verbunden sind
-            List<ElementContainer> available = isLastPathElementDependent ? allConnectedContainers : getAvailableConnectables();
+            Collection<ElementContainer> available = isLastPathElementDependent ? allConnectedContainers : getAvailableConnectables();
 
             //neues Element anlegen und verknüpfen soll nur gezeigt werden, wenn der Pfad an sich anlegbar ist. Ist die searchElementClass
             //abhängig von der Existenz des Elementes davor im Pfad, dann soll auch kein Neu-Anlegen-Eintrag kommen
@@ -229,38 +230,48 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
      * @return
      */
-    private List<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
-        List<ElementContainer> connectedElements = new ArrayList<>();
-        connectedElements.add(dialog.getModelElement().getContainer(mainDoc));
-        int edgeSearchStopIndex = forelastInPath ? edgeClasses.length - 1 : edgeClasses.length;
-        for (int i = 0; i < edgeSearchStopIndex; i++) {
-            List<ElementContainer> tempConnectedElements = new ArrayList<>();
-            for (ElementContainer ec : connectedElements) {
-                tempConnectedElements.addAll(ec.getElement().getConnectedContainer(ModelElement.class, mainDoc, edgeClasses[i], directions[i]));
-            }
-            connectedElements = tempConnectedElements;
-        }
-        return connectedElements;
+    private Collection<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
+        return MetaPathFunctions.getConnectedContainer(getModelElement(), doc, metaPath, forelastInPath);
     }
+
+    //    /**
+    //     * Liefert die mit dem ModelElement des Dialoges über die angegebenen Kanten verbundenen Elemente.
+    //     *
+    //     * @param forelastInPath wenn <code>true</code> werden nicht die letzten, sondern die vorletzten im
+    //     *            Pfad zurück gegeben. Bei Pfaden, die nur aus einer Edge bestehen ist das das
+    //     *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
+    //     * @return
+    //     */
+    //    private List<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
+    //        List<ElementContainer> connectedElements = new ArrayList<>();
+    //        connectedElements.add(dialog.getModelElement().getContainer(mainDoc));
+    //        int edgeSearchStopIndex = forelastInPath ? edgeClasses.length - 1 : edgeClasses.length;
+    //        for (int i = 0; i < edgeSearchStopIndex; i++) {
+    //            List<ElementContainer> tempConnectedElements = new ArrayList<>();
+    //            for (ElementContainer ec : connectedElements) {
+    //                tempConnectedElements.addAll(ec.getElement().getConnectedContainer(ModelElement.class, mainDoc, edgeClasses[i], directions[i]));
+    //            }
+    //            connectedElements = tempConnectedElements;
+    //        }
+    //        return connectedElements;
+    //    }
 
     /**
      * Liefert alle Elemente der searchElementClass, die mit dem Ausgangselement direkt verbunden sind.
      *
      * @return
      */
-    private final List<ElementContainer> getConnectedContainer() {
+    private final Collection<ElementContainer> getConnectedContainer() {
         return getConnectedContainer(false);
     }
 
     /**
-     * Liefert die Elemente, die auf dem durch die Kanten angegebenen Pfad diejenigen sind, die tatsächlich
-     * mit dem searchElementen verbunden sind. Bei einem Pfad der Länge 1 ist das immer nur das ModelElement
-     * selbst bzw. dessen HauptDokument-Container. Bei einem Pfad der Länge 2 sind es die Elemente in der
-     * Mitte, also immer die direkt nach dem Ausgangs-ModelElement und vor dem searchElement usw.
+     * Liefert die ElementContainer, die mit den Endelementen des Pfades verbunden sind. Ist der Pfad nur eine Kante lang, sind das immer das/die
+     * Ausgeangselement/e. Ist der Pfad länger, sind es immer die StartElemente des letzten Pfadschrittes.
      *
      * @return
      */
-    private final List<ElementContainer> getSearchElementConnectedContainer() {
+    private final Collection<ElementContainer> getForelastConnectedContainer() {
         return getConnectedContainer(true);
     }
 
@@ -268,12 +279,12 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      * Trennt alle Verbindungen zwischen den vorletzten Elementen im Kanten-Pfad und den searchElementen.
      */
     private final void unlinkAll() {
-        List<ElementContainer> searchElementConnectedContainer = getSearchElementConnectedContainer();
+        Collection<ElementContainer> searchElementConnectedContainer = getForelastConnectedContainer();
         GDCollection gdcoll = mainDoc.getCollection();
-        Class<? extends Edge> lastEdgeInPath = edgeClasses[lastEdgeIndex];
+        Class<? extends Edge> lastEdgeInPath = getLastEdgeClassInPath();
         for (ElementContainer ec : searchElementConnectedContainer) {
             ModelElement me = ec.getElement();
-            List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, directions[lastEdgeIndex]);
+            List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, getLastDirectionInPath());
             for (ModelElement connected : connectedElements) {
                 gdcoll.unlink(me, connected, lastEdgeInPath, dialog.getTransactionID());
             }
