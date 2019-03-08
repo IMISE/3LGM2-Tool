@@ -39,6 +39,9 @@ public abstract class AbstractCardinalityError extends AbstractError {
 
     @SuppressWarnings("unchecked")
     public Class<? extends Edge> getEdgeClass() {
+        if (errorField instanceof ElementaryMetaPath) {
+            return ((ElementaryMetaPath) errorField).getEdgeClass();
+        }
         return (Class<? extends Edge>) errorField;
     }
 
