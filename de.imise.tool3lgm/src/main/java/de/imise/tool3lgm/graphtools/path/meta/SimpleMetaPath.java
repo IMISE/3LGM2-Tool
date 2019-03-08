@@ -5,7 +5,6 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.util.ReflectionUtils;
 
 /**
  * Ein {@link SequenceMetaPath}, der immer nur aus einer einfachen Folge von Kanten bzw. {@link ElementaryMetaPath} besteht.
@@ -108,27 +107,6 @@ public class SimpleMetaPath extends SequenceMetaPath {
         }
         return new SimpleMetaPath(subMetaPathsArray);
 
-    }
-
-    /**
-     * Liefert die Verbindungsklasse des Pfadschrittes mit dem übergebenen Index. Dies ist beim Index 0 die speziellere der Endklasse des ersten
-     * Elementarpfades und der Startklasse des nächsten Elementarpfades. Der Pfadschritt mit dem Index der Pfadlänge -1 ist die Endklasse des letzten
-     * Elementarpfades = Endklasse des Gesamten Pfades. An die Startklasse des Gesamtpfades kommt man mit dieser Funktion nicht.
-     *
-     * @param pathStepIndex
-     * @return
-     */
-    public Class<? extends ModelElement> getPathStepElementClass(final int pathStepIndex) {
-        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
-        ElementaryMetaPath elementaryMetaPathPre = elementaryMetaPaths.get(pathStepIndex);
-        if (pathStepIndex == elementaryMetaPaths.size() - 1) {
-            return elementaryMetaPathPre.getEndClass();
-        }
-        ElementaryMetaPath elementaryMetaPathPost = elementaryMetaPaths.get(pathStepIndex + 1);
-        Class<? extends ModelElement> endClass = elementaryMetaPathPre.getEndClass();
-        Class<? extends ModelElement> startClass = elementaryMetaPathPost.getStartClass();
-        Class<?> pathStepStartClass = ReflectionUtils.getMostSpecialElementClass(endClass, startClass);
-        return pathStepStartClass == null ? null : pathStepStartClass.asSubclass(ModelElement.class); //null tritt ein, wenn die Elemente der aufeinanderfolgenden Elementarpfade nicht zusammenpassen
     }
 
 }

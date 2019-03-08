@@ -9,6 +9,20 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
  */
 public class SimpleMetaPathCreator {
 
+    //    /**
+    //     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} ausgehend von der Startklasse, die übergeben wurde. Die
+    //     * Richtungen werden aus dder Startklasse abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
+    //     * rückwärts dreht, dann wird immer vorwärts angenommen.
+    //     *
+    //     * @param startClass
+    //     * @param associations
+    //     * @return
+    //     */
+    //    @SafeVarargs
+    //    public static final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge>... associations) {
+    //        return createSimpleMetaPath(startClass, null, null, associations);
+    //    }
+    //
     /**
      * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
      * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
@@ -61,9 +75,25 @@ public class SimpleMetaPathCreator {
         Class<? extends ModelElement> start = startClass;
         for (int i = 0; i < associations.length; i++) {
             Class<? extends Edge> edgeClass = associations[i];
-            Direction direction = getEdgeDirection(start, edgeClass);
+            Direction direction = getEdgeDirection(start, edgeClass, i == associations.length - 1 ? endClass : null); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
+            //die Elementklasse passt nicht zur aktuellen Kante
+            if (direction == null) {
+                //solange zur vorherigen Kante zurück gehen, bis man eine findet, die sowohl vorwärts als auch rückwärts passt und diese dann mit rückwärts probieren
+                for (--i; i >= 0; i--) {
+                    if (metaPaths[i].hasDirectionForward()) { //das bedeutet, dass die aktuelle Kante in Vorwärsrichtung gelesen genommen wurde, was immer die zuerst gesuchte Richtung ist
+                        if (isEdgeDirectionBackward(startClass, edgeClass)) { //falls die Kante auch rückwärts im Pfad sein kann
+                            direction = Direction.BACKWARD;
+                            break;
+                        }
+                    }
+                }
+                if (i < 0) {
+                    //der Pfad ist fehlerhaft, d. h. trotz Zurücklaufen und Test mit der Gegenrichtung passen die Kanten nicht zueinander
+                    return null;
+                }
+            }
             ElementaryMetaPath metaPath = i == 0 ? ElementaryMetaPathHandler.getMetaPath(start, edgeClass, direction)
-                    : i == metaPaths.length - 1 ? ElementaryMetaPathHandler.getMetaPath(edgeClass, direction, endClass) : ElementaryMetaPathHandler.getMetaPath(edgeClass, direction);
+                    : i == metaPaths.length - 1 && endClass != null ? ElementaryMetaPathHandler.getMetaPath(edgeClass, direction, endClass) : ElementaryMetaPathHandler.getMetaPath(edgeClass, direction);
             metaPaths[i] = metaPath;
             start = metaPath.getEndClass();
         }
@@ -99,11 +129,17 @@ public class SimpleMetaPathCreator {
      *
      * @param startClass
      * @param edgeClass
+     * @param endClass ist diese Klasse null, wird nur die startClass berücksichtigt
      * @return
      */
-    public static final Direction getEdgeDirection(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {
-        Direction direction = Edge.isStartClass(edgeClass, startClass) ? Direction.FORWARD : Edge.isEndClass(edgeClass, startClass) ? Direction.BACKWARD : null;
+    public static final Direction getEdgeDirection(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
+        Direction direction = Edge.isStartClass(edgeClass, startClass) && (endClass == null || Edge.isEndClass(edgeClass, endClass)) ? Direction.FORWARD
+                : Edge.isEndClass(edgeClass, startClass) && (endClass == null || Edge.isStartClass(edgeClass, endClass)) ? Direction.BACKWARD : null;
         return direction;
+    }
+
+    public static boolean isEdgeDirectionBackward(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {
+        return Edge.isEndClass(edgeClass, startClass);
     }
 
 }

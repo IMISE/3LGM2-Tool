@@ -9,6 +9,8 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -162,7 +164,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param type
      */
     private ElementaryMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final Direction direction, final ConnectionState connectionState, final Type type) {
-        super(startClass == null ? isForward(direction) ? Edge.getStartClass(edgeClass) : Edge.getEndClass(edgeClass) : startClass, endClass == null ? isForward(direction) ? Edge.getEndClass(edgeClass) : Edge.getStartClass(edgeClass) : endClass);
+        super(startClass == null ? getStartClass(edgeClass, direction) : startClass, endClass == null ? getEndClass(edgeClass, direction) : endClass);
         Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
         Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
         if (direction == Direction.FORWARD) {
@@ -185,8 +187,27 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         return direction != null ? direction : Direction.FORWARD;
     }
 
-    private static final boolean isForward(final Direction direction) {
-        return getDirection(direction) == Direction.FORWARD;
+    /**
+     * Liefert die Startklasse eines {@link ElementaryMetaPath}, der sich aus der Kante und der übergebenen Richtung ergeben würde.
+     *
+     * @param edgeClass
+     * @param direction
+     * @return
+     */
+    public static Class<? extends ModelElement> getStartClass(final Class<? extends Edge> edgeClass, final Direction direction) {
+        return direction == Direction.BACKWARD ? Edge.getStartClass(edgeClass) : Edge.getEndClass(edgeClass);
+    }
+
+    /**
+     * Liefert die Endklasse eines {@link ElementaryMetaPath}, der sich aus der Kante und der übergebenen Richtung ergeben würde.
+     *
+     * @param edgeClass
+     * @param direction
+     * @return
+     */
+    public static Class<? extends ModelElement> getEndClass(final Class<? extends Edge> edgeClass, final Direction direction) {
+        Class<? extends ModelElement> startClass = getStartClass(edgeClass, direction);
+        return Edge.getOther(edgeClass, startClass);
     }
 
     @Override
@@ -343,7 +364,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
 
     @Override
     public final boolean isCreateable() {
-        return createable;
+        //die hintere Bedungung kann man nicht in creatable speichern, weil es sonst zu einem java.lang.ExceptionInInitializerError beim Laden des Metamodells kommt
+        return createable && ModelConstants.getConditionPath(edgeClass) == null;
     }
 
     /**
@@ -489,6 +511,22 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     public static final ElementaryMetaPath getStartAndEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(edgeClass, edgeClass, ReflectionUtils.getCommonSuperClass(Edge.getStartClass(edgeClass), Edge.getEndClass(edgeClass)), null, connectionState, Type.END_WITH_EDGE);
+    }
+
+    /**
+     * @return Cardinality des Pfades in Vorwärtsrichtung, also vom Start- zum EndElement.
+     */
+    public EdgeCardinality getForwardCardinality() {
+        //Wird die Kante in Vorwärtsrichtung gelesen, dann ist es auch die Vorwärtskardinalität der Kante, sonst die Rückwärtskardinalität
+        return direction == Direction.BACKWARD ? Edge.getBackwardCardinality(edgeClass) : Edge.getForwardCardinality(edgeClass);
+    }
+
+    /**
+     * @return Cardinality des Pfades in Rückwärtsrichtung
+     */
+    public EdgeCardinality getBackwardCardinality() {
+        //Wird die Kante in Vorwärtsrichtung gelesen, dann ist es die Rückwärtskardinalität der Kante, sonst die Vorwärtskardinalität
+        return direction == Direction.BACKWARD ? Edge.getForwardCardinality(edgeClass) : Edge.getBackwardCardinality(edgeClass);
     }
 
 }

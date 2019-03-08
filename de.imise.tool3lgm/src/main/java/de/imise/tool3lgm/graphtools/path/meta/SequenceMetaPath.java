@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -224,34 +225,12 @@ public class SequenceMetaPath extends ListMetaPath {
             if (!elementaryMetaPaths.get(i).isCreateable()) {
                 return false;
             }
-            if (i < elementaryMetaPaths.size() - 2) {
-                Class<? extends ModelElement> connectingClass = getConnectingClass(i);
-                if (ModelConstants.isAbstract(connectingClass)) {
-                    return false;
-                }
+            Class<? extends ModelElement> connectingClass = getPathStepElementClass(i + 1);
+            if (ModelConstants.isAbstract(connectingClass)) {
+                return false;
             }
         }
         return true;
-    }
-
-    /**
-     * Liefert die speziellere der beiden Elementklassen, die sich aus der Endklasse des einen Elementarpfadschrittes und der Anfangsklasse des
-     * nächsten Elementarpfadschrittes ergeben.
-     *
-     * @param elementaryMetaPathStepIndex Indexs des Pfadschrittes. 0 = der erste und simpleMetaPath.length() - 2 = der letzte
-     * @return die speziellere der beiden Elementklasse zwischen 2 Elementarpfadschritten
-     */
-    private Class<? extends ModelElement> getConnectingClass(final int elementaryMetaPathStepIndex) {
-        ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(elementaryMetaPathStepIndex);
-        ElementaryMetaPath nextElementaryMetaPath = elementaryMetaPaths.get(elementaryMetaPathStepIndex + 1);
-        Class<? extends ModelElement> lastEndClass = elementaryMetaPath.getEndClass();
-        Class<? extends ModelElement> nextStartClass = nextElementaryMetaPath.getStartClass();
-        if (lastEndClass.isAssignableFrom(nextStartClass)) {
-            return nextStartClass;
-        } else if (nextStartClass.isAssignableFrom(lastEndClass)) {
-            return lastEndClass;
-        }
-        return null;
     }
 
     @Override
@@ -314,24 +293,27 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     /**
-     * Liefert die Verbindungsklasse des Pfadschrittes mit dem übergebenen Index. Dies ist beim Index 0 die speziellere der Endklasse des ersten
-     * Elementarpfades und der Startklasse des nächsten Elementarpfades. Der Pfadschritt mit dem Index der Pfadlänge -1 ist die Endklasse des letzten
-     * Elementarpfades = Endklasse des Gesamten Pfades. An die Startklasse des Gesamtpfades kommt man mit dieser Funktion nicht.
+     * Liefert alle Verbindungsklassen zwischen dem MetaPfad mit dem übergebenen Index und dem darauffolgenden. Beim Index Gesamtpfadlänge -1 kommen
+     * die Endklassen des letzten Metapfades zurück, ansonsten werden immer paarweise die Endklassen des MetaPfades mit dme übergebenen Index mit den
+     * Startklassen des darauffolgenden Metapfades verglichen und wenn sie zuweisungskompatibel sind die speziellere der beiden zum Ergebnisset
+     * hinzzgefügt.
+     * Bei Pfaden, die nur aus Elementarpfaden bestehen enthält das Set genau die Klasse (oder null), die auch bei
+     * {@link #getPathStepElementClass(int)} zurück kommt.
      *
      * @param pathStepIndex
      * @return
      */
-    public final Set<Class<? extends ModelElement>> getPathStepElementClasses(final int pathStepIndex) {
-        AbstractMetaPath metaPathPre = metaPaths.get(pathStepIndex);
+    public final Set<Class<? extends ModelElement>> getPathStepConnectingClasses(final int pathStepIndex) {
+        AbstractMetaPath metaPath = metaPaths.get(pathStepIndex);
+        Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
         if (pathStepIndex == metaPaths.size() - 1) {
-            return metaPathPre.getEndClasses();
+            return endClasses;
         }
-        AbstractMetaPath elementaryMetaPathPost = metaPaths.get(pathStepIndex + 1);
-        Set<Class<? extends ModelElement>> endClasses = metaPathPre.getEndClasses();
-        Set<Class<? extends ModelElement>> startClasses = elementaryMetaPathPost.getStartClasses();
+        AbstractMetaPath nextMetaPath = metaPaths.get(pathStepIndex + 1);
+        Set<Class<? extends ModelElement>> nextStartClasses = nextMetaPath.getStartClasses();
         Set<Class<? extends ModelElement>> pathStepClasses = new HashSet<>();
         for (Class<? extends ModelElement> endClass : endClasses) {
-            for (Class<? extends ModelElement> startClass : startClasses) {
+            for (Class<? extends ModelElement> startClass : nextStartClasses) {
                 Class<? extends ModelElement> pathStepClass = ReflectionUtils.getMostSpecialElementClass(endClass, startClass);
                 //null tritt ein, wenn die Elemente der aufeinanderfolgenden Elementarpfade nicht zusammenpassen
                 if (pathStepClass != null) {
@@ -340,6 +322,26 @@ public class SequenceMetaPath extends ListMetaPath {
             }
         }
         return pathStepClasses;
+    }
+
+    /**
+     * Liefert die Verbindungsklasse des Pfadschrittes mit dem übergebenen Index in der Elementarpfadliste dieses Pfades. Dies ist beim Index 0 die
+     * speziellere der Endklasse des ersten Elementarpfades und der Startklasse des nächsten Elementarpfades. Der Pfadschritt mit dem Index der
+     * Pfadlänge -1 ist die Endklasse des letzten Elementarpfades = Endklasse der gesamten Elementarpfadliste. An die Startklasse des Gesamtpfades
+     * kommt man mit dieser Funktion nicht.
+     *
+     * @param pathStepIndex
+     * @return
+     */
+    public final Class<? extends ModelElement> getPathStepElementClass(final int pathStepIndex) {
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        if (elementaryMetaPaths.isEmpty()) {
+            return null;
+        }
+        ElementaryMetaPath elementaryMetaPath1 = elementaryMetaPaths.get(pathStepIndex);
+        ElementaryMetaPath elementaryMetaPath2 = pathStepIndex == elementaryMetaPaths.size() - 1 ? null : elementaryMetaPaths.get(pathStepIndex + 1);
+        Class<? extends ModelElement> connectingClass = MetaPathFunctions.getElementaryPathsConnectingClass(elementaryMetaPath1, elementaryMetaPath2);
+        return connectingClass;
     }
 
     public enum InvalidReason {
@@ -353,9 +355,9 @@ public class SequenceMetaPath extends ListMetaPath {
             //jeden Einzelpfad durchgehen
             for (int i = 0; i < metaPaths.size(); i++) {
                 //Hole alle Elementklassen die einen Pfad mit dem nächsten verbinden
-                Set<Class<? extends ModelElement>> pathStepElementClasses = getPathStepElementClasses(i);
+                Set<Class<? extends ModelElement>> pathStepElementClasses = getPathStepConnectingClasses(i);
                 //2 aufienanderfolgende Pfade passen nicht zusmammen
-                if (pathStepElementClasses.size() == 0) {
+                if (pathStepElementClasses.isEmpty()) {
                     invalidityCheckResult = new InvalidityCheckResult(InvalidReason.INVALID_SEQUENCE_INCOMPATIBLE_PATH_STEP_END_START_CLASSES, i);
                     break;
                 }

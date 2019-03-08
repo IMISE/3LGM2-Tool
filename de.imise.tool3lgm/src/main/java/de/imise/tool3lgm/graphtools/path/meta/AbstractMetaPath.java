@@ -554,6 +554,20 @@ public abstract class AbstractMetaPath {
     }
 
     /**
+     * Liefert <code>true</code>, wenn der Pfad eine einfache Assoziationsfolge ist (also bei {@link #getElementaryMetaPaths()} nicht
+     * <code>null</code> zurück gibt und jeder Einzelpfad die maximale Endkardinalität von 1 hat.
+     */
+    public final boolean isSingleConnection() {
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        for (ElementaryMetaPath elementaryMetaPath : elementaryMetaPaths) {
+            if (elementaryMetaPath.getForwardCardinality().max() != 1) {
+                return false;
+            }
+        }
+        return !elementaryMetaPaths.isEmpty();
+    }
+
+    /**
      * Liefert den MetaPfad der die Gegenricthung beschreibt oder <code>null</code>, wenn es einen solchen nicht gibt.
      *
      * @return the otherDirectionPath
