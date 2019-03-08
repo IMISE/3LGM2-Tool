@@ -13,6 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.Connect
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.DifferenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
@@ -22,6 +23,7 @@ import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode.NodeType;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
  * Ein Model, das je nach übergebenem MetaPfad und Startelementen einen Baum aufbaut, in dem man ausgehend von den Startelementen alle
@@ -220,9 +222,23 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @return
      */
     public final Collection<ModelElement> getConnectedElements(final boolean multiple) {
+        return getConnectedElements(multiple, false);
+    }
+
+    /**
+     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
+     *
+     * @param multiple
+     *            Wenn <code>true</code> sind mehrfach verbundene Element auch mehrfach in der Ergebnisliste, bei <code>false</code> ist jedes Element
+     *            nur einmal enthalten.
+     * @param forlast wenn <code>true</code>, werden nicht die letzten Elemente des Pfades zurück gegeben, sondern die vorletzten. Ist der Pfad nur 1
+     *            lang, kommem die Ausgangselemente zurück
+     * @return
+     */
+    public final Collection<ModelElement> getConnectedElements(final boolean multiple, final boolean forlast) {
         Collection<ModelElement> returnCollection = multiple ? new ArrayList<>() : new HashSet<>();
         for (PathResultTreeNode node : getCompletePathLeafs()) {
-            returnCollection.add(node.getEndElement());
+            returnCollection.add(forlast ? node.getStartElement() : node.getEndElement());
         }
         return returnCollection;
     }
@@ -233,7 +249,52 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @return
      */
     public Collection<ModelElement> getConnectedElements() {
-        return getConnectedElements(false);
+        return getConnectedElements(false, false);
+    }
+
+    /**
+     * Liefert alle Parent-Elemente der mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente. Besteht der Pfad nur aus einer Kante,
+     * so kommt hier das Ausgangselement zurück.
+     *
+     * @return
+     */
+    public Collection<ModelElement> getForlastConnectedElements() {
+        return getConnectedElements(false, true);
+    }
+
+    /**
+     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
+     *
+     * @param multiple
+     *            Wenn <code>true</code> sind mehrfach verbundene Element auch mehrfach in der Ergebnisliste, bei <code>false</code> ist jedes Element
+     *            nur einmal enthalten.
+     * @return
+     */
+    public final Collection<ElementContainer> getConnectedContainer(final GraphDocument doc) {
+        return getConnectedContainer(doc, false);
+    }
+
+    /**
+     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
+     *
+     * @param doc
+     *            GraphDocument, in dem die Container gesucht werden
+     * @param forlast
+     *            wenn <code>true</code> werden nicht die letzten, sondern die vorletzten im
+     *            Pfad zurück gegeben. Bei Pfaden, die nur aus einer Edge bestehen ist das das
+     *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
+     * @return
+     */
+    public final Collection<ElementContainer> getConnectedContainer(final GraphDocument doc, final boolean forlast) {
+        Collection<ElementContainer> returnCollection = new HashSet<>();
+        for (PathResultTreeNode node : getCompletePathLeafs()) {
+            ModelElement endElement = forlast ? node.getStartElement() : node.getEndElement();
+            ElementContainer ec = endElement.getContainer(doc);
+            if (ec != null) {
+                returnCollection.add(ec);
+            }
+        }
+        return returnCollection;
     }
 
     //Aufbau des Models
