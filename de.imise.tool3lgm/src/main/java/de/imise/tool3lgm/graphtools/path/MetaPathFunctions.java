@@ -1,9 +1,16 @@
 package de.imise.tool3lgm.graphtools.path;
 
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwardCardinality;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+
+import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -12,11 +19,15 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.util.ReflectionUtils;
+import de.imise.util.Sys;
 
 /**
  * @author AXS
@@ -126,6 +137,17 @@ public class MetaPathFunctions {
      */
     private static final Collection<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final AbstractMetaPath metaPath, final boolean multiple) {
         return getResultTree(modelElements, metaPath).getConnectedElements(multiple);
+    }
+
+    /**
+     * @param me
+     * @param doc
+     * @param metaPath
+     * @param forlast
+     * @return
+     */
+    public static final Collection<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final AbstractMetaPath metaPath, final boolean forlast) {
+        return getResultTree(me, metaPath).getConnectedContainer(doc, forlast);
     }
 
     /**
@@ -433,7 +455,7 @@ public class MetaPathFunctions {
      * @param doc
      * @return
      */
-    public static final ElementaryPath[] createPath(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final GraphDocument doc, final int pid) {
+    public static final ElementaryPath[] _createPath(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final GraphDocument doc, final int pid) {
         //Achtung: der Pfad wird auch angelegt, wenn dadurch die Cardinalität von einigen Elementen verletzt wird! (das macht das false)
         if (!isCreateable(startElement, endElement, metaPath, false)) {
             return null;
@@ -465,7 +487,7 @@ public class MetaPathFunctions {
             }
             int pathLength = simpleMetaPath.size();
             if (pathLength == 1) {
-                return createPath(startElement, endElement, simpleMetaPath.get(0), doc, pid);
+                return _createPath(startElement, endElement, simpleMetaPath.get(0), doc, pid);
             }
             //StartElement des ersten Pfades ist das übergebene StartElement
             ModelElement currentStartElement = startElement;
@@ -514,6 +536,262 @@ public class MetaPathFunctions {
             }
         }
         return returnPath;
+    }
+
+    /**
+     * @param simpleMetaPath
+     * @param pathStepIndex
+     * @return
+     */
+    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final SimpleMetaPath simpleMetaPath, final int pathStepIndex) {
+        List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
+        ElementaryMetaPath elementaryMetaPath1 = elementaryMetaPaths.get(pathStepIndex);
+        ElementaryMetaPath elementaryMetaPath2 = null;
+        if (pathStepIndex + 1 < elementaryMetaPaths.size()) {
+            elementaryMetaPath2 = elementaryMetaPaths.get(pathStepIndex + 1);
+        }
+        return getElementaryPathsConnectingClass(elementaryMetaPath1, elementaryMetaPath2);
+    }
+
+    /**
+     * Liefert die speziellere der Endklasse des ersten Pfades und der Startklasse des zweiten Pfades. Ist der zweite Pfad <code>null</code>, kommt
+     * die Endklasse des ersten zurück.
+     *
+     * @param elementaryMetaPath1
+     * @param elementaryMetaPath2
+     * @return
+     */
+    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final ElementaryMetaPath elementaryMetaPath1, final ElementaryMetaPath elementaryMetaPath2) {
+        //ACHTUNG: diese FUnktion nicht einfach durch die andere mit den EdgeClasses laufen lassen, da die Start- und Endklasse der ElementaryMetaPaths was anderes sein können, als die Start- bzw. die Endklasse der enthaltenen Kantenklasse
+        Class<? extends ModelElement> endClass = elementaryMetaPath1.getEndClass();
+        if (elementaryMetaPath2 == null) {
+            return endClass;
+        }
+        Class<? extends ModelElement> nextStartClass = elementaryMetaPath2.getStartClass();
+        Class<? extends ModelElement> connectingClass = ReflectionUtils.getMostSpecialElementClass(endClass, nextStartClass);
+        return connectingClass;
+    }
+
+    /**
+     * Liefert die speziellere der Endklasse des ersten Pfades und der Startklasse des zweiten Pfades. Ist der zweite Pfad <code>null</code>, kommt
+     * die Endklasse des ersten zurück.
+     *
+     * @param edgeClass1
+     * @param direction1
+     * @param edgeClass2
+     * @param direction2
+     * @return
+     */
+    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final Class<? extends Edge> edgeClass1, final Direction direction1, final Class<? extends Edge> edgeClass2, final Direction direction2) {
+        Class<? extends ModelElement> endClass = ElementaryMetaPath.getEndClass(edgeClass1, direction1);
+        if (edgeClass2 == null) {
+            return endClass;
+        }
+        Class<? extends ModelElement> nextStartClass = ElementaryMetaPath.getStartClass(edgeClass2, direction2);
+        Class<? extends ModelElement> connectingClass = ReflectionUtils.getMostSpecialElementClass(endClass, nextStartClass);
+        return connectingClass;
+    }
+
+    /**
+     * Liefert true, wenn die Kantenklasse eine Composition ist und die zugehörige Richtung (direction) vom Master auf den Slave zeigt.
+     *
+     * @return
+     */
+    private static final boolean isCompositionFromMasterToSlave(final Class<? extends Edge> edgeClass, final Direction direction) {
+        boolean isEdgeMasterToSlaveComposition = ModelConstants.isComposition(edgeClass);
+        if (!isEdgeMasterToSlaveComposition) {
+            return false;
+        }
+        isEdgeMasterToSlaveComposition = direction == CompositionEdge.MASTER_TO_SLAVE_DIRECTION;
+        return isEdgeMasterToSlaveComposition;
+    }
+
+    //    /**
+    //     * Erzeugt ein neues Element und verknüpft es mit dem übergebenen Startelelement. Für das neue Element werden alle anderen
+    //     * Elemente angelegt, die es braucht, damit keine Verletzung irgendwelcher Kardinalitäten bestehen.
+    //     *
+    //     * @param startElement Element, von dem aus die Kanten angelegt werden sollen. Ist dieses Element null, dann wird nur das neue Element angelegt,
+    //     *            aber nichts verknüpft.
+    //     * @param edgeClassToNewElement Kantenklasse, die zwischen dem startElement und dem anzulegenden Element bestehen soll. Diese Klasse und die
+    //     *            directionToNewElement geben vor, welche Elementart neu angelegt werden soll
+    //     * @param directionToNewElement Richtung der neu anzulegenden Edge ausgehend vom startContainer
+    //     * @param edgeClassFromNewElement Kantenklasse, die nicht neu angelegt wird, auch wenn die Kardinalität das bedingen würde. Da diese Funktion hier
+    //     *            für einen anzulegenden Pfad aufgerufen wird, dürfen die Edge, dieses Pfades eben nicht schon hier automatisch angelegt werden.
+    //     * @param doc GraphDocument, in dem die anzulegenden Container landen sollen (wenn sie teilmodellspezifisch sind)
+    //     * @param pid Process-ID des Dialoges
+    //     * @return den neu angelegtes ModelElement mit allen davon abhängigen Elementen (außer denen, die evtl. auf dem Pfad liegen, der insgesamt
+    //     *         angelegt werden soll)
+    //     */
+    //    public static final ModelElement createNodeWithContainerAndDependents(final GraphDocument doc, final ModelElement startElement, final SimpleMetaPath metaPath, final int pathStepIndex, final int pid) {
+    //        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+    //        ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(pathStepIndex);
+    //        Class<? extends Edge> edgeClassToNewElement = elementaryMetaPath.getEdgeClass();
+    //        Direction directionToNewElement = elementaryMetaPath.getDirection();
+    //        Class<? extends Edge> edgeClassFromNewElement = null;
+    //        Direction directionFromNewElement = null;
+    //        if (pathStepIndex + 1 < elementaryMetaPaths.size()) {
+    //            elementaryMetaPath = elementaryMetaPaths.get(pathStepIndex + 1);
+    //            edgeClassFromNewElement = elementaryMetaPath.getEdgeClass();
+    //            directionFromNewElement = elementaryMetaPath.getDirection();
+    //        }
+    //        return createNodeWithContainerAndDependents(doc, startElement, edgeClassToNewElement, directionToNewElement, edgeClassFromNewElement, directionFromNewElement, pid);
+    //    }
+    //
+    /**
+     * Erzeugt ein neues Element und verknüpft es mit dem übergebenen Startelelement. Für das neue Element werden alle anderen
+     * Elemente angelegt, die es braucht, damit keine Verletzung irgendwelcher Kardinalitäten bestehen.
+     *
+     * @param startElement Element, von dem aus die Kanten angelegt werden sollen. Ist dieses Element null, dann wird nur das neue Element angelegt,
+     *            aber nichts verknüpft.
+     * @param edgeClassToNewElement Kantenklasse, die zwischen dem startElement und dem anzulegenden Element bestehen soll. Diese Klasse und die
+     *            directionToNewElement geben vor, welche Elementart neu angelegt werden soll
+     * @param directionToNewElement Richtung der neu anzulegenden Edge ausgehend vom startContainer
+     * @param edgeClassFromNewElement Kantenklasse, die nicht neu angelegt wird, auch wenn die Kardinalität das bedingen würde. Da diese Funktion hier
+     *            für einen anzulegenden Pfad aufgerufen wird, dürfen die Edge, dieses Pfades eben nicht schon hier automatisch angelegt werden.
+     * @param doc GraphDocument, in dem die anzulegenden Container landen sollen (wenn sie teilmodellspezifisch sind)
+     * @param pid Process-ID des Dialoges
+     * @return den neu angelegtes ModelElement mit allen davon abhängigen Elementen (außer denen, die evtl. auf dem Pfad liegen, der insgesamt
+     *         angelegt werden soll)
+     */
+    public static final ModelElement createNodeWithContainerAndDependents(final GraphDocument doc, final ModelElement startElement, final Class<? extends Edge> edgeClassToNewElement, final Direction directionToNewElement,
+            final Class<? extends Edge> edgeClassFromNewElement, final Direction directionFromNewElement, final int pid) {
+
+        //Collection des übergebenen doc holen
+        GDCollection gdcoll = doc.getCollection();
+        //den interactiveMode auf false setzen, damit man nicht nach den Namen für die Zwischenelemente gefragt wird,
+        //bei denen der Namen normalerweise nicht generiert wird
+        boolean isInteractiveMode = gdcoll.isInteractiveMode();
+
+        boolean lastEdge = edgeClassFromNewElement == null;
+
+        //bei der letzten Edge sollte man bei neuen Elementen nach dem Namen fragen
+        boolean newInteractiveMode = lastEdge;
+        //Ausnahme für Mac-Java-Bug: wenn Dialoge aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
+        //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach nicht angezeigt und der Name generiert.
+        if (System.getProperty("os.name").toLowerCase().contains("mac") && Sys.stackTraceContains(DropTarget.class)) {
+            newInteractiveMode = false;
+        }
+        gdcoll.setInteractiveMode(newInteractiveMode);
+
+        Class<? extends ModelElement> elementClass2Create = getElementaryPathsConnectingClass(edgeClassToNewElement, directionToNewElement, edgeClassFromNewElement, directionFromNewElement);
+        //abstracte Elemente können nicht angelegt werden! hier wird nicht auf null gecheckt, weil man diese Funktion nur mit SimpleMetaPaths aufrufen sollte, die creatable sind!
+        if (ModelConstants.isAbstract(elementClass2Create)) {
+            return null;
+        }
+
+        ModelElement createdDependent;
+        ElementContainer createdContainer = null;
+        //wenn ein gültiges startElement übergeben wurde und die Kantenart eine Composition ist
+        if (startElement != null && isCompositionFromMasterToSlave(edgeClassToNewElement, directionToNewElement)) {
+            //erzeuge ein untergeordnetes Element
+            Class<? extends CompositionEdge> compositionEdgeClass = edgeClassToNewElement.asSubclass(CompositionEdge.class);
+            createdDependent = GraphDocument.createAddicted(doc, startElement, compositionEdgeClass, elementClass2Create, pid);
+        } else {
+            //das neue Element gleich mit Container im doc anlegen
+            createdContainer = doc.createKnotenWithContainer(elementClass2Create, pid);
+            if (createdContainer == null) {
+                return null;
+            }
+            //das Element des neu angelgten Containers holen
+            createdDependent = createdContainer.getElement();
+
+            //das neue Element mit dem startElement verknüpfen. Dast Startelement kann null sein, wenn nur das neue Element angelegt werden soll
+            if (startElement != null) {
+                link(gdcoll, startElement, createdDependent, edgeClassToNewElement, directionToNewElement, pid);
+            }
+        }
+
+        //falls hier beim Anlegen irgendwas schief gegangen ist -> raus
+        if (createdDependent == null) {
+            return null;
+        }
+
+        //wenn das neu angelegte Element ein übergerodnetes Element von dem startElement ist, dann sollte es in der Grafik unter dem startElement liegen
+        if (startElement.isSubElementOf(createdDependent)) {
+            if (createdContainer == null) {
+                createdContainer = createdDependent.getContainer(doc);
+            }
+            doc.raiseSlaves(createdContainer);
+        }
+
+        //alle Kantentpyen der neu angelegten Elementart holen
+        Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass2Create);
+        //für jede dieser Kantenarten
+        boolean interrupted = false;
+        for (int i = 0; i < edgeTypes.length && !interrupted; i++) {
+            //aktuelle Kantenart holen
+            Class<? extends Edge> edgeType = edgeTypes[i];
+            //die Kanten, die über den Pfad als nächstes angelegt werden sollen, dürfen hier nicht angelegt werden
+            if (edgeType == edgeClassFromNewElement) {
+                continue;
+            }
+            //wenn das neu angelegte Element StartElement der Edge ist
+            if (Edge.isStartClass(edgeType, elementClass2Create)) {
+                //hole die MinKardnalität zu dem anderen Element der Edge
+                int minCardinalityForwardToOther = Edge.getMinForwardCardinality(edgeType);
+                if (minCardinalityForwardToOther > 0) {
+                    //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
+                    List<Edge> edgesForwardTo = createdDependent.getEdgesTo(ModelElement.class, edgeType);
+                    //Anzahl der bestehenden Kanten der aktuellen Kantenart zu anderen Elementen
+                    int edgesForwardToCount = edgesForwardTo.size();
+                    //wenn weitere Kanten angelegt werden müssen
+                    while (minCardinalityForwardToOther - edgesForwardToCount > 0) {
+                        //für das neu angelegte Element müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
+                        //geht, ist die edgeCLassFromNewElement null.
+                        ModelElement created = createNodeWithContainerAndDependents(doc, createdDependent, edgeType, FORWARD, null, null, pid);
+                        if (created == null) {
+                            interrupted = true;
+                            break;
+                        }
+                        edgesForwardToCount++;
+                    }
+                }
+                //wenn das neu angelegte Element EndElement der Edge ist
+            } else {
+                //hole die MinKardnalität zu dem anderen Element der Edge
+                int minCardinalityBackwardToOther = getMinBackwardCardinality(edgeType);
+                if (minCardinalityBackwardToOther > 0) {
+                    //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
+                    List<Edge> edgesBackwardTo = createdDependent.getEdgesFrom(ModelElement.class, edgeType);
+                    //Anzahl der bestehenden Kanten der aktuellen Kantenart zu anderen Elementen
+                    int edgesBackwardToCount = edgesBackwardTo.size();
+                    //wenn weitere Kanten angelegt werden müssen
+                    while (minCardinalityBackwardToOther - edgesBackwardToCount > 0) {
+                        //für das neu angelegte Elemente, müssen auch alle abhängigen Elemente angelegt werden. Da der Pfad von hier nicht weiter
+                        //geht, ist die edgeClassFromNewElement null.
+                        ModelElement created = createNodeWithContainerAndDependents(doc, createdDependent, edgeType, BACKWARD, null, null, pid);
+                        if (created == null) {
+                            interrupted = true;
+                            break;
+                        }
+                        edgesBackwardToCount++;
+                    }
+                }
+            }
+
+        }
+        gdcoll.setInteractiveMode(isInteractiveMode);
+        return createdDependent;
+    }
+
+    /**
+     * Verbindet die beiden Elemente je nach übergebener Richtung vorwärts oder rückwärts. Richtung und Kantenklasse ergeben sich aus dem
+     * Elementarpfad.
+     *
+     * @param gdcoll
+     * @param startElement
+     * @param endElement
+     * @param edgeClass
+     * @param direction
+     * @param pid
+     */
+    private static void link(final GDCollection gdcoll, final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
+        //das neue Element mit dem startElement verknüpfen
+        if (direction == FORWARD) {
+            gdcoll.link(edgeClass, startElement, endElement, pid);
+        } else {
+            gdcoll.link(edgeClass, endElement, startElement, pid);
+        }
     }
 
 }
