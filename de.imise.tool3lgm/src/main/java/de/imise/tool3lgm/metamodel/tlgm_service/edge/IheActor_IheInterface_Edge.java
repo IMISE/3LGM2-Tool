@@ -5,13 +5,14 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMIT
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Optional;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActor;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheInterface;
 
 /**
  * @author AXS (24.04.2018)
  */
-public class IheActor_IheInterface_Edge extends CompositionEdge {
+public class IheActor_IheInterface_Edge extends CompositionEdge implements Optional {
 
     public static final Class<? extends ModelElement> stcl = IheActor.class;
 
