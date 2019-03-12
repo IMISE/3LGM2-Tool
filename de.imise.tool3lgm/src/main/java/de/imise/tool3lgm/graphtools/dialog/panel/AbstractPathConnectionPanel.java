@@ -46,7 +46,7 @@ import de.imise.util.StringUtils;
 public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel {
 
     /** Der MetaPfad zu anderen Elementen */
-    protected final AbstractMetaPath metaPath;
+    protected AbstractMetaPath metaPath;
 
     /** Label vor dem verbundenen Element mit der Art des Elementes */
     protected final JLabel westLabel;
@@ -66,6 +66,14 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     @SafeVarargs
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
         this(dialog, null, edgeClasses);
+    }
+
+    /**
+     * @param dialog
+     * @param simpleMetaPath
+     */
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, simpleMetaPath.getElementaryMetaPaths().size() - 1, false, null, simpleMetaPath);
     }
 
     /**
@@ -131,7 +139,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param labelEdgeIndex Index der Edge, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
      *            wird. Es wird immer die Endklasse des Pfades bis zur Edge mit dem jeweiligen Index ans Label geschrieben.
      * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
-     *            der Name der Edge selbst ans Label geschrieben. Welche Edge im Pfad das ist, wird durch connectionLabelIndex
+     *            der Name der Edge selbst ans Label geschrieben. Welche Edge im Pfad das ist, wird durch labelEdgeIndex
      *            festgelegt.
      * @param searchElementClass wird hier <code>null</code> übergeben, wird diese Klasse aus den edgeClasses bestimmt, sond wird die übergebene
      *            Klasse genommen
@@ -139,22 +147,26 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      */
     @SafeVarargs
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+        this(dialog, labelEdgeIndex, labelEdgeName, searchElementClass, SimpleMetaPathCreator.createSimpleMetaPath(dialog.getModelElement().getClass(), searchElementClass, edgeClasses));
+    }
+
+    /**
+     * @param dialog
+     * @param labelEdgeIndex
+     * @param labelEdgeName
+     * @param searchElementClass
+     * @param simpleMetaPath
+     */
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final SimpleMetaPath simpleMetaPath) {
         super(dialog);
-        Class<? extends ModelElement> startClass = dialog.getModelElement().getClass();
-        metaPath = SimpleMetaPathCreator.createSimpleMetaPath(startClass, searchElementClass, edgeClasses);
-        if (searchElementClass != null) {
-            this.searchElementClass = searchElementClass;
-        } else {
-            Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
-            Class<?> superEndClass = ReflectionUtils.getCommonSuperClass(endClasses);
-            this.searchElementClass = superEndClass.asSubclass(ModelElement.class);
-        }
+        metaPath = simpleMetaPath;
+        this.searchElementClass = getInitialSearchElementClass(searchElementClass, simpleMetaPath);
         isConnectionPointUnique = isConnectionPointUnique();
 
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
         westLabel = new JLabel();
         String westLabelText;
-        Class<? extends Edge> edgeClass = edgeClasses[labelEdgeIndex];
+        Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
 
         if (labelEdgeName) {
             westLabelText = getDirectionInPath(labelEdgeIndex) == FORWARD ? ElementsNameBuilder.getForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
@@ -171,10 +183,34 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         setName(westLabelText);
     }
 
+    /**
+     * Wenn eine gültige searchElementClass als Parameter übergeben wird, kommt diese zurück, sonst (wenn Parameter <code>null</code>) wird die
+     * Endklasse des Pfades zurück gegeben.
+     *
+     * @param searchElementClassConstructorParameter
+     * @param metaPath
+     * @return
+     */
+    private static Class<? extends ModelElement> getInitialSearchElementClass(final Class<? extends ModelElement> searchElementClassConstructorParameter, final AbstractMetaPath metaPath) {
+        Class<? extends ModelElement> searchElementClass = searchElementClassConstructorParameter;
+        if (searchElementClass == null) {
+            Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
+            Class<?> superEndClass = ReflectionUtils.getCommonSuperClass(endClasses);
+            searchElementClass = superEndClass.asSubclass(ModelElement.class);
+        }
+        return searchElementClass;
+    }
+
+    /**
+     * @return
+     */
     public Class<? extends Edge> getLastEdgeClassInPath() {
         return getEdgeClassInPath(-1);
     }
 
+    /**
+     * @return
+     */
     public Direction getLastDirectionInPath() {
         return getDirectionInPath(-1);
     }
@@ -196,16 +232,27 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         return elementaryMetaPath;
     }
 
+    /**
+     * @param index
+     * @return
+     */
     public Direction getDirectionInPath(final int index) {
         ElementaryMetaPath elementaryMetaPathInPath = getElementaryMetaPathInPath(index);
         return elementaryMetaPathInPath == null ? null : elementaryMetaPathInPath.getDirection();
     }
 
+    /**
+     * @param index
+     * @return
+     */
     public Class<? extends Edge> getEdgeClassInPath(final int index) {
         ElementaryMetaPath elementaryMetaPathInPath = getElementaryMetaPathInPath(index);
         return elementaryMetaPathInPath == null ? null : elementaryMetaPathInPath.getEdgeClass();
     }
 
+    /**
+     * @return
+     */
     public int getEdgesInPathCount() {
         return metaPath.getElementaryMetaPaths().size();
     }

@@ -41,9 +41,12 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel.ConnectedElementsTableColumnsDefinition;
+import de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel.ConnectedElementsTablePanel;
 
 /**
  * Eigenschaftsdialog für Modellelemnte, also Node und Kanten.<br>
@@ -532,7 +535,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     private void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final boolean editableOnlyInExpertMode, final boolean add2SubTab) {
-        boolean editable = !editableOnlyInExpertMode || Static.isExpertMode();
+        boolean editable = isEditable(editableOnlyInExpertMode);
         ElementDialogPanel panel2Add = null;
         if (ModelConstants.isComposition(edgeClass)) {
             panel2Add = new MutipleCompositionPanel(this, editable, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
@@ -549,6 +552,30 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         } else {
             addTab(panel2Add);
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableColumnsDefinition columnsDefinition, final Class<? extends Edge>... edgeClasses) {
+        addTab(new ConnectedElementsTablePanel(this, isEditable(editableOnlyInExpertMode), columnsDefinition, edgeClasses));
+    }
+
+    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableColumnsDefinition columnsDefinition, final SimpleMetaPath simpleMetaPath, final SimpleMetaPath... additionalSimpleMetaPaths) {
+        addTab(new ConnectedElementsTablePanel(this, isEditable(editableOnlyInExpertMode), columnsDefinition, simpleMetaPath, additionalSimpleMetaPaths));
+    }
+
+    //wird im Moment nicht gebraucht
+    //    public Component _getLastAddedComponent() {
+    //        int componentCount = getComponentCount();
+    //        return getComponent(componentCount - 1);
+    //    }
+    //
+    //    public ElementDialogPanel _getLastPanel() {
+    //        Component lastAddedComponent = _getLastAddedComponent();
+    //        return lastAddedComponent instanceof ElementDialogPanel ? (ElementDialogPanel) lastAddedComponent : null;
+    //    }
+
+    private static final boolean isEditable(final boolean editableOnlyInExpertMode) {
+        return !editableOnlyInExpertMode || Static.isExpertMode();
     }
 
 }
