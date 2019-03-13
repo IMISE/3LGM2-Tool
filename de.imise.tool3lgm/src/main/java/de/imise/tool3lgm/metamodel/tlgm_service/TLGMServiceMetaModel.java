@@ -14,6 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -391,6 +392,23 @@ public class TLGMServiceMetaModel extends MetaModel {
             return CONDITION_METAPATH_2;
         }
         return null;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    // Ebenfalls mizuinsnaziierende Pfade bei der Instanziierung über eine InstanciationEdge //
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    //IheActor_IheActorInstance_Edge
+    public static final Iterable<SimpleMetaPath> IHEACTOR_IHEACTORINSTANCE_EDGE_INSTANCIATION_METAPATHS = ImmutableList.of(
+            createSimpleMetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_InvokingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class),
+            createSimpleMetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+
+    @Override
+    public Iterable<SimpleMetaPath> getInstanciableMetaPath(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
+        if (instanciationEdgeClass == IheActor_IheActorInstance_Edge.class) {
+            return IHEACTOR_IHEACTORINSTANCE_EDGE_INSTANCIATION_METAPATHS;
+        }
+        return super.getInstanciableMetaPath(instanciationEdgeClass);
     }
 
     ///////////////////////////////////////////////////////////////////

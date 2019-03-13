@@ -17,6 +17,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -352,6 +353,29 @@ public abstract class MetaModel {
         //aus Performancegründen sollte hier keine Map zum Einsatz kommen. Es wird für die allerwenigsten Kanten einen solchen Pfad geben
         //und Unterklasse sollten das einfach über eine if-then-Abfrage regeln
         return null;
+    }
+
+    private static final Iterable<SimpleMetaPath> EMPTY_SIMPLE_META_PATH_ITERABLE = ImmutableList.of();
+
+    /**
+     * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
+     * Kantenklasse durchgeführt wird. <br>
+     * Jeder der Pfade muss zwingend bei derselben Klasse starten, bei der diese Kante startet.<br>
+     * Der Pfad hat nur einen Effekt, wenn seine Startklasse zur Startklasse dieser Kante zuweisungskompatibel ist und er mind. eine
+     * {@link InstanciationEdge} enthält. Der hiermit verbundene Mechanismus geht durch die Kantenklassen des Pfades. Ist die aktuelle
+     * Kantenklasse keine {@link InstanciationEdge}, dann suche von den aktuellen Elementen ausgehend (am Anfang ist das das Startelement dieser
+     * Kante) alle damit über diese Kantenart verbundenen Elemente und nimmt sie für den nächsten Schritt als Startelemente. Sobald im Pfad eine
+     * {@link InstanciationEdge} auftaucht, werden alle Elementarten und Kanten der dahinter liegenden Pfadschritte kompeltt neu erzeugt und die
+     * entstehenden Elemente immer mit den vorherigen verbunden. Wenn der Pfad mit einer Klasse endet (was er in den meisten Fällen tun wird, damit
+     * das ganze sinnvoll ist), die zuweisungskompatibel zur Endklasse dieser Kante ist (also zum durch diese Kante neu erzeugten Element), dann wird
+     * die letzte Verbindung bzw. die letzte Kante hin zum EndElementdieser Kante erzeugt und nicht nochmal ein Element der Endelementart angelegt.
+     * Damit kann man "Nebenbedingungspfade" für das Startelement gleich mit anlegen, wenn man das Startelement über diese Kante hier intsanziiert.
+     *
+     * @param instanciationEdgeClass
+     * @return
+     */
+    public Iterable<SimpleMetaPath> getInstanciableMetaPath(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
+        return EMPTY_SIMPLE_META_PATH_ITERABLE;
     }
 
     ///////////////////////////////////////////////////////////////////

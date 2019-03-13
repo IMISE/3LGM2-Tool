@@ -3661,10 +3661,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         Class<? extends ModelElement> class2Create = Edge.getEndClass(instanciationEdgeClass);
         NodeContainer instanceContainer = doc.createKnotenWithContainer(class2Create, pid);
         ModelElement instanceElement = instanceContainer.getElement();
-        InstanciationEdge instanciationEdge = (InstanciationEdge) gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
+        gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
 
         //Ebenfalls zu instanziierende Nebenpfade anlegen
-        for (SimpleMetaPath metaPath : instanciationEdge.iterateInstanciableMetaPaths()) {
+        for (SimpleMetaPath metaPath : ModelConstants.getInstanciablePath(instanciationEdgeClass)) {
             int path2CreateStartIndex = 0;
             for (; path2CreateStartIndex < metaPath.getMetaPathCount(); path2CreateStartIndex++) {
                 List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();

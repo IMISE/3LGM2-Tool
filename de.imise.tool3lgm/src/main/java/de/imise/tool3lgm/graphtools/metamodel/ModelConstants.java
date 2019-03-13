@@ -33,6 +33,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -442,6 +443,18 @@ public final class ModelConstants {
      */
     public static SimpleMetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
         return metaModel.getConditionPath(edgeClass);
+    }
+
+    /**
+     * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
+     * Kantenklasse durchgeführt wird.
+     *
+     * @param instanciationEdgeClass
+     * @return
+     * @see MetaModel#getInstanciableMetaPath(Class)
+     */
+    public static Iterable<SimpleMetaPath> getInstanciablePath(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
+        return metaModel.getInstanciableMetaPath(instanciationEdgeClass);
     }
 
     ///////////////////////////////////////////////////////////////////
