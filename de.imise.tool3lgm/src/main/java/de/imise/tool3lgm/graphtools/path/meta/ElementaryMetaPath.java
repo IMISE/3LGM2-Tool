@@ -97,11 +97,6 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     private final boolean directed;
 
     /**
-     * @see #isCreateable()
-     */
-    private final boolean createable;
-
-    /**
      * Ein MetaPfad kann nur aus einer Elementklasse bestehen. Dies beschreibt den Pfad zu allen Elementen dieser Klasse.
      * Intern sind bei diesem Pfad sowohl die Start- als auch die Endklasse auf diese Elementklasse gesetzt und es gibt
      * weder eine Kantenklasse noch eine Richtung.
@@ -117,7 +112,6 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         connectionState = null;
         otherDirection = this;
         directed = false;
-        createable = false;
         type = Type.SINGLE_ELEMENT;
     }
 
@@ -179,7 +173,6 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         this.connectionState = DoubleMeaningEdge.class.isAssignableFrom(edgeClass) ? connectionState : null; //nur bei DoubleMeaningEdges darf ein gültiger connectionState gesetzt werden, sonst muss er null sein!
         this.type = type;
         directed = this.startClass != this.endClass && getFullForwardMetaAssociationName(edgeClass) != getFullBackwardMetaAssociationName(edgeClass);
-        createable = getIsCreateable();
         //TODO: hier müsste noch der invalidReason geprüft werden!
     }
 
@@ -195,7 +188,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @return
      */
     public static Class<? extends ModelElement> getStartClass(final Class<? extends Edge> edgeClass, final Direction direction) {
-        return direction == Direction.BACKWARD ? Edge.getStartClass(edgeClass) : Edge.getEndClass(edgeClass);
+        return direction == Direction.BACKWARD ? Edge.getEndClass(edgeClass) : Edge.getStartClass(edgeClass);
     }
 
     /**
@@ -364,18 +357,9 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
 
     @Override
     public final boolean isCreateable() {
-        //die hintere Bedungung kann man nicht in creatable speichern, weil es sonst zu einem java.lang.ExceptionInInitializerError beim Laden des Metamodells kommt
-        return createable && ModelConstants.getConditionPath(edgeClass) == null;
-    }
-
-    /**
-     * Nur ElementarMetaPfade, die eine Kante zwischen 2 Knoten repräsentieren, wobei die Kantenklasse nicht abstract sein darf, sind anlegtbar. Alle
-     * anderen nicht. Die Elementklassen können abstract sein. Ob sie anlegbar sind, ist hier (bei einem einzelnen Elementarpfad) egal, da es nur um
-     * die Anlegbarkeit der Kante geht.
-     *
-     * @return
-     */
-    private final boolean getIsCreateable() {
+        //Nur ElementarMetaPfade, die eine Kante zwischen 2 Knoten repräsentieren, wobei die Kantenklasse nicht abstract sein darf, sind anlegtbar. Alle
+        //anderen nicht. Die Elementklassen können abstract sein. Ob sie anlegbar sind, ist hier (bei einem einzelnen Elementarpfad) egal, da es nur um
+        //die Anlegbarkeit der Kante geht.
         if (type != Type.ELEMENT_EDGE_ELEMENT) {
             return false;
         }
@@ -383,6 +367,9 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
             return false;
         }
         if (Modifier.isAbstract(edgeClass.getModifiers())) {
+            return false;
+        }
+        if (ModelConstants.getConditionPath(edgeClass) != null) {
             return false;
         }
         return true;

@@ -47,11 +47,6 @@ public class SequenceMetaPath extends ListMetaPath {
     private final boolean directed;
 
     /**
-     * @see #isCreateable()
-     */
-    private final boolean createable;
-
-    /**
      * @param metaPaths
      */
     public SequenceMetaPath(final AbstractMetaPath... metaPaths) {
@@ -75,7 +70,6 @@ public class SequenceMetaPath extends ListMetaPath {
         super(baseResKeyOrName, metaPaths);
         this.direction = direction;
         directed = getIsDirected();
-        createable = getIsCreateable();
     }
 
     @Override
@@ -90,7 +84,6 @@ public class SequenceMetaPath extends ListMetaPath {
     public int hashCode() {
         final int prime = 31;
         int result = super.hashCode();
-        result = prime * result + (createable ? 1231 : 1237);
         result = prime * result + (directed ? 1231 : 1237);
         result = prime * result + (direction == null ? 0 : direction.hashCode());
         result = prime * result + (metaPaths == null ? 0 : metaPaths.hashCode());
@@ -110,9 +103,6 @@ public class SequenceMetaPath extends ListMetaPath {
             return false;
         }
         SequenceMetaPath other = (SequenceMetaPath) obj;
-        if (createable != other.createable) {
-            return false;
-        }
         if (directed != other.directed) {
             return false;
         }
@@ -208,10 +198,6 @@ public class SequenceMetaPath extends ListMetaPath {
 
     @Override
     public final boolean isCreateable() {
-        return createable;
-    }
-
-    private final boolean getIsCreateable() {
         if (!isValid()) {
             return false;
         }
