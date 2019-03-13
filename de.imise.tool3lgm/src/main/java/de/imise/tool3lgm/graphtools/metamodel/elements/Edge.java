@@ -399,7 +399,10 @@ public abstract class Edge extends ModelElement {
      */
     private static final Class<? extends ModelElement> getStartOrEndClass(final Class<? extends Edge> edgeClass, final boolean start) {
         String fieldName = start ? START_CLASS_FIELD_NAME : END_CLASS_FIELD_NAME;
-        return ((Class<?>) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName)).asSubclass(ModelElement.class);
+        Object field = ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
+        Class<?> startOrEndClass = (Class<?>) field;
+        Class<? extends ModelElement> startOrEndElementClass = startOrEndClass.asSubclass(ModelElement.class);
+        return startOrEndElementClass;
     }
 
     /**
