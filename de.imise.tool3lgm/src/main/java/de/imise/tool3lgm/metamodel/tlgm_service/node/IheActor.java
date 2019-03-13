@@ -31,8 +31,8 @@ public class IheActor extends IheConcept {
         columnsDefinition.addColumnEndElement();
         columnsDefinition.addColumnOptional(0);
         columnsDefinition.addColumnPathStepName(1, "HEADER_ACTOR_TRANSACTION_CONNECTION_NAME");
-        SimpleMetaPath path1 = createSimpleMetaPath(IheActor.class, IheTransaction.class, IheInvokingInterface_IheTransaction_Edge.class.getSimpleName(), IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
-        SimpleMetaPath path2 = createSimpleMetaPath(IheActor.class, IheTransaction.class, IheProvidingInterface_IheTransaction_Edge.class.getSimpleName(), IheActor_IheInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
+        SimpleMetaPath path1 = createSimpleMetaPath(IheActor.class, IheTransaction.class, "PATH_IHE_ACTOR_IHE_INVOKING_INTERFACE_IHE_TRANSACTION", IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
+        SimpleMetaPath path2 = createSimpleMetaPath(IheActor.class, IheTransaction.class, "PATH_IHE_ACTOR_IHE_PROVIDING_INTERFACE_IHE_TRANSACTION", IheActor_IheInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
         dialog.addTablePanel(true, columnsDefinition, path1, path2);
         return dialog;
     }
