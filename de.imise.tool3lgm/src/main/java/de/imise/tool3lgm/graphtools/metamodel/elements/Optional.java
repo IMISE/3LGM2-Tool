@@ -41,7 +41,14 @@ public interface Optional {
         if (!(me instanceof Optional)) {
             return null;
         }
-        return ((Optional) me).isOptional() ? getOptionOptionalDisplayName() : getOptionRequiredDisplayName();
+        boolean optional = ((Optional) me).isOptional();
+        if (me instanceof Edge) {
+            Edge edge = (Edge) me;
+            ModelElement end = edge.getEnd();
+            String name = end.getName();
+            optional |= name.contains("[ITI-8]") || name.contains("[ITI-44]") || name.contains("[ITI-57]");
+        }
+        return optional ? getOptionOptionalDisplayName() : getOptionRequiredDisplayName();
     }
 
 }
