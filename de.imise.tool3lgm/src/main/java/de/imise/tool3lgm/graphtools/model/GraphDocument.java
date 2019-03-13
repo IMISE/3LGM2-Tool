@@ -88,6 +88,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /** Zeichen, das in Kommandos zusammengehörigen Text umschließt, damit er als zusammengehörig erkannt werden kann */
     public static final char GDCOMMAND_TEXT_SURROUNDER = '\'';
 
+    public static final char GENERATED_NAME_PREFIX = 27; //ESCAPE
+
     public final OptionsSupport optionsSupport = new OptionsSupport();
 
     /**
@@ -3032,6 +3034,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @param elementClass
      * @param name
+     * @param pid
+     * @return
+     */
+    public NodeContainer createKnotenWithContainer(final Class<? extends ModelElement> elementClass, final String name, final int pid) {
+        return createKnotenWithContainer(elementClass, name, GDCommands.INVALID_DESCRIPTION, GDCommands.INVALID_HASH_STRING, pid);
+    }
+
+    /**
+     * @param elementClass
+     * @param name
      * @param description
      * @param pid
      * @return
@@ -3659,7 +3671,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         doc.start_transaction(pid);
         //Hauptkante anlegen
         Class<? extends ModelElement> class2Create = Edge.getEndClass(instanciationEdgeClass);
-        NodeContainer instanceContainer = doc.createKnotenWithContainer(class2Create, pid);
+        String name = GENERATED_NAME_PREFIX + master.getName() + " " + Tool3lgmConstants.getResString("INSTANCE");
+        NodeContainer instanceContainer = doc.createKnotenWithContainer(class2Create, name, pid);
         ModelElement instanceElement = instanceContainer.getElement();
         gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
 
