@@ -80,6 +80,16 @@ public class PathResultTreeModel extends DefaultTreeModel {
     private boolean keepIncompleteBranches = false;
 
     /**
+     * Auf level 0 ist der Root und auf der 1 kommmen alle StartElement-Nodes
+     */
+    public static final int START_ELEMENTS_NODE_LEVEL = 1;
+
+    /**
+     * Nach den StartElement-Nodes kommen auf Level 2 die ersten Pfadschritte
+     */
+    public static final int FIRST_PATH_STEP_NODE_LEVEL = START_ELEMENTS_NODE_LEVEL + 1;
+
+    /**
      * @param metaPath
      */
     public PathResultTreeModel(final AbstractMetaPath metaPath) {
