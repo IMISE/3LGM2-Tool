@@ -102,7 +102,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                     String value = null;
                     if (columnType == ColumnType.OPTIONAL) {
                         Edge edge = currentPathNode.getEdge();
-                        value = Optional.getOptionDisplayName(edge);
+                        value = "  " + Optional.getOptionDisplayName(edge);
                     } else if (columnType == ColumnType.PATH_STEP_NAME) {
                         AbstractMetaPath metaPath = currentPathNode.getMetaPath();
                         value = metaPath.getName();
