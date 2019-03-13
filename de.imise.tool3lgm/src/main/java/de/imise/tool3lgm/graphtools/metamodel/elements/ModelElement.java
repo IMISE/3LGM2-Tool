@@ -426,7 +426,7 @@ public abstract class ModelElement extends UserFieldTarget {
                 //2 mal dasselbe steht)
                 ModelElement firstConnected = directConnectedElements.iterator().next();
                 if (directConnectedElements.size() == 1) {
-                    if (!firstConnected.getClearName().equals(getClearName())) {
+                    if (!getClearName().contains(firstConnected.getClearName())) {
                         suffixBuf.append("(").append(firstConnected.getName()).append(")");
                     }
                 } else {
