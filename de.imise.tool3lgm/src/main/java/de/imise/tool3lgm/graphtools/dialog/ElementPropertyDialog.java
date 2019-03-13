@@ -559,8 +559,8 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         addTab(new ConnectedElementsTablePanel(this, isEditable(editableOnlyInExpertMode), columnsDefinition, edgeClasses));
     }
 
-    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableColumnsDefinition columnsDefinition, final SimpleMetaPath simpleMetaPath, final SimpleMetaPath... additionalSimpleMetaPaths) {
-        addTab(new ConnectedElementsTablePanel(this, isEditable(editableOnlyInExpertMode), columnsDefinition, simpleMetaPath, additionalSimpleMetaPaths));
+    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableColumnsDefinition columnsDefinition, final SimpleMetaPath... simpleMetaPaths) {
+        addTab(new ConnectedElementsTablePanel(this, isEditable(editableOnlyInExpertMode), columnsDefinition, simpleMetaPaths));
     }
 
     //wird im Moment nicht gebraucht
