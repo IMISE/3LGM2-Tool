@@ -20,4 +20,11 @@ public class IheActor_IheInterface_Edge extends CompositionEdge implements Optio
 
     public static final Class<? extends ModelElement> etcl = IheInterface.class;
 
+    public boolean isOptional;
+
+    @Override
+    public boolean isOptional() {
+        return isOptional;
+    }
+
 }
