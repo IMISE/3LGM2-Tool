@@ -10,9 +10,11 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Optional;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
+import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode;
 import de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel.ConnectedElementsTableColumnsDefinition.ColumnType;
 import de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel.ConnectedElementsTableColumnsDefinition.SingleColumnDefinition;
 
@@ -23,15 +25,18 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
 
     private final SimpleMetaPath simpleMetaPath;
 
+    private final ConnectedElementsTableColumnsDefinition columnsDefinition;
+
     /**
      *
      */
     public ConnectedElementsTableModel(final SimpleMetaPath simpleMetaPath, final ConnectedElementsTableColumnsDefinition columnsDefinition) {
         this.simpleMetaPath = simpleMetaPath;
-        setColumnIdentifiers(columnsDefinition);
+        this.columnsDefinition = columnsDefinition;
+        setColumnIdentifiers();
     }
 
-    private void setColumnIdentifiers(final ConnectedElementsTableColumnsDefinition columnsDefinition) {
+    private void setColumnIdentifiers() {
         Vector<String> colNames = new Vector<>(columnsDefinition.columnCount());
         for (SingleColumnDefinition columnDefinition : columnsDefinition) {
             String colName = columnDefinition.getHeaderResKeyOrName();
@@ -42,15 +47,14 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                 if (columnType == ColumnType.END_ELEMENT) {
                     Class<? extends ModelElement> pathEndClass = simpleMetaPath.getEndClass();
                     colName = ElementsNameBuilder.getDisplayablePluralName(pathEndClass);
-                    //} else if (columnType == ColumnType.PATHNAME) {
+                    //} else if (columnType == ColumnType.PATH_NAME) { // das hier geht gar nicht, weil man bei den Leafs nicht mehr weiß, von welchem Pfad sie gekommen sind
                     //    colName = ;
                 } else {
                     List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
-                    int pathStepIndex = columnDefinition.getIndex();
+                    int pathStepIndex = columnDefinition.getPathStepIndex();
                     ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(pathStepIndex);
                     if (columnType == ColumnType.OPTIONAL) {
-                        Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-                        colName = Optional.getOptionName(edgeClass);
+                        colName = Optional.getOptionalityName();
                     } else if (columnType == ColumnType.PATH_STEP_NAME) {
                         colName = elementaryMetaPath.getName();
                     } else if (columnType == ColumnType.PATH_STEP_FULL_NAME) {
@@ -74,6 +78,41 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
     }
 
     public void setData(final PathResultTreeModel pathResultModel) {
+        List<PathResultTreeNode> completePathLeafs = pathResultModel.getCompletePathLeafs();
+        setRowCount(completePathLeafs.size());
+
+        int row = 0;
+        for (PathResultTreeNode resultNode : completePathLeafs) {
+            int col = 0;
+            for (SingleColumnDefinition singleColumnDefinition : columnsDefinition) {
+                ColumnType columnType = singleColumnDefinition.getColumnType();
+                if (columnType == ColumnType.END_ELEMENT) {
+                    setValueAt(resultNode.getEndElement(), row, col);
+                } else {
+                    PathResultTreeNode currentPathNode = resultNode;
+                    int level = currentPathNode.getLevel();
+                    int optionalEdgeInPathIndex = singleColumnDefinition.getPathStepIndex();
+                    while (level > 0) {
+                        if (level - optionalEdgeInPathIndex == PathResultTreeModel.FIRST_PATH_STEP_NODE_LEVEL) {
+                            break;
+                        }
+                        currentPathNode = (PathResultTreeNode) currentPathNode.getParent();
+                        level = currentPathNode.getLevel();
+                    }
+                    String value = null;
+                    if (columnType == ColumnType.OPTIONAL) {
+                        Edge edge = currentPathNode.getEdge();
+                        value = Optional.getOptionDisplayName(edge);
+                    } else if (columnType == ColumnType.PATH_STEP_NAME) {
+                        AbstractMetaPath metaPath = currentPathNode.getMetaPath();
+                        value = metaPath.getName();
+                    }
+                    setValueAt(value, row, col);
+                }
+                col++;
+            }
+            row++;
+        }
     }
 
 }

@@ -6,9 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.EventObject;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -19,15 +17,19 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
+import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
+import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 
 /**
  * @author AXS (11 Mar 2019)
  */
 public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
 
-    /** Die MetaPfade zu anderen Elementen */
-    protected List<SimpleMetaPath> metaPaths = new ArrayList<>();
+    /** Die MetaPfade zu anderen Elementen in einem UnionMetaPath */
+    protected UnionMetaPath metaPaths;
 
     /** Die eigentliche Tabelle */
     private ConnectedElementsTable table;
@@ -46,25 +48,18 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
      */
     @SafeVarargs
     public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, final ConnectedElementsTableColumnsDefinition columnsDefinition, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, edgeClasses);
-        metaPaths.add((SimpleMetaPath) metaPath);
-        this.columnsDefinition = columnsDefinition;
-        internalInit(editable);
+        this(dialog, editable, columnsDefinition, SimpleMetaPathCreator.createSimpleMetaPath(dialog.getModelElement().getClass(), null, edgeClasses));
     }
 
     /**
      * @param dialog
      * @param editable
      * @param columnsDefinition
-     * @param simpleMetaPath
-     * @param additionalSimpleMetaPaths
+     * @param simpleMetaPaths
      */
-    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, final ConnectedElementsTableColumnsDefinition columnsDefinition, final SimpleMetaPath simpleMetaPath, final SimpleMetaPath... additionalSimpleMetaPaths) {
-        super(dialog, simpleMetaPath);
-        metaPaths.add(simpleMetaPath);
-        for (SimpleMetaPath additionalSimpleMetaPath : additionalSimpleMetaPaths) {
-            metaPaths.add(additionalSimpleMetaPath);
-        }
+    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, final ConnectedElementsTableColumnsDefinition columnsDefinition, final SimpleMetaPath... simpleMetaPaths) {
+        super(dialog, simpleMetaPaths[0]); // den muss es geben!
+        metaPaths = new UnionMetaPath(simpleMetaPaths);
         this.columnsDefinition = columnsDefinition;
         internalInit(editable);
     }
@@ -160,6 +155,8 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
 
     @Override
     public void update() {
+        PathResultTreeModel resultTree = MetaPathFunctions.getResultTree(getModelElement(), metaPaths);
+        table.setData(resultTree);
     }
 
 }

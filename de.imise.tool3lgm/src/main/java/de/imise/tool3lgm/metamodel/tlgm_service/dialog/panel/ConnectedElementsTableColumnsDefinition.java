@@ -17,7 +17,7 @@ public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleC
     public enum ColumnType {
         END_ELEMENT,
         OPTIONAL, //muss in Verbindung mit einem Index initialisiert werden, wobei der Index die Kante im Pfad beschreibt deren Option in der Spalte dagestellt werden soll
-        //PATHNAME, //der über einen ResKey geladene Name des Pfades - im Moment nicht umgesetzt
+        PATH_NAME, //der über einen ResKey geladene Name des Pfades - im Moment nicht umgesetzt -> DAS GEHT GAR NICHT, WEIL IM DIE BLÄTTER DES BAUMES NICHT MEHR DEN GESAMTPFAD KENNEN
         PATH_STEP_START, //Muss man mit Index angeben, wobei damit immer das EndElement des jeweiligen Pfadschrittes gemeint wäre und der Index Pfadlänge - 1 dassselbe wie END_ELEMENT ergeben würde.
         PATH_STEP_END, //Muss man mit Index angeben, wobei damit immer das EndElement des jeweiligen Pfadschrittes gemeint wäre und der Index Pfadlänge - 1 dassselbe wie END_ELEMENT ergeben würde.
         PATH_STEP_EDGE, //dasselbe wie PATH_STEP_END_ELEMENT nur immer die Kante des Pfadschrittes (wenn es ein Elementarpfadschritt ist)
@@ -32,7 +32,7 @@ public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleC
 
         private final ColumnType columnType;
 
-        private final int index;
+        private final int pathStepIndex;
 
         private final String headerResKeyOrName;
 
@@ -40,9 +40,9 @@ public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleC
             this(columnType, -1, headerResKeyOrName);
         }
 
-        public SingleColumnDefinition(final ColumnType columnType, final int index, final String headerResKeyOrName) {
+        public SingleColumnDefinition(final ColumnType columnType, final int pathStepIndex, final String headerResKeyOrName) {
             this.columnType = columnType;
-            this.index = index;
+            this.pathStepIndex = pathStepIndex;
             this.headerResKeyOrName = headerResKeyOrName;
         }
 
@@ -50,8 +50,8 @@ public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleC
             return columnType;
         }
 
-        public int getIndex() {
-            return index;
+        public int getPathStepIndex() {
+            return pathStepIndex;
         }
 
         public String getHeaderResKeyOrName() {
