@@ -113,6 +113,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Optional;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -184,6 +185,9 @@ public final class GDCollection extends UserFieldTarget {
      * Set aller Szenarios in alphabetischer Reihenfolge.
      */
     private final AlphabeticalSet<Szenario> szenarios = new AlphabeticalSet<>();
+
+    /** Elemente, die in diesem Set sind, gelten als optional */
+    private final Set<Optional> optionalElements = new HashSet<>();
 
     /** Dokument wurde geaendert */
     private boolean changed;
@@ -908,6 +912,9 @@ public final class GDCollection extends UserFieldTarget {
             //und danach erst im Table des Elements
             //das Löschen aus dem ContainerTbale des Elementes kann man sich sparen, da das Element nirgends mehr gespeichert werden sollte
             //me.removeContainer(this.doc);
+            if (me instanceof Optional) {
+                removeOptional((Optional) me);
+            }
         }
         gdoc.finish_transaction(pid);
         gdoc.distributeEvent(DATA_CHANGED, pid);
@@ -2286,4 +2293,21 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
     }
+
+    //////////////
+    // Optional //
+    //////////////
+
+    public final boolean addOptional(final Optional optional) {
+        return optionalElements.add(optional);
+    }
+
+    public final boolean removeOptional(final Optional optional) {
+        return optionalElements.remove(optional);
+    }
+
+    public final boolean isOptional(final Object o) {
+        return optionalElements.contains(o);
+    }
+
 }
