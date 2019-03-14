@@ -36,14 +36,17 @@ public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleC
 
         private final String headerResKeyOrName;
 
-        public SingleColumnDefinition(final ColumnType columnType, final String headerResKeyOrName) {
-            this(columnType, -1, headerResKeyOrName);
+        private final int width;
+
+        public SingleColumnDefinition(final ColumnType columnType, final String headerResKeyOrName, final int width) {
+            this(columnType, -1, headerResKeyOrName, width);
         }
 
-        public SingleColumnDefinition(final ColumnType columnType, final int pathStepIndex, final String headerResKeyOrName) {
+        public SingleColumnDefinition(final ColumnType columnType, final int pathStepIndex, final String headerResKeyOrName, final int width) {
             this.columnType = columnType;
             this.pathStepIndex = pathStepIndex;
             this.headerResKeyOrName = headerResKeyOrName;
+            this.width = width;
         }
 
         public ColumnType getColumnType() {
@@ -58,6 +61,10 @@ public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleC
             return headerResKeyOrName;
         }
 
+        public int getWidth() {
+            return width;
+        }
+
     }
 
     /**
@@ -66,33 +73,36 @@ public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleC
     private final List<SingleColumnDefinition> columnDefinitions = new ArrayList<>();
 
     /**
-     *
+     * @param width
      */
-    public void addColumnEndElement() {
-        addColumn(ColumnType.END_ELEMENT, -1, null);
+    public void addColumnEndElement(final int width) {
+        addColumn(ColumnType.END_ELEMENT, -1, null, width);
     }
 
     /**
      * @param index
+     * @param width
      */
-    public void addColumnOptional(final int index) {
-        addColumn(ColumnType.OPTIONAL, index, null);
+    public void addColumnOptional(final int index, final int width) {
+        addColumn(ColumnType.OPTIONAL, index, null, width);
     }
 
     /**
      * @param index
      * @param headerResKeyOrName
+     * @param width
      */
-    public void addColumnPathStepName(final int index, final String headerResKeyOrName) {
-        addColumn(ColumnType.PATH_STEP_NAME, index, headerResKeyOrName);
+    public void addColumnPathStepName(final int index, final String headerResKeyOrName, final int width) {
+        addColumn(ColumnType.PATH_STEP_NAME, index, headerResKeyOrName, width);
     }
 
     /**
      * @param columnType
      * @param index
+     * @param width
      */
-    private void addColumn(final ColumnType columnType, final int index, final String headerResKeyOrName) {
-        SingleColumnDefinition columnDefinition = new SingleColumnDefinition(columnType, index, headerResKeyOrName);
+    private void addColumn(final ColumnType columnType, final int index, final String headerResKeyOrName, final int width) {
+        SingleColumnDefinition columnDefinition = new SingleColumnDefinition(columnType, index, headerResKeyOrName, width);
         columnDefinitions.add(columnDefinition);
     }
 
