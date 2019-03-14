@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 
 /**
  * Dieses Interface ist speziell für die Templates eingeführt worden, um der Kante zwischen IheActor und IheInterface die Optionalität mitgeben zu
@@ -10,18 +11,52 @@ import de.imise.tool3lgm.Tool3lgmConstants;
  */
 public interface Optional {
 
-    public default String getOptionValue() {
+    /**
+     * @return
+     */
+    public default String getOptionDisplayName() {
         return isOptional() ? getOptionOptionalDisplayName() : getOptionRequiredDisplayName();
     }
 
-    public boolean isOptional();
-
-    public default boolean isOptional(final ModelElement me) {
-        return me instanceof Optional ? ((Optional) me).isOptional() : false;
+    public default GDCollection getCollection() {
+        if (!(this instanceof Edge)) {
+            return null;
+        }
+        Edge me = (Edge) this;
+        GDCollection gdcoll = me.getCollection();
+        return gdcoll;
     }
 
     /**
-     * Liefert den Namen der Optionen, den man z.B. in einer Tabelle als Spaltenüberschrift nehmen kann.
+     * @return
+     */
+    public default boolean isOptional() {
+        GDCollection gdcoll = getCollection();
+        return gdcoll == null ? false : gdcoll.isOptional(this);
+    }
+
+    /**
+     * @param value
+     */
+    public default boolean setOptional(final boolean value) {
+        GDCollection gdcoll = getCollection();
+        if (gdcoll == null) {
+            return false;
+        }
+        return value ? gdcoll.addOptional(this) : gdcoll.removeOptional(this);
+    }
+
+    /**
+     * @param edge
+     * @return
+     */
+    public static boolean isOptional(final Edge edge) {
+        return edge instanceof Optional ? ((Optional) edge).isOptional() : false;
+    }
+
+    /**
+     * Liefert den Namen der Optionen, den man z.B. in einer Tabelle als Spaltenüberschrift nehmen kann. Default de ist 'Optionalität' und en
+     * 'Optionality'.
      *
      * @return
      */
@@ -29,25 +64,29 @@ public interface Optional {
         return Tool3lgmConstants.getResString("OPTIONALITY_NAME");
     }
 
+    /**
+     * @return de 'O'; en 'O'
+     */
     public static String getOptionOptionalDisplayName() {
         return Tool3lgmConstants.getResString("OPTIONALITY_OPTIONAL");
     }
 
+    /**
+     * @return de 'R'; en 'R'
+     */
     public static String getOptionRequiredDisplayName() {
         return Tool3lgmConstants.getResString("OPTIONALITY_REQUIRED");
     }
 
-    public static String getOptionDisplayName(final ModelElement me) {
-        if (!(me instanceof Optional)) {
+    /**
+     * @param edge
+     * @return
+     */
+    public static String getOptionDisplayName(final Edge edge) {
+        if (!(edge instanceof Optional)) {
             return null;
         }
-        boolean optional = ((Optional) me).isOptional();
-        if (me instanceof Edge) {
-            Edge edge = (Edge) me;
-            ModelElement end = edge.getEnd();
-            String name = end.getName();
-            optional |= name.contains("[ITI-8]") || name.contains("[ITI-44]") || name.contains("[ITI-57]");
-        }
+        boolean optional = ((Optional) edge).isOptional();
         return optional ? getOptionOptionalDisplayName() : getOptionRequiredDisplayName();
     }
 
