@@ -65,7 +65,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     }
 
     private void internalInit(final boolean editable) {
-        table = new ConnectedElementsTable((SimpleMetaPath) metaPath, columnsDefinition);
+        table = new ConnectedElementsTable((SimpleMetaPath) metaPath, columnsDefinition, editable, dialog.getTransactionID());
         JScrollPane scrollPane = new JScrollPane(table);
 
         GridBagLayout gbl = new GridBagLayout();

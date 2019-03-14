@@ -10,6 +10,7 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Optional;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -17,6 +18,7 @@ import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode;
 import de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel.ConnectedElementsTableColumnsDefinition.ColumnType;
 import de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel.ConnectedElementsTableColumnsDefinition.SingleColumnDefinition;
+import de.imise.util.NamedObjectContainer;
 
 /**
  * @author AXS (11 Mar 2019)
@@ -99,10 +101,12 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                         currentPathNode = (PathResultTreeNode) currentPathNode.getParent();
                         level = currentPathNode.getLevel();
                     }
-                    String value = null;
+                    Object value = null;
                     if (columnType == ColumnType.OPTIONAL) {
                         Edge edge = currentPathNode.getEdge();
-                        value = "  " + Optional.getOptionDisplayName(edge);
+                        if (edge instanceof Optional) {
+                            value = createOptionalCellValue((Optional) edge);
+                        }
                     } else if (columnType == ColumnType.PATH_STEP_NAME) {
                         AbstractMetaPath metaPath = currentPathNode.getMetaPath();
                         value = metaPath.getName();
@@ -112,6 +116,30 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                 col++;
             }
             row++;
+        }
+    }
+
+    /**
+     * @param edge
+     * @param string
+     */
+    NamedObjectContainer<Optional> createOptionalCellValue(final Optional edge) {
+        return new NamedObjectContainer<>(edge, edge.getOptionDisplayName(), true); //true, damit der Editor der Tabllenzelle den richtigen String auswählt, wenn er gestartet wird
+    }
+
+    void setOptionalValue(final Object oldValue, final Object newValue, final int pid) {
+        if (!oldValue.equals(newValue)) {
+            if (oldValue instanceof NamedObjectContainer) {
+                NamedObjectContainer<?> oldValueContainer = (NamedObjectContainer<?>) oldValue;
+                Object oldObject = oldValueContainer.getObject();
+                if (oldObject instanceof Edge) {
+                    String newValueString = String.valueOf(newValue);
+                    boolean isOptinal = Optional.getOptionOptionalDisplayName().equals(newValueString);
+                    Edge edge = (Edge) oldObject;
+                    GraphDocument doc = edge.getCollection().getMainGraphDocument();
+                    doc.setOptional(edge, isOptinal, pid);
+                }
+            }
         }
     }
 
