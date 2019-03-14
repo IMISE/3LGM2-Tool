@@ -55,6 +55,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Optional;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -934,6 +935,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 setUserFieldWeightReplacement(argv[0], argv[1], argv[2], pid);
             }
             break;
+
+        case MODEL_ACTION_SET_ELEMENT_OPTIONAL:
+            if (argc == 2) {
+                ModelElement element = getCollection().getMainGraphDocument().findElementCoded(argv[0]);
+                boolean bool = Boolean.parseBoolean(argv[1]);
+                setOptional((Edge) element, bool, pid);
+            }
 
         case MODEL_ACTION_SET_ELEMENT_POSITION:
             if (argc == 6) {
@@ -4300,6 +4308,21 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT + " " + modelElementHash + " " + userFieldHashToReplaceOrSimpleEdgeClassName, oldUserFieldHashReplacement, pid);
         finish_transaction(pid);
 
+    }
+
+    public final void setOptional(final Edge edge, final boolean value, final int pid) {
+        if (!(edge instanceof Optional)) {
+            return;
+        }
+        Optional optional = (Optional) edge;
+        if (optional.setOptional(value)) {
+            //UNDO und REDO Commands schreiben
+            start_transaction(pid);
+            String hash = edge.getHashString();
+            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL + " " + hash, Boolean.toString(value), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL + " " + hash, Boolean.toString(!value), pid);
+            finish_transaction(pid);
+        }
     }
 
     /**
