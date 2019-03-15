@@ -15,6 +15,7 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -31,8 +32,8 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
      *
      * @param dialog
      */
-    public LGMDragNDropPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelLastEdgeName, searchElementClass, edgeClasses);
+    public LGMDragNDropPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelLastEdgeName, simpleMetaPath);
     }
 
     /**

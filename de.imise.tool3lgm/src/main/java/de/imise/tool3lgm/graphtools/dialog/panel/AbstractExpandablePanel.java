@@ -7,8 +7,7 @@ import javax.swing.JButton;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 
 /**
  * Panel, bei dem man die rechte Seite auf und zuklappen kann. In der Regel sind dort links und rechts Bäume.
@@ -33,9 +32,8 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      */
     protected LGMAction showPartlyAction;
 
-    @SafeVarargs
-    public AbstractExpandablePanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelLastEdgeName, searchElementClass, edgeClasses);
+    public AbstractExpandablePanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelLastEdgeName, simpleMetaPath);
     }
 
     @Override

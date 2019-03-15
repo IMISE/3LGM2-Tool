@@ -13,6 +13,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
@@ -31,16 +32,12 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
      */
     private Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 
-    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, showRightTree, edgeClasses);
+    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, showRightTree, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, showRightTree, searchElementClass, edgeClasses);
-    }
-
-    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelLastEdgeName, showRightTree, edgeClasses);
+    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelLastEdgeName, showRightTree, simpleMetaPath);
     }
 
     @Override

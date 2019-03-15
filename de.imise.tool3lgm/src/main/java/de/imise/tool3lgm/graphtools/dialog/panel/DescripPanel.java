@@ -15,9 +15,9 @@ import javax.swing.border.Border;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
@@ -100,29 +100,24 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         }
     }
 
-    @SafeVarargs
-    public final void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
-        addDescriptedSingleConnectionPanel(false, edgeClasses);
+    public final void addDescriptedSingleConnectionPanel(final SimpleMetaPath simpleMetaPath) {
+        addDescriptedSingleConnectionPanel(false, simpleMetaPath);
     }
 
-    @SafeVarargs
-    public final void addDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        addSubPanel(new DescriptedSingleConnectionPanel(dialog, labelLastEdgeName, edgeClasses));
+    public final void addDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+        addSubPanel(new DescriptedSingleConnectionPanel(dialog, labelLastEdgeName, simpleMetaPath));
     }
 
-    @SafeVarargs
-    public final void addSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
-        addSingleConnectionPanel(false, false, edgeClasses);
+    public final void addSingleConnectionPanel(final SimpleMetaPath simpleMetaPath) {
+        addSingleConnectionPanel(false, false, simpleMetaPath);
     }
 
-    @SafeVarargs
-    public final void addSingleConnectionInfoPanel(final Class<? extends Edge>... edgeClasses) {
-        addSingleConnectionPanel(false, true, edgeClasses);
+    public final void addSingleConnectionInfoPanel(final SimpleMetaPath simpleMetaPath) {
+        addSingleConnectionPanel(false, true, simpleMetaPath);
     }
 
-    @SafeVarargs
-    public final void addSingleConnectionPanel(final boolean labelLastEdgeName, final boolean disableEdit, final Class<? extends Edge>... edgeClasses) {
-        addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, disableEdit, edgeClasses));
+    public final void addSingleConnectionPanel(final boolean labelLastEdgeName, final boolean disableEdit, final SimpleMetaPath simpleMetaPath) {
+        addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, disableEdit, simpleMetaPath));
     }
 
     private final void addSubPanel(final AbstractPathConnectionPanel panel) {

@@ -12,46 +12,27 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
  * Ein Panel das davon ausgeht, dass es mind einen Baum hat, der wenn er mit der Maus angeklickt wird eine Selektion zurück liefern kann.
  *
- * @author astruebi
+ * @author AXS
  * @created 22.06.2017
  */
 public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnectionPanel {
 
-    @SafeVarargs
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, edgeClasses);
+    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, simpleMetaPath);
     }
 
-    @SafeVarargs
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, searchElementClass, edgeClasses);
+    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelEdgeName, simpleMetaPath);
     }
 
-    @SafeVarargs
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelEdgeName, edgeClasses);
-    }
-
-    @SafeVarargs
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelEdgeName, searchElementClass, edgeClasses);
-    }
-
-    @SafeVarargs
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, searchEdgeIndex, labelEdgeName, edgeClasses);
-    }
-
-    @SafeVarargs
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelEdgeIndex, labelEdgeName, searchElementClass, edgeClasses);
+    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, searchEdgeIndex, labelEdgeName, simpleMetaPath);
     }
 
     protected void addListener(final JTree tree) {

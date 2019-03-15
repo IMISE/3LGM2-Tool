@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.NamedObjectContainer;
@@ -72,20 +73,18 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      * @param dialog
      * @param edgeClasses
      */
-    @SafeVarargs
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, false, false, edgeClasses);
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, false, simpleMetaPath);
     }
 
     /**
      * @param dialog
      * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
      *            letzten Edge aus den edgeClasses geschrieben.
-     * @param edgeClasses
+     * @param simpleMetaPath
      */
-    @SafeVarargs
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean disableEdit, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelLastEdgeName, edgeClasses);
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean disableEdit, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelLastEdgeName, simpleMetaPath);
         setLayout(new BorderLayout());
 
         if (disableEdit || isLastPathElementNeededForExistence() && connectedElement != null) {

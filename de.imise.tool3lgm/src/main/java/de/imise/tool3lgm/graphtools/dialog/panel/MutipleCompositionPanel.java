@@ -60,7 +60,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
      * @param edgeClass
      */
     public MutipleCompositionPanel(final ElementPropertyDialog dialog, final boolean editable, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
-        super(dialog, searchElementClass, edgeClass);
+        super(dialog, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
 
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);

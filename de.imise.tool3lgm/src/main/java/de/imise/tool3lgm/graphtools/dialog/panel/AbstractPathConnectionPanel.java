@@ -32,7 +32,6 @@ import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
@@ -61,31 +60,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
      *
      * @param dialog
-     * @param edgeClasses
-     */
-    @SafeVarargs
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, null, edgeClasses);
-    }
-
-    /**
-     * @param dialog
      * @param simpleMetaPath
      */
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, simpleMetaPath.getElementaryMetaPaths().size() - 1, false, null, simpleMetaPath);
-    }
-
-    /**
-     * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
-     *
-     * @param dialog
-     * @param searchElementClass
-     * @param edgeClasss
-     */
-    @SafeVarargs
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, false, searchElementClass, edgeClasses);
+        this(dialog, false, simpleMetaPath);
     }
 
     /**
@@ -94,42 +72,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param dialog
      * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der über die letzte Edge im Pfad verbundenen
      *            Elementart der Name der letzten Edge selbst ans Label geschrieben.
-     * @param edgeClasses
+     * @param simpleMetaPath
      */
-    @SafeVarargs
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, edgeClasses.length - 1, labelEdgeName, edgeClasses);
-    }
-
-    /**
-     * Panel für eine einfache Assoziation. Gelabelt wird das verbundene Element der letzten Edge oder die letzte Edge selbst.
-     *
-     * @param dialog
-     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der über die letzte Edge im Pfad verbundenen
-     *            Elementart der Name der letzten Edge selbst ans Label geschrieben.
-     * @param searchElementClass
-     * @param edgeClasses
-     */
-    @SafeVarargs
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, edgeClasses.length - 1, labelEdgeName, searchElementClass, edgeClasses);
-    }
-
-    /**
-     * Panel für eine einfache Assoziation
-     *
-     * @param dialog
-     * @param searchEdgeIndex Index der Edge, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
-     *            wird. Es wird immer die Endklasse des Pfades bis zur Edge mit dem jeweiliegn Index ans Label geschrieben.
-     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
-     *            der Name der Edge selbst ans Label geschrieben. Welche Edge im Pfad das ist, wird durch connectionLabelIndex
-     *            festgelegt.
-     * @param edgeClasses
-     */
-    @SafeVarargs
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, searchEdgeIndex, labelEdgeName, null, edgeClasses);
-
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, simpleMetaPath.getMetaPathCount() - 1, labelEdgeName, simpleMetaPath);
     }
 
     /**
@@ -141,26 +87,12 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
      *            der Name der Edge selbst ans Label geschrieben. Welche Edge im Pfad das ist, wird durch labelEdgeIndex
      *            festgelegt.
-     * @param searchElementClass wird hier <code>null</code> übergeben, wird diese Klasse aus den edgeClasses bestimmt, sond wird die übergebene
-     *            Klasse genommen
-     * @param edgeClasses
-     */
-    @SafeVarargs
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, labelEdgeIndex, labelEdgeName, searchElementClass, SimpleMetaPathCreator.createSimpleMetaPath(dialog.getModelElement().getClass(), searchElementClass, edgeClasses));
-    }
-
-    /**
-     * @param dialog
-     * @param labelEdgeIndex
-     * @param labelEdgeName
-     * @param searchElementClass
      * @param simpleMetaPath
      */
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog);
         metaPath = simpleMetaPath;
-        this.searchElementClass = getInitialSearchElementClass(searchElementClass, simpleMetaPath);
+        searchElementClass = getInitialSearchElementClass(simpleMetaPath);
         isConnectionPointUnique = isConnectionPointUnique();
 
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
@@ -173,7 +105,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         } else {
             Class<? extends ModelElement> labelPathStepEndClass = MetaPathFunctions.getElementaryPathsConnectingClass((SimpleMetaPath) metaPath, labelEdgeIndex);
             //zur Beschriftung des Labels wird immer die speziellere Klasse genommen aus Endklasse des Pfades und searchElementClass. Weil immer nur davon können die verbundenen Elemente sein.
-            if (searchElementClass != null && labelPathStepEndClass.isAssignableFrom(this.searchElementClass)) {
+            if (searchElementClass != null && labelPathStepEndClass.isAssignableFrom(searchElementClass)) {
                 labelPathStepEndClass = searchElementClass;
             }
             westLabelText = metaPath.isSingleConnection() ? ElementsNameBuilder.getDisplayableName(labelPathStepEndClass) : ElementsNameBuilder.getDisplayablePluralName(labelPathStepEndClass);
@@ -184,20 +116,15 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Wenn eine gültige searchElementClass als Parameter übergeben wird, kommt diese zurück, sonst (wenn Parameter <code>null</code>) wird die
-     * Endklasse des Pfades zurück gegeben.
+     * Gibt die gemeinsame Oberklasse aller Endklassen des Pfades zurück. Das ist die SearchElementClass.
      *
-     * @param searchElementClassConstructorParameter
      * @param metaPath
      * @return
      */
-    private static Class<? extends ModelElement> getInitialSearchElementClass(final Class<? extends ModelElement> searchElementClassConstructorParameter, final AbstractMetaPath metaPath) {
-        Class<? extends ModelElement> searchElementClass = searchElementClassConstructorParameter;
-        if (searchElementClass == null) {
-            Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
-            Class<?> superEndClass = ReflectionUtils.getCommonSuperClass(endClasses);
-            searchElementClass = superEndClass.asSubclass(ModelElement.class);
-        }
+    private static Class<? extends ModelElement> getInitialSearchElementClass(final AbstractMetaPath metaPath) {
+        Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
+        Class<?> superEndClass = ReflectionUtils.getCommonSuperClass(endClasses);
+        Class<? extends ModelElement> searchElementClass = superEndClass.asSubclass(ModelElement.class);
         return searchElementClass;
     }
 

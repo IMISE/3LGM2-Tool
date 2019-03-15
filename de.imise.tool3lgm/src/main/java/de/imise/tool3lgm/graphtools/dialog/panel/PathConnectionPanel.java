@@ -43,6 +43,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
@@ -82,24 +83,12 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     private final LGMAction newElementAction;
 
-    @SafeVarargs
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, false, showRightTree, edgeClasses);
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, showRightTree, simpleMetaPath);
     }
 
-    @SafeVarargs
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, false, showRightTree, searchElementClass, edgeClasses);
-    }
-
-    @SafeVarargs
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, labelLastEdgeName, showRightTree, null, edgeClasses);
-    }
-
-    @SafeVarargs
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelLastEdgeName, searchElementClass, edgeClasses);
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelLastEdgeName, simpleMetaPath);
         this.showRightTree = showRightTree;
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();

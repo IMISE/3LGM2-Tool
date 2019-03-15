@@ -41,6 +41,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
@@ -130,9 +131,11 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
 
     /**
      * @param dialog
+     * @param multipleConnectionEgdeClass
+     * @param doubleMeaningEdgeClass
      */
     public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
-        super(dialog, true, getOther(multipleConnectionEgdeClass, dialog.getModelElement().getClass()), multipleConnectionEgdeClass);
+        super(dialog, true, SimpleMetaPathCreator.createSimpleMetaPath(dialog.getModelElement().getClass(), getOther(multipleConnectionEgdeClass, dialog.getModelElement().getClass()), multipleConnectionEgdeClass));
         this.doubleMeaningEdgeClass = doubleMeaningEdgeClass;
 
         // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge anlegen
