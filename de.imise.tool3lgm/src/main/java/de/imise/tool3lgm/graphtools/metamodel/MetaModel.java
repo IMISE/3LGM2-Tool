@@ -253,6 +253,7 @@ public abstract class MetaModel {
     /**
      * Liefert alle Elementklassen, die nur im Baum angezeigt werden sollen, wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
      * auf <code>true</code> gestellt ist.
+     * ACHTUNG: hier wird nur mit contains(class) gerpüft -> immer auch die Oberklassen, die versteckt werden sollen reinschreiben
      *
      * @return alle Elementklassen, die nur im ExpertMode im Baum angezeigt werden
      */

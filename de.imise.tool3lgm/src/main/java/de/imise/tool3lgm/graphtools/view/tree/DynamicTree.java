@@ -259,16 +259,18 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         //alle Knoten entfernen/einblenden, die nicht/nur im ExpertMode zu sehen sein sollen
         for (Class<? extends ModelElement> onlyExperModeVisibleNodeClass : ModelConstants.getOnlyExpertModeVisibleNodes()) {
             LGMTreeNode node = elementClassToParentNode.get(onlyExperModeVisibleNodeClass);
-            if (Static.isExpertMode()) {
-                DefaultMutableTreeNode parent = onlyExperModeVisibleNodesToParent.remove(node);
-                if (parent != null) {
-                    parent.add(node);
-                }
-            } else {
-                DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
-                if (parent != null) {
-                    onlyExperModeVisibleNodesToParent.put(node, parent);
-                    parent.remove(node);
+            if (node != null) {
+                if (Static.isExpertMode()) {
+                    DefaultMutableTreeNode parent = onlyExperModeVisibleNodesToParent.remove(node);
+                    if (parent != null) {
+                        parent.add(node);
+                    }
+                } else {
+                    DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
+                    if (parent != null) {
+                        onlyExperModeVisibleNodesToParent.put(node, parent);
+                        parent.remove(node);
+                    }
                 }
             }
         }

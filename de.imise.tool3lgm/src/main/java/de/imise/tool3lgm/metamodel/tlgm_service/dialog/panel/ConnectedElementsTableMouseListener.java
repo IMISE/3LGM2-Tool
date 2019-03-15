@@ -13,6 +13,7 @@ import javax.swing.JPopupMenu;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.event.ActionLibrary;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -67,7 +68,7 @@ public class ConnectedElementsTableMouseListener extends MouseAdapter {
             int clickedRow = table.rowAtPoint(clickedPoint);
             int clickedColumn = table.columnAtPoint(clickedPoint);
             ModelElement selectedElement = getModelElementAt(clickedRow, clickedColumn);
-            if (selectedElement != null) {
+            if (selectedElement != null && !ModelConstants.isHiddenClass(selectedElement.getClass())) {
                 selectInDoc(ImmutableList.of(selectedElement));
                 showPropertyDialogMenuItem.doClick();
             }
@@ -96,7 +97,7 @@ public class ConnectedElementsTableMouseListener extends MouseAdapter {
         List<ModelElement> selectedElements = new ArrayList<>();
         for (int row : rows) {
             ModelElement selectedElement = getModelElementAt(row, clickedColumn);
-            if (selectedElement != null) {
+            if (selectedElement != null && !ModelConstants.isHiddenClass(selectedElement.getClass())) {
                 selectedElements.add(selectedElement);
                 selectionChanged = true;
             }

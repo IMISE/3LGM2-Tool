@@ -47,6 +47,7 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
@@ -174,6 +175,32 @@ public final class ModelConstants {
     }
 
     /**
+     * Liefert <code>true</code>, wenn die Klasse nicht angezeigt werden soll, also wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
+     * auf <code>false</code> gestellt ist und die Klasse nur im Expert-Mode angezeigt werden soll.
+     *
+     * @return <code>true</code>, wenn die Klasse gerade nicht sichtbar sein soll
+     * @see #getOnlyExpertModeVisibleNodes()
+     */
+    public static final boolean isHiddenClass(final Class<? extends ModelElement> elementClass) {
+        //im ExperMode ist nichts versteckt
+        if (UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE)) {
+            return false;
+        }
+        Set<Class<? extends ModelElement>> onlyExpertModeVisibleNodes = getOnlyExpertModeVisibleNodes();
+        if (onlyExpertModeVisibleNodes.contains(elementClass)) {
+            return true;
+        }
+        //bei Kanten prüfen, ob die Start- oder Endklasse eine versteckte Klasse ist
+        if (Edge.class.isAssignableFrom(elementClass)) {
+            Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
+            if (isHiddenClass(Edge.getStartClass(edgeClass)) || isHiddenClass(Edge.getEndClass(edgeClass))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Liefert alle Elementklassen, die nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true) angelegt und verändert werden
      * können.
      *
@@ -192,7 +219,7 @@ public final class ModelConstants {
      * @return <code>true</code>, wenn die Elementklasse, nur im ExpertMode geändert werden kann
      * @see MetaModel#getOnlyExpertModeEditableNodes()
      */
-    public static boolean isOnlyExpertModeEditableNode(final Class<? extends ModelElement> elementClass) {
+    public static boolean isOnlyExpertModeEditable(final Class<? extends ModelElement> elementClass) {
         return getOnlyExpertModeEditableNodes().contains(elementClass);
     }
 
