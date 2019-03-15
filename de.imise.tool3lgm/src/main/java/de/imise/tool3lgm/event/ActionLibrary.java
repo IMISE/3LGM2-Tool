@@ -360,7 +360,7 @@ public class ActionLibrary {
 
     public static class ContextActions {
 
-        public static final Action ACTION_SHOW_ELEMENT_PROPERTY_DIALOG = new SelectedElementsAction(ActionIdentifier.ACTION_SHOW_ELEMENT_PROPERTY_DIALOG) {
+        public static final Action ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG = new SelectedElementsAction(ActionIdentifier.ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG) {
             @Override
             public void actionPerformed() {
                 Static.getSelectedDoc().showPropertyDialog(false);

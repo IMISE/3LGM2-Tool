@@ -285,7 +285,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         new_physical_tree = createLayerMenu(CREATABLE_PHYSICAL_LAYER_NODES);
         new_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, Textfield.class.getName());
 
-        properties = getItem(ActionLibrary.ContextActions.ACTION_SHOW_ELEMENT_PROPERTY_DIALOG);
+        properties = getItem(ActionLibrary.ContextActions.ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG);
         unlinkToSzenario = getItem(MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL);
         selectLinkedSzenario = getItem("selectLinkedSzenario", MODEL_ACTION_SELECT_LINKED_SUBMODEL);
         delete_selected = getItem(MODEL_ACTION_DELETE_FROM_MODEL);
