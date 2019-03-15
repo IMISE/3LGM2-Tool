@@ -88,7 +88,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
         super(dialog, labelLastEdgeName, edgeClasses);
         setLayout(new BorderLayout());
 
-        if (disableEdit || isLastPathElementNeededForExistence()) {
+        if (disableEdit || isLastPathElementNeededForExistence() && connectedElement != null) {
             connectedElementsBox = null;
             itemListener = null;
             connectedElementName = new LimitedSizeScrollTextPane(4);
@@ -120,9 +120,11 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             boolean isLastPathElementDependent = isLastPathElementDependent();
             connectedElementsBox.removeItemListener(itemListener);
             connectedElementsBox.removeAllItems();
-            connectedElementsBox.addItem(" ");
+            if (!isLastPathElementNeededForExistence()) {//Abhängen nur anbieten, wenn dadurch das vorletzte Element im Pfad nicht inkonsostent wird
+                connectedElementsBox.addItem(" ");
+            }
             //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle bzw. alle, die über den ConditionPath verbunden sind
-            Collection<ElementContainer> available = isLastPathElementDependent ? allConnectedContainers : getAvailableConnectables();
+            Collection<ElementContainer> available = isLastPathElementDependent && !allConnectedContainers.isEmpty() ? allConnectedContainers : getAvailableConnectables();
 
             //neues Element anlegen und verknüpfen soll nur gezeigt werden, wenn der Pfad an sich anlegbar ist. Ist die searchElementClass
             //abhängig von der Existenz des Elementes davor im Pfad, dann soll auch kein Neu-Anlegen-Eintrag kommen
