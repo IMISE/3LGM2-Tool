@@ -88,8 +88,9 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
             int col = 0;
             for (SingleColumnDefinition singleColumnDefinition : columnsDefinition) {
                 ColumnType columnType = singleColumnDefinition.getColumnType();
+                Object value = null;
                 if (columnType == ColumnType.END_ELEMENT) {
-                    setValueAt(resultNode.getEndElement(), row, col);
+                    value = resultNode.getEndElement();
                 } else {
                     PathResultTreeNode currentPathNode = resultNode;
                     int level = currentPathNode.getLevel();
@@ -101,30 +102,20 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                         currentPathNode = (PathResultTreeNode) currentPathNode.getParent();
                         level = currentPathNode.getLevel();
                     }
-                    Object value = null;
                     if (columnType == ColumnType.OPTIONAL) {
                         Edge edge = currentPathNode.getEdge();
                         if (edge instanceof OptionalEdge) {
-                            value = createOptionalCellValue((OptionalEdge) edge);
+                            value = new NamedObjectContainer<>(edge, ((OptionalEdge) edge).getOptionDisplayName(), true); //true, damit der Editor der Tabllenzelle den richtigen String auswählt, wenn er gestartet wird
                         }
                     } else if (columnType == ColumnType.PATH_STEP_NAME) {
                         AbstractMetaPath metaPath = currentPathNode.getMetaPath();
                         value = metaPath.getName();
                     }
-                    setValueAt(value, row, col);
                 }
-                col++;
+                setValueAt(value, row, col++);
             }
             row++;
         }
-    }
-
-    /**
-     * @param edge
-     * @param string
-     */
-    NamedObjectContainer<OptionalEdge> createOptionalCellValue(final OptionalEdge edge) {
-        return new NamedObjectContainer<>(edge, edge.getOptionDisplayName(), true); //true, damit der Editor der Tabllenzelle den richtigen String auswählt, wenn er gestartet wird
     }
 
     void setOptionalValue(final Object oldValue, final Object newValue, final int pid) {
