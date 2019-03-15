@@ -23,7 +23,7 @@ import de.imise.util.NamedObjectContainer;
 /**
  * @author AXS
  */
-public class ConsistencyErrorTableEvents extends MouseAdapter {
+public class ConsistencyErrorTableMouseListener extends MouseAdapter {
 
     /**
      * Der Table, bei dem auf Ereignisse reagiert werden soll
@@ -41,7 +41,7 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
     /**
      *
      */
-    ConsistencyErrorTableEvents(final ConsistencyChecker checker, final JTable errorTable) {
+    ConsistencyErrorTableMouseListener(final ConsistencyChecker checker, final JTable errorTable) {
         super();
         this.checker = checker;
         table = errorTable;
