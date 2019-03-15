@@ -8,7 +8,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 
-import de.imise.tool3lgm.graphtools.metamodel.elements.Optional;
+import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 import de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel.ConnectedElementsTableColumnsDefinition.ColumnType;
@@ -82,8 +82,8 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
 
     private JComboBox<String> createOptionalCombobox() {
         JComboBox<String> comboBox = new JComboBox<>();
-        comboBox.addItem(Optional.getOptionOptionalDisplayName());
-        comboBox.addItem(Optional.getOptionRequiredDisplayName());
+        comboBox.addItem(OptionalEdge.getOptionOptionalDisplayName());
+        comboBox.addItem(OptionalEdge.getOptionRequiredDisplayName());
         return comboBox;
     }
 

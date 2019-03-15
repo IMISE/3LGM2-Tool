@@ -9,7 +9,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Optional;
+import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
@@ -56,7 +56,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                     int pathStepIndex = columnDefinition.getPathStepIndex();
                     ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(pathStepIndex);
                     if (columnType == ColumnType.OPTIONAL) {
-                        colName = Optional.getOptionalityName();
+                        colName = OptionalEdge.getOptionalityName();
                     } else if (columnType == ColumnType.PATH_STEP_NAME) {
                         colName = elementaryMetaPath.getName();
                     } else if (columnType == ColumnType.PATH_STEP_FULL_NAME) {
@@ -104,8 +104,8 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                     Object value = null;
                     if (columnType == ColumnType.OPTIONAL) {
                         Edge edge = currentPathNode.getEdge();
-                        if (edge instanceof Optional) {
-                            value = createOptionalCellValue((Optional) edge);
+                        if (edge instanceof OptionalEdge) {
+                            value = createOptionalCellValue((OptionalEdge) edge);
                         }
                     } else if (columnType == ColumnType.PATH_STEP_NAME) {
                         AbstractMetaPath metaPath = currentPathNode.getMetaPath();
@@ -123,7 +123,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
      * @param edge
      * @param string
      */
-    NamedObjectContainer<Optional> createOptionalCellValue(final Optional edge) {
+    NamedObjectContainer<OptionalEdge> createOptionalCellValue(final OptionalEdge edge) {
         return new NamedObjectContainer<>(edge, edge.getOptionDisplayName(), true); //true, damit der Editor der Tabllenzelle den richtigen String auswählt, wenn er gestartet wird
     }
 
@@ -134,7 +134,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                 Object oldObject = oldValueContainer.getObject();
                 if (oldObject instanceof Edge) {
                     String newValueString = String.valueOf(newValue);
-                    boolean isOptinal = Optional.getOptionOptionalDisplayName().equals(newValueString);
+                    boolean isOptinal = OptionalEdge.getOptionOptionalDisplayName().equals(newValueString);
                     Edge edge = (Edge) oldObject;
                     GraphDocument doc = edge.getCollection().getMainGraphDocument();
                     doc.setOptional(edge, isOptinal, pid);

@@ -55,7 +55,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Optional;
+import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -4311,10 +4311,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     public final void setOptional(final Edge edge, final boolean value, final int pid) {
-        if (!(edge instanceof Optional)) {
+        if (!(edge instanceof OptionalEdge)) {
             return;
         }
-        Optional optional = (Optional) edge;
+        OptionalEdge optional = (OptionalEdge) edge;
         if (optional.setOptional(value)) {
             //UNDO und REDO Commands schreiben
             start_transaction(pid);

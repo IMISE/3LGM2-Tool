@@ -9,7 +9,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
  *
  * @author AXS (11 Mar 2019)
  */
-public interface Optional {
+public interface OptionalEdge {
 
     /**
      * @return
@@ -51,7 +51,7 @@ public interface Optional {
      * @return
      */
     public static boolean isOptional(final Edge edge) {
-        return edge instanceof Optional ? ((Optional) edge).isOptional() : false;
+        return edge instanceof OptionalEdge ? ((OptionalEdge) edge).isOptional() : false;
     }
 
     /**
@@ -83,10 +83,10 @@ public interface Optional {
      * @return
      */
     public static String getOptionDisplayName(final Edge edge) {
-        if (!(edge instanceof Optional)) {
+        if (!(edge instanceof OptionalEdge)) {
             return null;
         }
-        boolean optional = ((Optional) edge).isOptional();
+        boolean optional = ((OptionalEdge) edge).isOptional();
         return optional ? getOptionOptionalDisplayName() : getOptionRequiredDisplayName();
     }
 
