@@ -24,6 +24,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -499,6 +500,13 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                             userFieldDefinitions.add(userField);
                         }
                         element.setUserFieldInputValue(userField, elementValue.toString());
+                    } else if (field.toLowerCase().startsWith("optional")) {
+                        if (element instanceof OptionalEdge) {
+                            OptionalEdge optionalEdge = (OptionalEdge) element;
+                            if (Boolean.parseBoolean(elementValue.toString())) {
+                                collection.addOptional(optionalEdge);
+                            }
+                        }
                     } else if (field.equals("layer")) {
                         //Tue nichts. Bei Modellen bis zur 3.5 stand der Layer noch mit im ModelElement. Danach nicht mehr, weil er sich immer
                         //aus den ModelConstants bzw. aus dem beim Einlesen der Elemente gerafde aktiven Layer ergibt.

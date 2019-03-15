@@ -29,6 +29,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -401,6 +402,12 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeModelElementField("end", edge.getEnd().getHashString());
             if (me instanceof DoubleMeaningEdge) {
                 writeModelElementField("state", ((DoubleMeaningEdge) edge).getConnectionStateName());
+            }
+            if (me instanceof OptionalEdge) {
+                OptionalEdge optionalEdge = (OptionalEdge) me;
+                if (optionalEdge.isOptional()) {
+                    writeModelElementField("optional", Boolean.TRUE.toString());
+                }
             }
         } else if (me instanceof Knickpunkt) {
             Knickpunkt bendpoint = (Knickpunkt) me;

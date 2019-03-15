@@ -67,7 +67,8 @@ public class ToolXMLParser {
             "<!--Tool3lgmFile version='3.3'-->", //7
             "<!--Tool3lgmFile version='3.4'-->", //8
             "<!--Tool3lgmFile version='3.5'-->", //9
-            "<!--Tool3lgmFile version='3.6'-->",//10
+            "<!--Tool3lgmFile version='3.6'-->", //10
+            "<!--Tool3lgmFile version='3.7'-->", //11 -> nach Tool-Version 3.4.0.2 (Beta)
     };
 
     /**
@@ -143,6 +144,7 @@ public class ToolXMLParser {
             //3.1 bis 3.6 haben denselben Parser, aber alte Baukastenversionen können neuere
             //Modelldateien nicht lesen, weil Elementklassen umbenannt wurden (was aber den Parser
             //nicht kümmert)
+        case 11: //Version 3.7 -> OptionalEdge.isOptional() wird gespeichert
             parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_1(collection, paste));
             break;
 
