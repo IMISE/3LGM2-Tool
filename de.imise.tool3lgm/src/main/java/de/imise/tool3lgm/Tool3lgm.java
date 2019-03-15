@@ -111,7 +111,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /** Position of divider betweeen the tree and the graph view in pixel from the left side */
     private int dividerLocation = getToolkit().getScreenSize().width / 5;
 
-    /** Holds the actual context and generates context menus */
+    /** Holds the current context and generates context menus */
     public static ContextGenerator contextGenerator;
 
     /** Checks the consistency of a model */

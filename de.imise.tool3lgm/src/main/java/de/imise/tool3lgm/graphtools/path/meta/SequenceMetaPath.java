@@ -185,8 +185,8 @@ public class SequenceMetaPath extends ListMetaPath {
         AbstractMetaPath[] otherDirectionMetaPaths = new AbstractMetaPath[metaPaths.size()];
         // Gegenrichtung der enthaltenen Einzelpfade in umgekehrter Reihenfolge einfügen
         for (int i = otherDirectionMetaPaths.length - 1; i >= 0; i--) {
-            AbstractMetaPath actualMetaPath = metaPaths.get(i);
-            AbstractMetaPath otherDirection = actualMetaPath.getOtherDirection();
+            AbstractMetaPath currentMetaPath = metaPaths.get(i);
+            AbstractMetaPath otherDirection = currentMetaPath.getOtherDirection();
             if (otherDirection == null) {
                 otherDirectionMetaPaths = null;
                 break;

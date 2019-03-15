@@ -835,9 +835,9 @@ public final class ModelConstants {
                     clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
                 } catch (Exception exc) {
                     String simpleClassName = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
-                    String actualClassName = metaModel.getCurrentClassName(simpleClassName);
-                    if (!actualClassName.equals(simpleClassName)) {
-                        clazz = getClassForName(actualClassName);
+                    String currentClassName = metaModel.getCurrentClassName(simpleClassName);
+                    if (!currentClassName.equals(simpleClassName)) {
+                        clazz = getClassForName(currentClassName);
                         CLASS_NAME_TO_CLASS_MAP.put(simpleClassName, clazz);
                         CLASS_NAME_TO_CLASS_MAP.put(fullClassName, clazz);
                         return clazz;
