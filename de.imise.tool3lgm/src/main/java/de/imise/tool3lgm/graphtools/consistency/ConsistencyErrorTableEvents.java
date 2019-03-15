@@ -31,7 +31,7 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
     private final JTable table;
 
     /**
-     * 
+     *
      */
     private final ConsistencyChecker checker;
 
@@ -39,7 +39,7 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
     private final ArrayList<ModelElement> selectedErrorElements = new ArrayList<>();
 
     /**
-     * 
+     *
      */
     ConsistencyErrorTableEvents(final ConsistencyChecker checker, final JTable errorTable) {
         super();
@@ -47,24 +47,35 @@ public class ConsistencyErrorTableEvents extends MouseAdapter {
         table = errorTable;
     }
 
+    private void showPopup(final MouseEvent e) {
+        int clickedRow = table.rowAtPoint(e.getPoint());
+        table.addRowSelectionInterval(clickedRow, clickedRow);
+        int[] rows = table.getSelectedRows();
+        if (rows.length == 0) {
+            return;
+        }
+        errors = new ArrayList<>();
+        selectedErrorElements.clear();
+        for (int r : rows) {
+            NamedObjectContainer<AbstractError> errContainer = (NamedObjectContainer<AbstractError>) table.getValueAt(r, ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal());
+            AbstractError error = errContainer.getObject();
+            errors.add(error);
+            selectedErrorElements.add(error.getModelElement());
+        }
+        getPopupMenu().show(table, e.getX(), e.getY());
+    }
+
+    @Override
+    public void mousePressed(final MouseEvent e) {
+        if (e.isPopupTrigger()) {
+            showPopup(e);
+        }
+    }
+
     @Override
     public void mouseReleased(final MouseEvent e) {
         if (e.isPopupTrigger()) {
-            int clickedRow = table.rowAtPoint(e.getPoint());
-            table.addRowSelectionInterval(clickedRow, clickedRow);
-            int[] rows = table.getSelectedRows();
-            if (rows.length == 0) {
-                return;
-            }
-            errors = new ArrayList<>();
-            selectedErrorElements.clear();
-            for (int r : rows) {
-                NamedObjectContainer<AbstractError> errContainer = (NamedObjectContainer<AbstractError>) table.getValueAt(r, ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal());
-                AbstractError error = errContainer.getObject();
-                errors.add(error);
-                selectedErrorElements.add(error.getModelElement());
-            }
-            getPopupMenu().show(table, e.getX(), e.getY());
+            showPopup(e);
         } else if (e.getClickCount() > 1) {
             int clickedRow = table.rowAtPoint(e.getPoint());
             int column = ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal();
