@@ -60,6 +60,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
 
     private void initCoumnEditor() {
         JComboBox<String> optionalComboBox = createOptionalCombobox();
+        ConnectedElementsTableMouseListener.addTo(this, optionalComboBox);
         for (int i = 0; i < columnsDefinition.columnCount(); i++) {
             SingleColumnDefinition singleColumnDefinition = columnsDefinition.get(i);
             if (singleColumnDefinition.getColumnType() == ColumnType.OPTIONAL) {
@@ -99,6 +100,10 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
             Object newValue = getValueAt(row, col);
             model.setOptionalValue(oldValue, newValue, pid);
         }
+    }
+
+    public int getTransactionID() {
+        return pid;
     }
 
 }
