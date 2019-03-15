@@ -592,7 +592,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                 // Aktive Zeile markieren
                 if (!isPopupTrigger(e)) {
                     if (e.getClickCount() > 1) {
-                        ((GraphDocument) subModelBox.getSelectedObject()).showPropertyDialog();
+                        ((GraphDocument) subModelBox.getSelectedObject()).showPropertyDialog(true);
                     }
                 } else {
                     ContextGenerator cg = Tool3lgm.getContextGenerator();
@@ -621,7 +621,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         });
 
         // Sortierung umsetzen
-        TableRowSorter<TableModel> trs = new TableRowSorter<TableModel>(table.getModel());
+        TableRowSorter<TableModel> trs = new TableRowSorter<>(table.getModel());
         trs.setComparator(0, new Comparator<Integer>() {
             @Override
             public int compare(final Integer int1, final Integer int2) {
@@ -641,7 +641,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                 int colX = table.getColumnModel().getColumnIndexAtX(e.getX());
                 @SuppressWarnings("unchecked")
                 TableRowSorter<TableModel> trs = (TableRowSorter<TableModel>) table.getRowSorter();
-                List<RowSorter.SortKey> sk = new ArrayList<RowSorter.SortKey>();
+                List<RowSorter.SortKey> sk = new ArrayList<>();
                 if (colX == 0) {
                     sortIdAsc = !sortIdAsc;
                     sk.add(new RowSorter.SortKey(0, sortIdAsc ? SortOrder.ASCENDING : SortOrder.DESCENDING));

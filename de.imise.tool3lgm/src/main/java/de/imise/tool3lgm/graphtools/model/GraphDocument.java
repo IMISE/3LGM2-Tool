@@ -39,6 +39,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -4082,12 +4083,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
+     * Zeigt die PropertyDialoge aller selektierten Elemente an.
      *
+     * @param onlyLastSelected wenn <code>true</code>, wird nur der Dialog des zuletzt selektierten Elementes angezeigt
      */
-    public void showPropertyDialog() {
-        ElementContainer ec = getLastSelected();
-        if (ec != null) {
-            showPropertyDialog(ec.getElement());
+    public void showPropertyDialog(final boolean onlyLastSelected) {
+        List<ElementContainer> selectedContainer = onlyLastSelected ? ImmutableList.of(getLastSelected()) : getSelectedContainer();
+        for (ElementContainer ec : selectedContainer) {
+            if (ec != null) {
+                showPropertyDialog(ec.getElement());
+            }
         }
     }
 
