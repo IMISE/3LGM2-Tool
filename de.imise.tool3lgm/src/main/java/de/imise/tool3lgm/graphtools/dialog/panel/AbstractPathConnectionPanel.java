@@ -276,8 +276,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         if (lastElementaryMetaPathInPath == null) {
             return false;
         }
-        EdgeCardinality forwardCardinality = lastElementaryMetaPathInPath.getForwardCardinality();
-        int minCardinality = forwardCardinality.min();
+        EdgeCardinality backwardCardinality = lastElementaryMetaPathInPath.getBackwardCardinality();
+        int minCardinality = backwardCardinality.min();
         return minCardinality > 0;
     }
 
