@@ -521,7 +521,7 @@ public abstract class AbstractMetaPath {
      *
      * @return
      */
-    public abstract boolean isCreateable();
+    public abstract boolean isCreatable();
 
     /**
      * Liefert <code>true</code>, wenn der Pfad zwischen Elementen der Start- und Zielklasse den prinzipiell angelegt werden kann.
@@ -535,8 +535,8 @@ public abstract class AbstractMetaPath {
      *            zu testenden Endklasse des Metapfades
      * @return
      *         /
-     *         public final boolean isCreateable(Class<? extends ModelElement> startClass, Class<? extends ModelElement> endClass) {
-     *         return isStartClassOrSubClass(startClass) && isEndClassOrSubClass(endClass) && isCreateable();
+     *         public final boolean isCreatable(Class<? extends ModelElement> startClass, Class<? extends ModelElement> endClass) {
+     *         return isStartClassOrSubClass(startClass) && isEndClassOrSubClass(endClass) && isCreatable();
      *         }
      *         /**
      *         Liefert <code>true</code>, wenn der Pfad zwischen Elementen der Start- und Zielklasse den prinzipiell angelegt werden kann.
@@ -549,8 +549,8 @@ public abstract class AbstractMetaPath {
      *            zu testenden Endklasse des Metapfades
      * @return
      */
-    public final boolean isCreateable(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
-        return isStartClass(this, startClass, true, false) && isEndClass(this, endClass, true, false) && isCreateable();
+    public final boolean isCreatable(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
+        return isStartClass(this, startClass, true, false) && isEndClass(this, endClass, true, false) && isCreatable();
     }
 
     /**

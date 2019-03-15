@@ -423,7 +423,7 @@ public class TLGMServiceMetaModel extends MetaModel {
     }
 
     @Override
-    protected Collection<SimpleMetaPath> getCreateablePaths() {
+    protected Collection<SimpleMetaPath> getCreatablePaths() {
         SimpleMetaPath path1 = createSimpleMetaPath(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         return ImmutableList.of(path1);
     }

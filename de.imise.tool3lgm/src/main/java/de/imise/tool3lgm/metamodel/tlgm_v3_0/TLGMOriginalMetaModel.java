@@ -344,7 +344,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
     }
 
     @Override
-    protected Collection<SimpleMetaPath> getCreateablePaths() {
+    protected Collection<SimpleMetaPath> getCreatablePaths() {
         return ImmutableList.of();
     }
 

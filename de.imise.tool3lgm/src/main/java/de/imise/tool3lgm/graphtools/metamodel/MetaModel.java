@@ -36,7 +36,7 @@ public abstract class MetaModel {
 
     public MetaModel() {
         putOldToNewClassNames();
-        initCreateableMetaPaths();
+        initCreatableMetaPaths();
     }
 
     /**
@@ -402,16 +402,16 @@ public abstract class MetaModel {
      * @return Liefert eine Sammlung aller {@link SimpleMetaPath}, die man zwischen 2 Elementen anlegen kann, wobei die Zwischenelemente ebenfalls neu
      *         angelegt werden. Diese Pfade werden im Kontextmenü bei Mehrfachselektion oder Einfachselektion angeboten.
      */
-    protected abstract Collection<SimpleMetaPath> getCreateablePaths();
+    protected abstract Collection<SimpleMetaPath> getCreatablePaths();
 
-    private final Multimap<Class<? extends ModelElement>, SimpleMetaPath> elementClassToCreateableMetaPaths = ArrayListMultimap.create();
+    private final Multimap<Class<? extends ModelElement>, SimpleMetaPath> elementClassToCreatableMetaPaths = ArrayListMultimap.create();
 
-    private final void initCreateableMetaPaths() {
-        Collection<SimpleMetaPath> createablePaths = getCreateablePaths();
-        if (createablePaths != null) {
-            for (SimpleMetaPath metaPath : createablePaths) {
-                elementClassToCreateableMetaPaths.put(metaPath.getStartClass(), metaPath);
-                elementClassToCreateableMetaPaths.put(metaPath.getEndClass(), metaPath.getOtherDirection());
+    private final void initCreatableMetaPaths() {
+        Collection<SimpleMetaPath> creatablePaths = getCreatablePaths();
+        if (creatablePaths != null) {
+            for (SimpleMetaPath metaPath : creatablePaths) {
+                elementClassToCreatableMetaPaths.put(metaPath.getStartClass(), metaPath);
+                elementClassToCreatableMetaPaths.put(metaPath.getEndClass(), metaPath.getOtherDirection());
             }
         }
     }
@@ -421,9 +421,9 @@ public abstract class MetaModel {
      *
      * @param elementClass
      */
-    public Collection<SimpleMetaPath> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass) {
-        Collection<SimpleMetaPath> createablePaths = elementClassToCreateableMetaPaths.get(elementClass);
-        return createablePaths == null ? ImmutableList.of() : createablePaths;
+    public Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass) {
+        Collection<SimpleMetaPath> creatablePaths = elementClassToCreatableMetaPaths.get(elementClass);
+        return creatablePaths == null ? ImmutableList.of() : creatablePaths;
     }
 
 }

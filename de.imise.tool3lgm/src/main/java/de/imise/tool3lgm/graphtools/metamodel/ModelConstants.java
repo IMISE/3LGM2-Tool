@@ -1305,8 +1305,8 @@ public final class ModelConstants {
      *
      * @param elementClass
      */
-    public static Collection<SimpleMetaPath> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass) {
-        return metaModel.getCreateableMetaPaths(elementClass);
+    public static Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass) {
+        return metaModel.getCreatableMetaPaths(elementClass);
     }
 
     /**
@@ -1317,15 +1317,15 @@ public final class ModelConstants {
      * @param elementClass1
      * @param elementClass2
      */
-    public static Collection<SimpleMetaPath> getCreateableMetaPaths(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
-        ImmutableList.Builder<SimpleMetaPath> createableMetaPaths = ImmutableList.builder();
-        for (SimpleMetaPath metaPath : metaModel.getCreateableMetaPaths(elementClass1)) {
+    public static Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+        ImmutableList.Builder<SimpleMetaPath> creatableMetaPaths = ImmutableList.builder();
+        for (SimpleMetaPath metaPath : metaModel.getCreatableMetaPaths(elementClass1)) {
             Class<? extends ModelElement> endClass = metaPath.getEndClass();
             if (endClass.isAssignableFrom(elementClass2)) {
-                createableMetaPaths.add(metaPath);
+                creatableMetaPaths.add(metaPath);
             }
         }
-        return createableMetaPaths.build();
+        return creatableMetaPaths.build();
     }
 
 }

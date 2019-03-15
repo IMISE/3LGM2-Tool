@@ -205,8 +205,8 @@ public class MetaPathFunctions {
      *            soll
      * @return
      */
-    private static final boolean isCreateable(final ModelElement modelElement, final ElementaryMetaPath metaPath, final boolean modelElementAsStartElement) {
-        if (!metaPath.isCreateable()) {
+    private static final boolean isCreatable(final ModelElement modelElement, final ElementaryMetaPath metaPath, final boolean modelElementAsStartElement) {
+        if (!metaPath.isCreatable()) {
             return false;
         }
         if (modelElementAsStartElement) {
@@ -242,8 +242,8 @@ public class MetaPathFunctions {
      * @param checkConsistency
      * @return
      */
-    public static final boolean isCreateable(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean checkConsistency) {
-        if (!metaPath.isCreateable()) {
+    public static final boolean isCreatable(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean checkConsistency) {
+        if (!metaPath.isCreatable()) {
             return false;
         }
         if (metaPath instanceof ElementaryMetaPath) {
@@ -270,13 +270,13 @@ public class MetaPathFunctions {
                 return false;
             }
             if (firstMetaPath == lastMetaPath) {
-                return isCreateable(startElement, endElement, lastMetaPath, checkConsistency);
+                return isCreatable(startElement, endElement, lastMetaPath, checkConsistency);
             }
 
-            if (!isCreateable(startElement, (ElementaryMetaPath) firstMetaPath, true)) {
+            if (!isCreatable(startElement, (ElementaryMetaPath) firstMetaPath, true)) {
                 return false;
             }
-            if (!isCreateable(endElement, (ElementaryMetaPath) lastMetaPath, false)) {
+            if (!isCreatable(endElement, (ElementaryMetaPath) lastMetaPath, false)) {
                 return false;
             }
 
@@ -292,16 +292,16 @@ public class MetaPathFunctions {
              * //prüfen, ob die Zwischenelemente angelegt werden können
              * if (i + 1 < metaPaths.size()) {
              * AbstractMetaPath nextMetaPath = metaPaths.get(i + 1);
-             * boolean createableMetaPathEndClass = mp.getEndClasses().size() == 1;
-             * boolean createableNextMetaPathStartClass = nextMetaPath.getStartClasses().size() == 1;
+             * boolean creatableMetaPathEndClass = mp.getEndClasses().size() == 1;
+             * boolean creatableNextMetaPathStartClass = nextMetaPath.getStartClasses().size() == 1;
              * //Keine eindeutige Folgeklasse
-             * if (!createableMetaPathEndClass && !createableNextMetaPathStartClass)
+             * if (!creatableMetaPathEndClass && !creatableNextMetaPathStartClass)
              * return false;
-             * if (createableMetaPathEndClass && Modifier.isAbstract(mp.getEndClasses().get(0).getModifiers()))
-             * createableMetaPathEndClass = false;
-             * if (createableNextMetaPathStartClass && Modifier.isAbstract(nextMetaPath.getStartClasses().get(0).getModifiers()))
-             * createableNextMetaPathStartClass = false;
-             * if (!createableMetaPathEndClass && !createableNextMetaPathStartClass)
+             * if (creatableMetaPathEndClass && Modifier.isAbstract(mp.getEndClasses().get(0).getModifiers()))
+             * creatableMetaPathEndClass = false;
+             * if (creatableNextMetaPathStartClass && Modifier.isAbstract(nextMetaPath.getStartClasses().get(0).getModifiers()))
+             * creatableNextMetaPathStartClass = false;
+             * if (!creatableMetaPathEndClass && !creatableNextMetaPathStartClass)
              * return false;
              * }
              * }
@@ -457,7 +457,7 @@ public class MetaPathFunctions {
      */
     public static final ElementaryPath[] _createPath(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final GraphDocument doc, final int pid) {
         //Achtung: der Pfad wird auch angelegt, wenn dadurch die Cardinalität von einigen Elementen verletzt wird! (das macht das false)
-        if (!isCreateable(startElement, endElement, metaPath, false)) {
+        if (!isCreatable(startElement, endElement, metaPath, false)) {
             return null;
         }
         GDCollection gdcoll = doc.getCollection();

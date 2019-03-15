@@ -77,7 +77,7 @@ public class RecursiveMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public boolean isCreateable() {
+    public boolean isCreatable() {
         return false;
     }
 

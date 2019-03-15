@@ -545,7 +545,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     private LGMAction getNewConnectedElementAction() {
-        if (!metaPath.isCreateable()) {
+        if (!metaPath.isCreatable()) {
             return null;
         }
         if (ModelConstants.isSlaveType(searchElementClass)) {

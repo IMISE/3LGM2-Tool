@@ -107,7 +107,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             add(connectedElementsBox, BorderLayout.CENTER);
         }
 
-        createNew = metaPath.isCreateable() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + ElementsNameBuilder.getDisplayableName(searchElementClass)) : null;
+        createNew = metaPath.isCreatable() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + ElementsNameBuilder.getDisplayableName(searchElementClass)) : null;
     }
 
     @Override

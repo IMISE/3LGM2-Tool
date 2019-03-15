@@ -265,9 +265,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     // --- Methoden zur Statusveraenderung --- Ende ---
 
-    private JMenu createLayerMenu(final Iterable<Class<? extends ModelElement>> createableLayerNodes) {
+    private JMenu createLayerMenu(final Iterable<Class<? extends ModelElement>> creatableLayerNodes) {
         JMenu layerMenu = new JMenu(getResString("el_neu"));
-        for (Class<? extends ModelElement> elementClass : createableLayerNodes) {
+        for (Class<? extends ModelElement> elementClass : creatableLayerNodes) {
             JMenuItem item = new JMenuItem(ElementsNameBuilder.getDisplayableName(elementClass));
             item.addActionListener(this);
             item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + elementClass.getName());
@@ -541,7 +541,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             //Anlegbare Pfade zu anderen Elementen anbieten
             JLabel connectLabel = null;
-            for (SimpleMetaPath metaPath : ModelConstants.getCreateableMetaPaths(meClass)) {
+            for (SimpleMetaPath metaPath : ModelConstants.getCreatableMetaPaths(meClass)) {
                 if (connectLabel == null) {
                     connectLabel = new JLabel(getResString("LABEL_CONNECT"));
                     menu.add(connectLabel);
@@ -695,7 +695,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                 List<Object> edgesAndPaths = new ArrayList<>();
                 edgesAndPaths.addAll(Arrays.asList(getEdgeTypes(lastSelectedClass, me2Class)));
-                edgesAndPaths.addAll(ModelConstants.getCreateableMetaPaths(lastSelectedClass, me2Class));
+                edgesAndPaths.addAll(ModelConstants.getCreatableMetaPaths(lastSelectedClass, me2Class));
                 for (Object edgeClassOrMetaPath : edgesAndPaths) {
                     if (edgeClassOrMetaPath instanceof Class) {
                         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassOrMetaPath).asSubclass(Edge.class);

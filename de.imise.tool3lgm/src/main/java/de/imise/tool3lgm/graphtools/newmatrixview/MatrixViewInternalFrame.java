@@ -180,7 +180,7 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
 
         /* nur anlgebare Verbindungen */
         for (AbstractMetaPath metaPath : metaPaths) {
-            if (!metaPath.isCreateable()) {
+            if (!metaPath.isCreatable()) {
                 return;
             }
         }

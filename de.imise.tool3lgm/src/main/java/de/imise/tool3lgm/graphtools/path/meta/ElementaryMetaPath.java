@@ -356,7 +356,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public final boolean isCreateable() {
+    public final boolean isCreatable() {
         //Nur ElementarMetaPfade, die eine Kante zwischen 2 Knoten repräsentieren, wobei die Kantenklasse nicht abstract sein darf, sind anlegtbar. Alle
         //anderen nicht. Die Elementklassen können abstract sein. Ob sie anlegbar sind, ist hier (bei einem einzelnen Elementarpfad) egal, da es nur um
         //die Anlegbarkeit der Kante geht.

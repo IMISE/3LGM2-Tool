@@ -224,13 +224,13 @@ public class MenuCollection {
         public static final String title = getResString("insert");
 
         /** Einträge der fachlichen Ebene */
-        public static final Component[] MENU_ENTRIES_DOMAIN = MenuCreator.createMenuEntries(ActionLibrary.CreateElementActions.DOMAIN_LAYER_CREATEABLE_NODES_ACTIONS, true);
+        public static final Component[] MENU_ENTRIES_DOMAIN = MenuCreator.createMenuEntries(ActionLibrary.CreateElementActions.DOMAIN_LAYER_CREATABLE_NODES_ACTIONS, true);
 
         /** Einträge der logischen Ebene */
-        public static final Component[] MENU_ENTRIES_LOGICAL = MenuCreator.createMenuEntries(ActionLibrary.CreateElementActions.LOGICAL_TOOL_LAYER_CREATEABLE_NODES_ACTIONS, true);
+        public static final Component[] MENU_ENTRIES_LOGICAL = MenuCreator.createMenuEntries(ActionLibrary.CreateElementActions.LOGICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS, true);
 
         /** Einträge der physichen bene */
-        public static final Component[] MENU_ENTRIES_PHYSICAL = MenuCreator.createMenuEntries(ActionLibrary.CreateElementActions.PHYSICAL_TOOL_LAYER_CREATEABLE_NODES_ACTIONS, true);
+        public static final Component[] MENU_ENTRIES_PHYSICAL = MenuCreator.createMenuEntries(ActionLibrary.CreateElementActions.PHYSICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS, true);
 
         public InsertMenu() {
             super(title);

@@ -197,7 +197,7 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     @Override
-    public final boolean isCreateable() {
+    public final boolean isCreatable() {
         if (!isValid()) {
             return false;
         }
@@ -208,7 +208,7 @@ public class SequenceMetaPath extends ListMetaPath {
         // prüfen, ob die Zwischenelemente angelegt werden können
         for (int i = 0; i < elementaryMetaPaths.size() - 1; i++) {
             //nur Elementarpfade mit einer Kante dazwischen sind anlegbar, wenn die Kantenklasse nicht abstract ist
-            if (!elementaryMetaPaths.get(i).isCreateable()) {
+            if (!elementaryMetaPaths.get(i).isCreatable()) {
                 return false;
             }
             Class<? extends ModelElement> connectingClass = getPathStepElementClass(i + 1);
