@@ -212,6 +212,21 @@ public final class ModelConstants {
     }
 
     /**
+     * Liefert <code>true</code>, wenn eine der übergebenen Klassen nur im ExpertMode editierbar sein soll.
+     *
+     * @param elementClasses
+     * @return
+     */
+    public static boolean containsOnlyExpertModeEditableNodes(final Iterable<Class<? extends ModelElement>> elementClasses) {
+        for (Class<? extends ModelElement> elementClass : elementClasses) {
+            if (isOnlyExpertModeEditable(elementClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Liefert <code>true</code>, wenn die übergebene Elementklasse nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true)
      * angelegt und verändert werden kann.
      *
