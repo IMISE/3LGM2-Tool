@@ -252,7 +252,7 @@ public class SequenceMetaPath extends ListMetaPath {
         }
         int metaPathCount = metaPaths == null ? 0 : metaPaths.size();
         //bei einer ungeraden Anzahl von Pfaden muss der mittlere Pfad selbst undirected sein
-        if (metaPathCount % 2 == 1 && metaPaths.get(metaPathCount / 2 + 1).isDirected()) {
+        if (metaPathCount % 2 == 1 && !metaPaths.get(metaPathCount / 2).isDirected()) {
             return false;
         }
         //Der Pfad muss zur Mitte hin symmetrisch sein, d.h. alle Pfade müssen von beiden Seiten von Außen
