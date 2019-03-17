@@ -50,6 +50,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDi
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel.ConnectedElementsTableColumnsDefinition;
 import de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel.ConnectedElementsTablePanel;
+import de.imise.util.swing.component.TabbedPane;
 
 /**
  * Eigenschaftsdialog für Modellelemnte, also Node und Kanten.<br>
@@ -617,6 +618,34 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         return true;
     }
 
+    @Override
+    public void windowActivated(final WindowEvent e) {
+        removeEmptyTabs();
+        super.windowActivated(e);
+    }
+
+    private void removeEmptyTabs() {
+        for (int i = getTabCount() - 1; i >= 0; i--) {
+            Component comp = getTabComponentAt(i);
+            if (isEmptyTabbedPanel(comp)) {
+                removeTab(i);
+            }
+        }
+    }
+
+    private boolean isEmptyTabbedPanel(Component comp) {
+        if (comp instanceof TabbedPanel) {
+            TabbedPanel tabbedPanel = (TabbedPanel) comp;
+            if (tabbedPanel.getComponentCount() == 1) {
+                comp = tabbedPanel.getComponent(0);
+                if (tabbedPanel.getComponent(0) instanceof TabbedPane) {
+                    TabbedPane tabbedPane = (TabbedPane) comp;
+                    int componentCount = tabbedPane.getComponentCount();
+                    return componentCount == 0;
+                }
+            }
+        }
+        return false;
     }
 
 }

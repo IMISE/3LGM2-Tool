@@ -69,6 +69,15 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
         tab.addTab(title, icon, component);
     }
 
+    /**
+     * Entfernt den Tab mit dem übergebenen Index
+     * 
+     * @param tabIndex
+     */
+    protected void removeTab(final int tabIndex) {
+        tab.remove(tabIndex);
+    }
+
     public void setLastTabIcon(final Icon icon) {
         setTabIcon(tab.getTabCount() - 1, icon);
     }
