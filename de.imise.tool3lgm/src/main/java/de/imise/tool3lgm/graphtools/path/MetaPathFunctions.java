@@ -707,7 +707,7 @@ public class MetaPathFunctions {
         }
 
         //wenn das neu angelegte Element ein übergerodnetes Element von dem startElement ist, dann sollte es in der Grafik unter dem startElement liegen
-        if (startElement.isSubElementOf(createdDependent)) {
+        if (startElement != null && startElement.isSubElementOf(createdDependent)) {
             if (createdContainer == null) {
                 createdContainer = createdDependent.getContainer(doc);
             }
