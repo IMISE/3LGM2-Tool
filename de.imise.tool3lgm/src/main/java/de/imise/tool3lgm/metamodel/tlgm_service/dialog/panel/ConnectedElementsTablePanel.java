@@ -16,10 +16,8 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 
@@ -42,18 +40,6 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
 
     /**
      * @param dialog
-     * @param editable
-     * @param columnsDefinition
-     * @param edgeClasses
-     */
-    @SafeVarargs
-    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, final ConnectedElementsTableColumnsDefinition columnsDefinition, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, editable, columnsDefinition, SimpleMetaPathCreator.createSimpleMetaPath(dialog.getModelElement().getClass(), null, edgeClasses));
-    }
-
-    /**
-     * @param dialog
-     * @param editable
      * @param columnsDefinition
      * @param simpleMetaPaths
      */

@@ -14,7 +14,7 @@ public final class InvokingInterface extends CommunicationInterface {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(true, true, IheInvokingInterface_InvokingInterface_Edge.class);
+        dialog.addDescripSingleConnectionPanel(true, IheInvokingInterface_InvokingInterface_Edge.class);
         dialog.addDescripSingleConnectionPanel(IheInvokingInterface_InvokingInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
         dialog.addEdgePanel(CommunicationLink_Edge.class);
         dialog.addEdgePanel(Service_InvokingInterface_Edge.class);

@@ -13,8 +13,8 @@ public class IheInvokingInterface extends IheInterface {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         //showOnlyInExpertMode ist auf false, aber diese Knoten sollten sowieso nur im Expert Mode zu sehen sein
-        dialog.addDescripSingleConnectionPanel(false, true, false, IheInvokingInterface_IheTransaction_Edge.class);
-        dialog.addEdgePanel(true, IheInvokingInterface_InvokingInterface_Edge.class);
+        dialog.addDescripSingleConnectionPanel(false, IheInvokingInterface_IheTransaction_Edge.class);
+        dialog.addEdgePanel(IheInvokingInterface_InvokingInterface_Edge.class);
         return dialog;
     }
 }

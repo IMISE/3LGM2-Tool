@@ -11,8 +11,7 @@ public abstract class IheInterface extends IheConcept {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        //showOnlyInExpertMode ist auf false, aber diese Knoten sollten sowieso nur im Expert Mode zu sehen sein
-        dialog.addDescripSingleConnectionPanel(true, true, false, IheActor_IheInterface_Edge.class);
+        dialog.addDescripSingleConnectionPanel(true, IheActor_IheInterface_Edge.class);
         return dialog;
     }
 
