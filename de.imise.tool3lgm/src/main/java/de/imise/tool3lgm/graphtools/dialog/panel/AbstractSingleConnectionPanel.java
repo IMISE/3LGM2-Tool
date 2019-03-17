@@ -3,13 +3,10 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 import java.awt.Component;
 import java.awt.event.MouseListener;
 
-import javax.swing.JComboBox;
-
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.util.collections.CollectionUtils;
 
 /**
  * Abtsractes Panel für Verbindungen mit einer Maximalen Verbindungsanzahl von 1.
@@ -43,20 +40,23 @@ public abstract class AbstractSingleConnectionPanel extends AbstractPathConnecti
      * @param component
      */
     protected void addMouseActions(final Component component) {
-        if (component instanceof JComboBox<?>) {
-            JComboBox<?> box = (JComboBox<?>) component;
-            //box.getEditor().getEditorComponent().addMouseListener(mouseListener); // funktioniert nicht!!!
-            Component c[] = box.getComponents();
-            for (int i = 0; i < c.length; i++) {
-                // add event listener to all of the child components
-                MouseListener[] mouseListeners = c[i].getMouseListeners();
-                if (!CollectionUtils.arrayContains(mouseListeners, mouseListener)) {
-                    c[i].addMouseListener(mouseListener);
-                }
-            }
-        } else {
-            component.addMouseListener(mouseListener);
-        }
+        // Das unten auskommentierte hatte ich (AXS) mal gebaut, damit auf Comboboxen auch das Kontextmenü funktioniert. Das klappt aber auf dem MAC gar nicht
+        // und es reicht der untere Aufruf völlig -> Testen ob das auch auf Windows so geht und wenn ja, dann das auskommentierte Löschen. Das muss aber mal
+        // nötig gewesen sein, sonst hätte ich das nicht geschrieben. Evtl. auch Änderung durch neue Java-Version!?
+        //        if (component instanceof JComboBox<?>) {
+        //            JComboBox<?> box = (JComboBox<?>) component;
+        //            //box.getEditor().getEditorComponent().addMouseListener(mouseListener); // funktioniert nicht!!!
+        //            Component c[] = box.getComponents();
+        //            for (int i = 0; i < c.length; i++) {
+        //                // add event listener to all of the child components
+        //                MouseListener[] mouseListeners = c[i].getMouseListeners();
+        //                if (!CollectionUtils.arrayContains(mouseListeners, mouseListener)) {
+        //                    c[i].addMouseListener(mouseListener);
+        //                }
+        //            }
+        //        } else {
+        component.addMouseListener(mouseListener);
+        //        }
     }
 
 }
