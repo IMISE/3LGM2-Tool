@@ -92,8 +92,16 @@ public class SimpleMetaPathCreator {
                     return null;
                 }
             }
-            ElementaryMetaPath metaPath = i == 0 ? ElementaryMetaPathHandler.getMetaPath(start, edgeClass, direction)
-                    : i == metaPaths.length - 1 && endClass != null ? ElementaryMetaPathHandler.getMetaPath(edgeClass, direction, endClass) : ElementaryMetaPathHandler.getMetaPath(edgeClass, direction);
+            ElementaryMetaPath metaPath;
+            if (metaPaths.length == 1) {
+                metaPath = ElementaryMetaPathHandler.getMetaPath(start, edgeClass, direction, endClass);
+            } else if (i == 0) {
+                metaPath = ElementaryMetaPathHandler.getMetaPath(start, edgeClass, direction);
+            } else if (i == metaPaths.length - 1 && endClass != null) {
+                metaPath = ElementaryMetaPathHandler.getMetaPath(edgeClass, direction, endClass);
+            } else {
+                metaPath = ElementaryMetaPathHandler.getMetaPath(edgeClass, direction);
+            }
             metaPaths[i] = metaPath;
             start = metaPath.getEndClass();
         }

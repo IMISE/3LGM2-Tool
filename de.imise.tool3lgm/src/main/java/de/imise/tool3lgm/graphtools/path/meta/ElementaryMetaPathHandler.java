@@ -124,6 +124,18 @@ public class ElementaryMetaPathHandler {
     }
 
     /**
+     * @param startClass
+     * @param edgeClass
+     * @param direction
+     * @param endClass
+     * @return
+     */
+    public static final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Direction direction, final Class<? extends ModelElement> endClass) {
+        ElementaryMetaPath metaPath = getMetaPath(edgeClass, direction);
+        return getMetaPath(startClass, metaPath, endClass);
+    }
+
+    /**
      * @param edgeClass
      * @return
      */
