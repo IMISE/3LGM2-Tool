@@ -4,7 +4,7 @@ package de.imise.util;
  * Hilfsklasse, um Objekte zu kapseln, deren <code>toString()</code>-Methode nicht
  * das zurückliefert, was angezeigt werden soll. Dieses Objekt speichert das
  * Originalobjekt und zusätzlich einen String, der über <code>toString()</code> zurückgeliefert wird.
- * 
+ *
  * @author AXS
  * @created 17.10.2007
  */
@@ -23,27 +23,50 @@ public final class NamedObjectContainer<E> {
     protected final E object; //ACHTUNG: niemals unfinalizen und set() hierfür schreiben!
 
     /**
+     * Wenn <code>true</code>, reicht bei {@link #equals(Object)} für Gleichheit Identität oder dass beide {@link #toString()}-Funktionen dasselbe
+     * liefern. Wenn <code>false</code> wird auch geprüft, ob das andere Objekt ebenfalls ein {@link NamedObjectContainer} ist und die enthaltenen
+     * Objekte auch equals ist.
+     */
+    protected final boolean equalsIfToStringIsEquals;
+
+    /**
      * Legt ein Obekt an, das über die <code>toString()</code> -Methode den <code>toString</code> zurück liefert und zusätzlich das Objekt
      * <code>modelElement</code> speichert.
-     * 
+     *
      * @param modelElement
      * @param toString
      */
     public NamedObjectContainer(final E object, final String toString) {
+        this(object, toString, false);
+    }
+
+    /**
+     * Legt ein Obekt an, das über die <code>toString()</code> -Methode den <code>toString</code> zurück liefert und zusätzlich das Objekt
+     * <code>modelElement</code> speichert.
+     *
+     * @param modelElement
+     * @param toString
+     * @param equalsIfToStringIsEquals
+     *            Wenn <code>true</code>, reicht bei {@link #equals(Object)} für Gleichheit Identität oder dass beide {@link #toString()}-Funktionen
+     *            dasselbe liefern. Wenn <code>false</code> wird auch geprüft, ob das andere Objekt ebenfalls ein {@link NamedObjectContainer} ist und
+     *            die enthaltenen Objekte auch equals ist.
+     */
+    public NamedObjectContainer(final E object, final String toString, final boolean equalsIfToStringIsEquals) {
         this.toString = toString;
         this.object = object;
+        this.equalsIfToStringIsEquals = equalsIfToStringIsEquals;
         //System.err.println(getFullString(this));
     }
 
     /**
      * Liefert einen {@link NamedObjectContainer} mit dem Object object und dem String toString.
-     * 
+     *
      * @param object
      * @param toString
      * @return
      */
     public static <T> NamedObjectContainer<T> of(final T object, final String toString) {
-        return new NamedObjectContainer<T>(object, toString);
+        return new NamedObjectContainer<>(object, toString);
     }
 
     @Override
@@ -80,13 +103,16 @@ public final class NamedObjectContainer<E> {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof NamedObjectContainer)) {
-            return false;
+
+        if (!equalsIfToStringIsEquals) {//wenn nicht nur der String-Wert sondern auch die Elementklasse und das enthaltene Objekt auch getestet werden soll
+            if (!(obj instanceof NamedObjectContainer)) {
+                return false;
+            }
+            if (((NamedObjectContainer<?>) obj).getObject().equals(getObject())) {
+                return false;
+            }
         }
         if (!toString().equals(obj.toString())) {
-            return false;
-        }
-        if (((NamedObjectContainer<?>) obj).getObject() != getObject()) {
             return false;
         }
         return true;
