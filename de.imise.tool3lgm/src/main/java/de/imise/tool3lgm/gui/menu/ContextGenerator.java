@@ -1988,20 +1988,22 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    public JPopupMenu getTreeKnotContextMenu() {
+    public JPopupMenu getTreeKnotContextMenu(final boolean propertiesOnly) {
         JPopupMenu menu = new JPopupMenu();
         addMenuItem(menu, properties);
-        menu.addSeparator();
-        boolean do_join = doc.isJoinableElementsSelected();
-        if (do_join) {
-            menu.add(join_selected);
+        if (!propertiesOnly) {
             menu.addSeparator();
+            boolean do_join = doc.isJoinableElementsSelected();
+            if (do_join) {
+                menu.add(join_selected);
+                menu.addSeparator();
+            }
+            if (doc instanceof Szenario) {
+                menu.add(delete_selected_from_szenario);
+            }
+            menu.add(delete_selected);
+            delete_selected.setEnabled(doc.isSelection());
         }
-        if (doc instanceof Szenario) {
-            menu.add(delete_selected_from_szenario);
-        }
-        menu.add(delete_selected);
-        delete_selected.setEnabled(true);
         //		System.out.println("getTreeKnotContextMenu - addPopupMenuListener ausgeführt");
         menu.addPopupMenuListener(this);
         return menu;

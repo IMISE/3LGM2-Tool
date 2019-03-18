@@ -3,7 +3,9 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
+import java.awt.Component;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JLabel;
+import javax.swing.JTable;
 
 import com.google.common.collect.ImmutableList;
 
@@ -19,6 +22,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
+import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -97,6 +101,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
 
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
         westLabel = new JLabel();
+        //bei allen SingleConnectionPanels kann das Westlabel auch die MouseActions bekommen, so dass man auf dem Label an das verknüpfte Element kommt
+        if (isSingleConnectionPath()) {
+            addMouseActions(westLabel);
+        }
         String westLabelText;
         Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
 
@@ -230,6 +238,23 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         EdgeCardinality forwardCardinality = lastElementaryMetaPath.getForwardCardinality();
         int minCardinality = forwardCardinality.min();
         return minCardinality > 0;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenm der Pfad maximal ein Element als Ergebnis liefert, also das StartElement maximal ein Mal mit dem EndElement
+     * verbunden sein darf.
+     * Diese Funktion (genau wie die anderen isLastPathElementDependent(), isLastPathElementNeededForExistence() und isConnectionPointUnique()) könnte
+     * man auch direkt in die Pfade schreiben (falls sie noch woanders gebraucht werden))
+     *
+     * @return
+     */
+    protected boolean isSingleConnectionPath() {
+        ElementaryMetaPath lastElementaryMetaPathInPath = getElementaryMetaPathInPath(-1);
+        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass mehrere Verbindungen mgl. sind
+        if (lastElementaryMetaPathInPath == null) {
+            return false;
+        }
+        return lastElementaryMetaPathInPath.getForwardCardinality().max() == 1;
     }
 
     /**
@@ -381,32 +406,61 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * wird bei einem Rechtsklick das Kontextmenü des Elementes gezeigt oder bei einem Doppelklick
      * wird der Eigenschaftsdialog des Elementes geöffnet.
      *
-     * @param selection
+     * @param selectionObject
      * @param e
      */
-    private final void executeMouseClickedAction(final Object selection, final MouseEvent e) {
+    private final void executeMouseClickedAction(final Object selectionObject, final MouseEvent e) {
+        Iterable<?> fullSelection = selectionObject instanceof Iterable ? (Iterable<?>) selectionObject : ImmutableList.of(selectionObject);
         boolean popup = Tool3lgmConstants.isPopupTrigger(e);
         boolean doubleClick = !popup && e.getClickCount() > 1;
         //set selection
         GraphDocument doc = getGraphDocument();
+        doc.deselectAll(true);
         ElementContainer selected = null;
-        if (selection instanceof ElementContainer) {
-            selected = (ElementContainer) selection;
-        } else if (selection instanceof ModelElement) {
-            //da die Selektion sowieso in allen Teilmodellen ausgeführt wird, ist es hier ok, das ModelElement durch
-            //den Container aus dem Hauptdokument zu ersetzen
-            ModelElement me = (ModelElement) selection;
-            GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
-            selected = me.getContainer(mainDoc);
-        }
-        if (selected != null) {
-            doc.select(selected, getTransactionID());
-            if (popup) {
-                Tool3lgm.getContextGenerator().getTreeKnotContextMenu().show(e.getComponent(), e.getX() + 3, e.getY() + 3);
-            } else if (doubleClick) {
-                doc.showPropertyDialog(selected.getElement());
+        boolean first = true;
+        for (Object selectedObject : fullSelection) {
+            if (selectedObject instanceof ElementContainer) {
+                selected = (ElementContainer) selectedObject;
+            } else if (selectedObject instanceof ModelElement) {
+                //da die Selektion sowieso in allen Teilmodellen ausgeführt wird, ist es hier ok, das ModelElement durch
+                //den Container aus dem Hauptdokument zu ersetzen
+                ModelElement me = (ModelElement) selectedObject;
+                GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
+                selected = me.getContainer(mainDoc);
+            }
+            if (selected != null) {
+                if (first) {
+                    doc.select(selected, getTransactionID());
+                    first = false;
+                } else {
+                    doc.addToSelection(selected, getTransactionID());
+                }
+                if (doubleClick) {
+                    doc.showPropertyDialog(selected.getElement());
+                }
             }
         }
+        if (popup && doc.isSelection()) {
+            boolean showOnlyOpenPropertiesInContexMenu = sourceIs(e, JTable.class);
+            Tool3lgm.getContextGenerator().getTreeKnotContextMenu(showOnlyOpenPropertiesInContexMenu).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
+        }
+    }
+
+    private boolean sourceIs(final MouseEvent e, final Class<? extends Component> maybeSourceClass) {
+        Object source = e.getSource();
+        if (maybeSourceClass.isAssignableFrom(source.getClass())) {
+            return true;
+        }
+        if (source instanceof Component) {
+            Component comp = ((Component) source).getParent();
+            while (comp != null) {
+                if (maybeSourceClass.isAssignableFrom(comp.getClass())) {
+                    return true;
+                }
+                comp = comp.getParent();
+            }
+        }
+        return false;
     }
 
     /**
@@ -441,6 +495,34 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             available = mainDoc.getElementContainers(searchElementClass, true);
         }
         return available;
+    }
+
+    protected final MouseListener mouseListener = new LGMMouseListener(null, null, null, getMouseClickedAction(), null);
+
+    /**
+     * Fügt der übergebenen Komponente die Doppelklick-Öffne-Eigenschaftsdialog-des-selektierten-Elementes-Action
+     * hinzu und die Rechte-Maustastae-Öffnet-KontextMenü-Action.
+     *
+     * @param component
+     */
+    protected void addMouseActions(final Component component) {
+        // Das unten auskommentierte hatte ich (AXS) mal gebaut, damit auf Comboboxen auch das Kontextmenü funktioniert. Das klappt aber auf dem MAC gar nicht
+        // und es reicht der untere Aufruf völlig -> Testen ob das auch auf Windows so geht und wenn ja, dann das auskommentierte Löschen. Das muss aber mal
+        // nötig gewesen sein, sonst hätte ich das nicht geschrieben. Evtl. auch Änderung durch neue Java-Version!?
+        //        if (component instanceof JComboBox<?>) {
+        //            JComboBox<?> box = (JComboBox<?>) component;
+        //            //box.getEditor().getEditorComponent().addMouseListener(mouseListener); // funktioniert nicht!!!
+        //            Component c[] = box.getComponents();
+        //            for (int i = 0; i < c.length; i++) {
+        //                // add event listener to all of the child components
+        //                MouseListener[] mouseListeners = c[i].getMouseListeners();
+        //                if (!CollectionUtils.arrayContains(mouseListeners, mouseListener)) {
+        //                    c[i].addMouseListener(mouseListener);
+        //                }
+        //            }
+        //        } else {
+        component.addMouseListener(mouseListener);
+        //        }
     }
 
 }

@@ -42,7 +42,7 @@ import de.imise.util.swing.component.LimitedSizeScrollTextPane;
  *         da man z.B. jedem Anwendungsbaustein sein eigenes Datenbanksystem geben will, auch wenn ein
  *         übergeordneter Anwendungsbaustein schon eines besitzt.
  */
-public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
+public class SingleConnectionPanel extends AbstractPathConnectionPanel {
 
     /** Box, in der die verbindbaren Elemente zur Auswahl gestellt werden, wenn es mehr als eines gibt. */
     private final AlphabeticalComboBox connectedElementsBox;

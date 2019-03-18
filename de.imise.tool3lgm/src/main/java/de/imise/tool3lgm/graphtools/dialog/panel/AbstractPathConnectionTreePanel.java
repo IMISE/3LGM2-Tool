@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionListener;
@@ -10,7 +9,6 @@ import javax.swing.tree.TreePath;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
-import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.tools.LGMTreeNode;
@@ -36,14 +34,8 @@ public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnec
     }
 
     protected void addListener(final JTree tree) {
-        addMouseListener(tree);
+        addMouseActions(tree);
         addTreeSelectionListener(tree);
-    }
-
-    private void addMouseListener(final JTree tree) {
-        LGMAction mousePressedAction = getMouseClickedAction();
-        MouseListener mousePressedListener = new LGMMouseListener(null, null, null, mousePressedAction, null);
-        tree.addMouseListener(mousePressedListener);
     }
 
     private void addTreeSelectionListener(final JTree tree) {

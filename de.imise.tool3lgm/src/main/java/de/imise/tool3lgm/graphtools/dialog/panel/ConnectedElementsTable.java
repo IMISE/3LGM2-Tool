@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import java.awt.event.MouseListener;
+
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -31,17 +33,19 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
      * @param simpleMetaPath
      * @param columnsDefinition
      * @param editable wenn <code>true</code>, dann lassen sich die Optional-Werte ändern
+     * @param mouseListener
      * @param pid
      */
-    public ConnectedElementsTable(final SimpleMetaPath simpleMetaPath, final ConnectedElementsTableColumnsDefinition columnsDefinition, final boolean editable, final int pid) {
+    public ConnectedElementsTable(final SimpleMetaPath simpleMetaPath, final ConnectedElementsTableColumnsDefinition columnsDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
         super(new ConnectedElementsTableModel(simpleMetaPath, columnsDefinition));
         this.columnsDefinition = columnsDefinition;
         this.editable = editable;
         this.pid = pid;
+        addMouseListener(mouseListener);
         model = (ConnectedElementsTableModel) getModel();
         initColumnWidth();
         if (editable) {
-            initCoumnEditor();
+            initCoumnEditor(mouseListener);
         }
     }
 
@@ -58,9 +62,10 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
         }
     }
 
-    private void initCoumnEditor() {
+    private void initCoumnEditor(final MouseListener mouseListener) {
         JComboBox<String> optionalComboBox = createOptionalCombobox();
-        ConnectedElementsTableMouseListener.addTo(this, optionalComboBox);
+        optionalComboBox.addMouseListener(mouseListener);
+        //        ConnectedElementsTableMouseListener.addTo(this, optionalComboBox);
         for (int i = 0; i < columnsDefinition.columnCount(); i++) {
             SingleColumnDefinition singleColumnDefinition = columnsDefinition.get(i);
             if (singleColumnDefinition.getColumnType() == ColumnType.OPTIONAL) {

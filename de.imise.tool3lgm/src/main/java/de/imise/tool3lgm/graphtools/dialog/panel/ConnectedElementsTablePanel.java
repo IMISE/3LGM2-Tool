@@ -5,20 +5,27 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
+import de.imise.util.NamedObjectContainer;
 
 /**
  * @author AXS (11 Mar 2019)
@@ -50,9 +57,9 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     }
 
     private void internalInit(final boolean editable) {
-        table = new ConnectedElementsTable((SimpleMetaPath) metaPath, columnsDefinition, editable, dialog.getTransactionID());
+        table = new ConnectedElementsTable((SimpleMetaPath) metaPath, columnsDefinition, editable, mouseListener, dialog.getTransactionID());
         JScrollPane scrollPane = new JScrollPane(table);
-        ConnectedElementsTableMouseListener.addTo(table, table);
+        //ConnectedElementsTableMouseListener.addTo(table, table);
 
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
@@ -134,9 +141,53 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         return returnAction;
     }
 
+    private final boolean isRowSelected(final int row) {
+        int[] selectedRows = table.getSelectedRows();
+        for (int r : selectedRows) {
+            if (r == row) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     protected Object getSelection(final MouseEvent e) {
-        return null;
+        Point clickedPoint = e.getPoint();
+        JComponent source = (JComponent) e.getSource();
+        //wenn die Source nicht der Table selbst sondern eine darin enthaltene Editor-Komponente ist -> relative Koordinaten des Editors im Table bestimmen
+        if (source != table) {
+            Point location = source.getLocation();
+            clickedPoint.translate(location.x, location.y);
+        }
+        int clickedRow = table.rowAtPoint(clickedPoint);
+        if (!isRowSelected(clickedRow)) {//das kann eintreten, wenn mit Rechts auf eine bisher nicht selektierte Zeile geklickt wurde
+            table.addRowSelectionInterval(clickedRow, clickedRow);
+        }
+        int clickedColumn = table.columnAtPoint(clickedPoint);
+        int[] selectedRows = table.getSelectedRows();
+        List<ModelElement> selectedElements = new ArrayList<>();
+        for (int row : selectedRows) {
+            ModelElement selectedElement = getModelElementAt(row, clickedColumn);
+            if (selectedElement != null && !ModelConstants.isHiddenClass(selectedElement.getClass())) {
+                selectedElements.add(selectedElement);
+            }
+        }
+        return selectedElements;
+    }
+
+    /**
+     * @param row
+     * @param col
+     * @return
+     */
+    private ModelElement getModelElementAt(final int row, final int col) {
+        Object selectedRowValue = table.getValueAt(row, col);
+        if (selectedRowValue instanceof NamedObjectContainer) {
+            NamedObjectContainer<?> noc = (NamedObjectContainer) selectedRowValue;
+            selectedRowValue = noc.getObject();
+        }
+        return selectedRowValue instanceof ModelElement ? (ModelElement) selectedRowValue : null;
     }
 
     @Override
