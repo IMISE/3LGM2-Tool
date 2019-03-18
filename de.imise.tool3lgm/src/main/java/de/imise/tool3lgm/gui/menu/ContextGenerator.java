@@ -1988,7 +1988,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    public JPopupMenu getTreeKnotContextMenu(final boolean propertiesOnly) {
+    public JPopupMenu getDialogSelectionContextMenu(final boolean propertiesOnly) {
         JPopupMenu menu = new JPopupMenu();
         addMenuItem(menu, properties);
         if (!propertiesOnly) {
@@ -2004,7 +2004,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             menu.add(delete_selected);
             delete_selected.setEnabled(doc.isSelection());
         }
-        //		System.out.println("getTreeKnotContextMenu - addPopupMenuListener ausgeführt");
+        //		System.out.println("getDialogSelectionContextMenu - addPopupMenuListener ausgeführt");
         menu.addPopupMenuListener(this);
         return menu;
     }
@@ -2013,7 +2013,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param ec
      * @return
      */
-    public JPopupMenu getTreeKnotContextMenu(final ElementContainer ec) {
+    public JPopupMenu getDialogSelectionContextMenu(final ElementContainer ec) {
         JPopupMenu menu = new JPopupMenu();
         doc.addSimpleToSelection(ec);
         addMenuItem(menu, properties);

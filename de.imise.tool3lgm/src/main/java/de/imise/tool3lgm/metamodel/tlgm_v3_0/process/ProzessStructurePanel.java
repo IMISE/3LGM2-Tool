@@ -838,7 +838,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //            if (!(o instanceof String)) {
     //                // den angeklickten selektieren
     //                setSelectionRow(tree, clickedRow);
-    //                Tool3lgm.getContextGenerator().getTreeKnotContextMenu((ElementContainer) o).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
+    //                Tool3lgm.getContextGenerator().getDialogSelectionContextMenu((ElementContainer) o).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
     //            }
     //        }
     //        // es ist etwas selektiert
@@ -856,7 +856,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //            }
     //            // das PopupMenü für den jetzt selektierten Eintrag anzeigen
     //            Object o = ((LGMTreeNode) tree.getPathForRow(clickedRow).getLastPathComponent()).getUserObject();
-    //            Tool3lgm.getContextGenerator().getTreeKnotContextMenu((ElementContainer) o).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
+    //            Tool3lgm.getContextGenerator().getDialogSelectionContextMenu((ElementContainer) o).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
     //        }
     //    }
     //

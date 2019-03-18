@@ -442,7 +442,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         }
         if (popup && doc.isSelection()) {
             boolean showOnlyOpenPropertiesInContexMenu = sourceIs(e, JTable.class);
-            Tool3lgm.getContextGenerator().getTreeKnotContextMenu(showOnlyOpenPropertiesInContexMenu).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
+            Tool3lgm.getContextGenerator().getDialogSelectionContextMenu(showOnlyOpenPropertiesInContexMenu).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
         }
     }
 
