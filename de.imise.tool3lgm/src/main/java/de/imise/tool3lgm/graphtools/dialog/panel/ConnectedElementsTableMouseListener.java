@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel;
+package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import java.awt.Point;
 import java.awt.event.MouseAdapter;

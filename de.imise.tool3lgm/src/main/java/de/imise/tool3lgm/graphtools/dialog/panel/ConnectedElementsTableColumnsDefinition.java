@@ -1,10 +1,10 @@
-package de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel;
+package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import de.imise.tool3lgm.metamodel.tlgm_service.dialog.panel.ConnectedElementsTableColumnsDefinition.SingleColumnDefinition;
+import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.SingleColumnDefinition;
 
 /**
  * @author AXS (12 Mar 2019)
