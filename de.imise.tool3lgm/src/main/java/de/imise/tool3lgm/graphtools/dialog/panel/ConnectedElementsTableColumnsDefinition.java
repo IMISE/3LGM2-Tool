@@ -91,11 +91,27 @@ public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleC
 
     /**
      * @param index
+     * @param width
+     */
+    public void addColumnPathStepName(final int index, final int width) {
+        addColumnPathStepName(index, null, width);
+    }
+
+    /**
+     * @param index
      * @param headerResKeyOrName
      * @param width
      */
     public void addColumnPathStepName(final int index, final String headerResKeyOrName, final int width) {
         addColumn(ColumnType.PATH_STEP_NAME, index, headerResKeyOrName, width);
+    }
+
+    /**
+     * @param index
+     * @param width
+     */
+    public void addColumnPathStepBackwardName(final int index, final int width) {
+        addColumnPathStepBackwardName(index, null, width);
     }
 
     /**

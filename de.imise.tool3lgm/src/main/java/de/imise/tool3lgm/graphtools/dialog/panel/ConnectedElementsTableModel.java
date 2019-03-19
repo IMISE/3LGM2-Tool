@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.StringUtils;
 
 /**
  * @author AXS (11 Mar 2019)
@@ -82,24 +83,34 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                     } else {
                         Collection<String> colNameParts = new ArrayList<>();
                         List<AbstractMetaPath> metaPaths = columnHeaderReferencePath.getMetaPaths();
-                        List<ElementaryMetaPath> elementaryMetaPaths = columnHeaderReferencePath.getMetaPaths().get(0).getElementaryMetaPaths();
-                        int pathStepIndex = columnDefinition.getPathStepIndex();
-                        ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(pathStepIndex);
-                        if (columnType == ColumnType.PATH_STEP_NAME) {
-                            colName = elementaryMetaPath.getName();
-                        } else if (columnType == ColumnType.PATH_STEP_FULL_NAME) {
-                            colName = elementaryMetaPath.getFullName();
-                        } else {
-                            Class<? extends ModelElement> elementClass = null;
-                            if (columnType == ColumnType.PATH_STEP_START) {
-                                elementClass = elementaryMetaPath.getStartClass();
-                            } else if (columnType == ColumnType.PATH_STEP_END) {
-                                elementClass = elementaryMetaPath.getEndClass();
-                            } else if (columnType == ColumnType.PATH_STEP_EDGE) {
-                                elementClass = elementaryMetaPath.getEdgeClass();
+                        for (AbstractMetaPath metaPath : metaPaths) {
+                            List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+                            int pathStepIndex = columnDefinition.getPathStepIndex();
+                            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(pathStepIndex);
+                            if (columnType == ColumnType.PATH_STEP_NAME) {
+                                colName = elementaryMetaPath.getName();
+                            } else if (columnType == ColumnType.PATH_STEP_FULL_NAME) {
+                                colName = elementaryMetaPath.getFullName();
+                            } else if (columnType == ColumnType.PATH_STEP_BACKWARD_NAME) {
+                                colName = elementaryMetaPath.getOtherDirection().getName();
+                            } else if (columnType == ColumnType.PATH_STEP_FULL_BACKAWARD_NAME) {
+                                colName = elementaryMetaPath.getOtherDirection().getFullName();
+                            } else {
+                                Class<? extends ModelElement> elementClass = null;
+                                if (columnType == ColumnType.PATH_STEP_START) {
+                                    elementClass = elementaryMetaPath.getStartClass();
+                                } else if (columnType == ColumnType.PATH_STEP_END) {
+                                    elementClass = elementaryMetaPath.getEndClass();
+                                } else if (columnType == ColumnType.PATH_STEP_EDGE) {
+                                    elementClass = elementaryMetaPath.getEdgeClass();
+                                }
+                                colName = ElementsNameBuilder.getDisplayablePluralName(elementClass);
                             }
-                            colName = ElementsNameBuilder.getDisplayablePluralName(elementClass);
+                            if (!colNameParts.contains(colName)) {
+                                colNameParts.add(colName);
+                            }
                         }
+                        colName = StringUtils.createCollectionString(colNameParts, " / ");
                     }
                 }
             }
