@@ -52,12 +52,12 @@ public abstract class ElementDialogPanel extends JPanel {
      * Liste mit allen Elementen, die im Panel selektiert sind. Da ein Panel mehrere Bäume enthalten
      * kann, wird sich in dieser Liste sozusagen die Gesamtselektion gemerkt.
      */
-    protected List<ElementContainer> highlight = new ArrayList<ElementContainer>(0);
+    protected List<ElementContainer> highlight = new ArrayList<>(0);
 
     /**
      * COMMENTME
      */
-    protected List<Object> specialInfoOwner = new ArrayList<Object>(0);
+    protected List<Object> specialInfoOwner = new ArrayList<>(0);
 
     /**
      * COMMENTME
@@ -122,7 +122,7 @@ public abstract class ElementDialogPanel extends JPanel {
         mainDoc = doc.getCollection().getMainGraphDocument();
         treeRenderer = new TreeRenderer(doc);
         setBorder(BorderFactory.createEmptyBorder(1, 1, 0, 0));
-        highlight = new ArrayList<ElementContainer>();
+        highlight = new ArrayList<>();
 
         windowClosedAction = LGMActionLibrary.getWindowClosedAction(this);
         componentShownAction = LGMActionLibrary.getComponentShownAction(this);
