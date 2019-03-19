@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.metamodel.tlgm_service.node;
 
-import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.createSimpleMetaPath;
-
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition;
@@ -31,8 +29,8 @@ public class IheActor extends IheConcept {
         columnsDefinition.addColumnEndElement(300);
         columnsDefinition.addColumnOptional(0, 50);
         columnsDefinition.addColumnPathStepName(1, "HEADER_ACTOR_TRANSACTION_CONNECTION_NAME", 150);
-        SimpleMetaPath path1 = createSimpleMetaPath(IheActor.class, IheTransaction.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
-        SimpleMetaPath path2 = createSimpleMetaPath(IheActor.class, IheTransaction.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
+        SimpleMetaPath path1 = createSimpleMetaPath(IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
+        SimpleMetaPath path2 = createSimpleMetaPath(IheActor_IheInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
         dialog.addTablePanel(true, columnsDefinition, path1, path2);
         return dialog;
     }

@@ -36,6 +36,7 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -2020,6 +2021,16 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public String getHyperlink() {
         return hyperlink;
+    }
+
+    @SafeVarargs
+    protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends Edge>... edgeClasses) {
+        return createSimpleMetaPath(null, edgeClasses);
+    }
+
+    @SafeVarargs
+    protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final Class<? extends Edge>... edgeClasses) {
+        return SimpleMetaPathCreator.createSimpleMetaPath(getClass(), endClass, edgeClasses);
     }
 
 }
