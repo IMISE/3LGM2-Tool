@@ -336,16 +336,40 @@ public class StringUtils {
      * @return den übergebenen {@link StringBuilder}
      */
     public static StringBuilder appendCollectionString(final StringBuilder sb, final Collection<?> collection) {
+        return appendCollectionString(sb, collection, ", ");
+    }
+
+    /**
+     * Hängt an den übergebenen StringBuilder kommasepariert die Strings der toString()-Methode der in der Collection enthaltenen Elemente
+     *
+     * @param stringBuilder StringBuilder, an den angehängt werden soll
+     * @param collection Objecte, deren toString() kommasepariert angehänt werden soll
+     * @param delimiter Trenner zwischen den Einzelstrings
+     * @return den übergebenen {@link StringBuilder}
+     */
+    public static StringBuilder appendCollectionString(final StringBuilder stringBuilder, final Collection<?> collection, final String delimiter) {
+        StringBuilder sb = stringBuilder != null ? stringBuilder : new StringBuilder();
         boolean first = true;
         for (Object o : collection) {
             if (!first) {
-                sb.append(", ");
+                sb.append(delimiter);
             } else {
                 first = false;
             }
             sb.append(o);
         }
         return sb;
-
     }
+
+    /**
+     * Gibt den verketteten String aller Objekte in der Collection zurück. Diese sind durch den angegebenen Delimiter getrennt.
+     *
+     * @param collection
+     * @param delimiter
+     * @return
+     */
+    public static String createCollectionString(final Collection<?> collection, final String delimiter) {
+        return appendCollectionString(null, collection, delimiter).toString();
+    }
+
 }
