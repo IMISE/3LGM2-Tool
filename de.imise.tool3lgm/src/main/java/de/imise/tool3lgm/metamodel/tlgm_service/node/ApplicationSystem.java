@@ -19,7 +19,7 @@ public final class ApplicationSystem extends AbstractApplicationSystem {
         return dialog;
     }
 
-    private static final SimpleMetaPath NAME_EXTENSION_PATH = SimpleMetaPathCreator.createSimpleMetaPath(ApplicationComponent.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
+    private static final SimpleMetaPath NAME_EXTENSION_PATH = SimpleMetaPathCreator.createSimpleMetaPath(ApplicationSystem.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
 
     @Override
     protected SimpleMetaPath getNameExtensionPath() {
