@@ -22,7 +22,9 @@ public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleC
         PATH_STEP_END, //Muss man mit Index angeben, wobei damit immer das EndElement des jeweiligen Pfadschrittes gemeint wäre und der Index Pfadlänge - 1 dassselbe wie END_ELEMENT ergeben würde.
         PATH_STEP_EDGE, //dasselbe wie PATH_STEP_END_ELEMENT nur immer die Kante des Pfadschrittes (wenn es ein Elementarpfadschritt ist)
         PATH_STEP_NAME, //dasselbe wie PATH_STEP_EDGE_CLASS nur nur der Name des Pfadschrittes
-        PATH_STEP_FULL_NAME; //dasselbe wie PATH_STEP_EDGE_CLASS nur immer der volle Name des Pfadschrittes
+        PATH_STEP_FULL_NAME, //dasselbe wie PATH_STEP_EDGE_CLASS nur immer der volle Name des Pfadschrittes
+        PATH_STEP_BACKWARD_NAME, //dasselbe wie PATH_STEP_EDGE_CLASS nur nur der Rückwärts-Name des Pfadschrittes
+        PATH_STEP_FULL_BACKAWARD_NAME; //dasselbe wie PATH_STEP_EDGE_CLASS nur immer der volle Rückwärts-Name des Pfadschrittes
     }
 
     /**
@@ -94,6 +96,15 @@ public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleC
      */
     public void addColumnPathStepName(final int index, final String headerResKeyOrName, final int width) {
         addColumn(ColumnType.PATH_STEP_NAME, index, headerResKeyOrName, width);
+    }
+
+    /**
+     * @param index
+     * @param headerResKeyOrName
+     * @param width
+     */
+    public void addColumnPathStepBackwardName(final int index, final String headerResKeyOrName, final int width) {
+        addColumn(ColumnType.PATH_STEP_BACKWARD_NAME, index, headerResKeyOrName, width);
     }
 
     /**

@@ -110,6 +110,9 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                     } else if (columnType == ColumnType.PATH_STEP_NAME) {
                         AbstractMetaPath metaPath = currentPathNode.getMetaPath();
                         value = metaPath.getName();
+                    } else if (columnType == ColumnType.PATH_STEP_BACKWARD_NAME) {
+                        AbstractMetaPath metaPath = currentPathNode.getMetaPath();
+                        value = metaPath.getOtherDirection().getName();
                     }
                 }
                 setValueAt(value, row, col++);
