@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.util.ReflectionUtils;
 
 /**
  * Oberklasse für alle Metapfade.
@@ -111,8 +112,26 @@ public abstract class AbstractMetaPath {
     /**
      * @return
      */
+    public final Class<? extends ModelElement> getStartClass() {
+        Set<Class<? extends ModelElement>> endClasses = getEndClasses();
+        Class<?> commonSuperClass = ReflectionUtils.getCommonSuperClass(endClasses);
+        return commonSuperClass.asSubclass(ModelElement.class);
+    }
+
+    /**
+     * @return
+     */
     public final Set<Class<? extends ModelElement>> getEndClasses() {
         return endElementClasses;
+    }
+
+    /**
+     * @return
+     */
+    public final Class<? extends ModelElement> getEndClass() {
+        Set<Class<? extends ModelElement>> endClasses = getEndClasses();
+        Class<?> commonSuperClass = ReflectionUtils.getCommonSuperClass(endClasses);
+        return commonSuperClass.asSubclass(ModelElement.class);
     }
 
     /**
