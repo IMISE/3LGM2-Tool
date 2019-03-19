@@ -112,7 +112,7 @@ public abstract class AbstractMetaPath {
     /**
      * @return
      */
-    public final Class<? extends ModelElement> getStartClass() {
+    public Class<? extends ModelElement> getStartClass() {
         Set<Class<? extends ModelElement>> endClasses = getEndClasses();
         Class<?> commonSuperClass = ReflectionUtils.getCommonSuperClass(endClasses);
         return commonSuperClass.asSubclass(ModelElement.class);
@@ -128,7 +128,7 @@ public abstract class AbstractMetaPath {
     /**
      * @return
      */
-    public final Class<? extends ModelElement> getEndClass() {
+    public Class<? extends ModelElement> getEndClass() {
         Set<Class<? extends ModelElement>> endClasses = getEndClasses();
         Class<?> commonSuperClass = ReflectionUtils.getCommonSuperClass(endClasses);
         return commonSuperClass.asSubclass(ModelElement.class);
