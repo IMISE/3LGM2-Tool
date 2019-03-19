@@ -12,9 +12,9 @@ import javax.swing.table.TableColumn;
 
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.ColumnType;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.SingleColumnDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
+import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
 
 /**
  * @author AXS (11 Mar 2019)
@@ -30,14 +30,15 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
     private final boolean editable;
 
     /**
-     * @param simpleMetaPath
+     * @param modelElement
+     * @param metaPath
      * @param columnsDefinition
      * @param editable wenn <code>true</code>, dann lassen sich die Optional-Werte ändern
      * @param mouseListener
      * @param pid
      */
-    public ConnectedElementsTable(final SimpleMetaPath simpleMetaPath, final ConnectedElementsTableColumnsDefinition columnsDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
-        super(new ConnectedElementsTableModel(simpleMetaPath, columnsDefinition));
+    public ConnectedElementsTable(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableColumnsDefinition columnsDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
+        super(new ConnectedElementsTableModel(modelElement, metaPath, columnsDefinition));
         this.columnsDefinition = columnsDefinition;
         this.editable = editable;
         this.pid = pid;
@@ -47,10 +48,6 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
         if (editable) {
             initCoumnEditor(mouseListener);
         }
-    }
-
-    public void setData(final PathResultTreeModel pathResultModel) {
-        model.setData(pathResultModel);
     }
 
     private void initColumnWidth() {
@@ -109,6 +106,10 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
 
     public int getTransactionID() {
         return pid;
+    }
+
+    public void update() {
+        model.update();
     }
 
 }

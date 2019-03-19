@@ -1,9 +1,13 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
+
+import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -13,9 +17,11 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode;
 import de.imise.util.NamedObjectContainer;
@@ -25,52 +31,75 @@ import de.imise.util.NamedObjectContainer;
  */
 public class ConnectedElementsTableModel extends DefaultTableModel {
 
-    private final SimpleMetaPath simpleMetaPath;
+    /**
+     * ModelElement, für das die verbundenen Elemente über den MetaPafd dargestellt werden sollen
+     */
+    private final ModelElement modelElement;
 
+    /**
+     * MetaPfad, der in der Tabelle dargestellt werden soll
+     */
+    private final UnionMetaPath metaPath;
+
+    /**
+     * Definition der Spalten der Tabelle. Das bezieht sich im Header auf den im Konstruktor übergebenen {@link SimpleMetaPath} und in den
+     * Zellen auf die Positionen im {@link PathResultTreeModel}.
+     */
     private final ConnectedElementsTableColumnsDefinition columnsDefinition;
 
     /**
-     *
+     * @param modelElement
+     *            ModelElement, für das die verbundenen Elemente über den MetaPafd dargestellt werden sollen
+     * @param metaPath
+     *            MetaPfad, der in der Tabelle dargestellt werden soll
+     * @param columnsDefinition
+     *            Definition der Spalten der Tabelle. Das bezieht sich im Header auf den im Konstruktor übergebenen {@link SimpleMetaPath} und in den
+     *            Zellen auf die Positionen im {@link PathResultTreeModel}.
      */
-    public ConnectedElementsTableModel(final SimpleMetaPath simpleMetaPath, final ConnectedElementsTableColumnsDefinition columnsDefinition) {
-        this.simpleMetaPath = simpleMetaPath;
+    public ConnectedElementsTableModel(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableColumnsDefinition columnsDefinition) {
+        this.modelElement = modelElement;
+        this.metaPath = metaPath;
         this.columnsDefinition = columnsDefinition;
-        setColumnIdentifiers();
+        setColumnIdentifiers(metaPath);
     }
 
-    private void setColumnIdentifiers() {
+    private void setColumnIdentifiers(final UnionMetaPath columnHeaderReferencePath) {
         Vector<String> colNames = new Vector<>(columnsDefinition.columnCount());
         for (SingleColumnDefinition columnDefinition : columnsDefinition) {
             String colName = columnDefinition.getHeaderResKeyOrName();
-            if (colName != null) {
+            if (!Strings.isNullOrEmpty(colName)) {
                 colName = Tool3lgmConstants.getResStringWithoutError(colName); //wenn irgendwas als Spaltennanem von außen vorgegeben ist -> das setzten
             } else {
                 ColumnType columnType = columnDefinition.getColumnType();
                 if (columnType == ColumnType.END_ELEMENT) {
-                    Class<? extends ModelElement> pathEndClass = simpleMetaPath.getEndClass();
+                    Class<? extends ModelElement> pathEndClass = metaPath.getEndClass();
                     colName = ElementsNameBuilder.getDisplayablePluralName(pathEndClass);
                     //} else if (columnType == ColumnType.PATH_NAME) { // das hier geht gar nicht, weil man bei den Leafs nicht mehr weiß, von welchem Pfad sie gekommen sind
                     //    colName = ;
                 } else {
-                    List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
-                    int pathStepIndex = columnDefinition.getPathStepIndex();
-                    ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(pathStepIndex);
                     if (columnType == ColumnType.OPTIONAL) {
                         colName = OptionalEdge.getOptionalityName();
-                    } else if (columnType == ColumnType.PATH_STEP_NAME) {
-                        colName = elementaryMetaPath.getName();
-                    } else if (columnType == ColumnType.PATH_STEP_FULL_NAME) {
-                        colName = elementaryMetaPath.getFullName();
                     } else {
-                        Class<? extends ModelElement> elementClass = null;
-                        if (columnType == ColumnType.PATH_STEP_START) {
-                            elementClass = elementaryMetaPath.getStartClass();
-                        } else if (columnType == ColumnType.PATH_STEP_END) {
-                            elementClass = elementaryMetaPath.getEndClass();
-                        } else if (columnType == ColumnType.PATH_STEP_EDGE) {
-                            elementClass = elementaryMetaPath.getEdgeClass();
+                        Collection<String> colNameParts = new ArrayList<>();
+                        List<AbstractMetaPath> metaPaths = columnHeaderReferencePath.getMetaPaths();
+                        List<ElementaryMetaPath> elementaryMetaPaths = columnHeaderReferencePath.getMetaPaths().get(0).getElementaryMetaPaths();
+                        int pathStepIndex = columnDefinition.getPathStepIndex();
+                        ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(pathStepIndex);
+                        if (columnType == ColumnType.PATH_STEP_NAME) {
+                            colName = elementaryMetaPath.getName();
+                        } else if (columnType == ColumnType.PATH_STEP_FULL_NAME) {
+                            colName = elementaryMetaPath.getFullName();
+                        } else {
+                            Class<? extends ModelElement> elementClass = null;
+                            if (columnType == ColumnType.PATH_STEP_START) {
+                                elementClass = elementaryMetaPath.getStartClass();
+                            } else if (columnType == ColumnType.PATH_STEP_END) {
+                                elementClass = elementaryMetaPath.getEndClass();
+                            } else if (columnType == ColumnType.PATH_STEP_EDGE) {
+                                elementClass = elementaryMetaPath.getEdgeClass();
+                            }
+                            colName = ElementsNameBuilder.getDisplayablePluralName(elementClass);
                         }
-                        colName = ElementsNameBuilder.getDisplayablePluralName(elementClass);
                     }
                 }
             }
@@ -79,7 +108,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
         setColumnIdentifiers(colNames);
     }
 
-    public void setData(final PathResultTreeModel pathResultModel) {
+    private void setData(final PathResultTreeModel pathResultModel) {
         List<PathResultTreeNode> completePathLeafs = pathResultModel.getCompletePathLeafs();
         setRowCount(completePathLeafs.size());
 
@@ -134,6 +163,11 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                 }
             }
         }
+    }
+
+    public void update() {
+        PathResultTreeModel resultTree = MetaPathFunctions.getResultTree(modelElement, metaPath);
+        setData(resultTree);
     }
 
 }

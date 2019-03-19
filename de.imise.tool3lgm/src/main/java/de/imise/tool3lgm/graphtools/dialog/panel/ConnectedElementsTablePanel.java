@@ -21,10 +21,8 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
-import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 import de.imise.util.NamedObjectContainer;
 
 /**
@@ -33,10 +31,10 @@ import de.imise.util.NamedObjectContainer;
 public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
 
     /** Die MetaPfade zu anderen Elementen in einem UnionMetaPath */
-    protected UnionMetaPath metaPaths;
+    protected final UnionMetaPath metaPaths;
 
     /** Die eigentliche Tabelle */
-    private ConnectedElementsTable table;
+    private final ConnectedElementsTable table;
 
     /** Definition der Spalten der Tabelle */
     protected final ConnectedElementsTableColumnsDefinition columnsDefinition;
@@ -53,13 +51,12 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         super(dialog, simpleMetaPaths[0]); // den muss es geben!
         metaPaths = new UnionMetaPath(simpleMetaPaths);
         this.columnsDefinition = columnsDefinition;
+        table = new ConnectedElementsTable(dialog.getModelElement(), metaPaths, columnsDefinition, editable, mouseListener, dialog.getTransactionID());
         internalInit(editable);
     }
 
     private void internalInit(final boolean editable) {
-        table = new ConnectedElementsTable((SimpleMetaPath) metaPath, columnsDefinition, editable, mouseListener, dialog.getTransactionID());
         JScrollPane scrollPane = new JScrollPane(table);
-        //ConnectedElementsTableMouseListener.addTo(table, table);
 
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
@@ -192,8 +189,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
 
     @Override
     public void update() {
-        PathResultTreeModel resultTree = MetaPathFunctions.getResultTree(getModelElement(), metaPaths);
-        table.setData(resultTree);
+        table.update();
     }
 
 }
