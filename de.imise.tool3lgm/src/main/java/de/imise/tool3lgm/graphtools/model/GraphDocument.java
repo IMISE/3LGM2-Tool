@@ -3711,6 +3711,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     public final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final int pid) {
+        createPath(startElement, endElement, metaPath, false, pid);
+    }
+
+    public final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final boolean askNameForNewEndElement, final int pid) {
         start_transaction(pid);
 
         final int lastPathStepIndex = metaPath.getMetaPathCount() - 1;
@@ -3752,7 +3756,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     alreadyLinked = true;
                 } else { // nächstes Pfadschrittelement anlegen
                     Class<? extends ModelElement> pathStepEndClass = metaPath.getPathStepElementClass(i);
-                    boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
+                    boolean oldInteractiveMode = gdcoll.setInteractiveMode(i == lastPathStepIndex && askNameForNewEndElement);
                     NodeContainer pathStepEndElementContainer = createKnotenWithContainer(pathStepEndClass, pid);
                     gdcoll.setInteractiveMode(oldInteractiveMode);
                     pathStepEndElement = pathStepEndElementContainer.getElement();
