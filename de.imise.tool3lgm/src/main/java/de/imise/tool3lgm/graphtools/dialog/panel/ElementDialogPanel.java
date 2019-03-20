@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
+import de.imise.util.swing.SwingUtils;
 
 /**
  * @author Thomas Ist ein TestPanel zur Verallgemeinerung abgeleiteter Panels
@@ -146,12 +147,9 @@ public abstract class ElementDialogPanel extends JPanel {
     // ----------------------------------------------------------------------------------------------------------------------------------
 
     // ----------------------------------------------------------------------------------------------------------------------------------
-    protected void add(final Container con, final Component c, final GridBagConstraints gbc, final int x, final int y, final int w, final int h) {
-        gbc.gridx = x;
-        gbc.gridy = y;
-        gbc.gridwidth = w;
-        gbc.gridheight = h;
-        con.add(c, gbc);
+    protected final void add(final Container con, final Component c, final GridBagConstraints gbc, final int x, final int y, final int w, final int h) {
+        //der Static import funktioniert nicht mit der add-Funktion, weil das mit den add-Funktionen aus Container kollidiert
+        SwingUtils.add(con, c, gbc, x, y, w, h);
     }
 
     // ----------------------------------------------------------------------------------------------------------------------------------
