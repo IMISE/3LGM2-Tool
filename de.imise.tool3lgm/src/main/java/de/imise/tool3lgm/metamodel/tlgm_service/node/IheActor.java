@@ -28,9 +28,9 @@ public class IheActor extends IheConcept {
         ConnectedElementsTableColumnsDefinition columnsDefinition = new ConnectedElementsTableColumnsDefinition();
         columnsDefinition.addColumnEndElement(300);
         columnsDefinition.addColumnOptional(0, 50);
-        columnsDefinition.addColumnPathStepName(1, "HEADER_ACTOR_TRANSACTION_CONNECTION_NAME", 150);
-        SimpleMetaPath path1 = createSimpleMetaPath(IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
-        SimpleMetaPath path2 = createSimpleMetaPath(IheActor_IheInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
+        columnsDefinition.addColumnPathStepName(1, "HEADER_IHE_ACTOR_IHE_TRANSACTION_CONNECTION_NAME", 150);
+        SimpleMetaPath path1 = createSimpleMetaPath(1, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
+        SimpleMetaPath path2 = createSimpleMetaPath(1, IheActor_IheInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
         dialog.addTablePanel(true, columnsDefinition, path1, path2);
         return dialog;
     }

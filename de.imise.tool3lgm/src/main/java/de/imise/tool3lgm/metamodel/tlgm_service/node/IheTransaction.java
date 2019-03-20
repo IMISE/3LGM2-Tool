@@ -24,9 +24,9 @@ public class IheTransaction extends IheConcept {
         ConnectedElementsTableColumnsDefinition columnsDefinition = new ConnectedElementsTableColumnsDefinition();
         columnsDefinition.addColumnEndElement(300);
         columnsDefinition.addColumnOptional(1, 50);
-        columnsDefinition.addColumnPathStepBackwardName(0, "HEADER_ACTOR_TRANSACTION_CONNECTION_NAME", 150);
-        SimpleMetaPath path1 = createSimpleMetaPath(IheInvokingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
-        SimpleMetaPath path2 = createSimpleMetaPath(IheProvidingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
+        columnsDefinition.addColumnPathStepBackwardName(0, "HEADER_IHE_ACTOR_IHE_TRANSACTION_CONNECTION_NAME", 150);
+        SimpleMetaPath path1 = createSimpleMetaPath(0, IheInvokingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
+        SimpleMetaPath path2 = createSimpleMetaPath(0, IheProvidingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
         dialog.addTablePanel(true, columnsDefinition, path1, path2);
 
         dialog.addEdgePanel(IheIntegrationProfile_IheTransaction_Edge.class);
