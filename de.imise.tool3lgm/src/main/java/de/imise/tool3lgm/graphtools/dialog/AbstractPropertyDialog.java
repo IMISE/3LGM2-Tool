@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Dialog;
 import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -88,8 +89,15 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      * @param graphDocument Document in dessen Kontext der Dialog steht
      */
     public AbstractPropertyDialog(final Dialog owner, final GDCollection gdcoll) {
-        super(owner, "", false);
+        super(owner, "", owner instanceof AbstractPropertyDialog);
         init(gdcoll);
+    }
+
+    /**
+     * @param owner
+     */
+    public AbstractPropertyDialog(final AbstractPropertyDialog owner) {
+        this(owner, owner.gdcoll);
     }
 
     /**
@@ -115,36 +123,37 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     /**
      * @return Returns the transactionID.
      */
-    public int getTransactionID() {
+    public final int getTransactionID() {
         return transactionID;
     }
 
     /**
      * @return
      */
-    protected int createNewTransactionID() {
-        transactionID = GraphDocument.createTransactionId();
+    protected final int createNewTransactionID() {
+        Window owner = getOwner();
+        transactionID = owner instanceof AbstractPropertyDialog ? ((AbstractPropertyDialog) owner).transactionID : GraphDocument.createTransactionId();
         return transactionID;
     }
 
     /**
      * @return <code>doc</code>
      */
-    public LGMGraphDocument getGraphDocument() {
+    public final LGMGraphDocument getGraphDocument() {
         return doc;
     }
 
     /**
      * @return
      */
-    public UserFieldDefinitions getUserFieldDefinitions() {
+    public final UserFieldDefinitions getUserFieldDefinitions() {
         return gdcoll.getUserFieldDefinitions();
     }
 
     /**
      * Performs a click on the Ok-Button
      */
-    public void performOK() {
+    public final void performOK() {
         okButton.doClick();
     }
 
