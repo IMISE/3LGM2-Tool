@@ -106,7 +106,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             add(connectedElementsBox, BorderLayout.CENTER);
         }
 
-        createNew = metaPath.isCreatable() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + ElementsNameBuilder.getDisplayableName(searchElementClass)) : null;
+        createNew = isCreatableMetaPath() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + ElementsNameBuilder.getDisplayableName(searchElementClass)) : null;
     }
 
     @Override
@@ -152,6 +152,20 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                 connectedElementName.setText("");
             }
         }
+    }
+
+    /**
+     * @return Das verbundene Element das angezeigt wird (wenn es mind. eins gibt)
+     */
+    public ModelElement getConnectedElement() {
+        return connectedElement;
+    }
+
+    /**
+     * @return
+     */
+    private boolean isCreatableMetaPath() {
+        return metaPath != null && metaPath.isCreatable();
     }
 
     @Override
