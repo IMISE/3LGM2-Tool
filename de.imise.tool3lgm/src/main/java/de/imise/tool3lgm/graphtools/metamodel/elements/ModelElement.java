@@ -2023,14 +2023,48 @@ public abstract class ModelElement extends UserFieldTarget {
         return hyperlink;
     }
 
+    /**
+     * @param edgeWithPathNameIndex Index der Kante, die in Vorwärtsrichtung den Namen des Pfades vorgibt
+     * @param edgeClasses
+     * @return
+     */
     @SafeVarargs
-    protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends Edge>... edgeClasses) {
-        return createSimpleMetaPath(null, edgeClasses);
+    protected final SimpleMetaPath createSimpleMetaPath(final int edgeWithPathNameIndex, final Class<? extends Edge>... edgeClasses) {
+        return createSimpleMetaPath(edgeClasses[edgeWithPathNameIndex].getSimpleName(), edgeClasses);
     }
 
+    /**
+     * @param edgeClasses
+     * @return
+     */
+    @SafeVarargs
+    protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends Edge>... edgeClasses) {
+        return createSimpleMetaPath((Class<? extends ModelElement>) null, edgeClasses);
+    }
+
+    /**
+     * @param endClass
+     * @param edgeClasses
+     * @return
+     */
     @SafeVarargs
     protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final Class<? extends Edge>... edgeClasses) {
         return SimpleMetaPathCreator.createSimpleMetaPath(getClass(), endClass, edgeClasses);
+    }
+
+    /**
+     * @param baseResKeyOrName
+     * @param edgeClasses
+     * @return
+     */
+    @SafeVarargs
+    protected final SimpleMetaPath createSimpleMetaPath(final String baseResKeyOrName, final Class<? extends Edge>... edgeClasses) {
+        return createSimpleMetaPath(null, baseResKeyOrName, edgeClasses);
+    }
+
+    @SafeVarargs
+    protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... edgeClasses) {
+        return SimpleMetaPathCreator.createSimpleMetaPath(getClass(), endClass, baseResKeyOrName, edgeClasses);
     }
 
 }
