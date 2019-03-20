@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -17,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.dialog.ConnectPathDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -92,17 +94,20 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     *
     */
     public final LGMAction getCreateNewElementAction() {
+        final Component dialogParent = this;
         return new LGMAction(getResString("addButtonText")) {
             @Override
             public void execute(final EventObject eo) {
-                //aus MultipleCompositionPanel
-                //               int pid = getTransactionID();
-                //               GraphDocument selectedDoc = doc.getCollection().getSelectedDoc();
-                //               ModelElement me = getModelElement();
-                //               ElementContainer ec = me.getContainer(mainDoc);
-                //               doc.select(ec, pid);
-                //               GraphDocument.createAddicted(selectedDoc, me, getLastEdgeClassInPath().asSubclass(CompositionEdge.class), searchElementClass, pid);
-                //               doc.select(ec, pid);
+                ConnectPathDialog connectPathDialog = new ConnectPathDialog(doc, metaPaths);
+                boolean ok = connectPathDialog.createDialog(dialogParent);
+                while (ok && !connectPathDialog.hasValidSelection()) {
+                    ok = connectPathDialog.createDialog(dialogParent);
+                }
+                if (ok) {
+                    SimpleMetaPath selectedPath = connectPathDialog.getSelectedPath();
+                    ModelElement selectedEndElement = connectPathDialog.getSelectedEndElement();
+                    doc.createPath(getModelElement(), selectedEndElement, selectedPath, true, dialog.getTransactionID());
+                }
             }
         };
     }
