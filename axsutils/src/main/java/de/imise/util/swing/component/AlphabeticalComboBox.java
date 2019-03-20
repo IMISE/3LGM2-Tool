@@ -126,6 +126,26 @@ public class AlphabeticalComboBox extends JComboBox {
     }
 
     /**
+     * @param shift
+     * @param objects
+     */
+    public AlphabeticalComboBox(final Object... objects) {
+        this(0, objects);
+    }
+
+    /**
+     * @param shift
+     * @param objects
+     */
+    public AlphabeticalComboBox(final int shift, final Object... objects) {
+        this(shift);
+        for (Object o : objects) {
+            items.add(o);
+        }
+        Alphabetical.sort(items);
+    }
+
+    /**
      * Sortiert alle Listen neu
      */
     public void resort() {
@@ -219,6 +239,37 @@ public class AlphabeticalComboBox extends JComboBox {
             setSelectedIndex(-1);
         }
         return -1;
+    }
+
+    /**
+     * Wenn man die Klasse kennt, die man aus der Combobox und evtl. darin enthaltenen {@link NamedObjectContainer}n holen möchte, kann man hierüber
+     * das selektierte Element ohne zusätzlichen Cast bekommen.
+     *
+     * @param comboBox
+     * @param clazz
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getSelected(final JComboBox<?> comboBox, final Class<T> clazz) {
+        Object selectedItem = comboBox.getSelectedItem();
+        if (selectedItem instanceof NamedObjectContainer) {
+            selectedItem = ((NamedObjectContainer<?>) selectedItem).getObject();
+        }
+        if (selectedItem != null && clazz.isAssignableFrom(selectedItem.getClass())) {
+            return (T) selectedItem;
+        }
+        return null;
+    }
+
+    /**
+     * Wenn man die Klasse kennt, die man aus der Combobox und evtl. darin enthaltenen {@link NamedObjectContainer}n holen möchte, kann man hierüber
+     * das selektierte Element ohne zusätzlichen Cast bekommen.
+     *
+     * @param clazz
+     * @return
+     */
+    public <T> T getSelected(final Class<T> clazz) {
+        return getSelected(this, clazz);
     }
 
     /**
