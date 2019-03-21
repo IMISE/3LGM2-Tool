@@ -10,11 +10,14 @@ import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.ColumnType;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.SingleColumnDefinition;
@@ -54,6 +57,11 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
     private final boolean editable;
 
     /**
+     * Sorter für alle Spalten
+     */
+    private TableRowSorter<TableModel> sorter;
+
+    /**
      * @param modelElement
      *            ModelElement von dem die Pafde ausgehen. Das sollte das Element des diesen Table des beinhaltenden ElementPorpertyDialogs sein
      * @param metaPath
@@ -84,6 +92,20 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
         if (editable) {
             initCoumnEditor(mouseListener);
         }
+        initSorter();
+    }
+
+    private final void initSorter() {
+        setAutoCreateRowSorter(true);
+        sorter = new TableRowSorter<>(getModel());
+        setRowSorter(sorter);
+        List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+
+        for (int columnIndexToSort = 0; columnIndexToSort < model.getColumnCount(); columnIndexToSort++) {
+            sortKeys.add(new RowSorter.SortKey(columnIndexToSort, SortOrder.ASCENDING));
+        }
+
+        sorter.setSortKeys(sortKeys);
     }
 
     /**
@@ -164,6 +186,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
      */
     public void update() {
         model.update();
+        sorter.sort();
     }
 
     /**
