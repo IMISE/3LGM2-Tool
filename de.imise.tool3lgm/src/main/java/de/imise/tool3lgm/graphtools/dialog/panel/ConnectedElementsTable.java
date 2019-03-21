@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.CellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -13,37 +14,60 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.ColumnType;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.SingleColumnDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode;
 
 /**
+ * Table, der für ein ModelElement über Pfade verbundene Elemente, Kanten oder deren Eigenschaften in Spalten darstellen kann.
+ *
  * @author AXS (11 Mar 2019)
  */
 public class ConnectedElementsTable extends JTable implements CellEditorListener {
 
+    /**
+     * Das Model als speiziellste Unterklasse (super hat es nur als {@link TableModel})
+     */
     private final ConnectedElementsTableModel model;
 
+    /**
+     * Spaltendefinition der Tabelle, dei zu den Pfaden der Tabelle passen muss.
+     */
     private final ConnectedElementsTableColumnsDefinition columnsDefinition;
 
+    /**
+     * Transaction-ID mit der Änderungen vorgenommen werden. Das sollte wohl immer die des beinhaltenden ElementPorpertyDialogs sein
+     */
     private final int pid;
 
+    /**
+     * Wenn <code>true</code>, dann werden in einigen Spalten (z.B. mit {@link OptionalEdge}s) Editoren zum Ändern des Wertes angeboten. Bei
+     * <code>false</code> werden die Werte nur angezeigt.
+     */
     private final boolean editable;
 
     /**
      * @param modelElement
+     *            ModelElement von dem die Pafde ausgehen. Das sollte das Element des diesen Table des beinhaltenden ElementPorpertyDialogs sein
      * @param metaPath
+     *            Ein {@link UnionMetaPath}, der nur aus {@link SimpleMetaPath}s bestehen sollte. Diese {@link SimpleMetaPath} sind die eigentlichen
+     *            Pfade, über die verbundene ELemente gesucht werden.
      * @param columnsDefinition
+     *            Spaltendefinition der Tabelle, dei zu den Pfaden der Tabelle passen muss
      * @param editable wenn <code>true</code>, dann lassen sich die Optional-Werte ändern
      * @param mouseListener
+     *            {@link MouseListener} für das Kontextmenü oder das Öffnen des Eigenschaftsdialoges bei Klick auf eine Tabellenzelle
      * @param pid
+     *            Transaction-ID mit der Änderungen vorgenommen werden. Das sollte wohl immer die des beinhaltenden ElementPorpertyDialogs sein
      */
-    public ConnectedElementsTable(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableColumnsDefinition columnsDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
+    ConnectedElementsTable(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableColumnsDefinition columnsDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
         super(new ConnectedElementsTableModel(modelElement, metaPath, columnsDefinition));
         this.columnsDefinition = columnsDefinition;
         this.editable = editable;
@@ -62,6 +86,9 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
         }
     }
 
+    /**
+     * Holte die die in der {@link ConnectedElementsTableColumnsDefinition} angegebenen Spaltenbreiten und setzt diese.
+     */
     private void initColumnWidth() {
         for (int i = 0; i < columnsDefinition.columnCount(); i++) {
             TableColumn column = columnModel.getColumn(i);
@@ -71,6 +98,11 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
         }
     }
 
+    /**
+     * Setzt die Editoren für die Tabellenzellen, die editierbar sein sollen.
+     *
+     * @param mouseListener
+     */
     private void initCoumnEditor(final MouseListener mouseListener) {
         JComboBox<String> optionalComboBox = createOptionalCombobox();
         optionalComboBox.addMouseListener(mouseListener);
@@ -94,6 +126,11 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
         return singleColumnDefinition.getColumnType() == ColumnType.OPTIONAL;
     }
 
+    /**
+     * Liefert den {@link CellEditor} für Zellen, die eine {@link OptionalEdge} anzeigen
+     *
+     * @return
+     */
     private JComboBox<String> createOptionalCombobox() {
         JComboBox<String> comboBox = new JComboBox<>();
         comboBox.addItem(OptionalEdge.getOptionOptionalDisplayName());
@@ -115,14 +152,23 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
         }
     }
 
+    /**
+     * @return Transaction-ID mit der Änderungen vorgenommen werden. Das sollte wohl immer die des beinhaltenden ElementPorpertyDialogs sein
+     */
     public int getTransactionID() {
         return pid;
     }
 
+    /**
+     * Baut die Tabelle komplett neu auf (nur die Daten, nicht die Spaltenköpfe
+     */
     public void update() {
         model.update();
     }
 
+    /**
+     * @return die {@link PathResultTreeNode}s, aus deren Elementen bzw. Parent-Elementen die Einträge der gerade selektierten Zeilen erzeugt wurden
+     */
     public List<PathResultTreeNode> getSelectedPathResultTreeNodes() {
         List<PathResultTreeNode> resultNodes = new ArrayList<>();
         for (int i : getSelectedColumns()) {
@@ -132,6 +178,9 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
         return resultNodes;
     }
 
+    /**
+     * @return Alle echten Kanten des letzten Pfadschrittes einer selektierten Zeile.
+     */
     public List<Edge> getSelectedPathsLastEdges() {
         Set<Edge> resultEdges = new HashSet<>();
         for (int i : getSelectedRows()) {

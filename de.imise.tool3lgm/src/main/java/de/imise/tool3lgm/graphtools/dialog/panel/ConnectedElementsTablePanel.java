@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ConnectPathDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -26,9 +26,13 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.collections.CollectionUtils;
 
 /**
+ * Dieses Panel stellt einen oder mehrere Pfade ausgehend vom ModelElement des zugehörigen {@link ElementPropertyDialog} in einer Tabelle dar.
+ *
  * @author AXS (11 Mar 2019)
  */
 public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
@@ -47,10 +51,11 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
 
     /**
      * @param dialog
-     * @param columnsDefinition
-     * @param simpleMetaPaths
+     * @param editable wenn <code>true</code>, dann kann man Elemente hinzufügen oder löschen und vorhandene ändern
+     * @param columnsDefinition Spaltendefinition (die zu den Pfaden passen sollte)
+     * @param simpleMetaPaths MetaPfade, die in der Tabelle dargestellt werden sollen
      */
-    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, final ConnectedElementsTableColumnsDefinition columnsDefinition, final SimpleMetaPath... simpleMetaPaths) {
+    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, @Nonnull final ConnectedElementsTableColumnsDefinition columnsDefinition, final SimpleMetaPath... simpleMetaPaths) {
         super(dialog, simpleMetaPaths[0]); // den muss es geben!
         metaPaths = new UnionMetaPath(simpleMetaPaths);
         this.columnsDefinition = columnsDefinition;
@@ -58,6 +63,9 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         internalInit(editable);
     }
 
+    /**
+     * @param editable wenn <code>true</code>, dann werden die Buttons zum hinzufügen oder Löschen angezeigt
+     */
     private void internalInit(final boolean editable) {
         JScrollPane scrollPane = new JScrollPane(table);
 
@@ -92,8 +100,8 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     }
 
     /**
-    *
-    */
+     * Action des Hinzufügen-Buttons
+     */
     public final LGMAction getCreateNewElementAction() {
         final Component dialogParent = this;
         return new LGMAction(getResString("addButtonText")) {
@@ -114,33 +122,28 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
-     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
-     * sollte an die "removeButtons" der Panels angefügt werden.
+     * Action für den Löschen Button. Es wird die letzte Kante des Pfades einer Zeile gelöscht. Elemente, die nur mit dieser Kante existieren können,
+     * werden ebenfalls gelöscht und deren Kanten usw.
      */
     public final LGMAction getDisconnectAction() {
         final ConnectedElementsTable table = this.table;
-        LGMAction returnAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+        return new LGMAction(getResString("delete")) {
             @Override
             public void execute(final EventObject e) {
                 List<Edge> selectedPathLastEdges = table.getSelectedPathsLastEdges();
                 doc.getCollection().deleteElements(selectedPathLastEdges, doc, dialog.getTransactionID());
             }
         };
-        returnAction.putValue("Name", getResString("delete"));
-        returnAction.putValue("SmallIcon", null);
-
-        return returnAction;
     }
 
+    /**
+     * Liefert <code>true</code>, wenn die Zeile mit dem übergebenen Index selektiert ist
+     *
+     * @param row
+     * @return
+     */
     private final boolean isRowSelected(final int row) {
-        int[] selectedRows = table.getSelectedRows();
-        for (int r : selectedRows) {
-            if (r == row) {
-                return true;
-            }
-        }
-        return false;
+        return CollectionUtils.arrayContains(table.getSelectedRows(), row);
     }
 
     @Override
@@ -169,6 +172,10 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     }
 
     /**
+     * Wenn in der Zelle mit dem Row- und Column-Index ein ModelElement, ein ElementContainer oder ein {@link NamedObjectContainer} mit einem
+     * ModelElement oder ElementContainer steckt, dann wird dieses ModelElenent bzw. das ModelElement des ElementContainers zurück gegeben.
+     * Ist es das alles nicht, kommt <code>null</code> zurück.
+     *
      * @param row
      * @param col
      * @return
@@ -179,7 +186,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
             NamedObjectContainer<?> noc = (NamedObjectContainer) selectedRowValue;
             selectedRowValue = noc.getObject();
         }
-        return selectedRowValue instanceof ModelElement ? (ModelElement) selectedRowValue : null;
+        return selectedRowValue instanceof ModelElement ? (ModelElement) selectedRowValue : selectedRowValue instanceof ElementContainer ? ((ElementContainer) selectedRowValue).getElement() : null;
     }
 
     @Override

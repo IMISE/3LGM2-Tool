@@ -28,6 +28,8 @@ import de.imise.util.NamedObjectContainer;
 import de.imise.util.StringUtils;
 
 /**
+ * Model eines {@link ConnectedElementsTable}
+ *
  * @author AXS (11 Mar 2019)
  */
 public class ConnectedElementsTableModel extends DefaultTableModel {
