@@ -44,7 +44,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      * @param simpleMetaPath
      */
     public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, labelLastEdgeName, false, simpleMetaPath);
+        super(dialog, labelLastEdgeName, true, simpleMetaPath);
     }
 
     @Override

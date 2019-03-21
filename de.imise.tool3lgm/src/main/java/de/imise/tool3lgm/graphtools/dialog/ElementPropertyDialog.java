@@ -450,14 +450,14 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     @SafeVarargs
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, @Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         if (Static.isExpertMode()) {
-            descripPanel.addSingleConnectionPanel(labelLastEdgeName, false, createSimpleMetaPath(searchElementClass, edgeClasses));
+            descripPanel.addSingleConnectionPanel(labelLastEdgeName, true, createSimpleMetaPath(searchElementClass, edgeClasses));
         } else {
             SimpleMetaPath simpleMetaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
             if (isVisible(simpleMetaPath)) {
                 if (!isEditable(simpleMetaPath)) {
                     descripPanel.addSingleConnectionInfoPanel(createSimpleMetaPath(null, edgeClasses));
                 } else {
-                    descripPanel.addSingleConnectionPanel(labelLastEdgeName, false, createSimpleMetaPath(searchElementClass, edgeClasses));
+                    descripPanel.addSingleConnectionPanel(labelLastEdgeName, true, createSimpleMetaPath(searchElementClass, edgeClasses));
                 }
             }
         }

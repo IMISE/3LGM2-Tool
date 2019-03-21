@@ -74,20 +74,21 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      * @param edgeClasses
      */
     public SingleConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, false, simpleMetaPath);
+        this(dialog, false, true, simpleMetaPath);
     }
 
     /**
      * @param dialog
      * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
      *            letzten Edge aus den edgeClasses geschrieben.
+     * @param editable
      * @param simpleMetaPath
      */
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean disableEdit, final SimpleMetaPath simpleMetaPath) {
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean editable, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
         setLayout(new BorderLayout());
 
-        if (disableEdit || isLastPathElementNeededForExistence() && connectedElement != null) {
+        if (!editable || isLastPathElementNeededForExistence() && connectedElement != null) {
             connectedElementsBox = null;
             itemListener = null;
             connectedElementName = new LimitedSizeScrollTextPane(4);
