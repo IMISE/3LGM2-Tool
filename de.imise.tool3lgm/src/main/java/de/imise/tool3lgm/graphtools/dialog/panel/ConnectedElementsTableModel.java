@@ -49,6 +49,17 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
     private final ConnectedElementsTableColumnsDefinition columnsDefinition;
 
     /**
+     * Der Ergebnisbaum der Pfadsuche der aktuellen Pfade.
+     */
+    private PathResultTreeModel currentPathResultTreeModel;
+
+    /**
+     * Der Identifier für die versteckte Spalte mit dem PathResultTreeNode. Muss nur eindeutig sein und wird nirgends angezeigt, daher einfach ein
+     * statisches Object.
+     */
+    public static String HIDDEN_RESULT_NODE_COLUMN_IDENTIFIER = new Object().toString();
+
+    /**
      * @param modelElement
      *            ModelElement, für das die verbundenen Elemente über den MetaPafd dargestellt werden sollen
      * @param metaPath
@@ -65,7 +76,8 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
     }
 
     private void setColumnIdentifiers(final UnionMetaPath columnHeaderReferencePath) {
-        Vector<String> colNames = new Vector<>(columnsDefinition.columnCount());
+        //letzte Spalte ist hidden und enthält den PathResultTreeNode, aus dem die Zeile entstanden ist. Den braucht man, um zu wissen, wo der Pfad herkam und ihn löschen zu können
+        Vector<Object> colNames = new Vector<>(columnsDefinition.columnCount() + 1);
         for (SingleColumnDefinition columnDefinition : columnsDefinition) {
             String colName = columnDefinition.getHeaderResKeyOrName();
             if (!Strings.isNullOrEmpty(colName)) {
@@ -116,11 +128,12 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
             }
             colNames.add(colName);
         }
+        colNames.addElement(HIDDEN_RESULT_NODE_COLUMN_IDENTIFIER);
         setColumnIdentifiers(colNames);
     }
 
-    private void setData(final PathResultTreeModel pathResultModel) {
-        List<PathResultTreeNode> completePathLeafs = pathResultModel.getCompletePathLeafs();
+    private void setData() {
+        List<PathResultTreeNode> completePathLeafs = currentPathResultTreeModel.getCompletePathLeafs();
         setRowCount(completePathLeafs.size());
 
         int row = 0;
@@ -156,7 +169,8 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                 }
                 setValueAt(value, row, col++);
             }
-            row++;
+            //letzte Spalte ist hidden und enthält den resultNode, damit man die Quelle der Zeile kennt (braucht man zum Löschen)
+            setValueAt(resultNode, row++, col);
         }
     }
 
@@ -177,8 +191,16 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
     }
 
     public void update() {
-        PathResultTreeModel resultTree = MetaPathFunctions.getResultTree(modelElement, metaPath);
-        setData(resultTree);
+        currentPathResultTreeModel = MetaPathFunctions.getResultTree(modelElement, metaPath);
+        setData();
+    }
+
+    public int getHiddenPathResultTreeNodeColumn() {
+        return findColumn(HIDDEN_RESULT_NODE_COLUMN_IDENTIFIER.toString());
+    }
+
+    public PathResultTreeNode getPathResultTreeNode(final int rowIndex) {
+        return (PathResultTreeNode) getValueAt(rowIndex, getHiddenPathResultTreeNodeColumn());
     }
 
 }

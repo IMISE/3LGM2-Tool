@@ -1,6 +1,10 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
@@ -12,9 +16,11 @@ import javax.swing.table.TableColumn;
 
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.ColumnType;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.SingleColumnDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
+import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode;
 
 /**
  * @author AXS (11 Mar 2019)
@@ -44,6 +50,12 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
         this.pid = pid;
         addMouseListener(mouseListener);
         model = (ConnectedElementsTableModel) getModel();
+
+        //die Spalte mit dem PathResultTreeNode verstecken
+        int hiddenPathResultTreeNodeColumn = model.getHiddenPathResultTreeNodeColumn();
+        TableColumn hiddenColumn = columnModel.getColumn(hiddenPathResultTreeNodeColumn);
+        removeColumn(hiddenColumn);
+
         initColumnWidth();
         if (editable) {
             initCoumnEditor(mouseListener);
@@ -62,7 +74,6 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
     private void initCoumnEditor(final MouseListener mouseListener) {
         JComboBox<String> optionalComboBox = createOptionalCombobox();
         optionalComboBox.addMouseListener(mouseListener);
-        //        ConnectedElementsTableMouseListener.addTo(this, optionalComboBox);
         for (int i = 0; i < columnsDefinition.columnCount(); i++) {
             SingleColumnDefinition singleColumnDefinition = columnsDefinition.get(i);
             if (singleColumnDefinition.getColumnType() == ColumnType.OPTIONAL) {
@@ -110,6 +121,25 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
 
     public void update() {
         model.update();
+    }
+
+    public List<PathResultTreeNode> getSelectedPathResultTreeNodes() {
+        List<PathResultTreeNode> resultNodes = new ArrayList<>();
+        for (int i : getSelectedColumns()) {
+            PathResultTreeNode pathResultTreeNode = model.getPathResultTreeNode(i);
+            resultNodes.add(pathResultTreeNode);
+        }
+        return resultNodes;
+    }
+
+    public List<Edge> getSelectedPathsLastEdges() {
+        Set<Edge> resultEdges = new HashSet<>();
+        for (int i : getSelectedRows()) {
+            PathResultTreeNode pathResultTreeNode = model.getPathResultTreeNode(i);
+            Edge edge = pathResultTreeNode.getEdge();
+            resultEdges.add(edge);
+        }
+        return new ArrayList<>(resultEdges);
     }
 
 }

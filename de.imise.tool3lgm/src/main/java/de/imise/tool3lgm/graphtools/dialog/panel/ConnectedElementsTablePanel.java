@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.dialog.ConnectPathDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
@@ -118,23 +119,12 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
      * sollte an die "removeButtons" der Panels angefügt werden.
      */
     public final LGMAction getDisconnectAction() {
+        final ConnectedElementsTable table = this.table;
         LGMAction returnAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
             @Override
             public void execute(final EventObject e) {
-                //aus MultipleCompositionPanel
-                //               TreePath[] selpaths = tree.getSelectionPaths();
-                //               if (selpaths != null) {
-                //                   for (int n = 0; n < selpaths.length; n++) {
-                //                       // if(lomodel.getChildCount(loroot)>0) return;
-                //                       LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                //                       ElementContainer knot = (ElementContainer) node.getUserObject();
-                //
-                //                       ModelElement topLevelModelElement;
-                //                       topLevelModelElement = getModelElement();
-                //                       GDCollection gdcoll = getGraphDocument().getCollection();
-                //                       gdcoll.unlink(topLevelModelElement, knot.getElement(), getLastEdgeClassInPath(), getTransactionID());
-                //                   }
-                //               }
+                List<Edge> selectedPathLastEdges = table.getSelectedPathsLastEdges();
+                doc.getCollection().deleteElements(selectedPathLastEdges, doc, dialog.getTransactionID());
             }
         };
         returnAction.putValue("Name", getResString("delete"));
