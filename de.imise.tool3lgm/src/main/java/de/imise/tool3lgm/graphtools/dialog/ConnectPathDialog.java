@@ -79,8 +79,14 @@ public class ConnectPathDialog implements ActionListener {
     }
 
     private Object[] jOptionPaneMessage() {
+        //den PathChooser nur anzeigen, wenn es auch eine Auswahl bei den Pfaden gibt
+        if (pathChooser.getItemCount() > 1) {
+            return new Object[] {
+                    getResString("CONNECT_PATH_PATH_CHOOSER_LABEL"), pathChooser, getResString("CONNECT_PATH_ELEMENT_CHOOSER_LABEL"), endElementChooser
+            };
+        }
         return new Object[] {
-                getResString("CONNECT_PATH_PATH_CHOOSER_LABEL"), pathChooser, getResString("CONNECT_PATH_ELEMENT_CHOOSER_LABEL"), endElementChooser
+                getResString("CONNECT_PATH_ELEMENT_CHOOSER_LABEL"), endElementChooser
         };
     }
 
