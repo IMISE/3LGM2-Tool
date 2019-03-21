@@ -3733,6 +3733,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 }
             }
         }
+        if (!createSubPath && endElement == null) {
+            Class<? extends ModelElement> pathEndClass = metaPath.getPathStepElementClass(lastPathStepIndex);
+            boolean oldInteractiveMode = gdcoll.setInteractiveMode(askNameForNewEndElement);
+            NodeContainer pathEndElementContainer = createKnotenWithContainer(pathEndClass, pid);
+            gdcoll.setInteractiveMode(oldInteractiveMode);
+            if (pathEndElementContainer != null) { // kann passieren, wenn der Benutzer abbrechen im Namensdialog drückt
+                createPath(startElement, pathEndElementContainer.getElement(), metaPath, pid);
+            }
+            createSubPath = true;
+        }
         if (!createSubPath) {
             GDCollection gdcoll = getCollection();
             ModelElement pathStepStartElement = startElement;
@@ -3756,7 +3766,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     alreadyLinked = true;
                 } else { // nächstes Pfadschrittelement anlegen
                     Class<? extends ModelElement> pathStepEndClass = metaPath.getPathStepElementClass(i);
-                    boolean oldInteractiveMode = gdcoll.setInteractiveMode(i == lastPathStepIndex && askNameForNewEndElement);
+                    boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
                     NodeContainer pathStepEndElementContainer = createKnotenWithContainer(pathStepEndClass, pid);
                     gdcoll.setInteractiveMode(oldInteractiveMode);
                     pathStepEndElement = pathStepEndElementContainer.getElement();
