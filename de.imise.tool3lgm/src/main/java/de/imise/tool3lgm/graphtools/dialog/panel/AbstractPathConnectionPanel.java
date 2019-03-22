@@ -410,6 +410,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param e
      */
     private final void executeMouseClickedAction(final Object selectionObject, final MouseEvent e) {
+        if (selectionObject == null) {
+            return;
+        }
         Iterable<?> fullSelection = selectionObject instanceof Iterable ? (Iterable<?>) selectionObject : ImmutableList.of(selectionObject);
         boolean popup = Tool3lgmConstants.isPopupTrigger(e);
         boolean doubleClick = !popup && e.getClickCount() > 1;
