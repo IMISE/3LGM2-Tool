@@ -40,6 +40,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
@@ -591,6 +592,10 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             for (ElementaryMetaPath elementaryMetaPath : elementaryMetaPaths) {
                 //bei wenigstens einer Kante im Pfad sind Start- und Endklasse nur im ExpertMode editierbar
                 if (ModelConstants.isOnlyExpertModeEditable(elementaryMetaPath.getStartClass()) && ModelConstants.isOnlyExpertModeEditable(elementaryMetaPath.getEndClass())) {
+                    return false;
+                }
+                //die Kante ist eine InstanciantionEdge, die von der Insstanz auf das Klassenelement (Template) zeigt
+                if (InstanciationEdge.class.isAssignableFrom(elementaryMetaPath.getEdgeClass()) && InstanciationEdge.INSTANCE_TO_TEMPLATE_MASTER_DIRECTION.equals(elementaryMetaPath.getDirection())) {
                     return false;
                 }
             }

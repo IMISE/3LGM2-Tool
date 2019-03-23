@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+
 /**
  * Oberklasse für alle Kantenklassen, die ein Element von einem anderen ableiten, also eine Instanz bilden. Das Instanzelement ist immer das
  * Endelement der Kante und das Oberelement immer das Startelement.
@@ -9,5 +12,11 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
  * @author AXS (25.09.2018)
  */
 public abstract class InstanciationEdge extends Edge {
+
+    /** Richtung, in der die Kante vom Oberelement auf das Unterelement zeigt */
+    public static final Direction TEMPLATE_MASTER_TO_INSTANCE_DIRECTION = FORWARD;
+
+    /** Richtung, in der die Kante vom Unterelement auf das Oberelement zeigt */
+    public static final Direction INSTANCE_TO_TEMPLATE_MASTER_DIRECTION = BACKWARD;
 
 }
