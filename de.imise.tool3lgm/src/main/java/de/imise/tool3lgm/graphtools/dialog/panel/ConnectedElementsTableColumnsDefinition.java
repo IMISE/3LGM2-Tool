@@ -125,6 +125,32 @@ public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleC
     }
 
     /**
+     * Fügt eine Spalte zur Definition hinzu, die den Namen des Startelementes des Elementarpfades anzeigt.
+     *
+     * @param index
+     *            Index des Elementarpfades im Pfad
+     * @param width
+     *            preferredWidth der Spalte (muss man auch im Verhältnis zu den anderen Spalten und deren preferredWidth sehen). Kann man setzten,
+     *            wenn einge Spalten breiter als andere sein sollen. Default ist, dass alle gleich breit sind.
+     */
+    public void addColumnPathStepStart(final int index, final int width) {
+        addColumn(ColumnType.PATH_STEP_START, index, null, width);
+    }
+
+    /**
+     * Fügt eine Spalte zur Definition hinzu, die den Namen des Endelementes des Elementarpfades anzeigt.
+     *
+     * @param index
+     *            Index des Elementarpfades im Pfad
+     * @param width
+     *            preferredWidth der Spalte (muss man auch im Verhältnis zu den anderen Spalten und deren preferredWidth sehen). Kann man setzten,
+     *            wenn einge Spalten breiter als andere sein sollen. Default ist, dass alle gleich breit sind.
+     */
+    public void addColumnPathStepEnd(final int index, final int width) {
+        addColumn(ColumnType.PATH_STEP_END, index, null, width);
+    }
+
+    /**
      * Fügt eine Spalte zur Definition hinzu, die den Namen des Elementarpfades anzeigt - also nur den Kantennamen in der durch den Pfad festgelegten
      * Vorwärts Richtung. Der Spaltenkopf wird aus allen Kantennamen jeweils durch " / " getrennt gebildet.
      *

@@ -162,6 +162,10 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                         if (edge instanceof OptionalEdge) {
                             value = new NamedObjectContainer<>(edge, ((OptionalEdge) edge).getOptionDisplayName(), true); //true, damit der Editor der Tabllenzelle den richtigen String auswählt, wenn er gestartet wird
                         }
+                    } else if (columnType == ColumnType.PATH_STEP_START) {
+                        value = currentPathNode.getStartElement();
+                    } else if (columnType == ColumnType.PATH_STEP_END) {
+                        value = currentPathNode.getEndElement();
                     } else if (columnType == ColumnType.PATH_STEP_NAME || columnType == ColumnType.PATH_STEP_BACKWARD_NAME) {
                         Edge edge = currentPathNode.getEdge();
                         AbstractMetaPath metaPath = currentPathNode.getMetaPath();
