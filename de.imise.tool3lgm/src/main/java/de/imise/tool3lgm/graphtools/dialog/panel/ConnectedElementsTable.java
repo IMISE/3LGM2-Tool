@@ -92,6 +92,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
         if (editable) {
             initCoumnEditor(mouseListener);
         }
+        setRowHeight(getRowHeight() + 10);
         initSorter();
     }
 
