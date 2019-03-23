@@ -2983,7 +2983,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         for (ElementContainer ec : selectedContainer) {
             Class<? extends ElementContainer> ecClass = ec.getClass();
-            if (BendpointContainer.class.isAssignableFrom(ecClass) || EdgeContainer.class.isAssignableFrom(ecClass)) {
+            if (!(BendpointContainer.class.isAssignableFrom(ecClass) && EdgeContainer.class.isAssignableFrom(ecClass))) {
                 returnList.add(ec);
             }
         }
