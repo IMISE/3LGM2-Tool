@@ -5,7 +5,6 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheInterface_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInvokingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheProvidingInterface_IheTransaction_Edge;
 
@@ -29,7 +28,6 @@ public class IheTransaction extends IheConcept {
         SimpleMetaPath path2 = createSimpleMetaPath(0, IheProvidingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
         dialog.addTablePanel(true, columnsDefinition, path1, path2);
 
-        dialog.addEdgePanel(IheIntegrationProfile_IheTransaction_Edge.class);
         return dialog;
     }
 

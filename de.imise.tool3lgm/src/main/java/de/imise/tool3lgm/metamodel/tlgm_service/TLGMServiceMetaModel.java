@@ -39,7 +39,6 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheActorInstance_E
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheConcept_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheActor_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInvokingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInvokingInterface_InvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheProvidingInterface_IheTransaction_Edge;
@@ -320,7 +319,6 @@ public class TLGMServiceMetaModel extends MetaModel {
                 ApplicationSystem_IheActorInstance_Edge.class,
                 IheConcept_IheDomain_Edge.class,
                 IheIntegrationProfile_IheActor_Edge.class,
-                IheIntegrationProfile_IheTransaction_Edge.class,
                 IheInvokingInterface_IheTransaction_Edge.class,
                 IheProvidingInterface_IheTransaction_Edge.class,
                 IheInvokingInterface_InvokingInterface_Edge.class,
