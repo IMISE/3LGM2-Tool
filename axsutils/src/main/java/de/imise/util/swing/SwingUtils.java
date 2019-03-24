@@ -5,25 +5,25 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 
-import javax.swing.JButton;
+import javax.swing.JComponent;
 
 /**
  * @author AXS (20 Mar 2019)
  */
 public class SwingUtils {
 
-    public static final void setSameButtonSize(final JButton... buttons) {
-        if (buttons == null || buttons.length == 0) {
+    public static final void setSamePreferredSize(final JComponent... components) {
+        if (components == null || components.length == 0) {
             return;
         }
-        Dimension dim = buttons[0].getPreferredSize();
-        for (int i = 1; i < buttons.length; i++) {
-            Dimension otherDim = buttons[i].getPreferredSize();
+        Dimension dim = components[0].getPreferredSize();
+        for (int i = 1; i < components.length; i++) {
+            Dimension otherDim = components[i].getPreferredSize();
             dim.width = Math.max(dim.width, otherDim.width);
             dim.height = Math.max(dim.height, otherDim.height);
         }
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setPreferredSize(dim);
+        for (int i = 0; i < components.length; i++) {
+            components[i].setPreferredSize(dim);
         }
     }
 
