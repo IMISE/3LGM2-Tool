@@ -5,9 +5,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FOR
 import static de.imise.tool3lgm.graphtools.path.MetaPathFunctions.createNodeWithContainerAndDependents;
 
 import java.awt.Component;
-/**
- * @author AXS created on 20.05.2007
- */
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -54,6 +51,8 @@ import de.imise.util.swing.SwingUtils;
 /**
  * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Edge verbundene Elemente
  * angezeigt, hinzugefügt und entfernt werden.
+ *
+ * @author AXS created on 20.05.2007
  */
 public class PathConnectionPanel extends AbstractExpandablePanel {
 
@@ -158,15 +157,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             if (newElementAction != null) {
                 buttonpanel.add(new JButton(newElementAction));
             }
-            SwingUtils.setSamePreferredSize(westLabel, rLabel);
-            // dieses setzen der Dimension muss sein, damit sich der rechte Baum nie
-            // mehr Platz holt,
-            // als ihm in den Constraints gegeben wurde (spLinks und spRechts haben
-            // beide weigthx=0.5)
-            // ->jetzt ist es egal, wenn im linken Baum nichts steht, beide Baeume
-            // sind immer gleich breit!
-            rScollPane.setPreferredSize(new Dimension(1, 1));
-
+            SwingUtils.fillToSameLength(westLabel, rLabel); // beide labels müssen gleich breit sein, damit die Bäume gleich breit sind. Das ist irgendein komischer Bug des GridBagLayouts
         } else {
             rLabel = null;
             rroot = null;
