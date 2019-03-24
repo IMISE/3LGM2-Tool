@@ -1755,7 +1755,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param iconFile
      */
     public final void setIcon(final File iconFile, final int pid) {
-        String iconKey = gdcoll.loadIcon(iconFile);
+        String iconKey = gdcoll.getIconTable().loadIcon(iconFile);
         if (iconKey == null) {
             return;
         }

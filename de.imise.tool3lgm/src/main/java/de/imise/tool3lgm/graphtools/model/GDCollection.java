@@ -79,15 +79,10 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.swing.BoxLayout;
@@ -211,17 +206,12 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Verzeichnis der Bitmap-Icons
      */
-    private final Map<String, byte[]> iconTable = new HashMap<>();
+    private final GDCollectionIconTable iconTable = new GDCollectionIconTable();
 
     /**
      * Wenn <code>true</code>, werden keine Ereignisse gefeuert und keine Undo-/Redo-Commands aufgezeichnet.
      */
     private boolean bulk_mode = false;
-
-    /**
-     * COMMENTME
-     */
-    private int iconCounter = 0;
 
     /**
      * Dieser Counter berechnet die Verschiebung, mit der die Elemente bei einem Paste in die Grafik kopiert werden.
@@ -1767,44 +1757,9 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * @param iconPath
      * @return
      */
-    public final String loadIcon(final File iconPath) {
-        String iconKey = null;
-        try {
-            RandomAccessFile imf = new RandomAccessFile(iconPath, "r");
-            byte[] img = new byte[(int) imf.length()];
-            imf.read(img);
-            iconKey = KeyOf(img);
-            if (iconKey == null) {
-                iconKey = "IMG_" + new Date().getTime() + iconCounter++ + ".gif";
-                getIconTable().put(iconKey, img);
-            }
-            imf.close();
-        } catch (Exception e) {
-            Log.show(ERROR, getResString("FehlerAllgemein"), e);
-        }
-        return iconKey;
-    }
-
-    /**
-     * @param entry
-     * @return
-     */
-    private final String KeyOf(final byte[] entry) {
-        for (String key : getIconTable().keySet()) {
-            if (Arrays.equals(getIconTable().get(key), entry)) {
-                return key;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @return
-     */
-    public Map<String, byte[]> getIconTable() {
+    public GDCollectionIconTable getIconTable() {
         return iconTable;
     }
 
