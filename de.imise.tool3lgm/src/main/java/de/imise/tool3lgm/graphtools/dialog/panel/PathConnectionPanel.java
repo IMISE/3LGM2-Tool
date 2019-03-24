@@ -19,7 +19,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -50,6 +49,7 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.StringUtils;
+import de.imise.util.swing.SwingUtils;
 
 /**
  * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Edge verbundene Elemente
@@ -158,7 +158,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             if (newElementAction != null) {
                 buttonpanel.add(new JButton(newElementAction));
             }
-            makeSameSize(westLabel, rLabel);
+            SwingUtils.setSamePreferredSize(westLabel, rLabel);
             // dieses setzen der Dimension muss sein, damit sich der rechte Baum nie
             // mehr Platz holt,
             // als ihm in den Constraints gegeben wurde (spLinks und spRechts haben
@@ -180,14 +180,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
         initTreeListenerAndDragNDrop();
         showFullDialog(true);
-    }
-
-    private void makeSameSize(final JComponent c1, final JComponent c2) {
-        JComponent larger = c1.getPreferredSize().width > c2.getPreferredSize().width ? c1 : c2;
-        JComponent smaller = larger == c1 ? c2 : c1;
-        smaller.setPreferredSize(larger.getPreferredSize());
-        smaller.setMinimumSize(larger.getMinimumSize());
-        smaller.setMaximumSize(larger.getMaximumSize());
     }
 
     public void addUnderLeftTree(final Component c, final GridBagConstraints gbc) {
