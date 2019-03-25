@@ -85,11 +85,8 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
             add(this, buttonpanel, constraints, 0, 2, 3, 1);
         }
 
-        // add(this, viewButton, constraints, 2, 3, 1, 1);
         constraints.ipadx = 0;
         constraints.ipady = 0;
-        constraints.anchor = GridBagConstraints.WEST;
-        //        add(this, null, constraints, 0, 0, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
