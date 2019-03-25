@@ -110,7 +110,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ltree.setShowsRootHandles(true);
         ltree.setCellRenderer(treeRenderer);
         ltree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
-        JScrollPane sp = new JScrollPane(ltree);
+        JScrollPane lScrollPane = new JScrollPane(ltree);
 
         constraints.ipadx = 0;
         constraints.ipady = 0;
@@ -120,7 +120,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;
         constraints.weighty = 1d;
-        add(this, sp, constraints, 0, 1, 2, 4);
+        add(this, lScrollPane, constraints, 0, 1, 2, 4);
 
         if (showRightTree) {
             constraints.anchor = GridBagConstraints.EAST;
@@ -128,8 +128,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             constraints.weighty = 0d;
             constraints.fill = GridBagConstraints.NONE;
             //das hier braucht man wahrscheinlich nur unter Windows. Auf dem Mac sieht das komisch aus
-            //            constraints.ipadx = -30;
-            //            constraints.ipady = -10;
+            constraints.ipadx = -30;
+            constraints.ipady = -10;
             add(this, viewButton, constraints, 1, 5, 1, 1);
             constraints.weightx = 1d;
             constraints.weighty = 1d;
@@ -157,7 +157,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             if (newElementAction != null) {
                 buttonpanel.add(new JButton(newElementAction));
             }
-            SwingUtils.fillToSameLength(westLabel, rLabel); // beide labels müssen gleich breit sein, damit die Bäume gleich breit sind. Das ist irgendein komischer Bug des GridBagLayouts
+            //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
+            SwingUtils.fillToSameLength(westLabel, rLabel);
+            SwingUtils.setSamePreferredSize(westLabel, rLabel);
+            SwingUtils.setSamePreferredSize(lScrollPane, rScollPane);
+
         } else {
             rLabel = null;
             rroot = null;
