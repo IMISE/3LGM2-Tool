@@ -1,7 +1,11 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import java.awt.Dimension;
 import java.util.EventObject;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.JButton;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -22,6 +26,32 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      */
     protected JButton viewButton;
 
+    private class IconButton extends JButton {
+
+        @Override
+        public Dimension getPreferredSize() {
+            Action action = getAction();
+            if (action != null) {
+                Icon icon = (Icon) action.getValue(AbstractAction.SMALL_ICON);
+                if (icon != null) {
+                    return new Dimension(icon.getIconWidth(), icon.getIconHeight());
+                }
+            }
+            return super.getPreferredSize();
+        }
+
+        @Override
+        public Dimension getMinimumSize() {
+            return getPreferredSize();
+        }
+
+        @Override
+        public Dimension getMaximumSize() {
+            return getPreferredSize();
+        }
+
+    }
+
     /**
      * Action zum Aufklappen der rechten Seite
      */
@@ -41,7 +71,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         super.init();
         // Aktionen für den button setzen
         showPartlyAction = getShowAction(this, false);
-        viewButton = new JButton();
+        viewButton = new IconButton();
         showAllAction = getShowAction(this, true);
     }
 

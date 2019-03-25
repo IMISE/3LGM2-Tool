@@ -89,9 +89,6 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.EAST;
-        //nur für Windows wichtig
-        //        constraints.ipadx = -30;
-        //        constraints.ipady = -10;
         add(this, viewButton, constraints, 0, 6, 1, 1);
 
         constraints.anchor = GridBagConstraints.WEST;

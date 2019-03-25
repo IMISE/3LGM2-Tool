@@ -100,12 +100,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
         if (editable) {
             constraints.anchor = GridBagConstraints.EAST;
-            //das hier braucht man wahrscheinlich nur unter Windows. Auf dem Mac sieht das komisch aus
-            //            constraints.ipadx = -30;
-            //            constraints.ipady = -10;
             add(this, viewButton, constraints, 0, 6, 1, 1);
-            constraints.ipadx = 0;
-            constraints.ipady = 0;
         }
 
         constraints.anchor = GridBagConstraints.WEST;

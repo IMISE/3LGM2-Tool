@@ -112,8 +112,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ltree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
         JScrollPane lScrollPane = new JScrollPane(ltree);
 
-        constraints.ipadx = 0;
-        constraints.ipady = 0;
         constraints.anchor = GridBagConstraints.WEST;
         add(this, ltreeLabel, constraints, 0, 0, 2, 1);
         constraints.anchor = GridBagConstraints.CENTER;
@@ -127,9 +125,6 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             constraints.weightx = 0d;
             constraints.weighty = 0d;
             constraints.fill = GridBagConstraints.NONE;
-            //das hier braucht man wahrscheinlich nur unter Windows. Auf dem Mac sieht das komisch aus
-            constraints.ipadx = -30;
-            constraints.ipady = -10;
             add(this, viewButton, constraints, 1, 5, 1, 1);
             constraints.weightx = 1d;
             constraints.weighty = 1d;
@@ -150,7 +145,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             newElementAction = getNewConnectedElementAction();
 
             buttonpanel = new JPanel();
-            buttonpanel.setSize(30, 250);
+            //buttonpanel.setSize(30, 250);
             buttonpanel.setLayout(new GridLayout(3, 1));
             buttonpanel.add(new JButton(addAction));
             buttonpanel.add(new JButton(removeAction));
