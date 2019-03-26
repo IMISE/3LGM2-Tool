@@ -21,13 +21,13 @@ public class IheTransaction extends Node {
         dialog.addTabbedPanelPathConnectionPanel(IheInvokingInterface.class, IheInvokingInterface_IheTransaction_Edge.class);
         dialog.addTabbedPanelPathConnectionPanel(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class);
 
-        ConnectedElementsTableDefinition columnsDefinition = new ConnectedElementsTableDefinition();
-        columnsDefinition.addColumnEndElement(300);
-        columnsDefinition.addColumnOptional(1, 50);
-        columnsDefinition.addColumnPathStepBackwardName(0, "HEADER_CONNECTION_TYPE", 150);
+        ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
+        tableDefinition.addColumnEndElement(300);
+        tableDefinition.addColumnOptional(1, 50);
+        tableDefinition.addColumnPathStepBackwardName(0, "HEADER_CONNECTION_TYPE", 150);
         SimpleMetaPath path1 = createSimpleMetaPath(0, IheInvokingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
         SimpleMetaPath path2 = createSimpleMetaPath(0, IheProvidingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
-        dialog.addTablePanel(true, columnsDefinition, path1, path2);
+        dialog.addTablePanel(true, tableDefinition, path1, path2);
 
         return dialog;
     }

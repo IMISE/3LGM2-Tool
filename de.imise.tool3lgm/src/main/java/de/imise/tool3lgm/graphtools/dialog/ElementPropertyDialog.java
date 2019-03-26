@@ -552,12 +552,12 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     @SuppressWarnings("unchecked")
-    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableDefinition columnsDefinition, final Class<? extends Edge>... edgeClasses) {
+    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableDefinition tableDefinition, final Class<? extends Edge>... edgeClasses) {
         SimpleMetaPath simpleMetaPath = createSimpleMetaPath(null, edgeClasses);
-        addTab(new ConnectedElementsTablePanel(this, isEditable(simpleMetaPath), columnsDefinition, simpleMetaPath));
+        addTab(new ConnectedElementsTablePanel(this, isEditable(simpleMetaPath), tableDefinition, simpleMetaPath));
     }
 
-    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableDefinition columnsDefinition, final SimpleMetaPath... simpleMetaPaths) {
+    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
         boolean editable = true;
         for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
             if (!isEditable(simpleMetaPath)) {
@@ -565,7 +565,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
                 break;
             }
         }
-        addTab(new ConnectedElementsTablePanel(this, editable, columnsDefinition, simpleMetaPaths));
+        addTab(new ConnectedElementsTablePanel(this, editable, tableDefinition, simpleMetaPaths));
     }
 
     //wird im Moment nicht gebraucht

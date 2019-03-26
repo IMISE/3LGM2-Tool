@@ -48,7 +48,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
      * Definition der Spalten der Tabelle. Das bezieht sich im Header auf den im Konstruktor übergebenen {@link SimpleMetaPath} und in den
      * Zellen auf die Positionen im {@link PathResultTreeModel}.
      */
-    private final ConnectedElementsTableDefinition columnsDefinition;
+    private final ConnectedElementsTableDefinition tableDefinition;
 
     /**
      * Der Ergebnisbaum der Pfadsuche der aktuellen Pfade.
@@ -66,21 +66,21 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
      *            ModelElement, für das die verbundenen Elemente über den MetaPafd dargestellt werden sollen
      * @param metaPath
      *            MetaPfad, der in der Tabelle dargestellt werden soll
-     * @param columnsDefinition
+     * @param tableDefinition
      *            Definition der Spalten der Tabelle. Das bezieht sich im Header auf den im Konstruktor übergebenen {@link SimpleMetaPath} und in den
      *            Zellen auf die Positionen im {@link PathResultTreeModel}.
      */
-    public ConnectedElementsTableModel(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableDefinition columnsDefinition) {
+    public ConnectedElementsTableModel(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableDefinition tableDefinition) {
         this.modelElement = modelElement;
         this.metaPath = metaPath;
-        this.columnsDefinition = columnsDefinition;
+        this.tableDefinition = tableDefinition;
         setColumnIdentifiers(metaPath);
     }
 
     private void setColumnIdentifiers(final UnionMetaPath columnHeaderReferencePath) {
         //letzte Spalte ist hidden und enthält den PathResultTreeNode, aus dem die Zeile entstanden ist. Den braucht man, um zu wissen, wo der Pfad herkam und ihn löschen zu können
-        Vector<Object> colNames = new Vector<>(columnsDefinition.columnCount() + 1);
-        for (SingleColumnDefinition columnDefinition : columnsDefinition) {
+        Vector<Object> colNames = new Vector<>(tableDefinition.columnCount() + 1);
+        for (SingleColumnDefinition columnDefinition : tableDefinition) {
             String colName = columnDefinition.getHeaderResKeyOrName();
             if (!Strings.isNullOrEmpty(colName)) {
                 colName = Tool3lgmConstants.getResStringWithoutError(colName); //wenn irgendwas als Spaltennanem von außen vorgegeben ist -> das setzten
@@ -141,7 +141,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
         int row = 0;
         for (PathResultTreeNode resultNode : completePathLeafs) {
             int col = 0;
-            for (SingleColumnDefinition singleColumnDefinition : columnsDefinition) {
+            for (SingleColumnDefinition singleColumnDefinition : tableDefinition) {
                 ColumnType columnType = singleColumnDefinition.getColumnType();
                 Object value = null;
                 if (columnType == ColumnType.END_ELEMENT) {

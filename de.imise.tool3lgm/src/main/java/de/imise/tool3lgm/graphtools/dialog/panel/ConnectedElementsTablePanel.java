@@ -47,7 +47,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     private final ConnectedElementsTable table;
 
     /** Definition der Spalten der Tabelle */
-    protected final ConnectedElementsTableDefinition columnsDefinition;
+    protected final ConnectedElementsTableDefinition tableDefinition;
 
     /** Panel für Buttons Hinzufügen + Entfernen */
     private JPanel buttonpanel;
@@ -55,17 +55,17 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     /**
      * @param dialog
      * @param editable wenn <code>true</code>, dann kann man Elemente hinzufügen oder löschen und vorhandene ändern
-     * @param columnsDefinition Spaltendefinition (die zu den Pfaden passen sollte)
+     * @param tableDefinition Spaltendefinition (die zu den Pfaden passen sollte)
      * @param simpleMetaPaths MetaPfade, die in der Tabelle dargestellt werden sollen
      */
-    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, @Nonnull final ConnectedElementsTableDefinition columnsDefinition, final SimpleMetaPath... simpleMetaPaths) {
+    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
         super(dialog, simpleMetaPaths[0]); // den muss es geben!
         metaPaths = new UnionMetaPath(simpleMetaPaths);
-        this.columnsDefinition = columnsDefinition;
-        table = new ConnectedElementsTable(dialog.getModelElement(), metaPaths, columnsDefinition, editable, mouseListener, dialog.getTransactionID());
+        this.tableDefinition = tableDefinition;
+        table = new ConnectedElementsTable(dialog.getModelElement(), metaPaths, tableDefinition, editable, mouseListener, dialog.getTransactionID());
 
         //wenn in der columnsDefinion ein String als Resourcenschlüssel oder Tabellenname angegeben wurde, dann kommt hier irgendwas nicht leeres zurück
-        String tableTabName = Tool3lgmConstants.getResStringWithoutError(columnsDefinition.getTableResKeyOrName());
+        String tableTabName = Tool3lgmConstants.getResStringWithoutError(tableDefinition.getTableResKeyOrName());
         if (!Strings.isNullOrEmpty(tableTabName)) { //Name dieses Panels und somit des Tabs ggf. ersetzen (super setzt den Namen des Endelementes der Pfade)
             setName(tableTabName);
         }

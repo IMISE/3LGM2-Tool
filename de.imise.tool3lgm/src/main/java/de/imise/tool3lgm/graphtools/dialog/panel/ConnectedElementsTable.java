@@ -43,7 +43,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
     /**
      * Spaltendefinition der Tabelle, dei zu den Pfaden der Tabelle passen muss.
      */
-    private final ConnectedElementsTableDefinition columnsDefinition;
+    private final ConnectedElementsTableDefinition tableDefinition;
 
     /**
      * Transaction-ID mit der Änderungen vorgenommen werden. Das sollte wohl immer die des beinhaltenden ElementPorpertyDialogs sein
@@ -67,7 +67,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
      * @param metaPath
      *            Ein {@link UnionMetaPath}, der nur aus {@link SimpleMetaPath}s bestehen sollte. Diese {@link SimpleMetaPath} sind die eigentlichen
      *            Pfade, über die verbundene ELemente gesucht werden.
-     * @param columnsDefinition
+     * @param tableDefinition
      *            Spaltendefinition der Tabelle, dei zu den Pfaden der Tabelle passen muss
      * @param editable wenn <code>true</code>, dann lassen sich die Optional-Werte ändern
      * @param mouseListener
@@ -75,9 +75,9 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
      * @param pid
      *            Transaction-ID mit der Änderungen vorgenommen werden. Das sollte wohl immer die des beinhaltenden ElementPorpertyDialogs sein
      */
-    ConnectedElementsTable(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableDefinition columnsDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
-        super(new ConnectedElementsTableModel(modelElement, metaPath, columnsDefinition));
-        this.columnsDefinition = columnsDefinition;
+    ConnectedElementsTable(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableDefinition tableDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
+        super(new ConnectedElementsTableModel(modelElement, metaPath, tableDefinition));
+        this.tableDefinition = tableDefinition;
         this.editable = editable;
         this.pid = pid;
         addMouseListener(mouseListener);
@@ -113,9 +113,9 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
      * Holte die die in der {@link ConnectedElementsTableDefinition} angegebenen Spaltenbreiten und setzt diese.
      */
     private void initColumnWidth() {
-        for (int i = 0; i < columnsDefinition.columnCount(); i++) {
+        for (int i = 0; i < tableDefinition.columnCount(); i++) {
             TableColumn column = columnModel.getColumn(i);
-            SingleColumnDefinition singleColumnDefinition = columnsDefinition.get(i);
+            SingleColumnDefinition singleColumnDefinition = tableDefinition.get(i);
             int width = singleColumnDefinition.getWidth();
             column.setPreferredWidth(width);
         }
@@ -129,8 +129,8 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
     private void initCoumnEditor(final MouseListener mouseListener) {
         JComboBox<String> optionalComboBox = createOptionalCombobox();
         optionalComboBox.addMouseListener(mouseListener);
-        for (int i = 0; i < columnsDefinition.columnCount(); i++) {
-            SingleColumnDefinition singleColumnDefinition = columnsDefinition.get(i);
+        for (int i = 0; i < tableDefinition.columnCount(); i++) {
+            SingleColumnDefinition singleColumnDefinition = tableDefinition.get(i);
             if (singleColumnDefinition.getColumnType() == ColumnType.OPTIONAL) {
                 DefaultCellEditor editor = new DefaultCellEditor(optionalComboBox);
                 TableColumn column = columnModel.getColumn(i);
@@ -145,7 +145,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
         if (!editable) {
             return false;
         }
-        SingleColumnDefinition singleColumnDefinition = columnsDefinition.get(columnIndex);
+        SingleColumnDefinition singleColumnDefinition = tableDefinition.get(columnIndex);
         return singleColumnDefinition.getColumnType() == ColumnType.OPTIONAL;
     }
 
