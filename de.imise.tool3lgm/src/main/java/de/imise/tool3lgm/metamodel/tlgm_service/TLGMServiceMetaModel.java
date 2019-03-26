@@ -37,8 +37,8 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_Use_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorInstance_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheInterface_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheConcept_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheActor_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInvokingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInvokingInterface_InvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheProvidingInterface_IheTransaction_Edge;
@@ -70,7 +70,6 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.DeviceClass;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Function;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActor;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorInstance;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.IheConcept;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheDomain;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheIntegrationProfile;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheInterface;
@@ -216,7 +215,6 @@ public class TLGMServiceMetaModel extends MetaModel {
             //IHE-Konzepte
             IheActor.class,
             IheActorInstance.class,
-            IheConcept.class,
             IheDomain.class,
             IheIntegrationProfile.class,
             IheTransaction.class,
@@ -262,8 +260,8 @@ public class TLGMServiceMetaModel extends MetaModel {
     @Override
     public Class[] getTreeLogicalLayerVisibleAbstractNodes() {
         return new Class[] {
-                //nur bei Anwendungsbausteinen und IHE-Konzepten soll die abstrakte Oberklasse im Baum angezeigt werden
-                //ApplicationComponent.class, IheConcept.class, //im Moment deaktiviert
+                //nur bei Anwendungsbausteinen soll die abstrakte Oberklasse im Baum angezeigt werden
+                //ApplicationComponent.class, //im Moment deaktiviert
         };
     }
 
@@ -275,7 +273,7 @@ public class TLGMServiceMetaModel extends MetaModel {
 
     @Override
     public Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes() {
-        return ImmutableSet.of(IheActor.class, IheConcept.class, IheDomain.class, IheIntegrationProfile.class, IheInterface.class, IheInvokingInterface.class, IheProvidingInterface.class, IheTransaction.class);
+        return ImmutableSet.of(IheActor.class, IheDomain.class, IheIntegrationProfile.class, IheInterface.class, IheInvokingInterface.class, IheProvidingInterface.class, IheTransaction.class);
     }
 
     ////////////
@@ -317,7 +315,7 @@ public class TLGMServiceMetaModel extends MetaModel {
                 IheActor_IheInterface_Edge.class,
                 IheActorInstance_SoftwareProduct_Edge.class,
                 ApplicationSystem_IheActorInstance_Edge.class,
-                IheConcept_IheDomain_Edge.class,
+                IheIntegrationProfile_IheDomain_Edge.class,
                 IheIntegrationProfile_IheActor_Edge.class,
                 IheInvokingInterface_IheTransaction_Edge.class,
                 IheProvidingInterface_IheTransaction_Edge.class,
