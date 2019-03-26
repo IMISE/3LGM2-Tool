@@ -7,12 +7,10 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,6 +26,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.util.swing.SwingUtils;
 
 /**
  * @author fstephan
@@ -40,7 +39,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     private LGMTreeNode loroot, luroot, rroot;
     private JPanel control1, control2;
     private JLabel rlabel;
-    private JScrollPane sp2;
+    private JScrollPane rscrollPane;
 
     /**
      * Liste aller ElementContainer, die nicht im rectne Baum angezeigt werden sollen, weil sie links schon verknüpft sind
@@ -112,40 +111,30 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         rtree.setShowsRootHandles(true);
         rtree.setCellRenderer(treeRenderer);
         rtree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
-        sp2 = new JScrollPane(rtree);
+        rscrollPane = new JScrollPane(rtree);
 
         /*
          * Start: Buttons & Actions erstellen und registrieren ...
          */
-        JButton loaddButton = new JButton();
-        JButton loremoveButton = new JButton();
-        JButton luaddButton = new JButton();
-        JButton luremoveButton = new JButton();
-
         loaddAction = getConnectAction(rtree, lotree, false);
         loremoveAction = getDisconnectAction(lotree, rtree, false);
         luaddAction = getConnectAction(rtree, lutree, true);
         luremoveAction = getDisconnectAction(lutree, rtree, true);
 
-        loaddButton.setAction(loaddAction);
-        loremoveButton.setAction(loremoveAction);
-        luaddButton.setAction(luaddAction);
-        luremoveButton.setAction(luremoveAction);
         /*
          * ... end: Buttons & Actions erstellen und registrieren
          */
 
         // ButtonPanels erstellen
-        control1 = new JPanel(new GridLayout(2, 1));
-        control2 = new JPanel(new GridLayout(2, 1));
-
-        // Buttons dem Panel hinzufügen
-        control1.add(loaddButton);
-        control1.add(loremoveButton);
-        control2.add(luaddButton);
-        control2.add(luremoveButton);
+        control1 = createBetweenTreesButtonPanel(loaddAction, loremoveAction);
+        control2 = createBetweenTreesButtonPanel(luaddAction, luremoveAction);
 
         initTreeListenerAndDragNDrop();
+
+        //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
+        SwingUtils.fillToSameLength(lolabel, lulabel, rlabel);
+        SwingUtils.setSamePreferredSize(lolabel, lulabel, rlabel);
+        SwingUtils.setSamePreferredSize(lotreeScrollPane, lutreeScrollPane, rscrollPane);
 
         showFullDialog(true);
     }
@@ -206,7 +195,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 1d;
         constraints.weighty = 1d;
-        add(this, sp2, constraints, 2, 1, 1, 3);
+        add(this, rscrollPane, constraints, 2, 1, 1, 3);
     }
 
     @Override
@@ -214,7 +203,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         remove(control1);
         remove(control2);
         remove(rlabel);
-        remove(sp2);
+        remove(rscrollPane);
     }
 
     /**

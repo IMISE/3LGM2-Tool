@@ -1,17 +1,18 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
-import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.EventObject;
 
-import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.util.swing.SwingUtils;
+import de.imise.util.swing.SwingUtils.MinSizedIconButton;
 
 /**
  * Panel, bei dem man die rechte Seite auf und zuklappen kann. In der Regel sind dort links und rechts Bäume.
@@ -26,32 +27,6 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      */
     protected JButton viewButton;
 
-    private class IconButton extends JButton {
-
-        @Override
-        public Dimension getPreferredSize() {
-            Action action = getAction();
-            if (action != null) {
-                Icon icon = (Icon) action.getValue(AbstractAction.SMALL_ICON);
-                if (icon != null) {
-                    return new Dimension(icon.getIconWidth(), icon.getIconHeight());
-                }
-            }
-            return super.getPreferredSize();
-        }
-
-        @Override
-        public Dimension getMinimumSize() {
-            return getPreferredSize();
-        }
-
-        @Override
-        public Dimension getMaximumSize() {
-            return getPreferredSize();
-        }
-
-    }
-
     /**
      * Action zum Aufklappen der rechten Seite
      */
@@ -62,6 +37,15 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      */
     protected LGMAction showPartlyAction;
 
+    /** Mimimale Breite der Buttons zwischen den Bäumen */
+    private static final int MIN_ADD_REMOVE_NEW_BUTTON_WIDTH = 30;
+
+    /** Mimimale Höhe der Buttons zwischen den Bäumen */
+    private static final int MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT = 50;
+
+    /** Abstand zwischen den Buttons zwischen den Bäumen */
+    private static final int ADD_REMOVE_NEW_BUTTON_VGAP = 3;
+
     public AbstractExpandablePanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
     }
@@ -71,7 +55,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         super.init();
         // Aktionen für den button setzen
         showPartlyAction = getShowAction(this, false);
-        viewButton = new IconButton();
+        viewButton = MinSizedIconButton.createLimitedWidthAndHeigthButton(null);
         showAllAction = getShowAction(this, true);
     }
 
@@ -105,6 +89,36 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
                 panel.showFullDialog(full);
             }
         };
+    }
+
+    /**
+     * Liefert einen Button, der zwischen den Bäumen dargestellt werden kann mit entsprechender Maximalgröße. Das sind in der Regel die
+     * Add/Remove/New-Buttons.
+     *
+     * @param a Action
+     * @return
+     */
+    private JButton createBetweenTreesButton(final Action a) {
+        return SwingUtils.MinSizedIconButton.createLimitedWidthButton(a, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH, MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT);
+    }
+
+    /**
+     * Legt ein Panel an, dass für jede übergebene Action, die nicht <code>null</code> ist, einen Button enthält. Die Buttons stehen übereinander.
+     * 
+     * @param actions
+     * @return
+     */
+    public JPanel createBetweenTreesButtonPanel(final Action... actions) {
+        JPanel buttonpanel = new JPanel();
+        GridLayout gridLayout = new GridLayout(actions.length, 1);
+        gridLayout.setVgap(ADD_REMOVE_NEW_BUTTON_VGAP);
+        buttonpanel.setLayout(gridLayout);
+        for (Action a : actions) {
+            if (a != null) {
+                buttonpanel.add(createBetweenTreesButton(a));
+            }
+        }
+        return buttonpanel;
     }
 
 }

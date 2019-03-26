@@ -8,14 +8,12 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.EventObject;
 import java.util.HashSet;
 import java.util.List;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -144,14 +142,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             removeAction = getDisconnectAction();
             newElementAction = getNewConnectedElementAction();
 
-            buttonpanel = new JPanel();
-            //buttonpanel.setSize(30, 250);
-            buttonpanel.setLayout(new GridLayout(3, 1));
-            buttonpanel.add(new JButton(addAction));
-            buttonpanel.add(new JButton(removeAction));
-            if (newElementAction != null) {
-                buttonpanel.add(new JButton(newElementAction));
-            }
+            buttonpanel = createBetweenTreesButtonPanel(addAction, removeAction, newElementAction);
+
             //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
             SwingUtils.fillToSameLength(westLabel, rLabel);
             SwingUtils.setSamePreferredSize(westLabel, rLabel);
@@ -522,8 +514,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (ModelConstants.isSlaveType(searchElementClass)) {
             return null;
         }
-        return new LGMAction(getResString("new")) {
-
+        return new LGMAction("", Tool3lgmConstants.getIcon("ICON_LARGE_ACTION_DIALOG_NEW_ELEMENT.gif")) {
             @Override
             public void execute(final EventObject eo) {
                 //wenn eindutig fest steht, an welchen Node ein neues Element gehängt werden sollte, dann wird

@@ -6,10 +6,8 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FOR
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,6 +30,7 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.StringUtils;
+import de.imise.util.swing.SwingUtils;
 
 /**
  * Mit diesem Panel zeigen
@@ -135,42 +134,24 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             rutree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
             sp4 = new JScrollPane(rutree);
 
-            /*
-             * Start: Buttons & Actions erstellen und registrieren ...
-             */
-            JButton addUeberButton = new JButton();
-            JButton removeUeberButton = new JButton();
-            JButton addUnterButton = new JButton();
-            JButton removeUnterButton = new JButton();
-
             loaddAction = getConnectAction(rotree, lotree, false);
             loremoveAction = getDisconnectAction(lotree, rotree, false);
             luaddAction = getConnectAction(rutree, lutree, true);
             luremoveAction = getDisconnectAction(lutree, rutree, true);
 
-            addUeberButton.setAction(loaddAction);
-            removeUeberButton.setAction(loremoveAction);
-            addUnterButton.setAction(luaddAction);
-            removeUnterButton.setAction(luremoveAction);
-
             /*
              * ... end: Buttons & Actions erstellen und registrieren
              */
 
-            buttonpanel1 = new JPanel();
-            buttonpanel1.setSize(30, 250);
-            buttonpanel1.setLayout(new GridLayout(3, 1));
-
-            buttonpanel2 = new JPanel();
-            buttonpanel2.setSize(30, 250);
-            buttonpanel2.setLayout(new GridLayout(3, 1));
-
-            buttonpanel1.add(addUeberButton);
-            buttonpanel1.add(removeUeberButton);
-            buttonpanel2.add(addUnterButton);
-            buttonpanel2.add(removeUnterButton);
+            buttonpanel1 = createBetweenTreesButtonPanel(loaddAction, loremoveAction);
+            buttonpanel2 = createBetweenTreesButtonPanel(luaddAction, luremoveAction);
 
             initTreeListenerAndDragNDrop();
+
+            //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
+            SwingUtils.fillToSameLength(lolabel, lulabel, rolabel, rulabel);
+            SwingUtils.setSamePreferredSize(lolabel, lulabel, rolabel, rulabel);
+            SwingUtils.setSamePreferredSize(sp1, sp2, sp3, sp4);
 
             showFullDialog(true);
         }
