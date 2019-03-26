@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.SingleColumnDefinition;
+import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 
@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
  *
  * @author AXS (12 Mar 2019)
  */
-public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleColumnDefinition> {
+public class ConnectedElementsTableDefinition implements Iterable<SingleColumnDefinition> {
 
     /**
      * Ressourcenschlüssel des Namens der Tabelle und somit des Tabs, in dem sich die Tabelle befindet. Wird der Schlüssel nicht in den Resourcen

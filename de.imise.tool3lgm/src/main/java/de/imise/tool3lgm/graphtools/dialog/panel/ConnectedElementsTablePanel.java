@@ -47,7 +47,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     private final ConnectedElementsTable table;
 
     /** Definition der Spalten der Tabelle */
-    protected final ConnectedElementsTableColumnsDefinition columnsDefinition;
+    protected final ConnectedElementsTableDefinition columnsDefinition;
 
     /** Panel für Buttons Hinzufügen + Entfernen */
     private JPanel buttonpanel;
@@ -58,7 +58,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
      * @param columnsDefinition Spaltendefinition (die zu den Pfaden passen sollte)
      * @param simpleMetaPaths MetaPfade, die in der Tabelle dargestellt werden sollen
      */
-    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, @Nonnull final ConnectedElementsTableColumnsDefinition columnsDefinition, final SimpleMetaPath... simpleMetaPaths) {
+    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, @Nonnull final ConnectedElementsTableDefinition columnsDefinition, final SimpleMetaPath... simpleMetaPaths) {
         super(dialog, simpleMetaPaths[0]); // den muss es geben!
         metaPaths = new UnionMetaPath(simpleMetaPaths);
         this.columnsDefinition = columnsDefinition;

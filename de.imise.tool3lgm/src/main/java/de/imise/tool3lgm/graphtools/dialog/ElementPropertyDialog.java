@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition;
+import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTablePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescripPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescriptedSingleConnectionPanel;
@@ -552,12 +552,12 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     @SuppressWarnings("unchecked")
-    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableColumnsDefinition columnsDefinition, final Class<? extends Edge>... edgeClasses) {
+    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableDefinition columnsDefinition, final Class<? extends Edge>... edgeClasses) {
         SimpleMetaPath simpleMetaPath = createSimpleMetaPath(null, edgeClasses);
         addTab(new ConnectedElementsTablePanel(this, isEditable(simpleMetaPath), columnsDefinition, simpleMetaPath));
     }
 
-    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableColumnsDefinition columnsDefinition, final SimpleMetaPath... simpleMetaPaths) {
+    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableDefinition columnsDefinition, final SimpleMetaPath... simpleMetaPaths) {
         boolean editable = true;
         for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
             if (!isEditable(simpleMetaPath)) {

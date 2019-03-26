@@ -11,8 +11,8 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.ColumnType;
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.SingleColumnDefinition;
+import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.ColumnType;
+import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
@@ -48,7 +48,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
      * Definition der Spalten der Tabelle. Das bezieht sich im Header auf den im Konstruktor übergebenen {@link SimpleMetaPath} und in den
      * Zellen auf die Positionen im {@link PathResultTreeModel}.
      */
-    private final ConnectedElementsTableColumnsDefinition columnsDefinition;
+    private final ConnectedElementsTableDefinition columnsDefinition;
 
     /**
      * Der Ergebnisbaum der Pfadsuche der aktuellen Pfade.
@@ -70,7 +70,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
      *            Definition der Spalten der Tabelle. Das bezieht sich im Header auf den im Konstruktor übergebenen {@link SimpleMetaPath} und in den
      *            Zellen auf die Positionen im {@link PathResultTreeModel}.
      */
-    public ConnectedElementsTableModel(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableColumnsDefinition columnsDefinition) {
+    public ConnectedElementsTableModel(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableDefinition columnsDefinition) {
         this.modelElement = modelElement;
         this.metaPath = metaPath;
         this.columnsDefinition = columnsDefinition;

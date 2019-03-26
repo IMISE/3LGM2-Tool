@@ -19,8 +19,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.ColumnType;
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableColumnsDefinition.SingleColumnDefinition;
+import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.ColumnType;
+import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
@@ -43,7 +43,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
     /**
      * Spaltendefinition der Tabelle, dei zu den Pfaden der Tabelle passen muss.
      */
-    private final ConnectedElementsTableColumnsDefinition columnsDefinition;
+    private final ConnectedElementsTableDefinition columnsDefinition;
 
     /**
      * Transaction-ID mit der Änderungen vorgenommen werden. Das sollte wohl immer die des beinhaltenden ElementPorpertyDialogs sein
@@ -75,7 +75,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
      * @param pid
      *            Transaction-ID mit der Änderungen vorgenommen werden. Das sollte wohl immer die des beinhaltenden ElementPorpertyDialogs sein
      */
-    ConnectedElementsTable(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableColumnsDefinition columnsDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
+    ConnectedElementsTable(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableDefinition columnsDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
         super(new ConnectedElementsTableModel(modelElement, metaPath, columnsDefinition));
         this.columnsDefinition = columnsDefinition;
         this.editable = editable;
@@ -110,7 +110,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
     }
 
     /**
-     * Holte die die in der {@link ConnectedElementsTableColumnsDefinition} angegebenen Spaltenbreiten und setzt diese.
+     * Holte die die in der {@link ConnectedElementsTableDefinition} angegebenen Spaltenbreiten und setzt diese.
      */
     private void initColumnWidth() {
         for (int i = 0; i < columnsDefinition.columnCount(); i++) {
