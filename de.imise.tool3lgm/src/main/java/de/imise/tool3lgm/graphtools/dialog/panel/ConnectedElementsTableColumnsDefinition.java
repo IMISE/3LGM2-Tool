@@ -16,6 +16,29 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 public class ConnectedElementsTableColumnsDefinition implements Iterable<SingleColumnDefinition> {
 
     /**
+     * Ressourcenschlüssel des Namens der Tabelle und somit des Tabs, in dem sich die Tabelle befindet. Wird der Schlüssel nicht in den Resourcen
+     */
+    private String tableResKeyOrName = null;
+
+    /**
+     * Liefert den Ressourcenschlüssel des Namens der Tabelle und somit des Tabs, in dem sich die Tabelle befindet.
+     *
+     * @return
+     */
+    public String getTableResKeyOrName() {
+        return tableResKeyOrName;
+    }
+
+    /**
+     * Setzt den Ressourcenschlüssel des Namens der Tabelle und somit des Tabs, in dem sich die Tabelle befindet.
+     *
+     * @param tableResKeyOrName
+     */
+    public void setTableResKeyOrName(final String tableResKeyOrName) {
+        this.tableResKeyOrName = tableResKeyOrName;
+    }
+
+    /**
      * @author AXS (11 Mar 2019)
      */
     public enum ColumnType {

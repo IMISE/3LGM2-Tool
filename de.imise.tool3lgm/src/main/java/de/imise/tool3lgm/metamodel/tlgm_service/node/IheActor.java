@@ -27,6 +27,7 @@ public class IheActor extends Node {
         dialog.addTabbedPanelPathConnectionPanel(IheProvidingInterface.class, IheActor_IheInterface_Edge.class);
 
         ConnectedElementsTableColumnsDefinition columnsDefinition = new ConnectedElementsTableColumnsDefinition();
+        columnsDefinition.setTableResKeyOrName("TABLE_NAME_OVERVIEW");
         columnsDefinition.addColumnEndElement(300);
         columnsDefinition.addColumnOptional(0, 50);
         columnsDefinition.addColumnPathStepName(1, "HEADER_CONNECTION_TYPE", 150);
