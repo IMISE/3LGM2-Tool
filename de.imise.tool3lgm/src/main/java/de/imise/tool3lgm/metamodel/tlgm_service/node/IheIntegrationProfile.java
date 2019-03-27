@@ -22,10 +22,11 @@ public class IheIntegrationProfile extends Node {
         dialog.addEdgePanel(IheIntegrationProfile_IheActor_Edge.class);
 
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
+        tableDefinition.setTableResKeyOrName("TABLE_NAME_OVERVIEW");
         tableDefinition.addColumnPathStepEnd(0, 300);
+        tableDefinition.addColumnPathStepName(2, "HEADER_CONNECTION_TYPE", 150);
         tableDefinition.addColumnEndElement(300);
         tableDefinition.addColumnOptional(1, 50);
-        tableDefinition.addColumnPathStepName(2, "HEADER_CONNECTION_TYPE", 150);
         SimpleMetaPath path1 = createSimpleMetaPath(2, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
         SimpleMetaPath path2 = createSimpleMetaPath(2, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
         dialog.addTablePanel(true, tableDefinition, path1, path2);
