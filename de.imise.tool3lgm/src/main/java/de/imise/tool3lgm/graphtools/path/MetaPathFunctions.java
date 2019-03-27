@@ -4,11 +4,11 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwar
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
-import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -27,7 +27,6 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.ReflectionUtils;
-import de.imise.util.Sys;
 
 /**
  * @author AXS
@@ -658,20 +657,18 @@ public class MetaPathFunctions {
 
         //Collection des übergebenen doc holen
         GDCollection gdcoll = doc.getCollection();
+
         //den interactiveMode auf false setzen, damit man nicht nach den Namen für die Zwischenelemente gefragt wird,
         //bei denen der Namen normalerweise nicht generiert wird
-        boolean isInteractiveMode = gdcoll.isInteractiveMode();
-
         boolean lastEdge = edgeClassFromNewElement == null;
-
         //bei der letzten Edge sollte man bei neuen Elementen nach dem Namen fragen
         boolean newInteractiveMode = lastEdge;
-        //Ausnahme für Mac-Java-Bug: wenn Dialoge aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
+        //Ausnahme für Mac-Java-Bug: wenn Dialoge auf dem MAC aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
         //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach nicht angezeigt und der Name generiert.
-        if (System.getProperty("os.name").toLowerCase().contains("mac") && Sys.stackTraceContains(DropTarget.class)) {
+        if (Static.isDragNDropOnMac()) {
             newInteractiveMode = false;
         }
-        gdcoll.setInteractiveMode(newInteractiveMode);
+        boolean lastInteractiveMode = gdcoll.setInteractiveMode(newInteractiveMode);
 
         Class<? extends ModelElement> elementClass2Create = getElementaryPathsConnectingClass(edgeClassToNewElement, directionToNewElement, edgeClassFromNewElement, directionFromNewElement);
         //abstracte Elemente können nicht angelegt werden! hier wird nicht auf null gecheckt, weil man diese Funktion nur mit SimpleMetaPaths aufrufen sollte, die creatable sind!
@@ -770,7 +767,7 @@ public class MetaPathFunctions {
             }
 
         }
-        gdcoll.setInteractiveMode(isInteractiveMode);
+        gdcoll.setInteractiveMode(lastInteractiveMode);
         return createdDependent;
     }
 
