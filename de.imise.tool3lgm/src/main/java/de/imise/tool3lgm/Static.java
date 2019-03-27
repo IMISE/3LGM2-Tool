@@ -6,6 +6,7 @@ package de.imise.tool3lgm;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Component;
+import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.util.Sys;
 import de.imise.util.swing.dialog.OutputDialog;
 import de.imise.util.swing.dialog.ProgressDialog;
 
@@ -347,6 +349,21 @@ public class Static {
         }
         errorOutputDialog.setVisible(true);
         errorOutputDialog.appendln(mainMessage, message);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn auf dem MAC gerade ein DragNDrop ausgeführt wurde. Dann darf möglichst kein Dialog geöffnet werden, weil der
+     * dann wegen eines Java-Bugs auf dem MAC nicht mehr per Maus sondern nur noch per Tatstatur bedienbar ist.
+     *
+     * @return
+     */
+    public static boolean isDragNDropOnMac() {
+        //Ausnahme für Mac-Java-Bug: wenn Dialoge aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
+        //Dieser Bug ist nicht zu umgehen.
+        if (System.getProperty("os.name").toLowerCase().contains("mac") && Sys.stackTraceContains(DropTarget.class)) {
+            return true;
+        }
+        return false;
     }
 
 }
