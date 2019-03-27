@@ -26,6 +26,8 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
  */
 public class PathConnectionLeafPanel extends PathConnectionPanel {
 
+    protected final SimpleMetaPath simpleMetaPath;
+
     /**
      * Mappt von einem Endelement (Blattknoten) auf das ModelElement des im linke Baum darüber liegenden
      * Knotens. Das ist der Node, von dem aus ein eventuell durchzuführendes Unlinken angestoßen werden muss.
@@ -34,10 +36,12 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
         super(dialog, showRightTree, simpleMetaPath);
+        this.simpleMetaPath = simpleMetaPath;
     }
 
     public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, showRightTree, simpleMetaPath);
+        this.simpleMetaPath = simpleMetaPath;
     }
 
     @Override
@@ -108,6 +112,19 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
                 }
             }
         };
+    }
+
+    @Override
+    protected void connectToFirstPath(final ModelElement element2Connect) {
+        //dieses Panel ändert das ursprüngliche Verhalten dahingehend, dass es immer den ganzen Pfad neu anlegt und nicht nur den letzten Teil
+        createPath(element2Connect);
+    }
+
+    public void createPath(final ModelElement endElement) {
+        if (!metaPath.isCreatable()) {
+            return;
+        }
+        doc.createPath(dialog.getModelElement(), null, simpleMetaPath, true, dialog.getTransactionID());
     }
 
 }
