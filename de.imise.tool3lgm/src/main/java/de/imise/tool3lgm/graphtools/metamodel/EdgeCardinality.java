@@ -19,11 +19,11 @@ public class EdgeCardinality {
 
     public static final EdgeCardinality ZERO_ONE = new EdgeCardinality(ZERO, ONE);
 
-    public static final EdgeCardinality ZERO_UNIMITED = new EdgeCardinality(ZERO, UNLIMITED);
+    public static final EdgeCardinality ZERO_UNLIMITED = new EdgeCardinality(ZERO, UNLIMITED);
 
     public static final EdgeCardinality ONE_ONE = new EdgeCardinality(ONE, ONE);
 
-    public static final EdgeCardinality ONE_UNIMITED = new EdgeCardinality(ONE, UNLIMITED);
+    public static final EdgeCardinality ONE_UNLIMITED = new EdgeCardinality(ONE, UNLIMITED);
 
     private final int min;
 

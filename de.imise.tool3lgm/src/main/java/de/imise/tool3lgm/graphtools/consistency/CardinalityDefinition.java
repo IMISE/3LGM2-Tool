@@ -20,7 +20,7 @@ public class CardinalityDefinition {
 
     /**
      * Wenn <code>true</code>, dann werden für alle Kanten, bei denen keine neue Kardinalität definiert ist immer
-     * {@link EdgeCardinality#ZERO_UNIMITED}
+     * {@link EdgeCardinality#ZERO_UNLIMITED}
      * zurück gegeben. Bei Kanten mit neuer Kardinalität wird dann diese neue zurück gegeben.
      * Wenn <code>false</code>, dann werden entweder die neu definierten Kardinalitäten zurück gegeben oder, wenn keine neuen definiert wurden, dann
      * die originalen Kardinalitäten aus dem Metamodell.
@@ -117,7 +117,7 @@ public class CardinalityDefinition {
         //Wenn für die Kante neue Kardinalitäten angegeben wurden, gib diese zurück. Wenn keien neuen da sind und gefltert werden soll (= nur neue
         //Kardinalitäten sollen zu Konsistenzfehlern führen), dann gibt für alle Kanten ohne neue Kardinalitäten ZERO_UNLIMITED zurück (-> keine Fehler bei diesen Kanten).
         //Wenn aber nicht gefiltert werden soll und keine neuen Kardinalitäten definiert wurden, dann gib die originalen Kantenkardinalitäten zurück.
-        return newForwardCardinality != null ? newForwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNIMITED : Edge.getForwardCardinality(edgeClass);
+        return newForwardCardinality != null ? newForwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : Edge.getForwardCardinality(edgeClass);
     }
 
     /**
@@ -129,7 +129,7 @@ public class CardinalityDefinition {
         //Wenn für die Kante neue Kardinalitäten angegeben wurden, gib diese zurück. Wenn keien neuen da sind und gefltert werden soll (= nur neue
         //Kardinalitäten sollen zu Konsistenzfehlern führen), dann gibt für alle Kanten ohne neue Kardinalitäten ZERO_UNLIMITED zurück (-> keine Fehler bei diesen Kanten).
         //Wenn aber nicht gefiltert werden soll und keine neuen Kardinalitäten definiert wurden, dann gib die originalen Kantenkardinalitäten zurück.
-        return newBackwardCardinality != null ? newBackwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNIMITED : Edge.getBackwardCardinality(edgeClass);
+        return newBackwardCardinality != null ? newBackwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : Edge.getBackwardCardinality(edgeClass);
     }
 
 }

@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.consistency;
 
 import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getDisplayableName;
 import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getDisplayablePluralName;
-import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
+import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 
@@ -270,7 +270,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 EdgeCardinality forwardCardinality = consistencyDefinition.getForwardCardinality(edgeClass);
                 EdgeCardinality backwardCardinality = consistencyDefinition.getBackwardCardinality(edgeClass);
                 //wenn es keine Min-Max-Fehler geben kann -> weiter
-                if (forwardCardinality == ZERO_UNIMITED && backwardCardinality == ZERO_UNIMITED) {
+                if (forwardCardinality == ZERO_UNLIMITED && backwardCardinality == ZERO_UNLIMITED) {
                     continue;
                 }
 

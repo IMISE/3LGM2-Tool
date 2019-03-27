@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.edge;
 
-import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNIMITED;
+import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
@@ -15,9 +15,9 @@ public final class KommBeziehung extends DoubleMeaningEdge {
 
     public static final Class<? extends ModelElement> stcl = Bausteinschnittstelle.class;
 
-    public static final EdgeCardinality scard = ZERO_UNIMITED;
+    public static final EdgeCardinality scard = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNIMITED;
+    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
 
     public static final Class<? extends ModelElement> etcl = Bausteinschnittstelle.class;
 
