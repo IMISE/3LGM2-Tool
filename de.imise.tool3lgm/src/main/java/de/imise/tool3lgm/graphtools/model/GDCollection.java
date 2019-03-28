@@ -1041,9 +1041,8 @@ public final class GDCollection extends UserFieldTarget {
             me.setHashString(hashString);
         }
         boolean nameIsEmpty = Strings.isNullOrEmpty(name);
-        boolean askNameWithGeneratedString = !nameIsEmpty && name.charAt(0) != GraphDocument.GENERATED_NAME_PREFIX;
-
-        if (!nameIsEmpty && !askNameWithGeneratedString) {
+        boolean nameIsValidAndNotMarkedAsGenerated = !nameIsEmpty && name.charAt(0) != GraphDocument.GENERATED_NAME_PREFIX;
+        if (nameIsValidAndNotMarkedAsGenerated) {
             me.setName(getDecodedParseSaveString(name));
         } else {
             String newName = nameIsEmpty ? doc.getNextNewName(me.getClass()) : name.substring(1);
