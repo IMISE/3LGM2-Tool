@@ -8,6 +8,7 @@ package de.imise.util.swing.component;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,14 +44,29 @@ public class LimitedSizeScrollTextPane extends JScrollPane {
     }
 
     /**
+     * @param editable
+     */
+    public LimitedSizeScrollTextPane(final boolean editable) {
+        this(-1, editable);
+    }
+
+    /**
      * @param maxLines
      */
     public LimitedSizeScrollTextPane(final int maxLines) {
+        this(maxLines, true);
+    }
+
+    /**
+     * @param maxLines
+     * @param editable
+     */
+    public LimitedSizeScrollTextPane(final int maxLines, final boolean editable) {
         super();
-        textPane = new ExtendedTextPane();
+        textPane = new ExtendedTextPane(editable);
         setViewportView(textPane);
         this.maxLines = maxLines;
-        //		if (maxLines>1){
+        //      if (maxLines>1){
         textPane.addCaretListener(e -> {
             setSize(new Dimension(getSize().width, getPreferredSize().height));
             Component comp = getParent();
@@ -58,9 +74,8 @@ public class LimitedSizeScrollTextPane extends JScrollPane {
                 ((JComponent) getParent()).revalidate();
             }
         });
-        //		}
+        //      }
     }
-
     public void setCaretPosition(final int position) {
         textPane.setCaretPosition(position);
         textPane.setSize(getSize());
@@ -177,6 +192,12 @@ public class LimitedSizeScrollTextPane extends JScrollPane {
     public void removeDocumentListener(final DocumentListener listener) {
         textPane.getDocument().removeDocumentListener(listener);
         documentListeners.remove(listener);
+    }
+
+    @Override
+    public synchronized void addMouseListener(final MouseListener l) {
+        super.addMouseListener(l);
+        textPane.addMouseListener(l);
     }
 
 }

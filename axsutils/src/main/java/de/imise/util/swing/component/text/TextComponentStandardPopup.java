@@ -56,7 +56,9 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
         super();
         myTargetComponent = textComponent;
         this.extensionFindReplace = extensionFindReplace;
-        textComponent.addMouseListener(this);
+        if (textComponent.isEditable() && textComponent.isEnabled()) {
+            textComponent.addMouseListener(this);
+        }
     }
 
     /**
@@ -207,12 +209,9 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
 
                     // Workaround für Exception in thread "AWT-EventQueue-0" java.awt.IllegalComponentStateException:
                     // component must be showing on the screen to determine its location
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            findReplaceXPos = findIt.getLocationOnScreen().x;
-                            findReplaceYPos = findIt.getLocationOnScreen().y;
-                        }
+                    SwingUtilities.invokeLater(() -> {
+                        findReplaceXPos = findIt.getLocationOnScreen().x;
+                        findReplaceYPos = findIt.getLocationOnScreen().y;
                     });
                 }
             }
@@ -235,7 +234,6 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
      * @param textComponent
      * @return
      */
-    @SuppressWarnings("unused")
     public static boolean addPopupMenuTo(final JTextComponent textComponent) {
         return addPopupMenuTo(textComponent, true);
     }
@@ -250,7 +248,6 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
      *            Find/Replace eingefügen
      * @return
      */
-    @SuppressWarnings("unused")
     public static boolean addPopupMenuTo(final JTextComponent textComponent, final boolean extensionFindReplace) {
         // nur 1 x hinzufügen
         for (MouseListener ml : textComponent.getMouseListeners()) {
@@ -262,6 +259,24 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
         new TextComponentStandardPopup(textComponent, extensionFindReplace);
         registerMacShortcuts(textComponent);
         return true;
+    }
+
+    /**
+     * Kontextmenü für Textkomponenten mit Cut, Copy, Insert, Delete, SelectAll, Find and Replace optional Wenn die Textkomponente nicht editable oder
+     * nicht enabled ist, wird nur SelectAll und Copy
+     * angeboten.
+     *
+     * @param textComponent
+     * @return
+     */
+    public static void removePopupMenuFrom(final JTextComponent textComponent) {
+        MouseListener[] mouseListeners = textComponent.getMouseListeners();
+        for (int i = mouseListeners.length - 1; i >= 0; i--) {
+            MouseListener ml = mouseListeners[i];
+            if (ml instanceof TextComponentStandardPopup) {
+                textComponent.removeMouseListener(ml);
+            }
+        }
     }
 
     /**
