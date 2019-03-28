@@ -237,6 +237,29 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         lumodel.reload();
         lutree.restoreExpansion();
 
+        if (isRightSideVisible()) {
+            rotree.saveExpansion();
+            rutree.saveExpansion();
+            rotree.saveSelection();
+            rutree.saveSelection();
+
+            roroot.removeAllChildren();
+            ruroot.removeAllChildren();
+            rotree.reset();
+            rutree.reset();
+
+            for (ElementContainer ec : mainDoc.getElementContainer(searchElementClass)) {
+                rotree.addObject(ec, roroot, childrenToExcludeFromRotree, false, true);
+                rutree.addObject(ec, ruroot, childrenToExcludeFromRutree, false, true);
+            }
+            romodel.reload();
+            // expandTree(rotree);
+            rumodel.reload();
+            // expandTree(rutree);
+            rotree.restoreExpansion();
+            rutree.restoreExpansion();
+        }
+
         repaint();
         revalidate();
 
@@ -259,30 +282,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         constraints.weighty = 100;
         add(this, sp3, constraints, 2, 1, 1, 1);
         add(this, sp4, constraints, 2, 3, 1, 1);
-
-        rotree.saveExpansion();
-        rutree.saveExpansion();
-        rotree.saveSelection();
-        rutree.saveSelection();
-
-        roroot.removeAllChildren();
-        ruroot.removeAllChildren();
-        rotree.reset();
-        rutree.reset();
-
-        for (ElementContainer ec : mainDoc.getElementContainer(searchElementClass)) {
-            rotree.addObject(ec, roroot, childrenToExcludeFromRotree, false, true);
-            rutree.addObject(ec, ruroot, childrenToExcludeFromRutree, false, true);
-        }
-        romodel.reload();
-        // expandTree(rotree);
-        rumodel.reload();
-        // expandTree(rutree);
-        rotree.restoreExpansion();
-        rutree.restoreExpansion();
-
-        revalidate();
-        repaint();
     }
 
     @Override
