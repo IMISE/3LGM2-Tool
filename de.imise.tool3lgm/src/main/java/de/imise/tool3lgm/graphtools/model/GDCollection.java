@@ -1419,6 +1419,10 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
+     * Anders als bei link() ist hier die Richtung, also die Reihenfolge der beiden ModelElemente nur wichtig, wenn es eine {@link DoubleMeaningEdge}
+     * ist oder die übergebenen Elemente beide jeweils Start- und EndElement der Kantenklasse sein können. In allen anderen Fällen wird sonst auch
+     * einfach versucht irgendeine Kante dieser Art zwischen den beiden übergebenen Elementen zu löschen.
+     *
      * @param me1
      * @param me2
      * @param edgeClass
@@ -1431,7 +1435,11 @@ public final class GDCollection extends UserFieldTarget {
         }
         Edge edge = null;
         List<Edge> edges = null;
-        if (ModelConstants.isDirectedEdge(edgeClass)) {
+
+        Class<? extends ModelElement> me1Class = me1.getClass();
+        Class<? extends ModelElement> me2Class = me2.getClass();
+        boolean isDirectionImportent = ModelConstants.isDoubleMeaningEdge(edgeClass) || Edge.isConnecting(edgeClass, me1Class, me2Class) && Edge.isConnecting(edgeClass, me2Class, me1Class);
+        if (isDirectionImportent) {
             edges = me1.getEdgesTo(me2, edgeClass, me1EdgeIndex);
         } else {
             edges = me1.getEdgesWith(me2, edgeClass, me1EdgeIndex);
