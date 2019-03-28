@@ -2,7 +2,6 @@ package de.imise.tool3lgm.graphtools.model;
 
 import java.util.Date;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -77,7 +76,7 @@ public class Szenario extends LGMGraphDocument {
         retVal.setParent(null);
         int layernum = ((LayerContainer) ec.getParent()).getLayerNumber();
         layer[layernum].add(retVal);
-        if (retVal instanceof EdgeContainer && ModelConstants.getGraphViewDefinition().isPaintable(meClass)) {
+        if (retVal instanceof EdgeContainer && me.isPaintable()) {
             for (BendpointContainer kpC : ((EdgeContainer) retVal).iterateBendpointContainers()) {
                 layer[layernum].add(kpC);
                 getCollection().addNodeToMainDoc(kpC, layernum);

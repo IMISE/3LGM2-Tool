@@ -66,6 +66,9 @@ public abstract class GraphViewDefinition {
      * @return
      */
     public final boolean isPaintable(final Class<? extends ModelElement> elementClass) {
+        //Achtung: bei Kantenklassen, die auf abstrakten Knotenklassen definiert sind, die selbst nicht paintable sind, kommt false zurück, auch wenn die
+        //konkreten Unterklassen painable sind und es die Kante somit auch wäre. Hast man ein Edge-Object (und nicht nur die Kantenklasse) dann kann man
+        //auf der Egde isPainable() aufrufen und bekommt das richtige Ergebnis!
         if (Edge.class.isAssignableFrom(elementClass)) {
             Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
             return isPaintable(Edge.getStartClass(edgeClass)) && isPaintable(Edge.getEndClass(edgeClass));
