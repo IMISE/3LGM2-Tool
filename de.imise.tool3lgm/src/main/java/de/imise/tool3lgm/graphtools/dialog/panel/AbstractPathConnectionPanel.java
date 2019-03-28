@@ -338,12 +338,30 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param direction
      * @param pid
      */
-    private static void link(final GDCollection gdcoll, final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
+    protected static void link(final GDCollection gdcoll, final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         //das neue Element mit dem startElement verknüpfen
         if (direction == FORWARD) {
             gdcoll.link(edgeClass, startElement, endElement, pid);
         } else {
             gdcoll.link(edgeClass, endElement, startElement, pid);
+        }
+    }
+
+    /**
+     * Löst die Verbindung zwischen Start- und Endelement in der angegebenen Richtung
+     *
+     * @param gdcoll
+     * @param startElement
+     * @param endElement
+     * @param edgeClass
+     * @param direction
+     * @param pid
+     */
+    protected static void unlink(final GDCollection gdcoll, final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
+        if (direction == FORWARD) {
+            gdcoll.unlink(startElement, endElement, edgeClass, pid);
+        } else {
+            gdcoll.unlink(endElement, startElement, edgeClass, pid);
         }
     }
 

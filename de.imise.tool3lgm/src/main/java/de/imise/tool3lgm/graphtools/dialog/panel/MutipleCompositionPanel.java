@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -170,7 +171,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                         ModelElement topLevelModelElement;
                         topLevelModelElement = getModelElement();
                         GDCollection gdcoll = getGraphDocument().getCollection();
-                        gdcoll.unlink(topLevelModelElement, knot.getElement(), getLastEdgeClassInPath(), getTransactionID());
+                        unlink(gdcoll, topLevelModelElement, knot.getElement(), getLastEdgeClassInPath(), FORWARD, getTransactionID());
                     }
                 }
             }

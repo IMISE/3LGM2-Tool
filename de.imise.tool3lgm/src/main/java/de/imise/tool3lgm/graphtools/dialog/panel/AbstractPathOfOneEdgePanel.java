@@ -11,6 +11,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -64,7 +65,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param targetTree
      * @param connectForward
      */
-    protected final LGMAction getConnectAction(final JTree srcTree, final JTree targetTree, final boolean connectForward) {
+    protected final LGMAction getConnectAction(final JTree srcTree, final JTree targetTree, final Direction direction) {
         final GraphDocument doc = getGraphDocument();
         final GDCollection gdcoll = doc.getCollection();
         final int pid = getTransactionID();
@@ -78,7 +79,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                         ElementContainer ec = (ElementContainer) node.getUserObject();
                         ModelElement me = ec.getElement();
                         ModelElement topLevelMe = getTopLevelModelElement(targetTree);
-                        if (connectForward) {
+                        if (direction == FORWARD) {
                             gdcoll.link(edgeClass, topLevelMe, me, pid);
                         } else {
                             gdcoll.link(edgeClass, me, topLevelMe, pid);
@@ -98,7 +99,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param targetTree
      * @param disconnectForward
      */
-    protected final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree, final boolean disconnectForward) {
+    protected final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree, final Direction direction) {
         final GraphDocument doc = getGraphDocument();
         final GDCollection gdcoll = doc.getCollection();
         final int pid = getTransactionID();
@@ -112,11 +113,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                         ElementContainer ec = (ElementContainer) node.getUserObject();
                         ModelElement me = ec.getElement();
                         ModelElement topLevelModelElement = getTopLevelModelElement(targetTree == null ? srcTree : targetTree);
-                        if (disconnectForward) {
-                            gdcoll.unlink(topLevelModelElement, me, edgeClass, pid);
-                        } else {
-                            gdcoll.unlink(me, topLevelModelElement, edgeClass, pid);
-                        }
+                        unlink(gdcoll, topLevelModelElement, me, edgeClass, direction, pid);
                     }
                 }
             }

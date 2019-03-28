@@ -454,11 +454,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(edgeIndexInPath);
         int pid = getTransactionID();
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-        if (elementaryMetaPath.getDirection() == Direction.FORWARD) {
-            gdcoll.unlink(startInPath, endInPath, edgeClass, pid);
-        } else {
-            gdcoll.unlink(endInPath, startInPath, edgeClass, pid);
-        }
+        unlink(gdcoll, startInPath, endInPath, edgeClass, elementaryMetaPath.getDirection(), pid);
         if (!startInPath.isConsistent()) {
             gdcoll.deleteElement(startInPath, selDoc, pid);
         }

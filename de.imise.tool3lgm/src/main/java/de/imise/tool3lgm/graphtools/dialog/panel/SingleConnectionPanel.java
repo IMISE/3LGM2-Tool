@@ -17,6 +17,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
@@ -296,13 +297,15 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      */
     private final void unlinkAll() {
         Collection<ElementContainer> searchElementConnectedContainer = getForelastConnectedContainer();
-        GDCollection gdcoll = mainDoc.getCollection();
-        Class<? extends Edge> lastEdgeInPath = getLastEdgeClassInPath();
         for (ElementContainer ec : searchElementConnectedContainer) {
+            //da das in der Regel nur 1 Element ist, kann man die Variablen alle in der Schleife anlegen
+            GDCollection gdcoll = mainDoc.getCollection();
+            Class<? extends Edge> lastEdgeInPath = getLastEdgeClassInPath();
+            Direction lastDirectionInPath = getLastDirectionInPath();
             ModelElement me = ec.getElement();
-            List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, getLastDirectionInPath());
+            List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, lastDirectionInPath);
             for (ModelElement connected : connectedElements) {
-                gdcoll.unlink(me, connected, lastEdgeInPath, dialog.getTransactionID());
+                unlink(gdcoll, me, connected, lastEdgeInPath, lastDirectionInPath, dialog.getTransactionID());
             }
         }
     }

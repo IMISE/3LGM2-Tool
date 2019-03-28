@@ -134,10 +134,10 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             rutree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
             sp4 = new JScrollPane(rutree);
 
-            loaddAction = getConnectAction(rotree, lotree, false);
-            loremoveAction = getDisconnectAction(lotree, rotree, false);
-            luaddAction = getConnectAction(rutree, lutree, true);
-            luremoveAction = getDisconnectAction(lutree, rutree, true);
+            loaddAction = getConnectAction(rotree, lotree, BACKWARD);
+            loremoveAction = getDisconnectAction(lotree, rotree, BACKWARD);
+            luaddAction = getConnectAction(rutree, lutree, FORWARD);
+            luremoveAction = getDisconnectAction(lutree, rutree, FORWARD);
 
             /*
              * ... end: Buttons & Actions erstellen und registrieren

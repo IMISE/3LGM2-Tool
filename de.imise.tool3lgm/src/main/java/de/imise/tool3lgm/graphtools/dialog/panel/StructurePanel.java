@@ -4,6 +4,8 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -116,10 +118,10 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         /*
          * Start: Buttons & Actions erstellen und registrieren ...
          */
-        loaddAction = getConnectAction(rtree, lotree, false);
-        loremoveAction = getDisconnectAction(lotree, rtree, false);
-        luaddAction = getConnectAction(rtree, lutree, true);
-        luremoveAction = getDisconnectAction(lutree, rtree, true);
+        loaddAction = getConnectAction(rtree, lotree, BACKWARD);
+        loremoveAction = getDisconnectAction(lotree, rtree, BACKWARD);
+        luaddAction = getConnectAction(rtree, lutree, FORWARD);
+        luremoveAction = getDisconnectAction(lutree, rtree, FORWARD);
 
         /*
          * ... end: Buttons & Actions erstellen und registrieren
