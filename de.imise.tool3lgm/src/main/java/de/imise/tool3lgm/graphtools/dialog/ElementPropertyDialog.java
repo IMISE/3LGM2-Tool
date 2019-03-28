@@ -83,6 +83,12 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     private static final Dimension DEFAULT_SIZE = new Dimension(600, 500);
 
     /**
+     * Wird im Konstruktor auf <code>true</code> gesetzt und nach dem ersten zeigen des Dialoges auf <code>false</code>. Damit kann sicher gestellt
+     * werden, dass die Transaktion des Dialoges nur einmal am Anfang und nicht bei jedem weiteren Zeigen des Dialoges gestartet wird.
+     */
+    boolean opening = false;
+
+    /**
      * Wird <code>true</code>, wenn der Ok oder der Cancel Button gedrückt wurde
      */
     boolean closing = false;
@@ -142,6 +148,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
         addSizeOrPositionChangedListener();
         setSizeAndLocation();
+        opening = true;
     }
 
     private void addSizeOrPositionChangedListener() {
@@ -229,8 +236,11 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
      *
      */
     public void showDialog() {
-        doc.start_transaction(getTransactionID());
-        doc.addInTransactionListener(this);
+        if (opening) {
+            doc.start_transaction(getTransactionID());
+            doc.addInTransactionListener(this);
+            opening = false;
+        }
         setVisible(true);
     }
 
