@@ -82,19 +82,19 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      * @param dialog
      * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
      *            letzten Edge aus den edgeClasses geschrieben.
-     * @param editable
+     * @param editable bezieht sich nur auf die Möglichkeit, die Verbindung zum dargestellten Element zu lösen oder ein anderes anzuhängen. Das
+     *            verbundene Element bzw. dessen Name ist immmer nicht änderbar.
      * @param simpleMetaPath
      */
     public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean editable, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
         setLayout(new BorderLayout());
-
+        update(); //connectedElement initial setzen!
         if (!editable || isLastPathElementNeededForExistence() && connectedElement != null) {
             connectedElementsBox = null;
             itemListener = null;
-            connectedElementName = new LimitedSizeScrollTextPane(4);
+            connectedElementName = new LimitedSizeScrollTextPane(4, false); //wenn man hier true übergibt, kann man den Namen des verbundenen Elementes ändern. Aber dann funktuionieren die Maus-Actions nicht mehr, weil dann die Komponente eigene Mausaktionen für den Text macht
             connectedElementViewComponent = connectedElementName;
-
             //Doppelklick-Action und Kontextmenü anghängen
             addMouseActions(connectedElementName);
             add(connectedElementName, BorderLayout.CENTER);
@@ -105,6 +105,8 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             connectedElementViewComponent = connectedElementsBox;
 
             connectedElementsBox.addItemListener(itemListener);
+            //Doppelklick-Action und Kontextmenü anghängen
+            addMouseActions(connectedElementsBox);
             add(connectedElementsBox, BorderLayout.CENTER);
         }
 
@@ -144,9 +146,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             }
             connectedElementsBox.setSelectedItem(connectedContainer);
             connectedElementsBox.addItemListener(itemListener);
-            //Doppelklick-Action und Kontextmenü anghängen
-            addMouseActions(connectedElementsBox);
-        } else /* if (connectedElementName != null) */ {
+        } else if (connectedElementName != null) { // beim ersten update() aus dem Konstruktor sind beide (Box und TextArea) null -> nicht einfach nur else hier sondern else-if
             if (connectedElement != null) {
                 oldname = connectedElement.getName();
                 connectedElementName.setText(oldname);
