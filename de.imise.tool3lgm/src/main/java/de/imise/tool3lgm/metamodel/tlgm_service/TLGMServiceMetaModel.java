@@ -268,7 +268,7 @@ public class TLGMServiceMetaModel extends MetaModel {
     @Override
     public Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
         //hier wird nur mit contains(class) gerpüft -> immer auch die Oberklassen, die versteckt werden sollen reinschreiben
-        return ImmutableSet.of(IheInterface.class, IheInvokingInterface.class, IheProvidingInterface.class);
+        return ImmutableSet.of(IheInterface.class, IheInvokingInterface.class, IheProvidingInterface.class, Use.class);
     }
 
     @Override
