@@ -8,6 +8,7 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheActor_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInvokingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheProvidingInterface_IheTransaction_Edge;
 
@@ -19,7 +20,8 @@ public class IheActor extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(false, IheIntegrationProfile_IheActor_Edge.class);
+        dialog.addDescripSingleConnectionPanel(IheIntegrationProfile_IheActor_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
+        dialog.addDescripSingleConnectionPanel(IheIntegrationProfile_IheActor_Edge.class);
         dialog.addEdgePanel(IheActor_IheActorInstance_Edge.class);
         //dieses tabbedPane wird nur im ExpertMode angezeigt! Und damit auch die darin enthaltenen Interface-Panels
         dialog.addTabbedPanel(ElementsNameBuilder.getDisplayablePluralName(IheInterface.class));
