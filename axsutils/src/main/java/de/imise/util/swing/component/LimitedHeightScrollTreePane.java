@@ -125,7 +125,7 @@ public class LimitedHeightScrollTreePane extends JScrollPane {
      * @return
      */
     private int getHeight(final int lineCount) {
-        return singleLineHeight * lineCount + 2 * BORDER;
+        return singleLineHeight * lineCount + 2 * BORDER + 1;
     }
 
     @Override
