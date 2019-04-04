@@ -77,4 +77,9 @@ public final class ElementaryPath extends AbstractPath {
         return true;
     }
 
+    @Override
+    public final ElementaryMetaPath getMetaPath() {
+        return (ElementaryMetaPath) super.getMetaPath();
+    }
+
 }

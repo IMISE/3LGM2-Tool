@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
+import java.util.List;
+
 /**
  * @author AXS
  * @create 13.10.2010
@@ -89,6 +91,11 @@ public class RecursiveMetaPath extends AbstractMetaPath {
     @Override
     public boolean containsPropertyTransferEdge() {
         return realMetaPath.containsPropertyTransferEdge();
+    }
+
+    @Override
+    public List<AbstractMetaPath> getMetaPaths() {
+        return realMetaPath.getMetaPaths();
     }
 
 }

@@ -19,7 +19,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -538,16 +537,46 @@ public class MetaPathFunctions {
     }
 
     /**
-     * @param simpleMetaPath
-     * @param pathStepIndex
+     * Gibt einen Elementarpfad anhand eines übergebenen Index zurück. Ist der Index >= 0, dann wird genau der Index zurück gegeben. Ist der Index <
+     * 0, dann wird der übergebene Index von der Länge der Geamtliste der Elementarfade abgezogen. Möchte man also den letzten Elementarpfad haben,
+     * muss man -1 übergeben, für den vorletzten -2 usw.
+     *
+     * @param metaPath
+     * @param index
+     *            Index der Kante im Pfad, wenn dieser eindeutig ist. Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus der Summe der
+     *            Gesamtanzahl der Elementarpfade und diesem Wert.
      * @return
      */
-    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final SimpleMetaPath simpleMetaPath, final int pathStepIndex) {
+    public static final ElementaryMetaPath getElementaryMetaPathInPath(final AbstractMetaPath metaPath, final int index) {
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        if (elementaryMetaPaths.isEmpty()) {
+            return null;
+        }
+        ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(index < 0 ? elementaryMetaPaths.size() + index : index);
+        return elementaryMetaPath;
+    }
+
+    /**
+     * Liefert die Verbindungsklasse der Elementarpfade am angegebenen Index. Es wird immer die Endklasse des Elementarpfades mit dem Index und die
+     * Startklasse des nächsten genommen, wenn es einen nächsten gibt, und davon die speziellste gemeinsame Oberklasse zurück gegeben. Existiert für
+     * den Pfad keine einfache Elementarpfadliste für diesen MetaPath, dann kommt <code>null</code> zurück.
+     *
+     * @param simpleMetaPath
+     * @param pathStepIndex
+     *            Index der Kante im Pfad, wenn dieser eindeutig ist. Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus der Summe der
+     *            Gesamtanzahl der Elementarpfade und diesem Wert.
+     * @return
+     */
+    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final AbstractMetaPath simpleMetaPath, final int pathStepIndex) {
         List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
-        ElementaryMetaPath elementaryMetaPath1 = elementaryMetaPaths.get(pathStepIndex);
+        if (elementaryMetaPaths.isEmpty()) {
+            return null;
+        }
+        int index = pathStepIndex < 0 ? elementaryMetaPaths.size() + pathStepIndex : pathStepIndex;
+        ElementaryMetaPath elementaryMetaPath1 = elementaryMetaPaths.get(index);
         ElementaryMetaPath elementaryMetaPath2 = null;
-        if (pathStepIndex + 1 < elementaryMetaPaths.size()) {
-            elementaryMetaPath2 = elementaryMetaPaths.get(pathStepIndex + 1);
+        if (index + 1 < elementaryMetaPaths.size()) {
+            elementaryMetaPath2 = elementaryMetaPaths.get(index + 1);
         }
         return getElementaryPathsConnectingClass(elementaryMetaPath1, elementaryMetaPath2);
     }

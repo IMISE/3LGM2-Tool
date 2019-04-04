@@ -49,7 +49,7 @@ import de.imise.util.StringUtils;
 public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel {
 
     /** Der MetaPfad zu anderen Elementen */
-    protected AbstractMetaPath metaPath;
+    protected SimpleMetaPath metaPath;
 
     /** Label vor dem verbundenen Element mit der Art des Elementes */
     protected final JLabel westLabel;
@@ -79,7 +79,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param simpleMetaPath
      */
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, simpleMetaPath.getMetaPathCount() - 1, labelEdgeName, simpleMetaPath);
+        this(dialog, -1, labelEdgeName, simpleMetaPath);
     }
 
     /**
@@ -87,7 +87,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *
      * @param dialog
      * @param labelEdgeIndex Index der Edge, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
-     *            wird. Es wird immer die Endklasse des Pfades bis zur Edge mit dem jeweiligen Index ans Label geschrieben.
+     *            wird. Es wird immer die Endklasse des Pfades bis zur Edge mit dem jeweiligen Index ans Label geschrieben. Wird ein Wert < 0
+     *            übergeben, dann wird dieser Wert von der Anzahl der Kanten im Gesamtpfad abgezogen, um auf den tatsächlichen Index zu kommen.
      * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
      *            der Name der Edge selbst ans Label geschrieben. Welche Edge im Pfad das ist, wird durch labelEdgeIndex
      *            festgelegt.
@@ -96,7 +97,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog);
         metaPath = simpleMetaPath;
-        searchElementClass = getInitialSearchElementClass(simpleMetaPath);
+        searchElementClass = getInitialSearchElementClass(metaPath);
         isConnectionPointUnique = isConnectionPointUnique();
 
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
@@ -106,14 +107,13 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             addMouseActions(westLabel);
         }
         String westLabelText;
-        Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
-
         if (labelEdgeName) {
+            Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
             westLabelText = getDirectionInPath(labelEdgeIndex) == FORWARD ? ElementsNameBuilder.getForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
         } else {
-            Class<? extends ModelElement> labelPathStepEndClass = MetaPathFunctions.getElementaryPathsConnectingClass((SimpleMetaPath) metaPath, labelEdgeIndex);
+            Class<? extends ModelElement> labelPathStepEndClass = MetaPathFunctions.getElementaryPathsConnectingClass(metaPath, labelEdgeIndex);
             //zur Beschriftung des Labels wird immer die speziellere Klasse genommen aus Endklasse des Pfades und searchElementClass. Weil immer nur davon können die verbundenen Elemente sein.
-            if (searchElementClass != null && labelPathStepEndClass.isAssignableFrom(searchElementClass)) {
+            if (labelPathStepEndClass == null || labelPathStepEndClass.isAssignableFrom(searchElementClass)) {
                 labelPathStepEndClass = searchElementClass;
             }
             westLabelText = metaPath.isSingleConnection() ? ElementsNameBuilder.getDisplayableName(labelPathStepEndClass) : ElementsNameBuilder.getDisplayablePluralName(labelPathStepEndClass);
@@ -159,16 +159,13 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @return
      */
     public ElementaryMetaPath getElementaryMetaPathInPath(final int index) {
-        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-        if (elementaryMetaPaths.isEmpty()) {
-            return null;
-        }
-        ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(index < 0 ? elementaryMetaPaths.size() + index : index);
-        return elementaryMetaPath;
+        return MetaPathFunctions.getElementaryMetaPathInPath(metaPath, index);
     }
 
     /**
      * @param index
+     *            Index der Kante im Pfad, wenn dieser eindeutig ist. Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus der Summe der
+     *            Gesamtanzahl der Elementarpfade und diesem Wert.
      * @return
      */
     public Direction getDirectionInPath(final int index) {
@@ -178,6 +175,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
 
     /**
      * @param index
+     *            Index der Kante im Pfad, wenn dieser eindeutig ist. Wird ein Wert < 0 übergeben, dann ergibt sich der Index aus der Summe der
+     *            Gesamtanzahl der Elementarpfade und diesem Wert.
      * @return
      */
     public Class<? extends Edge> getEdgeClassInPath(final int index) {

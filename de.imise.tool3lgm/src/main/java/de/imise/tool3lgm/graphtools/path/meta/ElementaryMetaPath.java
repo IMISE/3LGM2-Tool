@@ -211,6 +211,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     /**
      * @return the startClass
      */
+    @Override
     public Class<? extends ModelElement> getStartClass() {
         return startClass;
     }
@@ -218,6 +219,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     /**
      * @return the endClass
      */
+    @Override
     public Class<? extends ModelElement> getEndClass() {
         return endClass;
     }
@@ -386,6 +388,11 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
             elementaryMetaPaths = ImmutableList.of(this);
         }
         return elementaryMetaPaths;
+    }
+
+    @Override
+    public List<AbstractMetaPath> getMetaPaths() {
+        return (List<AbstractMetaPath>) (List<?>) getElementaryMetaPaths();
     }
 
     @Override

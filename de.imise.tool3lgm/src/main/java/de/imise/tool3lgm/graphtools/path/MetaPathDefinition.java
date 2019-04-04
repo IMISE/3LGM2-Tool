@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.path;
 
 import static de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler.getForwardMetaPath;
-import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.createSimpleMetaPath;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +17,7 @@ import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.path.meta.WrapperMetaPath;
 import de.imise.util.Alphabetical;
 
@@ -138,7 +138,7 @@ public class MetaPathDefinition {
      */
     @SafeVarargs
     protected final SimpleMetaPath put(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) {
-        SimpleMetaPath simpleMetaPath = createSimpleMetaPath(startClass, endClass, baseResKeyOrName, associations);
+        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(startClass, endClass, baseResKeyOrName, associations);
         put(simpleMetaPath);
         return simpleMetaPath;
     }

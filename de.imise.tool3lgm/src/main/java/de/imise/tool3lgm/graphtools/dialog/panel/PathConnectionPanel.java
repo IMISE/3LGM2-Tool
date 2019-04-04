@@ -16,7 +16,6 @@ import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
@@ -45,6 +44,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.StringUtils;
 import de.imise.util.swing.SwingUtils;
+import de.imise.util.swing.component.LimitedHeightScrollTreePane;
 
 /**
  * Mit diesem Panel können für ein Element über einen Pfad von mehr als einer Edge verbundene Elemente
@@ -68,7 +68,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     private final JLabel rLabel;
 
-    private final JScrollPane rScollPane;
+    private final LimitedHeightScrollTreePane rScollPane;
 
     private final JPanel buttonpanel;
 
@@ -81,10 +81,26 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     private final LGMAction newElementAction;
 
     public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, showRightTree, simpleMetaPath);
+        this(dialog, showRightTree, -1, simpleMetaPath);
+    }
+
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, showRightTree, maxLines, false, simpleMetaPath);
     }
 
     public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, showRightTree, -1, false, simpleMetaPath);
+    }
+
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, showRightTree, maxLines, renderLeftTreeAsList, simpleMetaPath);
+    }
+
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, showRightTree, -1, renderLeftTreeAsList, simpleMetaPath);
+    }
+
+    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
         this.showRightTree = showRightTree;
         setPreferredSize(new Dimension(550, 350));
@@ -92,14 +108,16 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-        //wenn der Pfad aus mehr als einer Edge besteht, dann soll über dem linken Baum einfach "verbunden" stehen, sonst der Elementarpfadname
-        String ltreeLabelString = elementaryMetaPaths.size() == 1 ? getElementaryMetaPathInPath(0).getName() : getResString("verb");
-        String rtreeLabelString = getResString("frei");
-        ltreeLabelString = StringUtils.capitalizeFirstChar(ltreeLabelString);
-        rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
+        //wenn das Panel nicht in der Höhe eingeschränkt werden soll, dann steht es allein auf dem Panel und bekommt als Westabel = Label über dem linken Baum den Elementarpfadnamen oder "verbunden"
+        //wenn das Panel in der Höhe eingeschränkt werden soll, bleibt das Westpanel auf dem Wert von super = Name des Endelementes des Pfades oder des letzten Elementarpfadschrittes (wenn labelLastEdgeName == true)
+        if (maxLines < 0) {
+            List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+            //wenn der Pfad aus mehr als einer Edge besteht, dann soll über dem linken Baum einfach "verbunden" stehen, sonst der Elementarpfadname
+            String ltreeLabelString = elementaryMetaPaths.size() == 1 ? getElementaryMetaPathInPath(0).getName() : getResString("verb");
+            ltreeLabelString = StringUtils.capitalizeFirstChar(ltreeLabelString);
+            westLabel.setText(ltreeLabelString);
+        }
 
-        westLabel.setText(ltreeLabelString);
         JLabel ltreeLabel = westLabel;
         lroot = new LGMTreeNode(getModelElement().getContainer(mainDoc), false, getSortLeftTreeRootChildrenAlphabetical());
         lmodel = new DefaultTreeModel(lroot);
@@ -108,7 +126,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         ltree.setShowsRootHandles(true);
         ltree.setCellRenderer(treeRenderer);
         ltree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
-        JScrollPane lScrollPane = new JScrollPane(ltree);
+        LimitedHeightScrollTreePane lScrollPane = new LimitedHeightScrollTreePane(ltree, maxLines, renderLeftTreeAsList);
 
         constraints.anchor = GridBagConstraints.WEST;
         add(this, ltreeLabel, constraints, 0, 0, 2, 1);
@@ -127,6 +145,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             constraints.weightx = 1d;
             constraints.weighty = 1d;
             constraints.fill = GridBagConstraints.BOTH;
+            String rtreeLabelString = getResString("frei");
+            rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
             rLabel = new JLabel(rtreeLabelString);
             rroot = new LGMTreeNode(rtreeLabelString, false);
             rmodel = new DefaultTreeModel(rroot);
@@ -135,7 +155,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             rtree.setRootVisible(false);
             rtree.setShowsRootHandles(true);
             rtree.setCellRenderer(treeRenderer);
-            rScollPane = new JScrollPane(rtree);
+            rScollPane = new LimitedHeightScrollTreePane(rtree, maxLines, false);
 
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
@@ -450,6 +470,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     protected final void disconnect(final ModelElement startInPath, final ModelElement endInPath, final int edgeIndexInPath) {
         GraphDocument selDoc = getSelectedGraphDocument();
         GDCollection gdcoll = selDoc.getCollection();
+        //das disconnect sollte nur angeboten werden, wenn der Path ceratable ist und dann kommt bei metaPath.getElementaryMetaPaths() auch was sinnvolles zurück
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(edgeIndexInPath);
         int pid = getTransactionID();

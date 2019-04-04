@@ -46,6 +46,7 @@ public abstract class ListMetaPath extends AbstractMetaPath implements Iterable<
     /**
      * @return the metaPaths
      */
+    @Override
     public final List<AbstractMetaPath> getMetaPaths() {
         return metaPaths;
     }

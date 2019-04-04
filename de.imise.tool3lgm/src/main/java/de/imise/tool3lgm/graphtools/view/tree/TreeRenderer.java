@@ -45,63 +45,66 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
 
     @Override
     public Component getTreeCellRendererComponent(final JTree tree, final Object value, final boolean sel, final boolean expanded, final boolean leaf, final int row, final boolean hasFocus) {
-        LGMTreeNode node = (LGMTreeNode) value;
-        Object userObject = node.getUserObject();
+        if (value instanceof LGMTreeNode) {
+            LGMTreeNode node = (LGMTreeNode) value;
+            Object userObject = node.getUserObject();
 
-        if (!node.isSelectable()) {
-            setTextNonSelectionColor(Color.gray);
-        } else if (UserProperties.is(BooleanProperty.OPTION_USE_PROPERTY_COLORS)) {
-            setTextNonSelectionColor(node.getSignalColor());
-        } else {
-            setTextNonSelectionColor(Color.black);
-        }
-
-        super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
-
-        if (userObject instanceof ElementContainer) {
-            int iconState = node.getIconState();
-            ElementContainer container = (ElementContainer) userObject;
-            ImageIcon icon = container.getTreeIcon();
-            if (icon == null) {
-                ModelElement me = container.getElement();
-                GraphElementLayout.SHAPE form = me.isPaintable() ? doc.getMapping().getStandardForm(container) : null;
-                if (form != null) {
-                    switch (form) {
-                    case rechteck:
-                        if (iconState == LGMTreeNode.SHOW_NORMAL_ICON) {
-                            setIcon(rectIcon);
-                        } else if (iconState == LGMTreeNode.SHOW_ERROR_ICON) {
-                            setIcon(rectErrorIcon);
-                        }
-                        break;
-                    case oval:
-                        setIcon(circleIcon);
-                        break;
-                    case dreieck:
-                        setIcon(triangleIcon);
-                        break;
-                    case rundeck:
-                        setIcon(rundeckIcon);
-                        break;
-                    case rhombus:
-                        setIcon(rhombusIcon);
-                        break;
-                    case tonne:
-                        setIcon(tonneIcon);
-                        break;
-                    case wabe:
-                        setIcon(wabeIcon);
-                        break;
-                    default:
-                        setIcon(null);
-                    }
-                }
+            if (!node.isSelectable()) {
+                setTextNonSelectionColor(Color.gray);
+            } else if (UserProperties.is(BooleanProperty.OPTION_USE_PROPERTY_COLORS)) {
+                setTextNonSelectionColor(node.getSignalColor());
             } else {
-                container.checkTreeIcon();
-                setIcon(icon);
+                setTextNonSelectionColor(Color.black);
             }
+
+            super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
+            if (userObject instanceof ElementContainer) {
+                int iconState = node.getIconState();
+                ElementContainer container = (ElementContainer) userObject;
+                ImageIcon icon = container.getTreeIcon();
+                if (icon == null) {
+                    ModelElement me = container.getElement();
+                    GraphElementLayout.SHAPE form = me.isPaintable() ? doc.getMapping().getStandardForm(container) : null;
+                    if (form != null) {
+                        switch (form) {
+                        case rechteck:
+                            if (iconState == LGMTreeNode.SHOW_NORMAL_ICON) {
+                                setIcon(rectIcon);
+                            } else if (iconState == LGMTreeNode.SHOW_ERROR_ICON) {
+                                setIcon(rectErrorIcon);
+                            }
+                            break;
+                        case oval:
+                            setIcon(circleIcon);
+                            break;
+                        case dreieck:
+                            setIcon(triangleIcon);
+                            break;
+                        case rundeck:
+                            setIcon(rundeckIcon);
+                            break;
+                        case rhombus:
+                            setIcon(rhombusIcon);
+                            break;
+                        case tonne:
+                            setIcon(tonneIcon);
+                            break;
+                        case wabe:
+                            setIcon(wabeIcon);
+                            break;
+                        default:
+                            setIcon(null);
+                        }
+                    }
+                } else {
+                    container.checkTreeIcon();
+                    setIcon(icon);
+                }
+            }
+            return this;
         }
-        return this;
+        return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
     }
 
 }

@@ -63,7 +63,7 @@ public abstract class AbstractPath {
     /**
      * @return the metaPath
      */
-    public final AbstractMetaPath getMetaPath() {
+    public AbstractMetaPath getMetaPath() {
         return metaPath;
     }
 

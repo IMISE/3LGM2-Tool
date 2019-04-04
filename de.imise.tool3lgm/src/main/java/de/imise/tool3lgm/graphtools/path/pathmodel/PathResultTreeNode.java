@@ -9,7 +9,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 
 /**
  * Knoten, der genutzt werden kann um Pfade in einem Baum zu speichern. Jeder dieser
@@ -94,7 +94,7 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
      * @return
      * @see tool3lgm.graphtools.newpath.pathmodel.Path#getMetaPath()
      */
-    public final AbstractMetaPath getMetaPath() {
+    public final ElementaryMetaPath getMetaPath() {
         ElementaryPath path = getPathObject();
         if (path == null) {
             return null;

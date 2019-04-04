@@ -490,6 +490,16 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     @SafeVarargs
+    public final void addDescripListPanel(final Class<? extends Edge>... edgeClasses) {
+        descripPanel.addListPanel(false, createSimpleMetaPath(null, edgeClasses));
+    }
+
+    @SafeVarargs
+    public final void addDescripListPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
+        descripPanel.addListPanel(labelLastEdgeName, createSimpleMetaPath(null, edgeClasses));
+    }
+
+    @SafeVarargs
     public final void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addTab(new DescriptedSingleConnectionPanel(this, createSimpleMetaPath(null, edgeClasses)));
     }

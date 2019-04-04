@@ -120,6 +120,10 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, editable, simpleMetaPath));
     }
 
+    public final void addListPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+        addSubPanel(new PathConnectionLeafPanel(dialog, labelLastEdgeName, false, 4, simpleMetaPath));
+    }
+
     private final void addSubPanel(final AbstractPathConnectionPanel panel) {
         panels.add(panel);
         if (panel instanceof DescriptedSingleConnectionPanel) {

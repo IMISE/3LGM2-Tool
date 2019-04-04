@@ -607,6 +607,13 @@ public abstract class AbstractMetaPath {
     }
 
     /**
+     * Liefert eine Liste aller {@link AbstractMetaPath}, die dieser MetaPfad enthält.
+     *
+     * @return
+     */
+    public abstract List<AbstractMetaPath> getMetaPaths();
+
+    /**
      * Liefert <code>true</code>, wenn dieser Pfad Elementarten miteinander verbindet, die
      * zueinander zuweisungskompatibel sind. D.h. die Startklasse ist gleich der Endklasse
      * oder die Endklasse eine Unterklasse der Startklasse.

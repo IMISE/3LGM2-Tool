@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.swing.tree.TreePath;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -14,6 +16,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
@@ -26,8 +29,6 @@ import de.imise.tool3lgm.tools.LGMTreeNode;
  */
 public class PathConnectionLeafPanel extends PathConnectionPanel {
 
-    protected final SimpleMetaPath simpleMetaPath;
-
     /**
      * Mappt von einem Endelement (Blattknoten) auf das ModelElement des im linke Baum darüber liegenden
      * Knotens. Das ist der Node, von dem aus ein eventuell durchzuführendes Unlinken angestoßen werden muss.
@@ -36,12 +37,18 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
         super(dialog, showRightTree, simpleMetaPath);
-        this.simpleMetaPath = simpleMetaPath;
     }
 
     public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, showRightTree, simpleMetaPath);
-        this.simpleMetaPath = simpleMetaPath;
+    }
+
+    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, showRightTree, maxLines, simpleMetaPath);
+    }
+
+    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelLastEdgeName, showRightTree, maxLines, true, simpleMetaPath);
     }
 
     @Override
@@ -68,18 +75,36 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
             nodeToParentModelElement.clear();
         }
         if (!leafNodes.isEmpty()) {
-            //vor dem Umhängen der Blätter an den root für jedes Blatt das echte Vorgängerelement auf dem Pfad merken
-            for (LGMTreeNode leaf : leafNodes) {
-                LGMTreeNode leafParent = (LGMTreeNode) leaf.getParent();
-                ModelElement parentMe = getNodeModelElement(leafParent);
-                nodeToParentModelElement.put(leaf, parentMe);
-                lroot.add(leaf);
-            }
-            //alle Elemente vom root abhängen
-            lroot.removeAllChildren();
-            //alle Blätter direkt an den root hängen
-            for (LGMTreeNode leaf : leafNodes) {
-                lroot.add(leaf);
+            if (metaPath.isCreatable()) { //wen der anlegbar ist, dann werden die Blätter sooft angezeigt, wie Pfade existeren (also Elemente evtl. auch doppelt)
+                //vor dem Umhängen der Blätter an den root für jedes Blatt das echte Vorgängerelement auf dem Pfad merken
+                for (LGMTreeNode leaf : leafNodes) {
+                    LGMTreeNode leafParent = (LGMTreeNode) leaf.getParent();
+                    ModelElement parentMe = getNodeModelElement(leafParent);
+                    nodeToParentModelElement.put(leaf, parentMe);
+                }
+                //alle Elemente vom root abhängen
+                lroot.removeAllChildren();
+                //alle Blätter direkt an den root hängen
+                for (LGMTreeNode leaf : leafNodes) {
+                    lroot.add(leaf);
+                }
+            } else { //der Pfad ist nicht anlegbar und somit werden die verbundenen Elemente nur angezeigt -> keins doppelt anzeigen! In diesem Fall ist nodeToParentModelElement egal!
+                ImmutableList.Builder<LGMTreeNode> newLeafNodes = ImmutableList.builder();
+                //alle Elemente vom root abhängen
+                lroot.removeAllChildren();
+                ltree.reset(); //check von bereits hinzugefügten Elementen zurück setzen
+                //alle Blätter neu erzeugen und direkt an den root hängen
+                for (LGMTreeNode leaf : leafNodes) {
+                    Object userObject = leaf.getUserObject();
+                    if (userObject instanceof ElementContainer) {
+                        ElementContainer ec = (ElementContainer) userObject;
+                        LGMTreeNode node = ltree.addObject(ec, lroot, null, true, true, false);
+                        if (node != null) {
+                            newLeafNodes.add(node);
+                        }
+                    }
+                }
+                return newLeafNodes.build();
             }
         }
         return leafNodes;
@@ -124,7 +149,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
         if (!metaPath.isCreatable()) {
             return;
         }
-        doc.createPath(dialog.getModelElement(), null, simpleMetaPath, true, dialog.getTransactionID());
+        doc.createPath(dialog.getModelElement(), null, metaPath, true, dialog.getTransactionID());
     }
 
 }

@@ -68,9 +68,11 @@ public class SimpleMetaPathCreator {
      * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
      *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
      * @return
+     * @throws IllegalArgumentException
      */
     @SafeVarargs
-    public static final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) {
+    public static final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations)
+            throws IllegalArgumentException {
         ElementaryMetaPath[] metaPaths = new ElementaryMetaPath[associations.length];
         Class<? extends ModelElement> start = startClass;
         for (int i = 0; i < associations.length; i++) {
@@ -89,7 +91,7 @@ public class SimpleMetaPathCreator {
                 }
                 if (i < 0) {
                     //der Pfad ist fehlerhaft, d. h. trotz Zurücklaufen und Test mit der Gegenrichtung passen die Kanten nicht zueinander
-                    return null;
+                    throw new IllegalArgumentException("EdgeClasses dosn't define a valid metapath");
                 }
             }
             ElementaryMetaPath metaPath;
