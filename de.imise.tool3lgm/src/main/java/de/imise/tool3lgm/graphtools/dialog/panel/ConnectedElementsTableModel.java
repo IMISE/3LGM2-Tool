@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
@@ -168,7 +169,12 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                         value = currentPathNode.getEndElement();
                     } else if (columnType == ColumnType.PATH_STEP_NAME || columnType == ColumnType.PATH_STEP_BACKWARD_NAME) {
                         Edge edge = currentPathNode.getEdge();
-                        AbstractMetaPath metaPath = currentPathNode.getMetaPath();
+                        ElementaryMetaPath metaPath = currentPathNode.getMetaPath();
+                        Class<? extends Edge> edgeClass = edge.getClass();
+                        //der Metapfad kann auf einer abstrakten Oberklasse der konkreten Kante definiert sein. Ist das der Fall, muss der Name aber von der konkreten Kantenklasse abgeleitet werden!
+                        if (edgeClass != metaPath.getEdgeClass()) {
+                            metaPath = ElementaryMetaPathHandler.getMetaPath(metaPath.getStartClass(), edgeClass, metaPath.getDirection(), metaPath.getEndClass());
+                        }
                         String name = columnType == ColumnType.PATH_STEP_NAME ? metaPath.getName() : metaPath.getOtherDirection().getName();
                         value = new NamedObjectContainer<>(edge, name);
                     }
