@@ -31,9 +31,14 @@ public class IheTransaction extends Node {
         tableDefinition.addColumnEndElement(300);
         tableDefinition.addColumnOptional(1, 50);
         tableDefinition.addColumnPathStepBackwardName(0, "HEADER_CONNECTION_TYPE", 150);
-        SimpleMetaPath path1 = createSimpleMetaPath(0, IheInvokingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
-        SimpleMetaPath path2 = createSimpleMetaPath(0, IheProvidingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
-        dialog.addTablePanel(true, tableDefinition, path1, path2);
+
+        //die unteren 2 Zeilen sind abslut identisch zu dem, was hier auskommentiert ist. Hier werden beide Pfade explizit definiert und dem TablePanel übergeben. Unten werden
+        //dieselben beiden Pfade aus dem abstrakten Pfad abgeleitet. Das ist nur als Vorlage hier enthalten, damit man die verschiedenen Möglichkeiten zur Definition sieht.
+        //        SimpleMetaPath path1 = createSimpleMetaPath(0, IheInvokingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
+        //        SimpleMetaPath path2 = createSimpleMetaPath(0, IheProvidingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
+        //        dialog.addTablePanel(true, tableDefinition, path1, path2);
+        SimpleMetaPath[] iheActorToIheTransactionPaths = createSimpleMetaPaths(0, IheInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
+        dialog.addTablePanel(true, tableDefinition, iheActorToIheTransactionPaths);
 
         return dialog;
     }

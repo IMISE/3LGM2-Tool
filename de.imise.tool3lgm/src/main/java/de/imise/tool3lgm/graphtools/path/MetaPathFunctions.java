@@ -18,7 +18,9 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -818,6 +820,44 @@ public class MetaPathFunctions {
         } else {
             gdcoll.link(edgeClass, endElement, startElement, pid);
         }
+    }
+
+    /**
+     * Es werden alle verschiedenen {@link SimpleMetaPath}s zurück gegeben, bei denen die im übergebenen {@link SimpleMetaPath} eventuell abstrakten
+     * Kantenklassen durch konkrete ersetzt wurden.
+     *
+     * @param simpleMetaPath
+     * @return
+     */
+    public static Collection<SimpleMetaPath> getSimpleMetaPathsNonAbstract(final SimpleMetaPath simpleMetaPath) {
+        Collection<SimpleMetaPath> allSimpleMetaPaths = new ArrayList<>();
+        List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
+        boolean hasAbstractEdgeClass = false;
+        for (int i = 0; i < elementaryMetaPaths.size(); i++) {
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
+            Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+            if (ModelConstants.isAbstract(edgeClass)) {
+                hasAbstractEdgeClass = true;
+                Class<? extends ModelElement> pathStepConnectingStartClass = i == 0 ? simpleMetaPath.getStartClass() : simpleMetaPath.getPathStepElementClass(i - 1);
+                Class<? extends ModelElement> pathStepConnectingEndClass = simpleMetaPath.getPathStepElementClass(i);
+                Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(pathStepConnectingStartClass, pathStepConnectingEndClass);
+                for (Class<? extends Edge> edgeType : edgeTypes) {
+                    if (edgeClass.isAssignableFrom(edgeType)) {
+                        ElementaryMetaPath[] elementaryMetaPathArray = new ElementaryMetaPath[elementaryMetaPaths.size()];
+                        elementaryMetaPathArray = elementaryMetaPaths.toArray(elementaryMetaPathArray);
+                        elementaryMetaPathArray[i] = ElementaryMetaPathHandler.getMetaPath(pathStepConnectingStartClass, edgeType, elementaryMetaPath.getDirection(), pathStepConnectingEndClass);
+                        int metaPathStepWithPathName = simpleMetaPath.getMetaPathStepWithPathName();
+                        SimpleMetaPath newSimpleMetaPath = metaPathStepWithPathName < 0 ? new SimpleMetaPath(elementaryMetaPathArray) : new SimpleMetaPath(metaPathStepWithPathName, elementaryMetaPathArray);
+                        Collection<SimpleMetaPath> simpleMetaPathsNonAbstract = getSimpleMetaPathsNonAbstract(newSimpleMetaPath);
+                        allSimpleMetaPaths.addAll(simpleMetaPathsNonAbstract);
+                    }
+                }
+            }
+        }
+        if (!hasAbstractEdgeClass) {
+            allSimpleMetaPaths.add(simpleMetaPath);
+        }
+        return allSimpleMetaPaths;
     }
 
 }

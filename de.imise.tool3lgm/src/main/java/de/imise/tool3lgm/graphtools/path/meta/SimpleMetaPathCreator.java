@@ -1,8 +1,11 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
+import java.util.Collection;
+
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 
 /**
  * @author AXS (5 Dec 2018)
@@ -35,7 +38,7 @@ public class SimpleMetaPathCreator {
      */
     @SafeVarargs
     public static final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
-        return createSimpleMetaPath(startClass, endClass, null, associations);
+        return createSimpleMetaPath(startClass, endClass, null, -1, associations);
     }
 
     /**
@@ -58,6 +61,18 @@ public class SimpleMetaPathCreator {
     }
 
     /**
+     * @param startClass
+     * @param endClass
+     * @param metaPathStepWithPathName
+     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param metaPaths
+     */
+    public SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final ElementaryMetaPath... metaPaths) {
+        return new SimpleMetaPath(metaPathStepWithPathName, initFullPath(startClass, endClass, metaPaths));
+    }
+
+    /**
      * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
      * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
      * rückwärts dreht, dann wird immer vorwärts angenommen.
@@ -73,6 +88,48 @@ public class SimpleMetaPathCreator {
     @SafeVarargs
     public static final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations)
             throws IllegalArgumentException {
+        return createSimpleMetaPath(startClass, endClass, baseResKeyOrName, -1, associations);
+    }
+
+    /**
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
+     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
+     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     *
+     * @param startClass
+     * @param endClass
+     * @param metaPathStepWithPathName
+     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
+     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @return
+     * @throws IllegalArgumentException
+     */
+    @SafeVarargs
+    public static final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final Class<? extends Edge>... associations)
+            throws IllegalArgumentException {
+        return createSimpleMetaPath(startClass, endClass, null, metaPathStepWithPathName, associations);
+    }
+    /**
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
+     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
+     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     *
+     * @param startClass
+     * @param endClass
+     * @param baseResKeyOrName
+     * @param metaPathStepWithPathName
+     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
+     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @return
+     * @throws IllegalArgumentException
+     */
+    @SafeVarargs
+    private static final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final int metaPathStepWithPathName,
+            final Class<? extends Edge>... associations) throws IllegalArgumentException {
         ElementaryMetaPath[] metaPaths = new ElementaryMetaPath[associations.length];
         Class<? extends ModelElement> start = startClass;
         for (int i = 0; i < associations.length; i++) {
@@ -107,8 +164,25 @@ public class SimpleMetaPathCreator {
             metaPaths[i] = metaPath;
             start = metaPath.getEndClass();
         }
-        SimpleMetaPath simpleMetaPath = new SimpleMetaPath(baseResKeyOrName, metaPaths);
+        SimpleMetaPath simpleMetaPath = metaPathStepWithPathName < 0 ? new SimpleMetaPath(baseResKeyOrName, metaPaths) : new SimpleMetaPath(metaPathStepWithPathName, metaPaths);
         return simpleMetaPath;
+    }
+
+    /**
+     * Erzeugt ein Array von allen konkreten MetaPfaden, die dem ggf. abstrakten übergebenen MetaPfad entsprechen. Ist keine der übergebenen
+     * Kantenklassen abstrakt, dann kommt in dem Set nur der übergebene Pfad zurück.
+     *
+     * @param metaPathStepWithPathName
+     * @param edgeClasses
+     * @return
+     */
+    @SafeVarargs
+    public static final SimpleMetaPath[] createSimpleMetaPaths(final Class<? extends ModelElement> startClass, final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
+        SimpleMetaPath path = SimpleMetaPathCreator.createSimpleMetaPath(startClass, null, metaPathStepWithPathName, edgeClasses);
+        Collection<SimpleMetaPath> simpleMetaPathsNonAbstract = MetaPathFunctions.getSimpleMetaPathsNonAbstract(path);
+        SimpleMetaPath[] simpleMetaPaths = new SimpleMetaPath[simpleMetaPathsNonAbstract.size()];
+        simpleMetaPaths = simpleMetaPathsNonAbstract.toArray(simpleMetaPaths);
+        return simpleMetaPaths;
     }
 
     /**

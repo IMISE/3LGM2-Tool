@@ -2024,13 +2024,15 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * @param edgeWithPathNameIndex Index der Kante, die in Vorwärtsrichtung den Namen des Pfades vorgibt
+     * @param metaPathStepWithPathName
+     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
      * @param edgeClasses
      * @return
      */
     @SafeVarargs
-    protected final SimpleMetaPath createSimpleMetaPath(final int edgeWithPathNameIndex, final Class<? extends Edge>... edgeClasses) {
-        return createSimpleMetaPath(edgeClasses[edgeWithPathNameIndex].getSimpleName(), edgeClasses);
+    protected final SimpleMetaPath createSimpleMetaPath(final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
+        return createSimpleMetaPath(null, metaPathStepWithPathName, edgeClasses);
     }
 
     /**
@@ -2062,9 +2064,41 @@ public abstract class ModelElement extends UserFieldTarget {
         return createSimpleMetaPath(null, baseResKeyOrName, edgeClasses);
     }
 
+    /**
+     * @param endClass
+     * @param baseResKeyOrName
+     * @param edgeClasses
+     * @return
+     */
     @SafeVarargs
     protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... edgeClasses) {
         return SimpleMetaPathCreator.createSimpleMetaPath(getClass(), endClass, baseResKeyOrName, edgeClasses);
+    }
+
+    /**
+     * @param endClass
+     * @param metaPathStepWithPathName
+     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param edgeClasses
+     * @return
+     */
+    @SafeVarargs
+    protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
+        return SimpleMetaPathCreator.createSimpleMetaPath(getClass(), endClass, metaPathStepWithPathName, edgeClasses);
+    }
+
+    /**
+     * Erzeugt ein Array von allen konkreten MetaPfaden, die dem ggf. abstrakten übergebenen MetaPfad entsprechen. Ist keine der übergebenen
+     * Kantenklassen abstrakt, dann kommt in dem Set nur der übergebene Pfad zurück.
+     *
+     * @param metaPathStepWithPathName
+     * @param edgeClasses
+     * @return
+     */
+    @SafeVarargs
+    protected final SimpleMetaPath[] createSimpleMetaPaths(final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
+        return SimpleMetaPathCreator.createSimpleMetaPaths(getClass(), metaPathStepWithPathName, edgeClasses);
     }
 
 }

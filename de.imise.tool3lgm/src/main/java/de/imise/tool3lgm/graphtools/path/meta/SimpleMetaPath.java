@@ -14,10 +14,27 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 public class SimpleMetaPath extends SequenceMetaPath {
 
     /**
+     * Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     * super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     */
+    private int metaPathStepWithPathName = -1;
+
+    /**
      * @param metaPaths
      */
     public SimpleMetaPath(final ElementaryMetaPath... metaPaths) {
         super(metaPaths);
+    }
+
+    /**
+     * @param metaPathStepWithPathName
+     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param metaPaths
+     */
+    public SimpleMetaPath(final int metaPathStepWithPathName, final ElementaryMetaPath... metaPaths) {
+        super(metaPathStepWithPathName < 0 ? null : metaPaths[metaPathStepWithPathName].toString(), metaPaths);
+        this.metaPathStepWithPathName = metaPathStepWithPathName;
     }
 
     /**
@@ -38,8 +55,21 @@ public class SimpleMetaPath extends SequenceMetaPath {
     }
 
     /**
+     * @param metaPathStepWithPathName
+     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param direction
+     * @param metaPaths
+     */
+    protected SimpleMetaPath(final int metaPathStepWithPathName, final Direction direction, final ElementaryMetaPath... metaPaths) {
+        super(metaPathStepWithPathName < 0 ? null : metaPaths[metaPathStepWithPathName].name, direction, metaPaths);
+        this.metaPathStepWithPathName = metaPathStepWithPathName;
+    }
+
+    /**
      * @return the startClass
      */
+    @Override
     public Class<? extends ModelElement> getStartClass() {
         return getElementaryMetaPaths().get(0).getStartClass();
     }
@@ -47,6 +77,7 @@ public class SimpleMetaPath extends SequenceMetaPath {
     /**
      * @return the endClass
      */
+    @Override
     public Class<? extends ModelElement> getEndClass() {
         List<ElementaryMetaPath> simpleMetaPath = getElementaryMetaPaths();
         return simpleMetaPath.get(simpleMetaPath.size() - 1).getEndClass();
@@ -106,7 +137,16 @@ public class SimpleMetaPath extends SequenceMetaPath {
             subMetaPathsArray[subMetaPathsArray.length - 1] = ElementaryMetaPathHandler.getMetaPath(subMetaPathsArray[subMetaPathsArray.length - 1], metaPathsArray[pathStepEndIndex].getStartClass());
         }
         return new SimpleMetaPath(subMetaPathsArray);
+    }
 
+    /**
+     * Liefert den Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     * super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     *
+     * @return
+     */
+    public int getMetaPathStepWithPathName() {
+        return metaPathStepWithPathName;
     }
 
 }
