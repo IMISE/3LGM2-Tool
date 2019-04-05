@@ -280,9 +280,9 @@ public class SequenceMetaPath extends ListMetaPath {
 
     /**
      * Liefert alle Verbindungsklassen zwischen dem MetaPfad mit dem übergebenen Index und dem darauffolgenden. Beim Index Gesamtpfadlänge -1 kommen
-     * die Endklassen des letzten Metapfades zurück, ansonsten werden immer paarweise die Endklassen des MetaPfades mit dme übergebenen Index mit den
+     * die Endklassen des letzten Metapfades zurück, ansonsten werden immer paarweise die Endklassen des MetaPfades mit dem übergebenen Index mit den
      * Startklassen des darauffolgenden Metapfades verglichen und wenn sie zuweisungskompatibel sind die speziellere der beiden zum Ergebnisset
-     * hinzzgefügt.
+     * hinzugefügt.
      * Bei Pfaden, die nur aus Elementarpfaden bestehen enthält das Set genau die Klasse (oder null), die auch bei
      * {@link #getPathStepElementClass(int)} zurück kommt.
      *
