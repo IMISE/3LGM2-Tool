@@ -12,6 +12,7 @@ import java.awt.event.MouseListener;
 import javax.swing.BorderFactory;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeCellRenderer;
@@ -95,19 +96,19 @@ public class LimitedHeightScrollTreePane extends JScrollPane {
      *            originale Einrückung und Darstellung der Linien erhalten.
      */
     public LimitedHeightScrollTreePane(final JTree tree, final int maxLines, final boolean editable, final boolean renderTreeAsList) {
+        super(tree, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         this.tree = tree;
         if (renderTreeAsList) {
             BasicTreeUI basicTreeUI = (BasicTreeUI) tree.getUI();
             basicTreeUI.setRightChildIndent(0);
             basicTreeUI.setLeftChildIndent(0); //kleinen Abstand zwischen Rand und erstem Buchstaben lassen
-            tree.setBorder(BorderFactory.createEmptyBorder(BORDER, BORDER, BORDER, BORDER));
+            tree.setBorder(BorderFactory.createEmptyBorder(0, BORDER, 0, BORDER));
             tree.putClientProperty("JTree.lineStyle", "None");
         }
         tree.setEditable(editable);
         this.maxLines = maxLines;
         singleLineHeight = maxLines > 0 ? getSingleLineHeigth() : -1; //braucht nicht berechnet werden, wenn die Komponente gar nicht in der Höhe eingeschränkt werden soll
         maxHeight = maxLines > 0 ? getHeight(maxLines) : Integer.MAX_VALUE;
-        setViewportView(tree);
     }
 
     /**
@@ -125,7 +126,7 @@ public class LimitedHeightScrollTreePane extends JScrollPane {
      * @return
      */
     private int getHeight(final int lineCount) {
-        return singleLineHeight * lineCount + 2 * BORDER + 1;
+        return singleLineHeight * lineCount + 4;
     }
 
     @Override
