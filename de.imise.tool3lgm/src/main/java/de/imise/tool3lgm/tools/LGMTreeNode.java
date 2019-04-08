@@ -2,6 +2,7 @@ package de.imise.tool3lgm.tools;
 
 import java.awt.Color;
 import java.util.HashSet;
+import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
@@ -10,14 +11,16 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.Alphabetical;
 
 /**
- * @author N.N.
+ * @author N.N. (< 2005), AXS (08.04.2019)
  */
 public class LGMTreeNode extends DefaultMutableTreeNode {
 
     private String visibleText = null;
+
     private final boolean sort;
+
     private boolean selectable = true;
-    private boolean actionByDoubleClick = false;
+
     private Color foregroundColor = Color.black;
 
     // iconState = SHOW_NORMAL_ICON setzt in TreeRenderer das für den Node
@@ -79,16 +82,14 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
             return visibleText;
         } else if (userObject != null) {
             return userObject.toString();
-        } else {
-            return "";
         }
+        return "";
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void insert(final MutableTreeNode newChild, int childIndex) {
         if (children != null && sort) {
-            childIndex = Alphabetical.getInsertPosition(children, newChild);
+            childIndex = Alphabetical.getInsertPosition((Vector<?>) children, newChild);
         }
         super.insert(newChild, childIndex);
     }
@@ -126,20 +127,6 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
      */
     public void setIconState(final int i) {
         iconState = i;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isActionByDoubleClick() {
-        return actionByDoubleClick;
-    }
-
-    /**
-     * @param b
-     */
-    public void setActionByDoubleClick(final boolean b) {
-        actionByDoubleClick = b;
     }
 
     /**
