@@ -57,8 +57,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
      * @param dialog
      * @param editable wenn <code>true</code>, dann kann man Elemente hinzufügen oder löschen und vorhandene ändern
      * @param tableDefinition Spaltendefinition (die zu den Pfaden passen sollte)
-     * @param simpleMetaPath MetaPfade, der in der Tabelle dargestellt werden soll. Davon werden alle konkreten MetaPfade gebildet, wenn er abstrakte
-     *            Kantenklassen enthält
+     * @param simpleMetaPath MetaPfade, der in der Tabelle dargestellt werden soll
      */
     public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final Collection<SimpleMetaPath> simpleMetaPaths) {
         this(dialog, editable, tableDefinition, toArray(simpleMetaPaths));
