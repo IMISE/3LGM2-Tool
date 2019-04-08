@@ -149,4 +149,17 @@ public class SimpleMetaPath extends SequenceMetaPath {
         return metaPathStepWithPathName;
     }
 
+    public final String getFullPathString() {
+        StringBuilder sb = new StringBuilder();
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        for (int i = 0; i < elementaryMetaPaths.size(); i++) {
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
+            sb.append(elementaryMetaPath.getFullName());
+            if (i + 1 < elementaryMetaPaths.size()) {
+                sb.append(" + ");
+            }
+        }
+        return sb.toString();
+    }
+
 }
