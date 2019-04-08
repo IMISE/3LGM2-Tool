@@ -7,10 +7,8 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorInstance_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheActorInstance_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInvokingInterface_IheTransaction_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInvokingInterface_InvokingInterface_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheProvidingInterface_IheTransaction_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheProvidingInterface_ProvidingInterface_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInterface_CommunicationInterface_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInterface_IheTransaction_Edge;
 
 public class IheActorInstance extends ApplicationComponent {
 
@@ -23,10 +21,8 @@ public class IheActorInstance extends ApplicationComponent {
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
         tableDefinition.addColumnEndElement(300);
         tableDefinition.addColumnPathStepName(2, "HEADER_CONNECTION_TYPE", 150);
-        SimpleMetaPath path1 = createSimpleMetaPath(2, ApplicationComponent_CommunicationInterface_Edge.class, IheInvokingInterface_InvokingInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
-        SimpleMetaPath path2 = createSimpleMetaPath(2, ApplicationComponent_CommunicationInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
-        dialog.addTablePanel(tableDefinition, path1, path2);
-
+        SimpleMetaPath[] paths = createSimpleMetaPaths(2, ApplicationComponent_CommunicationInterface_Edge.class, IheInterface_CommunicationInterface_Edge.class, IheInterface_IheTransaction_Edge.class);
+        dialog.addTablePanel(tableDefinition, paths);
 
         return dialog;
     }
