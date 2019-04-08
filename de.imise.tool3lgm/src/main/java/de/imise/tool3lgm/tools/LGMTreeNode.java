@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.tools;
 
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -15,7 +14,6 @@ import de.imise.util.Alphabetical;
  */
 public class LGMTreeNode extends DefaultMutableTreeNode {
 
-    private final ArrayList<Object> userObjects = new ArrayList<Object>(1);
     private String visibleText = null;
     private final boolean sort;
     private boolean selectable = true;
@@ -23,8 +21,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
     private Color foregroundColor = Color.black;
 
     // iconState = SHOW_NORMAL_ICON setzt in TreeRenderer das für den Node
-    // spezifische Icon,
-    // sonst wird ein Error- oder Warning-Icon gesetzt
+    // spezifische Icon, sonst wird ein Error- oder Warning-Icon gesetzt
     public static final int SHOW_NORMAL_ICON = 0;
     public static final int SHOW_ERROR_ICON = 1;
     public static final int SHOW_WARNING_ICON = 2;
@@ -36,8 +33,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
      * @param sort
      */
     public LGMTreeNode(final Object o, final boolean setTreeNode, final boolean sort) {
-        super();
-        userObjects.add(o);
+        super(o);
         if (setTreeNode && o instanceof NodeContainer) {
             ((NodeContainer) o).setTreeNode(this);
         }
@@ -58,8 +54,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
      * @param sort
      */
     public LGMTreeNode(final Object o, final String visibleText, final boolean sort) {
-        super();
-        userObjects.add(o);
+        super(o);
         this.visibleText = visibleText;
         this.sort = sort;
     }
@@ -82,8 +77,8 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
     public String toString() {
         if (visibleText != null) {
             return visibleText;
-        } else if (userObjects.get(0) != null) {
-            return userObjects.get(0).toString();
+        } else if (userObject != null) {
+            return userObject.toString();
         } else {
             return "";
         }
@@ -100,7 +95,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
 
     /**
      * Setzt die Selektierbar-Eigenschaft des Knotens und der Kinder.
-     * 
+     *
      * @param s
      */
     public void setSelectable(final boolean s) {
@@ -112,7 +107,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
 
     /**
      * Gibt zurück, ob der Node selektierbar ist
-     * 
+     *
      * @return
      */
     public boolean isSelectable() {
@@ -131,53 +126,6 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
      */
     public void setIconState(final int i) {
         iconState = i;
-    }
-
-    /**
-     * Leert die arrayList <code>userObjects</code> und fügt das übergebene
-     * Object ein.
-     * 
-     * @see javax.swing.tree.DefaultMutableTreeNode#setUserObject(java.lang.Object)
-     */
-    @Override
-    public void setUserObject(final Object o) {
-        userObjects.clear();
-        userObjects.add(o);
-    }
-
-    /**
-     * @param o
-     * @param index
-     */
-    public void setUserObject(final Object o, final int index) {
-        if (index < userObjects.size()) {
-            userObjects.set(index, o);
-        } else {
-            while (index > userObjects.size()) {
-                userObjects.add(null);
-            }
-            userObjects.add(o);
-        }
-    }
-
-    /*
-     * gibt das erste Element aus der ArrayList <code>userObjects</code> zurück.
-     * @see javax.swing.tree.DefaultMutableTreeNode#getUserObject()
-     */
-    @Override
-    public Object getUserObject() {
-        return userObjects.size() == 0 ? null : userObjects.get(0);
-    }
-
-    /**
-     * Gibt das <code>userObject</code> an der Stelle <code>index</code> aus der
-     * ArrayList <code>userObjects</code> zurück.
-     * 
-     * @param index
-     * @return
-     */
-    public Object getUserObject(final int index) {
-        return userObjects.size() <= index ? null : userObjects.get(index);
     }
 
     /**
@@ -218,7 +166,7 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
             return retVal;
         }
 
-        HashSet<Color> colors = new HashSet<Color>();
+        HashSet<Color> colors = new HashSet<>();
         if (retVal != Color.black) {
             colors.add(retVal);
         }
