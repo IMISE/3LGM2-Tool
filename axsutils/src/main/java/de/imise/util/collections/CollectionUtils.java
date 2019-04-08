@@ -499,32 +499,6 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * @param row
-     * @return
-     * @throws ArrayIndexOutOfBoundsException
-     * @throws IllegalArgumentException
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> T[] toArray(final Collection<? extends T> row) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
-
-        if (row == null) {
-            return null;
-        }
-        row.toArray();
-
-        int n = row.size();
-        T[] array = (T[]) new Object[n];
-
-        // Zeilen-/Spaltenzähler
-        int i = 0;
-        for (T value : row) {
-            array[i] = value;
-            i++;
-        }
-        return array;
-    }
-
-    /**
      * Wandelt das <code>objectArray</code> in ein <code>String[][]</code> um.<br>
      * Dabei wird auf jedes {@link Object} aus <code>objectArray</code> {@link Object#toString()} angewendet und das Resultat an die entsprechende
      * Stelle im <code>String[][]</code> geschrieben.
