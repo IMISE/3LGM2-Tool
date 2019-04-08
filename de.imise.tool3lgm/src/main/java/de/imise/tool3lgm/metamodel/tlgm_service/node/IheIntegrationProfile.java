@@ -29,7 +29,7 @@ public class IheIntegrationProfile extends Node {
         tableDefinition.addColumnOptional(1, 50);
         SimpleMetaPath path1 = createSimpleMetaPath(2, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
         SimpleMetaPath path2 = createSimpleMetaPath(2, IheIntegrationProfile_IheActor_Edge.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
-        dialog.addTablePanel(true, tableDefinition, path1, path2);
+        dialog.addTablePanel(tableDefinition, path1, path2);
 
         return dialog;
     }

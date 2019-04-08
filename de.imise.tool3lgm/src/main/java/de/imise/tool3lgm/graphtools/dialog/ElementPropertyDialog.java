@@ -571,13 +571,14 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableDefinition tableDefinition, final Class<? extends Edge>... edgeClasses) {
-        SimpleMetaPath simpleMetaPath = createSimpleMetaPath(null, edgeClasses);
-        addTab(new ConnectedElementsTablePanel(this, isEditable(simpleMetaPath), tableDefinition, simpleMetaPath));
+    @SafeVarargs
+    public final void addTablePanel(final ConnectedElementsTableDefinition tableDefinition, final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
+        SimpleMetaPath[] simpleMetaPaths = SimpleMetaPathCreator.createSimpleMetaPaths(modelElement.getClass(), metaPathStepWithPathName, edgeClasses);
+        addTablePanel(tableDefinition, simpleMetaPaths);
     }
 
-    public void addTablePanel(final boolean editableOnlyInExpertMode, final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
+    @SafeVarargs
+    public final void addTablePanel(final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
         boolean editable = true;
         for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
             if (!isEditable(simpleMetaPath)) {

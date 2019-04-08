@@ -4,7 +4,6 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheActor_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheDomain_Edge;
@@ -37,8 +36,7 @@ public class IheTransaction extends Node {
         //        SimpleMetaPath path1 = createSimpleMetaPath(0, IheInvokingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
         //        SimpleMetaPath path2 = createSimpleMetaPath(0, IheProvidingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
         //        dialog.addTablePanel(true, tableDefinition, path1, path2);
-        SimpleMetaPath[] iheActorToIheTransactionPaths = createSimpleMetaPaths(0, IheInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
-        dialog.addTablePanel(true, tableDefinition, iheActorToIheTransactionPaths);
+        dialog.addTablePanel(tableDefinition, 0, IheInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
 
         return dialog;
     }
