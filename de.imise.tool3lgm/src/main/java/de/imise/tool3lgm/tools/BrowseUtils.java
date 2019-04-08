@@ -40,7 +40,12 @@ public class BrowseUtils {
                 File file = new File(urlOrPath);
                 Desktop.getDesktop().open(file);
             } catch (Exception ex) {
-                Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
+                try {
+                    URI uri = new URI("http://" + urlOrPath);
+                    Desktop.getDesktop().browse(uri);
+                } catch (Exception exx) {
+                    Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
+                }
             }
         }
     }
