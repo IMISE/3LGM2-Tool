@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
 
@@ -56,9 +57,20 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
      * @param dialog
      * @param editable wenn <code>true</code>, dann kann man Elemente hinzufügen oder löschen und vorhandene ändern
      * @param tableDefinition Spaltendefinition (die zu den Pfaden passen sollte)
+     * @param simpleMetaPath MetaPfade, der in der Tabelle dargestellt werden soll. Davon werden alle konkreten MetaPfade gebildet, wenn er abstrakte
+     *            Kantenklassen enthält
+     */
+    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final Collection<SimpleMetaPath> simpleMetaPaths) {
+        this(dialog, editable, tableDefinition, toArray(simpleMetaPaths));
+    }
+
+    /**
+     * @param dialog
+     * @param editable wenn <code>true</code>, dann kann man Elemente hinzufügen oder löschen und vorhandene ändern
+     * @param tableDefinition Spaltendefinition (die zu den Pfaden passen sollte)
      * @param simpleMetaPaths MetaPfade, die in der Tabelle dargestellt werden sollen
      */
-    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
+    private ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
         super(dialog, simpleMetaPaths[0]); // den muss es geben!
         metaPaths = new UnionMetaPath(simpleMetaPaths);
         this.tableDefinition = tableDefinition;
@@ -71,6 +83,11 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         }
 
         internalInit(editable);
+    }
+
+    private static SimpleMetaPath[] toArray(final Collection<SimpleMetaPath> simpleMetaPaths) {
+        SimpleMetaPath[] simpleMetaPathsArray = new SimpleMetaPath[simpleMetaPaths.size()];
+        return simpleMetaPaths.toArray(simpleMetaPathsArray);
     }
 
     /**

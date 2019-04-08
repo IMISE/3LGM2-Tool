@@ -21,8 +21,7 @@ public class IheActorInstance extends ApplicationComponent {
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
         tableDefinition.addColumnEndElement(300);
         tableDefinition.addColumnPathStepName(2, "HEADER_CONNECTION_TYPE", 150);
-        SimpleMetaPath[] paths = createSimpleMetaPaths(2, ApplicationComponent_CommunicationInterface_Edge.class, IheInterface_CommunicationInterface_Edge.class, IheInterface_IheTransaction_Edge.class);
-        dialog.addTablePanel(tableDefinition, paths);
+        dialog.addTablePanel(tableDefinition, 2, ApplicationComponent_CommunicationInterface_Edge.class, IheInterface_CommunicationInterface_Edge.class, IheInterface_IheTransaction_Edge.class);
 
         return dialog;
     }

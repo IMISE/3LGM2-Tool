@@ -95,6 +95,25 @@ public class SimpleMetaPathCreator {
     }
 
     /**
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} ausgehend von der Startklasse, die übergeben wurde. Die
+     * Richtungen und Endklasse werden sukkessive abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
+     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     *
+     * @param startClass
+     * @param metaPathStepWithPathName
+     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
+     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @return
+     * @throws IllegalArgumentException
+     */
+    @SafeVarargs
+    public static final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final int metaPathStepWithPathName, final Class<? extends Edge>... associations) throws IllegalArgumentException {
+        return createSimpleMetaPath(startClass, null, metaPathStepWithPathName, associations);
+    }
+
+    /**
      * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
      * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
      * rückwärts dreht, dann wird immer vorwärts angenommen.
@@ -114,6 +133,7 @@ public class SimpleMetaPathCreator {
             throws IllegalArgumentException {
         return createSimpleMetaPath(startClass, endClass, null, metaPathStepWithPathName, associations);
     }
+
     /**
      * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
      * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder

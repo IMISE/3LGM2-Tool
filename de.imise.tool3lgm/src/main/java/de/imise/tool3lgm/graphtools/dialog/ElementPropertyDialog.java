@@ -13,7 +13,10 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
@@ -573,20 +576,31 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     @SafeVarargs
     public final void addTablePanel(final ConnectedElementsTableDefinition tableDefinition, final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
-        SimpleMetaPath[] simpleMetaPaths = SimpleMetaPathCreator.createSimpleMetaPaths(modelElement.getClass(), metaPathStepWithPathName, edgeClasses);
-        addTablePanel(tableDefinition, simpleMetaPaths);
+        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(modelElement.getClass(), metaPathStepWithPathName, edgeClasses);
+        addTablePanel(tableDefinition, simpleMetaPath);
+    }
+
+    public final void addTablePanel(final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath simpleMetaPath) {
+        addTablePanelInternal(tableDefinition, simpleMetaPath);
     }
 
     @SafeVarargs
-    public final void addTablePanel(final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
+    private final void addTablePanelInternal(final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
         boolean editable = true;
+        Set<SimpleMetaPath> allDifferentSimpleMetaPaths = new HashSet<>();
         for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
-            if (!isEditable(simpleMetaPath)) {
-                editable = false;
-                break;
+            Collection<SimpleMetaPath> simpleMetaPathsNonAbstract = SimpleMetaPathCreator.getSimpleMetaPathsNonAbstract(simpleMetaPath);
+            allDifferentSimpleMetaPaths.addAll(simpleMetaPathsNonAbstract);
+            if (editable) {
+                for (SimpleMetaPath nonAbstractSimpleMetaPaths : simpleMetaPathsNonAbstract) {
+                    if (!isEditable(nonAbstractSimpleMetaPaths)) {
+                        editable = false;
+                        break;
+                    }
+                }
             }
         }
-        addTab(new ConnectedElementsTablePanel(this, editable, tableDefinition, simpleMetaPaths));
+        addTab(new ConnectedElementsTablePanel(this, editable, tableDefinition, allDifferentSimpleMetaPaths));
     }
 
     //wird im Moment nicht gebraucht
