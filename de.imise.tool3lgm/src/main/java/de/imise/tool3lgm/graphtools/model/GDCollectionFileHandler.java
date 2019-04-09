@@ -25,7 +25,7 @@ import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.tools.LGMInputStream;
+import de.imise.tool3lgm.tools.StayOpenFileInputStream;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xml.LGMVersionException;
 import de.imise.tool3lgm.xml.ToolXMLParser;
@@ -44,6 +44,12 @@ public class GDCollectionFileHandler {
 
     /** the file to load collection from or to save collection in */
     private RandomAccessFile randomAccessFile;
+
+    /**
+     * der InputStream, der das RandomAccessFile einliest. Er darf nicht geschlossen werden, wenn über das RandomAccessFile noch gespeichert werden
+     * soll und muss am Ende mit forceClose() tatsächlich geschlossen werden
+     */
+    private StayOpenFileInputStream randomAccessFileInputStream;
 
     private File file;
 
@@ -161,6 +167,9 @@ public class GDCollectionFileHandler {
             if (randomAccessFile != null) {
                 randomAccessFile.close();
             }
+            if (randomAccessFileInputStream != null) {
+                randomAccessFileInputStream.forceClose();
+            }
         } catch (Exception exp) {
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), exp);
         }
@@ -222,6 +231,7 @@ public class GDCollectionFileHandler {
     /**
      * Load collection from file which is specified in field file
      *
+     * @param file File to load/import in the corresponding model. If <code>null</code>, the randomAccesFile of this will be loaded in this model.
      * @return true if reading was successful
      * @throws Exception; throws all exceptions happen during reading
      * @author Thomas Rudert
@@ -241,26 +251,25 @@ public class GDCollectionFileHandler {
             randomAccessFile.seek(0);
             String line = randomAccessFile.readLine();
             if (line != null) {
-                LGMInputStream fis = new LGMInputStream(randomAccessFile.getFD());
+                randomAccessFileInputStream = new StayOpenFileInputStream(randomAccessFile.getFD());
                 if (line.startsWith("<!--ziped Tool3lgmFile-->")) {
-                    readingSuccessful = loadZipFile(fis);
+                    readingSuccessful = loadZipFile(randomAccessFileInputStream);
                     if (readingSuccessful) {
                         isZipFile = true;
                     }
                 } else if (line.startsWith("PK")) {
-                    fis.getChannel().position(0);
-                    readingSuccessful = loadZipFile(fis);
+                    randomAccessFileInputStream.getChannel().position(0);
+                    readingSuccessful = loadZipFile(randomAccessFileInputStream);
                     if (readingSuccessful) {
                         isZipFile = true;
                     }
                 } else {
-                    fis.getChannel().position(0);
-                    readingSuccessful = loadFromFileInputStream(fis);
+                    randomAccessFileInputStream.getChannel().position(0);
+                    readingSuccessful = loadFromFileInputStream(randomAccessFileInputStream);
                     if (readingSuccessful) {
                         isZipFile = false;
                     }
                 }
-                fis.close();
             } else {
                 randomAccessFile.close();
                 throw new IOException("Could not read file...");
@@ -413,10 +422,7 @@ public class GDCollectionFileHandler {
         if (tempFile.length() <= 0) {
             throw new IOException("Empty file!");
         }
-
-        @SuppressWarnings("resource")
-        //der wird geclosed in forceClose()
-        LGMInputStream tmpIStream = new LGMInputStream(tempFile);
+        FileInputStream tmpIStream = new FileInputStream(tempFile);
         randomAccessFile.seek(0);
         randomAccessFile.setLength(0);
 
@@ -431,8 +437,7 @@ public class GDCollectionFileHandler {
         } else {
             randomAccessFile.write(data);
         }
-        tmpIStream.forceClose();
-
+        tmpIStream.close();
         tempFile.delete();
     }
 
