@@ -25,6 +25,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -236,6 +237,17 @@ public final class ModelConstants {
      */
     public static boolean isOnlyExpertModeEditable(final Class<? extends ModelElement> elementClass) {
         return getOnlyExpertModeEditableNodes().contains(elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse aktuell editierbar ist. Das ist sie, wenn sich der Baukasten im ExpertMode befindet oder
+     * wenn er sich nicht im ExpertMode befindet und die Klasse keine Klasse aus den {@link #getOnlyExpertModeEditableNodes()} ist.
+     *
+     * @param elementClass
+     * @return
+     */
+    public static boolean isEditable(final Class<? extends ModelElement> elementClass) {
+        return Static.isExpertMode() || !isOnlyExpertModeEditable(elementClass);
     }
 
     ////////////
@@ -674,6 +686,19 @@ public final class ModelConstants {
     //			}
     //		}
     //	}
+
+    public static final Iterable<Class<? extends ModelElement>> getCreatableLayerNodes(final int layer) {
+        if (layer == DOMAIN_LAYER) {
+            return CREATABLE_DOMAIN_LAYER_NODES;
+        }
+        if (layer == LOGICAL_LAYER) {
+            return CREATABLE_LOGICAL_LAYER_NODES;
+        }
+        if (layer == PHYSICAL_LAYER) {
+            return CREATABLE_PHYSICAL_LAYER_NODES;
+        }
+        return EMPTY_ELEMENT_CLASS_COLLECTION;
+    }
 
     /**
      * Liefert <code>true</code>, wenn die übergebenen Klasse eine Knotenklassen ist, die in jedem Teilmodell vorkommt, also nicht in jedem Teilmodell

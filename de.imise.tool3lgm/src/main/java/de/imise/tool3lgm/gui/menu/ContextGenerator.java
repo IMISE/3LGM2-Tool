@@ -10,9 +10,6 @@ import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getFullBackwardMe
 import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getFullForwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getFullMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_DOMAIN_LAYER_NODES;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_LOGICAL_LAYER_NODES;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
@@ -128,11 +125,6 @@ import de.imise.util.swing.menu.MenuScroller;
  * @author N.N., Thomas, AXS
  */
 public class ContextGenerator implements PopupMenuListener, ActionListener {
-
-    /**
-     * COMMENTME
-     */
-    static JMenu new_logical_tree, new_domain_tree, new_physical_tree;
 
     /**
      * COMMENTME
@@ -265,24 +257,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     // --- Methoden zur Statusveraenderung --- Ende ---
 
-    private JMenu createLayerMenu(final Iterable<Class<? extends ModelElement>> creatableLayerNodes) {
-        JMenu layerMenu = new JMenu(getResString("el_neu"));
-        for (Class<? extends ModelElement> elementClass : creatableLayerNodes) {
-            JMenuItem item = new JMenuItem(ElementsNameBuilder.getDisplayableName(elementClass));
-            item.addActionListener(this);
-            item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + elementClass.getName());
-            layerMenu.add(item);
-        }
-        return layerMenu;
-    }
-
     /**
      *
      */
     private void init() {
-        new_domain_tree = createLayerMenu(CREATABLE_DOMAIN_LAYER_NODES);
-        new_logical_tree = createLayerMenu(CREATABLE_LOGICAL_LAYER_NODES);
-        new_physical_tree = createLayerMenu(CREATABLE_PHYSICAL_LAYER_NODES);
         new_text = getItem("text_neu", MODEL_ACTION_CREATE_NODE, Textfield.class.getName());
 
         properties = getItem(ActionLibrary.ContextActions.ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG);
@@ -1116,26 +1094,21 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     }
 
     /**
-     * @param menu
-     * @param enabled
-     * @return null, wenn enabled == false, sonst menu
-     */
-    private JMenu setItemsEnabled(final JMenu menu, final boolean enabled) {
-        for (int i = 0; i < menu.getItemCount(); i++) {
-            menu.getItem(i).setEnabled(enabled);
-        }
-        return enabled ? menu : null;
-    }
-
-    /**
      * @return
      */
     private JMenu getNewKnotMenu() {
         int activeLayer = doc.getCollection().getActiveLayer();
-        JMenu menu = setItemsEnabled(new_domain_tree, activeLayer == ModelConstants.DOMAIN_LAYER);
-        menu = menu != null ? menu : setItemsEnabled(new_logical_tree, activeLayer == ModelConstants.LOGICAL_LAYER);
-        menu = menu != null ? menu : setItemsEnabled(new_physical_tree, activeLayer == ModelConstants.PHYSICAL_LAYER);
-        return menu != null ? menu : new_domain_tree;
+        Iterable<Class<? extends ModelElement>> creatableLayerNodes = ModelConstants.getCreatableLayerNodes(activeLayer);
+        JMenu layerMenu = new JMenu(getResString("el_neu"));
+        for (Class<? extends ModelElement> elementClass : creatableLayerNodes) {
+            if (ModelConstants.isEditable(elementClass)) {
+                JMenuItem item = new JMenuItem(ElementsNameBuilder.getDisplayableName(elementClass));
+                item.addActionListener(this);
+                item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + elementClass.getName());
+                layerMenu.add(item);
+            }
+        }
+        return layerMenu;
     }
 
     /**
