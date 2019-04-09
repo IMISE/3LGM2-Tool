@@ -27,7 +27,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.tools.ElementContainerTreeNode;
 import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.tool3lgm.tools.StringTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
@@ -68,7 +70,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         GridBagConstraints constraints = new GridBagConstraints();
 
         JLabel label = new JLabel(getResString("verb"));
-        root = new LGMTreeNode(getResString("verb"), false);
+        root = new StringTreeNode(getResString("verb"));
         model = new DefaultTreeModel(root);
         tree = new JTree(model);
         tree.setRootVisible(false);
@@ -109,13 +111,13 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         ModelElement modelElement = getModelElement();
         List<ElementContainer> all = modelElement.getConnectedContainer(searchElementClass, mainDoc);
         for (int m = 0; m < all.size(); m++) {
-            LGMTreeNode node = new LGMTreeNode(all.get(m), false);
+            LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
             root.add(node);
         }
         if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS)) {
             all = ((Node) modelElement).getPartConnectedContainer(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
-                LGMTreeNode node = new LGMTreeNode(all.get(m), false);
+                LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
                 node.setSelectable(false);
                 root.add(node);
             }
@@ -123,7 +125,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS)) {
             all = ((Node) modelElement).getParentConnectedContainer(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
-                LGMTreeNode node = new LGMTreeNode(all.get(m), false);
+                LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
                 node.setSelectable(false);
                 root.add(node);
             }

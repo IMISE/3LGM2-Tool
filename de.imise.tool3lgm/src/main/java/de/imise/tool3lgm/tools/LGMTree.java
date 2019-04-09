@@ -51,7 +51,7 @@ public class LGMTree extends CorrectSelectionTree {
             if (showPartOfHierarchy && !force && !kc.getElement().getParentElements().isEmpty()) {
                 return null;
             }
-            LGMTreeNode elementNode = new LGMTreeNode(kc, false, true);
+            LGMTreeNode elementNode = new ElementContainerTreeNode(kc, false, true);
             if (excludeChildren != null && excludeChildren.contains(kc)) {
                 elementNode.setSelectable(false);
             }
@@ -79,7 +79,7 @@ public class LGMTree extends CorrectSelectionTree {
                 continue;
             }
 
-            LGMTreeNode childNode = new LGMTreeNode(pc, false, true);
+            LGMTreeNode childNode = new ElementContainerTreeNode(pc, false, true);
             childNode.setSelectable(childrenAreSelectable);
             if (excludeChildren != null && excludeChildren.contains(pc)) {
                 childNode.setSelectable(false);

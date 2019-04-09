@@ -25,7 +25,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.tool3lgm.tools.ElementContainerTreeNode;
 
 /**
  * @author N.N.
@@ -79,7 +79,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     /**
      * COMMENTME
      */
-    protected LGMTreeNode treeNode = null;
+    protected ElementContainerTreeNode treeNode = null;
 
     /**
      *
@@ -398,14 +398,14 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     /**
      * @param node
      */
-    public void setTreeNode(final LGMTreeNode node) {
+    public void setTreeNode(final ElementContainerTreeNode node) {
         treeNode = node;
     }
 
     /**
      * @return
      */
-    public LGMTreeNode getTreeNode() {
+    public ElementContainerTreeNode getTreeNode() {
         return treeNode;
     }
 

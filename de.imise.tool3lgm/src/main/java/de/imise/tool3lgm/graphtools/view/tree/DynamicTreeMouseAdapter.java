@@ -23,9 +23,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.tools.BrowseUtils;
+import de.imise.tool3lgm.tools.ElementContainerTreeNode;
 import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.tool3lgm.tools.UserFieldTreeNode;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.event.ExtendedAction;
 
@@ -48,11 +48,9 @@ public class DynamicTreeMouseAdapter implements MouseListener {
     }
 
     /**
-     * COMMENTME
+     * für die Kommunikation zwischen mousePressed und mouseClicked
      */
-    private Object tmpUserObject = null;
-
-    // für die Kommunikation zwischen mousePressed und mouseClicked
+    private LGMTreeNode selectedNode = null;
 
     @Override
     public void mouseClicked(final MouseEvent e) {
@@ -70,9 +68,8 @@ public class DynamicTreeMouseAdapter implements MouseListener {
             //Component source, int id, long when, int modifiers,
             //int keyCode, char keyChar, int keyLocation
             tree.dispatchEvent(new KeyEvent(tree, KeyEvent.KEY_RELEASED, 0l, 0, KeyEvent.VK_ALT, KeyEvent.CHAR_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD));
-            if (left_button && tmpUserObject != null && tmpUserObject instanceof HyperlinkString) {
-                String value = ((HyperlinkString) tmpUserObject).getValue();
-                BrowseUtils.browse(value);
+            if (left_button && selectedNode != null && selectedNode instanceof UserFieldTreeNode) {
+                ((UserFieldTreeNode) selectedNode).openHyperlink();
                 return;
             }
             Static.getTool().changeToLinked(doc);
@@ -85,8 +82,10 @@ public class DynamicTreeMouseAdapter implements MouseListener {
             return;
         }
 
-        if (left_button && tmpUserObject != null && tmpUserObject instanceof NodeContainer) {
-            doc.showPropertyDialog(((NodeContainer) tmpUserObject).getElement());
+        if (left_button && selectedNode != null && selectedNode instanceof ElementContainerTreeNode) {
+            ElementContainer ec = ((ElementContainerTreeNode) selectedNode).getUserObject();
+            ModelElement me = ec.getElement();
+            doc.showPropertyDialog(me);
         }
     }
 
@@ -133,8 +132,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
             }
         }
         if (path != null) {
-            Object knot = ((LGMTreeNode) path.getLastPathComponent()).getUserObject();
-            tmpUserObject = knot;
+            selectedNode = (LGMTreeNode) path.getLastPathComponent();
             Object lastPathComponent = path.getLastPathComponent();
             if (tree.isLayerNode(lastPathComponent)) {
                 if (right_button) {
@@ -148,9 +146,11 @@ public class DynamicTreeMouseAdapter implements MouseListener {
 
             // TODO:FST: Actions für Item aus GlobalActionLibrary holen und setzen
             TreePath parent = path.getParentPath();
+            //wenn der selektierte Knoten kein ElementContainer-Knoten ist, bleibt die Variable null
+            ElementContainerTreeNode selectedElementContainerTreeNode = selectedNode instanceof ElementContainerTreeNode ? (ElementContainerTreeNode) selectedNode : null;
             if (parent != null) {
                 lastPathComponent = parent.getLastPathComponent();
-                if (!(knot instanceof ElementContainer)) {
+                if (selectedElementContainerTreeNode == null) { //kein ElementContainer selektiert, sondern etwas anderes
                     if (right_button) {
                         String label = path.getLastPathComponent().toString();
                         Class<? extends ModelElement> elementClass = null;
@@ -169,12 +169,12 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                     }
                 }
             }
-            if (knot instanceof ElementContainer) {
+            if (selectedElementContainerTreeNode != null) { //ElementContainer ist selektiert
                 if (right_button) {
-                    ElementContainer elem = (ElementContainer) knot;
+                    ElementContainer ec = selectedElementContainerTreeNode.getUserObject();
                     //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
                     //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
-                    elem.getGraphDocument().addToSelection(elem, DynamicTree.PID);
+                    ec.getGraphDocument().addToSelection(ec, DynamicTree.PID);
                     JPopupMenu pm = Tool3lgm.getContextGenerator().getKnotContextMenu(tree);
                     if (pm != null) {
                         pm.show(tree, xin + 3, yin + 3);

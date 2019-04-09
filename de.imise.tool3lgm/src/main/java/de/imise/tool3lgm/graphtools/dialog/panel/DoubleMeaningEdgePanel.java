@@ -27,6 +27,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.tool3lgm.tools.StringTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.StringUtils;
@@ -75,7 +76,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         //hier niemals das this löschen, weil die globale searchElementClass im super-Konsturktor richtig gesetzt wird
         boolean showRootHandles = ModelConstants.canHaveParts(this.searchElementClass);
 
-        loroot = new LGMTreeNode("loroot", false);
+        loroot = new StringTreeNode("loroot");
         lomodel = new DefaultTreeModel(loroot);
         lotree = new LGMTree(lomodel, mainDoc);
         lotree.setRootVisible(false);
@@ -87,7 +88,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         String lulabeltext = StringUtils.capitalizeFirstChar(getEdgeDisplayName(ConnectionState.FORWARD));
         JLabel lulabel = new JLabel(lulabeltext);
 
-        luroot = new LGMTreeNode("luroot", false);
+        luroot = new StringTreeNode("luroot");
         lumodel = new DefaultTreeModel(luroot);
         lutree = new LGMTree(lumodel, mainDoc);
         lutree.setRootVisible(false);
@@ -113,7 +114,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         add(this, sp2, constraints, 0, 3, 1, 1);
 
         if (editable) {
-            roroot = new LGMTreeNode("roroot", false);
+            roroot = new StringTreeNode("roroot");
             romodel = new DefaultTreeModel(roroot);
             rotree = new LGMTree(romodel, mainDoc);
             rotree.setRootVisible(false);
@@ -125,7 +126,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             String unconnected = getResString("frei");
             rolabel = new JLabel(unconnected);
             rulabel = new JLabel(unconnected);
-            ruroot = new LGMTreeNode("ruroot", false);
+            ruroot = new StringTreeNode("ruroot");
             rumodel = new DefaultTreeModel(ruroot);
             rutree = new LGMTree(rumodel, mainDoc);
             rutree.setRootVisible(false);

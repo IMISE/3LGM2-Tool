@@ -47,7 +47,9 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
+import de.imise.tool3lgm.tools.ElementContainerTreeNode;
 import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.tool3lgm.tools.StringTreeNode;
 
 /**
  * 24.10.2018: Dieses Panel funktioniert im Moment überhaupt nicht mehr richtig. Die Aufgaben des Prozesses werden alphabetisch sortiert und die
@@ -236,10 +238,10 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         ModelElement me = ((NodeContainer) aufgabenContainerNode.getUserObject()).getElement();
         List<ElementContainer> ots = me.getConnectedContainer(Objekttyp.class, doc, null, BACKWARD, false);
         if (ots.size() > 0) {
-            LGMTreeNode tmpNode = new LGMTreeNode(getResString("AufObjVerbindung_f_b"), false);
+            LGMTreeNode tmpNode = new StringTreeNode(getResString("AufObjVerbindung_f_b"));
             tmpNode.setSelectable(false);
             for (ElementContainer ot : ots) {
-                LGMTreeNode otNode = new LGMTreeNode(ot, false);
+                LGMTreeNode otNode = new ElementContainerTreeNode(ot, false, true);
                 otNode.setSelectable(false);
                 tmpNode.add(otNode);
             }
@@ -247,10 +249,10 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         }
         ots = me.getConnectedContainer(Objekttyp.class, doc, null, FORWARD, false);
         if (ots.size() > 0) {
-            LGMTreeNode tmpNode = new LGMTreeNode(getResString("AufObjVerbindung_f_f"), false);
+            LGMTreeNode tmpNode = new StringTreeNode(getResString("AufObjVerbindung_f_f"));
             tmpNode.setSelectable(false);
             for (ElementContainer ot : ots) {
-                LGMTreeNode otNode = new LGMTreeNode(ot, false);
+                LGMTreeNode otNode = new ElementContainerTreeNode(ot, false, true);
                 otNode.setSelectable(false);
                 tmpNode.add(otNode);
             }

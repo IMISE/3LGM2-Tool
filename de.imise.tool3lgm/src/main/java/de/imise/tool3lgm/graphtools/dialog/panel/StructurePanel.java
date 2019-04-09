@@ -28,6 +28,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.tool3lgm.tools.StringTreeNode;
 import de.imise.util.swing.SwingUtils;
 
 /**
@@ -63,9 +64,11 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     }
 
     private void internalInit() {
+        ModelElement me = getModelElement();
+        String name = me.getName();
         // lotree
         JLabel lolabel = new JLabel(getResString("ueberg"));
-        loroot = new LGMTreeNode(getModelElement().getName(), false);
+        loroot = new StringTreeNode(name);
         lomodel = new DefaultTreeModel(loroot);
         lotree = new LGMTree(lomodel, mainDoc);
         lotree.setName("lotree");
@@ -77,7 +80,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
 
         // lutree
         JLabel lulabel = new JLabel(getResString("unterg"));
-        luroot = new LGMTreeNode(getModelElement().getName(), false);
+        luroot = new StringTreeNode(name);
         lumodel = new DefaultTreeModel(luroot);
         lutree = new LGMTree(lumodel, mainDoc);
         lutree.setName("lutree");
@@ -105,7 +108,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
 
         // rtree
         rlabel = new JLabel(getResString("frei"));
-        rroot = new LGMTreeNode(getResString("frei"), false);
+        rroot = new StringTreeNode(getResString("frei"));
         rmodel = new DefaultTreeModel(rroot);
         rtree = new LGMTree(rmodel, mainDoc);
         rtree.setName("rtree");

@@ -7,13 +7,12 @@ import java.util.Vector;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 
-import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.Alphabetical;
 
 /**
  * @author N.N. (< 2005), AXS (08.04.2019)
  */
-public class LGMTreeNode extends DefaultMutableTreeNode {
+public abstract class LGMTreeNode extends DefaultMutableTreeNode {
 
     private String visibleText = null;
 
@@ -33,22 +32,17 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
     /**
      * @param o
      * @param setTreeNode
-     * @param sort
      */
-    public LGMTreeNode(final Object o, final boolean setTreeNode, final boolean sort) {
-        super(o);
-        if (setTreeNode && o instanceof NodeContainer) {
-            ((NodeContainer) o).setTreeNode(this);
-        }
-        this.sort = sort;
+    protected LGMTreeNode(final Object o) {
+        this(o, true);
     }
 
     /**
      * @param o
-     * @param setTreeNode
+     * @param sort
      */
-    public LGMTreeNode(final Object o, final boolean setTreeNode) {
-        this(o, setTreeNode, true);
+    public LGMTreeNode(final Object o, final boolean sort) {
+        this(o, null, sort);
     }
 
     /**
@@ -178,4 +172,5 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
 
         return retVal;
     }
+
 }

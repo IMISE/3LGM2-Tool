@@ -38,8 +38,10 @@ import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.tools.ElementContainerTreeNode;
 import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.tool3lgm.tools.StringTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.StringUtils;
@@ -119,7 +121,10 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
 
         JLabel ltreeLabel = westLabel;
-        lroot = new LGMTreeNode(getModelElement().getContainer(mainDoc), false, getSortLeftTreeRootChildrenAlphabetical());
+        ModelElement me = getModelElement();
+        ElementContainer ec = me.getContainer(mainDoc);
+        boolean sortLeftTree = getSortLeftTreeRootChildrenAlphabetical();
+        lroot = new ElementContainerTreeNode(ec, false, sortLeftTree);
         lmodel = new DefaultTreeModel(lroot);
         ltree = new LGMTree(lmodel, mainDoc);
         ltree.setRootVisible(false);
@@ -148,7 +153,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             String rtreeLabelString = getResString("frei");
             rtreeLabelString = StringUtils.capitalizeFirstChar(rtreeLabelString);
             rLabel = new JLabel(rtreeLabelString);
-            rroot = new LGMTreeNode(rtreeLabelString, false);
+            rroot = new StringTreeNode(rtreeLabelString);
             rmodel = new DefaultTreeModel(rroot);
             rtree = new LGMTree(rmodel, mainDoc);
             rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
