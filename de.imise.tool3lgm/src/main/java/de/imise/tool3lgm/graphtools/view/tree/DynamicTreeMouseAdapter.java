@@ -17,16 +17,15 @@ import javax.swing.tree.TreePath;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
-import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.event.ExtendedAction;
 
 public class DynamicTreeMouseAdapter implements MouseListener {
@@ -144,32 +143,18 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                 return;
             }
 
-            // TODO:FST: Actions für Item aus GlobalActionLibrary holen und setzen
-            TreePath parent = path.getParentPath();
             //wenn der selektierte Knoten kein ElementContainer-Knoten ist, bleibt die Variable null
             ElementContainerTreeNode selectedElementContainerTreeNode = selectedNode instanceof ElementContainerTreeNode ? (ElementContainerTreeNode) selectedNode : null;
-            if (parent != null) {
-                lastPathComponent = parent.getLastPathComponent();
-                if (selectedElementContainerTreeNode == null) { //kein ElementContainer selektiert, sondern etwas anderes
-                    if (right_button) {
-                        String label = path.getLastPathComponent().toString();
-                        Class<? extends ModelElement> elementClass = null;
-                        for (Class<? extends ModelElement> creatableElementClass : CollectionUtils.getCommonIterable(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES, ModelConstants.CREATABLE_LOGICAL_LAYER_NODES,
-                                ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES)) {
-                            String displayName = ElementsNameBuilder.getDisplayableName(creatableElementClass);
-                            if (displayName.equals(label)) {
-                                elementClass = creatableElementClass;
-                                break;
-                            }
+            if (selectedElementContainerTreeNode == null) { //kein ElementContainer selektiert, sondern etwas anderes
+                if (right_button) {
+                    if (selectedNode instanceof ElementClassTreeNode) { //Klassenknoten?
+                        Class<? extends ModelElement> elementClass = ((ElementClassTreeNode) selectedNode).getUserObject();
+                        if (ModelConstants.isEditable(elementClass)) {
+                            showNewInstanceContextMenu(elementClass.getSimpleName(), xin + 3, yin + 3);
                         }
-                        if (elementClass == null) {
-                            return;
-                        }
-                        showNewInstanceContextMenu(elementClass.getSimpleName(), xin + 3, yin + 3);
                     }
                 }
-            }
-            if (selectedElementContainerTreeNode != null) { //ElementContainer ist selektiert
+            } else { //ElementContainer ist selektiert
                 if (right_button) {
                     ElementContainer ec = selectedElementContainerTreeNode.getUserObject();
                     //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
@@ -179,7 +164,6 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                     if (pm != null) {
                         pm.show(tree, xin + 3, yin + 3);
                     }
-                    return;
                 }
             }
         }
