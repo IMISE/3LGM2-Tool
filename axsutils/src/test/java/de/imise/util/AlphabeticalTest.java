@@ -5,6 +5,8 @@ import static org.testng.Assert.assertNotNull;
 
 import org.testng.annotations.Test;
 
+import de.imise.util.pair.Pair;
+
 public class AlphabeticalTest {
 
     @Test

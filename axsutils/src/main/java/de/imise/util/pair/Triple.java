@@ -1,4 +1,4 @@
-package de.imise.util;
+package de.imise.util.pair;
 
 /**
  * Repräsentation eines geordneten Triples.

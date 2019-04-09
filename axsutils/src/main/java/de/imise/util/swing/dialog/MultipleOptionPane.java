@@ -17,7 +17,7 @@ import javax.swing.JSeparator;
 
 import com.google.common.base.Strings;
 
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 
 /**
  * Stellt einen Dialog bereit, der untereinander CheckBoxen für übergebene Optionen darstellt,

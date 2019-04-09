@@ -1,7 +1,7 @@
 /*
  * Created on 23.04.2004
  */
-package de.imise.util;
+package de.imise.util.pair;
 
 /**
  * @author AXS

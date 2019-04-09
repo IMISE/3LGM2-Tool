@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 
 import com.google.common.base.Strings;
 
+import de.imise.util.pair.Pair;
+
 public class StringUtils {
 
     /**

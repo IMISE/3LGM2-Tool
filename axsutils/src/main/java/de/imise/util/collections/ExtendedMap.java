@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 
 /**
  * Erweiterungs-Klasse der {@link HashMap}.

@@ -12,7 +12,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 
 /**
  * Erweiterungsklasse zu {@link AbstractAction}
