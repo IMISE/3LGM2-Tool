@@ -8,6 +8,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.Connect
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.util.ReflectionUtils;
 
 /**
  * Dieser Hanldler merkt sich alle
@@ -158,6 +159,34 @@ public class ElementaryMetaPathHandler {
      */
     public static final ElementaryMetaPath getForwardMetaPath(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass, final ConnectionState connectionState) {
         return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, connectionState);
+    }
+
+    /**
+     * Liefert einen Elementarpfad ausgehend von der Start- hin zur Endklasse verläuft. Dabei ist die Kantenklasse die speziellste gemeinsame
+     * Oberklasse aller Kantenklasse, die zwischen Start- und Endklasse liegen.
+     *
+     * @param startClass
+     * @param endClass
+     * @return
+     */
+    public static final ElementaryMetaPath _getForwardMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
+        Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(startClass, endClass);
+        Class<? extends Edge> commonSuperClass = null;
+        for (Class<? extends Edge> edgeClass : edgeTypes) {
+            if (Edge.isConnectingForward(edgeClass, startClass, endClass)) {
+                if (commonSuperClass == null) {
+                    commonSuperClass = edgeClass;
+                } else {
+                    commonSuperClass = ReflectionUtils.getCommonSuperClass(commonSuperClass, edgeClass);
+                }
+            }
+        }
+        ElementaryMetaPath elementaryMetaPath = null;
+        if (commonSuperClass != null) {
+            elementaryMetaPath = getForwardMetaPath(commonSuperClass);
+            elementaryMetaPath = getMetaPath(startClass, elementaryMetaPath, endClass);
+        }
+        return elementaryMetaPath;
     }
 
     //    /**
