@@ -2,6 +2,7 @@ package de.imise.tool3lgm.tools;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.util.BrowseUtils;
 import de.imise.util.pair.Pair;
 
 /**

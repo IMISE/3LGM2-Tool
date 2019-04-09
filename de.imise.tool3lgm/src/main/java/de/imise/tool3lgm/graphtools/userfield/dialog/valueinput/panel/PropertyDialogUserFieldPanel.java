@@ -54,7 +54,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.tools.BrowseUtils;
+import de.imise.util.BrowseUtils;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.text.ExtendedTextArea;
 import de.imise.util.swing.component.text.ExtendedTextField;
@@ -67,9 +67,8 @@ import de.imise.util.swing.component.text.NumberTextField;
  * wird eine <code>ArrayList</code> angelegt, die Objekte vom Typ <code>UserFieldEditorComponent</code> enthält. Eine
  * <code>UserFieldEditorComponent</code> enthält als Objektattribute ein Attribut einer Element- bzw. Kantenklasse und die zugehörige GUI-Komponente.
  * Für die Datenübernahme ist die Methode <code>commit()</code> zuständig. Sie prüft iterativ die Eingaben in GUI-komponenten in der
- * <code>ArrayList</code> und vergleicht Sie mit den
- * bisherigen Werten der UserField. Bei einem Unterschied wird das Tool3lgm-Kommando <code>MODEL_ACTION_SET_USER_FIELD_VALUE</code> aufgerufen und somit der Wert
- * eines Attributes einer Element- bzw. Kanetenklasse geändert.
+ * <code>ArrayList</code> und vergleicht Sie mit den bisherigen Werten der UserField. Bei einem Unterschied wird das Tool3lgm-Kommando
+ * <code>MODEL_ACTION_SET_USER_FIELD_VALUE</code> aufgerufen und somit der Wert eines Attributes einer Element- bzw. Kanetenklasse geändert.
  *
  * @author Thomas Rudert, xhb, AXS
  */

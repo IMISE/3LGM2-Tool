@@ -63,10 +63,10 @@ import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
+import de.imise.util.BrowseUtils;
 import de.imise.util.robot.ScreenRobot;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 

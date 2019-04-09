@@ -43,8 +43,8 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.util.BrowseUtils;
 import de.imise.util.htmlxml.XMLCharacterCoder;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.io.FileHandler;
@@ -59,10 +59,7 @@ public class WebExportDialog extends JDialog {
 
     /** Rssourcendateien, die der Webexportdialog braucht. Achtung: die Reihenfolge ist wichtig! index.html muss als erste stehen. */
     public static final String[] WEB_EXPORT_RESOURCES_FILES = {
-            "index.html",
-            "start.html",
-            "tool3lgm.gif",
-            "icon.jpg",
+            "index.html", "start.html", "tool3lgm.gif", "icon.jpg",
     };
 
     private final GDCollection collection;

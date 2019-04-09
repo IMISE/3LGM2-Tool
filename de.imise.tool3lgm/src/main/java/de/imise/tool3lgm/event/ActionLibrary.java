@@ -74,13 +74,13 @@ import de.imise.tool3lgm.imexport.DataExportModule;
 import de.imise.tool3lgm.imexport.DataImportModule;
 import de.imise.tool3lgm.imexport.graphml.GraphmlExporter;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Alphabetical;
+import de.imise.util.BrowseUtils;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.DirectoryChooser;
@@ -619,7 +619,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL = new StaticAction(ActionIdentifier.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, PPP) {
             @Override
             public void actionPerformed() {
-                BrowseUtils.browseRelativeFileFromResource("auswhilfe_datei");
+                BrowseUtils.browseApplicationPathRelativeFile(getResString("auswhilfe_datei"));
             }
         };
 
@@ -627,7 +627,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_SHOW_ONLINE_HELP = new StaticAction(ActionIdentifier.ACTION_SHOW_ONLINE_HELP, PPP) {
             @Override
             public void actionPerformed() {
-                BrowseUtils.browseUrlFromResource("3lgm2tool_support_website");
+                BrowseUtils.browse(getResString("3lgm2tool_support_website"));
             }
         };
 
@@ -635,7 +635,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_SHOW_3LGM_WEB_SITE = new StaticAction(ActionIdentifier.ACTION_SHOW_3LGM_WEB_SITE, PPP) {
             @Override
             public void actionPerformed() {
-                BrowseUtils.browseUrlFromResource("3lgm2_website");
+                BrowseUtils.browse(getResString("3lgm2_website"));
             }
         };
 
@@ -651,7 +651,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY = new StaticAction(ActionIdentifier.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, PPP) {
             @Override
             public void actionPerformed() {
-                BrowseUtils.browseRelativeFileFromResource("modlib_verz");
+                BrowseUtils.browseApplicationPathRelativeFile(getResString("modlib_verz"));
             }
         };
 
