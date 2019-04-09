@@ -25,13 +25,13 @@ import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.tools.StayOpenFileInputStream;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xml.LGMVersionException;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.tool3lgm.xml.ToolXMLWriter;
 import de.imise.tool3lgm.xml.XMLVersionException;
 import de.imise.util.io.FileHandler;
+import de.imise.util.io.StayOpenFileInputStream;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 public class GDCollectionFileHandler {
