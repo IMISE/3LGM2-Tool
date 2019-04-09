@@ -1676,8 +1676,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param yin
      */
     private void right_layer_none(final Component gdl, final int xin, final int yin) {
-        //TODO: FST: showMenu
-        //FSTContextMenu.showMenu(gdl, xin, yin);
         menu = getLayerContextMenu();
         menu.show(gdl, xin, yin);
     }
@@ -1735,8 +1733,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private void right_knot_knots(final Component gdl, final int xin, final int yin) {
         doc.addToSelection(mc, 0);
         menu = getKnotContextMenu(gdl);
-        //TODO: FST: showMenu
-        //FSTContextMenu.showMenu(gdl, xin, yin);
         menu.show(gdl, xin, yin);
     }
 
