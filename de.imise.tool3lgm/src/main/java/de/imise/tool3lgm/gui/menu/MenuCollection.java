@@ -6,6 +6,8 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LOGICAL_LAYE
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
 
 import java.awt.Component;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
@@ -28,8 +30,10 @@ import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Analysis;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Graphics;
 import de.imise.tool3lgm.event.ActionLibrary.ViewActions;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
+import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
@@ -223,15 +227,6 @@ public class MenuCollection {
         /** Name dieses Menus */
         public static final String title = getResString("insert");
 
-        /** Einträge der fachlichen Ebene */
-        public static final Component[] MENU_ENTRIES_DOMAIN = MenuCreator.createMenuEntries(ActionLibrary.CreateElementActions.DOMAIN_LAYER_CREATABLE_NODES_ACTIONS, true);
-
-        /** Einträge der logischen Ebene */
-        public static final Component[] MENU_ENTRIES_LOGICAL = MenuCreator.createMenuEntries(ActionLibrary.CreateElementActions.LOGICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS, true);
-
-        /** Einträge der physichen bene */
-        public static final Component[] MENU_ENTRIES_PHYSICAL = MenuCreator.createMenuEntries(ActionLibrary.CreateElementActions.PHYSICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS, true);
-
         public InsertMenu() {
             super(title);
         }
@@ -241,19 +236,31 @@ public class MenuCollection {
             if (Static.getSelectedDoc() == null) {
                 return;
             }
+
             removeAll();
             int layerID = Static.getSelectedGDCollection().getActiveLayer();
+            List<Action> menuActions = new ArrayList<>();
+            Iterable<StaticAction> createElementActions = null;
             switch (layerID) {
             case DOMAIN_LAYER:
-                MenuCreator.addAll(this, MENU_ENTRIES_DOMAIN);
+                createElementActions = ActionLibrary.CreateElementActions.DOMAIN_LAYER_CREATABLE_NODES_ACTIONS;
                 break;
             case LOGICAL_LAYER:
-                MenuCreator.addAll(this, MENU_ENTRIES_LOGICAL);
+                createElementActions = ActionLibrary.CreateElementActions.LOGICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS;
                 break;
             case PHYSICAL_LAYER:
-                MenuCreator.addAll(this, MENU_ENTRIES_PHYSICAL);
+                createElementActions = ActionLibrary.CreateElementActions.PHYSICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS;
                 break;
             }
+            for (StaticAction action : createElementActions) {
+                String arguments = action.getArguments();
+                Class<? extends ModelElement> elementClass = ModelConstants.getClassForName(arguments);
+                if (ModelConstants.isEditable(elementClass)) {
+                    menuActions.add(action);
+                }
+            }
+            Component[] menuEntries = MenuCreator.createMenuEntries(menuActions, true);
+            MenuCreator.addAll(this, menuEntries);
         }
     }
 

@@ -145,6 +145,15 @@ public abstract class StaticAction extends ExtendedAction {
         return command;
     }
 
+    public Object getIdentifier() {
+        return getValue(IDENTIFIER_KEY);
+    }
+
+    public String getArguments() {
+        Object argument = getValue(ARGUMENT_KEY);
+        return argument == null ? null : argument.toString();
+    }
+
     private void setText(final Object identifier, final String command, final String text, final String textSuffix) {
         //Text auf RessourcenString lesen, wenn keiner übergeben wurde und eine Ressource existiert (wenn keine da ist, bleibts
         //bei dem, was im super-Constructor gesetzt wurde)

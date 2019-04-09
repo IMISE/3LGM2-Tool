@@ -680,17 +680,17 @@ public class ActionLibrary {
     public static class CreateElementActions {
 
         /** Array aller Insert-Actions für die Fachliche Ebene */
-        public static final List<Action> DOMAIN_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES);
+        public static final Iterable<StaticAction> DOMAIN_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES);
 
         /** Array aller Insert-Actions für die Logische Werkzeugebene */
-        public static final List<Action> LOGICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_LOGICAL_LAYER_NODES);
+        public static final Iterable<StaticAction> LOGICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_LOGICAL_LAYER_NODES);
 
         /** Array aller Insert-Actions für die Physische Werkzeugebene */
-        public static final List<Action> PHYSICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES);
+        public static final Iterable<StaticAction> PHYSICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES);
 
         /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der spezifizierten Klassen wieder */
-        private static List<Action> getActions(final Iterable<Class<? extends ModelElement>> creatableLayerNodes) {
-            List<Action> actions = new ArrayList<>();
+        private static Iterable<StaticAction> getActions(final Iterable<Class<? extends ModelElement>> creatableLayerNodes) {
+            List<StaticAction> actions = new ArrayList<>();
             for (Class<? extends ModelElement> creatableClass : creatableLayerNodes) {
                 String actionName = ElementsNameBuilder.getDisplayableName(creatableClass);
                 actions.add(new GraphDocumentAction(GDCommands.MODEL_ACTION_CREATE_NODE, creatableClass.getName(), actionName, null));
