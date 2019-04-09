@@ -21,7 +21,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EtntEtdtKombination;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Repraesentationsform;
-import de.imise.util.SameTypePair;
+import de.imise.util.pair.SameTypePair;
 
 /**
  * Mit dieser Klasse können für Objekttypen alle kürzesten Kommunikationspfade ermittelt werden.

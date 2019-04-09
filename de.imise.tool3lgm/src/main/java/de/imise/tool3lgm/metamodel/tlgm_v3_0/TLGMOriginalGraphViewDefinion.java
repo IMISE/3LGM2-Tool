@@ -29,7 +29,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationsplan;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 
 public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
 

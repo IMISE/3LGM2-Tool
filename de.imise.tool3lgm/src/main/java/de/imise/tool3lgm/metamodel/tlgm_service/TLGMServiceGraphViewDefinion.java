@@ -28,7 +28,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ObjectType;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.OrganisationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.PhysicalDataProcessingComponent;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ProvidingInterface;
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 
 public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
 

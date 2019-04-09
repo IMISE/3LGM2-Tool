@@ -19,7 +19,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 
 public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
 

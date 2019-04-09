@@ -17,7 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 
 /**
  * @author AXS

@@ -42,12 +42,12 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.layout.Abs
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractTableModel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractUserFieldTableModel;
 import de.imise.util.NamedObjectContainer;
-import de.imise.util.Pair;
 import de.imise.util.clipboard.ContentExchangeListener;
 import de.imise.util.clipboard.ContentExchanger;
 import de.imise.util.clipboard.ContentManagerImpl;
 import de.imise.util.clipboard.IllegalContentException;
 import de.imise.util.clipboard.SimpleContentParser;
+import de.imise.util.pair.Pair;
 
 /**
  * Klasse repräsentiert einen speziellen <code>JTable</code>, der zur Eingabe und Darstellung von Kennzahlen, Verteilungsgewichten und Modelvaribalen

@@ -16,7 +16,7 @@ import javax.swing.JList;
 
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.cell.IUserFieldTableCell;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model.AbstractTableModel;
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 
 /**
  * Klasse stellt den Controller für <code>UserFieldTable</code>s dar.
