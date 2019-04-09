@@ -20,7 +20,6 @@ public final class ApplicationManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.err.println(f);
         return f;
     }
 
