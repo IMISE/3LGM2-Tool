@@ -398,10 +398,17 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private JMenu getSubElemMenu() {
-        ModelElement selected = doc.getLastSelected().getElement();
+        ElementContainer ec = doc.getLastSelected();
+        ModelElement me = ec.getElement();
+        Class<? extends ModelElement> elementClass = me.getClass();
         JMenu sub_elem = new JMenu(getResString("unterg_el"));
+        //die Elementklasse darf man nicht bearbeiten, also auch keine Unterelemente hinzufügen -> raus
+        if (!ModelConstants.isEditable(elementClass)) {
+            return sub_elem;
+        }
+
         HashSet<Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>>> slavePairs = new HashSet<>();
-        for (Class<? extends CompositionEdge> compositionClass : ModelConstants.getCompositionEdgeTypesForMaster(selected.getClass())) {
+        for (Class<? extends CompositionEdge> compositionClass : ModelConstants.getCompositionEdgeTypesForMaster(elementClass)) {
             Class<? extends ModelElement> abstractSlaves = CompositionEdge.getSlaveType(compositionClass);
             for (Class<? extends ModelElement> instanciableSlaves : ModelConstants.getInstanciableAssignableClasses(abstractSlaves)) {
                 slavePairs.add(new Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>>(compositionClass, instanciableSlaves));
@@ -416,8 +423,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         for (Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>> slavePair : slavePairs) {
             Class<? extends CompositionEdge> compositionClass = slavePair.getFirstItem();
-            JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), MODEL_ACTION_CREATE_ADDICTED, doc.getHashString() + " " + selected.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
-            item.setEnabled(selected.countConnections(compositionClass) < CompositionEdge.getMaxMasterToSlaveCardinality(compositionClass));
+            JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), MODEL_ACTION_CREATE_ADDICTED, doc.getHashString() + " " + me.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
+            item.setEnabled(me.countConnections(compositionClass) < CompositionEdge.getMaxMasterToSlaveCardinality(compositionClass));
             items.add(item);
         }
         Alphabetical.sort(items);
