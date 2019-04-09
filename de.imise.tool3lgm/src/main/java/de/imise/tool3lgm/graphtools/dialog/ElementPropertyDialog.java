@@ -43,12 +43,10 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
@@ -469,7 +467,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
         if (Static.isExpertMode() || isVisible(simpleMetaPath)) {
-            descripPanel.addSingleConnectionPanel(labelLastEdgeName, isEditable(simpleMetaPath), simpleMetaPath);
+            descripPanel.addSingleConnectionPanel(labelLastEdgeName, ModelConstants.isEditable(simpleMetaPath), simpleMetaPath);
         }
     }
 
@@ -551,7 +549,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         if (!isVisible(metaPath)) {
             return;
         }
-        boolean editable = isEditable(metaPath);
+        boolean editable = ModelConstants.isEditable(metaPath);
         ElementDialogPanel panel2Add = null;
         if (ModelConstants.isComposition(edgeClass)) {
             panel2Add = new MutipleCompositionPanel(this, editable, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
@@ -589,7 +587,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             allDifferentSimpleMetaPaths.addAll(simpleMetaPathsNonAbstract);
             if (editable) {
                 for (SimpleMetaPath nonAbstractSimpleMetaPaths : simpleMetaPathsNonAbstract) {
-                    if (!isEditable(nonAbstractSimpleMetaPaths)) {
+                    if (!ModelConstants.isEditable(nonAbstractSimpleMetaPaths)) {
                         editable = false;
                         break;
                     }
@@ -597,41 +595,6 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             }
         }
         addTab(new ConnectedElementsTablePanel(this, editable, tableDefinition, allDifferentSimpleMetaPaths));
-    }
-
-    //wird im Moment nicht gebraucht
-    //    public Component _getLastAddedComponent() {
-    //        int componentCount = getComponentCount();
-    //        return getComponent(componentCount - 1);
-    //    }
-    //
-    //    public ElementDialogPanel _getLastPanel() {
-    //        Component lastAddedComponent = _getLastAddedComponent();
-    //        return lastAddedComponent instanceof ElementDialogPanel ? (ElementDialogPanel) lastAddedComponent : null;
-    //    }
-
-    /**
-     * Prüft, ob Verbindungen über diesen Pfad im nicht-ExperMode geändert werden dürfen. Das dürfen sie, wenn keine Kante des Pfades ausschließlich
-     * Elemente verbindet, die nur im ExpertMode geändert werden dürfen.
-     *
-     * @param metaPath
-     * @return
-     */
-    private static final boolean isEditable(final SimpleMetaPath metaPath) {
-        if (!Static.isExpertMode()) {
-            List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-            for (ElementaryMetaPath elementaryMetaPath : elementaryMetaPaths) {
-                //bei wenigstens einer Kante im Pfad sind Start- und Endklasse nur im ExpertMode editierbar
-                if (ModelConstants.isOnlyExpertModeEditable(elementaryMetaPath.getStartClass()) && ModelConstants.isOnlyExpertModeEditable(elementaryMetaPath.getEndClass())) {
-                    return false;
-                }
-                //die Kante ist eine InstanciantionEdge, die von der Insstanz auf das Klassenelement (Template) zeigt
-                if (InstanciationEdge.class.isAssignableFrom(elementaryMetaPath.getEdgeClass()) && InstanciationEdge.INSTANCE_TO_TEMPLATE_MASTER_DIRECTION.equals(elementaryMetaPath.getDirection())) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     /**

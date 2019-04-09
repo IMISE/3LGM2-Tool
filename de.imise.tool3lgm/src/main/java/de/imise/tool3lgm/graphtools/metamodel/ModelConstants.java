@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,6 +44,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -208,46 +210,54 @@ public final class ModelConstants {
      * @return alle Elementklassen, die nur im ExpertMode geändert werden können
      * @see MetaModel#getOnlyExpertModeEditableNodes()
      */
-    public static Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes() {
+    private static Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes() {
         return metaModel.getOnlyExpertModeEditableNodes();
     }
 
     /**
-     * Liefert <code>true</code>, wenn eine der übergebenen Klassen nur im ExpertMode editierbar sein soll.
+     * Liefert <code>true</code>, wenn alle übergebenen Klasse aktuell editierbar ist. Das ist sie, wenn sich der Baukasten im ExpertMode befindet
+     * oder wenn er sich nicht im ExpertMode befindet und die Klasse keine Klasse aus den {@link #getOnlyExpertModeEditableNodes()} ist.
      *
-     * @param elementClasses
+     * @param elementClass
      * @return
      */
-    public static boolean containsOnlyExpertModeEditableNodes(final Iterable<Class<? extends ModelElement>> elementClasses) {
-        for (Class<? extends ModelElement> elementClass : elementClasses) {
-            if (isOnlyExpertModeEditable(elementClass)) {
-                return true;
+    @SafeVarargs
+    public static final boolean isEditable(final Class<? extends ModelElement>... elementClasses) {
+        if (!Static.isExpertMode()) {
+            Set<Class<? extends ModelElement>> onlyExpertModeEditableNodes = getOnlyExpertModeEditableNodes();
+            for (Class<? extends ModelElement> elementClass : elementClasses) {
+                if (onlyExpertModeEditableNodes.contains(elementClass)) {
+                    return false;
+                }
             }
         }
-        return false;
+        return true;
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true)
-     * angelegt und verändert werden kann.
+     * Prüft, ob Verbindungen über diesen Pfad im nicht-ExperMode geändert werden dürfen. Das dürfen sie, wenn keine Kante des Pfades ausschließlich
+     * Elemente verbindet, die nur im ExpertMode geändert werden dürfen.
      *
-     * @param elementClass
-     * @return <code>true</code>, wenn die Elementklasse, nur im ExpertMode geändert werden kann
-     * @see MetaModel#getOnlyExpertModeEditableNodes()
-     */
-    public static boolean isOnlyExpertModeEditable(final Class<? extends ModelElement> elementClass) {
-        return getOnlyExpertModeEditableNodes().contains(elementClass);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse aktuell editierbar ist. Das ist sie, wenn sich der Baukasten im ExpertMode befindet oder
-     * wenn er sich nicht im ExpertMode befindet und die Klasse keine Klasse aus den {@link #getOnlyExpertModeEditableNodes()} ist.
-     *
-     * @param elementClass
+     * @param metaPath
      * @return
      */
-    public static boolean isEditable(final Class<? extends ModelElement> elementClass) {
-        return Static.isExpertMode() || !isOnlyExpertModeEditable(elementClass);
+    public static final boolean isEditable(final SimpleMetaPath... simpleMetaPaths) {
+        if (!Static.isExpertMode()) {
+            for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
+                List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
+                for (ElementaryMetaPath elementaryMetaPath : elementaryMetaPaths) {
+                    //bei wenigstens einer Kante im Pfad sind Start- und Endklasse nur im ExpertMode editierbar
+                    if (!isEditable(elementaryMetaPath.getStartClass(), elementaryMetaPath.getEndClass())) {
+                        return false;
+                    }
+                    //die Kante ist eine InstanciantionEdge, die von der Insstanz auf das Klassenelement (Template) zeigt
+                    if (InstanciationEdge.class.isAssignableFrom(elementaryMetaPath.getEdgeClass()) && InstanciationEdge.INSTANCE_TO_TEMPLATE_MASTER_DIRECTION.equals(elementaryMetaPath.getDirection())) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     ////////////
