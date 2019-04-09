@@ -375,7 +375,7 @@ public abstract class MetaModel {
      * @param instanciationEdgeClass
      * @return
      */
-    public Iterable<SimpleMetaPath> getInstanciableMetaPath(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
+    public Iterable<SimpleMetaPath> getInstanciableMetaPaths(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
         return EMPTY_SIMPLE_META_PATH_ITERABLE;
     }
 

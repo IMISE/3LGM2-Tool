@@ -401,11 +401,11 @@ public class TLGMServiceMetaModel extends MetaModel {
             createSimpleMetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
 
     @Override
-    public Iterable<SimpleMetaPath> getInstanciableMetaPath(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
+    public Iterable<SimpleMetaPath> getInstanciableMetaPaths(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
         if (instanciationEdgeClass == IheActor_IheActorInstance_Edge.class) {
             return IHEACTOR_IHEACTORINSTANCE_EDGE_INSTANCIATION_METAPATHS;
         }
-        return super.getInstanciableMetaPath(instanciationEdgeClass);
+        return super.getInstanciableMetaPaths(instanciationEdgeClass);
     }
 
     ///////////////////////////////////////////////////////////////////

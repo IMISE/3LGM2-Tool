@@ -46,6 +46,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -515,10 +516,11 @@ public final class ModelConstants {
      *
      * @param instanciationEdgeClass
      * @return
-     * @see MetaModel#getInstanciableMetaPath(Class)
+     * @see MetaModel#getInstanciableMetaPaths(Class)
      */
     public static Iterable<SimpleMetaPath> getInstanciablePath(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
-        return metaModel.getInstanciableMetaPath(instanciationEdgeClass);
+        Iterable<SimpleMetaPath> instanciableMetaPaths = metaModel.getInstanciableMetaPaths(instanciationEdgeClass);
+        return SimpleMetaPathCreator.getSimpleMetaPathsNonAbstract(instanciableMetaPaths);
     }
 
     ///////////////////////////////////////////////////////////////////

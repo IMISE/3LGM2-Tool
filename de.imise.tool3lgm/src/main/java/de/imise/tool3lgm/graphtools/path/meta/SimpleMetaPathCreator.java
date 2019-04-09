@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.path.meta;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -332,6 +333,19 @@ public class SimpleMetaPathCreator {
             }
         }
         return simpleMetaPaths;
+    }
+
+    /**
+     * @param simpleMetaPaths
+     * @return
+     */
+    public static Iterable<SimpleMetaPath> getSimpleMetaPathsNonAbstract(final Iterable<SimpleMetaPath> simpleMetaPaths) {
+        HashSet<SimpleMetaPath> allSimpleMetaPathsNonAbstract = new HashSet<>();
+        for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
+            Collection<SimpleMetaPath> simpleMetaPathsNonAbstract = getSimpleMetaPathsNonAbstract(simpleMetaPath);
+            allSimpleMetaPathsNonAbstract.addAll(simpleMetaPathsNonAbstract);
+        }
+        return allSimpleMetaPathsNonAbstract;
     }
 
 }
