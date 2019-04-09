@@ -38,8 +38,8 @@ import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.tools.ElementContainerTreeNode;
-import de.imise.tool3lgm.tools.LGMTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.tools.StringTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -56,9 +56,9 @@ import de.imise.util.swing.component.LimitedHeightScrollTreePane;
  */
 public class PathConnectionPanel extends AbstractExpandablePanel {
 
-    protected final LGMTree ltree;
+    protected final ElementDialogPanelTree ltree;
 
-    protected final LGMTree rtree;
+    protected final ElementDialogPanelTree rtree;
 
     protected final DefaultTreeModel lmodel;
 
@@ -126,7 +126,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         boolean sortLeftTree = getSortLeftTreeRootChildrenAlphabetical();
         lroot = new ElementContainerTreeNode(ec, false, sortLeftTree);
         lmodel = new DefaultTreeModel(lroot);
-        ltree = new LGMTree(lmodel, mainDoc);
+        ltree = new ElementDialogPanelTree(lmodel, mainDoc);
         ltree.setRootVisible(false);
         ltree.setShowsRootHandles(true);
         ltree.setCellRenderer(treeRenderer);
@@ -155,7 +155,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             rLabel = new JLabel(rtreeLabelString);
             rroot = new StringTreeNode(rtreeLabelString);
             rmodel = new DefaultTreeModel(rroot);
-            rtree = new LGMTree(rmodel, mainDoc);
+            rtree = new ElementDialogPanelTree(rmodel, mainDoc);
             rtree.getSelectionModel().setSelectionMode(getTreesSelectionModel());
             rtree.setRootVisible(false);
             rtree.setShowsRootHandles(true);
@@ -374,8 +374,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     }
 
     @Override
-    public final LGMTree[] getAllDragNDropTrees() {
-        return new LGMTree[] {
+    public final ElementDialogPanelTree[] getAllDragNDropTrees() {
+        return new ElementDialogPanelTree[] {
                 rtree, ltree
         };
     }

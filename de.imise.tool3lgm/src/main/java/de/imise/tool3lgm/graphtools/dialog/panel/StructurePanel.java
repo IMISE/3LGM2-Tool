@@ -26,7 +26,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.tools.LGMTree;
+import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.tools.StringTreeNode;
 import de.imise.util.swing.SwingUtils;
@@ -36,8 +36,8 @@ import de.imise.util.swing.SwingUtils;
  */
 public class StructurePanel extends AbstractPathOfOneEdgePanel {
 
-    private LGMTree lotree, lutree;
-    private LGMTree rtree;
+    private ElementDialogPanelTree lotree, lutree;
+    private ElementDialogPanelTree rtree;
     private DefaultTreeModel lomodel, lumodel, rmodel;
     private LGMTreeNode loroot, luroot, rroot;
     private JPanel control1, control2;
@@ -70,7 +70,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         JLabel lolabel = new JLabel(getResString("ueberg"));
         loroot = new StringTreeNode(name);
         lomodel = new DefaultTreeModel(loroot);
-        lotree = new LGMTree(lomodel, mainDoc);
+        lotree = new ElementDialogPanelTree(lomodel, mainDoc);
         lotree.setName("lotree");
         lotree.setRootVisible(false);
         lotree.setShowsRootHandles(true);
@@ -82,7 +82,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         JLabel lulabel = new JLabel(getResString("unterg"));
         luroot = new StringTreeNode(name);
         lumodel = new DefaultTreeModel(luroot);
-        lutree = new LGMTree(lumodel, mainDoc);
+        lutree = new ElementDialogPanelTree(lumodel, mainDoc);
         lutree.setName("lutree");
         lutree.setRootVisible(false);
         lutree.setCellRenderer(treeRenderer);
@@ -110,7 +110,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         rlabel = new JLabel(getResString("frei"));
         rroot = new StringTreeNode(getResString("frei"));
         rmodel = new DefaultTreeModel(rroot);
-        rtree = new LGMTree(rmodel, mainDoc);
+        rtree = new ElementDialogPanelTree(rmodel, mainDoc);
         rtree.setName("rtree");
         rtree.setRootVisible(false);
         rtree.setShowsRootHandles(true);
@@ -228,12 +228,12 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         /*
          * alle Aktionen zwischen lotree <-> lutree
          */
-        DragNDropInitializer.DragNDropActionChain tac5 = DragNDropInitializer.createNewDragNDropActionChain(new LGMTree[] {
+        DragNDropInitializer.DragNDropActionChain tac5 = DragNDropInitializer.createNewDragNDropActionChain(new ElementDialogPanelTree[] {
                 lotree, rtree, lutree
         }, new LGMAction[] {
                 loremoveAction, luaddAction
         });
-        DragNDropInitializer.DragNDropActionChain tac6 = DragNDropInitializer.createNewDragNDropActionChain(new LGMTree[] {
+        DragNDropInitializer.DragNDropActionChain tac6 = DragNDropInitializer.createNewDragNDropActionChain(new ElementDialogPanelTree[] {
                 lutree, rtree, lotree
         }, new LGMAction[] {
                 luremoveAction, loaddAction
@@ -248,8 +248,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     }
 
     @Override
-    public LGMTree[] getAllDragNDropTrees() {
-        return new LGMTree[] {
+    public ElementDialogPanelTree[] getAllDragNDropTrees() {
+        return new ElementDialogPanelTree[] {
                 rtree, lotree, lutree
         };
     }

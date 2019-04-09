@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.tools;
+package de.imise.tool3lgm.graphtools.view.tree;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,22 +13,20 @@ import javax.swing.tree.TreePath;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.tools.ElementContainerTreeNode;
+import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.component.tree.CorrectSelectionTree;
 
-public class LGMTree extends CorrectSelectionTree {
+public class ElementDialogPanelTree extends CorrectSelectionTree {
 
-    private GraphDocument doc;
+    private final GraphDocument doc;
 
-    public LGMTree(final DefaultTreeModel treeModel, final GraphDocument doc) {
+    public ElementDialogPanelTree(final DefaultTreeModel treeModel, final GraphDocument doc) {
         super(treeModel);
         this.doc = doc;
         setShowsRootHandles(true);
-    }
-
-    public LGMTree(final DefaultTreeModel treeModel) {
-        super(treeModel);
     }
 
     Collection<ElementContainer> elementsAdded = new HashSet<>();
@@ -225,7 +223,7 @@ public class LGMTree extends CorrectSelectionTree {
      *
      * @param selectionSource Der Baum dessen Selektion nachgebildet werden soll
      */
-    public final void restoreSelection(final LGMTree selectionSource) {
+    public final void restoreSelection(final ElementDialogPanelTree selectionSource) {
         TreePath[] sourceSelectedPaths = selectionSource.selectedPaths;
         for (int i = 0; i < sourceSelectedPaths.length; i++) {
             LGMTreeNode sourceNode = (LGMTreeNode) sourceSelectedPaths[i].getLastPathComponent();
@@ -247,7 +245,7 @@ public class LGMTree extends CorrectSelectionTree {
      *
      * @param selectionSource
      */
-    public final void restoreSelectionAndScroll(final LGMTree selectionSource) {
+    public final void restoreSelectionAndScroll(final ElementDialogPanelTree selectionSource) {
         restoreSelection(selectionSource);
         scrollPathToVisible(getLeadSelectionPath());
     }

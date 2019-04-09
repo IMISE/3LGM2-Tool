@@ -25,7 +25,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.Connect
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.tools.LGMTree;
+import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.tools.LGMTreeNode;
 import de.imise.tool3lgm.tools.StringTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -46,8 +46,8 @@ import de.imise.util.swing.SwingUtils;
  */
 public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
-    private final LGMTree lotree, lutree;
-    private LGMTree rotree, rutree;
+    private final ElementDialogPanelTree lotree, lutree;
+    private ElementDialogPanelTree rotree, rutree;
     private final DefaultTreeModel lomodel, lumodel;
     private DefaultTreeModel romodel;
     private DefaultTreeModel rumodel;
@@ -78,7 +78,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
         loroot = new StringTreeNode("loroot");
         lomodel = new DefaultTreeModel(loroot);
-        lotree = new LGMTree(lomodel, mainDoc);
+        lotree = new ElementDialogPanelTree(lomodel, mainDoc);
         lotree.setRootVisible(false);
         lotree.setShowsRootHandles(showRootHandles);
         lotree.setCellRenderer(treeRenderer);
@@ -90,7 +90,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
         luroot = new StringTreeNode("luroot");
         lumodel = new DefaultTreeModel(luroot);
-        lutree = new LGMTree(lumodel, mainDoc);
+        lutree = new ElementDialogPanelTree(lumodel, mainDoc);
         lutree.setRootVisible(false);
         lutree.setShowsRootHandles(showRootHandles);
         lutree.setCellRenderer(treeRenderer);
@@ -116,7 +116,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         if (editable) {
             roroot = new StringTreeNode("roroot");
             romodel = new DefaultTreeModel(roroot);
-            rotree = new LGMTree(romodel, mainDoc);
+            rotree = new ElementDialogPanelTree(romodel, mainDoc);
             rotree.setRootVisible(false);
             rotree.setShowsRootHandles(showRootHandles);
             rotree.setCellRenderer(treeRenderer);
@@ -128,7 +128,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             rulabel = new JLabel(unconnected);
             ruroot = new StringTreeNode("ruroot");
             rumodel = new DefaultTreeModel(ruroot);
-            rutree = new LGMTree(rumodel, mainDoc);
+            rutree = new ElementDialogPanelTree(rumodel, mainDoc);
             rutree.setRootVisible(false);
             rutree.setShowsRootHandles(showRootHandles);
             rutree.setCellRenderer(treeRenderer);
