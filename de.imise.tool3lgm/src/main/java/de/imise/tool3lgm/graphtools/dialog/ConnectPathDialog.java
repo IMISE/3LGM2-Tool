@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -102,7 +103,7 @@ public class ConnectPathDialog implements ActionListener {
                     List<ModelElement> endClassElements = doc.getModelItems(newEndClass);
                     endElements.addAll(endClassElements);
                     String createNew = getResString("new") + ": " + ElementsNameBuilder.getDisplayableName(newEndClass);
-                    endElementChooser.removeAll();
+                    endElementChooser.removeAllItems();
                     endElementChooser.addItem(createNew);
                     endElementChooser.addSeparator(false);
                     endElementChooser.addAll(endElements);
@@ -130,7 +131,9 @@ public class ConnectPathDialog implements ActionListener {
 
     public final boolean createDialog(final Component parentComponent) {
         JOptionPane pane = new JOptionPane(jOptionPaneMessage(), JOptionPane.PLAIN_MESSAGE, JOptionPane.OK_CANCEL_OPTION);
-        pane.createDialog(parentComponent, getResString("CONNECT_PATH_TITLE")).setVisible(true);
+        String title = getResString("CONNECT_PATH_TITLE");
+        JDialog dialog = pane.createDialog(parentComponent, title);
+        dialog.setVisible(true);
         return new Integer(JOptionPane.OK_OPTION).equals(pane.getValue());
     }
 
