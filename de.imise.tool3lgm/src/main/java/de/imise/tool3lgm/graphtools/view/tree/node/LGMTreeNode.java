@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.tools;
+package de.imise.tool3lgm.graphtools.view.tree.node;
 
 import java.awt.Color;
 import java.util.HashSet;

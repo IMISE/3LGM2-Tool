@@ -39,11 +39,11 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.tools.ElementClassTreeNode;
-import de.imise.tool3lgm.tools.ElementContainerTreeNode;
-import de.imise.tool3lgm.tools.LGMTreeNode;
-import de.imise.tool3lgm.tools.StringTreeNode;
-import de.imise.tool3lgm.tools.UserFieldTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 

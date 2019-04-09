@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.tools;
+package de.imise.tool3lgm.graphtools.view.tree.node;
 
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;

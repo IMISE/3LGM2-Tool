@@ -23,9 +23,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.tools.ElementContainerTreeNode;
-import de.imise.tool3lgm.tools.LGMTreeNode;
-import de.imise.tool3lgm.tools.UserFieldTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.event.ExtendedAction;
 

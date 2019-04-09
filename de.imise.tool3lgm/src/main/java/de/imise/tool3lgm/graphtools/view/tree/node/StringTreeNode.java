@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.tools;
+package de.imise.tool3lgm.graphtools.view.tree.node;
 
 /**
  * @author AXS (8 Apr 2019)

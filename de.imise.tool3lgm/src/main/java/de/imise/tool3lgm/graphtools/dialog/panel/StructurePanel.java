@@ -27,8 +27,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
-import de.imise.tool3lgm.tools.LGMTreeNode;
-import de.imise.tool3lgm.tools.StringTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.swing.SwingUtils;
 
 /**

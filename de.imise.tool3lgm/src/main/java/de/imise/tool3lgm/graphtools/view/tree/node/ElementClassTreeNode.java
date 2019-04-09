@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.tools;
+package de.imise.tool3lgm.graphtools.view.tree.node;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;

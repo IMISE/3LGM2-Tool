@@ -44,12 +44,12 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
-import de.imise.tool3lgm.tools.ElementContainerTreeNode;
-import de.imise.tool3lgm.tools.LGMTreeNode;
-import de.imise.tool3lgm.tools.StringTreeNode;
 
 /**
  * 24.10.2018: Dieses Panel funktioniert im Moment überhaupt nicht mehr richtig. Die Aufgaben des Prozesses werden alphabetisch sortiert und die
