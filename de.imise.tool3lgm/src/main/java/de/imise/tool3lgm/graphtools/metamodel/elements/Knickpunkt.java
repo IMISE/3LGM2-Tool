@@ -1,6 +1,3 @@
-/*
- * Created on 01.11.2004
- */
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -9,22 +6,22 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
- * @author imi0wendt
+ * @author imi0wendt (01.11.2004)
  */
 public class Knickpunkt extends Node {
 
     /**
-     * COMMENTME
+     * ID der Kante, zu der der Knickpunkt gehört
      */
-    private String kantenHash = "";
+    private String edgeHash = "";
 
     /**
-     * COMMENTME
+     * {@link EdgeContainer}, zu der der Knickpunkt gehört
      */
     private EdgeContainer kc = null;
 
     /**
-     * COMMENTME
+     * Index des Knickpunktes auf dem {@link EdgeContainer}
      */
     private int index = 0;
 
@@ -44,14 +41,14 @@ public class Knickpunkt extends Node {
      * @return
      */
     public String getKantenHash() {
-        return kantenHash;
+        return edgeHash;
     }
 
     /**
-     * @param kantenHash
+     * @param egdeHash
      */
-    public void setKantenHash(final String kantenHash) {
-        this.kantenHash = kantenHash == null ? "" : kantenHash;
+    public void setKantenHash(final String egdeHash) {
+        edgeHash = egdeHash == null ? "" : egdeHash;
     }
 
     @Override
@@ -80,7 +77,7 @@ public class Knickpunkt extends Node {
      */
     public void setOwner(final EdgeContainer kc) {
         this.kc = kc;
-        kantenHash = kc.getHashString();
+        edgeHash = kc.getHashString();
     }
 
     /**
