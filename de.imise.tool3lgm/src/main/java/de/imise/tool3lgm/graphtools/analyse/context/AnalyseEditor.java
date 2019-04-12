@@ -13,7 +13,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 
 import javax.swing.BorderFactory;
@@ -276,7 +275,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         }
         HashSet<Class<? extends ModelElement>> allNonAbstractClasses = new HashSet<>(connectedTypes.size());
         for (Class<? extends ModelElement> c : connectedTypes) {
-            allNonAbstractClasses.addAll(Arrays.asList(ModelConstants.getInstanciableAssignableClasses(c)));
+            allNonAbstractClasses.addAll(ModelConstants.getInstanciableAssignableClasses(c));
         }
         Class<? extends ModelElement>[] returnClasses = new Class[allNonAbstractClasses.size()];
         System.arraycopy(allNonAbstractClasses.toArray(), 0, returnClasses, 0, returnClasses.length);
@@ -480,26 +479,26 @@ public class AnalyseEditor extends JDialog implements ActionListener {
 
         for (int i = 1; i < pathPanels.size(); i++) {
 
-            PathStepComponent actual = pathPanels.get(i);
+            PathStepComponent current = pathPanels.get(i);
             // Wenn Listen angezeigt werden, die entweder leer sind oder in denen nichts selektiert
             // ist.
-            if (actual.pathStepElementTypeList.getSelectedValues().length == 0) {
+            if (current.pathStepElementTypeList.getSelectedValues().length == 0) {
                 break;
             }
             querystring.append("\t<suche>\n");
-            if (actual.pathStepElementTypeList.getSelectedValues().length > 0) {
+            if (current.pathStepElementTypeList.getSelectedValues().length > 0) {
                 querystring.append("\t\t<typ>\n");
 
-                Object[] selectedIndices = actual.pathStepElementTypeList.getSelectedObjects();
+                Object[] selectedIndices = current.pathStepElementTypeList.getSelectedObjects();
                 for (int j = 0; j < selectedIndices.length; j++) {
                     querystring.append("\t\t\t<eintrag>" + ((Class<?>) selectedIndices[j]).getSimpleName() + "</eintrag>\n");
                 }
                 querystring.append("\t\t</typ>\n");
             }
-            querystring.append("\t\t<verbundenstate>" + (actual.getConnectedState() ? true : false) + "</verbundenstate>\n");
-            if (actual.conditionElementTypeList.getSelectedValues().length > 0) {
+            querystring.append("\t\t<verbundenstate>" + (current.getConnectedState() ? true : false) + "</verbundenstate>\n");
+            if (current.conditionElementTypeList.getSelectedValues().length > 0) {
                 querystring.append("\t\t<verbundene>\n");
-                Object[] selectedIndices = actual.conditionElementTypeList.getSelectedObjects();
+                Object[] selectedIndices = current.conditionElementTypeList.getSelectedObjects();
                 for (int j = 0; j < selectedIndices.length; j++) {
                     querystring.append("\t\t\t<eintrag>" + ((Class<?>) selectedIndices[j]).getSimpleName() + "</eintrag>\n");
                 }

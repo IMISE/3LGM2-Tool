@@ -5,7 +5,6 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -23,6 +22,7 @@ import javax.swing.WindowConstants;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
@@ -33,9 +33,12 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.WrapperMetaPath;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.collections.AlphabeticalSet;
@@ -121,10 +124,10 @@ public class RedundancyAnalysis extends WindowAdapter {
             String[] options = new String[analyseCount + 1];
             for (int i = 0; i < analyseCount; i++) {
                 SingleRedundancyAnalysisDefinition singleRedundancyAnalysisDefinition = redundancyAnalysisDefinitions.get(i);
-                MetaPath metaPath = singleRedundancyAnalysisDefinition.getMetaPath();
-                Class<? extends ModelElement> startClass = metaPath.getStartClass();
-                Class<? extends ModelElement> endClass = metaPath.getEndClass();
-                options[i] = getDisplayablePluralName(startClass) + con + getDisplayablePluralName(endClass);
+                AbstractMetaPath metaPath = singleRedundancyAnalysisDefinition.getMetaPath();
+                Set<Class<? extends ModelElement>> startClass = metaPath.getStartClasses();
+                Set<Class<? extends ModelElement>> endClass = metaPath.getEndClasses();
+                options[i] = ElementsNameBuilder.getDisplayablePluralName(startClass) + con + ElementsNameBuilder.getDisplayablePluralName(endClass);
             }
             options[analyseCount] = getResString("ana_fr_self_defined_analysis");
 
@@ -151,12 +154,14 @@ public class RedundancyAnalysis extends WindowAdapter {
 
             // selbst definierte XMLAnalyse
             if (result == null && selectedOptions[selectedOptions.length - 1] != null) {
-                MetaPathSelector mps = MetaPathSelector.showDialog(getResString("ana_fr_class1_label"), getResString("ana_fr_class2_label"), getResString("metapath"));
-                if (mps.isValid()) {
-                    Class<? extends ModelElement> c1 = mps.getSelectedClass1();
-                    Class<? extends ModelElement> c2 = mps.getSelectedClass2();
-                    MetaPath mp = mps.getSelectedMetaPath();
-                    MetaPath metaPath = new MetaPath(c1, c2, mp.getEdgeClasses());
+                MetaPathSelector mps = MetaPathSelector.showDialog(redundancyAnalysisDefinitions, getResString("ana_fr_class1_label"), getResString("ana_fr_class2_label"), getResString("metapath"), 1);
+                if (mps.isValidSelection()) {
+                    MetaPathSelection metaPathSelection = mps.getSelection();
+                    Class<? extends ModelElement> c1 = metaPathSelection.class1;
+                    Class<? extends ModelElement> c2 = metaPathSelection.class2;
+                    List<AbstractMetaPath> selectedMetaPaths = metaPathSelection.selectedMetaPaths;
+                    AbstractMetaPath mp = selectedMetaPaths.get(0); //es solte genau einer sein
+                    AbstractMetaPath metaPath = WrapperMetaPath.wrapMetaPath(c1, c2, mp);
                     SingleRedundancyAnalysisDefinition definition = new RedundancyAnalysisDefinitions().add(metaPath);
                     String resultName = c2.getSimpleName() + " " + mp.toString();
                     result = new RedundancyAnalysisResult(gdcoll, definition, resultName);
@@ -192,24 +197,19 @@ public class RedundancyAnalysis extends WindowAdapter {
         CardinalityDefinition cardinalityDefinition = consistencyDefinition.getCardinalityDefinition();
 
         SingleRedundancyAnalysisDefinition definition = result.getDefinition();
-        MetaPath metaPath = definition.getMetaPath();
-        for (int i = 0; i < metaPath.countPathes(); i++) {
-            Class<? extends Edge>[] internalMetaPath = metaPath.getEdgeClasses(i);
-            for (int j = 0; j < internalMetaPath.length; j++) {
-                Class<? extends Edge> edgeClass = internalMetaPath[j];
-                //jetzt die Kardinalitätsvorgaben der gewählten Analyse in die Kardinalitäten der Konsitenzprüfung übertragen
-                cardinalityDefinition.setNewForwardCardinality(edgeClass, definition.getNewForwardCardinality(edgeClass));
-                cardinalityDefinition.setNewBackwardCardinality(edgeClass, definition.getNewBackwardCardinality(edgeClass));
-            }
+        AbstractMetaPath metaPath = definition.getMetaPath();
+        for (ElementaryMetaPath elementaryMetaPath : metaPath.getElementaryMetaPaths()) {
+            Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+            //jetzt die Kardinalitätsvorgaben der gewählten Analyse in die Kardinalitäten der Konsitenzprüfung übertragen
+            cardinalityDefinition.setNewForwardCardinality(edgeClass, definition.getNewForwardCardinality(edgeClass));
+            cardinalityDefinition.setNewBackwardCardinality(edgeClass, definition.getNewBackwardCardinality(edgeClass));
         }
         List<AbstractError> errors = consistencyChecker.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
         if (errors.size() > 0) {
             // Custom button xmlText
             Object[] options = {
-                    getResString("ana_fr_resolve_errors"),
-                    getResString("ana_fr_ignore_errors"),
-                    getResString("cancel")
+                    getResString("ana_fr_resolve_errors"), getResString("ana_fr_ignore_errors"), getResString("cancel")
             };
             int answer = JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("ana_fr_error_message"), getResString("ana_fr_error_message_title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
             if (answer == JOptionPane.YES_OPTION) {
@@ -382,11 +382,11 @@ public class RedundancyAnalysis extends WindowAdapter {
      */
     private static String getElementName(final ModelElement me, final SingleRedundancyAnalysisDefinition analysisDefinition) {
         String retVal = me.toString().replace("-\n", "").replace('\n', ' ');
-        MetaPath expandedNamePath = analysisDefinition.getExpandedNamePath(me.getClass());
+        AbstractMetaPath expandedNamePath = analysisDefinition.getExpandedNamePath(me.getClass());
         if (expandedNamePath != null) {
             StringBuilder sb = new StringBuilder(retVal);
             sb.append(" (");
-            for (ModelElement connected : PathFinder.getConnectedElements(me, expandedNamePath)) {
+            for (ModelElement connected : MetaPathFunctions.getConnectedElements(me, expandedNamePath)) {
                 sb.append(getElementName(connected, analysisDefinition));
                 sb.append(", ");
             }

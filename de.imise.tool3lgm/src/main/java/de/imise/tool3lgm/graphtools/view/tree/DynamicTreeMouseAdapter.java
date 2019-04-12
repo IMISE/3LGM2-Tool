@@ -3,12 +3,10 @@ package de.imise.tool3lgm.graphtools.view.tree;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.StringTokenizer;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
@@ -21,14 +19,16 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.tools.BrowseUtils;
-import de.imise.tool3lgm.tools.LGMTreeNode;
-import de.imise.util.collections.CollectionUtils;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
+import de.imise.util.swing.event.ExtendedAction;
 
-public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
+public class DynamicTreeMouseAdapter implements MouseListener {
 
     private final DynamicTree tree;
 
@@ -47,11 +47,9 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
     }
 
     /**
-     * COMMENTME
+     * für die Kommunikation zwischen mousePressed und mouseClicked
      */
-    private Object tmpUserObject = null;
-
-    // für die Kommunikation zwischen mousePressed und mouseClicked
+    private LGMTreeNode selectedNode = null;
 
     @Override
     public void mouseClicked(final MouseEvent e) {
@@ -69,9 +67,8 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
             //Component source, int id, long when, int modifiers,
             //int keyCode, char keyChar, int keyLocation
             tree.dispatchEvent(new KeyEvent(tree, KeyEvent.KEY_RELEASED, 0l, 0, KeyEvent.VK_ALT, KeyEvent.CHAR_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD));
-            if (left_button && tmpUserObject != null && tmpUserObject instanceof HyperlinkString) {
-                String value = ((HyperlinkString) tmpUserObject).getValue();
-                BrowseUtils.browse(value);
+            if (left_button && selectedNode != null && selectedNode instanceof UserFieldTreeNode) {
+                ((UserFieldTreeNode) selectedNode).openHyperlink();
                 return;
             }
             Static.getTool().changeToLinked(doc);
@@ -84,8 +81,10 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
             return;
         }
 
-        if (left_button && tmpUserObject != null && tmpUserObject instanceof NodeContainer) {
-            doc.showPropertyDialog(((NodeContainer) tmpUserObject).getElement());
+        if (left_button && selectedNode != null && selectedNode instanceof ElementContainerTreeNode) {
+            ElementContainer ec = ((ElementContainerTreeNode) selectedNode).getUserObject();
+            ModelElement me = ec.getElement();
+            doc.showPropertyDialog(me);
         }
     }
 
@@ -132,8 +131,7 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
             }
         }
         if (path != null) {
-            Object knot = ((LGMTreeNode) path.getLastPathComponent()).getUserObject();
-            tmpUserObject = knot;
+            selectedNode = (LGMTreeNode) path.getLastPathComponent();
             Object lastPathComponent = path.getLastPathComponent();
             if (tree.isLayerNode(lastPathComponent)) {
                 if (right_button) {
@@ -145,40 +143,27 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
                 return;
             }
 
-            // TODO:FST: Actions für Item aus GlobalActionLibrary holen und setzen
-            TreePath parent = path.getParentPath();
-            if (parent != null) {
-                lastPathComponent = parent.getLastPathComponent();
-                if (!(knot instanceof ElementContainer)) {
-                    if (right_button) {
-                        String label = path.getLastPathComponent().toString();
-                        Class<? extends ModelElement> elementClass = null;
-                        for (Class<? extends ModelElement> creatableElementClass : CollectionUtils.getCommonIterable(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES, ModelConstants.CREATABLE_LOGICAL_LAYER_NODES,
-                                ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES)) {
-                            String displayName = ModelConstants.getDisplayableName(creatableElementClass);
-                            if (displayName.equals(label)) {
-                                elementClass = creatableElementClass;
-                                break;
-                            }
+            //wenn der selektierte Knoten kein ElementContainer-Knoten ist, bleibt die Variable null
+            ElementContainerTreeNode selectedElementContainerTreeNode = selectedNode instanceof ElementContainerTreeNode ? (ElementContainerTreeNode) selectedNode : null;
+            if (selectedElementContainerTreeNode == null) { //kein ElementContainer selektiert, sondern etwas anderes
+                if (right_button) {
+                    if (selectedNode instanceof ElementClassTreeNode) { //Klassenknoten?
+                        Class<? extends ModelElement> elementClass = ((ElementClassTreeNode) selectedNode).getUserObject();
+                        if (ModelConstants.isEditable(elementClass)) {
+                            showNewInstanceContextMenu(elementClass.getSimpleName(), xin + 3, yin + 3);
                         }
-                        if (elementClass == null) {
-                            return;
-                        }
-                        showNewInstanceContextMenu(elementClass.getSimpleName(), xin + 3, yin + 3);
                     }
                 }
-            }
-            if (knot instanceof ElementContainer) {
+            } else { //ElementContainer ist selektiert
                 if (right_button) {
-                    ElementContainer elem = (ElementContainer) knot;
+                    ElementContainer ec = selectedElementContainerTreeNode.getUserObject();
                     //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
                     //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
-                    elem.getGraphDocument().addToSelection(elem, DynamicTree.PID);
+                    ec.getGraphDocument().addToSelection(ec, DynamicTree.PID);
                     JPopupMenu pm = Tool3lgm.getContextGenerator().getKnotContextMenu(tree);
                     if (pm != null) {
                         pm.show(tree, xin + 3, yin + 3);
                     }
-                    return;
                 }
             }
         }
@@ -195,36 +180,17 @@ public class DynamicTreeMouseAdapter implements MouseListener, ActionListener {
      */
     private final JPopupMenu showNewInstanceContextMenu(final String str, final int x, final int y) {
         JPopupMenu menu = new JPopupMenu();
+        ExtendedAction action = GDCommands.MODEL_ACTION_CREATE_NODE.createAction();
+        String actionCommand = action.getActionCommand();
+        actionCommand += " " + str;
+        action.setActionCommand(actionCommand);
 
-        JMenuItem item;
+        menu.add(new JMenuItem(action));
 
-        item = new JMenuItem(getResString("neue_instanz"));
-        item.addActionListener(this);
-        item.setActionCommand("newInstanze " + str);
-        menu.add(item);
         Tool3lgm.setLastActionPosition(x + tree.getX(), y + tree.getY());
         menu.show(tree, x, y);
 
         return menu;
-    }
-
-    @Override
-    public final void actionPerformed(final ActionEvent e) {
-        GraphDocument doc = tree.getGraphDocument();
-        if (doc == null) {
-            return;
-        }
-        String str = e.getActionCommand();
-        if (str.startsWith("newInstanze ")) {
-            StringTokenizer s = new StringTokenizer(str, " ");
-            if (s.countTokens() < 2) {
-                return;
-            }
-            s.nextToken();
-            String klassenname = s.nextToken();
-            doc.createKnotenWithContainer(ModelConstants.NODE_PACKAGE_NAME + klassenname, DynamicTree.PID);
-            return;
-        }
     }
 
 }

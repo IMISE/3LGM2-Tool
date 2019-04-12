@@ -7,12 +7,17 @@ import java.util.Map;
 
 import javax.swing.tree.TreePath;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**
  * Ein {@link PathConnectionPanel}, das statt im linken bzw. einzigen Baum den ganzen Pfad anzuzeigen immer
@@ -30,22 +35,27 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
      */
     private Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 
-    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, showRightTree, edgeClasses);
+    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, showRightTree, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, showRightTree, searchElementClass, edgeClasses);
+    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelLastEdgeName, showRightTree, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelLastEdgeName, showRightTree, edgeClasses);
+    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, showRightTree, maxLines, simpleMetaPath);
+    }
+
+    public PathConnectionLeafPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelLastEdgeName, showRightTree, maxLines, true, simpleMetaPath);
     }
 
     @Override
     protected boolean isConnectionPointUnique() {
-        //es wird immer an root angehängt
-        return true;
+        //bei MultipleEdges wird im rechten Baum nichts ausgeschlossen, bei allen anderen, darf man jedes Element nur einmal verknüpfen -> sie werden im rechten Baum deaktiviert, wenn sie im linken verknüpft sind
+        Class<? extends Edge> lastEdgeClassInPath = getLastEdgeClassInPath();
+        return !MultipleEdge.class.isAssignableFrom(lastEdgeClassInPath);
     }
 
     /**
@@ -56,7 +66,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
         Collection<LGMTreeNode> leafNodes = super.buildLeftTree();
         //wenn dieses Panel mit einem Pfad der Länge 1 initialisiert wurde, dann gibt es hier nichts zu tun,
         //da es keine Zwischenelemente gibt, die nicht angezeigt werden sollen
-        if (edgeClasses.length == 1) {
+        if (getEdgesInPathCount() == 1) {
             return leafNodes;
         }
         if (nodeToParentModelElement == null) {
@@ -65,18 +75,36 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
             nodeToParentModelElement.clear();
         }
         if (!leafNodes.isEmpty()) {
-            //vor dem Umhängen der Blätter an den root für jedes Blatt das echte Vorgängerelement auf dem Pfad merken
-            for (LGMTreeNode leaf : leafNodes) {
-                LGMTreeNode leafParent = (LGMTreeNode) leaf.getParent();
-                ModelElement parentMe = getNodeModelElement(leafParent);
-                nodeToParentModelElement.put(leaf, parentMe);
-                lroot.add(leaf);
-            }
-            //alle Elemente vom root abhängen
-            lroot.removeAllChildren();
-            //alle Blätter direkt an den root hängen
-            for (LGMTreeNode leaf : leafNodes) {
-                lroot.add(leaf);
+            if (metaPath.isCreatable()) { //wen der anlegbar ist, dann werden die Blätter sooft angezeigt, wie Pfade existeren (also Elemente evtl. auch doppelt)
+                //vor dem Umhängen der Blätter an den root für jedes Blatt das echte Vorgängerelement auf dem Pfad merken
+                for (LGMTreeNode leaf : leafNodes) {
+                    LGMTreeNode leafParent = (LGMTreeNode) leaf.getParent();
+                    ModelElement parentMe = getNodeModelElement(leafParent);
+                    nodeToParentModelElement.put(leaf, parentMe);
+                }
+                //alle Elemente vom root abhängen
+                lroot.removeAllChildren();
+                //alle Blätter direkt an den root hängen
+                for (LGMTreeNode leaf : leafNodes) {
+                    lroot.add(leaf);
+                }
+            } else { //der Pfad ist nicht anlegbar und somit werden die verbundenen Elemente nur angezeigt -> keins doppelt anzeigen! In diesem Fall ist nodeToParentModelElement egal!
+                ImmutableList.Builder<LGMTreeNode> newLeafNodes = ImmutableList.builder();
+                //alle Elemente vom root abhängen
+                lroot.removeAllChildren();
+                ltree.reset(); //check von bereits hinzugefügten Elementen zurück setzen
+                //alle Blätter neu erzeugen und direkt an den root hängen
+                for (LGMTreeNode leaf : leafNodes) {
+                    Object userObject = leaf.getUserObject();
+                    if (userObject instanceof ElementContainer) {
+                        ElementContainer ec = (ElementContainer) userObject;
+                        LGMTreeNode node = ltree.addObject(ec, lroot, null, true, true, false);
+                        if (node != null) {
+                            newLeafNodes.add(node);
+                        }
+                    }
+                }
+                return newLeafNodes.build();
             }
         }
         return leafNodes;
@@ -98,17 +126,30 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
                     return;
                 }
                 TreePath[] path2disconnect = ltree.getSelectionPaths();
+                int treePathEdgeIndex = getEdgesInPathCount() - 1;
                 for (int i = 0; i < path2disconnect.length; i++) {
                     LGMTreeNode node = (LGMTreeNode) path2disconnect[i].getLastPathComponent();
                     ModelElement element2Disconnect = getNodeModelElement(node);
                     //immer nur die letzte Edge im Pfad entfernen
                     //das ist der Index der Edge im Pfad, ab der entfernt werden soll
-                    int treePathEdgeIndex = edgeClasses.length - 1;
                     ModelElement parentOfElement2Disconnect = nodeToParentModelElement.get(node);
                     disconnect(parentOfElement2Disconnect, element2Disconnect, treePathEdgeIndex);
                 }
             }
         };
+    }
+
+    @Override
+    protected void connectToFirstPath(final ModelElement element2Connect) {
+        //dieses Panel ändert das ursprüngliche Verhalten dahingehend, dass es immer den ganzen Pfad neu anlegt und nicht nur den letzten Teil
+        createPath(element2Connect);
+    }
+
+    public void createPath(final ModelElement endElement) {
+        if (!metaPath.isCreatable()) {
+            return;
+        }
+        doc.createPath(dialog.getModelElement(), null, metaPath, true, dialog.getTransactionID());
     }
 
 }

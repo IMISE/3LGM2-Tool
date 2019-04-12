@@ -28,7 +28,6 @@ import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumFunction.TW
 import de.imise.tool3lgm.graphtools.userfield.calculator.PartValueSumSinglePartResults;
 import de.imise.tool3lgm.graphtools.userfield.event.UserFieldDefinitionChangeHandler;
 import de.imise.util.collections.CollectionUtils;
-import de.imise.util.collections.ExtendedMap;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
@@ -945,10 +944,6 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
     public Set<Class<? extends UserFieldTarget>> getUserFieldTargets() {
         return classToUserFieldListMap.keySet();
-    }
-
-    public String toExtendedToString() {
-        return ExtendedMap.toString(hashStringToUserFieldMap);
     }
 
     @Override

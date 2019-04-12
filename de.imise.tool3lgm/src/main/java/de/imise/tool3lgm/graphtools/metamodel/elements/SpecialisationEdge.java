@@ -1,6 +1,11 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
-public abstract class SpecialisationEdge extends SubordinationEdge {
+/**
+ * Spezialisierungskanten vererben ihre Eigenschaften vom Generellen ans Spezielle, also vom Startelement an das Endelement.
+ *
+ * @author AXS (05 Dec 2018)
+ */
+public abstract class SpecialisationEdge extends HasPartPropertyTransferStartToEndEdge {
 
     public final ModelElement getSpecializedElement() {
         return getSubElement();

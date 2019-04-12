@@ -3,21 +3,27 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 
 import java.lang.reflect.Modifier;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import javax.swing.Action;
 
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.path.InvalidPathException;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -30,6 +36,7 @@ public abstract class MetaModel {
 
     public MetaModel() {
         putOldToNewClassNames();
+        initCreatableMetaPaths();
     }
 
     /**
@@ -93,9 +100,9 @@ public abstract class MetaModel {
     // PathsDefinition //
     /////////////////////
 
-    private PathsDefinition pathsDefinition;
+    private MetaPathDefinition pathsDefinition;
 
-    public final PathsDefinition getPathsDefinition() {
+    public final MetaPathDefinition getPathsDefinition() {
         //immer lazy initialisieren, weil die PathsDefinition die kompeltten ModelConstants braucht, um sich selbst
         //zu initialisieren und die ModelConstants aber dieses Metamodel initialisieren -> wenn nicht lazy => InitializationException
         if (pathsDefinition == null) {
@@ -109,11 +116,8 @@ public abstract class MetaModel {
      *
      * @return
      */
-    protected PathsDefinition createPathsDefinition() {
-        return new PathsDefinition() {
-            @Override
-            protected void init() throws InvalidPathException {
-            }
+    protected MetaPathDefinition createPathsDefinition() {
+        return new MetaPathDefinition() {
         };
     }
 
@@ -246,6 +250,27 @@ public abstract class MetaModel {
         return allNodes;
     }
 
+    /**
+     * Liefert alle Elementklassen, die nur im Baum angezeigt werden sollen, wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
+     * auf <code>true</code> gestellt ist.
+     * ACHTUNG: hier wird nur mit contains(class) gerpüft -> immer auch die Oberklassen, die versteckt werden sollen reinschreiben
+     *
+     * @return alle Elementklassen, die nur im ExpertMode im Baum angezeigt werden
+     */
+    public Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
+        return ImmutableSet.of();
+    }
+
+    /**
+     * Liefert alle Elementklassen, die nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true) angelegt und verändert werden
+     * können.
+     *
+     * @return alle Elementklassen, die nur im ExpertMode geändert werden können
+     */
+    public Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes() {
+        return ImmutableSet.of();
+    }
+
     ////////////
     // Kanten //
     ////////////
@@ -325,28 +350,41 @@ public abstract class MetaModel {
      * @param edgeClass
      * @return
      */
-    public MetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
+    public SimpleMetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
         //aus Performancegründen sollte hier keine Map zum Einsatz kommen. Es wird für die allerwenigsten Kanten einen solchen Pfad geben
         //und Unterklasse sollten das einfach über eine if-then-Abfrage regeln
         return null;
     }
 
+    private static final Iterable<SimpleMetaPath> EMPTY_SIMPLE_META_PATH_ITERABLE = ImmutableList.of();
+
     /**
-     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
-     * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Edge
-     * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
-     * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Edge dargestellt werden, die
-     * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt. Hier wurde also das Model misbraucht, um im View diese Assoziationen
-     * zusammenzufassen.
+     * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
+     * Kantenklasse durchgeführt wird. <br>
+     * Jeder der Pfade muss zwingend bei derselben Klasse starten, bei der diese Kante startet.<br>
+     * Der Pfad hat nur einen Effekt, wenn seine Startklasse zur Startklasse dieser Kante zuweisungskompatibel ist und er mind. eine
+     * {@link InstanciationEdge} enthält. Der hiermit verbundene Mechanismus geht durch die Kantenklassen des Pfades. Ist die aktuelle
+     * Kantenklasse keine {@link InstanciationEdge}, dann suche von den aktuellen Elementen ausgehend (am Anfang ist das das Startelement dieser
+     * Kante) alle damit über diese Kantenart verbundenen Elemente und nimmt sie für den nächsten Schritt als Startelemente. Sobald im Pfad eine
+     * {@link InstanciationEdge} auftaucht, werden alle Elementarten und Kanten der dahinter liegenden Pfadschritte kompeltt neu erzeugt und die
+     * entstehenden Elemente immer mit den vorherigen verbunden. Wenn der Pfad mit einer Klasse endet (was er in den meisten Fällen tun wird, damit
+     * das ganze sinnvoll ist), die zuweisungskompatibel zur Endklasse dieser Kante ist (also zum durch diese Kante neu erzeugten Element), dann wird
+     * die letzte Verbindung bzw. die letzte Kante hin zum EndElementdieser Kante erzeugt und nicht nochmal ein Element der Endelementart angelegt.
+     * Damit kann man "Nebenbedingungspfade" für das Startelement gleich mit anlegen, wenn man das Startelement über diese Kante hier intsanziiert.
+     *
+     * @param instanciationEdgeClass
+     * @return
      */
-    public abstract Set<Class<? extends Edge>> getDoubleMeaningEdgeClasses();
+    public Iterable<SimpleMetaPath> getInstanciableMetaPaths(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
+        return EMPTY_SIMPLE_META_PATH_ITERABLE;
+    }
 
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
     ///////////////////////////////////////////////////////////////////
 
     //    /**
-    //     * Um Festzustellen, ob ein gegebener Klassenname bereits voll qulaifiziert ist, wird geschaut, ob der Klassenname mit
+    //     * Um Festzustellen, ob ein gegebener Klassenname bereits voll qualifiziert ist, wird geschaut, ob der Klassenname mit
     //     * diesem Prefix beginnt. Ein Metamodell dessen Element-Klassen außerhalb von "de.imise.tool3lgm." liegen, müsste über
     //     * diese Funktion den tatsächlichen Prefix ausgeben. Da das aber in absehbarer Zeit nicht passieren wird, ist diese
     //     * Funktion hier ertsmal final.
@@ -360,5 +398,33 @@ public abstract class MetaModel {
 
     /** Liefert ein Set aller Elementklassen, bei denen der Name nicht vom Nutzer eingegeben sondern generiert wird. */
     public abstract Set<Class<? extends ModelElement>> getGenerateNameClasses();
+
+    /**
+     * @return Liefert eine Sammlung aller {@link SimpleMetaPath}, die man zwischen 2 Elementen anlegen kann, wobei die Zwischenelemente ebenfalls neu
+     *         angelegt werden. Diese Pfade werden im Kontextmenü bei Mehrfachselektion oder Einfachselektion angeboten.
+     */
+    protected abstract Collection<SimpleMetaPath> getCreatablePaths();
+
+    private final Multimap<Class<? extends ModelElement>, SimpleMetaPath> elementClassToCreatableMetaPaths = ArrayListMultimap.create();
+
+    private final void initCreatableMetaPaths() {
+        Collection<SimpleMetaPath> creatablePaths = getCreatablePaths();
+        if (creatablePaths != null) {
+            for (SimpleMetaPath metaPath : creatablePaths) {
+                elementClassToCreatableMetaPaths.put(metaPath.getStartClass(), metaPath);
+                elementClassToCreatableMetaPaths.put(metaPath.getEndClass(), metaPath.getOtherDirection());
+            }
+        }
+    }
+
+    /**
+     * Liefert alle anlegbaren MetaPfade die für die übergebene Elementart im Metamodell definiert sind.
+     *
+     * @param elementClass
+     */
+    public Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass) {
+        Collection<SimpleMetaPath> creatablePaths = elementClassToCreatableMetaPaths.get(elementClass);
+        return creatablePaths == null ? ImmutableList.of() : creatablePaths;
+    }
 
 }

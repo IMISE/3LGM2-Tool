@@ -18,8 +18,8 @@ import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
  * @author fstephan Diese Klasse stellt statische Methoden zur Erzeugung von <code>LGMAction</code>

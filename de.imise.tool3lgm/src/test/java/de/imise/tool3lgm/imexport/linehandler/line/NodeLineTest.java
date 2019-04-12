@@ -4,12 +4,11 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.List;
 
-import mockit.Mock;
-import mockit.MockUp;
-
 import org.testng.annotations.Test;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import mockit.Mock;
+import mockit.MockUp;
 
 public class NodeLineTest {
 

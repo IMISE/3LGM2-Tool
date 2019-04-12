@@ -11,8 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
 /**
@@ -31,20 +31,20 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
 
     /**
      * @param dialog
-     * @param edgeClasses
+     * @param simpleMetaPath
      */
-    public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, false, edgeClasses);
+    public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, simpleMetaPath);
     }
 
     /**
      * @param dialog
      * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
      *            letzten Edge aus den edgeClasses geschrieben.
-     * @param edgeClasses
+     * @param simpleMetaPath
      */
-    public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelLastEdgeName, edgeClasses);
+    public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelLastEdgeName, true, simpleMetaPath);
     }
 
     @Override

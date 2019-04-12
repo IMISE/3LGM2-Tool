@@ -1,7 +1,9 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0;
 
+import java.util.Collection;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
@@ -9,9 +11,9 @@ import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.AufObjVerbindung;
@@ -90,8 +92,7 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Standort;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Subnetz;
 
 @SuppressWarnings({
-        "unchecked",
-        "rawtypes"
+        "unchecked", "rawtypes"
 })
 public class TLGMOriginalMetaModel extends MetaModel {
 
@@ -114,7 +115,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
     /////////////////////
 
     @Override
-    public PathsDefinition createPathsDefinition() {
+    public MetaPathDefinition createPathsDefinition() {
         return new TLGMOriginalPathsDefinition();
     }
 
@@ -160,11 +161,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     /** Alle Node der FE als Array */
     private static final Class[] ALL_DOMAIN_LAYER_NODES = {
-            Aufgabe.class,
-            AufOrgKombination.class,
-            Objekttyp.class,
-            Organisationseinheit.class,
-            Prozess.class,
+            Aufgabe.class, AufOrgKombination.class, Objekttyp.class, Organisationseinheit.class, Prozess.class,
     };
 
     /** Alle Node zw. FE und LWE als Array */
@@ -210,12 +207,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     /** Alle Node der PWE als Array */
     private final Class[] ALL_PHYSICAL_LAYER_NODES = {
-            PhysischerDVBaustein.class,
-            Standort.class,
-            Bausteintyp.class,
-            Netztyp.class,
-            Subnetz.class,
-            Netzprotokoll.class,
+            PhysischerDVBaustein.class, Standort.class, Bausteintyp.class, Netztyp.class, Subnetz.class, Netzprotokoll.class,
     };
 
     @Override
@@ -340,36 +332,6 @@ public class TLGMOriginalMetaModel extends MetaModel {
         return IMPORTABLE_NODES;
     }
 
-    ///////////////////////////////////
-    // spezielle Kanteneigenschaften //
-    ///////////////////////////////////
-
-    /**
-     * Liste aller Kantenklassen, die auch 2 gerichtete Assoziationen im Metamodell sein könnten, aber in eine Assoziation verpackt wurden,
-     * bei denen die Richtung der Edge (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Wegen dieser
-     * Kanten braucht man den ganzen Kanten-Richtungsmechanismus. Wenn sie grafisch dargestellt werden, dann werden sie als eine Edge dargestellt,die
-     * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt.
-     */
-    @Override
-    public final Set<Class<? extends Edge>> getDoubleMeaningEdgeClasses() {
-        return ImmutableSet.<Class<? extends Edge>> of(
-                //vorwärts1: bearbeitet; rückwärts1: wird bearbeitet von
-                //vorwärts2: interpretiert; rückwärts2: wird interpretiert von
-                AufObjVerbindung.class,
-                //vorwärts1: kann senden; rückwärts1: kann gesendet werden von
-                //vorwärts2: kann empfangen; rückwärts2: kann empfangen werden von
-                BssEtntVerbindung.class,
-                //vorwärts1: sendet über; rückwärts1: wird gesendet über
-                //vorwärts2: empfängt über; rückwärts2: wird empfangen über
-                KommbezEtntVerbindung.class,
-                //vorwärts1: sendet an; rückwärts1: empfängt von
-                //vorwärts2: sendet an; rückwärts2: empfängt von
-                //ACHTUNG: Dies ist auch eine Edge mit doppelter Bedeutung, weil sie das gerichtete
-                //Senden und Empfangen zw. Schnittstellen ausdrückt. Da aber beide Endklassen gleich sind
-                //haben sie auch in beiden Richtungen immer dieselb Bedeutung.
-                KommBeziehung.class);
-    }
-
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
     ///////////////////////////////////////////////////////////////////
@@ -379,6 +341,11 @@ public class TLGMOriginalMetaModel extends MetaModel {
     @Override
     public Set<Class<? extends ModelElement>> getGenerateNameClasses() {
         return GENERATE_NAME_CLASSES;
+    }
+
+    @Override
+    protected Collection<SimpleMetaPath> getCreatablePaths() {
+        return ImmutableList.of();
     }
 
 }

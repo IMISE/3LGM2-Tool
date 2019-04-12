@@ -25,9 +25,11 @@ import javax.xml.stream.XMLStreamException;
 import com.google.common.base.Strings;
 import com.google.common.collect.Table.Cell;
 
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -398,7 +400,15 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             Edge edge = (Edge) me;
             writeModelElementField("start", edge.getStart().getHashString());
             writeModelElementField("end", edge.getEnd().getHashString());
-            writeModelElementField("state", edge.getDirectionName());
+            if (me instanceof DoubleMeaningEdge) {
+                writeModelElementField("state", ((DoubleMeaningEdge) edge).getConnectionStateName());
+            }
+            if (me instanceof OptionalEdge) {
+                OptionalEdge optionalEdge = (OptionalEdge) me;
+                if (optionalEdge.isOptional()) {
+                    writeModelElementField("optional", Boolean.TRUE.toString());
+                }
+            }
         } else if (me instanceof Knickpunkt) {
             Knickpunkt bendpoint = (Knickpunkt) me;
             EdgeContainer edgeContainer = bendpoint.getOwner();

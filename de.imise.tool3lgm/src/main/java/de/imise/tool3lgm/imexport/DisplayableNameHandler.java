@@ -2,6 +2,7 @@ package de.imise.tool3lgm.imexport;
 
 import java.util.HashMap;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
@@ -15,7 +16,7 @@ public class DisplayableNameHandler {
 
     private void init() {
         for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_ELEMENTS) {
-            String name = ModelConstants.getDisplayableName(elementClass);
+            String name = ElementsNameBuilder.getDisplayableName(elementClass);
             displayableName2ClassMap.put(name, elementClass);
             if (ModelConstants.isEdgeType(elementClass)) {
 

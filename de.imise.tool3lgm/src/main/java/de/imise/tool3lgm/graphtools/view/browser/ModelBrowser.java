@@ -52,8 +52,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      * @return
      */
     protected void addCollection(final GDCollection gdcoll) {
-        JComponent panel;
-        panel = new SubModelComboBoxPane(gdcoll);
+        JComponent panel = new SubModelComboBoxPane(gdcoll);
         addTab(gdcoll.getName(), panel);
         setSelectedComponent(panel);
     }
@@ -203,6 +202,13 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
         }
 
         lastActiveBrowser = this;
+    }
+
+    public void updateAllSubModelBrowsers() {
+        for (int i = 0; i < getTabCount(); i++) {
+            SubModelsBrowser collectionPane = (SubModelsBrowser) getComponentAt(i);
+            collectionPane.update();
+        }
     }
 
     @Override

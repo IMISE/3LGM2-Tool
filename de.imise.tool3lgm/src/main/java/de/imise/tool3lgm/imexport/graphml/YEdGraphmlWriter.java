@@ -17,6 +17,8 @@ import javax.xml.stream.XMLStreamException;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -338,9 +340,10 @@ public class YEdGraphmlWriter extends GraphmlWriter {
 
     private void writeEdgeArrows(final EdgeContainer ec) throws XMLStreamException {
         Edge edge = ec.getEdge();
-        int direction = edge.getDirection();
-        String sourceArrow = direction == Edge.DOUBLE || direction == Edge.BACKWARD ? "delta" : "none";
-        String targetArrow = direction == Edge.DOUBLE || direction == Edge.FORWARD ? "delta" : "none";
+        Class<? extends Edge> edgeClass = edge.getClass();
+        ConnectionState direction = ModelConstants.isDirectedEdge(edgeClass) ? ModelConstants.isDoubleMeaningEdge(edgeClass) ? ((DoubleMeaningEdge) edge).getConnectionState() : ConnectionState.FORWARD : ConnectionState.DOUBLE;
+        String sourceArrow = direction == ConnectionState.DOUBLE || direction == ConnectionState.BACKWARD ? "delta" : "none";
+        String targetArrow = direction == ConnectionState.DOUBLE || direction == ConnectionState.FORWARD ? "delta" : "none";
         writeEmptyElement("y:Arrows", "source", sourceArrow, "target", targetArrow);
     }
 

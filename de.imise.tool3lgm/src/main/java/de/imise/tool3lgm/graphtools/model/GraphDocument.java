@@ -7,7 +7,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_NAME_CHANGED;
@@ -39,19 +39,27 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.CommandParser;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -81,6 +89,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     /** Zeichen, das in Kommandos zusammengehörigen Text umschließt, damit er als zusammengehörig erkannt werden kann */
     public static final char GDCOMMAND_TEXT_SURROUNDER = '\'';
+
+    public static final char GENERATED_NAME_PREFIX = 27; //ESCAPE
 
     public final OptionsSupport optionsSupport = new OptionsSupport();
 
@@ -600,7 +610,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 if (answer != null) {
                     dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
                     if (!answer) { // die Checkbox ist nicht selektiert -> Globale Option "Warnmeldung vor dem Löschen" soll true sein
-                        BooleanProperty.OPTION_SHOW_REMOVE_WARNING.getAction().perform();
+                        BooleanProperty.OPTION_SHOW_REMOVE_WARNING.createAction().perform();
                     }
                 }
             } else {
@@ -672,7 +682,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case MODEL_ACTION_LINK:
             switch (argc) {
             case 2:
-                linkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), Integer.parseInt(argv[1]), pid);
+                Direction direction = Enum.valueOf(Direction.class, argv[1]);
+                linkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), direction, pid);
                 break;
             case 6:
                 //Parameter: link(String edgeClassName, String edgeHash, ModelElement k1, ModelElement k2, int edgeIndex, int pid) {
@@ -691,7 +702,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             Class<? extends Edge> edgeClass = null;
             switch (argc) {
             case 2:
-                unlinkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), Integer.parseInt(argv[1]), pid);
+                Direction direction = Enum.valueOf(Direction.class, argv[1]);
+                unlinkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), direction, pid);
                 break;
             case 4:
                 edgeClass = ModelConstants.getClassForName(argv[2]).asSubclass(Edge.class);
@@ -727,6 +739,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             edgeClass = ModelConstants.getClassForName(argv[2]).asSubclass(Edge.class);
             Class<? extends ModelElement> slaveClass = ModelConstants.getClassForName(argv[3]);
             createAddicted(doc, master, edgeClass.asSubclass(CompositionEdge.class), slaveClass, pid);
+            break;
+
+        case MODEL_ACTION_CREATE_INSTANCIATION:
+            Class<? extends InstanciationEdge> instanciationClass = ModelConstants.getClassForName(argv[0]).asSubclass(InstanciationEdge.class);
+            doc = null;
+            master = null;
+            try {
+                doc = getCollection().getGraphDocumentCoded(argv[1]);
+                master = doc.findElementCoded(argv[2]);
+            } catch (Exception e) {
+                //die letzten beiden sind optional. Wird ein doc angegeben, dann wird in dem gesucht, sonst im gerade aktiven doc. Wird ein Hash für das Ausgangselement der Kante angegeben, dann wird nur das genommen, sonst die Selektion.
+            }
+            createInstance(doc, instanciationClass, master, pid);
             break;
 
         case MODEL_ACTION_SET_ELEMENT_COLOR:
@@ -911,6 +936,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 setUserFieldWeightReplacement(argv[0], argv[1], argv[2], pid);
             }
             break;
+
+        case MODEL_ACTION_SET_ELEMENT_OPTIONAL:
+            if (argc == 2) {
+                ModelElement element = getCollection().getMainGraphDocument().findElementCoded(argv[0]);
+                boolean bool = Boolean.parseBoolean(argv[1]);
+                setOptional((Edge) element, bool, pid);
+            }
 
         case MODEL_ACTION_SET_ELEMENT_POSITION:
             if (argc == 6) {
@@ -1723,7 +1755,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param iconFile
      */
     public final void setIcon(final File iconFile, final int pid) {
-        String iconKey = gdcoll.loadIcon(iconFile);
+        String iconKey = gdcoll.getIconTable().loadIcon(iconFile);
         if (iconKey == null) {
             return;
         }
@@ -2951,7 +2983,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         for (ElementContainer ec : selectedContainer) {
             Class<? extends ElementContainer> ecClass = ec.getClass();
-            if (BendpointContainer.class.isAssignableFrom(ecClass) || EdgeContainer.class.isAssignableFrom(ecClass)) {
+            if (!(BendpointContainer.class.isAssignableFrom(ecClass) && EdgeContainer.class.isAssignableFrom(ecClass))) {
                 returnList.add(ec);
             }
         }
@@ -2976,7 +3008,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (prefix == null) {
             prefix = "";
         }
-        String name = prefix + ModelConstants.getDisplayableName(elementClass) + " ";
+        String name = prefix + ElementsNameBuilder.getDisplayableName(elementClass) + " ";
         String newName = CollectionUtils.getNextIndicatedName(name, gdcoll.getMainGraphDocument().getModelItems(elementClass));
         return newName;
     }
@@ -3006,6 +3038,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public NodeContainer createKnotenWithContainer(final Class<? extends ModelElement> elementClass, final int pid) {
         return createKnotenWithContainer(elementClass, GDCommands.INVALID_NAME, GDCommands.INVALID_DESCRIPTION, GDCommands.INVALID_HASH_STRING, pid);
+    }
+
+    /**
+     * @param elementClass
+     * @param name
+     * @param pid
+     * @return
+     */
+    public NodeContainer createKnotenWithContainer(final Class<? extends ModelElement> elementClass, final String name, final int pid) {
+        return createKnotenWithContainer(elementClass, name, GDCommands.INVALID_DESCRIPTION, GDCommands.INVALID_HASH_STRING, pid);
     }
 
     /**
@@ -3625,7 +3667,128 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         return retVal;
     }
 
-    public final void linkSelected(final Class<? extends Edge> edgeClass, final int direction, final int pid) {
+    /**
+     * @param doc
+     * @param instanciationEdgeClass
+     * @param master
+     * @param pid
+     * @return
+     */
+    private NodeContainer createInstance(GraphDocument doc, final Class<? extends InstanciationEdge> instanciationEdgeClass, ModelElement master, final int pid) {
+        doc = doc == null ? this : doc;
+        master = master == null ? doc.getLastSelected().getElement() : master;
+        doc.start_transaction(pid);
+        //Hauptkante anlegen
+        Class<? extends ModelElement> class2Create = Edge.getEndClass(instanciationEdgeClass);
+        String name = GENERATED_NAME_PREFIX + master.getName() + " " + Tool3lgmConstants.getResString("INSTANCE");
+        NodeContainer instanceContainer = doc.createKnotenWithContainer(class2Create, name, pid);
+        ModelElement instanceElement = instanceContainer.getElement();
+        gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
+
+        //Ebenfalls zu instanziierende Nebenpfade anlegen
+        for (SimpleMetaPath metaPath : ModelConstants.getInstanciablePath(instanciationEdgeClass)) {
+            int path2CreateStartIndex = 0;
+            for (; path2CreateStartIndex < metaPath.getMetaPathCount(); path2CreateStartIndex++) {
+                List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+                ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(path2CreateStartIndex);
+                if (elementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
+                    break;
+                }
+            }
+            //für diesen Pfadteil müssen die verbundenen Elemente herausgesucht werden
+            SimpleMetaPath subPathConnected = metaPath.getSubPath(0, path2CreateStartIndex);
+            Collection<ModelElement> connectedElements = MetaPathFunctions.getConnectedElements(master, subPathConnected);
+            for (ModelElement me : connectedElements) {
+                //ab diesem Pfadteil muss neu angelegt werden
+                SimpleMetaPath subPathCreate = metaPath.getSubPath(path2CreateStartIndex);
+                doc.createPath(me, instanceElement, subPathCreate, pid);
+            }
+        }
+
+        doc.finish_transaction(pid);
+        doc.distributeEvent(DATA_CHANGED, pid);
+        return instanceContainer;
+    }
+
+    public final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final int pid) {
+        createPath(startElement, endElement, metaPath, false, pid);
+    }
+
+    public final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final boolean askNameForNewEndElement, final int pid) {
+        start_transaction(pid);
+
+        final int lastPathStepIndex = metaPath.getMetaPathCount() - 1;
+        //wenn ein EndElement ex. und die letzte Kante eine InstanciationEdge ist, wobei das EndElement der Master dieser InstanciationEdge ist, dann
+        //wird das EndElement über diese Kante instanziiert und der Restpfad bis zu dieser Instanz dann wieder über diese Funktion angelegt
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        boolean createSubPath = false;
+        if (lastPathStepIndex > 0 && endElement != null) {
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(lastPathStepIndex);
+            if (!elementaryMetaPath.hasDirectionForward()) {
+                if (elementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
+                    NodeContainer createdInstance = createInstance(this, elementaryMetaPath.getEdgeClass().asSubclass(InstanciationEdge.class), endElement, pid);
+                    SimpleMetaPath subPath = metaPath.getSubPath(0, lastPathStepIndex);
+                    createPath(startElement, createdInstance.getElement(), subPath, pid);
+                    createSubPath = true;
+                }
+            }
+        }
+        if (!createSubPath && endElement == null) {
+            Class<? extends ModelElement> pathEndClass = metaPath.getPathStepElementClass(lastPathStepIndex);
+            boolean oldInteractiveMode = gdcoll.setInteractiveMode(askNameForNewEndElement);
+            NodeContainer pathEndElementContainer = createKnotenWithContainer(pathEndClass, pid);
+            gdcoll.setInteractiveMode(oldInteractiveMode);
+            if (pathEndElementContainer != null) { // kann passieren, wenn der Benutzer abbrechen im Namensdialog drückt
+                createPath(startElement, pathEndElementContainer.getElement(), metaPath, pid);
+            }
+            createSubPath = true;
+        }
+        if (!createSubPath) {
+            GDCollection gdcoll = getCollection();
+            ModelElement pathStepStartElement = startElement;
+            ModelElement pathStepEndElement = null;
+            for (int i = 0; i <= lastPathStepIndex; i++) {
+                //wenn ein endElement angegeben wurde, dann das im letzten Pfadschritt verknüpfen
+                boolean lastPathStepLinksEndElement = endElement != null && i == lastPathStepIndex; //true, wenn ein endElemnt verknüpft werden soll und das hier der letzte Pfadschritt ist
+                boolean alreadyLinked = false;
+                ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
+                Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+                if (lastPathStepLinksEndElement) {
+                    pathStepEndElement = endElement;
+                    //wenn eine InstanciationEdge in dem Pfad auftaucht und das nicht die letzte Kante hin zu einem bestehenden endElement ist und
+                    //diese Kante vorwärts im Pfad liegt (also vom zu instanzieerenden Element auf das Instanz-Element zeigt), dann wird diese auch
+                    //selbst über den Instanziierungsmechanismus initialisiert
+                } else if (InstanciationEdge.class.isAssignableFrom(edgeClass) && elementaryMetaPath.hasDirectionForward()) {
+                    boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
+                    NodeContainer createdInstance = createInstance(this, edgeClass.asSubclass(InstanciationEdge.class), pathStepStartElement, pid);
+                    gdcoll.setInteractiveMode(oldInteractiveMode);
+                    pathStepEndElement = createdInstance.getElement();
+                    alreadyLinked = true;
+                } else { // nächstes Pfadschrittelement anlegen
+                    Class<? extends ModelElement> pathStepEndClass = metaPath.getPathStepElementClass(i);
+                    boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
+                    NodeContainer pathStepEndElementContainer = createKnotenWithContainer(pathStepEndClass, pid);
+                    gdcoll.setInteractiveMode(oldInteractiveMode);
+                    pathStepEndElement = pathStepEndElementContainer.getElement();
+                }
+                if (!alreadyLinked) {
+                    gdcoll.link(edgeClass, pathStepStartElement, pathStepEndElement, pid);
+                }
+                if (CompositionEdge.class.isAssignableFrom(edgeClass)) {
+                    if (elementaryMetaPath.hasDirectionForward()) {
+                        addict(pathStepStartElement, pathStepEndElement, edgeClass.asSubclass(CompositionEdge.class), pid);
+                    } else {
+                        addict(pathStepEndElement, pathStepStartElement, edgeClass.asSubclass(CompositionEdge.class), pid);
+                    }
+                }
+                pathStepStartElement = pathStepEndElement;
+            }
+        }
+        finish_transaction(pid);
+        distributeEvent(DATA_CHANGED, pid);
+    }
+
+    public final void linkSelected(final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
         if (direction == BACKWARD) {
@@ -3644,7 +3807,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @param pid
      */
-    public final void unlinkSelected(final Class<? extends Edge> edgeClass, final int direction, final int pid) {
+    public final void unlinkSelected(final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
         if (direction == BACKWARD) {
@@ -3934,12 +4097,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
+     * Zeigt die PropertyDialoge aller selektierten Elemente an.
      *
+     * @param onlyLastSelected wenn <code>true</code>, wird nur der Dialog des zuletzt selektierten Elementes angezeigt
      */
-    public void showPropertyDialog() {
-        ElementContainer ec = getLastSelected();
-        if (ec != null) {
-            showPropertyDialog(ec.getElement());
+    public void showPropertyDialog(final boolean onlyLastSelected) {
+        List<ElementContainer> selectedContainer = onlyLastSelected ? ImmutableList.of(getLastSelected()) : getSelectedContainer();
+        for (ElementContainer ec : selectedContainer) {
+            if (ec != null) {
+                showPropertyDialog(ec.getElement());
+            }
         }
     }
 
@@ -4160,6 +4327,21 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT + " " + modelElementHash + " " + userFieldHashToReplaceOrSimpleEdgeClassName, oldUserFieldHashReplacement, pid);
         finish_transaction(pid);
 
+    }
+
+    public final void setOptional(final Edge edge, final boolean value, final int pid) {
+        if (!(edge instanceof OptionalEdge)) {
+            return;
+        }
+        OptionalEdge optional = (OptionalEdge) edge;
+        if (optional.setOptional(value)) {
+            //UNDO und REDO Commands schreiben
+            start_transaction(pid);
+            String hash = edge.getHashString();
+            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL + " " + hash, Boolean.toString(value), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL + " " + hash, Boolean.toString(!value), pid);
+            finish_transaction(pid);
+        }
     }
 
     /**
@@ -4626,6 +4808,30 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final List<ModelElement> getModelItems(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
         return GraphDocumentHandler.getModelItems(this, clazz, includeSubClasses, absolutePartsOnly, alphabetical);
+    }
+
+    /**
+     * @param classes
+     *            Klassen der gesuchten Elementart (Node oder Kanten). Steht dieselbe Elementart (oder eine Ober- bzw. Unterklasse) mehrfach darin,
+     *            sind dieselben Elemente mehrfach in der Ergebnisliste.
+     * @param includeSubClasses
+     *            boolean with true if Vererbung beruecksichtigen; Frage nach allen Anwendungsbausteinen gibt
+     *            auch RechAnwendungsbausteine und KonAnwendungsbausteine zurück usw.
+     * @param absolutePartsOnly
+     *            wenn <code>true</code> werden keine Elemente zurückgegeben, denen über eine Part-Of-Beziehung
+     *            Teilelemente zugewiesen sind. Die Teil-Von-Eigenschaft wird nicht für dieses Teilmodell sondern
+     *            für das Gesamtmodell geprüft.
+     * @param alphabetical
+     *            wenn <code>true</code> wird eine alphabetisch sortierte Liste zurückgegeben
+     * @return List mit allen gefundenen Elementen
+     * @see #getModelItems(Class, boolean, boolean, boolean)
+     */
+    public final List<ModelElement> getModelItems(final Iterable<Class<? extends ModelElement>> classes, final boolean includeSubClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
+        List<ModelElement> elements = new ArrayList<>();
+        for (Class<? extends ModelElement> elementClass : classes) {
+            elements.addAll(GraphDocumentHandler.getModelItems(this, elementClass, includeSubClasses, absolutePartsOnly, alphabetical));
+        }
+        return elements;
     }
 
     /**

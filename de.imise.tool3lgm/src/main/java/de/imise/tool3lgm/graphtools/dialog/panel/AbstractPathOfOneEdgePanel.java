@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.util.EventObject;
 
@@ -11,11 +11,12 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**
  * Panel für alle einfachen Verbindungen zwischen 2 Elementen, also der Kantenpfad ist genau eine Edge lang.
@@ -50,9 +51,9 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param edgeClass
      */
     public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        super(dialog, labelEdgeName, searchElementClass, edgeClass);
+        super(dialog, labelEdgeName, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
         this.edgeClass = edgeClass;
-        edgeIsForward = directions[0] == FORWARD;
+        edgeIsForward = getLastDirectionInPath() == FORWARD;
     }
 
     /**
@@ -64,7 +65,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param targetTree
      * @param connectForward
      */
-    protected final LGMAction getConnectAction(final JTree srcTree, final JTree targetTree, final boolean connectForward) {
+    protected final LGMAction getConnectAction(final JTree srcTree, final JTree targetTree, final Direction direction) {
         final GraphDocument doc = getGraphDocument();
         final GDCollection gdcoll = doc.getCollection();
         final int pid = getTransactionID();
@@ -78,11 +79,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                         ElementContainer ec = (ElementContainer) node.getUserObject();
                         ModelElement me = ec.getElement();
                         ModelElement topLevelMe = getTopLevelModelElement(targetTree);
-                        if (connectForward) {
-                            gdcoll.link(edgeClass, topLevelMe, me, pid);
-                        } else {
-                            gdcoll.link(edgeClass, me, topLevelMe, pid);
-                        }
+                        link(gdcoll, topLevelMe, me, edgeClass, direction, pid);
                     }
                 }
             }
@@ -98,7 +95,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param targetTree
      * @param disconnectForward
      */
-    protected final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree, final boolean disconnectForward) {
+    protected final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree, final Direction direction) {
         final GraphDocument doc = getGraphDocument();
         final GDCollection gdcoll = doc.getCollection();
         final int pid = getTransactionID();
@@ -112,11 +109,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                         ElementContainer ec = (ElementContainer) node.getUserObject();
                         ModelElement me = ec.getElement();
                         ModelElement topLevelModelElement = getTopLevelModelElement(targetTree == null ? srcTree : targetTree);
-                        if (disconnectForward) {
-                            gdcoll.unlink(topLevelModelElement, me, edgeClass, pid);
-                        } else {
-                            gdcoll.unlink(me, topLevelModelElement, edgeClass, pid);
-                        }
+                        unlink(gdcoll, topLevelModelElement, me, edgeClass, direction, pid);
                     }
                 }
             }

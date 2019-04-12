@@ -22,7 +22,7 @@ import javax.swing.JLabel;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.tools.BrowseUtils;
+import de.imise.util.BrowseUtils;
 
 /**
  * @author hboehme
@@ -164,7 +164,7 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
     @Override
     public void mouseClicked(final MouseEvent e) {
         if (e.getX() >= linkPosition.getX() && e.getY() >= linkPosition.getY() && e.getX() <= linkPosition.getX() + linkPosition.getWidth() && e.getY() <= linkPosition.getY() + linkPosition.getHeight()) {
-            BrowseUtils.browseUrlFromResource("toolWebSite");
+            BrowseUtils.browse(getResString("toolWebSite"));
         }
     }
 

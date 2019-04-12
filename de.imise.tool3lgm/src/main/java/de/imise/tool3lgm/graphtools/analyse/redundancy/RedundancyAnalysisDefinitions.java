@@ -10,14 +10,16 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 
 /**
  * Definition aller {@link RedundancyAnalysis}
  *
  * @author AXS (16.09.2017)
  */
-public class RedundancyAnalysisDefinitions {
+public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
 
     /** Die Einzel-Definitionen als Liste */
     private List<SingleRedundancyAnalysisDefinition> redundancyAnalysisDefinitionData;
@@ -28,7 +30,7 @@ public class RedundancyAnalysisDefinitions {
      *            Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
      *            die potenziell redundanten Elemente.
      */
-    public SingleRedundancyAnalysisDefinition add(final MetaPath metaPath) {
+    public SingleRedundancyAnalysisDefinition add(final AbstractMetaPath metaPath) {
         if (redundancyAnalysisDefinitionData == null) {
             redundancyAnalysisDefinitionData = new ArrayList<>();
         }
@@ -65,27 +67,31 @@ public class RedundancyAnalysisDefinitions {
          * hin zu den Softwareprodukten. Wird das getan dann hat der Anzeigename des Anwendungsbausteins die Form
          * "Name des Anwendungsbausteins (Softwareprodukt1, Softwareprodukt2, ...)"
          */
-        private Map<Class<? extends ModelElement>, MetaPath> elementClassToExpandedNamePath;
+        private Map<Class<? extends ModelElement>, AbstractMetaPath> elementClassToExpandedNamePath;
 
         /**
          * Pfad, der angibt, für welche Elementart welche verbundenen Elemente als redundant angesehen werden sollen.
          * Die Ausgangselementart ist die Startelementart des Pfades und die über den Pfad verbundenen Elemente sind
          * die potenziell redundanten Elemente.
          */
-        private final MetaPath metaPath;
+        private final AbstractMetaPath metaPath;
 
-        public SingleRedundancyAnalysisDefinition(final MetaPath metaPath) {
+        private SingleRedundancyAnalysisDefinition(final AbstractMetaPath metaPath) {
             this.metaPath = metaPath;
+            if (!isValidRedundancyMetaPath()) {
+                throw new Error();
+            }
             cardinalityDefinition = new CardinalityDefinition();
             cardinalityDefinition.filterNewCardinalities = true;
             //alle Standardkardinalitäten der Kanten des MetaPfades zur cardinalityDefinition hinzufügen
-            for (Class<? extends Edge> edgeClass : metaPath.getEdgeClasses()) {
+            for (ElementaryMetaPath elementaryMetaPath : metaPath.getElementaryMetaPaths()) {
+                Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
                 cardinalityDefinition.setNewForwardCardinality(edgeClass, Edge.getForwardCardinality(edgeClass));
                 cardinalityDefinition.setNewBackwardCardinality(edgeClass, Edge.getBackwardCardinality(edgeClass));
             }
         }
 
-        public MetaPath getMetaPath() {
+        public AbstractMetaPath getMetaPath() {
             return metaPath;
         }
 
@@ -148,18 +154,23 @@ public class RedundancyAnalysisDefinitions {
          *
          * @param metaPath
          */
-        public void addExpandedNamePath(final MetaPath metaPath) {
+        public void addExpandedNamePath(final AbstractMetaPath metaPath) {
             if (elementClassToExpandedNamePath == null) {
                 elementClassToExpandedNamePath = new HashMap<>();
             }
-            Class<? extends ModelElement> startClass = metaPath.getStartClass();
-            for (Class<? extends ModelElement> instanciableAssignableClass : ModelConstants.getInstanciableAssignableClasses(startClass)) {
-                elementClassToExpandedNamePath.put(instanciableAssignableClass, metaPath);
+            for (Class<? extends ModelElement> startClass : metaPath.getStartClasses()) {
+                for (Class<? extends ModelElement> instanciableAssignableClass : ModelConstants.getInstanciableAssignableClasses(startClass)) {
+                    elementClassToExpandedNamePath.put(instanciableAssignableClass, metaPath);
+                }
             }
         }
 
-        public MetaPath getExpandedNamePath(final Class<? extends ModelElement> elementClass) {
+        public AbstractMetaPath getExpandedNamePath(final Class<? extends ModelElement> elementClass) {
             return elementClassToExpandedNamePath != null ? elementClassToExpandedNamePath.get(elementClass) : null;
+        }
+
+        public boolean isValidRedundancyMetaPath() {
+            return metaPath.getOtherDirection() != null;
         }
 
     }

@@ -1,0 +1,657 @@
+package de.imise.tool3lgm.graphtools.path.meta;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.util.ReflectionUtils;
+
+/**
+ * Oberklasse für alle Metapfade.
+ *
+ * @author AXS
+ * @create 12.10.2010
+ */
+public abstract class AbstractMetaPath {
+
+    /**
+     * Leere Elementarpfadliste
+     */
+    protected static final ImmutableList<ElementaryMetaPath> EMPTY_ELEMENTARY_PATH_LIST = ImmutableList.of();
+
+    /**
+     * Liste aller Startklassen dieses Pfades.
+     */
+    protected Set<Class<? extends ModelElement>> startElementClasses = null;
+
+    /**
+     * Liste aller Endklassen dieses Pfades.
+     */
+    protected Set<Class<? extends ModelElement>> endElementClasses = null;
+
+    /**
+     * Anzeigename des Pfades. Falls es ein
+     */
+    protected String name = null;
+
+    /**
+     * Anzeigename mit Start- und Endklassen. Kann in Unterlassen geändert werden.
+     */
+    protected String fullName = null;
+
+    /**
+     * MataPath für die Gegenrichtung dieses Pfades. Der ist nur nicht <code>null</code>, wenn er sich tatsächlich
+     * feststellen lässt.
+     */
+    protected AbstractMetaPath otherDirection = null;
+
+    /**
+     * Dieses Objekt gibt den Grund an, warum ein MetaPath nicht valide ist. Ist der darin enthaltene InvalidReason <code>null</code>, gilt der
+     * MetaPath als valide.
+     */
+    protected InvalidityCheckResult invalidityCheckResult;
+
+    /**
+     *
+     */
+    public AbstractMetaPath() {
+        this(null);
+    }
+
+    /**
+     * @param name
+     *            Anzeigenamen
+     */
+    public AbstractMetaPath(final String name) {
+        this((Class<? extends ModelElement>) null, (Class<? extends ModelElement>) null, name);
+    }
+
+    /**
+     * @param startElementClass
+     * @param endElementClass
+     */
+    public AbstractMetaPath(final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
+        this(startElementClass, endElementClass, null);
+
+    }
+
+    /**
+     * @param startElementClass
+     * @param endElementClass
+     * @param name
+     */
+    public AbstractMetaPath(final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
+        this(startElementClass != null ? ImmutableSet.of(startElementClass) : null, endElementClass != null ? ImmutableSet.of(endElementClass) : null, name);
+
+    }
+
+    /**
+     * @param startElementClasses
+     * @param endElementClasses
+     * @param name
+     */
+    public AbstractMetaPath(final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
+        this.startElementClasses = startElementClasses == null ? ImmutableSet.of() : ImmutableSet.class.isAssignableFrom(startElementClasses.getClass()) ? startElementClasses : ImmutableSet.copyOf(startElementClasses);
+        this.endElementClasses = endElementClasses == null ? ImmutableSet.of() : ImmutableSet.class.isAssignableFrom(endElementClasses.getClass()) ? endElementClasses : ImmutableSet.copyOf(endElementClasses);
+        this.name = name;
+    }
+
+    /**
+     * @return
+     */
+    public final Set<Class<? extends ModelElement>> getStartClasses() {
+        return startElementClasses;
+    }
+
+    /**
+     * @return
+     */
+    public Class<? extends ModelElement> getStartClass() {
+        Set<Class<? extends ModelElement>> endClasses = getEndClasses();
+        Class<?> commonSuperClass = ReflectionUtils.getCommonSuperClass(endClasses);
+        return commonSuperClass.asSubclass(ModelElement.class);
+    }
+
+    /**
+     * @return
+     */
+    public final Set<Class<? extends ModelElement>> getEndClasses() {
+        return endElementClasses;
+    }
+
+    /**
+     * @return
+     */
+    public Class<? extends ModelElement> getEndClass() {
+        Set<Class<? extends ModelElement>> endClasses = getEndClasses();
+        Class<?> commonSuperClass = ReflectionUtils.getCommonSuperClass(endClasses);
+        return commonSuperClass.asSubclass(ModelElement.class);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Startklasse des übergebenen Metapfades ist.
+     *
+     * @param metaPath
+     *            MetaPfad dessen Startklassen geprüft werden sollen
+     * @param elementClass
+     *            Elementklasse, die als Startklasse geprüft werden soll
+     * @param asSubClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebene Elementklasse eine Unterklasse
+     *            einer Startklasse ist
+     * @param asSuperClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebene Elementklasse eine Oberklasse
+     *            einer Startklasse ist
+     * @return
+     */
+    public static final boolean isStartClass(final AbstractMetaPath metaPath, final Class<? extends ModelElement> elementClass, final boolean asSubClass, final boolean asSuperClass) {
+        for (Class<? extends ModelElement> startClass : metaPath.getStartClasses()) {
+            if (elementClass == startClass) {
+                return true;
+            }
+            if (asSubClass && startClass.isAssignableFrom(elementClass)) {
+                return true;
+            }
+            if (asSuperClass && elementClass.isAssignableFrom(startClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Startklasse dieses Metapfades ist.
+     *
+     * @param elementClass
+     *            Elementklasse, die als Startklasse geprüft werden soll
+     * @param asSubClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebene Elementklasse eine Unterklasse
+     *            einer Startklasse ist
+     * @param asSuperClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebene Elementklasse eine Oberklasse
+     *            einer Startklasse ist
+     * @return
+     */
+    public final boolean isStartClass(final Class<? extends ModelElement> elementClass, final boolean asSubClass, final boolean asSuperClass) {
+        return isStartClass(this, elementClass, asSubClass, asSuperClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine Startklasse des übergebenen Metapfades ist.
+     *
+     * @param metaPath
+     *            MetaPfad dessen Startklassen geprüft werden sollen
+     * @param elementClasses
+     *            Elementklassen, die als Startklasse geprüft werden sollen
+     * @param asSubClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn eine übergebene Elementklasse eine Unterklasse
+     *            einer Startklasse ist
+     * @param asSuperClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn eine übergebene Elementklasse eine Oberklasse
+     *            einer Startklasse ist
+     * @return
+     */
+    public static final boolean isStartClass(final AbstractMetaPath metaPath, final Collection<Class<? extends ModelElement>> elementClasses, final boolean asSubClass, final boolean asSuperClass) {
+        for (Class<? extends ModelElement> elementClass : elementClasses) {
+            if (isStartClass(metaPath, elementClass, asSubClass, asSuperClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine Startklasse dieses Metapfades ist.
+     *
+     * @param elementClasses
+     *            Elementklassen, die als Startklasse geprüft werden soll
+     * @param asSubClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn eine übergebene Elementklasse eine Unterklasse
+     *            einer Startklasse ist
+     * @param asSuperClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn eine übergebene Elementklasse eine Oberklasse
+     *            einer Startklasse ist
+     * @return
+     */
+    public final boolean isStartClass(final Collection<Class<? extends ModelElement>> elementClasses, final boolean asSubClass, final boolean asSuperClass) {
+        return isStartClass(this, elementClasses, asSubClass, asSuperClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau die Endklasse des übergebenen MetaPfades ist.
+     *
+     * @param metaPath
+     *            MetaPfad dessen Endklassen geprüft werden sollen
+     * @param elementClass
+     *            Elementklasse, die als Endklasse geprüft werden soll
+     * @param asSubClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebene Elementklasse eine Unterklasse
+     *            einer Endklasse ist
+     * @param asSuperClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebene Elementklasse eine Oberklasse
+     *            einer Endklasse ist
+     * @return
+     */
+    public static final boolean isEndClass(final AbstractMetaPath metaPath, final Class<? extends ModelElement> elementClass, final boolean asSubClass, final boolean asSuperClass) {
+        for (Class<? extends ModelElement> endClass : metaPath.getEndClasses()) {
+            if (elementClass == endClass) {
+                return true;
+            }
+            if (asSubClass && endClass.isAssignableFrom(elementClass)) {
+                return true;
+            }
+            if (asSuperClass && elementClass.isAssignableFrom(endClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Endklasse dieses MetaPfades ist.
+     *
+     * @param elementClass
+     *            Elementklasse, die als Endklasse geprüft werden soll
+     * @param asSubClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebene Elementklasse eine Unterklasse
+     *            einer Endklasse ist
+     * @param asSuperClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebene Elementklasse eine Oberklasse
+     *            einer Endklasse ist
+     * @return
+     */
+    public final boolean isEndClass(final Class<? extends ModelElement> elementClass, final boolean asSubClass, final boolean asSuperClass) {
+        return isEndClass(this, elementClass, asSubClass, asSuperClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine Endklasse des übergebenen MetaPfades ist.
+     *
+     * @param metaPath
+     *            MetaPfad dessen Endklassen geprüft werden sollen
+     * @param elementClasses
+     *            Elementklasseen, die als Endklasse geprüft werden sollen
+     * @param asSubClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn eine übergebene Elementklasse eine Unterklasse
+     *            einer Endklasse ist
+     * @param asSuperClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn eine übergebene Elementklasse eine Oberklasse
+     *            einer Endklasse ist
+     * @return
+     */
+    public static final boolean isEndClass(final AbstractMetaPath metaPath, final Collection<Class<? extends ModelElement>> elementClasses, final boolean asSubClass, final boolean asSuperClass) {
+        for (Class<? extends ModelElement> elementClass : elementClasses) {
+            if (isEndClass(metaPath, elementClass, asSubClass, asSuperClass)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine Endklasse dieses MetaPfades ist.
+     *
+     * @param elementClasses
+     *            Elementklasseen, die als Endklasse geprüft werden sollen
+     * @param asSubClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn eine übergebene Elementklasse eine Unterklasse
+     *            einer Endklasse ist
+     * @param asSuperClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn eine übergebene Elementklasse eine Oberklasse
+     *            einer Endklasse ist
+     * @return
+     */
+    public final boolean isEndClass(final Collection<Class<? extends ModelElement>> elementClasses, final boolean asSubClass, final boolean asSuperClass) {
+        return isEndClass(this, elementClasses, asSubClass, asSuperClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau die Endklasse des übergebenen MetaPfades ist.
+     *
+     * @param metaPath
+     *            MetaPfad deren Startklasse geprüft werden soll
+     * @param startClass
+     *            Elementklasse, die als Startklasse der Kantenklasse geprüft werden soll
+     * @param startClass
+     *            Elementklasse, die als Endklasse der Kantenklasse geprüft werden soll
+     * @param asSubClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebenen Elementklassen eine Unterklasse der
+     *            Start- bzw. Endklasse der Kante ist
+     * @param asSuperClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebenen Elementklassen eine Oberklasse der
+     *            Start- bzw. Endklasse der Kante ist
+     * @return
+     */
+    public static final boolean isStartAndEndClass(final AbstractMetaPath metaPath, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean asSubClass, final boolean asSuperClass) {
+        return isStartClass(metaPath, startClass, asSubClass, asSuperClass) && isEndClass(metaPath, endClass, asSubClass, asSuperClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau die Endklasse dieses MetaPfades ist.
+     *
+     * @param startClass
+     *            Elementklasse, die als Startklasse der Kantenklasse geprüft werden soll
+     * @param startClass
+     *            Elementklasse, die als Endklasse der Kantenklasse geprüft werden soll
+     * @param asSubClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebenen Elementklassen eine Unterklasse der
+     *            Start- bzw. Endklasse der Kante ist
+     * @param asSuperClass
+     *            wenn <code>true</code> dann komnmt auch <code>true</code> zurück, wenn die übergebenen Elementklassen eine Oberklasse der
+     *            Start- bzw. Endklasse der Kante ist
+     * @return
+     */
+    public final boolean isStartAndEndClass(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean asSubClass, final boolean asSuperClass) {
+        return isStartAndEndClass(this, startClass, endClass, asSubClass, asSuperClass);
+    }
+
+    /**
+     * Repräsentiert den Validitätszustand eines MetaPath. Ist der invalidReason <code>null</code>, dann gilt der MetaPath als valide, sonst nicht.
+     *
+     * @author AXS (6 Dec 2018)
+     */
+    public class InvalidityCheckResult {
+
+        /**
+         * Ein beliebiger Enum, der einen FehlerKey enthält. Über diesen Key-Name kann ein Ressourcenstring geladen werden, der dem Benutzer einen
+         * Hinweis auf den Fehler gibt.
+         */
+        public final Enum<?> invalidReason;
+
+        /**
+         * Falls der Fehler mit irgendeinem Index zusammen hängt, kann man diesen hier speichern (z.B. Index des Pfades mit dem Fehler)
+         */
+        public final int index1;
+
+        /**
+         * Falls der Fehler mit irgendeinem weiteren Index zusammen hängt, kann man diesen hier speichern (z.B. Index des Elementarpfades mit dem
+         * Fehler)
+         */
+        public final int index2;
+
+        public InvalidityCheckResult(final Enum<?> invalidReason) {
+            this(invalidReason, -1, -1);
+        }
+
+        public InvalidityCheckResult(final Enum<?> invalidReason, final int index1) {
+            this(invalidReason, index1, -1);
+        }
+
+        public InvalidityCheckResult(final Enum<?> invalidReason, final int index1, final int index2) {
+            this.invalidReason = invalidReason;
+            this.index1 = index1;
+            this.index2 = index2;
+        }
+
+    }
+
+    public enum InvalidReason {
+        INVALID_START_CLASSES,
+        INVALID_END_CLASSES;
+    }
+
+    /**
+     * @return
+     */
+    public InvalidityCheckResult getInvalidityCheckResult() {
+        if (invalidityCheckResult == null) {
+            InvalidReason invalidReason = null;
+            if (startElementClasses == null || startElementClasses.size() == 0) {
+                invalidReason = InvalidReason.INVALID_START_CLASSES;
+            } else if (endElementClasses == null || endElementClasses.size() == 0) {
+                invalidReason = InvalidReason.INVALID_END_CLASSES;
+            } else {
+                invalidReason = null;
+            }
+            invalidityCheckResult = new InvalidityCheckResult(invalidReason);
+        }
+        return invalidityCheckResult;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn der Pfad keine Fehler enthält.
+     *
+     * @return
+     */
+    public final boolean isValid() {
+        return getInvalidityCheckResult().invalidReason == null;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn das übergebene Objekt dieselben Eigenschaften hat, wie this.
+     *
+     * @param obj
+     * @param ignoreName
+     *            Wenn <code>true</code> wird die Gleichheit des Namens nicht mitgeprüft
+     * @return
+     */
+    public boolean equals(final Object obj, final boolean ignoreName) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        AbstractMetaPath other = (AbstractMetaPath) obj;
+        if (endElementClasses == null) {
+            if (other.endElementClasses != null) {
+                return false;
+            }
+        } else if (!endElementClasses.equals(other.endElementClasses)) {
+            return false;
+        }
+        if (!ignoreName) {
+            if (fullName == null) {
+                if (other.fullName != null) {
+                    return false;
+                }
+            } else if (!fullName.equals(other.fullName)) {
+                return false;
+            }
+            if (name == null) {
+                if (other.name != null) {
+                    return false;
+                }
+            } else if (!name.equals(other.name)) {
+                return false;
+            }
+        }
+        if (startElementClasses == null) {
+            if (other.startElementClasses != null) {
+                return false;
+            }
+        } else if (!startElementClasses.equals(other.startElementClasses)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (endElementClasses == null ? 0 : endElementClasses.hashCode());
+        result = prime * result + (fullName == null ? 0 : fullName.hashCode());
+        result = prime * result + (name == null ? 0 : name.hashCode());
+        result = prime * result + (startElementClasses == null ? 0 : startElementClasses.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return equals(obj, true);
+    }
+
+    protected abstract String createName();
+
+    /**
+     * @return
+     */
+    public final String getName() {
+        if (Strings.isNullOrEmpty(name)) {
+            name = createName();
+        }
+        return name;
+    }
+
+    /**
+     * @return
+     */
+    public final String getFullName() {
+        if (Strings.isNullOrEmpty(fullName)) {
+            fullName = getName(true, true);
+        }
+        return fullName;
+    }
+
+    /**
+     * @param withStartClasses
+     * @param withEndClasses
+     * @return
+     */
+    public String getName(final boolean withStartClasses, final boolean withEndClasses) {
+        if (withStartClasses && withEndClasses) {
+            return ElementsNameBuilder.getDisplayableClassesNames(getStartClasses()) + " " + getName() + " " + ElementsNameBuilder.getDisplayableClassesNames(getEndClasses());
+        } else if (withStartClasses) {
+            return ElementsNameBuilder.getDisplayableClassesNames(getStartClasses()) + " " + getName();
+        } else if (withEndClasses) {
+            return getName() + " " + ElementsNameBuilder.getDisplayableClassesNames(getEndClasses());
+        }
+        return getName();
+    }
+
+    @Override
+    public final String toString() {
+        return getName();
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn der Pfad prinzipiell angelegt werden kann. Das ist der Fall, wenn es sich um eine
+     * einfache Assoziationsfolge ohne parallele Pfade oder Verweigungen zu Assoziationsklassen dazwischen handelt und alle
+     * Zwischenelementklassen nicht abstrakt sind.
+     *
+     * @return
+     */
+    public abstract boolean isCreatable();
+
+    /**
+     * Liefert <code>true</code>, wenn der Pfad zwischen Elementen der Start- und Zielklasse den prinzipiell angelegt werden kann.
+     * Das ist der Fall, wenn es sich um eine einfache Assoziationsfolge ohne parallele Pfade oder Verweigungen zu Assoziationsklassen
+     * dazwischen handelt und alle Zwischenelementklassen und Zwischenkantenklassen nicht abstrakt sind. Außerdem müssen die Start-
+     * und Zielklasse jeweils die Start- bzw. Zielklasse des Pfades oder eine Unterklasse davon sein.
+     *
+     * @param startClass
+     *            zu testenden Startklasse des Metapfades
+     * @param endClass
+     *            zu testenden Endklasse des Metapfades
+     * @return
+     *         /
+     *         public final boolean isCreatable(Class<? extends ModelElement> startClass, Class<? extends ModelElement> endClass) {
+     *         return isStartClassOrSubClass(startClass) && isEndClassOrSubClass(endClass) && isCreatable();
+     *         }
+     *         /**
+     *         Liefert <code>true</code>, wenn der Pfad zwischen Elementen der Start- und Zielklasse den prinzipiell angelegt werden kann.
+     *         Das ist der Fall, wenn es sich um eine einfache Assoziationsfolge ohne parallele Pfade oder Verweigungen zu Assoziationsklassen
+     *         dazwischen handelt und alle Zwischenelementklassen und Zwischenkantenklassen nicht abstrakt sind. Außerdem müssen die Start-
+     *         und Zielklasse jeweils die Start- bzw. Zielklasse des Pfades oder eine Unterklasse davon sein.
+     * @param startClass
+     *            zu testenden Startklasse des Metapfades
+     * @param endClass
+     *            zu testenden Endklasse des Metapfades
+     * @return
+     */
+    public final boolean isCreatable(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
+        return isStartClass(this, startClass, true, false) && isEndClass(this, endClass, true, false) && isCreatable();
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn der Pfad eine einfache Assoziationsfolge ist (also bei {@link #getElementaryMetaPaths()} nicht
+     * <code>null</code> zurück gibt und jeder Einzelpfad die maximale Endkardinalität von 1 hat.
+     */
+    public final boolean isSingleConnection() {
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        for (ElementaryMetaPath elementaryMetaPath : elementaryMetaPaths) {
+            if (elementaryMetaPath.getForwardCardinality().max() != 1) {
+                return false;
+            }
+        }
+        return !elementaryMetaPaths.isEmpty();
+    }
+
+    /**
+     * Liefert den MetaPfad der die Gegenricthung beschreibt oder <code>null</code>, wenn es einen solchen nicht gibt.
+     *
+     * @return the otherDirectionPath
+     */
+    public AbstractMetaPath getOtherDirection() {
+        return otherDirection;
+    }
+
+    /**
+     * Liefert eine Folge von Elementarpfaden, wenn sich dieser Pfad so bilden lässt, ansonsten kommt eine leere Liste zurück. Alle parallelen Pfade
+     * geben hier leere Liste zurück. {@link SequenceMetaPath} geben nur leine leere Liste zurück, wenn sie im innersten ein einzelner Pfad sind ohne
+     * parallele oder rekursive Pfade sind.
+     *
+     * @return
+     */
+    public List<ElementaryMetaPath> getElementaryMetaPaths() {
+        return EMPTY_ELEMENTARY_PATH_LIST;
+    }
+
+    /**
+     * Liefert eine Liste aller {@link AbstractMetaPath}, die dieser MetaPfad enthält.
+     *
+     * @return
+     */
+    public abstract List<AbstractMetaPath> getMetaPaths();
+
+    /**
+     * Liefert <code>true</code>, wenn dieser Pfad Elementarten miteinander verbindet, die
+     * zueinander zuweisungskompatibel sind. D.h. die Startklasse ist gleich der Endklasse
+     * oder die Endklasse eine Unterklasse der Startklasse.
+     *
+     * @return
+     */
+    public final boolean isRecursive() {
+        for (Class<? extends ModelElement> endClass : getEndClasses()) {
+            if (isStartClass(this, endClass, true, false)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Liefert <code>false</code>, wenn der Pfad in beide Richtungen dasselbe bedeutet. Dafür muss
+     * er dieselben Elementarten miteinander verbinden und denselben Namen in beiden Richtungen
+     * tragen. Z.B können 2 physische DV-Bausteine über Datenübertragungsverbindungen miteinander
+     * verbunden sein. Diese Verbindung heißt in jede der beiden Richtungen "ist verbunden mit" und
+     * verbindet dieselbe Elementart miteinander. Der dazugehörige Elementarpfad ist also undirected.
+     * Dasselbe ist aber auch für {@link SequenceMetaPath}s möglich, wenn z.B. die beiden physischen
+     * DV-Bausteine Schnittstellen beitzen würden (was sie im aktuellen Metamodell nicht haben) und diese
+     * dann über eine Datenübertragungsverbindung mit der beidseitigen Bedeutung "ist verbunden mit"
+     * verbunden sind, dann bedeutet der Pfad auch in beide Richtungen dasselbe, nämlich
+     * "Phys. DV-Baustein besitzt Schnittstelle ist verbunden mit Schnittstelle gehört zu Phys. DV-Baustein".
+     * Die Umkehrrichtung dieses Pfades ist er selbst und somit ist er undirected.
+     *
+     * @return
+     *         <code>true</code> wenn Vorwärts- und Rückwärtsrichtungen unterschiedliche Bedeutung haben
+     */
+    public abstract boolean isDirected();
+
+    /**
+     * Liefert <code>true</code>, wenn der Metapfad irgendwo eine {@link PartOfVerbindung} enthält.
+     *
+     * @return
+     */
+    public abstract boolean containsPropertyTransferEdge();
+
+}

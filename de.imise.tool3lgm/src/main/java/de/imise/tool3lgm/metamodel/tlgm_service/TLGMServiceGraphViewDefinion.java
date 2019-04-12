@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.metamodel.tlgm_service;
 
+import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.createSimpleMetaPath;
+
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -7,7 +9,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
@@ -18,8 +20,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.CommunicationInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Function;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorApplicationSystem;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfile;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorInstance;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheInvokingInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.InvokingInterface;
@@ -27,7 +28,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ObjectType;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.OrganisationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.PhysicalDataProcessingComponent;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ProvidingInterface;
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 
 public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
 
@@ -44,8 +45,8 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
                 InvokingInterface.class,
                 ProvidingInterface.class,
                 PhysicalDataProcessingComponent.class,
-                //                IheActorOfIntegrationProfile.class,
-                IheActorApplicationSystem.class,
+                //                IheActor.class,
+                IheActorInstance.class,
                 //                IheInvokingInterface.class,
                 //                IheProvidingInterface.class,
         };
@@ -53,12 +54,12 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
     }
 
     @Override
-    protected final MetaPath[] getConfigurationPaths() {
-        MetaPath[] configurationPaths = {
+    protected final SimpleMetaPath[] getConfigurationPaths() {
+        SimpleMetaPath[] configurationPaths = {
                 //Testpfad über alle Ebenen hinweg
                 //new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
-                new MetaPath(Function.class, ApplicationComponent.class, Function_Use_Edge.class, SupportLink_Edge.class),
-                new MetaPath(ApplicationComponent.class, PhysicalDataProcessingComponent.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class),
+                createSimpleMetaPath(Function.class, ApplicationComponent.class, Function_Use_Edge.class, SupportLink_Edge.class),
+                createSimpleMetaPath(ApplicationComponent.class, PhysicalDataProcessingComponent.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class),
         };
         return configurationPaths;
     }
@@ -77,9 +78,8 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         setDefaultLayout(InvokingInterface.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.LIGHTGREEN], 15, 15);
         setDefaultLayout(ProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE], 20, 20);
         setDefaultLayout(PhysicalDataProcessingComponent.class, GraphElementLayout.SHAPE.rechteck, GraphElementLayout.COLORS[GraphElementLayout.ORANGE]);
-        setDefaultLayout(IheActorOfIntegrationProfile.class, GraphElementLayout.SHAPE.wabe,
-                GraphElementLayout.COLORS[/* GraphElementLayout.LIGHTPURPLE */GraphElementLayout.YELLOW]);
-        setDefaultLayout(IheActorApplicationSystem.class, GraphElementLayout.SHAPE.rundeck, GraphElementLayout.COLORS[GraphElementLayout.LIGHTBLUE]);
+        //setDefaultLayout(IheActor.class, GraphElementLayout.SHAPE.wabe, GraphElementLayout.COLORS[/* GraphElementLayout.LIGHTPURPLE */GraphElementLayout.YELLOW]);
+        setDefaultLayout(IheActorInstance.class, GraphElementLayout.SHAPE.wabe, GraphElementLayout.COLORS[GraphElementLayout.LIGHTBLUE]);
         setDefaultLayout(IheInvokingInterface.class, GraphElementLayout.SHAPE.oval, GraphElementLayout.COLORS[GraphElementLayout.RED], 15, 15);
         setDefaultLayout(IheProvidingInterface.class, GraphElementLayout.SHAPE.dreieck, GraphElementLayout.COLORS[GraphElementLayout.RED], 20, 20);
     }

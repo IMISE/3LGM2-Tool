@@ -230,7 +230,7 @@ public class ModelAnalyzerCache {
         Set<ModelElement> sameInterfaceSet = new HashSet<>();
         for (ModelElement sameAWB : sameAWBCol) {
             // hole alle seine Schnittstellen und füge sie zur Gesamtliste hinzu
-            sameInterfaceSet.addAll(sameAWB.getConnectedElementsByEdge(AwbKommssVerbindung.class));
+            sameInterfaceSet.addAll(sameAWB.getConnectedElements(AwbKommssVerbindung.class));
             // lege die Gesamtliste für den Einzel-AWB in die globale HashMap
             appSysToInterfaceSet.put(sameAWB, sameInterfaceSet);
         }

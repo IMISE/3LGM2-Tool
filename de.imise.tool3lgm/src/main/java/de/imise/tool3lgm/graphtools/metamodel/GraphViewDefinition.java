@@ -14,10 +14,10 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 
 /**
  * @author AXS
@@ -41,7 +41,7 @@ public abstract class GraphViewDefinition {
     /** Liste aller metmodellabhängigen Knoten, die in der Grafik angezeigt werden */
     private final List<Class<? extends ModelElement>> metaModelSpecificPaintableNodes;
 
-    private Map<Class<? extends ModelElement>, MetaPath> classToConfigurationPaths = null;
+    private Map<Class<? extends ModelElement>, SimpleMetaPath> classToConfigurationPaths = null;
 
     public GraphViewDefinition() {
         ImmutableSet.Builder<Class<? extends ModelElement>> allPaintableNodesSetBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
@@ -66,6 +66,9 @@ public abstract class GraphViewDefinition {
      * @return
      */
     public final boolean isPaintable(final Class<? extends ModelElement> elementClass) {
+        //Achtung: bei Kantenklassen, die auf abstrakten Knotenklassen definiert sind, die selbst nicht paintable sind, kommt false zurück, auch wenn die
+        //konkreten Unterklassen painable sind und es die Kante somit auch wäre. Hast man ein Edge-Object (und nicht nur die Kantenklasse) dann kann man
+        //auf der Egde isPainable() aufrufen und bekommt das richtige Ergebnis!
         if (Edge.class.isAssignableFrom(elementClass)) {
             Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
             return isPaintable(Edge.getStartClass(edgeClass)) && isPaintable(Edge.getEndClass(edgeClass));
@@ -85,16 +88,15 @@ public abstract class GraphViewDefinition {
      *
      * @return
      */
-    protected abstract MetaPath[] getConfigurationPaths();
+    protected abstract SimpleMetaPath[] getConfigurationPaths();
 
-    public final MetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
+    public final SimpleMetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
         //es muss ein lazy-init sein, weil es sonst zu einer Init-Exception in der Reflection-Methode Edge.getStartClass(...)
         if (classToConfigurationPaths == null) {
             classToConfigurationPaths = new HashMap<>();
             //Map mit den Klassen zu ihren Konfigurationspfaden speichern
-            for (MetaPath metaPath : getConfigurationPaths()) {
-                Class<? extends ModelElement>[] instanciableAssignableClasses = ModelConstants.getInstanciableAssignableClasses(metaPath.getStartClass());
-                for (Class<? extends ModelElement> instanciableElementClass : instanciableAssignableClasses) {
+            for (SimpleMetaPath metaPath : getConfigurationPaths()) {
+                for (Class<? extends ModelElement> instanciableElementClass : ModelConstants.getInstanciableAssignableClasses(metaPath.getStartClass())) {
                     classToConfigurationPaths.put(instanciableElementClass, metaPath);
                 }
             }

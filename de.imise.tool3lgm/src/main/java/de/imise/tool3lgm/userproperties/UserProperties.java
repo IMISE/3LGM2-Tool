@@ -353,6 +353,12 @@ public class UserProperties {
         OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START,
 
         /**
+         * Schaltet einige Editieroptionen frei, die im normalen Modus verborgen sind. Das ist z.B. dafür gedacht, dass man in diesem Modus IheActors
+         * ändern kann, was ein normaler Benutzer nicht können soll.
+         */
+        OPTION_ENABLE_EXPERT_MODE,
+
+        /**
          * Zusammengeklappte Elemente werden speziell gezeichnet.<br>
          * Diese Option wird absichtlich <b>nicht </b> gespeichert und ist zu Beginn immer eingeschaltet.
          */
@@ -369,7 +375,7 @@ public class UserProperties {
         private UserPropertyBooleanChangeAction action;
 
         @Override
-        public UserPropertyBooleanChangeAction getAction() {
+        public UserPropertyBooleanChangeAction createAction() {
             //Keine der Options hat eine InteractiveAction. Also kann man hier einfach direkt
             //die Action instanziieren und muss nicht über die default-Implementierung gehen.
             //Will man über die default-Implementierung gehen, muss man die Funktion getActionClass()

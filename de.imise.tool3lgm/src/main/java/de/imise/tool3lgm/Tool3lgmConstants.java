@@ -4,7 +4,6 @@ import java.awt.Cursor;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
@@ -18,6 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.util.ApplicationManager;
 import de.imise.util.StringUtils;
 import de.imise.util.collections.CollectionUtils;
 
@@ -46,7 +46,7 @@ public abstract class Tool3lgmConstants {
 
     /** String with the version-identifier for Tool3lgm */
     // TODO _____###### ständig aktualisieren!
-    public static final String TOOL_VERSION = "3.4.0.2 (Beta)";
+    public static final String TOOL_VERSION = "3.4.0.3 (Beta)";
 
     /**
      * Wenn <code>true</code>, liefern die {@link GDCommands} in ihrer toString()-Methode den Namen des Kommandos zurück. Wenn <code>false</code>,
@@ -61,7 +61,7 @@ public abstract class Tool3lgmConstants {
     public static final String CLIPBOARD_PATH = System.getProperty("user.home") + File.separator + ".3lgm_clipboard";
 
     /** Pfad zum Installationsverzeichnis der Anwendung */
-    public static final File APPLICATION_DIR = getApplicationDir();
+    public static final File APPLICATION_DIR = ApplicationManager.getApplicationDir();
 
     public static final String RELATIVE_TOOL_JAR_PATH = "lib/tool3lgm.jar";
 
@@ -207,21 +207,6 @@ public abstract class Tool3lgmConstants {
      * für die Sanduhr...
      */
     protected static Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR), waitCursor = new Cursor(Cursor.WAIT_CURSOR), handCursor = new Cursor(Cursor.HAND_CURSOR);
-
-    /**
-     * Gibt das Oberste Verzeichnis zurück, in dem sich Anwendungsdaten befinden, also das Installationsverzeichnis.<br>
-     *
-     * @return Pfad zur Anwendung
-     */
-    public static File getApplicationDir() {
-        File f = null;
-        try {
-            f = new File(".").getCanonicalFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return f;
-    }
 
     /**
      * Liefert <code>true</code>, wenn der übergebene String eine Extension eines {@link FileNameExtensionFilter} in

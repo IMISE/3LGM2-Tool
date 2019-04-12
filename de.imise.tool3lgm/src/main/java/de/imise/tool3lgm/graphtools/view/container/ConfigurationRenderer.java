@@ -8,8 +8,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 
@@ -17,8 +17,8 @@ import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -87,9 +87,9 @@ public class ConfigurationRenderer {
                     ModelElement me = configurationStart.getElement();
                     Class<? extends ModelElement> elementClass = me.getClass();
                     GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
-                    MetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(elementClass);
-                    Set<ModelElement> directConnectedElements = PathFinder.getDirectConnectedElements(me, interLayerMetaPath);
-                    for (ModelElement connected : directConnectedElements) {
+                    SimpleMetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(elementClass);
+                    Collection<ModelElement> interLayerConnectedElements = MetaPathFunctions.getConnectedElements(me, interLayerMetaPath);
+                    for (ModelElement connected : interLayerConnectedElements) {
                         ElementContainer connectedEc = connected.getContainer(doc);
                         if (connectedEc != null) {
                             configurationEndContainer.add(connectedEc);

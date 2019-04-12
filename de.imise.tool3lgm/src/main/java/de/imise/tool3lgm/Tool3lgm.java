@@ -8,6 +8,7 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsEnvironment;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
@@ -36,7 +37,6 @@ import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -47,6 +47,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserfieldResourceHandler;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
@@ -62,10 +63,11 @@ import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
+import de.imise.util.BrowseUtils;
+import de.imise.util.robot.ScreenRobot;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /** Hauptklasse der Anwendung 3lgm */
@@ -107,9 +109,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     private final List<GDCollection> collections = new ArrayList<>();
 
     /** Position of divider betweeen the tree and the graph view in pixel from the left side */
-    int dividerLocation = 200;
+    private int dividerLocation = getToolkit().getScreenSize().width / 5;
 
-    /** Holds the actual context and generates context menus */
+    /** Holds the current context and generates context menus */
     public static ContextGenerator contextGenerator;
 
     /** Checks the consistency of a model */
@@ -322,6 +324,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         createMainFrame(gdcoll.getMainGraphDocument());
 
         LGMGraphDocument selectedDoc = gdcoll.getMainGraphDocument();
+        AbstractInternalFrame lastFrame = null;
         for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
             Szenario szen = gdcoll.getSzenario(i);
             Static.setProgressDialogStatusLabel("create_frame", szen.getTitle());
@@ -331,7 +334,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             if (szen.getViewParameter().selected) {
                 selectedDoc = szen;
             }
-            createSzenarioFrame(szen);
+            lastFrame = createSzenarioFrame(szen);
         }
 
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
@@ -352,6 +355,18 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //		printStatistic(gdcoll, false, true);
         //		System.err.println("###########################################################################");
 
+        //Dieser Spass hier dient nur dazu, nach dem Öffnen einer Modelldatei nochmal ein
+        //neu Zeichnen auszulösen, was nur mit einem Klick in den Frame zuverlässig passiert
+        //Erst dadurch fällt der Swing-Bug mit der am Anfanng nicht korrekt positionierten
+        //Schrift nicht mehr auf.
+        Point location = MouseInfo.getPointerInfo().getLocation();
+        if (lastFrame != null && lastFrame.isVisible()) {
+            Point locationOnScreen = lastFrame.getLocationOnScreen();
+            Dimension size = lastFrame.getSize();
+            ScreenRobot.setMouse(locationOnScreen.x + size.width / 2, locationOnScreen.y + size.height / 2);
+            ScreenRobot.click();
+        }
+        ScreenRobot.setMouse(location);
         return true;
     }
 
@@ -1180,15 +1195,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * return the verticalSplitPane of application
-     *
-     * @return JSplitPane
-     */
-    public JSplitPane getVerticalSplitPane() {
-        return verticalSplitPane;
-    }
-
-    /**
      * return the horizontalSplitPane of application
      *
      * @return JSplitPane
@@ -1209,12 +1215,12 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /** (De-)Aktiviert den ModelBrowser */
     private void showModelBrowser(final boolean b) {
         if (b) {
-            getVerticalSplitPane().setLeftComponent(getModelBrowserPanel());
-            getVerticalSplitPane().setDividerLocation(200);
+            verticalSplitPane.setLeftComponent(getModelBrowserPanel());
+            verticalSplitPane.setDividerLocation(dividerLocation);
             getWorkArea().revalidate();
         } else {
-            JSplitPane pane = getVerticalSplitPane();
-            pane.remove(pane.getLeftComponent());
+            dividerLocation = verticalSplitPane.getDividerLocation();
+            verticalSplitPane.remove(verticalSplitPane.getLeftComponent());
             getWorkArea().revalidate();
         }
     }
@@ -1410,7 +1416,13 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             setShowStandardToolbar(UserProperties.is(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR));
         } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_MODEL_BROWSER_SHOW, evt)) {
             showModelBrowser(UserProperties.is(BooleanProperty.OPTION_MODEL_BROWSER_SHOW));
+        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_ENABLE_EXPERT_MODE, evt)) {
+            setExpertMode(UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE));
         }
+    }
+
+    private void setExpertMode(final boolean enabled) {
+        modelBrowserPanel.updateModelBrowsers();
     }
 
 }

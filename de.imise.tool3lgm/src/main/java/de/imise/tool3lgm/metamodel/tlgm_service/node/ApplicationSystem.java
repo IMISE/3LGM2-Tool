@@ -1,27 +1,28 @@
 package de.imise.tool3lgm.metamodel.tlgm_service.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_IheActorApplicationSystem_Edge;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_SoftwareProduct_Edge;
 
 /**
  * @author AXS (26.12.2017)
  */
-public final class ApplicationSystem extends ApplicationComponent {
+public final class ApplicationSystem extends AbstractApplicationSystem {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addEdgePanel(ApplicationSystem_SoftwareProduct_Edge.class);
-        dialog.addEdgePanel(ApplicationSystem_IheActorApplicationSystem_Edge.class);
+        dialog.addEdgePanel(ApplicationSystem_IheActorInstance_Edge.class);
         return dialog;
     }
 
-    private static final MetaPath NAME_EXTENSION_PATH = new MetaPath(ApplicationComponent.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
+    private static final SimpleMetaPath NAME_EXTENSION_PATH = SimpleMetaPathCreator.createSimpleMetaPath(ApplicationSystem.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
 
     @Override
-    protected MetaPath getNameExtensionPath() {
+    protected SimpleMetaPath getNameExtensionPath() {
         return NAME_EXTENSION_PATH;
     }
 

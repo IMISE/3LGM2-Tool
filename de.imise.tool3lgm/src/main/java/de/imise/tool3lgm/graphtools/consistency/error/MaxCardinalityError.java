@@ -8,6 +8,7 @@ import java.util.List;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 
 /**
  * @author AXS
@@ -22,13 +23,13 @@ public class MaxCardinalityError extends AbstractCardinalityError {
 
     /**
      * @param me
-     * @param edgeClass
+     * @param elementaryMetaPath
      * @param connections
      * @param cardValue
      * @param gdcoll
      */
-    public MaxCardinalityError(final ModelElement me, final Class<? extends Edge> edgeClass, final List<Edge> connections, final GDCollection gdcoll, final int cardValue) {
-        super(me, edgeClass, gdcoll, cardValue);
+    public MaxCardinalityError(final ModelElement me, final ElementaryMetaPath elementaryMetaPath, final List<Edge> connections, final GDCollection gdcoll, final int cardValue) {
+        super(me, elementaryMetaPath, gdcoll, cardValue);
         this.connections = connections;
     }
 

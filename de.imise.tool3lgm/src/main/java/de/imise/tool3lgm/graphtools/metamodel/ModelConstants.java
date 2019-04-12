@@ -1,14 +1,8 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.UNLIMITED;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnecting;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
@@ -20,21 +14,28 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.Set;
 
 import javax.swing.Action;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Multimap;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -42,11 +43,16 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
@@ -59,7 +65,9 @@ public final class ModelConstants {
 
     public static MetaModel initMetaModel() {
         try {
-            return Tool3lgmMetaModelContext.getMetaModelClass().newInstance();
+            Class<? extends MetaModel> metaModelClass = Tool3lgmMetaModelContext.getMetaModelClass();
+            MetaModel metaModel = metaModelClass.newInstance();
+            return metaModel;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -77,6 +85,8 @@ public final class ModelConstants {
 
     @SuppressWarnings("unchecked")
     public static final Class<? extends CompositionEdge>[] EMPTY_COMPOSITION_CLASS_ARRAY = new Class[0];
+
+    public static final Collection<Class<? extends ModelElement>> EMPTY_ELEMENT_CLASS_COLLECTION = ImmutableList.of();
 
     //Bei Gelegenheit mal ersetzen (Das ist aber schon etwas mehr Arbeit)
     //public enum LAYER {NO_LAYER, PHYSICAL_LAYER, INTER_LOGICAL_PHYSICAL_LAYER, LOGICAL_LAYER, INTER_DOMAIN_LOGICAL_LAYER, DOMAIN_LAYER};
@@ -119,14 +129,7 @@ public final class ModelConstants {
      */
     public static final String NO_MODEL_ELEMENT_SHORT_NAME = "NME";
 
-    private static final String PLURAL_NAME_RES_KEY_SUFFIX = "_p";
-
-    /**
-     * Mappt von den Knotenklassen auf den zugehörigen Short-Name für die HashString der Elemente. Diese 3-Buchstabigen Klassenkürzel sind nicht
-     * zwangsläufig eindeutig und diesen lediglich der besseren Lesbarkeit von Hash-Strings, denen sie immer
-     * Vorangestellt werden.
-     */
-    private static HashMap<Class<? extends ModelElement>, String> elementClassToHashShortName = null;
+    public static final String PLURAL_NAME_RES_KEY_SUFFIX = "_p";
 
     /**
      * Liste aller geöffneten Dialoge
@@ -164,6 +167,100 @@ public final class ModelConstants {
         System.arraycopy(ALL_NODES_SET.toArray(), 0, ALL_NODES, 0, ALL_NODES.length);
     }
 
+    /**
+     * Liefert alle Elementklassen, die nur im Baum angezeigt werden sollen, wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
+     * auf <code>true</code> gestellt ist.
+     *
+     * @return alle Elementklassen, die nur im ExpertMode im Baum angezeigt werden
+     * @see MetaModel#getOnlyExpertModeVisibleNodes()
+     */
+    public static final Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
+        return metaModel.getOnlyExpertModeVisibleNodes();
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die Klasse nicht angezeigt werden soll, also wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
+     * auf <code>false</code> gestellt ist und die Klasse nur im Expert-Mode angezeigt werden soll.
+     *
+     * @return <code>true</code>, wenn die Klasse gerade nicht sichtbar sein soll
+     * @see #getOnlyExpertModeVisibleNodes()
+     */
+    public static final boolean isHiddenClass(final Class<? extends ModelElement> elementClass) {
+        //im ExperMode ist nichts versteckt
+        if (UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE)) {
+            return false;
+        }
+        Set<Class<? extends ModelElement>> onlyExpertModeVisibleNodes = getOnlyExpertModeVisibleNodes();
+        if (onlyExpertModeVisibleNodes.contains(elementClass)) {
+            return true;
+        }
+        //bei Kanten prüfen, ob die Start- oder Endklasse eine versteckte Klasse ist
+        if (Edge.class.isAssignableFrom(elementClass)) {
+            Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
+            if (isHiddenClass(Edge.getStartClass(edgeClass)) || isHiddenClass(Edge.getEndClass(edgeClass))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Liefert alle Elementklassen, die nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true) angelegt und verändert werden
+     * können.
+     *
+     * @return alle Elementklassen, die nur im ExpertMode geändert werden können
+     * @see MetaModel#getOnlyExpertModeEditableNodes()
+     */
+    private static Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes() {
+        return metaModel.getOnlyExpertModeEditableNodes();
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn alle übergebenen Klasse aktuell editierbar ist. Das ist sie, wenn sich der Baukasten im ExpertMode befindet
+     * oder wenn er sich nicht im ExpertMode befindet und die Klasse keine Klasse aus den {@link #getOnlyExpertModeEditableNodes()} ist.
+     *
+     * @param elementClass
+     * @return
+     */
+    @SafeVarargs
+    public static final boolean isEditable(final Class<? extends ModelElement>... elementClasses) {
+        if (!Static.isExpertMode()) {
+            Set<Class<? extends ModelElement>> onlyExpertModeEditableNodes = getOnlyExpertModeEditableNodes();
+            for (Class<? extends ModelElement> elementClass : elementClasses) {
+                if (onlyExpertModeEditableNodes.contains(elementClass)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Prüft, ob Verbindungen über diesen Pfad im nicht-ExperMode geändert werden dürfen. Das dürfen sie, wenn keine Kante des Pfades ausschließlich
+     * Elemente verbindet, die nur im ExpertMode geändert werden dürfen.
+     *
+     * @param metaPath
+     * @return
+     */
+    public static final boolean isEditable(final SimpleMetaPath... simpleMetaPaths) {
+        if (!Static.isExpertMode()) {
+            for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
+                List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
+                for (ElementaryMetaPath elementaryMetaPath : elementaryMetaPaths) {
+                    //bei wenigstens einer Kante im Pfad sind Start- und Endklasse nur im ExpertMode editierbar
+                    if (!isEditable(elementaryMetaPath.getStartClass(), elementaryMetaPath.getEndClass())) {
+                        return false;
+                    }
+                    //die Kante ist eine InstanciantionEdge, die von der Insstanz auf das Klassenelement (Template) zeigt
+                    if (InstanciationEdge.class.isAssignableFrom(elementaryMetaPath.getEdgeClass()) && InstanciationEdge.INSTANCE_TO_TEMPLATE_MASTER_DIRECTION.equals(elementaryMetaPath.getDirection())) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     ////////////
     // Kanten //
     ////////////
@@ -183,6 +280,29 @@ public final class ModelConstants {
     public static final Class<? extends ModelElement>[] ALL_ELEMENTS = new Class[ALL_ELEMENTS_SET.size()];
     static {
         System.arraycopy(ALL_ELEMENTS_SET.toArray(), 0, ALL_ELEMENTS, 0, ALL_ELEMENTS.length);
+    }
+
+    /**
+     * Sammlung, die alle Elementklassen inklusive aller Kantenklassen enthält einschließlich aller
+     * ihrer Oberklassen bis hin zu ModelElement.class.
+     */
+    public static final Set<Class<? extends ModelElement>> ALL_MODELELEMENT_CLASSES_WITH_SUPER_CLASSES = new HashSet<>();
+    static {
+        //Menge aller Elementklassen und aller ihrer Oberklassen bis hin zu ModelElement zusammenbauen
+        ArrayList<Class<? extends ModelElement>> allElementClasses = new ArrayList<>(ModelConstants.ALL_NODES_SET.size() + ModelConstants.ALL_EDGES_SET.size() + 20);
+        allElementClasses.addAll(ModelConstants.ALL_NODES_SET);
+        allElementClasses.addAll(ModelConstants.ALL_EDGES_SET);
+        for (int i = 0; i < allElementClasses.size(); i++) {
+            Class<? extends ModelElement> elementClass = allElementClasses.get(i);
+            do {
+                if (!allElementClasses.contains(elementClass)) {
+                    allElementClasses.add(elementClass);
+                }
+                elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
+            } while (elementClass != ModelElement.class);
+        }
+        allElementClasses.add(ModelElement.class);
+        ALL_MODELELEMENT_CLASSES_WITH_SUPER_CLASSES.addAll(allElementClasses);
     }
 
     ///////////////////////////////////
@@ -312,11 +432,9 @@ public final class ModelConstants {
         ImmutableSet.Builder<Class<? extends ModelElement>> creatableNodes = new ImmutableSet.Builder<>();
         for (Class<? extends ModelElement> elementClass : elementClasses) {
             if (!ModelConstants.isEdgeType(elementClass)) {
-                if (!creatableOnly || creatableOnly && !ModelConstants.isSlaveType(elementClass)) {
-                    if (!ModelConstants.isAbstract(elementClass)) {
-                        if (!ModelConstants.isExistenceDependent(elementClass, true)) {
-                            creatableNodes.add(elementClass);
-                        }
+                if (!ModelConstants.isAbstract(elementClass)) {
+                    if (!creatableOnly || !ModelConstants.isExistenceDependent(elementClass)) {
+                        creatableNodes.add(elementClass);
                     }
                 }
             }
@@ -348,25 +466,16 @@ public final class ModelConstants {
     }
 
     /**
-     * Liste aller Kantenklassen, die eigentlich 2 gerichtete Assoziationen im Metamodell sein müssten, aber aus Unwissenheit beim Entwurf des
-     * Metamodells fehlerhafterweise in eine Assoziation verpackt wurden, bei denen die Richtung der Edge
-     * (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Nur wegen den 4 braucht man den ganzen
-     * Doppelkanten-Richtungsquatsch. Wenn sie grafisch dargestellt werden, dann werden sie als eine Edge dargestellt werden, die
-     * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt. Hier wurde also das Model misbraucht, um im View diese Assoziationen
-     * zusammenzufassen.
-     */
-    private static final Set<Class<? extends Edge>> DOUBLE_MEANING_EDGE_CLASSES = metaModel.getDoubleMeaningEdgeClasses();
-
-    /**
      * Prüft, ob die übergebene Klasse eine Kantenklasse mit mehreren Bedeutungen ist, also die Richtung der Edge die Bedeutung angibt.
      *
-     * @see #DOUBLE_MEANING_EDGE_CLASSES
      * @param edgeClass
      * @return
      */
     public static final boolean isDoubleMeaningEdge(final Class<?> edgeClass) {
-        return DOUBLE_MEANING_EDGE_CLASSES.contains(edgeClass);
+        return DoubleMeaningEdge.class.isAssignableFrom(edgeClass);
     }
+
+    //    private static final boolean DEBUG = true;
 
     /**
      * Prüft, ob Kante gerichtet ist. Das ist sie, wenn sie nicht dieselben Elementarten verbindet oder in beide Richtungen einen unterschiedlichen
@@ -378,7 +487,16 @@ public final class ModelConstants {
      */
     public static final boolean isDirectedEdge(final Class<? extends Edge> edgeClass) {
         //man muss explizit auf Kanten mit doppelter Bedeutung testen!
-        return Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass) || isDoubleMeaningEdge(edgeClass) || !getForwardMetaAssociationName(edgeClass).equals(getBackwardMetaAssociationName(edgeClass));
+        //        if (DEBUG) {
+        //            Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
+        //            Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+        //            boolean isDoubleMeaningEdge = isDoubleMeaningEdge(edgeClass);
+        //            String forwardMetaAssociationName = ElementsNameBuilder.getForwardMetaAssociationName(edgeClass);
+        //            String backwardMetaAssociationName = ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
+        //            Sys.err1("isDirectedEdge:   edgeClass=" + edgeClass.getSimpleName() + "   startClass=" + startClass + "   endClass=" + endClass + "   isDoubleMeaningEdge=" + isDoubleMeaningEdge + "   forwardMetaAssociationName='" + forwardMetaAssociationName
+        //                    + "'   backwardMetaAssociationName='" + backwardMetaAssociationName + "'\n\t-> " + (startClass != endClass) + " || " + isDoubleMeaningEdge + " || " + !forwardMetaAssociationName.equals(backwardMetaAssociationName));
+        //        }
+        return Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass) || isDoubleMeaningEdge(edgeClass) || !ElementsNameBuilder.getForwardMetaAssociationName(edgeClass).equals(ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass));
     }
 
     /**
@@ -388,8 +506,21 @@ public final class ModelConstants {
      * @param edgeClass
      * @return
      */
-    public static MetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
+    public static SimpleMetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
         return metaModel.getConditionPath(edgeClass);
+    }
+
+    /**
+     * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
+     * Kantenklasse durchgeführt wird.
+     *
+     * @param instanciationEdgeClass
+     * @return
+     * @see MetaModel#getInstanciableMetaPaths(Class)
+     */
+    public static Iterable<SimpleMetaPath> getInstanciablePath(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
+        Iterable<SimpleMetaPath> instanciableMetaPaths = metaModel.getInstanciableMetaPaths(instanciationEdgeClass);
+        return SimpleMetaPathCreator.getSimpleMetaPathsNonAbstract(instanciableMetaPaths);
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -399,7 +530,7 @@ public final class ModelConstants {
     /**
      * Mappt von einer Elementklasse auf das Array aller instanziierbaren und zu dieser Klasse zuweisungskompatiblen ModelElement-Klassen.
      */
-    public static final HashMap<Class<? extends ModelElement>, Class<? extends ModelElement>[]> ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES = new HashMap<>();
+    public static final Multimap<Class<? extends ModelElement>, Class<? extends ModelElement>> ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES = HashMultimap.create();
 
     /**
      * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
@@ -408,31 +539,23 @@ public final class ModelConstants {
      * @param elementClass
      * @return
      */
-    @SuppressWarnings("unchecked")
-    public static final Class<? extends ModelElement>[] getInstanciableAssignableClasses(final Class<? extends ModelElement> elementClass) {
-        Class<? extends ModelElement>[] elementClasses = ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.get(elementClass);
-        if (elementClasses != null) {
-            return elementClasses;
+    public static final Collection<Class<? extends ModelElement>> getInstanciableAssignableClasses(final Class<? extends ModelElement> elementClass) {
+        if (ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.containsKey(elementClass)) {
+            Collection<Class<? extends ModelElement>> classes = ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.get(elementClass);
+            if (classes.size() == 1 && classes.iterator().next() == null) {
+                return EMPTY_ELEMENT_CLASS_COLLECTION;
+            }
+            return classes;
         }
-        HashSet<Class<? extends ModelElement>> al = new HashSet<>();
-        for (Class<? extends ModelElement> clazz : ALL_NODES) {
+        for (Class<? extends ModelElement> clazz : ALL_ELEMENTS) {
             if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz)) {
-                al.add(clazz);
+                ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, clazz);
             }
         }
-        for (Class<? extends ModelElement> clazz : ALL_EDGES_SET) {
-            if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz)) {
-                al.add(clazz);
-            }
+        if (!ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.containsKey(elementClass)) {
+            ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, null);
         }
-        if (al.size() == 0) {
-            ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, EMPTY_ELEMENT_CLASS_ARRAY);
-            return EMPTY_ELEMENT_CLASS_ARRAY;
-        }
-        elementClasses = new Class[al.size()];
-        System.arraycopy(al.toArray(), 0, elementClasses, 0, elementClasses.length);
-        ELEMENT_CLASS_TO_NON_ABSTRACT_ASSIGNABLE_ELEMENT_CLASSES.put(elementClass, elementClasses);
-        return elementClasses;
+        return getInstanciableAssignableClasses(elementClass);
     }
 
     /**
@@ -576,13 +699,17 @@ public final class ModelConstants {
     //		}
     //	}
 
-    static {
-        //    	System.err.println(MetaPathDefinitions.AUFGABE_BEARBEITET_OBJEKTTYP.toString());
-        //    	System.err.println(MetaPathDefinitions.AUFGABE_WIRD_ERLEDIGT_IN_ORGANISATIONSEINHEIT.toString());
-        //    	System.err.println(MetaPathDefinitions.AUFGABE_WIRD_UNTERSTUETZT_DURCH_PHYSICHER_DV_BAUSTEIN.toString());
-        //    	System.err.println(MetaPathDefinitions.TESTPFAD.toString());
-        //    	System.err.println(MetaPathDefinitions.OBJEKTTYP_WIRD_GESPEICHERT_VON_LOGICSCHEM_SPEICHER.toString());
-        //    	System.exit(0);
+    public static final Iterable<Class<? extends ModelElement>> getCreatableLayerNodes(final int layer) {
+        if (layer == DOMAIN_LAYER) {
+            return CREATABLE_DOMAIN_LAYER_NODES;
+        }
+        if (layer == LOGICAL_LAYER) {
+            return CREATABLE_LOGICAL_LAYER_NODES;
+        }
+        if (layer == PHYSICAL_LAYER) {
+            return CREATABLE_PHYSICAL_LAYER_NODES;
+        }
+        return EMPTY_ELEMENT_CLASS_COLLECTION;
     }
 
     /**
@@ -787,9 +914,9 @@ public final class ModelConstants {
                     clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
                 } catch (Exception exc) {
                     String simpleClassName = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
-                    String actualClassName = metaModel.getCurrentClassName(simpleClassName);
-                    if (!actualClassName.equals(simpleClassName)) {
-                        clazz = getClassForName(actualClassName);
+                    String currentClassName = metaModel.getCurrentClassName(simpleClassName);
+                    if (!currentClassName.equals(simpleClassName)) {
+                        clazz = getClassForName(currentClassName);
                         CLASS_NAME_TO_CLASS_MAP.put(simpleClassName, clazz);
                         CLASS_NAME_TO_CLASS_MAP.put(fullClassName, clazz);
                         return clazz;
@@ -803,313 +930,6 @@ public final class ModelConstants {
         CLASS_NAME_TO_CLASS_MAP.put(fullClassName, clazz);
 
         return clazz;
-    }
-
-    /**
-     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
-     *
-     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
-     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
-     * @return String aus dem geladenen ResourcenBundle
-     */
-    private static final String getDisplayableName(Class<? extends ModelElement> clazz, final boolean plural) {
-        if (clazz == null) {
-            return null;
-        }
-        while (ModelElement.class.isAssignableFrom(clazz)) {
-            try {
-                String resKey = clazz.getSimpleName();
-                if (plural) {
-                    resKey += PLURAL_NAME_RES_KEY_SUFFIX;
-                }
-                return getResString(resKey);
-            } catch (MissingResourceException mre) {
-                clazz = clazz.getSuperclass().asSubclass(ModelElement.class);
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
-     *
-     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
-     * @return String aus dem geladenen ResourcenBundle
-     */
-    public static final String getDisplayablePluralName(final Class<? extends ModelElement> clazz) {
-        return getDisplayableName(clazz, true);
-    }
-
-    /**
-     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
-     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
-     *
-     * @param clazz Klasse für die der anzeigbare Name geliefert werden soll
-     * @return String aus dem geladenen ResourcenBundle
-     */
-    public static final String getDisplayableName(final Class<? extends ModelElement> clazz) {
-        return getDisplayableName(clazz, false);
-    }
-
-    /**
-     * Liefert den Standardanzeigenamen für ein Modelelement der übergebenen Art
-     *
-     * @param me
-     * @return
-     * @see #getDisplayableName(Class)
-     */
-    public static final String getDisplayableName(final ModelElement me) {
-        return getDisplayableName(me.getClass());
-    }
-
-    /*************************/
-
-    /**
-     * @param edgeClass
-     * @return
-     * @see #getMetaAssociationName(Class, boolean, int)
-     */
-    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
-        return getForwardMetaAssociationName(edgeClass, false, false);
-    }
-
-    /**
-     * Liefert den Meta-Namen der Kanteklasse für die Vorwärtsrichtung ohne die Elementartnamen, die die Edge verbindet.
-     *
-     * @param edgeClass
-     * @return
-     * @see #getMetaAssociationName(Class, boolean, int)
-     */
-    public static String getFullForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
-        return getForwardMetaAssociationName(edgeClass, true, true);
-    }
-
-    /**
-     * @param edgeClass
-     * @param appendPrefixClass
-     * @param appendPostfixClass
-     * @return
-     * @see #getMetaAssociationName(Class, boolean, int)
-     */
-    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return getForwardMetaAssociationName(edgeClass, DOUBLE, appendPrefixClass, appendPostfixClass);
-    }
-
-    /**
-     * @param edgeClass
-     * @param connectionState
-     * @param appendPrefixClass
-     * @param appendPostfixClass
-     * @return
-     * @see #getMetaAssociationName(Class, boolean, int)
-     */
-    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final int connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return getMetaAssociationName(edgeClass, false, connectionState, appendPrefixClass, appendPostfixClass);
-    }
-
-    /**
-     * @param edgeClass
-     * @return
-     * @see #getMetaAssociationName(Class, boolean, int)
-     */
-    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
-        return getBackwardMetaAssociationName(edgeClass, false, false);
-    }
-
-    /**
-     * Liefert den Meta-Namen der Kanteklasse für die Rückwärtsrichtung mit den Elementartnamen, die die Edge verbindet.
-     *
-     * @param edgeClass
-     * @return
-     * @see #getMetaAssociationName(Class, boolean, int)
-     */
-    public static String getFullBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
-        return getBackwardMetaAssociationName(edgeClass, true, true);
-    }
-
-    /**
-     * @param edgeClass
-     * @param appendPrefixClass
-     * @param appendPostfixClass
-     * @return
-     * @see #getMetaAssociationName(Class, boolean, int)
-     */
-    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return getBackwardMetaAssociationName(edgeClass, DOUBLE, appendPrefixClass, appendPostfixClass);
-    }
-
-    /**
-     * @param edgeClass
-     * @param connectionState
-     * @param appendPrefixClass
-     * @param appendPostfixClass
-     * @return
-     * @see #getMetaAssociationName(Class, boolean, int)
-     */
-    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final int connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return getMetaAssociationName(edgeClass, true, connectionState, appendPrefixClass, appendPostfixClass);
-    }
-
-    /**
-     * @param edgeClass
-     * @param switchDefinedDirection
-     * @param direction
-     * @return
-     * @see #getMetaAssociationName(Class, boolean, int)
-     */
-    public static String getFullMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final int direction) {
-        return getMetaAssociationName(edgeClass, switchDefinedDirection, direction, true, true);
-    }
-
-    /**
-     * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse
-     *
-     * @param edgeClass
-     * @param switchDefinedDirection gibt an, ob die Bedeutung der Edge von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse
-     *            zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
-     *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
-     * @param connectionState Doppelkante.FORWARD, Doppelkante.BACKWARD oder Doppelkante.DOUBLE - Bei allen Assoziationen, die in jede Richtung nur
-     *            eine Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine Bedeutung haben, kann hier
-     *            die Richtung angegeben werden für die die bedeutung zurück gegeben werden soll.<br>
-     *            Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die eigentlich 2
-     *            Assoziationen sind, aber aus allerlei Gründen in eine gepackt wurden.<br>
-     *            Beispiel 1: AufObjVerbindung = Assoziation zw. Startklasse Aufgabe und Endklasse Objekttyp.<br>
-     *            <ul>
-     *            <li>
-     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
-     *            "Aufgabe bearbeitet Objekttyp"</li>
-     *            <li>
-     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
-     *            "Aufgabe interpretiert Objekttyp"</li>
-     *            <li>
-     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
-     *            "Objekttyp wird interpretiert von Aufgabe "</li>
-     *            <li>
-     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
-     *            "Objekttyp wird bearbeitet von Aufgabe"</li>
-     *            </ul>
-     * @return
-     */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final int connectionState) {
-        return getMetaAssociationName(edgeClass, switchDefinedDirection, connectionState, false, false);
-    }
-
-    /**
-     * Liefert in Abhängigkeit von der Richtung den Meta-Namen der Kanteklasse
-     *
-     * @param edgeClass
-     * @param switchDefinedDirection gibt an, ob die Bedeutung der Edge von der Startklasse zur Endklasse (<code>false</code>) oder von der Endklasse
-     *            zur Startklasse (<code>true</code>) zurück gegeben werden soll. Mit Start- und Endklasse sind hier die
-     *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
-     * @param connectionState Doppelkante.FORWARD, Doppelkante.BACKWARD oder Doppelkante.DOUBLE - Bei allen Assoziationen, die in jede Richtung nur
-     *            eine Bedeutung haben, ist dieser Parameter egal. Bei Assoziationen, die mehr als eine Bedeutung haben, kann hier
-     *            die Richtung angegeben werden für die die bedeutung zurück gegeben werden soll.<br>
-     *            Alle Assoziationen im aktuellen Metamodell haben maximal 2 Bedeutungen. Das ist bei allen Assoziationen der Fall, die eigentlich 2
-     *            Assoziationen sind, aber aus allerlei Gründen in eine gepackt wurden.<br>
-     *            Beispiel 1: AufObjVerbindung = Assoziation zw. Startklasse Aufgabe und Endklasse Objekttyp.<br>
-     *            <ul>
-     *            <li>
-     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
-     *            "Aufgabe bearbeitet Objekttyp"</li>
-     *            <li>
-     *            <code>switchDefinedDirection == false</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
-     *            "Aufgabe interpretiert Objekttyp"</li>
-     *            <li>
-     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.FORWARD</code> heißt
-     *            "Objekttyp wird interpretiert von Aufgabe "</li>
-     *            <li>
-     *            <code>switchDefinedDirection == true</code>, <code>direction == {@link Doppelkante}.BACKWARD</code> heißt
-     *            "Objekttyp wird bearbeitet von Aufgabe"</li>
-     *            </ul>
-     * @param doubleMeaningEdgeDelimiter String der bei Kanten mit doppelter Bedeutung, bei denen beide Bedeutungen gleichzeitig ausgegeben werden
-     *            sollen zwischen die beiden Bedeutungen geschrieben wird.
-     * @return
-     */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final int connectionState, final String doubleMeaningEdgeDelimiter) {
-        //alle Kantenamen müssen mit SimplerKantenklassenName_f oder SimplerKantenklassenName_b angegeben sein oder bei Kanten mit doppelter Bedeutung SimplerKantenklassenName_f_f,
-        //SimplerKantenklassenName_f_b, SimplerKantenklassenName_b_f und SimplerKantenklassenName_b_b
-        String edgeClassName = edgeClass.getSimpleName();
-        final String mainEdgeDirection = !switchDefinedDirection ? "_f" : "_b";
-        String edgeName = getEdgeName(edgeClassName, mainEdgeDirection);
-        if (edgeName != null) {
-            return edgeName;
-        }
-        if (edgeName == null) {
-            String interpretedDirection = connectionState == FORWARD ? "_f" : connectionState == BACKWARD ? "_b" : null;
-            if (interpretedDirection != null) {
-                edgeName = getEdgeName(edgeClassName, mainEdgeDirection, interpretedDirection);
-                if (edgeName != null) {
-                    return edgeName;
-                }
-            } else {
-                edgeName = getEdgeName(edgeClassName, mainEdgeDirection, "_f");
-                if (edgeName != null) {
-                    //wenn es einen Vorwärtsnamen gibt, dann muss auch ein Rückwärtsname angegeben sein!
-                    return edgeName + doubleMeaningEdgeDelimiter + getEdgeName(edgeClassName, mainEdgeDirection, "_b");
-                }
-            }
-        }
-        //wenn für den aktuellen Klassennamen kein Name gefunden wurde -> nimm die Oberklasse -> irgendwann kommt man bei Edge.class an, für die auf jeden Fall ein Namen ex.
-        return getMetaAssociationName(edgeClass.getSuperclass().asSubclass(Edge.class), switchDefinedDirection, connectionState, doubleMeaningEdgeDelimiter);
-    }
-
-    private static final String getEdgeName(final String simpleEdgeClassName, final String mainEdgeDirection) {
-        return getEdgeName(simpleEdgeClassName, mainEdgeDirection, null);
-    }
-
-    private static final String getEdgeName(final String simpleEdgeClassName, final String mainEdgeDirection, final String interpretedDirection) {
-        try {
-            if (interpretedDirection == null) {
-                return getResString(simpleEdgeClassName + mainEdgeDirection);
-            }
-            return getResString(simpleEdgeClassName + mainEdgeDirection + interpretedDirection);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
-     * @param edgeClass
-     * @param switchDefinedDirection
-     * @param connectionState
-     * @param appendPrefixClass
-     * @param appendPostfixClass
-     * @return
-     * @see #getMetaAssociationName(Class, boolean, int)
-     */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final int connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return getMetaAssociationName(edgeClass, switchDefinedDirection, connectionState, appendPostfixClass, appendPrefixClass, " / ");
-    }
-
-    /**
-     * @param edgeClass
-     * @param switchDefinedDirection
-     * @param connectionState
-     * @param appendPrefixClass
-     * @param appendPostfixClass
-     * @param doubleMeaningEdgeDelimiter String der bei Kanten mit doppelter Bedeutung, bei denen beide Bedeutungen gleichzeitig ausgegeben werden
-     *            sollen zwischen die beiden Bedeutungen geschrieben wird.
-     * @return
-     * @see #getMetaAssociationName(Class, boolean, int)
-     */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean switchDefinedDirection, final int connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass,
-            final String doubleMeaningEdgeDelimiter) {
-        if (!appendPrefixClass && !appendPostfixClass) {
-            return getMetaAssociationName(edgeClass, switchDefinedDirection, connectionState, doubleMeaningEdgeDelimiter);
-        }
-        StringBuilder sb = new StringBuilder();
-        if (appendPrefixClass) {
-            sb.append(getDisplayableName(!switchDefinedDirection ? getStartClass(edgeClass) : getEndClass(edgeClass)));
-            sb.append(" ");
-        }
-        sb.append(getMetaAssociationName(edgeClass, switchDefinedDirection, connectionState, doubleMeaningEdgeDelimiter));
-        if (appendPostfixClass) {
-            sb.append(" ");
-            sb.append(getDisplayableName(!switchDefinedDirection ? getEndClass(edgeClass) : getStartClass(edgeClass)));
-        }
-        return sb.toString();
     }
 
     public static final Set<Class<? extends ModelElement>> ELEMENT_CLASSES_WITH_HAS_PART_EDGE_CLASSES = new HashSet<>();
@@ -1155,9 +975,7 @@ public final class ModelConstants {
     }
 
     public static boolean isRecursive(final Class<? extends Edge> edgeClass) {
-        Class<? extends ModelElement> startClass = getStartClass(edgeClass);
-        Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
+        return Edge.isRecursive(edgeClass);
     }
 
     public static boolean isRecursiveHasPartEdge(final Class<? extends Edge> edgeClass) {
@@ -1169,125 +987,6 @@ public final class ModelConstants {
     }
 
     /*******************/
-
-    /**
-     * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren nicht, dass man von ihnen auf die Klasse zurückschließen kann.
-     * Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei etwas
-     * lesbarer zu gestalten.
-     *
-     * @param elementClass Elementklasse für die das Kürzel zurück gegeben werden soll.
-     * @return String mit Namenskuerzel
-     */
-    public static final String getShortName(final Class<? extends ModelElement> elementClass) {
-
-        //HashMap mit den ShortNames der Klassen initialisieren (einmal statisch)
-        if (elementClassToHashShortName == null) {
-            elementClassToHashShortName = new HashMap<>();
-            //Set in das alle bisher gefundenen ShortNames eingetragen werden, um zu prüfen, ob ein shortName bereits existiert
-            HashSet<String> allShortNames = new HashSet<>();
-            loop1: for (int i = 0; i < ALL_NODES.length; i++) {
-                String s = ALL_NODES[i].getSimpleName();
-                //wenn der Klassenname aus weniger als 4 Zeichen besteht
-                if (s.length() <= 3) {
-                    elementClassToHashShortName.put(ALL_NODES[i], s.toUpperCase());
-                    continue;
-                }
-                //mehr als 3 Zeichen
-                StringBuilder shortName = new StringBuilder(3);
-                for (int j = 0; j < s.length(); j++) {
-                    //suche Großbuchstaben -> sie werden bevorzugt in den Shortname aufgenommen
-                    String character = s.substring(j, j + 1);
-                    if (character.toUpperCase().equals(character)) {
-                        shortName.append(character);
-                        //wenn 3 Großbuchstaben gefunden wurden
-                        if (shortName.length() == 3) {
-                            String sn = shortName.toString();
-                            //wenn es den ShortName noch nicht gibt
-                            if (!allShortNames.contains(sn)) {
-                                allShortNames.add(sn);
-                                elementClassToHashShortName.put(ALL_NODES[i], sn);
-                                continue loop1;
-                            }
-                            //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter nach Großbuchstanben suchen
-                            shortName.deleteCharAt(2);
-                        }
-                    }
-                }
-                //hier kommt er nur hin, wenn keine 3 Großbuchstaben gefunden wurden
-                //short name hat 0 bis 2 Zeichen
-
-                //wenn genau 2 Großbuchstaben gefunden wurden
-                if (shortName.length() == 2) {
-                    int lastUpperCharInClassName = 0;
-                    for (int j = 0; j < shortName.length(); j++) {
-                        char shortNameChar = shortName.charAt(j);
-                        for (; lastUpperCharInClassName < s.length(); lastUpperCharInClassName++) {
-                            if (s.charAt(lastUpperCharInClassName) == shortNameChar) {
-                                break;
-                            }
-                        }
-                    }
-                    //lastUpperCharInClassName hat jetzt den Index des letzten Großbuchstaben in shortName
-
-                    //solange hinter dem letzten Großbuchstaben noch Zeichen kommen, einfach solange diese Zeichen anhängen,
-                    //bis ein eindeutiger 3-Zeichen-shortName gefunden wurde
-                    while (++lastUpperCharInClassName < s.length()) {
-                        shortName.append(s.charAt(lastUpperCharInClassName));
-                        String sn = shortName.toString().toUpperCase();
-                        //wenn es den ShortName noch nicht gibt
-                        if (!allShortNames.contains(sn)) {
-                            allShortNames.add(sn);
-                            elementClassToHashShortName.put(ALL_NODES[i], sn);
-                            continue loop1;
-                        }
-                        //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
-                        shortName.deleteCharAt(2);
-                    }
-                }
-
-                //es wurden keine 3 eindutigen Buchstaben nach Großbuchstaben gefunden -> Nimm einfach die ersten beiden
-                //Buchstaben und suche einen Folgebuchstaben bis 3 eindeutige Zeichen gefunden werden (das geht immer gut,
-                //wenn die Klassennamen eindeutig sind (was immer der Fall ist, wenn sie im selben package liegen) und hier
-                ///unten fest steht, dass der Name mind. 4 Zeichen lang ist)
-                shortName.setLength(0);
-                shortName.append(s.charAt(0));
-                shortName.append(s.charAt(1));
-                for (int j = 2; j < s.length(); j++) {
-                    shortName.append(s.charAt(j));
-                    String sn = shortName.toString().toUpperCase();
-                    // wenn es den ShortName noch nicht gibt
-                    if (!allShortNames.contains(sn)) {
-                        allShortNames.add(sn);
-                        elementClassToHashShortName.put(ALL_NODES[i], sn);
-                        continue loop1;
-                    }
-                    //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
-                    shortName.deleteCharAt(2);
-                }
-
-                //wenn auch das nicht gekalppt hat (der Fall dürfte nicht eintreten, wenn die Klassen alle im gleichen Package liegen,
-                //da sie dann alle etwas eindeutiges bei s = class.getShortName() geliefert haben)
-                //-> nimm einfach die ersten 3 Zeichen ohne noch einmal irgendwelche Eindeutigkeit zu prüfen;
-                String sn = s.substring(0, 3).toUpperCase();
-                allShortNames.add(sn); //kann man sich wahrscheinlich sparen, weil auch diese Kombination schon oben durchprobiert wurde, aber sicher ist sicher
-                elementClassToHashShortName.put(ALL_NODES[i], sn);
-            }
-        }
-
-        //Node
-        if (Node.class.isAssignableFrom(elementClass)) {
-            Object o = elementClassToHashShortName.get(elementClass);
-            //ist null bei Layerknoten. Die brauchen aber auch keinen lesbaren Hash
-            if (o == null) {
-                return NO_MODEL_ELEMENT_SHORT_NAME;
-            }
-            return elementClassToHashShortName.get(elementClass).toString();
-            //Kanten
-        } else if (Edge.class.isAssignableFrom(elementClass)) {
-            return EDGE_SHORT_NAME;
-        }
-        return NO_MODEL_ELEMENT_SHORT_NAME;
-    }
 
     private static Map<Class<? extends ModelElement>, Integer> ELEMENT_CLASS_TO_LAYER = createELEMENT_CLASS_TO_LAYER_MAP();
 
@@ -1526,48 +1225,45 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert true, wenn die übergebenen Klasse wenigstens eine Kante beseitzt, bei der die minimale Kardinalität zu der
-     * verbundenen Klasse > 0 ist. Die Existenz des übergebenen Elementes ist also abhängig von dem anderen Element.
-     * Das tifft automatisch bei allen {@link CompositionEdge}s zu, bei denen das übergebene Element der Slave ist, aber kann
-     * auch bei allen anderen Kanten zutreffen.
+     * Liefert <code>true</code>, wenn die übergebene Elementart der Slave einer {@link CompositionEdge} ist
      *
      * @param elementClass
-     * @param ignoreCompositions wenn true, werden Kanten nicht beachtet, bei denen die übergebene Elementklasse Master einer Composition ist
      * @return
      */
-    public static boolean isExistenceDependent(final Class<? extends ModelElement> elementClass, final boolean ignoreCompositions) {
+    private static boolean isExistenceDependent(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends Edge> edgeClass : ModelConstants.getEdgeTypes(elementClass)) {
-            if (!ignoreCompositions || ignoreCompositions && !isComposition(edgeClass)) {
-                if (Edge.getMinCardinality(elementClass, edgeClass) > 0) {
+            //System.err.print(elementClass.getSimpleName() + "  --->  " + edgeClass.getSimpleName() + "  --->  " + Edge.getMinCardinality(elementClass, edgeClass) + "  --->  ");
+            //minimale Kardinalität von 1 zu anderen Elementen -> dieses Element braucht mind. ein anderes, damit es konsistent ist
+            if (Edge.getMinCardinality(elementClass, edgeClass) > 0) {
+                //wenn das andere, benötigte Element aber mit einer Compostion untergeordnet ist, dann wird dieses benötigte, untergeordnete Element in der GDCollection-Funktion createInitialSubtypes(...) auomatisch erzeugt und somit die Konsistenz automatisch hergestellt und damit gilt dieses Element nicht als anhängig
+                if (!isComposition(edgeClass) || CompositionEdge.isSlaveType(edgeClass.asSubclass(CompositionEdge.class), elementClass)) {
+                    //System.err.println(true);
                     return true;
                 }
             }
+            //System.err.println(false);
         }
         return false;
     }
 
     /**
-     * Liefert für die übergebene Elementklasse alle Elementtypen, die ihr untergeordnet sind und die nicht unendlich oft
-     * an ihr hängen dürfen. Diese müssen beim Join ebenfalls zusammengeführt werden. Z.B. darf ein Rechanwendungsbaustein
-     * laut Metamodell nur ein Datenbanksystem besitzen. Werden zwei Rechanwendungsbausteine mit jeweils einem Datenbanksystem
-     * gejoined, dann müssen auch die Datenbanksysteme gejoined werden.
+     * Liefert für die übergebene Elementklasse alle Kantenklassen, die nur einmal an ihr hängen dürfen. Diese müssen beim Join ebenfalls
+     * zusammengeführt werden. Z.B. darf ein Rechanwendungsbaustein laut Metamodell nur ein Datenbanksystem besitzen. Werden zwei
+     * Rechanwendungsbausteine mit jeweils einem Datenbanksystem gejoined, dann müssen auch die Datenbanksysteme gejoined werden.
      *
      * @param elementClass
      * @return
      */
-    public static final Set<Class<? extends ModelElement>> getSubordinatedJoinbleTypes(final Class<? extends ModelElement> elementClass) {
-        ImmutableSet.Builder<Class<? extends ModelElement>> subordinatedJoinbleTypes = ImmutableSet.<Class<? extends ModelElement>> builder();
-        Class<? extends CompositionEdge>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
-        for (Class<? extends CompositionEdge> compositionEdgeType : compositionEdgeTypes) {
-            if (CompositionEdge.getMaxMasterToSlaveCardinality(compositionEdgeType) < UNLIMITED) {
-                Class<? extends ModelElement> slaveType = CompositionEdge.getSlaveType(compositionEdgeType);
-                Class<? extends ModelElement>[] instanciableAssignableClasses = getInstanciableAssignableClasses(slaveType);
-                for (Class<? extends ModelElement> instanciableAssignableClass : instanciableAssignableClasses) {
-                    subordinatedJoinbleTypes.add(instanciableAssignableClass);
-                }
+    public static final Set<Class<? extends Edge>> getSubordinatedJoinbleTypes(final Class<? extends ModelElement> elementClass) {
+        Set<Class<? extends Edge>> edgeClassesToSubordinatedJoinbleTypes = new HashSet<>();
+        for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass)) {
+            Edge.getOther(edgeClass, elementClass);
+            int maxCardinality = Edge.getMaxCardinality(elementClass, edgeClass);
+            if (maxCardinality == 1) {
+                edgeClassesToSubordinatedJoinbleTypes.add(edgeClass);
             }
         }
-        return subordinatedJoinbleTypes.build();
+        return edgeClassesToSubordinatedJoinbleTypes;
     }
 
     /** Cache für die Funktion {@link #getInitialSubtypes(Class)} */
@@ -1636,11 +1332,11 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert die {@link PathsDefinition} des Metamodells
+     * Liefert die {@link MetaPathDefinition} des Metamodells
      *
      * @return
      */
-    public static final PathsDefinition getPathsDefinition() {
+    public static final MetaPathDefinition getPathsDefinition() {
         return metaModel.getPathsDefinition();
     }
 
@@ -1680,6 +1376,35 @@ public final class ModelConstants {
      */
     public static final Action[] getExtrasActions(final boolean plugins) {
         return metaModel.getExtrasActions(plugins);
+    }
+
+    /**
+     * Liefert alle anlegbaren MetaPfade, bei denen für selektierte Elemente der übergebenen Elementart im Kontextmenü eine Liste aller existierenden
+     * Elemente angeboten werden soll, zu denen ein Pfad angelegt werden soll.
+     *
+     * @param elementClass
+     */
+    public static Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass) {
+        return metaModel.getCreatableMetaPaths(elementClass);
+    }
+
+    /**
+     * Liefert alle anlegbaren MetaPfade die zwischen den übergebenen Elementarten im Metamodell definiert sind. Alle diese Pfade werden als
+     * verbindbare Pfade im Kontextmenü angeboten, wenn das zuletzt markierte Element und ein anderes markiertes Element zuwesiungskompatibel zu den
+     * übergebenen Elementklassen sind. Diese Pfade werden dann mit allen Zwischenelementen zwischen den beiden Elementen angelegt.
+     *
+     * @param elementClass1
+     * @param elementClass2
+     */
+    public static Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+        ImmutableList.Builder<SimpleMetaPath> creatableMetaPaths = ImmutableList.builder();
+        for (SimpleMetaPath metaPath : metaModel.getCreatableMetaPaths(elementClass1)) {
+            Class<? extends ModelElement> endClass = metaPath.getEndClass();
+            if (endClass.isAssignableFrom(elementClass2)) {
+                creatableMetaPaths.add(metaPath);
+            }
+        }
+        return creatableMetaPaths.build();
     }
 
 }

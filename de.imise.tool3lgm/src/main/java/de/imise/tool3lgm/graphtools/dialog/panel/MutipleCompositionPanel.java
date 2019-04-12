@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.MASTER_TO_SLAVE_DIRECTION;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -26,7 +27,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.tools.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
@@ -51,23 +54,23 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
      */
     private final LGMTreeNode root;
 
-    private final JPanel buttonpanel;
+    private JPanel buttonpanel;
 
     /**
      * @param dialog
+     * @param editable
      * @param searchElementClass
      * @param edgeClass
      */
-    @SuppressWarnings("unchecked")
-    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
-        super(dialog, searchElementClass, edgeClass);
+    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final boolean editable, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
+        super(dialog, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
 
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
         JLabel label = new JLabel(getResString("verb"));
-        root = new LGMTreeNode(getResString("verb"), false);
+        root = new StringTreeNode(getResString("verb"));
         model = new DefaultTreeModel(root);
         tree = new JTree(model);
         tree.setRootVisible(false);
@@ -82,16 +85,15 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
 
         JScrollPane sp = new JScrollPane(tree);
 
-        constraints.anchor = GridBagConstraints.CENTER;
-        buttonpanel = new JPanel();
-        buttonpanel.setLayout(new GridLayout(1, 2));
-        buttonpanel.add(removeButton);
-        buttonpanel.add(addButton);
-        add(this, buttonpanel, constraints, 0, 2, 3, 1);
+        if (editable) {
+            constraints.anchor = GridBagConstraints.CENTER;
+            buttonpanel = new JPanel();
+            buttonpanel.setLayout(new GridLayout(1, 2));
+            buttonpanel.add(removeButton);
+            buttonpanel.add(addButton);
+            add(this, buttonpanel, constraints, 0, 2, 3, 1);
+        }
 
-        // add(this, viewButton, constraints, 2, 3, 1, 1);
-        constraints.ipadx = 0;
-        constraints.ipady = 0;
         constraints.anchor = GridBagConstraints.WEST;
         add(this, label, constraints, 0, 0, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
@@ -109,13 +111,13 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         ModelElement modelElement = getModelElement();
         List<ElementContainer> all = modelElement.getConnectedContainer(searchElementClass, mainDoc);
         for (int m = 0; m < all.size(); m++) {
-            LGMTreeNode node = new LGMTreeNode(all.get(m), false);
+            LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
             root.add(node);
         }
         if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS)) {
             all = ((Node) modelElement).getPartConnectedContainer(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
-                LGMTreeNode node = new LGMTreeNode(all.get(m), false);
+                LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
                 node.setSelectable(false);
                 root.add(node);
             }
@@ -123,7 +125,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS)) {
             all = ((Node) modelElement).getParentConnectedContainer(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
-                LGMTreeNode node = new LGMTreeNode(all.get(m), false);
+                LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
                 node.setSelectable(false);
                 root.add(node);
             }
@@ -146,7 +148,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 ModelElement me = getModelElement();
                 ElementContainer ec = me.getContainer(mainDoc);
                 doc.select(ec, pid);
-                GraphDocument.createAddicted(selectedDoc, me, edgeClasses[0].asSubclass(CompositionEdge.class), searchElementClass, pid);
+                GraphDocument.createAddicted(selectedDoc, me, getLastEdgeClassInPath().asSubclass(CompositionEdge.class), searchElementClass, pid);
                 doc.select(ec, pid);
             }
         };
@@ -171,7 +173,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                         ModelElement topLevelModelElement;
                         topLevelModelElement = getModelElement();
                         GDCollection gdcoll = getGraphDocument().getCollection();
-                        gdcoll.unlink(topLevelModelElement, knot.getElement(), edgeClasses[lastEdgeIndex], getTransactionID());
+                        unlink(gdcoll, topLevelModelElement, knot.getElement(), getLastEdgeClassInPath(), MASTER_TO_SLAVE_DIRECTION, getTransactionID());
                     }
                 }
             }

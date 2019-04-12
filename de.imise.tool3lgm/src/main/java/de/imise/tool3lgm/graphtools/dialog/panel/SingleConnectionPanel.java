@@ -1,26 +1,29 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.NamedObjectContainer;
@@ -40,7 +43,7 @@ import de.imise.util.swing.component.LimitedSizeScrollTextPane;
  *         da man z.B. jedem Anwendungsbaustein sein eigenes Datenbanksystem geben will, auch wenn ein
  *         übergeordneter Anwendungsbaustein schon eines besitzt.
  */
-public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
+public class SingleConnectionPanel extends AbstractPathConnectionPanel {
 
     /** Box, in der die verbindbaren Elemente zur Auswahl gestellt werden, wenn es mehr als eines gibt. */
     private final AlphabeticalComboBox connectedElementsBox;
@@ -71,26 +74,27 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      * @param dialog
      * @param edgeClasses
      */
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final Class<? extends Edge>... edgeClasses) {
-        this(dialog, false, edgeClasses);
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, true, simpleMetaPath);
     }
 
     /**
      * @param dialog
      * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
      *            letzten Edge aus den edgeClasses geschrieben.
-     * @param edgeClasses
+     * @param editable bezieht sich nur auf die Möglichkeit, die Verbindung zum dargestellten Element zu lösen oder ein anderes anzuhängen. Das
+     *            verbundene Element bzw. dessen Name ist immmer nicht änderbar.
+     * @param simpleMetaPath
      */
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        super(dialog, labelLastEdgeName, edgeClasses);
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean editable, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelLastEdgeName, simpleMetaPath);
         setLayout(new BorderLayout());
-
-        if (isLastPathElementNeededForExistence()) {
+        update(); //connectedElement initial setzen!
+        if (!editable || isLastPathElementNeededForExistence() && connectedElement != null) {
             connectedElementsBox = null;
             itemListener = null;
-            connectedElementName = new LimitedSizeScrollTextPane(4);
+            connectedElementName = new LimitedSizeScrollTextPane(4, false); //wenn man hier true übergibt, kann man den Namen des verbundenen Elementes ändern. Aber dann funktuionieren die Maus-Actions nicht mehr, weil dann die Komponente eigene Mausaktionen für den Text macht
             connectedElementViewComponent = connectedElementName;
-
             //Doppelklick-Action und Kontextmenü anghängen
             addMouseActions(connectedElementName);
             add(connectedElementName, BorderLayout.CENTER);
@@ -101,25 +105,29 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             connectedElementViewComponent = connectedElementsBox;
 
             connectedElementsBox.addItemListener(itemListener);
+            //Doppelklick-Action und Kontextmenü anghängen
+            addMouseActions(connectedElementsBox);
             add(connectedElementsBox, BorderLayout.CENTER);
         }
 
-        createNew = isPathCreatable() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getDisplayableName(searchElementClass)) : null;
+        createNew = isCreatableMetaPath() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + ElementsNameBuilder.getDisplayableName(searchElementClass)) : null;
     }
 
     @Override
     public void update() {
-        List<ElementContainer> allConnectedContainers = getConnectedContainer();
-        ElementContainer connectedContainer = allConnectedContainers.isEmpty() ? null : allConnectedContainers.get(0);
+        Collection<ElementContainer> allConnectedContainers = getConnectedContainer();
+        ElementContainer connectedContainer = allConnectedContainers.isEmpty() ? null : allConnectedContainers.iterator().next();
         connectedElement = connectedContainer == null ? null : connectedContainer.getElement();
 
         if (connectedElementsBox != null) {
             boolean isLastPathElementDependent = isLastPathElementDependent();
             connectedElementsBox.removeItemListener(itemListener);
             connectedElementsBox.removeAllItems();
-            connectedElementsBox.addItem(" ");
+            if (!isLastPathElementNeededForExistence()) {//Abhängen nur anbieten, wenn dadurch das vorletzte Element im Pfad nicht inkonsistent wird
+                connectedElementsBox.addItem(" ");
+            }
             //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle bzw. alle, die über den ConditionPath verbunden sind
-            List<ElementContainer> available = isLastPathElementDependent ? allConnectedContainers : getAvailableConnectables();
+            Collection<ElementContainer> available = isLastPathElementDependent && !allConnectedContainers.isEmpty() ? allConnectedContainers : getAvailableConnectables();
 
             //neues Element anlegen und verknüpfen soll nur gezeigt werden, wenn der Pfad an sich anlegbar ist. Ist die searchElementClass
             //abhängig von der Existenz des Elementes davor im Pfad, dann soll auch kein Neu-Anlegen-Eintrag kommen
@@ -138,9 +146,7 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
             }
             connectedElementsBox.setSelectedItem(connectedContainer);
             connectedElementsBox.addItemListener(itemListener);
-            //Doppelklick-Action und Kontextmenü anghängen
-            addMouseActions(connectedElementsBox);
-        } else /* if (connectedElementName != null) */ {
+        } else if (connectedElementName != null) { // beim ersten update() aus dem Konstruktor sind beide (Box und TextArea) null -> nicht einfach nur else hier sondern else-if
             if (connectedElement != null) {
                 oldname = connectedElement.getName();
                 connectedElementName.setText(oldname);
@@ -148,6 +154,20 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
                 connectedElementName.setText("");
             }
         }
+    }
+
+    /**
+     * @return Das verbundene Element das angezeigt wird (wenn es mind. eins gibt)
+     */
+    public ModelElement getConnectedElement() {
+        return connectedElement;
+    }
+
+    /**
+     * @return
+     */
+    private boolean isCreatableMetaPath() {
+        return metaPath != null && metaPath.isCreatable();
     }
 
     @Override
@@ -227,38 +247,48 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
      * @return
      */
-    private List<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
-        List<ElementContainer> connectedElements = new ArrayList<>();
-        connectedElements.add(dialog.getModelElement().getContainer(mainDoc));
-        int edgeSearchStopIndex = forelastInPath ? edgeClasses.length - 1 : edgeClasses.length;
-        for (int i = 0; i < edgeSearchStopIndex; i++) {
-            List<ElementContainer> tempConnectedElements = new ArrayList<>();
-            for (ElementContainer ec : connectedElements) {
-                tempConnectedElements.addAll(ec.getElement().getConnectedContainer(ModelElement.class, mainDoc, edgeClasses[i], directions[i]));
-            }
-            connectedElements = tempConnectedElements;
-        }
-        return connectedElements;
+    private Collection<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
+        return MetaPathFunctions.getConnectedContainer(getModelElement(), doc, metaPath, forelastInPath);
     }
+
+    //    /**
+    //     * Liefert die mit dem ModelElement des Dialoges über die angegebenen Kanten verbundenen Elemente.
+    //     *
+    //     * @param forelastInPath wenn <code>true</code> werden nicht die letzten, sondern die vorletzten im
+    //     *            Pfad zurück gegeben. Bei Pfaden, die nur aus einer Edge bestehen ist das das
+    //     *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
+    //     * @return
+    //     */
+    //    private List<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
+    //        List<ElementContainer> connectedElements = new ArrayList<>();
+    //        connectedElements.add(dialog.getModelElement().getContainer(mainDoc));
+    //        int edgeSearchStopIndex = forelastInPath ? edgeClasses.length - 1 : edgeClasses.length;
+    //        for (int i = 0; i < edgeSearchStopIndex; i++) {
+    //            List<ElementContainer> tempConnectedElements = new ArrayList<>();
+    //            for (ElementContainer ec : connectedElements) {
+    //                tempConnectedElements.addAll(ec.getElement().getConnectedContainer(ModelElement.class, mainDoc, edgeClasses[i], directions[i]));
+    //            }
+    //            connectedElements = tempConnectedElements;
+    //        }
+    //        return connectedElements;
+    //    }
 
     /**
      * Liefert alle Elemente der searchElementClass, die mit dem Ausgangselement direkt verbunden sind.
      *
      * @return
      */
-    private final List<ElementContainer> getConnectedContainer() {
+    private final Collection<ElementContainer> getConnectedContainer() {
         return getConnectedContainer(false);
     }
 
     /**
-     * Liefert die Elemente, die auf dem durch die Kanten angegebenen Pfad diejenigen sind, die tatsächlich
-     * mit dem searchElementen verbunden sind. Bei einem Pfad der Länge 1 ist das immer nur das ModelElement
-     * selbst bzw. dessen HauptDokument-Container. Bei einem Pfad der Länge 2 sind es die Elemente in der
-     * Mitte, also immer die direkt nach dem Ausgangs-ModelElement und vor dem searchElement usw.
+     * Liefert die ElementContainer, die mit den Endelementen des Pfades verbunden sind. Ist der Pfad nur eine Kante lang, sind das immer das/die
+     * Ausgeangselement/e. Ist der Pfad länger, sind es immer die StartElemente des letzten Pfadschrittes.
      *
      * @return
      */
-    private final List<ElementContainer> getSearchElementConnectedContainer() {
+    private final Collection<ElementContainer> getForelastConnectedContainer() {
         return getConnectedContainer(true);
     }
 
@@ -266,15 +296,16 @@ public class SingleConnectionPanel extends AbstractSingleConnectionPanel {
      * Trennt alle Verbindungen zwischen den vorletzten Elementen im Kanten-Pfad und den searchElementen.
      */
     private final void unlinkAll() {
-        List<ElementContainer> searchElementConnectedContainer = getSearchElementConnectedContainer();
-        GDCollection gdcoll = mainDoc.getCollection();
-        Class<? extends Edge> lastEdgeInPath = edgeClasses[lastEdgeIndex];
-        int lastEdgeDirection = directions[lastEdgeIndex];
+        Collection<ElementContainer> searchElementConnectedContainer = getForelastConnectedContainer();
         for (ElementContainer ec : searchElementConnectedContainer) {
+            //da das in der Regel nur 1 Element ist, kann man die Variablen alle in der Schleife anlegen
+            GDCollection gdcoll = mainDoc.getCollection();
+            Class<? extends Edge> lastEdgeInPath = getLastEdgeClassInPath();
+            Direction lastDirectionInPath = getLastDirectionInPath();
             ModelElement me = ec.getElement();
-            List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, lastEdgeDirection);
+            List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, lastDirectionInPath);
             for (ModelElement connected : connectedElements) {
-                gdcoll.unlink(me, connected, lastEdgeInPath, dialog.getTransactionID());
+                unlink(gdcoll, me, connected, lastEdgeInPath, lastDirectionInPath, dialog.getTransactionID());
             }
         }
     }

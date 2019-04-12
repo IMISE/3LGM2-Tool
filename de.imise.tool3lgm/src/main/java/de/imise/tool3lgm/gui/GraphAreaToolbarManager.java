@@ -4,11 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewPathSelectorToolBar;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.newmatrixview.InternalMatrixFrameToolBar;
+import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
@@ -52,12 +52,12 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
                 setToolBarVisible(UserProperties.is(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR));
             } else if (activeFrame instanceof MatrixViewInternalFrame) {
                 MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) activeFrame;
-                if (currentToolBar == null || !(currentToolBar instanceof MatrixViewPathSelectorToolBar)) {
+                if (currentToolBar == null || !(currentToolBar instanceof InternalMatrixFrameToolBar)) {
                     removeToolBar();
-                    currentToolBar = new MatrixViewPathSelectorToolBar(matrixFrame);
+                    currentToolBar = new InternalMatrixFrameToolBar(matrixFrame);
                     addToolBar();
                 }
-                MatrixViewPathSelectorToolBar matrixViewToolBar = (MatrixViewPathSelectorToolBar) currentToolBar;
+                InternalMatrixFrameToolBar matrixViewToolBar = (InternalMatrixFrameToolBar) currentToolBar;
                 matrixViewToolBar.setFrame(matrixFrame);
                 matrixFrame.setMatrixViewToolBar(matrixViewToolBar);
                 if (matrixViewToolBar.getParent() == null) {

@@ -1,11 +1,11 @@
 /**
- * 
+ *
  */
 package de.imise.tool3lgm.graphtools.consistency.error;
 
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 
 /**
  * @author AXS
@@ -15,12 +15,12 @@ public class MinCardinalityError extends AbstractCardinalityError {
 
     /**
      * @param me
-     * @param edgeClass
+     * @param elementaryMetaPath
      * @param cardValue
      * @param gdcoll
      */
-    public MinCardinalityError(final ModelElement me, final Class<? extends Edge> edgeClass, final GDCollection gdcoll, final int cardValue) {
-        super(me, edgeClass, gdcoll, cardValue);
+    public MinCardinalityError(final ModelElement me, final ElementaryMetaPath elementaryMetaPath, final GDCollection gdcoll, final int cardValue) {
+        super(me, elementaryMetaPath, gdcoll, cardValue);
     }
 
 }

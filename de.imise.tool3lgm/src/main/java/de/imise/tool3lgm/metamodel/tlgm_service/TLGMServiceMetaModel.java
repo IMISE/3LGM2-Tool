@@ -1,7 +1,11 @@
 package de.imise.tool3lgm.metamodel.tlgm_service;
 
+import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.createSimpleMetaPath;
+
+import java.util.Collection;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
@@ -9,18 +13,19 @@ import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.metamodel.PathsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
+import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.AbstractApplicationSystem_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationLink_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_SupportLink_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_IheActorApplicationSystem_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationSystem_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.DataTransmissionLink_Edge;
@@ -29,16 +34,15 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_Use_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorOfIntegrationProfile_IheInterface_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheConcept_IheDomain_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheActorOfIntegrationProfile_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheTransaction_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorInstance_SoftwareProduct_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheActorInstance_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheInterface_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheActor_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheDomain_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInvokingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInvokingInterface_InvokingInterface_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheProvidingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheProvidingInterface_ProvidingInterface_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransactionLink_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransactionLink_IheTransaction_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheTransaction_Service_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Location_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ObjectType_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.OrganisationalUnit_HasPartEdge;
@@ -64,9 +68,8 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.CommunicationInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.DeviceClass;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Function;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorApplicationSystem;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorOfIntegrationProfile;
-import de.imise.tool3lgm.metamodel.tlgm_service.node.IheConcept;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActor;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorInstance;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheDomain;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheIntegrationProfile;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.IheInterface;
@@ -79,6 +82,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ObjectType;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.OrganisationSystem;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.OrganisationalUnit;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.PhysicalDataProcessingComponent;
+import de.imise.tool3lgm.metamodel.tlgm_service.node.Process;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ProvidingInterface;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Service;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.ServiceClass;
@@ -86,7 +90,6 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.SoftwareProduct;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.SystemOfConcepts;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.TransmissionMedium;
 import de.imise.tool3lgm.metamodel.tlgm_service.node.Use;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PdvbVirtualPdvbVerbindung;
 
 @SuppressWarnings({
         "unchecked", "rawtypes"
@@ -114,9 +117,9 @@ public class TLGMServiceMetaModel extends MetaModel {
         putOldToNewClassName("AufAufOrgVerbindung", "Function_Use_Edge");
         putOldToNewClassName("AufAufVerbindung", "Function_HasPartEdge");
         putOldToNewClassName("AufObjVerbindung", "Function_ObjectType_Edge");
-        putOldToNewClassName("KawbAwbVerbindung", "ApplicationComponent_HasPartEdge");
+        putOldToNewClassName("KawbAwbVerbindung", "OrganisationSystem_ApplicationSystem_HasPartEdge"); //das haut nur hin ohne Fehler, wenn die KawVerbindung auch ein KonAnwendungsbaustein mit einem RechAnwendungsbaustein verbunden hat
+        putOldToNewClassName("RawbRawbVerbindung", "ApplicationSystem_HasPartEdge");
         putOldToNewClassName("ObjObjVerbindung", "ObjectType_HasPartEdge");
-        putOldToNewClassName("", "");
         putOldToNewClassName("", "");
         putOldToNewClassName("", "");
         putOldToNewClassName("", "");
@@ -136,7 +139,7 @@ public class TLGMServiceMetaModel extends MetaModel {
     /////////////////////
 
     @Override
-    public PathsDefinition createPathsDefinition() {
+    public MetaPathDefinition createPathsDefinition() {
         //im Moment hat dieses Metamodell keine eigene Pfaddefinition. Man könnte diese Funktion auch weglassen.
         return super.createPathsDefinition();
     }
@@ -183,7 +186,7 @@ public class TLGMServiceMetaModel extends MetaModel {
 
     /** Alle Node der FE als Array */
     private static final Class[] ALL_DOMAIN_LAYER_NODES = {
-            Function.class, ObjectType.class, OrganisationalUnit.class, Use.class, SystemOfConcepts.class, de.imise.tool3lgm.metamodel.tlgm_service.node.Process.class, // es gibt im lang-package ebenfalls eine Klasse Process
+            Function.class, ObjectType.class, OrganisationalUnit.class, Use.class, SystemOfConcepts.class, Process.class, // es gibt im lang-package ebenfalls eine Klasse Process
     };
 
     /** Alle Node zw. FE und LWE als Array */
@@ -210,9 +213,8 @@ public class TLGMServiceMetaModel extends MetaModel {
             CommunicationInterface.class,
 
             //IHE-Konzepte
-            IheActorOfIntegrationProfile.class,
-            IheActorApplicationSystem.class,
-            IheConcept.class,
+            IheActor.class,
+            IheActorInstance.class,
             IheDomain.class,
             IheIntegrationProfile.class,
             IheTransaction.class,
@@ -220,7 +222,6 @@ public class TLGMServiceMetaModel extends MetaModel {
             IheInvokingInterface.class,
             IheProvidingInterface.class,
             //IHE-Assoziationsklassen
-            IheTransactionLink_Edge.class,
     };
 
     /** Alle Node zw. LWE und PWE als Array */
@@ -259,9 +260,20 @@ public class TLGMServiceMetaModel extends MetaModel {
     @Override
     public Class[] getTreeLogicalLayerVisibleAbstractNodes() {
         return new Class[] {
-                //nur bei Anwendungsbausteinen und IIH-Konzepten soll die abstrakte Oberklasse im Baum angezeigt werden
-                //ApplicationComponent.class, IheConcept.class,
+                //nur bei Anwendungsbausteinen soll die abstrakte Oberklasse im Baum angezeigt werden
+                //ApplicationComponent.class, //im Moment deaktiviert
         };
+    }
+
+    @Override
+    public Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
+        //hier wird nur mit contains(class) gerpüft -> immer auch die Oberklassen, die versteckt werden sollen reinschreiben
+        return ImmutableSet.of(IheInterface.class, IheInvokingInterface.class, IheProvidingInterface.class, Use.class);
+    }
+
+    @Override
+    public Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes() {
+        return ImmutableSet.of(IheActor.class, IheDomain.class, IheIntegrationProfile.class, IheInterface.class, IheInvokingInterface.class, IheProvidingInterface.class, IheTransaction.class);
     }
 
     ////////////
@@ -288,9 +300,9 @@ public class TLGMServiceMetaModel extends MetaModel {
                 StorageLink_Edge.class,
                 SupportLink_Edge.class,
                 //LWE
+                AbstractApplicationSystem_HasPartEdge.class,
                 ApplicationComponent_CommunicationInterface_Edge.class,
                 ApplicationComponent_CommunicationLink_Edge.class,
-                ApplicationComponent_HasPartEdge.class,
                 ApplicationSystem_SoftwareProduct_Edge.class,
                 CommunicationLink_Edge.class,
                 Service_CommunicationLink_Edge.class,
@@ -299,17 +311,16 @@ public class TLGMServiceMetaModel extends MetaModel {
                 Service_ServiceClass_Edge.class,
                 ServiceUses_Edge.class,
                 //IHE-Kanten
-                IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge.class,
-                IheActorOfIntegrationProfile_IheInterface_Edge.class,
-                ApplicationSystem_IheActorApplicationSystem_Edge.class,
-                IheConcept_IheDomain_Edge.class,
-                IheIntegrationProfile_IheActorOfIntegrationProfile_Edge.class,
-                IheIntegrationProfile_IheTransaction_Edge.class,
+                IheActor_IheActorInstance_Edge.class,
+                IheActor_IheInterface_Edge.class,
+                IheActorInstance_SoftwareProduct_Edge.class,
+                ApplicationSystem_IheActorInstance_Edge.class,
+                IheIntegrationProfile_IheDomain_Edge.class,
+                IheIntegrationProfile_IheActor_Edge.class,
+                IheInvokingInterface_IheTransaction_Edge.class,
+                IheProvidingInterface_IheTransaction_Edge.class,
                 IheInvokingInterface_InvokingInterface_Edge.class,
                 IheProvidingInterface_ProvidingInterface_Edge.class,
-                IheTransaction_Service_Edge.class,
-                IheTransactionLink_Edge.class,
-                IheTransactionLink_IheTransaction_Edge.class,
                 //LWE - PWE
                 ApplicationComponent_PhysicalDataProcessingComponent_Edge.class,
                 ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class,
@@ -320,7 +331,6 @@ public class TLGMServiceMetaModel extends MetaModel {
                 Location_HasPartEdge.class,
                 PhysicalDataProcessingComponent_DeviceClass_Edge.class,
                 PhysicalDataProcessingComponent_HasPartEdge.class,
-                PdvbVirtualPdvbVerbindung.class,
                 PhysicalDataProcessingComponent_Location_Edge.class,
                 PhysicalDataProcessingComponentVirtualises_Edge.class,
                 TransmissionMedium_DataTransmissionLink_Edge.class,
@@ -359,36 +369,20 @@ public class TLGMServiceMetaModel extends MetaModel {
         return IMPORTABLE_NODES;
     }
 
-    ///////////////////////////////////
-    // spezielle Kanteneigenschaften //
-    ///////////////////////////////////
-
-    /**
-     * Liste aller Kantenklassen, die auch 2 gerichtete Assoziationen im Metamodell sein könnten, aber in eine Assoziation verpackt wurden,
-     * bei denen die Richtung der Edge (Doppelkante.FORWARD, Doppelkante.BACKWARD, Doppelkante.DOUBLE) die Bedeutung angibt. Wegen dieser
-     * Kanten braucht man den ganzen Kanten-Richtungsmechanismus. Wenn sie grafisch dargestellt werden, dann werden sie als eine Edge dargestellt,die
-     * je nach Bedeutung eine der Richtungen oder beide als Pfeile darstellt.
-     */
-    @Override
-    public final Set<Class<? extends Edge>> getDoubleMeaningEdgeClasses() {
-        return ImmutableSet.<Class<? extends Edge>> of(
-                //vorwärts1: bearbeitet; rückwärts1: wird bearbeitet von
-                //vorwärts2: interpretiert; rückwärts2: wird interpretiert von
-                Function_ObjectType_Edge.class,
-                //vorwärts1: hat als Ergebnis; rückwärts1: ist Ergebnis von
-                //vorwärts2: hat als Parameter; rückwärts2: ist Parameter von
-                Service_ObjectType_Edge.class);
-    }
+    ///////////////////////////////////////////////////////////////////////
+    // Bedingungspfade für Kanten (siehe Beschreibung getConditionPath() //
+    ///////////////////////////////////////////////////////////////////////
 
     //IheInvokingInterface_InvokingInterface_Edge
-    public static final MetaPath CONDITION_METAPATH_1 = new MetaPath(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class),
-            IheActorOfIntegrationProfile_IheInterface_Edge.class, IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
+    public static final SimpleMetaPath CONDITION_METAPATH_1 = createSimpleMetaPath(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class), IheActor_IheInterface_Edge.class,
+            IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
     //IheProvidingInterface_ProvidingInterface_Edge
-    public static final MetaPath CONDITION_METAPATH_2 = new MetaPath(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class), Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class),
-            IheActorOfIntegrationProfile_IheInterface_Edge.class, IheActorApplicationSystem_IheActorOfIntegrationProfile_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
+    public static final SimpleMetaPath CONDITION_METAPATH_2 = createSimpleMetaPath(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class), Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class),
+            IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
 
     @Override
-    public final MetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
+    public final SimpleMetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
+        //Sind nur 2 -> muss keine Map sein
         if (IheInvokingInterface_InvokingInterface_Edge.class.isAssignableFrom(edgeClass)) {
             return CONDITION_METAPATH_1;
         } else if (IheProvidingInterface_ProvidingInterface_Edge.class.isAssignableFrom(edgeClass)) {
@@ -397,15 +391,38 @@ public class TLGMServiceMetaModel extends MetaModel {
         return null;
     }
 
+    /////////////////////////////////////////////////////////////////////////////////////////////
+    // Ebenfalls mitzuinstanziierende Pfade bei der Instanziierung über eine InstanciationEdge //
+    /////////////////////////////////////////////////////////////////////////////////////////////
+
+    //IheActor_IheActorInstance_Edge
+    public static final Iterable<SimpleMetaPath> IHEACTOR_IHEACTORINSTANCE_EDGE_INSTANCIATION_METAPATHS = ImmutableList.of(
+            createSimpleMetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_InvokingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class),
+            createSimpleMetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+
+    @Override
+    public Iterable<SimpleMetaPath> getInstanciableMetaPaths(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
+        if (instanciationEdgeClass == IheActor_IheActorInstance_Edge.class) {
+            return IHEACTOR_IHEACTORINSTANCE_EDGE_INSTANCIATION_METAPATHS;
+        }
+        return super.getInstanciableMetaPaths(instanciationEdgeClass);
+    }
+
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
     ///////////////////////////////////////////////////////////////////
 
-    private final Set<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = ImmutableSet.<Class<? extends ModelElement>> of();
+    private final Set<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = ImmutableSet.<Class<? extends ModelElement>> of(Use.class);
 
     @Override
     public Set<Class<? extends ModelElement>> getGenerateNameClasses() {
         return GENERATE_NAME_CLASSES;
+    }
+
+    @Override
+    protected Collection<SimpleMetaPath> getCreatablePaths() {
+        SimpleMetaPath path1 = createSimpleMetaPath(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
+        return ImmutableList.of(path1);
     }
 
 }

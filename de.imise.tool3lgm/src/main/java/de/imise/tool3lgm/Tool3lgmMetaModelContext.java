@@ -16,7 +16,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.NamedObjectContainer;
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**

@@ -5,9 +5,9 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridLayout;
@@ -37,17 +37,25 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
-import de.imise.tool3lgm.tools.LGMTreeNode;
 
 /**
+ * 24.10.2018: Dieses Panel funktioniert im Moment überhaupt nicht mehr richtig. Die Aufgaben des Prozesses werden alphabetisch sortiert und die
+ * Umbenennung mit den Nummern davor findet auch nicht mehr statt. Die Objekttypen werden auch nicht mehr angehängt und das Verifizieren geht auch
+ * nicht mehr.
+ *
  * @author AXS
  */
 public class ProzessStructurePanel extends PathConnectionLeafPanel implements TreeWillExpandListener {
@@ -125,9 +133,11 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
 
     /**
      * @param dialog
+     * @param multipleConnectionEgdeClass
+     * @param doubleMeaningEdgeClass
      */
-    public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends Edge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
-        super(dialog, true, getOther(multipleConnectionEgdeClass, dialog.getModelElement().getClass()), multipleConnectionEgdeClass);
+    public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
+        super(dialog, true, SimpleMetaPathCreator.createSimpleMetaPath(dialog.getModelElement().getClass(), getOther(multipleConnectionEgdeClass, dialog.getModelElement().getClass()), multipleConnectionEgdeClass));
         this.doubleMeaningEdgeClass = doubleMeaningEdgeClass;
 
         // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge anlegen
@@ -228,10 +238,10 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         ModelElement me = ((NodeContainer) aufgabenContainerNode.getUserObject()).getElement();
         List<ElementContainer> ots = me.getConnectedContainer(Objekttyp.class, doc, null, BACKWARD, false);
         if (ots.size() > 0) {
-            LGMTreeNode tmpNode = new LGMTreeNode(getResString("AufObjVerbindung_f_b"), false);
+            LGMTreeNode tmpNode = new StringTreeNode(getResString("AufObjVerbindung_f_b"));
             tmpNode.setSelectable(false);
             for (ElementContainer ot : ots) {
-                LGMTreeNode otNode = new LGMTreeNode(ot, false);
+                LGMTreeNode otNode = new ElementContainerTreeNode(ot, false, true);
                 otNode.setSelectable(false);
                 tmpNode.add(otNode);
             }
@@ -239,10 +249,10 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         }
         ots = me.getConnectedContainer(Objekttyp.class, doc, null, FORWARD, false);
         if (ots.size() > 0) {
-            LGMTreeNode tmpNode = new LGMTreeNode(getResString("AufObjVerbindung_f_f"), false);
+            LGMTreeNode tmpNode = new StringTreeNode(getResString("AufObjVerbindung_f_f"));
             tmpNode.setSelectable(false);
             for (ElementContainer ot : ots) {
-                LGMTreeNode otNode = new LGMTreeNode(ot, false);
+                LGMTreeNode otNode = new ElementContainerTreeNode(ot, false, true);
                 otNode.setSelectable(false);
                 tmpNode.add(otNode);
             }
@@ -830,7 +840,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //            if (!(o instanceof String)) {
     //                // den angeklickten selektieren
     //                setSelectionRow(tree, clickedRow);
-    //                Tool3lgm.getContextGenerator().getTreeKnotContextMenu((ElementContainer) o).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
+    //                Tool3lgm.getContextGenerator().getDialogSelectionContextMenu((ElementContainer) o).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
     //            }
     //        }
     //        // es ist etwas selektiert
@@ -848,7 +858,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     //            }
     //            // das PopupMenü für den jetzt selektierten Eintrag anzeigen
     //            Object o = ((LGMTreeNode) tree.getPathForRow(clickedRow).getLastPathComponent()).getUserObject();
-    //            Tool3lgm.getContextGenerator().getTreeKnotContextMenu((ElementContainer) o).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
+    //            Tool3lgm.getContextGenerator().getDialogSelectionContextMenu((ElementContainer) o).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
     //        }
     //    }
     //
@@ -1062,7 +1072,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ElementDialogPanel pane = edp;
         final LGMTreeNode lroot = (LGMTreeNode) tree.getModel().getRoot();
         if (edp instanceof ProzessStructurePanel) {
-            return new LGMAction(getResString("verif")) {
+            return new LGMAction(getResString("verify")) {
 
                 @Override
                 public void execute(final EventObject e) {
@@ -1264,8 +1274,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
 
             @Override
             public void execute(final EventObject eo) {
-                // Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat
-                // die 1)
+                // Aufaben haben Pfadlänge 2 (das nicht sichtbare root hat die 1)
                 TreePath selPath = ltree.getSelectionPath();
                 // wenn links eine Aufgabe selektiert ist
                 if (selPath != null && selPath.getPathCount() == 2) {
@@ -1273,8 +1282,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                     int pos1 = lmodel.getIndexOfChild(lroot, selPath.getLastPathComponent());
                     // wenn nicht die erste sondern eine Aufgabe dahinter selektiert ist
                     if (pos1 > 0) {
-                        // jetzt die Position der über der selektierten Aufgabe liegenden
-                        // Aufgabe holen
+                        // jetzt die Position der über der selektierten Aufgabe liegenden Aufgabe holen
                         // -> von dieser alle evtl. expandierten Unterknoten merken
                         // -> sie removen und unter der selektierten wieder einfügen
                         // -> alles was von ihr expandiert war, wieder expandieren
@@ -1285,26 +1293,18 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                             path = ltree.getPathForRow(pos2);
                         }
 
-                        // wenn die selektierte Aufgabe expandierte Unterknoten hat (können max.
-                        // 2 sein, nämlich
-                        // "Interpretiert" und "Bearbeitet"), dann sind diese TreePathes jetzt
-                        // in enum
+                        // wenn die selektierte Aufgabe expandierte Unterknoten hat (können max. 2 sein, nämlich
+                        // "Interpretiert" und "Bearbeitet"), dann sind diese TreePathes jetzt in enum
                         Enumeration<TreePath> en = ltree.getExpandedDescendants(path);
 
-                        // jetzt den Baum anpassen (DER WIRD IN DIESEM FALL IN buildLeftTree()
-                        // NICHT VERÄNDERT)
-                        // und weil hier noch die Expasionen anpasst werden (über enum), soll
-                        // das auch hier bleiben!
+                        // jetzt den Baum anpassen (DER WIRD IN DIESEM FALL IN buildLeftTree() NICHT VERÄNDERT)
+                        // und weil hier noch die Expasionen anpasst werden (über enum), soll das auch hier bleiben!
                         LGMTreeNode node = (LGMTreeNode) lroot.getChildAt(pos1 - 1); // den
                         // oberen Node holen
                         lmodel.removeNodeFromParent(node); // ihn entfernen
-                        lmodel.insertNodeInto(node, lroot, pos1); // ihn einen tiefer als vorher
-                                                                  // einfügen, wenn die
-                                                                  // selektierte Aufgabe
-                                                                  // expandiert war
+                        lmodel.insertNodeInto(node, lroot, pos1); // ihn einen tiefer als vorher einfügen, wenn die selektierte Aufgabe expandiert war
                         if (en != null) {
-                            panel.expandFullPath(true); // muss sein wegen treeWillExpand,
-                                                        // damits auch wirklich expandiert wird
+                            panel.expandFullPath(true); // muss sein wegen treeWillExpand, damits auch wirklich expandiert wird
                             ltree.expandRow(pos1 + 1); // den Node wieder expandieren
                             while (en.hasMoreElements()) {
                                 ltree.expandPath(en.nextElement()); // seine Unterknoten auch

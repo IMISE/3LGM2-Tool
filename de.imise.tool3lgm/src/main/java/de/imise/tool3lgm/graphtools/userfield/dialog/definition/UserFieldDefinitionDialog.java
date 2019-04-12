@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
 
 import java.awt.Container;
 import java.awt.Dimension;
@@ -19,9 +18,12 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.AbstractPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -118,7 +120,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
             sb.append(getResString(userField.getTargetClass().getSimpleName()));
         } else {
             if (ModelConstants.isEdgeType(userField.getTargetClass())) {
-                sb.append(ModelConstants.getMetaAssociationName(userField.getTargetClass().asSubclass(Edge.class), false, DOUBLE, true, true));
+                sb.append(ElementsNameBuilder.getMetaAssociationName(userField.getTargetClass().asSubclass(Edge.class), Direction.FORWARD, ConnectionState.DOUBLE, true, true));
             } else if (userField.isGlobalOrFormat()) {
                 sb.append(UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName());
             }

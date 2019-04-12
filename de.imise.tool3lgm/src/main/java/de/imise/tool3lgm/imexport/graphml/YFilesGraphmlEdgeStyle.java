@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.imexport.graphml;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 
@@ -28,9 +30,10 @@ public class YFilesGraphmlEdgeStyle {
 
     public YFilesGraphmlEdgeStyle(final EdgeContainer ec) {
         Edge edge = ec.getEdge();
-        int direction = edge.getDirection();
-        sourceArrow = direction == Edge.DOUBLE || direction == Edge.BACKWARD ? "TRIANGLE" : null;
-        targetArrow = direction == Edge.DOUBLE || direction == Edge.FORWARD ? "TRIANGLE" : null;
+        Class<? extends Edge> edgeClass = edge.getClass();
+        ConnectionState direction = ModelConstants.isDirectedEdge(edgeClass) ? ModelConstants.isDoubleMeaningEdge(edgeClass) ? ((DoubleMeaningEdge) edge).getConnectionState() : ConnectionState.FORWARD : ConnectionState.DOUBLE;
+        sourceArrow = direction == ConnectionState.DOUBLE || direction == ConnectionState.BACKWARD ? "TRIANGLE" : null;
+        targetArrow = direction == ConnectionState.DOUBLE || direction == ConnectionState.FORWARD ? "TRIANGLE" : null;
         smoothingLength = "0";
         isDashed = ModelConstants.isHasPartEdge(edge.getClass());
         if (isDashed) {

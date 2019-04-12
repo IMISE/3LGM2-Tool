@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.metamodel.tlgm_v3_0.process;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -160,7 +160,7 @@ public class ShortestCommunicationPathFinderOld {
             // für alle Einzel-AWB eines Gesamt-AWB
             for (ModelElement sameAWB : sameAWBList) {
                 // hole alle seine Schnittstellen und füge sie zur Gesamtliste hinzu
-                sameSSList.addAll(sameAWB.getConnectedElementsByEdge(AwbKommssVerbindung.class));
+                sameSSList.addAll(sameAWB.getConnectedElements(AwbKommssVerbindung.class));
                 // lege die Gesamtliste für den Einzel-AWB in die globale HashMap
                 awbToBSSList.put(sameAWB, sameSSList);
             }
@@ -459,22 +459,17 @@ public class ShortestCommunicationPathFinderOld {
         for (int r = 0; r < communicationLinks.size(); r++) {
             Edge commLink = (Edge) communicationLinks.get(r);
 
-            int[] directions = {
-                    FORWARD,
-                    BACKWARD
-            };
+            for (Direction direction : Direction.values()) {
 
-            for (int d = 0; d < directions.length; d++) {
-
-                List<ModelElement> ntAndDtOfKante = commLink.getConnectedElements(EreignisNachrichtenTyp.class, mainDoc, KommbezEtntVerbindung.class, directions[d], false);
-                ntAndDtOfKante.addAll(commLink.getConnectedElements(EreignisDokumentenTyp.class, mainDoc, KommbezEtntVerbindung.class, directions[d], false));
+                List<ModelElement> ntAndDtOfKante = commLink.getConnectedElements(EreignisNachrichtenTyp.class, mainDoc, KommbezEtntVerbindung.class, direction, false);
+                ntAndDtOfKante.addAll(commLink.getConnectedElements(EreignisDokumentenTyp.class, mainDoc, KommbezEtntVerbindung.class, direction, false));
 
                 // für jede dieser EtNt-Kombinationen
                 for (ModelElement nt : ntAndDtOfKante) {
-                    List<ModelElement> ntOfEtnt = nt.getConnectedElementsByEdge(EtntNatVerbindung.class);
-                    ntOfEtnt.addAll(nt.getConnectedElementsByEdge(EtntDotVerbindung.class));
+                    List<ModelElement> ntOfEtnt = nt.getConnectedElements(EtntNatVerbindung.class);
+                    ntOfEtnt.addAll(nt.getConnectedElements(EtntDotVerbindung.class));
                     for (ModelElement nachrichtentyp : ntOfEtnt) {
-                        List<ModelElement> objekttypes = nachrichtentyp.getConnectedElementsByEdge(ObjReprVerbindung.class);
+                        List<ModelElement> objekttypes = nachrichtentyp.getConnectedElements(ObjReprVerbindung.class);
                         int z = objekttypes.size();
                         for (int l = 0; l < z; l++) {
                             objekttypes.addAll(objekttypes.get(l).getPartElements(false));
@@ -495,7 +490,7 @@ public class ShortestCommunicationPathFinderOld {
                                 objekttypToInterfacePairList.put(objekttyp, sendToReceiveInterfaceList);
                             }
                             ModelElement sendInterface, receiveInterface;
-                            if (directions[d] == BACKWARD) {
+                            if (direction == FORWARD) {
                                 sendInterface = commLink.getStart();
                                 receiveInterface = commLink.getEnd();
                             } else {

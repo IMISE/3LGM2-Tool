@@ -34,7 +34,7 @@ class ConsistencyErrorTableGenerator {
         this.checker = checker;
         ConsistencyErrorTableModel treeModel = new ConsistencyErrorTableModel();
         table = new UneditableJTable(treeModel);
-        table.addMouseListener(new ConsistencyErrorTableEvents(checker, table));
+        table.addMouseListener(new ConsistencyErrorTableMouseListener(checker, table));
 
         table.getTableHeader().setReorderingAllowed(false);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);

@@ -1,14 +1,15 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.util.List;
 import java.util.Vector;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -61,7 +62,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
 
         Class<? extends ModelElement> fractionValueSumSourceClass = edgeForwardDirection ? getEndClass(edgeClass) : getStartClass(edgeClass);
 
-        int direction = edgeForwardDirection ? FORWARD : BACKWARD;
+        Direction direction = edgeForwardDirection ? FORWARD : BACKWARD;
         //alle mit dem Element über die Edge verbundenen Elemente holen
         List<ModelElement> modelElements = me.getConnectedElements(fractionValueSumSourceClass, edgeClass, direction, true);
 

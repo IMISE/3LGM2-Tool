@@ -4,7 +4,6 @@ import static de.imise.tool3lgm.Static.getSelectedDoc;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayablePluralName;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -12,8 +11,8 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -34,6 +33,7 @@ import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
 import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.event.action.SubmodelAction;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepositoryFrame;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
@@ -45,7 +45,6 @@ import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
 import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
-import de.imise.tool3lgm.graphtools.matrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -56,8 +55,9 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.path.MetaPath;
-import de.imise.tool3lgm.graphtools.path.PathFinder;
+import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -74,15 +74,15 @@ import de.imise.tool3lgm.imexport.DataExportModule;
 import de.imise.tool3lgm.imexport.DataImportModule;
 import de.imise.tool3lgm.imexport.graphml.GraphmlExporter;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.tools.BrowseUtils;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Alphabetical;
-import de.imise.util.Pair;
+import de.imise.util.BrowseUtils;
 import de.imise.util.image.ComponentAsImageExportHandler;
+import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.DirectoryChooser;
 import de.imise.util.swing.event.ExtendedAction;
 import de.imise.util.swing.event.ToggleAction;
@@ -360,10 +360,10 @@ public class ActionLibrary {
 
     public static class ContextActions {
 
-        public static final Action ACTION_SHOW_ELEMENT_PROPERTY_DIALOG = new SelectedElementsAction(ActionIdentifier.ACTION_SHOW_ELEMENT_PROPERTY_DIALOG) {
+        public static final Action ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG = new SelectedElementsAction(ActionIdentifier.ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG) {
             @Override
             public void actionPerformed() {
-                Static.getSelectedDoc().showPropertyDialog();
+                Static.getSelectedDoc().showPropertyDialog(false);
             }
         };
 
@@ -381,9 +381,9 @@ public class ActionLibrary {
                     for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
                         if (ec instanceof InterLayerConnectedNodeContainer) {
                             ModelElement me = ec.getElement();
-                            MetaPath interLayerMetaPath = ModelConstants.getGraphViewDefinition().getInterLayerMetaPath(ec.getElement().getClass());
+                            AbstractMetaPath interLayerMetaPath = ModelConstants.getGraphViewDefinition().getInterLayerMetaPath(ec.getElement().getClass());
                             if (interLayerMetaPath != null) {
-                                Set<ModelElement> interLayerConnectedElements = PathFinder.getDirectConnectedElements(me, interLayerMetaPath);
+                                Collection<ModelElement> interLayerConnectedElements = MetaPathFunctions.getConnectedElements(me, interLayerMetaPath);
                                 if (!interLayerConnectedElements.isEmpty()) {
                                     boolean hasVisibleConfigs = ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections();
                                     if (show != hasVisibleConfigs) {
@@ -619,7 +619,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL = new StaticAction(ActionIdentifier.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, PPP) {
             @Override
             public void actionPerformed() {
-                BrowseUtils.browseRelativeFileFromResource("auswhilfe_datei");
+                BrowseUtils.browseApplicationPathRelativeFile(getResString("auswhilfe_datei"));
             }
         };
 
@@ -627,7 +627,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_SHOW_ONLINE_HELP = new StaticAction(ActionIdentifier.ACTION_SHOW_ONLINE_HELP, PPP) {
             @Override
             public void actionPerformed() {
-                BrowseUtils.browseUrlFromResource("3lgm2tool_support_website");
+                BrowseUtils.browse(getResString("3lgm2tool_support_website"));
             }
         };
 
@@ -635,7 +635,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_SHOW_3LGM_WEB_SITE = new StaticAction(ActionIdentifier.ACTION_SHOW_3LGM_WEB_SITE, PPP) {
             @Override
             public void actionPerformed() {
-                BrowseUtils.browseUrlFromResource("3lgm2_website");
+                BrowseUtils.browse(getResString("3lgm2_website"));
             }
         };
 
@@ -651,7 +651,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY = new StaticAction(ActionIdentifier.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, PPP) {
             @Override
             public void actionPerformed() {
-                BrowseUtils.browseRelativeFileFromResource("modlib_verz");
+                BrowseUtils.browseApplicationPathRelativeFile(getResString("modlib_verz"));
             }
         };
 
@@ -680,19 +680,19 @@ public class ActionLibrary {
     public static class CreateElementActions {
 
         /** Array aller Insert-Actions für die Fachliche Ebene */
-        public static final List<Action> DOMAIN_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES);
+        public static final Iterable<StaticAction> DOMAIN_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES);
 
         /** Array aller Insert-Actions für die Logische Werkzeugebene */
-        public static final List<Action> LOGICAL_TOOL_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_LOGICAL_LAYER_NODES);
+        public static final Iterable<StaticAction> LOGICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_LOGICAL_LAYER_NODES);
 
         /** Array aller Insert-Actions für die Physische Werkzeugebene */
-        public static final List<Action> PHYSICAL_TOOL_LAYER_CREATEABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES);
+        public static final Iterable<StaticAction> PHYSICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES);
 
         /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der spezifizierten Klassen wieder */
-        private static List<Action> getActions(final Iterable<Class<? extends ModelElement>> creatableLayerNodes) {
-            List<Action> actions = new ArrayList<>();
+        private static Iterable<StaticAction> getActions(final Iterable<Class<? extends ModelElement>> creatableLayerNodes) {
+            List<StaticAction> actions = new ArrayList<>();
             for (Class<? extends ModelElement> creatableClass : creatableLayerNodes) {
-                String actionName = ModelConstants.getDisplayableName(creatableClass);
+                String actionName = ElementsNameBuilder.getDisplayableName(creatableClass);
                 actions.add(new GraphDocumentAction(GDCommands.MODEL_ACTION_CREATE_NODE, creatableClass.getName(), actionName, null));
             }
             return ImmutableList.sortedCopyOf(Alphabetical.getLocalizedComparator(), actions);
@@ -763,9 +763,9 @@ public class ActionLibrary {
                         }
                     };
                     String resKey = ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS.name();
-                    MetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
-                    String startClassPluralName = getDisplayablePluralName(metaPath.getStartClass());
-                    String endClassPluralName = getDisplayablePluralName(metaPath.getEndClass());
+                    AbstractMetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
+                    String startClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getStartClasses());
+                    String endClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getEndClasses());
                     String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);
                     action.setText(fullActionDisplayName);
                     returnActions[i] = action;
@@ -820,7 +820,7 @@ public class ActionLibrary {
                         arguments = elementClass.getSimpleName();
                     }
                     GraphFrameAction hideAction = new GraphFrameAction(command, arguments, null);
-                    hideAction.setReplacedText(getDisplayablePluralName(elementClass));
+                    hideAction.setReplacedText(ElementsNameBuilder.getDisplayablePluralName(elementClass));
                     actions[i] = hideAction;
                 }
                 return actions;

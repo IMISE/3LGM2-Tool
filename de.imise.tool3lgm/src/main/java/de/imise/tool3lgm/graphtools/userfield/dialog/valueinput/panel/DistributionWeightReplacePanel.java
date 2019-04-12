@@ -10,6 +10,7 @@ import java.util.Vector;
 
 import javax.swing.AbstractAction;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -113,7 +114,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
             for (int k = 0; k < edgeTypes.length; k++) {
                 Class<? extends Edge> edgeClass = edgeTypes[k];
                 if (definitions.getAnalyzer().hasNumberFields(edgeClass)) {
-                    elementClassBox.addItem(elementClass, ModelConstants.getDisplayableName(elementClass));
+                    elementClassBox.addItem(elementClass, ElementsNameBuilder.getDisplayableName(elementClass));
                     continue loop;
                 }
             }
@@ -215,7 +216,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         for (int k = 0; k < edgeTypes.length; k++) {
             Class<? extends Edge> edgeClass = edgeTypes[k];
             if (definitions.getAnalyzer().hasNumberFields(edgeClass)) {
-                edgeClassBox.addItem(edgeClass, ModelConstants.getFullForwardMetaAssociationName(edgeClass));
+                edgeClassBox.addItem(edgeClass, ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
                 //                edgeClassBox.addItem(edgeClass, ModelConstants.getFullBackwardMetaAssociationName(edgeClass));
             }
         }

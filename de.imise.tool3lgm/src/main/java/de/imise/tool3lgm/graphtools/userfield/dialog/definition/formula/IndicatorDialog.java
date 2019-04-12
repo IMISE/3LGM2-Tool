@@ -123,8 +123,8 @@ public class IndicatorDialog extends JDialog implements ActionListener {
         constraints.weightx = 0;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.anchor = GridBagConstraints.NORTH;
-        JLabel actualValueLabel = new JLabel(getResString("attributeIndicate"));
-        panel1.add(actualValueLabel, constraints);
+        JLabel currentValueLabel = new JLabel(getResString("attributeIndicate"));
+        panel1.add(currentValueLabel, constraints);
         userFieldComboBox = new AlphabeticalComboBox();
         if (userField != null) {
             definitions = userField.getDefinitions();

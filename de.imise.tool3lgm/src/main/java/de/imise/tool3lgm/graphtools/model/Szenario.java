@@ -2,9 +2,9 @@ package de.imise.tool3lgm.graphtools.model;
 
 import java.util.Date;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -76,7 +76,7 @@ public class Szenario extends LGMGraphDocument {
         retVal.setParent(null);
         int layernum = ((LayerContainer) ec.getParent()).getLayerNumber();
         layer[layernum].add(retVal);
-        if (retVal instanceof EdgeContainer && ModelConstants.getGraphViewDefinition().isPaintable(meClass)) {
+        if (retVal instanceof EdgeContainer && me.isPaintable()) {
             for (BendpointContainer kpC : ((EdgeContainer) retVal).iterateBendpointContainers()) {
                 layer[layernum].add(kpC);
                 getCollection().addNodeToMainDoc(kpC, layernum);
@@ -144,7 +144,8 @@ public class Szenario extends LGMGraphDocument {
                 if (b) {
                     //bei Compositions auch das Slave-Element in dieses Szenario holen (wenn sie es nicht unique ist)
                     if (ka instanceof CompositionEdge) {
-                        updateSlaveContainers(ka, CompositionEdge.MASTER_TO_SLAVE_DIRECTION == Edge.FORWARD, sourceDoc);
+                        //hier werden mit Absicht identische Konstanten verglichen, falls sich MASTER_TO_SLAVE_DIRECTION mal auf BACKWARD ändert (was sehr unwarhscheinlich ist)
+                        updateSlaveContainers(ka, CompositionEdge.MASTER_TO_SLAVE_DIRECTION == Direction.FORWARD, sourceDoc);
                     }
                     //wenn Start und End-Element der Edge einen Container in diesem Szenario haben
 

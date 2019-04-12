@@ -63,28 +63,11 @@ public abstract class Edge extends ModelElement {
      */
     private String start_hash, end_hash;
 
-    ///////////////////////////////////////////
-    // Richtungskram aus ehemals Doppelkante //
-    ///////////////////////////////////////////
-    public static final int FORWARD = 1;
-
-    public static final int BACKWARD = 2;
-
-    public static final int DOUBLE = 0;
-
-    public static final int ANY = -2;
-
-    public static final int NOTCONNECTED = -1;
-
-    protected int direction = FORWARD;
-
-    public static final int[] DIRECTION = {
-            NOTCONNECTED, DOUBLE, FORWARD, BACKWARD
-    };
-
-    public static final String[] DIRECTION_STR = {
-            "NOTCONNECTED", "DOUBLE", "FORWARD", "BACKWARD"
-    };
+    public enum Direction {
+        FORWARD,
+        BACKWARD;
+        //ACHTUNG: toString() darf nicht überschreiben werden und muss dasselbe wie name() zurück liefern, weil das in den UNDO-REDO-Kommandos genutzt wird
+    }
 
     @Override
     public final Edge clone() {
@@ -265,7 +248,7 @@ public abstract class Edge extends ModelElement {
     }
 
     @Override
-    public final boolean putXMLFieldString(final String field, final String value) {
+    public boolean putXMLFieldString(final String field, final String value) {
         if (field.equals("start")) {
             start_hash = value;
             return true;
@@ -279,15 +262,6 @@ public abstract class Edge extends ModelElement {
         }
         if (field.equals("master_slave")) {
             return true;
-        }
-        if (field.equals("state")) {
-            for (int i = 0; i < DIRECTION_STR.length; i++) {
-                if (value.equals(DIRECTION_STR[i])) {
-                    setDirection(i - 1);
-                    return true;
-                }
-            }
-            return false;
         }
         return super.putXMLFieldString(field, value);
     }
@@ -319,12 +293,16 @@ public abstract class Edge extends ModelElement {
         return true;
     }
 
+    public boolean isDirecting(final ModelElement _k1, final ModelElement _k2) {
+        return isDirectingForward(_k1, _k2);
+    }
+
     /**
      * @param _k1
      * @param _k2
      * @return
      */
-    private final boolean isDirectingForward(final ModelElement _k1, final ModelElement _k2) {
+    protected final boolean isDirectingForward(final ModelElement _k1, final ModelElement _k2) {
         return k1 == _k1 && k2 == _k2;
     }
 
@@ -394,19 +372,10 @@ public abstract class Edge extends ModelElement {
             }
             switchClasses = true;
         }
-        //bei allen Kanten, bei denen die Richtung egal ist, wird sie immer auf DOUBLE gesetzt (das macht die GDCollection in link auch!)
-        if (!ModelConstants.isDirectedEdge(getClass())) {
-            direction = DOUBLE;
-        }
         if (switchClasses) {
             ModelElement dummy = k1;
             k1 = k2;
             k2 = dummy;
-            if (direction == FORWARD) {
-                direction = BACKWARD;
-            } else if (direction == BACKWARD) {
-                direction = FORWARD;
-            }
             return true;
         }
         //Es musste nichts vertauscht werden -> hier kommt nur true zurück, wenn die Klassen
@@ -430,7 +399,10 @@ public abstract class Edge extends ModelElement {
      */
     private static final Class<? extends ModelElement> getStartOrEndClass(final Class<? extends Edge> edgeClass, final boolean start) {
         String fieldName = start ? START_CLASS_FIELD_NAME : END_CLASS_FIELD_NAME;
-        return ((Class<?>) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName)).asSubclass(ModelElement.class);
+        Object field = ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
+        Class<?> startOrEndClass = (Class<?>) field;
+        Class<? extends ModelElement> startOrEndElementClass = startOrEndClass.asSubclass(ModelElement.class);
+        return startOrEndElementClass;
     }
 
     /**
@@ -472,7 +444,7 @@ public abstract class Edge extends ModelElement {
      */
     public static final boolean isStartClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         Class<? extends ModelElement> startClass = getStartClass(edgeClass);
-        return startClass.isAssignableFrom(elementClass) || elementClass.isAssignableFrom(startClass);
+        return ReflectionUtils.isAssignable(startClass, elementClass);
     }
 
     /**
@@ -494,7 +466,7 @@ public abstract class Edge extends ModelElement {
      */
     public static final boolean isEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return endClass.isAssignableFrom(elementClass) || elementClass.isAssignableFrom(endClass);
+        return ReflectionUtils.isAssignable(endClass, elementClass);
     }
 
     /**
@@ -551,10 +523,10 @@ public abstract class Edge extends ModelElement {
      * @param edgeClass
      * @return
      */
-    public static boolean isConnectingSameElementClasses(final Class<? extends Edge> edgeClass) {
+    public static boolean isRecursive(final Class<? extends Edge> edgeClass) {
         Class<? extends ModelElement> startClass = getStartClass(edgeClass);
         Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass);
+        return ReflectionUtils.isAssignable(startClass, endClass);
     }
 
     ////////////////////
@@ -752,40 +724,6 @@ public abstract class Edge extends ModelElement {
             return k1.isPaintable() && k2.isPaintable();
         }
         return false;
-    }
-
-    ///////////////////////////////////////////
-    // Richtungskram aus ehemals Doppelkante //
-    ///////////////////////////////////////////
-    /**
-     * @return
-     */
-    public int getDirection() {
-        return direction;
-    }
-
-    /**
-     * @param dir
-     */
-    public void setDirection(final int dir) {
-        direction = dir;
-    }
-
-    public final String getDirectionName() {
-        return DIRECTION_STR[direction + 1];
-    }
-
-    public final boolean isDirecting(final ModelElement _k1, final ModelElement _k2) {
-        switch (direction) {
-        case DOUBLE:
-            return isConnecting(_k1, _k2);
-        case FORWARD:
-            return isDirectingForward(_k1, _k2);
-        case BACKWARD:
-            return isDirectingForward(_k2, _k1);
-        default:
-            return false;
-        }
     }
 
     @Override

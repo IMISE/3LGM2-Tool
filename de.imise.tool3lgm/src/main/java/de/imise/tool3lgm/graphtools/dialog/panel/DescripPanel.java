@@ -15,9 +15,9 @@ import javax.swing.border.Border;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
@@ -100,23 +100,23 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         }
     }
 
-    public void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
-        addDescriptedSingleConnectionPanel(false, edgeClasses);
+    public final void addDescriptedSingleConnectionPanel(final SimpleMetaPath simpleMetaPath) {
+        addDescriptedSingleConnectionPanel(false, simpleMetaPath);
     }
 
-    public void addDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        addSubPanel(new DescriptedSingleConnectionPanel(dialog, labelLastEdgeName, edgeClasses));
+    public final void addDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+        addSubPanel(new DescriptedSingleConnectionPanel(dialog, labelLastEdgeName, simpleMetaPath));
     }
 
-    public void addSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
-        addSingleConnectionPanel(false, edgeClasses);
+    public final void addSingleConnectionPanel(final boolean labelLastEdgeName, final boolean editable, final SimpleMetaPath simpleMetaPath) {
+        addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, editable, simpleMetaPath));
     }
 
-    public void addSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, edgeClasses));
+    public final void addListPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+        addSubPanel(new PathConnectionLeafPanel(dialog, labelLastEdgeName, false, 4, simpleMetaPath));
     }
 
-    private void addSubPanel(final AbstractPathConnectionPanel panel) {
+    private final void addSubPanel(final AbstractPathConnectionPanel panel) {
         panels.add(panel);
         if (panel instanceof DescriptedSingleConnectionPanel) {
             addSeparator();
@@ -132,12 +132,12 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         }
     }
 
-    public void addSeparator() {
+    public final void addSeparator() {
         add(this, new JSeparator(), gbc, 0, gridy++, 2, 1);
     }
 
     @Override
-    public void commit() {
+    public final void commit() {
         ModelElement me = getModelElement();
         String newName = nameTextPane.getText();
         // nur wenn der Name explizit geändert wurde, dann auch den Namen in einer Transaktion ändern

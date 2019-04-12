@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.FAT_STROKE;
 
 import java.awt.BasicStroke;
@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
@@ -657,8 +659,16 @@ public class EdgeContainer extends ElementContainer {
             }
 
             if (i == 0) {
-                Edge dlk = getEdge();
-                if (dlk.getDirection() == BACKWARD || dlk.getDirection() == DOUBLE) {
+                Edge edge = getEdge();
+                boolean backward; // außer bei DoubleMeaningEdges und HasPartEdges wird der Rückwärts-Pfeil auch bei unberichteten Kanten gezeichnet
+                if (edge instanceof DoubleMeaningEdge) {
+                    DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
+                    ConnectionState connectionState = doubleMeaningEdge.getConnectionState();
+                    backward = connectionState == BACKWARD || connectionState == DOUBLE;
+                } else {
+                    backward = edge instanceof HasPartEdge || !ModelConstants.isDirectedEdge(edge.getClass());
+                }
+                if (backward) {
                     gc.rotate(rad1, startx, starty);
                     // try {
                     g.drawPolygon(p2);
@@ -673,8 +683,17 @@ public class EdgeContainer extends ElementContainer {
                 }
             }
             if (i == numKKnots) {
-                Edge dlk = getEdge();
-                if (dlk.getDirection() == FORWARD || dlk.getDirection() == DOUBLE) {
+                boolean forward; //alle Kanten sollen Vorwärts gemalt werden außer DoubleMeaning Edges und HasPart
+                Edge edge = getEdge();
+                if (edge instanceof DoubleMeaningEdge) {
+                    DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
+                    ConnectionState connectionState = doubleMeaningEdge.getConnectionState();
+                    forward = connectionState == FORWARD || connectionState == DOUBLE;
+                } else {
+                    forward = !(edge instanceof HasPartEdge);
+                }
+
+                if (forward) {
                     gc.rotate(rad2, endx, endy);
                     // try {
                     g.drawPolygon(p1);

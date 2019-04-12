@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.model;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +11,15 @@ import java.util.Vector;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
-import de.imise.util.Pair;
+import de.imise.util.pair.Pair;
 
 public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
 
@@ -30,14 +31,14 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * @param doc
      * @param edgeClass
      * @param direction Richtung in der die ausgwählte Edge zu lesen ist. In der Tabelle sthen die Startklassen der Edge in den Zeilen, wenn
-     *            <code>DoubleTrace.FORWARD</code> übergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
+     *            <code>FORWARD</code> übergeben wurde. Bei <code>BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
      * @param field
      * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente angezeigt, die gefunden werden. Wenn ein Element übergeben wurde,
      *            dann wird nur die Spalte dieses Elementes angezeigt.
      * @param columnElement Wenn <code>null</code>, werden alle Spalten-Elemente angezeigt, die gefunden werden. Wenn ein Element übergeben wurde,
      *            dann wird nur die Spalte dieses Elementes angezeigt.
      */
-    public UserFieldWeightTableModel(final GraphDocument doc, final Class<? extends Edge> edgeClass, final int direction, final UserField field, final ModelElement columnElement) {
+    public UserFieldWeightTableModel(final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final UserField field, final ModelElement columnElement) {
         super(doc);
         if (columnElement == null) {
             setData(edgeClass, direction, field, null);
@@ -55,7 +56,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * @param direction
      * @return
      */
-    private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Edge> edgeClass, final int direction) {
+    private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Edge> edgeClass, final Direction direction) {
         Class<? extends ModelElement> rowElementClass = direction == FORWARD ? getStartClass(edgeClass) : getEndClass(edgeClass);
         Class<? extends ModelElement> colElementClass = direction == FORWARD ? getEndClass(edgeClass) : getStartClass(edgeClass);
         List<ModelElement> allRowElements = doc.getModelItems(rowElementClass, false, true);
@@ -85,7 +86,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * @param columnElement
      * @return
      */
-    private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Edge> edgeClass, final int direction, final ModelElement columnElement) {
+    private Pair<List<ModelElement>, List<ModelElement>> getRowAndColumnElements(final Class<? extends Edge> edgeClass, final Direction direction, final ModelElement columnElement) {
         List<Edge> edges;
         if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
             if (direction == FORWARD) {
@@ -118,7 +119,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      * @param columnElement
      * @return
      */
-    private Pair<List<ModelElement>, List<ModelElement>> initRowAndColumnElements(final Class<? extends Edge> edgeClass, final int direction, final ModelElement columnElement) {
+    private Pair<List<ModelElement>, List<ModelElement>> initRowAndColumnElements(final Class<? extends Edge> edgeClass, final Direction direction, final ModelElement columnElement) {
         Pair<List<ModelElement>, List<ModelElement>> rowColumnElements;
         if (columnElement == null) {
             rowColumnElements = getRowAndColumnElements(edgeClass, direction);
@@ -136,7 +137,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      *            <code>DoubleTrace.FORWARD</code> übergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
      * @param field
      */
-    private void setData(final Class<? extends Edge> edgeClass, final int direction, final UserField field, final ModelElement columnElement) {
+    private void setData(final Class<? extends Edge> edgeClass, final Direction direction, final UserField field, final ModelElement columnElement) {
         Pair<List<ModelElement>, List<ModelElement>> rowColumnElements = initRowAndColumnElements(edgeClass, direction, columnElement);
         List<ModelElement> allRowElements = rowColumnElements.getFirstItem();
         List<ModelElement> columnElements = rowColumnElements.getSecondItem();

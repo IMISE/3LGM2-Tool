@@ -56,6 +56,7 @@ import javax.swing.text.JTextComponent;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -516,9 +517,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             data[1] = ec;
             // data[2] = ec.getGraphDocument().getTitle();
             if (ec.getElement() instanceof Edge) {
-                data[2] = ModelConstants.getDisplayableName(ec.getElement()) + ": " + ModelConstants.getFullForwardMetaAssociationName(ec.getElement().getClass().asSubclass(Edge.class));
+                data[2] = ElementsNameBuilder.getDisplayableName(ec.getElement()) + ": " + ElementsNameBuilder.getFullForwardMetaAssociationName(ec.getElement().getClass().asSubclass(Edge.class));
             } else {
-                data[2] = ModelConstants.getDisplayableName(ec.getElement());
+                data[2] = ElementsNameBuilder.getDisplayableName(ec.getElement());
             }
             mod.addRow(data);
             rowCounter++;
@@ -591,7 +592,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                 // Aktive Zeile markieren
                 if (!isPopupTrigger(e)) {
                     if (e.getClickCount() > 1) {
-                        ((GraphDocument) subModelBox.getSelectedObject()).showPropertyDialog();
+                        ((GraphDocument) subModelBox.getSelectedObject()).showPropertyDialog(true);
                     }
                 } else {
                     ContextGenerator cg = Tool3lgm.getContextGenerator();
@@ -620,7 +621,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         });
 
         // Sortierung umsetzen
-        TableRowSorter<TableModel> trs = new TableRowSorter<TableModel>(table.getModel());
+        TableRowSorter<TableModel> trs = new TableRowSorter<>(table.getModel());
         trs.setComparator(0, new Comparator<Integer>() {
             @Override
             public int compare(final Integer int1, final Integer int2) {
@@ -640,7 +641,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                 int colX = table.getColumnModel().getColumnIndexAtX(e.getX());
                 @SuppressWarnings("unchecked")
                 TableRowSorter<TableModel> trs = (TableRowSorter<TableModel>) table.getRowSorter();
-                List<RowSorter.SortKey> sk = new ArrayList<RowSorter.SortKey>();
+                List<RowSorter.SortKey> sk = new ArrayList<>();
                 if (colX == 0) {
                     sortIdAsc = !sortIdAsc;
                     sk.add(new RowSorter.SortKey(0, sortIdAsc ? SortOrder.ASCENDING : SortOrder.DESCENDING));
@@ -676,15 +677,15 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             if (Modifier.isAbstract(ModelConstants.ALL_NODES[i].getModifiers())) {
                 continue;
             }
-            elementClassBox.addItem(ModelConstants.ALL_NODES[i], ModelConstants.getDisplayableName(ModelConstants.ALL_NODES[i]));
+            elementClassBox.addItem(ModelConstants.ALL_NODES[i], ElementsNameBuilder.getDisplayableName(ModelConstants.ALL_NODES[i]));
         }
         elementClassBox.addSeparator(true);
         elementClassBox.addItem(Edge.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKanten"));
         elementClassBox.addSeparator(true);
 
         for (Class<? extends Edge> edgeClass : ModelConstants.ALL_EDGES_SET) {
-            elementClassBox.addItem(edgeClass, ModelConstants.getFullForwardMetaAssociationName(edgeClass));
-            elementClassBox.addItem(edgeClass, ModelConstants.getFullBackwardMetaAssociationName(edgeClass));
+            elementClassBox.addItem(edgeClass, ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
+            elementClassBox.addItem(edgeClass, ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
         }
         elementClassBox.setSelectedObject(ModelElement.class);
     }

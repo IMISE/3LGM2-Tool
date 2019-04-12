@@ -11,20 +11,16 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYERS;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.UNIQUE_NODES;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getCopyDependencies;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getDisplayableName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getForwardMetaAssociationName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getInitialSubtypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSubordinatedJoinbleTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.hasObjektDialog;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMeaningEdge;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isGenerateName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayerStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.DOUBLE;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.FORWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.BACKWARD;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
+import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
@@ -83,15 +79,10 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.swing.BoxLayout;
@@ -104,14 +95,20 @@ import javax.swing.JRadioButton;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -184,6 +181,9 @@ public final class GDCollection extends UserFieldTarget {
      */
     private final AlphabeticalSet<Szenario> szenarios = new AlphabeticalSet<>();
 
+    /** Elemente, die in diesem Set sind, gelten als optional */
+    private final Set<OptionalEdge> optionalElements = new HashSet<>();
+
     /** Dokument wurde geaendert */
     private boolean changed;
 
@@ -206,17 +206,12 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * Verzeichnis der Bitmap-Icons
      */
-    private final Map<String, byte[]> iconTable = new HashMap<>();
+    private final GDCollectionIconTable iconTable = new GDCollectionIconTable();
 
     /**
      * Wenn <code>true</code>, werden keine Ereignisse gefeuert und keine Undo-/Redo-Commands aufgezeichnet.
      */
     private boolean bulk_mode = false;
-
-    /**
-     * COMMENTME
-     */
-    private int iconCounter = 0;
 
     /**
      * Dieser Counter berechnet die Verschiebung, mit der die Elemente bei einem Paste in die Grafik kopiert werden.
@@ -861,8 +856,8 @@ public final class GDCollection extends UserFieldTarget {
                     String endHash = ke.getHashString();
                     int startEdgeIndex = ks.getEdgeIndex(edge);
                     int endEdgeIndex = ke.getEdgeIndex(edge);
-                    int direction = edge.getDirection();
-                    switch (direction) {
+                    ConnectionState connectionState = edge instanceof DoubleMeaningEdge ? ((DoubleMeaningEdge) edge).getConnectionState() : ConnectionState.FORWARD;
+                    switch (connectionState) {
                     case FORWARD:
                         doc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
                         doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
@@ -907,6 +902,9 @@ public final class GDCollection extends UserFieldTarget {
             //und danach erst im Table des Elements
             //das Löschen aus dem ContainerTbale des Elementes kann man sich sparen, da das Element nirgends mehr gespeichert werden sollte
             //me.removeContainer(this.doc);
+            if (me instanceof OptionalEdge) {
+                removeOptional((OptionalEdge) me);
+            }
         }
         gdoc.finish_transaction(pid);
         gdoc.distributeEvent(DATA_CHANGED, pid);
@@ -1042,10 +1040,13 @@ public final class GDCollection extends UserFieldTarget {
         if (StringUtils.isValid(hashString, "null")) {
             me.setHashString(hashString);
         }
-        if (!Strings.isNullOrEmpty(name)) {
+        boolean nameIsEmpty = Strings.isNullOrEmpty(name);
+        boolean nameIsValidAndNotMarkedAsGenerated = !nameIsEmpty && name.charAt(0) != GraphDocument.GENERATED_NAME_PREFIX;
+        if (nameIsValidAndNotMarkedAsGenerated) {
             me.setName(getDecodedParseSaveString(name));
         } else {
-            me.setName(doc.getNextNewName(me.getClass()), false);
+            String newName = nameIsEmpty ? doc.getNextNewName(me.getClass()) : name.substring(1);
+            me.setName(newName, false);
             if (isInteractiveMode() && !isGenerateName(me.getClass())) {
                 if (!askNameAndColor(nc)) {
                     return null;
@@ -1101,9 +1102,9 @@ public final class GDCollection extends UserFieldTarget {
                 String name;
                 //wenn mehrere Unterelemene existieren können, dann durchnummerieren
                 if (minCardForSubType > 1) {
-                    name = getNextIndicatedName(getDisplayableName(subType) + " ", " " + getResString("fuer") + " " + me.getName(), connectedSubTypes);
+                    name = getNextIndicatedName(ElementsNameBuilder.getDisplayableName(subType) + " ", " " + getResString("fuer") + " " + me.getName(), connectedSubTypes);
                 } else {
-                    name = getDisplayableName(subType) + " " + getResString("fuer") + " " + me.getName();
+                    name = ElementsNameBuilder.getDisplayableName(subType) + " " + getResString("fuer") + " " + me.getName();
                 }
                 ModelElement skC = createKnotenWithContainer(subType.asSubclass(Node.class), name, "", null, pid).getElement();
                 link(subTypeEdgeClass, me, skC, pid);
@@ -1254,60 +1255,36 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      *         die neu angelegte Edge zwischen den beiden Elementen oder die Edge, die bereits existierte
      */
-    public Edge link(String edgeClassName, final String edgeHash, ModelElement startElement, ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency, final int pid) {
+    public Edge link(final String edgeClassName, final String edgeHash, ModelElement startElement, ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency, final int pid) {
         //		System.err.println("GDCollection.link() " + me1 + "\t" + me2);
         if (startElement == null || endElement == null || startElement == endElement) {
             return null;
         }
+
         Edge edge = null;
         EdgeContainer kac = null;
         Class<? extends ModelElement> edgeClassOrNull = ModelConstants.getClassForName(edgeClassName);
+        if (edgeClassOrNull == null) {
+            return null;
+        }
         Class<? extends Edge> edgeClass = edgeClassOrNull == null ? null : edgeClassOrNull.asSubclass(Edge.class);
         if (edgeClass != null && !isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
             return null;
         }
+
         doc.start_transaction(pid);
         try {
-            //wenn keine Kantenklasse angegeben wurde, muss diese ermittelt werden. Wenn sie nicht eindeutig ist, wird der Benutzer per Dialog gefragt.
-            if (edgeClass == null) {
-                Class<? extends Edge>[] edgeClasses = getEdgeTypes(startElement.getClass(), endElement.getClass());
-                if (edgeClasses == null || edgeClasses.length == 0) {
-                    return null;
+            if (!MultipleEdge.class.isAssignableFrom(edgeClass)) {
+                edge = startElement.getEdgeTo(endElement, edgeClass, startElementEdgeIndex);
+                if (edge != null) {
+                    doc.finish_transaction(pid);
+                    return edge;
                 }
-                edgeClass = edgeClasses[0];
-                if (edgeClasses.length > 1) {
-                    JPanel messagePanel = new JPanel();
-                    messagePanel.setLayout(new BoxLayout(messagePanel, Y_AXIS));
-                    ButtonGroup buttonGroup = new ButtonGroup();
-                    for (int i = 0; i < edgeClasses.length; i++) {
-                        JRadioButton b = new JRadioButton(getForwardMetaAssociationName(edgeClasses[i]));
-                        b.setActionCommand(edgeClasses[i].getName());
-                        messagePanel.add(b);
-                        buttonGroup.add(b);
-                        if (i == 0) {
-                            b.setSelected(true);
-                        }
-                    }
-                    JOptionPane optionPane = new JOptionPane(messagePanel, PLAIN_MESSAGE, DEFAULT_OPTION);
-                    JDialog dialog = optionPane.createDialog(Static.getMainFrame(), getResString("choose_trace"));
-                    dialog.setVisible(true);
-                    edgeClassName = buttonGroup.getSelection().getActionCommand();
-                    edgeClass = getClassForName(edgeClassName).asSubclass(Edge.class);
-                }
-            }
-            edge = startElement.getEdgeTo(endElement, edgeClass, startElementEdgeIndex);
-            if (edge != null) {
-                doc.finish_transaction(pid);
-                return edge;
             }
             edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
             //wenn es schon eine Kante in der Gegenrichtung gibt und diese Kante eine Kante mit doppelter Bedeutung ist -> dann Richtung auf DOUBLE setzen
-            if (ModelConstants.isDoubleMeaningEdge(edgeClass) && edge != null) {
-                edge.setDirection(DOUBLE);
-                String startHash = startElement.getHashString();
-                String endHash = endElement.getHashString();
-                doc.addRedoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
-                doc.addUndoCommand(MODEL_ACTION_UNLINK + " " + startHash + " " + endHash + " " + edgeClassName + " " + startElementEdgeIndex, pid);
+            if (isDoubleMeaningEdge(edgeClass) && edge != null) {
+                ((DoubleMeaningEdge) edge).setConnectionState(DOUBLE);
             } else {
                 try {
                     edge = edgeClass.newInstance();
@@ -1319,35 +1296,15 @@ public final class GDCollection extends UserFieldTarget {
                 if (edgeHash != null && !edgeHash.equals("")) {
                     edge.setHashString(edgeHash);
                 }
-                //AXS: geändert am 21.06.2017: jetzt sind immer alle Kanten, die nicht DoubleMeaning, PartOf oder Composition sind automatisch DOUBLE
-                //Kanten die dieselben Elemente verbinden
-                //                Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
-                //                Class<? extends ModelElement> startClass = startElement.getClass();
-                //                Class<? extends ModelElement> edgeEndClass = edge.getEndClass();
-                //                Class<? extends ModelElement> endClass = endElement.getClass();
-                //                boolean doubleDir = edgeStartClass.isAssignableFrom(startClass) && edgeStartClass.isAssignableFrom(endClass);
-                //                doubleDir = doubleDir && edgeEndClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass);
-                //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(HasPartEdge.class);
-                //                doubleDir = doubleDir && !edgeClass.isAssignableFrom(Composition.class);
-                //                doubleDir = doubleDir && !ModelConstants.isDoubleMeaningEdge(edgeClass);
-                //AXS: nochmal geändert am 30.01.2018: jetzt sind nur alle einfachen Kanten, die im Moment absolut dieselbe Elementart verbinden
-                //(Zuweisungskompatibilität wird nicht geprüft) immer Soppelkanten und alle anderen nicht (siehe ModelConstants.isAlwaysDoubleConnectedEdge(edgeClass))
-                if (!ModelConstants.isDirectedEdge(edgeClass)) {
-                    edge.setDirection(DOUBLE);
-                } else {
-                    int dir = FORWARD;
-                    //AXS: auch am 21.06.2017 geändert
-                    //                    if (!(edgeStartClass.isAssignableFrom(startClass) && edgeEndClass.isAssignableFrom(endClass))) {
-                    if (!isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
-                        ModelElement dummy = startElement;
-                        startElement = endElement;
-                        endElement = dummy;
-                        //AXS:auch am 30.01.2018: alle Kanten, die keine doppelte Bedeutung haben sind immer vorwärts
-                        if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                            dir = BACKWARD;
-                        }
-                    }
-                    edge.setDirection(dir);
+                ConnectionState connectionState = FORWARD; // wird nur für die DoubleMeaningEdges gebraucht
+                if (!isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
+                    ModelElement dummy = startElement;
+                    startElement = endElement;
+                    endElement = dummy;
+                    connectionState = BACKWARD;
+                }
+                if (isDoubleMeaningEdge(edgeClass)) {
+                    ((DoubleMeaningEdge) edge).setConnectionState(connectionState);
                 }
                 edge.setKnotsAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
                 if (edge.getStart() != null && edge.getEnd() != null) {
@@ -1362,36 +1319,33 @@ public final class GDCollection extends UserFieldTarget {
                         edge.getStart().removeEdge(edge);
                     }
                 }
-                String startHash = startElement.getHashString();
-                String endHash = endElement.getHashString();
-                doc.addRedoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
-                doc.addUndoCommand(MODEL_ACTION_UNLINK + " " + startHash + " " + endHash + " " + edgeClassName + " " + startElementEdgeIndex, pid);
                 //Falls bereits Beziehungen der anzulegenden Art bestehen und durch die neue Beziehung die Kardinalitäten
                 //verletzt wären -> lösche solange bestehende Beziehungen, bis die Kardinaltitäten eingehalten werden
                 //Dies muss nach dem Hinzufügen der anderen Undo-Komamndos erfolgen, sonst stimmt die Reihenfolge der Kommandos nicht.
                 if (ensureConsistency) {
-                    Class<? extends ModelElement> startClass = startElement.getClass();
-                    Class<? extends ModelElement> endClass = endElement.getClass();
-                    boolean startElementIsEdgeStart = edge.isStartClass(startClass);
-                    boolean endElementIsEdgeStart = edge.isStartClass(endClass);
-                    Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
+                    //beim Startelement eine alte Kante löschen, falls die neue Kante die Anzahl der Verbindungen auf dem MAX-Wert gebracht hat
+                    //War der Wert vorher schon höher, wird hier nicht gelöscht! Das wäre ein Fall für die Konsistenzprüfung
                     Class<? extends ModelElement> edgeEndClass = edge.getEndClass();
                     int maxForwardCardinality = edge.getMaxForwardCardinality();
-                    int maxBackwardCardinality = edge.getMaxBackwardCardinality();
-                    int maxElemCardinality = startElementIsEdgeStart ? maxForwardCardinality : maxBackwardCardinality;
-                    List<Edge> edgeList = startElement.getEdgesWith(startElementIsEdgeStart ? edgeEndClass : edgeStartClass, edgeClass);
+                    List<Edge> edgeList = startElement.getEdgesTo(edgeEndClass, edgeClass);
                     edgeList.remove(edge);
-                    if (edgeList.size() > 0 && edgeList.size() == maxElemCardinality) {
+                    if (edgeList.size() == maxForwardCardinality) {
                         deleteElement(edgeList.get(0), doc, pid);
                     }
-                    maxElemCardinality = endElementIsEdgeStart ? maxForwardCardinality : maxBackwardCardinality;
-                    edgeList = endElement.getEdgesWith(endElementIsEdgeStart ? edgeEndClass : edgeStartClass, edgeClass);
+                    //beim Endelement dasselbe nur in Rückwärtsrichtung
+                    Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
+                    int maxBackwardCardinality = edge.getMaxBackwardCardinality();
+                    edgeList = endElement.getEdgesFrom(edgeStartClass, edgeClass);
                     edgeList.remove(edge);
-                    if (edgeList.size() > 0 && edgeList.size() == maxElemCardinality) {
+                    if (edgeList.size() == maxBackwardCardinality) {
                         deleteElement(edgeList.get(0), doc, pid);
                     }
                 }
             }
+            String startHash = startElement.getHashString();
+            String endHash = endElement.getHashString();
+            doc.addRedoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
+            doc.addUndoCommand(MODEL_ACTION_UNLINK + " " + startHash + " " + endHash + " " + edgeClassName + " " + startElementEdgeIndex, pid);
         } catch (Exception e) {
             Log.show(ERROR, getResString("FehlerAllgemein"), e);
             doc.undo(pid);
@@ -1436,6 +1390,39 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
+     * ACHTUNG: DIESE BEIDEN UNINK-FUNKTIONEN HABE ICH AM 24.10.2018 HINZUGEFÜGT. DAS PROZESSSTRUKTURPANEL MÜSSTE ÜBER EINE SOLCHE FUNKTION ARBEITEN.
+     * DAS HIER IST DAZU DA, MICH DARAN ZU ERINNERN!
+     *
+     * @param edge
+     * @param pid
+     */
+    public final void _unlink(final Edge edge, final int pid) {
+        _unlink(edge, Direction.FORWARD, pid);
+    }
+
+    /**
+     * ACHTUNG: DIESE BEIDEN UNINK-FUNKTIONEN HABE ICH AM 24.10.2018 HINZUGEFÜGT. DAS PROZESSSTRUKTURPANEL MÜSSTE ÜBER EINE SOLCHE FUNKTION ARBEITEN.
+     * DAS HIER IST DAZU DA, MICH DARAN ZU ERINNERN!
+     *
+     * @param edge
+     * @param direction
+     * @param pid
+     */
+    public final void _unlink(final Edge edge, final Direction direction, final int pid) {
+        ModelElement start = edge.getStart();
+        ModelElement end = edge.getEnd();
+        if (direction == Direction.FORWARD) {
+            unlink(start, end, edge.getClass(), start.getEdgeIndex(edge), pid);
+        } else {
+            unlink(end, start, edge.getClass(), end.getEdgeIndex(edge), pid);
+        }
+    }
+
+    /**
+     * Anders als bei link() ist hier die Richtung, also die Reihenfolge der beiden ModelElemente nur wichtig, wenn es eine {@link DoubleMeaningEdge}
+     * ist oder die übergebenen Elemente beide jeweils Start- und EndElement der Kantenklasse sein können. In allen anderen Fällen wird sonst auch
+     * einfach versucht irgendeine Kante dieser Art zwischen den beiden übergebenen Elementen zu löschen.
+     *
      * @param me1
      * @param me2
      * @param edgeClass
@@ -1448,7 +1435,11 @@ public final class GDCollection extends UserFieldTarget {
         }
         Edge edge = null;
         List<Edge> edges = null;
-        if (ModelConstants.isDirectedEdge(edgeClass)) {
+
+        Class<? extends ModelElement> me1Class = me1.getClass();
+        Class<? extends ModelElement> me2Class = me2.getClass();
+        boolean isDirectionImportent = ModelConstants.isDoubleMeaningEdge(edgeClass) || Edge.isConnecting(edgeClass, me1Class, me2Class) && Edge.isConnecting(edgeClass, me2Class, me1Class);
+        if (isDirectionImportent) {
             edges = me1.getEdgesTo(me2, edgeClass, me1EdgeIndex);
         } else {
             edges = me1.getEdgesWith(me2, edgeClass, me1EdgeIndex);
@@ -1462,7 +1453,7 @@ public final class GDCollection extends UserFieldTarget {
             messagePanel.setLayout(new BoxLayout(messagePanel, Y_AXIS));
             ButtonGroup buttonGroup = new ButtonGroup();
             for (int i = 0; i < edges.size(); i++) {
-                JRadioButton b = new JRadioButton(getForwardMetaAssociationName(edges.get(i).getClass()));
+                JRadioButton b = new JRadioButton(ElementsNameBuilder.getForwardMetaAssociationName(edges.get(i).getClass()));
                 if (i == 0) {
                     b.setSelected(true);
                 }
@@ -1489,13 +1480,14 @@ public final class GDCollection extends UserFieldTarget {
         //ist die Richtung egal und das Unlinken ist das Löschen der Edge
         Class<? extends Edge> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
         if (isDoubleMeaningEdge(absoluteEdgeClass)) {
-            if (edge.getDirection() == DOUBLE) {
+            DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
+            if (doubleMeaningEdge.getConnectionState() == DOUBLE) {
                 if (edge.getStart() == me1) {
                     doc.addUndoCommand(MODEL_ACTION_LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me1Hash + " " + me2Hash + " " + me1.getEdgeIndex(edge) + " " + me2.getEdgeIndex(edge), pid);
-                    edge.setDirection(BACKWARD);
+                    doubleMeaningEdge.setConnectionState(BACKWARD);
                 } else {
                     doc.addUndoCommand(MODEL_ACTION_LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me2Hash + " " + me1Hash + " " + me2.getEdgeIndex(edge) + " " + me1.getEdgeIndex(edge), pid);
-                    edge.setDirection(FORWARD);
+                    doubleMeaningEdge.setConnectionState(FORWARD);
                 }
             } else {
                 deleteElement(edge, doc, pid);
@@ -1525,6 +1517,21 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public boolean join(final String hashString1, final String hashString2, final GraphDocument source, final int pid) {
+        Collection<String> elementHashes2ExcludeFromJoin = new ArrayList<>();
+        elementHashes2ExcludeFromJoin.add(hashString1);
+        elementHashes2ExcludeFromJoin.add(hashString2);
+        return joinRecursive(hashString1, hashString2, source, elementHashes2ExcludeFromJoin, pid);
+    }
+
+    /**
+     * @param hashString1
+     * @param hashString2
+     * @param source
+     * @param elementHashes2ExcludeFromJoin
+     * @param pid
+     * @return
+     */
+    private boolean joinRecursive(final String hashString1, final String hashString2, final GraphDocument source, final Collection<String> elementHashes2ExcludeFromJoin, final int pid) {
         ModelElement modelElement1 = doc.findElementCoded(hashString1);
         ModelElement modelElement2 = doc.findElementCoded(hashString2);
         if (modelElement1 == null || modelElement2 == null || modelElement1 == modelElement2) {
@@ -1532,13 +1539,18 @@ public final class GDCollection extends UserFieldTarget {
         }
         //prüfen, ob es sich um Node gleichen Typs handelt (nur diese können vereint werden)
         if (!(modelElement1 instanceof Node && modelElement2 instanceof Node)) {
-            JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
+            if (interactive_mode) {
+                JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
+            }
             return false;
         }
-        Node knoten1 = (Node) modelElement1;
-        Node knoten2 = (Node) modelElement2;
-        if (knoten1.getClass() != knoten2.getClass()) {
-            JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
+        Node node1 = (Node) modelElement1;
+        Node node2 = (Node) modelElement2;
+        Class<? extends ModelElement> nodeClass = node1.getClass();
+        if (nodeClass != node2.getClass()) {
+            if (interactive_mode) {
+                JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
+            }
             return false;
         }
         //Beginne umhängen der Kanten
@@ -1548,20 +1560,31 @@ public final class GDCollection extends UserFieldTarget {
         }
         //Namen und Beschreibung des zu löschenden Node an den verbleibenden anhängen
         //und ExtIDs und benutzerdef. Eigenschaftsfelder zusammenführen
-        knoten2.join(knoten1, false);
+        node2.join(node1, false);
         //knoten2.createNameWithSzens(doc);
-        for (Class<? extends ModelElement> clazz : getSubordinatedJoinbleTypes(knoten2.getClass())) {
-            List<ModelElement> sjt1 = knoten1.getConnectedElements(clazz);
-            List<ModelElement> sjt2 = knoten2.getConnectedElements(clazz);
-            if (sjt1.size() > 0 && sjt2.size() > 0) {
+
+        for (Class<? extends Edge> edgeClass : getSubordinatedJoinbleTypes(node2.getClass())) {
+            List<ModelElement> sjt1 = node1.getConnectedElements(edgeClass);
+            List<ModelElement> sjt2 = node2.getConnectedElements(edgeClass);
+            if (sjt1.size() == 1 && sjt2.size() == 1) {
                 ModelElement me1 = sjt1.get(0);
-                ModelElement me2 = knoten2.getConnectedElements(clazz).get(0);
-                join(me1.getHashString(), me2.getHashString(), source, pid);
+                ModelElement me2 = sjt2.get(0);
+                String hash1 = me1.getHashString();
+                if (elementHashes2ExcludeFromJoin.contains(hash1)) {
+                    continue;
+                }
+                String hash2 = me2.getHashString();
+                if (elementHashes2ExcludeFromJoin.contains(hash2)) {
+                    continue;
+                }
+                elementHashes2ExcludeFromJoin.add(hash1);
+                elementHashes2ExcludeFromJoin.add(hash2);
+                joinRecursive(hash1, hash2, source, elementHashes2ExcludeFromJoin, pid);
             }
         }
         //Das hier ist Hardcore, weil hier das IterableObject zurück auf List gecastet wird-> eigentlich müsste sich Edge selbst irgenwie darum kümmern!
-        List<Edge> kantenVector1 = (List<Edge>) knoten1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
-        List<Edge> kantenVector2 = (List<Edge>) knoten2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
+        List<Edge> kantenVector1 = (List<Edge>) node1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
+        List<Edge> kantenVector2 = (List<Edge>) node2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
         ModelElement startKnoten, endKnoten;
         //für jede Edge vom zu löschenden Node
         while (kantenVector1.size() > 0) {
@@ -1569,12 +1592,12 @@ public final class GDCollection extends UserFieldTarget {
             startKnoten = kante.getStart(); //Startknoten der zu übernehmenden Edge merken
             endKnoten = kante.getEnd(); //Endknoten -"-
             //zu löschenden Node durch den verbleibenden ersetzen
-            if (startKnoten == knoten1) {
-                startKnoten = knoten2;
+            if (startKnoten == node1) {
+                startKnoten = node2;
                 endKnoten = kante.getEnd();
             } else {
                 startKnoten = kante.getStart();
-                endKnoten = knoten2;
+                endKnoten = node2;
             }
             boolean deleteKante = false;
             if (startKnoten == endKnoten) {
@@ -1601,21 +1624,21 @@ public final class GDCollection extends UserFieldTarget {
             }
             if (deleteKante) { //wenn die Edge doppelt vorkommen würde
                 deleteElement(kante, doc, pid);
-                //				doc.removeEdge(kante, pid);//Edge einfach komplett löschen
+                //              doc.removeEdge(kante, pid);//Edge einfach komplett löschen
             } else { //Edge muss umgehängt werden
-                knoten1.removeEdge(kante); //im zu löschenden Node die Edge entfernen
+                node1.removeEdge(kante); //im zu löschenden Node die Edge entfernen
                 kante.setKnots(startKnoten, endKnoten);//die Edge wirklich an knoten2 binden
             }
         }
         for (Szenario szen : szenarios) {
-            NodeContainer kc1 = (NodeContainer) knoten1.getContainer(szen);
-            NodeContainer kc2 = (NodeContainer) knoten2.getContainer(szen);
+            NodeContainer kc1 = (NodeContainer) node1.getContainer(szen);
+            NodeContainer kc2 = (NodeContainer) node2.getContainer(szen);
             // jetzt umhängen aller Container von knoten1 auf knoten2 in allen Teilmodellen
             if (kc2 == null && kc1 != null) {
-                //				szen.removeKnotContainer((NodeContainer) knoten1.getContainer(szen), pid);
-                removeContainerFromSubmodel(knoten1.getContainer(szen), pid);
-                kc1.setElement(knoten2);
-                szen.getLayer(knoten2.layerFor()).add(kc1);
+                //              szen.removeKnotContainer((NodeContainer) knoten1.getContainer(szen), pid);
+                removeContainerFromSubmodel(node1.getContainer(szen), pid);
+                kc1.setElement(node2);
+                szen.getLayer(node2.layerFor()).add(kc1);
             }
             NodeContainer nc = null;
             if (kc2 != null) {
@@ -1632,8 +1655,8 @@ public final class GDCollection extends UserFieldTarget {
                 szen.finish_transaction(TransactionManager.STANDARD_PID, false);
             }
         }
-        deleteElement(knoten1, doc, pid);
-        //		doc.removeNode((NodeContainer)knoten1.getContainer(doc), pid); //alle Kanten umgehängt -> wegfallenden Node komplett löschen
+        deleteElement(node1, doc, pid);
+        //      doc.removeNode((NodeContainer)knoten1.getContainer(doc), pid); //alle Kanten umgehängt -> wegfallenden Node komplett löschen
         for (Szenario szen : szenarios) {
             szen.finish_transaction(pid, false);
         }
@@ -1741,44 +1764,9 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * @param iconPath
      * @return
      */
-    public final String loadIcon(final File iconPath) {
-        String iconKey = null;
-        try {
-            RandomAccessFile imf = new RandomAccessFile(iconPath, "r");
-            byte[] img = new byte[(int) imf.length()];
-            imf.read(img);
-            iconKey = KeyOf(img);
-            if (iconKey == null) {
-                iconKey = "IMG_" + new Date().getTime() + iconCounter++ + ".gif";
-                getIconTable().put(iconKey, img);
-            }
-            imf.close();
-        } catch (Exception e) {
-            Log.show(ERROR, getResString("FehlerAllgemein"), e);
-        }
-        return iconKey;
-    }
-
-    /**
-     * @param entry
-     * @return
-     */
-    private final String KeyOf(final byte[] entry) {
-        for (String key : getIconTable().keySet()) {
-            if (Arrays.equals(getIconTable().get(key), entry)) {
-                return key;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @return
-     */
-    public Map<String, byte[]> getIconTable() {
+    public GDCollectionIconTable getIconTable() {
         return iconTable;
     }
 
@@ -1844,9 +1832,12 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * @param flag
+     * @return previous interactive mode
      */
-    public void setInteractiveMode(final boolean flag) {
+    public boolean setInteractiveMode(final boolean flag) {
+        boolean oldMode = interactive_mode;
         interactive_mode = flag;
+        return oldMode;
     }
 
     /**
@@ -2264,4 +2255,21 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
     }
+
+    //////////////
+    // Optional //
+    //////////////
+
+    public final boolean addOptional(final OptionalEdge optional) {
+        return optionalElements.add(optional);
+    }
+
+    public final boolean removeOptional(final OptionalEdge optional) {
+        return optionalElements.remove(optional);
+    }
+
+    public final boolean isOptional(final Object o) {
+        return optionalElements.contains(o);
+    }
+
 }

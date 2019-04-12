@@ -6,8 +6,8 @@ package de.imise.tool3lgm.graphtools.dialog;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Dialog;
-import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Window;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -21,6 +21,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.help.Help;
+import de.imise.util.swing.SwingUtils;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 
 /**
@@ -88,8 +89,15 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      * @param graphDocument Document in dessen Kontext der Dialog steht
      */
     public AbstractPropertyDialog(final Dialog owner, final GDCollection gdcoll) {
-        super(owner, "", false);
+        super(owner, "", owner instanceof AbstractPropertyDialog);
         init(gdcoll);
+    }
+
+    /**
+     * @param owner
+     */
+    public AbstractPropertyDialog(final AbstractPropertyDialog owner) {
+        this(owner, owner.gdcoll);
     }
 
     /**
@@ -102,7 +110,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
         okButton = new JButton(getResString("ok"));
         cancelButton = new JButton(getResString("cancel"));
         applyButton = new JButton(getResString("apply"));
-        setSameButtonSize(okButton, cancelButton, applyButton);
+        SwingUtils.setSamePreferredSize(okButton, cancelButton, applyButton);
         String helpID = Help.getHelp().getHelpID(this);
         if (helpID != null && helpID.length() > 0) {
             helpButton = new JButton(getResString("hilfeButtonText"));
@@ -112,54 +120,40 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
         createNewTransactionID();
     }
 
-    private static final void setSameButtonSize(final JButton... buttons) {
-        if (buttons == null || buttons.length == 0) {
-            return;
-        }
-        Dimension dim = buttons[0].getPreferredSize();
-        for (int i = 1; i < buttons.length; i++) {
-            Dimension otherDim = buttons[i].getPreferredSize();
-            dim.width = Math.max(dim.width, otherDim.width);
-            dim.height = Math.max(dim.height, otherDim.height);
-        }
-        for (int i = 0; i < buttons.length; i++) {
-            buttons[i].setPreferredSize(dim);
-        }
-    }
-
     /**
      * @return Returns the transactionID.
      */
-    public int getTransactionID() {
+    public final int getTransactionID() {
         return transactionID;
     }
 
     /**
      * @return
      */
-    protected int createNewTransactionID() {
-        transactionID = GraphDocument.createTransactionId();
+    protected final int createNewTransactionID() {
+        Window owner = getOwner();
+        transactionID = owner instanceof AbstractPropertyDialog ? ((AbstractPropertyDialog) owner).transactionID : GraphDocument.createTransactionId();
         return transactionID;
     }
 
     /**
      * @return <code>doc</code>
      */
-    public LGMGraphDocument getGraphDocument() {
+    public final LGMGraphDocument getGraphDocument() {
         return doc;
     }
 
     /**
      * @return
      */
-    public UserFieldDefinitions getUserFieldDefinitions() {
+    public final UserFieldDefinitions getUserFieldDefinitions() {
         return gdcoll.getUserFieldDefinitions();
     }
 
     /**
      * Performs a click on the Ok-Button
      */
-    public void performOK() {
+    public final void performOK() {
         okButton.doClick();
     }
 

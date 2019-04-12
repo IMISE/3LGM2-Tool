@@ -42,7 +42,7 @@ public class KeyStrokes {
     }
 
     private static void put(final GDCommands command, final int keyCode, final int modifiers) {
-        KEYSTROKES.put(command.getAction(), KeyStroke.getKeyStroke(keyCode, modifiers));
+        KEYSTROKES.put(command.createAction(), KeyStroke.getKeyStroke(keyCode, modifiers));
     }
 
     private static void put(final Action action, final int keyCode, final int modifiers) {
