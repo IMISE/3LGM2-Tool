@@ -760,7 +760,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("szenario")) {
                 for (BendpointContainer benpointContainer : hashToSzenarioBendpointContainer.values()) {
-                    Bendpoint bendpoint = benpointContainer.getKnickpunktKnoten();
+                    Bendpoint bendpoint = benpointContainer.getBendpoint();
                     String bendpointEdgeHash = bendpoint.getKantenHash();
 
                     if (isCopyAndPaste()) {
@@ -845,7 +845,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     Static.setProgressDialogStatusLabel("labelAddBendpoints");
                     for (ElementContainer ec : hashToMainDocContainer.values()) {
                         if (ec instanceof BendpointContainer) {
-                            Bendpoint bendpoint = ((BendpointContainer) ec).getKnickpunktKnoten();
+                            Bendpoint bendpoint = ((BendpointContainer) ec).getBendpoint();
                             bendpoint.putXMLFieldString("kanteHash", oldToNewHashString.get(bendpoint.getKantenHash()));
                         }
                     }

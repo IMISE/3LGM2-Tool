@@ -554,8 +554,8 @@ public class LGMGraphDocument extends GraphDocument {
                 if (oldKP == null) {
                     continue;
                 }
-                EdgeContainer kC = dest.findEdgeContainerCoded(kp.getKnickpunktKnoten().getKantenHash());
-                EdgeContainer oldKC = oldKP.getKnickpunktKnoten().getOwner();
+                EdgeContainer kC = dest.findEdgeContainerCoded(kp.getBendpoint().getKantenHash());
+                EdgeContainer oldKC = oldKP.getBendpoint().getOwner();
                 if (oldKC == null) {
                     oldKC = findEdgeContainerCoded(kC.getHashString());
                 }
@@ -563,8 +563,8 @@ public class LGMGraphDocument extends GraphDocument {
                     if (!edges.contains(kC.getElement())) {
                         edgeConts.add(kC);
                     }
-                    kp.getKnickpunktKnoten().setOwner(kC);
-                    kC.setKnickpunkt(kp, oldKC.getIndexOfKnickpunkt(oldKP.getKnickpunktKnoten()));
+                    kp.getBendpoint().setOwner(kC);
+                    kC.setKnickpunkt(kp, oldKC.getIndexOfKnickpunkt(oldKP.getBendpoint()));
                     dest.getLayer(kC.layerFor()).add(kp);
                 }
             }

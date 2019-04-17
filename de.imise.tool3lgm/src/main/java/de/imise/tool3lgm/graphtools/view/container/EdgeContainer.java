@@ -489,7 +489,7 @@ public class EdgeContainer extends ElementContainer {
         }
         // System.err.println("AXS_AXSsetKnickpunkt " + getGraphDocument());
         knickpunkte.set(index, kp);
-        kp.getKnickpunktKnoten().setOwner(this);
+        kp.getBendpoint().setOwner(this);
     }
 
     /**
@@ -507,7 +507,7 @@ public class EdgeContainer extends ElementContainer {
             index = 0;
         }
         knickpunkte.add(index, kp);
-        kp.getKnickpunktKnoten().setOwner(this);
+        kp.getBendpoint().setOwner(this);
     }
 
     /**
@@ -542,7 +542,7 @@ public class EdgeContainer extends ElementContainer {
      */
     public int getIndexOfKnickpunkt(final Bendpoint kn) {
         for (int i = 0; i < knickpunkte.size(); i++) {
-            if (knickpunkte.get(i).getKnickpunktKnoten() == kn) {
+            if (knickpunkte.get(i).getBendpoint() == kn) {
                 return i;
             }
         }

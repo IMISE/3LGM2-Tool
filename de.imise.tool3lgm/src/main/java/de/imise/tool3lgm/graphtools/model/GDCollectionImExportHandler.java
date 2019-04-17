@@ -185,7 +185,7 @@ public final class GDCollectionImExportHandler {
                     newSzenario.getLayer(ModelConstants.LAYERS[i]).add(container);
                     container.refreshText();
                     BendpointContainer knC = (BendpointContainer) container;
-                    kc.setKnickpunkt(knC, knC.getKnickpunktKnoten().getIndex());
+                    kc.setKnickpunkt(knC, knC.getBendpoint().getIndex());
                     kc.computeBorderPoints();
                 }
             }

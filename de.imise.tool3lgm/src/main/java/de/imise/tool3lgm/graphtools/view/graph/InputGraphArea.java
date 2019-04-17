@@ -451,7 +451,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         }
         // Knickpunkte bei Doppelklicks löschen
         if (ka instanceof BendpointContainer) {
-            szenario.getCollection().removeBendpoint(((BendpointContainer) ka).getKnickpunktKnoten(), TransactionManager.STANDARD_PID);
+            szenario.getCollection().removeBendpoint(((BendpointContainer) ka).getBendpoint(), TransactionManager.STANDARD_PID);
         } else if (ka != null) {
             szenario.showPropertyDialog(ka.getElement());
         }
@@ -674,7 +674,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                         Point postPos = kpc.getSuccessorPosition();
                         //wenn der Knickpunkt auf seinen Vorgänger- oder Nachfolgerknickpunkt gedragged wurde -> lösche ihn
                         if (isSamePointInBendpointTolerance(pos, prePos, postPos)) {
-                            szenario.getCollection().removeBendpoint(kpc.getKnickpunktKnoten(), STANDARD_PID);
+                            szenario.getCollection().removeBendpoint(kpc.getBendpoint(), STANDARD_PID);
                             //prüfe, ob der Knickpunkt mit einer gewissen Toleranz auf fast einer Linie mit seinen Außenpunkten
                             // liegt -> wenn ja -> lösche ihn
                         } else {
@@ -721,7 +721,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                                 // daher die Abweichung von 1 bestimmen)
                                 if (Math.abs(1d - cosAlpha) < BENDPOINT_LINE_DIFFERENCE_ANGLE_IN_DEG) {
                                     // Lösche den aktuellen Knickpunkt
-                                    szenario.getCollection().removeBendpoint(kpc.getKnickpunktKnoten(), STANDARD_PID);
+                                    szenario.getCollection().removeBendpoint(kpc.getBendpoint(), STANDARD_PID);
                                 }
                                 //System.err.println("preX="+preX + "   preY="+preY + "   kpcX=" + kpcX + "   kpcY=" + kpcY + "   postX="+postX + "   postY="+postY );
                                 //System.err.println("a="+a + "   b="+b + "   c=" + c);

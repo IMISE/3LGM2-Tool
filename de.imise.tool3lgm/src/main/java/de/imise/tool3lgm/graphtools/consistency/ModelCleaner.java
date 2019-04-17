@@ -163,7 +163,7 @@ public class ModelCleaner {
                 for (int i = lc.getBendpointContainerCount() - 1; i >= 0; i--) {
                     boolean ok = true;
                     BendpointContainer bpc = lc.getBendpointContainer(i);
-                    Bendpoint bp = bpc.getKnickpunktKnoten(); //das hier ist der Container aus dem Hauptdokument
+                    Bendpoint bp = bpc.getBendpoint(); //das hier ist der Container aus dem Hauptdokument
                     if (bp.getContainerCount() != 2) {
                         ok = false;
                     } else {

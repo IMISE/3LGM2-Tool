@@ -2192,7 +2192,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 edgeC.computeBorderPoints();
             }
         } else {
-            ((BendpointContainer) nc).getKnickpunktKnoten().getOwner().computeBorderPoints();
+            ((BendpointContainer) nc).getBendpoint().getOwner().computeBorderPoints();
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, nc, null, pid);
@@ -3301,7 +3301,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             for (LayerContainer lc : layer) {
                 for (BendpointContainer bc : lc.getBendpointContainers()) {
                     if (hashString.equals(bc.getHashString())) {
-                        return bc.getKnickpunktKnoten();
+                        return bc.getBendpoint();
                     }
                 }
             }
@@ -4922,7 +4922,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 if (kpC == null) {
                     continue;
                 }
-                Bendpoint kp = kpC.getKnickpunktKnoten();
+                Bendpoint kp = kpC.getBendpoint();
                 if (kp == null) {
                     continue;
                 }

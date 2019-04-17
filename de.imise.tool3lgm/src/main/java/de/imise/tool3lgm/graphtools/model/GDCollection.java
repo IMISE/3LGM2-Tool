@@ -580,7 +580,7 @@ public final class GDCollection extends UserFieldTarget {
                     transctionStarted = true;
                 }
                 //				removeBendpoint((BendpointContainer)ec, pid);
-                removeBendpoint(((BendpointContainer) ec).getKnickpunktKnoten(), pid);
+                removeBendpoint(((BendpointContainer) ec).getBendpoint(), pid);
                 continue;
             }
             //keine Kanten löschen
@@ -643,7 +643,7 @@ public final class GDCollection extends UserFieldTarget {
         //die bendPointContainerList wird beim removeBendpoint-Aufruf selbst geändert -> daher einfach von hinten die
         //Knickpunkte löschen, dann muss nichts kopiert werden
         for (int k = edgeContainer.getBendpointContainerCount() - 1; k >= 0; k--) {
-            removeBendpoint(edgeContainer.getBendpointContainer(k).getKnickpunktKnoten(), pid);
+            removeBendpoint(edgeContainer.getBendpointContainer(k).getBendpoint(), pid);
         }
         Edge edge = edgeContainer.getEdge();
         GraphDocument doc = edgeContainer.getGraphDocument();
@@ -1890,7 +1890,7 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
             for (BendpointContainer bc : lc.getBendpointContainers()) {
-                Bendpoint bendpoint = bc.getKnickpunktKnoten();
+                Bendpoint bendpoint = bc.getBendpoint();
                 for (GraphDocument doc : export) {
                     if (doc.isMyElement(bendpoint)) {
                         if (!elements.contains(bendpoint)) {
@@ -1934,7 +1934,7 @@ public final class GDCollection extends UserFieldTarget {
         }
         if (me instanceof Edge) {
             for (BendpointContainer kpC : doc.getLayer(me.layerFor()).getBendpointContainers()) {
-                Bendpoint kp = kpC.getKnickpunktKnoten();
+                Bendpoint kp = kpC.getBendpoint();
                 String kantenHash = kp.getKantenHash();
                 if (kantenHash != null && kantenHash.equals(me.getHashString())) {
                     if (!elements.contains(kp)) {

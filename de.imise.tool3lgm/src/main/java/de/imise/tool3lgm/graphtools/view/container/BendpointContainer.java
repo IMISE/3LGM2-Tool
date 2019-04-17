@@ -33,7 +33,7 @@ public class BendpointContainer extends NodeContainer {
     /**
      * @return
      */
-    public Bendpoint getKnickpunktKnoten() {
+    public Bendpoint getBendpoint() {
         return (Bendpoint) me;
     }
 
@@ -79,7 +79,7 @@ public class BendpointContainer extends NodeContainer {
      * @return
      */
     public Point getPredecessorPosition() {
-        EdgeContainer edgeC = getKnickpunktKnoten().getOwner();
+        EdgeContainer edgeC = getBendpoint().getOwner();
         int pos = edgeC.indexOfBendpointContainer(this);
         if (pos == -1) {
             return null;
@@ -99,7 +99,7 @@ public class BendpointContainer extends NodeContainer {
      * @return
      */
     public Point getSuccessorPosition() {
-        EdgeContainer edgeC = getKnickpunktKnoten().getOwner();
+        EdgeContainer edgeC = getBendpoint().getOwner();
         int pos = edgeC.indexOfBendpointContainer(this);
         if (pos == -1) {
             return null;
