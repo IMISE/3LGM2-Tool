@@ -930,9 +930,9 @@ public final class GDCollection extends UserFieldTarget {
         //immer in einem Szenario)
         EdgeContainer edgeC = bendpoint.getOwner();
         //fuer das UndoKommando die Position merken, an der sich der Knickpunkt auf der Edge befunden hat.
-        int oldIndex = edgeC.getIndexOfKnickpunkt(bendpoint);
+        int oldIndex = edgeC.getIndexOfBendpoint(bendpoint);
         //entferne den Knickpunkt von der Edge
-        edgeC.removeKnickpunkt(bendpoint);
+        edgeC.removeBendpoint(bendpoint);
         edgeC.computeBorderPoints();
         int layerIndex = edgeC.layerFor();
         //den Knickpunkt im Teilmodell löschen
@@ -991,7 +991,7 @@ public final class GDCollection extends UserFieldTarget {
         }
         szen.start_transaction(pid);
         if (bendpointIndex == INVALID_BENDPOINT_INDEX) {
-            bendpointIndex = edgeContainer.getKnickpunktInsertIndex(x, y);
+            bendpointIndex = edgeContainer.getBendpointInsertIndex(x, y);
         }
         //[0] = SzenHash, [1] = HashString der Edge, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
         szen.addRedoCommand(MODEL_ACTION_INSERT_BENDING_POINT + " " + szenHashString + " " + edgeContainer.getHashString() + " " + bendpoint.getHashString() + " " + x + " " + y + " " + bendpointIndex, pid);
@@ -1003,7 +1003,7 @@ public final class GDCollection extends UserFieldTarget {
             return null;
         }
         doc.getLayer(layerNumber).add(new BendpointContainer(bendpoint, doc));
-        edgeContainer.addKnickpunkt(bendpointContainer, bendpointIndex);
+        edgeContainer.addBendpoint(bendpointContainer, bendpointIndex);
         if (x != INVALID_POSITION_X && y != INVALID_POSITION_Y) {
             bendpointContainer.setLocation(x, y);
         }
@@ -1306,7 +1306,7 @@ public final class GDCollection extends UserFieldTarget {
                 if (isDoubleMeaningEdge(edgeClass)) {
                     ((DoubleMeaningEdge) edge).setConnectionState(connectionState);
                 }
-                edge.setKnotsAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
+                edge.setNodesAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
                 if (edge.getStart() != null && edge.getEnd() != null) {
                     kac = new EdgeContainer(edge, doc);
                     edge.setName(doc.getNextNewName(edge.getClass()), false);
@@ -1611,7 +1611,7 @@ public final class GDCollection extends UserFieldTarget {
                     Log.show(ERROR, getResString("FehlerAllgemein"), e);
                     continue;
                 }
-                testKante.setKnots(startKnoten, endKnoten, false);
+                testKante.setNodes(startKnoten, endKnoten, false);
                 //TODO:AXS: ich glaube hier fliegen Kanten raus, die in unterschiedliche Richtungen zeigen, weil isEqualTo nur die Elemente und die Kanteklasse prüft
                 for (int i = 0; i < kantenVector2.size(); i++) {
                     //für jede Edge des verbleibenden Elementes prüfen, ob umzuhängende Edge und eine Edge in
@@ -1627,7 +1627,7 @@ public final class GDCollection extends UserFieldTarget {
                 //              doc.removeEdge(kante, pid);//Edge einfach komplett löschen
             } else { //Edge muss umgehängt werden
                 node1.removeEdge(kante); //im zu löschenden Node die Edge entfernen
-                kante.setKnots(startKnoten, endKnoten);//die Edge wirklich an knoten2 binden
+                kante.setNodes(startKnoten, endKnoten);//die Edge wirklich an knoten2 binden
             }
         }
         for (Szenario szen : szenarios) {

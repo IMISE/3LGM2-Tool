@@ -83,19 +83,19 @@ public abstract class SubordinationEdge extends Edge {
     }
 
     @Override
-    public final void setKnots(final ModelElement superElement, final ModelElement subElement, final boolean registerInKnots) {
+    public final void setNodes(final ModelElement superElement, final ModelElement subElement, final boolean registerInKnots) {
         ModelElement start = k1;
         ModelElement end = k2;
-        super.setKnots(superElement, subElement, registerInKnots);
+        super.setNodes(superElement, subElement, registerInKnots);
         if (isInCircle()) {
             subElement.removeEdge(this);
             superElement.removeEdge(this);
-            super.setKnots(start, end, registerInKnots);
+            super.setNodes(start, end, registerInKnots);
         }
     }
 
     @Override
-    public void setKnotsAndInsert(final ModelElement startElement, final int startElementEdgeIndex, final ModelElement endElement, final int endElementEdgeIndex) {
+    public void setNodesAndInsert(final ModelElement startElement, final int startElementEdgeIndex, final ModelElement endElement, final int endElementEdgeIndex) {
         ModelElement oldStartElement = k1;
         ModelElement oldEndElement = k2;
         int oldStartElementEdgeIndex = oldStartElement == null ? 0 : oldStartElement.removeEdge(this);
@@ -107,7 +107,7 @@ public abstract class SubordinationEdge extends Edge {
         if (isInCircle()) {
             startElement.removeEdge(this);
             endElement.removeEdge(this);
-            super.setKnotsAndInsert(oldStartElement, oldStartElementEdgeIndex, oldEndElement, oldEndElementEdgeIndex);
+            super.setNodesAndInsert(oldStartElement, oldStartElementEdgeIndex, oldEndElement, oldEndElementEdgeIndex);
         }
     }
 

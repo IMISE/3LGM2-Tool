@@ -89,11 +89,11 @@ public abstract class Edge extends ModelElement {
     /**
      * liefert true, wenn beide Node, die die Edge verbindet identisch sind und die Edge von derselben Art ist (Richtung ist egal)
      *
-     * @param kante
+     * @param edge
      * @return
      */
-    public final boolean isEqualTo(final Edge kante) {
-        return (k1 == kante.getStart() && k2 == kante.getEnd() || k2 == kante.getStart() && k1 == kante.getEnd()) && getClass() == kante.getClass();
+    public final boolean isEqualTo(final Edge edge) {
+        return (k1 == edge.getStart() && k2 == edge.getEnd() || k2 == edge.getStart() && k1 == edge.getEnd()) && getClass() == edge.getClass();
         //		if ((k1 == kante.getStart() && k2 == kante.getEnd()) || (k2 == kante.getStart() && k1 == kante.getEnd()))
         //			return true;
         //		return false;
@@ -103,8 +103,8 @@ public abstract class Edge extends ModelElement {
      * @param _k1
      * @param _k2
      */
-    public final void setKnots(final ModelElement _k1, final ModelElement _k2) {
-        setKnots(_k1, _k2, true);
+    public final void setNodes(final ModelElement _k1, final ModelElement _k2) {
+        setNodes(_k1, _k2, true);
     }
 
     /**
@@ -112,7 +112,7 @@ public abstract class Edge extends ModelElement {
      * @param _k2
      * @param registerInKnots
      */
-    public void setKnots(final ModelElement _k1, final ModelElement _k2, final boolean registerInKnots) {
+    public void setNodes(final ModelElement _k1, final ModelElement _k2, final boolean registerInKnots) {
         k1 = _k1;
         k2 = _k2;
         if (registerInKnots) {
@@ -149,7 +149,7 @@ public abstract class Edge extends ModelElement {
      * @param _k2EdgePos Postion der Edge in der Kantenliste von _k2. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
      *            Edge hinten angefügt.
      */
-    public void setKnotsAndInsert(final ModelElement _k1, final int _k1EdgePos, final ModelElement _k2, final int _k2EdgePos) {
+    public void setNodesAndInsert(final ModelElement _k1, final int _k1EdgePos, final ModelElement _k2, final int _k2EdgePos) {
         k1 = _k1;
         k2 = _k2;
         //wenn HasPartEdges im Kreis modelliert wurden, wird die falsche Beziehung gleich wieder entfernt
@@ -288,7 +288,7 @@ public abstract class Edge extends ModelElement {
         if (_k1 == null || _k2 == null) {
             return false;
         }
-        setKnots(_k1, _k2);
+        setNodes(_k1, _k2);
 
         return true;
     }

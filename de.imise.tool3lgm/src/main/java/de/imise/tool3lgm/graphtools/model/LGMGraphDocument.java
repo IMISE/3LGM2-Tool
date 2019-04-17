@@ -564,7 +564,7 @@ public class LGMGraphDocument extends GraphDocument {
                         edgeConts.add(kC);
                     }
                     kp.getBendpoint().setOwner(kC);
-                    kC.setKnickpunkt(kp, oldKC.getIndexOfKnickpunkt(oldKP.getBendpoint()));
+                    kC.setBendpointContainer(kp, oldKC.getIndexOfBendpoint(oldKP.getBendpoint()));
                     dest.getLayer(kC.layerFor()).add(kp);
                 }
             }

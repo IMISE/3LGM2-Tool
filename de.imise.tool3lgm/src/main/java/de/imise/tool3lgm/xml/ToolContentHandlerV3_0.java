@@ -770,7 +770,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     if (kc != null) {
                         bendpoint.addEdge(kc.getEdge());
                         bendpoint.setOwner(kc);
-                        kc.setKnickpunkt(benpointContainer, bendpoint.getIndex());
+                        kc.setBendpointContainer(benpointContainer, bendpoint.getIndex());
                         int layer = bendpoint.layerFor();
                         ElementContainer mainDocBendpointContainer = hashToMainDocContainer.get(bendpoint.getHashString());
                         doc.getLayer(layer).add(mainDocBendpointContainer);

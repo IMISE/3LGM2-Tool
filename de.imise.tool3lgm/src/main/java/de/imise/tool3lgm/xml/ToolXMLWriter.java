@@ -413,7 +413,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             Bendpoint bendpoint = (Bendpoint) me;
             EdgeContainer edgeContainer = bendpoint.getOwner();
             writeModelElementField("kantenHash", edgeContainer.getHashString());
-            writeModelElementField("index", edgeContainer.getIndexOfKnickpunkt(bendpoint));
+            writeModelElementField("index", edgeContainer.getIndexOfBendpoint(bendpoint));
         }
         writeEndElement(); //</element>
     }

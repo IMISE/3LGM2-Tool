@@ -471,7 +471,7 @@ public class ModelCleaner {
             HasPartEdge hasPartEdge = (HasPartEdge) edge;
             ModelElement part = hasPartEdge.getStart(); // ist ja noch falsch herum
             ModelElement parent = hasPartEdge.getEnd(); // ist ja noch falsch herum
-            hasPartEdge.setKnots(parent, part, false);
+            hasPartEdge.setNodes(parent, part, false);
         }
 
     }

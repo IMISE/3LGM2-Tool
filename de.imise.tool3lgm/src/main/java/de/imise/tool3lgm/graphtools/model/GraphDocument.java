@@ -4930,7 +4930,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 if (kc == null) {
                     continue;
                 }
-                kc.setKnickpunkt(kpC, kp.getIndex());
+                kc.setBendpointContainer(kpC, kp.getIndex());
                 kp.addEdge(kc.getEdge());
             }
             for (EdgeContainer kc : layer[i].getEdgeContainers()) {

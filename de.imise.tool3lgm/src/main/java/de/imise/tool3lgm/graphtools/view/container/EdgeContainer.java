@@ -69,9 +69,9 @@ public class EdgeContainer extends ElementContainer {
     protected double rad1 = 0, rad2 = 0;
 
     /**
-     * Liste aller KnickpunktContainer auf dieser Kante
+     * Liste aller BendpointContainer auf dieser Kante
      */
-    protected List<BendpointContainer> bendpointContainers = new ArrayList<>(1);
+    protected List<BendpointContainer> bendpoints = new ArrayList<>(1);
 
     /**
      *
@@ -120,13 +120,13 @@ public class EdgeContainer extends ElementContainer {
             retVal.over_lapping = over_lapping;
             retVal.p1 = new Polygon(p1.xpoints, p1.ypoints, 3);
             retVal.p2 = new Polygon(p2.xpoints, p2.ypoints, 3);
-            retVal.bendpointContainers.clear();
+            retVal.bendpoints.clear();
             if (_doc instanceof Szenario) {
-                for (int i = 0; i < bendpointContainers.size(); i++) {
-                    BendpointContainer knC = bendpointContainers.get(i);
-                    BendpointContainer kp = (BendpointContainer) knC.clone(true, _doc);
-                    kp.getElement().addEdge((Edge) me);
-                    retVal.setKnickpunkt(kp, i);
+                for (int i = 0; i < bendpoints.size(); i++) {
+                    BendpointContainer knC = bendpoints.get(i);
+                    BendpointContainer bpC = (BendpointContainer) knC.clone(true, _doc);
+                    bpC.getElement().addEdge((Edge) me);
+                    retVal.setBendpointContainer(bpC, i);
                 }
             }
         }
@@ -138,8 +138,8 @@ public class EdgeContainer extends ElementContainer {
      * @param _k2
      * @param gd
      */
-    public void setKnots(final Node _k1, final Node _k2, final GraphDocument gd) {
-        getEdge().setKnots(_k1, _k2);
+    public void setNodes(final Node _k1, final Node _k2, final GraphDocument gd) {
+        getEdge().setNodes(_k1, _k2);
     }
 
     /**
@@ -236,17 +236,17 @@ public class EdgeContainer extends ElementContainer {
         // null-Elemente in der Liste knickpunkte
         // daher hat AXS hier mal das Löschen eingefügt. Eigentlich sollte das
         // aber nicht nötig sein, weil das nur sie Symptome abstellt
-        for (int i = bendpointContainers.size() - 1; i >= 0; i--) {
-            if (bendpointContainers.get(i) == null) {
-                bendpointContainers.remove(i);
+        for (int i = bendpoints.size() - 1; i >= 0; i--) {
+            if (bendpoints.get(i) == null) {
+                bendpoints.remove(i);
             }
         }
 
-        if (!bendpointContainers.isEmpty()) {
-            int i = bendpointContainers.size() - 1;
+        if (!bendpoints.isEmpty()) {
+            int i = bendpoints.size() - 1;
             int left_x = kc1.getX();
             int left_y = kc1.getY();
-            BendpointContainer bendpointContainer = bendpointContainers.get(0);
+            BendpointContainer bendpointContainer = bendpoints.get(0);
             int right_x = bendpointContainer.getX();
             int right_y = bendpointContainer.getY();
 
@@ -268,8 +268,8 @@ public class EdgeContainer extends ElementContainer {
 
             left_x = kc2.getX();
             left_y = kc2.getY();
-            right_x = bendpointContainers.get(i).getX();
-            right_y = bendpointContainers.get(i).getY();
+            right_x = bendpoints.get(i).getX();
+            right_y = bendpoints.get(i).getY();
 
             middle_x = left_x;
             middle_y = left_y;
@@ -333,13 +333,13 @@ public class EdgeContainer extends ElementContainer {
         int lstarty = 0;
         int lendx = 0;
         int lendy = 0;
-        if (bendpointContainers.size() > 0) {
-            int i = bendpointContainers.size() - 1;
-            lstartx = bendpointContainers.get(i).getX();
-            lstarty = bendpointContainers.get(i).getY();
+        if (bendpoints.size() > 0) {
+            int i = bendpoints.size() - 1;
+            lstartx = bendpoints.get(i).getX();
+            lstarty = bendpoints.get(i).getY();
             rad2 = Math.atan2(endy - lstarty, endx - lstartx) + Math.PI / 2;
-            lendx = bendpointContainers.get(0).getX();
-            lendy = bendpointContainers.get(0).getY();
+            lendx = bendpoints.get(0).getX();
+            lendy = bendpoints.get(0).getY();
             rad1 = Math.atan2(lendy - starty, lendx - startx) + Math.PI / 2;
         } else {
             rad2 = Math.atan2(endy - starty, endx - startx) + Math.PI / 2;
@@ -400,9 +400,9 @@ public class EdgeContainer extends ElementContainer {
                 if (startC == endC) {
                     continue;
                 }
-                Edge tmpKante = (Edge) me.clone();
-                tmpKante.setKnots(startC.getElement(), endC.getElement(), false);
-                EdgeContainer tmpC = new EdgeContainer(tmpKante, doc);
+                Edge tmpEdge = (Edge) me.clone();
+                tmpEdge.setNodes(startC.getElement(), endC.getElement(), false);
+                EdgeContainer tmpC = new EdgeContainer(tmpEdge, doc);
                 tmpC.setColor(Color.gray);
                 ((LayerContainer) containerParent).addTmpEdgeContainer(tmpC);
             }
@@ -425,7 +425,7 @@ public class EdgeContainer extends ElementContainer {
         if (!isVisible()) {
             return false;
         }
-        return getKnickpunktInsertIndex(x, y) >= 0;
+        return getBendpointInsertIndex(x, y) >= 0;
     }
 
     /**
@@ -436,8 +436,8 @@ public class EdgeContainer extends ElementContainer {
      * @param y
      * @return
      */
-    public int getKnickpunktInsertIndex(final int x, final int y) {
-        return getKnickpunktInsertIndex(x, y, TOLERANCE);
+    public int getBendpointInsertIndex(final int x, final int y) {
+        return getBendpointInsertIndex(x, y, TOLERANCE);
     }
 
     /**
@@ -449,19 +449,19 @@ public class EdgeContainer extends ElementContainer {
      * @param tolerance
      * @return
      */
-    private int getKnickpunktInsertIndex(final int x, final int y, final int tolerance) {
+    private int getBendpointInsertIndex(final int x, final int y, final int tolerance) {
         int index = -1;
         int startx = getStartX();
         int starty = getStartY();
-        int numKKnots = bendpointContainers.size();
-        for (int i = 0; i <= numKKnots; i++) {
+        int bendpointCount = bendpoints.size();
+        for (int i = 0; i <= bendpointCount; i++) {
             int endx = 0, endy = 0;
-            if (i == numKKnots) {
+            if (i == bendpointCount) {
                 endx = getEndX();
                 endy = getEndY();
             } else {
-                endx = bendpointContainers.get(i).getX();
-                endy = bendpointContainers.get(i).getY();
+                endx = bendpoints.get(i).getX();
+                endy = bendpoints.get(i).getY();
             }
             if ((int) Line2D.ptSegDist(startx, starty, endx, endy, x, y) <= tolerance) {
                 index = i;
@@ -480,15 +480,15 @@ public class EdgeContainer extends ElementContainer {
      * @param kp
      * @param index
      */
-    public void setKnickpunkt(final BendpointContainer kp, int index) {
+    public void setBendpointContainer(final BendpointContainer kp, int index) {
         if (index == -1) {
             index = 0;
         }
-        while (index >= bendpointContainers.size()) {
-            bendpointContainers.add(null);
+        while (index >= bendpoints.size()) {
+            bendpoints.add(null);
         }
         // System.err.println("AXS_AXSsetKnickpunkt " + getGraphDocument());
-        bendpointContainers.set(index, kp);
+        bendpoints.set(index, kp);
         kp.getBendpoint().setOwner(this);
     }
 
@@ -499,50 +499,50 @@ public class EdgeContainer extends ElementContainer {
      * @param kp
      * @param index
      */
-    public void addKnickpunkt(final BendpointContainer kp, int index) {
+    public void addBendpoint(final BendpointContainer kp, int index) {
         if (index < 0) {
-            index = getKnickpunktInsertIndex(kp.layout.x, kp.layout.y);
+            index = getBendpointInsertIndex(kp.layout.x, kp.layout.y);
         }
         if (index < 0) {
             index = 0;
         }
-        bendpointContainers.add(index, kp);
+        bendpoints.add(index, kp);
         kp.getBendpoint().setOwner(this);
     }
 
     /**
      * @param kp
      */
-    public void removeKnickpunkt(final Bendpoint kp) {
-        bendpointContainers.remove(kp.getContainer(doc));
+    public void removeBendpoint(final Bendpoint kp) {
+        bendpoints.remove(kp.getContainer(doc));
     }
 
     /**
      * @return
      */
     public Iterable<BendpointContainer> iterateBendpointContainers() {
-        return bendpointContainers;
+        return bendpoints;
     }
 
     public int indexOfBendpointContainer(final BendpointContainer bendpointContainer) {
-        return bendpointContainers.indexOf(bendpointContainer);
+        return bendpoints.indexOf(bendpointContainer);
     }
 
     public int getBendpointContainerCount() {
-        return bendpointContainers.size();
+        return bendpoints.size();
     }
 
     public BendpointContainer getBendpointContainer(final int index) {
-        return bendpointContainers.get(index);
+        return bendpoints.get(index);
     }
 
     /**
      * @param kn
      * @return
      */
-    public int getIndexOfKnickpunkt(final Bendpoint kn) {
-        for (int i = 0; i < bendpointContainers.size(); i++) {
-            if (bendpointContainers.get(i).getBendpoint() == kn) {
+    public int getIndexOfBendpoint(final Bendpoint kn) {
+        for (int i = 0; i < bendpoints.size(); i++) {
+            if (bendpoints.get(i).getBendpoint() == kn) {
                 return i;
             }
         }
@@ -633,14 +633,14 @@ public class EdgeContainer extends ElementContainer {
         startx = getStartX();
         starty = getStartY();
 
-        int numKKnots = bendpointContainers.size();
-        for (int i = 0; i <= numKKnots; i++) {
-            if (i == numKKnots) {
+        int bendpointCount = bendpoints.size();
+        for (int i = 0; i <= bendpointCount; i++) {
+            if (i == bendpointCount) {
                 endx = getEndX();
                 endy = getEndY();
             } else {
-                endx = bendpointContainers.get(i).getX();
-                endy = bendpointContainers.get(i).getY();
+                endx = bendpoints.get(i).getX();
+                endy = bendpoints.get(i).getY();
             }
 
             boolean fatFrame = false;
@@ -682,7 +682,7 @@ public class EdgeContainer extends ElementContainer {
                     gc.rotate(-rad1, startx, starty);
                 }
             }
-            if (i == numKKnots) {
+            if (i == bendpointCount) {
                 boolean forward; //alle Kanten sollen Vorwärts gemalt werden außer DoubleMeaning Edges und HasPart
                 Edge edge = getEdge();
                 if (edge instanceof DoubleMeaningEdge) {
