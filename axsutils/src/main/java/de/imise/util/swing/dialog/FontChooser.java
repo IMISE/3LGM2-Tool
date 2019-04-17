@@ -410,7 +410,7 @@ public class FontChooser extends JDialog {
      * OpenList combines a label, text field and a list.
      */
     public class OpenList extends JPanel implements ListSelectionListener, ActionListener {
-        JList _list;
+        JList<String> _list;
 
         JScrollPane _scroll;
 
@@ -451,10 +451,6 @@ public class FontChooser extends JDialog {
             setSelected("" + value);
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.JComponent#getMaximumSize()
-         */
         @Override
         public Dimension getMaximumSize() {
             Insets ins = getInsets();
@@ -468,10 +464,6 @@ public class FontChooser extends JDialog {
             return new Dimension(w + ins.left + ins.right, h + ins.top + ins.bottom);
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.JComponent#getMinimumSize()
-         */
         @Override
         public Dimension getMinimumSize() {
             Insets ins = getInsets();
@@ -485,10 +477,6 @@ public class FontChooser extends JDialog {
             return new Dimension(w + ins.left + ins.right, h + ins.top + ins.bottom);
         }
 
-        /*
-         * (non-Javadoc)
-         * @see javax.swing.JComponent#getPreferredSize()
-         */
         @Override
         public Dimension getPreferredSize() {
             Insets ins = getInsets();
@@ -520,18 +508,14 @@ public class FontChooser extends JDialog {
             }
         }
 
-        /*
-         * (non-Javadoc)
-         * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-         */
         @Override
         public void actionPerformed(final ActionEvent ev) {
             // sync listbox with textbox
 
-            ListModel model = _list.getModel();
+            ListModel<String> model = _list.getModel();
             String key = _text.getText().toLowerCase();
             for (int i = 0; i < model.getSize(); i++) {
-                String data = (String) model.getElementAt(i);
+                String data = model.getElementAt(i);
                 if (data.toLowerCase().startsWith(key)) {
                     _list.setSelectedValue(data, true);
                     break;
