@@ -98,11 +98,6 @@ public class TLGMServiceMetaModel extends MetaModel {
 
     @Override
     protected final void putOldToNewClassNames() {
-        putOldToNewClassName("KnickpunktKnoten", "Knickpunkt");
-        putOldToNewClassName("TextfeldFach", "Textfield");
-        putOldToNewClassName("TextfeldLog", "Textfield");
-        putOldToNewClassName("TextfeldPhy", "Textfield");
-
         putOldToNewClassName("Aufgabe", "Function");
         putOldToNewClassName("Objekttyp", "ObjectType");
         putOldToNewClassName("Organisationseinheit", "OrganisationalUnit");

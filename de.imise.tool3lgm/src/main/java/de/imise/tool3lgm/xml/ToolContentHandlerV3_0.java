@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -239,10 +240,13 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 Class<? extends ModelElement> elementClass = null;
                 try {
                     String className = atts.getValue("class");
-                    if ("Knickpunkt".equals(className)) { //Knickpunkte umbenannt in Bendpoint
-                        className = Bendpoint.class.getSimpleName();
+                    if (className.startsWith("Knickpunkt")) { //KnickpunktKnoten umbenannt in Knickpunkt umbenannt in Bendpoint
+                        elementClass = Bendpoint.class;
+                    } else if (className.startsWith("Textfeld")) { //TextfeldFach, TextfeldLog und TextfeldPhy umbenannt in Textfield
+                        elementClass = Textfield.class;
+                    } else {
+                        elementClass = getClassForName(className);
                     }
-                    elementClass = getClassForName(className);
                 } catch (Exception e) {
                     throw new SAXException("Klasse für Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
                 }

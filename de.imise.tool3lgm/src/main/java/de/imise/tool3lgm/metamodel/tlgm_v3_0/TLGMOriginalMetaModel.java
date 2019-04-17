@@ -98,10 +98,6 @@ public class TLGMOriginalMetaModel extends MetaModel {
 
     @Override
     protected final void putOldToNewClassNames() {
-        putOldToNewClassName("KnickpunktKnoten", "Knickpunkt");
-        putOldToNewClassName("TextfeldFach", "Textfield");
-        putOldToNewClassName("TextfeldLog", "Textfield");
-        putOldToNewClassName("TextfeldPhy", "Textfield");
         putOldToNewClassName("RawbAwbVerbindung", "RawbRawbVerbindung");
         putOldToNewClassName("EtntKombination", "EreignisNachrichtenTyp");
         putOldToNewClassName("EtdtKombination", "EreignisDokumentenTyp");
