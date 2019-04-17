@@ -3,14 +3,10 @@
  */
 package de.imise.tool3lgm.graphtools.userfield;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.log.Log;
 import de.imise.util.htmlxml.XMLCharacterCoder;
 
 /**
@@ -52,7 +48,6 @@ public class UserFieldTarget implements Cloneable {
         try {
             retVal = (UserFieldTarget) super.clone();
         } catch (Exception e) {
-            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             return null;
         }
         retVal.userFieldToInputValuesMap = userFieldToInputValuesMap == null ? null : new HashMap<>(userFieldToInputValuesMap);
@@ -179,7 +174,7 @@ public class UserFieldTarget implements Cloneable {
      * @param userField <code>UserField</code> für das der berechnete Wert dieses Elementes zurück gegeben werden soll
      * @see #_getUserFieldInputValue(String)
      * @see #_getUserFieldInputValue(UserField)
-     * @see UserField#getValue(ModelElement)
+     * @see UserField#getValue(UserFieldTarget)
      * @return den für den übergebenen HashString eines Formel-UserFields vermerkten berechenten Wert oder <code>EMPTY_STRING</code>, wenn kein Wert
      *         vermerk ist
      */
