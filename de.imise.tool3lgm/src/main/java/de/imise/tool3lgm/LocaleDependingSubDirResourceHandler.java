@@ -15,7 +15,7 @@ import java.util.jar.JarFile;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
- * Klasse zum Laden von Resourcen, die in sprachabhängigen Unterverzeichnissen in den Resoruces liegen.
+ * Klasse zum Laden von Resourcen, die in sprachabhängigen Unterverzeichnissen in den Resources liegen.
  * Diese Klasse bietet im Grunde nur eine Funktion, die den Zugriff auf diese Resourcen zur Laufzeit aus der Entwicklungsumgebung heraus
  * und aus dem deploiten jar-File heraus managed.
  *
