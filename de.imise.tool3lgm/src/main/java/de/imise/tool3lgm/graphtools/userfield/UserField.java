@@ -15,7 +15,6 @@ import java.util.StringTokenizer;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.HashStringGenerator;
@@ -28,30 +27,30 @@ import de.imise.util.HashStringGenerator;
  *
  * @author Thomas Rudert
  */
-public final class UserField implements Cloneable, Comparator<ModelElement>, HashSource {
+public final class UserField implements Cloneable, Comparator<UserFieldTarget>, HashSource {
 
     public static enum Style {
         SEPARATOR {
             @Override
-            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return 0;
             }
         },
         SINGLE_LINE {
             @Override
-            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return alphabeticalCompare(uf, me1, me2);
             }
         },
         MULTI_LINE {
             @Override
-            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return alphabeticalCompare(uf, me1, me2);
             }
         },
         CHECK_BOX {
             @Override
-            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 String v1 = uf.getValue(me1);
                 String v2 = uf.getValue(me2);
                 if (v1 == null) {
@@ -70,13 +69,13 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
         },
         COMBO_BOX {
             @Override
-            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return alphabeticalCompare(uf, me1, me2);
             }
         },
         RADIO_BUTTON {
             @Override
-            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 String v1 = uf.getValue(me1);
                 String v2 = uf.getValue(me2);
 
@@ -97,31 +96,31 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
         },
         HYPERLINK {
             @Override
-            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return alphabeticalCompare(uf, me1, me2);
             }
         },
         ID {
             @Override
-            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return alphabeticalCompare(uf, me1, me2);
             }
         },
         CLASSIFICATION_NUMBER {
             @Override
-            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return numberCompare(uf, me1, me2);
             }
         },
         CLASSIFICATION_NUMBER_FORMULA {
             @Override
-            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return numberCompare(uf, me1, me2);
             }
         },
         FORMAT {
             @Override
-            int compare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+            int compare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
                 return alphabeticalCompare(uf, me1, me2);
             }
         },
@@ -145,10 +144,10 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
          * @param me
          * @return
          */
-        abstract int compare(UserField uf, ModelElement me1, ModelElement me2);
+        abstract int compare(UserField uf, UserFieldTarget me1, UserFieldTarget me2);
 
         /** Alphabetischer Vergleich der jeweiligen Werte (siehe {@link String#compareTo(String)}) */
-        private static int alphabeticalCompare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+        private static int alphabeticalCompare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
             String v1 = uf.getValue(me1);
             String v2 = uf.getValue(me2);
             if (v1 == null) {
@@ -161,7 +160,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
         }
 
         /** Vergleich der jeweiligen Werte für Kennzahlen/Kennzahlformeln */
-        private static int numberCompare(final UserField uf, final ModelElement me1, final ModelElement me2) {
+        private static int numberCompare(final UserField uf, final UserFieldTarget me1, final UserFieldTarget me2) {
             String v1 = uf.getValue(me1);
             String v2 = uf.getValue(me2);
             if (v1 == null) {
@@ -1034,7 +1033,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
      * @param me Modellelement, für das der formatierte Wert zurück gegeben werden soll
      * @return
      */
-    public String getFormattedValue(final ModelElement me) {
+    public String getFormattedValue(final UserFieldTarget me) {
         return getFormattedValue(me, false);
     }
 
@@ -1045,7 +1044,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
      * @param appendUnit wenn <code>true</code> wird auch die Einheit an den Rückgabewert angehängt
      * @return
      */
-    public String getFormattedValue(final ModelElement me, final boolean appendUnit) {
+    public String getFormattedValue(final UserFieldTarget me, final boolean appendUnit) {
         String value = getValue(me);
         return getFormattedValue(value, appendUnit);
     }
@@ -1053,7 +1052,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
     /**
      * Formatiert den über <code>o.toString()</code> erhaltenen String gemäß der Formatvorlage.
      *
-     * @see #getFormattedValue(ModelElement, boolean)
+     * @see #getFormattedValue(UserFieldTarget, boolean)
      * @param o
      * @param appendUnit
      * @return
@@ -1135,9 +1134,9 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
      * @return
      */
     @Override
-    public int compare(final ModelElement o1, final ModelElement o2) {
-        Class<? extends ModelElement> class1 = o1.getClass();
-        Class<? extends ModelElement> class2 = o2.getClass();
+    public int compare(final UserFieldTarget o1, final UserFieldTarget o2) {
+        Class<? extends UserFieldTarget> class1 = o1.getClass();
+        Class<? extends UserFieldTarget> class2 = o2.getClass();
         if (!class1.equals(class2)) {
             throw new ClassCastException("Die Modelelemente sind Instanzen verschiedener Klassen.");
         }
@@ -1237,7 +1236,7 @@ public final class UserField implements Cloneable, Comparator<ModelElement>, Has
      * @param elementClass
      * @return
      */
-    public boolean isUserFieldFor(final Class<? extends ModelElement> elementClass) {
+    public boolean isUserFieldFor(final Class<? extends UserFieldTarget> elementClass) {
         for (UserField uf : definitions.getUserFields(elementClass)) {
             if (uf == this) {
                 return true;
