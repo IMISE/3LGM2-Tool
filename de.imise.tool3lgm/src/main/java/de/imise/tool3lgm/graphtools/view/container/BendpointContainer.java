@@ -7,7 +7,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 
@@ -23,7 +23,7 @@ public class BendpointContainer extends NodeContainer {
         super();
     }
 
-    public BendpointContainer(final Knickpunkt kp, final GraphDocument gd) {
+    public BendpointContainer(final Bendpoint kp, final GraphDocument gd) {
         super(kp, new GraphElementLayout(), gd);
         layout.bg_color = new Color(0, 0, 0, 0);
         layout.width = 10;
@@ -33,8 +33,8 @@ public class BendpointContainer extends NodeContainer {
     /**
      * @return
      */
-    public Knickpunkt getKnickpunktKnoten() {
-        return (Knickpunkt) me;
+    public Bendpoint getKnickpunktKnoten() {
+        return (Bendpoint) me;
     }
 
     @Override

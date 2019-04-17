@@ -21,8 +21,8 @@ import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -239,6 +239,9 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 Class<? extends ModelElement> elementClass = null;
                 try {
                     String className = atts.getValue("class");
+                    if ("Knickpunkt".equals(className)) { //Knickpunkte umbenannt in Bendpoint
+                        className = Bendpoint.class.getSimpleName();
+                    }
                     elementClass = getClassForName(className);
                 } catch (Exception e) {
                     throw new SAXException("Klasse für Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
@@ -573,7 +576,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     if (isCopyAndPaste() || !szenario.equals(doc)) {
                         //Knickpunkte werden erst zum Layer hinzugefügt, wenn die Kante zu dem sie gehören auch
                         //hinzugefügt wurde. Das passiert beim Ende des szenaro-Tags
-                        if (!(me instanceof Knickpunkt)) {
+                        if (!(me instanceof Bendpoint)) {
                             layer.add(container);
                             //alle Elemente, bei denen beim Einlesen der Layer noch nicht feststand, können jetzt, da die verbundenen Elemente und der
                             //Layer nun bekannt sind, auch ins Hauptmodell eingetragen werden -> jetzt mainDocContainer zum mainDoc hinzufügen
@@ -757,7 +760,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("szenario")) {
                 for (BendpointContainer benpointContainer : hashToSzenarioBendpointContainer.values()) {
-                    Knickpunkt bendpoint = benpointContainer.getKnickpunktKnoten();
+                    Bendpoint bendpoint = benpointContainer.getKnickpunktKnoten();
                     String bendpointEdgeHash = bendpoint.getKantenHash();
 
                     if (isCopyAndPaste()) {
@@ -842,7 +845,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     Static.setProgressDialogStatusLabel("labelAddBendpoints");
                     for (ElementContainer ec : hashToMainDocContainer.values()) {
                         if (ec instanceof BendpointContainer) {
-                            Knickpunkt bendpoint = ((BendpointContainer) ec).getKnickpunktKnoten();
+                            Bendpoint bendpoint = ((BendpointContainer) ec).getKnickpunktKnoten();
                             bendpoint.putXMLFieldString("kanteHash", oldToNewHashString.get(bendpoint.getKantenHash()));
                         }
                     }

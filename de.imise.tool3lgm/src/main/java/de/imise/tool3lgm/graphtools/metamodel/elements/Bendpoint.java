@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 /**
  * @author imi0wendt (01.11.2004)
  */
-public class Knickpunkt extends Node {
+public class Bendpoint extends Node {
 
     /**
      * ID der Kante, zu der der Knickpunkt gehört
@@ -28,7 +28,7 @@ public class Knickpunkt extends Node {
     /**
      *
      */
-    public Knickpunkt() {
+    public Bendpoint() {
         super();
     }
 

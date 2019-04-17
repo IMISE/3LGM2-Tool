@@ -19,7 +19,7 @@ import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -172,7 +172,7 @@ public final class GDCollectionImExportHandler {
 
                 for (BendpointContainer importKC : importLayerContainer.getBendpointContainers()) {
                     ModelElement element = mainDoc.findKnickpunktCoded(importKC.getElement().getHashString());
-                    EdgeContainer kc = newSzenario.findEdgeContainerCoded(((Knickpunkt) element).getKantenHash());
+                    EdgeContainer kc = newSzenario.findEdgeContainerCoded(((Bendpoint) element).getKantenHash());
                     if (kc == null) {
                         continue;
                     }

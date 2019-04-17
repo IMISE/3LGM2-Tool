@@ -25,7 +25,7 @@ import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisD
 import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -510,7 +510,7 @@ public class LGMGraphDocument extends GraphDocument {
                             layer.add(newMainC);
                             if (newE instanceof Edge) {
                                 edges.add((Edge) newE);
-                            } else if (newE instanceof Knickpunkt) {
+                            } else if (newE instanceof Bendpoint) {
                                 knickpunkte.add((BendpointContainer) newC);
                             } else {
                                 if (!newE.isUnique() && dest instanceof Szenario) {
@@ -614,7 +614,7 @@ public class LGMGraphDocument extends GraphDocument {
      * @param saveInBoth
      */
     private void joinElements(final ModelElement me1, final ModelElement me2, final GraphDocument doc2, final boolean saveInBoth) {
-        if (me1 instanceof Knickpunkt) {
+        if (me1 instanceof Bendpoint) {
             return;
         }
 

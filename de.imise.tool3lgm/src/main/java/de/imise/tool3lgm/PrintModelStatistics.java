@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -106,7 +106,7 @@ public class PrintModelStatistics {
                 } else {
                     System.err.println();
                 }
-                if (Knickpunkt.class.isAssignableFrom(elementClass)) {
+                if (Bendpoint.class.isAssignableFrom(elementClass)) {
                     bendCount += count;
                     bendContFromDoc += contFromDoc;
                     bendContFromMe += contFromMe;

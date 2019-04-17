@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -46,7 +46,7 @@ public class GraphDocumentHandler {
             return new ArrayList<>(0);
         }
         //Problem: Suche nach Elemenklasse inkl. Unterklassen, wobei Unterklassen unique sein können -> im doc und im mainDoc suchen
-        if (!includeSubClasses || clazz == Knickpunkt.class) {
+        if (!includeSubClasses || clazz == Bendpoint.class) {
             List<Class<? extends ModelElement>> searchClasses = new ArrayList<>();
             searchClasses.add(clazz);
             return getModelItemsForClasses(ModelConstants.isUnique(clazz) ? doc.getCollection().getMainGraphDocument() : doc, searchClasses, absolutePartsOnly, alphabetical);
@@ -116,7 +116,7 @@ public class GraphDocumentHandler {
         boolean searchEdges = false;
         //zu durchsuchende ElementContainer-Listen bestimmen
         for (Class<? extends ModelElement> searchClass : searchClasses) {
-            if (Knickpunkt.class == searchClass) {
+            if (Bendpoint.class == searchClass) {
                 searchBendpoints = true;
             }
             if (!searchNodes && isNodeType(searchClass)) {

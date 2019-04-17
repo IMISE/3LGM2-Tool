@@ -11,7 +11,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -54,7 +54,7 @@ public abstract class GraphViewDefinition {
             allPaintableNodesSetBuilder.add(paintableNodeClass);
         }
         //Diese Klassen müssen noch hinzugefügt werden, da sie auch dargestellt werden
-        allPaintableNodesSetBuilder.add(Knickpunkt.class);
+        allPaintableNodesSetBuilder.add(Bendpoint.class);
         allPaintableNodesSetBuilder.add(Textfield.class);
         allPaintableNodes = allPaintableNodesSetBuilder.build();
     }
@@ -116,7 +116,7 @@ public abstract class GraphViewDefinition {
 
     private final void initDefaultElementLayoutInternal() {
         setDefaultLayout(Textfield.class, GraphElementLayout.SHAPE.rechteck, new Color(0, 0, 0, 0));
-        defaultElementsLayoutDefinition.setStandardSize(Knickpunkt.class, 10, 10);
+        defaultElementsLayoutDefinition.setStandardSize(Bendpoint.class, 10, 10);
     }
 
     /** Initialisiert die Defaults für das Layout der Elemente */

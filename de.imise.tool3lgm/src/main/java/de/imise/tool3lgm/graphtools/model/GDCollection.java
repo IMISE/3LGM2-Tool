@@ -104,7 +104,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -784,12 +784,12 @@ public final class GDCollection extends UserFieldTarget {
                 dialog.performOK();
             }
             //Knickpunkte kann man gleich löschen
-            if (me instanceof Knickpunkt) {
+            if (me instanceof Bendpoint) {
                 ElementContainer kpc = me.getContainer(gdoc);
                 if (kpc == null) {
                     kpc = me.getContainer(doc);
                 }
-                removeBendpoint((Knickpunkt) me, pid);
+                removeBendpoint((Bendpoint) me, pid);
                 allElementsToDelete.remove(i--);
                 continue;
             } else if (me instanceof Edge) {
@@ -888,7 +888,7 @@ public final class GDCollection extends UserFieldTarget {
         }
         //jetzt alle Node im Hauptmodell löschen
         for (ModelElement me : allElementsToDelete) {
-            if (me instanceof Edge || me instanceof Knickpunkt) {
+            if (me instanceof Edge || me instanceof Bendpoint) {
                 continue;
             }
             Class<? extends ModelElement> meClass = me.getClass();
@@ -912,13 +912,13 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * Entfernt den übergebenen {@link Knickpunkt} aus dem Haupt-{@link GraphDocument} und
+     * Entfernt den übergebenen {@link Bendpoint} aus dem Haupt-{@link GraphDocument} und
      * dem Szenario, in dem er dargestellt wird (das ist immer nur 1). Es werden die Undo-Redo-Kommandos geloggt.
      *
      * @param kpk
      * @param pid
      */
-    public final void removeBendpoint(final Knickpunkt bendpoint, final int pid) {
+    public final void removeBendpoint(final Bendpoint bendpoint, final int pid) {
         BendpointContainer bendpointContainer = bendpoint.getBendpointContainer();
         if (bendpointContainer == null) {
             return;
@@ -983,7 +983,7 @@ public final class GDCollection extends UserFieldTarget {
             }
             edgeContainer = (EdgeContainer) szen.getLastSelected();
         }
-        Knickpunkt bendpoint = new Knickpunkt();
+        Bendpoint bendpoint = new Bendpoint();
         bendpoint.setName(doc.getNextNewName(bendpoint.getClass()));
         bendpointContainer = new BendpointContainer(bendpoint, szen);
         if (!isNullOrEmpty(bendpointHashString)) {
@@ -1025,7 +1025,7 @@ public final class GDCollection extends UserFieldTarget {
      */
     public NodeContainer createKnotenWithContainer(final Class<? extends Node> elementClass, final String name, final String description, final String hashString, final int pid) {
         //Knickpunkte kann man über diese Funktion nicht anlegen
-        if (Knickpunkt.class.isAssignableFrom(elementClass)) {
+        if (Bendpoint.class.isAssignableFrom(elementClass)) {
             return null;
         }
         Node me = null;
@@ -1123,7 +1123,7 @@ public final class GDCollection extends UserFieldTarget {
             nc = kc;
         } else {
             if (kc instanceof BendpointContainer) {
-                nc = new BendpointContainer((Knickpunkt) kc.getKnoten(), doc);
+                nc = new BendpointContainer((Bendpoint) kc.getKnoten(), doc);
             } else if (isInterLayerStartClass(kc.getElement().getClass())) {
                 kc = new InterLayerConnectedNodeContainer(kc.getKnoten(), doc);
             } else {
@@ -1890,7 +1890,7 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
             for (BendpointContainer bc : lc.getBendpointContainers()) {
-                Knickpunkt bendpoint = bc.getKnickpunktKnoten();
+                Bendpoint bendpoint = bc.getKnickpunktKnoten();
                 for (GraphDocument doc : export) {
                     if (doc.isMyElement(bendpoint)) {
                         if (!elements.contains(bendpoint)) {
@@ -1911,7 +1911,7 @@ public final class GDCollection extends UserFieldTarget {
         for (ElementContainer ec : elements) {
             ModelElement me = ec.getElement();
             if (!result.contains(me)) {
-                if (!(me instanceof Knickpunkt)) {
+                if (!(me instanceof Bendpoint)) {
                     result.add(me);
                     resolveCopyDependencies(me, result, userFields);
                 }
@@ -1926,7 +1926,7 @@ public final class GDCollection extends UserFieldTarget {
      * @return HashSet mit den HashStrings der gefundenen Elementen
      */
     private void resolveCopyDependencies(final ModelElement me, final List<ModelElement> elements, final Set<UserField> userFields) {
-        if (me instanceof Knickpunkt) {
+        if (me instanceof Bendpoint) {
             return;
         }
         for (UserField userField : me.getUserFieldInputValueKeys()) {
@@ -1934,7 +1934,7 @@ public final class GDCollection extends UserFieldTarget {
         }
         if (me instanceof Edge) {
             for (BendpointContainer kpC : doc.getLayer(me.layerFor()).getBendpointContainers()) {
-                Knickpunkt kp = kpC.getKnickpunktKnoten();
+                Bendpoint kp = kpC.getKnickpunktKnoten();
                 String kantenHash = kp.getKantenHash();
                 if (kantenHash != null && kantenHash.equals(me.getHashString())) {
                     if (!elements.contains(kp)) {

@@ -27,7 +27,7 @@ import com.google.common.collect.Table.Cell;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -409,8 +409,8 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                     writeModelElementField("optional", Boolean.TRUE.toString());
                 }
             }
-        } else if (me instanceof Knickpunkt) {
-            Knickpunkt bendpoint = (Knickpunkt) me;
+        } else if (me instanceof Bendpoint) {
+            Bendpoint bendpoint = (Bendpoint) me;
             EdgeContainer edgeContainer = bendpoint.getOwner();
             writeModelElementField("kantenHash", edgeContainer.getHashString());
             writeModelElementField("index", edgeContainer.getIndexOfKnickpunkt(bendpoint));

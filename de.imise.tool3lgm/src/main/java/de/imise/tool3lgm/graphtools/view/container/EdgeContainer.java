@@ -21,7 +21,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -513,7 +513,7 @@ public class EdgeContainer extends ElementContainer {
     /**
      * @param kp
      */
-    public void removeKnickpunkt(final Knickpunkt kp) {
+    public void removeKnickpunkt(final Bendpoint kp) {
         knickpunkte.remove(kp.getContainer(doc));
     }
 
@@ -540,7 +540,7 @@ public class EdgeContainer extends ElementContainer {
      * @param kn
      * @return
      */
-    public int getIndexOfKnickpunkt(final Knickpunkt kn) {
+    public int getIndexOfKnickpunkt(final Bendpoint kn) {
         for (int i = 0; i < knickpunkte.size(); i++) {
             if (knickpunkte.get(i).getKnickpunktKnoten() == kn) {
                 return i;

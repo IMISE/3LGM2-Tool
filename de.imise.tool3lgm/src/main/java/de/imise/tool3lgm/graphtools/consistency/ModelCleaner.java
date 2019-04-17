@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -163,7 +163,7 @@ public class ModelCleaner {
                 for (int i = lc.getBendpointContainerCount() - 1; i >= 0; i--) {
                     boolean ok = true;
                     BendpointContainer bpc = lc.getBendpointContainer(i);
-                    Knickpunkt bp = bpc.getKnickpunktKnoten(); //das hier ist der Container aus dem Hauptdokument
+                    Bendpoint bp = bpc.getKnickpunktKnoten(); //das hier ist der Container aus dem Hauptdokument
                     if (bp.getContainerCount() != 2) {
                         ok = false;
                     } else {

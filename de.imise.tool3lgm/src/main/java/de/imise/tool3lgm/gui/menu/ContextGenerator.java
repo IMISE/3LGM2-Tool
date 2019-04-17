@@ -96,7 +96,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
@@ -1361,7 +1361,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             //der BendpointContainer, der ja ein Knotenkontainer ist und ein sinnloses Kontextmenü
             //anzeigen würde
             if (mc instanceof BendpointContainer) {
-                EdgeContainer kc = ((Knickpunkt) mc.getElement()).getOwner();
+                EdgeContainer kc = ((Bendpoint) mc.getElement()).getOwner();
                 if (doc.isSelected(kc)) {
                     if (left_button) {
                         doc.select(mc, TransactionManager.STANDARD_PID);

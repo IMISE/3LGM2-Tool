@@ -52,7 +52,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -3289,7 +3289,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param hashString
      * @return
      */
-    public Knickpunkt findKnickpunktCoded(final String hashString) {
+    public Bendpoint findKnickpunktCoded(final String hashString) {
         if (getCollection().getMainGraphDocument() != this) {
             return getCollection().getMainGraphDocument().findKnickpunktCoded(hashString);
         }
@@ -4497,7 +4497,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return null;
         }
         ModelElement me = ec.getElement();
-        if (me instanceof Knickpunkt || me.isUnique()) {
+        if (me instanceof Bendpoint || me.isUnique()) {
             return null;
         }
 
@@ -4704,7 +4704,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
             List<Iterable<? extends ElementContainer>> layerElements = new ArrayList<>();
             //Knickpunkte
-            if (clazz == Knickpunkt.class) {
+            if (clazz == Bendpoint.class) {
                 layerElements.add(lc.getBendpointContainers());
             } else if (ModelConstants.isNodeType(clazz)) {
                 layerElements.add(lc.getNodeContainersAlphabetical());
@@ -4742,7 +4742,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         //wenn alphabetisch sortiert werden soll und andere Elemente als die bereits in der aplhabetisch sortierten
         //Knotenliste enthaltenen zur Rückgabeliste hinzugefügt wurden
-        if (clazz == Knickpunkt.class || !ModelConstants.isNodeType(clazz)) {
+        if (clazz == Bendpoint.class || !ModelConstants.isNodeType(clazz)) {
             //aplhabetisch sortieren
             Alphabetical.sort(objects);
         }
@@ -4922,7 +4922,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 if (kpC == null) {
                     continue;
                 }
-                Knickpunkt kp = kpC.getKnickpunktKnoten();
+                Bendpoint kp = kpC.getKnickpunktKnoten();
                 if (kp == null) {
                     continue;
                 }

@@ -15,7 +15,7 @@ import java.util.List;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -185,7 +185,7 @@ public class LayerContainer extends ElementContainer {
         if (ReflectionUtils.isAssignable(elementClass, Edge.class)) {
             counter += countType(edgeContainers, elementClass);
         }
-        if (ReflectionUtils.isAssignable(elementClass, Knickpunkt.class)) {
+        if (ReflectionUtils.isAssignable(elementClass, Bendpoint.class)) {
             counter += countType(bendpointContainers, elementClass);
         }
         return counter;
