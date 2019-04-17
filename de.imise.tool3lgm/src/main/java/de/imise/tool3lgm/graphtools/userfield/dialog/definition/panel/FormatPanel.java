@@ -15,7 +15,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Vector;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -107,7 +107,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
     /**
      *
      */
-    private final HashSet<String> unitBoxElements = new HashSet<>();
+    private final Vector<String> unitBoxElements = new Vector<>();
     /**
      * Wenn Formate über dieses Panel gelöscht werden, dann wird in dieser Map jeweils in einer <code>ArrayList</code> gespeichert, welche UserFields
      * dieses Format benutzt haben. Wenn Abbrechen aufgerufen wird, müssen die Formate wieder alle gesetzt werden.
@@ -147,9 +147,8 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         String currency = Currency.getInstance(getLocale()).getSymbol(getLocale());
         unitBoxElements.add(currency);
         unitBoxElements.add("%");
-        DefaultComboBoxModel dcbm = new DefaultComboBoxModel(unitBoxElements.toArray());
-
-        unitBox.setModel(dcbm);
+        DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(unitBoxElements);
+        unitBox.setModel(comboBoxModel);
 
         refreshButton = new JButton(getResString("refreshButtonText"));
         refreshButton.addActionListener(this);
