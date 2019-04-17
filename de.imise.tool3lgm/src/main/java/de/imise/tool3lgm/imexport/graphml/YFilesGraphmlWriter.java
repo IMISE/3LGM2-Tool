@@ -15,8 +15,8 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
+import de.imise.tool3lgm.graphtools.view.container.EdgeContainer.Bendpoint;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -426,9 +426,9 @@ public class YFilesGraphmlWriter extends GraphmlWriter {
         if (ec.getBendpointContainerCount() > 0) {
             writeStartElementDataKey(YFilesGraphmlWriterDataKeys.edge_EdgeGeometry.getKeyID()); // start data
             writeStartElement("x:List"); // start x:List
-            for (BendpointContainer bc : ec.iterateBendpointContainers()) {
-                String x = String.valueOf(bc.getX() + currentSzenarioLayerElementsOffsetX);
-                String y = String.valueOf(bc.getY() + currentSzenarioLayerElementsOffsetY);
+            for (Bendpoint bc : ec.iterateBendpointContainers()) {
+                String x = String.valueOf(bc.x + currentSzenarioLayerElementsOffsetX);
+                String y = String.valueOf(bc.y + currentSzenarioLayerElementsOffsetY);
                 writeEmptyElement("y:Bend", "Location", x + "," + y);
             }
             writeEndElement(); // end x:List

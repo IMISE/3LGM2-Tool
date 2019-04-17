@@ -322,7 +322,7 @@ public class Static {
         if (doc == null) {
             return new ArrayList<>(0);
         }
-        return doc.getSelectedRealElementContainerIterable();
+        return doc.iterateSelectedRealElementContainer();
     }
 
     // MessageDialoge //

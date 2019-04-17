@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -51,13 +50,6 @@ public class PrintModelStatistics {
                 //Anzahl der ElementContainer der Modellelemente im Gesamtmodell hochzählen
                 for (GraphDocument doc : docs) {
                     for (LayerContainer lcc : doc.getLayers()) {
-                        for (ElementContainer layerEc : lcc.getBendpointContainers()) {
-                            if (layerEc.getElement() == me) {
-                                count = class2ContainerCountFromGraphDocuments.get(meClass);
-                                count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);
-                                class2ContainerCountFromGraphDocuments.put(meClass, count);
-                            }
-                        }
                         for (ElementContainer layerEc : lcc.getNodeContainersAlphabetical()) {
                             if (layerEc.getElement() == me) {
                                 count = class2ContainerCountFromGraphDocuments.get(meClass);
@@ -81,7 +73,6 @@ public class PrintModelStatistics {
 
             int nodeCount = 0, nodeContFromDoc = 0, nodeContFromMe = 0;
             int edgeCount = 0, edgeContFromDoc = 0, edgeContFromMe = 0;
-            int bendCount = 0, bendContFromDoc = 0, bendContFromMe = 0;
 
             System.err.println("Modellstatistik: " + gdcoll.getName());
             System.err.println("-------------------------------------");
@@ -106,11 +97,7 @@ public class PrintModelStatistics {
                 } else {
                     System.err.println();
                 }
-                if (Knickpunkt.class.isAssignableFrom(elementClass)) {
-                    bendCount += count;
-                    bendContFromDoc += contFromDoc;
-                    bendContFromMe += contFromMe;
-                } else if (Node.class.isAssignableFrom(elementClass)) {
+                if (Node.class.isAssignableFrom(elementClass)) {
                     nodeCount += count;
                     nodeContFromDoc += contFromDoc;
                     nodeContFromMe += contFromMe;
@@ -122,7 +109,6 @@ public class PrintModelStatistics {
             }
             System.err.println("Node      " + nodeCount + " " + nodeContFromDoc + " " + nodeContFromMe);
             System.err.println("Kanten      " + edgeCount + " " + edgeContFromDoc + " " + edgeContFromMe);
-            System.err.println("Knickpunkte " + bendCount + " " + bendContFromDoc + " " + bendContFromMe);
 
             System.err.println();
         }

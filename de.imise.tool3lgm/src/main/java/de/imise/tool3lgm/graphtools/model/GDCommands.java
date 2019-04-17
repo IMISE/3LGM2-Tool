@@ -85,6 +85,7 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_MOVE_ORDER, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
 
     MODEL_ACTION_INSERT_BENDING_POINT,
+    MODEL_ACTION_REMOVE_BENDING_POINT,
 
     MODEL_ACTION_SET_USER_FIELD_VALUE,
     MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT,

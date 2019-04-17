@@ -15,12 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import com.google.common.collect.Lists;
-
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -29,7 +26,6 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -88,7 +84,7 @@ public class ModelCleaner {
         // Mist und wird hier berichtigt.
         for (GraphDocument doc : docs) {
             for (LayerContainer lc : doc.getLayers()) {
-                List<ElementContainer> allEc = new ArrayList<>(lc.getNodeContainerCount() + lc.getEdgeContainerCount() + lc.getBendpointContainerCount());
+                List<ElementContainer> allEc = new ArrayList<>(lc.getNodeContainerCount() + lc.getEdgeContainerCount());
                 lc.addAllContainers(allEc);
                 // für alle Container des aktuellen GraphDocuments
                 for (ElementContainer layerElemCont : allEc) {
@@ -149,48 +145,6 @@ public class ModelCleaner {
                             print(me, doc, 4);
                         }
                         lc.add(ec);
-                    }
-                }
-            }
-        }
-
-        // Alle Knickpunkte löschen, die keiner Edge zugeordnet sind. So etwas trat in alten Modellen
-        // auf und sollte gleich am Anfang ausgeschlossen werden
-        List<GraphDocument> allDocs = Lists.newArrayList(gdcoll.getSzenarios());
-        allDocs.add(mainDoc);
-        for (GraphDocument doc : allDocs) {
-            for (LayerContainer lc : doc.getLayers()) {
-                for (int i = lc.getBendpointContainerCount() - 1; i >= 0; i--) {
-                    boolean ok = true;
-                    BendpointContainer bpc = lc.getBendpointContainer(i);
-                    Knickpunkt bp = bpc.getKnickpunktKnoten(); //das hier ist der Container aus dem Hauptdokument
-                    if (bp.getContainerCount() != 2) {
-                        ok = false;
-                    } else {
-                        EdgeContainer ec = bp.getOwner(); //das hier ist der Container aus dem (einzigen) Szenario, in dem der Knickpunkt vorkommt
-                        // wenn der Owner null ist oder der Knickpunktcontainer nicht richtig in der
-                        // KnickpunktContainerListe seines Owners steht -> löschen
-                        if (ec == null) {
-                            // System.err.println("nullllll");
-                            // System.err.println(gdcoll.getSzenario(i));
-                            ok = false;
-                        } else {
-                            GraphDocument ecDoc = ec.getGraphDocument(); // das hier muss ein Szeario sein, weil der Owner des Knickpunktes nur in einem Szenario sein kann
-                            if (ecDoc == null || !(ecDoc instanceof Szenario)) {
-                                ok = false;
-                            } else {
-                                ElementContainer szenBpc = bp.getContainer(ecDoc);
-                                if (ec.indexOfBendpointContainer((BendpointContainer) szenBpc) == -1) {
-                                    // System.err.println("owner kennt den nicht");
-                                    // System.err.println(gdcoll.getSzenario(i));
-                                    ok = false;
-                                }
-                            }
-                        }
-                    }
-
-                    if (!ok) {
-                        lc.remove(bpc);
                     }
                 }
             }

@@ -82,14 +82,6 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     protected ElementContainerTreeNode treeNode = null;
 
     /**
-     *
-     */
-    public NodeContainer() {
-        super();
-        init();
-    }
-
-    /**
      * @param neu
      * @param gd
      */
@@ -121,7 +113,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      *
      */
     private void init() {
-        if (doc == null) {
+        if (doc == null || me == null) {
             return;
         }
         if (ModelConstants.hasSortedEdgeClassesToPaintable(me.getClass())) {
@@ -145,9 +137,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             //			specialInfoTargets.addAll(me.getConnectedContainer(Aufgabe.class, doc, null, Doppelkante.FORWARD, false));
         }
 
-        if (me != null) {
-            linkWithSzenario(((Node) me).getAssociatedDoc() != null);
-        }
+        linkWithSzenario(((Node) me).getAssociatedDoc() != null);
     }
 
     @Override

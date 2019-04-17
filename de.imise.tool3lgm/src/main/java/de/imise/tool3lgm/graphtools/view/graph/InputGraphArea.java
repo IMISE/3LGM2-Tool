@@ -36,7 +36,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -153,6 +152,9 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      */
     private boolean was_selected = false;
 
+    /**
+     *
+     */
     public InputGraphArea() {
         super(null);
     }
@@ -281,34 +283,41 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      * @return
      *         die übergebenen {@link Rectangle} oder wenn <code>null</code> übergeben wurde eine neue {@link Rectangle}
      */
-    private static final Rectangle getIncludingRectangle(final Rectangle rect, final ElementContainer ec) {
+    private static final Rectangle getIncludingRectangle(Rectangle rect, final ElementContainer ec) {
+        int x = ec.getX();
+        int y = ec.getY();
         int w = ec.getWidth();
         int h = ec.getHeight();
-        int realx1 = ec.getX() - (w >> 1);
-        int realy1 = ec.getY() - (h >> 1);
-        int realx2 = realx1 + w;
-        int realy2 = realy1 + h;
-        return getIncludingRectangle(rect, realx1, realy1, realx2, realy2);
+        rect = getIncludingRectangle(rect, x, y, w, h);
+        if (ec instanceof EdgeContainer) {
+            EdgeContainer edgeC = (EdgeContainer) ec;
+            for (Point p : edgeC.iterateBendpointContainers()) {
+                checkIncludingRectX(rect, p.x);
+                checkIncludingRectY(rect, p.y);
+            }
+        }
+        return rect;
     }
 
     /**
-     * /**
      * Berechnet in jeder Richtung die minimalen und maximalen Koordinaten von der übergebenen {@link Rectangle} und dem {@link ElementContainer}.
      * Wird als {@link Rectangle} <code>null</code> übergeben, dann kommt ein neues {@link Rectangle}-Objekt zurück, ansonsten wird das bestehende
      * zurück gegeben.
-     * Die Weite und Höhe des {@link Rectangle} geben Koordinaten an und nicht die Weite und Höhe im eigentlichen
-     * Sinne
+     * Die Weite und Höhe des {@link Rectangle} geben Koordinaten an und nicht die Weite und Höhe im eigentlichen Sinne.
      *
      * @param rect
      *            {@link Rectangle}, die verändert wird, falls die Koordinaten des übergebenen {@link ElementContainer}s
      *            außerhalb der vorher bestehenden Dimasion lagen
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
+     * @param ec
+     *            {@link ElementContainer}, dessen Koordinaten in der übergebenen {@link Rectangle} liegen sollen
      * @return
+     *         die übergebenen {@link Rectangle} oder wenn <code>null</code> übergeben wurde eine neue {@link Rectangle}
      */
-    private final static Rectangle getIncludingRectangle(Rectangle rect, final int x1, final int y1, final int x2, final int y2) {
+    private static final Rectangle getIncludingRectangle(Rectangle rect, final int x, final int y, final int w, final int h) {
+        int x1 = x - (w >> 1);
+        int y1 = y - (h >> 1);
+        int x2 = x1 + w;
+        int y2 = y1 + h;
         if (rect == null) {
             rect = new Rectangle(x1, y1, x2, y2);
         } else {
@@ -328,24 +337,41 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         return rect;
     }
 
+    private static final void checkIncludingRectX(final Rectangle rect, final int x) {
+        if (x < rect.x) {
+            rect.x = x;
+        } else if (x > rect.width) {
+            rect.width = x;
+        }
+    }
+
+    private static final void checkIncludingRectY(final Rectangle rect, final int y) {
+        if (y < rect.y) {
+            rect.y = y;
+        } else if (y > rect.height) {
+            rect.height = y;
+        }
+    }
+
     /**
      * Füllt die 3 {@link Rectangle} {@link #grabbedElementsFullRect}, {@link #grabbedElementsRasteredRect} und {@link #grabbedElementsRealRect} mit
      * den Koordinaten in Abhängigkeit von der Selektion. Wenn eine
      * Einzelebenenansicht eingeschaltet ist, dann werden nur Elemente der aktuellen Ebene einbezogen sonst alle.
      */
     private void findIncludingRectangles() {
-        if (szenario.isSingleSelection() && ka instanceof BendpointContainer) {
-            //bei einzelnen KnickpunktContainern ist nur der Mittelpunkt das selektierte Rechteck
-            grabbedElementsRealRect = new Rectangle(ka.getX(), ka.getY(), ka.getX(), ka.getY());
-            grabbedElementsRasteredRect = new Rectangle(grabbedElementsRealRect);
-            grabbedElementsFullRect = new Rectangle(grabbedElementsRealRect);
-        } else if (ka instanceof NodeContainer) {
+        //        if (szenario.isSingleSelection() && ka instanceof BendpointContainer) {
+        //            //bei einzelnen KnickpunktContainern ist nur der Mittelpunkt das selektierte Rechteck
+        //            grabbedElementsRealRect = new Rectangle(ka.getX(), ka.getY(), ka.getX(), ka.getY());
+        //            grabbedElementsRasteredRect = new Rectangle(grabbedElementsRealRect);
+        //            grabbedElementsFullRect = new Rectangle(grabbedElementsRealRect);
+        //        } else
+        if (ka instanceof NodeContainer) {
             // bei KnotenContainern (einem oder mehrere) wird das die Selektion einschließende
             // Rechteck inklusive der evtl. mitzubewegenden Teilelemente berechnet
             grabbedElementsRealRect = null;
             grabbedElementsFullRect = null;
             int ebene = szenario.getCollection().getActiveLayer();
-            for (NodeContainer kc : szenario.getSelectedRealElementContainerIterable()) {
+            for (NodeContainer kc : szenario.iterateSelectedRealElementContainer()) {
                 if (!kc.isVisible() || !multiView && kc.layerFor() != ebene) {
                     continue;
                 }
@@ -360,18 +386,9 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     }
                     grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, ec);
                     for (Edge edge : me.getEdgesWith(ka.getElement())) {
-                        EdgeContainer edgeC = (EdgeContainer) edge.getContainer(szenario);
-                        if (edgeC != null) {
-                            for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
-                                grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, bc);
-                            }
-                        }
+                        ElementContainer edgeC = edge.getContainer(szenario);
+                        grabbedElementsFullRect = getIncludingRectangle(grabbedElementsFullRect, edgeC);
                     }
-                }
-            }
-            for (BendpointContainer kc : szenario.getSelectedBendpointContainerIterable()) {
-                if (multiView || !multiView && kc.layerFor() == ebene) {
-                    grabbedElementsRealRect = getIncludingRectangle(grabbedElementsRealRect, kc);
                 }
             }
             grabbedElementsRasteredRect = new Rectangle(grabbedElementsRealRect);
@@ -388,18 +405,15 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      */
     private final ElementContainer getMouseOverElementContainer() {
         ElementContainer returnContainer = null;
-        if (multiView) {
-            for (int c = MAX_LAYER_INDEX; c >= MIN_LAYER_INDEX; c--) {
-                if (!ModelConstants.isInterLayer(c)) {
-                    returnContainer = chooseObject(szenario.getLayer(c), xreal[c], yreal[c]);
-                    if (returnContainer != null) {
-                        break;
-                    }
+        int minlayerIndex = multiView ? MIN_LAYER_INDEX : szenario.getCollection().getActiveLayer();
+        int maxLayerIndex = multiView ? MAX_LAYER_INDEX : minlayerIndex;
+        for (int c = MAX_LAYER_INDEX; c >= MIN_LAYER_INDEX; c--) {
+            if (!ModelConstants.isInterLayer(c)) {
+                returnContainer = chooseObject(szenario.getLayer(c), xreal[c], yreal[c]);
+                if (returnContainer != null) {
+                    break;
                 }
             }
-        } else {
-            int ebene = szenario.getCollection().getActiveLayer();
-            returnContainer = chooseObject(szenario.getLayer(ebene), xreal[ebene], yreal[ebene]);
         }
         return returnContainer;
     }
@@ -797,18 +811,6 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         }
         int counter;
         if (!UserProperties.is(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS)) {
-            for (counter = lc.getBendpointContainerCount() - 1; counter >= 0; counter--) {
-                BendpointContainer k = lc.getBendpointContainer(counter);
-                if (!k.getElement().isPaintable()) {
-                    continue;
-                }
-                if (!k.isVisible()) {
-                    continue;
-                }
-                if (NodeRenderer.isInside(k, x, y)) {
-                    return k;
-                }
-            }
             for (EdgeContainer k : lc.getEdgeContainersBackward()) {
                 Edge ka = k.getEdge();
                 ModelElement s = ka.getStart();
@@ -827,6 +829,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 if (ec == null || !ec.isVisible()) {
                     continue;
                 }
+
                 if (k.isInside(x, y)) {
                     return k;
                 }
@@ -1097,6 +1100,9 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 //die Edge getroffen wurde (also grabbed==true ist), aber die Koordinaten bei mouseDragged() beim ersten Drag-Schritt ausßerhalb
                 //des Kantenbereichs liegen und der Index des neuen Knickpunktes nicht korrekt bestimmt werden kann.
                 //Da die Einfügeposition anhand der Koodinaten betimmt wird, wird -1 übergeben.
+                GDCollection gdcoll = szenario.getCollection();
+                String szenHash = szenario.getHashString();
+                ModelElement egde = ka.getElement();
                 ka = szenario.getCollection().insertBendingPoint(szenario.getHashString(), ka.getElement().getHashString(), INVALID_HASH_STRING, lastXreal[ebene], lastYreal[ebene], INVALID_BENDPOINT_INDEX, STANDARD_PID);
                 szenario.select(ka, STANDARD_PID);
                 findIncludingRectangles();

@@ -15,7 +15,6 @@ import java.util.List;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -65,11 +64,6 @@ public class LayerContainer extends ElementContainer {
      *
      */
     private List<EdgeContainer> edgeContainers;
-
-    /**
-     *
-     */
-    private List<BendpointContainer> bendpointContainers;
 
     /**
      * Liste aller NodeContainer, fuer die die Kanten sortiert werden muessen (momentan nur Prozesse)
@@ -145,12 +139,10 @@ public class LayerContainer extends ElementContainer {
             graphNodeContainers = new ArrayList<>(100);
             treeNodeContainers = new ArrayList<>(100);
             edgeContainers = new ArrayList<>(100);
-            bendpointContainers = new ArrayList<>(50);
         } else {
             graphNodeContainers = new ArrayList<>(500);
             treeNodeContainers = new ArrayList<>(500);
             edgeContainers = new ArrayList<>(500);
-            bendpointContainers = new ArrayList<>(1000);
         }
         numberedEdgesNodeContainer = new ArrayList<>(10);
         tmpEdgeContainer = new ArrayList<>(100);
@@ -184,9 +176,6 @@ public class LayerContainer extends ElementContainer {
         }
         if (ReflectionUtils.isAssignable(elementClass, Edge.class)) {
             counter += countType(edgeContainers, elementClass);
-        }
-        if (ReflectionUtils.isAssignable(elementClass, Knickpunkt.class)) {
-            counter += countType(bendpointContainers, elementClass);
         }
         return counter;
     }
@@ -485,15 +474,6 @@ public class LayerContainer extends ElementContainer {
             }
         }
         if (!isPaintEdgesOnlyForSelectedElements) {
-            for (BendpointContainer ec : bendpointContainers) {
-                //hier wird bei jedem Knickpunkt nochmal geprüft, ob er in die Ebene passt. Wenn nicht, wird die
-                //Ebenengröße hochgesetzt und das Zeichen neu angestoßen
-                if (!doc.pageHasSize(ec)) {
-                    doc.setPageSizeFactor(-1.0);
-                    return;
-                }
-                ec.paint(g);
-            }
             paintingSurrogates = true;
             for (EdgeContainer ec : tmpEdgeContainer) {
                 ec.paint(g);
@@ -549,11 +529,6 @@ public class LayerContainer extends ElementContainer {
                     return true;
                 }
             }
-            for (BendpointContainer ec : bendpointContainers) {
-                if (ec.getHashString().equals(hashString)) {
-                    return true;
-                }
-            }
         }
         return false;
     }
@@ -577,14 +552,7 @@ public class LayerContainer extends ElementContainer {
         if (containsHashString(((ElementContainer) comp).getHashString())) {
             return null;
         }
-        //		comp = super.add(comp);
-        if (comp instanceof BendpointContainer) {
-            if (pos != -1) {
-                bendpointContainers.add(pos, (BendpointContainer) comp);
-            } else {
-                bendpointContainers.add((BendpointContainer) comp);
-            }
-        } else if (comp instanceof EdgeContainer) {
+        if (comp instanceof EdgeContainer) {
             if (pos != -1) {
                 edgeContainers.add(pos, (EdgeContainer) comp);
             } else {
@@ -607,7 +575,6 @@ public class LayerContainer extends ElementContainer {
         if (!(doc.getCollection().getSelectedDoc() instanceof Szenario)) {
             comp.setVisible(false);
         }
-
         return comp;
     }
 
@@ -616,9 +583,7 @@ public class LayerContainer extends ElementContainer {
         if (comp == null) {
             return;
         }
-        if (comp instanceof BendpointContainer) {
-            bendpointContainers.remove(comp);
-        } else if (comp instanceof EdgeContainer) {
+        if (comp instanceof EdgeContainer) {
             edgeContainers.remove(comp);
         } else {
             graphNodeContainers.remove(comp);
@@ -632,7 +597,6 @@ public class LayerContainer extends ElementContainer {
         graphNodeContainers.clear();
         treeNodeContainers.clear();
         edgeContainers.clear();
-        bendpointContainers.clear();
         numberedEdgesNodeContainer.clear();
     }
 
@@ -684,7 +648,6 @@ public class LayerContainer extends ElementContainer {
     public void addAllContainers(final List<ElementContainer> list) {
         //Die Reihenfolge der Listen ist Absicht, da diese Funktion insbesondere beim Löschen von Elementen gebraucht wird
         //und man ohne irgendwelche Konflikte erst Knickpunkte, dann Kanten und dann Knoten löschen kann
-        list.addAll(bendpointContainers);
         list.addAll(edgeContainers);
         list.addAll(treeNodeContainers);
     }
@@ -704,13 +667,6 @@ public class LayerContainer extends ElementContainer {
         list.addAll(edgeContainers);
     }
 
-    /**
-     * @param list
-     */
-    public void addBendpointContainers(final List<ElementContainer> list) {
-        list.addAll(bendpointContainers);
-    }
-
     public Iterable<NodeContainer> getGraphNodeContainers() {
         return () -> graphNodeContainers.listIterator();
     }
@@ -725,10 +681,6 @@ public class LayerContainer extends ElementContainer {
 
     public Iterable<EdgeContainer> getEdgeContainersBackward() {
         return CollectionUtils.getBackwardIterable(edgeContainers);
-    }
-
-    public Iterable<BendpointContainer> getBendpointContainers() {
-        return () -> bendpointContainers.listIterator();
     }
 
     /**
@@ -761,14 +713,6 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * @param i
-     * @return
-     */
-    public BendpointContainer getBendpointContainer(final int i) {
-        return bendpointContainers.get(i);
-    }
-
-    /**
      * @return
      */
     public int getNodeContainerCount() {
@@ -783,20 +727,10 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
-     * @return
-     */
-    public int getBendpointContainerCount() {
-        return bendpointContainers.size();
-    }
-
-    /**
      * @param ec
      * @return
      */
     public boolean isMyElement(final ElementContainer ec) {
-        if (ec instanceof BendpointContainer) {
-            return bendpointContainers.contains(ec);
-        }
         if (ec instanceof NodeContainer) {
             return graphNodeContainers.contains(ec);
         }

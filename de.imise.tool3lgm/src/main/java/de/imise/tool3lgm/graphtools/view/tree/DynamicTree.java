@@ -521,7 +521,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         TreePath[] path = new TreePath[doc.getSelectedRealElementContainerCount()];
         int m = 0;
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
-        for (NodeContainer ec : doc.getSelectedRealElementContainerIterable()) {
+        for (NodeContainer ec : doc.iterateSelectedRealElementContainer()) {
             ModelElement me = ec.getElement();
             ec = (NodeContainer) me.getContainer(doc);
             if (ec == null) {

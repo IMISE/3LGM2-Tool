@@ -1,11 +1,11 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -15,7 +15,7 @@ public class ElementSelectionContext {
     /**
      * COMMENTME
      */
-    protected ModelSelection selectedContainer;
+    private final ModelSelection selectedContainer;
 
     /**
      *
@@ -35,17 +35,9 @@ public class ElementSelectionContext {
 
     /**
      * @return
-     * @see de.imise.tool3lgm.graphtools.model.ModelSelection#iterableBendpointContainer()
-     */
-    public Iterable<BendpointContainer> getSelectedBendpointContainerIterable() {
-        return selectedContainer.iterableBendpointContainer();
-    }
-
-    /**
-     * @return
      * @see de.imise.tool3lgm.graphtools.model.ModelSelection#iterableRealElementContainer()
      */
-    public Iterable<NodeContainer> getSelectedRealElementContainerIterable() {
+    public Iterable<NodeContainer> iterateSelectedRealElementContainer() {
         return selectedContainer.iterableRealElementContainer();
     }
 
@@ -53,7 +45,7 @@ public class ElementSelectionContext {
      * @return
      * @see de.imise.tool3lgm.graphtools.model.ModelSelection#iterableEdgeContainer()
      */
-    public Iterable<EdgeContainer> getSelectedEdgeContainerIterable() {
+    public Iterable<EdgeContainer> iterateSelectedEdgeContainer() {
         return selectedContainer.iterableEdgeContainer();
     }
 
@@ -61,7 +53,7 @@ public class ElementSelectionContext {
      * @return
      * @see de.imise.tool3lgm.graphtools.model.ModelSelection.iterable()
      */
-    public Iterable<ElementContainer> getSelectedContainerIterator() {
+    public Iterable<ElementContainer> iterateSelectedContainer() {
         return selectedContainer.iterable();
     }
 
@@ -72,6 +64,13 @@ public class ElementSelectionContext {
      */
     public void clearSelection() {
         selectedContainer.clear();
+    }
+
+    /**
+     * @return
+     */
+    public Iterator<ElementContainer> getSelected() {
+        return selectedContainer.iterator();
     }
 
     /**

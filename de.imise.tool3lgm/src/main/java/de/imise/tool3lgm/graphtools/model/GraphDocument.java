@@ -52,7 +52,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -67,7 +66,6 @@ import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
-import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
@@ -327,7 +325,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         double minPageSizeFactor = 1.0;
         for (int l : ModelConstants.VISIBLE_LAYERS) {
             LayerContainer lc = layer[l];
-            Iterable<NodeContainer> visibleElements = CollectionUtils.getCommonIterable(lc.getGraphNodeContainers(), lc.getBendpointContainers());
+            Iterable<ElementContainer> visibleElements = CollectionUtils.getCommonIterable(lc.getGraphNodeContainers(), lc.getEdgeContainers());
             for (ElementContainer c : visibleElements) {
                 double neededPageSizeFactor = getMinimalPageSizeFactor(c);
                 if (neededPageSizeFactor > minPageSizeFactor) {
@@ -984,8 +982,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             gdcoll.setInteractiveMode(isInteractiveMode);
             break;
         case MODEL_ACTION_INSERT_BENDING_POINT:
-            //[0] = SzenHash, [1] = HashString der Edge, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
-            gdcoll.insertBendingPoint(argv[0], argv[1], argv[2], Integer.parseInt(argv[3]), Integer.parseInt(argv[4]), Integer.parseInt(argv[5]), pid);
+            //[0] = SzenHash, [1] = HashString der Edge, [2] = X-Position, [3] = Y-Position, [4] = Index des Knickpuntes auf der Edge,
+            gdcoll.insertBendingPoint(argv[0], argv[1], Integer.parseInt(argv[2]), Integer.parseInt(argv[3]), Integer.parseInt(argv[4]), pid);
+            break;
+
+        case MODEL_ACTION_REMOVE_BENDING_POINT:
+            //[0] = SzenHash, [1] = HashString der Edge, [2] = X-Position, [3] = Y-Position, [4] = Index des Knickpuntes auf der Edge,
+            gdcoll.removeBendingPoint(argv[0], argv[1], Integer.parseInt(argv[2]), Integer.parseInt(argv[3]), Integer.parseInt(argv[4]), pid);
             break;
 
         case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER:
@@ -1244,7 +1247,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             switch (argc) {
             case 1:
-                linkElementsToSzenario(argv[0], new ArrayList<>(selectedContainer), pid);
+                linkElementsToSzenario(argv[0], getSelectedContainer(), pid);
                 break;
             default:
                 linkElementToSzenario(argv[0], argv[1], pid);
@@ -1252,11 +1255,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             break;
 
         case MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL:
-            linkElementsToSzenario(null, new ArrayList<>(selectedContainer), pid);
+            linkElementsToSzenario(null, getSelectedContainer(), pid);
             break;
 
         case MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL:
-            linkElementsToNewSzenario(new ArrayList<>(selectedContainer), pid);
+            linkElementsToNewSzenario(getSelectedContainer(), pid);
             break;
 
         case MODEL_ACTION_DELETE_FROM_SUBMODEL:
@@ -1265,7 +1268,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 if (!(this instanceof Szenario)) {
                     break;
                 }
-                gdcoll.removeContainerFromSubmodel(selectedContainer, pid);
+                gdcoll.removeContainerFromSubmodel(getSelectedContainer(), pid);
                 break;
             case 2:
                 GraphDocument szenario = gdcoll.getGraphDocumentCoded(argv[0]);
@@ -1294,7 +1297,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             break;
         case MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON:
         case MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF:
-            for (ElementContainer ec : selectedContainer) {
+            for (ElementContainer ec : iterateSelectedContainer()) {
                 if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
                     ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
                 }
@@ -1402,7 +1405,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (log) {
             if (!(transStackInt > 1)) {
                 //				System.err.println("start_transaction " + iii++ + " + " + pid + ": "+ transStackInt + " " + this);
-                for (ElementContainer ec : selectedContainer) {
+                for (ElementContainer ec : iterateSelectedContainer()) {
                     getCollection().getTman().addPreSelectionItem(ec.getHashString(), pid);
                 }
             }
@@ -1449,7 +1452,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //			System.err.println("### " + (iii++) + " " + pid);
             if (transStackInt == 0) {
                 //				System.err.println("finish_transaction " + iii++ + " - " + pid + ": "+ transStackInt + " " + this);
-                for (ElementContainer ec : selectedContainer) {
+                for (ElementContainer ec : iterateSelectedContainer()) {
                     getCollection().getTman().addPostSelectionItem(ec.getHashString(), pid);
                 }
             }
@@ -1633,11 +1636,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void normalizeSelected(final int pid) {
-        if (selectedContainer.size() == 0) {
+        if (!isSelection()) {
             return;
         }
         start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedContainer()) {
             normalizeElement(ec, pid);
         }
         finish_transaction(pid);
@@ -1649,11 +1652,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void normalizeFontSelected(final int pid) {
-        if (selectedContainer.size() == 0) {
+        if (!isSelection()) {
             return;
         }
         start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedContainer()) {
             normalizeFontElement(ec, pid);
         }
         finish_transaction(pid);
@@ -1664,11 +1667,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void normalizeColorSelected(final int pid) {
-        if (selectedContainer.size() == 0) {
+        if (!isSelection()) {
             return;
         }
         start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedContainer()) {
             normalizeColorElement(ec, pid);
         }
         finish_transaction(pid);
@@ -1680,11 +1683,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void normalizeTransparencySelected(final int pid) {
-        if (selectedContainer.size() == 0) {
+        if (isSelection()) {
             return;
         }
         start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedContainer()) {
             normalizeTransparencyElement(ec, pid);
         }
         finish_transaction(pid);
@@ -1744,7 +1747,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final void setIcon(final String iconKey, final int pid) {
         start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedContainer()) {
             setIcon(hashString, ec.getElement().getHashString(), iconKey, pid);
         }
         finish_transaction(pid);
@@ -1791,7 +1794,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final void unsetIcon(final int pid) {
         start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedContainer()) {
             unsetIcon(hashString, ec.getHashString(), pid);
         }
         finish_transaction(pid);
@@ -1823,7 +1826,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         Color oldcol = null;
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedContainer()) {
             Color tmpcol = ec.getColor();
             if (tmpcol == null) {
                 tmpcol = mapping.getStandardBackGroundColor(ec);
@@ -1840,7 +1843,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedContainer()) {
             changeColor(ec, col, pid);
         }
         finish_transaction(pid);
@@ -1969,7 +1972,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             alphaMode = GraphElementLayout.TRANSPARENCY_NONE;
         }
         start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedContainer()) {
             changeAlpha(ec, alphaMode, pid);
         }
         finish_transaction(pid);
@@ -2138,12 +2141,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final void changeFont(Font font, final int pid) {
         start_transaction(pid);
-        if (selectedContainer.size() != 0) {
+        if (!isSelection()) {
             if (font == null) {
                 font = EasyDialogAccess.getFontByChooser(Static.getMainFrame(), getLastSelected().getFont());
             }
             if (font != null) {
-                for (ElementContainer ec : selectedContainer) {
+                for (ElementContainer ec : iterateSelectedContainer()) {
                     changeFont(ec, font, pid);
                 }
             }
@@ -2178,21 +2181,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addRedoCommandOrReplace(commandPrefix, redoCommandArguments, pid);
         nc.setCoordinates(x, y, width, height);
 
-        //wenn NodeContainer verschoben werden (keine KnickpinktContainer)
-        if (!(nc instanceof BendpointContainer)) {
-            //bei allen Kanten dieser Node
-            for (Edge ka : nc.getKnoten().getEdges()) {
-                EdgeContainer edgeC = (EdgeContainer) ka.getContainer(this);
-                //wenn die Edge keinen Container in diesem Teilmodell hat (dann wird sie
-                //auch nicht Grafisch dargestellt und es braucht nichts verschoben werden) -> weiter
-                if (edgeC == null) {
-                    continue;
-                }
-                //aktualisiere die Endpunkte der Edge
-                edgeC.computeBorderPoints();
+        //bei allen Kanten dieser Node
+        for (Edge ka : nc.getKnoten().getEdges()) {
+            EdgeContainer edgeC = (EdgeContainer) ka.getContainer(this);
+            //wenn die Edge keinen Container in diesem Teilmodell hat (dann wird sie
+            //auch nicht Grafisch dargestellt und es braucht nichts verschoben werden) -> weiter
+            if (edgeC == null) {
+                continue;
             }
-        } else {
-            ((BendpointContainer) nc).getKnickpunktKnoten().getOwner().computeBorderPoints();
+            //aktualisiere die Endpunkte der Edge
+            edgeC.computeBorderPoints();
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, nc, null, pid);
@@ -2227,7 +2225,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //dann auch als Undo gelogt wird
         boolean moveSubelements = UserProperties.is(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS);
         List<ElementContainer> selection = expandSelection(moveSubelements);
-        for (NodeContainer kc : getSelectedRealElementContainerIterable()) {
+        for (NodeContainer kc : iterateSelectedRealElementContainer()) {
             if (layer == ModelConstants.NO_LAYER || layer == kc.layerFor()) {
                 coordinateKnot(kc, kc.getX() + deltaX, kc.getY() + deltaY, kc.getWidth(), kc.getHeight(), pid);
             }
@@ -2292,7 +2290,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         start_transaction(pid);
         NodeContainer lastSelected = (NodeContainer) getLastSelected();
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedContainer()) {
             if (!(ec instanceof NodeContainer)) {
                 continue;
             }
@@ -2352,7 +2350,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     private List<ElementContainer> expandSelection(final boolean addAllParts) {
         Collection<ElementContainer> container2Select = new HashSet<>();
-        for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
+        for (NodeContainer nc : iterateSelectedRealElementContainer()) {
             ModelElement me = nc.getElement();
             for (ElementContainer partNc : me.getSubordinatedContainer(this, addAllParts)) {
                 if (!isSelected(partNc)) {
@@ -2371,14 +2369,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addSimpleToSelection(lastSelected);
         //Knickpunkte aller Kanten dazuselektieren, bei denen beide Elemente selektiert sind
         container2Select.clear();
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedContainer()) {
             ModelElement me = ec.getElement();
             if (ModelConstants.isPaintable(me.getClass())) {
                 for (Edge edge : me.getEdges()) {
                     ModelElement other = edge.getOther(me);
                     if (ModelConstants.isPaintable(other.getClass())) {
                         ElementContainer otherEc = other.getContainer(this);
-                        if (selectedContainer.contains(otherEc)) {
+                        if (isSelected(otherEc)) {
                             EdgeContainer edgeC = (EdgeContainer) edge.getContainer(this);
                             if (edgeC != null) {
                                 for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
@@ -2975,15 +2973,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @return
      */
     private List<ElementContainer> getSelectionInGraphOrder() {
-        List<ElementContainer> returnList = new ArrayList<>(selectedContainer.size());
-        for (ElementContainer ec : getElementContainer(Node.class)) {
-            if (selectedContainer.contains(ec)) {
+        List<ElementContainer> returnList = new ArrayList<>(getSelectionSize());
+        for (ElementContainer ec : getElementContainer(Node.class)) { //alle NodeContainer in der Reihenfolge in der Grafik holen
+            if (isSelected(ec)) {
                 returnList.add(ec);
             }
         }
-        for (ElementContainer ec : selectedContainer) {
-            Class<? extends ElementContainer> ecClass = ec.getClass();
-            if (!(BendpointContainer.class.isAssignableFrom(ecClass) && EdgeContainer.class.isAssignableFrom(ecClass))) {
+        for (ElementContainer ec : getSelectedContainer()) {//alle Kanten hinzufügen - Reihenfolge ist egal!
+            if (ec instanceof EdgeContainer) {
                 returnList.add(ec);
             }
         }
@@ -3164,23 +3161,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * @param hashString
-     * @return
-     */
-    public BendpointContainer findBendpointContainerCoded(final String hashString) {
-        if (hashString == null) {
-            return null;
-        }
-
-        ModelElement me = findKnickpunktCoded(hashString);
-        if (me == null) {
-            return null;
-        }
-
-        return (BendpointContainer) me.getContainer(me.isUnique() ? getCollection().getMainGraphDocument() : this);
-    }
-
-    /**
      * Finds the first element with the given UserField name and the given id String.
      * If the values are IDs a special element can be detected.
      *
@@ -3236,11 +3216,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return me;
         }
         me = findKanteCoded(hashString);
-        if (me != null) {
-            return me;
-        }
-        me = findKnickpunktCoded(hashString);
-        findBendpointContainerCoded(hashString);
         return me;
     }
 
@@ -3282,31 +3257,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 }
             }
         }
-        return null;
-    }
-
-    /**
-     * @param hashString
-     * @return
-     */
-    public Knickpunkt findKnickpunktCoded(final String hashString) {
-        if (getCollection().getMainGraphDocument() != this) {
-            return getCollection().getMainGraphDocument().findKnickpunktCoded(hashString);
-        }
-
-        if (hashString == null) {
-            return null;
-        }
-        if (hashString != null) {
-            for (LayerContainer lc : layer) {
-                for (BendpointContainer bc : lc.getBendpointContainers()) {
-                    if (hashString.equals(bc.getHashString())) {
-                        return bc.getKnickpunktKnoten();
-                    }
-                }
-            }
-        }
-
         return null;
     }
 
@@ -3792,11 +3742,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
         if (direction == BACKWARD) {
-            for (ElementContainer ec : selectedContainer) {
+            for (ElementContainer ec : iterateSelectedContainer()) {
                 gdcoll.link(edgeClass, ec.getElement(), lastSelecedElement, pid);
             }
         } else {
-            for (ElementContainer ec : selectedContainer) {
+            for (ElementContainer ec : iterateSelectedContainer()) {
                 gdcoll.link(edgeClass, lastSelecedElement, ec.getElement(), pid);
             }
         }
@@ -3811,11 +3761,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
         if (direction == BACKWARD) {
-            for (ElementContainer ec : selectedContainer) {
+            for (ElementContainer ec : iterateSelectedContainer()) {
                 gdcoll.unlink(ec.getElement(), lastSelecedElement, edgeClass, pid);
             }
         } else {
-            for (ElementContainer ec : selectedContainer) {
+            for (ElementContainer ec : iterateSelectedContainer()) {
                 gdcoll.unlink(lastSelecedElement, ec.getElement(), edgeClass, pid);
             }
         }
@@ -3914,10 +3864,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void z_move_up(final int pid) {
         if (isSelectedAtLeastOneRealNode()) {
             start_transaction(pid);
-            for (ElementContainer ec : selectedContainer) {
-                if (ec instanceof NodeContainer && !(ec instanceof BendpointContainer)) {
-                    z_move_up(ec, pid);
-                }
+            for (ElementContainer ec : iterateSelectedRealElementContainer()) {
+                z_move_up(ec, pid);
             }
             finish_transaction(pid);
             distributeEvent(GROUP_ORDER_CHANGED, pid);
@@ -3960,10 +3908,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void z_move_down(final int pid) {
         if (isSelectedAtLeastOneRealNode()) {
             start_transaction(pid);
-            for (ElementContainer ec : selectedContainer) {
-                if (ec instanceof NodeContainer && !(ec instanceof BendpointContainer)) {
-                    z_move_down(ec, pid);
-                }
+            for (ElementContainer ec : iterateSelectedRealElementContainer()) {
+                z_move_down(ec, pid);
             }
             finish_transaction(pid);
             distributeEvent(GROUP_ORDER_CHANGED, pid);
@@ -4040,10 +3986,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void z_step_up(final int pid) {
         if (isSelectedAtLeastOneRealNode()) {
             start_transaction(pid);
-            for (ElementContainer ec : selectedContainer) {
-                if (ec instanceof NodeContainer && !(ec instanceof BendpointContainer)) {
-                    z_step_up(ec, pid);
-                }
+            for (ElementContainer ec : iterateSelectedContainer()) {
+                z_step_up(ec, pid);
             }
             finish_transaction(pid);
             distributeEvent(GROUP_ORDER_CHANGED, pid);
@@ -4086,10 +4030,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void z_step_down(final int pid) {
         if (isSelectedAtLeastOneRealNode()) {
             start_transaction(pid);
-            for (ElementContainer ec : selectedContainer) {
-                if (ec instanceof NodeContainer && !(ec instanceof BendpointContainer)) {
-                    z_step_down(ec, pid);
-                }
+            for (ElementContainer ec : iterateSelectedContainer()) {
+                z_step_down(ec, pid);
             }
             finish_transaction(pid);
             distributeEvent(GROUP_ORDER_CHANGED, pid);
@@ -4123,7 +4065,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final void label_valign(final int mode, final int pid) {
         start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedRealElementContainer()) {
             label_valign(mode, ec, pid);
         }
         finish_transaction(pid);
@@ -4157,7 +4099,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final void label_halign(final int mode, final int pid) {
         start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
+        for (ElementContainer ec : iterateSelectedRealElementContainer()) {
             label_halign(mode, ec, pid);
         }
         finish_transaction(pid);
@@ -4497,7 +4439,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return null;
         }
         ModelElement me = ec.getElement();
-        if (me instanceof Knickpunkt || me.isUnique()) {
+        if (me.isUnique()) {
             return null;
         }
 
@@ -4579,10 +4521,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void joinSelected(final int pid) {
-        if (selectedContainer.size() > 1) {
+        if (isSelection()) {
             String targetHash = getLastSelected().getHashString();
-            List<ElementContainer> selection = new ArrayList<>(selectedContainer);
-            for (ElementContainer ec : new ArrayList<>(selection)) {
+            for (ElementContainer ec : getSelectedContainer()) {
                 joinElements(ec.getHashString(), targetHash, pid);
             }
             //nach dem Join kann man kein Undo mehr machen -> alle Undo-Kommandos davor auch löschen
@@ -4703,10 +4644,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             LayerContainer lc = document.getLayer(i);
             //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
             List<Iterable<? extends ElementContainer>> layerElements = new ArrayList<>();
-            //Knickpunkte
-            if (clazz == Knickpunkt.class) {
-                layerElements.add(lc.getBendpointContainers());
-            } else if (ModelConstants.isNodeType(clazz)) {
+            if (ModelConstants.isNodeType(clazz)) {
                 layerElements.add(lc.getNodeContainersAlphabetical());
                 //Kanten
             } else if (ModelConstants.isEdgeType(clazz)) {
@@ -4720,7 +4658,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     return objects;
                 }
                 //alle Elemente sind Unterklassen von ModelElement -> alle Containerlisten können zur Rückgabeliste hinzugefügt werden
-                lc.addBendpointContainers(objects);
                 lc.addEdgeContainers(objects);
                 lc.addNodeContainers(objects, true);
                 //wenn eine Unterklasse von ModelElement gesucht werden soll
@@ -4742,7 +4679,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         //wenn alphabetisch sortiert werden soll und andere Elemente als die bereits in der aplhabetisch sortierten
         //Knotenliste enthaltenen zur Rückgabeliste hinzugefügt wurden
-        if (clazz == Knickpunkt.class || !ModelConstants.isNodeType(clazz)) {
+        if (!ModelConstants.isNodeType(clazz)) {
             //aplhabetisch sortieren
             Alphabetical.sort(objects);
         }
@@ -4918,21 +4855,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public void initTraceContainers() {
         for (int i = 0; i < layer.length; i++) {
-            for (BendpointContainer kpC : layer[i].getBendpointContainers()) {
-                if (kpC == null) {
-                    continue;
-                }
-                Knickpunkt kp = kpC.getKnickpunktKnoten();
-                if (kp == null) {
-                    continue;
-                }
-                EdgeContainer kc = layer[i].getEdgeContainer(kp.getKantenHash());
-                if (kc == null) {
-                    continue;
-                }
-                kc.setKnickpunkt(kpC, kp.getIndex());
-                kp.addEdge(kc.getEdge());
-            }
             for (EdgeContainer kc : layer[i].getEdgeContainers()) {
                 if (kc != null) {
                     kc.computeBorderPoints();

@@ -47,15 +47,6 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
 
     /**
      * Konstruktor
-     * <p>
-     * Benötigt für cloning in {@link ElementContainer#clone(boolean, GraphDocument)}
-     */
-    public InterLayerConnectedNodeContainer() {
-        super();
-    }
-
-    /**
-     * Konstruktor
      *
      * @param k
      * @param doc

@@ -27,7 +27,6 @@ import com.google.common.collect.Table.Cell;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -38,8 +37,8 @@ import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
-import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
+import de.imise.tool3lgm.graphtools.view.container.EdgeContainer.Bendpoint;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -371,9 +370,6 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                 for (EdgeContainer kc : lc.getEdgeContainers()) {
                     writeModelElement(kc.getElement());
                 }
-                for (BendpointContainer kc : lc.getBendpointContainers()) {
-                    writeModelElement(kc.getElement());
-                }
             }
         }
     }
@@ -409,11 +405,6 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                     writeModelElementField("optional", Boolean.TRUE.toString());
                 }
             }
-        } else if (me instanceof Knickpunkt) {
-            Knickpunkt bendpoint = (Knickpunkt) me;
-            EdgeContainer edgeContainer = bendpoint.getOwner();
-            writeModelElementField("kantenHash", edgeContainer.getHashString());
-            writeModelElementField("index", edgeContainer.getIndexOfKnickpunkt(bendpoint));
         }
         writeEndElement(); //</element>
     }
@@ -502,31 +493,38 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                     writeElementContainer(kc);
                 }
             }
-            for (BendpointContainer kc : lc.getBendpointContainers()) {
-                if (elements == null || elements.contains(kc.getElement())) {
-                    writeElementContainer(kc);
-                }
-            }
             writeEndElement(); //</layer>
         }
     }
 
     protected void writeElementContainer(final ElementContainer ec) throws XMLStreamException {
-        writeStartElement("container"); //<container>
-        writeAttribute("hash", ec.getHashString());
-        if (!(ec instanceof EdgeContainer)) {
-            writeElement("expanded", ec.isExpanded());
-            writeElement("visible", ec.isVisible());
+        EdgeContainer edgeC = null;
+        if (ec instanceof EdgeContainer) {
+            edgeC = (EdgeContainer) ec;
         }
-        GraphElementLayout expandedLayout = ec.getE3LGMLayout();
-        if (expandedLayout != null) {
-            writeGraphElementLayout(ModelElement.class, expandedLayout, true);
+        if (edgeC == null || edgeC.getBendpointContainerCount() > 0) {
+            writeStartElement("container"); //<container>
+            writeAttribute("hash", ec.getHashString());
+            if (edgeC == null) {
+                writeElement("expanded", ec.isExpanded());
+                writeElement("visible", ec.isVisible());
+                GraphElementLayout expandedLayout = ec.getE3LGMLayout();
+                if (expandedLayout != null) {
+                    writeGraphElementLayout(ModelElement.class, expandedLayout, true);
+                }
+                GraphElementLayout nonExpandedLayout = ec.getNE3LGMLayout();
+                if (nonExpandedLayout != null) {
+                    writeGraphElementLayout(ModelElement.class, nonExpandedLayout, false);
+                }
+            } else {
+                for (Bendpoint bp : edgeC.iterateBendpointContainers()) {
+                    writeEmptyElement("bend", "x", String.valueOf(bp.x), "y", String.valueOf(bp.y));
+                }
+            }
+            writeEndElement(); //</container>
+        } else {
+            writeEmptyElement("container", "hash", ec.getHashString()); //<container>
         }
-        GraphElementLayout nonExpandedLayout = ec.getNE3LGMLayout();
-        if (nonExpandedLayout != null) {
-            writeGraphElementLayout(ModelElement.class, nonExpandedLayout, false);
-        }
-        writeEndElement(); //</container>
     }
 
     ////////////

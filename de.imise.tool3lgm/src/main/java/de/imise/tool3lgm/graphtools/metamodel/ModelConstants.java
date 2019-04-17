@@ -36,7 +36,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
@@ -47,7 +46,6 @@ import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
-import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
@@ -745,26 +743,6 @@ public final class ModelConstants {
     }
 
     /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Node} oder {@link NodeContainer} ist.
-     *
-     * @param elementClass
-     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
-     */
-    public static final boolean isBendpointType(final Class<?> elementClass) {
-        return Knickpunkt.class.isAssignableFrom(elementClass) || BendpointContainer.class.isAssignableFrom(elementClass);
-    }
-
-    /**
-     * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Node} ist.
-     *
-     * @param elementClass
-     * @return <code>true</code>, wenn die übergebene Klasse ein Knotentyps ist, sonst <code>false</code>.
-     */
-    public static final boolean isRealNodeType(final Class<?> elementClass) {
-        return isNodeType(elementClass) && !isBendpointType(elementClass);
-    }
-
-    /**
      * Geprüft wird, ob sich die übergebene Klasse eine Unterklasse von {@link Edge} ist.
      *
      * @param elementClass
@@ -845,7 +823,7 @@ public final class ModelConstants {
     private static final Map<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<>();
 
     /** Alle Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
-    private static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Knickpunkt.class, Textfield.class);
+    private static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Textfield.class);
 
     /** Klassennamen aller Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
     private static final Set<String> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPE_NAMES = CollectionUtils.getSimpleClassNames(META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES);

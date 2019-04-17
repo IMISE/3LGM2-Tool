@@ -74,7 +74,7 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
     private void initSelectedElementContainer() {
         selectedElementContainer = new ArrayList<>();
         if (doc != null) {
-            for (NodeContainer ec : doc.getSelectedRealElementContainerIterable()) {
+            for (NodeContainer ec : doc.iterateSelectedRealElementContainer()) {
                 ModelElement me = ec.getElement();
                 Class<? extends ModelElement> elementClass = me.getClass();
                 if (!ModelConstants.isSlaveType(elementClass)) {

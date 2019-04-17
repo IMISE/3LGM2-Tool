@@ -22,8 +22,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.Connect
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
+import de.imise.tool3lgm.graphtools.view.container.EdgeContainer.Bendpoint;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.util.htmlxml.HTMLConverter;
@@ -319,8 +319,8 @@ public class YEdGraphmlWriter extends GraphmlWriter {
             writeEmptyElement("y:Path", "sx", "0.0", "sy", "0.0", "tx", "0.0", "ty", "0.0");
         } else {
             writeStartElement("y:Path", "sx", "0.0", "sy", "0.0", "tx", "0.0", "ty", "0.0"); // start y:Path
-            for (BendpointContainer bc : ec.iterateBendpointContainers()) {
-                writeEmptyElement("y:Point", "x", String.valueOf(bc.getX()), "y", String.valueOf(bc.getY()));
+            for (Bendpoint bc : ec.iterateBendpointContainers()) {
+                writeEmptyElement("y:Point", "x", String.valueOf(bc.x), "y", String.valueOf(bc.y));
             }
             writeEndElement(); // end y:Path
         }

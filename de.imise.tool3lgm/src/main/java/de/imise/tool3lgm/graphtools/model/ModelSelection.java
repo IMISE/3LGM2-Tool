@@ -10,11 +10,10 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
-import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
+import de.imise.tool3lgm.graphtools.view.container.EdgeContainer.Bendpoint;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.ReflectionUtils;
@@ -39,10 +38,12 @@ public class ModelSelection implements Set<ElementContainer> {
      * Liste, die die selektierten {@link NodeContainer} enthält.
      */
     private final HashSet<NodeContainer> selectedRealNodeContainer;
+
     /**
-     * Liste, die die selektierten {@link BendpointContainer} enthält.
+     * Liste, die die selektierten {@link Bendpoint} enthält.
      */
-    private final HashSet<BendpointContainer> selectedBendpointContainer;
+    private final HashSet<Bendpoint> selectedBendpointContainer;
+
     /**
      * Liste, die die selektierten {@link EdgeContainer} enthält.
      */

@@ -16,15 +16,17 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.SelectableObject;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
@@ -37,41 +39,65 @@ import de.imise.tool3lgm.log.Log;
 public class EdgeContainer extends ElementContainer {
 
     /**
-     * COMMENTME
+     *
      */
     final static float dash1[] = {
             10.0f
     };
 
     /**
-     * COMMENTME
+     *
      */
     final static BasicStroke dashedStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f);
 
     /**
-     * COMMENTME
+     *
      */
     protected int startx = 0, starty = 0, endx = 0, endy = 0;
 
     /**
-     * COMMENTME
+     *
      */
     public Polygon p1 = new Polygon(), p2 = new Polygon();
 
     /**
-     * COMMENTME
+     *
      */
     protected boolean over_lapping = false;
 
     /**
-     * COMMENTME
+     *
      */
     protected double rad1 = 0, rad2 = 0;
 
     /**
-     * COMMENTME
+     * Liste aller Knickpunkte der Kante. Sie werden in dieser Reihenfolge zwischen das Start- und Endelement an diese Punktposition gezeichnet.
      */
-    protected List<BendpointContainer> bendpointContainers = new ArrayList<>(1);
+    private List<Bendpoint> bendpoints;
+
+    /**
+     * Indiezes der im Moment selektierten Knickpunkte.
+     */
+    private List<Integer> selectedBendpoints;
+
+    /**
+     * Ein Punkt, der nur gleich ist, wenn er identisch ist!
+     *
+     * @author AXS (15 Apr 2019)
+     */
+    public class Bendpoint implements SelectableObject {
+
+        public final EdgeContainer edgeContainer;
+
+        public int x, y;
+
+        public Bendpoint(final EdgeContainer edgeContainer, final int x, final int y) {
+            this.edgeContainer = edgeContainer;
+            this.x = x;
+            this.y = y;
+        }
+
+    }
 
     /**
      *
@@ -120,13 +146,14 @@ public class EdgeContainer extends ElementContainer {
             retVal.over_lapping = over_lapping;
             retVal.p1 = new Polygon(p1.xpoints, p1.ypoints, 3);
             retVal.p2 = new Polygon(p2.xpoints, p2.ypoints, 3);
-            retVal.bendpointContainers.clear();
-            if (_doc instanceof Szenario) {
-                for (int i = 0; i < bendpointContainers.size(); i++) {
-                    BendpointContainer knC = bendpointContainers.get(i);
-                    BendpointContainer kp = (BendpointContainer) knC.clone(true, _doc);
-                    kp.getElement().addEdge((Edge) me);
-                    retVal.setKnickpunkt(kp, i);
+            if (bendpoints != null) {
+                retVal.bendpoints.clear();
+                if (_doc instanceof Szenario) {
+                    for (int i = 0; i < bendpoints.size(); i++) {
+                        Bendpoint p = bendpoints.get(i);
+                        Bendpoint pNew = new Bendpoint(retVal, p.x, p.y);
+                        retVal.setKnickpunkt(pNew, i);
+                    }
                 }
             }
         }
@@ -198,6 +225,10 @@ public class EdgeContainer extends ElementContainer {
         return endy;
     }
 
+    public final boolean hasBendpoints() {
+        return bendpoints != null && !bendpoints.isEmpty();
+    }
+
     // Komplett aus Edge
     /**
      *
@@ -232,23 +263,23 @@ public class EdgeContainer extends ElementContainer {
             return;
         }
 
-        // TODO:Aus irgend einem Grund sind beim Import von Teilmodellen hier
-        // null-Elemente in der Liste knickpunkte
-        // daher hat AXS hier mal das Löschen eingefügt. Eigentlich sollte das
-        // aber nicht nötig sein, weil das nur sie Symptome abstellt
-        for (int i = bendpointContainers.size() - 1; i >= 0; i--) {
-            if (bendpointContainers.get(i) == null) {
-                bendpointContainers.remove(i);
+        if (hasBendpoints()) {
+            // TODO:Aus irgend einem Grund sind beim Import von Teilmodellen hier
+            // null-Elemente in der Liste knickpunkte
+            // daher hat AXS hier mal das Löschen eingefügt. Eigentlich sollte das
+            // aber nicht nötig sein, weil das nur sie Symptome abstellt
+            for (int i = bendpoints.size() - 1; i >= 0; i--) {
+                if (bendpoints.get(i) == null) {
+                    bendpoints.remove(i);
+                }
             }
-        }
 
-        if (!bendpointContainers.isEmpty()) {
-            int i = bendpointContainers.size() - 1;
+            int i = bendpoints.size() - 1;
             int left_x = kc1.getX();
             int left_y = kc1.getY();
-            BendpointContainer bendpointContainer = bendpointContainers.get(0);
-            int right_x = bendpointContainer.getX();
-            int right_y = bendpointContainer.getY();
+            Bendpoint bendpoint = bendpoints.get(0);
+            int right_x = bendpoint.x;
+            int right_y = bendpoint.y;
 
             int middle_x = right_x, middle_y = right_y;
 
@@ -268,8 +299,8 @@ public class EdgeContainer extends ElementContainer {
 
             left_x = kc2.getX();
             left_y = kc2.getY();
-            right_x = bendpointContainers.get(i).getX();
-            right_y = bendpointContainers.get(i).getY();
+            right_x = bendpoints.get(i).x;
+            right_y = bendpoints.get(i).y;
 
             middle_x = left_x;
             middle_y = left_y;
@@ -333,13 +364,13 @@ public class EdgeContainer extends ElementContainer {
         int lstarty = 0;
         int lendx = 0;
         int lendy = 0;
-        if (bendpointContainers.size() > 0) {
-            int i = bendpointContainers.size() - 1;
-            lstartx = bendpointContainers.get(i).getX();
-            lstarty = bendpointContainers.get(i).getY();
+        if (hasBendpoints()) {
+            int i = bendpoints.size() - 1;
+            lstartx = bendpoints.get(i).x;
+            lstarty = bendpoints.get(i).y;
             rad2 = Math.atan2(endy - lstarty, endx - lstartx) + Math.PI / 2;
-            lendx = bendpointContainers.get(0).getX();
-            lendy = bendpointContainers.get(0).getY();
+            lendx = bendpoints.get(0).x;
+            lendy = bendpoints.get(0).y;
             rad1 = Math.atan2(lendy - starty, lendx - startx) + Math.PI / 2;
         } else {
             rad2 = Math.atan2(endy - starty, endx - startx) + Math.PI / 2;
@@ -451,17 +482,20 @@ public class EdgeContainer extends ElementContainer {
      */
     private int getKnickpunktInsertIndex(final int x, final int y, final int tolerance) {
         int index = -1;
+        if (!hasBendpoints()) {
+            return index;
+        }
         int startx = getStartX();
         int starty = getStartY();
-        int numKKnots = bendpointContainers.size();
+        int numKKnots = bendpoints.size();
         for (int i = 0; i <= numKKnots; i++) {
             int endx = 0, endy = 0;
             if (i == numKKnots) {
                 endx = getEndX();
                 endy = getEndY();
             } else {
-                endx = bendpointContainers.get(i).getX();
-                endy = bendpointContainers.get(i).getY();
+                endx = bendpoints.get(i).x;
+                endy = bendpoints.get(i).y;
             }
             if ((int) Line2D.ptSegDist(startx, starty, endx, endy, x, y) <= tolerance) {
                 index = i;
@@ -477,76 +511,129 @@ public class EdgeContainer extends ElementContainer {
      * Setzt einen Knickpunkt an der richtigen Position in die Liste der Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand der
      * Koordinaten berechnet.
      *
-     * @param kp
+     * @param p
      * @param index
      */
-    public void setKnickpunkt(final BendpointContainer kp, int index) {
+    public void setKnickpunkt(final Bendpoint p, int index) {
         if (index == -1) {
             index = 0;
         }
-        while (index >= bendpointContainers.size()) {
-            bendpointContainers.add(null);
+        if (bendpoints == null) {
+            bendpoints = new ArrayList<>();
+        }
+        while (index >= bendpoints.size()) {
+            bendpoints.add(null);
         }
         // System.err.println("AXS_AXSsetKnickpunkt " + getGraphDocument());
-        bendpointContainers.set(index, kp);
-        kp.getKnickpunktKnoten().setOwner(this);
+        bendpoints.set(index, p);
     }
 
     /**
      * Fügt einen Knickpunkt an der richtigen Position in die Liste der Knickpunkte ein. Wird als Index -1 übergeben, dann wird der Index anhand der
      * Koordinaten berechnet.
      *
-     * @param kp
+     * @param x
+     * @param y
      * @param index
      */
-    public void addKnickpunkt(final BendpointContainer kp, int index) {
+    public Bendpoint addKnickpunkt(final int x, final int y, int index) {
         if (index < 0) {
-            index = getKnickpunktInsertIndex(kp.layout.x, kp.layout.y);
+            index = getKnickpunktInsertIndex(x, y);
         }
         if (index < 0) {
             index = 0;
         }
-        bendpointContainers.add(index, kp);
-        kp.getKnickpunktKnoten().setOwner(this);
+        Bendpoint p = new Bendpoint(this, x, y);
+        if (bendpoints == null) {
+            bendpoints = new ArrayList<>();
+        }
+        bendpoints.add(index, p);
+        return p;
     }
 
     /**
      * @param kp
      */
-    public void removeKnickpunkt(final Knickpunkt kp) {
-        bendpointContainers.remove(kp.getContainer(doc));
+    public void removeKnickpunkt(final Bendpoint p) {
+        if (bendpoints != null) {
+            int indexOf = bendpoints.indexOf(p);
+            deselectBendpoint(indexOf); //falls er selektiertwar - auch dort entfernen
+            if (indexOf == 0 && bendpoints.size() == 1) {
+                bendpoints = null;
+            } else {
+                bendpoints.remove(indexOf);
+            }
+        }
     }
+
+    private static final List<Bendpoint> EMPTY_BENDPOINT_LIST = ImmutableList.of();
+
+    private static final List<Integer> EMPTY_INTEGER_LIST = ImmutableList.of();
 
     /**
      * @return
      */
-    public Iterable<BendpointContainer> iterateBendpointContainers() {
-        return bendpointContainers;
+    public Iterable<Bendpoint> iterateBendpointContainers() {
+        return bendpoints != null ? bendpoints : EMPTY_BENDPOINT_LIST;
     }
 
-    public int indexOfBendpointContainer(final BendpointContainer bendpointContainer) {
-        return bendpointContainers.indexOf(bendpointContainer);
+    public int indexOfBendpointContainer(final Bendpoint bendpoint) {
+        return bendpoints != null ? bendpoints.indexOf(bendpoint) : -1;
     }
 
     public int getBendpointContainerCount() {
-        return bendpointContainers.size();
+        return bendpoints != null ? bendpoints.size() : 0;
     }
 
-    public BendpointContainer getBendpointContainer(final int index) {
-        return bendpointContainers.get(index);
+    public Bendpoint getBendpointContainer(final int index) {
+        return bendpoints.get(index);
     }
 
     /**
-     * @param kn
      * @return
      */
-    public int getIndexOfKnickpunkt(final Knickpunkt kn) {
-        for (int i = 0; i < bendpointContainers.size(); i++) {
-            if (bendpointContainers.get(i).getKnickpunktKnoten() == kn) {
-                return i;
+    public Iterable<Integer> iterateSelectedBendpointIndices() {
+        return selectedBendpoints != null ? selectedBendpoints : EMPTY_INTEGER_LIST;
+    }
+
+    public void selectBendpoint(final Bendpoint p) {
+        if (selectedBendpoints == null) {
+            selectedBendpoints = new ArrayList<>();
+        }
+        int index = bendpoints.indexOf(p);
+        selectedBendpoints.add(index);
+    }
+
+    public void deselectBendpoint(final Bendpoint p) {
+        int index = indexOfBendpointContainer(p);
+        deselectBendpoint(index);
+    }
+
+    public void deselectBendpoint(final int selecedBendpointIndex) {
+        if (selectedBendpoints != null) {
+            int indexOfSelecedBendpointIndex = selectedBendpoints.indexOf(selecedBendpointIndex);
+            if (indexOfSelecedBendpointIndex == 0 && selectedBendpoints.size() == 1) {
+                clearSelectedBendpoints();
+            } else if (selecedBendpointIndex >= 0) {
+                selectedBendpoints.remove(indexOfSelecedBendpointIndex);
             }
         }
-        return -1;
+    }
+
+    public int getSelectedBendpointCount() {
+        return selectedBendpoints.size();
+    }
+
+    public void clearSelectedBendpoints() {
+        selectedBendpoints = null;
+    }
+
+    public void moveSelectedBendpoints(final int deltaX, final int deltaY) {
+        for (Integer selectedBendpointIndex : iterateSelectedBendpointIndices()) {
+            Bendpoint bendpoint = getBendpointContainer(selectedBendpointIndex);
+            bendpoint.x += deltaX;
+            bendpoint.y += deltaY;
+        }
     }
 
     @Override
@@ -633,14 +720,14 @@ public class EdgeContainer extends ElementContainer {
         startx = getStartX();
         starty = getStartY();
 
-        int numKKnots = bendpointContainers.size();
+        int numKKnots = getBendpointContainerCount();
         for (int i = 0; i <= numKKnots; i++) {
             if (i == numKKnots) {
                 endx = getEndX();
                 endy = getEndY();
             } else {
-                endx = bendpointContainers.get(i).getX();
-                endy = bendpointContainers.get(i).getY();
+                endx = bendpoints.get(i).x;
+                endy = bendpoints.get(i).y;
             }
 
             boolean fatFrame = false;

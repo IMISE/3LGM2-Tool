@@ -96,7 +96,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Knickpunkt;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
@@ -106,8 +105,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
@@ -518,47 +515,45 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         JPopupMenu menu = new JPopupMenu();
         mc = ec;
         ModelElement me = ec.getElement();
-        if (!(ec instanceof BendpointContainer)) {
-            addMenuItem(menu, properties);
-            menu.addSeparator();
+        addMenuItem(menu, properties);
+        menu.addSeparator();
 
-            Class<? extends ModelElement> meClass = me.getClass();
+        Class<? extends ModelElement> meClass = me.getClass();
 
-            //Anlegbare Pfade zu anderen Elementen anbieten
-            JLabel connectLabel = null;
-            for (SimpleMetaPath metaPath : ModelConstants.getCreatableMetaPaths(meClass)) {
-                if (connectLabel == null) {
-                    connectLabel = new JLabel(getResString("LABEL_CONNECT"));
-                    menu.add(connectLabel);
-                }
-                Class<? extends ModelElement> endClass = metaPath.getEndClass();
-                JMenu pathConnectableElements = new JMenu(metaPath.getName(false, true));
-                pathConnectableElements.setIcon(verbindung_anlegen);
-                List<ModelElement> endElements = doc.getModelItems(endClass, true, true);
-                pathConnectableElements.setEnabled(!endElements.isEmpty());
-                menu.add(pathConnectableElements);
-                for (ModelElement endMe : endElements) {
-                    Action createPathAction = createPathAction(metaPath, endMe);
-                    JMenuItem createPathItem = getItem(createPathAction);
-                    pathConnectableElements.add(createPathItem);
-                }
+        //Anlegbare Pfade zu anderen Elementen anbieten
+        JLabel connectLabel = null;
+        for (SimpleMetaPath metaPath : ModelConstants.getCreatableMetaPaths(meClass)) {
+            if (connectLabel == null) {
+                connectLabel = new JLabel(getResString("LABEL_CONNECT"));
+                menu.add(connectLabel);
             }
+            Class<? extends ModelElement> endClass = metaPath.getEndClass();
+            JMenu pathConnectableElements = new JMenu(metaPath.getName(false, true));
+            pathConnectableElements.setIcon(verbindung_anlegen);
+            List<ModelElement> endElements = doc.getModelItems(endClass, true, true);
+            pathConnectableElements.setEnabled(!endElements.isEmpty());
+            menu.add(pathConnectableElements);
+            for (ModelElement endMe : endElements) {
+                Action createPathAction = createPathAction(metaPath, endMe);
+                JMenuItem createPathItem = getItem(createPathAction);
+                pathConnectableElements.add(createPathItem);
+            }
+        }
 
-            //InstaciationEdges -> "Neue Instanz" der verbundenen Klasse erzeugen anbieten
-            JLabel newInstanceLabel = null;
-            if (!ModelConstants.isSlaveType(meClass)) {
-                for (Class<? extends Edge> edgeClass : getEdgeTypes(meClass)) {
-                    if (InstanciationEdge.class.isAssignableFrom(edgeClass) && Edge.isStartClass(edgeClass, meClass)) {
-                        if (newInstanceLabel == null) {
-                            newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
-                            menu.add(newInstanceLabel);
-                        }
-                        String toolTip = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
-                        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
-                        String label = ElementsNameBuilder.getDisplayableName(endClass);
-                        JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, edgeClass.getSimpleName(), verbindung_anlegen, true, toolTip);
-                        menu.add(item);
+        //InstaciationEdges -> "Neue Instanz" der verbundenen Klasse erzeugen anbieten
+        JLabel newInstanceLabel = null;
+        if (!ModelConstants.isSlaveType(meClass)) {
+            for (Class<? extends Edge> edgeClass : getEdgeTypes(meClass)) {
+                if (InstanciationEdge.class.isAssignableFrom(edgeClass) && Edge.isStartClass(edgeClass, meClass)) {
+                    if (newInstanceLabel == null) {
+                        newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
+                        menu.add(newInstanceLabel);
                     }
+                    String toolTip = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+                    Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+                    String label = ElementsNameBuilder.getDisplayableName(endClass);
+                    JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, edgeClass.getSimpleName(), verbindung_anlegen, true, toolTip);
+                    menu.add(item);
                 }
             }
 
@@ -623,25 +618,19 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     menu.add(getLayerMenu());
                 }
             }
-
             menu.addSeparator();
-
             // Analysemenü anfügen
             menu.add(getAnalyseMenu());
-
             JMenuItem joinMenu = getJoinMenu();
             if (joinMenu != null) {
                 menu.addSeparator();
                 menu.add(joinMenu);
             }
-
             menu.addSeparator();
         }
-
         //        if (ActionLibrary.EditActions.MODEL_ACTION_REMOVE_CHILDS.isEnabled()) {
         //            menu.add(ActionLibrary.EditActions.MODEL_ACTION_REMOVE_CHILDS);
         //        }
-
         //bewirkt, dass "Aus Teilmodell löschen" nur angezeigt wird,
         //wenn das selektierte Element in mehr als einem Teilmodell vorkommt
         //und nicht der <Alle-Elemte>-Browser aktiviert ist.
@@ -650,11 +639,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 menu.add(delete_selected_from_szenario);
             }
         }
-
-        if (!(ec instanceof BendpointContainer)) {
-            menu.add(delete_selected);
-        }
-
+        menu.add(delete_selected);
         return menu;
     }
 
@@ -1356,21 +1341,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         }
 
         if (elementGetroffen) {
-            //wenn man auf einer selektierten Edge das Kontexmenü auf einem Knickpunkt öffnet,
-            //dann soll das Kontextmenü aufgehen, als wäre die Edge angeklickt worden und nicht
-            //der BendpointContainer, der ja ein Knotenkontainer ist und ein sinnloses Kontextmenü
-            //anzeigen würde
-            if (mc instanceof BendpointContainer) {
-                EdgeContainer kc = ((Knickpunkt) mc.getElement()).getOwner();
-                if (doc.isSelected(kc)) {
-                    if (left_button) {
-                        doc.select(mc, TransactionManager.STANDARD_PID);
-                    } else {
-                        mc = kc;
-                    }
-                }
-            }
-
             if (mc instanceof NodeContainer) {
                 // nichts selektiert
                 if (!doc.isSelection()) {
