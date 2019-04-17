@@ -458,7 +458,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         // nicht ausreicht.
         PathStepComponent first = pathPanels.get(0);
         querystring.append("\t<suche>\n");
-        if (first.pathStepElementTypeList.getSelectedValues().length > 0) {
+        if (!first.pathStepElementTypeList.getSelectedValuesList().isEmpty()) {
             querystring.append("\t\t<typ>\n");
             Object[] selectedIndices = first.pathStepElementTypeList.getSelectedObjects();
             for (int j = 0; j < selectedIndices.length; j++) {
@@ -467,7 +467,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
             querystring.append("\t\t</typ>\n");
         }
         querystring.append("\t\t<verbundenstate>" + (first.getConnectedState() ? "wahr" : "falsch") + "</verbundenstate>\n");
-        if (first.conditionElementTypeList.getSelectedValues().length > 0) {
+        if (!first.conditionElementTypeList.getSelectedValuesList().isEmpty()) {
             querystring.append("\t\t<verbundene>\n");
             Object[] selectedIndices = first.conditionElementTypeList.getSelectedObjects();
             for (int j = 0; j < selectedIndices.length; j++) {
@@ -482,11 +482,11 @@ public class AnalyseEditor extends JDialog implements ActionListener {
             PathStepComponent current = pathPanels.get(i);
             // Wenn Listen angezeigt werden, die entweder leer sind oder in denen nichts selektiert
             // ist.
-            if (current.pathStepElementTypeList.getSelectedValues().length == 0) {
+            if (current.pathStepElementTypeList.getSelectedValuesList().isEmpty()) {
                 break;
             }
             querystring.append("\t<suche>\n");
-            if (current.pathStepElementTypeList.getSelectedValues().length > 0) {
+            if (!current.pathStepElementTypeList.getSelectedValuesList().isEmpty()) {
                 querystring.append("\t\t<typ>\n");
 
                 Object[] selectedIndices = current.pathStepElementTypeList.getSelectedObjects();
@@ -496,7 +496,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
                 querystring.append("\t\t</typ>\n");
             }
             querystring.append("\t\t<verbundenstate>" + (current.getConnectedState() ? true : false) + "</verbundenstate>\n");
-            if (current.conditionElementTypeList.getSelectedValues().length > 0) {
+            if (!current.conditionElementTypeList.getSelectedValuesList().isEmpty()) {
                 querystring.append("\t\t<verbundene>\n");
                 Object[] selectedIndices = current.conditionElementTypeList.getSelectedObjects();
                 for (int j = 0; j < selectedIndices.length; j++) {
