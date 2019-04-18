@@ -78,7 +78,7 @@ public abstract class Edge extends ModelElement {
     }
 
     @Override
-    public int layerFor() {
+    public final int layerFor() {
         int layer = super.layerFor();
         if (layer == ModelConstants.NO_LAYER) {
             layer = ModelConstants.getEdgeLayer(k1.getClass(), k2.getClass());

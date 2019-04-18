@@ -102,7 +102,7 @@ public class Bendpoint extends Node {
     }
 
     @Override
-    public int layerFor() {
+    public final int layerFor() {
         return kc.layerFor();
     }
 
