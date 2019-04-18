@@ -10,10 +10,15 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
+/**
+ * Stellt Funktionen bereit, um eine Selektion auf den ModellElementen (Knoten, Kanten, Knickpunkte) zu erstellen und diese auszuwerten. Je nach
+ * gegebener Selektion müssen (Kontext-)Menüeinträge angepasst werden bzw. Actions verfügbar sein oder eben nicht. Diese Klasse delegiert die
+ * eigentliche Selektion und kann in die Vererbungshierarchie eingehängt werden.
+ */
 public class ElementSelectionContext {
 
     /**
-     * COMMENTME
+     * Die eigentliche Selektion
      */
     protected ModelSelection selectedContainer;
 

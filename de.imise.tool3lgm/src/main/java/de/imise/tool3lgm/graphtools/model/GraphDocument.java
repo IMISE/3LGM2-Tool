@@ -85,6 +85,10 @@ import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.dialog.ImageChooser;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
+/**
+ * Repräsentiert ein Teilmodell. Dieses Teilmodell kann das Hauptmodell sein (= spezielle Teilmodell das alle Elemente enthält, aber keine Grafik
+ * besitzt) oder ein Szenario (= eine beliebige Elementauswahl aus allen Elementen mit einer grafischen Repräsentation)
+ */
 public abstract class GraphDocument extends ElementSelectionContext implements SwingConstants {
 
     /** Zeichen, das in Kommandos zusammengehörigen Text umschließt, damit er als zusammengehörig erkannt werden kann */

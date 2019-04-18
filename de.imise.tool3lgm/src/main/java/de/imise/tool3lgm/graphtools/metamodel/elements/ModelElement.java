@@ -28,6 +28,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -1719,6 +1720,12 @@ public abstract class ModelElement extends UserFieldTarget {
         return prop;
     }
 
+    /**
+     * Erzeugt den Eigenchaftsdialog des Elementes. Unterklassen sollten diese Funktion überschreiben und alle nötigen {@link ElementDialogPanel}
+     * hinzufügen.
+     *
+     * @return
+     */
     protected ElementPropertyDialog createPropertyDialog() {
         GDCollection gdcoll = getCollection();
         if (gdcoll == null) {

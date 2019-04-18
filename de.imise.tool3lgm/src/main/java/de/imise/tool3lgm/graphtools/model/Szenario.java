@@ -16,6 +16,9 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.util.StringUtils;
 
+/**
+ * Speizielle Unterklasse für echte Teilmodelle mit grafischer Repräsentation.
+ */
 public class Szenario extends LGMGraphDocument {
 
     /**
