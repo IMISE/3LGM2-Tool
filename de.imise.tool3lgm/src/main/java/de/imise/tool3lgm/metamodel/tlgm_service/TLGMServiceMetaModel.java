@@ -18,9 +18,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.AbstractApplicationSystem_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_CommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
@@ -295,7 +295,7 @@ public class TLGMServiceMetaModel extends MetaModel {
                 StorageLink_Edge.class,
                 SupportLink_Edge.class,
                 //LWE
-                AbstractApplicationSystem_HasPartEdge.class,
+                ApplicationComponent_HasPartEdge.class,
                 ApplicationComponent_CommunicationInterface_Edge.class,
                 ApplicationComponent_CommunicationLink_Edge.class,
                 ApplicationSystem_SoftwareProduct_Edge.class,

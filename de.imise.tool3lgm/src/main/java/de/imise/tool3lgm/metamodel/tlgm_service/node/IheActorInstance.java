@@ -10,7 +10,7 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheActorInstance_E
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInterface_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheInterface_IheTransaction_Edge;
 
-public class IheActorInstance extends ApplicationComponent {
+public class IheActorInstance extends ApplicationSystem {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {
