@@ -34,7 +34,6 @@ import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_HasPartEdge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.Function_Use_Edge;
-import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActorInstance_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.tlgm_service.edge.IheIntegrationProfile_IheActor_Edge;
@@ -308,7 +307,6 @@ public class TLGMServiceMetaModel extends MetaModel {
                 //IHE-Kanten
                 IheActor_IheActorInstance_Edge.class,
                 IheActor_IheInterface_Edge.class,
-                IheActorInstance_SoftwareProduct_Edge.class,
                 ApplicationSystem_IheActorInstance_Edge.class,
                 IheIntegrationProfile_IheDomain_Edge.class,
                 IheIntegrationProfile_IheActor_Edge.class,
