@@ -466,7 +466,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        if (Static.isExpertMode() || isVisible(simpleMetaPath)) {
+        if (Static.isExpertMode() || ModelConstants.isVisible(simpleMetaPath)) {
             descripPanel.addSingleConnectionPanel(labelLastEdgeName, ModelConstants.isEditable(simpleMetaPath), simpleMetaPath);
         }
     }
@@ -546,7 +546,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     private void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final boolean add2SubTab) {
         SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClass);
-        if (!isVisible(metaPath)) {
+        if (!ModelConstants.isVisible(metaPath)) {
             return;
         }
         boolean editable = ModelConstants.isEditable(metaPath);
@@ -595,26 +595,6 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             }
         }
         addTab(new ConnectedElementsTablePanel(this, editable, tableDefinition, allDifferentSimpleMetaPaths));
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn ein Panel mit diesem Pfad angezeigt werden soll. Ob es angezeigt werden soll entscheidet sich anhand der
-     * Zielklasse des Pfades. Ist diese nur im Expert-Mode anzuzeigen, der Modeus aber nicht an, dann sollte ein Panel mit diesem MetaPath nicht
-     * angezeigt werden.
-     *
-     * @param metaPath
-     * @return
-     */
-    private static final boolean isVisible(final SimpleMetaPath metaPath) {
-        if (Static.isExpertMode()) {
-            return true;
-        }
-        for (Class<? extends ModelElement> endClass : metaPath.getEndClasses()) {
-            if (ModelConstants.isHiddenClass(endClass)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override

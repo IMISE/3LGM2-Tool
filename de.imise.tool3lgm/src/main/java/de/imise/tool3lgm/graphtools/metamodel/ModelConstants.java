@@ -261,6 +261,26 @@ public final class ModelConstants {
         return true;
     }
 
+    /**
+     * Liefert <code>true</code>, wenn ein Panel mit diesem Pfad angezeigt werden soll. Ob es angezeigt werden soll entscheidet sich anhand der
+     * Zielklasse des Pfades. Ist diese nur im Expert-Mode anzuzeigen, der Modeus aber nicht an, dann sollte ein Panel mit diesem MetaPath nicht
+     * angezeigt werden.
+     *
+     * @param metaPath
+     * @return
+     */
+    public static final boolean isVisible(final SimpleMetaPath metaPath) {
+        if (Static.isExpertMode()) {
+            return true;
+        }
+        for (Class<? extends ModelElement> endClass : metaPath.getEndClasses()) {
+            if (ModelConstants.isHiddenClass(endClass)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     ////////////
     // Kanten //
     ////////////
