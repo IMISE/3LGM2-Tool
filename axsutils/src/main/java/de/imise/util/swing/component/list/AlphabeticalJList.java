@@ -6,9 +6,8 @@ import java.util.Iterator;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
-import de.imise.util.NamedObjectContainer;
-
 import de.imise.util.Alphabetical;
+import de.imise.util.NamedObjectContainer;
 
 /**
  * JList, die alle Items immer alphabetisch sortiert anzeigt.
