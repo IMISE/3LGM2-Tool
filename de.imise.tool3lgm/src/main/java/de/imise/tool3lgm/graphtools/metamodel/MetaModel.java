@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +38,7 @@ public abstract class MetaModel {
     public MetaModel() {
         putOldToNewClassNames();
         initCreatableMetaPaths();
+        addRemovedEdgeClasses();
     }
 
     /**
@@ -303,6 +305,39 @@ public abstract class MetaModel {
             }
         }
         return uniqueNodes.build();
+    }
+
+    /**
+     * Mappt von einer Elementklasse auf alle Kantenklassen, die eine ab dieser Klasse nicht mehr für diese Elementart gelten sollen. Damit können
+     * ererbte Kanten abgeschaltet werden. Z.B. wenn man eine Unterklasse einer bestehenden Metamodellklasse definiert, die aber nicht mehr wie die
+     * Oberklasse in Teilelemente zerlegt werden könen soll, dann muss man hier die Unterklasse und die 'abzuschaltende' HatTeil-Kante angeben.
+     * Es müssen alle konkreten Element-Klassen angegeben werden, für die eine konkrete Kantenklasse nicht gelten soll. D.h. die Klassen hier werden
+     * auf Identität geprüft und nicht auf Unterklassen
+     */
+    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClasses = ArrayListMultimap.create();
+
+    @SafeVarargs
+    protected final void addRemovedEdgeClasses(final Class<? extends ModelElement> elementClass, final Class<? extends Edge>... edgeClasses) {
+        elementClassToRemovedEdgeClasses.putAll(elementClass, Arrays.asList(edgeClasses));
+    }
+
+    /**
+     * Diese Funktion können Unterklassen überschreiben und darin dann {@link #addRemovedEdgeClasses(Class, Class...)} aufrufen.
+     */
+    protected void addRemovedEdgeClasses() {
+
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse für die übergebene Elementklasse als nicht mehr gültig definiert wurde.
+     *
+     * @param elementClass
+     * @param edgeClass
+     * @return
+     */
+    public boolean isRemovedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        Collection<Class<? extends Edge>> removedEdgeClasses = elementClassToRemovedEdgeClasses.get(elementClass);
+        return removedEdgeClasses != null && removedEdgeClasses.contains(edgeClass);
     }
 
     ///////////////////////////////////

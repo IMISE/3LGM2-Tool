@@ -364,6 +364,12 @@ public class TLGMServiceMetaModel extends MetaModel {
         return IMPORTABLE_NODES;
     }
 
+    @Override
+    protected void addRemovedEdgeClasses() {
+        //ActorInstances sind Unterklassen von ApplicationComponent, man soll sie aber nicht mehr in Unterklassen zerlegen können und sie sollen nicht wieder selbst mit IheActorInstances versehen werden können
+        addRemovedEdgeClasses(IheActorInstance.class, ApplicationComponent_HasPartEdge.class, ApplicationSystem_IheActorInstance_Edge.class);
+    }
+
     ///////////////////////////////////////////////////////////////////////
     // Bedingungspfade für Kanten (siehe Beschreibung getConditionPath() //
     ///////////////////////////////////////////////////////////////////////

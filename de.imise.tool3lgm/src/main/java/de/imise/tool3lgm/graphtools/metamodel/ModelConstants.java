@@ -281,6 +281,16 @@ public final class ModelConstants {
         return true;
     }
 
+    /**
+     * @param elementClass
+     * @param edgeClass
+     * @return
+     * @see MetaModel#isRemovedEdgeClass(Class, Class)
+     */
+    public static final boolean isRemovedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        return metaModel.isRemovedEdgeClass(elementClass, edgeClass);
+    }
+
     ////////////
     // Kanten //
     ////////////
@@ -598,7 +608,9 @@ public final class ModelConstants {
         ArrayList<Class<? extends Edge>> elementClassEdgeClasses = new ArrayList<>();
         for (Class<? extends Edge> edgeClass : ALL_EDGES_SET) {
             if (isStartOrEndClass(edgeClass, elementClass)) {
-                elementClassEdgeClasses.add(edgeClass);
+                if (!metaModel.isRemovedEdgeClass(elementClass, edgeClass)) {
+                    elementClassEdgeClasses.add(edgeClass);
+                }
             }
         }
         int size = elementClassEdgeClasses.size();
@@ -662,7 +674,9 @@ public final class ModelConstants {
         ArrayList<Class<? extends Edge>> resultEdgeClasses = new ArrayList<>();
         for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass1)) {
             if (isConnecting(edgeClass, elementClass1, elementClass2)) {
-                resultEdgeClasses.add(edgeClass);
+                if (!metaModel.isRemovedEdgeClass(elementClass2, edgeClass)) { // !metaModel.isRemovedEdgeClass(elementClass1, edgeClass) wird schon in getEdgeTypes(elementClass1) geprüft
+                    resultEdgeClasses.add(edgeClass);
+                }
             }
         }
         Class<? extends Edge>[] returnClasses = null;
