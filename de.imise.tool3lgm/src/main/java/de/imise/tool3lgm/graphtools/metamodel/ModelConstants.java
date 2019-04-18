@@ -979,7 +979,7 @@ public final class ModelConstants {
     }
 
     public static boolean isRecursiveHasPartEdge(final Class<? extends Edge> edgeClass) {
-        return SubordinationEdge.class.isAssignableFrom(edgeClass) && isRecursive(edgeClass);
+        return isHasPartEdge(edgeClass) && isRecursive(edgeClass);
     }
 
     public static boolean isRecursiveSubordination(final Class<? extends Edge> edgeClass) {
