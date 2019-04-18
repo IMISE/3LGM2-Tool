@@ -126,6 +126,8 @@ import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
 /**
+ * Repräsentiert ein Gesamtmodell. GDColllection = GrapDocument-Sammlung - also Sammlung aller Teilmodelle, die als Gesamtmodell gesehen werden.
+ *
  * @author thomas, AXS
  */
 public final class GDCollection extends UserFieldTarget {
@@ -236,18 +238,30 @@ public final class GDCollection extends UserFieldTarget {
         activeGraphDocumentsList.add(doc);
     }
 
+    /**
+     * @return
+     */
     public GDCollectionFileHandler getFileHandler() {
         return fileHandler;
     }
 
+    /**
+     * @return
+     */
     public File getFile() {
         return fileHandler.getFile();
     }
 
+    /**
+     * @return
+     */
     public String getFileVersion() {
         return fileHandler.getFileVersion();
     }
 
+    /**
+     * @return
+     */
     public GDCollectionImExportHandler getImExportHandler() {
         return imExportHandler;
     }
