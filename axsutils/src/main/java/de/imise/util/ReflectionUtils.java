@@ -92,8 +92,6 @@ public class ReflectionUtils {
      * Ansonsten wird mindestens <code>Object.class</code> zurückgeliefert.
      *
      * @param objectList
-     * @param startIndex
-     * @param endIndex
      * @return
      */
     public static final Class<?> getCommonSuperClass(final Collection<?> objectListOrClassList) {
