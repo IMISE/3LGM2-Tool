@@ -55,7 +55,6 @@ public final class NamedObjectContainer<E> {
         this.toString = toString;
         this.object = object;
         this.equalsIfToStringIsEquals = equalsIfToStringIsEquals;
-        //System.err.println(getFullString(this));
     }
 
     /**
@@ -71,7 +70,7 @@ public final class NamedObjectContainer<E> {
 
     @Override
     public String toString() {
-        return toString;
+        return String.valueOf(toString);
     }
 
     /**
@@ -84,7 +83,7 @@ public final class NamedObjectContainer<E> {
     @Override
     public int hashCode() {
         if (toString == null && object == null) {
-            return super.hashCode();
+            return getClass().hashCode();
         }
         if (toString == null) {
             return object.hashCode();
@@ -96,30 +95,30 @@ public final class NamedObjectContainer<E> {
     }
 
     @Override
-    public boolean equals(final Object obj) {
-        if (obj == null) {
+    public boolean equals(final Object other) {
+        if (other == null) {
             return false;
         }
-        if (obj == this) {
+        if (other == this) {
             return true;
         }
-
-        if (!equalsIfToStringIsEquals) {//wenn nicht nur der String-Wert sondern auch die Elementklasse und das enthaltene Objekt auch getestet werden soll
-            if (!(obj instanceof NamedObjectContainer)) {
-                return false;
-            }
-            if (((NamedObjectContainer<?>) obj).getObject().equals(getObject())) {
+        if (!(other instanceof NamedObjectContainer)) {
+            return false;
+        }
+        NamedObjectContainer<?> otherNoc = (NamedObjectContainer<?>) other;
+        if (!(equalsIfToStringIsEquals && otherNoc.equalsIfToStringIsEquals)) {//wenn nicht nur der String-Wert sondern auch die Elementklasse und das enthaltene Objekt auch getestet werden soll
+            if (object == null) {
+                if (otherNoc.object != null) {
+                    return false;
+                }
+            } else if (!object.equals(otherNoc.object)) {
                 return false;
             }
         }
-        if (!toString().equals(obj.toString())) {
+        if (!toString().equals(other.toString())) {
             return false;
         }
         return true;
-    }
-
-    public final String getFullString() {
-        return "NamedObjectContainer(" + object + ", \"" + toString + "\")";
     }
 
 }
