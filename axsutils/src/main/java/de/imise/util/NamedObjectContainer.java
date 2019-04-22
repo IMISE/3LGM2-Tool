@@ -1,5 +1,9 @@
 package de.imise.util;
 
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
+
+import de.imise.util.pair.Pair;
+
 /**
  * Hilfsklasse, um Objekte zu kapseln, deren <code>toString()</code>-Methode nicht
  * das zurückliefert, was angezeigt werden soll. Dieses Objekt speichert das
@@ -8,19 +12,7 @@ package de.imise.util;
  * @author AXS
  * @created 17.10.2007
  */
-public final class NamedObjectContainer<E> {
-
-    /**
-     * <code>String</code> der in der Liste angezeigt wird. <br>
-     * Dies ist also der String, der über <code>toString()</code> zurück
-     * gegeben wird.
-     */
-    protected final String toString; //ACHTUNG: niemals unfinalizen und set() hierfür schreiben!
-
-    /**
-     * Das Objekt das durch den angezeigten String dargestellt wird
-     */
-    protected final E object; //ACHTUNG: niemals unfinalizen und set() hierfür schreiben!
+public final class NamedObjectContainer<E> extends Pair<E, String> {
 
     /**
      * Wenn <code>true</code>, reicht bei {@link #equals(Object)} für Gleichheit Identität oder dass beide {@link #toString()}-Funktionen dasselbe
@@ -52,8 +44,7 @@ public final class NamedObjectContainer<E> {
      *            die enthaltenen Objekte auch equals ist.
      */
     public NamedObjectContainer(final E object, final String toString, final boolean equalsIfToStringIsEquals) {
-        this.toString = toString;
-        this.object = object;
+        super(object, toString);
         this.equalsIfToStringIsEquals = equalsIfToStringIsEquals;
     }
 
@@ -70,28 +61,40 @@ public final class NamedObjectContainer<E> {
 
     @Override
     public String toString() {
-        return String.valueOf(toString);
+        return String.valueOf(getSecondItem());
     }
 
     /**
      * @return Liefert das <code>object</code>
      */
     public E getObject() {
-        return object;
+        return getFirstItem();
     }
 
+    /**
+     * Guaranteed to throw an exception and leave the list unmodified.
+     *
+     * @throws UnsupportedOperationException always
+     * @deprecated Unsupported operation.
+     */
+    @CanIgnoreReturnValue
+    @Deprecated
     @Override
-    public int hashCode() {
-        if (toString == null && object == null) {
-            return getClass().hashCode();
-        }
-        if (toString == null) {
-            return object.hashCode();
-        }
-        if (object == null) {
-            return toString.hashCode();
-        }
-        return toString.hashCode() * object.hashCode();
+    public final void setFirstItem(final E o) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * Guaranteed to throw an exception and leave the toStringValue unmodified.
+     *
+     * @throws UnsupportedOperationException always
+     * @deprecated Unsupported operation.
+     */
+    @CanIgnoreReturnValue
+    @Deprecated
+    @Override
+    public void setSecondItem(final String o) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -107,11 +110,11 @@ public final class NamedObjectContainer<E> {
         }
         NamedObjectContainer<?> otherNoc = (NamedObjectContainer<?>) other;
         if (!(equalsIfToStringIsEquals && otherNoc.equalsIfToStringIsEquals)) {//wenn nicht nur der String-Wert sondern auch die Elementklasse und das enthaltene Objekt auch getestet werden soll
-            if (object == null) {
-                if (otherNoc.object != null) {
+            if (firstObject == null) {
+                if (otherNoc.firstObject != null) {
                     return false;
                 }
-            } else if (!object.equals(otherNoc.object)) {
+            } else if (!firstObject.equals(otherNoc.firstObject)) {
                 return false;
             }
         }

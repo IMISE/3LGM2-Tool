@@ -6,6 +6,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNotSame;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertSame;
+import static org.testng.Assert.assertThrows;
 
 import org.testng.annotations.Test;
 
@@ -168,11 +169,11 @@ public class NamedObjectContainerTest {
     private void toStringTest(final Object object, final String toString) {
         NamedObjectContainer<Object> noc = new NamedObjectContainer<>(object, toString);
         String s = toString == null ? null : "" + toString; //neues String Object mit selbem Inhalt anlegen
-        assertEquals(noc.toString, s);
+        assertEquals(noc.getSecondItem(), s);
         s = String.valueOf(s); //ist toString null, dann gibt toString() "null" als String zurück, ansonsten den String selbst
         assertEquals(noc.toString(), s);
         noc = new NamedObjectContainer<>(object, null); //toString mit null testen
-        assertNull(noc.toString); //Variable selbst ist null
+        assertNull(noc.getSecondItem()); //Variable selbst ist null
         assertEquals(noc.toString(), "null"); //toString() gibt aber "null" als String zurück
     }
 
@@ -187,6 +188,10 @@ public class NamedObjectContainerTest {
         noc2 = new NamedObjectContainer<>(null, "Foo");
         noc3 = new NamedObjectContainer<>(new Object(), "Bar");
         getObject(noc1, noc2, noc3);
+
+        assertSame(noc1.getFirstItem(), noc1.getObject());
+        assertSame(noc2.getFirstItem(), noc2.getObject());
+        assertSame(noc3.getFirstItem(), noc3.getObject());
     }
 
     private <E, F, G> void getObject(final NamedObjectContainer<E> noc1, final NamedObjectContainer<F> noc2, final NamedObjectContainer<G> noc3) {
@@ -215,53 +220,19 @@ public class NamedObjectContainerTest {
     }
 
     @Test
-    public void hashCodeTest() {
-        Object object = new Object();
-        String toString = "Foo";
-        NamedObjectContainer<Object> noc1 = new NamedObjectContainer<>(object, toString);
-        NamedObjectContainer<Object> noc2 = new NamedObjectContainer<>(object, toString);
-        int hashCode1 = noc1.hashCode();
-        int hashCode2 = noc2.hashCode();
-        assertEquals(hashCode1, hashCode2);
-        noc2 = NamedObjectContainer.of(new Object(), toString);
-        hashCode2 = noc2.hashCode();
-        assertNotEquals(hashCode1, hashCode2);
-        noc2 = NamedObjectContainer.of(object, "Bar");
-        hashCode2 = noc2.hashCode();
-        assertNotEquals(hashCode1, hashCode2);
+    public final void setFirstItem() {
+        NamedObjectContainer<Object> noc = new NamedObjectContainer<>(new Object(), "Foo");
+        assertThrows(UnsupportedOperationException.class, () -> {
+            noc.setFirstItem(new Object());
+        });
+    }
 
-        noc1 = new NamedObjectContainer<>(null, null);
-        hashCode1 = noc1.hashCode();
-        assertNotEquals(hashCode1, hashCode2);
-        noc2 = new NamedObjectContainer<>(null, null);
-        hashCode2 = noc2.hashCode();
-        assertEquals(noc1, noc2);
-        assertEquals(hashCode1, hashCode2);
-
-        noc1 = new NamedObjectContainer<>(new Object(), null);
-        hashCode1 = noc1.hashCode();
-        assertNotEquals(hashCode1, hashCode2);
-        noc2 = new NamedObjectContainer<>(noc1.getObject(), null);
-        hashCode2 = noc2.hashCode();
-        assertEquals(noc1, noc2);
-        assertEquals(hashCode1, hashCode2);
-        noc2 = new NamedObjectContainer<>(new Object(), null);
-        hashCode2 = noc2.hashCode();
-        assertNotEquals(noc1, noc2);
-        assertNotEquals(hashCode1, hashCode2);
-
-        noc1 = new NamedObjectContainer<>(null, toString);
-        hashCode1 = noc1.hashCode();
-        assertNotEquals(hashCode1, hashCode2);
-        noc2 = new NamedObjectContainer<>(null, toString);
-        hashCode2 = noc2.hashCode();
-        assertEquals(noc1, noc2);
-        assertEquals(hashCode1, hashCode2);
-        noc2 = new NamedObjectContainer<>(null, "Bar");
-        hashCode2 = noc2.hashCode();
-        assertNotEquals(noc1, noc2);
-        assertNotEquals(hashCode1, hashCode2);
-
+    @Test
+    public void setSecondItem() {
+        NamedObjectContainer<Object> noc = new NamedObjectContainer<>(new Object(), "Foo");
+        assertThrows(UnsupportedOperationException.class, () -> {
+            noc.setSecondItem("Bar");
+        });
     }
 
 }
