@@ -627,7 +627,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             menu.addSeparator();
 
             // Analysemenü anfügen
-            menu.add(getAnalyseMenu());
+            menu.add(getAnalysisMenu());
 
             JMenuItem joinMenu = getJoinMenu();
             if (joinMenu != null) {
@@ -2003,27 +2003,21 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      *
      * @return Analysemenü
      */
-    private JMenu getAnalyseMenu() {
+    private JMenu getAnalysisMenu() {
         JMenu menu = new JMenu(getResString("analysis"));
         ElementContainer ec = doc.getLastSelected();
         if (ec != null && ec.getElement() instanceof Node) {
             // Alle Analysen für die ausgewählte Klasse holen
-            String klasse = ec.getElement().getClass().getName();
-            klasse = klasse.substring(klasse.lastIndexOf('.') + 1);
-            List<AbstractAnalyse> analysen = AnalyseRepository.getAnalysenFuerKnoten(klasse);
+            Class<? extends ModelElement> elementClass = ec.getElement().getClass();
+            List<AbstractAnalyse> analysis = AnalyseRepository.getAnalysis(elementClass);
             // Analysen ins Menü eintragen
-            if (analysen != null && analysen.size() > 0) {
-                for (final AbstractAnalyse ana : analysen) {
-                    JMenuItem item = new JMenuItem(ana.getName());
-                    menu.add(item);
-                    item.addActionListener(e -> ana.setAnalysisResult(doc));
-                }
-            } else {
-                menu.setEnabled(false);
+            for (final AbstractAnalyse ana : analysis) {
+                JMenuItem item = new JMenuItem(ana.getName());
+                menu.add(item);
+                item.addActionListener(e -> ana.setAnalysisResult(doc));
             }
-        } else {
-            menu.setEnabled(false);
         }
+        menu.setEnabled(menu.getItemCount() != 0);
         return menu;
     }
 

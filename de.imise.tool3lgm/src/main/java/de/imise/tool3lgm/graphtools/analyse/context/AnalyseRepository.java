@@ -89,23 +89,22 @@ public class AnalyseRepository {
     /**
      * Gibt alle Analysen zurück, deren Startknoten dem übergebenen Node entspricht.
      *
-     * @param elementClassName
-     * @return ArrayList, in der jeder Eintrag eine XMLAnalyse ist.
+     * @param elementClass
+     * @return List, in der jeder Eintrag eine XMLAnalyse ist. Ist keine vorhanden, kommt eine leere Liste zurück, aber niemals <code>null</code>.
      */
-    public static List<AbstractAnalyse> getAnalysenFuerKnoten(final String elementClassName) {
-        Class<? extends ModelElement> elementClass = ModelConstants.getClassForName(elementClassName);
-        List<AbstractAnalyse> analysenFuerKnoten = new ArrayList<>();
+    public static List<AbstractAnalyse> getAnalysis(final Class<? extends ModelElement> elementClass) {
+        List<AbstractAnalyse> analysis = new ArrayList<>();
         List<AbstractAnalyse> allAnalysis = new ArrayList<>(getXMLAnalysen());
         allAnalysis.addAll(ModelConstants.getAnalysisDefinition().getNodeAnalysis());
         for (AbstractAnalyse ana : allAnalysis) {
-            ArrayList<Class<? extends ModelElement>> startknoten = ana.getStartknoten();
-            for (Class<? extends ModelElement> startKnotenClass : startknoten) {
-                if (startKnotenClass != null && startKnotenClass.isAssignableFrom(elementClass)) {
-                    analysenFuerKnoten.add(ana);
+            ArrayList<Class<? extends ModelElement>> startClasses = ana.getStartknoten();
+            for (Class<? extends ModelElement> startClass : startClasses) {
+                if (startClass != null && startClass.isAssignableFrom(elementClass)) {
+                    analysis.add(ana);
                 }
             }
         }
-        return analysenFuerKnoten;
+        return analysis;
     }
 
     /**
