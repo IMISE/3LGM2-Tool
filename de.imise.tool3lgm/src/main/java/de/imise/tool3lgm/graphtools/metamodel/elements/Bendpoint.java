@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 /**
  * @author imi0wendt (01.11.2004)
  */
-public class Bendpoint extends Node {
+public final class Bendpoint extends Node {
 
     /**
      * ID der Kante, zu der der Knickpunkt gehört
@@ -24,13 +24,6 @@ public class Bendpoint extends Node {
      * Index des Knickpunktes auf dem {@link EdgeContainer}
      */
     private int index = 0;
-
-    /**
-     *
-     */
-    public Bendpoint() {
-        super();
-    }
 
     @Override
     public ElementContainer createContainer(final GraphDocument doc) {
@@ -102,7 +95,7 @@ public class Bendpoint extends Node {
     }
 
     @Override
-    public int layerFor() {
+    public final int layerFor() {
         return kc.layerFor();
     }
 
