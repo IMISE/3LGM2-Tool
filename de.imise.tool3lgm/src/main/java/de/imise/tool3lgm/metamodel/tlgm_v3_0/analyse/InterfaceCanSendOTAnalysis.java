@@ -12,7 +12,7 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
+import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -36,14 +36,14 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * @author AXS
  * @create 14.10.2011
  */
-public class InterfaceCanSendOTAnalysis extends AbstractAnalyse {
+public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
 
     /**
      *
      */
     public InterfaceCanSendOTAnalysis() {
         super();
-        startknoten.add(Bausteinschnittstelle.class);
+        startClasses.add(Bausteinschnittstelle.class);
         SimpleResourceHandler resHandler = new SimpleResourceHandler(getClass());
         name = resHandler.getString("ANALYSIS_NAME");
     }

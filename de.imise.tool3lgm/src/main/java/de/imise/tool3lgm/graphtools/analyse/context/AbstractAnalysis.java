@@ -12,13 +12,13 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
-public abstract class AbstractAnalyse {
+public abstract class AbstractAnalysis {
 
     /** der Name der Analyse. */
     protected String name;
 
     /** der Node, bei dem die Analyse beginnt. */
-    protected ArrayList<Class<? extends ModelElement>> startknoten = new ArrayList<>();
+    protected List<Class<? extends ModelElement>> startClasses = new ArrayList<>();
 
     /**
      * Gibt den Namen der XMLAnalyse zurück.
@@ -43,25 +43,25 @@ public abstract class AbstractAnalyse {
      * ACHTUNG: Diese Liste wird nicht bei der Durchführung der XMLAnalyse verwendet, sondern nur
      * bei der Zuordnung, welche Analysen für wlche Node zur Verfügung stehen.
      *
-     * @return eine ArrayList der Startknoten.
+     * @return eine Liste der Startelementklassen.
      */
-    public ArrayList<Class<? extends ModelElement>> getStartknoten() {
-        return startknoten;
+    public List<Class<? extends ModelElement>> getStartClasses() {
+        return startClasses;
     }
 
     /**
      * @return Kommaseparierten String aller Startklassen der XMLAnalyse für die aktuelle Locale
      */
-    public String getStartknotenString() {
-        if (startknoten == null || startknoten.size() == 0) {
+    public String getStartClassesDisplayNames() {
+        if (startClasses == null || startClasses.size() == 0) {
             return "";
         }
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < startknoten.size() - 1; i++) {
-            sb.append(ElementsNameBuilder.getDisplayableName(ModelConstants.getClassForName(startknoten.get(i).getName())));
+        for (int i = 0; i < startClasses.size() - 1; i++) {
+            sb.append(ElementsNameBuilder.getDisplayableName(ModelConstants.getClassForName(startClasses.get(i).getName())));
             sb.append(", ");
         }
-        sb.append(ElementsNameBuilder.getDisplayableName(ModelConstants.getClassForName(startknoten.get(startknoten.size() - 1).getName())));
+        sb.append(ElementsNameBuilder.getDisplayableName(ModelConstants.getClassForName(startClasses.get(startClasses.size() - 1).getName())));
         return sb.toString();
     }
 

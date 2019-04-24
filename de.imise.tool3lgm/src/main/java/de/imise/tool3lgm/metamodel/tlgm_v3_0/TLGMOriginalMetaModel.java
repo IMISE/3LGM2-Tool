@@ -6,7 +6,7 @@ import java.util.Set;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
@@ -138,8 +138,8 @@ public class TLGMOriginalMetaModel extends MetaModel {
     ////////////////////////
 
     @Override
-    protected Class<? extends AnalysisDefinition> getAnalysisDefinitionClass() {
-        return TLGMOriginalAnalysisDefinition.class;
+    protected Class<? extends AnalysesDefinition> getAnalysisDefinitionClass() {
+        return TLGMOriginalAnalysesDefinition.class;
     }
 
     /////////////////////////////

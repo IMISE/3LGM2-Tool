@@ -39,7 +39,7 @@ import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
 /** @author thomas, AXS, xhb */
-public class AnalyseEditor extends JDialog implements ActionListener {
+public class AnalysisEditor extends JDialog implements ActionListener {
 
     /**
      * Diese Componente besteht aus zwei Listen, die Elementklassen enthalten. In der ersten sind
@@ -99,8 +99,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
 
         /** Fügt die Listen und Beschriftungen im Panel hinzu */
         public void addElements() {
-            // TODO: für unsere englischen Freunde auslagern. Dann aber auch gleich die
-            // Analyseeditoren und
+            // TODO: für unsere englischen Freunde auslagern. Dann aber auch gleich die Analyseeditoren und
             // parser so umschreiben, dass sie nur noch englische Tags schreiben und lesen
 
             pathStepMainPanelConstraints.gridy++;
@@ -134,8 +133,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
             pathStepMainPanelConstraints.gridy--;
             pathStepMainPanelConstraints.gridheight = 2;
 
-            // Die Liste, die die Elementklassen enthält, mit den Einschränkungen getroffen werden
-            // können.
+            // Die Liste, die die Elementklassen enthält, mit den Einschränkungen getroffen werden können.
             pathStepMainPanel.add(scrollPaneverb, pathStepMainPanelConstraints);
             pathStepMainPanelConstraints.gridheight = 1;
 
@@ -283,25 +281,25 @@ public class AnalyseEditor extends JDialog implements ActionListener {
     }
 
     /**
-     * Zeigt den AnalyseEditor an.
+     * Zeigt den AnalysisEditor an.
      *
      * @param owner
      */
     public static void showDialog(final JDialog owner) {
         if (editor == null) {
-            editor = new AnalyseEditor(owner);
+            editor = new AnalysisEditor(owner);
         }
         editor.setVisible(true);
     }
 
     /**
-     * Zeigt den AnalyseEditor an.
+     * Zeigt den AnalysisEditor an.
      *
      * @param owner
      */
     public static void showDialog(final JFrame owner) {
         if (editor == null) {
-            editor = new AnalyseEditor(owner);
+            editor = new AnalysisEditor(owner);
         }
         editor.setVisible(true);
     }
@@ -330,16 +328,16 @@ public class AnalyseEditor extends JDialog implements ActionListener {
     private JPanel mainPanel;
 
     /** Die Instanz dieser Klasse, die dann tatsächlich angezeigt wird. */
-    static AnalyseEditor editor = null;
+    static AnalysisEditor editor = null;
 
     /** @param owner */
-    private AnalyseEditor(final Frame owner) {
+    private AnalysisEditor(final Frame owner) {
         super(owner);
         init();
     }
 
     /** @param owner */
-    private AnalyseEditor(final JDialog owner) {
+    private AnalysisEditor(final JDialog owner) {
         super(owner);
         init();
     }
@@ -357,9 +355,9 @@ public class AnalyseEditor extends JDialog implements ActionListener {
             PathStepComponent first = pathPanels.get(0);
             if (!(first.pathStepElementTypeList.isSelectionEmpty() && first.conditionElementTypeList.isSelectionEmpty())) {
                 try {
-                    XMLAnalyse.createAnalyse(getAnalyseString()).setAnalysisResult(doc);
+                    XMLAnalysis.createAnalysis(getAnalysisString()).setAnalysisResult(doc);
                 } catch (SAXException e1) {
-                    Log.log(Log.ERROR, "Can't execute analysis\n" + getAnalyseString());
+                    Log.log(Log.ERROR, "Can't execute analysis\n" + getAnalysisString());
                     // e1.printStackTrace();
                 }
             }
@@ -399,28 +397,27 @@ public class AnalyseEditor extends JDialog implements ActionListener {
                 if (val == null) {
                     val = "(null)";
                 }
-                XMLAnalyse toadd = null;
+                XMLAnalysis toadd = null;
                 try {
-                    toadd = XMLAnalyse.createAnalyse(val, getAnalyseString());
+                    toadd = XMLAnalysis.createAnalysis(val, getAnalysisString());
                 } catch (SAXException ex) {
-                    Log.show(Log.ERROR, getResString("AnalyseNichtErstellt") + "\n" + ex.getMessage(), ex);
+                    Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
                 }
                 if (toadd != null) {
-                    // wenn der AnalyseRepositoryFrame sichtbar ist, wird die neue XMLAnalyse nicht
-                    // gleich ins
-                    // Standard-Repository übernommen, sondern erst ins
-                    if (AnalyseRepositoryFrame.dialog.isVisible()) {
-                        AnalyseRepositoryFrame.addAnalyse(toadd, false);
-                        AnalyseRepositoryFrame.analysisChanged = true;
-                        AnalyseRepositoryFrame.table.update();
-                        AnalyseRepositoryFrame.refreshActionStates();
-                        // der Editor wurde ohne AnalyseRepositoryFrame gestartet -> neue XMLAnalyse
+                    // wenn der AnalysesRepositoryFrame sichtbar ist, wird die neue XMLAnalyse nicht
+                    // gleich ins Standard-Repository übernommen, sondern erst ins
+                    if (AnalysesRepositoryFrame.dialog.isVisible()) {
+                        AnalysesRepositoryFrame.addAnalysis(toadd, false);
+                        AnalysesRepositoryFrame.analysisChanged = true;
+                        AnalysesRepositoryFrame.table.update();
+                        AnalysesRepositoryFrame.refreshActionStates();
+                        // der Editor wurde ohne AnalysesRepositoryFrame gestartet -> neue XMLAnalyse
                         // gleich ins Repository schreiben
                     } else {
-                        AnalyseRepository.addAnalyse(toadd);
-                        AnalyseRepository.saveRepository();
+                        AnalysesRepository.addAnalysis(toadd);
+                        AnalysesRepository.saveRepository();
                         // die Kopie der Analysen des Repositories auch im Dialog updaten
-                        AnalyseRepositoryFrame.setAnalysen(AnalyseRepository.getXMLAnalysen());
+                        AnalysesRepositoryFrame.setAnalyses(AnalysesRepository.getXMLAnalyses());
                     }
                 }
             }
@@ -432,8 +429,8 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         super.dispose();
         // null setzten, weil nicht fest steht, ob der Editor wieder mit dem gleichen Parent
         // gestartet wird
-        // (das kann das Hauptfenster oder der AnalyseRepositoryFrame sein)
-        AnalyseEditor.editor = null;
+        // (das kann das Hauptfenster oder der AnalysesRepositoryFrame sein)
+        AnalysisEditor.editor = null;
     }
 
     /**
@@ -441,7 +438,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
      *
      * @return XML-String der XMLAnalyse
      */
-    public String getAnalyseString() {
+    public String getAnalysisString() {
         PathStepComponent firstListPanel = pathPanels.get(0);
         StringBuilder querystring = new StringBuilder("<?xml version=\"1.0\" encoding=\"ISO-8559-15\"?>\n<analyse>\n");
         querystring.append("\t<startknoten name=\"");
@@ -547,7 +544,7 @@ public class AnalyseEditor extends JDialog implements ActionListener {
         /* Panels Ende */
         JPanel buttons = new JPanel();
         buttons.setLayout(new FlowLayout());
-        JButton but = new JButton(AnalyseRepositoryFrameActions.ACTION_RESET_ANALYSIS_RESULT);
+        JButton but = new JButton(AnalysesRepositoryFrameActions.ACTION_RESET_ANALYSIS_RESULT);
         buttons.add(but);
         but = new JButton(getResString("ana_start"));
         but.addActionListener(this);

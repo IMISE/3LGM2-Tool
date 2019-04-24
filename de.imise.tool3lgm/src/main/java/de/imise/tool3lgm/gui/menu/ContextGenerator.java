@@ -87,8 +87,8 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
-import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
+import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
+import de.imise.tool3lgm.graphtools.analyse.context.AnalysesRepository;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -2009,9 +2009,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         if (ec != null && ec.getElement() instanceof Node) {
             // Alle Analysen für die ausgewählte Klasse holen
             Class<? extends ModelElement> elementClass = ec.getElement().getClass();
-            List<AbstractAnalyse> analysis = AnalyseRepository.getAnalysis(elementClass);
+            List<AbstractAnalysis> analysis = AnalysesRepository.getAnalyses(elementClass);
             // Analysen ins Menü eintragen
-            for (final AbstractAnalyse ana : analysis) {
+            for (final AbstractAnalysis ana : analysis) {
                 JMenuItem item = new JMenuItem(ana.getName());
                 menu.add(item);
                 item.addActionListener(e -> ana.setAnalysisResult(doc));

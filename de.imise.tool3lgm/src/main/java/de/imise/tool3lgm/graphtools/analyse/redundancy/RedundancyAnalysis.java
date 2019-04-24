@@ -28,7 +28,7 @@ import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
-import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -118,7 +118,7 @@ public class RedundancyAnalysis extends WindowAdapter {
 
             String con = " " + getResString("ana_fr_concerning") + " ";
 
-            AnalysisDefinition analysisDefinition = ModelConstants.getAnalysisDefinition();
+            AnalysesDefinition analysisDefinition = ModelConstants.getAnalysesDefinition();
             RedundancyAnalysisDefinitions redundancyAnalysisDefinitions = analysisDefinition.getRedundancyAnalysisDefinitions();
             int analyseCount = redundancyAnalysisDefinitions.size();
             String[] options = new String[analyseCount + 1];
@@ -269,7 +269,7 @@ public class RedundancyAnalysis extends WindowAdapter {
         // alle Results hintereinander ausgeben
         for (RedundancyAnalysisResult result : redundancyAnalysisResults) {
             SingleRedundancyAnalysisDefinition singleRedundancyAnalysisDefinition = result.getDefinition();
-            outputDialog.appendln(getResString("ana_fr_option") + ": " + result.getAnalyseOptionString(), true);
+            outputDialog.appendln(getResString("ana_fr_option") + ": " + result.getAnalysisOptionString(), true);
             outputDialog.appendln();
 
             // Nicht verzichtbare Anwendungssysteme
