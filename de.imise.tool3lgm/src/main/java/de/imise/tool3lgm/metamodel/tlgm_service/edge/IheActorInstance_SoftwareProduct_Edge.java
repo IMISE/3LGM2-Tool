@@ -13,12 +13,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.SoftwareProduct;
  */
 public final class IheActorInstance_SoftwareProduct_Edge extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = IheActorInstance.class;
+    public static final Class<? extends ModelElement> STCL = IheActorInstance.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = SoftwareProduct.class;
+    public static final Class<? extends ModelElement> ETCL = SoftwareProduct.class;
 
 }

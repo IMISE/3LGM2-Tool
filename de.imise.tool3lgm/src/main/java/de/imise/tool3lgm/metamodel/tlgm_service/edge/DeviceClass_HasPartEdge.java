@@ -13,12 +13,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.DeviceClass;
  */
 public final class DeviceClass_HasPartEdge extends PartitioningEdge {
 
-    public static final Class<? extends ModelElement> stcl = DeviceClass.class;
+    public static final Class<? extends ModelElement> STCL = DeviceClass.class;
 
-    public static final EdgeCardinality scard = ZERO_ONE;
+    public static final EdgeCardinality SCARD = ZERO_ONE;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = DeviceClass.class;
+    public static final Class<? extends ModelElement> ETCL = DeviceClass.class;
 
 }

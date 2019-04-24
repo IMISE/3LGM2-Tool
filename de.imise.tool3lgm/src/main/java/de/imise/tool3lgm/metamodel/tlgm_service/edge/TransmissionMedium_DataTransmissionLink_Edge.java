@@ -12,12 +12,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.TransmissionMedium;
  */
 public final class TransmissionMedium_DataTransmissionLink_Edge extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = DataTransmissionLink_Edge.class;
+    public static final Class<? extends ModelElement> STCL = DataTransmissionLink_Edge.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = TransmissionMedium.class;
+    public static final Class<? extends ModelElement> ETCL = TransmissionMedium.class;
 
 }

@@ -13,12 +13,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.AbstractApplicationSystem;
  */
 public final class AbstractApplicationSystem_HasPartEdge extends PartitioningEdge {
 
-    public static final Class<? extends ModelElement> stcl = AbstractApplicationSystem.class;
+    public static final Class<? extends ModelElement> STCL = AbstractApplicationSystem.class;
 
-    public static final EdgeCardinality scard = ZERO_ONE;
+    public static final EdgeCardinality SCARD = ZERO_ONE;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = AbstractApplicationSystem.class;
+    public static final Class<? extends ModelElement> ETCL = AbstractApplicationSystem.class;
 
 }

@@ -14,12 +14,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.Use;
  */
 public final class Function_Use_Edge extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = Function.class;
+    public static final Class<? extends ModelElement> STCL = Function.class;
 
-    public static final EdgeCardinality scard = ONE_ONE;
+    public static final EdgeCardinality SCARD = ONE_ONE;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = Use.class;
+    public static final Class<? extends ModelElement> ETCL = Use.class;
 
 }

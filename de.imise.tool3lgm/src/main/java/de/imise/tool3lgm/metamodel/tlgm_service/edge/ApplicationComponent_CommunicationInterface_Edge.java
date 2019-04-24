@@ -13,10 +13,10 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.CommunicationInterface;
  */
 public final class ApplicationComponent_CommunicationInterface_Edge extends CompositionEdge {
 
-    public static final Class<? extends ModelElement> stcl = ApplicationComponent.class;
+    public static final Class<? extends ModelElement> STCL = ApplicationComponent.class;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = CommunicationInterface.class;
+    public static final Class<? extends ModelElement> ETCL = CommunicationInterface.class;
 
 }

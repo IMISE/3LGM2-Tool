@@ -19,39 +19,39 @@ public abstract class Edge extends ModelElement {
      * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Startklassen beschreibt. Über diesen
      * Namen werden die Startklassen per Reflection ermittelt.
      */
-    public static final String START_CLASS_FIELD_NAME = "stcl";
+    public static final String START_CLASS_FIELD_NAME = "STCL";
 
     /**
      * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Endklassen beschreibt. Über diesen
      * Namen werden die Endklassen per Reflection ermittelt.
      */
-    public static final String END_CLASS_FIELD_NAME = "etcl";
+    public static final String END_CLASS_FIELD_NAME = "ETCL";
 
     /**
      * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Startklasse für Elemente
      * der Endklasse vorhanden sein müssen.<br />
      * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt. Das Array sollte immer nur 2 int-Werte für Minimum und Maximum enthalten.
      */
-    public static final String START_CARDINALITY_FIELD_NAME = "scard";
+    public static final String START_CARDINALITY_FIELD_NAME = "SCARD";
 
     /**
      * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Endklasse für Elemente der
      * Startklasse vorhanden sein müssen.<br />
      * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt. Das Array sollte immer nur 2 int-Werte für Minimum und Maximum enthalten.
      */
-    public static final String END_CARDINALITY_FIELD_NAME = "ecard";
+    public static final String END_CARDINALITY_FIELD_NAME = "ECARD";
 
     /**
      * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
      * die getStartElementClass() und getEndElementClass() aufruft.
      */
-    public static final Class<? extends ModelElement> stcl = ModelElement.class;
+    public static final Class<? extends ModelElement> STCL = ModelElement.class;
 
     /**
      * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
      * die getStartElementClass() und getEndElementClass() aufruft.
      */
-    public static final Class<? extends ModelElement> etcl = ModelElement.class;
+    public static final Class<? extends ModelElement> ETCL = ModelElement.class;
 
     /**
      * The two elements wchich are connected by this edge.

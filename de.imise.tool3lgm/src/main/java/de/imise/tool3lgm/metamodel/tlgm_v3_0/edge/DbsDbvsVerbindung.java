@@ -14,12 +14,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Datenbanksystem;
  */
 public final class DbsDbvsVerbindung extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = Datenbanksystem.class;
+    public static final Class<? extends ModelElement> STCL = Datenbanksystem.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_ONE;
+    public static final EdgeCardinality ECARD = ZERO_ONE;
 
-    public static final Class<? extends ModelElement> etcl = DBVerwaltungssystem.class;
+    public static final Class<? extends ModelElement> ETCL = DBVerwaltungssystem.class;
 
 }

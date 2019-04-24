@@ -14,12 +14,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.IheInterface;
  */
 public abstract class IheInterface_CommunicationInterface_Edge extends InstanciationEdge {
 
-    public static final Class<? extends ModelElement> stcl = IheInterface.class;
+    public static final Class<? extends ModelElement> STCL = IheInterface.class;
 
-    public static final EdgeCardinality scard = ZERO_ONE;
+    public static final EdgeCardinality SCARD = ZERO_ONE;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = CommunicationInterface.class;
+    public static final Class<? extends ModelElement> ETCL = CommunicationInterface.class;
 
 }

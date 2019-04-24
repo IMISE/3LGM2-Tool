@@ -14,13 +14,13 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.Use;
  */
 public final class SupportLink_Edge extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = ApplicationComponent.class;
+    public static final Class<? extends ModelElement> STCL = ApplicationComponent.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = Use.class;
+    public static final Class<? extends ModelElement> ETCL = Use.class;
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {

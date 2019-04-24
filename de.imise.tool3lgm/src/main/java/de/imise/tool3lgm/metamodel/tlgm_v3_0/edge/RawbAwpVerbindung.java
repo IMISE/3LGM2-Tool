@@ -13,10 +13,10 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
  */
 public final class RawbAwpVerbindung extends CompositionEdge {
 
-    public static final Class<? extends ModelElement> stcl = RechAnwendungsbaustein.class;
+    public static final Class<? extends ModelElement> STCL = RechAnwendungsbaustein.class;
 
-    public static final EdgeCardinality ecard = ONE_ONE;
+    public static final EdgeCardinality ECARD = ONE_ONE;
 
-    public static final Class<? extends ModelElement> etcl = Anwendungsprogramm.class;
+    public static final Class<? extends ModelElement> ETCL = Anwendungsprogramm.class;
 
 }

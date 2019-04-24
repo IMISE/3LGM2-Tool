@@ -14,12 +14,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.IheActorInstance;
  */
 public class IheActor_IheActorInstance_Edge extends InstanciationEdge {
 
-    public static final Class<? extends ModelElement> stcl = IheActor.class;
+    public static final Class<? extends ModelElement> STCL = IheActor.class;
 
-    public static final EdgeCardinality scard = ONE_ONE;
+    public static final EdgeCardinality SCARD = ONE_ONE;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = IheActorInstance.class;
+    public static final Class<? extends ModelElement> ETCL = IheActorInstance.class;
 
 }

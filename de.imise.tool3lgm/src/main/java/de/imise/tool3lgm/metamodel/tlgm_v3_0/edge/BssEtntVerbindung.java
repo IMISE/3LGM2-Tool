@@ -13,12 +13,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.EtntEtdtKombination;
  */
 public final class BssEtntVerbindung extends DoubleMeaningEdge {
 
-    public static final Class<? extends ModelElement> stcl = Bausteinschnittstelle.class;
+    public static final Class<? extends ModelElement> STCL = Bausteinschnittstelle.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = EtntEtdtKombination.class;
+    public static final Class<? extends ModelElement> ETCL = EtntEtdtKombination.class;
 
 }

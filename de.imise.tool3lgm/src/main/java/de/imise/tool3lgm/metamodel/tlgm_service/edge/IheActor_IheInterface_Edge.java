@@ -14,10 +14,10 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.IheInterface;
  */
 public class IheActor_IheInterface_Edge extends CompositionEdge implements OptionalEdge {
 
-    public static final Class<? extends ModelElement> stcl = IheActor.class;
+    public static final Class<? extends ModelElement> STCL = IheActor.class;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = IheInterface.class;
+    public static final Class<? extends ModelElement> ETCL = IheInterface.class;
 
 }

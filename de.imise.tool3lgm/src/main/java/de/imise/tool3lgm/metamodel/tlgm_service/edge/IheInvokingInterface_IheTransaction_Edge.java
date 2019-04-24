@@ -8,6 +8,6 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.IheInvokingInterface;;
  */
 public class IheInvokingInterface_IheTransaction_Edge extends IheInterface_IheTransaction_Edge {
 
-    public static final Class<? extends ModelElement> stcl = IheInvokingInterface.class;
+    public static final Class<? extends ModelElement> STCL = IheInvokingInterface.class;
 
 }

@@ -13,13 +13,13 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ObjectType;
  */
 public final class StorageLink_Edge extends BooleanAttributeEdge {
 
-    public static final Class<? extends ModelElement> stcl = ApplicationComponent.class;
+    public static final Class<? extends ModelElement> STCL = ApplicationComponent.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = ObjectType.class;
+    public static final Class<? extends ModelElement> ETCL = ObjectType.class;
 
     public StorageLink_Edge() {
         super("StorageEdge_isMaster_Attribute", 1);
