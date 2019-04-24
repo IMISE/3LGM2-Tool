@@ -176,26 +176,29 @@ public class XMLAnalysis extends AbstractAnalysis {
 
     @Override
     public int hashCode() {
-        // assert false : "hashCode not designed";
-        return 42; // any arbitrary constant will do
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (xmlText == null ? 0 : xmlText.hashCode());
+        return result;
     }
 
     @Override
     public boolean equals(final Object obj) {
-        if (super.equals(obj)) {
+        if (this == obj) {
             return true;
         }
-        if (!(obj instanceof XMLAnalysis)) {
+        if (!super.equals(obj)) {
             return false;
         }
-        XMLAnalysis a = (XMLAnalysis) obj;
-        if (!name.equals(a.name)) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        if (!startClasses.equals(a.startClasses)) {
-            return false;
-        }
-        if (!xmlText.equals(a.xmlText)) {
+        XMLAnalysis other = (XMLAnalysis) obj;
+        if (xmlText == null) {
+            if (other.xmlText != null) {
+                return false;
+            }
+        } else if (!xmlText.equals(other.xmlText)) {
             return false;
         }
         return true;
