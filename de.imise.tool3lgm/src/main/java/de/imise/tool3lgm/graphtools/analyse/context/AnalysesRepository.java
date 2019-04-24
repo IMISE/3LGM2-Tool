@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -218,7 +219,7 @@ public class AnalysesRepository {
         String line = "";
         List<XMLAnalysis> analysen = null;
         try {
-            BufferedReader dataStream = new BufferedReader(new InputStreamReader(url.openStream()));
+            BufferedReader dataStream = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.ISO_8859_1));
             line = dataStream.readLine();
             if (!line.equals("Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;")) {
                 throw new DataFormatException();
