@@ -69,7 +69,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
     private void addChildren(final LGMTreeNode elementNode, final Collection<ElementContainer> excludeChildren, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
         NodeContainer kc = (NodeContainer) elementNode.getUserObject();
 
-        List<ElementContainer> all = kc.getKnoten().getDirectPartContainer(doc);
+        List<ElementContainer> all = kc.getNode().getDirectPartContainer(doc);
         for (int i = 0; i < all.size(); i++) {
             NodeContainer pc = (NodeContainer) all.get(i);
 

@@ -2185,7 +2185,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //wenn NodeContainer verschoben werden (keine KnickpinktContainer)
         if (!(nc instanceof BendpointContainer)) {
             //bei allen Kanten dieser Node
-            for (Edge ka : nc.getKnoten().getEdges()) {
+            for (Edge ka : nc.getNode().getEdges()) {
                 EdgeContainer edgeC = (EdgeContainer) ka.getContainer(this);
                 //wenn die Edge keinen Container in diesem Teilmodell hat (dann wird sie
                 //auch nicht Grafisch dargestellt und es braucht nichts verschoben werden) -> weiter
@@ -4539,8 +4539,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         start_transaction(pid);
-        String oldSzen = ((NodeContainer) ec).getKnoten().getAssociatedDoc();
-        ((NodeContainer) ec).getKnoten().setAssociatedDoc("null".equals(szenHashString) ? null : szenHashString);
+        String oldSzen = ((NodeContainer) ec).getNode().getAssociatedDoc();
+        ((NodeContainer) ec).getNode().setAssociatedDoc("null".equals(szenHashString) ? null : szenHashString);
 
         String oldSzenHash = oldSzen == null ? "null" : oldSzen;
         addUndoCommand(GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL + " " + oldSzenHash + " " + ec.getHashString(), pid);
@@ -4559,15 +4559,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         start_transaction(pid, log);
-        for (Class<? extends ModelElement> c : ModelConstants.getCopyDependencies(kc.getKnoten().getClass())) {
-            List<ElementContainer> dependentObjects = kc.getKnoten().getConnectedContainer(c, this);
+        for (Class<? extends ModelElement> c : ModelConstants.getCopyDependencies(kc.getNode().getClass())) {
+            List<ElementContainer> dependentObjects = kc.getNode().getConnectedContainer(c, this);
             for (int j = 0; j < dependentObjects.size(); j++) {
                 NodeContainer sc = (NodeContainer) dependentObjects.get(j);
-                Node sk = sc.getKnoten();
+                Node sk = sc.getNode();
                 if (!isMyElement(sk)) {
                     continue;
                 }
-                LayerContainer lc1 = getLayer(kc.getKnoten().layerFor());
+                LayerContainer lc1 = getLayer(kc.getNode().layerFor());
                 LayerContainer lc2 = getLayer(sk.layerFor());
                 if (lc1 == lc2) {
                     while (lc1.indexOf(sc) < lc1.indexOf(kc)) {
