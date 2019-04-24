@@ -127,15 +127,15 @@ public class AnalysisXMLParser extends DefaultHandler {
             if (suchcnt == 0) {
                 if (doc.getSelectionSize() > 0) {
                     Collection<ElementContainer> selection = doc.getSelectedContainer();
-                    List<ElementContainer> connected = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, searchParts, searchParents);
+                    List<ElementContainer> connected = GraphAnalysis.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, searchParts, searchParents);
                     resulttmp = new ArrayList<>(selection.size() + connected.size());
                     resulttmp.addAll(selection);
                     resulttmp.addAll(connected);
                 } else {
-                    resulttmp = GraphAnalyse.performSearch(doc, typ, verbundenstate, connectedNames);
+                    resulttmp = GraphAnalysis.performSearch(doc, typ, verbundenstate, connectedNames);
                 }
             } else {
-                resulttmp = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, searchParts, searchParents);
+                resulttmp = GraphAnalysis.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, searchParts, searchParents);
             }
             result.addAll(resulttmp);
             suchcnt++;

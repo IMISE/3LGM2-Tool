@@ -43,9 +43,9 @@ public class XMLAnalysis extends AbstractAnalysis {
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
     public static XMLAnalysis createAnalysis(final String analyseText) throws SAXException {
-        XMLAnalysis xMLAnalyse = new XMLAnalysis();
-        xMLAnalyse.setXMLText(analyseText);
-        return xMLAnalyse;
+        XMLAnalysis xMLAnalysis = new XMLAnalysis();
+        xMLAnalysis.setXMLText(analyseText);
+        return xMLAnalysis;
     }
 
     /**
@@ -58,10 +58,10 @@ public class XMLAnalysis extends AbstractAnalysis {
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
     public static XMLAnalysis createAnalysis(final String name, final String analyseText) throws SAXException {
-        XMLAnalysis xMLAnalyse = new XMLAnalysis();
-        xMLAnalyse.setName(name);
-        xMLAnalyse.setXMLText(analyseText);
-        return xMLAnalyse;
+        XMLAnalysis xMLAnalysis = new XMLAnalysis();
+        xMLAnalysis.setName(name);
+        xMLAnalysis.setXMLText(analyseText);
+        return xMLAnalysis;
     }
 
     /**
