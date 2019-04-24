@@ -85,35 +85,35 @@ public class XMLAnalysis extends AbstractAnalysis {
         }
 
         // alte Startknoten speichern
-        List<Class<? extends ModelElement>> alteStartknoten = getStartClasses();
-        deleteStartknoten();
+        List<Class<? extends ModelElement>> oldStartNodes = getStartClasses();
+        clearStartClasses();
 
         try {
             parseAnalysis(xmlText);
         } catch (SAXException e) {
             // alte Werte wieder herstellen
-            startClasses = alteStartknoten;
+            startClasses = oldStartNodes;
             throw e;
         }
         this.xmlText = xmlText;
     }
 
     /**
-     * Fügt einen neuen Startknoten hinzu.
+     * Fügt einen Startklasse hinzu.
      *
-     * @param startknoten der neue Name des Startknotens.
+     * @param startClassName der neue Name des Startknotens.
      */
-    private void addStartknoten(final String startknoten) {
-        Class<? extends ModelElement> startClass = ModelConstants.getClassForName(startknoten);
+    private void addStartClass(final String startClassName) {
+        Class<? extends ModelElement> startClass = ModelConstants.getClassForName(startClassName);
         if (startClass != null) {
             startClasses.add(startClass);
         }
     }
 
     /**
-     * Löscht die Liste der Startknoten.
+     * Löscht die Liste der Startklassen.
      */
-    protected void deleteStartknoten() {
+    private final void clearStartClasses() {
         if (startClasses != null) {
             startClasses.clear();
         }
@@ -130,7 +130,7 @@ public class XMLAnalysis extends AbstractAnalysis {
             if (qName.equals("startknoten")) {
                 StringTokenizer st = new StringTokenizer(atts.getValue("name"), ",");
                 while (st.hasMoreTokens()) {
-                    addStartknoten(st.nextToken().trim());
+                    addStartClass(st.nextToken().trim());
                 }
             }
         }
