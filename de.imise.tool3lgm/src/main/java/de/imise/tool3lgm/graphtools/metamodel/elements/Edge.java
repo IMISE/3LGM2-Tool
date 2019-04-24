@@ -54,9 +54,9 @@ public abstract class Edge extends ModelElement {
     public static final Class<? extends ModelElement> etcl = ModelElement.class;
 
     /**
-     * The two elements wchich are connected by this edge. <code>k1</code> is the start element and <code>k2</code> the end element of this edge.
+     * The two elements wchich are connected by this edge.
      */
-    protected ModelElement k1, k2;
+    protected ModelElement startElement, endElement;
 
     /**
      * Hash-Strings of the start
@@ -81,7 +81,7 @@ public abstract class Edge extends ModelElement {
     public final int layerFor() {
         int layer = super.layerFor();
         if (layer == ModelConstants.NO_LAYER) {
-            layer = ModelConstants.getEdgeLayer(k1.getClass(), k2.getClass());
+            layer = ModelConstants.getEdgeLayer(startElement.getClass(), endElement.getClass());
         }
         return layer;
     }
@@ -93,34 +93,31 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public final boolean isEqualTo(final Edge edge) {
-        return (k1 == edge.getStart() && k2 == edge.getEnd() || k2 == edge.getStart() && k1 == edge.getEnd()) && getClass() == edge.getClass();
-        //		if ((k1 == kante.getStart() && k2 == kante.getEnd()) || (k2 == kante.getStart() && k1 == kante.getEnd()))
-        //			return true;
-        //		return false;
+        return (startElement == edge.getStart() && endElement == edge.getEnd() || endElement == edge.getStart() && startElement == edge.getEnd()) && getClass() == edge.getClass();
     }
 
     /**
-     * @param _k1
-     * @param _k2
+     * @param startElement
+     * @param endElement
      */
-    public final void setNodes(final ModelElement _k1, final ModelElement _k2) {
-        setNodes(_k1, _k2, true);
+    public final void setNodes(final ModelElement startElement, final ModelElement endElement) {
+        setNodes(startElement, endElement, true);
     }
 
     /**
-     * @param _k1
-     * @param _k2
+     * @param startElement
+     * @param endElement
      * @param registerInKnots
      */
-    public void setNodes(final ModelElement _k1, final ModelElement _k2, final boolean registerInKnots) {
-        k1 = _k1;
-        k2 = _k2;
+    public void setNodes(final ModelElement startElement, final ModelElement endElement, final boolean registerInKnots) {
+        this.startElement = startElement;
+        this.endElement = endElement;
         if (registerInKnots) {
-            if (_k1 != null) {
-                _k1.addEdge(this);
+            if (startElement != null) {
+                startElement.addEdge(this);
             }
-            if (_k2 != null) {
-                _k2.addEdge(this);
+            if (endElement != null) {
+                endElement.addEdge(this);
             }
         }
         //Validität der Edge prüfen und dabei wenn nötig umdrehen (bis Version 3.2
@@ -128,37 +125,36 @@ public abstract class Edge extends ModelElement {
         //als sie in der Kantenklasse festgelegt sind. Das wird hier grade gebogen
         checkValidity();
         //		if (!checkValidity());
-        //			System.err.println(getClass().getSimpleName() + " : Edge with Node1 = "  + k1.getClearName() + " and Node2 " + k2.getClearName() + " is not valid. ");
+        //			System.err.println(getClass().getSimpleName() + " : Edge with Node1 = "  + startElement.getClearName() + " and Node2 " + endElement.getClearName() + " is not valid. ");
         //
 
     }
 
     /**
-     * Setzt fuer die Edge die Node Anfang=_k1 und Ende=_k2 und fügt die Edge bei _k1 an Position _k1EdgePos und bei _k2 an Position _k2EdgePos
-     * ein.
+     * Setzt fuer die Edge das Start- und Endelement und fügt die Edge beim StartElement an Position startElementEdgePos und bei endElement an
+     * Position endElementEdgePos ein.
      *
-     * @param _k1 Node
-     * @param pos int Position
-     * @param _k2 Node
-     */
-    /**
-     * @param _k1 Startelement der Edge
-     * @param _k1EdgePos Postion der Edge in der Kantenliste von _k1. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
+     * @param startElement
+     *            Startelement der Edge
+     * @param startElementEdgePos
+     *            Postion der Edge in der Kantenliste des StartElementes. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
      *            Edge hinten angefügt.
-     * @param _k2 Endelement der Edge
-     * @param _k2EdgePos Postion der Edge in der Kantenliste von _k2. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
+     * @param endElement
+     *            Endelement der Edge
+     * @param endElementEdgePos
+     *            Postion der Edge in der Kantenliste von EndElementes. Wenn der Wert größer oder kleiner als die aktuelle Liste ist, dann wird die
      *            Edge hinten angefügt.
      */
-    public void setNodesAndInsert(final ModelElement _k1, final int _k1EdgePos, final ModelElement _k2, final int _k2EdgePos) {
-        k1 = _k1;
-        k2 = _k2;
+    public void setNodesAndInsert(final ModelElement startElement, final int startElementEdgePos, final ModelElement endElement, final int endElementEdgePos) {
+        this.startElement = startElement;
+        this.endElement = endElement;
         //wenn HasPartEdges im Kreis modelliert wurden, wird die falsche Beziehung gleich wieder entfernt
         //und ihre alten Start- und Endelemente gesetzt, die bei einer neuen Edge immer null waren -> null hier abfangen
-        if (_k1 != null) {
-            _k1.insertEdge(this, _k1EdgePos);
+        if (startElement != null) {
+            startElement.insertEdge(this, startElementEdgePos);
         }
-        if (_k2 != null) {
-            _k2.insertEdge(this, _k2EdgePos);
+        if (endElement != null) {
+            endElement.insertEdge(this, endElementEdgePos);
         }
     }
 
@@ -166,9 +162,9 @@ public abstract class Edge extends ModelElement {
      * @param start
      */
     public void setStartAndInsert(final ModelElement start) {
-        k1 = start;
-        if (k1 != null) {
-            k1.addEdge(this);
+        startElement = start;
+        if (startElement != null) {
+            startElement.addEdge(this);
         }
     }
 
@@ -176,9 +172,9 @@ public abstract class Edge extends ModelElement {
      * @param end
      */
     public void setEndAndInsert(final ModelElement end) {
-        k2 = end;
-        if (k2 != null) {
-            k2.addEdge(this);
+        endElement = end;
+        if (endElement != null) {
+            endElement.addEdge(this);
         }
     }
 
@@ -186,7 +182,7 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public final ModelElement getStart() {
-        return k1;
+        return startElement;
     }
 
     /**
@@ -201,7 +197,7 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public final ModelElement getEnd() {
-        return k2;
+        return endElement;
     }
 
     /**
@@ -271,48 +267,47 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public final boolean decodeHashStrings(final GraphDocument doc) {
-        ModelElement _k1 = null, _k2 = null;
+        ModelElement startElement = null, endElement = null;
         if (start_hash == null || end_hash == null) {
             return false;
         }
-        _k1 = doc.findElementCoded(start_hash);
-        if (_k1 == null) {
+        startElement = doc.findElementCoded(start_hash);
+        if (startElement == null) {
             System.out.println("Error decoding start element hash \"" + start_hash + "\"" + getClass());
         }
 
-        _k2 = doc.findElementCoded(end_hash);
-        if (_k2 == null) {
+        endElement = doc.findElementCoded(end_hash);
+        if (endElement == null) {
             System.out.println("Error decoding end element hash \"" + end_hash + "\"" + getClass());
         }
 
-        if (_k1 == null || _k2 == null) {
+        if (startElement == null || endElement == null) {
             return false;
         }
-        setNodes(_k1, _k2);
-
+        setNodes(startElement, endElement);
         return true;
     }
 
-    public boolean isDirecting(final ModelElement _k1, final ModelElement _k2) {
-        return isDirectingForward(_k1, _k2);
+    public boolean isDirecting(final ModelElement me1, final ModelElement me2) {
+        return isDirectingForward(me1, me2);
     }
 
     /**
-     * @param _k1
-     * @param _k2
+     * @param me1
+     * @param me2
      * @return
      */
-    protected final boolean isDirectingForward(final ModelElement _k1, final ModelElement _k2) {
-        return k1 == _k1 && k2 == _k2;
+    protected final boolean isDirectingForward(final ModelElement me1, final ModelElement me2) {
+        return startElement == me1 && endElement == me2;
     }
 
     /**
-     * @param _k1
-     * @param _k2
+     * @param me1
+     * @param me2
      * @return
      */
-    public final boolean isConnecting(final ModelElement _k1, final ModelElement _k2) {
-        return k1 == _k1 && k2 == _k2 || k1 == _k2 && k2 == _k1;
+    public final boolean isConnecting(final ModelElement me1, final ModelElement me2) {
+        return startElement == me1 && endElement == me2 || startElement == me2 && endElement == me1;
     }
 
     /**
@@ -324,10 +319,10 @@ public abstract class Edge extends ModelElement {
 
     @Override
     public final String getDebugString() {
-        String startName = k1 == null ? "null" : k1.getName();
-        String endName = k2 == null ? "null" : k2.getName();
-        String startHash = start_hash != null ? start_hash : k1 == null ? "null" : k1.getHashString();
-        String endHash = end_hash != null ? end_hash : k2 == null ? "null" : k2.getHashString();
+        String startName = startElement == null ? "null" : startElement.getName();
+        String endName = endElement == null ? "null" : endElement.getName();
+        String startHash = start_hash != null ? start_hash : startElement == null ? "null" : startElement.getHashString();
+        String endHash = end_hash != null ? end_hash : endElement == null ? "null" : endElement.getHashString();
         return startHash + " <-> " + endHash + " " + getClass().getSimpleName() + ": " + getName() + " " + startName + " <-> " + endName;
     }
 
@@ -339,8 +334,8 @@ public abstract class Edge extends ModelElement {
     public boolean checkValidity() {
         boolean startClassOk = false, endClassOk = false;
         boolean switchStart = false, switchEnd = false;
-        if (k1 != null && k2 != null) {
-            Class<? extends ModelElement> clazz = k1.getClass();
+        if (startElement != null && endElement != null) {
+            Class<? extends ModelElement> clazz = startElement.getClass();
             //prüfen, ob das StartElement von einer der Startklassen ist
             if (!isStartClass(clazz)) {
                 //wenn nicht
@@ -348,7 +343,7 @@ public abstract class Edge extends ModelElement {
             } else {
                 startClassOk = true;
             }
-            clazz = k2.getClass();
+            clazz = endElement.getClass();
             //prüfen, ob das EndElement von einer der Endklassen ist
             if (!isEndClass(clazz)) {
                 //wenn nicht
@@ -362,20 +357,20 @@ public abstract class Edge extends ModelElement {
         if (switchStart && switchEnd) {
             switchClasses = true;
         } else if (switchStart) {
-            if (!isStartClass(k2.getClass())) {
+            if (!isStartClass(endElement.getClass())) {
                 return false;
             }
             switchClasses = true;
         } else if (switchEnd) {
-            if (!isEndClass(k1.getClass())) {
+            if (!isEndClass(startElement.getClass())) {
                 return false;
             }
             switchClasses = true;
         }
         if (switchClasses) {
-            ModelElement dummy = k1;
-            k1 = k2;
-            k2 = dummy;
+            ModelElement dummy = startElement;
+            startElement = endElement;
+            endElement = dummy;
             return true;
         }
         //Es musste nichts vertauscht werden -> hier kommt nur true zurück, wenn die Klassen
@@ -679,19 +674,19 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public final boolean reconnect(final GDCollection coll) {
-        if (k1 == null || k2 == null) {
+        if (startElement == null || endElement == null) {
             return false;
         }
 
-        k1 = coll.getMainGraphDocument().findElementCoded(k1.getHashString());
-        k2 = coll.getMainGraphDocument().findElementCoded(k2.getHashString());
+        startElement = coll.getMainGraphDocument().findElementCoded(startElement.getHashString());
+        endElement = coll.getMainGraphDocument().findElementCoded(endElement.getHashString());
 
-        if (k1 == null || k2 == null || coll.getMainGraphDocument().findElementCoded(getHashString()) == null) {
+        if (startElement == null || endElement == null || coll.getMainGraphDocument().findElementCoded(getHashString()) == null) {
             return false;
         }
 
-        boolean reconnectFirst = k1.addEdge(this);
-        boolean reconnectSecond = k2.addEdge(this);
+        boolean reconnectFirst = startElement.addEdge(this);
+        boolean reconnectSecond = endElement.addEdge(this);
 
         return reconnectFirst || reconnectSecond;
     }
@@ -699,8 +694,8 @@ public abstract class Edge extends ModelElement {
     @Override
     public final boolean join(final ModelElement other, final boolean overwriteHashstringAndExtIDs) {
         if (super.join(other, overwriteHashstringAndExtIDs)) {
-            k1 = ((Edge) other).k1;
-            k2 = ((Edge) other).k2;
+            startElement = ((Edge) other).startElement;
+            endElement = ((Edge) other).endElement;
             return true;
         }
         return false;
@@ -712,16 +707,16 @@ public abstract class Edge extends ModelElement {
         //Start- und Endelemente gehen. Wenn die aber
         //noch nicht gesetzt sind, dann über Reflection
         //direkt über die ModelConstants.
-        if (k1 != null && k2 != null) {
-            return k1.isUnique() || k2.isUnique();
+        if (startElement != null && endElement != null) {
+            return startElement.isUnique() || endElement.isUnique();
         }
         return ModelConstants.isUnique(getClass());
     }
 
     @Override
     public final boolean isPaintable() {
-        if (k1 != null && k2 != null) {
-            return k1.isPaintable() && k2.isPaintable();
+        if (startElement != null && endElement != null) {
+            return startElement.isPaintable() && endElement.isPaintable();
         }
         return false;
     }

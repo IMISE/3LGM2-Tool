@@ -82,14 +82,14 @@ public abstract class DoubleMeaningEdge extends Edge {
     }
 
     @Override
-    public final boolean isDirecting(final ModelElement _k1, final ModelElement _k2) {
+    public final boolean isDirecting(final ModelElement me1, final ModelElement me2) {
         switch (connectionState) {
         case DOUBLE:
-            return isConnecting(_k1, _k2);
+            return isConnecting(me1, me2);
         case FORWARD:
-            return isDirectingForward(_k1, _k2);
+            return isDirectingForward(me1, me2);
         case BACKWARD:
-            return isDirectingForward(_k2, _k1);
+            return isDirectingForward(me2, me1);
         default:
             return false;
         }
@@ -104,8 +104,8 @@ public abstract class DoubleMeaningEdge extends Edge {
     public boolean checkValidity() {
         boolean startClassOk = false, endClassOk = false;
         boolean switchStart = false, switchEnd = false;
-        if (k1 != null && k2 != null) {
-            Class<? extends ModelElement> clazz = k1.getClass();
+        if (startElement != null && endElement != null) {
+            Class<? extends ModelElement> clazz = startElement.getClass();
             //prüfen, ob das StartElement von einer der Startklassen ist
             if (!isStartClass(clazz)) {
                 //wenn nicht
@@ -113,7 +113,7 @@ public abstract class DoubleMeaningEdge extends Edge {
             } else {
                 startClassOk = true;
             }
-            clazz = k2.getClass();
+            clazz = endElement.getClass();
             //prüfen, ob das EndElement von einer der Endklassen ist
             if (!isEndClass(clazz)) {
                 //wenn nicht
@@ -127,12 +127,12 @@ public abstract class DoubleMeaningEdge extends Edge {
         if (switchStart && switchEnd) {
             switchClasses = true;
         } else if (switchStart) {
-            if (!isStartClass(k2.getClass())) {
+            if (!isStartClass(endElement.getClass())) {
                 return false;
             }
             switchClasses = true;
         } else if (switchEnd) {
-            if (!isEndClass(k1.getClass())) {
+            if (!isEndClass(startElement.getClass())) {
                 return false;
             }
             switchClasses = true;
@@ -142,9 +142,9 @@ public abstract class DoubleMeaningEdge extends Edge {
             connectionState = DOUBLE;
         }
         if (switchClasses) {
-            ModelElement dummy = k1;
-            k1 = k2;
-            k2 = dummy;
+            ModelElement dummy = startElement;
+            startElement = endElement;
+            endElement = dummy;
             if (connectionState == FORWARD) {
                 connectionState = BACKWARD;
             } else if (connectionState == BACKWARD) {
