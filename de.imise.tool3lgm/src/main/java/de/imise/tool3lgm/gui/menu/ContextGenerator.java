@@ -1151,8 +1151,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         menu.addSeparator();
         menu.add(layout_layer);
         menu.add(ActionLibrary.LayoutActions.ACTION_OPEN_GLOBAL_LAYOUT_EDITOR);
-        menu.addSeparator();
-        menu.add(internals);
+        if (Static.isExpertMode()) {
+            menu.addSeparator();
+            menu.add(internals);
+        }
         return menu;
     }
 

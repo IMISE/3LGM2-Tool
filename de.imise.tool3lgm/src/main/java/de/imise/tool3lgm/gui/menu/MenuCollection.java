@@ -82,7 +82,7 @@ public class MenuCollection {
             ModelConstants.getAnalysesDefinition().getAnalysisActions(), Analysis.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS);
 
     /** Das Optionen-Menu */
-    public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.ACTION_PROPERTY_INT_RMI_PORT,
+    public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, new JSeparator(), OptionsActions.ACTION_PROPERTY_INT_RMI_PORT,
             OptionsActions.ACTIONS_CHOOSE_META_MODEL, OptionsSubMenus.LOCALE_MENU, UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
 
     /** Das Extras-Menu */
