@@ -36,6 +36,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
@@ -82,7 +83,7 @@ public class MenuCollection {
 
     /** Das Optionen-Menu */
     public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.ACTION_PROPERTY_INT_RMI_PORT,
-            OptionsActions.ACTIONS_CHOOSE_META_MODEL, OptionsSubMenus.LOCALE_MENU);
+            OptionsActions.ACTIONS_CHOOSE_META_MODEL, OptionsSubMenus.LOCALE_MENU, UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
 
     /** Das Extras-Menu */
     public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION,
