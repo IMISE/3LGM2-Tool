@@ -31,11 +31,16 @@ public class Tool3lgmMetaModelContext {
     private static List<Class<? extends MetaModel>> META_MODEL_CLASSES = ImmutableList.of(TLGMOriginalMetaModel.class, TLGMServiceMetaModel.class);
 
     private static void initMetaModel() {
-        if (!UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START)) {
+        boolean showDialog = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START);
+        if (!showDialog) {
             metaModelClass = getUserpropertiesStoredMetaModel();
         }
         while (metaModelClass == null) {
-            metaModelClass = chooseMetaModel(true);
+            if (showDialog) {
+                metaModelClass = chooseMetaModel(true);
+            } else {
+                metaModelClass = META_MODEL_CLASSES.get(0); // es war gewünscht worden, dass beim initialen Start das originale Metamodell ausgewählt ist. showDialog ist initial false
+            }
         }
     }
 
