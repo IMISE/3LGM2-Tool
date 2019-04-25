@@ -16,28 +16,28 @@ import de.imise.util.ReflectionUtils;
 public abstract class Edge extends ModelElement {
 
     /**
-     * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Startklassen beschreibt. Über diesen
-     * Namen werden die Startklassen per Reflection ermittelt.
+     * Name der <code>Class&lt;? extends ModelElement&gt;</code>, mit der jede Kantenklasse seine Startklasse beschreibt. Über diesen Namen wird die
+     * jeweilige Startklasse per Reflection ermittelt.
      */
     public static final String START_CLASS_FIELD_NAME = "STCL";
 
     /**
-     * Name des <code>Class&lt;? extends ModelElement&gt;[]</code>-Arrays, mit dem jede Kantenklasse alle seine Endklassen beschreibt. Über diesen
-     * Namen werden die Endklassen per Reflection ermittelt.
+     * Name der <code>Class&lt;? extends ModelElement&gt;</code>, mit dem jede Kantenklasse seine Endklasse beschreibt. Über diesen Namen wird die
+     * jeweilige Endklasse per Reflection ermittelt.
      */
     public static final String END_CLASS_FIELD_NAME = "ETCL";
 
     /**
-     * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Startklasse für Elemente
-     * der Endklasse vorhanden sein müssen.<br />
-     * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt. Das Array sollte immer nur 2 int-Werte für Minimum und Maximum enthalten.
+     * Name des Feldes mit der {@link EdgeCardinality}, mit der jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Startklasse
+     * für Elemente der Endklasse vorhanden sein müssen.<br />
+     * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt.
      */
     public static final String START_CARDINALITY_FIELD_NAME = "SCARD";
 
     /**
-     * Name des <code>int[]</code>-Arrays, mit dem jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Endklasse für Elemente der
-     * Startklasse vorhanden sein müssen.<br />
-     * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt. Das Array sollte immer nur 2 int-Werte für Minimum und Maximum enthalten.
+     * Name des Feldes mit der {@link EdgeCardinality}, mit der jede Kantenklasse die Kardinalitäten beschreibt, mit denen Elemente der Endklasse für
+     * Elemente der Startklasse vorhanden sein müssen.<br />
+     * Über diesen Namen werden die Kardinalitäten per Reflection ermittelt.
      */
     public static final String END_CARDINALITY_FIELD_NAME = "ECARD";
 
