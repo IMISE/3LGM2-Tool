@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Static.getSelectedDoc;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.event.action.StaticAction.PPP;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -30,12 +31,13 @@ import de.imise.tool3lgm.event.action.GlobalOptionAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
+import de.imise.tool3lgm.event.action.OpenUrlAction;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
 import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.event.action.SubmodelAction;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.analyse.context.AnalysisEditor;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalysesRepositoryFrame;
+import de.imise.tool3lgm.graphtools.analyse.context.AnalysisEditor;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
@@ -93,9 +95,6 @@ import de.imise.util.swing.event.ToggleAction;
  * @author fstephan
  */
 public class ActionLibrary {
-
-    /** "..."-Suffix Actions */
-    private static final String PPP = getResString("3points");
 
     /** Konstruktor - Verhindert Instanziierung */
     private ActionLibrary() {
@@ -624,20 +623,13 @@ public class ActionLibrary {
         };
 
         /** öffnet die Online-Hilfe-Seite */
-        public static final ExtendedAction ACTION_SHOW_ONLINE_HELP = new StaticAction(ActionIdentifier.ACTION_SHOW_ONLINE_HELP, PPP) {
-            @Override
-            public void actionPerformed() {
-                BrowseUtils.browse(getResString("3lgm2tool_support_website"));
-            }
-        };
+        public static final ExtendedAction ACTION_OPEN_URL_ONLINE_HELP = new OpenUrlAction(ActionIdentifier.ACTION_OPEN_URL_ONLINE_HELP);
 
         /** öffnet die 3lgm-Homepage */
-        public static final ExtendedAction ACTION_SHOW_3LGM_WEB_SITE = new StaticAction(ActionIdentifier.ACTION_SHOW_3LGM_WEB_SITE, PPP) {
-            @Override
-            public void actionPerformed() {
-                BrowseUtils.browse(getResString("3lgm2_website"));
-            }
-        };
+        public static final ExtendedAction ACTION_OPEN_URL_3LGM_WEBSITE = new OpenUrlAction(ActionIdentifier.ACTION_OPEN_URL_3LGM_WEBSITE);
+
+        /** öffnet die Website mit dem IssueTracker */
+        public static final ExtendedAction ACTION_OPEN_URL_ISSUE_TRACKER = new OpenUrlAction(ActionIdentifier.ACTION_OPEN_URL_ISSUE_TRACKER);
 
         /** öffnet das Beispielmodell */
         public static final ExtendedAction ACTION_OPEN_EXAMPLE_MODEL_FILE = new StaticAction(ActionIdentifier.ACTION_OPEN_EXAMPLE_MODEL_FILE) {

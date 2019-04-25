@@ -367,11 +367,10 @@ public class MenuCollection {
         public HelpMenu() {
             super(title);
 
-            MenuCreator.addAll(this,
-                    MenuCreator.createMenuEntries(false, ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, ActionLibrary.HelpActions.ACTION_ACTIVATE_DIRECT_HELP, new JSeparator(),
-                            ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(), ActionLibrary.HelpActions.ACTION_SHOW_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_SHOW_3LGM_WEB_SITE, new JSeparator(),
-                            ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MODEL_FILE, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG,
-                            new JSeparator()/* , ActionLibrary.HelpActions.ACTION_IMPORT_LICENSE_FILE */));
+            MenuCreator.addAll(this, MenuCreator.createMenuEntries(false, ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, ActionLibrary.HelpActions.ACTION_ACTIVATE_DIRECT_HELP, new JSeparator(),
+                    ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_OPEN_URL_3LGM_WEBSITE, new JSeparator(),
+                    ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MODEL_FILE, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER,
+                    ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG/* , new JSeparator() , ActionLibrary.HelpActions.ACTION_IMPORT_LICENSE_FILE */));
         }
     }
 
