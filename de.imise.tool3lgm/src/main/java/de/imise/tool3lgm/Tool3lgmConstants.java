@@ -46,7 +46,7 @@ public abstract class Tool3lgmConstants {
 
     /** String with the version-identifier for Tool3lgm */
     // TODO _____###### ständig aktualisieren!
-    public static final String TOOL_VERSION = "3.4.0.3 (Beta)";
+    public static final String TOOL_VERSION = "3.4.0.4 (RC)";
 
     /**
      * Wenn <code>true</code>, liefern die {@link GDCommands} in ihrer toString()-Methode den Namen des Kommandos zurück. Wenn <code>false</code>,
