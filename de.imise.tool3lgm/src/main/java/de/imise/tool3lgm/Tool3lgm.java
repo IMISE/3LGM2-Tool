@@ -57,7 +57,6 @@ import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
-import de.imise.tool3lgm.gui.StatusBar;
 import de.imise.tool3lgm.gui.ToolBar;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.gui.menu.MenuBar;
@@ -187,7 +186,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         getContentPane().add(toolbar, BorderLayout.NORTH);
         getContentPane().add(workarea, BorderLayout.CENTER);
-        getContentPane().add(new StatusBar(), BorderLayout.SOUTH);
+        //getContentPane().add(new StatusBar(), BorderLayout.SOUTH);
 
         JScrollPane desktopscroll = new JScrollPane(desktop);
         verticalSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktopscroll);
@@ -821,7 +820,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             return true;
         }
         Object[] buttons = new Object[] {
-                getResString("yes"), getResString("no"), getResString("cancel")
+                getResString("yes"),
+                getResString("no"),
+                getResString("cancel")
         };
         File file = gdcoll.getFile();
         int answer = JOptionPane.showOptionDialog(this, getResString("speicherfrage") + "\n" + (file == null ? gdcoll.getName() : file.getName()), getResString("tool3lgm"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons,
@@ -1281,7 +1282,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (frame != null) {
             if (hyperlink != null) {
                 Object[] buttons = new Object[] {
-                        getResString("hyperlink"), getResString("submodel"), getResString("cancel")
+                        getResString("hyperlink"),
+                        getResString("submodel"),
+                        getResString("cancel")
                 };
                 int value = JOptionPane.showOptionDialog(null, getResString("link_oder_szen_frage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
                 if (value == JOptionPane.YES_OPTION) {
