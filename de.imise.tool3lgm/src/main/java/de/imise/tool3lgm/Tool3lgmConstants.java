@@ -41,7 +41,8 @@ public abstract class Tool3lgmConstants {
         USERFIELD,
         LIC,
         XSL,
-        CSV
+        CSV,
+        JAR
     }
 
     /** String with the version-identifier for Tool3lgm */
