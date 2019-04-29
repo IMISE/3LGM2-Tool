@@ -13,12 +13,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.Process;
  */
 public final class Process_Function_Edge extends MultipleEdge {
 
-    public static final Class<? extends ModelElement> stcl = Process.class;
+    public static final Class<? extends ModelElement> STCL = Process.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = Function.class;
+    public static final Class<? extends ModelElement> ETCL = Function.class;
 
 }

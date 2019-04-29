@@ -13,10 +13,10 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Schnittstelle;
  */
 public final class AwbKommssVerbindung extends CompositionEdge {
 
-    public static final Class<? extends ModelElement> stcl = Anwendungsbaustein.class;
+    public static final Class<? extends ModelElement> STCL = Anwendungsbaustein.class;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = Schnittstelle.class;
+    public static final Class<? extends ModelElement> ETCL = Schnittstelle.class;
 
 }

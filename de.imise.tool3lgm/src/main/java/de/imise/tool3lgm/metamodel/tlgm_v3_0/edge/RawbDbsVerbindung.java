@@ -13,10 +13,10 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
  */
 public final class RawbDbsVerbindung extends CompositionEdge {
 
-    public static final Class<? extends ModelElement> stcl = RechAnwendungsbaustein.class;
+    public static final Class<? extends ModelElement> STCL = RechAnwendungsbaustein.class;
 
-    public static final EdgeCardinality ecard = ZERO_ONE;
+    public static final EdgeCardinality ECARD = ZERO_ONE;
 
-    public static final Class<? extends ModelElement> etcl = Datenbanksystem.class;
+    public static final Class<? extends ModelElement> ETCL = Datenbanksystem.class;
 
 }

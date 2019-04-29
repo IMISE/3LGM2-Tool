@@ -5,11 +5,11 @@ import java.util.List;
 
 import javax.swing.Action;
 
-import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
+import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions;
 
-public abstract class AnalysisDefinition {
+public abstract class AnalysesDefinition {
 
     /** Definition aller SimpleRedundancyAnalysis für dieses Metamodell */
     protected final SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinitions = new SimpleRedundancyAnalysisDefinitions();
@@ -27,16 +27,16 @@ public abstract class AnalysisDefinition {
         return redundancyAnalysisDefinitions;
     }
 
-    /** Liste aller Analysen, die im Kontextmenü der Knoten zusätzlich zu denen im AnalyseRepository definierten angezeigt werden sollen */
-    protected final List<AbstractAnalyse> nodeAnalysis = new ArrayList<>();
+    /** Liste aller Analysen, die im Kontextmenü der Knoten zusätzlich zu denen im AnalysesRepository definierten angezeigt werden sollen */
+    protected final List<AbstractAnalysis> nodeAnalyses = new ArrayList<>();
 
-    public List<AbstractAnalyse> getNodeAnalysis() {
-        return nodeAnalysis;
+    public List<AbstractAnalysis> getNodeAnalyses() {
+        return nodeAnalyses;
     }
 
     /**
      * Liste von Actions, die ins AnalyseMenü eingefügt werden
-     * 
+     *
      * @return
      */
     public Action[] getAnalysisActions() {

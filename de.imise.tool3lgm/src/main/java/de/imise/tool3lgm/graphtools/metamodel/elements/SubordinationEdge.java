@@ -24,19 +24,19 @@ public abstract class SubordinationEdge extends Edge {
     public static final Direction SUB_TO_SUPER_DIRECTION = BACKWARD;
 
     public ModelElement getSubElement() {
-        return k2;
+        return endElement;
     }
 
     public ModelElement getSuperElement() {
-        return k1;
+        return startElement;
     }
 
     protected void setSubElement(final ModelElement sub) {
-        k2 = sub;
+        endElement = sub;
     }
 
     protected void setSuperElement(final ModelElement sup) {
-        k1 = sup;
+        startElement = sup;
     }
 
     /**
@@ -84,8 +84,8 @@ public abstract class SubordinationEdge extends Edge {
 
     @Override
     public final void setNodes(final ModelElement superElement, final ModelElement subElement, final boolean registerInKnots) {
-        ModelElement start = k1;
-        ModelElement end = k2;
+        ModelElement start = startElement;
+        ModelElement end = endElement;
         super.setNodes(superElement, subElement, registerInKnots);
         if (isInCircle()) {
             subElement.removeEdge(this);
@@ -96,12 +96,12 @@ public abstract class SubordinationEdge extends Edge {
 
     @Override
     public void setNodesAndInsert(final ModelElement startElement, final int startElementEdgeIndex, final ModelElement endElement, final int endElementEdgeIndex) {
-        ModelElement oldStartElement = k1;
-        ModelElement oldEndElement = k2;
+        ModelElement oldStartElement = startElement;
+        ModelElement oldEndElement = endElement;
         int oldStartElementEdgeIndex = oldStartElement == null ? 0 : oldStartElement.removeEdge(this);
         int oldEndElementEdgeIndex = oldEndElement == null ? 0 : oldEndElement.removeEdge(this);
-        k1 = startElement;
-        k2 = endElement;
+        this.startElement = startElement;
+        this.endElement = endElement;
         startElement.insertEdge(this, startElementEdgeIndex);
         endElement.insertEdge(this, endElementEdgeIndex);
         if (isInCircle()) {
@@ -113,10 +113,10 @@ public abstract class SubordinationEdge extends Edge {
 
     @Override
     public final void setStartAndInsert(final ModelElement startElement) {
-        ModelElement oldStartElement = k1;
+        ModelElement oldStartElement = startElement;
         oldStartElement.removeEdge(this);
-        k1 = startElement;
-        k1.addEdge(this);
+        this.startElement = startElement;
+        startElement.addEdge(this);
         if (isInCircle()) {
             startElement.removeEdge(this);
             super.setStartAndInsert(oldStartElement);
@@ -125,10 +125,10 @@ public abstract class SubordinationEdge extends Edge {
 
     @Override
     public final void setEndAndInsert(final ModelElement endElement) {
-        ModelElement oldEndElement = k2;
+        ModelElement oldEndElement = endElement;
         oldEndElement.removeEdge(this);
-        k2 = endElement;
-        k2.addEdge(this);
+        this.endElement = endElement;
+        endElement.addEdge(this);
         if (isInCircle()) {
             endElement.removeEdge(this);
             super.setEndAndInsert(oldEndElement);
@@ -144,7 +144,8 @@ public abstract class SubordinationEdge extends Edge {
         if (k1 != null && k2 != null) {
             boolean retVal = k2.isSuperElementOf(k1, getClass());
             if (retVal) {
-                Log.show(Log.INFO, getResString("part_of_circle_error") + "\n" + ElementsNameBuilder.getDisplayablePluralName(ModelElement.class) + ":\n" + ElementsNameBuilder.getDisplayableName(k1) + ": " + k1.getName() + "\n" + ElementsNameBuilder.getDisplayableName(k2) + ": " + k2.getName());
+                Log.show(Log.INFO, getResString("part_of_circle_error") + "\n" + ElementsNameBuilder.getDisplayablePluralName(ModelElement.class) + ":\n" + ElementsNameBuilder.getDisplayableName(k1) + ": " + k1.getName() + "\n"
+                        + ElementsNameBuilder.getDisplayableName(k2) + ": " + k2.getName());
             }
             return retVal;
         }

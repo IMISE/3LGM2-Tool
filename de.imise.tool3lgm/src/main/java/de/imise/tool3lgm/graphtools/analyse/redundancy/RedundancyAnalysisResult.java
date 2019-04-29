@@ -32,28 +32,28 @@ public class RedundancyAnalysisResult {
      * Menge aller AWB, die man in jeder minimalen Menge braucht. Sie unterstützen mind. eine
      * Funktion als einziger Baustein.
      */
-    AlphabeticalSet<ModelElement> exclusiveAWB = new AlphabeticalSet<ModelElement>();
+    AlphabeticalSet<ModelElement> exclusiveAWB = new AlphabeticalSet<>();
 
     /**
      * Menge aller AWB, die überhaupt keine Aufgabe unterstützen
      */
-    AlphabeticalSet<ModelElement> notSupportingAWB = new AlphabeticalSet<ModelElement>();
+    AlphabeticalSet<ModelElement> notSupportingAWB = new AlphabeticalSet<>();
 
     /**
      * Menge aller AWB, auf die man verzichten kann, wenn man alle exklusiven AWB hat
      */
-    AlphabeticalSet<ModelElement> uselessAWB = new AlphabeticalSet<ModelElement>();
+    AlphabeticalSet<ModelElement> uselessAWB = new AlphabeticalSet<>();
 
     /**
      * Liste aller AWB, auf die man auch verzichten kann, da sie in keinem Minimalset vorkommen
      */
-    AlphabeticalSet<ModelElement> moreUselessAWB = new AlphabeticalSet<ModelElement>();
+    AlphabeticalSet<ModelElement> moreUselessAWB = new AlphabeticalSet<>();
 
     /**
      * Liste aller AWB, auf die man auch braucht, da sie in jedem Minimalset vorkommen, die aber nur
      * eine einelementige Äquivalenzklasse bilden.
      */
-    AlphabeticalSet<ModelElement> moreNeededAWB = new AlphabeticalSet<ModelElement>();
+    AlphabeticalSet<ModelElement> moreNeededAWB = new AlphabeticalSet<>();
 
     /**
      * Liste von <code>AlphabeticalSet</code>s mit AWB, die jeweils alle dieselben Aufgaben
@@ -69,7 +69,7 @@ public class RedundancyAnalysisResult {
      * oder <code>moreNeededAWB</code> vorkommen und mind. eine Aufgabe des überflüssigen AWB
      * unterstützen.
      */
-    HashMap<ModelElement, AlphabeticalSet<ModelElement>> uselessToNeeded = new HashMap<ModelElement, AlphabeticalSet<ModelElement>>();
+    HashMap<ModelElement, AlphabeticalSet<ModelElement>> uselessToNeeded = new HashMap<>();
 
     /**
      * Modell das analysiert werden soll
@@ -85,7 +85,7 @@ public class RedundancyAnalysisResult {
     /**
      * String der bei der Ausgabe des Ergebnisses als Analyseoption angezeigt werden soll
      */
-    private final String analyseOptionString;
+    private final String analysisOptionString;
 
     /**
      * @param gdcoll Modell, das analysiert werden soll
@@ -93,14 +93,14 @@ public class RedundancyAnalysisResult {
      *            Die Definition mit dem MetaPfad, über den Elemente der Art <code>startClass</code> und <code>endClass</code> analysiert werden
      *            sollen. Die startClass des Metapfades ist die Klasse, für deren Elemente Redundanz aufgedeckt werden soll und die endClass
      *            ist die Klasse, bezüglich der Elemente der <code>endClass</code> redundant sein können.
-     * @param analyseOptionString
+     * @param analysisOptionString
      *            String der bei der Ausgabe des Ergebnisses als Analyseoption angezeigt werden soll
      */
-    public RedundancyAnalysisResult(final GDCollection gdcoll, final SingleRedundancyAnalysisDefinition definition, final String analyseOptionString) {
+    public RedundancyAnalysisResult(final GDCollection gdcoll, final SingleRedundancyAnalysisDefinition definition, final String analysisOptionString) {
         super();
         this.gdcoll = gdcoll;
         this.definition = definition;
-        this.analyseOptionString = analyseOptionString;
+        this.analysisOptionString = analysisOptionString;
     }
 
     /**
@@ -120,7 +120,7 @@ public class RedundancyAnalysisResult {
     /**
      * @return Returns the analyseOptionString.
      */
-    public String getAnalyseOptionString() {
-        return analyseOptionString;
+    public String getAnalysisOptionString() {
+        return analysisOptionString;
     }
 }

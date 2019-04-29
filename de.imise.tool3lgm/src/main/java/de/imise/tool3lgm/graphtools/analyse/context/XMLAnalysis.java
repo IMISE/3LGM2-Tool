@@ -7,7 +7,6 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -30,7 +29,7 @@ import de.imise.tool3lgm.log.Log;
  *
  * @author Sebastian Weber
  */
-public class XMLAnalyse extends AbstractAnalyse {
+public class XMLAnalysis extends AbstractAnalysis {
 
     /** der Text der die Analyse beschreibt. */
     protected String xmlText;
@@ -43,10 +42,10 @@ public class XMLAnalyse extends AbstractAnalyse {
      *         den übergebenen Parametern zurück gegeben.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
-    public static XMLAnalyse createAnalyse(final String analyseText) throws SAXException {
-        XMLAnalyse xMLAnalyse = new XMLAnalyse();
-        xMLAnalyse.setXMLText(analyseText);
-        return xMLAnalyse;
+    public static XMLAnalysis createAnalysis(final String analyseText) throws SAXException {
+        XMLAnalysis xMLAnalysis = new XMLAnalysis();
+        xMLAnalysis.setXMLText(analyseText);
+        return xMLAnalysis;
     }
 
     /**
@@ -58,11 +57,11 @@ public class XMLAnalyse extends AbstractAnalyse {
      *         den übergebenen Parametern zurück gegeben.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
-    public static XMLAnalyse createAnalyse(final String name, final String analyseText) throws SAXException {
-        XMLAnalyse xMLAnalyse = new XMLAnalyse();
-        xMLAnalyse.setName(name);
-        xMLAnalyse.setXMLText(analyseText);
-        return xMLAnalyse;
+    public static XMLAnalysis createAnalysis(final String name, final String analyseText) throws SAXException {
+        XMLAnalysis xMLAnalysis = new XMLAnalysis();
+        xMLAnalysis.setName(name);
+        xMLAnalysis.setXMLText(analyseText);
+        return xMLAnalysis;
     }
 
     /**
@@ -86,37 +85,37 @@ public class XMLAnalyse extends AbstractAnalyse {
         }
 
         // alte Startknoten speichern
-        ArrayList<Class<? extends ModelElement>> alteStartknoten = getStartknoten();
-        deleteStartknoten();
+        List<Class<? extends ModelElement>> oldStartNodes = getStartClasses();
+        clearStartClasses();
 
         try {
-            parseAnalyse(xmlText);
+            parseAnalysis(xmlText);
         } catch (SAXException e) {
             // alte Werte wieder herstellen
-            startknoten = alteStartknoten;
+            startClasses = oldStartNodes;
             throw e;
         }
         this.xmlText = xmlText;
     }
 
     /**
-     * Fügt einen neuen Startknoten hinzu.
+     * Fügt einen Startklasse hinzu.
      *
-     * @param startknoten der neue Name des Startknotens.
+     * @param startClassName der neue Name des Startknotens.
      */
-    private void addStartknoten(final String startknoten) {
-        Class<? extends ModelElement> startClass = ModelConstants.getClassForName(startknoten);
+    private void addStartClass(final String startClassName) {
+        Class<? extends ModelElement> startClass = ModelConstants.getClassForName(startClassName);
         if (startClass != null) {
-            this.startknoten.add(startClass);
+            startClasses.add(startClass);
         }
     }
 
     /**
-     * Löscht die Liste der Startknoten.
+     * Löscht die Liste der Startklassen.
      */
-    protected void deleteStartknoten() {
-        if (startknoten != null) {
-            startknoten.clear();
+    private final void clearStartClasses() {
+        if (startClasses != null) {
+            startClasses.clear();
         }
     }
 
@@ -125,13 +124,13 @@ public class XMLAnalyse extends AbstractAnalyse {
      *
      * @author Sebastian Weber
      */
-    private class AnalyseParser extends DefaultHandler {
+    private class AnalysisParser extends DefaultHandler {
         @Override
         public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) {
             if (qName.equals("startknoten")) {
                 StringTokenizer st = new StringTokenizer(atts.getValue("name"), ",");
                 while (st.hasMoreTokens()) {
-                    addStartknoten(st.nextToken().trim());
+                    addStartClass(st.nextToken().trim());
                 }
             }
         }
@@ -139,16 +138,16 @@ public class XMLAnalyse extends AbstractAnalyse {
 
     @Override
     public final List<ElementContainer> getResult(final GraphDocument doc) {
-        return AnalyseXMLParser.analyze(xmlText, doc);
+        return AnalysisXMLParser.analyze(xmlText, doc);
     }
 
     /**
      * Parst einen Analysetext.
      *
-     * @param analyseText der Analysetext.
+     * @param analysisText der Analysetext.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
-    public void parseAnalyse(final String analyseText) throws SAXException {
+    public void parseAnalysis(final String analysisText) throws SAXException {
         SAXParser parser = null;
         SAXParserFactory factory = SAXParserFactory.newInstance();
 
@@ -160,7 +159,7 @@ public class XMLAnalyse extends AbstractAnalyse {
 
         if (parser != null) {
             try {
-                parser.parse(new InputSource(new StringReader(analyseText)), new AnalyseParser());
+                parser.parse(new InputSource(new StringReader(analysisText)), new AnalysisParser());
             } catch (IOException | IllegalArgumentException ex) {
                 Log.show(Log.ERROR, getResString("FehlerParser") + "\n" + ex.getMessage(), ex);
             }
@@ -169,34 +168,37 @@ public class XMLAnalyse extends AbstractAnalyse {
 
     @Override
     public String toString() {
-        // wird gebraucht, um die Analysen in der Tabelle des AnalyseRepositoryDialoges richtig
+        // wird gebraucht, um die Analysen in der Tabelle des AnalysesRepositoryDialoges richtig
         // zu sortieren (das ganze is ne echte Krücke!)
-        return getStartknotenString();
+        return getStartClassesDisplayNames();
         // return startknoten.toString();
     }
 
     @Override
     public int hashCode() {
-        // assert false : "hashCode not designed";
-        return 42; // any arbitrary constant will do
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (xmlText == null ? 0 : xmlText.hashCode());
+        return result;
     }
 
     @Override
     public boolean equals(final Object obj) {
-        if (super.equals(obj)) {
+        if (this == obj) {
             return true;
         }
-        if (!(obj instanceof XMLAnalyse)) {
+        if (!super.equals(obj)) {
             return false;
         }
-        XMLAnalyse a = (XMLAnalyse) obj;
-        if (!name.equals(a.name)) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        if (!startknoten.equals(a.startknoten)) {
-            return false;
-        }
-        if (!xmlText.equals(a.xmlText)) {
+        XMLAnalysis other = (XMLAnalysis) obj;
+        if (xmlText == null) {
+            if (other.xmlText != null) {
+                return false;
+            }
+        } else if (!xmlText.equals(other.xmlText)) {
             return false;
         }
         return true;

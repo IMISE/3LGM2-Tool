@@ -1394,12 +1394,12 @@ public final class ModelConstants {
     }
 
     /**
-     * Liefert die {@link AnalysisDefinition} des Metamodells
+     * Liefert die {@link AnalysesDefinition} des Metamodells
      *
      * @return
      */
-    public static final AnalysisDefinition getAnalysisDefinition() {
-        return metaModel.getAnalysisDefinition();
+    public static final AnalysesDefinition getAnalysesDefinition() {
+        return metaModel.getAnalysesDefinition();
     }
 
     /**

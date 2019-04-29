@@ -36,6 +36,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
@@ -78,11 +79,11 @@ public class MenuCollection {
     /** Das XMLAnalyse-Menu */
     public static final JMenu ANALYSIS_MENU = createMenu("analysis", AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
             BooleanProperty.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT, AnalysisActions.ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR, new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY,
-            ModelConstants.getAnalysisDefinition().getAnalysisActions(), Analysis.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS);
+            ModelConstants.getAnalysesDefinition().getAnalysisActions(), Analysis.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS);
 
     /** Das Optionen-Menu */
-    public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, OptionsActions.ACTION_PROPERTY_INT_RMI_PORT,
-            OptionsActions.ACTIONS_CHOOSE_META_MODEL, OptionsSubMenus.LOCALE_MENU);
+    public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, new JSeparator(), OptionsActions.ACTION_PROPERTY_INT_RMI_PORT,
+            OptionsActions.ACTIONS_CHOOSE_META_MODEL, OptionsSubMenus.LOCALE_MENU, UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
 
     /** Das Extras-Menu */
     public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION,
@@ -366,11 +367,10 @@ public class MenuCollection {
         public HelpMenu() {
             super(title);
 
-            MenuCreator.addAll(this,
-                    MenuCreator.createMenuEntries(false, ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, ActionLibrary.HelpActions.ACTION_ACTIVATE_DIRECT_HELP, new JSeparator(),
-                            ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(), ActionLibrary.HelpActions.ACTION_SHOW_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_SHOW_3LGM_WEB_SITE, new JSeparator(),
-                            ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MODEL_FILE, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG,
-                            new JSeparator()/* , ActionLibrary.HelpActions.ACTION_IMPORT_LICENSE_FILE */));
+            MenuCreator.addAll(this, MenuCreator.createMenuEntries(false, ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, ActionLibrary.HelpActions.ACTION_ACTIVATE_DIRECT_HELP, new JSeparator(),
+                    ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_OPEN_URL_3LGM_WEBSITE, new JSeparator(),
+                    ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MODEL_FILE, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER,
+                    ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG/* , new JSeparator() , ActionLibrary.HelpActions.ACTION_IMPORT_LICENSE_FILE */));
         }
     }
 

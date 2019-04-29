@@ -333,7 +333,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     /**
      * @return
      */
-    public Node getKnoten() {
+    public Node getNode() {
         return (Node) me;
     }
 

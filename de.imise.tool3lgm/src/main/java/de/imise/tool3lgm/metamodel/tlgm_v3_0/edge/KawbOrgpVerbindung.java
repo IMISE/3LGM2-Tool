@@ -13,10 +13,10 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationsplan;
  */
 public final class KawbOrgpVerbindung extends CompositionEdge {
 
-    public static final Class<? extends ModelElement> stcl = KonAnwendungsbaustein.class;
+    public static final Class<? extends ModelElement> STCL = KonAnwendungsbaustein.class;
 
-    public static final EdgeCardinality ecard = ONE_ONE;
+    public static final EdgeCardinality ECARD = ONE_ONE;
 
-    public static final Class<? extends ModelElement> etcl = Organisationsplan.class;
+    public static final Class<? extends ModelElement> ETCL = Organisationsplan.class;
 
 }

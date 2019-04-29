@@ -14,12 +14,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Nachrichtentyp;
  */
 public final class EtntNatVerbindung extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = EreignisNachrichtenTyp.class;
+    public static final Class<? extends ModelElement> STCL = EreignisNachrichtenTyp.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_ONE;
+    public static final EdgeCardinality ECARD = ZERO_ONE;
 
-    public static final Class<? extends ModelElement> etcl = Nachrichtentyp.class;
+    public static final Class<? extends ModelElement> ETCL = Nachrichtentyp.class;
 
 }

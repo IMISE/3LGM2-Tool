@@ -13,7 +13,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author AXS Dieser Renderer bewirkt, dass die Zelle mit dem Focus auch mit blauem Hintergrund
  *         dargstellt wird. Standardverhalten ist, dass sie weiss bleibt.
  */
-public class AnalyseRepositoryFrameTableCellRenderer extends DefaultTableCellRenderer {
+public class AnalysesRepositoryFrameTableCellRenderer extends DefaultTableCellRenderer {
 
     /**
      * COMMENTME

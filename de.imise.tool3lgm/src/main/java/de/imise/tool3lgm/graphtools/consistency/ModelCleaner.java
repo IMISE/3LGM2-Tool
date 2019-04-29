@@ -231,7 +231,7 @@ public class ModelCleaner {
                 }
                 for (int j = lc.getNodeContainerCount() - 1; j >= 0; j--) {
                     NodeContainer kc = lc.getNodeContainer(j);
-                    if (kc.getKnoten() == null) {
+                    if (kc.getNode() == null) {
                         gdcoll.removeContainerFromSubmodel(kc, STANDARD_PID);
                     }
                 }

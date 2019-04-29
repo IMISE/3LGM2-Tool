@@ -6,7 +6,7 @@ import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.creat
 import javax.swing.Action;
 
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.AnalysisDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.analyse.DataAvailabilityFinder;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.analyse.InterfaceCanSendOTAnalysis;
@@ -27,15 +27,15 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.RechAnwendungsbaustein;
 import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Softwareprodukt;
 
-public class TLGMOriginalAnalysisDefinition extends AnalysisDefinition {
+public class TLGMOriginalAnalysesDefinition extends AnalysesDefinition {
 
-    public TLGMOriginalAnalysisDefinition() {
-        initSimpleRedundancyAnalysis();
-        initRedundancyAnalysis();
-        initNodeAnalysis();
+    public TLGMOriginalAnalysesDefinition() {
+        initSimpleRedundancyAnalyses();
+        initRedundancyAnalyses();
+        initNodeAnalyses();
     }
 
-    private void initSimpleRedundancyAnalysis() {
+    private void initSimpleRedundancyAnalyses() {
         AbstractMetaPath functionToConfigurationRedundancy = createSimpleMetaPath(Aufgabe.class, ABKonfiguration.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class);
         AbstractMetaPath functionToConfigurationRedundancyDifference = createSimpleMetaPath(ABKonfiguration.class, Anwendungsbaustein.class, AwbAwbkVerbindung.class);
         AbstractMetaPath objecttypeToStoreplaceRedundancy = createSimpleMetaPath(Objekttyp.class, LogischerSpeicher.class, ObjLogspVerbindung.class);
@@ -43,7 +43,7 @@ public class TLGMOriginalAnalysisDefinition extends AnalysisDefinition {
         simpleRedundancyAnalysisDefinitions.add(objecttypeToStoreplaceRedundancy, true);
     }
 
-    private void initRedundancyAnalysis() {
+    private void initRedundancyAnalyses() {
         //Analyse 1: Anwendungsbausteine bezüglich Aufgaben
         SingleRedundancyAnalysisDefinition analyse = redundancyAnalysisDefinitions.add(createSimpleMetaPath(Anwendungsbaustein.class, Aufgabe.class, AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class));
         //es darf immer nur ein Anwendungsbaustein an jeder Konfiguration hängen, damit die Analyse ein interpretierbares Ergebnis liefert -> Kardinalitäten einschränken
@@ -68,8 +68,8 @@ public class TLGMOriginalAnalysisDefinition extends AnalysisDefinition {
         redundancyAnalysisDefinitions.add(createSimpleMetaPath(Datenbanksystem.class, Objekttyp.class, ObjLogspVerbindung.class));
     }
 
-    private void initNodeAnalysis() {
-        nodeAnalysis.add(new InterfaceCanSendOTAnalysis());
+    private void initNodeAnalyses() {
+        nodeAnalyses.add(new InterfaceCanSendOTAnalysis());
     }
 
     @Override

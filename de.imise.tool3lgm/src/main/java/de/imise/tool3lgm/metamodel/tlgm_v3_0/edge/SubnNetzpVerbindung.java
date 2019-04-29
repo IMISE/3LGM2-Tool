@@ -13,12 +13,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Subnetz;
  */
 public final class SubnNetzpVerbindung extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = Subnetz.class;
+    public static final Class<? extends ModelElement> STCL = Subnetz.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = Netzprotokoll.class;
+    public static final Class<? extends ModelElement> ETCL = Netzprotokoll.class;
 
 }

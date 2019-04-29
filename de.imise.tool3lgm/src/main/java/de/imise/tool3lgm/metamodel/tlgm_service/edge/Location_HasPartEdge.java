@@ -13,12 +13,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.Location;
  */
 public final class Location_HasPartEdge extends PartitioningEdge {
 
-    public static final Class<? extends ModelElement> stcl = Location.class;
+    public static final Class<? extends ModelElement> STCL = Location.class;
 
-    public static final EdgeCardinality scard = ZERO_ONE;
+    public static final EdgeCardinality SCARD = ZERO_ONE;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = Location.class;
+    public static final Class<? extends ModelElement> ETCL = Location.class;
 
 }

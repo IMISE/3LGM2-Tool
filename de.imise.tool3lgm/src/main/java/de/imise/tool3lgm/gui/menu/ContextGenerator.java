@@ -87,8 +87,8 @@ import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalyse;
-import de.imise.tool3lgm.graphtools.analyse.context.AnalyseRepository;
+import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
+import de.imise.tool3lgm.graphtools.analyse.context.AnalysesRepository;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -627,7 +627,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             menu.addSeparator();
 
             // Analysemenü anfügen
-            menu.add(getAnalyseMenu());
+            menu.add(getAnalysisMenu());
 
             JMenuItem joinMenu = getJoinMenu();
             if (joinMenu != null) {
@@ -1151,8 +1151,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         menu.addSeparator();
         menu.add(layout_layer);
         menu.add(ActionLibrary.LayoutActions.ACTION_OPEN_GLOBAL_LAYOUT_EDITOR);
-        menu.addSeparator();
-        menu.add(internals);
+        if (Static.isExpertMode()) {
+            menu.addSeparator();
+            menu.add(internals);
+        }
         return menu;
     }
 
@@ -2003,27 +2005,21 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      *
      * @return Analysemenü
      */
-    private JMenu getAnalyseMenu() {
+    private JMenu getAnalysisMenu() {
         JMenu menu = new JMenu(getResString("analysis"));
         ElementContainer ec = doc.getLastSelected();
         if (ec != null && ec.getElement() instanceof Node) {
             // Alle Analysen für die ausgewählte Klasse holen
-            String klasse = ec.getElement().getClass().getName();
-            klasse = klasse.substring(klasse.lastIndexOf('.') + 1);
-            List<AbstractAnalyse> analysen = AnalyseRepository.getAnalysenFuerKnoten(klasse);
+            Class<? extends ModelElement> elementClass = ec.getElement().getClass();
+            List<AbstractAnalysis> analysis = AnalysesRepository.getAnalyses(elementClass);
             // Analysen ins Menü eintragen
-            if (analysen != null && analysen.size() > 0) {
-                for (final AbstractAnalyse ana : analysen) {
-                    JMenuItem item = new JMenuItem(ana.getName());
-                    menu.add(item);
-                    item.addActionListener(e -> ana.setAnalysisResult(doc));
-                }
-            } else {
-                menu.setEnabled(false);
+            for (final AbstractAnalysis ana : analysis) {
+                JMenuItem item = new JMenuItem(ana.getName());
+                menu.add(item);
+                item.addActionListener(e -> ana.setAnalysisResult(doc));
             }
-        } else {
-            menu.setEnabled(false);
         }
+        menu.setEnabled(menu.getItemCount() != 0);
         return menu;
     }
 

@@ -13,12 +13,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Softwareprodukt;
  */
 public final class SwpAufVerbindung extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = Softwareprodukt.class;
+    public static final Class<? extends ModelElement> STCL = Softwareprodukt.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = Aufgabe.class;
+    public static final Class<? extends ModelElement> ETCL = Aufgabe.class;
 
 }

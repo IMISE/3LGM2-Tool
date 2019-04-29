@@ -347,9 +347,13 @@ public class UserProperties {
         /** Warnung vor dem Löschen von Elementen aus dem Gesamtmodell */
         OPTION_SHOW_REMOVE_WARNING,
 
+        /** Die Toolbar zum Zeichnen von Elementen an/aus */
         OPTION_SHOW_PAINTING_TOOLBAR,
+        /** Standardtoolbar unter dem Menu an/aus */
         OPTION_SHOW_STANDARD_TOOLBAR,
+        /** ModelBrowser an/aus */
         OPTION_MODEL_BROWSER_SHOW,
+        /** Beim Start den Abfrgadedialog anzeigen, mit dem man das Metamodell wählen kann an/aus */
         OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START,
 
         /**
@@ -366,7 +370,7 @@ public class UserProperties {
 
         private static final Set<BooleanProperty> DEFAULT_TRUE_PROERTIES = ImmutableSet.of(OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, OPTION_GRAPH_MOVE_SUBELEMENTS, OPTION_SHOW_PAINTING_TOOLBAR,
                 OPTION_SHOW_STANDARD_TOOLBAR, OPTION_MODEL_BROWSER_SHOW, OPTION_ENABLE_SUBMODEL_BROWSER, OPTION_SHOW_PART_OF_HIERARCHY, OPTION_USE_PROPERTY_COLORS, OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING,
-                TRANSIENT_OPTION_SHOW_EXPANSION_SIGN, OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START);
+                TRANSIENT_OPTION_SHOW_EXPANSION_SIGN);
 
         private boolean getDefault() {
             return DEFAULT_TRUE_PROERTIES.contains(this);

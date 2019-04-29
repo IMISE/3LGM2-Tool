@@ -14,12 +14,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.IheTransaction;;
  */
 public abstract class IheInterface_IheTransaction_Edge extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = IheInterface.class;
+    public static final Class<? extends ModelElement> STCL = IheInterface.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ONE_ONE;
+    public static final EdgeCardinality ECARD = ONE_ONE;
 
-    public static final Class<? extends ModelElement> etcl = IheTransaction.class;
+    public static final Class<? extends ModelElement> ETCL = IheTransaction.class;
 
 }

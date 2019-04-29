@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.RandomAccessFile;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
@@ -23,41 +24,41 @@ import de.imise.tool3lgm.log.Log;
 /**
  * Diese Klasse stellt Methoden zum speichern und laden der Analysen bereit. Hier werden alle
  * Analysen die im 3LGM-Baukasten verwendet werden, verwaltet. Achtung: Es existiert noch kein
- * Listener-Mechanismus, der Klassen, welche das AnalyseRepository verwenden, über Änderungen im
+ * Listener-Mechanismus, der Klassen, welche das AnalysesRepository verwenden, über Änderungen im
  * Repository informiert.
  *
  * @author Thomas Wendt, Sebastian Weber, AXS
  */
-public class AnalyseRepository {
+public class AnalysesRepository {
 
     /** Datei, aus der zuletzt Analysen geladen oder in die zuletzt Analysen gespeichert wurden */
     private static File file;
 
     /** Enthält alle Analysen, die im Modell audf Elemente angewendet werden können. */
-    private static List<XMLAnalyse> xmlAnalysen;
+    private static List<XMLAnalysis> xmlAnalyses;
 
-    private static List<AbstractAnalyse> specialAnalysis;
+    private static List<AbstractAnalysis> specialAnalyses;
 
     /**
      * Fügt eine neue XMLAnalyse ins Repository ein, wenn sie noch nicht enthalten ist.
      *
-     * @param xmlAnalysen Liste zu der die übergebene XMLAnalyse hinzugefügt werden soll
+     * @param xmlAnalyses Liste zu der die übergebene XMLAnalyse hinzugefügt werden soll
      * @param toadd die XMLAnalyse, die hinzugefügt werden soll
      */
-    public static boolean addAnalyse(final XMLAnalyse toadd) {
+    public static boolean addAnalysis(final XMLAnalysis toadd) {
         if (toadd == null) {
             return false;
         }
-        if (xmlAnalysen == null) {
-            xmlAnalysen = new ArrayList<>();
+        if (xmlAnalyses == null) {
+            xmlAnalyses = new ArrayList<>();
         }
-        if (xmlAnalysen.contains(toadd)) {
+        if (xmlAnalyses.contains(toadd)) {
             return false;
         }
-        if (toadd.startknoten == null || toadd.startknoten.isEmpty()) {
+        if (toadd.startClasses == null || toadd.startClasses.isEmpty()) {
             return false;
         }
-        xmlAnalysen.add(toadd);
+        xmlAnalyses.add(toadd);
         return true;
     }
 
@@ -65,19 +66,19 @@ public class AnalyseRepository {
      * Prüft, ob der übergebene <code>name</code> bei irgend einer anderen als der einzeln
      * übergebenen XMLAnalyse vorkommt.
      *
-     * @param xmlAnalysen eine ArrayList der Analysen.
-     * @param xMLAnalyse die XMLAnalyse, der ein neuer Name gegeben werden soll.
+     * @param xmlAnalyses eine ArrayList der Analysen.
+     * @param xMLAnalysis die XMLAnalyse, der ein neuer Name gegeben werden soll.
      * @param name der Name für die übergebene XMLAnalyse.
      * @return false, wenn der Name in der Liste der Analysen gar nicht enthalten ist oder nur die
      *         einzeln übergebnen XMLAnalyse diesen Namen besitzt.
      */
-    public static boolean containsName(final List<XMLAnalyse> analysen, final XMLAnalyse xMLAnalyse, final String name) {
-        if (analysen == null) {
+    public static boolean containsName(final List<XMLAnalysis> analyses, final XMLAnalysis xMLAnalysis, final String name) {
+        if (analyses == null) {
             return false;
         }
-        for (XMLAnalyse ana : analysen) {
+        for (XMLAnalysis ana : analyses) {
             if (ana.getName().equals(name)) {
-                if (xMLAnalyse != null && xMLAnalyse == ana) {
+                if (xMLAnalysis != null && xMLAnalysis == ana) {
                     continue;
                 }
                 return true;
@@ -89,23 +90,22 @@ public class AnalyseRepository {
     /**
      * Gibt alle Analysen zurück, deren Startknoten dem übergebenen Node entspricht.
      *
-     * @param elementClassName
-     * @return ArrayList, in der jeder Eintrag eine XMLAnalyse ist.
+     * @param elementClass
+     * @return List, in der jeder Eintrag eine XMLAnalyse ist. Ist keine vorhanden, kommt eine leere Liste zurück, aber niemals <code>null</code>.
      */
-    public static List<AbstractAnalyse> getAnalysenFuerKnoten(final String elementClassName) {
-        Class<? extends ModelElement> elementClass = ModelConstants.getClassForName(elementClassName);
-        List<AbstractAnalyse> analysenFuerKnoten = new ArrayList<>();
-        List<AbstractAnalyse> allAnalysis = new ArrayList<>(getXMLAnalysen());
-        allAnalysis.addAll(ModelConstants.getAnalysisDefinition().getNodeAnalysis());
-        for (AbstractAnalyse ana : allAnalysis) {
-            ArrayList<Class<? extends ModelElement>> startknoten = ana.getStartknoten();
-            for (Class<? extends ModelElement> startKnotenClass : startknoten) {
-                if (startKnotenClass != null && startKnotenClass.isAssignableFrom(elementClass)) {
-                    analysenFuerKnoten.add(ana);
+    public static List<AbstractAnalysis> getAnalyses(final Class<? extends ModelElement> elementClass) {
+        List<AbstractAnalysis> analyses = new ArrayList<>();
+        List<AbstractAnalysis> allAnalyses = new ArrayList<>(getXMLAnalyses());
+        allAnalyses.addAll(ModelConstants.getAnalysesDefinition().getNodeAnalyses());
+        for (AbstractAnalysis ana : allAnalyses) {
+            List<Class<? extends ModelElement>> startClasses = ana.getStartClasses();
+            for (Class<? extends ModelElement> startClass : startClasses) {
+                if (startClass != null && startClass.isAssignableFrom(elementClass)) {
+                    analyses.add(ana);
                 }
             }
         }
-        return analysenFuerKnoten;
+        return analyses;
     }
 
     /**
@@ -179,14 +179,14 @@ public class AnalyseRepository {
      *
      * @return eine ArrayList der Abfragen. Jeder Eintrag des ArrayList ist eine XMLAnalyse.
      */
-    public static List<XMLAnalyse> getXMLAnalysen() {
-        if (xmlAnalysen == null) {
-            xmlAnalysen = loadAnalyseFile(getRepositoryFile());
+    public static List<XMLAnalysis> getXMLAnalyses() {
+        if (xmlAnalyses == null) {
+            xmlAnalyses = loadAnalyseFile(getRepositoryFile());
         }
-        if (xmlAnalysen == null) {
+        if (xmlAnalyses == null) {
             return new ArrayList<>();
         }
-        return new ArrayList<>(xmlAnalysen);
+        return new ArrayList<>(xmlAnalyses);
     }
 
     // ////////////////////////////////////////////////////
@@ -199,7 +199,7 @@ public class AnalyseRepository {
      * @param file
      * @return
      */
-    public static List<XMLAnalyse> loadAnalyseFile(final File file) {
+    public static List<XMLAnalysis> loadAnalyseFile(final File file) {
         try {
             return loadAnalyseFile(file.toURI().toURL());
         } catch (MalformedURLException e) {
@@ -215,11 +215,11 @@ public class AnalyseRepository {
      * @param f
      * @return
      */
-    public static List<XMLAnalyse> loadAnalyseFile(final URL url) {
+    public static List<XMLAnalysis> loadAnalyseFile(final URL url) {
         String line = "";
-        List<XMLAnalyse> analysen = null;
+        List<XMLAnalysis> analysen = null;
         try {
-            BufferedReader dataStream = new BufferedReader(new InputStreamReader(url.openStream()));
+            BufferedReader dataStream = new BufferedReader(new InputStreamReader(url.openStream(), StandardCharsets.ISO_8859_1));
             line = dataStream.readLine();
             if (!line.equals("Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;")) {
                 throw new DataFormatException();
@@ -243,11 +243,11 @@ public class AnalyseRepository {
                 for (line = dataStream.readLine(); !line.equals("--multipart_3lgm_query_separator"); line = dataStream.readLine()) {
                     strbuf.append(line + "\n");
                 }
-                XMLAnalyse toadd = null;
+                XMLAnalysis toadd = null;
                 try {
-                    toadd = XMLAnalyse.createAnalyse(ananame, strbuf.toString());
+                    toadd = XMLAnalysis.createAnalysis(ananame, strbuf.toString());
                 } catch (SAXException ex) {
-                    Log.show(Log.ERROR, getResString("AnalyseNichtErstellt") + "\n" + ex.getMessage(), ex);
+                    Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
                 }
                 analysen.add(toadd);
             }
@@ -265,7 +265,7 @@ public class AnalyseRepository {
      *
      * @param f die Datei, in die die Analysen gespeichert werden sollen.
      */
-    public static void saveAnalyseFile(final File f, final List<XMLAnalyse> analysen) {
+    public static void saveAnalyseFile(final File f, final List<XMLAnalysis> analysen) {
         if (file == null || analysen == null) {
             return;
         }
@@ -277,7 +277,7 @@ public class AnalyseRepository {
             raf.writeBytes("Content-Type: multipart/related; boundary=--multipart_3lgm_query_separator;\n");
             String line = "";
             for (int i = 0; i < analysen.size(); i++) {
-                XMLAnalyse sp = analysen.get(i);
+                XMLAnalysis sp = analysen.get(i);
                 line = null;
                 if (sp != null) {
                     line = sp.getXMLText();
@@ -302,7 +302,7 @@ public class AnalyseRepository {
      * Speichert die aktuelle Liste <code>xmlAnalysen</code> als Repository.
      */
     public static final void saveRepository() {
-        saveAnalyseFile(getRepositoryFile(), xmlAnalysen);
+        saveAnalyseFile(getRepositoryFile(), xmlAnalyses);
     }
 
     /**
@@ -312,11 +312,11 @@ public class AnalyseRepository {
      * @param newAbfragen eine ArrayList der neuen Abfragen. Jeder Eintrag des ArrayList ist eine
      *            XMLAnalyse.
      */
-    public static boolean setXMLAnalysen(final List<XMLAnalyse> newXMLAnalysen) {
+    public static boolean setXMLAnalysen(final List<XMLAnalysis> newXMLAnalysen) {
         if (newXMLAnalysen == null) {
             return false;
         }
-        xmlAnalysen = newXMLAnalysen;
+        xmlAnalyses = newXMLAnalysen;
         return true;
     }
 

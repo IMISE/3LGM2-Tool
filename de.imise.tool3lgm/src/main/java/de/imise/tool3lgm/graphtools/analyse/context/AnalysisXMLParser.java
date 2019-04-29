@@ -21,7 +21,7 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
-public class AnalyseXMLParser extends DefaultHandler {
+public class AnalysisXMLParser extends DefaultHandler {
 
     // public final static String parserClass = "javax.xml.parsers.SAXParser";
 
@@ -41,7 +41,7 @@ public class AnalyseXMLParser extends DefaultHandler {
      *
      */
     public static List<ElementContainer> analyze(final String str, final GraphDocument _doc) {
-        AnalyseXMLParser p = new AnalyseXMLParser();
+        AnalysisXMLParser p = new AnalysisXMLParser();
         return p.process(new StringReader(str), _doc);
     }
 
@@ -68,7 +68,7 @@ public class AnalyseXMLParser extends DefaultHandler {
     /**
      *
      */
-    public AnalyseXMLParser() {
+    public AnalysisXMLParser() {
         unknown_depth = 0;
         file_state = START;
         state = START;
@@ -127,15 +127,15 @@ public class AnalyseXMLParser extends DefaultHandler {
             if (suchcnt == 0) {
                 if (doc.getSelectionSize() > 0) {
                     Collection<ElementContainer> selection = doc.getSelectedContainer();
-                    List<ElementContainer> connected = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, searchParts, searchParents);
+                    List<ElementContainer> connected = GraphAnalysis.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, searchParts, searchParents);
                     resulttmp = new ArrayList<>(selection.size() + connected.size());
                     resulttmp.addAll(selection);
                     resulttmp.addAll(connected);
                 } else {
-                    resulttmp = GraphAnalyse.performSearch(doc, typ, verbundenstate, connectedNames);
+                    resulttmp = GraphAnalysis.performSearch(doc, typ, verbundenstate, connectedNames);
                 }
             } else {
-                resulttmp = GraphAnalyse.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, searchParts, searchParents);
+                resulttmp = GraphAnalysis.searchWithinConnected(doc, resulttmp, new ArrayList<>(resulttmp), typ, verbundenstate, connectedNames, searchParts, searchParents);
             }
             result.addAll(resulttmp);
             suchcnt++;

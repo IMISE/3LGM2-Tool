@@ -12,12 +12,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.PhysischerDVBaustein;
  */
 public class PdvbPdvbVerbindung extends PartitioningEdge {
 
-    public static final Class<? extends ModelElement> stcl = PhysischerDVBaustein.class;
+    public static final Class<? extends ModelElement> STCL = PhysischerDVBaustein.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = PhysischerDVBaustein.class;
+    public static final Class<? extends ModelElement> ETCL = PhysischerDVBaustein.class;
 
 }

@@ -25,24 +25,22 @@ import de.imise.util.Alphabetical;
 /**
  * @author Thomas, Sebastian Weber, AXS
  */
-public class AnalyseRepositoryFrame extends JFrame {
+public class AnalysesRepositoryFrame extends JFrame {
 
     /**
      * Tabelle, in der die Analysen angezeigt werden
      */
-    static AnalyseRepositoryFrameTable table;
+    static AnalysesRepositoryFrameTable table;
 
     private static AbstractButton[] buttons = {
-            new JButton(AnalyseRepositoryFrameActions.ACTION_START_ANALYSIS),
-            new JButton(AnalyseRepositoryFrameActions.ACTION_RESET_ANALYSIS_RESULT),
-            new JButton(AnalyseRepositoryFrameActions.ACTION_CLOSE_DIALOG),
+            new JButton(AnalysesRepositoryFrameActions.ACTION_START_ANALYSIS), new JButton(AnalysesRepositoryFrameActions.ACTION_RESET_ANALYSIS_RESULT), new JButton(AnalysesRepositoryFrameActions.ACTION_CLOSE_DIALOG),
     };
 
     /**
      * Lokale Kopie der Analysen aus dem Repository. Die Liste wird für die Tabelle, die die selbe
      * Liste nutzt, alphabetisch sortiert.
      */
-    static List<XMLAnalyse> analysen;
+    static List<XMLAnalysis> analysen;
 
     /**
      * Speichert die Analysendatei auf der der Benutzer grade arbeitet, wenn er eine Analysedatei
@@ -54,7 +52,7 @@ public class AnalyseRepositoryFrame extends JFrame {
     static File analyseFile = null;
 
     /** Instanz dieser Klasse. */
-    static AnalyseRepositoryFrame dialog = new AnalyseRepositoryFrame();
+    static AnalysesRepositoryFrame dialog = new AnalysesRepositoryFrame();
 
     /**
      * Wenn sich die Analysen geändert haben, muss beim Schließen des Frames gefragt werden, ob sie
@@ -70,7 +68,7 @@ public class AnalyseRepositoryFrame extends JFrame {
      *            eingefügt, sonst nicht
      * @return
      */
-    static boolean addAnalyse(final XMLAnalyse toadd, final boolean ignoreDuplicates) {
+    static boolean addAnalysis(final XMLAnalysis toadd, final boolean ignoreDuplicates) {
         if (toadd == null || !ignoreDuplicates && analysen.contains(toadd)) {
             return false;
         }
@@ -88,7 +86,7 @@ public class AnalyseRepositoryFrame extends JFrame {
         // Das hier funktioniert nur solange richtig, wie es in Menüs keine Untermenüs mit zu
         // aktualisierenden
         // Aktionen gibt
-        JMenuBar menuBar = AnalyseRepositoryFrame.dialog.getJMenuBar();
+        JMenuBar menuBar = AnalysesRepositoryFrame.dialog.getJMenuBar();
         for (int i = 0; i < menuBar.getComponentCount(); i++) {
             JMenu menu = (JMenu) menuBar.getComponent(i);
             if (menu.getAction() != null) {
@@ -111,19 +109,19 @@ public class AnalyseRepositoryFrame extends JFrame {
      * Setzt die übergeben ArrayList als die Analysenliste dieses Dialoges und sortiert sie für die
      * Tabelle.
      */
-    static void setAnalysen(final List<XMLAnalyse> analysen) {
+    static void setAnalyses(final List<XMLAnalysis> analysen) {
         Alphabetical.sort(analysen);
         for (int i = analysen.size() - 1; i >= 0; i--) {
-            XMLAnalyse analyse = analysen.get(i);
-            if (analyse.startknoten.isEmpty()) {
+            XMLAnalysis analyse = analysen.get(i);
+            if (analyse.startClasses.isEmpty()) {
                 analysen.remove(i);
             }
         }
-        AnalyseRepositoryFrame.analysen = analysen;
+        AnalysesRepositoryFrame.analysen = analysen;
     }
 
     /**
-     * Zeigt den AnalyseRepositoryFrame an.
+     * Zeigt den AnalysesRepositoryFrame an.
      */
     public static void showDialog() {
         if (table != null) {
@@ -137,31 +135,31 @@ public class AnalyseRepositoryFrame extends JFrame {
      *
      * @param t die Tool3lgm Klasse, in der dieser Dialog angezeigt wird.
      */
-    private AnalyseRepositoryFrame() {
+    private AnalysesRepositoryFrame() {
         super(getResString("repository"));
         setIconImage(Static.getMainFrame().getIconImage());
 
         JMenu menuFile = new JMenu(getResString("file"));
-        menuFile.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_LOAD_STANDARD_REPOSITORY));
-        menuFile.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_SAVE_REPOSITORY));
+        menuFile.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_LOAD_STANDARD_REPOSITORY));
+        menuFile.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_SAVE_REPOSITORY));
         menuFile.add(new JSeparator());
-        menuFile.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_IMPORT_ANALYSIS));
-        menuFile.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_EXPORT_ANALYSIS));
+        menuFile.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_IMPORT_ANALYSIS));
+        menuFile.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_EXPORT_ANALYSIS));
         menuFile.add(new JSeparator());
-        menuFile.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_CLOSE_DIALOG));
+        menuFile.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_CLOSE_DIALOG));
         JMenu menuAnalysis = new JMenu(getResString("analysis"));
-        menuAnalysis.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_NEW_ANALYSIS));
-        menuAnalysis.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_DELETE_ANALYSIS));
+        menuAnalysis.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_NEW_ANALYSIS));
+        menuAnalysis.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_DELETE_ANALYSIS));
         menuAnalysis.add(new JSeparator());
-        menuAnalysis.add(new JMenuItem(AnalyseRepositoryFrameActions.ACTION_ANALYSIS_EDITOR));
+        menuAnalysis.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_ANALYSIS_EDITOR));
 
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(menuFile);
         menuBar.add(menuAnalysis);
         setJMenuBar(menuBar);
 
-        setAnalysen(AnalyseRepository.getXMLAnalysen());
-        table = new AnalyseRepositoryFrameTable();
+        setAnalyses(AnalysesRepository.getXMLAnalyses());
+        table = new AnalysesRepositoryFrameTable();
         JScrollPane tableScrollPane = new JScrollPane(table);
 
         // das Buttonpanel zusammenbauen
@@ -183,7 +181,7 @@ public class AnalyseRepositoryFrame extends JFrame {
     public void dispose() {
         super.dispose();
         // beim Schließen immer die Analysen wieder auf die des Repositories setzen
-        setAnalysen(AnalyseRepository.getXMLAnalysen());
+        setAnalyses(AnalysesRepository.getXMLAnalyses());
         analysisChanged = false;
     }
 }

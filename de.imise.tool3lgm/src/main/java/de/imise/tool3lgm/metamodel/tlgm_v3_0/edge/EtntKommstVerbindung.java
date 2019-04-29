@@ -14,12 +14,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Kommunikationsstandard;
  */
 public final class EtntKommstVerbindung extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = EtntEtdtKombination.class;
+    public static final Class<? extends ModelElement> STCL = EtntEtdtKombination.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_ONE;
+    public static final EdgeCardinality ECARD = ZERO_ONE;
 
-    public static final Class<? extends ModelElement> etcl = Kommunikationsstandard.class;
+    public static final Class<? extends ModelElement> ETCL = Kommunikationsstandard.class;
 
 }

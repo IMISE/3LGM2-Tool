@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
-public class GraphAnalyse {
+public class GraphAnalysis {
 
     /**
      * Prüft, ob ein Element(Container) den angegebenen Kriterien entspricht

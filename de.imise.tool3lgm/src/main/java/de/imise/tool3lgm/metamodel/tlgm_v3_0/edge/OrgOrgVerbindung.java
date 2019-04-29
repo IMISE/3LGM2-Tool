@@ -12,12 +12,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationseinheit;
  */
 public final class OrgOrgVerbindung extends PartitioningEdge {
 
-    public static final Class<? extends ModelElement> stcl = Organisationseinheit.class;
+    public static final Class<? extends ModelElement> STCL = Organisationseinheit.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = Organisationseinheit.class;
+    public static final Class<? extends ModelElement> ETCL = Organisationseinheit.class;
 
 }

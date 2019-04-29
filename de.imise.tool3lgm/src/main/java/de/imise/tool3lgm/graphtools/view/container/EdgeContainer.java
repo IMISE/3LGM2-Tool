@@ -134,12 +134,12 @@ public class EdgeContainer extends ElementContainer {
     }
 
     /**
-     * @param _k1
-     * @param _k2
+     * @param startNode
+     * @param endNode
      * @param gd
      */
-    public void setNodes(final Node _k1, final Node _k2, final GraphDocument gd) {
-        getEdge().setNodes(_k1, _k2);
+    public void setNodes(final Node startNode, final Node endNode, final GraphDocument gd) {
+        getEdge().setNodes(startNode, endNode);
     }
 
     /**

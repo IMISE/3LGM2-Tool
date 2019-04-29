@@ -12,12 +12,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.OrganisationalUnit;
  */
 public final class OrganisationalUnit_SupportLink_Edge extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = OrganisationalUnit.class;
+    public static final Class<? extends ModelElement> STCL = OrganisationalUnit.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = SupportLink_Edge.class;
+    public static final Class<? extends ModelElement> ETCL = SupportLink_Edge.class;
 
 }

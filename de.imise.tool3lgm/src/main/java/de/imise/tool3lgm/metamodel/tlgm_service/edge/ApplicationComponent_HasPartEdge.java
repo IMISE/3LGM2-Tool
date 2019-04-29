@@ -15,9 +15,9 @@ public final class ApplicationComponent_HasPartEdge extends PartitioningEdge {
 
     public static final Class<? extends ModelElement> stcl = ApplicationComponent.class;
 
-    public static final EdgeCardinality scard = ZERO_ONE;
+    public static final EdgeCardinality SCARD = ZERO_ONE;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
     public static final Class<? extends ModelElement> etcl = ApplicationComponent.class;
 

@@ -14,13 +14,13 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ProvidingInterface;
  */
 public final class CommunicationLink_Edge extends BooleanAttributeEdge {
 
-    public static final Class<? extends ModelElement> stcl = InvokingInterface.class;
+    public static final Class<? extends ModelElement> STCL = InvokingInterface.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = ProvidingInterface.class;
+    public static final Class<? extends ModelElement> ETCL = ProvidingInterface.class;
 
     public CommunicationLink_Edge() {
         super("CommunicationLinkEdge_executionDepending_Attribute");

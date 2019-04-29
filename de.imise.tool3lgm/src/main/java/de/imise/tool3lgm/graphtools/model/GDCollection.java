@@ -369,7 +369,7 @@ public final class GDCollection extends UserFieldTarget {
         //den Verweis auf dieses Teilmodell löschen (das passiert im Hauptmodell)
         for (LayerContainer layer : doc.getLayers()) {
             for (NodeContainer nc : layer.getNodeContainersAlphabetical()) {
-                Node node = nc.getKnoten();
+                Node node = nc.getNode();
                 String associatedDoc = node.getAssociatedDoc();
                 if (associatedDoc != null && associatedDoc.equals(szenHash)) {
                     node.setAssociatedDoc(null);
@@ -1001,7 +1001,7 @@ public final class GDCollection extends UserFieldTarget {
         bendpoint.setName(doc.getNextNewName(bendpoint.getClass()));
         bendpointContainer = new BendpointContainer(bendpoint, szen);
         if (!isNullOrEmpty(bendpointHashString)) {
-            bendpointContainer.getKnoten().setHashString(bendpointHashString);
+            bendpointContainer.getNode().setHashString(bendpointHashString);
         }
         szen.start_transaction(pid);
         if (bendpointIndex == INVALID_BENDPOINT_INDEX) {
@@ -1137,11 +1137,11 @@ public final class GDCollection extends UserFieldTarget {
             nc = kc;
         } else {
             if (kc instanceof BendpointContainer) {
-                nc = new BendpointContainer((Bendpoint) kc.getKnoten(), doc);
+                nc = new BendpointContainer((Bendpoint) kc.getNode(), doc);
             } else if (isInterLayerStartClass(kc.getElement().getClass())) {
-                kc = new InterLayerConnectedNodeContainer(kc.getKnoten(), doc);
+                kc = new InterLayerConnectedNodeContainer(kc.getNode(), doc);
             } else {
-                nc = new NodeContainer(kc.getKnoten(), doc);
+                nc = new NodeContainer(kc.getNode(), doc);
             }
         }
         doc.getLayer(layerIndex).add(nc);
@@ -1877,7 +1877,7 @@ public final class GDCollection extends UserFieldTarget {
         /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
         for (LayerContainer lc : doc.getLayers()) {
             for (NodeContainer nc : lc.getGraphNodeContainers()) {
-                Node node = nc.getKnoten();
+                Node node = nc.getNode();
                 for (GraphDocument doc : export) {
                     if (doc.isMyElement(node)) {
                         ElementContainer container = node.getContainer(doc);

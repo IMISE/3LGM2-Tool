@@ -256,7 +256,7 @@ public final class NodeRenderer {
         }
 
         // Symbol für Verlinkung mit Teilmodell
-        if (kc.getKnoten().getAssociatedDoc() != null && UserProperties.is(BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS)) {
+        if (kc.getNode().getAssociatedDoc() != null && UserProperties.is(BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS)) {
             g.drawImage(linkIcon, xm + 2, yp - 13, kc);
         }
 

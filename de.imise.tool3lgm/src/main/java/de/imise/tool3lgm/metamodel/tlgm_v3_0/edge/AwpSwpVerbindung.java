@@ -14,12 +14,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Softwareprodukt;
  */
 public final class AwpSwpVerbindung extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = Anwendungsprogramm.class;
+    public static final Class<? extends ModelElement> STCL = Anwendungsprogramm.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_ONE;
+    public static final EdgeCardinality ECARD = ZERO_ONE;
 
-    public static final Class<? extends ModelElement> etcl = Softwareprodukt.class;
+    public static final Class<? extends ModelElement> ETCL = Softwareprodukt.class;
 
 }

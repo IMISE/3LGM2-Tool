@@ -22,7 +22,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
 /**
  * @author AXS created on 21.08.2007
  */
-public class AnalyseRepositoryFrameActions {
+public class AnalysesRepositoryFrameActions {
 
     // ////////////////////////////////////
     // Actions für Buttons und das Menü //
@@ -34,18 +34,18 @@ public class AnalyseRepositoryFrameActions {
     static final Action ACTION_CLOSE_DIALOG = new AbstractAction(getResString("close")) {
         @Override
         public void actionPerformed(final ActionEvent e) {
-            if (AnalyseRepositoryFrame.analysisChanged) {
-                int answer = MultipleOptionPane.showConfirmDialog(AnalyseRepositoryFrame.dialog, getResString("ana_close_repository_frame_question_title"), getResString("ana_close_repository_frame_question"), JOptionPane.YES_NO_OPTION,
+            if (AnalysesRepositoryFrame.analysisChanged) {
+                int answer = MultipleOptionPane.showConfirmDialog(AnalysesRepositoryFrame.dialog, getResString("ana_close_repository_frame_question_title"), getResString("ana_close_repository_frame_question"), JOptionPane.YES_NO_OPTION,
                         JOptionPane.WARNING_MESSAGE);
                 if (answer == JOptionPane.YES_OPTION) {
-                    AnalyseRepository.setXMLAnalysen(AnalyseRepositoryFrame.analysen);
-                    AnalyseRepository.saveRepository();
+                    AnalysesRepository.setXMLAnalysen(AnalysesRepositoryFrame.analysen);
+                    AnalysesRepository.saveRepository();
                 }
             }
-            if (AnalyseEditor.editor != null && AnalyseEditor.editor.getOwner() == AnalyseRepositoryFrame.dialog) {
-                AnalyseEditor.editor.dispose();
+            if (AnalysisEditor.editor != null && AnalysisEditor.editor.getOwner() == AnalysesRepositoryFrame.dialog) {
+                AnalysisEditor.editor.dispose();
             }
-            AnalyseRepositoryFrame.dialog.dispose();
+            AnalysesRepositoryFrame.dialog.dispose();
         }
     };
 
@@ -57,32 +57,32 @@ public class AnalyseRepositoryFrameActions {
     static final Action ACTION_IMPORT_ANALYSIS = new AbstractAction(getResString("ana_import")) {
         @Override
         public void actionPerformed(final ActionEvent e) {
-            File lastUsedAnalyseFile = AnalyseRepositoryFrame.analyseFile;
+            File lastUsedAnalyseFile = AnalysesRepositoryFrame.analyseFile;
             if (lastUsedAnalyseFile == null) {
-                lastUsedAnalyseFile = AnalyseRepository.getRepositoryFile();
+                lastUsedAnalyseFile = AnalysesRepository.getRepositoryFile();
             }
             ExtendedFileChooser chooser = new ExtendedFileChooser(getClass());
             if (lastUsedAnalyseFile != null) {
                 chooser.setCurrentDirectory(lastUsedAnalyseFile);
             }
             chooser.setMultiSelectionEnabled(false);
-            if (chooser.showOpenDialog(AnalyseRepositoryFrame.dialog) == ExtendedFileChooser.APPROVE_OPTION) {
+            if (chooser.showOpenDialog(AnalysesRepositoryFrame.dialog) == ExtendedFileChooser.APPROVE_OPTION) {
                 File fileToOpen = chooser.getSelectedFile();
                 if (fileToOpen == null) {
                     return;
                 }
-                List<XMLAnalyse> analysenToAdd = AnalyseRepository.loadAnalyseFile(fileToOpen);
+                List<XMLAnalysis> analysenToAdd = AnalysesRepository.loadAnalyseFile(fileToOpen);
                 if (analysenToAdd == null || analysenToAdd.size() == 0) {
                     return;
                 }
-                int size = AnalyseRepositoryFrame.analysen.size();
-                for (XMLAnalyse xMLAnalyse : analysenToAdd) {
-                    AnalyseRepositoryFrame.addAnalyse(xMLAnalyse, true);
+                int size = AnalysesRepositoryFrame.analysen.size();
+                for (XMLAnalysis xMLAnalyse : analysenToAdd) {
+                    AnalysesRepositoryFrame.addAnalysis(xMLAnalyse, true);
                 }
                 // wenn mind. eine neue XMLAnalyse eingefügt wurde -> analysisChanged == true setzen
-                AnalyseRepositoryFrame.analysisChanged = size < AnalyseRepositoryFrame.analysen.size();
-                AnalyseRepositoryFrame.table.update();
-                AnalyseRepositoryFrame.refreshActionStates();
+                AnalysesRepositoryFrame.analysisChanged = size < AnalysesRepositoryFrame.analysen.size();
+                AnalysesRepositoryFrame.table.update();
+                AnalysesRepositoryFrame.refreshActionStates();
             }
         }
     };
@@ -94,42 +94,42 @@ public class AnalyseRepositoryFrameActions {
         @Override
         public void actionPerformed(final ActionEvent e) {
             // Speichert die aktuellen Analysen in einer vom Benutzer ausgewählten Datei
-            File lastUsedAnalyseFile = AnalyseRepositoryFrame.analyseFile;
+            File lastUsedAnalyseFile = AnalysesRepositoryFrame.analyseFile;
             if (lastUsedAnalyseFile == null) {
-                lastUsedAnalyseFile = AnalyseRepository.getRepositoryFile();
+                lastUsedAnalyseFile = AnalysesRepository.getRepositoryFile();
             }
             ExtendedFileChooser chooser = new ExtendedFileChooser(getClass());
             if (lastUsedAnalyseFile != null) {
                 chooser.setCurrentDirectory(lastUsedAnalyseFile);
             }
             chooser.setMultiSelectionEnabled(false);
-            if (chooser.showSaveDialog(AnalyseRepositoryFrame.dialog) == ExtendedFileChooser.APPROVE_OPTION) {
+            if (chooser.showSaveDialog(AnalysesRepositoryFrame.dialog) == ExtendedFileChooser.APPROVE_OPTION) {
                 File fileToSave = chooser.getSelectedFile();
                 if (fileToSave == null) {
                     return;
                 }
 
                 // wenn nicht selektiert ist, dann alles speichern, sonst nur die Selektion
-                List<XMLAnalyse> analysenToExport;
-                int[] selection = AnalyseRepositoryFrame.table.getSelectedRows();
+                List<XMLAnalysis> analysenToExport;
+                int[] selection = AnalysesRepositoryFrame.table.getSelectedRows();
                 if (selection.length == 0) {
-                    analysenToExport = AnalyseRepositoryFrame.analysen;
+                    analysenToExport = AnalysesRepositoryFrame.analysen;
                 } else {
                     analysenToExport = new ArrayList<>();
                     for (int i = selection.length - 1; i >= 0; i--) {
-                        analysenToExport.add(AnalyseRepositoryFrame.analysen.get(selection[i]));
+                        analysenToExport.add(AnalysesRepositoryFrame.analysen.get(selection[i]));
                     }
                 }
 
-                AnalyseRepository.saveAnalyseFile(fileToSave, analysenToExport);
+                AnalysesRepository.saveAnalyseFile(fileToSave, analysenToExport);
                 lastUsedAnalyseFile = fileToSave;
             }
-            if (lastUsedAnalyseFile != AnalyseRepository.getRepositoryFile()) {
-                AnalyseRepositoryFrame.analyseFile = lastUsedAnalyseFile;
+            if (lastUsedAnalyseFile != AnalysesRepository.getRepositoryFile()) {
+                AnalysesRepositoryFrame.analyseFile = lastUsedAnalyseFile;
             } else {
-                AnalyseRepositoryFrame.analyseFile = null;
+                AnalysesRepositoryFrame.analyseFile = null;
             }
-            AnalyseRepositoryFrame.refreshActionStates();
+            AnalysesRepositoryFrame.refreshActionStates();
         }
     };
 
@@ -140,20 +140,20 @@ public class AnalyseRepositoryFrameActions {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-            if (AnalyseRepositoryFrame.analysisChanged == true) {
-                int answer = JOptionPane.showConfirmDialog(AnalyseRepositoryFrame.dialog, getResString("ana_load_standard_repository_question"), getResString("ana_load_standard_repository"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (AnalysesRepositoryFrame.analysisChanged == true) {
+                int answer = JOptionPane.showConfirmDialog(AnalysesRepositoryFrame.dialog, getResString("ana_load_standard_repository_question"), getResString("ana_load_standard_repository"), JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 if (answer == JOptionPane.YES_OPTION) {
-                    AnalyseRepositoryFrame.setAnalysen(AnalyseRepository.getXMLAnalysen());
-                    AnalyseRepositoryFrame.analysisChanged = false;
-                    AnalyseRepositoryFrame.table.update();
-                    AnalyseRepositoryFrame.refreshActionStates();
+                    AnalysesRepositoryFrame.setAnalyses(AnalysesRepository.getXMLAnalyses());
+                    AnalysesRepositoryFrame.analysisChanged = false;
+                    AnalysesRepositoryFrame.table.update();
+                    AnalysesRepositoryFrame.refreshActionStates();
                 }
             }
         }
 
         @Override
         public boolean isEnabled() {
-            return AnalyseRepositoryFrame.analysisChanged;
+            return AnalysesRepositoryFrame.analysisChanged;
         }
     };
 
@@ -164,17 +164,17 @@ public class AnalyseRepositoryFrameActions {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-            if (!AnalyseRepository.setXMLAnalysen(AnalyseRepositoryFrame.analysen)) {
+            if (!AnalysesRepository.setXMLAnalysen(AnalysesRepositoryFrame.analysen)) {
                 return;
             }
-            AnalyseRepository.saveRepository();
-            AnalyseRepositoryFrame.analysisChanged = false;
-            AnalyseRepositoryFrame.refreshActionStates();
+            AnalysesRepository.saveRepository();
+            AnalysesRepositoryFrame.analysisChanged = false;
+            AnalysesRepositoryFrame.refreshActionStates();
         }
 
         @Override
         public boolean isEnabled() {
-            return AnalyseRepositoryFrame.analysisChanged;
+            return AnalysesRepositoryFrame.analysisChanged;
         }
     };
 
@@ -189,7 +189,7 @@ public class AnalyseRepositoryFrameActions {
                 return;
             }
             gd.clearAnalysisResult();
-            AnalyseRepositoryFrame.refreshActionStates();
+            AnalysesRepositoryFrame.refreshActionStates();
         }
     };
 
@@ -203,12 +203,12 @@ public class AnalyseRepositoryFrameActions {
             GraphDocument doc = Static.getSelectedDoc();
             if (doc == null) {
             }
-            int[] selection = AnalyseRepositoryFrame.table.getSelectedRows();
+            int[] selection = AnalysesRepositoryFrame.table.getSelectedRows();
             for (int i = 0; i < selection.length; i++) {
-                XMLAnalyse query = AnalyseRepositoryFrame.analysen.get(selection[i]);
+                XMLAnalysis query = AnalysesRepositoryFrame.analysen.get(selection[i]);
                 query.setAnalysisResult(doc);
             }
-            AnalyseRepositoryFrame.refreshActionStates();
+            AnalysesRepositoryFrame.refreshActionStates();
         }
 
         @Override
@@ -229,13 +229,13 @@ public class AnalyseRepositoryFrameActions {
         @Override
         public void actionPerformed(final ActionEvent e) {
             try {
-                AnalyseRepositoryFrame.addAnalyse(XMLAnalyse.createAnalyse("", ""), true);
+                AnalysesRepositoryFrame.addAnalysis(XMLAnalysis.createAnalysis("", ""), true);
             } catch (SAXException ex) {
-                Log.show(Log.ERROR, getResString("AnalyseNichtErstellt") + "\n" + ex.getMessage(), ex);
+                Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
             }
-            AnalyseRepositoryFrame.analysisChanged = true;
-            AnalyseRepositoryFrame.table.update();
-            AnalyseRepositoryFrame.refreshActionStates();
+            AnalysesRepositoryFrame.analysisChanged = true;
+            AnalysesRepositoryFrame.table.update();
+            AnalysesRepositoryFrame.refreshActionStates();
         }
     };
 
@@ -245,31 +245,31 @@ public class AnalyseRepositoryFrameActions {
     static final Action ACTION_DELETE_ANALYSIS = new AbstractAction(getResString("ana_delete")) {
         @Override
         public void actionPerformed(final ActionEvent e) {
-            int[] selection = AnalyseRepositoryFrame.table.getSelectedRows();
+            int[] selection = AnalysesRepositoryFrame.table.getSelectedRows();
             for (int i = selection.length - 1; i >= 0; i--) {
-                AnalyseRepositoryFrame.analysen.remove(selection[i]);
+                AnalysesRepositoryFrame.analysen.remove(selection[i]);
             }
-            AnalyseRepositoryFrame.analysisChanged = true;
-            AnalyseRepositoryFrame.table.update();
-            AnalyseRepositoryFrame.refreshActionStates();
+            AnalysesRepositoryFrame.analysisChanged = true;
+            AnalysesRepositoryFrame.table.update();
+            AnalysesRepositoryFrame.refreshActionStates();
         }
 
         @Override
         public boolean isEnabled() {
-            if (AnalyseRepositoryFrame.table == null) {
+            if (AnalysesRepositoryFrame.table == null) {
                 return false;
             }
-            return AnalyseRepositoryFrame.table.getSelectedRows().length > 0;
+            return AnalysesRepositoryFrame.table.getSelectedRows().length > 0;
         }
     };
 
     /**
-     * Action für das Starten des AnalyseEditors
+     * Action für das Starten des {@link AnalysisEditor}
      */
     static final Action ACTION_ANALYSIS_EDITOR = new AbstractAction(getResString("analysis_editor")) {
         @Override
         public void actionPerformed(final ActionEvent e) {
-            AnalyseEditor.showDialog(AnalyseRepositoryFrame.dialog);
+            AnalysisEditor.showDialog(AnalysesRepositoryFrame.dialog);
         }
     };
 

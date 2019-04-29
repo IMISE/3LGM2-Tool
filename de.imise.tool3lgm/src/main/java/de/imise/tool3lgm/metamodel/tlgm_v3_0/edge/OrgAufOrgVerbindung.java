@@ -14,12 +14,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Organisationseinheit;
  */
 public final class OrgAufOrgVerbindung extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = AufOrgKombination.class;
+    public static final Class<? extends ModelElement> STCL = AufOrgKombination.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ONE_UNLIMITED;
+    public static final EdgeCardinality ECARD = ONE_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = Organisationseinheit.class;
+    public static final Class<? extends ModelElement> ETCL = Organisationseinheit.class;
 
 }

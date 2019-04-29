@@ -30,7 +30,7 @@ import de.imise.util.swing.dialog.SimpleXMLEditor;
  *
  * @author AXS created on 15.08.2007 aus inneren Klassen
  */
-public class AnalyseRepositoryFrameTable extends JTable {
+public class AnalysesRepositoryFrameTable extends JTable {
 
     /**
      * Das TableModel der Tabelle.
@@ -48,9 +48,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
          * Tabellen Kopfzeilenbeschriftungen
          */
         String[] colheads = {
-                getResString("start_element_type"),
-                getResString("ana_name"),
-                getResString("definition")
+                getResString("start_element_type"), getResString("ana_name"), getResString("definition")
         };
 
         /**
@@ -76,16 +74,16 @@ public class AnalyseRepositoryFrameTable extends JTable {
 
         @Override
         public int getRowCount() {
-            return AnalyseRepositoryFrame.analysen != null ? AnalyseRepositoryFrame.analysen.size() : 0;
+            return AnalysesRepositoryFrame.analysen != null ? AnalysesRepositoryFrame.analysen.size() : 0;
         }
 
         @Override
         public Object getValueAt(final int row, final int column) {
-            if (AnalyseRepositoryFrame.analysen != null) {
-                XMLAnalyse ana = AnalyseRepositoryFrame.analysen.get(row);
+            if (AnalysesRepositoryFrame.analysen != null) {
+                XMLAnalysis ana = AnalysesRepositoryFrame.analysen.get(row);
                 switch (column) {
                 case 0:
-                    return ana.getStartknotenString();
+                    return ana.getStartClassesDisplayNames();
                 case 1:
                     return ana.getName();
                 case 2:
@@ -106,20 +104,20 @@ public class AnalyseRepositoryFrameTable extends JTable {
             switch (column) {
             case 1: {
                 String neuerName = o != null ? o.toString() : "";
-                XMLAnalyse ana = AnalyseRepositoryFrame.analysen.get(row);
-                if (!AnalyseRepository.containsName(AnalyseRepositoryFrame.analysen, ana, neuerName)) {
+                XMLAnalysis ana = AnalysesRepositoryFrame.analysen.get(row);
+                if (!AnalysesRepository.containsName(AnalysesRepositoryFrame.analysen, ana, neuerName)) {
                     ana.setName(neuerName);
-                    AnalyseRepositoryFrame.analysisChanged = true;
+                    AnalysesRepositoryFrame.analysisChanged = true;
                 } else {
-                    JOptionPane.showConfirmDialog(parent, getResString("AnalyseExistiert"), getResString("fehler"), JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showConfirmDialog(parent, getResString("ANALYSIS_ALREADY_EXISTS"), getResString("fehler"), JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
                 }
                 break;
             }
             case 2: {
                 try {
-                    AnalyseRepositoryFrame.analysen.get(row).setXMLText(o != null ? o.toString() : "");
+                    AnalysesRepositoryFrame.analysen.get(row).setXMLText(o != null ? o.toString() : "");
                 } catch (SAXException ex) {
-                    Log.show(Log.ERROR, getResString("AnalyseNichtErstellt") + "\n" + ex.getMessage(), ex);
+                    Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
                 }
                 break;
             }
@@ -178,7 +176,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
                 String val = dialog.getText();
                 if (val != null && !analyseText.equals(val)) {
                     analyseText = val;
-                    AnalyseRepositoryFrame.analysisChanged = true;
+                    AnalysesRepositoryFrame.analysisChanged = true;
                     table.setValueAt(val, row, col);
                 }
                 break;
@@ -215,7 +213,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
      *
      * @param analysen
      */
-    public AnalyseRepositoryFrameTable() {
+    public AnalysesRepositoryFrameTable() {
         super();
         setModel(new AnalyseTableModel(this));
         getTableHeader().setReorderingAllowed(false);
@@ -247,7 +245,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
         if (column == 2) {
             return new TableCellButtonRenderer();
         }
-        return new AnalyseRepositoryFrameTableCellRenderer();
+        return new AnalysesRepositoryFrameTableCellRenderer();
     }
 
     // ////////////////////////////////////////////////////////////////////
@@ -268,7 +266,7 @@ public class AnalyseRepositoryFrameTable extends JTable {
     @Override
     public void valueChanged(final ListSelectionEvent e) {
         super.valueChanged(e);
-        AnalyseRepositoryFrame.refreshActionStates();
+        AnalysesRepositoryFrame.refreshActionStates();
     }
 
 }

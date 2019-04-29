@@ -12,12 +12,12 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.Function;
  */
 public final class Function_HasPartEdge extends PartitioningEdge {
 
-    public static final Class<? extends ModelElement> stcl = Function.class;
+    public static final Class<? extends ModelElement> STCL = Function.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = Function.class;
+    public static final Class<? extends ModelElement> ETCL = Function.class;
 
 }

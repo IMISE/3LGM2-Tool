@@ -9,8 +9,8 @@ import de.imise.tool3lgm.metamodel.tlgm_service.node.ProvidingInterface;
  */
 public class IheProvidingInterface_ProvidingInterface_Edge extends IheInterface_CommunicationInterface_Edge {
 
-    public static final Class<? extends ModelElement> stcl = IheProvidingInterface.class;
+    public static final Class<? extends ModelElement> STCL = IheProvidingInterface.class;
 
-    public static final Class<? extends ModelElement> etcl = ProvidingInterface.class;
+    public static final Class<? extends ModelElement> ETCL = ProvidingInterface.class;
 
 }

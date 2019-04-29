@@ -598,7 +598,7 @@ public class LayerContainer extends ElementContainer {
                 graphNodeContainers.add(nc);
             }
             Alphabetical.insert(treeNodeContainers, nc);
-            Node node = nc.getKnoten();
+            Node node = nc.getNode();
             if (ModelConstants.hasSortedEdgeClassesToPaintable(node.getClass())) {
                 numberedEdgesNodeContainer.add(nc);
             }

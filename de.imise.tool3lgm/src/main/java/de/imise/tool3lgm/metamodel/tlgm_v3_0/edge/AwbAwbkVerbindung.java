@@ -14,12 +14,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Anwendungsbaustein;
  */
 public final class AwbAwbkVerbindung extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = ABKonfiguration.class;
+    public static final Class<? extends ModelElement> STCL = ABKonfiguration.class;
 
-    public static final EdgeCardinality scard = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
-    public static final EdgeCardinality ecard = ONE_UNLIMITED;
+    public static final EdgeCardinality ECARD = ONE_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = Anwendungsbaustein.class;
+    public static final Class<? extends ModelElement> ETCL = Anwendungsbaustein.class;
 
 }

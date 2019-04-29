@@ -14,12 +14,12 @@ import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.DBKonfiguration;
  */
 public final class PdvbkAwbVerbindung extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> stcl = Anwendungsbaustein.class;
+    public static final Class<? extends ModelElement> STCL = Anwendungsbaustein.class;
 
-    public static final EdgeCardinality scard = ONE_ONE;
+    public static final EdgeCardinality SCARD = ONE_ONE;
 
-    public static final EdgeCardinality ecard = ZERO_UNLIMITED;
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> etcl = DBKonfiguration.class;
+    public static final Class<? extends ModelElement> ETCL = DBKonfiguration.class;
 
 }
