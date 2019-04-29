@@ -8,18 +8,18 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.node.Aufgabe;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 
 public class NodeHeaderLineTest {
 
     @Test
     public void NodeHeaderLine() {
-        Class<? extends ModelElement> elementClass = Aufgabe.class;
+        Class<? extends ModelElement> elementClass = Node.class;
         String elementType = "Aufgabe oder irgend was anderes";
         String nameHeader = "irrelevantString1";
         String descriptionHeader = "irrelevantString2";
         String hashHeader = "irrelevantString3";
-        List<String> userFieldNames = new ArrayList<String>();
+        List<String> userFieldNames = new ArrayList<>();
         userFieldNames.add("userFieldName");
         userFieldNames.add("userFieldName");
         userFieldNames.add("userFieldName2");
