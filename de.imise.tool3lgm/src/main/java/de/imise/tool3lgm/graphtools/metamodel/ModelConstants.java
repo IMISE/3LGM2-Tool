@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnecting;
@@ -131,9 +130,90 @@ public final class ModelConstants {
     public static final String PLURAL_NAME_RES_KEY_SUFFIX = "_p";
 
     /**
+     * Erzeugt eine neue Instanz eines Modellelementes.<br>
+     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte.
+     *
+     * @param elementClass Unterklasse von <code>ModelElement</code>
+     * @return
+     */
+    public static final ModelElement createElement(final Class<? extends ModelElement> elementClass) {
+        return createElement(elementClass, true);
+    }
+
+    /**
+     * Erzeugt eine neue Instanz eines Modellelementes.<br>
+     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte und <code>log</code> mit <code>true</code> übergeben wurde.
+     *
+     * @param elementClass Unterklasse von <code>ModelElement</code>
+     * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
+     * @return neues ModelElement der übergebenen Klasse oder <code>null</code>
+     */
+    public static final ModelElement createElement(final Class<? extends ModelElement> elementClass, final boolean log) {
+        try {
+            return elementClass.newInstance();
+        } catch (Exception e) {
+            if (log) {
+                Log.show(Log.ERROR, "Konnte Klasse " + elementClass.getName() + " nicht erstellen.", e);
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Erzeugt eine neues ModelElement der gleichen Art wie das übergebene
+     *
+     * @return neues ModelElement der übergebenen Art oder im Fehlerfall <code>null</code>
+     * @param me ModelElement, das die Klasse des neu zu erzeugenden Elementes vorgibt
+     * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
+     * @return neues ModelElement oder <code>null</code>
+     */
+    public static final ModelElement createElement(final ModelElement me, final boolean log) {
+        return createElement(me.getClass(), log);
+    }
+
+    /**
+     * Prüft, ob in dem übergebenen className mindestens 2 Punkte stehen.
+     *
+     * @param className
+     * @return
+     */
+    private static final boolean isFullQualifiedClassName(final String className) {
+        int firstPoint = className.indexOf('.');
+        if (firstPoint < 0) {
+            return false;
+        }
+        int secondPoint = className.lastIndexOf('.');
+        return firstPoint < secondPoint;
+    }
+
+    public static final String getVisibleLayerName(final int layer) {
+        String resKey = "layer";
+        int reskeyLayerNumber = -1;
+        for (int i = 0; i < VISIBLE_LAYERS.length; i++) {
+            if (layer == VISIBLE_LAYERS[i]) {
+                reskeyLayerNumber = i + 1;
+                break;
+            }
+        }
+        //das auskommentierte geht eigentlich genausogut, aber das hier ist lesbarer
+        //        int visibleLayers = LAYER_COUNT / 2 + 1; // = 3
+        //        // 4 = 1 -> 4 / 2 = 2 - visibleLayers = -1 * -1 = 1
+        //        // 2 = 2 -> 2 / 2 = 1 - visibleLayers = -2 * -1 = 2
+        //        // 0 = 3 -> 0 / 2 = 0 - visibleLayers = -3 * -1 = 3
+        //        int reskeyLayerNumber = -(layer / 2 - visibleLayers);
+        try {
+            return Tool3lgmConstants.getResString(resKey + reskeyLayerNumber);
+        } catch (Exception e) {
+            return Tool3lgmConstants.getResString(resKey) + reskeyLayerNumber;
+        }
+    }
+
+    /**
      * Standardrückgabewert bei Fehlern = -1 ;
      */
     public static final int STANDARD_ERROR_INT_VALUE = new Integer(-1);
+
+    // ab hier wird es das neue MetaModelInstance //
 
     /** Alle Node der FE als HashSet */
     public static final Set<Class<? extends ModelElement>> ALL_DOMAIN_LAYER_NODES_SET = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllDomainLayerNodes()));
@@ -827,48 +907,6 @@ public final class ModelConstants {
         return getGraphViewDefinition().getInterLayerMetaPath(elementClass) != null;
     }
 
-    /**
-     * Erzeugt eine neue Instanz eines Modellelementes.<br>
-     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte.
-     *
-     * @param elementClass Unterklasse von <code>ModelElement</code>
-     * @return
-     */
-    public static final ModelElement createElement(final Class<? extends ModelElement> elementClass) {
-        return createElement(elementClass, true);
-    }
-
-    /**
-     * Erzeugt eine neue Instanz eines Modellelementes.<br>
-     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte und <code>log</code> mit <code>true</code> übergeben wurde.
-     *
-     * @param elementClass Unterklasse von <code>ModelElement</code>
-     * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
-     * @return neues ModelElement der übergebenen Klasse oder <code>null</code>
-     */
-    public static final ModelElement createElement(final Class<? extends ModelElement> elementClass, final boolean log) {
-        try {
-            return elementClass.newInstance();
-        } catch (Exception e) {
-            if (log) {
-                Log.show(Log.ERROR, "Konnte Klasse " + elementClass.getName() + " nicht erstellen.", e);
-            }
-            return null;
-        }
-    }
-
-    /**
-     * Erzeugt eine neues ModelElement der gleichen Art wie das übergebene
-     *
-     * @return neues ModelElement der übergebenen Art oder im Fehlerfall <code>null</code>
-     * @param me ModelElement, das die Klasse des neu zu erzeugenden Elementes vorgibt
-     * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
-     * @return neues ModelElement oder <code>null</code>
-     */
-    public static final ModelElement createElement(final ModelElement me, final boolean log) {
-        return createElement(me.getClass(), log);
-    }
-
     /** Mappt vom Klassennamen auf die Klasse. Ist der Cache für die Funktion {@link #getClassForName(String)} */
     private static final Map<String, Class<? extends ModelElement>> CLASS_NAME_TO_CLASS_MAP = new HashMap<>();
 
@@ -877,21 +915,6 @@ public final class ModelConstants {
 
     /** Klassennamen aller Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
     private static final Set<String> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPE_NAMES = CollectionUtils.getSimpleClassNames(META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES);
-
-    /**
-     * Prüft, ob in dem übergebenen className mindestens 2 Punkte stehen.
-     *
-     * @param className
-     * @return
-     */
-    private static final boolean isFullQualifiedClassName(final String className) {
-        int firstPoint = className.indexOf('.');
-        if (firstPoint < 0) {
-            return false;
-        }
-        int secondPoint = className.lastIndexOf('.');
-        return firstPoint < secondPoint;
-    }
 
     public static final String NODE_PACKAGE_NAME = ALL_NODES_SET.size() > 0 ? ALL_NODES_SET.iterator().next().getPackage().getName() + "." : "";
 
@@ -1299,28 +1322,6 @@ public final class ModelConstants {
             elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
         }
         return false;
-    }
-
-    public static final String getVisibleLayerName(final int layer) {
-        String resKey = "layer";
-        int reskeyLayerNumber = -1;
-        for (int i = 0; i < VISIBLE_LAYERS.length; i++) {
-            if (layer == VISIBLE_LAYERS[i]) {
-                reskeyLayerNumber = i + 1;
-                break;
-            }
-        }
-        //das auskommentierte geht eigentlich genausogut, aber das hier ist lesbarer
-        //        int visibleLayers = LAYER_COUNT / 2 + 1; // = 3
-        //        // 4 = 1 -> 4 / 2 = 2 - visibleLayers = -1 * -1 = 1
-        //        // 2 = 2 -> 2 / 2 = 1 - visibleLayers = -2 * -1 = 2
-        //        // 0 = 3 -> 0 / 2 = 0 - visibleLayers = -3 * -1 = 3
-        //        int reskeyLayerNumber = -(layer / 2 - visibleLayers);
-        try {
-            return getResString(resKey + reskeyLayerNumber);
-        } catch (Exception e) {
-            return getResString(resKey) + reskeyLayerNumber;
-        }
     }
 
     /**
