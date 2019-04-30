@@ -936,12 +936,13 @@ public final class ModelConstants {
 
         Class<? extends ModelElement> clazz = null;
 
+        ClassLoader metaModelClassLoader = Tool3lgmMetaModelContext.getMetaModelClass().getClassLoader();
         try {
-            clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
+            clazz = Class.forName(fullClassName, true, metaModelClassLoader).asSubclass(ModelElement.class);
         } catch (Exception e) {
             try {
                 fullClassName = EDGE_PACKAGE_NAME + classname;
-                clazz = Class.forName(fullClassName).asSubclass(ModelElement.class);
+                clazz = Class.forName(fullClassName, true, metaModelClassLoader).asSubclass(ModelElement.class);
             } catch (Exception ex) {
                 try {
                     fullClassName = Tool3lgmConstants.GD_PACKAGE_NAME + classname;

@@ -27,7 +27,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.tlgm_v3_0.TLGMOriginalMetaModel;
 
 /**
  * @author Thomas Rudert
@@ -328,7 +327,7 @@ public class ToolXMLParser {
     private static class FileVersion {
         int xmlVersionIndex = -1;
         int lgmVersionIndex = -1;
-        Class<? extends MetaModel> metaModelClass = TLGMOriginalMetaModel.class; // das hier ist bei allen Modellen das Metamodell, bei denen es nicht explizit angegeben ist
+        Class<? extends MetaModel> metaModelClass = Tool3lgmMetaModelContext.getDefaultMetaModelClass(); // das hier ist bei allen Modellen das Metamodell, bei denen es nicht explizit angegeben ist
         @Override
         public String toString() {
             return metaModelClass.getSimpleName() + " xmlVersion='" + supportedXMLVersions[xmlVersionIndex] + "' lgmVersion='" + supportedFileVersions[lgmVersionIndex] + "'";
