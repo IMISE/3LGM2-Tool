@@ -14,7 +14,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.UNIQUE_NODES
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getCopyDependencies;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getInitialSubtypes;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSubordinatedJoinbleTypes;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.hasObjektDialog;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMeaningEdge;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isGenerateName;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayerStartClass;
@@ -96,6 +95,7 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -793,7 +793,7 @@ public final class GDCollection extends UserFieldTarget {
                 continue;
             }
             //den evtl. geöffneten Dialog des Elementes scließen
-            ElementPropertyDialog dialog = hasObjektDialog(me);
+            ElementPropertyDialog dialog = ElemenPropertyDialogsContext.hasOpenDialog(me);
             if (dialog != null) {
                 dialog.performOK();
             }

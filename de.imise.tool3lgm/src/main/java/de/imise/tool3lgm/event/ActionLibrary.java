@@ -41,6 +41,7 @@ import de.imise.tool3lgm.graphtools.analyse.context.AnalysisEditor;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
+import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.GraphViewOptionsDialog;
 import de.imise.tool3lgm.graphtools.dialog.GraphicPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
@@ -566,7 +567,7 @@ public class ActionLibrary {
         public static final Action ACTION_OPEN_USERFIELD_DEFINITION_DIALOG = new GraphDocumentAction(ActionIdentifier.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, PPP) {
             @Override
             public void actionPerformed() {
-                if (!ModelConstants.getDialogs().isEmpty()) {
+                if (ElemenPropertyDialogsContext.hasOpenDialogs()) {
                     JOptionPane.showMessageDialog(getTool(), getResString("message_close_all_dialogs"));
                     return;
                 }
@@ -578,7 +579,7 @@ public class ActionLibrary {
         public static final Action ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG = new GraphDocumentAction(ActionIdentifier.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, PPP) {
             @Override
             public void actionPerformed() {
-                if (!ModelConstants.getDialogs().isEmpty()) {
+                if (ElemenPropertyDialogsContext.hasOpenDialogs()) {
                     JOptionPane.showMessageDialog(getTool(), getResString("message_close_all_dialogs"));
                     return;
                 }

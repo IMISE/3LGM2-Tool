@@ -27,6 +27,7 @@ import org.apache.commons.collections4.map.Flat3Map;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
@@ -1712,12 +1713,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public ElementPropertyDialog getPropertyDialog() {
-        ElementPropertyDialog prop = ModelConstants.hasObjektDialog(this);
-        if (prop == null) {
-            prop = createPropertyDialog();
-            ModelConstants.dialogs.add(prop);
-        }
-        return prop;
+        return ElemenPropertyDialogsContext.getDialog(this);
     }
 
     /**
@@ -1732,6 +1728,16 @@ public abstract class ModelElement extends UserFieldTarget {
             return null;
         }
         return new ElementPropertyDialog(this, gdcoll);
+    }
+
+    /**
+     * Ruft einfach nur {@link #createPropertyDialog()} auf. Diese Funktion wurde notwendig, damit für den neuen {@link ElemenPropertyDialogsContext}
+     * nicht die Sichtbarkeit von {@link #createPropertyDialog()} geändert werden musste.
+     * 
+     * @return
+     */
+    public final ElementPropertyDialog getNewPropertyDialogInsance() {
+        return createPropertyDialog();
     }
 
     /**

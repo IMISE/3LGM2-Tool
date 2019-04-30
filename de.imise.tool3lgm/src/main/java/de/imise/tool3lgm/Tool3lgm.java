@@ -36,8 +36,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -862,17 +861,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         Static.showProgressDialog(true);
         Static.setProgressDialogTitle(getResString("close_model") + " " + gdcoll.getName());
 
-        List<ElementPropertyDialog> dialogs = ModelConstants.getDialogs();
-        for (int n = 0; n < dialogs.size(); n++) {
-            ElementPropertyDialog pd = dialogs.get(n);
-            // wenn der Dialog zum zu schließenden Modell gehört
-            if (selDoc.isMyElement(pd.getModelElement())) {
-                // alle Änderungen der geöffneten Dialoge zurück rollen
-                pd.cancel();
-                // in pd.cancel() wird die dialogs.size() um -1 geändert
-                n--;
-            }
-        }
+        ElemenPropertyDialogsContext.closeAllDialogs(selDoc);
 
         if (!askUserCloseModel(gdcoll)) {
             Static.closeProgressDialog();

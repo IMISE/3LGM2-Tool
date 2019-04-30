@@ -30,7 +30,6 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -130,11 +129,6 @@ public final class ModelConstants {
     public static final String NO_MODEL_ELEMENT_SHORT_NAME = "NME";
 
     public static final String PLURAL_NAME_RES_KEY_SUFFIX = "_p";
-
-    /**
-     * Liste aller geöffneten Dialoge
-     */
-    public static final ArrayList<ElementPropertyDialog> dialogs = new ArrayList<>();
 
     /**
      * Standardrückgabewert bei Fehlern = -1 ;
@@ -1108,43 +1102,6 @@ public final class ModelConstants {
     public static final int layerFor(final Class<? extends ModelElement> elementClass) {
         Integer layer = ELEMENT_CLASS_TO_LAYER.get(elementClass);
         return layer == null ? NO_LAYER : layer.intValue();
-    }
-
-    /**
-     * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen ggf. zurück
-     *
-     * @param obj Dialog zu diesem Objekt
-     * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
-     */
-    public static ElementPropertyDialog hasObjektDialog(final ModelElement obj) {
-        for (ElementPropertyDialog pd : dialogs) {
-            if (obj == pd.getModelElement()) {
-                return pd;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Gibt Verctor mit allen geoeffneten Dialogen zurueck
-     *
-     * @return ArrayList mit allen geoeffneten Dialogen
-     */
-    public static final ArrayList<ElementPropertyDialog> getDialogs() {
-        return dialogs;
-    }
-
-    /**
-     * entfernt einen Dialog aus dem ArrayList mit allen geoeffneten Dialogen
-     *
-     * @param modelElement Element dessen Dialog aus dem ArrayList entfernt werden soll
-     */
-    public static final void removeDialog(final ModelElement modelElement) {
-        for (int n = 0; n < dialogs.size(); n++) {
-            if (modelElement == dialogs.get(n).getModelElement()) {
-                dialogs.remove(n--);
-            }
-        }
     }
 
     public static final boolean isComposition(final Class<? extends Edge> edgeClass) {

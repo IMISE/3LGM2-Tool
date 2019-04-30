@@ -183,8 +183,8 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             setLastWidth(DEFAULT_SIZE.width);
             setLastHeight(DEFAULT_SIZE.height);
         } else {
-            for (int i = 0; i < ModelConstants.dialogs.size(); i++) {
-                ElementPropertyDialog pd = ModelConstants.dialogs.get(i);
+            for (int i = 0; i < ElemenPropertyDialogsContext.getDialogCount(); i++) {
+                ElementPropertyDialog pd = ElemenPropertyDialogsContext.getDialog(i);
                 if (pd.getLocation().x == xx && pd.getLocation().y == yy) {
                     xx += 20;
                     yy += 20;
@@ -264,11 +264,11 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             }
         }
         //alle anderen Dialoge updaten
-        for (ElementPropertyDialog pd : ModelConstants.getDialogs()) {
+        for (ElementPropertyDialog pd : ElemenPropertyDialogsContext.getDialogs()) {
             // this wird in update klargemacht...
             if (pd != this) {
-                for (int m = 0; m < getTabCount(); m++) {
-                    Component comp = getTabComponentAt(m);
+                for (int m = 0; m < pd.getTabCount(); m++) {
+                    Component comp = pd.getTabComponentAt(m);
                     if (comp instanceof ElementDialogPanel) {
                         ((ElementDialogPanel) comp).update();
                     }
@@ -303,7 +303,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     private void close() {
-        ModelConstants.removeDialog(modelElement);
+        ElemenPropertyDialogsContext.removeDialog(modelElement);
         doc.finish_transaction(getTransactionID());
         doc.removeInTransactionListener(this);
         dispose();
