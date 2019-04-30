@@ -62,7 +62,7 @@ public class Tool3lgmMetaModelContext {
         }
     }
 
-    private static String getMetamodelBundleName() {
+    private static String getMetamodelBundleName(Class<? extends MetaModel> metaModelClass) {
         //das Metamodel-Resourcebundle liegt im resource-package unter demselben Pfad, wie die Metamodellklasse des Packages.
         //der ClassLoader, der das package lädt, erwartet relative Pfade ab dem Pfad dieser Klasse hier, die das Bundle lädt.
         //z.B. liegt das speziele Metamodel im package "de.imise.tool3lgm.metamodel.tlgm_v3_0". Diese Klasse Tool3lgmConstants
@@ -70,17 +70,33 @@ public class Tool3lgmMetaModelContext {
         //geladen werden. Also muss man vom package-Namen des Metamodells den package-Namen der Tool3lgmConstants abziehen und den
         //vorgegebenen Bundle-Name "MetamodelResources" anhängen (mit Punkt dazwischen).
         //        String mainPackageName = Tool3lgmConstants.class.getPackage().getName();
-        String metaModelPackageName = Tool3lgmMetaModelContext.getMetaModelClass().getPackage().getName();
+        metaModelClass = metaModelClass == null ? getMetaModelClass() : metaModelClass;
+        String metaModelPackageName = metaModelClass.getPackage().getName();
         //        String bundleName = metaModelPackageName.substring(mainPackageName.length() + 1) + "." + METAMODEL_RESOURCE_BASE_NAME;
         String bundleName = metaModelPackageName + "." + Tool3lgmConstants.METAMODEL_RESOURCE_BASE_NAME;
         return bundleName;
+    }
+
+    public static String getMetaModelDisplayableName(final Class<? extends MetaModel> metaModelClass) {
+        ResourceBundle metaModelResources = getMetaModelResources(metaModelClass);
+        String metaModelNameResKey = metaModelClass.getSimpleName(); //immer der SimpleName der Klasse ist der Resourcenschlüssel zum Namen des Metamodells
+        String metaModelName = metaModelResources.getString(metaModelNameResKey);
+        return metaModelName;
+    }
+
+    public static final ResourceBundle getMetaModelResources(final Class<? extends MetaModel> metaModelClass) {
+        Locale locale = UserProperties.getLocale();
+        ClassLoader loader = metaModelClass.getClassLoader();
+        String baseName = getMetamodelBundleName(metaModelClass);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(baseName, locale, loader);
+        return resourceBundle;
     }
 
     public static final ResourceBundle getMetaModelResources() {
         if (resourceBundle == null) {
             Locale locale = UserProperties.getLocale();
             ClassLoader loader = metaModelClass.getClassLoader();
-            String baseName = getMetamodelBundleName();
+            String baseName = getMetamodelBundleName(metaModelClass);
             resourceBundle = ResourceBundle.getBundle(baseName, locale, loader);
         }
         return resourceBundle;
@@ -182,7 +198,7 @@ public class Tool3lgmMetaModelContext {
         NamedObjectContainer<Class<? extends MetaModel>> selectedOption = null;
         for (int i = 0; i < optionsCount; i++) {
             Class<? extends MetaModel> metaModelClass = META_MODEL_CLASSES.get(i);
-            options[i] = new NamedObjectContainer<>(metaModelClass, getResString(metaModelClass.getSimpleName()));
+            options[i] = new NamedObjectContainer<>(metaModelClass, getMetaModelDisplayableName(metaModelClass));
             if (i == 0 || lastMetaModel == metaModelClass) {
                 selectedOption = options[i];
             }
@@ -211,10 +227,6 @@ public class Tool3lgmMetaModelContext {
             }
         }
         return null;
-    }
-
-    public static final String getDisplayableName(final Class<? extends MetaModel> metaModelClass) {
-        return getResString(metaModelClass.getSimpleName());
     }
 
 }

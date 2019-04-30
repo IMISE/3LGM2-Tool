@@ -104,8 +104,8 @@ public class ToolXMLParser {
 
         /* Metamodell passt nicht */
         if (version.metaModelClass != Tool3lgmMetaModelContext.getMetaModelClass()) {
-            String fileMetaModelName = Tool3lgmMetaModelContext.getDisplayableName(version.metaModelClass);
-            String toolMetaModelName = Tool3lgmMetaModelContext.getDisplayableName(Tool3lgmMetaModelContext.getMetaModelClass());
+            String fileMetaModelName = Tool3lgmMetaModelContext.getMetaModelDisplayableName(version.metaModelClass);
+            String toolMetaModelName = Tool3lgmMetaModelContext.getMetaModelDisplayableName(Tool3lgmMetaModelContext.getMetaModelClass());
             JOptionPane.showMessageDialog(Static.getTool(), getResString("wrong_metamodel_open_warning", fileMetaModelName, toolMetaModelName), getResString("warnung"), JOptionPane.WARNING_MESSAGE);
         }
 
