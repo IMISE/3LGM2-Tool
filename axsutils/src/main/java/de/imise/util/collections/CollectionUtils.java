@@ -257,7 +257,7 @@ public abstract class CollectionUtils {
      * @return <code>Collection</code> aller Elemente der angegebenen Klasse.
      * @see #getAllElementsOf(Collection, Class, boolean)
      */
-    public static final <T> ArrayList<T> getAllElementsOf(final Collection<T> source, final Class<T> clazz) {
+    public static final <T> List<T> getAllElementsOf(final Collection<T> source, final Class<T> clazz) {
         return getAllElementsOf(source, clazz, false);
     }
 
@@ -270,7 +270,7 @@ public abstract class CollectionUtils {
      * @return <code>Collection</code> aller Elemente, die Instanz der angegebenen Klasse sind.
      * @see #getAllElementsOf(Collection, Class, boolean)
      */
-    public static final <T> ArrayList<T> getAllInstancesOf(final Collection<?> source, final Class<T> clazz) {
+    public static final <T> List<T> getAllInstancesOf(final Collection<?> source, final Class<T> clazz) {
         return getAllElementsOf(source, clazz, true);
     }
 
@@ -375,8 +375,8 @@ public abstract class CollectionUtils {
      * @return <code>Collection</code> aller Elemente oder aller Instanzen der angegebenen Klasse
      */
     @SuppressWarnings("unchecked")
-    private static final <T> ArrayList<T> getAllElementsOf(final Collection<?> source, final Class<T> clazz, final boolean strict) {
-        ArrayList<T> retList = new ArrayList<>();
+    private static final <T> List<T> getAllElementsOf(final Collection<?> source, final Class<T> clazz, final boolean strict) {
+        List<T> retList = new ArrayList<>();
         Iterator<?> it = source.iterator();
         if (!strict) {
             while (it.hasNext()) {
@@ -397,13 +397,13 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Gibt eine neue <code>ArrayList</code> zurück, die jedes Element aus der übergebenen Liste
+     * Gibt eine neue <code>List</code> zurück, die jedes Element aus der übergebenen Liste
      * genau einmal enthält.
      *
      * @param list
      */
-    public static final ArrayList<?> _getNoMultiplesList(final ArrayList<?> list) {
-        ArrayList<Object> returnList = new ArrayList<>(list.size());
+    public static final List<?> _getNoMultiplesList(final List<?> list) {
+        List<Object> returnList = new ArrayList<>(list.size());
         for (int i = 0; i < list.size(); i++) {
             Object o = list.get(i);
             if (!returnList.contains(o)) {
@@ -418,7 +418,7 @@ public abstract class CollectionUtils {
      *
      * @param list
      */
-    public static final void _removeMultiples(final ArrayList<?> list) {
+    public static final void _removeMultiples(final List<?> list) {
         for (int i = 0; i < list.size(); i++) {
             Object o = list.get(i);
             for (int j = i + 1; j < list.size(); j++) {
