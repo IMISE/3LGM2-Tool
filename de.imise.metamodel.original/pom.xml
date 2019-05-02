@@ -106,7 +106,7 @@
 									<type>${project.packaging}</type>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>../Plugins/</outputDirectory>
+							<outputDirectory>../de.imise.tool3lgm/Plugins/</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>

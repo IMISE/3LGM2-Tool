@@ -105,7 +105,7 @@ public class Tool3lgmMetaModelContext {
     public static final List<Class<? extends MetaModel>> loadMetaModelClasses() {
         List<Class<? extends MetaModel>> metaModelClasses = new ArrayList<>();
         Class<? extends MetaModel> defaultMetaModelClass = null;
-        File pluginDir = new File(Tool3lgmConstants.APPLICATION_DIR.getParentFile(), "Plugins");
+        File pluginDir = new File(Tool3lgmConstants.APPLICATION_DIR, "Plugins");
         //        System.err.println(pluginDir);
         FileNameExtensionFilter jarFileFilter = Tool3lgmConstants.getFileNameExtensionFilter(Tool3lgmConstants.FileFilterType.JAR);
         for (File f : pluginDir.listFiles()) {
