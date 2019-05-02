@@ -38,53 +38,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
-				<executions>
-					<execution>
-						<id>copy-resources-original-action</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<encoding>ISO-8859-1</encoding>
-							<outputDirectory>${basedir}\target\classes\de\imise\tool3lgm\metamodel\original\action</outputDirectory>
-							<resources>
-								<resource>
-									<directory>src\main\java\de\imise\tool3lgm\metamodel\original\action</directory>
-									<filtering>true</filtering>
-									<includes>
-										<include>**/*.properties</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-resources-original-analyse</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<encoding>ISO-8859-1</encoding>
-							<outputDirectory>${basedir}\target\classes\de\imise\tool3lgm\metamodel\original\analyse</outputDirectory>
-							<resources>
-								<resource>
-									<directory>src\main\java\de\imise\tool3lgm\metamodel\original\analyse</directory>
-									<filtering>true</filtering>
-									<includes>
-										<include>**/*.properties</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 			<!-- Am Ende das jar-File-Artefakt ins Tool in den Plugin-Ordner kopieren -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -111,7 +64,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
 		<resources>
 			<resource>
@@ -136,6 +88,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
 
 </project>
