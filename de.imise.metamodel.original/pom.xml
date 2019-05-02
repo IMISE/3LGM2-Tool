@@ -106,7 +106,7 @@
 									<type>${project.packaging}</type>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>../tool-3lgm2/Plugins/</outputDirectory>
+							<outputDirectory>../Plugins/</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
