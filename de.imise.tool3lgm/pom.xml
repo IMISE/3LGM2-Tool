@@ -84,52 +84,6 @@
 	</properties>
  	<build>
 		<plugins>
-			<plugin>
- 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
-				<executions>
-					<execution>
-						<id>copy-resources-tlgm_v3_0-action</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<encoding>ISO-8859-1</encoding>
-							<outputDirectory>${basedir}\target\classes\de\imise\tool3lgm\metamodel\tlgm_v3_0\action</outputDirectory>
-							<resources>
-								<resource>
-									<directory>src\main\java\de\imise\tool3lgm\metamodel\tlgm_v3_0\action</directory>
-									<filtering>true</filtering>
-									<includes>
-										<include>**/*.properties</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
-						<id>copy-resources-tlgm_v3_0-analyse</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<encoding>ISO-8859-1</encoding>
-							<outputDirectory>${basedir}\target\classes\de\imise\tool3lgm\metamodel\tlgm_v3_0\analyse</outputDirectory>
-							<resources>
-								<resource>
-									<directory>src\main\java\de\imise\tool3lgm\metamodel\tlgm_v3_0\analyse</directory>
-									<filtering>true</filtering>
-									<includes>
-										<include>**/*.properties</include>
-									</includes>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<!-- http://maven.apache.org/shared/maven-archiver/index.html -->
  			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
