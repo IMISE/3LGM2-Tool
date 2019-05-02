@@ -1,9 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.imise</groupId>
 	<artifactId>tool3lgm</artifactId>
- 	<version>1.0</version>
+	<version>1.0</version>
 	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
@@ -29,63 +30,54 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
- 		<dependency>
+		<dependency>
 			<groupId>javax.help</groupId>
 			<artifactId>javahelp</artifactId>
 			<version>2.0.02</version>
 		</dependency>
- 		<dependency>
+		<dependency>
 			<groupId>gnu-regexp</groupId>
 			<artifactId>gnu-regexp</artifactId>
 			<version>1.1.4</version>
 		</dependency>
-	 	<dependency>
+		<dependency>
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>saxon</artifactId>
 			<version>8.7</version>
-		</dependency> 
-  		<dependency>
+		</dependency>
+		<dependency>
 			<groupId>de.axs</groupId>
 			<artifactId>de-axs-utils</artifactId>
 			<version>1.0.0</version>
-			<!-- Das hier muss man machen, wenn man per Maven eine Datei lokal verlinken will. Hierbei liget die Datei im Projektordner unter Plugins/ -->
-<!-- 			<scope>system</scope>
-			<systemPath>${basedir}/../Plugins/de-axs-utils-1.0.0.jar</systemPath>
- -->			
- 		</dependency>
-<!--		<dependency>
-			<groupId>de.imise</groupId>
-			<artifactId>de.imise.twatd</artifactId>
-			<version>0.0.1</version>
+			<!-- Das hier muss man machen, wenn man per Maven eine Datei lokal verlinken 
+				will. Hierbei liget die Datei im Projektordner unter Plugins/ -->
+			<!-- <scope>system</scope> <systemPath>${basedir}/../Plugins/de-axs-utils-1.0.0.jar</systemPath> -->
 		</dependency>
- -->
- 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
- 		<dependency>
+		<!-- <dependency> <groupId>de.imise</groupId> <artifactId>de.imise.twatd</artifactId> 
+			<version>0.0.1</version> </dependency> -->
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>27.1-jre</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
 		<dependency>
-    		<groupId>org.apache.commons</groupId>
-    		<artifactId>commons-collections4</artifactId>
-    		<version>4.3</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.3</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-<!-- 		<dependency>
-    		<groupId>org.apache.commons</groupId>
-    		<artifactId>commons-lang3</artifactId>
-    		<version>3.9</version>
-		</dependency>
- -->		
+		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-lang3</artifactId> 
+			<version>3.9</version> </dependency> -->
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
- 	<build>
+	<build>
 		<plugins>
 			<!-- http://maven.apache.org/shared/maven-archiver/index.html -->
- 			<plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<configuration>
@@ -96,12 +88,12 @@
 						</manifest>
 						<manifestEntries>
 							<SplashScreen-Image>splash.gif</SplashScreen-Image>
-                        </manifestEntries>
+						</manifestEntries>
 					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
- 		<resources>
+		<resources>
 			<resource>
 				<directory>src\main\resources</directory>
 			</resource>
@@ -111,7 +103,7 @@
 				<directory>src\test\resources</directory>
 			</testResource>
 		</testResources>
- 		<pluginManagement>
+		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -124,4 +116,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
 </project>
