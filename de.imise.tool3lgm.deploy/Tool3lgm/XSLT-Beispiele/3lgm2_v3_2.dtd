@@ -1,0 +1,67 @@
+<!ENTITY % attributClass "class (ABKonfiguration|Anwendungsbaustein|Anwendungsprogramm|AufObjVerbindung|Aufgabe|AufOrgKombination|Bausteinschnittstelle|Bausteintyp|Benutzungsschnittstelle|Datenbanksystem|Datensatztyp|DBKonfiguration|DBVerwaltungssystem|Dokumentensammlung|Dokumententyp|Doppelkante|Ereignistyp|ETNTKombination|Kante|KommBeziehung|Kommunikationsstandard|KonAnwendungsbaustein|Nachrichtentyp|Netzprotokoll|Netztyp|Objekttyp|Organisationseinheit|Organisationsplan|PhysischerDVBaustein|RechAnwendungsbaustein|Softwareprodukt|Standort|Subnetz|Textfeld|TextfeldFach|TextfeldLog|TextfeldPhy|PdvbStoVerbindung|PdvbBtypVerbindung|PdvbSubnVerbindung|DatenuebertragungsVerbindung|PdvbPdvbVerbindung|PdvbPdvbkVerbindung|PdvbkAwbVerbindung|EreignisNachrichtenTyp|BssEtntVerbindung|EtntKommstVerbindung|EtntEtVerbindung|EtntNatVerbindung|DbsDatVerbindung|BssKommstVerbindung|RawbAwpVerbindung|AwpSwpVerbindung|AwbKommssVerbindung|RawbDbsVerbindung|DbsDbvsVerbindung|RawbAwbVerbindung|KommbezEtntVerbindung|KnickpunktKnoten|AwbAwbkVerbindung|EtAufVerbindung|ObjReprVerbindung|AwbkAufOrgVerbindung|ObjLogspVerbindung|Prozess|OrgAufOrgVerbindung|AufAufOrgVerbindung|OrgOrgVerbindung|ObjObjVerbindung|AufAufVerbindung|PrzAufVerbindung|Knoten|PartOfBeziehung|Kommunikationsprozess|Rolle|Cluster|Mirror|Raid|Standby|EreignisDokumentenTyp|AwbAwpVerbindung|AwbDbsVerbindung|AwbDoksVerbindung|AwbOrgpVerbindung|DoksDokVerbindung|EtntDotVerbindung|KawbDoksVerbindung|KawbOrgpVerbindung|AwbAwbVerbindung|KawbAwbVerbindung|RolRolVerbindung|RolAufVerbindung|SubnNetzpVerbindung|SubnNetztVerbindung|SwpAufVerbindung)">
+<!ENTITY % attributHash "hash CDATA">
+<!ENTITY % attributLayer "number (0|1|2|3|4)">
+<!ENTITY % attributName "name (description|direction|disksize|end|inventar|master_slave|name|os_type|processor|ramsize|serial|start|state|layer|downtime|kantenHash|index|requirement|note|assoc_szen)">
+<!ENTITY % attributType "type CDATA">
+<!ENTITY % attributColor "name (bg_color|fg_color|border_color)">
+<!ELEMENT modell_3lgm_2 (header, userFieldDefinitions?, objects, szenario+, images)>
+<!ELEMENT header (title, description, version, author?)>
+<!ELEMENT userFieldDefinitions (#PCDATA)>
+<!ELEMENT objects (element*)>
+<!ELEMENT images (bitmap*)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT version (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT element (field*)>
+<!ATTLIST element %attributClass; #REQUIRED
+	%attributHash; #REQUIRED
+>
+<!ELEMENT field (#PCDATA)>
+<!ATTLIST field %attributName; #REQUIRED>
+<!ELEMENT szenario (description, view, mapping, layer+)>
+<!ATTLIST szenario 
+	%attributHash; #REQUIRED
+	titel CDATA #REQUIRED
+>
+<!ELEMENT view (selected, x, y, zoom, degree, shift,pageZoom?,activeLayer,multiView)>
+<!ELEMENT selected (#PCDATA)>
+<!ELEMENT zoom (#PCDATA)>
+<!ELEMENT degree (#PCDATA)>
+<!ELEMENT shift (#PCDATA)>
+<!ELEMENT pageZoom (#PCDATA)>
+<!ELEMENT activeLayer (#PCDATA)>
+<!ELEMENT multiView (#PCDATA)>
+<!ELEMENT mapping (layout+)>
+<!ELEMENT layout (color*, form?, line_thickness?, line_style?, form?, font_family?, font_style?, font_size?, x?, y?, width?, height?, icon?,valign?,halign?)>
+<!ELEMENT nelayout (color*, form?, line_thickness?, line_style?, form?, font_family?, font_style?, font_size?, x?, y?, width?, height?, icon?,valign?,halign?)>
+<!ATTLIST layout %attributClass; #IMPLIED>
+<!ELEMENT layer (layout, container*)>
+<!ATTLIST layer %attributLayer; #REQUIRED>
+<!ELEMENT container (expanded?, visible?, layout?, nelayout?)>
+<!ATTLIST container %attributHash; #REQUIRED>
+<!ELEMENT bitmap (#PCDATA)>
+<!ATTLIST bitmap %attributType; #REQUIRED
+	%attributHash; #REQUIRED
+>
+<!ELEMENT color (red, green, blue, alpha?)>
+<!ATTLIST color %attributColor; #REQUIRED>
+<!ELEMENT red (#PCDATA)>
+<!ELEMENT green (#PCDATA)>
+<!ELEMENT blue (#PCDATA)>
+<!ELEMENT alpha (#PCDATA)>
+<!ELEMENT line_thickness (#PCDATA)>
+<!ELEMENT line_style (#PCDATA)>
+<!ELEMENT form (#PCDATA)>
+<!ELEMENT font_family (#PCDATA)>
+<!ELEMENT font_style (#PCDATA)>
+<!ELEMENT font_size (#PCDATA)>
+<!ELEMENT x (#PCDATA)>
+<!ELEMENT y (#PCDATA)>
+<!ELEMENT width (#PCDATA)>
+<!ELEMENT height (#PCDATA)>
+<!ELEMENT icon (#PCDATA)>
+<!ELEMENT valign (#PCDATA)>
+<!ELEMENT halign (#PCDATA)>
+<!ELEMENT expanded (#PCDATA)>
+<!ELEMENT visible (#PCDATA)>
