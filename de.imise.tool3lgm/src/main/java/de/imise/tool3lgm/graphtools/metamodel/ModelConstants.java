@@ -348,7 +348,7 @@ public final class ModelConstants {
             return true;
         }
         for (Class<? extends ModelElement> endClass : metaPath.getEndClasses()) {
-            if (ModelConstants.isHiddenClass(endClass)) {
+            if (isHiddenClass(endClass)) {
                 return false;
             }
         }
@@ -393,9 +393,9 @@ public final class ModelConstants {
     public static final Set<Class<? extends ModelElement>> ALL_MODELELEMENT_CLASSES_WITH_SUPER_CLASSES = new HashSet<>();
     static {
         //Menge aller Elementklassen und aller ihrer Oberklassen bis hin zu ModelElement zusammenbauen
-        ArrayList<Class<? extends ModelElement>> allElementClasses = new ArrayList<>(ModelConstants.ALL_NODES_SET.size() + ModelConstants.ALL_EDGES_SET.size() + 20);
-        allElementClasses.addAll(ModelConstants.ALL_NODES_SET);
-        allElementClasses.addAll(ModelConstants.ALL_EDGES_SET);
+        ArrayList<Class<? extends ModelElement>> allElementClasses = new ArrayList<>(ALL_NODES_SET.size() + ALL_EDGES_SET.size() + 20);
+        allElementClasses.addAll(ALL_NODES_SET);
+        allElementClasses.addAll(ALL_EDGES_SET);
         for (int i = 0; i < allElementClasses.size(); i++) {
             Class<? extends ModelElement> elementClass = allElementClasses.get(i);
             do {
@@ -507,7 +507,7 @@ public final class ModelConstants {
         if (elementClassesWithSortedEdges == null) {
             ImmutableSet.Builder<Class<? extends ModelElement>> elementClassesWithSortedEdgesBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
             for (Class<? extends ModelElement> clazz : ALL_NODES) {
-                Set<Class<? extends Edge>> sortedEdgeClasses = ModelConstants.getSortedEdgeClasses(clazz);
+                Set<Class<? extends Edge>> sortedEdgeClasses = getSortedEdgeClasses(clazz);
                 if (sortedEdgeClasses != null) {
                     GraphViewDefinition graphViewDefinition = getGraphViewDefinition();
                     for (Class<? extends Edge> edgeClass : sortedEdgeClasses) {
@@ -535,9 +535,9 @@ public final class ModelConstants {
     private static Set<Class<? extends ModelElement>> getTreeVisibleNodes(final Iterable<Class<? extends ModelElement>> elementClasses, final boolean creatableOnly) {
         ImmutableSet.Builder<Class<? extends ModelElement>> creatableNodes = new ImmutableSet.Builder<>();
         for (Class<? extends ModelElement> elementClass : elementClasses) {
-            if (!ModelConstants.isEdgeType(elementClass)) {
-                if (!ModelConstants.isAbstract(elementClass)) {
-                    if (!creatableOnly || !ModelConstants.isExistenceDependent(elementClass)) {
+            if (!isEdgeType(elementClass)) {
+                if (!isAbstract(elementClass)) {
+                    if (!creatableOnly || !isExistenceDependent(elementClass)) {
                         creatableNodes.add(elementClass);
                     }
                 }
@@ -1246,7 +1246,7 @@ public final class ModelConstants {
      * @return
      */
     private static boolean isExistenceDependent(final Class<? extends ModelElement> elementClass) {
-        for (Class<? extends Edge> edgeClass : ModelConstants.getEdgeTypes(elementClass)) {
+        for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass)) {
             //System.err.print(elementClass.getSimpleName() + "  --->  " + edgeClass.getSimpleName() + "  --->  " + Edge.getMinCardinality(elementClass, edgeClass) + "  --->  ");
             //minimale Kardinalität von 1 zu anderen Elementen -> dieses Element braucht mind. ein anderes, damit es konsistent ist
             if (Edge.getMinCardinality(elementClass, edgeClass) > 0) {
