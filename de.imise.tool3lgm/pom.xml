@@ -75,6 +75,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<build>
+		<finalName>tool3lgm</finalName>
 		<plugins>
 			<!-- http://maven.apache.org/shared/maven-archiver/index.html -->
 			<plugin>
@@ -92,10 +93,11 @@
 					</archive>
 				</configuration>
 			</plugin>
+			<!-- lib-Verzeichnis im Deploy-Projekt leeren -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.4.1</version>
+				<version>2.5</version>
 				<configuration>
 					<filesets>
 						<fileset>
@@ -108,11 +110,13 @@
 					</filesets>
 				</configuration>
 			</plugin>
- 			<plugin>
+			<!-- lib-Verzeichnis im Deploy-Projekt wieder füllen -->
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>3.1.1</version>
 				<executions>
+					<!-- alle Dependencies ins lib-Verzeichnis im Deploy-Projekt kopieren -->
 					<execution>
 						<id>copy-dependencies</id>
 						<phase>package</phase>
@@ -125,6 +129,70 @@
 							<overWriteSnapshots>false</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
 							<includeScope>compile</includeScope>
+						</configuration>
+					</execution>
+					<!-- die Tool-jar ins lib-Verzeichnis im Deploy-Projekt kopieren. Dummerweise heißt sie tool3lgm-1.0.jar und das lässt sich nicht ändern (destFileName wird ignoriert :(( ) -->
+					<execution>
+						<id>copy-installed-deploy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+									<type>${project.packaging}</type>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>../de.imise.tool3lgm.deploy/Tool3lgm/lib</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<configuration>
+							<target>
+								<copy
+									file="../de.imise.tool3lgm.deploy/Tool3lgm/lib/${project.artifactId}-${project.version}.${project.packaging}"
+									tofile="../de.imise.tool3lgm.deploy/Tool3lgm/lib/${project.artifactId}.${project.packaging}" />
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.5</version>
+				<executions>
+					<execution>
+						<id>delete-artefact-with-version</id>
+						<phase>install</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+						<configuration>
+							<filesets>
+								<fileset>
+									<directory>../de.imise.tool3lgm.deploy/Tool3lgm/lib</directory>
+									<includes>
+										<include>${project.artifactId}-${project.version}.${project.packaging}</include>
+									</includes>
+									<followSymlinks>false</followSymlinks>
+								</fileset>
+							</filesets>
 						</configuration>
 					</execution>
 				</executions>
