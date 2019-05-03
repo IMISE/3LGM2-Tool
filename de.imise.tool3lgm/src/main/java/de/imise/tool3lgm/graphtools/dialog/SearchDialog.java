@@ -120,16 +120,16 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     private int checkBoxMode = 0;
 
     /** Checkbox für ignore case Bezeichnung */
-    private final JCheckBox elementName_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInName);
+    private final JCheckBox elementName_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInName);
 
     /** Checkbox für ignore case Beschreibung */
-    private final JCheckBox elementDescription_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInDescription);
+    private final JCheckBox elementDescription_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInDescription);
 
     /** Checkbox für ignore case Benutzerdef Eigenschaften */
-    private final JCheckBox elementUserField_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInUserField);
+    private final JCheckBox elementUserField_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInUserField);
 
     /** Checkbox Checkboxsuche */
-    private JComboBox checkBoxAuswahl = new AlphabeticalComboBox();
+    private JComboBox<String> checkBoxAuswahl = new AlphabeticalComboBox();
 
     /** Typbox der benutzerdef. Eigenschaften wie Checkbox, Textfeld usw. */
     private AlphabeticalComboBox userFieldTypeComboBox;
@@ -360,9 +360,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
 
         // wenn Groß-/KLeinschreibung ignorieren, dann wandle in kleine namen um
-        String name = elementName_cb.isSelected() ? cleanName((String) elementName.getSelectedItem()) : (String) elementName.getSelectedItem();
-        String bez = elementDescription_cb.isSelected() ? cleanName((String) elementDescription.getSelectedItem()) : (String) elementDescription.getSelectedItem();
-        String ud = elementUserField_cb.isSelected() ? cleanName((String) elementUserField.getSelectedItem()) : (String) elementUserField.getSelectedItem();
+        String name = elementName_cb.isSelected() ? (String) elementName.getSelectedItem() : cleanName((String) elementName.getSelectedItem());
+        String bez = elementDescription_cb.isSelected() ? (String) elementDescription.getSelectedItem() : cleanName((String) elementDescription.getSelectedItem());
+        String ud = elementUserField_cb.isSelected() ? (String) elementUserField.getSelectedItem() : cleanName((String) elementUserField.getSelectedItem());
 
         // Null abfangen
         if (name == null || name.equals("")) {
@@ -422,7 +422,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         for (int i = searchSet.size() - 1; i >= 0; i--) {
             ModelElement me = searchSet.get(i).getElement();
             if (re1 != null) {
-                String string = elementName_cb.isSelected() ? cleanName(me.getName()) : me.getName();
+                String string = elementName_cb.isSelected() ? me.getName() : cleanName(me.getName());
                 REMatch match1 = re1.getMatch(string);
                 if (match1 == null) {
                     searchSet.remove(i);
@@ -430,7 +430,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                 }
             }
             if (re2 != null) {
-                String string = elementDescription_cb.isSelected() ? cleanName(me.getDescription()) : me.getDescription();
+                String string = elementDescription_cb.isSelected() ? me.getDescription() : cleanName(me.getDescription());
                 REMatch match2 = re2.getMatch(string);
                 if (match2 == null) {
                     searchSet.remove(i);
@@ -487,7 +487,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                                 string = string.replaceAll("\\.", ",");
                             }
 
-                            string = elementUserField_cb.isSelected() ? cleanName(string) : string;
+                            string = elementUserField_cb.isSelected() ? string : cleanName(string);
                             REMatch match3 = re3.getMatch(string);
                             if (match3 == null) {
                                 continue;
@@ -783,7 +783,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         userFieldTypeComboBox.addItem(UserField.Style.ID, CostingUtil.getDisplayableStyleName(UserField.Style.ID));
 
         // auswahlmodi für die checkboxen
-        checkBoxAuswahl = new JComboBox();
+        checkBoxAuswahl = new JComboBox<>();
         checkBoxAuswahl.addItem(getResString("SEARCH_DIALOG_USERFIELD_activated_deactivated"));
         checkBoxAuswahl.addItem(getResString("SEARCH_DIALOG_USERFIELD_activated"));
         checkBoxAuswahl.addItem(getResString("SEARCH_DIALOG_USERFIELD_deactivated"));
@@ -892,9 +892,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     }
 
     private void addCBListeners() {
-        elementName_cb.addActionListener(e -> ignoreCaseInName = elementName_cb.isSelected());
-        elementDescription_cb.addActionListener(e -> ignoreCaseInDescription = elementDescription_cb.isSelected());
-        elementUserField_cb.addActionListener(e -> ignoreCaseInUserField = elementUserField_cb.isSelected());
+        elementName_cb.addActionListener(e -> ignoreCaseInName = !elementName_cb.isSelected());
+        elementDescription_cb.addActionListener(e -> ignoreCaseInDescription = !elementDescription_cb.isSelected());
+        elementUserField_cb.addActionListener(e -> ignoreCaseInUserField = !elementUserField_cb.isSelected());
 
     }
 
