@@ -330,7 +330,7 @@ public class ReflectionUtils {
     }
 
     /**
-     * Liefert true, wenn die Klassen gleich sind oder eine die Oberklasse der anderen ist.
+     * Liefert true, wenn die Klassen nicht <code>null</code> und gleich sind oder eine die Oberklasse der anderen ist.
      *
      * @param class1
      * @param class2
