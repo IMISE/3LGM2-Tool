@@ -241,8 +241,14 @@ public class SimpleMetaPathCreator {
      * @return
      */
     public static final Direction getEdgeDirection(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
-        Direction direction = Edge.isStartClass(edgeClass, startClass) && (endClass == null || Edge.isEndClass(edgeClass, endClass)) ? Direction.FORWARD
-                : Edge.isEndClass(edgeClass, startClass) && (endClass == null || Edge.isStartClass(edgeClass, endClass)) ? Direction.BACKWARD : null;
+        Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
+        Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
+        Direction direction = null;
+        if (ReflectionUtils.isAssignable(edgeStartClass, startClass) && (endClass == null || ReflectionUtils.isAssignable(edgeEndClass, endClass))) {
+            direction = Direction.FORWARD;
+        } else if (ReflectionUtils.isAssignable(edgeEndClass, startClass) && (endClass == null || ReflectionUtils.isAssignable(edgeStartClass, endClass))) {
+            direction = Direction.BACKWARD;
+        }
         return direction;
     }
 

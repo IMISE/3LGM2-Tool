@@ -439,7 +439,7 @@ public abstract class Edge extends ModelElement {
      */
     public static final boolean isStartClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         Class<? extends ModelElement> startClass = getStartClass(edgeClass);
-        return ReflectionUtils.isAssignable(startClass, elementClass);
+        return startClass.isAssignableFrom(elementClass);
     }
 
     /**
@@ -461,7 +461,7 @@ public abstract class Edge extends ModelElement {
      */
     public static final boolean isEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return ReflectionUtils.isAssignable(endClass, elementClass);
+        return endClass.isAssignableFrom(elementClass);
     }
 
     /**
@@ -521,7 +521,7 @@ public abstract class Edge extends ModelElement {
     public static boolean isRecursive(final Class<? extends Edge> edgeClass) {
         Class<? extends ModelElement> startClass = getStartClass(edgeClass);
         Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return ReflectionUtils.isAssignable(startClass, endClass);
+        return startClass.isAssignableFrom(endClass);
     }
 
     ////////////////////
