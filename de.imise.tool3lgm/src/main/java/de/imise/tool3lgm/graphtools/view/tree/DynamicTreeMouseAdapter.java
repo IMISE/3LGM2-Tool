@@ -160,7 +160,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                     //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
                     //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
                     ec.getGraphDocument().addToSelection(ec, DynamicTree.PID);
-                    JPopupMenu pm = Tool3lgm.getContextGenerator().getKnotContextMenu(tree);
+                    JPopupMenu pm = Tool3lgm.getContextGenerator().getNodeContextMenu(tree);
                     if (pm != null) {
                         pm.show(tree, xin + 3, yin + 3);
                     }

@@ -520,7 +520,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 // 1. Ob man in eine Hand eines Knotens getroffen hat
                 ka = chooseResizable(layer, x, y);
                 if (ka != null) {
-                    contextGenerator.setModelElement(ka);
+                    contextGenerator.setElementContainer(ka);
                     contextGenerator.setResizing(true);
                     if (left_button && layerIndex != activeLayerIndex) {
                         gdcoll.setActiveLayer(layerIndex);
@@ -535,8 +535,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 ka = chooseObject(layer, x, y);
                 //System.out.println("    start context generating..." + System.currentTimeMillis());
                 if (ka != null) {
-                    contextGenerator.setModelElement(ka);
-                    contextGenerator.setElementGetroffen(true);
+                    contextGenerator.setElementContainer(ka);
+                    contextGenerator.setElementClicked(true);
                     if (left_button && layerIndex != activeLayerIndex) {
                         gdcoll.setActiveLayer(layerIndex);
                     }
@@ -553,7 +553,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 }
                 // 3. Ob man die Ebene selbst getroffen hat
                 {
-                    contextGenerator.setEbeneGetroffen(true);
+                    contextGenerator.setLayerClicked(true);
                     if (isMultiView()) {
                         for (int j = layerIndex; j >= MIN_LAYER_INDEX; j--) {
                             if (!isInterLayer(j)) {
@@ -651,13 +651,13 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     continue;
                 }
                 // 1. Ob man in eine Hand eines Knotens getroffen hat
-                if (contextGenerator.getResizing()) {
+                if (contextGenerator.isResizing()) {
                     contextGenerator.setResizing(false);
                     sized = false;
                     break;
                 }
                 // 2. Ob man in ein Objekt direkt getroffen hat: Node oder Edge
-                if (contextGenerator.getElementGetroffen()) {
+                if (contextGenerator.isElementClicked()) {
                     if (was_selected) {
                         was_selected = false;
                         if (!mouse_dragged) {
@@ -730,13 +730,13 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                             }
                         }
                     }
-                    contextGenerator.setElementGetroffen(false);
+                    contextGenerator.setElementClicked(false);
                     grabbed = false;
                     break;
                 }
                 // 3. Ob man die Ebene selbst getroffen hat
-                if (contextGenerator.getEbeneGetroffen()) {
-                    contextGenerator.setEbeneGetroffen(false);
+                if (contextGenerator.isLayerClicked()) {
+                    contextGenerator.setLayerClicked(false);
                     break;
                 }
             } // loop
