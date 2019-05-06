@@ -1106,7 +1106,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private JMenu getCreateNodesMenu() {
+    private JMenu getCreateNewNodesMenu() {
         int activeLayer = doc.getCollection().getActiveLayer();
         Iterable<Class<? extends ModelElement>> creatableLayerNodes = ModelConstants.getCreatableLayerNodes(activeLayer);
         JMenu layerMenu = new JMenu(getResString("el_neu"));
@@ -1144,7 +1144,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     public final JPopupMenu getLayerContextMenu() {
         JPopupMenu menu = new JPopupMenu();
-        menu.add(getCreateNodesMenu());
+        menu.add(getCreateNewNodesMenu());
         menu.add(new_text);
         menu.addSeparator();
 
