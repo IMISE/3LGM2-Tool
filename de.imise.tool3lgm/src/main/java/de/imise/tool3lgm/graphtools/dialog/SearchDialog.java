@@ -24,7 +24,9 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -74,9 +76,6 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
-import gnu.regexp.RE;
-import gnu.regexp.REException;
-import gnu.regexp.REMatch;
 
 public class SearchDialog extends JDialog implements ActionListener, ListSelectionListener, WindowListener, ItemListener {
 
@@ -366,12 +365,15 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
         // Null abfangen
         if (name == null || name.equals("")) {
-            name = ".*";
+            //            name = ".*";
+            name = "";
         } else {
             name = name.replaceAll("\\*", ".*").replaceAll("\\?", ".");
         }
         if (bez == null) {
             bez = "";
+        } else {
+            bez = bez.replaceAll("\\*", ".*").replaceAll("\\?", ".");
         }
         if (ud == null) {
             ud = "";
@@ -394,27 +396,28 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                 }
             }
         }
-        RE re1 = null;
+
+        Pattern re1 = null;
         if (!name.equals("")) {
             try {
-                re1 = new RE(name);
-            } catch (REException error) {
+                re1 = Pattern.compile(name);
+            } catch (PatternSyntaxException error) {
                 Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
             }
         }
-        RE re2 = null;
+        Pattern re2 = null;
         if (!bez.equals("")) {
             try {
-                re2 = new RE(bez);
-            } catch (REException error) {
+                re2 = Pattern.compile(bez);
+            } catch (PatternSyntaxException error) {
                 Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
             }
         }
-        RE re3 = null;
+        Pattern re3 = null;
         if (!ud.equals("")) {
             try {
-                re3 = new RE(ud);
-            } catch (REException error) {
+                re3 = Pattern.compile(ud);
+            } catch (PatternSyntaxException error) {
                 Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
             }
         }
@@ -423,16 +426,16 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             ModelElement me = searchSet.get(i).getElement();
             if (re1 != null) {
                 String string = elementName_cb.isSelected() ? me.getName() : cleanName(me.getName());
-                REMatch match1 = re1.getMatch(string);
-                if (match1 == null) {
+                Matcher match1 = re1.matcher(string);
+                if (!match1.find()) {
                     searchSet.remove(i);
                     continue;
                 }
             }
             if (re2 != null) {
                 String string = elementDescription_cb.isSelected() ? me.getDescription() : cleanName(me.getDescription());
-                REMatch match2 = re2.getMatch(string);
-                if (match2 == null) {
+                Matcher match2 = re2.matcher(string);
+                if (!match2.find()) {
                     searchSet.remove(i);
                 }
                 continue;
@@ -442,8 +445,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             // eingeschränkt wird
             if (re3 == null && !userFieldTypeComboBox.getSelectedObject().equals(getResString("SEARCH_DIALOG_USERFIELD_all"))) {
                 try {
-                    re3 = new RE(" ");
-                } catch (REException e1) {
+                    re3 = Pattern.compile(" ");
+                } catch (PatternSyntaxException e1) {
                     e1.printStackTrace();
                 }
             }
@@ -464,7 +467,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
                             boolean nameOfCheckBoxMatched = false;// (+ zusätzlich muss label
                                                                   // stimmen)
-                            REMatch matchNameOfCheckBox = re3.getMatch(key.getName());
+                            Matcher matchNameOfCheckBox = re3.matcher(key.getName());
                             if (matchNameOfCheckBox != null) {
                                 nameOfCheckBoxMatched = true;
                             }
@@ -488,8 +491,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                             }
 
                             string = elementUserField_cb.isSelected() ? string : cleanName(string);
-                            REMatch match3 = re3.getMatch(string);
-                            if (match3 == null) {
+                            Matcher match3 = re3.matcher(string);
+                            if (!match3.find()) {
                                 continue;
                             }
                             found = true;
