@@ -118,7 +118,6 @@ import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.pair.Pair;
-import de.imise.util.swing.menu.DynamicMenu;
 import de.imise.util.swing.menu.MenuScroller;
 
 /**
@@ -280,7 +279,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         queue = getItem(MODEL_ACTION_PRINT_QUEUE);
         consistency = getItem(MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY);
 
-        internals = new DynamicMenu(getResString("intern"));
+        internals = new JMenu(getResString("intern"));
         internals.add(verify);
         internals.add(interactive);
         internals.add(expertMode);
