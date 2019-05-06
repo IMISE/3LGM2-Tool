@@ -166,9 +166,9 @@ public class MenuCollection {
         public static final JMenu LOCALE_MENU = createLocaleMenu();
 
         /** Methode erzeugt das Sprachen-Menu */
-        private static final DynamicMenu createLocaleMenu() {
+        private static final JMenu createLocaleMenu() {
             ChangeLocaleAction[] actions = ChangeLocaleAction.getAllActions();
-            DynamicMenu localeMenu = new DynamicMenu(getResString("localeOptionsMenu"));
+            JMenu localeMenu = new JMenu(getResString("localeOptionsMenu"));
             ButtonGroup bg = new ButtonGroup();
             for (ChangeLocaleAction action : actions) {
                 JRadioButtonMenuItem languageButton = MenuCreator.createRadioButtonMenuItem(action);
