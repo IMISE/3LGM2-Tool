@@ -232,13 +232,13 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse eine Ober- oder Unterklasse der im Elementarpfad einthaltenen Kantenklasse ist.
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse eine Ober- oder Unterklasse der im Elementarpfad enthaltenen Kantenklasse ist.
      *
      * @param edgeClass Kantenklasse, deren Zuweisungskompatibilität
      * @return
      */
     public boolean hasEdgeClass(final Class<? extends Edge> edgeClass) {
-        return edgeClass != null && this.edgeClass != null && ReflectionUtils.isAssignable(this.edgeClass, edgeClass);
+        return ReflectionUtils.isAssignable(this.edgeClass, edgeClass);
     }
 
     /**
