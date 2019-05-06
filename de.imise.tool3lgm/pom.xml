@@ -36,11 +36,6 @@
 			<version>2.0.02</version>
 		</dependency>
 		<dependency>
-			<groupId>gnu-regexp</groupId>
-			<artifactId>gnu-regexp</artifactId>
-			<version>1.1.4</version>
-		</dependency>
-		<dependency>
 			<groupId>net.sf.saxon</groupId>
 			<artifactId>saxon</artifactId>
 			<version>8.7</version>
@@ -150,6 +145,19 @@
 						</configuration>
 						<goals>
 							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.20</version>
+				<executions>
+					<execution>
+						<id>download-licenses</id>
+						<goals>
+							<goal>download-licenses</goal>
 						</goals>
 					</execution>
 				</executions>
