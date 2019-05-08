@@ -1,8 +1,13 @@
 package de.imise.util.swing.menu;
 
+import java.awt.Component;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.swing.Action;
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 
 /**
  * Erweiterungsklasse zu {@link JMenu}
@@ -13,7 +18,9 @@ import javax.swing.JMenuItem;
  *
  * @author fstephan
  */
-public class DynamicMenu extends JMenu {
+public abstract class DynamicMenu extends JMenu {
+
+    private final List<DynamicMenuPlaceholder> placeholders = new ArrayList<>();
 
     /**
      * Konstruktor
@@ -21,9 +28,32 @@ public class DynamicMenu extends JMenu {
      * Erzeugt eine neue Instanz mit entsprechender Beschriftung
      *
      * @param s
+     * @param menuEntries
      */
-    public DynamicMenu(final String s) {
+    public DynamicMenu(final String s, final Object... menuEntries) {
         super(s);
+        Object[] allMenuEntries = menuEntries.length > 0 ? menuEntries : new Object[] {
+                new DynamicMenuPlaceholder() // wenn gar keine Items angegeben wurden, dann wird hier ein Placeholder eingefügt. Ohne diesen Placeholder braucht man kein DynamicMenu zu nehmen
+        };
+        for (int i = 0; i < allMenuEntries.length; i++) {
+            if (allMenuEntries[i] instanceof DynamicMenuPlaceholder) {
+                DynamicMenuPlaceholder placeholder = (DynamicMenuPlaceholder) allMenuEntries[i];
+                placeholder.startIndex = i;
+                placeholder.parent = this;
+                placeholders.add(placeholder);
+            }
+        }
+        MenuCreator.addAll(this, MenuCreator.createMenuEntries(true, allMenuEntries));
+    }
+
+    /**
+     * Liefert den Placeholder mit am übergebenen Index
+     * 
+     * @param index
+     * @return
+     */
+    public DynamicMenuPlaceholder getPlaceholder(final int index) {
+        return placeholders.get(index);
     }
 
     /**
@@ -48,21 +78,58 @@ public class DynamicMenu extends JMenu {
      * Das Setzen der Attribute <code>isSelected</code> und <code>isEnabled</code> muss hier nicht
      * implementiert werden, da dies bereits über {@link #fireMenuSelected()} erfolgt.
      */
-    protected void updateItems() {
+    protected final void updateItems() {
+        //von hinten löschen, weil sonst die Indizes nicht stimmen
+        for (int i = placeholders.size() - 1; i >= 0; i--) {
+            removeItems(placeholders.get(i));
+        }
+        for (DynamicMenuPlaceholder placeholder : placeholders) {
+            remove(placeholder);
+            updateItems(placeholder);
+        }
     }
+
+    protected abstract void updateItems(final DynamicMenuPlaceholder palceholder);
 
     /** Entfernt alle Items innerhalb und inklusive der spezifizierten Indices */
-    public void removeItems(final int firstIndex, final int lastIndex) {
-        for (int i = firstIndex; i <= lastIndex; i++) {
-            remove(firstIndex);
+    private final void removeItems(final DynamicMenuPlaceholder placeholder) {
+        for (int i = placeholder.startIndex; i < placeholder.startIndex + placeholder.itemCount && getItemCount() > 0; i++) {
+            remove(placeholder.startIndex);
         }
+        placeholder.itemCount = -1;
+        add(placeholder, placeholder.startIndex);
     }
 
-    /** Fügt die spezifiezierten Items an der spezifizierten Position ein */
-    public void insertItems(final JMenuItem[] items, int pos) {
-        for (JMenuItem item : items) {
-            insert(item, pos++);
+    public static final class DynamicMenuPlaceholder extends Component {
+
+        private int startIndex;
+
+        private int itemCount = -1;
+
+        private DynamicMenu parent;
+
+        public final void addAll(final Action[] actions) {
+            if (actions == null || actions.length == 0) {
+                return;
+            }
+            addAll(Arrays.asList(actions));
         }
+
+        public final void addSeparator(final int indexFromStartIndex) {
+            MenuCreator.addAll(parent, startIndex + indexFromStartIndex, new JSeparator());
+            itemCount++;
+        }
+
+        public final void addAll(final List<Action> actions) {
+            Component[] menuEntries = MenuCreator.createMenuEntries(actions, true);
+            itemCount = actions.size();
+            MenuCreator.addAll(parent, startIndex, menuEntries);
+        }
+
+        public int getStartIndex() {
+            return startIndex;
+        }
+
     }
 
 }
