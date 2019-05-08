@@ -16,7 +16,6 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JSeparator;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.ActionLibrary.AnalysisActions;
 import de.imise.tool3lgm.event.ActionLibrary.EditActions;
@@ -92,7 +91,10 @@ public class MenuCollection {
     public static final JMenu WINDOW_MENU = new WindowMenu();
 
     /** Das Hilfe-Menu */
-    public static final JMenu HELP_MENU = new HelpMenu();
+    public static final JMenu HELP_MENU = createMenu("help", ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, ActionLibrary.HelpActions.ACTION_ACTIVATE_DIRECT_HELP, new JSeparator(),
+            ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_OPEN_URL_3LGM_WEBSITE, new JSeparator(),
+            ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MODEL_FILE, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER,
+            ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG/* , new JSeparator() , ActionLibrary.HelpActions.ACTION_IMPORT_LICENSE_FILE */);
 
     /** Sammlung der Unter-Menus des Datei-Menus */
     static class FileSubMenus {
@@ -295,8 +297,6 @@ public class MenuCollection {
         }
     }
 
-    static int tt = 0;
-
     /** Das Fenster-Menu */
     private static class WindowMenu extends DynamicMenu {
 
@@ -331,21 +331,6 @@ public class MenuCollection {
             }
             placeholder.addAll(a);
             placeholder.addSeparator(1);// Trenner zwischen aktivem Frame und aktivierbaren Frames
-        }
-    }
-
-    public static class HelpMenu extends JMenu {
-
-        /** Name dieses Menus */
-        public static final String title = Tool3lgmConstants.getResString("help");
-
-        public HelpMenu() {
-            super(title);
-
-            MenuCreator.addAll(this, MenuCreator.createMenuEntries(false, ActionLibrary.HelpActions.ACTION_OPEN_HELP_DIALOG, ActionLibrary.HelpActions.ACTION_ACTIVATE_DIRECT_HELP, new JSeparator(),
-                    ActionLibrary.HelpActions.ACTION_SHOW_INFORMATION_SYSTEM_EVALUATION_TUTORIAL, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ONLINE_HELP, ActionLibrary.HelpActions.ACTION_OPEN_URL_3LGM_WEBSITE, new JSeparator(),
-                    ActionLibrary.HelpActions.ACTION_OPEN_EXAMPLE_MODEL_FILE, ActionLibrary.HelpActions.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, new JSeparator(), ActionLibrary.HelpActions.ACTION_OPEN_URL_ISSUE_TRACKER,
-                    ActionLibrary.HelpActions.ACTION_OPEN_ABOUT_DIALOG/* , new JSeparator() , ActionLibrary.HelpActions.ACTION_IMPORT_LICENSE_FILE */));
         }
     }
 
