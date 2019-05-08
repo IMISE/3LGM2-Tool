@@ -5,7 +5,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LOGICAL_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
 
-import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,30 +194,15 @@ public class MenuCollection {
         /** Name dieses Menus */
         public static final String title = getResString("file");
 
-        /** Index, an dem die erste Datei im Menu steht */
-        private static final int firstFileIndex = 11;
-
-        /** Index, an dem die letzte Datei im Menu steht */
-        private int lastFileIndex = -1;
-
         public FileMenu() {
-            super(title);
-            MenuCreator.addAll(this,
-                    MenuCreator.createMenuEntries(true, FileActions.ACTION_NEW_MODEL, FileActions.ACTION_OPEN_MODEL, FileActions.ACTION_SAVE_MODEL, FileActions.ACTION_SAVE_MODEL_AS, FileActions.ACTION_CLOSE_MODEL, new JSeparator(),
-                            FileActions.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, new JSeparator(), FileSubMenus.IMPORT_MENU, FileSubMenus.EXPORT_MENU, new JSeparator(),
-                            //hier werden später die zuletzt geladenen Modelle angezeigt
-                            new JSeparator(), FileActions.ACTION_EXIT));
+            super(title, FileActions.ACTION_NEW_MODEL, FileActions.ACTION_OPEN_MODEL, FileActions.ACTION_SAVE_MODEL, FileActions.ACTION_SAVE_MODEL_AS, FileActions.ACTION_CLOSE_MODEL, new JSeparator(), FileActions.ACTION_SHOW_MODEL_DESCRIPTION_FRAME,
+                    new JSeparator(), FileSubMenus.IMPORT_MENU, FileSubMenus.EXPORT_MENU, new JSeparator(), new DynamicMenuPlaceholder(), new JSeparator(), FileActions.ACTION_EXIT);
         }
 
         @Override
-        protected void updateItems() {
-            Action[] a = ActionLibrary.DynamicActions.getLastUsedFilesOpenActions();
-            if (a == null || a.length == 0) {
-                return;
-            }
-            removeItems(firstFileIndex, lastFileIndex);
-            MenuCreator.addAll(this, firstFileIndex, MenuCreator.createMenuEntries(a, false));
-            lastFileIndex = firstFileIndex + a.length - 1;
+        protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
+            Action[] actions = ActionLibrary.DynamicActions.getLastUsedFilesOpenActions();
+            placeholder.addAll(actions);
         }
     }
 
@@ -229,16 +213,14 @@ public class MenuCollection {
         public static final String title = getResString("insert");
 
         public InsertMenu() {
-            super(title);
+            super(title); //legt ein Menü mit einem Placeholder als einzigem Eintrag an
         }
 
         @Override
-        protected void updateItems() {
+        protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
             if (Static.getSelectedDoc() == null) {
                 return;
             }
-
-            removeAll();
             int layerID = Static.getSelectedGDCollection().getActiveLayer();
             List<Action> menuActions = new ArrayList<>();
             Iterable<StaticAction> createElementActions = null;
@@ -260,8 +242,7 @@ public class MenuCollection {
                     menuActions.add(action);
                 }
             }
-            Component[] menuEntries = MenuCreator.createMenuEntries(menuActions, true);
-            MenuCreator.addAll(this, menuEntries);
+            placeholder.addAll(menuActions);
         }
     }
 
@@ -291,7 +272,7 @@ public class MenuCollection {
         }
 
         @Override
-        protected void updateItems() {
+        protected void updateItems(final DynamicMenuPlaceholder placeholder) {
             removeAll();
             GraphDocument doc = Static.getSelectedDoc();
             if (doc == null) {
@@ -322,24 +303,18 @@ public class MenuCollection {
         /** Name dieses Menus */
         public static final String title = getResString("windowMenu");
 
-        /** Index, des ersten Fensters im Menu */
-        private final int firstFrameIndex;
-
         private final int scrollItemCount = 30;
 
         public WindowMenu() {
-            super(title);
-            MenuCreator.addAll(this, MenuCreator.createMenuEntries(true, ActionLibrary.WindowActions.ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT, ActionLibrary.WindowActions.ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT, new JSeparator()));
-            firstFrameIndex = getItemCount();
+            super(title, MenuCreator.createMenuEntries(true, ActionLibrary.WindowActions.ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT, ActionLibrary.WindowActions.ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT, new JSeparator(), new DynamicMenuPlaceholder()));
+            DynamicMenuPlaceholder placeHolder = getPlaceholder(0);
             //firstFrameIndex + 2 weil der jeweils aktive Frame und der darauffolgende JSeparator nicht mitgescrollt werden sollen
-            MenuScroller.setScrollerFor(this, scrollItemCount, 125, firstFrameIndex + 2, 0);
+            MenuScroller.setScrollerFor(this, scrollItemCount, 125, placeHolder.getStartIndex() + 2, 0);
         }
 
         @SuppressWarnings("unchecked")
         @Override
-        protected void updateItems() {
-            //alle Items von Fenstern entfernen
-            removeItems(firstFrameIndex, getItemCount() - 1);
+        protected void updateItems(final DynamicMenuPlaceholder placeholder) {
             Action[] a = ActionLibrary.DynamicActions.getSelectInternalFrameActions();
             if (a == null || a.length == 0) {
                 return;
@@ -354,8 +329,8 @@ public class MenuCollection {
             for (int i = 1; i < a.length; i++) {
                 a[i] = noc[i - 1].getObject();
             }
-            MenuCreator.addAll(this, firstFrameIndex, MenuCreator.createMenuEntries(a, false));
-            add(new JSeparator(), firstFrameIndex + 1);// Trenner zwischen aktivem Frame und aktivierbaren Frames
+            placeholder.addAll(a);
+            placeholder.addSeparator(1);// Trenner zwischen aktivem Frame und aktivierbaren Frames
         }
     }
 
