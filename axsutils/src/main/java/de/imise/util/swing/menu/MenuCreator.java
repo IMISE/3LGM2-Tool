@@ -223,7 +223,7 @@ public class MenuCreator {
      *            <code>false</code>: es werden keine Mnemonics gesetzt.
      */
     public static final JMenu createMenu(final String title, final Object[] menuEntries, final boolean setMnemonics) {
-        JMenu menu = new DynamicMenu(title);
+        JMenu menu = new JMenu(title);
         addAll(menu, createMenuEntries(menuEntries, setMnemonics));
         return menu;
     }
