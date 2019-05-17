@@ -1072,7 +1072,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ElementDialogPanel pane = edp;
         final LGMTreeNode lroot = (LGMTreeNode) tree.getModel().getRoot();
         if (edp instanceof ProzessStructurePanel) {
-            return new LGMAction(getResString("verify")) {
+            return new LGMAction(getResString("PROCESS_PANEL_VERIFY")) {
 
                 @Override
                 public void execute(final EventObject e) {
@@ -1103,8 +1103,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     private static final LGMAction getFehlerAction(final ElementDialogPanel edp) throws ActionNotDefinedForClassException {
         final ElementDialogPanel pane = edp;
         if (edp instanceof ProzessStructurePanel) {
-            return new LGMAction(getResString("fehler")) {
-
+            return new LGMAction(getResString("PROCESS_PANEL_ERROR")) {
                 @Override
                 public void execute(final EventObject e) {
                     ProzessStructurePanel panel = (ProzessStructurePanel) pane;
