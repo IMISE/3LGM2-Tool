@@ -6,14 +6,12 @@ package de.imise.owl2tlgm.graph;
 public class Edge {
 
     /**
-     * Der Knoten der domain class oder <code>null</code>, wenn dieser
-     * nicht vorhanden ist.
+     * Der Knoten mit der Klasse domain class oder <code>null</code>, wenn dieser nicht vorhanden ist.
      */
     private final Node domainNode;
 
     /**
-     * Der Knoten der range class oder <code>null</code>, wenn dieser
-     * nicht vorhanden ist.
+     * Der Knoten mit der Klasse range class oder <code>null</code>, wenn dieser nicht vorhanden ist.
      */
     private final Node rangeNode;
 

@@ -91,8 +91,7 @@ public class OWLImporter {
 
     /**
      * Holt aus dem übergebenen Iterator die erste {@link OntResource}, die bei {@link OntResource#isClass()}<code>==true</code> liefert und gibt
-     * diese
-     * zurück.
+     * diese zurück.
      *
      * @param ontResources
      *            Iterator aller zu durchsuchenden {@link OntResource}
@@ -116,7 +115,8 @@ public class OWLImporter {
     }
 
     /**
-     * Erzeugt einen neuen Knoten der übergebenen Art
+     * Erzeugt einen neuen Knoten der übergebenen Art. Ist er bereits im Graph vorhanden, wird kein neuer Knoten angelegt, sondern der vorhandene
+     * zurück gegeben.
      *
      * @param classOntResource
      * @return
