@@ -18,7 +18,7 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -124,7 +124,8 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
         if (doc == null) {
             return;
         }
-        if (ModelConstants.hasSortedEdgeClassesToPaintable(me.getClass())) {
+        MetaModelInstance metaModel = doc.getMetaModel();
+        if (metaModel.hasSortedEdgeClassesToPaintable(me.getClass())) {
             //			registerAsGraphDocumentListener();
             if (layout == null) {
                 layout = new GraphElementLayout();

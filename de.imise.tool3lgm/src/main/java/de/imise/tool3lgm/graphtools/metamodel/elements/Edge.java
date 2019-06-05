@@ -81,7 +81,7 @@ public abstract class Edge extends ModelElement {
     public final int layerFor() {
         int layer = super.layerFor();
         if (layer == ModelConstants.NO_LAYER) {
-            layer = ModelConstants.getEdgeLayer(startElement.getClass(), endElement.getClass());
+            layer = getMetaModel().getEdgeLayer(startElement.getClass(), endElement.getClass());
         }
         return layer;
     }
@@ -535,7 +535,7 @@ public abstract class Edge extends ModelElement {
      */
     private static final EdgeCardinality getCardinality(final Class<? extends Edge> edgeClass, final boolean backward) {
         String fieldName = backward ? START_CARDINALITY_FIELD_NAME : END_CARDINALITY_FIELD_NAME;
-        return (EdgeCardinality) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
+        return ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName, EdgeCardinality.class);
     }
 
     /**
@@ -710,7 +710,7 @@ public abstract class Edge extends ModelElement {
         if (startElement != null && endElement != null) {
             return startElement.isUnique() || endElement.isUnique();
         }
-        return ModelConstants.isUnique(getClass());
+        return super.isUnique();
     }
 
     @Override

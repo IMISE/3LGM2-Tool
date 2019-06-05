@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
-
 /**
  * @author AXS (10 Dec 2018)
  */
@@ -24,6 +22,7 @@ public abstract class ListMetaPath extends AbstractMetaPath implements Iterable<
     protected final String baseResKeyOrName;
 
     /**
+     * @param metaModel
      * @param metaPaths
      */
     public ListMetaPath(final AbstractMetaPath... metaPaths) {
@@ -31,11 +30,12 @@ public abstract class ListMetaPath extends AbstractMetaPath implements Iterable<
     }
 
     /**
+     * @param metaModel
      * @param baseResKeyOrName
      * @param metaPaths
      */
     public ListMetaPath(final String baseResKeyOrName, final AbstractMetaPath... metaPaths) {
-        super();
+        super(metaPaths[0].metaModel);
         this.baseResKeyOrName = baseResKeyOrName;
         this.metaPaths = ImmutableList.copyOf(metaPaths);
         initStartEndClasses();
@@ -60,7 +60,7 @@ public abstract class ListMetaPath extends AbstractMetaPath implements Iterable<
 
     @Override
     protected String createName() {
-        return Tool3lgmConstants.getResStringWithoutError(baseResKeyOrName);
+        return metaModel.getResStringWithoutError(baseResKeyOrName);
     }
 
     public enum InvalidReason {

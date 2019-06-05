@@ -69,7 +69,7 @@ public final class GDCollectionImExportHandler {
      *            wenn <code>true</code> kann der
      */
     private void importSzenarios(final File file, final boolean chooseSzenarioDialog) {
-        GDCollection sourceGDColl = new GDCollection();
+        GDCollection sourceGDColl = new GDCollection(gdcoll.getMetaModelContext());
 
         Static.showProgressDialog();
         Static.setProgressDialogTitle(getResString("load_model") + " " + file.getName());

@@ -29,7 +29,7 @@ import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -118,16 +118,18 @@ public class RedundancyAnalysis extends WindowAdapter {
 
             String con = " " + getResString("ana_fr_concerning") + " ";
 
-            AnalysesDefinition analysisDefinition = ModelConstants.getAnalysesDefinition();
+            MetaModelInstance metaModel = gdcoll.getMetaModel();
+            AnalysesDefinition analysisDefinition = metaModel.getAnalysesDefinition();
             RedundancyAnalysisDefinitions redundancyAnalysisDefinitions = analysisDefinition.getRedundancyAnalysisDefinitions();
             int analyseCount = redundancyAnalysisDefinitions.size();
             String[] options = new String[analyseCount + 1];
+            ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
             for (int i = 0; i < analyseCount; i++) {
                 SingleRedundancyAnalysisDefinition singleRedundancyAnalysisDefinition = redundancyAnalysisDefinitions.get(i);
                 AbstractMetaPath metaPath = singleRedundancyAnalysisDefinition.getMetaPath();
                 Set<Class<? extends ModelElement>> startClass = metaPath.getStartClasses();
                 Set<Class<? extends ModelElement>> endClass = metaPath.getEndClasses();
-                options[i] = ElementsNameBuilder.getDisplayablePluralName(startClass) + con + ElementsNameBuilder.getDisplayablePluralName(endClass);
+                options[i] = elementsNameBuilder.getDisplayablePluralName(startClass) + con + elementsNameBuilder.getDisplayablePluralName(endClass);
             }
             options[analyseCount] = getResString("ana_fr_self_defined_analysis");
 
@@ -162,7 +164,7 @@ public class RedundancyAnalysis extends WindowAdapter {
                     List<AbstractMetaPath> selectedMetaPaths = metaPathSelection.selectedMetaPaths;
                     AbstractMetaPath mp = selectedMetaPaths.get(0); //es solte genau einer sein
                     AbstractMetaPath metaPath = WrapperMetaPath.wrapMetaPath(c1, c2, mp);
-                    SingleRedundancyAnalysisDefinition definition = new RedundancyAnalysisDefinitions().add(metaPath);
+                    SingleRedundancyAnalysisDefinition definition = new RedundancyAnalysisDefinitions(metaModel).add(metaPath);
                     String resultName = c2.getSimpleName() + " " + mp.toString();
                     result = new RedundancyAnalysisResult(gdcoll, definition, resultName);
                 }

@@ -1,9 +1,6 @@
 package de.imise.tool3lgm.gui.menu;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LOGICAL_LAYER;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,17 +25,21 @@ import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Analysis;
 import de.imise.tool3lgm.event.ActionLibrary.OptionsActions.Graphics;
 import de.imise.tool3lgm.event.ActionLibrary.ViewActions;
 import de.imise.tool3lgm.event.action.ChangeLocaleAction;
+import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.menu.DynamicMenu;
+import de.imise.util.swing.menu.DynamicMenu.DynamicMenuPlaceholder;
 import de.imise.util.swing.menu.MenuCreator;
 import de.imise.util.swing.menu.MenuScroller;
 
@@ -75,17 +76,36 @@ public class MenuCollection {
     public static final JMenu SUBMODEL_MENU = createMenu("submodels", GDCommands.MODEL_ACTION_CREATE_SUBMODEL, GDCommands.MODEL_ACTION_DELETE_SUBMODEL, new JSeparator(), GDCommands.MODEL_ACTION_RENAME_SUBMODEL);
 
     /** Das XMLAnalyse-Menu */
-    public static final JMenu ANALYSIS_MENU = createMenu("analysis", AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
-            BooleanProperty.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT, AnalysisActions.ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR, new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY,
-            ModelConstants.getAnalysesDefinition().getAnalysisActions(), Analysis.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS);
+    //    public static final JMenu ANALYSIS_MENU = new AnalysisMenu();
+    public static final JMenu ANALYSIS_MENU = new DynamicMenu(getResString("analysis"), AnalysisActions.ACTION_ANALYSIS_OPEN_REPOSITORY, AnalysisActions.ACTION_ANALYSIS_OPEN_EDITOR, AnalysisActions.ACTION_ANALYSIS_RESET_RESULT,
+            BooleanProperty.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT, AnalysisActions.ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR, new JSeparator(), AnalysisActions.ACTION_ANALYSIS_REDUNDANCY, new DynamicMenuPlaceholder()) {
+
+        @Override
+        protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
+            MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
+            AnalysesDefinition analysesDefinition = selectedMetaModel.getAnalysesDefinition();
+            Action[] analysisActions = analysesDefinition.getAnalysisActions();
+            placeholder.addAll(analysisActions);
+            Action[] optionsSimpleRedundancyAnalysis = Analysis.getOptionsSimpleRedundancyAnalysis(selectedMetaModel);
+            placeholder.addAll(optionsSimpleRedundancyAnalysis);
+        }
+    };
 
     /** Das Optionen-Menu */
     public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, new JSeparator(), OptionsActions.ACTION_PROPERTY_INT_RMI_PORT,
-            OptionsActions.ACTIONS_CHOOSE_META_MODEL, OptionsSubMenus.LOCALE_MENU, UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
+            BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, OptionsSubMenus.LOCALE_MENU, UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
 
     /** Das Extras-Menu */
-    public static final JMenu EXTRAS_MENU = createMenu("extras", ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG, BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION,
-            new JSeparator(), ModelConstants.getExtrasActions(false), new JSeparator(), BooleanProperty.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU);
+    public static final JMenu EXTRAS_MENU = new DynamicMenu(getResString("extras"), ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG,
+            BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION, new JSeparator(), new DynamicMenuPlaceholder(), new JSeparator(), BooleanProperty.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU) {
+
+        @Override
+        protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
+            MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
+            Action[] extrasActions = selectedMetaModel.getExtrasActions(false);
+            placeholder.addAll(extrasActions);
+        }
+    };
 
     /** Das Fenster-Menu */
     public static final JMenu WINDOW_MENU = new WindowMenu();
@@ -157,11 +177,18 @@ public class MenuCollection {
                 new JSeparator(), BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER);
 
         /** Das Grafik-Optionen-Menu */
-        public static final JMenu GRAPHICS_OPTIONS_MENU = createMenu("graphicOptionsMenu", BooleanProperty.OPTION_USE_RASTER, BooleanProperty.OPTION_SHOW_RASTER, BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,
-                BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, Graphics.MODEL_ACTIONS_HIDE_UNHIDE_UNASSOCIATED, BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS, BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS,
-                BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN, Graphics.ACTION_PROPERTY_INT_RENDER_SETTINGS
+        public static final JMenu GRAPHICS_OPTIONS_MENU = new DynamicMenu(getResString("graphicOptionsMenu"), BooleanProperty.OPTION_USE_RASTER, BooleanProperty.OPTION_SHOW_RASTER, BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,
+                BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, new DynamicMenuPlaceholder(), BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS, BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS, BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN,
+                Graphics.ACTION_PROPERTY_INT_RENDER_SETTINGS
         //createCheckBoxItem(Graphics.TOOLTIPS)
-        );
+        ) {
+            @Override
+            protected void updateItems(final DynamicMenuPlaceholder placeholder) { //nur ein Placeholder -> eindeutig
+                MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
+                GraphFrameAction[] modelActionsHideUnhideUnassociated = Graphics.getModelActionsHideUnhideUnassociated(selectedMetaModel);
+                placeholder.addAll(modelActionsHideUnhideUnassociated);
+            };
+        };
 
         /** Das Sprach-Menu */
         public static final JMenu LOCALE_MENU = createLocaleMenu();
@@ -184,7 +211,15 @@ public class MenuCollection {
     /** Sammlung der Unter-Menus des Extras-Menus */
     static class ExtrasSubMenus {
 
-        public static final JMenu PLUGIN_MENU = createMenu("plugin", ModelConstants.getExtrasActions(true));
+        public static final JMenu PLUGIN_MENU = new DynamicMenu(getResString("plugin"), new DynamicMenuPlaceholder()) {
+
+            @Override
+            protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
+                MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
+                Action[] extrasActions = selectedMetaModel.getExtrasActions(true);
+                placeholder.addAll(extrasActions);
+            }
+        };
 
     }
 
@@ -220,27 +255,18 @@ public class MenuCollection {
 
         @Override
         protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
-            if (Static.getSelectedDoc() == null) {
+            LGMGraphDocument selectedDoc = Static.getSelectedDoc();
+            if (selectedDoc == null) {
                 return;
             }
             int layerID = Static.getSelectedGDCollection().getActiveLayer();
             List<Action> menuActions = new ArrayList<>();
-            Iterable<StaticAction> createElementActions = null;
-            switch (layerID) {
-            case DOMAIN_LAYER:
-                createElementActions = ActionLibrary.CreateElementActions.DOMAIN_LAYER_CREATABLE_NODES_ACTIONS;
-                break;
-            case LOGICAL_LAYER:
-                createElementActions = ActionLibrary.CreateElementActions.LOGICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS;
-                break;
-            case PHYSICAL_LAYER:
-                createElementActions = ActionLibrary.CreateElementActions.PHYSICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS;
-                break;
-            }
+            MetaModelInstance metaModel = selectedDoc.getMetaModel();
+            Iterable<StaticAction> createElementActions = ActionLibrary.CreateElementActions.getCreateElementActions(metaModel, layerID);
             for (StaticAction action : createElementActions) {
                 String arguments = action.getArguments();
-                Class<? extends ModelElement> elementClass = ModelConstants.getClassForName(arguments);
-                if (ModelConstants.isEditable(elementClass)) {
+                Class<? extends ModelElement> elementClass = metaModel.getClassForName(arguments);
+                if (metaModel.isEditable(elementClass)) {
                     menuActions.add(action);
                 }
             }

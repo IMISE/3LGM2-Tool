@@ -17,7 +17,7 @@ import javax.swing.tree.TreePath;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -149,7 +149,9 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                 if (right_button) {
                     if (selectedNode instanceof ElementClassTreeNode) { //Klassenknoten?
                         Class<? extends ModelElement> elementClass = ((ElementClassTreeNode) selectedNode).getUserObject();
-                        if (ModelConstants.isEditable(elementClass)) {
+                        GraphDocument doc = tree.getGraphDocument();
+                        MetaModelInstance metaModel = doc.getMetaModel();
+                        if (metaModel.isEditable(elementClass)) {
                             showNewInstanceContextMenu(elementClass.getSimpleName(), xin + 3, yin + 3);
                         }
                     }

@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -159,12 +159,14 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         GraphDocument doc = getDialog().getGraphDocument();
         GDCollection gdcoll = doc.getCollection();
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
+        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
 
-        boolean isEdgeType = ModelConstants.isEdgeType(selectableElementsClass);
+        boolean isEdgeType = MetaModelInstance.isEdgeType(selectableElementsClass);
         String resKey = isEdgeType ? "userFieldEditor_edge_type" : "userFieldEditor_element_type";
         elementTypeBox.addSeparator(getResString(resKey));
 
-        for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_ELEMENTS_SET) {
+        for (Class<? extends ModelElement> elementClass : metaModel.allElementsSet) {
 
             //von allen Elementklassen nur die zulassen, die im Konstruktor angegeben wurde
             if (!selectableElementsClass.isAssignableFrom(elementClass)) {
@@ -183,14 +185,14 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
             }
 
             if (insertType == AS_MODELELEMENT) {
-                elementTypeBox.addItem(elementClass, ElementsNameBuilder.getDisplayableName(elementClass));
+                elementTypeBox.addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
             } else if (insertType != NO) {
                 Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
                 if (insertType == InsertType.AS_EDGE_FORWARD || insertType == AS_EDGE_FORWARD_AND_BACKWARD) {
-                    elementTypeBox.addItem(edgeClass, ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
+                    elementTypeBox.addItem(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
                 }
                 if (insertType == InsertType.AS_EDGE_BACKWARD || insertType == AS_EDGE_FORWARD_AND_BACKWARD) {
-                    elementTypeBox.addItem(edgeClass, ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
+                    elementTypeBox.addItem(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
                 }
             }
 
@@ -295,7 +297,8 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
             return;
         }
         Class<? extends ModelElement> selectedClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(ModelElement.class);
-        if (ModelConstants.canHavePartsOrParents(selectedClass)) {
+        MetaModelInstance metaModel = dialog.getMetaModel();
+        if (metaModel.canHavePartsOrParents(selectedClass)) {
             hierarchyTypeFilterPane.setVisible(true);
         }
         AbstractUserFieldTableModel uftm = getTableModel();

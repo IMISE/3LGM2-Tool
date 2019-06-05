@@ -3,8 +3,7 @@
  */
 package de.imise.tool3lgm.metamodel.original.node;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.original.edge.AufObjVerbindung;
@@ -20,8 +19,9 @@ public final class Prozess extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addTab(getResString("Aufgabe_p"), new ProzessStructurePanel(dialog, PrzAufVerbindung.class, AufObjVerbindung.class));
-        //		dialog.addTab(getResString("Kommunikationsprozess_p"),new KommProzessPanel(dialog));
+        ElementsNameBuilder elementsNameBuilder = getMetaModel().getElementsNameBuilder();
+        dialog.addTab(elementsNameBuilder.getDisplayablePluralName(Aufgabe.class), new ProzessStructurePanel(dialog, PrzAufVerbindung.class, AufObjVerbindung.class));
+        //		dialog.addTab(elementsNameBuilder.getDisplayablePluralName(Kommunikationsprozess.class), new KommProzessPanel(dialog));
         return dialog;
     }
 

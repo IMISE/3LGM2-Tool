@@ -1,6 +1,13 @@
 package de.imise.tool3lgm.metamodel.original;
 
+import java.util.Map;
+
+import com.google.common.collect.ImmutableMap;
+
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbKommssVerbindung;
@@ -28,6 +35,13 @@ import de.imise.tool3lgm.metamodel.original.node.Softwareprodukt;
 import de.imise.tool3lgm.metamodel.original.node.Standort;
 
 public class TLGMOriginalPathsDefinition extends MetaPathDefinition {
+
+    /**
+     * @param metaModel
+     */
+    public TLGMOriginalPathsDefinition(final MetaModelInstance metaModel) {
+        super(metaModel);
+    }
 
     @Override
     protected final void init() {
@@ -93,6 +107,15 @@ public class TLGMOriginalPathsDefinition extends MetaPathDefinition {
         //                }
         //        }, 1));
 
+    }
+
+    ////////////////////////////////////////////////////////////////////////
+    // Map auf die in der Grafik anzuzeigenden Namen verbundener Elemente //
+    ////////////////////////////////////////////////////////////////////////
+
+    @Override
+    public Map<Class<? extends ModelElement>, AbstractMetaPath> getElementClassToNameExtensionPath() {
+        return ImmutableMap.of(RechAnwendungsbaustein.class, simpleMetaPathCreator.createSimpleMetaPath(RechAnwendungsbaustein.class, Softwareprodukt.class, RawbAwpVerbindung.class, AwpSwpVerbindung.class));
     }
 
 }

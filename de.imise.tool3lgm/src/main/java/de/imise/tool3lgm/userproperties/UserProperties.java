@@ -354,7 +354,7 @@ public class UserProperties {
         /** ModelBrowser an/aus */
         OPTION_MODEL_BROWSER_SHOW,
         /** Beim Start den Abfrgadedialog anzeigen, mit dem man das Metamodell wählen kann an/aus */
-        OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START,
+        OPTION_SHOW_CHOOSE_METAMODEL_DIALOG,
 
         /**
          * Schaltet einige Editieroptionen frei, die im normalen Modus verborgen sind. Das ist z.B. dafür gedacht, dass man in diesem Modus IheActors

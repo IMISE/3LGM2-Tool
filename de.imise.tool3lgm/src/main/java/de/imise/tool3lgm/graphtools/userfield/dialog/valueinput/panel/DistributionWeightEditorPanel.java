@@ -364,7 +364,8 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         }
         Class<? extends Edge> selectedEdgeClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(Edge.class);
         String selectedEdgeName = elementTypeBox.getSelectedItem().toString();
-        choosedEdgeDirection = selectedEdgeName.equals(ElementsNameBuilder.getFullForwardMetaAssociationName(selectedEdgeClass)) ? FORWARD : BACKWARD;
+        ElementsNameBuilder elementsNameBuilder = dialog.getElementsNameBuilder();
+        choosedEdgeDirection = selectedEdgeName.equals(elementsNameBuilder.getFullForwardMetaAssociationName(selectedEdgeClass)) ? FORWARD : BACKWARD;
         UserField selectedWeigthUserField = (UserField) weightBox.getSelectedObject();
         AbstractUserFieldTableModel uftm = new UserFieldWeightTableModel(getDialog().getGraphDocument(), selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField, columnFilterBoxSelection);
         UserFieldTableController tec = UserFieldTableController.getNewDistributionWeightTableController(uftm);

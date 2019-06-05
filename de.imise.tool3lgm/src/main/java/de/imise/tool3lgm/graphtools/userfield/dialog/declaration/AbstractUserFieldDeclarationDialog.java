@@ -22,6 +22,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
@@ -63,8 +64,8 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
 
     public AbstractUserFieldDeclarationDialog(final Frame owner, final UserFieldDefinitions definitions) {
         super(owner, getResString("userfields"), true);
-
-        classComboBox = new UserFieldDeclarationDialogClassComboBox(13);
+        MetaModelInstance metaModel = definitions.getMetaModel();
+        classComboBox = new UserFieldDeclarationDialogClassComboBox(metaModel, 13);
         fieldList = new UserFieldDeclarationDialogFieldList(definitions);
         userFieldTypeComboBox = new AlphabeticalComboBox();
 

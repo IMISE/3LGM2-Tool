@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.metamodel.original.node;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -19,7 +17,7 @@ public class AufOrgKombination extends Node {
 
     @Override
     public String toString() {
-        StringBuilder retVal = new StringBuilder(getResString("in_oes"));
+        StringBuilder retVal = new StringBuilder(getMetaModel().getResString("in_oes"));
         retVal.append(": ");
         List<? extends ModelElement> connectedElements = getConnectedElements(Organisationseinheit.class, OrgAufOrgVerbindung.class);
         StringUtils.appendCollectionString(retVal, connectedElements);

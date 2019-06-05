@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.util.HashMap;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
@@ -23,12 +22,11 @@ public class ElementsLayoutDefinition {
     private GraphElementLayout standardElementLayout = (GraphElementLayout) GraphElementLayout.STANDARD_ELEMENT_LAYOUT.clone();
 
     /**
-     *
+     * @param loadDefaults
      */
-    public ElementsLayoutDefinition(final boolean loadDefaults) {
-        super();
-        if (loadDefaults) {
-            loadDefaults();
+    public ElementsLayoutDefinition(final ElementsLayoutDefinition defaultElementsLayout) {
+        if (defaultElementsLayout != null) {
+            adapt(defaultElementsLayout);
         }
     }
 
@@ -36,14 +34,14 @@ public class ElementsLayoutDefinition {
      * Setzt für diese Map alle Werte der übergebenen. Alle <code>GraphElementLayout</code>s der übergebenen
      * Map werden geclont.
      *
-     * @param map
+     * @param layout2Clone
      */
-    public final void adapt(final ElementsLayoutDefinition map) {
-        standardElementLayout = (GraphElementLayout) map.standardElementLayout.clone();
-        Set<Class<? extends ModelElement>> keySet = map.elementClassToStandardLayoutMap.keySet();
+    public final void adapt(final ElementsLayoutDefinition layout2Clone) {
+        standardElementLayout = (GraphElementLayout) layout2Clone.standardElementLayout.clone();
+        Set<Class<? extends ModelElement>> keySet = layout2Clone.elementClassToStandardLayoutMap.keySet();
         elementClassToStandardLayoutMap = new HashMap<>(keySet.size());
         for (Class<? extends ModelElement> c : keySet) {
-            elementClassToStandardLayoutMap.put(c, (GraphElementLayout) map.elementClassToStandardLayoutMap.get(c).clone());
+            elementClassToStandardLayoutMap.put(c, (GraphElementLayout) layout2Clone.elementClassToStandardLayoutMap.get(c).clone());
         }
     }
 
@@ -213,11 +211,6 @@ public class ElementsLayoutDefinition {
      */
     public final void setStandardFont(final Class<? extends ModelElement> elementClass, final Font font) {
         getElementClassSpecificLayout(elementClass).setFont(font);
-    }
-
-    public void loadDefaults() {
-        ElementsLayoutDefinition defaultElementsLayout = ModelConstants.getGraphViewDefinition().getDefaultElementsLayout();
-        adapt(defaultElementsLayout);
     }
 
 }

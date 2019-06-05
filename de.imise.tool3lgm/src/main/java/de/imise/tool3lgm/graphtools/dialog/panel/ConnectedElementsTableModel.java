@@ -13,6 +13,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.ColumnType;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
@@ -36,7 +37,7 @@ import de.imise.util.StringUtils;
 public class ConnectedElementsTableModel extends DefaultTableModel {
 
     /**
-     * ModelElement, für das die verbundenen Elemente über den MetaPafd dargestellt werden sollen
+     * ModelElement, für das die verbundenen Elemente über den MetaPfad dargestellt werden sollen
      */
     private final ModelElement modelElement;
 
@@ -89,7 +90,9 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                 ColumnType columnType = columnDefinition.getColumnType();
                 if (columnType == ColumnType.END_ELEMENT) {
                     Class<? extends ModelElement> pathEndClass = metaPath.getEndClass();
-                    colName = ElementsNameBuilder.getDisplayablePluralName(pathEndClass);
+                    MetaModelInstance metaModel = metaPath.getMetaModel();
+                    ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+                    colName = elementsNameBuilder.getDisplayablePluralName(pathEndClass);
                     //} else if (columnType == ColumnType.PATH_NAME) { // das hier geht gar nicht, weil man bei den Leafs nicht mehr weiß, von welchem Pfad sie gekommen sind
                     //    colName = ;
                 } else {
@@ -119,7 +122,9 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                                 } else if (columnType == ColumnType.PATH_STEP_EDGE) {
                                     elementClass = elementaryMetaPath.getEdgeClass();
                                 }
-                                colName = ElementsNameBuilder.getDisplayablePluralName(elementClass);
+                                MetaModelInstance metaModel = metaPath.getMetaModel();
+                                ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+                                colName = elementsNameBuilder.getDisplayablePluralName(elementClass);
                             }
                             if (!colNameParts.contains(colName)) {
                                 colNameParts.add(colName);
@@ -173,7 +178,9 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                         Class<? extends Edge> edgeClass = edge.getClass();
                         //der Metapfad kann auf einer abstrakten Oberklasse der konkreten Kante definiert sein. Ist das der Fall, muss der Name aber von der konkreten Kantenklasse abgeleitet werden!
                         if (edgeClass != metaPath.getEdgeClass()) {
-                            metaPath = ElementaryMetaPathHandler.getMetaPath(metaPath.getStartClass(), edgeClass, metaPath.getDirection(), metaPath.getEndClass());
+                            MetaModelInstance metaModel = metaPath.getMetaModel();
+                            ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
+                            metaPath = elementaryMetaPathHandler.getMetaPath(metaPath.getStartClass(), edgeClass, metaPath.getDirection(), metaPath.getEndClass());
                         }
                         String name = columnType == ColumnType.PATH_STEP_NAME ? metaPath.getName() : metaPath.getOtherDirection().getName();
                         value = new NamedObjectContainer<>(edge, name);

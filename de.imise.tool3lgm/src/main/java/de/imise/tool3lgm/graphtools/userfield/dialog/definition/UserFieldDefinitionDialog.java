@@ -20,7 +20,7 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.AbstractPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -116,11 +116,13 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         StringBuilder sb = new StringBuilder();
         sb.append(getResString("attribute"));
         sb.append(":  ");
-        if (ModelConstants.isNodeType(userField.getTargetClass())) {
+        if (MetaModelInstance.isNodeType(userField.getTargetClass())) {
             sb.append(getResString(userField.getTargetClass().getSimpleName()));
         } else {
-            if (ModelConstants.isEdgeType(userField.getTargetClass())) {
-                sb.append(ElementsNameBuilder.getMetaAssociationName(userField.getTargetClass().asSubclass(Edge.class), Direction.FORWARD, ConnectionState.DOUBLE, true, true));
+            if (MetaModelInstance.isEdgeType(userField.getTargetClass())) {
+                MetaModelInstance metaModel = definitions.getMetaModel();
+                ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+                sb.append(elementsNameBuilder.getMetaAssociationName(userField.getTargetClass().asSubclass(Edge.class), Direction.FORWARD, ConnectionState.DOUBLE, true, true));
             } else if (userField.isGlobalOrFormat()) {
                 sb.append(UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName());
             }

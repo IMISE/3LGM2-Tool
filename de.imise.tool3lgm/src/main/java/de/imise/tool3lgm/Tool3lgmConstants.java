@@ -173,11 +173,6 @@ public abstract class Tool3lgmConstants {
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
 
     /**
-     * ResourceBundle mit den metamodell-spezifischen Daten
-     */
-    private static ResourceBundle metamodelBundle = null;
-
-    /**
      * Name der Datei mit Analysen. Unter diesem Namen ex. die Standarddatei in den localisierten Resourcen. Wenn der Benutzer irgendeine XMLAnalyse
      * mal aufgerufen hat, dann gibt es mit diesem Namen
      * im APPLICATION_PATH eine Datei (wenn der Benutzer dort Schreibrecht hat) oder in seinem user.home-Pfad (wenn er im APPLICATION_PATH kein
@@ -321,15 +316,7 @@ public abstract class Tool3lgmConstants {
         //das hier darf auf keinen Fall mit try-catch komplett umrandet werden, da mehrere Funktionen auf die
         //MissingResocureException regaieren (z.B. die Funktionen zum heraussuchen der Kantennamen bei
         //Kanten mit doppelter Bedeutung
-        try {
-            return resourceBundle.getString(key);
-        } catch (Exception e) {
-            //es muss lazy initialisiert werden!
-            if (metamodelBundle == null) {
-                metamodelBundle = Tool3lgmMetaModelContext.getMetaModelResources();
-            }
-            return metamodelBundle.getString(key);
-        }
+        return resourceBundle.getString(key);
     }
 
     /**

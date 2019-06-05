@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -623,10 +623,12 @@ public class MetaPathFunctions {
     /**
      * Liefert true, wenn die Kantenklasse eine Composition ist und die zugehörige Richtung (direction) vom Master auf den Slave zeigt.
      *
+     * @param edgeClass
+     * @param direction
      * @return
      */
     private static final boolean isCompositionFromMasterToSlave(final Class<? extends Edge> edgeClass, final Direction direction) {
-        boolean isEdgeMasterToSlaveComposition = ModelConstants.isComposition(edgeClass);
+        boolean isEdgeMasterToSlaveComposition = MetaModelInstance.isComposition(edgeClass);
         if (!isEdgeMasterToSlaveComposition) {
             return false;
         }
@@ -701,7 +703,7 @@ public class MetaPathFunctions {
 
         Class<? extends ModelElement> elementClass2Create = getElementaryPathsConnectingClass(edgeClassToNewElement, directionToNewElement, edgeClassFromNewElement, directionFromNewElement);
         //abstracte Elemente können nicht angelegt werden! hier wird nicht auf null gecheckt, weil man diese Funktion nur mit SimpleMetaPaths aufrufen sollte, die creatable sind!
-        if (ModelConstants.isAbstract(elementClass2Create)) {
+        if (MetaModelInstance.isAbstract(elementClass2Create)) {
             return null;
         }
 
@@ -741,7 +743,8 @@ public class MetaPathFunctions {
         }
 
         //alle Kantentpyen der neu angelegten Elementart holen
-        Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass2Create);
+        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(elementClass2Create);
         //für jede dieser Kantenarten
         boolean interrupted = false;
         for (int i = 0; i < edgeTypes.length && !interrupted; i++) {

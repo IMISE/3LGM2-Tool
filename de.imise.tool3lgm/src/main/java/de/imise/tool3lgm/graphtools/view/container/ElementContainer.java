@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSortedEdgeClasses;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_FONT;
 
 import java.awt.Color;
@@ -18,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -312,8 +311,9 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     @Override
     public final void setVisible(final boolean visible) {
         super.setVisible(visible);
+        MetaModelInstance metaModel = me.getMetaModel();
         if (visible) {
-            Set<Class<? extends Edge>> sortedEdgeClasses = getSortedEdgeClasses(me.getClass());
+            Set<Class<? extends Edge>> sortedEdgeClasses = metaModel.getSortedEdgeClasses(me.getClass());
             if (sortedEdgeClasses != null) {
                 for (Class<? extends Edge> edgeClass : sortedEdgeClasses) {
                     if (additionalLabelTextGenerator == null) {
@@ -325,7 +325,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         } else if (additionalLabelTextGenerator != null) {
             additionalLabelTextGenerator.deleteSpecialInfoFromTargets();
         }
-        for (Class<? extends ModelElement> c : ModelConstants.getSlaveElementTypes(me.getClass())) {
+        for (Class<? extends ModelElement> c : metaModel.getSlaveElementTypes(me.getClass())) {
             for (ElementContainer sC : me.getConnectedContainer(c, doc)) {
                 sC.setVisible(visible);
             }

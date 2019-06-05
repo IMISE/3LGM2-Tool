@@ -1,6 +1,3 @@
-/**
- *
- */
 package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
@@ -11,7 +8,7 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
@@ -108,7 +105,8 @@ public class SimpleRedundancyAnalysis {
             //#################################
             AbstractMetaPath metaPath = definition.getMetaPath();
             Class<? extends ModelElement> elementClass = metaPath.getStartClasses().iterator().next();
-            int layer = ModelConstants.layerFor(elementClass);
+            MetaModelInstance metaModel = doc.getMetaModel();
+            int layer = metaModel.layerFor(elementClass);
             LayerContainer lc = doc.getLayer(layer);
             if (lc != null) {
                 lc.setAdditionalTextAbove(this, s);
@@ -122,7 +120,8 @@ public class SimpleRedundancyAnalysis {
     public void removeGraphTexts() {
         AbstractMetaPath metaPath = definition.getMetaPath();
         Class<? extends ModelElement> elementClass = metaPath.getStartClasses().iterator().next();
-        int layer = ModelConstants.layerFor(elementClass);
+        MetaModelInstance metaModel = doc.getMetaModel();
+        int layer = metaModel.layerFor(elementClass);
         LayerContainer lc = doc.getLayer(layer);
         if (lc != null) {
             lc.removeAdditionalTextAbove(this);
@@ -194,9 +193,11 @@ public class SimpleRedundancyAnalysis {
     private String getRedundanceString(final float redundance, final float saturation) {
         AbstractMetaPath metaPath = definition.getMetaPath();
         StringBuilder sb = new StringBuilder();
-        sb.append(ElementsNameBuilder.getDisplayablePluralName(metaPath.getStartClasses()));
+        MetaModelInstance metaModel = doc.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        sb.append(elementsNameBuilder.getDisplayablePluralName(metaPath.getStartClasses()));
         sb.append(" -> ");
-        sb.append(ElementsNameBuilder.getDisplayablePluralName(metaPath.getEndClasses()));
+        sb.append(elementsNameBuilder.getDisplayablePluralName(metaPath.getEndClasses()));
         sb.append(": ");
         sb.append(getResString("SIMPLE_REDUNDNANCY_ANALYSIS_redundancy_factor"));
         sb.append("=");

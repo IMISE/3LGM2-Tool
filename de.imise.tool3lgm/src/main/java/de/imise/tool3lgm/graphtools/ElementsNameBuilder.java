@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
@@ -9,19 +8,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
 
 import com.google.common.base.Strings;
 
+import de.imise.tool3lgm.MetaModelInstanceContext;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.util.Alphabetical;
 
 /**
@@ -36,7 +35,17 @@ public class ElementsNameBuilder {
      * zwangsläufig eindeutig und diesen lediglich der besseren Lesbarkeit von Hash-Strings, denen sie immer
      * Vorangestellt werden.
      */
-    private static HashMap<Class<? extends ModelElement>, String> elementClassToHashShortName = null;
+    private static HashMap<String, String> elementClassSimpleNameToHashShortName = null;
+
+    /** Der Context mit dem Metamodel und den Resourcen, aus denen dieser NameBuilder die Elementnamen zieht */
+    private final MetaModelInstanceContext metaModelContext;
+
+    /**
+     * @param metaModelContext
+     */
+    public ElementsNameBuilder(final MetaModelInstanceContext metaModelContext) {
+        this.metaModelContext = metaModelContext;
+    }
 
     /**
      * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
@@ -46,14 +55,14 @@ public class ElementsNameBuilder {
      * @return String aus dem geladenen ResourcenBundle
      */
     @SafeVarargs
-    private static final String getDisplayableName(final boolean plural, final Class<? extends ModelElement>... classes) {
+    public final String getDisplayableName(final boolean plural, final Class<? extends ModelElement>... classes) {
         if (classes == null || classes.length == 0) {
             return "";
         }
         return getDisplayableName(plural, Arrays.asList(classes));
     }
 
-    private static final String getDisplayableName(final boolean plural, final Collection<Class<? extends ModelElement>> classes) {
+    private final String getDisplayableName(final boolean plural, final Collection<Class<? extends ModelElement>> classes) {
         if (classes == null) {
             return "";
         }
@@ -68,7 +77,7 @@ public class ElementsNameBuilder {
                     if (plural) {
                         resKey += ModelConstants.PLURAL_NAME_RES_KEY_SUFFIX;
                     }
-                    String name = getResString(resKey);
+                    String name = metaModelContext != null ? metaModelContext.getResString(resKey) : Tool3lgmConstants.getResString(resKey);
                     names.append(name);
                     if (i < classCount - 1) {
                         names.append(", ");
@@ -91,7 +100,7 @@ public class ElementsNameBuilder {
      * @return String aus dem geladenen ResourcenBundle
      */
     @SafeVarargs
-    public static final String getDisplayablePluralName(final Class<? extends ModelElement>... classes) {
+    public final String getDisplayablePluralName(final Class<? extends ModelElement>... classes) {
         return getDisplayableName(true, classes);
     }
 
@@ -102,7 +111,7 @@ public class ElementsNameBuilder {
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
-    public static final String getDisplayablePluralName(final Collection<Class<? extends ModelElement>> classes) {
+    public final String getDisplayablePluralName(final Collection<Class<? extends ModelElement>> classes) {
         return getDisplayableName(true, classes);
     }
 
@@ -114,7 +123,7 @@ public class ElementsNameBuilder {
      * @return String aus dem geladenen ResourcenBundle
      */
     @SafeVarargs
-    public static final String getDisplayableName(final Class<? extends ModelElement>... classes) {
+    public final String getDisplayableName(final Class<? extends ModelElement>... classes) {
         return getDisplayableName(false, classes);
     }
 
@@ -125,7 +134,7 @@ public class ElementsNameBuilder {
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
-    public static final String getDisplayableName(final Collection<Class<? extends ModelElement>> classes) {
+    public final String getDisplayableName(final Collection<Class<? extends ModelElement>> classes) {
         return getDisplayableName(false, classes);
     }
 
@@ -136,7 +145,7 @@ public class ElementsNameBuilder {
      * @return
      * @see getDisplayableName
      */
-    public static final String getDisplayableName(final ModelElement me) {
+    public final String getDisplayableName(final ModelElement me) {
         return getDisplayableName(me.getClass());
     }
 
@@ -145,8 +154,8 @@ public class ElementsNameBuilder {
      * @return
      * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
      */
-    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
-        return ElementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, false);
+    public String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
+        return getForwardMetaAssociationName(edgeClass, false, false);
     }
 
     /**
@@ -156,8 +165,8 @@ public class ElementsNameBuilder {
      * @return
      * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
      */
-    public static String getFullForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
-        return ElementsNameBuilder.getForwardMetaAssociationName(edgeClass, true, true);
+    public String getFullForwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
+        return getForwardMetaAssociationName(edgeClass, true, true);
     }
 
     /**
@@ -167,8 +176,8 @@ public class ElementsNameBuilder {
      * @return
      * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
-    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return ElementsNameBuilder.getForwardMetaAssociationName(edgeClass, ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
+    public String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        return getForwardMetaAssociationName(edgeClass, ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
     }
 
     /**
@@ -179,8 +188,8 @@ public class ElementsNameBuilder {
      * @return
      * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
-    public static String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return ElementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, connectionState, appendPrefixClass, appendPostfixClass);
+    public String getForwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        return getMetaAssociationName(edgeClass, Direction.FORWARD, connectionState, appendPrefixClass, appendPostfixClass);
     }
 
     /**
@@ -188,8 +197,8 @@ public class ElementsNameBuilder {
      * @return
      * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean, String)
      */
-    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
-        return ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, false);
+    public String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
+        return getBackwardMetaAssociationName(edgeClass, false, false);
     }
 
     /**
@@ -199,8 +208,8 @@ public class ElementsNameBuilder {
      * @return
      * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
-    public static String getFullBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
-        return ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass, true, true);
+    public String getFullBackwardMetaAssociationName(final Class<? extends Edge> edgeClass) {
+        return getBackwardMetaAssociationName(edgeClass, true, true);
     }
 
     /**
@@ -210,8 +219,8 @@ public class ElementsNameBuilder {
      * @return
      * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
-    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass, ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
+    public String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        return getBackwardMetaAssociationName(edgeClass, ConnectionState.DOUBLE, appendPrefixClass, appendPostfixClass);
     }
 
     /**
@@ -222,8 +231,8 @@ public class ElementsNameBuilder {
      * @return
      * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
-    public static String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
-        return ElementsNameBuilder.getMetaAssociationName(edgeClass, Direction.BACKWARD, connectionState, appendPrefixClass, appendPostfixClass);
+    public String getBackwardMetaAssociationName(final Class<? extends Edge> edgeClass, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+        return getMetaAssociationName(edgeClass, Direction.BACKWARD, connectionState, appendPrefixClass, appendPostfixClass);
     }
 
     /**
@@ -233,8 +242,8 @@ public class ElementsNameBuilder {
      * @return
      * @see ElementsNameBuilder#getMetaAssociationName(Class, boolean, ModelConstants.ConnectionState, boolean, boolean)
      */
-    public static String getFullMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
-        return ElementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, true, true);
+    public String getFullMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
+        return getMetaAssociationName(edgeClass, direction, connectionState, true, true);
     }
 
     /**
@@ -247,8 +256,8 @@ public class ElementsNameBuilder {
      *            beiden Elementklasse gemeint, die in der Kantenklasse in dieser Reihenfolge definiert sind
      * @return
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction) {
-        return ElementsNameBuilder.getMetaAssociationName(edgeClass, direction, ConnectionState.DOUBLE, false, false);
+    public String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction) {
+        return getMetaAssociationName(edgeClass, direction, ConnectionState.DOUBLE, false, false);
     }
 
     /**
@@ -282,7 +291,7 @@ public class ElementsNameBuilder {
      *            sollen zwischen die beiden Bedeutungen geschrieben wird.
      * @return
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
+    public String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
         //alle Kantenamen müssen mit SimplerKantenklassenName_f oder SimplerKantenklassenName_b angegeben sein oder bei Kanten mit doppelter Bedeutung SimplerKantenklassenName_f_f,
         //SimplerKantenklassenName_f_b, SimplerKantenklassenName_b_f und SimplerKantenklassenName_b_b
         String edgeClassName = edgeClass.getSimpleName();
@@ -303,7 +312,7 @@ public class ElementsNameBuilder {
      * @return
      * @see getMetaAssociationName
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
+    public String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean appendPrefixClass, final boolean appendPostfixClass) {
         boolean forward = direction != Direction.BACKWARD;
         Class<? extends ModelElement> prefixClass = !appendPrefixClass ? null : forward ? getStartClass(edgeClass) : getEndClass(edgeClass);
         Class<? extends ModelElement> postfixClass = !appendPostfixClass ? null : forward ? getEndClass(edgeClass) : getStartClass(edgeClass);
@@ -319,7 +328,7 @@ public class ElementsNameBuilder {
      * @return
      * @see getMetaAssociationName
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final Class<? extends ModelElement> prefixClass, final Class<? extends ModelElement> postfixClass) {
+    public String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final Class<? extends ModelElement> prefixClass, final Class<? extends ModelElement> postfixClass) {
         return getMetaAssociationName(edgeClass, direction, connectionState, prefixClass == null ? null : getDisplayableName(prefixClass), postfixClass == null ? null : getDisplayableName(postfixClass));
     }
 
@@ -331,7 +340,7 @@ public class ElementsNameBuilder {
      * @param postfix
      * @return
      */
-    public static String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final String prefix, final String postfix) {
+    public String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final String prefix, final String postfix) {
         boolean emptyPrefix = Strings.isNullOrEmpty(prefix);
         boolean emptyPostfix = Strings.isNullOrEmpty(postfix);
         if (emptyPrefix && emptyPostfix) {
@@ -350,7 +359,7 @@ public class ElementsNameBuilder {
         return sb.toString();
     }
 
-    public static final String getDirectedName(final String baseResKey, final Direction direction) {
+    public final String getDirectedName(final String baseResKey, final Direction direction) {
         return getDirectedName(baseResKey, direction, null);
     }
 
@@ -363,7 +372,7 @@ public class ElementsNameBuilder {
      * @param connectionState
      * @return
      */
-    public static final String getDirectedName(final String baseResKey, final Direction direction, final ConnectionState connectionState) {
+    public final String getDirectedName(final String baseResKey, final Direction direction, final ConnectionState connectionState) {
         String directionPostfix = direction == BACKWARD ? "_b" : "_f"; //direction == null oder FORWARD werden als forward interpretiert
         String directedName = getDirectedName(baseResKey, directionPostfix);//bei einfachen Kanten kommt hier nicht null zurück
         if (directedName != null) {
@@ -381,7 +390,7 @@ public class ElementsNameBuilder {
         if (connectionState == ConnectionState.DOUBLE || connectionState == null) {
             directedName = getDirectedName(baseResKey, directionPostfix, "_f"); //hier braucht man immer beide Namen -> hole den Vorwärtsnamen
             if (directedName != null) {
-                String doubleMeaningEdgeDelimiter = connectionState == null ? getResString("oder") : getResString("und");
+                String doubleMeaningEdgeDelimiter = connectionState == null ? metaModelContext.getResString("oder") : metaModelContext.getResString("und");
                 //wenn es einen Vorwärtsnamen gibt, dann muss auch ein Rückwärtsname angegeben sein!
                 return directedName + " " + doubleMeaningEdgeDelimiter + " " + getDirectedName(baseResKey, directionPostfix, "_b");
             }
@@ -396,7 +405,7 @@ public class ElementsNameBuilder {
      * @param direction
      * @return
      */
-    private static final String getDirectedName(final String baseResKey, final String direction) {
+    private final String getDirectedName(final String baseResKey, final String direction) {
         return getDirectedName(baseResKey, direction, null);
     }
 
@@ -409,12 +418,12 @@ public class ElementsNameBuilder {
      * @param connectionState
      * @return
      */
-    private static final String getDirectedName(final String baseResKey, final String direction, final String connectionState) {
+    private final String getDirectedName(final String baseResKey, final String direction, final String connectionState) {
         try {
             if (Strings.isNullOrEmpty(connectionState)) {
-                return getResString(baseResKey + direction);
+                return metaModelContext.getResString(baseResKey + direction);
             }
-            return getResString(baseResKey + direction + connectionState);
+            return metaModelContext.getResString(baseResKey + direction + connectionState);
         } catch (Exception e) {
             return null;
         }
@@ -426,10 +435,10 @@ public class ElementsNameBuilder {
      * @param classes
      * @return
      */
-    public static String getDisplayableClassesNames(final Collection<Class<? extends ModelElement>> classes) {
+    public String getDisplayableClassesNames(final Collection<Class<? extends ModelElement>> classes) {
         List<String> names = new ArrayList<>();
         for (Class<? extends ModelElement> c : classes) {
-            String name = ElementsNameBuilder.getDisplayableName(c);
+            String name = getDisplayableName(c);
             Alphabetical.insert(names, name);
         }
         String s = names.toString(); //ArrayList erzeugt einen String mit eckigen Klammern wie [name1, name2]
@@ -439,123 +448,177 @@ public class ElementsNameBuilder {
 
     //################################################################################################################################################
 
+    //    /**
+    //     * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren nicht, dass man von ihnen auf die Klasse zurückschließen kann.
+    //     * Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei etwas
+    //     * lesbarer zu gestalten.
+    //     *
+    //     * @param elementClass Elementklasse für die das Kürzel zurück gegeben werden soll.
+    //     * @return String mit Namenskuerzel
+    //     */
+    //    public static final String getShortName(final Class<? extends ModelElement> elementClass) {
+    //
+    //        //HashMap mit den ShortNames der Klassen initialisieren (einmal statisch)
+    //        if (elementClassToHashShortName == null) {
+    //            elementClassToHashShortName = new HashMap<>();
+    //            //Set in das alle bisher gefundenen ShortNames eingetragen werden, um zu prüfen, ob ein shortName bereits existiert
+    //            HashSet<String> allShortNames = new HashSet<>();
+    //            loop1: for (Class<? extends ModelElement> nodeClass : ModelConstants.ALL_NODES_SET) {
+    //                String s = nodeClass.getSimpleName();
+    //                //wenn der Klassenname aus weniger als 4 Zeichen besteht
+    //                if (s.length() <= 3) {
+    //                    elementClassToHashShortName.put(nodeClass, s.toUpperCase());
+    //                    continue;
+    //                }
+    //                //mehr als 3 Zeichen
+    //                StringBuilder shortName = new StringBuilder(3);
+    //                for (int j = 0; j < s.length(); j++) {
+    //                    //suche Großbuchstaben -> sie werden bevorzugt in den Shortname aufgenommen
+    //                    String character = s.substring(j, j + 1);
+    //                    if (character.toUpperCase().equals(character)) {
+    //                        shortName.append(character);
+    //                        //wenn 3 Großbuchstaben gefunden wurden
+    //                        if (shortName.length() == 3) {
+    //                            String sn = shortName.toString();
+    //                            //wenn es den ShortName noch nicht gibt
+    //                            if (!allShortNames.contains(sn)) {
+    //                                allShortNames.add(sn);
+    //                                elementClassToHashShortName.put(nodeClass, sn);
+    //                                continue loop1;
+    //                            }
+    //                            //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter nach Großbuchstanben suchen
+    //                            shortName.deleteCharAt(2);
+    //                        }
+    //                    }
+    //                }
+    //                //hier kommt er nur hin, wenn keine 3 Großbuchstaben gefunden wurden
+    //                //short name hat 0 bis 2 Zeichen
+    //
+    //                //wenn genau 2 Großbuchstaben gefunden wurden
+    //                if (shortName.length() == 2) {
+    //                    int lastUpperCharInClassName = 0;
+    //                    for (int j = 0; j < shortName.length(); j++) {
+    //                        char shortNameChar = shortName.charAt(j);
+    //                        for (; lastUpperCharInClassName < s.length(); lastUpperCharInClassName++) {
+    //                            if (s.charAt(lastUpperCharInClassName) == shortNameChar) {
+    //                                break;
+    //                            }
+    //                        }
+    //                    }
+    //                    //lastUpperCharInClassName hat jetzt den Index des letzten Großbuchstaben in shortName
+    //
+    //                    //solange hinter dem letzten Großbuchstaben noch Zeichen kommen, einfach solange diese Zeichen anhängen,
+    //                    //bis ein eindeutiger 3-Zeichen-shortName gefunden wurde
+    //                    while (++lastUpperCharInClassName < s.length()) {
+    //                        shortName.append(s.charAt(lastUpperCharInClassName));
+    //                        String sn = shortName.toString().toUpperCase();
+    //                        //wenn es den ShortName noch nicht gibt
+    //                        if (!allShortNames.contains(sn)) {
+    //                            allShortNames.add(sn);
+    //                            elementClassToHashShortName.put(nodeClass, sn);
+    //                            continue loop1;
+    //                        }
+    //                        //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
+    //                        shortName.deleteCharAt(2);
+    //                    }
+    //                }
+    //
+    //                //es wurden keine 3 eindutigen Buchstaben nach Großbuchstaben gefunden -> Nimm einfach die ersten beiden
+    //                //Buchstaben und suche einen Folgebuchstaben bis 3 eindeutige Zeichen gefunden werden (das geht immer gut,
+    //                //wenn die Klassennamen eindeutig sind (was immer der Fall ist, wenn sie im selben package liegen) und hier
+    //                ///unten fest steht, dass der Name mind. 4 Zeichen lang ist)
+    //                shortName.setLength(0);
+    //                shortName.append(s.charAt(0));
+    //                shortName.append(s.charAt(1));
+    //                for (int j = 2; j < s.length(); j++) {
+    //                    shortName.append(s.charAt(j));
+    //                    String sn = shortName.toString().toUpperCase();
+    //                    // wenn es den ShortName noch nicht gibt
+    //                    if (!allShortNames.contains(sn)) {
+    //                        allShortNames.add(sn);
+    //                        elementClassToHashShortName.put(nodeClass, sn);
+    //                        continue loop1;
+    //                    }
+    //                    //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
+    //                    shortName.deleteCharAt(2);
+    //                }
+    //
+    //                //wenn auch das nicht gekalppt hat (der Fall dürfte nicht eintreten, wenn die Klassen alle im gleichen Package liegen,
+    //                //da sie dann alle etwas eindeutiges bei s = class.getShortName() geliefert haben)
+    //                //-> nimm einfach die ersten 3 Zeichen ohne noch einmal irgendwelche Eindeutigkeit zu prüfen;
+    //                String sn = s.substring(0, 3).toUpperCase();
+    //                allShortNames.add(sn); //kann man sich wahrscheinlich sparen, weil auch diese Kombination schon oben durchprobiert wurde, aber sicher ist sicher
+    //                elementClassToHashShortName.put(nodeClass, sn);
+    //            }
+    //        }
+    //
+    //        //Node
+    //        if (Node.class.isAssignableFrom(elementClass)) {
+    //            Object o = elementClassToHashShortName.get(elementClass);
+    //            //ist null bei Layerknoten. Die brauchen aber auch keinen lesbaren Hash
+    //            if (o == null) {
+    //                return ModelConstants.NO_MODEL_ELEMENT_SHORT_NAME;
+    //            }
+    //            return elementClassToHashShortName.get(elementClass).toString();
+    //            //Kanten
+    //        } else if (Edge.class.isAssignableFrom(elementClass)) {
+    //            return ModelConstants.EDGE_SHORT_NAME;
+    //        }
+    //        return ModelConstants.NO_MODEL_ELEMENT_SHORT_NAME;
+    //    }
+
     /**
      * Gibt Namenskuerzel einer Elementklasse zurueck. Diese Namenskürzel garantieren nicht, dass man von ihnen auf die Klasse zurückschließen kann.
-     * Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei etwas
-     * lesbarer zu gestalten.
+     * Sie dienen lediglich dazu, die Hash-Strings der Modellelemente im Baukasten und der XML-Datei etwas lesbarer zu gestalten. 2 verschiedene
+     * Klassen können den selben Shortname haben. So wird in beiden Fällen aus AufObjVerbindung und AufOrgVerbindung der Short-Name AOV.
      *
      * @param elementClass Elementklasse für die das Kürzel zurück gegeben werden soll.
      * @return String mit Namenskuerzel
      */
     public static final String getShortName(final Class<? extends ModelElement> elementClass) {
-
-        //HashMap mit den ShortNames der Klassen initialisieren (einmal statisch)
-        if (ElementsNameBuilder.elementClassToHashShortName == null) {
-            ElementsNameBuilder.elementClassToHashShortName = new HashMap<>();
-            //Set in das alle bisher gefundenen ShortNames eingetragen werden, um zu prüfen, ob ein shortName bereits existiert
-            HashSet<String> allShortNames = new HashSet<>();
-            loop1: for (int i = 0; i < ModelConstants.ALL_NODES.length; i++) {
-                String s = ModelConstants.ALL_NODES[i].getSimpleName();
-                //wenn der Klassenname aus weniger als 4 Zeichen besteht
-                if (s.length() <= 3) {
-                    ElementsNameBuilder.elementClassToHashShortName.put(ModelConstants.ALL_NODES[i], s.toUpperCase());
-                    continue;
-                }
-                //mehr als 3 Zeichen
-                StringBuilder shortName = new StringBuilder(3);
-                for (int j = 0; j < s.length(); j++) {
-                    //suche Großbuchstaben -> sie werden bevorzugt in den Shortname aufgenommen
-                    String character = s.substring(j, j + 1);
-                    if (character.toUpperCase().equals(character)) {
-                        shortName.append(character);
-                        //wenn 3 Großbuchstaben gefunden wurden
-                        if (shortName.length() == 3) {
-                            String sn = shortName.toString();
-                            //wenn es den ShortName noch nicht gibt
-                            if (!allShortNames.contains(sn)) {
-                                allShortNames.add(sn);
-                                ElementsNameBuilder.elementClassToHashShortName.put(ModelConstants.ALL_NODES[i], sn);
-                                continue loop1;
-                            }
-                            //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter nach Großbuchstanben suchen
-                            shortName.deleteCharAt(2);
-                        }
-                    }
-                }
-                //hier kommt er nur hin, wenn keine 3 Großbuchstaben gefunden wurden
-                //short name hat 0 bis 2 Zeichen
-
-                //wenn genau 2 Großbuchstaben gefunden wurden
-                if (shortName.length() == 2) {
-                    int lastUpperCharInClassName = 0;
-                    for (int j = 0; j < shortName.length(); j++) {
-                        char shortNameChar = shortName.charAt(j);
-                        for (; lastUpperCharInClassName < s.length(); lastUpperCharInClassName++) {
-                            if (s.charAt(lastUpperCharInClassName) == shortNameChar) {
-                                break;
-                            }
-                        }
-                    }
-                    //lastUpperCharInClassName hat jetzt den Index des letzten Großbuchstaben in shortName
-
-                    //solange hinter dem letzten Großbuchstaben noch Zeichen kommen, einfach solange diese Zeichen anhängen,
-                    //bis ein eindeutiger 3-Zeichen-shortName gefunden wurde
-                    while (++lastUpperCharInClassName < s.length()) {
-                        shortName.append(s.charAt(lastUpperCharInClassName));
-                        String sn = shortName.toString().toUpperCase();
-                        //wenn es den ShortName noch nicht gibt
-                        if (!allShortNames.contains(sn)) {
-                            allShortNames.add(sn);
-                            ElementsNameBuilder.elementClassToHashShortName.put(ModelConstants.ALL_NODES[i], sn);
-                            continue loop1;
-                        }
-                        //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
-                        shortName.deleteCharAt(2);
-                    }
-                }
-
-                //es wurden keine 3 eindutigen Buchstaben nach Großbuchstaben gefunden -> Nimm einfach die ersten beiden
-                //Buchstaben und suche einen Folgebuchstaben bis 3 eindeutige Zeichen gefunden werden (das geht immer gut,
-                //wenn die Klassennamen eindeutig sind (was immer der Fall ist, wenn sie im selben package liegen) und hier
-                ///unten fest steht, dass der Name mind. 4 Zeichen lang ist)
-                shortName.setLength(0);
-                shortName.append(s.charAt(0));
-                shortName.append(s.charAt(1));
-                for (int j = 2; j < s.length(); j++) {
-                    shortName.append(s.charAt(j));
-                    String sn = shortName.toString().toUpperCase();
-                    // wenn es den ShortName noch nicht gibt
-                    if (!allShortNames.contains(sn)) {
-                        allShortNames.add(sn);
-                        ElementsNameBuilder.elementClassToHashShortName.put(ModelConstants.ALL_NODES[i], sn);
-                        continue loop1;
-                    }
-                    //es gibt den ShortName bereits -> letztes Zeichen löschen und weiter suchen
-                    shortName.deleteCharAt(2);
-                }
-
-                //wenn auch das nicht gekalppt hat (der Fall dürfte nicht eintreten, wenn die Klassen alle im gleichen Package liegen,
-                //da sie dann alle etwas eindeutiges bei s = class.getShortName() geliefert haben)
-                //-> nimm einfach die ersten 3 Zeichen ohne noch einmal irgendwelche Eindeutigkeit zu prüfen;
-                String sn = s.substring(0, 3).toUpperCase();
-                allShortNames.add(sn); //kann man sich wahrscheinlich sparen, weil auch diese Kombination schon oben durchprobiert wurde, aber sicher ist sicher
-                ElementsNameBuilder.elementClassToHashShortName.put(ModelConstants.ALL_NODES[i], sn);
-            }
-        }
-
-        //Node
-        if (Node.class.isAssignableFrom(elementClass)) {
-            Object o = ElementsNameBuilder.elementClassToHashShortName.get(elementClass);
-            //ist null bei Layerknoten. Die brauchen aber auch keinen lesbaren Hash
-            if (o == null) {
-                return ModelConstants.NO_MODEL_ELEMENT_SHORT_NAME;
-            }
-            return ElementsNameBuilder.elementClassToHashShortName.get(elementClass).toString();
-            //Kanten
-        } else if (Edge.class.isAssignableFrom(elementClass)) {
+        if (Edge.class.isAssignableFrom(elementClass)) {
             return ModelConstants.EDGE_SHORT_NAME;
         }
-        return ModelConstants.NO_MODEL_ELEMENT_SHORT_NAME;
+        //HashMap mit den ShortNames der Klassen initialisieren (einmal statisch)
+        if (elementClassSimpleNameToHashShortName == null) {
+            elementClassSimpleNameToHashShortName = new HashMap<>();
+        }
+        String simpleClassName = elementClass.getSimpleName();
+        String shortName = elementClassSimpleNameToHashShortName.get(simpleClassName);
+        if (shortName == null) {
+            if (simpleClassName.length() <= 3) {
+                shortName = simpleClassName;
+            } else {
+                StringBuilder shortNameBuilder = new StringBuilder(simpleClassName.charAt(0));
+                for (int j = 1; j < simpleClassName.length(); j++) {
+                    //suche Großbuchstaben -> sie werden bevorzugt in den Shortname aufgenommen
+                    String character = simpleClassName.substring(j, j + 1);
+                    if (character.toUpperCase().equals(character)) {
+                        shortNameBuilder.append(character);
+                        //wenn 3 Großbuchstaben gefunden wurden
+                        if (shortNameBuilder.length() == 3) {
+                            break;
+                        }
+                    }
+                }
+                //kein oder nur ein einziger Großbuchstabe am Anfang
+                if (shortNameBuilder.length() == 1) {
+                    shortName = simpleClassName.substring(0, 3);
+                } else if (shortNameBuilder.length() == 2) { // 2 Großbuchstaben gefunden
+                    int lastUpperChar = simpleClassName.lastIndexOf(shortNameBuilder.charAt(1));
+                    if (lastUpperChar == simpleClassName.length() - 1) { // der 2. Großbuchstabe steht ganz am Ende?
+                        char secondCharInName = simpleClassName.charAt(1);
+                        shortNameBuilder.insert(1, secondCharInName); //füge den 2. Buchstaben des Gesamtwortes noch in der Mitte ein
+                    } else {
+                        char charAfterlastUpperChar = simpleClassName.charAt(lastUpperChar + 1);
+                        shortNameBuilder.append(charAfterlastUpperChar); //hänge den Buchstaben direkt nach dem 2. Großbuchstaben ans Ende an
+                    }
+                }
+                shortName = shortNameBuilder.toString();
+            }
+            elementClassSimpleNameToHashShortName.put(simpleClassName, shortName.toUpperCase());
+        }
+        return shortName;
     }
 
 }

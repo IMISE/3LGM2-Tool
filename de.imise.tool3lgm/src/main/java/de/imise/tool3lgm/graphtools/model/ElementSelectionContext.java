@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -23,11 +24,10 @@ public class ElementSelectionContext {
     protected ModelSelection selectedContainer;
 
     /**
-     *
+     * @param metaModel
      */
-    public ElementSelectionContext() {
-        super();
-        selectedContainer = new ModelSelection();
+    public ElementSelectionContext(final MetaModelInstance metaModel) {
+        selectedContainer = new ModelSelection(metaModel);
     }
 
     /**

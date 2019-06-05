@@ -4,7 +4,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static javax.swing.BorderFactory.createTitledBorder;
@@ -26,6 +25,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -122,7 +122,10 @@ public class ReferencePanel extends JPanel implements ActionListener {
         add(new JLabel(getResString("headline_reference_panel")), gbc);
         gbc.gridy++;
 
-        add(new JLabel(getResString("Edge") + ": " + ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass)), gbc);
+        UserFieldDefinitions definitions = userField.getDefinitions();
+        MetaModelInstance metaModel = definitions.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        add(new JLabel(getResString("Edge") + ": " + elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass)), gbc);
         ButtonGroup bg = new ButtonGroup();
         directionPanel = new JPanel(new BorderLayout());
         directionPanel.setBorder(BorderFactory.createTitledBorder(getResString("direction_information")));
@@ -136,7 +139,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1;
 
-        if (HasPartEdge.class.isAssignableFrom(edgeClass) || getEdgeTypes(edgeClass).length != 0) {
+        if (HasPartEdge.class.isAssignableFrom(edgeClass) || metaModel.getEdgeTypes(edgeClass).length != 0) {
             add(directionPanel, gbc);
         } else {
             directionPanel.setVisible(false);
@@ -234,8 +237,11 @@ public class ReferencePanel extends JPanel implements ActionListener {
      * @param classesList
      */
     private void setClassesInLists(final AlphabeticalJList classesList) {
+        UserFieldDefinitions definitions = userField.getDefinitions();
+        MetaModelInstance metaModel = definitions.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (int i = 0; i < classes.length; i++) {
-            classesList.addItem(classes[i], ElementsNameBuilder.getDisplayableName(classes[i]));
+            classesList.addItem(classes[i], elementsNameBuilder.getDisplayableName(classes[i]));
         }
     }
 

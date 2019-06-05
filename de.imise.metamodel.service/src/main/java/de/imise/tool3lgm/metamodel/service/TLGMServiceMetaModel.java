@@ -1,11 +1,7 @@
 package de.imise.tool3lgm.metamodel.service;
 
-import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.createSimpleMetaPath;
-
-import java.util.Collection;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
@@ -13,11 +9,8 @@ import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_HasPartEdge;
@@ -95,6 +88,11 @@ import de.imise.tool3lgm.metamodel.service.node.Use;
 })
 public class TLGMServiceMetaModel extends MetaModel {
 
+    /**
+     * ID des Metamodells für die Serialisierung.
+     */
+    private static final long serialVersionUID = 2388259974838049670L;
+
     @Override
     protected final void putOldToNewClassNames() {
         putOldToNewClassName("Aufgabe", "Function");
@@ -133,9 +131,8 @@ public class TLGMServiceMetaModel extends MetaModel {
     /////////////////////
 
     @Override
-    public MetaPathDefinition createPathsDefinition() {
-        //im Moment hat dieses Metamodell keine eigene Pfaddefinition. Man könnte diese Funktion auch weglassen.
-        return super.createPathsDefinition();
+    public final Class<? extends MetaPathDefinition> getMetaPathsDefinitionClass() {
+        return TLGMServiceMetaPathsDefinition.class;
     }
 
     /////////////////////////
@@ -143,8 +140,8 @@ public class TLGMServiceMetaModel extends MetaModel {
     /////////////////////////
 
     @Override
-    public final GraphViewDefinition createGraphViewDefinition() {
-        return new TLGMServiceGraphViewDefinion();
+    public final Class<? extends GraphViewDefinition> getGraphViewDefinitionClass() {
+        return TLGMServiceGraphViewDefinion.class;
     }
 
     //////////////////////
@@ -161,8 +158,9 @@ public class TLGMServiceMetaModel extends MetaModel {
     ////////////////////////
 
     @Override
-    protected Class<? extends AnalysesDefinition> getAnalysisDefinitionClass() {
-        return null;
+    public final Class<? extends AnalysesDefinition> getAnalysesDefinitionClass() {
+        //im Moment hat dieses Metamodell keine eigene AnalysesDefinition. Man könnte diese Funktion auch weglassen.
+        return super.getAnalysesDefinitionClass();
     }
 
     /////////////////////////////
@@ -171,7 +169,8 @@ public class TLGMServiceMetaModel extends MetaModel {
 
     @Override
     protected Class<? extends ExtrasActionsDefinition> getExtrasActionsDefinitionClass() {
-        return null;
+        //im Moment hat dieses Metamodell keine eigene Pfaddefinition. Man könnte diese Funktion auch weglassen.
+        return super.getExtrasActionsDefinitionClass();
     }
 
     ////////////
@@ -334,31 +333,31 @@ public class TLGMServiceMetaModel extends MetaModel {
     // spezielle Knoteneigenschaften //
     ///////////////////////////////////
 
-    private final Class[] IMPORTABLE_NODES = {
-            //            Aufgabe.class,
-            //            Bausteintyp.class,
-            //            DBVerwaltungssystem.class,
-            //            Dokumententyp.class,
-            //            Ereignistyp.class,
-            //            KommBeziehung.class,
-            //            Kommunikationsstandard.class,
-            //            Nachrichtentyp.class,
-            //            Netzprotokoll.class,
-            //            Netztyp.class,
-            //            Objekttyp.class,
-            //            Organisationseinheit.class,
-            //            Organisationsplan.class,
-            //            KonAnwendungsbaustein.class,
-            //            PhysischerDVBaustein.class,
-            //            RechAnwendungsbaustein.class,
-            //            Softwareprodukt.class,
-            //            Standort.class,
-            //            Subnetz.class,
-    };
+    private final Set<Class<? extends ModelElement>> IMPORTABLE_NODES = ImmutableSet.of(
+    //            Aufgabe.class,
+    //            Bausteintyp.class,
+    //            DBVerwaltungssystem.class,
+    //            Dokumententyp.class,
+    //            Ereignistyp.class,
+    //            KommBeziehung.class,
+    //            Kommunikationsstandard.class,
+    //            Nachrichtentyp.class,
+    //            Netzprotokoll.class,
+    //            Netztyp.class,
+    //            Objekttyp.class,
+    //            Organisationseinheit.class,
+    //            Organisationsplan.class,
+    //            KonAnwendungsbaustein.class,
+    //            PhysischerDVBaustein.class,
+    //            RechAnwendungsbaustein.class,
+    //            Softwareprodukt.class,
+    //            Standort.class,
+    //            Subnetz.class,
+    );
 
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     @Override
-    public final Class<? extends ModelElement>[] getImportableNodes() {
+    public final Set<Class<? extends ModelElement>> getImportableNodes() {
         return IMPORTABLE_NODES;
     }
 
@@ -368,60 +367,11 @@ public class TLGMServiceMetaModel extends MetaModel {
         addRemovedEdgeClasses(IheActorInstance.class, ApplicationComponent_HasPartEdge.class, ApplicationSystem_IheActorInstance_Edge.class);
     }
 
-    ///////////////////////////////////////////////////////////////////////
-    // Bedingungspfade für Kanten (siehe Beschreibung getConditionPath() //
-    ///////////////////////////////////////////////////////////////////////
-
-    //IheInvokingInterface_InvokingInterface_Edge
-    public static final SimpleMetaPath CONDITION_METAPATH_1 = createSimpleMetaPath(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class), IheActor_IheInterface_Edge.class,
-            IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
-    //IheProvidingInterface_ProvidingInterface_Edge
-    public static final SimpleMetaPath CONDITION_METAPATH_2 = createSimpleMetaPath(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class), Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class),
-            IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class);
-
-    @Override
-    public final SimpleMetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
-        //Sind nur 2 -> muss keine Map sein
-        if (IheInvokingInterface_InvokingInterface_Edge.class.isAssignableFrom(edgeClass)) {
-            return CONDITION_METAPATH_1;
-        } else if (IheProvidingInterface_ProvidingInterface_Edge.class.isAssignableFrom(edgeClass)) {
-            return CONDITION_METAPATH_2;
-        }
-        return null;
-    }
-
-    /////////////////////////////////////////////////////////////////////////////////////////////
-    // Ebenfalls mitzuinstanziierende Pfade bei der Instanziierung über eine InstanciationEdge //
-    /////////////////////////////////////////////////////////////////////////////////////////////
-
-    //IheActor_IheActorInstance_Edge
-    public static final Iterable<SimpleMetaPath> IHEACTOR_IHEACTORINSTANCE_EDGE_INSTANCIATION_METAPATHS = ImmutableList.of(
-            createSimpleMetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_InvokingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class),
-            createSimpleMetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
-
-    @Override
-    public Iterable<SimpleMetaPath> getInstanciableMetaPaths(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
-        if (instanciationEdgeClass == IheActor_IheActorInstance_Edge.class) {
-            return IHEACTOR_IHEACTORINSTANCE_EDGE_INSTANCIATION_METAPATHS;
-        }
-        return super.getInstanciableMetaPaths(instanciationEdgeClass);
-    }
-
-    ///////////////////////////////////////////////////////////////////
-    // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
-    ///////////////////////////////////////////////////////////////////
-
     private final Set<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = ImmutableSet.<Class<? extends ModelElement>> of(Use.class);
 
     @Override
     public Set<Class<? extends ModelElement>> getGenerateNameClasses() {
         return GENERATE_NAME_CLASSES;
-    }
-
-    @Override
-    protected Collection<SimpleMetaPath> getCreatablePaths() {
-        SimpleMetaPath path1 = createSimpleMetaPath(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-        return ImmutableList.of(path1);
     }
 
 }

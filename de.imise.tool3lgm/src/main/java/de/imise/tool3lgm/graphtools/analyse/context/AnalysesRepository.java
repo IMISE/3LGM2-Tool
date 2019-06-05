@@ -16,8 +16,11 @@ import java.util.zip.DataFormatException;
 
 import org.xml.sax.SAXException;
 
+import de.imise.tool3lgm.MetaModelInstanceContext;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.Tool3lgmMetaModelContext;
+import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
 
@@ -36,8 +39,6 @@ public class AnalysesRepository {
 
     /** Enthält alle Analysen, die im Modell audf Elemente angewendet werden können. */
     private static List<XMLAnalysis> xmlAnalyses;
-
-    private static List<AbstractAnalysis> specialAnalyses;
 
     /**
      * Fügt eine neue XMLAnalyse ins Repository ein, wenn sie noch nicht enthalten ist.
@@ -90,13 +91,15 @@ public class AnalysesRepository {
     /**
      * Gibt alle Analysen zurück, deren Startknoten dem übergebenen Node entspricht.
      *
+     * @param metaModel
      * @param elementClass
      * @return List, in der jeder Eintrag eine XMLAnalyse ist. Ist keine vorhanden, kommt eine leere Liste zurück, aber niemals <code>null</code>.
      */
-    public static List<AbstractAnalysis> getAnalyses(final Class<? extends ModelElement> elementClass) {
+    public static List<AbstractAnalysis> getAnalyses(final MetaModelInstance metaModel, final Class<? extends ModelElement> elementClass) {
         List<AbstractAnalysis> analyses = new ArrayList<>();
         List<AbstractAnalysis> allAnalyses = new ArrayList<>(getXMLAnalyses());
-        allAnalyses.addAll(ModelConstants.getAnalysesDefinition().getNodeAnalyses());
+        AnalysesDefinition analysesDefinition = metaModel.getAnalysesDefinition();
+        allAnalyses.addAll(metaModel.getAnalysesDefinition().getNodeAnalyses());
         for (AbstractAnalysis ana : allAnalyses) {
             List<Class<? extends ModelElement>> startClasses = ana.getStartClasses();
             for (Class<? extends ModelElement> startClass : startClasses) {
@@ -238,14 +241,22 @@ public class AnalysesRepository {
                     throw new DataFormatException();
                 }
                 line = dataStream.readLine();
-                String ananame = line.substring(12);
+                //Model-Type ist die Metamodel-ID, die erst nach Version 3.4.0.4 eingeführt wurde und in den Modelldateien sowie den Analysen gespeichert wird
+                String metaModelIDLinePrefix = "Model-Type: ";
+                MetaModelInstanceContext metaModelContext = Tool3lgmMetaModelContext.getDefaultMetaModelContext();
+                if (line.startsWith(metaModelIDLinePrefix)) {
+                    String metaModelId = line.substring(metaModelIDLinePrefix.length()).trim();
+                    metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForID(metaModelId);
+                    line = dataStream.readLine();
+                }
+                String ananame = line.substring("Content-ID: ".length());
                 StringBuilder strbuf = new StringBuilder();
                 for (line = dataStream.readLine(); !line.equals("--multipart_3lgm_query_separator"); line = dataStream.readLine()) {
                     strbuf.append(line + "\n");
                 }
                 XMLAnalysis toadd = null;
                 try {
-                    toadd = XMLAnalysis.createAnalysis(ananame, strbuf.toString());
+                    toadd = XMLAnalysis.createAnalysis(metaModelContext, ananame, strbuf.toString());
                 } catch (SAXException ex) {
                     Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
                 }
@@ -283,7 +294,9 @@ public class AnalysesRepository {
                     line = sp.getXMLText();
                 }
                 if (line != null) {
-                    raf.writeBytes("--multipart_3lgm_query_separator\nContent-Type: text/xml\nContent-ID: " + sp.getName() + "\n");
+                    raf.writeBytes("--multipart_3lgm_query_separator\nContent-Type: text/xml\n");
+                    raf.writeBytes("Model-Type: " + sp.metaModelContext.getMetaModelID() + "\n");
+                    raf.writeBytes("Content-ID: " + sp.getName() + "\n");
                     raf.writeBytes(line);
                     if (!line.endsWith("\n")) {
                         raf.writeBytes("\n");

@@ -8,7 +8,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -131,9 +131,11 @@ public class SequenceMetaPath extends ListMetaPath {
         //zuerst versuche, den Resouceneintrag mit dem übergebenen Schlüssel zu finden, aber ohne "_f" oder "_b" am Ende -> setze den und gehe davon aus, dass es keine Rückrichtung gibt (wenn es ihn gibt)
         String name = super.createName();
         if (Strings.isNullOrEmpty(name)) {//das passiert nur, wenn der baseResKeyOrName null oder leer ist
-            name = ElementsNameBuilder.getDirectedName(Edge.class.getSimpleName(), direction); //das sorgt dafür , dass der "ist verbunden mit"-Eintrag gefunden wird und der String nicht null ist
+            ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+            name = elementsNameBuilder.getDirectedName(Edge.class.getSimpleName(), direction); //das sorgt dafür , dass der "ist verbunden mit"-Eintrag gefunden wird und der String nicht null ist
         } else if (name.equals(baseResKeyOrName)) { //wenn der Key nicht leer war und nicht schon ein Resourceneintrag ohne "_f" oder "_b" gefunden wurde
-            name = ElementsNameBuilder.getDirectedName(name, direction);//versuche einen mit "_f" oder "_b" zu finden (je nach Richtung)
+            ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+            name = elementsNameBuilder.getDirectedName(name, direction);//versuche einen mit "_f" oder "_b" zu finden (je nach Richtung)
             if (Strings.isNullOrEmpty(name)) { //wenn keiner gefunden wurde
                 name = baseResKeyOrName; // setzte den übergbenen nicht leeren Resourcen-String als Namen
             }
@@ -212,7 +214,7 @@ public class SequenceMetaPath extends ListMetaPath {
                 return false;
             }
             Class<? extends ModelElement> connectingClass = getPathStepElementClass(i + 1);
-            if (ModelConstants.isAbstract(connectingClass)) {
+            if (MetaModelInstance.isAbstract(connectingClass)) {
                 return false;
             }
         }

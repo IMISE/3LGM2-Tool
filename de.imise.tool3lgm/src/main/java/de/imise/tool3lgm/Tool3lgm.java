@@ -33,6 +33,8 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
@@ -64,6 +66,8 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
+import de.imise.tool3lgm.xml.ToolXMLParser;
+import de.imise.tool3lgm.xml.ToolXMLParser.FileVersion;
 import de.imise.util.BrowseUtils;
 import de.imise.util.robot.ScreenRobot;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
@@ -156,10 +160,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         } catch (InterruptedException e) {
         }
         setIconImage(Tool3lgmConstants.getIcon("toolIcon.gif").getImage());
+        setTitle(null);
 
         //den Hauptframe in die Mitte setzen
         //setLocationRelativeTo(null);
-        setTitle(getResString("tool3lgm") + " " + getResString("tool3lgm_title_extension") + " " + getResString(Tool3lgmMetaModelContext.getMetaModelClass().getSimpleName()));
         //den Hauptframe initialisieren, damit die JOption-Panes der Lizenzanfrage an der richtigen Stelle sind.
         //        setVisible(true);
         //        LicenseHandler.checkLicenses();
@@ -217,6 +221,15 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     }
 
+    @Override
+    public void setTitle(final String metaModelName) {
+        String title = getResString("tool3lgm");
+        if (!Strings.isNullOrEmpty(metaModelName)) {
+            title += " " + getResString("tool3lgm_title_extension") + " " + metaModelName;
+        }
+        super.setTitle(title);
+    }
+
     /**
      * @return instance of ContextGenerator
      */
@@ -265,50 +278,67 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /**
      * lädt ein 3LGM²-Dokument (legt die Teilmodell-Fenster an, aktualisiert das Fenster Menu und ModelBrowser)
      */
-    public boolean openFile(final boolean open) {
-        return openFile(open, null);
+    public boolean createNewModel() {
+        MetaModelInstanceContext choosedMetaModelContext = Tool3lgmMetaModelContext.chooseMetaModel();
+        if (choosedMetaModelContext == null) {
+            return false;
+        }
+        return openModel(null, choosedMetaModelContext);
+    }
+
+    /**
+     * Lädt eine Modell-Datei
+     *
+     * @param file die zu ladende Datei
+     * @return
+     */
+    public boolean openModelFile(File file) {
+        file = chooseModelFile(file);
+        if (file != null) {
+            try {
+                FileVersion fileVersion = ToolXMLParser.extractVersionAndMetaModel(file);
+                return openModel(file, fileVersion.metaModelInstanceContext);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    private File chooseModelFile(File file) {
+        if (file != null) {
+            return file;
+        }
+        ExtendedFileChooser chooser = new ExtendedFileChooser(null, UserProperties.getWorkingDirectory());
+        chooser.setMultiSelectionEnabled(false);
+        FileNameExtensionFilter[] lgmFileFilter = Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED);
+        int chooserAnswer = chooser.showOpenDialog(this, false, lgmFileFilter);
+        UserProperties.setWorkingDirectory(chooser.getCurrentDirectory());
+        if (chooserAnswer == ExtendedFileChooser.APPROVE_OPTION) {
+            file = chooser.getSelectedFile();
+            chooser.setVisible(false);
+        }
+        return file;
     }
 
     /**
      * Legt ein neues Modell an oder lädt ein bestehendes aus einer Datei.
      *
-     * @param open
-     *            wenn <code>true</code>, wird ein FileChooser geöffnet, über
-     *            den der Benutzer zu ladende Modelldatei auswählen kann. Diese
-     *            Option ist aber nue relevant, wenn <code>file</code> <code>null</code> ist.
      * @param file
-     *            zu ladende Datei. Wenn <code>null</code> übergeben wird,
-     *            wird eine neue Datei angelegt
-     * @return die geöffnete Datei
+     *            zu ladende Datei. Wenn <code>null</code> übergeben wird, wird eine neue Datei angelegt.
+     * @param metaModelContext
+     *            MetaModelContext der zu öffnenden Datei oder des neu anzulegenden Modells
+     * @return <code>true</code>, wenn die Datei geöffnet werden konnte oder ein neues Modell angelegt wurde
      */
-    public boolean openFile(final boolean open, File file) {
-        GDCollection gdcoll = new GDCollection();
+    private boolean openModel(final File file, final MetaModelInstanceContext metaModelContext) {
+        GDCollection gdcoll = new GDCollection(metaModelContext);
         //Standard-Userfield-Definition laden
         UserfieldResourceHandler.loadDefaultUserfieldDefinition(gdcoll);
-        if (open == false && file == null) {
+        if (file == null) {
             gdcoll.createSzenario();
-        } else if (file != null) {
-            if (!loadFile(file, gdcoll)) {
-                Static.closeProgressDialog();
-                return false;
-            }
-        } else if (open == true) {
-            ExtendedFileChooser chooser = new ExtendedFileChooser(null, UserProperties.getWorkingDirectory());
-            chooser.setMultiSelectionEnabled(false);
-            FileNameExtensionFilter[] lgmFileFilter = Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED);
-            int chooserAnswer = chooser.showOpenDialog(this, false, lgmFileFilter);
-            UserProperties.setWorkingDirectory(chooser.getCurrentDirectory());
-            if (chooserAnswer == ExtendedFileChooser.APPROVE_OPTION) {
-                file = chooser.getSelectedFile();
-                Static.showProgressDialog(true);
-                chooser.setVisible(false);
-                if (!loadFile(file, gdcoll)) {
-                    Static.closeProgressDialog();
-                    return false;
-                }
-            } else {
-                return false;
-            }
+        } else if (!loadFile(file, gdcoll)) {
+            Static.closeProgressDialog();
+            return false;
         }
         UserProperties.setWorkingDirectory(file);
 
@@ -819,9 +849,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             return true;
         }
         Object[] buttons = new Object[] {
-                getResString("yes"),
-                getResString("no"),
-                getResString("cancel")
+                getResString("yes"), getResString("no"), getResString("cancel")
         };
         File file = gdcoll.getFile();
         int answer = JOptionPane.showOptionDialog(this, getResString("speicherfrage") + "\n" + (file == null ? gdcoll.getName() : file.getName()), getResString("tool3lgm"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons,
@@ -1271,9 +1299,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (frame != null) {
             if (hyperlink != null) {
                 Object[] buttons = new Object[] {
-                        getResString("hyperlink"),
-                        getResString("submodel"),
-                        getResString("cancel")
+                        getResString("hyperlink"), getResString("submodel"), getResString("cancel")
                 };
                 int value = JOptionPane.showOptionDialog(null, getResString("link_oder_szen_frage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
                 if (value == JOptionPane.YES_OPTION) {
@@ -1331,7 +1357,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
                             continue outerLoop;
                         }
                     }
-                    openFile(false, file);
+                    openModelFile(file);
                     path.setLength(0);
                 } else {
                     path.append(' ');

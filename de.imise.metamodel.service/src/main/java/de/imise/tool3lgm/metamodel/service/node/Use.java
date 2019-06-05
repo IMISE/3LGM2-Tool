@@ -27,7 +27,8 @@ public class Use extends Node {
 
     @Override
     public String toString() {
-        StringBuilder retVal = new StringBuilder(ElementsNameBuilder.getDisplayableName(getClass()));
+        ElementsNameBuilder elementsNameBuilder = getMetaModel().getElementsNameBuilder();
+        StringBuilder retVal = new StringBuilder(elementsNameBuilder.getDisplayableName(getClass()));
         List<? extends ModelElement> connectedElements = getConnectedElements(OrganisationalUnit.class, OrganisationalUnit_Use_Edge.class);
         if (!connectedElements.isEmpty()) {
             retVal.append(": ");

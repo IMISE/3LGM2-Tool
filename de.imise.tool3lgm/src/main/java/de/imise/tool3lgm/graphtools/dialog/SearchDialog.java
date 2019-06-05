@@ -59,7 +59,7 @@ import javax.swing.text.JTextComponent;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -316,7 +316,6 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         inputPane.add(searchButton, constraints);
 
         // Selectboxen befüllen
-        fillElementClassBox();
         fillModelBox();
 
         getContentPane().setLayout(new BorderLayout());
@@ -356,6 +355,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
         if (e.getSource() == modelBox) {
             fillSubModelBox();
+            fillElementClassBox();
         }
 
         // wenn Groß-/KLeinschreibung ignorieren, dann wandle in kleine namen um
@@ -390,8 +390,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         List<ElementContainer> searchSet = doc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true);
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
         if (doc != mainDoc) {
+            MetaModelInstance metaModel = doc.getMetaModel();
             for (ElementContainer ec : mainDoc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true)) {
-                if (ModelConstants.isUnique(ec.getElement().getClass())) {
+                if (metaModel.isUnique(ec.getElement().getClass())) {
                     Alphabetical.insert(searchSet, ec);
                 }
             }
@@ -513,6 +514,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             mod.removeRow(0);
         }
 
+        ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
         int rowCounter = 1;
         Object[] data = new Object[3];
         for (ElementContainer ec : searchSet) {
@@ -520,9 +522,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             data[1] = ec;
             // data[2] = ec.getGraphDocument().getTitle();
             if (ec.getElement() instanceof Edge) {
-                data[2] = ElementsNameBuilder.getDisplayableName(ec.getElement()) + ": " + ElementsNameBuilder.getFullForwardMetaAssociationName(ec.getElement().getClass().asSubclass(Edge.class));
+                data[2] = elementsNameBuilder.getDisplayableName(ec.getElement()) + ": " + elementsNameBuilder.getFullForwardMetaAssociationName(ec.getElement().getClass().asSubclass(Edge.class));
             } else {
-                data[2] = ElementsNameBuilder.getDisplayableName(ec.getElement());
+                data[2] = elementsNameBuilder.getDisplayableName(ec.getElement());
             }
             mod.addRow(data);
             rowCounter++;
@@ -598,10 +600,10 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                         ((GraphDocument) subModelBox.getSelectedObject()).showPropertyDialog(true);
                     }
                 } else {
-                    ContextGenerator cg = Tool3lgm.getContextGenerator();
-                    cg.changeContext((LGMGraphDocument) subModelBox.getSelectedObject());
+                    ContextGenerator ontextGenerator = Tool3lgm.getContextGenerator();
+                    ontextGenerator.changeContext((LGMGraphDocument) subModelBox.getSelectedObject());
 
-                    JPopupMenu jpm = cg.getSearchDialogContextMenu();
+                    JPopupMenu jpm = ontextGenerator.getSearchDialogContextMenu();
                     // refresh
 
                     jpm.show(table, e.getX(), e.getY());
@@ -671,24 +673,29 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * Befüllt die elementClassBox
      */
     private void fillElementClassBox() {
+
+        elementClassBox.removeAllItems();
         elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_USERFIELD_AlleElementeArten"));
         elementClassBox.addSeparator(true);
 
         elementClassBox.addItem(Node.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKnoten"));
         elementClassBox.addSeparator(true);
-        for (int i = 0; i < ModelConstants.ALL_NODES.length; i++) {
-            if (Modifier.isAbstract(ModelConstants.ALL_NODES[i].getModifiers())) {
+        GDCollection gdcoll = (GDCollection) modelBox.getSelectedObject();
+        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
+        for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
+            if (Modifier.isAbstract(elementClass.getModifiers())) {
                 continue;
             }
-            elementClassBox.addItem(ModelConstants.ALL_NODES[i], ElementsNameBuilder.getDisplayableName(ModelConstants.ALL_NODES[i]));
+            elementClassBox.addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
         }
         elementClassBox.addSeparator(true);
         elementClassBox.addItem(Edge.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKanten"));
         elementClassBox.addSeparator(true);
 
-        for (Class<? extends Edge> edgeClass : ModelConstants.ALL_EDGES_SET) {
-            elementClassBox.addItem(edgeClass, ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
-            elementClassBox.addItem(edgeClass, ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
+        for (Class<? extends Edge> edgeClass : metaModel.allEdgesSet) {
+            elementClassBox.addItem(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
+            elementClassBox.addItem(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
         }
         elementClassBox.setSelectedObject(ModelElement.class);
     }
@@ -748,6 +755,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
         modelBox.setSelectedObject(Static.getSelectedGDCollection());
         fillSubModelBox();
+        fillElementClassBox();
     }
 
     /**

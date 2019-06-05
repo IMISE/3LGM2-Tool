@@ -1,15 +1,15 @@
 package de.imise.tool3lgm.metamodel.service;
 
-import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.createSimpleMetaPath;
-
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
@@ -31,6 +31,13 @@ import de.imise.tool3lgm.metamodel.service.node.ProvidingInterface;
 import de.imise.util.pair.Pair;
 
 public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
+
+    /**
+     * @param metaModel
+     */
+    public TLGMServiceGraphViewDefinion(final MetaModelInstance metaModel) {
+        super(metaModel);
+    }
 
     @SuppressWarnings("unchecked")
     @Override
@@ -58,8 +65,8 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         SimpleMetaPath[] configurationPaths = {
                 //Testpfad über alle Ebenen hinweg
                 //new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
-                createSimpleMetaPath(Function.class, ApplicationComponent.class, Function_Use_Edge.class, SupportLink_Edge.class),
-                createSimpleMetaPath(ApplicationComponent.class, PhysicalDataProcessingComponent.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class),
+                SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Function.class, ApplicationComponent.class, Function_Use_Edge.class, SupportLink_Edge.class),
+                SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ApplicationComponent.class, PhysicalDataProcessingComponent.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class),
         };
         return configurationPaths;
     }

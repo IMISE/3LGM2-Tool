@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Static.getTool;
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResStringWithoutError;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
@@ -33,6 +32,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nonnull;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -41,11 +41,13 @@ import javax.swing.SwingConstants;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.MetaModelInstanceContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -193,31 +195,62 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     protected InternalGraphFrame frame = null;
 
+    /** MetaModel dieses Modells */
+    protected final MetaModelInstance metaModel;
+
     /**
      * @param _gdcoll
      */
-    public GraphDocument(final GDCollection _gdcoll) {
-        if (_gdcoll == null) {
-            gdcoll = new GDCollection();
-        } else {
-            gdcoll = _gdcoll;
-        }
+    protected GraphDocument(@Nonnull final GDCollection _gdcoll) {
+        super(_gdcoll.getMetaModel());
+        gdcoll = _gdcoll;
+        metaModel = gdcoll.getMetaModel();
         hashString = "DOC" + "_" + new Date().getTime();
 
         analysisResult = new ArrayList<>();
         listener = new ArrayList<>();
         inlistener = new ArrayList<>();
-        mapping = new ElementsLayoutDefinition(true);
+        mapping = new ElementsLayoutDefinition(metaModel.getGraphViewDefinition().getDefaultElementsLayout());
 
         layer = new LayerContainer[LAYER_COUNT];
         for (int c = 0; c < layer.length; c++) {
-            layer[c] = new LayerContainer(new LayerKnoten(c), this, c);
+            layer[c] = new LayerContainer(new LayerKnoten(metaModel, c), this, c);
             layer[c].setColor(Color.white);
         }
         setPageSizeFactor(1.0);
     }
 
     // Verwaltung globaler Modelldaten --- Anfang ---
+
+    /** Liefert das zu Grunde liegende MetaModel */
+    public MetaModelInstance getMetaModel() {
+        return metaModel;
+    }
+
+    /**
+     * Diese Funktion mach genau das umgekehrte wie die Funktion {@link Tool3lgmConstants#getResString(String)}. D.h. sie schaut zuerst in die
+     * Resourcen des eigenen Metamodells und wenn sie dort den key nicht gefunden hat, dann in die allgemeinen des Tools. Im Unterschied zu der
+     * Funktion aus den {@link Tool3lgmConstants} wird hier aber nicht in die Resourcen des aktuell selektierten Modells geschaut, sondern in die
+     * dieses Modells hier.
+     *
+     * @param key
+     * @return
+     * @see MetaModelInstanceContext#getResString(String)
+     */
+    public String getResString(final String key) {
+        return getMetaModel().getResString(key);
+    }
+
+    /**
+     * Liefert die Klasse, über die alle Knoten- und Kantenklassennamen generiert werden, also die Anzeigenamen in Ein- und Mehrzahl und bei den
+     * Kanten die gerichteten Namen.
+     *
+     * @return
+     * @see MetaModelInstanceContext#getElementsNameBuilder()
+     */
+    public ElementsNameBuilder getElementsNameBuilder() {
+        return getMetaModel().getElementsNameBuilder();
+    }
 
     /**
      * Liefert den Zoom-Faktor
@@ -669,7 +702,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             } catch (Exception e) {
                 //Die Argumente 1-3 sind optional; deshalb keine Fehlermeldung, wenn das Parsen fehlschlägt
             }
-            createKnotenWithContainer(ModelConstants.getClassForName(classname), name, description, hashcode, pid);
+            createKnotenWithContainer(metaModel.getClassForName(classname), name, description, hashcode, pid);
             break;
 
         case MODEL_ACTION_DELETE_FROM_MODEL:
@@ -687,7 +720,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             switch (argc) {
             case 2:
                 Direction direction = Enum.valueOf(Direction.class, argv[1]);
-                linkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), direction, pid);
+                linkSelected(metaModel.getClassForName(argv[0]).asSubclass(Edge.class), direction, pid);
                 break;
             case 6:
                 //Parameter: link(String edgeClassName, String edgeHash, ModelElement k1, ModelElement k2, int edgeIndex, int pid) {
@@ -707,10 +740,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             switch (argc) {
             case 2:
                 Direction direction = Enum.valueOf(Direction.class, argv[1]);
-                unlinkSelected(ModelConstants.getClassForName(argv[0]).asSubclass(Edge.class), direction, pid);
+                unlinkSelected(metaModel.getClassForName(argv[0]).asSubclass(Edge.class), direction, pid);
                 break;
             case 4:
-                edgeClass = ModelConstants.getClassForName(argv[2]).asSubclass(Edge.class);
+                edgeClass = metaModel.getClassForName(argv[2]).asSubclass(Edge.class);
                 position = Integer.parseInt(argv[3]);
                 gdcoll.unlink(argv[0], argv[1], edgeClass, position, pid);
                 break;
@@ -740,13 +773,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case MODEL_ACTION_CREATE_ADDICTED:
             GraphDocument doc = getCollection().getGraphDocumentCoded(argv[0]);
             ModelElement master = doc.findElementCoded(argv[1]);
-            edgeClass = ModelConstants.getClassForName(argv[2]).asSubclass(Edge.class);
-            Class<? extends ModelElement> slaveClass = ModelConstants.getClassForName(argv[3]);
+            edgeClass = metaModel.getClassForName(argv[2]).asSubclass(Edge.class);
+            Class<? extends ModelElement> slaveClass = metaModel.getClassForName(argv[3]);
             createAddicted(doc, master, edgeClass.asSubclass(CompositionEdge.class), slaveClass, pid);
             break;
 
         case MODEL_ACTION_CREATE_INSTANCIATION:
-            Class<? extends InstanciationEdge> instanciationClass = ModelConstants.getClassForName(argv[0]).asSubclass(InstanciationEdge.class);
+            Class<? extends InstanciationEdge> instanciationClass = metaModel.getClassForName(argv[0]).asSubclass(InstanciationEdge.class);
             doc = null;
             master = null;
             try {
@@ -1299,7 +1332,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON:
         case MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF:
             for (ElementContainer ec : selectedContainer) {
-                if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
+                if (metaModel.hasInterLayerStartClass(ec.getElement())) {
                     ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
                 }
             }
@@ -2377,10 +2410,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         container2Select.clear();
         for (ElementContainer ec : selectedContainer) {
             ModelElement me = ec.getElement();
-            if (ModelConstants.isPaintable(me.getClass())) {
+            if (metaModel.isPaintable(me.getClass())) {
                 for (Edge edge : me.getEdges()) {
                     ModelElement other = edge.getOther(me);
-                    if (ModelConstants.isPaintable(other.getClass())) {
+                    if (metaModel.isPaintable(other.getClass())) {
                         ElementContainer otherEc = other.getContainer(this);
                         if (selectedContainer.contains(otherEc)) {
                             EdgeContainer edgeC = (EdgeContainer) edge.getContainer(this);
@@ -3012,7 +3045,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (prefix == null) {
             prefix = "";
         }
-        String name = prefix + ElementsNameBuilder.getDisplayableName(elementClass) + " ";
+        String name = prefix + getElementsNameBuilder().getDisplayableName(elementClass) + " ";
         String newName = CollectionUtils.getNextIndicatedName(name, gdcoll.getMainGraphDocument().getModelItems(elementClass));
         return newName;
     }
@@ -3032,7 +3065,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @return
      */
     public NodeContainer createKnotenWithContainer(final String elementClassName, final int pid) {
-        return createKnotenWithContainer(ModelConstants.getClassForName(elementClassName), pid);
+        return createKnotenWithContainer(metaModel.getClassForName(elementClassName), pid);
     }
 
     /**
@@ -3477,7 +3510,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         szen.start_transaction(pid);
 
-        List<Edge> edges = masterElement.getEdgesWith(slaveElement, ModelConstants.getClassForName(edgeClassName).asSubclass(Edge.class));
+        List<Edge> edges = masterElement.getEdgesWith(slaveElement, metaModel.getClassForName(edgeClassName).asSubclass(Edge.class));
         if (edges.size() == 0 || !(szen instanceof Szenario)) {
             finish_transaction(pid);
             return null;
@@ -3690,7 +3723,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
 
         //Ebenfalls zu instanziierende Nebenpfade anlegen
-        for (SimpleMetaPath metaPath : ModelConstants.getInstanciablePath(instanciationEdgeClass)) {
+        for (SimpleMetaPath metaPath : metaModel.getInstanciablePath(instanciationEdgeClass)) {
             int path2CreateStartIndex = 0;
             for (; path2CreateStartIndex < metaPath.getMetaPathCount(); path2CreateStartIndex++) {
                 List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
@@ -4297,7 +4330,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         UserFieldDefinitions definitions = getUserFieldDefinitions();
         WeightReplacer replacer = definitions.getWeightReplacer();
         //wurde eine Kantenklasse übergeben?
-        Class<? extends ModelElement> edgeElementClass = ModelConstants.getClassForName(userFieldHashToReplaceOrSimpleEdgeClassName);
+        Class<? extends ModelElement> edgeElementClass = metaModel.getClassForName(userFieldHashToReplaceOrSimpleEdgeClassName);
         //falls ein null oder Leerwert als Ersetzung übergeben wurde, muss der hier in EMPTY_STRING ersetzt werden, damit die
         //Kommandos mit der richtigen Parameteranzahl geparst werden könnnen
         String hashReplacement = Strings.isNullOrEmpty(userFieldHashReplacement) ? emptyArgument : userFieldHashReplacement;
@@ -4399,10 +4432,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             for (ElementContainer ec : elements) {
                 ModelElement me = ec.getElement();
                 Class<? extends ModelElement> elementClass = me.getClass();
-                if (!(me instanceof Node) || szen.isMyElement(me) || ModelConstants.isUnique(elementClass)) {
+                if (!(me instanceof Node) || szen.isMyElement(me) || metaModel.isUnique(elementClass)) {
                     continue;
                 }
-                if (ModelConstants.isSlaveType(elementClass)) {
+                if (metaModel.isSlaveType(elementClass)) {
                     continue;
                 }
                 addElementToSzenario(szen.getHashString(), (NodeContainer) ec, pid);
@@ -4559,7 +4592,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         start_transaction(pid, log);
-        for (Class<? extends ModelElement> c : ModelConstants.getCopyDependencies(kc.getNode().getClass())) {
+        for (Class<? extends ModelElement> c : metaModel.getCopyDependencies(kc.getNode().getClass())) {
             List<ElementContainer> dependentObjects = kc.getNode().getConnectedContainer(c, this);
             for (int j = 0; j < dependentObjects.size(); j++) {
                 NodeContainer sc = (NodeContainer) dependentObjects.get(j);
@@ -4688,10 +4721,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         //		long start = System.currentTimeMillis();
 
-        GraphDocument document = ModelConstants.isUnique(clazz) ? getCollection().getMainGraphDocument() : this;
+        GraphDocument document = metaModel.isUnique(clazz) ? getCollection().getMainGraphDocument() : this;
         List<ElementContainer> objects = new ArrayList<>();
         //Ebene der gesuchten Elementklasse bestimmen
-        int layer = ModelConstants.layerFor(clazz);
+        int layer = metaModel.layerFor(clazz);
         //Indizes der zu durchsuchenden Ebenen
         int minLayer = MIN_LAYER_INDEX;
         int maxLayer = MAX_LAYER_INDEX;
@@ -4710,10 +4743,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //Knickpunkte
             if (clazz == Bendpoint.class) {
                 layerElements.add(lc.getBendpointContainers());
-            } else if (ModelConstants.isNodeType(clazz)) {
+            } else if (MetaModelInstance.isNodeType(clazz)) {
                 layerElements.add(lc.getNodeContainersAlphabetical());
                 //Kanten
-            } else if (ModelConstants.isEdgeType(clazz)) {
+            } else if (MetaModelInstance.isEdgeType(clazz)) {
                 layerElements.add(lc.getEdgeContainers());
             }
 
@@ -4746,7 +4779,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         //wenn alphabetisch sortiert werden soll und andere Elemente als die bereits in der aplhabetisch sortierten
         //Knotenliste enthaltenen zur Rückgabeliste hinzugefügt wurden
-        if (clazz == Bendpoint.class || !ModelConstants.isNodeType(clazz)) {
+        if (clazz == Bendpoint.class || !MetaModelInstance.isNodeType(clazz)) {
             //aplhabetisch sortieren
             Alphabetical.sort(objects);
         }

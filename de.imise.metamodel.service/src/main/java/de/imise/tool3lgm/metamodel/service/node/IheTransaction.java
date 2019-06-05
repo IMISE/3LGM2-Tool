@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.metamodel.service.node;
 
-import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -22,7 +21,7 @@ public class IheTransaction extends Node {
         dialog.addDescripListPanel(IheInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
         dialog.addDescripListPanel(IheInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
 
-        dialog.addTabbedPanel(ElementsNameBuilder.getDisplayablePluralName(IheInterface.class));
+        dialog.addTabbedPanel(IheInterface.class);
         dialog.addTabbedPanelPathConnectionPanel(IheInvokingInterface.class, IheInvokingInterface_IheTransaction_Edge.class);
         dialog.addTabbedPanelPathConnectionPanel(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class);
 

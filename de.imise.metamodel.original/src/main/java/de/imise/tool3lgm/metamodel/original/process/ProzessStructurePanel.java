@@ -4,7 +4,6 @@
  */
 package de.imise.tool3lgm.metamodel.original.process;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
@@ -35,18 +34,23 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
+import de.imise.tool3lgm.metamodel.original.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.PrzAufVerbindung;
 import de.imise.tool3lgm.metamodel.original.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
@@ -137,7 +141,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      * @param doubleMeaningEdgeClass
      */
     public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
-        super(dialog, true, SimpleMetaPathCreator.createSimpleMetaPath(dialog.getModelElement().getClass(), getOther(multipleConnectionEgdeClass, dialog.getModelElement().getClass()), multipleConnectionEgdeClass));
+        super(dialog, true, createSimpleMetaPath(dialog, multipleConnectionEgdeClass, doubleMeaningEdgeClass));
         this.doubleMeaningEdgeClass = doubleMeaningEdgeClass;
 
         // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge anlegen
@@ -214,6 +218,20 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     }
 
     /**
+     * @param dialog
+     * @param multipleConnectionEgdeClass
+     * @param doubleMeaningEdgeClass
+     * @return
+     */
+    private static SimpleMetaPath createSimpleMetaPath(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
+        ModelElement me = dialog.getModelElement();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        MetaModelInstance metaModel = dialog.getMetaModel();
+        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, elementClass, getOther(multipleConnectionEgdeClass, elementClass), multipleConnectionEgdeClass);
+        return simpleMetaPath;
+    }
+
+    /**
      * Die TreeNodes unter dem Root im linken Baum dürfen nicht sortiert werden
      *
      * @return false, damit die TreeNodes unter dem Root im linken Baum dürfen nicht sortiert werden
@@ -238,7 +256,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         ModelElement me = ((NodeContainer) aufgabenContainerNode.getUserObject()).getElement();
         List<ElementContainer> ots = me.getConnectedContainer(Objekttyp.class, doc, null, BACKWARD, false);
         if (ots.size() > 0) {
-            LGMTreeNode tmpNode = new StringTreeNode(getResString("AufObjVerbindung_f_b"));
+            String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.BACKWARD, false, false);
+            LGMTreeNode tmpNode = new StringTreeNode(typeNodeName);
             tmpNode.setSelectable(false);
             for (ElementContainer ot : ots) {
                 LGMTreeNode otNode = new ElementContainerTreeNode(ot, false, true);
@@ -249,7 +268,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         }
         ots = me.getConnectedContainer(Objekttyp.class, doc, null, FORWARD, false);
         if (ots.size() > 0) {
-            LGMTreeNode tmpNode = new StringTreeNode(getResString("AufObjVerbindung_f_f"));
+            String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.FORWARD, false, false);
+            LGMTreeNode tmpNode = new StringTreeNode(typeNodeName);
             tmpNode.setSelectable(false);
             for (ElementContainer ot : ots) {
                 LGMTreeNode otNode = new ElementContainerTreeNode(ot, false, true);
@@ -1072,7 +1092,9 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ElementDialogPanel pane = edp;
         final LGMTreeNode lroot = (LGMTreeNode) tree.getModel().getRoot();
         if (edp instanceof ProzessStructurePanel) {
-            return new LGMAction(getResString("PROCESS_PANEL_VERIFY")) {
+            ElementPropertyDialog dialog = pane.getDialog();
+            LGMGraphDocument doc = dialog.getGraphDocument();
+            return new LGMAction(doc.getResString("PROCESS_PANEL_VERIFY")) {
 
                 @Override
                 public void execute(final EventObject e) {
@@ -1103,7 +1125,9 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     private static final LGMAction getFehlerAction(final ElementDialogPanel edp) throws ActionNotDefinedForClassException {
         final ElementDialogPanel pane = edp;
         if (edp instanceof ProzessStructurePanel) {
-            return new LGMAction(getResString("PROCESS_PANEL_ERROR")) {
+            ElementPropertyDialog dialog = pane.getDialog();
+            LGMGraphDocument doc = dialog.getGraphDocument();
+            return new LGMAction(doc.getResString("PROCESS_PANEL_ERROR")) {
                 @Override
                 public void execute(final EventObject e) {
                     ProzessStructurePanel panel = (ProzessStructurePanel) pane;

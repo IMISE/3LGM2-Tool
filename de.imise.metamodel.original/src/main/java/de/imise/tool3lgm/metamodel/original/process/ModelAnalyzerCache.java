@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.metamodel.original.edge.AwbKommssVerbindung;
@@ -245,7 +245,8 @@ public class ModelAnalyzerCache {
      */
     public Set<ModelElement> getMultipleParentElements(final Class<? extends ModelElement> elementClass) {
         HashSet<ModelElement> returnSet = new HashSet<>();
-        if (ModelConstants.canHaveParts(elementClass)) {
+        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        if (metaModel.canHaveParts(elementClass)) {
             for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(elementClass, true, true)) {
                 if (me.getDirectParentElements().size() > 1) {
                     returnSet.add(me);

@@ -4,7 +4,7 @@ import static de.imise.tool3lgm.imexport.linehandler.LineParser.EMPTY_STRING;
 
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.imexport.DisplayableNameHandler;
 import de.imise.tool3lgm.imexport.linehandler.line.AbstractImportLine;
@@ -15,7 +15,7 @@ import de.imise.tool3lgm.imexport.linehandler.line.NodeLine;
 
 /**
  * Creates {@link NodeLine}, {@link EdgeLine} {@link NodeHeaderLine} and {@link EdgeHeaderLine} from an input line string.
- * 
+ *
  * @author
  * @create 06.10.2014
  */
@@ -46,7 +46,7 @@ public class ImportLineHandler {
     public static final int COLUMN_INDEX_EDGE_USERFIELD_NAMES_START = 6;
 
     /** Handler for resolving the value of an element type column to a model element class (subclass og {@link ModelElement}) */
-    private final DisplayableNameHandler nameHandler = new DisplayableNameHandler();
+    private final DisplayableNameHandler nameHandler;
 
     /** The last found header line ({@link NodeHeaderLine} or {@link EdgeHeaderLine}) */
     private AbstractImportLine lastHeader;
@@ -57,13 +57,16 @@ public class ImportLineHandler {
     /** Line Tokenizer */
     private final LineParser parser = new LineParser();
 
-    /** */
-    public ImportLineHandler() {
+    /**
+     * @param metaModel
+     */
+    public ImportLineHandler(final MetaModelInstance metaModel) {
+        nameHandler = new DisplayableNameHandler(metaModel);
     }
 
     /**
      * Sets the current line.
-     * 
+     *
      * @param lineString
      * @param row
      */
@@ -78,13 +81,13 @@ public class ImportLineHandler {
             //resolve the element type to a element class
             Class<? extends ModelElement> elementClass = nameHandler.getElementClass(elementType);
             //element class is a subclass of Edge
-            if (ModelConstants.isEdgeType(elementClass)) {
+            if (MetaModelInstance.isEdgeType(elementClass)) {
                 String startHash = parser.getColumn(COLUMN_INDEX_EDGE_START_HASH);
                 String endHash = parser.getColumn(COLUMN_INDEX_EDGE_END_HASH);
                 List<String> userFieldNames = parser.getColumns(COLUMN_INDEX_EDGE_USERFIELD_NAMES_START);
                 line = new EdgeHeaderLine(elementClass, elementType, name, description, hash, startHash, endHash, userFieldNames, row);
                 //element class not found or element class is a subclass of Node
-            } else if (elementClass == null || ModelConstants.isNodeType(elementClass)) {
+            } else if (elementClass == null || MetaModelInstance.isNodeType(elementClass)) {
                 List<String> userFieldNames = parser.getColumns(COLUMN_INDEX_NODE_USERFIELD_NAMES_START);
                 line = new NodeHeaderLine(elementClass, elementType, name, description, hash, userFieldNames, row);
             }

@@ -6,10 +6,7 @@ import java.util.List;
 import javax.help.CSH;
 import javax.swing.ButtonGroup;
 
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
-
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -32,7 +29,7 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
     private final ButtonGroup buttonGroup = new ButtonGroup();
 
     /** Mappt vom LayerIndex auf die Elementklassen, für die auf der Toolbar ein Button angezeigt werden soll */
-    private static final Multimap<Integer, Class<? extends Node>> layerGraphElementClasses = getLayerGraphElementClasses();
+    //    private static final Multimap<Integer, Class<? extends Node>> layerGraphElementClasses = getLayerGraphElementClasses();
 
     /** irgendeine der grafisch darstellbaren Klassen, die man braucht, um einen Strich auf den Button der Kanten zu malen */
     private static Class<? extends Node> dummyEdgeButtonNodeClass;
@@ -43,7 +40,8 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
     public GraphAreaToolBar(final InternalGraphFrame frame) {
         super();
         buttonSwitchMouseMode = ToolButton.createDisableMouseMakesElementsButton();
-        buttonCreateEdge = ToolButton.createEdgeButton(dummyEdgeButtonNodeClass);
+        MetaModelInstance metaModel = frame.doc.getMetaModel();
+        buttonCreateEdge = ToolButton.createEdgeButton(metaModel, dummyEdgeButtonNodeClass);
         buttonGroup.add(buttonSwitchMouseMode);
         buttonGroup.add(buttonCreateEdge);
         sliders = new GraphAreaOptionSliders(frame, 150, 30);
@@ -51,23 +49,47 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
         CSH.setHelpIDString(this, "GRAPH_TOOLBAR_ansichtswerkzeuge");
     }
 
-    private static Multimap<Integer, Class<? extends Node>> getLayerGraphElementClasses() {
-        Multimap<Integer, Class<? extends Node>> layerGraphElementClasses = ArrayListMultimap.create();
-        for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_NODES) {
-            if (ModelConstants.isNodeType(elementClass)) { //Assoziationsklassen stehn auch in ALL_NODES -> rausfiltern
-                if (ModelConstants.isPaintable(elementClass)) { //Knoten muss natürlich zeichenbar sein
-                    if (!ModelConstants.isSlaveType(elementClass)) { // Knoten darf kein untergeordnetes Element sein
-                        int layer = ModelConstants.layerFor(elementClass);
-                        Class<? extends Node> nodeClass = elementClass.asSubclass(Node.class);
-                        layerGraphElementClasses.put(layer, nodeClass);
-                        if (dummyEdgeButtonNodeClass == null) {
-                            dummyEdgeButtonNodeClass = nodeClass;
+    //AXS 28.05.2019: als das Metamodell statisch war, wurde diese Map hier fefüllt. Sollte der Kontext-Switch zu langsam sein, kann man das wieder so oder so
+    //ähnlich machen, aber ich habe das erstmal durch die Variante ersetzt, in der die Liste jedes Mal einfach komplett neu aufgebaut wird
+    //    private static Multimap<Integer, Class<? extends Node>> getLayerGraphElementClasses() {
+    //        Multimap<Integer, Class<? extends Node>> layerGraphElementClasses = ArrayListMultimap.create();
+    //        MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
+    //        for (Class<? extends ModelElement> elementClass : selectedMetaModel.allNodesSet) {
+    //            if (MetaModelInstance.isNodeType(elementClass)) { //Assoziationsklassen stehn auch in ALL_NODES -> rausfiltern
+    //                if (selectedMetaModel.isPaintable(elementClass)) { //Knoten muss natürlich zeichenbar sein
+    //                    if (!selectedMetaModel.isSlaveType(elementClass)) { // Knoten darf kein untergeordnetes Element sein
+    //                        int layer = selectedMetaModel.layerFor(elementClass);
+    //                        Class<? extends Node> nodeClass = elementClass.asSubclass(Node.class);
+    //                        layerGraphElementClasses.put(layer, nodeClass);
+    //                        if (dummyEdgeButtonNodeClass == null) {
+    //                            dummyEdgeButtonNodeClass = nodeClass;
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //        return layerGraphElementClasses;
+    //    }
+
+    private List<Class<? extends Node>> getLayerGraphElementClasses(final int layerIndex) {
+        MetaModelInstance metaModel = frame.doc.getMetaModel();
+        List<Class<? extends Node>> paintableNodeClasses = new ArrayList<>(5);
+        for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
+            if (MetaModelInstance.isNodeType(elementClass)) { //Assoziationsklassen stehn auch in ALL_NODES -> rausfiltern
+                if (metaModel.isPaintable(elementClass)) { //Knoten muss natürlich zeichenbar sein
+                    if (!metaModel.isSlaveType(elementClass)) { // Knoten darf kein untergeordnetes Element sein
+                        if (layerIndex == metaModel.layerFor(elementClass)) { //layer muss stimmen
+                            Class<? extends Node> nodeClass = elementClass.asSubclass(Node.class);
+                            paintableNodeClasses.add(nodeClass);
+                            if (dummyEdgeButtonNodeClass == null) {
+                                dummyEdgeButtonNodeClass = nodeClass;
+                            }
                         }
                     }
                 }
             }
         }
-        return layerGraphElementClasses;
+        return paintableNodeClasses;
     }
 
     public void setFrame(final InternalGraphFrame frame) {
@@ -82,8 +104,10 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
             buttonGroup.remove(button);
         }
         buttonsCreateElement.clear();
-        for (Class<? extends Node> paintableLayerElementClass : layerGraphElementClasses.get(layer)) {
-            ToolButton createNodeButton = ToolButton.createNodeButton(paintableLayerElementClass);
+        MetaModelInstance metaModel = frame.doc.getMetaModel();
+        //        for (Class<? extends Node> paintableLayerElementClass : layerGraphElementClasses.get(layer)) {
+        for (Class<? extends Node> paintableLayerElementClass : getLayerGraphElementClasses(layer)) {
+            ToolButton createNodeButton = ToolButton.createNodeButton(metaModel, paintableLayerElementClass);
             buttonsCreateElement.add(createNodeButton);
             createNodeButton.setFrame(frame);
             buttonGroup.add(createNodeButton);

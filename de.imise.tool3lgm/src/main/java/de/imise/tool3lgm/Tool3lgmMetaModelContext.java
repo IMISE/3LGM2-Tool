@@ -2,35 +2,26 @@ package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
-import java.awt.Component;
 import java.io.File;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
-import de.imise.util.NamedObjectContainer;
+import de.imise.util.PluginUtils;
 import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
- * Klasse, die das Metamodell initialisiert
+ * Klasse, die die verfügbaeren Metamodelle verwaltet, initialisiert und bereitstellt.
  *
  * @author AXS (12.06.2018)
  */
-public class Tool3lgmMetaModelContext {
+public final class Tool3lgmMetaModelContext {
 
     /**
      * Name der Metamodellklasse, die als Default gesetzt werden soll. Das ist auch die Klasse, mit der Modelle geladen werden, bei denen kein
@@ -38,117 +29,55 @@ public class Tool3lgmMetaModelContext {
      */
     private static final String DEFAULT_METAMDOEL_CLASS_NAME = "TLGMOriginalMetaModel";
 
-    private static Class<? extends MetaModel> metaModelClass = null;
-
-    private static ResourceBundle resourceBundle = null;
-
     /**
      * Alle MetaModel-Klasse, die gefunden werden. Die Standardmetamodellklasse (= die Klasse mit dem Namen DEFAULT_METAMDOEL_NAME) befindet sich
      * immer an Position 0)
      */
-    private static List<Class<? extends MetaModel>> META_MODEL_CLASSES = loadMetaModelClasses();
+    private static final List<MetaModelInstanceContext> metaModelInstanceContexts = loadMetaModelInstanceContexts();
 
-    private static void initMetaModel() {
-        boolean showDialog = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START);
+    /** Das Metamodell, mit dem ein neues Modell initialisiert werden soll */
+    private static MetaModelInstanceContext metaModelInstanceContext = null;
+
+    /**
+     * Liefert einen MetaModelContext. Abhängig davon, ob in den UserProperties eingestellt ist, ob per Dialog nachgefragt werden soll oder nicht,
+     * wird der in den den UserProperties gespeicherte einfach zurück gegeben oder per Dialog nachgefragt.
+     *
+     * @return
+     */
+    public static MetaModelInstanceContext getNewModelMetaModelInstanceContext() {
+        boolean showDialog = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG);
         if (!showDialog) {
-            metaModelClass = getUserpropertiesStoredMetaModel();
+            metaModelInstanceContext = getUserpropertiesStoredMetaModelInstanceContext();
         }
-        while (metaModelClass == null) {
+        while (metaModelInstanceContext == null) {
             if (showDialog) {
-                metaModelClass = chooseMetaModel(true);
+                metaModelInstanceContext = chooseMetaModel();
             } else {
-                metaModelClass = META_MODEL_CLASSES.get(0); // es war gewünscht worden, dass beim initialen Start das originale Metamodell ausgewählt ist. showDialog ist initial false
+                metaModelInstanceContext = metaModelInstanceContexts.get(0); // es war gewünscht worden, dass beim initialen Start das originale Metamodell ausgewählt ist. showDialog ist initial false
             }
         }
+        return metaModelInstanceContext;
     }
 
-    private static String getMetamodelBundleName(Class<? extends MetaModel> metaModelClass) {
-        //das Metamodel-Resourcebundle liegt im resource-package unter demselben Pfad, wie die Metamodellklasse des Packages.
-        //der ClassLoader, der das package lädt, erwartet relative Pfade ab dem Pfad dieser Klasse hier, die das Bundle lädt.
-        //z.B. liegt das speziele Metamodel im package "de.imise.tool3lgm.metamodel.tlgm_v3_0". Diese Klasse Tool3lgmConstants
-        //liegt im Hauptpackage "de.imise.tool3lgm". Das Resource-Bundle kann mit dem BundleName "metamodel.tlgm_v3_0.MetamodelResources"
-        //geladen werden. Also muss man vom package-Namen des Metamodells den package-Namen der Tool3lgmConstants abziehen und den
-        //vorgegebenen Bundle-Name "MetamodelResources" anhängen (mit Punkt dazwischen).
-        //        String mainPackageName = Tool3lgmConstants.class.getPackage().getName();
-        metaModelClass = metaModelClass == null ? getMetaModelClass() : metaModelClass;
-        String metaModelPackageName = metaModelClass.getPackage().getName();
-        //        String bundleName = metaModelPackageName.substring(mainPackageName.length() + 1) + "." + METAMODEL_RESOURCE_BASE_NAME;
-        String bundleName = metaModelPackageName + "." + Tool3lgmConstants.METAMODEL_RESOURCE_BASE_NAME;
-        return bundleName;
-    }
-
-    public static String getMetaModelDisplayableName(final Class<? extends MetaModel> metaModelClass) {
-        ResourceBundle metaModelResources = getMetaModelResources(metaModelClass);
-        String metaModelNameResKey = metaModelClass.getSimpleName(); //immer der SimpleName der Klasse ist der Resourcenschlüssel zum Namen des Metamodells
-        String metaModelName = metaModelResources.getString(metaModelNameResKey);
-        return metaModelName;
-    }
-
-    public static final ResourceBundle getMetaModelResources(final Class<? extends MetaModel> metaModelClass) {
-        Locale locale = UserProperties.getLocale();
-        ClassLoader loader = metaModelClass.getClassLoader();
-        String baseName = getMetamodelBundleName(metaModelClass);
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(baseName, locale, loader);
-        return resourceBundle;
-    }
-
-    public static final ResourceBundle getMetaModelResources() {
-        if (resourceBundle == null) {
-            Locale locale = UserProperties.getLocale();
-            ClassLoader loader = metaModelClass.getClassLoader();
-            String baseName = getMetamodelBundleName(metaModelClass);
-            resourceBundle = ResourceBundle.getBundle(baseName, locale, loader);
-        }
-        return resourceBundle;
-    }
-
-    public static final List<Class<? extends MetaModel>> loadMetaModelClasses() {
-        List<Class<? extends MetaModel>> metaModelClasses = new ArrayList<>();
-        Class<? extends MetaModel> defaultMetaModelClass = null;
+    /**
+     * Lädt alle im Plaugin-Verzeichnis auffindbaren Metamodell-Klassen in einen MetaModelInstanceContext. Die Klasse
+     *
+     * @return
+     */
+    public static final List<MetaModelInstanceContext> loadMetaModelInstanceContexts() {
         File pluginDir = new File(Tool3lgmConstants.APPLICATION_DIR, "Plugins");
-        //        System.err.println(pluginDir);
-        FileNameExtensionFilter jarFileFilter = Tool3lgmConstants.getFileNameExtensionFilter(Tool3lgmConstants.FileFilterType.JAR);
-        for (File f : pluginDir.listFiles()) {
-            if (!jarFileFilter.accept(f)) {
-                continue;
-            }
-            //System.err.println(f);
-            try {
-                URL[] urls = {
-                        new URL("jar:file:" + f.toString() + "!/")
-                };
-                URLClassLoader cl = URLClassLoader.newInstance(urls);
-                JarFile jarFile = new JarFile(f);
-                Enumeration<JarEntry> entries = jarFile.entries();
-                while (entries.hasMoreElements()) {
-                    JarEntry entry = entries.nextElement();
-                    if (entry.isDirectory()) {
-                        continue;
-                    }
-                    String entryName = entry.getName();
-                    if (entryName.endsWith(".class")) {
-                        //System.err.println(entryName);
-                        String className = entryName.substring(0, entryName.length() - 6); // ".class" abschneiden
-                        className = className.replace('/', '.');
-                        Class<?> c = cl.loadClass(className);
-                        if (MetaModel.class.isAssignableFrom(c)) {
-                            Class<? extends MetaModel> metaModelClass = c.asSubclass(MetaModel.class);
-                            if (c.getSimpleName().equals(DEFAULT_METAMDOEL_CLASS_NAME)) {
-                                defaultMetaModelClass = metaModelClass;
-                            } else {
-                                metaModelClasses.add(metaModelClass);
-                                //System.err.println(c);
-                            }
-                        }
-                    }
-                }
-                jarFile.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+        List<Class<? extends MetaModel>> metaModelClasses = PluginUtils.loadClasses(pluginDir, MetaModel.class);
+        List<MetaModelInstanceContext> metaModelInstanceContexts = new ArrayList<>();
+        for (int i = 0; i < metaModelClasses.size(); i++) {
+            Class<? extends MetaModel> metaModelClass = metaModelClasses.get(i);
+            MetaModelInstanceContext metaModelInstanceContext = new MetaModelInstanceContext(metaModelClass);
+            if (metaModelClass.getSimpleName().equals(DEFAULT_METAMDOEL_CLASS_NAME)) {
+                metaModelInstanceContexts.add(0, metaModelInstanceContext); // das DefaultMetaModelganz nach vorne holen
+            } else {
+                metaModelInstanceContexts.add(metaModelInstanceContext);
             }
         }
-        metaModelClasses.add(0, defaultMetaModelClass);
-        return metaModelClasses;
+        return metaModelInstanceContexts;
     }
 
     /**
@@ -156,74 +85,73 @@ public class Tool3lgmMetaModelContext {
      *
      * @return
      */
-    public static final Class<? extends MetaModel> getDefaultMetaModelClass() {
-        return META_MODEL_CLASSES.get(0);
+    public static final MetaModelInstanceContext getDefaultMetaModelContext() {
+        return metaModelInstanceContexts.get(0);
     }
 
-    public static final Class<? extends MetaModel> getMetaModelClass() {
-        if (metaModelClass == null) {
-            initMetaModel();
-        }
-        return metaModelClass;
-    }
-
-    private static final Class<? extends MetaModel> getUserpropertiesStoredMetaModel() {
-        String metaModelClassName = UserProperties.get(StringProperty.META_MODEL);
-        if (metaModelClassName != null) {
-            for (Class<? extends MetaModel> metaModelClass : META_MODEL_CLASSES) {
-                if (metaModelClass.getName().endsWith(metaModelClassName)) {
-                    return metaModelClass;
+    /**
+     * Liefert anhand der ID des in den UserProperties gespeicherten MetaModels den zugehörigen Kontext.
+     *
+     * @return
+     */
+    private static final MetaModelInstanceContext getUserpropertiesStoredMetaModelInstanceContext() {
+        String storedMetaModelID = UserProperties.get(StringProperty.META_MODEL);
+        if (!Strings.isNullOrEmpty(storedMetaModelID)) {
+            for (MetaModelInstanceContext metaModelInstanceContext : metaModelInstanceContexts) {
+                if (metaModelInstanceContext.getMetaModelID().equals(storedMetaModelID)) {
+                    return metaModelInstanceContext;
                 }
             }
         }
         return null;
     }
 
-    public static void chooseNextStartMetaModel() {
-        Class<? extends MetaModel> oldMetaModelClass = metaModelClass;
-        Class<? extends MetaModel> choosedMetaModelClass = chooseMetaModel(false);
-        if (choosedMetaModelClass != null && choosedMetaModelClass != oldMetaModelClass) {
-            JOptionPane.showMessageDialog(Static.getTool(), getResString("metamodel_changed_info"), getResString("restart_required"), JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
-
-    private static final Class<? extends MetaModel> chooseMetaModel(final boolean initialSelection) {
-        int optionsCount = META_MODEL_CLASSES.size();
-        Class<? extends MetaModel> lastMetaModel = getUserpropertiesStoredMetaModel();
-        Component owner = initialSelection ? null : Static.getMainFrame();
+    public static final MetaModelInstanceContext chooseMetaModel() {
+        int optionsCount = metaModelInstanceContexts.size();
+        MetaModelInstanceContext lastMetaModelInstanceContext = getUserpropertiesStoredMetaModelInstanceContext();
         String title = getResString("choose_meta_model_dialog_title");
         String message = null;
-        @SuppressWarnings("unchecked")
-        NamedObjectContainer<Class<? extends MetaModel>>[] options = new NamedObjectContainer[optionsCount];
-        NamedObjectContainer<Class<? extends MetaModel>> selectedOption = null;
+        MetaModelInstanceContext[] options = new MetaModelInstanceContext[optionsCount];
+        MetaModelInstanceContext selectedOption = null;
         for (int i = 0; i < optionsCount; i++) {
-            Class<? extends MetaModel> metaModelClass = META_MODEL_CLASSES.get(i);
-            options[i] = new NamedObjectContainer<>(metaModelClass, getMetaModelDisplayableName(metaModelClass));
-            if (i == 0 || lastMetaModel == metaModelClass) {
+            MetaModelInstanceContext metaModelInstanceContext = metaModelInstanceContexts.get(i);
+            options[i] = metaModelInstanceContext;
+            if (i == 0 || lastMetaModelInstanceContext == metaModelInstanceContext) {
                 selectedOption = options[i];
             }
         }
         String showAgainQuestion = getResString("show_this_dialog_at_start");
-        boolean showAgainQuestionSelection = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START) || initialSelection;
-        Pair<NamedObjectContainer<Class<? extends MetaModel>>, Boolean> choosedMetaModelAnswer = MultipleOptionPane.showSingleSelectionOptionDialog(owner, title, message, options, selectedOption, showAgainQuestion, showAgainQuestionSelection);
+        boolean showAgainQuestionSelection = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG);
+        Pair<MetaModelInstanceContext, Boolean> choosedMetaModelAnswer = MultipleOptionPane.showSingleSelectionOptionDialog(Static.getMainFrame(), title, message, options, selectedOption, showAgainQuestion, showAgainQuestionSelection);
         if (choosedMetaModelAnswer == null) {
-            if (initialSelection) {
-                System.exit(0);
-            }
             return null;
         }
-        NamedObjectContainer<Class<? extends MetaModel>> choosedMetaModelClassContainer = choosedMetaModelAnswer.getFirstItem();
-        Class<? extends MetaModel> choosedMetaModelClass = choosedMetaModelClassContainer.getObject();
-        UserProperties.set(StringProperty.META_MODEL, choosedMetaModelClass.getSimpleName());
-        UserProperties.set(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG_AT_START, Boolean.TRUE.equals(choosedMetaModelAnswer.getSecondItem()));
-        return choosedMetaModelClass;
+        MetaModelInstanceContext choosedMetaModelInstanceContext = choosedMetaModelAnswer.getFirstItem();
+        UserProperties.set(StringProperty.META_MODEL, choosedMetaModelInstanceContext.getMetaModelID());
+        UserProperties.set(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, Boolean.TRUE.equals(choosedMetaModelAnswer.getSecondItem()));
+        return choosedMetaModelInstanceContext;
     }
 
-    public static final Class<? extends MetaModel> getMetaModelClassForName(final String simpleClassName) {
-        for (Class<? extends MetaModel> metaModelClass : META_MODEL_CLASSES) {
-            String name = metaModelClass.getSimpleName();
-            if (name.equals(simpleClassName)) {
-                return metaModelClass;
+    /**
+     * Liefert den {@link MetaModelInstanceContext} anhand seiner ID. Das ist der Klassennamen@SerialVersionUID. Bei alten Modellen ist es nur der
+     * Klassenname.
+     *
+     * @param metaModelContextID
+     * @return
+     */
+    public static final MetaModelInstanceContext getMetaModelContextForID(String metaModelContextID) {
+        if (Strings.isNullOrEmpty(metaModelContextID)) {
+            metaModelContextID = DEFAULT_METAMDOEL_CLASS_NAME;
+        }
+        for (MetaModelInstanceContext metaModelInstanceContext : metaModelInstanceContexts) {
+            String otherID = metaModelInstanceContext.getMetaModelID();
+            if (otherID.equals(metaModelContextID)) {
+                return metaModelInstanceContext;
+            }
+            //bevor die Metamodelle mit der SerialVersionUID gekennzeichnet wurden, war einzig der SimpleClassName der Metamodellklasse die ID -> für alte Modelle daruf testen
+            otherID = metaModelInstanceContext.getMetaModelClass().getSimpleName();
+            if (otherID.equals(metaModelContextID)) {
+                return metaModelInstanceContext;
             }
         }
         return null;

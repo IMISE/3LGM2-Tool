@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
@@ -14,7 +13,7 @@ public abstract class Node extends ModelElement {
 
     @Override
     public ElementContainer createContainer(final GraphDocument doc) {
-        if (ModelConstants.isInterLayerStartClass(getClass())) {
+        if (getMetaModel().hasInterLayerStartClass(this)) {
             return new InterLayerConnectedNodeContainer(this, doc);
         }
         return new NodeContainer(this, doc);

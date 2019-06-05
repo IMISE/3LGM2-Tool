@@ -149,7 +149,8 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
      */
     private boolean isSelectedEdgeDirectionForward() {
         Class<? extends Edge> selectedEdgeClass = getSelectedEdgeClass();
-        String fullForwardMetaAssociationName = ElementsNameBuilder.getFullForwardMetaAssociationName(selectedEdgeClass);
+        ElementsNameBuilder elementsNameBuilder = dialog.getElementsNameBuilder();
+        String fullForwardMetaAssociationName = elementsNameBuilder.getFullForwardMetaAssociationName(selectedEdgeClass);
         String selectedEdgeClassVisibleName = elementTypeBox.getSelectedItem().toString();
         boolean isSelectedEdgeDirectionForward = fullForwardMetaAssociationName.equals(selectedEdgeClassVisibleName);
         return isSelectedEdgeDirectionForward;

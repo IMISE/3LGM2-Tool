@@ -24,6 +24,9 @@ import de.imise.util.pair.Pair;
  */
 public abstract class GraphViewDefinition {
 
+    /** Zu Grunde liegendes MetaModel */
+    protected final MetaModelInstance metaModel;
+
     /**
      * Liefert eine Liste aller metamodellabhängigen Knoten, die in der Grafik dargestellt werden.
      * Die Reihenfolge in dieser Liste legt fest, in welcher Reihenfolge die Elemente in dem gloabeln LayoutEditor angezeigt werden
@@ -43,7 +46,11 @@ public abstract class GraphViewDefinition {
 
     private Map<Class<? extends ModelElement>, SimpleMetaPath> classToConfigurationPaths = null;
 
-    public GraphViewDefinition() {
+    /**
+     * @param metaModel
+     */
+    public GraphViewDefinition(final MetaModelInstance metaModel) {
+        this.metaModel = metaModel;
         ImmutableSet.Builder<Class<? extends ModelElement>> allPaintableNodesSetBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
         metaModelSpecificPaintableNodes = ImmutableList.copyOf(getPaintableNodes());
         for (Class<? extends ModelElement> paintableNodeClass : metaModelSpecificPaintableNodes) {
@@ -90,13 +97,31 @@ public abstract class GraphViewDefinition {
      */
     protected abstract SimpleMetaPath[] getConfigurationPaths();
 
-    public final SimpleMetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
+    /**
+     * Liefert den MetaPfade, der als Interebenenbeziehung dargestellt werden soll, wenn es einen solchen gibt.
+     *
+     * @param me
+     * @return
+     */
+    public final SimpleMetaPath getInterLayerMetaPath(final ModelElement me) {
+        return getInterLayerMetaPath(me.getMetaModel(), me.getClass());
+    }
+
+    /**
+     * Liefert den MetaPfade, der als Interebenenbeziehung dargestellt werden soll, wenn es einen solchen gibt.
+     *
+     * @param metaModel
+     * @param elementClass
+     * @return
+     */
+    public final SimpleMetaPath getInterLayerMetaPath(final MetaModelInstance metaModel, final Class<? extends ModelElement> elementClass) {
         //es muss ein lazy-init sein, weil es sonst zu einer Init-Exception in der Reflection-Methode Edge.getStartClass(...)
         if (classToConfigurationPaths == null) {
             classToConfigurationPaths = new HashMap<>();
             //Map mit den Klassen zu ihren Konfigurationspfaden speichern
             for (SimpleMetaPath metaPath : getConfigurationPaths()) {
-                for (Class<? extends ModelElement> instanciableElementClass : ModelConstants.getInstanciableAssignableClasses(metaPath.getStartClass())) {
+                Class<? extends ModelElement> startClass = metaPath.getStartClass();
+                for (Class<? extends ModelElement> instanciableElementClass : metaModel.getInstanciableAssignableClasses(startClass)) {
                     classToConfigurationPaths.put(instanciableElementClass, metaPath);
                 }
             }
@@ -126,7 +151,7 @@ public abstract class GraphViewDefinition {
 
     public ElementsLayoutDefinition getDefaultElementsLayout() {
         if (defaultElementsLayoutDefinition == null) {
-            defaultElementsLayoutDefinition = new ElementsLayoutDefinition(false);
+            defaultElementsLayoutDefinition = new ElementsLayoutDefinition(null);
             initDefaultElementLayoutInternal();
             initDefaultElementLayout();
         }

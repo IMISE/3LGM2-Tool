@@ -26,7 +26,6 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.event.action.GlobalOptionAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
@@ -49,7 +48,8 @@ import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -112,7 +112,7 @@ public class ActionLibrary {
         public static final Action ACTION_NEW_MODEL = new StaticAction(ActionIdentifier.ACTION_NEW_MODEL) {
             @Override
             protected void actionPerformed() {
-                getTool().openFile(false);
+                getTool().createNewModel();
             }
         };
 
@@ -120,7 +120,7 @@ public class ActionLibrary {
         public static final Action ACTION_OPEN_MODEL = new StaticAction(ActionIdentifier.ACTION_OPEN_MODEL, PPP) {
             @Override
             protected void actionPerformed() {
-                getTool().openFile(true);
+                getTool().openModelFile(null);
             }
         };
 
@@ -325,7 +325,7 @@ public class ActionLibrary {
         public static final Action ACTION_ANALYSIS_OPEN_EDITOR = new StaticAction(ActionIdentifier.ACTION_ANALYSIS_OPEN_EDITOR, PPP) {
             @Override
             protected void actionPerformed() {
-                AnalysisEditor.showDialog(getTool());
+                AnalysisEditor.showDialog(getTool(), Static.getSelectedMetaModel());
             }
         };
 
@@ -378,10 +378,13 @@ public class ActionLibrary {
                     if (!super.isEnabled()) {
                         return false;
                     }
+                    MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
                     for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
                         if (ec instanceof InterLayerConnectedNodeContainer) {
                             ModelElement me = ec.getElement();
-                            AbstractMetaPath interLayerMetaPath = ModelConstants.getGraphViewDefinition().getInterLayerMetaPath(ec.getElement().getClass());
+                            ModelElement selected = ec.getElement();
+                            GraphViewDefinition graphViewDefinition = selectedMetaModel.getGraphViewDefinition();
+                            AbstractMetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(selected);
                             if (interLayerMetaPath != null) {
                                 Collection<ModelElement> interLayerConnectedElements = MetaPathFunctions.getConnectedElements(me, interLayerMetaPath);
                                 if (!interLayerConnectedElements.isEmpty()) {
@@ -410,8 +413,10 @@ public class ActionLibrary {
                         return false;
                     }
                     LayerContainer lc = Static.getSelectedDoc().getActiveLayer();
+                    MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
                     for (ElementContainer ec : lc.getGraphNodeContainers()) {
-                        if (ModelConstants.isInterLayerStartClass(ec.getElement().getClass())) {
+                        ModelElement me = ec.getElement();
+                        if (selectedMetaModel.hasInterLayerStartClass(me)) {
                             boolean hasVisibleConfigs = ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections();
                             if (visible != hasVisibleConfigs) {
                                 return true;
@@ -455,10 +460,9 @@ public class ActionLibrary {
             for (int i = 0; i < actions.length; i++) {
                 final File file = files.get(i);
                 actions[i] = new AbstractAction(file.getName()) {
-
                     @Override
                     public void actionPerformed(final ActionEvent e) {
-                        Static.getTool().openFile(true, file);
+                        Static.getTool().openModelFile(file);
                     }
                 };
             }
@@ -636,7 +640,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_OPEN_EXAMPLE_MODEL_FILE = new StaticAction(ActionIdentifier.ACTION_OPEN_EXAMPLE_MODEL_FILE) {
             @Override
             public void actionPerformed() {
-                Static.getTool().openFile(false, Tool3lgmConstants.EXAMPLE_MODEL_FILE);
+                Static.getTool().openModelFile(Tool3lgmConstants.EXAMPLE_MODEL_FILE);
             }
         };
 
@@ -672,20 +676,18 @@ public class ActionLibrary {
      */
     public static class CreateElementActions {
 
-        /** Array aller Insert-Actions für die Fachliche Ebene */
-        public static final Iterable<StaticAction> DOMAIN_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_DOMAIN_LAYER_NODES);
-
-        /** Array aller Insert-Actions für die Logische Werkzeugebene */
-        public static final Iterable<StaticAction> LOGICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_LOGICAL_LAYER_NODES);
-
-        /** Array aller Insert-Actions für die Physische Werkzeugebene */
-        public static final Iterable<StaticAction> PHYSICAL_TOOL_LAYER_CREATABLE_NODES_ACTIONS = getActions(ModelConstants.CREATABLE_PHYSICAL_LAYER_NODES);
-
-        /** Gibt alle Actions zum Erzeugen von {@link ModelElement}en der spezifizierten Klassen wieder */
-        private static Iterable<StaticAction> getActions(final Iterable<Class<? extends ModelElement>> creatableLayerNodes) {
+        /**
+         * Gibt alle Actions zum Erzeugen von {@link ModelElement}en der spezifizierten Klassen wieder
+         *
+         * @param metaModel
+         * @param layerIndex
+         */
+        public static Iterable<StaticAction> getCreateElementActions(final MetaModelInstance metaModel, final int layerIndex) {
+            final Iterable<Class<? extends ModelElement>> creatableLayerNodes = metaModel.getCreatableLayerNodes(layerIndex);
+            ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
             List<StaticAction> actions = new ArrayList<>();
             for (Class<? extends ModelElement> creatableClass : creatableLayerNodes) {
-                String actionName = ElementsNameBuilder.getDisplayableName(creatableClass);
+                String actionName = elementsNameBuilder.getDisplayableName(creatableClass);
                 actions.add(new GraphDocumentAction(GDCommands.MODEL_ACTION_CREATE_NODE, creatableClass.getName(), actionName, null));
             }
             return ImmutableList.sortedCopyOf(Alphabetical.getLocalizedComparator(), actions);
@@ -724,14 +726,13 @@ public class ActionLibrary {
          */
         public static class Analysis {
 
-            public static final Action[] OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS = create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS();
-
-            private static final Action[] create_OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS() {
+            public static final Action[] getOptionsSimpleRedundancyAnalysis(final MetaModelInstance metaModel) {
                 //die Definitionen für die SimpleRedundancyAnalysis aud der AnalyseDefinition holen
-                AnalysesDefinition analysisDefinition = ModelConstants.getAnalysesDefinition();
+                AnalysesDefinition analysisDefinition = metaModel.getAnalysesDefinition();
                 SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinitions();
                 //wenn es gültige Definitionen für die SimpleRedundancyAnalysis gibt, dann werden in dieses Array die zugehörigen Actions geschrieben
                 Action[] returnActions = new StaticAction[simpleRedundancyAnalysisDefinition.size()];
+                ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
                 for (int i = 0; i < returnActions.length; i++) {
                     //Definition einer der aktuellen SimpleRedundancyAnalysis holen
                     final SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition = simpleRedundancyAnalysisDefinition.get(i);
@@ -757,8 +758,8 @@ public class ActionLibrary {
                     };
                     String resKey = ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS.name();
                     AbstractMetaPath metaPath = singleSimpleRedundancyDefinition.getMetaPath();
-                    String startClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getStartClasses());
-                    String endClassPluralName = ElementsNameBuilder.getDisplayablePluralName(metaPath.getEndClasses());
+                    String startClassPluralName = elementsNameBuilder.getDisplayablePluralName(metaPath.getStartClasses());
+                    String endClassPluralName = elementsNameBuilder.getDisplayablePluralName(metaPath.getEndClasses());
                     String fullActionDisplayName = getResString(resKey, startClassPluralName, endClassPluralName);
                     action.setText(fullActionDisplayName);
                     returnActions[i] = action;
@@ -784,21 +785,19 @@ public class ActionLibrary {
                 }
             };
 
-            /** Array, aller Actions, für die das Ein- und Ausblenden in der Grafik in der GraphViewDefinition angegeben wurde. */
-            public static final GraphFrameAction MODEL_ACTIONS_HIDE_UNHIDE_UNASSOCIATED[] = create_MODEL_ACTIONS_HIDE_UNHIDE_UNASSOCIATED_Actions();
-
             /**
              * Erzeugt das Array, aller Actions, für die das Ein- und Ausblenden in der Grafik in der GraphViewDefinition angegeben wurde.
              *
              * @param hide
              * @return
              */
-            private static final GraphFrameAction[] create_MODEL_ACTIONS_HIDE_UNHIDE_UNASSOCIATED_Actions() {
-                List<Pair<Class<? extends ModelElement>, Class<? extends Edge>>> hidableIfNotConnected = ModelConstants.getGraphViewDefinition().getHidableIfNotConnected();
+            public static final GraphFrameAction[] getModelActionsHideUnhideUnassociated(final MetaModelInstance metaModel) {
+                List<Pair<Class<? extends ModelElement>, Class<? extends Edge>>> hidableIfNotConnected = metaModel.getGraphViewDefinition().getHidableIfNotConnected();
                 if (hidableIfNotConnected == null || hidableIfNotConnected.isEmpty()) {
                     return null;
                 }
                 GraphFrameAction[] actions = new GraphFrameAction[hidableIfNotConnected.size() * 2];
+                ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
                 for (int i = 0; i < actions.length; i++) {
                     Pair<Class<? extends ModelElement>, Class<? extends Edge>> hidable = hidableIfNotConnected.get(i / 2);
                     Class<? extends ModelElement> elementClass = hidable.getFirstItem();
@@ -813,7 +812,7 @@ public class ActionLibrary {
                         arguments = elementClass.getSimpleName();
                     }
                     GraphFrameAction hideAction = new GraphFrameAction(command, arguments, null);
-                    hideAction.setReplacedText(ElementsNameBuilder.getDisplayablePluralName(elementClass));
+                    hideAction.setReplacedText(elementsNameBuilder.getDisplayablePluralName(elementClass));
                     actions[i] = hideAction;
                 }
                 return actions;
@@ -841,13 +840,6 @@ public class ActionLibrary {
             }
         };
 
-        public static final Action ACTIONS_CHOOSE_META_MODEL = new StaticAction(MetaModel.class, "", getResString("metamodelOptionsMenu"), PPP) {
-            @Override
-            protected void actionPerformed() {
-                Tool3lgmMetaModelContext.chooseNextStartMetaModel();
-            };
-
-        };
     }
 
     /**

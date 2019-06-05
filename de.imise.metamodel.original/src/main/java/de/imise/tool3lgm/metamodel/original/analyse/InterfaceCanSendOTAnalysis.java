@@ -11,6 +11,7 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 
+import de.imise.tool3lgm.MetaModelInstanceContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -39,10 +40,10 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
 public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
 
     /**
-     *
+     * @param metaModelContext
      */
-    public InterfaceCanSendOTAnalysis() {
-        super();
+    public InterfaceCanSendOTAnalysis(final MetaModelInstanceContext metaModelContext) {
+        super(metaModelContext);
         startClasses.add(Bausteinschnittstelle.class);
         SimpleResourceHandler resHandler = new SimpleResourceHandler(getClass());
         name = resHandler.getString("ANALYSIS_NAME");

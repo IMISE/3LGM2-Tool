@@ -4,9 +4,6 @@
 package de.imise.tool3lgm.imexport;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_EDGES_SET;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_NODES_SET;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isEdgeType;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,6 +17,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -78,13 +76,15 @@ public class DataExportModule {
                 elements = doc.getModelItems(ModelElement.class, true, true);
             }
 
+            MetaModelInstance metaModel = doc.getMetaModel();
+
             //Alle Elementklassen in der Reihenfolge zusammen sammeln, in der sie exportiert werden sollen (erst
             //alphabetisch alle Knotenklassen, dann alle Kantenklassen
             ArrayList<Class<? extends ModelElement>> elementClasses = new ArrayList<>();
-            elementClasses.addAll(ALL_NODES_SET);
+            elementClasses.addAll(metaModel.allNodesSet);
             Alphabetical.sort(elementClasses);
             ArrayList<Class<? extends ModelElement>> edgeClasses = new ArrayList<>();
-            edgeClasses.addAll(ALL_EDGES_SET);
+            edgeClasses.addAll(metaModel.allEdgesSet);
             //Kommunikationsbeziehungen sind Node und Kanten -> einfach alle Kanten von den Node abziehen, damit die nicht 2 mal drin sind
             elementClasses.removeAll(edgeClasses);
             Alphabetical.sort(edgeClasses);
@@ -99,11 +99,12 @@ public class DataExportModule {
                     }
                     if (elementClass != classElement) {
                         classElement = elementClass;
-                        String displayableClassName = isEdgeType(elementClass) ? ElementsNameBuilder.getFullForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : ElementsNameBuilder.getDisplayableName(elementClass);
+                        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+                        String displayableClassName = MetaModelInstance.isEdgeType(elementClass) ? elementsNameBuilder.getFullForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : elementsNameBuilder.getDisplayableName(elementClass);
                         caption = displayableClassName + "\tName\tDescription\tHashString";
                         for (SimpleMetaPath metaPath : metaPaths2Export) {
                             if (metaPath.getStartClass().isAssignableFrom(elementClass)) {
-                                caption += "\t" + ElementsNameBuilder.getDisplayableName(metaPath.getEndClass());
+                                caption += "\t" + elementsNameBuilder.getDisplayableName(metaPath.getEndClass());
                             }
                         }
                         for (UserField uf : ufDef.getUserFields(classElement)) {

@@ -1,15 +1,15 @@
 package de.imise.tool3lgm.metamodel.original;
 
-import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.createSimpleMetaPath;
-
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
@@ -33,6 +33,13 @@ import de.imise.util.pair.Pair;
 
 public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
 
+    /**
+     * @param metaModel
+     */
+    public TLGMOriginalGraphViewDefinion(final MetaModelInstance metaModel) {
+        super(metaModel);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     protected final Class[] getPaintableNodes() {
@@ -40,15 +47,7 @@ public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
         //dass das Array hier in der Funktion immer wieder neu angelegt wird
         //Die Reihenfolge in dieser Liste legt fest, in welcher Reihenfolge die Elemente in dem gloabeln LayoutEditor angezeigt werden
         Class[] graphViewVisibleNodes = {
-                Aufgabe.class,
-                Objekttyp.class,
-                RechAnwendungsbaustein.class,
-                KonAnwendungsbaustein.class,
-                Datenbanksystem.class,
-                Dokumentensammlung.class,
-                Bausteinschnittstelle.class,
-                Benutzungsschnittstelle.class,
-                PhysischerDVBaustein.class
+                Aufgabe.class, Objekttyp.class, RechAnwendungsbaustein.class, KonAnwendungsbaustein.class, Datenbanksystem.class, Dokumentensammlung.class, Bausteinschnittstelle.class, Benutzungsschnittstelle.class, PhysischerDVBaustein.class
         };
         return graphViewVisibleNodes;
     }
@@ -58,8 +57,8 @@ public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
         SimpleMetaPath[] configurationPaths = {
                 //Testpfad über alle Ebenen hinweg
                 //new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
-                createSimpleMetaPath(Aufgabe.class, Anwendungsbaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class),
-                createSimpleMetaPath(Anwendungsbaustein.class, PhysischerDVBaustein.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
+                SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Aufgabe.class, Anwendungsbaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class),
+                SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Anwendungsbaustein.class, PhysischerDVBaustein.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
         };
         return configurationPaths;
     }

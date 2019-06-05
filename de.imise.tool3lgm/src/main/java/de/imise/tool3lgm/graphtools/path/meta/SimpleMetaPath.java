@@ -130,11 +130,12 @@ public class SimpleMetaPath extends SequenceMetaPath {
         ElementaryMetaPath[] subMetaPathsArray = new ElementaryMetaPath[pathStepEndIndex - pathStepStartIndex];
         System.arraycopy(metaPathsArray, pathStepStartIndex, subMetaPathsArray, 0, subMetaPathsArray.length);
         //Hier wird noch vor der ersten und nach der letzten Kante die Elementart eingeschränkt, weil die Elementart der "weggeschnittenen" Kante die Start- oder Zielklasse des verkürzten Pfades eigentlich einschränken kann
+        ElementaryMetaPathHandler elementaryMetaPathHandler = getMetaModel().getElementaryMetaPathHandler();
         if (pathStepStartIndex > 0) {
-            subMetaPathsArray[0] = ElementaryMetaPathHandler.getMetaPath(metaPathsArray[pathStepStartIndex - 1].getEndClass(), subMetaPathsArray[0]);
+            subMetaPathsArray[0] = elementaryMetaPathHandler.getMetaPath(metaPathsArray[pathStepStartIndex - 1].getEndClass(), subMetaPathsArray[0]);
         }
         if (pathStepEndIndex < fullPathLength) {
-            subMetaPathsArray[subMetaPathsArray.length - 1] = ElementaryMetaPathHandler.getMetaPath(subMetaPathsArray[subMetaPathsArray.length - 1], metaPathsArray[pathStepEndIndex].getStartClass());
+            subMetaPathsArray[subMetaPathsArray.length - 1] = elementaryMetaPathHandler.getMetaPath(subMetaPathsArray[subMetaPathsArray.length - 1], metaPathsArray[pathStepEndIndex].getStartClass());
         }
         return new SimpleMetaPath(subMetaPathsArray);
     }

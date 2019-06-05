@@ -22,6 +22,7 @@ import javax.swing.Action;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSetMultimap;
@@ -29,6 +30,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Table;
 
+import de.imise.tool3lgm.MetaModelInstanceContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
@@ -39,12 +41,15 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElementInstanceCreator;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -52,7 +57,6 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
-import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -65,12 +69,36 @@ import de.imise.util.collections.CollectionUtils;
  *
  * @author AXS (30 Apr 2019)
  */
-public class MetaModelInstance {
+public final class MetaModelInstance {
 
-    private MetaModel metaModel;
+    /**
+     * Leeres Array als Standardrückgabetyp für zu überschreibende Funktionen.
+     */
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends ModelElement>[] EMPTY_ELEMENT_CLASS_ARRAY = new Class[0];
+
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends Edge>[] EMPTY_EDGE_CLASS_ARRAY = new Class[0];
+
+    @SuppressWarnings("unchecked")
+    public static final Class<? extends CompositionEdge>[] EMPTY_COMPOSITION_CLASS_ARRAY = new Class[0];
+
+    public static final Collection<Class<? extends ModelElement>> EMPTY_ELEMENT_CLASS_COLLECTION = ImmutableList.of();
 
     /** Alle Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
     private static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Bendpoint.class, Textfield.class);
+
+    /** Der Context, der dieses MetaModell erzeugt hat und hält. Er wird nur gebraucht, um an die Resourcen zu kommen. */
+    private final MetaModelInstanceContext metaModelInstanceContext;
+
+    /**
+     * Hilfsklasse zum Anlegen neuer Elemente, die sicher stellt, dass das richtige MetaModel für die Elemente gesetzt wird und dann nicht mehr von
+     * außen geändert werden kann.
+     */
+    private final ModelElementInstanceCreator modelElementInstanceCreator;
+
+    /** Handler für das einfache und nicht redundante Anlegen von Elementar-Metapfaden */
+    private final ElementaryMetaPathHandler elementaryMetaPathHandler;
 
     ////////////
     // Knoten //
@@ -94,9 +122,6 @@ public class MetaModelInstance {
     /** Set aller Knotenklassen */
     public final Set<Class<? extends ModelElement>> allNodesSet;
 
-    /** Array aller Knotenklassen */
-    public final Class<? extends ModelElement>[] allNodes;
-
     ////////////
     // Kanten //
     ////////////
@@ -110,9 +135,6 @@ public class MetaModelInstance {
 
     /** Set aller Elementklassen */
     public final Set<Class<? extends ModelElement>> allElementsSet;
-
-    /** Array aller Elementklassen */
-    public final Class<? extends ModelElement>[] allElements;
 
     /**
      * Sammlung, die alle Elementklassen inklusive aller Kantenklassen enthält einschließlich aller
@@ -128,19 +150,26 @@ public class MetaModelInstance {
      * Mappt von Elementklassen auf alle Kantenklasse, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
      * Bedeutung haben.
      */
-    private final Map<Class<? extends ModelElement>, Set<Class<? extends Edge>>> elementClassToSortedEdges = metaModel.getElementClassToSortedEdges();
+    private final SetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToSortedEdges;
 
     /** Alle Klassen, die man über den Datenimport einlesen kann */
-    private final Class<? extends ModelElement>[] importableNodes = metaModel.getImportableNodes();
+    private final Set<Class<? extends ModelElement>> importableNodes;
 
     /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
-    public final Set<Class<? extends Node>> uniqueNodes = metaModel.getUniqueNodes();
+    public final Set<Class<? extends Node>> uniqueNodes;
 
     /** Alle Knotenklassen, bei denen in der Grafik zusätzlich zum eigenen Namen noch die Namen verbundener Elemente angezeigt werden sollen */
-    public final Set<Class<? extends ModelElement>> elementsWithNameExtensions;
+    public final Set<Class<? extends ModelElement>> elementClassesWithNameExtensions;
 
     /** Alle Elementklassen, die nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true) angelegt und verändert werden können. */
     private final Set<Class<? extends ModelElement>> onlyExpertModeEditableNodes;
+
+    /**
+     * Elementklassen, die nur im Baum angezeigt werden sollen, wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
+     * auf <code>true</code> gestellt ist.
+     * ACHTUNG: hier wird nur mit contains(class) gerpüft -> immer auch die Oberklassen, die versteckt werden sollen reinschreiben
+     */
+    private final Set<Class<? extends ModelElement>> onlyExpertModeVisibleNodes;
 
     /** Alle Elementklassen, die ein Layout brauchen, weil die selbst oder an anderen Elementen in der Grafik dargstellt werden */
     private final Set<Class<? extends ModelElement>> elementClassesWithLayout;
@@ -151,9 +180,26 @@ public class MetaModelInstance {
      */
     private final Set<Class<? extends ModelElement>> elementClassesWithSortedEdgesToPaintable;
 
+    /** Alle abstracten Klassen, die im Baum aus der FE auftauchen sollen */
+    private final Class<? extends ModelElement>[] treeDomainLayerVisibleAbstractNodes;
+
+    /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
+    private final Class<? extends ModelElement>[] treeLogicalLayerVisibleAbstractNodes;
+
+    /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
+    private final Class<? extends ModelElement>[] treePhysicalLayerVisibleAbstractNodes;
+
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
     ///////////////////////////////////////////////////////////////////
+
+    /**
+     * Mappt von alten Elementklassen auf die neuen. <br>
+     * Nach einem Refactoring von Node- oder Kantenklassen muss man in diese Map jeweils als <code>String</code> als Schlüssel den alten Namen und
+     * als Value den neuen Namen des Elementes eintragen, damit die Elemente von alten Modellen noch korrekt
+     * eingelesen werden können.
+     */
+    private final Map<String, String> oldToNewClassName;
 
     /**
      * Mappt von einer Elementklasse auf das Array aller instanziierbaren und zu dieser Klasse zuweisungskompatiblen ModelElement-Klassen.
@@ -174,12 +220,57 @@ public class MetaModelInstance {
     private final Table<Class<? extends ModelElement>, Class<? extends ModelElement>, Class<? extends Edge>[]> elementClassesToEdgeClasses = HashBasedTable.create();
 
     /**
+     * Mappt von einer Elementklasse auf alle Kantenklassen, die eine ab dieser Klasse nicht mehr für diese Elementart gelten sollen. Damit können
+     * ererbte Kanten abgeschaltet werden. Z.B. wenn man eine Unterklasse einer bestehenden Metamodellklasse definiert, die aber nicht mehr wie die
+     * Oberklasse in Teilelemente zerlegt werden könen soll, dann muss man hier die Unterklasse und die 'abzuschaltende' HatTeil-Kante angeben.
+     * Es müssen alle konkreten Element-Klassen angegeben werden, für die eine konkrete Kantenklasse nicht gelten soll. D.h. die Klassen hier werden
+     * auf Identität geprüft und nicht auf Unterklassen
+     */
+    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClasses;
+
+    /**
      * Mappt vom Klassennamen auf die Klasse. Es ist immer der SimpleName und der FullName der Klasse in der Map. Dies ist der Cache für die Funktion
      * {@link #getClassForName(String)}
      */
     private final Map<String, Class<? extends ModelElement>> elementClassNameToElementClass;
 
-    // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException
+    /**
+     * Mappt von einer Kantenklasse auf den MetaPfad, über den die verbindbaren Elemente ebenfalls bereits verbunden sein müssen.
+     * Dieser Mechanismus ist dafür gedacht, verbindbare Elemente einzuschränken auf bestimmte Elemente.
+     */
+    private final Map<Class<? extends Edge>, SimpleMetaPath> edgeClassToConditionMetaPath;
+
+    /**
+     * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
+     * Kantenklasse durchgeführt wird. <br>
+     * Jeder der Pfade muss zwingend bei derselben Klasse starten, bei der diese Kante startet.<br>
+     * Der Pfad hat nur einen Effekt, wenn seine Startklasse zur Startklasse dieser Kante zuweisungskompatibel ist und er mind. eine
+     * {@link InstanciationEdge} enthält. Der hiermit verbundene Mechanismus geht durch die Kantenklassen des Pfades. Ist die aktuelle
+     * Kantenklasse keine {@link InstanciationEdge}, dann suche von den aktuellen Elementen ausgehend (am Anfang ist das das Startelement dieser
+     * Kante) alle damit über diese Kantenart verbundenen Elemente und nimmt sie für den nächsten Schritt als Startelemente. Sobald im Pfad eine
+     * {@link InstanciationEdge} auftaucht, werden alle Elementarten und Kanten der dahinter liegenden Pfadschritte kompeltt neu erzeugt und die
+     * entstehenden Elemente immer mit den vorherigen verbunden. Wenn der Pfad mit einer Klasse endet (was er in den meisten Fällen tun wird, damit
+     * das ganze sinnvoll ist), die zuweisungskompatibel zur Endklasse dieser Kante ist (also zum durch diese Kante neu erzeugten Element), dann wird
+     * die letzte Verbindung bzw. die letzte Kante hin zum EndElementdieser Kante erzeugt und nicht nochmal ein Element der Endelementart angelegt.
+     * Damit kann man "Nebenbedingungspfade" für das Startelement gleich mit anlegen, wenn man das Startelement über diese Kante hier intsanziiert.
+     */
+    private final Multimap<Class<? extends InstanciationEdge>, SimpleMetaPath> instanciationEdgeToAdditionalInstanciationMetaPaths;
+
+    /**
+     * Mappt von einer ElementKlasse auf eine Sammlung aller {@link SimpleMetaPath}, die man zwischen ihr und anderen Elementen anlegen kann, wobei
+     * die Zwischenelemente ebenfalls neu angelegt werden. Diese Pfade werden im Kontextmenü bei Mehrfachselektion oder Einfachselektion angeboten.
+     */
+    private final Multimap<Class<? extends ModelElement>, SimpleMetaPath> elementClassToCreatableMetaPaths;
+
+    /**
+     * Mappt von Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern unter der eigentlichen Elementart angezeigt
+     * werden soll, auf den MetaPfad zu den anzuzeigenden, verbundenen Elementen.
+     */
+    private final Map<Class<? extends ModelElement>, AbstractMetaPath> elementClassToNameExtensionPath;
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /** Alle im Baum auf der FE sichtbaren Node */
     public final Iterable<Class<? extends ModelElement>> treeDomainLayerNodes;
@@ -214,51 +305,155 @@ public class MetaModelInstance {
     /** Alle Elementklassen, deren Name generiert und nicht vom Nutzer eingegeben wird */
     private final Set<Class<? extends ModelElement>> generateNameClasses;
 
+    //////////////////////////
+    // Weitere Definitionen //
+    //////////////////////////
+
+    /** Beschreibung aller abhängigen Elemente, die beim Kopieren mitkopiert werden müssen */
+    private final CopyDependencies copyDependencies;
+
+    /** {@link MetaPathDefinition} des Metamodells */
+    private final MetaPathDefinition metaPathsDefinition;
+
+    /** {@link GraphViewDefinition} des Metamodells */
+    private final GraphViewDefinition graphViewDefinition;
+
+    /** {@link AnalysesDefinition} des Metamodells */
+    private final AnalysesDefinition analysesDefinition;
+
+    /** Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen werden sollen */
+    private final ExtrasActionsDefinition extrasActionsDefinition;
+
     /**
      * @param metaModelClass
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      */
-    @SuppressWarnings("unchecked")
-    public MetaModelInstance(final Class<? extends MetaModel> metaModelClass) {
-        try {
-            metaModel = metaModelClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public MetaModelInstance(final MetaModelInstanceContext metaModelInstanceContext) throws InstantiationException, IllegalAccessException {
+        this.metaModelInstanceContext = metaModelInstanceContext;
+        modelElementInstanceCreator = new ModelElementInstanceCreator(this);
+        elementaryMetaPathHandler = new ElementaryMetaPathHandler(this);
+        Class<? extends MetaModel> metaModelClass = metaModelInstanceContext.getMetaModelClass();
+        MetaModel metaModelDefinition = metaModelClass.newInstance();
         //Knoten
-        allDomainLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllDomainLayerNodes()));
-        allInterDomainLogicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllInterDomainLogicalLayerNodes()));
-        allLogicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllLogicalLayerNodes()));
-        allInterLogicalPhysicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllInterLogicalPhysicalLayerNodes()));
-        allPhysicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllPhysicalLayerNodes()));
+        allDomainLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllDomainLayerNodes()));
+        allInterDomainLogicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllInterDomainLogicalLayerNodes()));
+        allLogicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllLogicalLayerNodes()));
+        allInterLogicalPhysicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllInterLogicalPhysicalLayerNodes()));
+        allPhysicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllPhysicalLayerNodes()));
         allNodesSet = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(allDomainLayerNodesSet).addAll(allInterDomainLogicalLayerNodesSet).addAll(allLogicalLayerNodesSet).addAll(allInterLogicalPhysicalLayerNodesSet)
                 .addAll(allPhysicalLayerNodesSet).build();
-        allNodes = new Class[allNodesSet.size()];
-        System.arraycopy(allNodesSet.toArray(), 0, allNodes, 0, allNodes.length);
         //Kanten
-        allEdgesSet = ImmutableSet.copyOf(Arrays.asList(metaModel.getAllEdges()));
+        allEdgesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllEdges()));
         //alle Elementklassen
         allElementsSet = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(allNodesSet).addAll(allEdgesSet).build();
-        allElements = new Class[allElementsSet.size()];
-        System.arraycopy(allElementsSet.toArray(), 0, allElements, 0, allElements.length);
-        allModelElementClassesWithSuperClasses = getAllModelelementClassesWithSuperClasses();
-        elementClassNameToElementClass = getElementClassNameToElementClass();
+        allModelElementClassesWithSuperClasses = CollectionUtils.ensureImmutable(getAllModelelementClassesWithSuperClasses());
+        elementClassNameToElementClass = CollectionUtils.ensureImmutable(getElementClassNameToElementClass());
+
+        elementClassToSortedEdges = CollectionUtils.ensureImmutable(metaModelDefinition.getElementClassToSortedEdges());
+
+        //jetzt die GraphViewDefinition, weil die gleich gebraucht wird
+        graphViewDefinition = getInstance(metaModelDefinition.getGraphViewDefinitionClass());
         //spezielle Knoteneigenschaften
-        elementsWithNameExtensions = ReflectionUtils.hasMethod(ModelElement.GET_NAME_EXTENSION_METHOD_NAME, allElements);
-        onlyExpertModeEditableNodes = ImmutableSet.copyOf(metaModel.getOnlyExpertModeEditableNodes());
-        elementClassesWithLayout = getElementClassesWithLayout();
-        elementClassesWithSortedEdgesToPaintable = getElementClassesWithSortedEdgeClassesToPaintable();
+        onlyExpertModeEditableNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getOnlyExpertModeEditableNodes());
+        onlyExpertModeVisibleNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getOnlyExpertModeVisibleNodes());
+        elementClassesWithSortedEdgesToPaintable = CollectionUtils.ensureImmutable(getElementClassesWithSortedEdgeClassesToPaintable()); //muss vor elementClassesWithLayout, da für dessen init notwendig!
+        elementClassesWithLayout = CollectionUtils.ensureImmutable(getElementClassesWithLayout());
+        treeDomainLayerVisibleAbstractNodes = metaModelDefinition.getTreeDomainLayerVisibleAbstractNodes();
+        treeLogicalLayerVisibleAbstractNodes = metaModelDefinition.getTreeLogicalLayerVisibleAbstractNodes();
+        treePhysicalLayerVisibleAbstractNodes = metaModelDefinition.getTreePhysicalLayerVisibleAbstractNodes();
+        // Maps von Elementklassen auf Sets von Elementklassen (und mehr)
+        oldToNewClassName = CollectionUtils.ensureImmutable(metaModelDefinition.getOldToNewClassNameMap());
+        elementClassToRemovedEdgeClasses = CollectionUtils.ensureImmutable(metaModelDefinition.getElementClassToRemovedEdgeClasses());
         // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException
-        treeDomainLayerNodes = getTreeVisibleNodes(allDomainLayerNodesSet, false);
-        creatableDomainLayerNodes = getTreeVisibleNodes(treeDomainLayerNodes, true);
-        treeLogicalLayerNodes = getTreeVisibleNodes(allLogicalLayerNodesSet, false);
-        creatableLogicalLayerNodes = getTreeVisibleNodes(treeLogicalLayerNodes, true);
-        treePhysicalLayerNodes = getTreeVisibleNodes(allPhysicalLayerNodesSet, false);
-        creatablePhysicalLayerNodes = getTreeVisibleNodes(treePhysicalLayerNodes, true);
-        elementClassesWithHasPartEdgeClasses = getElementClassesWithPartEdges(HasPartEdge.PARENT_TO_PART_DIRECTION);
-        elementClassesWithPartOfEdgeClasses = getElementClassesWithPartEdges(HasPartEdge.PART_TO_PARENT_DIRECTION);
-        elementClassToLayer = getElementClassToLayerMap();
-        initialSubtypes = getInitialSubtypes();
-        generateNameClasses = ImmutableSet.copyOf(metaModel.getGenerateNameClasses());
+        treeDomainLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(allDomainLayerNodesSet, false));
+        creatableDomainLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(treeDomainLayerNodes, true));
+        treeLogicalLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(allLogicalLayerNodesSet, false));
+        creatableLogicalLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(treeLogicalLayerNodes, true));
+        treePhysicalLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(allPhysicalLayerNodesSet, false));
+        creatablePhysicalLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(treePhysicalLayerNodes, true));
+        elementClassesWithHasPartEdgeClasses = CollectionUtils.ensureImmutable(getElementClassesWithPartEdges(HasPartEdge.PARENT_TO_PART_DIRECTION));
+        elementClassesWithPartOfEdgeClasses = CollectionUtils.ensureImmutable(getElementClassesWithPartEdges(HasPartEdge.PART_TO_PARENT_DIRECTION));
+        elementClassToLayer = CollectionUtils.ensureImmutable(getElementClassToLayerMap());
+        initialSubtypes = CollectionUtils.ensureImmutable(getInitialSubtypes());
+        generateNameClasses = CollectionUtils.ensureImmutable(metaModelDefinition.getGenerateNameClasses());
+        importableNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getImportableNodes());
+        uniqueNodes = getUniqueNodes(); //ist schon immutable
+        copyDependencies = metaModelDefinition.getCopyDependencies();
+        analysesDefinition = getInstance(metaModelDefinition.getAnalysesDefinitionClass());
+        extrasActionsDefinition = getInstance(metaModelDefinition.getExtrasActionsDefinitionClass());
+        // Die MetaPathsDefinition und die darauffolgend zu initialisierenden Maps
+        metaPathsDefinition = getInstance(metaModelDefinition.getMetaPathsDefinitionClass());
+        edgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getConditionPaths());
+        instanciationEdgeToAdditionalInstanciationMetaPaths = CollectionUtils.ensureImmutable(getInstanciationEdgeToAdditionalInstanciationNonAbstractMetaPaths(metaPathsDefinition.getInstanciationEdgeToAdditionalInstanciationMetaPaths()));
+        elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatablePaths()));
+        elementClassToNameExtensionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionPath());
+        elementClassesWithNameExtensions = CollectionUtils.ensureImmutable(elementClassToNameExtensionPath.keySet());
+
+    }
+
+    /**
+     * Liefert aus dem ResourceBundle des Contextes den String mit dem übergeben Key. Kommt er darin nicht vor, wird im Bundle des Tools gesucht.
+     *
+     * @param key
+     * @return
+     * @see MetaModelInstanceContext#getResString(String)
+     */
+    public final String getResString(final String key) {
+        return metaModelInstanceContext.getResString(key);
+    }
+
+    /**
+     * Wenn der Key nicht in den Resoucen gefunden wird, kommt einfach der key selsbt zurück und es wird keine MissingResourceException
+     * ausgelöst.
+     *
+     * @param key
+     * @return
+     */
+    public final String getResStringWithoutError(final String key) {
+        try {
+            return getResString(key);
+        } catch (Exception e) {
+            return key;
+        }
+    }
+
+    /**
+     * Liefert den Handler, über die alle Knoten- und Kantenklassennamen generiert werden, also die Anzeigenamen in Ein- und Mehrzahl und bei den
+     * Kanten die gerichteten Namen.
+     *
+     * @return
+     * @see MetaModelInstanceContext#getElementsNameBuilder()
+     */
+    public ElementsNameBuilder getElementsNameBuilder() {
+        return metaModelInstanceContext.getElementsNameBuilder();
+    }
+
+    /**
+     * Liefert die ID der Metamodellklasse. Dies ist ein String aus dem SimpleClassName + "@" + serialVersionUID. Damit sollte die die
+     * Metamodellklasse immer eindeutig identifizierbar sein.
+     *
+     * @return
+     * @see de.imise.tool3lgm.MetaModelInstanceContext#getMetaModelID()
+     */
+    public final String getMetaModelID() {
+        return metaModelInstanceContext.getMetaModelID();
+    }
+
+    /**
+     * @return
+     */
+    public final MetaModelInstanceContext getMetaModelContext() {
+        return metaModelInstanceContext;
+    }
+
+    /**
+     * Hanlder für das einfache und nicht redundante Anlegen von Elementar-Metapfaden für dieses MetaModel
+     *
+     * @return
+     */
+    public final ElementaryMetaPathHandler getElementaryMetaPathHandler() {
+        return elementaryMetaPathHandler;
     }
 
     /**
@@ -352,6 +547,44 @@ public class MetaModelInstance {
     }
 
     /**
+     * Erzeugt aus der in der MetaModelDefinition angegebenen Map von den InstanciateionEdges auf die ebenfalls mitzuinstanziierenden MetaPfade die
+     * gleichartige endgültige Map, bei der die originalen Metapfade durch die Funktion
+     * {@link SimpleMetaPathCreator#getSimpleMetaPathsNonAbstract(Iterable)} in alle Metapfade umgewandelt werden, die keine abstrakten
+     * Zwischenklassen mehr enthalten und somit dann tatsächlich anlegbar sind.
+     *
+     * @param metaModelMap
+     * @return
+     */
+    private static final Multimap<Class<? extends InstanciationEdge>, SimpleMetaPath> getInstanciationEdgeToAdditionalInstanciationNonAbstractMetaPaths(final Multimap<Class<? extends InstanciationEdge>, SimpleMetaPath> metaModelMap) {
+        ImmutableListMultimap.Builder<Class<? extends InstanciationEdge>, SimpleMetaPath> builder = ImmutableListMultimap.builder();
+        for (Class<? extends InstanciationEdge> instanciationEdge : metaModelMap.keySet()) {
+            Collection<SimpleMetaPath> simpleMetaPaths = metaModelMap.get(instanciationEdge);
+            Iterable<SimpleMetaPath> simpleMetaPathsNonAbstract = SimpleMetaPathCreator.getSimpleMetaPathsNonAbstract(simpleMetaPaths);
+            builder.putAll(instanciationEdge, simpleMetaPathsNonAbstract);
+        }
+        return builder.build();
+    }
+
+    /**
+     * Erzeugt aus der Sammlung aller anlegbaren Pfade die Map die von einer ElementKlasse auf eine Sammlung aller {@link SimpleMetaPath} mappt, die
+     * man zwischen ihr und anderen Elementen anlegen kann, wobei die Zwischenelemente ebenfalls neu angelegt werden. Diese Pfade werden im
+     * Kontextmenü bei Mehrfachselektion oder Einfachselektion angeboten.
+     *
+     * @param creatablePaths
+     * @return
+     */
+    private static final Multimap<Class<? extends ModelElement>, SimpleMetaPath> getCreatableMetaPathsMap(final Collection<SimpleMetaPath> creatablePaths) {
+        ImmutableListMultimap.Builder<Class<? extends ModelElement>, SimpleMetaPath> builder = ImmutableListMultimap.builder();
+        if (creatablePaths != null) {
+            for (SimpleMetaPath metaPath : creatablePaths) {
+                builder.put(metaPath.getStartClass(), metaPath);
+                builder.put(metaPath.getEndClass(), metaPath.getOtherDirection());
+            }
+        }
+        return builder.build();
+    }
+
+    /**
      * Extrahiert aus den übergebenen Knoten alle, die im Baum angezeigt werden.
      *
      * @param elementClasses Elementklassen, die gefiltert werden sollen
@@ -437,7 +670,7 @@ public class MetaModelInstance {
      */
     private final SetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> getInitialSubtypes() {
         ImmutableSetMultimap.Builder<Class<? extends ModelElement>, Class<? extends Edge>> initialSubtypes = ImmutableSetMultimap.builder();
-        for (Class<? extends ModelElement> elementClass : allElements) {
+        for (Class<? extends ModelElement> elementClass : allElementsSet) {
             Class<? extends CompositionEdge>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
             for (Class<? extends CompositionEdge> compositionEdgeType : compositionEdgeTypes) {
                 if (CompositionEdge.getMinMasterToSlaveCardinality(compositionEdgeType) > ZERO) {
@@ -446,6 +679,26 @@ public class MetaModelInstance {
             }
         }
         return initialSubtypes.build();
+    }
+
+    /**
+     * Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen.
+     * Das sind alle nicht-abstrakten Knotenklassen (nicht Kante), die in der GraphViewDefinition nicht als paintable eingetragen sind.
+     */
+    public final Set<Class<? extends Node>> getUniqueNodes() {
+        ImmutableSet.Builder<Class<? extends Node>> uniqueNodes = new ImmutableSet.Builder<>();
+        for (Class<? extends ModelElement> elementClass : allNodesSet) {
+            //keine abstrakten Klassen zu diesem Set hinzufügen
+            if (!Modifier.isAbstract(elementClass.getModifiers())) {
+                //nur Knotenklassen nehmen (dort können auch Assoziationsklassen drin sein)
+                if (Node.class.isAssignableFrom(elementClass)) {
+                    if (!hasLayout(elementClass)) {
+                        uniqueNodes.add(elementClass.asSubclass(Node.class));
+                    }
+                }
+            }
+        }
+        return uniqueNodes.build();
     }
 
     ////////////////////////////////////////////
@@ -460,7 +713,7 @@ public class MetaModelInstance {
      * @see MetaModel#getOnlyExpertModeVisibleNodes()
      */
     public final Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
-        return metaModel.getOnlyExpertModeVisibleNodes();
+        return onlyExpertModeVisibleNodes;
     }
 
     /**
@@ -555,13 +808,15 @@ public class MetaModelInstance {
     }
 
     /**
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse für die übergebene Elementklasse als nicht mehr gültig definiert wurde.
+     *
      * @param elementClass
      * @param edgeClass
      * @return
-     * @see MetaModel#isRemovedEdgeClass(Class, Class)
      */
-    public final boolean isRemovedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return metaModel.isRemovedEdgeClass(elementClass, edgeClass);
+    public boolean isRemovedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        Collection<Class<? extends Edge>> removedEdgeClasses = elementClassToRemovedEdgeClasses.get(elementClass);
+        return removedEdgeClasses != null && removedEdgeClasses.contains(edgeClass);
     }
 
     ///////////////////////////////////
@@ -627,17 +882,17 @@ public class MetaModelInstance {
 
     /** Alle abstracten Klassen, die im Baum aus der FE auftauchen sollen */
     public Class<? extends ModelElement>[] getTreeDomainLayerVisibleAbstractNodes() {
-        return metaModel.getTreeDomainLayerVisibleAbstractNodes();
+        return treeDomainLayerVisibleAbstractNodes;
     }
 
     /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
     public Class<? extends ModelElement>[] getTreeLogicalLayerVisibleAbstractNodes() {
-        return metaModel.getTreeLogicalLayerVisibleAbstractNodes();
+        return treeLogicalLayerVisibleAbstractNodes;
     }
 
     /** Alle abstracten Klassen, die im Baum aus der LWE auftauchen sollen */
     public Class<? extends ModelElement>[] getTreePhysicalLayerVisibleAbstractNodes() {
-        return metaModel.getTreePhsicalLayerVisibleAbstractNodes();
+        return treePhysicalLayerVisibleAbstractNodes;
     }
 
     ///////////////////////////////////
@@ -668,7 +923,7 @@ public class MetaModelInstance {
      * @param edgeClass
      * @return
      */
-    public static final boolean isDirectedEdge(final Class<? extends Edge> edgeClass) {
+    public final boolean isDirectedEdge(final Class<? extends Edge> edgeClass) {
         //man muss explizit auf Kanten mit doppelter Bedeutung testen!
         //        if (DEBUG) {
         //            Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
@@ -679,7 +934,11 @@ public class MetaModelInstance {
         //            Sys.err1("isDirectedEdge:   edgeClass=" + edgeClass.getSimpleName() + "   startClass=" + startClass + "   endClass=" + endClass + "   isDoubleMeaningEdge=" + isDoubleMeaningEdge + "   forwardMetaAssociationName='" + forwardMetaAssociationName
         //                    + "'   backwardMetaAssociationName='" + backwardMetaAssociationName + "'\n\t-> " + (startClass != endClass) + " || " + isDoubleMeaningEdge + " || " + !forwardMetaAssociationName.equals(backwardMetaAssociationName));
         //        }
-        return Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass) || isDoubleMeaningEdge(edgeClass) || !ElementsNameBuilder.getForwardMetaAssociationName(edgeClass).equals(ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass));
+        if (Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass) || isDoubleMeaningEdge(edgeClass)) {
+            return true;
+        }
+        ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
+        return !elementsNameBuilder.getForwardMetaAssociationName(edgeClass).equals(elementsNameBuilder.getBackwardMetaAssociationName(edgeClass));
     }
 
     /**
@@ -690,7 +949,7 @@ public class MetaModelInstance {
      * @return
      */
     public SimpleMetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
-        return metaModel.getConditionPath(edgeClass);
+        return edgeClassToConditionMetaPath.get(edgeClass);
     }
 
     /**
@@ -702,13 +961,40 @@ public class MetaModelInstance {
      * @see MetaModel#getInstanciableMetaPaths(Class)
      */
     public Iterable<SimpleMetaPath> getInstanciablePath(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
-        Iterable<SimpleMetaPath> instanciableMetaPaths = metaModel.getInstanciableMetaPaths(instanciationEdgeClass);
+        Iterable<SimpleMetaPath> instanciableMetaPaths = instanciationEdgeToAdditionalInstanciationMetaPaths.get(instanciationEdgeClass);
         return SimpleMetaPathCreator.getSimpleMetaPathsNonAbstract(instanciableMetaPaths);
     }
 
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
     ///////////////////////////////////////////////////////////////////
+
+    /**
+     * Liefert aus der <code>HashMap oldToNewName</code> den aktuellen Klassennamen für den übergebenen alten Klassennamen. <br>
+     * Ist in <code>oldToNewName</code> kein Eintrag für den übergebenen alten Klassennamen vorhanden, wird davon ausgegangen, dass der alte Name der
+     * aktuelle ist.
+     *
+     * @param oldName
+     * @return
+     */
+    public final String getCurrentClassName(String oldName) {
+        String newName = oldToNewClassName.get(oldName);
+        //wenn kein Eintrag für den alten Namen gefunden wurde, ist der alte
+        // Namen der aktuelle
+        if (newName == null) {
+            return oldName;
+        }
+        //solange immer nach neuen Ersetzungen suchen, bis es keine mehr gibt
+        // -> den letzten
+        //gefundenen Namen zurückgeben
+        while (true) {
+            oldName = newName;
+            newName = oldToNewClassName.get(oldName);
+            if (newName == null) {
+                return oldName;
+            }
+        }
+    }
 
     /**
      * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
@@ -721,11 +1007,11 @@ public class MetaModelInstance {
         if (elementClassToNonAbstractAssignableElementClasses.containsKey(elementClass)) {
             Collection<Class<? extends ModelElement>> classes = elementClassToNonAbstractAssignableElementClasses.get(elementClass);
             if (classes.size() == 1 && classes.iterator().next() == null) {
-                return ModelConstants.EMPTY_ELEMENT_CLASS_COLLECTION;
+                return EMPTY_ELEMENT_CLASS_COLLECTION;
             }
             return classes;
         }
-        for (Class<? extends ModelElement> clazz : allElements) {
+        for (Class<? extends ModelElement> clazz : allElementsSet) {
             if (elementClass.isAssignableFrom(clazz) && !isAbstract(clazz)) {
                 elementClassToNonAbstractAssignableElementClasses.put(elementClass, clazz);
             }
@@ -751,7 +1037,7 @@ public class MetaModelInstance {
         ArrayList<Class<? extends Edge>> elementClassEdgeClasses = new ArrayList<>();
         for (Class<? extends Edge> edgeClass : allEdgesSet) {
             if (isStartOrEndClass(edgeClass, elementClass)) {
-                if (!metaModel.isRemovedEdgeClass(elementClass, edgeClass)) {
+                if (!isRemovedEdgeClass(elementClass, edgeClass)) {
                     elementClassEdgeClasses.add(edgeClass);
                 }
             }
@@ -759,7 +1045,7 @@ public class MetaModelInstance {
         int size = elementClassEdgeClasses.size();
         Class<? extends Edge>[] returnClasses = null;
         if (size == 0) {
-            returnClasses = ModelConstants.EMPTY_EDGE_CLASS_ARRAY;
+            returnClasses = EMPTY_EDGE_CLASS_ARRAY;
         } else {
             returnClasses = new Class[size];
             System.arraycopy(elementClassEdgeClasses.toArray(), 0, returnClasses, 0, size);
@@ -802,7 +1088,7 @@ public class MetaModelInstance {
         ArrayList<Class<? extends Edge>> resultEdgeClasses = new ArrayList<>();
         for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass1)) {
             if (isConnecting(edgeClass, elementClass1, elementClass2)) {
-                if (!metaModel.isRemovedEdgeClass(elementClass2, edgeClass)) { // !metaModel.isRemovedEdgeClass(elementClass1, edgeClass) wird schon in getEdgeTypes(elementClass1) geprüft
+                if (!isRemovedEdgeClass(elementClass2, edgeClass)) { // !isRemovedEdgeClass(elementClass1, edgeClass) wird schon in getEdgeTypes(elementClass1) geprüft
                     resultEdgeClasses.add(edgeClass);
                 }
             }
@@ -810,7 +1096,7 @@ public class MetaModelInstance {
         Class<? extends Edge>[] returnClasses = null;
         int size = resultEdgeClasses.size();
         if (size == 0) {
-            returnClasses = ModelConstants.EMPTY_EDGE_CLASS_ARRAY;
+            returnClasses = EMPTY_EDGE_CLASS_ARRAY;
         } else {
             returnClasses = new Class[resultEdgeClasses.size()];
             System.arraycopy(resultEdgeClasses.toArray(), 0, returnClasses, 0, size);
@@ -831,7 +1117,7 @@ public class MetaModelInstance {
         if (layer == ModelConstants.PHYSICAL_LAYER) {
             return creatablePhysicalLayerNodes;
         }
-        return ModelConstants.EMPTY_ELEMENT_CLASS_COLLECTION;
+        return EMPTY_ELEMENT_CLASS_COLLECTION;
     }
 
     /**
@@ -914,11 +1200,22 @@ public class MetaModelInstance {
     /**
      * Liefert <code>true</code>, wenn die übergebene Klasse Startklasse eines Interebenenmetapfades ist.
      *
+     * @param me
+     * @return
+     */
+    public final boolean hasInterLayerStartClass(final ModelElement me) {
+        return getGraphViewDefinition().getInterLayerMetaPath(me) != null;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse Startklasse eines Interebenenmetapfades ist.
+     *
+     * @param metaModel
      * @param elementClass
      * @return
      */
-    public final boolean isInterLayerStartClass(final Class<? extends ModelElement> elementClass) {
-        return getGraphViewDefinition().getInterLayerMetaPath(elementClass) != null;
+    public final boolean isInterLayerStartClass(final MetaModelInstance metaModel, final Class<? extends ModelElement> elementClass) {
+        return getGraphViewDefinition().getInterLayerMetaPath(metaModel, elementClass) != null;
     }
 
     /**
@@ -1049,7 +1346,7 @@ public class MetaModelInstance {
         }
         int size = subEdgeTypes.size();
         if (size == 0) {
-            return ModelConstants.EMPTY_COMPOSITION_CLASS_ARRAY;
+            return EMPTY_COMPOSITION_CLASS_ARRAY;
         }
         Class<? extends CompositionEdge>[] returnClasses = new Class[size];
         System.arraycopy(subEdgeTypes.toArray(), 0, returnClasses, 0, size);
@@ -1097,7 +1394,7 @@ public class MetaModelInstance {
     public final Class<? extends ModelElement>[] getSlaveElementTypes(final Class<? extends ModelElement> masterElementClass) {
         Class<? extends CompositionEdge>[] compositions = getCompositionEdgeTypesForMaster(masterElementClass);
         if (compositions.length == 0) {
-            return ModelConstants.EMPTY_ELEMENT_CLASS_ARRAY;
+            return EMPTY_ELEMENT_CLASS_ARRAY;
         }
         ArrayList<Class<? extends ModelElement>> slaveElementClasses = new ArrayList<>(compositions.length);
         for (Class<? extends CompositionEdge> compClass : compositions) {
@@ -1197,60 +1494,14 @@ public class MetaModelInstance {
     }
 
     /**
-     * Liefert die {@link MetaPathDefinition} des Metamodells
-     *
-     * @return
-     */
-    public final MetaPathDefinition getPathsDefinition() {
-        return metaModel.getPathsDefinition();
-    }
-
-    /**
-     * Liefert die {@link GraphViewDefinition} des Metamodells
-     *
-     * @return
-     */
-    public final GraphViewDefinition getGraphViewDefinition() {
-        return metaModel.getGraphViewDefinition();
-    }
-
-    private final CopyDependencies copyDependencies = metaModel.getCopyDependencies();
-
-    public Collection<Class<? extends ModelElement>> getCopyDependencies(final Class<? extends ModelElement> elementClass) {
-        return copyDependencies.get(elementClass);
-    }
-
-    public boolean avoidDuplicates(final Class<? extends ModelElement> elementClass) {
-        return copyDependencies.avoidDuplicates(elementClass);
-    }
-
-    /**
-     * Liefert die {@link AnalysesDefinition} des Metamodells
-     *
-     * @return
-     */
-    public final AnalysesDefinition getAnalysesDefinition() {
-        return metaModel.getAnalysesDefinition();
-    }
-
-    /**
-     * Liefert die Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen werden sollen
-     *
-     * @param plugins
-     * @return
-     */
-    public final Action[] getExtrasActions(final boolean plugins) {
-        return metaModel.getExtrasActions(plugins);
-    }
-
-    /**
      * Liefert alle anlegbaren MetaPfade, bei denen für selektierte Elemente der übergebenen Elementart im Kontextmenü eine Liste aller existierenden
      * Elemente angeboten werden soll, zu denen ein Pfad angelegt werden soll.
      *
      * @param elementClass
      */
     public Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass) {
-        return metaModel.getCreatableMetaPaths(elementClass);
+        Collection<SimpleMetaPath> creatablePaths = elementClassToCreatableMetaPaths.get(elementClass);
+        return creatablePaths == null ? ImmutableList.of() : creatablePaths;
     }
 
     /**
@@ -1263,13 +1514,129 @@ public class MetaModelInstance {
      */
     public Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
         ImmutableList.Builder<SimpleMetaPath> creatableMetaPaths = ImmutableList.builder();
-        for (SimpleMetaPath metaPath : metaModel.getCreatableMetaPaths(elementClass1)) {
+        for (SimpleMetaPath metaPath : getCreatableMetaPaths(elementClass1)) {
             Class<? extends ModelElement> endClass = metaPath.getEndClass();
             if (endClass.isAssignableFrom(elementClass2)) {
                 creatableMetaPaths.add(metaPath);
             }
         }
         return creatableMetaPaths.build();
+    }
+
+    /**
+     * Liefert für alle Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern unter der eigentlichen Elementart
+     * angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen Elementen.
+     *
+     * @return
+     */
+    public AbstractMetaPath getNameExtensionPath(final Class<? extends ModelElement> elementClass) {
+        return elementClassToNameExtensionPath.get(elementClass);
+    }
+
+    /**
+     * @return Iterable über alle Klassen, bei denen verbundene Elemente an den Namen angehängt werden sollen
+     */
+    public Collection<Class<? extends ModelElement>> getElementClassesWithNameExtensionPath() {
+        return elementClassesWithNameExtensions;
+    }
+
+    // die weiteren zum Metamodell gehörigen Definitionen
+
+    public Collection<Class<? extends ModelElement>> getCopyDependencies(final Class<? extends ModelElement> elementClass) {
+        return copyDependencies.get(elementClass);
+    }
+
+    public boolean avoidDuplicates(final Class<? extends ModelElement> elementClass) {
+        return copyDependencies.avoidDuplicates(elementClass);
+    }
+
+    /**
+     * @return {@link MetaPathDefinition} des Metamodells
+     */
+    public final MetaPathDefinition getMetaPathsDefinition() {
+        return metaPathsDefinition;
+    }
+
+    /**
+     * @return {@link GraphViewDefinition} des Metamodells
+     */
+    public final GraphViewDefinition getGraphViewDefinition() {
+        return graphViewDefinition;
+    }
+
+    /**
+     * @return {@link AnalysesDefinition} des Metamodells
+     */
+    public final AnalysesDefinition getAnalysesDefinition() {
+        return analysesDefinition;
+    }
+
+    /**
+     * Instanziiert die übergebene Klasse mit einem Kontruktor, der als Parmeter eine Instanz der Klasse {@link MetaModelInstance} erwartet. Geht
+     * dabei irgendwas schief, versucht sie es mit dem leeren Constructor. Geht dabei auch etwas schief, dann kommt ohne Exception <code>null</code>
+     * zurück.
+     *
+     * @param metaModelDependentClass
+     * @return
+     */
+    private <T> T getInstance(final Class<? extends T> metaModelDependentClass) {
+        T instance = null;
+        try {
+            instance = metaModelDependentClass.getConstructor(MetaModelInstance.class).newInstance(this);
+        } catch (Exception e) {
+            try {
+                instance = metaModelDependentClass.newInstance();
+            } catch (Exception e2) {
+            }
+        }
+        return instance;
+    }
+
+    /**
+     * Liefert die Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen werden sollen
+     *
+     * @param plugins
+     * @return
+     */
+    public final Action[] getExtrasActions(final boolean plugins) {
+        return extrasActionsDefinition.getActions(plugins);
+    }
+
+    // Anlegen neuer Elemente //
+
+    /**
+     * Erzeugt eine neue Instanz eines Modellelementes.<br>
+     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte.
+     *
+     * @param elementClass Unterklasse von <code>ModelElement</code>
+     * @return
+     */
+    public final ModelElement createElement(final Class<? extends ModelElement> elementClass) {
+        return createElement(elementClass, true);
+    }
+
+    /**
+     * Erzeugt eine neue Instanz eines Modellelementes.<br>
+     * Loggt eine Fehlermedung, wenn Objekt nicht erzeugt werden konnte und <code>log</code> mit <code>true</code> übergeben wurde.
+     *
+     * @param elementClass Unterklasse von <code>ModelElement</code>
+     * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
+     * @return neues ModelElement der übergebenen Klasse oder <code>null</code>
+     */
+    public final ModelElement createElement(final Class<? extends ModelElement> elementClass, final boolean log) {
+        return modelElementInstanceCreator.createElement(elementClass, log);
+    }
+
+    /**
+     * Erzeugt eine neues ModelElement der gleichen Art wie das übergebene
+     *
+     * @return neues ModelElement der übergebenen Art oder im Fehlerfall <code>null</code>
+     * @param me ModelElement, das die Klasse des neu zu erzeugenden Elementes vorgibt
+     * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
+     * @return neues ModelElement oder <code>null</code>
+     */
+    public final ModelElement createElement(final ModelElement me, final boolean log) {
+        return createElement(me.getClass(), log);
     }
 
 }

@@ -4,7 +4,6 @@
  */
 package de.imise.tool3lgm.metamodel.original.process;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
@@ -36,6 +35,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -181,17 +181,17 @@ public class KommProzessPanel extends ElementDialogPanel {
         setLayout(new BorderLayout());
 
         String[] colHeads = new String[COLUMN_COUNT];
-        colHeads[POSITION] = getResString("position");
-        colHeads[START_FUNCTION] = getResString("start_aufg");
-        colHeads[END_FUNCTION] = getResString("end_aufg");
-        colHeads[OBJECTTYPE] = getResString("Objekttyp");
-        colHeads[START_COMPONENTS] = getResString("start_bausteine");
-        colHeads[START_ORGUNIT] = getResString("start_orgeinh");
-        colHeads[END_COMPONENTS] = getResString("end_bausteine");
-        colHeads[END_ORGUNIT] = getResString("end_orgeinh");
-        colHeads[INTERFACES] = getResString("schnittstellen");
-        colHeads[MEDIUM_BREAKS] = getResString("medium_breaks");
-        colHeads[COMMENTS] = getResString("bemerk");
+        colHeads[POSITION] = _getResString("position"); // das hier kam aus den Tool-Resourcen, muss aber, wenn dieses Panel mal wieder reaktiviert werden sollte, wegen der sauberen Trennung aus den metamodell-spezifischen Resourcen kommen!
+        colHeads[START_FUNCTION] = _getResString("start_aufg");
+        colHeads[END_FUNCTION] = _getResString("end_aufg");
+        colHeads[OBJECTTYPE] = _getResString("Objekttyp");
+        colHeads[START_COMPONENTS] = _getResString("start_bausteine");
+        colHeads[START_ORGUNIT] = _getResString("start_orgeinh");
+        colHeads[END_COMPONENTS] = _getResString("end_bausteine");
+        colHeads[END_ORGUNIT] = _getResString("end_orgeinh");
+        colHeads[INTERFACES] = _getResString("schnittstellen");
+        colHeads[MEDIUM_BREAKS] = _getResString("medium_breaks");
+        colHeads[COMMENTS] = _getResString("bemerk"); // das hier kam aus den Tool-Resourcen, muss aber, wenn dieses Panel mal wieder reaktiviert werden sollte, wegen der sauberen Trennung aus den metamodell-spezifischen Resourcen kommen!
 
         String[][] contents = new String[0][0];
         tmodel = new DefaultTableModel(contents, colHeads);
@@ -205,11 +205,11 @@ public class KommProzessPanel extends ElementDialogPanel {
          */
         try {
             LGMAction showTeilmodelleAction = getShowTeilModelleAction(this);
-            LGMAction enumerateSchnittstellenAction = getRefreshHighlightsAndSpecialInfoAction(this, getResString("schnitt_nummern"));
-            LGMAction enumerateKantenAction = getRefreshHighlightsAndSpecialInfoAction(this, getResString("kanten_nummern"));
-            LGMAction writeObjekttypenAction = getRefreshHighlightsAndSpecialInfoAction(this, getResString("Objekttyp_p"));
-            LGMAction showKonfsAction = getRefreshHighlightsAndSpecialInfoAction(this, getResString("Anwendungsbaustein_p"));
-            LGMAction highlightAllCommElementsAction = getRefreshHighlightsAndSpecialInfoAction(this, getResString("alles_hervorheben"));
+            LGMAction enumerateSchnittstellenAction = getRefreshHighlightsAndSpecialInfoAction(this, _getResString("schnitt_nummern"));
+            LGMAction enumerateKantenAction = getRefreshHighlightsAndSpecialInfoAction(this, _getResString("kanten_nummern"));
+            LGMAction writeObjekttypenAction = getRefreshHighlightsAndSpecialInfoAction(this, _getResString("Objekttyp_p"));
+            LGMAction showKonfsAction = getRefreshHighlightsAndSpecialInfoAction(this, _getResString("Anwendungsbaustein_p"));
+            LGMAction highlightAllCommElementsAction = getRefreshHighlightsAndSpecialInfoAction(this, _getResString("alles_hervorheben"));
             showSubmodelsCheck = new JCheckBox();
             showSubmodelsCheck.setSelected(showSubmodels);
             showSubmodelsCheck.setAction(showTeilmodelleAction);
@@ -490,19 +490,19 @@ public class KommProzessPanel extends ElementDialogPanel {
                 table.setValueAt(null, i, END_COMPONENTS);// Endkonfigurationsbausteine
                 table.setValueAt(null, i, END_ORGUNIT);// Endorganisationseinheit
                 table.setValueAt(null, i, INTERFACES);// Schnittstellen
-                table.setValueAt(getResString("kein_OT"), i, COMMENTS);
+                table.setValueAt(_getResString("kein_OT"), i, COMMENTS);
             } else if (!step.hasStartKonfiguration()) {
                 if (step.hasEndKonfiguration()) {
-                    table.setValueAt(getResString("keine_Start_Konf"), i, COMMENTS);
+                    table.setValueAt(_getResString("keine_Start_Konf"), i, COMMENTS);
                 } else {
-                    table.setValueAt(getResString("keine_Konfigs"), i, COMMENTS);
+                    table.setValueAt(_getResString("keine_Konfigs"), i, COMMENTS);
                 }
             } else if (!step.hasEndKonfiguration()) {
-                tmodel.setValueAt(getResString("keine_End_Konf"), i, COMMENTS);
+                tmodel.setValueAt(_getResString("keine_End_Konf"), i, COMMENTS);
             } else if (step.getKommProzessLength() == ShortestCommunicationPathFinder.INFINITY) {
-                table.setValueAt(getResString("konfigs_passen_nicht"), i, COMMENTS);
+                table.setValueAt(_getResString("konfigs_passen_nicht"), i, COMMENTS);
             } else if (step.getKommProzessLength() == 0) {
-                table.setValueAt(getResString("konfigs_teilw_gleich"), i, COMMENTS);
+                table.setValueAt(_getResString("konfigs_teilw_gleich"), i, COMMENTS);
             } else {
                 // Bemerkungsspalte löschen
                 table.setValueAt(null, i, COMMENTS);
@@ -587,7 +587,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                         for (int b = 0; b < specialInfoTargetContainer.size(); b++) {
                             ElementContainer ec = doc.getElementContainer(specialInfoTargetContainer.get(b));
                             if (ec != null) {
-                                ec.addSpecialInfoToThisContainer(new AdditionalLabelTextGenerator(selectedStep, prozessC.get3LGMLayout()), getResString("start"));
+                                ec.addSpecialInfoToThisContainer(new AdditionalLabelTextGenerator(selectedStep, prozessC.get3LGMLayout()), _getResString("start"));
                             }
                         }
                     }
@@ -600,7 +600,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                         for (int b = 0; b < specialInfoTargetContainer.size(); b++) {
                             ElementContainer ec = doc.getElementContainer(specialInfoTargetContainer.get(b));
                             if (ec != null) {
-                                ec.addSpecialInfoToThisContainer(new AdditionalLabelTextGenerator(selectedStep, prozessC.get3LGMLayout()), getResString("ende"));
+                                ec.addSpecialInfoToThisContainer(new AdditionalLabelTextGenerator(selectedStep, prozessC.get3LGMLayout()), _getResString("ende"));
                             }
                         }
                     }
@@ -710,10 +710,10 @@ public class KommProzessPanel extends ElementDialogPanel {
     /**
      * @param edp
      */
-    private static final LGMAction getShowTeilModelleAction(final ElementDialogPanel edp) throws ActionNotDefinedForClassException {
+    private final LGMAction getShowTeilModelleAction(final ElementDialogPanel edp) throws ActionNotDefinedForClassException {
         final ElementDialogPanel pane = edp;
         if (pane instanceof KommProzessPanel) {
-            return new LGMAction(getResString("submodels")) {
+            return new LGMAction(_getResString("submodels")) {// das hier kam aus den Tool-Resourcen, muss aber, wenn dieses Panel mal wieder reaktiviert werden sollte, wegen der sauberen Trennung aus den metamodell-spezifischen Resourcen kommen!
 
                 @Override
                 public void execute(final EventObject eo) {
@@ -925,6 +925,11 @@ public class KommProzessPanel extends ElementDialogPanel {
             }
         }
         return varianten;
+    }
+
+    public String _getResString(final String key) {
+        GDCollection gdcoll = doc.getCollection();
+        return gdcoll.getResString(key);
     }
 
     //  /*

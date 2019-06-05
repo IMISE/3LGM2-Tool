@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.calculator.Calculator;
@@ -253,7 +253,9 @@ public class CostingUtil {
         Class<? extends Edge> edgeClass = null;
         String edgeClassName = extractSimpleFractionValueSumFormulaEdgeClassName(userField);
         if (edgeClassName != null) {
-            edgeClass = ModelConstants.getClassForName(edgeClassName).asSubclass(Edge.class);
+            UserFieldDefinitions definitions = userField.getDefinitions();
+            MetaModelInstance metaModel = definitions.getMetaModel();
+            edgeClass = metaModel.getClassForName(edgeClassName).asSubclass(Edge.class);
         }
         return edgeClass;
     }

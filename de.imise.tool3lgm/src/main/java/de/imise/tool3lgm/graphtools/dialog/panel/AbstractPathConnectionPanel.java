@@ -19,12 +19,11 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
@@ -109,14 +108,15 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         String westLabelText;
         if (labelEdgeName) {
             Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
-            westLabelText = getDirectionInPath(labelEdgeIndex) == FORWARD ? ElementsNameBuilder.getForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
+            Direction directionInPath = getDirectionInPath(labelEdgeIndex);
+            westLabelText = elementsNameBuilder.getMetaAssociationName(edgeClass, directionInPath);
         } else {
             Class<? extends ModelElement> labelPathStepEndClass = MetaPathFunctions.getElementaryPathsConnectingClass(metaPath, labelEdgeIndex);
             //zur Beschriftung des Labels wird immer die speziellere Klasse genommen aus Endklasse des Pfades und searchElementClass. Weil immer nur davon können die verbundenen Elemente sein.
             if (labelPathStepEndClass == null || labelPathStepEndClass.isAssignableFrom(searchElementClass)) {
                 labelPathStepEndClass = searchElementClass;
             }
-            westLabelText = metaPath.isSingleConnection() ? ElementsNameBuilder.getDisplayableName(labelPathStepEndClass) : ElementsNameBuilder.getDisplayablePluralName(labelPathStepEndClass);
+            westLabelText = elementsNameBuilder.getDisplayableName(!metaPath.isSingleConnection(), labelPathStepEndClass);
         }
         westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Den ersten Buchstaben des Labels immer groß schreiben
         westLabel.setText(westLabelText);
@@ -498,13 +498,15 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         if (elementaryMetaPaths.size() == 1) {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(0);
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-            SimpleMetaPath conditionPath = ModelConstants.getConditionPath(edgeClass);
+            ModelElement me = getModelElement();
+            MetaModelInstance metaModel = me.getMetaModel();
+            SimpleMetaPath conditionPath = metaModel.getConditionPath(edgeClass);
             //für diese eine Kante ist ein ConditionPath angegeben
             if (conditionPath != null) {
                 if (elementaryMetaPath.getDirection() == BACKWARD) {
                     conditionPath = conditionPath.getOtherDirection();
                 }
-                Collection<ModelElement> conditionElements = MetaPathFunctions.getConnectedElements(getModelElement(), conditionPath);
+                Collection<ModelElement> conditionElements = MetaPathFunctions.getConnectedElements(me, conditionPath);
                 available = new ArrayList<>(conditionElements.size());
                 for (ModelElement conditionElement : conditionElements) {
                     available.add(conditionElement.getContainer(mainDoc));

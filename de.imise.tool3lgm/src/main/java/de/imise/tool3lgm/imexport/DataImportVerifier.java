@@ -35,7 +35,7 @@ import de.imise.tool3lgm.imexport.linehandler.line.NodeLine;
 
 /**
  * Class to verify a import file. The main result is a {@link ImportErrorConfiguration} which contains all {@link ImportError} for the file.
- * 
+ *
  * @author AXS
  * @create 06.10.2014
  */
@@ -66,7 +66,7 @@ public class DataImportVerifier {
         try {
             FileInputStream istream = new FileInputStream(importFile);
             reader = new BufferedReader(new InputStreamReader(istream));
-            ImportLineHandler lineHandler = new ImportLineHandler();
+            ImportLineHandler lineHandler = new ImportLineHandler(gdcoll.getMetaModel());
             ImportHashConfiguration importHashConfiguration = new ImportHashConfiguration();
             String line = null;
             int row = -1;
@@ -113,7 +113,7 @@ public class DataImportVerifier {
      * Fehler 2: Der Name des Knotens ist leer
      * Fehler 3: Hash mehrfach in der Datei vergeben
      * Fehler 4: Hash wird im Modell bereits für ein Element einer anderen Art verwendet
-     * 
+     *
      * @param nodeLine
      * @param importHashConfiguration
      */
@@ -122,7 +122,7 @@ public class DataImportVerifier {
         if (nodeLine.getHeaderLine() == null) {
             errors.add(nodeLine, COLUMN_INDEX_ELEMENT_TYPE, HEADER_MISSING);
         }
-        //Node line always needs a valid name 
+        //Node line always needs a valid name
         String name = nodeLine.getName();
         if (name == null || name.isEmpty()) {
             errors.add(nodeLine, COLUMN_INDEX_NAME, NODE_OR_EDGE_EMPTY_NAME);
@@ -138,12 +138,12 @@ public class DataImportVerifier {
      * Fehler 5: Das Element, das der Starthash angibt, passt nicht zur Edge
      * Fehler 6: Das Element, das der Endhash angibt, existiert nicht
      * Fehler 7: Das Element, das der Endhash angibt, passt nicht zur Edge
-     * 
+     *
      * @param edgeLine
      * @param importHashConfiguration
      */
     private void addEdgeLineErrors(final EdgeLine edgeLine, final ImportHashConfiguration importHashConfiguration) {
-        //Edge lines always needs a valid name 
+        //Edge lines always needs a valid name
         String name = edgeLine.getName();
         if (name == null || name.isEmpty()) {
             errors.add(edgeLine, COLUMN_INDEX_NAME, NODE_OR_EDGE_EMPTY_NAME);
@@ -156,7 +156,7 @@ public class DataImportVerifier {
     /**
      * Fehler 1: In der HeaderLine ist eine Elementklasse angegeben, die nicht aufgelöst werden kann.
      * Fehler 2: Für die aktuelle Elementklasse müssen alle Userfields definiert sein, deren Namen in der übergebenen HeaderLine stehen.
-     * 
+     *
      * @param nodeHeaderLine
      */
     private void addNodeHeaderLineErrors(final NodeHeaderLine nodeHeaderLine) {
@@ -172,7 +172,7 @@ public class DataImportVerifier {
 
     /**
      * Fehler: Für die aktuelle Elementklasse müssen alle Userfields definiert sein, deren Namen in der übergebenen HeaderLine stehen.
-     * 
+     *
      * @param edgeHeaderLine
      */
     private void addEdgeHeaderLineErrors(final EdgeHeaderLine edgeHeaderLine) {
@@ -181,7 +181,7 @@ public class DataImportVerifier {
 
     /**
      * Fehler: Für die aktuelle Elementklasse müssen alle Userfields definiert sein, deren Namen in der übergebenen HeaderLine stehen.
-     * 
+     *
      * @param line
      * @param userFieldColumnStartIndex
      */
@@ -203,7 +203,7 @@ public class DataImportVerifier {
     /**
      * Fehler 1: Hash mehrfach in der Datei vergeben
      * Fehler 2: Hash wird im Modell bereits für ein Element einer anderen Art verwendet.
-     * 
+     *
      * @param line
      * @param importHashConfiguration
      */
@@ -222,7 +222,8 @@ public class DataImportVerifier {
             //prüfen, ob im Modell ein Element einer anderen Art vorkommt, das denselben Hash hat
             ModelElement me = gdcoll.getMainGraphDocument().findElementCoded(hash);
             if (me != null && me.getClass() != elementClass) {
-                String displayableName = ElementsNameBuilder.getDisplayableName(me.getClass());
+                ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
+                String displayableName = elementsNameBuilder.getDisplayableName(me.getClass());
                 errors.add(line, COLUMN_INDEX_HASH, HASH_CONFLICT, displayableName, me.getName(), hash);
             }
         }
@@ -231,7 +232,7 @@ public class DataImportVerifier {
     /**
      * Fehler 1: Das Element, das der Starthash angibt, existiert nicht.
      * Fehler 2: Das Element, das der Starthash angibt, passt nicht zur Edge.
-     * 
+     *
      * @param edgeLine
      * @param importHashConfiguration
      */
@@ -242,7 +243,7 @@ public class DataImportVerifier {
     /**
      * Fehler 1: Das Element, das der Endhash angibt, existiert nicht.
      * Fehler 2: Das Element, das der Endhash angibt, passt nicht zur Edge.
-     * 
+     *
      * @param edgeLine
      * @param importHashConfiguration
      */

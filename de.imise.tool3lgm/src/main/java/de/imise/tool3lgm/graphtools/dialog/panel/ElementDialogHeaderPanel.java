@@ -11,9 +11,8 @@ import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -56,7 +55,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         typeLabel = new JLabel();
         add(typeLabel, gbc);
 
-        if (ModelConstants.isEdgeType(getModelElement().getClass())) {
+        if (MetaModelInstance.isEdgeType(getModelElement().getClass())) {
             gbc.gridx = 0;
             gbc.gridy++;
             gbc.weightx = 0.0;
@@ -91,7 +90,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         idLabel = new JLabel();
         add(idLabel, gbc);
 
-        if (ModelConstants.isNodeType(getModelElement().getClass())) {
+        if (MetaModelInstance.isNodeType(getModelElement().getClass())) {
             gbc.gridx = 0;
             gbc.gridy++;
             gbc.weightx = 0.0;
@@ -111,7 +110,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
     public void update() {
         ModelElement me = dialog.getModelElement();
         if (me instanceof Node) {
-            typeLabel.setText(ElementsNameBuilder.getDisplayableName(me));
+            typeLabel.setText(elementsNameBuilder.getDisplayableName(me));
             labelLabel.setText("<html><b>" + me.getClearName() + "</b></html>");
             GraphDocument vdoc = mainDoc.getCollection().getGraphDocumentCoded(me.getAssociatedDoc());
             if (vdoc == null) {
@@ -126,20 +125,20 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             Edge edge = (Edge) me;
             Class<? extends Edge> edgeClass = edge.getClass();
 
-            String startElementClassName = ElementsNameBuilder.getDisplayableName(getStartClass(edgeClass));
-            String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ElementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD) + "</i>&nbsp;&nbsp;";
-            String endElementClassName = ElementsNameBuilder.getDisplayableName(getEndClass(edgeClass));
-
-            if (ModelConstants.isAssociationClass(getModelElement().getClass())) {
-                typeLabel.setText("<html>" + ElementsNameBuilder.getDisplayableName(me) + " (" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + ")</html>");
+            String startElementClassName = elementsNameBuilder.getDisplayableName(getStartClass(edgeClass));
+            String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD) + "</i>&nbsp;&nbsp;";
+            String endElementClassName = elementsNameBuilder.getDisplayableName(getEndClass(edgeClass));
+            MetaModelInstance metaModel = getMetaModel();
+            if (metaModel.isAssociationClass(getModelElement().getClass())) {
+                typeLabel.setText("<html>" + elementsNameBuilder.getDisplayableName(me) + " (" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + ")</html>");
             } else {
                 typeLabel.setText("<html>" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + "</html>");
             }
 
             String startElementName = edge.getStart().getClearName();
             // bei DoubleMeaning-Edges nur die tatsächliche Richtung hinschreiben
-            if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
-                forwardEdgeClassName = "&nbsp;&nbsp;<i>" + ElementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ((DoubleMeaningEdge) edge).getConnectionState()) + "</i>&nbsp;&nbsp;";
+            if (MetaModelInstance.isDoubleMeaningEdge(edgeClass)) {
+                forwardEdgeClassName = "&nbsp;&nbsp;<i>" + elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ((DoubleMeaningEdge) edge).getConnectionState()) + "</i>&nbsp;&nbsp;";
             }
             String endElementName = edge.getEnd().getClearName();
 

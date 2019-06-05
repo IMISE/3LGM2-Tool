@@ -4,14 +4,6 @@ import static de.imise.tool3lgm.Static.getCollections;
 import static de.imise.tool3lgm.Static.getPreSelectedGDCollection;
 import static de.imise.tool3lgm.Tool3lgmConstants.getIcon;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getBackwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getForwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getFullBackwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getFullForwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getFullMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
@@ -89,7 +81,7 @@ import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalysesRepository;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
@@ -401,25 +393,22 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         ModelElement me = ec.getElement();
         Class<? extends ModelElement> elementClass = me.getClass();
         JMenu sub_elem = new JMenu(getResString("unterg_el"));
+        MetaModelInstance metaModel = doc.getMetaModel();
         //die Elementklasse darf man nicht bearbeiten, also auch keine Unterelemente hinzufügen -> raus
-        if (!ModelConstants.isEditable(elementClass)) {
+        if (!metaModel.isEditable(elementClass)) {
             return sub_elem;
         }
-
         HashSet<Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>>> slavePairs = new HashSet<>();
-        for (Class<? extends CompositionEdge> compositionClass : ModelConstants.getCompositionEdgeTypesForMaster(elementClass)) {
+        for (Class<? extends CompositionEdge> compositionClass : metaModel.getCompositionEdgeTypesForMaster(elementClass)) {
             Class<? extends ModelElement> abstractSlaves = CompositionEdge.getSlaveType(compositionClass);
-            for (Class<? extends ModelElement> instanciableSlaves : ModelConstants.getInstanciableAssignableClasses(abstractSlaves)) {
+            for (Class<? extends ModelElement> instanciableSlaves : metaModel.getInstanciableAssignableClasses(abstractSlaves)) {
                 slavePairs.add(new Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>>(compositionClass, instanciableSlaves));
             }
         }
-
         if (slavePairs.size() == 0) {
             return sub_elem;
         }
-
         ArrayList<JMenuItem> items = new ArrayList<>(slavePairs.size());
-
         for (Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>> slavePair : slavePairs) {
             Class<? extends CompositionEdge> compositionClass = slavePair.getFirstItem();
             JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), MODEL_ACTION_CREATE_ADDICTED, doc.getHashString() + " " + me.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
@@ -528,7 +517,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             //Anlegbare Pfade zu anderen Elementen anbieten
             JLabel connectLabel = null;
-            for (SimpleMetaPath metaPath : ModelConstants.getCreatableMetaPaths(meClass)) {
+            MetaModelInstance metaModel = me.getMetaModel();
+            for (SimpleMetaPath metaPath : metaModel.getCreatableMetaPaths(meClass)) {
                 if (connectLabel == null) {
                     connectLabel = new JLabel(getResString("LABEL_CONNECT"));
                     menu.add(connectLabel);
@@ -548,16 +538,17 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             //InstaciationEdges -> "Neue Instanz" der verbundenen Klasse erzeugen anbieten
             JLabel newInstanceLabel = null;
-            if (!ModelConstants.isSlaveType(meClass)) {
-                for (Class<? extends Edge> edgeClass : getEdgeTypes(meClass)) {
+            if (!metaModel.isSlaveType(meClass)) {
+                ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+                for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(meClass)) {
                     if (InstanciationEdge.class.isAssignableFrom(edgeClass) && Edge.isStartClass(edgeClass, meClass)) {
                         if (newInstanceLabel == null) {
                             newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
                             menu.add(newInstanceLabel);
                         }
-                        String toolTip = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+                        String toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                         Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
-                        String label = ElementsNameBuilder.getDisplayableName(endClass);
+                        String label = elementsNameBuilder.getDisplayableName(endClass);
                         JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, edgeClass.getSimpleName(), link_icon, true, toolTip);
                         menu.add(item);
                     }
@@ -595,7 +586,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     addMenuItem(menu, show_configs);
                     addMenuItem(menu, hide_configs);
                 }
-                if (ModelConstants.hasLayout(me.getClass())) {
+                if (metaModel.hasLayout(me.getClass())) {
                     menu.addSeparator();
                     if (!ec.isVisible()) {
                         menu.add(set_visible);
@@ -679,18 +670,21 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             List<NamedObjectContainer<JMenuItem>> connectableItems = new ArrayList<>();
             List<NamedObjectContainer<JMenuItem>> disconnectableItems = new ArrayList<>();
 
+            MetaModelInstance metaModel = doc.getMetaModel();
+            ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
+
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                 List<Object> edgesAndPaths = new ArrayList<>();
-                edgesAndPaths.addAll(Arrays.asList(getEdgeTypes(lastSelectedClass, me2Class)));
-                edgesAndPaths.addAll(ModelConstants.getCreatableMetaPaths(lastSelectedClass, me2Class));
+                edgesAndPaths.addAll(Arrays.asList(metaModel.getEdgeTypes(lastSelectedClass, me2Class)));
+                edgesAndPaths.addAll(metaModel.getCreatableMetaPaths(lastSelectedClass, me2Class));
                 for (Object edgeClassOrMetaPath : edgesAndPaths) {
                     if (edgeClassOrMetaPath instanceof Class) {
                         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassOrMetaPath).asSubclass(Edge.class);
                         //Hat-Teil-Kante
                         if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
                             if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-                                String label = getForwardMetaAssociationName(edgeClass, false, true);
-                                String toolTip = getFullForwardMetaAssociationName(edgeClass);
+                                String label = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
+                                String toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -711,8 +705,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
                             }
                             if (isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
-                                String label = getBackwardMetaAssociationName(edgeClass, false, true);
-                                String toolTip = getFullBackwardMetaAssociationName(edgeClass);
+                                String label = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
+                                String toolTip = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -733,12 +727,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectable, toolTip), label));
                             }
                             //Kante mit Doppelter Bedeutung
-                        } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+                        } else if (MetaModelInstance.isDoubleMeaningEdge(edgeClass)) {
                             if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
                                 Direction direction = Direction.FORWARD;
                                 ConnectionState connectionState = ConnectionState.FORWARD;
-                                String label = getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                String toolTip = getFullMetaAssociationName(edgeClass, direction, connectionState);
+                                String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
+                                String toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -758,8 +752,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
 
                                 connectionState = ConnectionState.BACKWARD;
-                                label = getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                toolTip = getFullMetaAssociationName(edgeClass, direction, connectionState);
+                                label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
+                                toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
                                 connectable = false;
                                 disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -783,8 +777,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             if (isConnectingForward(edgeClass, me2Class, lastSelectedClass) && getStartClass(edgeClass) != getEndClass(edgeClass)) {
                                 Direction direction = Direction.BACKWARD;
                                 ConnectionState connectionState = ConnectionState.FORWARD;
-                                String label = getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                String toolTip = getFullMetaAssociationName(edgeClass, direction, connectionState);
+                                String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
+                                String toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -804,8 +798,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
 
                                 connectionState = ConnectionState.BACKWARD;
-                                label = getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                toolTip = getFullMetaAssociationName(edgeClass, direction, connectionState);
+                                label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
+                                toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
                                 connectable = false;
                                 disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -826,11 +820,11 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
                             }
                             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
-                        } else if (Edge.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && Edge.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && ModelConstants.isDirectedEdge(edgeClass)) {
-                            String labelForward = getForwardMetaAssociationName(edgeClass, false, true);
-                            String toolTipForward = getFullForwardMetaAssociationName(edgeClass);
-                            String labelBackward = getBackwardMetaAssociationName(edgeClass, false, true);
-                            String toolTipBackward = getFullBackwardMetaAssociationName(edgeClass);
+                        } else if (Edge.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && Edge.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && metaModel.isDirectedEdge(edgeClass)) {
+                            String labelForward = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
+                            String toolTipForward = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+                            String labelBackward = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
+                            String toolTipBackward = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
                             boolean connectableForward = false;
                             boolean disconnectableForward = false;
                             boolean connectableBackward = false;
@@ -866,12 +860,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             String toolTip;
                             if (isStartClass(edgeClass, lastSelectedClass)) {
                                 direction = FORWARD;
-                                label = getForwardMetaAssociationName(edgeClass, false, true);
-                                toolTip = getFullForwardMetaAssociationName(edgeClass);
+                                label = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
+                                toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                             } else {
                                 direction = BACKWARD;
-                                label = getBackwardMetaAssociationName(edgeClass, false, true);
-                                toolTip = getFullBackwardMetaAssociationName(edgeClass);
+                                label = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
+                                toolTip = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
                             }
                             boolean connectable = false;
                             boolean disconnectable = false;
@@ -1107,11 +1101,13 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private JMenu getCreateNewNodesMenu() {
         int activeLayer = doc.getCollection().getActiveLayer();
-        Iterable<Class<? extends ModelElement>> creatableLayerNodes = ModelConstants.getCreatableLayerNodes(activeLayer);
+        MetaModelInstance metaModel = doc.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        Iterable<Class<? extends ModelElement>> creatableLayerNodes = metaModel.getCreatableLayerNodes(activeLayer);
         JMenu layerMenu = new JMenu(getResString("el_neu"));
         for (Class<? extends ModelElement> elementClass : creatableLayerNodes) {
-            if (ModelConstants.isEditable(elementClass)) {
-                JMenuItem item = new JMenuItem(ElementsNameBuilder.getDisplayableName(elementClass));
+            if (metaModel.isEditable(elementClass)) {
+                JMenuItem item = new JMenuItem(elementsNameBuilder.getDisplayableName(elementClass));
                 item.addActionListener(this);
                 item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + elementClass.getName());
                 layerMenu.add(item);
@@ -2013,7 +2009,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         if (ec != null && ec.getElement() instanceof Node) {
             // Alle Analysen für die ausgewählte Klasse holen
             Class<? extends ModelElement> elementClass = ec.getElement().getClass();
-            List<AbstractAnalysis> analysis = AnalysesRepository.getAnalyses(elementClass);
+            List<AbstractAnalysis> analysis = AnalysesRepository.getAnalyses(Static.getSelectedMetaModel(), elementClass);
             // Analysen ins Menü eintragen
             for (final AbstractAnalysis ana : analysis) {
                 JMenuItem item = new JMenuItem(ana.getName());
@@ -2190,13 +2186,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * Liefert eine Kanteart zwischen den beiden übergebenen Elementarte zurück, wenn es mind. eine gibt. Gibt es mehrere, wird der Benutzer mit einem
      * Dialog vor die Auswahl gestellt.
      *
+     * @param metaModel
      * @param elementClass1
      * @param elementClass2
      * @return
      */
-    public static Class<? extends Edge> requestCurrentEdgeType(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+    public static Class<? extends Edge> requestCurrentEdgeType(final MetaModelInstance metaModel, final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
         Class<? extends Edge> edgeClass = null;
-        Class<? extends Edge>[] edgeClasses = getEdgeTypes(elementClass1, elementClass2);
+        Class<? extends Edge>[] edgeClasses = metaModel.getEdgeTypes(elementClass1, elementClass2);
         if (edgeClasses == null || edgeClasses.length == 0) {
             return null;
         }
@@ -2205,8 +2202,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             JPanel messagePanel = new JPanel();
             messagePanel.setLayout(new BoxLayout(messagePanel, Y_AXIS));
             ButtonGroup buttonGroup = new ButtonGroup();
+            ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
             for (int i = 0; i < edgeClasses.length; i++) {
-                JRadioButton b = new JRadioButton(ElementsNameBuilder.getForwardMetaAssociationName(edgeClasses[i]));
+                JRadioButton b = new JRadioButton(elementsNameBuilder.getForwardMetaAssociationName(edgeClasses[i]));
                 b.setActionCommand(edgeClasses[i].getName());
                 messagePanel.add(b);
                 buttonGroup.add(b);
@@ -2218,7 +2216,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             JDialog dialog = optionPane.createDialog(Static.getMainFrame(), getResString("choose_trace"));
             dialog.setVisible(true);
             String edgeClassName = buttonGroup.getSelection().getActionCommand();
-            edgeClass = getClassForName(edgeClassName).asSubclass(Edge.class);
+            edgeClass = metaModel.getClassForName(edgeClassName).asSubclass(Edge.class);
         }
         return edgeClass;
     }

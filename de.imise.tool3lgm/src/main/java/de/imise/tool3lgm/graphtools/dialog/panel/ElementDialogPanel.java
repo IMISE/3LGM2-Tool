@@ -15,11 +15,13 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMComponentListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMWindowListener;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -44,10 +46,11 @@ public abstract class ElementDialogPanel extends JPanel {
      */
     protected GraphDocument mainDoc;
 
-    /**
-     * Der Dialog in dem sich dieses Panel befindet
-     */
+    /** Der Dialog in dem sich dieses Panel befindet */
     protected final ElementPropertyDialog dialog;
+
+    /** Der ElementsNameBuilder des zugehörigen Metamodells */
+    protected final ElementsNameBuilder elementsNameBuilder;
 
     /**
      * Liste mit allen Elementen, die im Panel selektiert sind. Da ein Panel mehrere Bäume enthalten
@@ -115,13 +118,14 @@ public abstract class ElementDialogPanel extends JPanel {
         super();
         this.dialog = dialog;
         setName(name);
+        doc = dialog.getGraphDocument();
+        mainDoc = doc.getCollection().getMainGraphDocument();
+        treeRenderer = new TreeRenderer(doc);
+        elementsNameBuilder = doc.getElementsNameBuilder();
         init();
     }
 
     protected void init() {
-        doc = dialog.getGraphDocument();
-        mainDoc = doc.getCollection().getMainGraphDocument();
-        treeRenderer = new TreeRenderer(doc);
         setBorder(BorderFactory.createEmptyBorder(1, 1, 0, 0));
         highlight = new ArrayList<>();
 
@@ -231,7 +235,7 @@ public abstract class ElementDialogPanel extends JPanel {
     /**
      * @return dialog
      */
-    public ElementPropertyDialog getDialog() {
+    public final ElementPropertyDialog getDialog() {
         return dialog;
     }
 
@@ -260,8 +264,19 @@ public abstract class ElementDialogPanel extends JPanel {
     /**
      * @return modelElement
      */
-    public ModelElement getModelElement() {
+    public final ModelElement getModelElement() {
         return dialog.getModelElement();
+    }
+
+    public final MetaModelInstance getMetaModel() {
+        return mainDoc.getMetaModel();
+    }
+
+    /**
+     * @return
+     */
+    public final ElementsNameBuilder getElementNameBuilder() {
+        return mainDoc.getElementsNameBuilder();
     }
 
     // -------------------------------------------------------------------------------- -/

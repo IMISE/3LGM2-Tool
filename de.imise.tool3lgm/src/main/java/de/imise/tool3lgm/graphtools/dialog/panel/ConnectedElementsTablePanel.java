@@ -25,7 +25,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ConnectPathDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -187,7 +187,8 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         List<ModelElement> selectedElements = new ArrayList<>();
         for (int row : selectedRows) {
             ModelElement selectedElement = getModelElementAt(row, clickedColumn);
-            if (selectedElement != null && !ModelConstants.isHiddenClass(selectedElement.getClass())) {
+            MetaModelInstance metaModel = mainDoc.getMetaModel();
+            if (selectedElement != null && !metaModel.isHiddenClass(selectedElement.getClass())) {
                 selectedElements.add(selectedElement);
             }
         }

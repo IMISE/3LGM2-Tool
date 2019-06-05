@@ -26,6 +26,8 @@ import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.KeyStrokes;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -111,14 +113,14 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     private final Collection<LGMTreeNode> nodesToClear;
 
     /**
-     * @param d
+     * @param doc
      */
-    public DynamicTree(final GraphDocument d) {
+    public DynamicTree(final GraphDocument doc) {
         super(new DefaultTreeModel(new StringTreeNode(getResString("MODEL_BRWOSER_TITLE"), false)));
+        this.doc = doc;
         initTree();
         nodesToClear = elementClassToParentNode.values();
         rootPath = new TreePath(((DefaultTreeModel) getModel()).getPathToRoot((LGMTreeNode) getModel().getRoot()));
-        doc = d;
         //alle KeyStrokes im Baum hinzufügen, die systemweit gelten sollen. Da der Baum schon eine eigene InputMap und ActionMap hat,
         //werden die ShortCuts aus dem RootPane des Tools hier nicht auch beachtet und müssen explizit hinzugefügt werden
         KeyStrokes.registerPublicKeyStrokes(this);
@@ -191,12 +193,15 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         sortedByAssignable(abstractClasses);
         //Liste von Knoten für die abstrakten Klassen in derselben Reihenfolge wie die abstrakten Klassen
         List<LGMTreeNode> abstractClassNodes = new ArrayList<>();
+        ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
         for (Class<? extends ModelElement> abstractClass : abstractClasses) {
-            abstractClassNodes.add(new ElementClassTreeNode(abstractClass));
+            String label = elementsNameBuilder.getDisplayableName(abstractClass);
+            abstractClassNodes.add(new ElementClassTreeNode(abstractClass, label));
         }
         //jetzt die ElementKnoten unter die abstrakten Knoten hängen oder unter den LayerKnoten selbst, wenn es keinen abstakten Oberklassenkoten gibt
         for (Class<? extends ModelElement> elementClass : treeLayerVisibleInstancialeNodes) {
-            LGMTreeNode instanciableClassNode = new ElementClassTreeNode(elementClass, false); // muss nicht selbst sortieren, weil die Elemente bereits sortiert reinkommen
+            String label = elementsNameBuilder.getDisplayableName(elementClass);
+            LGMTreeNode instanciableClassNode = new ElementClassTreeNode(elementClass, label, false); // muss nicht selbst sortieren, weil die Elemente bereits sortiert reinkommen
             elementClassToParentNode.put(elementClass, instanciableClassNode);
             boolean superClassFound = false;
             for (int i = abstractClasses.size() - 1; i >= 0; i--) {
@@ -240,9 +245,10 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         top.add(fachebene);
         top.add(logebene);
         top.add(phyebene);
-        initLayer(fachebene, ModelConstants.getTreeDomainLayerVisibleAbstractNodes(), ModelConstants.TREE_DOMAIN_LAYER_NODES);
-        initLayer(logebene, ModelConstants.getTreeLogicalLayerVisibleAbstractNodes(), ModelConstants.TREE_LOGICAL_LAYER_NODES);
-        initLayer(phyebene, ModelConstants.getTreePhysicalLayerVisibleAbstractNodes(), ModelConstants.TREE_PHYSICAL_LAYER_NODES);
+        MetaModelInstance metaModel = doc.getMetaModel();
+        initLayer(fachebene, metaModel.getTreeDomainLayerVisibleAbstractNodes(), metaModel.treeDomainLayerNodes);
+        initLayer(logebene, metaModel.getTreeLogicalLayerVisibleAbstractNodes(), metaModel.treeLogicalLayerNodes);
+        initLayer(phyebene, metaModel.getTreePhysicalLayerVisibleAbstractNodes(), metaModel.treePhysicalLayerNodes);
     }
 
     public boolean isLayerNode(final Object o) {
@@ -260,7 +266,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
      */
     private void createTree() {
         //alle Knoten entfernen/einblenden, die nicht/nur im ExpertMode zu sehen sein sollen
-        for (Class<? extends ModelElement> onlyExperModeVisibleNodeClass : ModelConstants.getOnlyExpertModeVisibleNodes()) {
+        for (Class<? extends ModelElement> onlyExperModeVisibleNodeClass : doc.getMetaModel().getOnlyExpertModeVisibleNodes()) {
             LGMTreeNode node = elementClassToParentNode.get(onlyExperModeVisibleNodeClass);
             if (node != null) {
                 if (Static.isExpertMode()) {
@@ -432,7 +438,9 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
 
     private LGMTreeNode getOrCreateTextFieldNode(final LGMTreeNode layerNode, LGMTreeNode textFieldNode) {
         if (textFieldNode == null) {
-            textFieldNode = new ElementClassTreeNode(Textfield.class, false);
+            ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
+            String label = elementsNameBuilder.getDisplayableName(Textfield.class);
+            textFieldNode = new ElementClassTreeNode(Textfield.class, label, false);
         }
         if (textFieldNode.getParent() == null) {
             textFieldNode.removeAllChildren();

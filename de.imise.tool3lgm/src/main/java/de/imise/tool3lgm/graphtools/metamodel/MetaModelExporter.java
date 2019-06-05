@@ -16,6 +16,8 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.MetaModelInstanceContext;
+import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -29,14 +31,24 @@ public class MetaModelExporter {
 
     private static final String INDENTION = "    ";
 
+    private final MetaModelInstance metaModel;
+
+    private final ElementsNameBuilder elementsNameBuilder;
+
     public static void main(final String[] args) {
         UserProperties.init();
-        MetaModel metaModel = ModelConstants.initMetaModel();
-        print(metaModel);
+        MetaModelInstanceContext metaModelContext = Tool3lgmMetaModelContext.chooseMetaModel();
+        new MetaModelExporter(metaModelContext.getMetaModel());
     }
 
-    public static void print(final MetaModel metaModel) {
-        List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies = getElementsHierarchies(ModelConstants.ALL_NODES_SET);
+    public MetaModelExporter(final MetaModelInstance metaModel) {
+        this.metaModel = metaModel;
+        elementsNameBuilder = metaModel.getElementsNameBuilder();
+        printMetaModel();
+    }
+
+    public void printMetaModel() {
+        List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies = getElementsHierarchies(metaModel.allNodesSet);
 
         System.out.println("###  ALL NODES (compact)");
         for (NamedObjectContainer<List<Class<?>>> o : elementsHierarchies) {
@@ -49,10 +61,10 @@ public class MetaModelExporter {
         System.out.println();
 
         System.out.println("### All Nodes (full) ######");
-        printElementsWithEdges(elementsHierarchies);
+        printElementsWithEdges(metaModel, elementsHierarchies);
         System.out.println();
 
-        List<NamedObjectContainer<List<Class<?>>>> edgesHierarchies = getElementsHierarchies(ModelConstants.ALL_EDGES_SET);
+        List<NamedObjectContainer<List<Class<?>>>> edgesHierarchies = getElementsHierarchies(metaModel.allEdgesSet);
 
         System.out.println("###  ALL EDGES (compact)");
         for (NamedObjectContainer<List<Class<?>>> o : edgesHierarchies) {
@@ -65,20 +77,20 @@ public class MetaModelExporter {
         System.out.println();
 
         System.out.println("### All EDGES (full) ######");
-        printElementsWithEdges(edgesHierarchies);
+        printElementsWithEdges(metaModel, edgesHierarchies);
         System.out.println();
 
     }
 
-    private static String getDisplayableName(final NamedObjectContainer<List<Class<?>>> noc) {
+    private String getDisplayableName(final NamedObjectContainer<List<Class<?>>> noc) {
         return getDisplayableName(noc, 0);
     }
 
-    private static String getDisplayableName(final NamedObjectContainer<List<Class<?>>> noc, final int classIndex) {
+    private String getDisplayableName(final NamedObjectContainer<List<Class<?>>> noc, final int classIndex) {
         List<Class<?>> elementClassList = noc.getObject();
         Class<? extends ModelElement> elementClass = elementClassList.get(classIndex).asSubclass(ModelElement.class);
         StringBuilder sb = new StringBuilder();
-        String displayableName = ElementsNameBuilder.getDisplayableName(elementClass);
+        String displayableName = elementsNameBuilder.getDisplayableName(elementClass);
         String elementClassName = elementClass.getSimpleName();
         if (!elementClassName.equals(displayableName)) {
             sb.append(" (");
@@ -88,7 +100,7 @@ public class MetaModelExporter {
         return sb.toString();
     }
 
-    private static <T extends ModelElement> List<NamedObjectContainer<List<Class<?>>>> getElementsHierarchies(final Collection<Class<? extends T>> classes) {
+    private <T extends ModelElement> List<NamedObjectContainer<List<Class<?>>>> getElementsHierarchies(final Collection<Class<? extends T>> classes) {
         List<NamedObjectContainer<List<Class<?>>>> elementHierarchies = new ArrayList<>();
         for (Class<? extends T> elementClass : classes) {
             NamedObjectContainer<List<Class<?>>> noc = getSingleElementHierarchy(elementClass, false);
@@ -98,7 +110,7 @@ public class MetaModelExporter {
         return elementHierarchies;
     }
 
-    private static void printHierarchyTree(final List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies) {
+    private void printHierarchyTree(final List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies) {
         List<Class<?>> lastElementHierarchy = new ArrayList<>();
         for (NamedObjectContainer<List<Class<?>>> noc : elementsHierarchies) {
             List<Class<?>> elementHierarchy = noc.getObject();
@@ -118,7 +130,7 @@ public class MetaModelExporter {
         }
     }
 
-    private static boolean containsSameClass(final List<Class<?>> elementHierarchy, final Class<?> elementClass, final int indexFromEnd) {
+    private boolean containsSameClass(final List<Class<?>> elementHierarchy, final Class<?> elementClass, final int indexFromEnd) {
         int indexInElementHierarchy = elementHierarchy.size() - indexFromEnd;
         if (indexInElementHierarchy < 0) {
             return false;
@@ -126,17 +138,17 @@ public class MetaModelExporter {
         return elementHierarchy.get(indexInElementHierarchy) == elementClass;
     }
 
-    private static void printElementsWithEdges(final List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies) {
+    private void printElementsWithEdges(final MetaModelInstance metaModel, final List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies) {
         for (NamedObjectContainer<List<Class<?>>> noc : elementsHierarchies) {
             System.out.println(noc);
             Class<? extends ModelElement> elementClass = noc.getObject().get(0).asSubclass(ModelElement.class);
-            if (ModelConstants.isEdgeType(elementClass)) {
+            if (MetaModelInstance.isEdgeType(elementClass)) {
                 Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
                 //                String edgeString = getEdgeStringOrg2(edgeClass, ModelElement.class, INDENTION);
                 String edgeString = getEdgeString(edgeClass, INDENTION);
                 System.out.println(edgeString);
             }
-            List<Class<? extends Edge>> edgeClasses = Arrays.asList(ModelConstants.getEdgeTypes(elementClass));
+            List<Class<? extends Edge>> edgeClasses = Arrays.asList(metaModel.getEdgeTypes(elementClass));
             Alphabetical.sort(edgeClasses);
             List<NamedObjectContainer<Class<? extends Edge>>> edgesStrings = new ArrayList<>();
             for (Class<? extends Edge> edgeClass : edgeClasses) {
@@ -163,11 +175,11 @@ public class MetaModelExporter {
      * @param edgeClass
      * @return
      */
-    private static boolean isDefinedStartOrEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+    private boolean isDefinedStartOrEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         return getStartClass(edgeClass) == elementClass || getEndClass(edgeClass) == elementClass;
     }
 
-    private static NamedObjectContainer<List<Class<?>>> getSingleElementHierarchy(final Class<? extends ModelElement> elementClass, final boolean appendDisplayableName) {
+    private NamedObjectContainer<List<Class<?>>> getSingleElementHierarchy(final Class<? extends ModelElement> elementClass, final boolean appendDisplayableName) {
         List<Class<?>> classAndSuperClasses = getSuperClasses(elementClass, ModelElement.class);
         StringBuilder sb = new StringBuilder();
         for (int i = classAndSuperClasses.size() - 1; i >= 0; i--) {
@@ -182,14 +194,14 @@ public class MetaModelExporter {
         }
         if (appendDisplayableName) {
             sb.append(" (");
-            sb.append(ElementsNameBuilder.getDisplayableName(elementClass));
+            sb.append(elementsNameBuilder.getDisplayableName(elementClass));
             sb.append(")");
         }
         NamedObjectContainer<List<Class<?>>> noc = new NamedObjectContainer<>(classAndSuperClasses, sb.toString());
         return noc;
     }
 
-    private static final List<Class<?>> getSuperClasses(final Class<?> clazz, final Class<?> superClass) {
+    private final List<Class<?>> getSuperClasses(final Class<?> clazz, final Class<?> superClass) {
         ImmutableList.Builder<Class<?>> classAndSuperClasses = ImmutableList.builder();
         Class<?> tmpClass = clazz;
         classAndSuperClasses.add(tmpClass);
@@ -200,7 +212,7 @@ public class MetaModelExporter {
         return classAndSuperClasses.build();
     }
 
-    private static String getEdgeString(final Class<? extends Edge> edgeClass, final String intention) {
+    private String getEdgeString(final Class<? extends Edge> edgeClass, final String intention) {
         StringBuilder sb = new StringBuilder(intention);
         sb.append(edgeClass.getSimpleName());
         sb.append(": ");
@@ -210,7 +222,7 @@ public class MetaModelExporter {
         return sb.toString();
     }
 
-    private static String getEdgeString(final Class<? extends Edge> edgeClass, final boolean forward) {
+    private String getEdgeString(final Class<? extends Edge> edgeClass, final boolean forward) {
         StringBuilder sb = new StringBuilder();
         int minBackwardCardinality = forward ? getMinBackwardCardinality(edgeClass) : getMinForwardCardinality(edgeClass);
         int maxBackwardCardinality = forward ? getMaxBackwardCardinality(edgeClass) : getMaxForwardCardinality(edgeClass);
@@ -219,9 +231,9 @@ public class MetaModelExporter {
         int maxForwardCardinality = forward ? getMaxForwardCardinality(edgeClass) : getMaxBackwardCardinality(edgeClass);
         String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
 
-        String startClassName = forward ? ElementsNameBuilder.getDisplayableName(getStartClass(edgeClass)) : ElementsNameBuilder.getDisplayableName(getEndClass(edgeClass));
-        String endClassName = forward ? ElementsNameBuilder.getDisplayableName(getEndClass(edgeClass)) : ElementsNameBuilder.getDisplayableName(getStartClass(edgeClass));
-        String metaAssociationName = forward ? ElementsNameBuilder.getForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
+        String startClassName = forward ? elementsNameBuilder.getDisplayableName(getStartClass(edgeClass)) : elementsNameBuilder.getDisplayableName(getEndClass(edgeClass));
+        String endClassName = forward ? elementsNameBuilder.getDisplayableName(getEndClass(edgeClass)) : elementsNameBuilder.getDisplayableName(getStartClass(edgeClass));
+        String metaAssociationName = forward ? elementsNameBuilder.getForwardMetaAssociationName(edgeClass) : elementsNameBuilder.getBackwardMetaAssociationName(edgeClass);
 
         sb.append(startClassName);
         sb.append(" ");
@@ -232,7 +244,7 @@ public class MetaModelExporter {
         return sb.toString();
     }
 
-    private static String getEdgeStringOrg2(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
+    private String getEdgeStringOrg2(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
         String edgeClassName = edgeClass.getSimpleName();
         StringBuilder sb = new StringBuilder();
         boolean forward = isStartClass(edgeClass, readingDirectionStartClass);
@@ -242,13 +254,13 @@ public class MetaModelExporter {
         int minForwardCardinality = forward ? getMinForwardCardinality(edgeClass) : getMinBackwardCardinality(edgeClass);
         int maxForwardCardinality = forward ? getMaxForwardCardinality(edgeClass) : getMaxBackwardCardinality(edgeClass);
         String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
-        String fulldMetaAssociationName = forward ? ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass) : ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
+        String fulldMetaAssociationName = forward ? elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass) : elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
         sb.append(intention).append(edgeClassName).append(": [").append(minBackwardCardinality).append(", ").append(maxBackwardCardinalityString).append("] ");
         sb.append(fulldMetaAssociationName).append(" [").append(minForwardCardinality).append(", ").append(maxForwardCardinalityString).append("]");
         return sb.toString();
     }
 
-    private static String getEdgeStringOrg(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
+    private String getEdgeStringOrg(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> readingDirectionStartClass, final String intention) {
         String edgeClassName = edgeClass.getSimpleName();
         int minBackwardCardinality = getMinBackwardCardinality(edgeClass);
         int maxBackwardCardinality = getMaxBackwardCardinality(edgeClass);
@@ -256,7 +268,7 @@ public class MetaModelExporter {
         int minForwardCardinality = getMinForwardCardinality(edgeClass);
         int maxForwardCardinality = getMaxForwardCardinality(edgeClass);
         String maxForwardCardinalityString = maxForwardCardinality == Integer.MAX_VALUE ? "N" : Integer.toString(maxForwardCardinality);
-        String fullForwardMetaAssociationName = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+        String fullForwardMetaAssociationName = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
         StringBuilder sb = new StringBuilder();
         sb.append(intention).append(edgeClassName).append(": [").append(minBackwardCardinality).append(", ").append(maxBackwardCardinalityString).append("] ");
         sb.append(fullForwardMetaAssociationName).append(" [").append(minForwardCardinality).append(", ").append(maxForwardCardinalityString).append("]");

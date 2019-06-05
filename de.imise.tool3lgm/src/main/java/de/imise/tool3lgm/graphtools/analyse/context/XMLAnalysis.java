@@ -18,7 +18,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.MetaModelInstanceContext;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -29,21 +30,29 @@ import de.imise.tool3lgm.log.Log;
  *
  * @author Sebastian Weber
  */
-public class XMLAnalysis extends AbstractAnalysis {
+public final class XMLAnalysis extends AbstractAnalysis {
 
     /** der Text der die Analyse beschreibt. */
-    protected String xmlText;
+    private String xmlText;
+
+    /**
+     * @param metaModelContext
+     */
+    private XMLAnalysis(final MetaModelInstanceContext metaModelContext) {
+        super(metaModelContext);
+    }
 
     /**
      * Erzeugt eine neue XMLAnalyse mit den übergebenen Parametern.
      *
+     * @param metaModelContext der Context des Metamodels, für das die Analyse anwendbar ist
      * @param analyseText die XMLAnalyse als XML-Text.
      * @return wenn kein Fehler beim erzeugen der XMLAnalyse auftrat, wird eine neue XMLAnalyse mit
      *         den übergebenen Parametern zurück gegeben.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
-    public static XMLAnalysis createAnalysis(final String analyseText) throws SAXException {
-        XMLAnalysis xMLAnalysis = new XMLAnalysis();
+    public static XMLAnalysis createAnalysis(final MetaModelInstanceContext metaModelContext, final String analyseText) throws SAXException {
+        XMLAnalysis xMLAnalysis = new XMLAnalysis(metaModelContext);
         xMLAnalysis.setXMLText(analyseText);
         return xMLAnalysis;
     }
@@ -51,14 +60,15 @@ public class XMLAnalysis extends AbstractAnalysis {
     /**
      * Erzeugt eine neue XMLAnalyse mit den übergebenen Parametern.
      *
+     * @param metaModelContext der Context des Metamodels, für das die Analyse anwendbar ist
      * @param name Name der XMLAnalyse.
      * @param analyseText die XMLAnalyse als XML-Text.
      * @return wenn kein Fehler beim erzeugen der XMLAnalyse auftrat, wird eine neue XMLAnalyse mit
      *         den übergebenen Parametern zurück gegeben.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
-    public static XMLAnalysis createAnalysis(final String name, final String analyseText) throws SAXException {
-        XMLAnalysis xMLAnalysis = new XMLAnalysis();
+    public static XMLAnalysis createAnalysis(final MetaModelInstanceContext metaModelContext, final String name, final String analyseText) throws SAXException {
+        XMLAnalysis xMLAnalysis = new XMLAnalysis(metaModelContext);
         xMLAnalysis.setName(name);
         xMLAnalysis.setXMLText(analyseText);
         return xMLAnalysis;
@@ -104,7 +114,8 @@ public class XMLAnalysis extends AbstractAnalysis {
      * @param startClassName der neue Name des Startknotens.
      */
     private void addStartClass(final String startClassName) {
-        Class<? extends ModelElement> startClass = ModelConstants.getClassForName(startClassName);
+        MetaModelInstance metaModel = metaModelContext.getMetaModel();
+        Class<? extends ModelElement> startClass = metaModel.getClassForName(startClassName);
         if (startClass != null) {
             startClasses.add(startClass);
         }

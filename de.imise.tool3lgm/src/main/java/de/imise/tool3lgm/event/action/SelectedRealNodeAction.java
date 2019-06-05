@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.event.action;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 public class SelectedRealNodeAction extends GraphDocumentAction {
@@ -27,7 +27,8 @@ public class SelectedRealNodeAction extends GraphDocumentAction {
         }
         for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
             //TODO: testen, ob visible hier reicht
-            if (ec.getElement().isPaintable() && ec.isVisible() || ModelConstants.hasSortedEdgeClassesToPaintable(ec.getElement().getClass())) {
+            ModelElement me = ec.getElement();
+            if (me.isPaintable() && ec.isVisible() || me.getMetaModel().hasSortedEdgeClassesToPaintable(me.getClass())) {
                 return true;
             }
         }

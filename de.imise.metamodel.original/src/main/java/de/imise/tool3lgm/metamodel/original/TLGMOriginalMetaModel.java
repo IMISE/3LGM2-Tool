@@ -1,9 +1,7 @@
 package de.imise.tool3lgm.metamodel.original;
 
-import java.util.Collection;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
@@ -13,7 +11,6 @@ import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AufObjVerbindung;
@@ -96,6 +93,13 @@ import de.imise.tool3lgm.metamodel.original.node.Subnetz;
 })
 public class TLGMOriginalMetaModel extends MetaModel {
 
+    /**
+     * Muss jedes MetaModell angeben. Diese ID wird genutzt, um die Klasse eindeutig zu identifizieren. Diese ID wird nicht zur Serialisierung per
+     * Java genutzt, sondern zur Serialisierung in 3LGM-Modelldateien. Sie wird per Reflection abgefragt - daher findet man nirgends einen direkten
+     * Zugriff.
+     */
+    private static final long serialVersionUID = -6111172173611550491L;
+
     @Override
     protected final void putOldToNewClassNames() {
         putOldToNewClassName("RawbAwbVerbindung", "RawbRawbVerbindung");
@@ -111,8 +115,8 @@ public class TLGMOriginalMetaModel extends MetaModel {
     /////////////////////
 
     @Override
-    public MetaPathDefinition createPathsDefinition() {
-        return new TLGMOriginalPathsDefinition();
+    public final Class<? extends MetaPathDefinition> getMetaPathsDefinitionClass() {
+        return TLGMOriginalPathsDefinition.class;
     }
 
     /////////////////////////
@@ -120,8 +124,8 @@ public class TLGMOriginalMetaModel extends MetaModel {
     /////////////////////////
 
     @Override
-    public final GraphViewDefinition createGraphViewDefinition() {
-        return new TLGMOriginalGraphViewDefinion();
+    public final Class<? extends GraphViewDefinition> getGraphViewDefinitionClass() {
+        return TLGMOriginalGraphViewDefinion.class;
     }
 
     //////////////////////
@@ -138,7 +142,7 @@ public class TLGMOriginalMetaModel extends MetaModel {
     ////////////////////////
 
     @Override
-    protected Class<? extends AnalysesDefinition> getAnalysisDefinitionClass() {
+    public Class<? extends AnalysesDefinition> getAnalysesDefinitionClass() {
         return TLGMOriginalAnalysesDefinition.class;
     }
 
@@ -306,31 +310,13 @@ public class TLGMOriginalMetaModel extends MetaModel {
     // spezielle Knoteneigenschaften //
     ///////////////////////////////////
 
-    private final Class[] IMPORTABLE_NODES = {
-            Aufgabe.class,
-            Bausteintyp.class,
-            DBVerwaltungssystem.class,
-            Dokumententyp.class,
-            Ereignistyp.class,
-            KommBeziehung.class,
-            Kommunikationsstandard.class,
-            Nachrichtentyp.class,
-            Netzprotokoll.class,
-            Netztyp.class,
-            Objekttyp.class,
-            Organisationseinheit.class,
-            Organisationsplan.class,
-            KonAnwendungsbaustein.class,
-            PhysischerDVBaustein.class,
-            RechAnwendungsbaustein.class,
-            Softwareprodukt.class,
-            Standort.class,
-            Subnetz.class,
-    };
+    private final Set<Class<? extends ModelElement>> IMPORTABLE_NODES = ImmutableSet.of(Aufgabe.class, Bausteintyp.class, DBVerwaltungssystem.class, Dokumententyp.class, Ereignistyp.class, KommBeziehung.class, Kommunikationsstandard.class,
+            Nachrichtentyp.class, Netzprotokoll.class, Netztyp.class, Objekttyp.class, Organisationseinheit.class, Organisationsplan.class, KonAnwendungsbaustein.class, PhysischerDVBaustein.class, RechAnwendungsbaustein.class, Softwareprodukt.class,
+            Standort.class, Subnetz.class);
 
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     @Override
-    public final Class<? extends ModelElement>[] getImportableNodes() {
+    public final Set<Class<? extends ModelElement>> getImportableNodes() {
         return IMPORTABLE_NODES;
     }
 
@@ -343,11 +329,6 @@ public class TLGMOriginalMetaModel extends MetaModel {
     @Override
     public Set<Class<? extends ModelElement>> getGenerateNameClasses() {
         return GENERATE_NAME_CLASSES;
-    }
-
-    @Override
-    protected Collection<SimpleMetaPath> getCreatablePaths() {
-        return ImmutableList.of();
     }
 
 }
