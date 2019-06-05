@@ -96,6 +96,7 @@ public class ToolXMLParser {
         parser.getXMLReader().setDTDHandler(new ToolDTDHandler());
 
         version = extractVersionAndMetaModel(parseStream);
+        gdcoll.setMetaModelContext(version.metaModelInstanceContext);
 
         /* XML Version */
         if (version.xmlVersionIndex < 0) {
@@ -350,7 +351,7 @@ public class ToolXMLParser {
      * @throws IOException, FileNotFoundException
      */
     @SuppressWarnings("deprecation")
-    private static FileVersion extractVersionAndMetaModel(final InputStream inputStream) throws FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
+    public static FileVersion extractVersionAndMetaModel(final InputStream inputStream) throws FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
         DataInputStream dataStream = new DataInputStream(inputStream);
         FileVersion result = new FileVersion();
         String line = dataStream.readLine();

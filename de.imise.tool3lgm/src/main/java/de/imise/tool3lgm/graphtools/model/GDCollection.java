@@ -128,7 +128,10 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
 public final class GDCollection extends UserFieldTarget {
 
     /** Das Metamodel, auf dem dieses Modell basiert */
-    private final MetaModelInstanceContext metaModelInstanceContext;
+    private MetaModelInstanceContext metaModelContext;
+
+    /** Das Metamodel des Modells */
+    private MetaModelInstance metaModel;
 
     /** Undo- und Redomanager */
     protected TransactionManager tman = new TransactionManager();
@@ -201,6 +204,7 @@ public final class GDCollection extends UserFieldTarget {
     /** Handler für den Im- und Export von (Teil-)Modellen */
     private final GDCollectionImExportHandler imExportHandler;
 
+    /** Momentan geöffnetes Beschreibungsfenster des Modells. Dieser View Kram gehört hier eigentlich gar nicht hin! */
     public ModelPropertyDialog descriptionFrame;
 
     /**
@@ -224,26 +228,34 @@ public final class GDCollection extends UserFieldTarget {
      */
     private int active_layer = DOMAIN_LAYER;
 
-    /** Das Metamodel des Modells */
-    private final MetaModelInstance metaModel;
+    /**
+     *
+     */
+    public GDCollection() {
+        fileHandler = new GDCollectionFileHandler(this);
+        imExportHandler = new GDCollectionImExportHandler(this);
+    }
 
     /**
-     * @param metaModelInstanceContext
+     * @param metaModelContext
      */
-    public GDCollection(@Nonnull final MetaModelInstanceContext metaModelInstanceContext) {
-        this.metaModelInstanceContext = metaModelInstanceContext;
-        metaModel = metaModelInstanceContext.getMetaModel();
+    public GDCollection(@Nonnull final MetaModelInstanceContext metaModelContext) {
+        this();
+        setMetaModelContext(metaModelContext);
+    }
+
+    public void setMetaModelContext(final MetaModelInstanceContext metaModelContext) {
+        this.metaModelContext = metaModelContext;
+        metaModel = metaModelContext.getMetaModel();
         doc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
         doc.addGraphDocumentListener(userFieldDefinitions);
-        imExportHandler = new GDCollectionImExportHandler(this);
-        fileHandler = new GDCollectionFileHandler(this);
         activeGraphDocumentsList.add(doc);
     }
 
     /** Liefert den MetaModelContext, auf dem dieses Modell basiert */
     public MetaModelInstanceContext getMetaModelContext() {
-        return metaModelInstanceContext;
+        return metaModelContext;
     }
 
     /** Liefert das MetaModel, auf dem dieses Modell basiert */
@@ -257,7 +269,7 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      */
     public Class<? extends MetaModel> getMetaModelClass() {
-        return metaModelInstanceContext.getMetaModelClass();
+        return metaModelContext.getMetaModelClass();
     }
 
     /**
@@ -271,7 +283,7 @@ public final class GDCollection extends UserFieldTarget {
      * @see MetaModelInstanceContext#getResString(String)
      */
     public String getResString(final String key) {
-        return metaModelInstanceContext.getResString(key);
+        return metaModelContext.getResString(key);
     }
 
     /**
@@ -282,7 +294,7 @@ public final class GDCollection extends UserFieldTarget {
      * @see MetaModelInstanceContext#getElementsNameBuilder()
      */
     public ElementsNameBuilder getElementsNameBuilder() {
-        return metaModelInstanceContext.getElementsNameBuilder();
+        return metaModelContext.getElementsNameBuilder();
     }
 
     /**
