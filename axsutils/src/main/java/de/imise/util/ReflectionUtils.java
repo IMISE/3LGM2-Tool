@@ -398,16 +398,20 @@ public class ReflectionUtils {
      * @param clazz
      * @param maxSuperClass
      * @param fieldName
+     * @param type
      * @return
      */
-    public static final Object getField(final Class<?> clazz, final Class<?> maxSuperClass, final String fieldName) {
+    @SuppressWarnings("unchecked")
+    public static final <T> T getField(final Class<?> clazz, final Class<?> maxSuperClass, final String fieldName, final Class<T> type) {
         Class<?> elementClass = clazz;
         try {
             boolean breakWhile = false;
             while (elementClass != null) {
                 for (Field fld : elementClass.getDeclaredFields()) {
                     if (fld.getName().equals(fieldName)) {
-                        return fld.get(fld);
+                        if (type == null || fld.getType().equals(type)) {
+                            return (T) fld.get(fld);
+                        }
                     }
                 }
                 if (breakWhile) {
@@ -425,6 +429,37 @@ public class ReflectionUtils {
     }
 
     /**
+     * Sucht ausgehend von der übergebenen Klasse über alle direkten Oberklassen (keine Interfaces)
+     * bis maximal zur Oberklasse maxSuperClass ein Feld mit dem übergebenen Namen und gibt dessen Wert zurück.
+     * Die Klasse maxSuperClass wird selbst nicht mehr durchsucht. Soll bis einschließlich Object.class durchsucht werden,
+     * muss als maxSuperClass null angegeben werden.
+     *
+     * @param clazz
+     * @param fieldName
+     * @param type
+     * @return
+     */
+    public static final <T> T getField(final Class<?> clazz, final String fieldName, final Class<T> type) {
+        return getField(clazz, clazz.getSuperclass(), fieldName, type);
+    }
+
+    /**
+     * Sucht ausgehend von der übergebenen Klasse über alle direkten Oberklassen (keine Interfaces)
+     * bis maximal zur Oberklasse maxSuperClass ein Feld mit dem übergebenen Namen und gibt dessen Wert zurück.
+     * Die Klasse maxSuperClass wird selbst nicht mehr durchsucht. Soll bis einschließlich Object.class durchsucht werden,
+     * muss als maxSuperClass null angegeben werden.
+     *
+     * @param clazz
+     * @param maxSuperClass
+     * @param fieldName
+     * @param type
+     * @return
+     */
+    public static final Object getField(final Class<?> clazz, final Class<?> maxSuperClass, final String fieldName) {
+        return getField(clazz, maxSuperClass, fieldName, null);
+    }
+
+    /**
      * Liefert ein Set aller übergebenen Klassen zurück, die eine Methode mit dem übergebenen Namen haben.
      * Oberklassen werden nicht berücksichtigt.
      *
@@ -434,6 +469,18 @@ public class ReflectionUtils {
      */
     @SafeVarargs
     public static <T> Set<Class<? extends T>> hasMethod(final String name, final Class<? extends T>... classes) {
+        return hasMethod(name, Arrays.asList(classes));
+    }
+
+    /**
+     * Liefert ein Set aller übergebenen Klassen zurück, die eine Methode mit dem übergebenen Namen haben.
+     * Oberklassen werden nicht berücksichtigt.
+     *
+     * @param name
+     * @param classes
+     * @return
+     */
+    public static <T> Set<Class<? extends T>> hasMethod(final String name, final Collection<Class<? extends T>> classes) {
         ImmutableSet.Builder<Class<? extends T>> returnClasses = new ImmutableSet.Builder<>();
         for (Class<? extends T> clazz : classes) {
             try {
