@@ -376,6 +376,7 @@ public class ToolXMLParser {
         if (result.lgmVersionIndex == -1) {
             throw new LGMVersionException(getResString("lgmversionsfehler"));
         }
+        result.metaModelInstanceContext = Tool3lgmMetaModelContext.getDefaultMetaModelContext();
         int indexToOpenComma = VERSION_STRING_METAMODEL_CLASS.length() - 1;
         int metaModelStart = line.indexOf(VERSION_STRING_METAMODEL_CLASS.substring(0, indexToOpenComma - 1));
         if (metaModelStart >= 0) {
