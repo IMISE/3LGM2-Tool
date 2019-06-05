@@ -108,6 +108,7 @@ import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.UserfieldResourceHandler;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -234,6 +235,7 @@ public final class GDCollection extends UserFieldTarget {
     public GDCollection() {
         fileHandler = new GDCollectionFileHandler(this);
         imExportHandler = new GDCollectionImExportHandler(this);
+        //Standard-Userfield-Definition laden
     }
 
     /**
@@ -251,6 +253,7 @@ public final class GDCollection extends UserFieldTarget {
         userFieldDefinitions = new UserFieldDefinitions(this);
         doc.addGraphDocumentListener(userFieldDefinitions);
         activeGraphDocumentsList.add(doc);
+        UserfieldResourceHandler.loadDefaultUserfieldDefinition(this);
     }
 
     /** Liefert den MetaModelContext, auf dem dieses Modell basiert */

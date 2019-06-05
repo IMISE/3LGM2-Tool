@@ -50,7 +50,6 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.graphtools.userfield.UserfieldResourceHandler;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -331,8 +330,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         GDCollection gdcoll;
         if (file == null) {
             gdcoll = new GDCollection(metaModelContext);
-            //Standard-Userfield-Definition laden
-            UserfieldResourceHandler.loadDefaultUserfieldDefinition(gdcoll);
             gdcoll.createSzenario();
         } else {
             gdcoll = loadFile(file);
