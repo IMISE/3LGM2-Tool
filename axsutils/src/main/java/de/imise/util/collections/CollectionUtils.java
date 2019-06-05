@@ -12,7 +12,14 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableSetMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.SetMultimap;
 
 import de.imise.util.Sys;
 
@@ -394,6 +401,75 @@ public abstract class CollectionUtils {
             }
         }
         return retList;
+    }
+
+    /**
+     * Liefert eine Immutable-Variante des übergebenen Sets. Ist es bereits immutable, dann kommt das Set selbst zurück.
+     *
+     * @param original
+     * @return
+     */
+    public static <T> ImmutableSet<T> ensureImmutable(final Set<T> original) {
+        return original instanceof ImmutableSet ? (ImmutableSet<T>) original : ImmutableSet.copyOf(original);
+    }
+
+    /**
+     * Liefert eine Immutable-Variante der übergebenen List. Ist es bereits immutable, dann kommt die List selbst zurück.
+     *
+     * @param original
+     * @return
+     */
+    public static <T> ImmutableList<T> ensureImmutable(final List<T> original) {
+        return original instanceof ImmutableList ? (ImmutableList<T>) original : ImmutableList.copyOf(original);
+    }
+
+    /**
+     * Liefert eine Immutable-Variante der übergebenen Map. Ist es bereits immutable, dann kommt die Map selbst zurück.
+     *
+     * @param original
+     * @return
+     */
+    public static <K, V> ImmutableMap<K, V> ensureImmutable(final Map<K, V> original) {
+        if (original == null) {
+            return ImmutableMap.of();
+        }
+        return original instanceof ImmutableMap ? (ImmutableMap<K, V>) original : ImmutableMap.copyOf(original);
+    }
+
+    /**
+     * Liefert eine Immutable-Variante der übergebenen ListMultimap. Ist es bereits immutable, dann kommt die ListMultimap selbst zurück.
+     *
+     * @param original
+     * @return
+     */
+    public static <K, V> ImmutableListMultimap<K, V> ensureImmutable(final ListMultimap<K, V> original) {
+        if (original == null) {
+            return ImmutableListMultimap.of();
+        }
+        return original instanceof ImmutableListMultimap ? (ImmutableListMultimap<K, V>) original : ImmutableListMultimap.copyOf(original);
+    }
+
+    /**
+     * Liefert eine Immutable-Variante der übergebenen SetMultimap. Ist es bereits immutable, dann kommt die SetMultimap selbst zurück.
+     *
+     * @param original
+     * @return
+     */
+    public static <K, V> ImmutableSetMultimap<K, V> ensureImmutable(final SetMultimap<K, V> original) {
+        if (original == null) {
+            return ImmutableSetMultimap.of();
+        }
+        return original instanceof ImmutableSetMultimap ? (ImmutableSetMultimap<K, V>) original : ImmutableSetMultimap.copyOf(original);
+    }
+
+    /**
+     * Liefert eine Immutable-Variante der übergebenen SetMultimap. Ist es bereits immutable, dann kommt die SetMultimap selbst zurück.
+     *
+     * @param original
+     * @return
+     */
+    public static <K, V> ImmutableMultimap<K, V> ensureImmutable(final Multimap<K, V> original) {
+        return original instanceof SetMultimap ? ensureImmutable((SetMultimap<K, V>) original) : ensureImmutable((ListMultimap<K, V>) original);
     }
 
     /**
