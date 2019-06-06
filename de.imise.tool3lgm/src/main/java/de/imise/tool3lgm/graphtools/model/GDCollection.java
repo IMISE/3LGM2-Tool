@@ -1107,7 +1107,7 @@ public final class GDCollection extends UserFieldTarget {
         Node me = null;
         NodeContainer nc = null;
         try {
-            me = elementClass.newInstance();
+            me = metaModel.createElement(elementClass);
             nc = (NodeContainer) me.createContainer(doc);
         } catch (Exception ex) {
             Log.show(ERROR, getResString("FehlerAllgemein"), ex);
@@ -1363,14 +1363,11 @@ public final class GDCollection extends UserFieldTarget {
             if (MetaModelInstance.isDoubleMeaningEdge(edgeClass) && edge != null) {
                 ((DoubleMeaningEdge) edge).setConnectionState(DOUBLE);
             } else {
-                try {
-                    edge = edgeClass.newInstance();
-                } catch (Exception e) {
-                    Log.show(ERROR, getResString("FehlerAllgemein"), e);
-                    doc.undo(pid);
+                edge = metaModel.createElement(edgeClass);
+                if (edge == null) {
                     return null;
                 }
-                if (edgeHash != null && !edgeHash.equals("")) {
+                if (!Strings.isNullOrEmpty(edgeHash)) {
                     edge.setHashString(edgeHash);
                 }
                 ConnectionState connectionState = FORWARD; // wird nur für die DoubleMeaningEdges gebraucht
