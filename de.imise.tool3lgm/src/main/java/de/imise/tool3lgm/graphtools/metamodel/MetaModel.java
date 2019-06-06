@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartOrEndClass;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -1591,7 +1592,8 @@ public final class MetaModel {
     private <T> T getInstance(final Class<? extends T> metaModelDependentClass) {
         T instance = null;
         try {
-            instance = metaModelDependentClass.getConstructor(MetaModel.class).newInstance(this);
+            Constructor<? extends T> constructor = metaModelDependentClass.getConstructor(MetaModel.class);
+            instance = constructor.newInstance(this);
         } catch (Exception e) {
             try {
                 instance = metaModelDependentClass.newInstance();
