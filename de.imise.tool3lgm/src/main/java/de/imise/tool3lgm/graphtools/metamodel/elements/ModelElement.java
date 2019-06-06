@@ -120,9 +120,11 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     private static void initContainerTable(final ModelElement me) {
-        //bei allen Elementen, die sowieso nie mehr als 3 Container haben können (uniques und Knickpunkte) wird
-        //eine optimierte Map für die Container initialisiert
-        me.containerTable = me.getMaxContainerCount() > 3 ? new HashMap<>(3, 1) : new Flat3Map<>();
+        if (me.containerTable == null) {
+            //bei allen Elementen, die sowieso nie mehr als 3 Container haben können (uniques und Knickpunkte) wird
+            //eine optimierte Map für die Container initialisiert
+            me.containerTable = me.getMaxContainerCount() > 3 ? new HashMap<>(3, 1) : new Flat3Map<>();
+        }
     }
 
     /**
@@ -131,9 +133,11 @@ public abstract class ModelElement extends UserFieldTarget {
      * soll, sondern alle nur den leeren. Bei jedem ModelElement muss das MetaModel sofort (!) nach dem Anlegen über diese Funktion gesetzt werden,
      * damit das ModelElement richtig funktioniert. Anlegen und setzen macht beides der {@link ModelElementInstanceCreator}.
      */
-    void setMetaModel(final MetaModelInstance metaModel) {
-        this.metaModel = metaModel;
-        initContainerTable(this);
+    final void setMetaModel(final MetaModelInstance metaModel) {
+        if (this.metaModel == null) {
+            this.metaModel = metaModel;
+            initContainerTable(this);
+        }
     }
 
     /** Liefert das MetaModel, aus dem dieses Element kommt */
