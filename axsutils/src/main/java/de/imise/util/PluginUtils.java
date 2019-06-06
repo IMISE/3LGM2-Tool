@@ -86,8 +86,8 @@ public class PluginUtils {
                         className = className.replace('/', '.');
                         Class<?> c = cl.loadClass(className);
                         if (superClassOfResultClasses.isAssignableFrom(c)) {
-                            Class<? extends T> metaModelClass = c.asSubclass(superClassOfResultClasses);
-                            resultClasses.add(metaModelClass);
+                            Class<? extends T> resultClass = c.asSubclass(superClassOfResultClasses);
+                            resultClasses.add(resultClass);
                         }
                     }
                 }
