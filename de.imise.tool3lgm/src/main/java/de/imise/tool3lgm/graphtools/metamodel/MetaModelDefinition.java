@@ -26,9 +26,9 @@ import de.imise.util.collections.CollectionUtils;
 @SuppressWarnings({
         "rawtypes"
 })
-public abstract class MetaModel implements Serializable {
+public abstract class MetaModelDefinition implements Serializable {
 
-    public MetaModel() {
+    public MetaModelDefinition() {
         putOldToNewClassNames();
         addRemovedEdgeClasses();
     }

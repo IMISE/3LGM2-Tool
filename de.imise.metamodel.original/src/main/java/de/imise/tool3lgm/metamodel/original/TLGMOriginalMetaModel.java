@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
@@ -91,7 +91,7 @@ import de.imise.tool3lgm.metamodel.original.node.Subnetz;
 @SuppressWarnings({
         "unchecked", "rawtypes"
 })
-public class TLGMOriginalMetaModel extends MetaModel {
+public class TLGMOriginalMetaModel extends MetaModelDefinition {
 
     /**
      * Muss jedes MetaModell angeben. Diese ID wird genutzt, um die Klasse eindeutig zu identifizieren. Diese ID wird nicht zur Serialisierung per

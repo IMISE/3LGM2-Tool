@@ -31,7 +31,6 @@ import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -129,9 +128,9 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Setzt das MetaModel, zu dem dieses Element gehört. Diese Funktion ist nur für das package sichtbar und es gibt es nur, weil zwar jedes
-     * ModelElement das Metamodel kennen muss, aber nicht jede Unterklasse von ModelElement einen Konstruktor mit Parameter {@link MetaModel} haben
-     * soll, sondern alle nur den leeren. Bei jedem ModelElement muss das MetaModel sofort (!) nach dem Anlegen über diese Funktion gesetzt werden,
-     * damit das ModelElement richtig funktioniert. Anlegen und setzen macht beides der {@link ModelElementInstanceCreator}.
+     * ModelElement das Metamodel kennen muss, aber nicht jede Unterklasse von ModelElement einen Konstruktor mit Parameter {@link MetaModelInsance}
+     * haben soll, sondern alle nur den leeren. Bei jedem ModelElement muss das MetaModel sofort (!) nach dem Anlegen über diese Funktion gesetzt
+     * werden, damit das ModelElement richtig funktioniert. Anlegen und setzen macht beides der {@link ModelElementInstanceCreator}.
      */
     final void setMetaModel(final MetaModelInstance metaModel) {
         if (this.metaModel == null) {

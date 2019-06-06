@@ -90,7 +90,6 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
@@ -264,15 +263,6 @@ public final class GDCollection extends UserFieldTarget {
     /** Liefert das MetaModel, auf dem dieses Modell basiert */
     public MetaModelInstance getMetaModel() {
         return metaModel;
-    }
-
-    /**
-     * Liefert die Klasse der zu Grunde liegenden Metamodel-Definition
-     *
-     * @return
-     */
-    public Class<? extends MetaModel> getMetaModelClass() {
-        return metaModelContext.getMetaModelClass();
     }
 
     /**

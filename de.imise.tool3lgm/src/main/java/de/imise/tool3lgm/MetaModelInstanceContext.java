@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 import javax.annotation.Nonnull;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ReflectionUtils;
@@ -23,7 +23,7 @@ import de.imise.util.ReflectionUtils;
 public final class MetaModelInstanceContext {
 
     /** Klasse des Metamodells */
-    private final Class<? extends MetaModel> metaModelClass;
+    private final Class<? extends MetaModelDefinition> metaModelDefinitionClass;
 
     /** Anzeigename des Metamodells */
     public final String metaModelName;
@@ -44,35 +44,33 @@ public final class MetaModelInstanceContext {
      * Initialisiert den Kontext. Dabei wird das ResourceBundle einmal geladen, um an den Namen des Metamodells zu kommen. Das ResourceBundel wird
      * aber nicht gespeichert.
      *
-     * @param metaModelClass
+     * @param metaModelDefinitionClass
      */
-    public MetaModelInstanceContext(@Nonnull final Class<? extends MetaModel> metaModelClass) {
-        this.metaModelClass = metaModelClass;
+    public MetaModelInstanceContext(@Nonnull final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        this.metaModelDefinitionClass = metaModelDefinitionClass;
         ResourceBundle resources = getMetaModelResources();
         metaModelName = getMetaModelDisplayName(resources);
     }
 
     /**
-     * Liefert die Metamodellklasse
-     *
-     * @return
+     * @return Klasse der MetaModell-Definition dieses Kontextes
      */
-    public Class<? extends MetaModel> getMetaModelClass() {
-        return metaModelClass;
+    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+        return metaModelDefinitionClass;
     }
 
     /**
      * Lädt das ResoruceBundle zu diesem Metamdoell und gibt es zurück.
      *
-     * @return
+     * @return ResoruceBundle zu diesem Metamdoell
      */
     private final ResourceBundle getMetaModelResources() {
         if (metaModelResourceBundle != null) {
             return metaModelResourceBundle;
         }
         Locale locale = UserProperties.getLocale();
-        ClassLoader loader = metaModelClass.getClassLoader();
-        String baseName = getMetamodelBundleName(metaModelClass);
+        ClassLoader loader = metaModelDefinitionClass.getClassLoader();
+        String baseName = getMetamodelBundleName(metaModelDefinitionClass);
         ResourceBundle resourceBundle = ResourceBundle.getBundle(baseName, locale, loader);
         return resourceBundle;
     }
@@ -80,10 +78,10 @@ public final class MetaModelInstanceContext {
     /**
      * Lädt das ResoruceBundle zur übergebenen Metamodell-Klasse und gibt es zurück
      *
-     * @param metaModelClass
-     * @return
+     * @param metaModelDefinitionClass
+     * @return ResoruceBundle zur übergebenen Metamodell-Klasse
      */
-    private static String getMetamodelBundleName(@Nonnull final Class<? extends MetaModel> metaModelClass) {
+    private static String getMetamodelBundleName(@Nonnull final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         //das Metamodel-Resourcebundle liegt im resource-package unter demselben Pfad, wie die Metamodellklasse des Packages.
         //der ClassLoader, der das package lädt, erwartet relative Pfade ab dem Pfad dieser Klasse hier, die das Bundle lädt.
         //z.B. liegt das speziele Metamodel im package "de.imise.tool3lgm.metamodel.tlgm_v3_0". Diese Klasse Tool3lgmConstants
@@ -91,7 +89,7 @@ public final class MetaModelInstanceContext {
         //geladen werden. Also muss man vom package-Namen des Metamodells den package-Namen der Tool3lgmConstants abziehen und den
         //vorgegebenen Bundle-Name "MetamodelResources" anhängen (mit Punkt dazwischen).
         //        String mainPackageName = Tool3lgmConstants.class.getPackage().getName();
-        String metaModelPackageName = metaModelClass.getPackage().getName();
+        String metaModelPackageName = metaModelDefinitionClass.getPackage().getName();
         //        String bundleName = metaModelPackageName.substring(mainPackageName.length() + 1) + "." + METAMODEL_RESOURCE_BASE_NAME;
         String bundleName = metaModelPackageName + "." + Tool3lgmConstants.METAMODEL_RESOURCE_BASE_NAME;
         return bundleName;
@@ -104,7 +102,7 @@ public final class MetaModelInstanceContext {
      * @return
      */
     private final String getMetaModelDisplayName(final ResourceBundle resources) {
-        String metaModelNameResKey = metaModelClass.getSimpleName(); //immer der SimpleName der Klasse ist der Resourcenschlüssel zum Namen des Metamodells
+        String metaModelNameResKey = metaModelDefinitionClass.getSimpleName(); //immer der SimpleName der Klasse ist der Resourcenschlüssel zum Namen des Metamodells
         String metaModelName = resources.getString(metaModelNameResKey);
         return metaModelName;
     }
@@ -166,8 +164,8 @@ public final class MetaModelInstanceContext {
      * @return
      */
     public final String getMetaModelID() {
-        String name = metaModelClass.getSimpleName();
-        Long metaModelClassSerialVersionUID = ReflectionUtils.getField(metaModelClass, "serialVersionUID", Long.class);
+        String name = metaModelDefinitionClass.getSimpleName();
+        Long metaModelClassSerialVersionUID = ReflectionUtils.getField(metaModelDefinitionClass, "serialVersionUID", Long.class);
         String idString = metaModelClassSerialVersionUID == null ? "" : "@" + String.valueOf(metaModelClassSerialVersionUID); // ein @ kann nicht im Klassenname vorkommen -> Trenner zwischen Klassenname und UID
         String classID = name + idString;
         return classID;

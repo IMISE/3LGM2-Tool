@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
@@ -66,10 +66,10 @@ public final class Tool3lgmMetaModelContext {
      */
     public static final List<MetaModelInstanceContext> loadMetaModelInstanceContexts() {
         File pluginDir = new File(Tool3lgmConstants.APPLICATION_DIR, "Plugins");
-        List<Class<? extends MetaModel>> metaModelClasses = PluginUtils.loadClasses(pluginDir, MetaModel.class);
+        List<Class<? extends MetaModelDefinition>> metaModelClasses = PluginUtils.loadClasses(pluginDir, MetaModelDefinition.class);
         List<MetaModelInstanceContext> metaModelInstanceContexts = new ArrayList<>();
         for (int i = 0; i < metaModelClasses.size(); i++) {
-            Class<? extends MetaModel> metaModelClass = metaModelClasses.get(i);
+            Class<? extends MetaModelDefinition> metaModelClass = metaModelClasses.get(i);
             MetaModelInstanceContext metaModelInstanceContext = new MetaModelInstanceContext(metaModelClass);
             if (metaModelClass.getSimpleName().equals(DEFAULT_METAMDOEL_CLASS_NAME)) {
                 metaModelInstanceContexts.add(0, metaModelInstanceContext); // das DefaultMetaModelganz nach vorne holen
@@ -149,7 +149,7 @@ public final class Tool3lgmMetaModelContext {
                 return metaModelInstanceContext;
             }
             //bevor die Metamodelle mit der SerialVersionUID gekennzeichnet wurden, war einzig der SimpleClassName der Metamodellklasse die ID -> für alte Modelle daruf testen
-            otherID = metaModelInstanceContext.getMetaModelClass().getSimpleName();
+            otherID = metaModelInstanceContext.getMetaModelDefinitionClass().getSimpleName();
             if (otherID.equals(metaModelContextID)) {
                 return metaModelInstanceContext;
             }

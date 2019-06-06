@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationInterface_Edge;
@@ -86,7 +86,7 @@ import de.imise.tool3lgm.metamodel.service.node.Use;
 @SuppressWarnings({
         "unchecked", "rawtypes"
 })
-public class TLGMServiceMetaModel extends MetaModel {
+public class TLGMServiceMetaModel extends MetaModelDefinition {
 
     /**
      * ID des Metamodells für die Serialisierung.

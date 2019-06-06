@@ -60,10 +60,8 @@ import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.collections.CollectionUtils;
 
 /**
- * Dieses Objekt kapselt ein Metamodel. Eigentlich ist das, was hier {@link MetaModel} heißt nur die MetaModelDefinition und diese Klasse hier wäre
- * das Metamodel. Damit der komplizierte Name "MetaModelDefinition" aber nicht nach außen und in die Resourcen gelangt, sind diese Bezeichnungen
- * entstanden. Diese Klasse hier nimmt ein MetaModel(Definition) und füllt damit alle Listen, Sets, Arrays usw. um dann alle Fragen über ein konkretes
- * Metamodell zu beantworten.<br>
+ * Dieses Objekt kapselt ein Metamodel. Diese Klasse hier nimmt eine {@link MetaModelDefinition} und füllt damit alle Listen, Sets, Arrays usw. um
+ * dann alle Fragen über ein konkretes Metamodell zu beantworten.<br>
  * Das hier ist aus der ehemals statischen Klasse ModelConstants entstanden, als es nicht mehr nur ein MetaModel sondern mehrere gleichzeitig geben
  * sollte.
  *
@@ -333,8 +331,8 @@ public final class MetaModelInstance {
         this.metaModelInstanceContext = metaModelInstanceContext;
         modelElementInstanceCreator = new ModelElementInstanceCreator(this);
         elementaryMetaPathHandler = new ElementaryMetaPathHandler(this);
-        Class<? extends MetaModel> metaModelClass = metaModelInstanceContext.getMetaModelClass();
-        MetaModel metaModelDefinition = metaModelClass.newInstance();
+        Class<? extends MetaModelDefinition> metaModelClass = metaModelInstanceContext.getMetaModelDefinitionClass();
+        MetaModelDefinition metaModelDefinition = metaModelClass.newInstance();
         //Knoten
         allDomainLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllDomainLayerNodes()));
         allInterDomainLogicalLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllInterDomainLogicalLayerNodes()));
@@ -547,8 +545,8 @@ public final class MetaModelInstance {
     }
 
     /**
-     * Erzeugt aus der in der MetaModelDefinition angegebenen Map von den InstanciateionEdges auf die ebenfalls mitzuinstanziierenden MetaPfade die
-     * gleichartige endgültige Map, bei der die originalen Metapfade durch die Funktion
+     * Erzeugt aus der in der {@link MetaModelDefinition} angegebenen Map von den InstanciateionEdges auf die ebenfalls mitzuinstanziierenden
+     * MetaPfade die gleichartige endgültige Map, bei der die originalen Metapfade durch die Funktion
      * {@link SimpleMetaPathCreator#getSimpleMetaPathsNonAbstract(Iterable)} in alle Metapfade umgewandelt werden, die keine abstrakten
      * Zwischenklassen mehr enthalten und somit dann tatsächlich anlegbar sind.
      *
@@ -710,7 +708,7 @@ public final class MetaModelInstance {
      * auf <code>true</code> gestellt ist.
      *
      * @return alle Elementklassen, die nur im ExpertMode im Baum angezeigt werden
-     * @see MetaModel#getOnlyExpertModeVisibleNodes()
+     * @see MetaModelDefinition#getOnlyExpertModeVisibleNodes()
      */
     public final Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
         return onlyExpertModeVisibleNodes;
@@ -958,7 +956,7 @@ public final class MetaModelInstance {
      *
      * @param instanciationEdgeClass
      * @return
-     * @see MetaModel#getInstanciableMetaPaths(Class)
+     * @see MetaModelDefinition#getInstanciableMetaPaths(Class)
      */
     public Iterable<SimpleMetaPath> getInstanciablePath(final Class<? extends InstanciationEdge> instanciationEdgeClass) {
         Iterable<SimpleMetaPath> instanciableMetaPaths = instanciationEdgeToAdditionalInstanciationMetaPaths.get(instanciationEdgeClass);
