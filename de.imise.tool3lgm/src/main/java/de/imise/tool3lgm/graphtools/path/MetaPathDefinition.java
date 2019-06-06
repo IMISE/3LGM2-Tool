@@ -47,6 +47,16 @@ public class MetaPathDefinition {
     protected final SimpleMetaPathCreator simpleMetaPathCreator;
 
     /**
+     * Legt eine neue Pfaddefinition an, in der nichts definiert ist.
+     *
+     * @param metaModel
+     */
+    @SuppressWarnings("unchecked")
+    public MetaPathDefinition(final MetaModel metaModel) {
+        this(metaModel, new Class[0]);
+    }
+
+    /**
      * Legt eine neue Pfaddefinition an. Werden dem Konstruktor Kantenklassen übergeben, dann werden nur diese Kantenklassen als
      * {@link ElementaryMetaPath} zur Definition hinzugefügt. Ist das übergebene Array leer,dann werden alle Kanten des Metamodells hinzugefügt.
      *

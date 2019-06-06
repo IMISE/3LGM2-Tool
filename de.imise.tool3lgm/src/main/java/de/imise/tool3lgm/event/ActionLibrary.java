@@ -314,7 +314,7 @@ public class ActionLibrary {
     public static class AnalysisActions {
 
         /** Zeigt das XMLAnalyse-Repository an */
-        public static final Action ACTION_ANALYSIS_OPEN_REPOSITORY = new StaticAction(ActionIdentifier.ACTION_ANALYSIS_OPEN_REPOSITORY, PPP) {
+        public static final Action ACTION_ANALYSIS_OPEN_REPOSITORY = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_OPEN_REPOSITORY, PPP) {
             @Override
             protected void actionPerformed() {
                 AnalysesRepositoryFrame.showDialog();
@@ -322,7 +322,7 @@ public class ActionLibrary {
         };
 
         /** Öffnet den XMLAnalyse-Editor */
-        public static final Action ACTION_ANALYSIS_OPEN_EDITOR = new StaticAction(ActionIdentifier.ACTION_ANALYSIS_OPEN_EDITOR, PPP) {
+        public static final Action ACTION_ANALYSIS_OPEN_EDITOR = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_OPEN_EDITOR, PPP) {
             @Override
             protected void actionPerformed() {
                 AnalysisEditor.showDialog(getTool(), Static.getSelectedMetaModel());

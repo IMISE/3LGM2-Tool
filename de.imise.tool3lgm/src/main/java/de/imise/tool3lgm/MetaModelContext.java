@@ -49,7 +49,13 @@ public final class MetaModelContext {
     public MetaModelContext(@Nonnull final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         this.metaModelDefinitionClass = metaModelDefinitionClass;
         ResourceBundle resources = getMetaModelResources();
-        metaModelName = getMetaModelDisplayName(resources);
+        String metaModelName;
+        try {
+            metaModelName = getMetaModelDisplayName(resources);
+        } catch (Exception e) {
+            metaModelName = metaModelDefinitionClass.getSimpleName();
+        }
+        this.metaModelName = metaModelName;
     }
 
     /**
@@ -60,7 +66,7 @@ public final class MetaModelContext {
     }
 
     /**
-     * Lädt das ResoruceBundle zu diesem Metamdoell und gibt es zurück.
+     * Lädt das ResoruceBundle zu diesem Metamdoell und gibt es zurück. Wird keines gefunden, kommt ohne Fehler <code>null</code> zurück.
      *
      * @return ResoruceBundle zu diesem Metamdoell
      */
@@ -71,7 +77,11 @@ public final class MetaModelContext {
         Locale locale = UserProperties.getLocale();
         ClassLoader loader = metaModelDefinitionClass.getClassLoader();
         String baseName = getMetamodelBundleName(metaModelDefinitionClass);
-        ResourceBundle resourceBundle = ResourceBundle.getBundle(baseName, locale, loader);
+        ResourceBundle resourceBundle = null;
+        try {
+            resourceBundle = ResourceBundle.getBundle(baseName, locale, loader);
+        } catch (Exception e) {
+        }
         return resourceBundle;
     }
 

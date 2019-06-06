@@ -44,6 +44,9 @@ public class Static {
 
     private static JFrame mainFrame;
 
+    /** Dummy-Instanz eines Metamodells, um Null-Chekcs zu vermeiden */
+    private static final MetaModel DEFAULT_DUMMY_META_MODEL = MetaModel.getDummyInstance();
+
     /** Progress-Dialog */
     private static ProgressDialog progressDialog;
 
@@ -68,7 +71,7 @@ public class Static {
     public static MetaModelContext getSelectedMetaModelContext() {
         GDCollection selectedGDCollection = getSelectedGDCollection();
         if (selectedGDCollection == null) {
-            return null;
+            return DEFAULT_DUMMY_META_MODEL.getMetaModelContext();
         }
         return selectedGDCollection.getMetaModelContext();
     }
@@ -77,7 +80,7 @@ public class Static {
     public static MetaModel getSelectedMetaModel() {
         MetaModelContext selectedMetaModelContext = getSelectedMetaModelContext();
         if (selectedMetaModelContext == null) {
-            return null;
+            return DEFAULT_DUMMY_META_MODEL;
         }
         return selectedMetaModelContext.getMetaModel();
     }

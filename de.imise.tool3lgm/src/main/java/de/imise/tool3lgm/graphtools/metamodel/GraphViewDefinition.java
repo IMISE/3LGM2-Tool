@@ -167,4 +167,35 @@ public abstract class GraphViewDefinition {
         defaultElementsLayoutDefinition.setStandardBackGroundColor(elementClass, defaultBackground);
         defaultElementsLayoutDefinition.setStandardSize(elementClass, defaultWidth, defaultHeight);
     }
+
+    /**
+     * Leere Implementierrung der {@link GraphViewDefinition}
+     *
+     * @author AXS (6 Jun 2019)
+     */
+    public static class DefaultGraphViewDefinitionAdapter extends GraphViewDefinition {
+
+        /**
+         * @param metaModel
+         */
+        public DefaultGraphViewDefinitionAdapter(final MetaModel metaModel) {
+            super(metaModel);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected Class<? extends ModelElement>[] getPaintableNodes() {
+            return new Class[0];
+        }
+
+        @Override
+        protected SimpleMetaPath[] getConfigurationPaths() {
+            return new SimpleMetaPath[0];
+        }
+
+        @Override
+        protected void initDefaultElementLayout() {
+        }
+    }
+
 }

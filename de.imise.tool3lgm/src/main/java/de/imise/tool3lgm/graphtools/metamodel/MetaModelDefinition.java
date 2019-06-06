@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.DefaultGraphViewDefinitionAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
@@ -92,7 +93,9 @@ public abstract class MetaModelDefinition implements Serializable {
     // GraphViewDefinition //
     /////////////////////////
 
-    protected abstract Class<? extends GraphViewDefinition> getGraphViewDefinitionClass();
+    protected Class<? extends GraphViewDefinition> getGraphViewDefinitionClass() {
+        return DefaultGraphViewDefinitionAdapter.class;
+    }
 
     //////////////////////
     // CopyDependencies //
@@ -107,7 +110,14 @@ public abstract class MetaModelDefinition implements Serializable {
         return copyDependencies;
     }
 
-    protected abstract CopyDependencies createCopyDependencies();
+    /**
+     * Erzeugt standardmäßig eine 'leere' CopyDependency
+     *
+     * @return 'leere' CopyDependency
+     */
+    protected CopyDependencies createCopyDependencies() {
+        return new CopyDependencies();
+    }
 
     ////////////////////////
     // AnalysisDefinition //
@@ -300,5 +310,55 @@ public abstract class MetaModelDefinition implements Serializable {
 
     /** Liefert ein Set aller Elementklassen, bei denen der Name nicht vom Nutzer eingegeben sondern generiert wird. */
     public abstract Set<Class<? extends ModelElement>> getGenerateNameClasses();
+
+    /**
+     * Adapter, der alle abstrakten Funktionen mit leeren Arrays und Sets überschreibt.
+     *
+     * @author AXS (6 Jun 2019)
+     */
+    @SuppressWarnings("unchecked")
+    public static class DefaultMetaModelDefinitionAdapter extends MetaModelDefinition {
+
+        @Override
+        protected Class<? extends ModelElement>[] getAllDomainLayerNodes() {
+            return new Class[0];
+        }
+
+        @Override
+        public Class<? extends ModelElement>[] getAllInterDomainLogicalLayerNodes() {
+            return new Class[0];
+        }
+
+        @Override
+        public Class<? extends ModelElement>[] getAllLogicalLayerNodes() {
+            return new Class[0];
+        }
+
+        @Override
+        public Class<? extends ModelElement>[] getAllInterLogicalPhysicalLayerNodes() {
+            return new Class[0];
+        }
+
+        @Override
+        public Class<? extends ModelElement>[] getAllPhysicalLayerNodes() {
+            return new Class[0];
+        }
+
+        @Override
+        public Class<? extends Edge>[] getAllEdges() {
+            return new Class[0];
+        }
+
+        @Override
+        public Set<Class<? extends ModelElement>> getImportableNodes() {
+            return ImmutableSet.of();
+        }
+
+        @Override
+        public Set<Class<? extends ModelElement>> getGenerateNameClasses() {
+            return ImmutableSet.of();
+        }
+
+    }
 
 }
