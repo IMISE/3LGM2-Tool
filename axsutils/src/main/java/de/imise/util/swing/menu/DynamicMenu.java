@@ -48,7 +48,7 @@ public abstract class DynamicMenu extends JMenu {
 
     /**
      * Liefert den Placeholder mit am übergebenen Index
-     * 
+     *
      * @param index
      * @return
      */
@@ -89,7 +89,7 @@ public abstract class DynamicMenu extends JMenu {
         }
     }
 
-    protected abstract void updateItems(final DynamicMenuPlaceholder palceholder);
+    protected abstract void updateItems(final DynamicMenuPlaceholder placeholder);
 
     /** Entfernt alle Items innerhalb und inklusive der spezifizierten Indices */
     private final void removeItems(final DynamicMenuPlaceholder placeholder) {
@@ -122,7 +122,7 @@ public abstract class DynamicMenu extends JMenu {
 
         public final void addAll(final List<Action> actions) {
             Component[] menuEntries = MenuCreator.createMenuEntries(actions, true);
-            itemCount = actions.size();
+            itemCount = (itemCount == -1 ? 0 : itemCount) + actions.size();
             MenuCreator.addAll(parent, startIndex, menuEntries);
         }
 
