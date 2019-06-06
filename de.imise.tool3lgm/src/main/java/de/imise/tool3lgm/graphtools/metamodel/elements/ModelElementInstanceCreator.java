@@ -32,9 +32,9 @@ public class ModelElementInstanceCreator {
      * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
      * @return neues ModelElement der übergebenen Klasse oder <code>null</code>
      */
-    public final ModelElement createElement(final Class<? extends ModelElement> elementClass, final boolean log) {
+    public final <T extends ModelElement> T createElement(final Class<? extends T> elementClass, final boolean log) {
         try {
-            ModelElement me = elementClass.newInstance();
+            T me = elementClass.newInstance();
             me.setMetaModel(metaModel);
             return me;
         } catch (Exception e) {

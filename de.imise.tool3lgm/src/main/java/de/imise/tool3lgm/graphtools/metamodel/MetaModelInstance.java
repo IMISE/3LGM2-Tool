@@ -1611,7 +1611,7 @@ public final class MetaModelInstance {
      * @param elementClass Unterklasse von <code>ModelElement</code>
      * @return
      */
-    public final ModelElement createElement(final Class<? extends ModelElement> elementClass) {
+    public final <T extends ModelElement> T createElement(final Class<? extends T> elementClass) {
         return createElement(elementClass, true);
     }
 
@@ -1623,7 +1623,7 @@ public final class MetaModelInstance {
      * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
      * @return neues ModelElement der übergebenen Klasse oder <code>null</code>
      */
-    public final ModelElement createElement(final Class<? extends ModelElement> elementClass, final boolean log) {
+    public final <T extends ModelElement> T createElement(final Class<? extends T> elementClass, final boolean log) {
         return modelElementInstanceCreator.createElement(elementClass, log);
     }
 
