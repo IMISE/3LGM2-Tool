@@ -31,7 +31,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -102,7 +102,7 @@ public abstract class ModelElement extends UserFieldTarget {
     private static final StringBuilder textBuf = new StringBuilder("");
 
     /** MetaModel aus dem die Klasse dieses Elementes stammt. */
-    private MetaModelInstance metaModel;
+    private MetaModel metaModel;
 
     /**
      * HashString des Teilmodells, mit dem das Element verknüpft ist. Diese Verknüpfung sagt einfach nur aus, dass das Element in dem Teilmodell näher
@@ -132,7 +132,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * haben soll, sondern alle nur den leeren. Bei jedem ModelElement muss das MetaModel sofort (!) nach dem Anlegen über diese Funktion gesetzt
      * werden, damit das ModelElement richtig funktioniert. Anlegen und setzen macht beides der {@link ModelElementInstanceCreator}.
      */
-    final void setMetaModel(final MetaModelInstance metaModel) {
+    final void setMetaModel(final MetaModel metaModel) {
         if (this.metaModel == null) {
             this.metaModel = metaModel;
             initContainerTable(this);
@@ -140,7 +140,7 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /** Liefert das MetaModel, aus dem dieses Element kommt */
-    public MetaModelInstance getMetaModel() {
+    public MetaModel getMetaModel() {
         return metaModel;
     }
 
@@ -1658,7 +1658,7 @@ public abstract class ModelElement extends UserFieldTarget {
                     //bei allen gerichteten Kanten
                     if (metaModel.isDirectedEdge(edgeClass)) {
                         //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                        if (MetaModelInstance.isDoubleMeaningEdge(edgeClass)) {
+                        if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                             switch (((DoubleMeaningEdge) edge).getConnectionState()) {
                             case FORWARD:
                                 knot = edge.isEnd(this) ? null : edge.getEnd();
@@ -1682,7 +1682,7 @@ public abstract class ModelElement extends UserFieldTarget {
                     //bei allen gerichteten Kanten
                     if (metaModel.isDirectedEdge(edgeClass)) {
                         //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                        if (MetaModelInstance.isDoubleMeaningEdge(edgeClass)) {
+                        if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                             switch (((DoubleMeaningEdge) edge).getConnectionState()) {
                             case FORWARD:
                                 knot = edge.isEnd(this) ? edge.getStart() : null;
@@ -1932,7 +1932,7 @@ public abstract class ModelElement extends UserFieldTarget {
             return false;
         }
         //Wenn es sich bei dieser Kantenart nicht um eine mehrfach zwischend denselben Elementen anlgebare Edge handelt
-        if (!MetaModelInstance.isMultipleEdgeClass(edgeClass)) {
+        if (!MetaModel.isMultipleEdgeClass(edgeClass)) {
             //wenn schon eine solche Edge zwischen den beiden Elementen existiert
             List<Edge> edges = getEdgesTo(me, edgeClass);
             if (edges != null && edges.size() > 0) {

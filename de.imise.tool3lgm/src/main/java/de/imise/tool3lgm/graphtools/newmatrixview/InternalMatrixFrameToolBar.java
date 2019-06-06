@@ -18,7 +18,7 @@ import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
@@ -106,7 +106,7 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
         pathNameLabel.setFont(pathNameLabel.getFont().deriveFont(Font.BOLD));
 
         GDCollection gdcoll = controlledFrame.getCollection();
-        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        MetaModel metaModel = gdcoll.getMetaModel();
 
         MetaPathDefinition pathsDefinition = metaModel.getMetaPathsDefinition();
         metaPathSelector = new MetaPathSelector(pathsDefinition, MAX_PARALLEL_SELECTED_METAPATHS);

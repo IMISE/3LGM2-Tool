@@ -7,7 +7,7 @@ import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
@@ -24,7 +24,7 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
     /**
      * @param metaModel
      */
-    public RedundancyAnalysisDefinitions(final MetaModelInstance metaModel) {
+    public RedundancyAnalysisDefinitions(final MetaModel metaModel) {
         super(metaModel);
     }
 

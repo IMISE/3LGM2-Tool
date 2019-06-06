@@ -28,7 +28,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -556,7 +556,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (!metaPath.isCreatable()) {
             return null;
         }
-        MetaModelInstance metaModel = getMetaModel();
+        MetaModel metaModel = getMetaModel();
         if (metaModel.isSlaveType(searchElementClass)) {
             return null;
         }

@@ -12,7 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -55,7 +55,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         typeLabel = new JLabel();
         add(typeLabel, gbc);
 
-        if (MetaModelInstance.isEdgeType(getModelElement().getClass())) {
+        if (MetaModel.isEdgeType(getModelElement().getClass())) {
             gbc.gridx = 0;
             gbc.gridy++;
             gbc.weightx = 0.0;
@@ -90,7 +90,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         idLabel = new JLabel();
         add(idLabel, gbc);
 
-        if (MetaModelInstance.isNodeType(getModelElement().getClass())) {
+        if (MetaModel.isNodeType(getModelElement().getClass())) {
             gbc.gridx = 0;
             gbc.gridy++;
             gbc.weightx = 0.0;
@@ -128,7 +128,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             String startElementClassName = elementsNameBuilder.getDisplayableName(getStartClass(edgeClass));
             String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD) + "</i>&nbsp;&nbsp;";
             String endElementClassName = elementsNameBuilder.getDisplayableName(getEndClass(edgeClass));
-            MetaModelInstance metaModel = getMetaModel();
+            MetaModel metaModel = getMetaModel();
             if (metaModel.isAssociationClass(getModelElement().getClass())) {
                 typeLabel.setText("<html>" + elementsNameBuilder.getDisplayableName(me) + " (" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + ")</html>");
             } else {
@@ -137,7 +137,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
 
             String startElementName = edge.getStart().getClearName();
             // bei DoubleMeaning-Edges nur die tatsächliche Richtung hinschreiben
-            if (MetaModelInstance.isDoubleMeaningEdge(edgeClass)) {
+            if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                 forwardEdgeClassName = "&nbsp;&nbsp;<i>" + elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ((DoubleMeaningEdge) edge).getConnectionState()) + "</i>&nbsp;&nbsp;";
             }
             String endElementName = edge.getEnd().getClearName();

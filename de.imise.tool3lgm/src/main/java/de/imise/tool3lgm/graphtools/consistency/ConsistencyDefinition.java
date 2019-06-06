@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -21,7 +21,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 public class ConsistencyDefinition {
 
     /** Metamodel, für das die Konsistenz definiert wird */
-    private final MetaModelInstance metaModel;
+    private final MetaModel metaModel;
 
     /**
      * Definition der Kardinalitäten, die bei der Konsistenzprüfung eingealten werden sollen.
@@ -39,7 +39,7 @@ public class ConsistencyDefinition {
     /**
      * @param metaModel
      */
-    public ConsistencyDefinition(final MetaModelInstance metaModel) {
+    public ConsistencyDefinition(final MetaModel metaModel) {
         this.metaModel = metaModel;
     }
 

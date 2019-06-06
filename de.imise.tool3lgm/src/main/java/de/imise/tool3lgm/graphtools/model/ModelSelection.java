@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
@@ -30,7 +30,7 @@ import de.imise.util.collections.CollectionUtils;
 public class ModelSelection implements Set<ElementContainer> {
 
     /** MetaModel des Modells zu dem diese Selektion gehört */
-    private final MetaModelInstance metaModel;
+    private final MetaModel metaModel;
 
     /**
      * Speziellste Oberklasse der {@link ModelElement}s aller selektierbaren {@link NodeContainer}. Das
@@ -64,7 +64,7 @@ public class ModelSelection implements Set<ElementContainer> {
      * @param metaModel
      * @param initialCapacity
      */
-    public ModelSelection(final MetaModelInstance metaModel, final int initialCapacity) {
+    public ModelSelection(final MetaModel metaModel, final int initialCapacity) {
         this.metaModel = metaModel;
         commonRealElementsSuperClass = ReflectionUtils.getCommonSuperClass(metaModel.allNodesSet);
         selectedRealNodeContainer = new HashSet<>(initialCapacity);
@@ -77,7 +77,7 @@ public class ModelSelection implements Set<ElementContainer> {
      *
      * @param metaModel
      */
-    public ModelSelection(final MetaModelInstance metaModel) {
+    public ModelSelection(final MetaModel metaModel) {
         this(metaModel, 100);
     }
 
@@ -87,7 +87,7 @@ public class ModelSelection implements Set<ElementContainer> {
      * @param metaModel
      * @param selection
      */
-    public ModelSelection(final MetaModelInstance metaModel, final Collection<? extends ElementContainer> selection) {
+    public ModelSelection(final MetaModel metaModel, final Collection<? extends ElementContainer> selection) {
         this(metaModel, selection.size());
         addAll(selection);
     }

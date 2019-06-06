@@ -14,7 +14,7 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -61,7 +61,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         writeAttribute("time", String.valueOf(System.currentTimeMillis()));
         writeUserFieldDefinitions(userFields);
         writeStartElement("objects"); //<objects>
-        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        MetaModel metaModel = gdcoll.getMetaModel();
         for (ModelElement me : copyElements) {
             if (metaModel.avoidDuplicates(me.getClass())) {
                 writeStartElement("avoidDuplicates"); //<avoidDuplicates>

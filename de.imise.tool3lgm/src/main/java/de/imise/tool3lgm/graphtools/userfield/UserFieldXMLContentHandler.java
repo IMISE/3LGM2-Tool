@@ -8,7 +8,7 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen ContentHandler von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle
@@ -66,7 +66,7 @@ public class UserFieldXMLContentHandler implements ContentHandler {
             if (elementClass == null) {
                 field = new UserField(atts.getValue("hash"), definitions);
             } else {
-                MetaModelInstance metaModel = definitions.getMetaModel();
+                MetaModel metaModel = definitions.getMetaModel();
                 field = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), definitions);
             }
         } else if (qName.equals("userFieldName")) {

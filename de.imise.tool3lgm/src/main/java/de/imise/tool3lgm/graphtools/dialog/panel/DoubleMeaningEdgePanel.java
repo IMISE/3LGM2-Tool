@@ -19,7 +19,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -73,7 +73,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         JLabel lolabel = new JLabel(lolabeltext);
 
         //hier niemals das this löschen, weil die globale searchElementClass im super-Konsturktor richtig gesetzt wird
-        MetaModelInstance metaModel = getMetaModel();
+        MetaModel metaModel = getMetaModel();
         boolean showRootHandles = metaModel.canHaveParts(this.searchElementClass);
 
         loroot = new StringTreeNode("loroot");
@@ -159,7 +159,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     }
 
     protected String getEdgeDisplayName(final ConnectionState connectionState) {
-        boolean isDoubleMeaningEdge = MetaModelInstance.isDoubleMeaningEdge(edgeClass);
+        boolean isDoubleMeaningEdge = MetaModel.isDoubleMeaningEdge(edgeClass);
         //dieses Panel war urspünglich nur für Kanten mit doppelter Bedeutung. Danach hat AXS das auch für Kanten zwischen denselben Elementen, die aber eine Richtung haben, angepasst.
         //Kanten ohne doppelte Bedeutung haben immer die Richtung FORWARD, aber der connectionState muss hier als Lesrichtung der Kante interpretiert werden, damit über den beiden Bäumen jeweils eine Richtung steht
         boolean forward = isDoubleMeaningEdge && edgeIsForward || !isDoubleMeaningEdge && connectionState == ConnectionState.FORWARD;

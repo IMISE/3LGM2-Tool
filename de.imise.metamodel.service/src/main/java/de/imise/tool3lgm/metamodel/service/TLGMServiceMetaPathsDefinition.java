@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -35,7 +35,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     /**
      * @param metaModel
      */
-    public TLGMServiceMetaPathsDefinition(final MetaModelInstance metaModel) {
+    public TLGMServiceMetaPathsDefinition(final MetaModel metaModel) {
         super(metaModel);
     }
 

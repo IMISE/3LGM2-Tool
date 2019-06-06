@@ -5,7 +5,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BAC
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -159,7 +159,7 @@ public abstract class SubordinationEdge extends Edge {
      * @return
      */
     public final boolean isRecursive() {
-        return MetaModelInstance.isRecursiveSubordination(getClass());
+        return MetaModel.isRecursiveSubordination(getClass());
     }
 
 }

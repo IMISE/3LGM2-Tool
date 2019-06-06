@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
@@ -499,7 +499,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(0);
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
             ModelElement me = getModelElement();
-            MetaModelInstance metaModel = me.getMetaModel();
+            MetaModel metaModel = me.getMetaModel();
             SimpleMetaPath conditionPath = metaModel.getConditionPath(edgeClass);
             //für diese eine Kante ist ein ConditionPath angegeben
             if (conditionPath != null) {

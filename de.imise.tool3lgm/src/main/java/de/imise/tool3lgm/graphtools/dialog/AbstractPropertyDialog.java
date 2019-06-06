@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -148,9 +148,9 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     }
 
     /**
-     * @return {@link MetaModelInstance}
+     * @return {@link MetaModel}
      */
-    public final MetaModelInstance getMetaModel() {
+    public final MetaModel getMetaModel() {
         return gdcoll.getMetaModel();
     }
 

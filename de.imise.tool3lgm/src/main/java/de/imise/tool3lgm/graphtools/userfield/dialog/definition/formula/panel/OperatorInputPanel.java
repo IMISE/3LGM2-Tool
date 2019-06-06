@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -158,7 +158,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         //es
         HashSet<Class<? extends ModelElement>> elementClassAssignable = new HashSet<>();
         GDCollection gdcoll = definitions.getCollection();
-        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        MetaModel metaModel = gdcoll.getMetaModel();
         for (Class<? extends ModelElement> assClass : metaModel.allNodesSet) {
             if (elementClass.isAssignableFrom(assClass)) {
                 elementClassAssignable.add(assClass);
@@ -237,7 +237,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         // gleich der Element-Klasse ist
         UserFieldDefinitions definitions = userField.getDefinitions();
         GDCollection gdcoll = definitions.getCollection();
-        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        MetaModel metaModel = gdcoll.getMetaModel();
 
         Class<? extends Edge>[] edgeClasses = metaModel.getEdgeTypes(userField.getTargetClass().asSubclass(ModelElement.class));
 

@@ -29,7 +29,7 @@ import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -118,7 +118,7 @@ public class RedundancyAnalysis extends WindowAdapter {
 
             String con = " " + getResString("ana_fr_concerning") + " ";
 
-            MetaModelInstance metaModel = gdcoll.getMetaModel();
+            MetaModel metaModel = gdcoll.getMetaModel();
             AnalysesDefinition analysisDefinition = metaModel.getAnalysesDefinition();
             RedundancyAnalysisDefinitions redundancyAnalysisDefinitions = analysisDefinition.getRedundancyAnalysisDefinitions();
             int analyseCount = redundancyAnalysisDefinitions.size();

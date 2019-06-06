@@ -34,7 +34,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -226,7 +226,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     private static SimpleMetaPath createSimpleMetaPath(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
         ModelElement me = dialog.getModelElement();
         Class<? extends ModelElement> elementClass = me.getClass();
-        MetaModelInstance metaModel = dialog.getMetaModel();
+        MetaModel metaModel = dialog.getMetaModel();
         SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, elementClass, getOther(multipleConnectionEgdeClass, elementClass), multipleConnectionEgdeClass);
         return simpleMetaPath;
     }

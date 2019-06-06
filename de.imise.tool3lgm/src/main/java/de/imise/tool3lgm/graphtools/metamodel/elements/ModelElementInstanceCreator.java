@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import javax.annotation.Nonnull;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -15,12 +15,12 @@ import de.imise.tool3lgm.log.Log;
 public class ModelElementInstanceCreator {
 
     /** das Metamodel, das an die ModelElements durchgereicht wird */
-    private final MetaModelInstance metaModel;
+    private final MetaModel metaModel;
 
     /**
      * @param metaModel
      */
-    public ModelElementInstanceCreator(@Nonnull final MetaModelInstance metaModel) {
+    public ModelElementInstanceCreator(@Nonnull final MetaModel metaModel) {
         this.metaModel = metaModel;
     }
 

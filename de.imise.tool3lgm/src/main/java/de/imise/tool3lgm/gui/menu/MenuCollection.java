@@ -29,7 +29,7 @@ import de.imise.tool3lgm.event.action.GraphFrameAction;
 import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.graphtools.dialog.ElementAlignmentDialog;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -82,7 +82,7 @@ public class MenuCollection {
 
         @Override
         protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
-            MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
+            MetaModel selectedMetaModel = Static.getSelectedMetaModel();
             AnalysesDefinition analysesDefinition = selectedMetaModel.getAnalysesDefinition();
             Action[] analysisActions = analysesDefinition.getAnalysisActions();
             placeholder.addAll(analysisActions);
@@ -101,7 +101,7 @@ public class MenuCollection {
 
         @Override
         protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
-            MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
+            MetaModel selectedMetaModel = Static.getSelectedMetaModel();
             Action[] extrasActions = selectedMetaModel.getExtrasActions(false);
             placeholder.addAll(extrasActions);
         }
@@ -184,7 +184,7 @@ public class MenuCollection {
         ) {
             @Override
             protected void updateItems(final DynamicMenuPlaceholder placeholder) { //nur ein Placeholder -> eindeutig
-                MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
+                MetaModel selectedMetaModel = Static.getSelectedMetaModel();
                 GraphFrameAction[] modelActionsHideUnhideUnassociated = Graphics.getModelActionsHideUnhideUnassociated(selectedMetaModel);
                 placeholder.addAll(modelActionsHideUnhideUnassociated);
             };
@@ -215,7 +215,7 @@ public class MenuCollection {
 
             @Override
             protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
-                MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
+                MetaModel selectedMetaModel = Static.getSelectedMetaModel();
                 Action[] extrasActions = selectedMetaModel.getExtrasActions(true);
                 placeholder.addAll(extrasActions);
             }
@@ -261,7 +261,7 @@ public class MenuCollection {
             }
             int layerID = Static.getSelectedGDCollection().getActiveLayer();
             List<Action> menuActions = new ArrayList<>();
-            MetaModelInstance metaModel = selectedDoc.getMetaModel();
+            MetaModel metaModel = selectedDoc.getMetaModel();
             Iterable<StaticAction> createElementActions = ActionLibrary.CreateElementActions.getCreateElementActions(metaModel, layerID);
             for (StaticAction action : createElementActions) {
                 String arguments = action.getArguments();

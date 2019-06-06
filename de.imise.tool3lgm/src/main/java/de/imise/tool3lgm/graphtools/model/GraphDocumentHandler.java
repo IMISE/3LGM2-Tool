@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -42,7 +42,7 @@ public class GraphDocumentHandler {
             return new ArrayList<>(0);
         }
         //Problem: Suche nach Elemenklasse inkl. Unterklassen, wobei Unterklassen unique sein können -> im doc und im mainDoc suchen
-        MetaModelInstance metaModel = doc.getMetaModel();
+        MetaModel metaModel = doc.getMetaModel();
         if (!includeSubClasses || clazz == Bendpoint.class) {
             List<Class<? extends ModelElement>> searchClasses = new ArrayList<>();
             searchClasses.add(clazz);
@@ -53,7 +53,7 @@ public class GraphDocumentHandler {
         List<Class<? extends ModelElement>> searchClassesUnique = new ArrayList<>();
         List<Class<? extends ModelElement>> searchClassesNotUnique = new ArrayList<>();
         for (Class<? extends ModelElement> elementClass : metaModel.allElementsSet) {
-            if (MetaModelInstance.isAbstract(elementClass)) {
+            if (MetaModel.isAbstract(elementClass)) {
                 continue;
             }
             if (clazz.isAssignableFrom(elementClass)) {
@@ -116,10 +116,10 @@ public class GraphDocumentHandler {
             if (Bendpoint.class == searchClass) {
                 searchBendpoints = true;
             }
-            if (!searchNodes && MetaModelInstance.isNodeType(searchClass)) {
+            if (!searchNodes && MetaModel.isNodeType(searchClass)) {
                 searchNodes = true;
             }
-            if (!searchEdges && MetaModelInstance.isEdgeType(searchClass)) {
+            if (!searchEdges && MetaModel.isEdgeType(searchClass)) {
                 searchEdges = true;
             }
             if (searchBendpoints && searchEdges && searchNodes) {
@@ -127,7 +127,7 @@ public class GraphDocumentHandler {
             }
         }
         //Indizes der Ebenen so anpassen, dass möglichst wenig durchsucht werden muss
-        MetaModelInstance metaModel = doc.getMetaModel();
+        MetaModel metaModel = doc.getMetaModel();
         for (Class<? extends ModelElement> searchClass : searchClasses) {
             //Ebene der gesuchten Elementklasse bestimmen
             int ebene = metaModel.layerFor(searchClass);

@@ -19,7 +19,7 @@ import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -238,7 +238,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("element")) {
                 Class<? extends ModelElement> elementClass = null;
-                MetaModelInstance metaModel = doc.getMetaModel();
+                MetaModel metaModel = doc.getMetaModel();
                 try {
                     String className = atts.getValue("class");
                     if (className.startsWith("Knickpunkt")) { //KnickpunktKnoten umbenannt in Knickpunkt umbenannt in Bendpoint
@@ -390,7 +390,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 //            } else if (qName.equals("description")) {
                 //
             } else if (qName.equals("mapping")) {
-                MetaModelInstance metaModel = szenario.getMetaModel();
+                MetaModel metaModel = szenario.getMetaModel();
                 GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
                 ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
                 szenario.setMapping(new ElementsLayoutDefinition(defaultElementsLayout));
@@ -420,7 +420,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (elementClass == null) {
                     userField = new UserField(atts.getValue("hash"), collection.getUserFieldDefinitions());
                 } else {
-                    MetaModelInstance metaModel = collection.getMetaModel();
+                    MetaModel metaModel = collection.getMetaModel();
                     userField = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), collection.getUserFieldDefinitions());
                 }
             } else if (qName.equals("replacerEntry")) {
@@ -435,7 +435,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 String edgeClassName = atts.getValue("edgeClass");
                 String replaceUserFieldHash = atts.getValue("replaceUserFieldHash");
                 WeightReplacer replacer = userFieldDefinitions.getWeightReplacer();
-                MetaModelInstance metaModel = collection.getMetaModel();
+                MetaModel metaModel = collection.getMetaModel();
                 Class<? extends Edge> edgeClass = metaModel.getClassForName(edgeClassName).asSubclass(Edge.class);
                 replacer.setUniformDistributionReplacement(elementHash, edgeClass, replaceUserFieldHash);
 
@@ -749,7 +749,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (container != null) {
                     ModelElement me = container.getElement();
                     Class<? extends ModelElement> elementClass = me.getClass();
-                    MetaModelInstance metaModel = me.getMetaModel();
+                    MetaModel metaModel = me.getMetaModel();
                     if (metaModel.hasSortedEdgeClassesToPaintable(elementClass)) {
                         container.checkTreeIcon();
                     }

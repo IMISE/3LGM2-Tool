@@ -16,7 +16,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.MetaModelInstanceContext;
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -31,17 +31,17 @@ public class MetaModelExporter {
 
     private static final String INDENTION = "    ";
 
-    private final MetaModelInstance metaModel;
+    private final MetaModel metaModel;
 
     private final ElementsNameBuilder elementsNameBuilder;
 
     public static void main(final String[] args) {
         UserProperties.init();
-        MetaModelInstanceContext metaModelContext = Tool3lgmMetaModelContext.chooseMetaModel();
+        MetaModelContext metaModelContext = Tool3lgmMetaModelContext.chooseMetaModel();
         new MetaModelExporter(metaModelContext.getMetaModel());
     }
 
-    public MetaModelExporter(final MetaModelInstance metaModel) {
+    public MetaModelExporter(final MetaModel metaModel) {
         this.metaModel = metaModel;
         elementsNameBuilder = metaModel.getElementsNameBuilder();
         printMetaModel();
@@ -138,11 +138,11 @@ public class MetaModelExporter {
         return elementHierarchy.get(indexInElementHierarchy) == elementClass;
     }
 
-    private void printElementsWithEdges(final MetaModelInstance metaModel, final List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies) {
+    private void printElementsWithEdges(final MetaModel metaModel, final List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies) {
         for (NamedObjectContainer<List<Class<?>>> noc : elementsHierarchies) {
             System.out.println(noc);
             Class<? extends ModelElement> elementClass = noc.getObject().get(0).asSubclass(ModelElement.class);
-            if (MetaModelInstance.isEdgeType(elementClass)) {
+            if (MetaModel.isEdgeType(elementClass)) {
                 Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
                 //                String edgeString = getEdgeStringOrg2(edgeClass, ModelElement.class, INDENTION);
                 String edgeString = getEdgeString(edgeClass, INDENTION);

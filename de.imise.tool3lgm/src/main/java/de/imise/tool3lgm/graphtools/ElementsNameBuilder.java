@@ -14,7 +14,7 @@ import java.util.MissingResourceException;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.MetaModelInstanceContext;
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
@@ -38,12 +38,12 @@ public class ElementsNameBuilder {
     private static HashMap<String, String> elementClassSimpleNameToHashShortName = null;
 
     /** Der Context mit dem Metamodel und den Resourcen, aus denen dieser NameBuilder die Elementnamen zieht */
-    private final MetaModelInstanceContext metaModelContext;
+    private final MetaModelContext metaModelContext;
 
     /**
      * @param metaModelContext
      */
-    public ElementsNameBuilder(final MetaModelInstanceContext metaModelContext) {
+    public ElementsNameBuilder(final MetaModelContext metaModelContext) {
         this.metaModelContext = metaModelContext;
     }
 

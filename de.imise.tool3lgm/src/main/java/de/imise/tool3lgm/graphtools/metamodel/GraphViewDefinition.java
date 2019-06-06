@@ -25,7 +25,7 @@ import de.imise.util.pair.Pair;
 public abstract class GraphViewDefinition {
 
     /** Zu Grunde liegendes MetaModel */
-    protected final MetaModelInstance metaModel;
+    protected final MetaModel metaModel;
 
     /**
      * Liefert eine Liste aller metamodellabhängigen Knoten, die in der Grafik dargestellt werden.
@@ -49,7 +49,7 @@ public abstract class GraphViewDefinition {
     /**
      * @param metaModel
      */
-    public GraphViewDefinition(final MetaModelInstance metaModel) {
+    public GraphViewDefinition(final MetaModel metaModel) {
         this.metaModel = metaModel;
         ImmutableSet.Builder<Class<? extends ModelElement>> allPaintableNodesSetBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
         metaModelSpecificPaintableNodes = ImmutableList.copyOf(getPaintableNodes());
@@ -114,7 +114,7 @@ public abstract class GraphViewDefinition {
      * @param elementClass
      * @return
      */
-    public final SimpleMetaPath getInterLayerMetaPath(final MetaModelInstance metaModel, final Class<? extends ModelElement> elementClass) {
+    public final SimpleMetaPath getInterLayerMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> elementClass) {
         //es muss ein lazy-init sein, weil es sonst zu einer Init-Exception in der Reflection-Methode Edge.getStartClass(...)
         if (classToConfigurationPaths == null) {
             classToConfigurationPaths = new HashMap<>();

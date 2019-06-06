@@ -17,7 +17,7 @@ import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -145,7 +145,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
             field = atts.getValue("name");
 
         } else if (qName.equals("element")) {
-            MetaModelInstance metaModel = doc.getMetaModel();
+            MetaModel metaModel = doc.getMetaModel();
             Class<? extends ModelElement> elementClass = metaModel.getClassForName(atts.getValue("class"));
             if (elementClass == null || Modifier.isAbstract(elementClass.getModifiers())) {
                 throw new SAXException("Klasse für Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
@@ -237,7 +237,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
         } else if (qName.equals("description")) {
 
         } else if (qName.equals("mapping")) {
-            MetaModelInstance metaModel = szenario.getMetaModel();
+            MetaModel metaModel = szenario.getMetaModel();
             GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
             ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
             szenario.setMapping(new ElementsLayoutDefinition(defaultElementsLayout));

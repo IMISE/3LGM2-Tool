@@ -49,7 +49,7 @@ import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -378,7 +378,7 @@ public class ActionLibrary {
                     if (!super.isEnabled()) {
                         return false;
                     }
-                    MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
+                    MetaModel selectedMetaModel = Static.getSelectedMetaModel();
                     for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
                         if (ec instanceof InterLayerConnectedNodeContainer) {
                             ModelElement me = ec.getElement();
@@ -413,7 +413,7 @@ public class ActionLibrary {
                         return false;
                     }
                     LayerContainer lc = Static.getSelectedDoc().getActiveLayer();
-                    MetaModelInstance selectedMetaModel = Static.getSelectedMetaModel();
+                    MetaModel selectedMetaModel = Static.getSelectedMetaModel();
                     for (ElementContainer ec : lc.getGraphNodeContainers()) {
                         ModelElement me = ec.getElement();
                         if (selectedMetaModel.hasInterLayerStartClass(me)) {
@@ -682,7 +682,7 @@ public class ActionLibrary {
          * @param metaModel
          * @param layerIndex
          */
-        public static Iterable<StaticAction> getCreateElementActions(final MetaModelInstance metaModel, final int layerIndex) {
+        public static Iterable<StaticAction> getCreateElementActions(final MetaModel metaModel, final int layerIndex) {
             final Iterable<Class<? extends ModelElement>> creatableLayerNodes = metaModel.getCreatableLayerNodes(layerIndex);
             ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
             List<StaticAction> actions = new ArrayList<>();
@@ -726,7 +726,7 @@ public class ActionLibrary {
          */
         public static class Analysis {
 
-            public static final Action[] getOptionsSimpleRedundancyAnalysis(final MetaModelInstance metaModel) {
+            public static final Action[] getOptionsSimpleRedundancyAnalysis(final MetaModel metaModel) {
                 //die Definitionen für die SimpleRedundancyAnalysis aud der AnalyseDefinition holen
                 AnalysesDefinition analysisDefinition = metaModel.getAnalysesDefinition();
                 SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinition = analysisDefinition.getSimpleRedundancyAnalysisDefinitions();
@@ -791,7 +791,7 @@ public class ActionLibrary {
              * @param hide
              * @return
              */
-            public static final GraphFrameAction[] getModelActionsHideUnhideUnassociated(final MetaModelInstance metaModel) {
+            public static final GraphFrameAction[] getModelActionsHideUnhideUnassociated(final MetaModel metaModel) {
                 List<Pair<Class<? extends ModelElement>, Class<? extends Edge>>> hidableIfNotConnected = metaModel.getGraphViewDefinition().getHidableIfNotConnected();
                 if (hidableIfNotConnected == null || hidableIfNotConnected.isEmpty()) {
                     return null;

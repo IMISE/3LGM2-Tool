@@ -30,7 +30,7 @@ import javax.swing.event.ListSelectionListener;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -42,7 +42,7 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
 public class AnalysisEditor extends JDialog implements ActionListener {
 
     /** Das MetaModel, für das die Analsysen erstellt werden sollen */
-    private final MetaModelInstance metaModel;
+    private final MetaModel metaModel;
 
     /**
      * Diese Componente besteht aus zwei Listen, die Elementklassen enthalten. In der ersten sind
@@ -290,7 +290,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
      * @param owner
      * @param metaModel
      */
-    public static void showDialog(final JDialog owner, final MetaModelInstance metaModel) {
+    public static void showDialog(final JDialog owner, final MetaModel metaModel) {
         if (editor == null) {
             editor = new AnalysisEditor(owner, metaModel);
         }
@@ -303,7 +303,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
      * @param owner
      * @param metaModel
      */
-    public static void showDialog(final JFrame owner, final MetaModelInstance metaModel) {
+    public static void showDialog(final JFrame owner, final MetaModel metaModel) {
         if (editor == null) {
             editor = new AnalysisEditor(owner, metaModel);
         }
@@ -340,7 +340,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
      * @param owner
      * @param metaModel
      */
-    private AnalysisEditor(final Frame owner, final MetaModelInstance metaModel) {
+    private AnalysisEditor(final Frame owner, final MetaModel metaModel) {
         super(owner);
         this.metaModel = metaModel;
         init();
@@ -350,7 +350,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
      * @param owner
      * @param metaModel
      */
-    private AnalysisEditor(final JDialog owner, final MetaModelInstance metaModel) {
+    private AnalysisEditor(final JDialog owner, final MetaModel metaModel) {
         super(owner);
         this.metaModel = metaModel;
         init();

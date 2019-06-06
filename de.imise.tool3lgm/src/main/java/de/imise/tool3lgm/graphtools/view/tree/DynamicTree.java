@@ -27,7 +27,7 @@ import javax.swing.tree.TreePath;
 import de.imise.tool3lgm.KeyStrokes;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -245,7 +245,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         top.add(fachebene);
         top.add(logebene);
         top.add(phyebene);
-        MetaModelInstance metaModel = doc.getMetaModel();
+        MetaModel metaModel = doc.getMetaModel();
         initLayer(fachebene, metaModel.getTreeDomainLayerVisibleAbstractNodes(), metaModel.treeDomainLayerNodes);
         initLayer(logebene, metaModel.getTreeLogicalLayerVisibleAbstractNodes(), metaModel.treeLogicalLayerNodes);
         initLayer(phyebene, metaModel.getTreePhysicalLayerVisibleAbstractNodes(), metaModel.treePhysicalLayerNodes);

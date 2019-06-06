@@ -17,7 +17,7 @@ import javax.swing.SwingUtilities;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -65,7 +65,7 @@ public class Static {
     }
 
     /** Liefert den MetaModelContext des aktuell selektierten Modells */
-    public static MetaModelInstanceContext getSelectedMetaModelContext() {
+    public static MetaModelContext getSelectedMetaModelContext() {
         GDCollection selectedGDCollection = getSelectedGDCollection();
         if (selectedGDCollection == null) {
             return null;
@@ -74,8 +74,8 @@ public class Static {
     }
 
     /** Liefert das MetaModel des aktuell selektierten Modells */
-    public static MetaModelInstance getSelectedMetaModel() {
-        MetaModelInstanceContext selectedMetaModelContext = getSelectedMetaModelContext();
+    public static MetaModel getSelectedMetaModel() {
+        MetaModelContext selectedMetaModelContext = getSelectedMetaModelContext();
         if (selectedMetaModelContext == null) {
             return null;
         }

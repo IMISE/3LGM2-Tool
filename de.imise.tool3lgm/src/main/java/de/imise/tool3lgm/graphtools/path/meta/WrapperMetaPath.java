@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.path.meta;
 
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
@@ -65,7 +65,7 @@ public class WrapperMetaPath extends SequenceMetaPath {
         if (startClass != null && endClass != null) {
             if (originalMetaPath instanceof ElementaryMetaPath) {
                 //Elementarpfade werden nicht gewrapped sondern neu angelegt, d.h. sie 'wrappen sich selbst'
-                MetaModelInstance metaModel = originalMetaPath.getMetaModel();
+                MetaModel metaModel = originalMetaPath.getMetaModel();
                 ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
                 return elementaryMetaPathHandler.getMetaPath(startClass, (ElementaryMetaPath) originalMetaPath, endClass);
             }

@@ -83,14 +83,14 @@ import javax.swing.JRadioButton;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.MetaModelInstanceContext;
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -128,10 +128,10 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
 public final class GDCollection extends UserFieldTarget {
 
     /** Das Metamodel, auf dem dieses Modell basiert */
-    private MetaModelInstanceContext metaModelContext;
+    private MetaModelContext metaModelContext;
 
     /** Das Metamodel des Modells */
-    private MetaModelInstance metaModel;
+    private MetaModel metaModel;
 
     /** Undo- und Redomanager */
     protected TransactionManager tman = new TransactionManager();
@@ -240,12 +240,12 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * @param metaModelContext
      */
-    public GDCollection(@Nonnull final MetaModelInstanceContext metaModelContext) {
+    public GDCollection(@Nonnull final MetaModelContext metaModelContext) {
         this();
         setMetaModelContext(metaModelContext);
     }
 
-    public void setMetaModelContext(final MetaModelInstanceContext metaModelContext) {
+    public void setMetaModelContext(final MetaModelContext metaModelContext) {
         this.metaModelContext = metaModelContext;
         metaModel = metaModelContext.getMetaModel();
         doc = new LGMGraphDocument(this);
@@ -256,12 +256,12 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /** Liefert den MetaModelContext, auf dem dieses Modell basiert */
-    public MetaModelInstanceContext getMetaModelContext() {
+    public MetaModelContext getMetaModelContext() {
         return metaModelContext;
     }
 
     /** Liefert das MetaModel, auf dem dieses Modell basiert */
-    public MetaModelInstance getMetaModel() {
+    public MetaModel getMetaModel() {
         return metaModel;
     }
 
@@ -273,7 +273,7 @@ public final class GDCollection extends UserFieldTarget {
      *
      * @param key
      * @return
-     * @see MetaModelInstanceContext#getResString(String)
+     * @see MetaModelContext#getResString(String)
      */
     public String getResString(final String key) {
         return metaModelContext.getResString(key);
@@ -284,7 +284,7 @@ public final class GDCollection extends UserFieldTarget {
      * Kanten die gerichteten Namen.
      *
      * @return
-     * @see MetaModelInstanceContext#getElementsNameBuilder()
+     * @see MetaModelContext#getElementsNameBuilder()
      */
     public ElementsNameBuilder getElementsNameBuilder() {
         return metaModelContext.getElementsNameBuilder();
@@ -1350,7 +1350,7 @@ public final class GDCollection extends UserFieldTarget {
             }
             edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
             //wenn es schon eine Kante in der Gegenrichtung gibt und diese Kante eine Kante mit doppelter Bedeutung ist -> dann Richtung auf DOUBLE setzen
-            if (MetaModelInstance.isDoubleMeaningEdge(edgeClass) && edge != null) {
+            if (MetaModel.isDoubleMeaningEdge(edgeClass) && edge != null) {
                 ((DoubleMeaningEdge) edge).setConnectionState(DOUBLE);
             } else {
                 edge = metaModel.createElement(edgeClass);
@@ -1367,7 +1367,7 @@ public final class GDCollection extends UserFieldTarget {
                     endElement = dummy;
                     connectionState = BACKWARD;
                 }
-                if (MetaModelInstance.isDoubleMeaningEdge(edgeClass)) {
+                if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                     ((DoubleMeaningEdge) edge).setConnectionState(connectionState);
                 }
                 edge.setNodesAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
@@ -1502,7 +1502,7 @@ public final class GDCollection extends UserFieldTarget {
 
         Class<? extends ModelElement> me1Class = me1.getClass();
         Class<? extends ModelElement> me2Class = me2.getClass();
-        boolean isDirectionImportent = MetaModelInstance.isDoubleMeaningEdge(edgeClass) || Edge.isConnecting(edgeClass, me1Class, me2Class) && Edge.isConnecting(edgeClass, me2Class, me1Class);
+        boolean isDirectionImportent = MetaModel.isDoubleMeaningEdge(edgeClass) || Edge.isConnecting(edgeClass, me1Class, me2Class) && Edge.isConnecting(edgeClass, me2Class, me1Class);
         if (isDirectionImportent) {
             edges = me1.getEdgesTo(me2, edgeClass, me1EdgeIndex);
         } else {
@@ -1543,7 +1543,7 @@ public final class GDCollection extends UserFieldTarget {
         //nur bei Kanten mit doppelter bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
         //ist die Richtung egal und das Unlinken ist das Löschen der Edge
         Class<? extends Edge> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
-        if (MetaModelInstance.isDoubleMeaningEdge(absoluteEdgeClass)) {
+        if (MetaModel.isDoubleMeaningEdge(absoluteEdgeClass)) {
             DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
             if (doubleMeaningEdge.getConnectionState() == DOUBLE) {
                 if (edge.getStart() == me1) {

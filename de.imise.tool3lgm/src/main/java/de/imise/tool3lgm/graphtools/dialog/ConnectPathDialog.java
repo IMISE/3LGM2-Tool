@@ -13,7 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
@@ -103,7 +103,7 @@ public class ConnectPathDialog implements ActionListener {
                     Set<ModelElement> endElements = new HashSet<>();
                     List<ModelElement> endClassElements = doc.getModelItems(newEndClass);
                     endElements.addAll(endClassElements);
-                    MetaModelInstance metaModel = doc.getMetaModel();
+                    MetaModel metaModel = doc.getMetaModel();
                     ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
                     String createNew = getResString("new") + ": " + elementsNameBuilder.getDisplayableName(newEndClass);
                     endElementChooser.removeAllItems();

@@ -14,7 +14,7 @@ import javax.swing.JToggleButton;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -47,7 +47,7 @@ public class ToolButton extends JToggleButton {
      * @param paintableElementClass
      * @param isEdgeButton
      */
-    private ToolButton(final MetaModelInstance metaModel, final Class<? extends ModelElement> paintableElementClass) {
+    private ToolButton(final MetaModel metaModel, final Class<? extends ModelElement> paintableElementClass) {
         isEdgeButton = metaModel == null;
         paintedNode = paintableElementClass == null ? null : (Node) metaModel.createElement(paintableElementClass);
         setPreferredSize(PREFRERRED_SIZE);
@@ -58,7 +58,7 @@ public class ToolButton extends JToggleButton {
      * @param paintableElementClass
      * @return
      */
-    public static ToolButton createNodeButton(final MetaModelInstance metaModel, final Class<? extends Node> paintableElementClass) {
+    public static ToolButton createNodeButton(final MetaModel metaModel, final Class<? extends Node> paintableElementClass) {
         final ToolButton button = new ToolButton(metaModel, paintableElementClass);
         button.setAction(new AbstractAction() {
             @Override
@@ -85,7 +85,7 @@ public class ToolButton extends JToggleButton {
      *            irgendeine der grafisch darstellbaren Klassen, die man braucht, um einen Strich auf den Button der Kanten zu malen
      * @return
      */
-    public static ToolButton createEdgeButton(final MetaModelInstance metaModel, final Class<? extends Node> dummyPaintableElementClass) {
+    public static ToolButton createEdgeButton(final MetaModel metaModel, final Class<? extends Node> dummyPaintableElementClass) {
         ToolButton button = new ToolButton(null, dummyPaintableElementClass);
         button.setAction(new AbstractAction() {
             @Override

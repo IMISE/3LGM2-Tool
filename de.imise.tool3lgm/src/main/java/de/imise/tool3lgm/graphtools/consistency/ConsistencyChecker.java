@@ -25,7 +25,7 @@ import de.imise.tool3lgm.graphtools.consistency.error.MinCardinalityError;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -269,7 +269,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      */
     private void addCardinalityErrors(final ModelElement me, final List<AbstractError> returnList) {
         Class<? extends ModelElement> meClass = me.getClass();
-        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        MetaModel metaModel = gdcoll.getMetaModel();
         ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
         Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(meClass);
         // nur Elementarten beachten, die wenigstens eine Edge besitzen können

@@ -18,8 +18,8 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import de.imise.tool3lgm.MetaModelInstanceContext;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -38,7 +38,7 @@ public final class XMLAnalysis extends AbstractAnalysis {
     /**
      * @param metaModelContext
      */
-    private XMLAnalysis(final MetaModelInstanceContext metaModelContext) {
+    private XMLAnalysis(final MetaModelContext metaModelContext) {
         super(metaModelContext);
     }
 
@@ -51,7 +51,7 @@ public final class XMLAnalysis extends AbstractAnalysis {
      *         den übergebenen Parametern zurück gegeben.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
-    public static XMLAnalysis createAnalysis(final MetaModelInstanceContext metaModelContext, final String analyseText) throws SAXException {
+    public static XMLAnalysis createAnalysis(final MetaModelContext metaModelContext, final String analyseText) throws SAXException {
         XMLAnalysis xMLAnalysis = new XMLAnalysis(metaModelContext);
         xMLAnalysis.setXMLText(analyseText);
         return xMLAnalysis;
@@ -67,7 +67,7 @@ public final class XMLAnalysis extends AbstractAnalysis {
      *         den übergebenen Parametern zurück gegeben.
      * @throws SAXException wenn ein Fehler beim parsen des Analysetextes auftritt.
      */
-    public static XMLAnalysis createAnalysis(final MetaModelInstanceContext metaModelContext, final String name, final String analyseText) throws SAXException {
+    public static XMLAnalysis createAnalysis(final MetaModelContext metaModelContext, final String name, final String analyseText) throws SAXException {
         XMLAnalysis xMLAnalysis = new XMLAnalysis(metaModelContext);
         xMLAnalysis.setName(name);
         xMLAnalysis.setXMLText(analyseText);
@@ -114,7 +114,7 @@ public final class XMLAnalysis extends AbstractAnalysis {
      * @param startClassName der neue Name des Startknotens.
      */
     private void addStartClass(final String startClassName) {
-        MetaModelInstance metaModel = metaModelContext.getMetaModel();
+        MetaModel metaModel = metaModelContext.getMetaModel();
         Class<? extends ModelElement> startClass = metaModel.getClassForName(startClassName);
         if (startClass != null) {
             startClasses.add(startClass);

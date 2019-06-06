@@ -30,7 +30,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.SetMultimap;
 import com.google.common.collect.Table;
 
-import de.imise.tool3lgm.MetaModelInstanceContext;
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
@@ -67,7 +67,7 @@ import de.imise.util.collections.CollectionUtils;
  *
  * @author AXS (30 Apr 2019)
  */
-public final class MetaModelInstance {
+public final class MetaModel {
 
     /**
      * Leeres Array als Standardrückgabetyp für zu überschreibende Funktionen.
@@ -87,7 +87,7 @@ public final class MetaModelInstance {
     private static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Bendpoint.class, Textfield.class);
 
     /** Der Context, der dieses MetaModell erzeugt hat und hält. Er wird nur gebraucht, um an die Resourcen zu kommen. */
-    private final MetaModelInstanceContext metaModelInstanceContext;
+    private final MetaModelContext metaModelContext;
 
     /**
      * Hilfsklasse zum Anlegen neuer Elemente, die sicher stellt, dass das richtige MetaModel für die Elemente gesetzt wird und dann nicht mehr von
@@ -323,15 +323,15 @@ public final class MetaModelInstance {
     private final ExtrasActionsDefinition extrasActionsDefinition;
 
     /**
-     * @param metaModelClass
+     * @param metaModelContext
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public MetaModelInstance(final MetaModelInstanceContext metaModelInstanceContext) throws InstantiationException, IllegalAccessException {
-        this.metaModelInstanceContext = metaModelInstanceContext;
+    public MetaModel(final MetaModelContext metaModelContext) throws InstantiationException, IllegalAccessException {
+        this.metaModelContext = metaModelContext;
         modelElementInstanceCreator = new ModelElementInstanceCreator(this);
         elementaryMetaPathHandler = new ElementaryMetaPathHandler(this);
-        Class<? extends MetaModelDefinition> metaModelClass = metaModelInstanceContext.getMetaModelDefinitionClass();
+        Class<? extends MetaModelDefinition> metaModelClass = metaModelContext.getMetaModelDefinitionClass();
         MetaModelDefinition metaModelDefinition = metaModelClass.newInstance();
         //Knoten
         allDomainLayerNodesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllDomainLayerNodes()));
@@ -395,10 +395,10 @@ public final class MetaModelInstance {
      *
      * @param key
      * @return
-     * @see MetaModelInstanceContext#getResString(String)
+     * @see MetaModelContext#getResString(String)
      */
     public final String getResString(final String key) {
-        return metaModelInstanceContext.getResString(key);
+        return metaModelContext.getResString(key);
     }
 
     /**
@@ -421,10 +421,10 @@ public final class MetaModelInstance {
      * Kanten die gerichteten Namen.
      *
      * @return
-     * @see MetaModelInstanceContext#getElementsNameBuilder()
+     * @see MetaModelContext#getElementsNameBuilder()
      */
     public ElementsNameBuilder getElementsNameBuilder() {
-        return metaModelInstanceContext.getElementsNameBuilder();
+        return metaModelContext.getElementsNameBuilder();
     }
 
     /**
@@ -432,17 +432,17 @@ public final class MetaModelInstance {
      * Metamodellklasse immer eindeutig identifizierbar sein.
      *
      * @return
-     * @see de.imise.tool3lgm.MetaModelInstanceContext#getMetaModelID()
+     * @see de.imise.tool3lgm.MetaModelContext#getMetaModelID()
      */
     public final String getMetaModelID() {
-        return metaModelInstanceContext.getMetaModelID();
+        return metaModelContext.getMetaModelID();
     }
 
     /**
      * @return
      */
-    public final MetaModelInstanceContext getMetaModelContext() {
-        return metaModelInstanceContext;
+    public final MetaModelContext getMetaModelContext() {
+        return metaModelContext;
     }
 
     /**
@@ -1212,7 +1212,7 @@ public final class MetaModelInstance {
      * @param elementClass
      * @return
      */
-    public final boolean isInterLayerStartClass(final MetaModelInstance metaModel, final Class<? extends ModelElement> elementClass) {
+    public final boolean isInterLayerStartClass(final MetaModel metaModel, final Class<? extends ModelElement> elementClass) {
         return getGraphViewDefinition().getInterLayerMetaPath(metaModel, elementClass) != null;
     }
 
@@ -1570,7 +1570,7 @@ public final class MetaModelInstance {
     }
 
     /**
-     * Instanziiert die übergebene Klasse mit einem Kontruktor, der als Parmeter eine Instanz der Klasse {@link MetaModelInstance} erwartet. Geht
+     * Instanziiert die übergebene Klasse mit einem Kontruktor, der als Parmeter eine Instanz der Klasse {@link MetaModel} erwartet. Geht
      * dabei irgendwas schief, versucht sie es mit dem leeren Constructor. Geht dabei auch etwas schief, dann kommt ohne Exception <code>null</code>
      * zurück.
      *
@@ -1580,7 +1580,7 @@ public final class MetaModelInstance {
     private <T> T getInstance(final Class<? extends T> metaModelDependentClass) {
         T instance = null;
         try {
-            instance = metaModelDependentClass.getConstructor(MetaModelInstance.class).newInstance(this);
+            instance = metaModelDependentClass.getConstructor(MetaModel.class).newInstance(this);
         } catch (Exception e) {
             try {
                 instance = metaModelDependentClass.newInstance();

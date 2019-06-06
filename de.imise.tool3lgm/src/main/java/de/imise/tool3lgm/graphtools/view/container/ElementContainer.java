@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -311,7 +311,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     @Override
     public final void setVisible(final boolean visible) {
         super.setVisible(visible);
-        MetaModelInstance metaModel = me.getMetaModel();
+        MetaModel metaModel = me.getMetaModel();
         if (visible) {
             Set<Class<? extends Edge>> sortedEdgeClasses = metaModel.getSortedEdgeClasses(me.getClass());
             if (sortedEdgeClasses != null) {

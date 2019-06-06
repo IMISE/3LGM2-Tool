@@ -14,7 +14,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
@@ -48,7 +48,7 @@ public class ModelCleaner {
     private final GDCollection gdcoll;
 
     /** Das MetaModel der zu bereinigen GDCollection */
-    private final MetaModelInstance metaModel;
+    private final MetaModel metaModel;
 
     /**
      * Initialisiert einen neuen <code>ModelCleaner</code>.
@@ -207,7 +207,7 @@ public class ModelCleaner {
             }
             // Kanten löschen, die nicht mehrfach vorkommen dürfen, aber mehrfach vorkommen
             // (alle bis auf eine löschen)
-            if (MetaModelInstance.isMultipleEdgeClass(edge.getClass())) {
+            if (MetaModel.isMultipleEdgeClass(edge.getClass())) {
                 continue;
             }
             for (Edge edge2 : edge.getStart().getEdgesTo(edge.getEnd(), edge.getClass())) {

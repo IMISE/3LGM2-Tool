@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -36,7 +36,7 @@ public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
     /**
      * @param metaModel
      */
-    public TLGMOriginalGraphViewDefinion(final MetaModelInstance metaModel) {
+    public TLGMOriginalGraphViewDefinion(final MetaModel metaModel) {
         super(metaModel);
     }
 

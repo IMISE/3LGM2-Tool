@@ -11,7 +11,7 @@ import java.util.Vector;
 import javax.swing.AbstractAction;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -107,7 +107,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
      */
     private void setElementClassBoxContent() {
         UserFieldDefinitions definitions = getUserFieldDefinitions();
-        MetaModelInstance metaModel = definitions.getMetaModel();
+        MetaModel metaModel = definitions.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         loop: for (Class<? extends ModelElement> elementClass : metaModel.allElementsSet) {
             Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(elementClass);
@@ -210,7 +210,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         UserFieldDefinitions definitions = getUserFieldDefinitions();
         edgeClassBox.removeAllItems();
         edgeClassBox.addSeparator(getResString("userFieldEditor_edge_type"));
-        MetaModelInstance metaModel = definitions.getMetaModel();
+        MetaModel metaModel = definitions.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(elementClass);
         //mind. eine Kantenklase mit Kennzahlen oder Kennzahlformeln?

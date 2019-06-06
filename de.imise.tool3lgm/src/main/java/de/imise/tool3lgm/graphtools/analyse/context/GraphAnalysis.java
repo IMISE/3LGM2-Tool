@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.analyse.context;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -26,7 +26,7 @@ public class GraphAnalysis {
         boolean tmpmatch = false;
         // Ist eine Klasse aus "Verbundene" gewählt? Wenn nein, dann okay!
         ModelElement kn = ec.getElement();
-        MetaModelInstance metaModel = doc.getMetaModel();
+        MetaModel metaModel = doc.getMetaModel();
         for (int i = 0; i < connectedNames.size() && !tmpmatch; i++) {
             for (int j = 0; j < kn.getEdgesCount() && !tmpmatch; j++) {
                 if (kn.getConnectedElement(j).getClass() == metaModel.getClassForName(connectedNames.get(i))) {
@@ -52,7 +52,7 @@ public class GraphAnalysis {
      */
     public static List<ElementContainer> performSearch(final GraphDocument doc, final List<String> typ, final boolean getVerbundenState, final List<String> connectedNames) {
         List<ElementContainer> ergebnis = new ArrayList<>(50);
-        MetaModelInstance metaModel = doc.getMetaModel();
+        MetaModel metaModel = doc.getMetaModel();
         for (String t : typ) {
             for (ElementContainer ec : doc.getElementContainer(metaModel.getClassForName(t))) {
                 if (matchesCriteria(doc, ec, getVerbundenState, connectedNames)) {
@@ -83,7 +83,7 @@ public class GraphAnalysis {
             final boolean searchParts, final boolean searchParents) {
         ArrayList<ElementContainer> ergebnis = new ArrayList<>(50);
 
-        MetaModelInstance metaModel = doc.getMetaModel();
+        MetaModel metaModel = doc.getMetaModel();
         for (ElementContainer orgC : origin) {
             ModelElement kn = orgC.getElement();
             for (String t : typ) {

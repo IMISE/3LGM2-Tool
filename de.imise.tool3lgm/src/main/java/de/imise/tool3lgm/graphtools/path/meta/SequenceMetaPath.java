@@ -8,7 +8,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -214,7 +214,7 @@ public class SequenceMetaPath extends ListMetaPath {
                 return false;
             }
             Class<? extends ModelElement> connectingClass = getPathStepElementClass(i + 1);
-            if (MetaModelInstance.isAbstract(connectingClass)) {
+            if (MetaModel.isAbstract(connectingClass)) {
                 return false;
             }
         }

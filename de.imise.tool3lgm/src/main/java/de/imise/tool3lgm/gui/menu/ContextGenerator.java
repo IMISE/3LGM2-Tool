@@ -81,7 +81,7 @@ import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalysesRepository;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
@@ -393,7 +393,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         ModelElement me = ec.getElement();
         Class<? extends ModelElement> elementClass = me.getClass();
         JMenu sub_elem = new JMenu(getResString("unterg_el"));
-        MetaModelInstance metaModel = doc.getMetaModel();
+        MetaModel metaModel = doc.getMetaModel();
         //die Elementklasse darf man nicht bearbeiten, also auch keine Unterelemente hinzufügen -> raus
         if (!metaModel.isEditable(elementClass)) {
             return sub_elem;
@@ -517,7 +517,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             //Anlegbare Pfade zu anderen Elementen anbieten
             JLabel connectLabel = null;
-            MetaModelInstance metaModel = me.getMetaModel();
+            MetaModel metaModel = me.getMetaModel();
             for (SimpleMetaPath metaPath : metaModel.getCreatableMetaPaths(meClass)) {
                 if (connectLabel == null) {
                     connectLabel = new JLabel(getResString("LABEL_CONNECT"));
@@ -670,7 +670,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             List<NamedObjectContainer<JMenuItem>> connectableItems = new ArrayList<>();
             List<NamedObjectContainer<JMenuItem>> disconnectableItems = new ArrayList<>();
 
-            MetaModelInstance metaModel = doc.getMetaModel();
+            MetaModel metaModel = doc.getMetaModel();
             ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
 
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
@@ -727,7 +727,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectable, toolTip), label));
                             }
                             //Kante mit Doppelter Bedeutung
-                        } else if (MetaModelInstance.isDoubleMeaningEdge(edgeClass)) {
+                        } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                             if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
                                 Direction direction = Direction.FORWARD;
                                 ConnectionState connectionState = ConnectionState.FORWARD;
@@ -1101,7 +1101,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private JMenu getCreateNewNodesMenu() {
         int activeLayer = doc.getCollection().getActiveLayer();
-        MetaModelInstance metaModel = doc.getMetaModel();
+        MetaModel metaModel = doc.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         Iterable<Class<? extends ModelElement>> creatableLayerNodes = metaModel.getCreatableLayerNodes(activeLayer);
         JMenu layerMenu = new JMenu(getResString("el_neu"));
@@ -2191,7 +2191,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param elementClass2
      * @return
      */
-    public static Class<? extends Edge> requestCurrentEdgeType(final MetaModelInstance metaModel, final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+    public static Class<? extends Edge> requestCurrentEdgeType(final MetaModel metaModel, final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
         Class<? extends Edge> edgeClass = null;
         Class<? extends Edge>[] edgeClasses = metaModel.getEdgeTypes(elementClass1, elementClass2);
         if (edgeClasses == null || edgeClasses.length == 0) {

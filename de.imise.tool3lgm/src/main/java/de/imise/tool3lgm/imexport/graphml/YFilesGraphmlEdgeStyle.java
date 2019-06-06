@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.imexport.graphml;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -31,12 +31,12 @@ public class YFilesGraphmlEdgeStyle {
     public YFilesGraphmlEdgeStyle(final EdgeContainer ec) {
         Edge edge = ec.getEdge();
         Class<? extends Edge> edgeClass = edge.getClass();
-        MetaModelInstance metaModel = edge.getMetaModel();
-        ConnectionState direction = metaModel.isDirectedEdge(edgeClass) ? MetaModelInstance.isDoubleMeaningEdge(edgeClass) ? ((DoubleMeaningEdge) edge).getConnectionState() : ConnectionState.FORWARD : ConnectionState.DOUBLE;
+        MetaModel metaModel = edge.getMetaModel();
+        ConnectionState direction = metaModel.isDirectedEdge(edgeClass) ? MetaModel.isDoubleMeaningEdge(edgeClass) ? ((DoubleMeaningEdge) edge).getConnectionState() : ConnectionState.FORWARD : ConnectionState.DOUBLE;
         sourceArrow = direction == ConnectionState.DOUBLE || direction == ConnectionState.BACKWARD ? "TRIANGLE" : null;
         targetArrow = direction == ConnectionState.DOUBLE || direction == ConnectionState.FORWARD ? "TRIANGLE" : null;
         smoothingLength = "0";
-        isDashed = MetaModelInstance.isHasPartEdge(edge.getClass());
+        isDashed = MetaModel.isHasPartEdge(edge.getClass());
         if (isDashed) {
             strokeFill = "BLACK";
             strokeDashStyle = "Dash";

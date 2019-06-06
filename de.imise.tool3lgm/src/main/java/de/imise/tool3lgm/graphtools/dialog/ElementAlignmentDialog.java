@@ -20,7 +20,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -77,7 +77,7 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
             for (NodeContainer ec : doc.getSelectedRealElementContainerIterable()) {
                 ModelElement me = ec.getElement();
                 Class<? extends ModelElement> elementClass = me.getClass();
-                MetaModelInstance metaModel = doc.getMetaModel();
+                MetaModel metaModel = doc.getMetaModel();
                 if (!metaModel.isSlaveType(elementClass)) {
                     selectedElementContainer.add(ec);
                 }

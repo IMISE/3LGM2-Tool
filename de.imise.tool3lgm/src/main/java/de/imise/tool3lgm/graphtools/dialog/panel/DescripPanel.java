@@ -14,7 +14,7 @@ import javax.swing.JSeparator;
 import javax.swing.border.Border;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -59,7 +59,7 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         add(this, label2, gbc, 0, gridy, 1, 1);
 
         nameTextPane = new LimitedSizeScrollTextPane(4);
-        MetaModelInstance metaModel = dialog.getMetaModel();
+        MetaModel metaModel = dialog.getMetaModel();
         nameTextPane.setEditable(!metaModel.isGenerateName(getModelElement().getClass()));
         gbc.weightx = 1;
         add(this, nameTextPane, gbc, 1, gridy++, 1, 1);

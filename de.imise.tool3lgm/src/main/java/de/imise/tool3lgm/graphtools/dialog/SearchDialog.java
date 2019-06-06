@@ -59,7 +59,7 @@ import javax.swing.text.JTextComponent;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -390,7 +390,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         List<ElementContainer> searchSet = doc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true);
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
         if (doc != mainDoc) {
-            MetaModelInstance metaModel = doc.getMetaModel();
+            MetaModel metaModel = doc.getMetaModel();
             for (ElementContainer ec : mainDoc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true)) {
                 if (metaModel.isUnique(ec.getElement().getClass())) {
                     Alphabetical.insert(searchSet, ec);
@@ -681,7 +681,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         elementClassBox.addItem(Node.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKnoten"));
         elementClassBox.addSeparator(true);
         GDCollection gdcoll = (GDCollection) modelBox.getSelectedObject();
-        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        MetaModel metaModel = gdcoll.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
         for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
             if (Modifier.isAbstract(elementClass.getModifiers())) {

@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 
 /**
@@ -11,7 +11,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
  */
 public class LayerKnoten extends Node {
 
-    public LayerKnoten(final MetaModelInstance metaModel, final int layer) {
+    public LayerKnoten(final MetaModel metaModel, final int layer) {
         this.layer = layer;
         setMetaModel(metaModel);
         setName(ModelConstants.getVisibleLayerName(layer));

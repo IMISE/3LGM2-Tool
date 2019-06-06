@@ -16,11 +16,11 @@ import java.util.zip.DataFormatException;
 
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.MetaModelInstanceContext;
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.log.Log;
 
@@ -95,7 +95,7 @@ public class AnalysesRepository {
      * @param elementClass
      * @return List, in der jeder Eintrag eine XMLAnalyse ist. Ist keine vorhanden, kommt eine leere Liste zurück, aber niemals <code>null</code>.
      */
-    public static List<AbstractAnalysis> getAnalyses(final MetaModelInstance metaModel, final Class<? extends ModelElement> elementClass) {
+    public static List<AbstractAnalysis> getAnalyses(final MetaModel metaModel, final Class<? extends ModelElement> elementClass) {
         List<AbstractAnalysis> analyses = new ArrayList<>();
         List<AbstractAnalysis> allAnalyses = new ArrayList<>(getXMLAnalyses());
         AnalysesDefinition analysesDefinition = metaModel.getAnalysesDefinition();
@@ -243,7 +243,7 @@ public class AnalysesRepository {
                 line = dataStream.readLine();
                 //Model-Type ist die Metamodel-ID, die erst nach Version 3.4.0.4 eingeführt wurde und in den Modelldateien sowie den Analysen gespeichert wird
                 String metaModelIDLinePrefix = "Model-Type: ";
-                MetaModelInstanceContext metaModelContext = Tool3lgmMetaModelContext.getDefaultMetaModelContext();
+                MetaModelContext metaModelContext = Tool3lgmMetaModelContext.getDefaultMetaModelContext();
                 if (line.startsWith(metaModelIDLinePrefix)) {
                     String metaModelId = line.substring(metaModelIDLinePrefix.length()).trim();
                     metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForID(metaModelId);

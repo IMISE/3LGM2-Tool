@@ -14,7 +14,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -38,7 +38,7 @@ import de.imise.util.Alphabetical;
 public class MetaPathDefinition {
 
     /** Das MetaModel der für das diese Definition gilt */
-    protected final MetaModelInstance metaModel;
+    protected final MetaModel metaModel;
 
     /** Sammlung aller definierten Metapfade */
     private final Set<AbstractMetaPath> definedMetaPaths = new HashSet<>();
@@ -54,7 +54,7 @@ public class MetaPathDefinition {
      * @param edgeClasses
      */
     @SafeVarargs
-    public MetaPathDefinition(final MetaModelInstance metaModel, final Class<? extends Edge>... edgeClasses) {
+    public MetaPathDefinition(final MetaModel metaModel, final Class<? extends Edge>... edgeClasses) {
         this.metaModel = metaModel;
         simpleMetaPathCreator = new SimpleMetaPathCreator(metaModel);
         Iterable<Class<? extends Edge>> edgeClassesIt = edgeClasses == null || edgeClasses.length == 0 ? metaModel.allEdgesSet : Arrays.asList(edgeClasses);
@@ -82,7 +82,7 @@ public class MetaPathDefinition {
     /**
      * @return
      */
-    public final MetaModelInstance getMetaModel() {
+    public final MetaModel getMetaModel() {
         return metaModel;
     }
 

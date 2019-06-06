@@ -6,21 +6,21 @@ import java.util.ResourceBundle;
 import javax.annotation.Nonnull;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ReflectionUtils;
 
 /**
- * Klasse, die die Klasse eines Metamodells und das dazugehörige ResouceBundle dieses Metamodells enthält. Es enthält noch nicht die MetaModelInstance
- * sondern die MetaModelInstance wird mit diesem Kontext hier initilisiert. Man braucht das ResourceBundle der Metamodelle bevor man eine Instanz der
+ * Klasse, die die Klasse eines Metamodells und das dazugehörige ResouceBundle dieses Metamodells enthält. Es enthält noch nicht das MetaModel
+ * sondern das MetaModel wird mit diesem Kontext hier initilisiert. Man braucht das ResourceBundle der Metamodelle bevor man eine Instanz der
  * Metamodell-Klasse bildet, um bei der Auswahl, welches Metmodell überhaupt instanziiert werden soll, den Namen des Metamodells anzeigen zu können.
  * So kann man dafür sorgen, dass die Metamodelle nur instanziiert und damit initialisiert werden, wenn man sie wirklich braucht, um damit eine
  * Modelldatei zu erzeugen.
  *
  * @author AXS (8 May 2019)
  */
-public final class MetaModelInstanceContext {
+public final class MetaModelContext {
 
     /** Klasse des Metamodells */
     private final Class<? extends MetaModelDefinition> metaModelDefinitionClass;
@@ -29,9 +29,9 @@ public final class MetaModelInstanceContext {
     public final String metaModelName;
 
     /** Das tatsächlich über die MetaModelDefintion initialiserte Metamodell */
-    private MetaModelInstance metaModelInstance;
+    private MetaModel metaModel;
 
-    /** Das ResourceBundle des MetaModels. Es ist nur nicht <code>null</code>, wenn auch die metaModelInstance nicht <code>null</code> ist */
+    /** Das ResourceBundle des MetaModels. Es ist nur nicht <code>null</code>, wenn auch metaModel nicht <code>null</code> ist */
     private ResourceBundle metaModelResourceBundle;
 
     /**
@@ -46,7 +46,7 @@ public final class MetaModelInstanceContext {
      *
      * @param metaModelDefinitionClass
      */
-    public MetaModelInstanceContext(@Nonnull final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+    public MetaModelContext(@Nonnull final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         this.metaModelDefinitionClass = metaModelDefinitionClass;
         ResourceBundle resources = getMetaModelResources();
         metaModelName = getMetaModelDisplayName(resources);
@@ -177,24 +177,24 @@ public final class MetaModelInstanceContext {
      *
      * @return
      */
-    public MetaModelInstance getMetaModel() {
-        if (metaModelInstance == null) {
+    public MetaModel getMetaModel() {
+        if (metaModel == null) {
             try {
                 metaModelResourceBundle = getMetaModelResources();
-                metaModelInstance = new MetaModelInstance(this);
+                metaModel = new MetaModel(this);
                 elementsNameBuilder = new ElementsNameBuilder(this);
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
-        return metaModelInstance;
+        return metaModel;
     }
 
     /**
      * Hiermit kann man die Referenz auf das Metamodell in diesem Kontext löschen. Dadurch wird der Speicher freigegeben. Das ist sinnvoll, wenn man
      * das letzte Modell einer bestimmten Art geschlossen hat, um ein bisschen Platz zu schaffen.
      */
-    public void unloadMetaModelInstance() {
-        metaModelInstance = null;
+    public void unloadMetaModel() {
+        metaModel = null;
     }
 }

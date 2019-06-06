@@ -14,7 +14,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
@@ -85,7 +85,7 @@ public class ConfigurationRenderer {
                 if (configurationEndContainer == null) {
                     configurationEndContainer = new ArrayList<>();
                     ModelElement me = configurationStart.getElement();
-                    MetaModelInstance metaModel = me.getMetaModel();
+                    MetaModel metaModel = me.getMetaModel();
                     GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
                     SimpleMetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(me);
                     Collection<ModelElement> interLayerConnectedElements = MetaPathFunctions.getConnectedElements(me, interLayerMetaPath);

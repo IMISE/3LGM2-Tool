@@ -3,7 +3,7 @@ package de.imise.tool3lgm.imexport;
 import java.util.HashMap;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
@@ -18,12 +18,12 @@ public class DisplayableNameHandler {
      * @param metaModel
      *            MetaModell, für das die anzeigbaren Namen hier gecached werden
      */
-    public DisplayableNameHandler(final MetaModelInstance metaModel) {
+    public DisplayableNameHandler(final MetaModel metaModel) {
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (Class<? extends ModelElement> elementClass : metaModel.allElementsSet) {
             String name = elementsNameBuilder.getDisplayableName(elementClass);
             displayableName2ClassMap.put(name, elementClass);
-            if (MetaModelInstance.isEdgeType(elementClass)) {
+            if (MetaModel.isEdgeType(elementClass)) {
                 //AXS: 28.05.2019: es sieht aus, als würde hier was fehlen
             }
         }

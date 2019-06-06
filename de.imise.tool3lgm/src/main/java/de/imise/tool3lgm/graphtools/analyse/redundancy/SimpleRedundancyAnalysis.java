@@ -8,7 +8,7 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
@@ -105,7 +105,7 @@ public class SimpleRedundancyAnalysis {
             //#################################
             AbstractMetaPath metaPath = definition.getMetaPath();
             Class<? extends ModelElement> elementClass = metaPath.getStartClasses().iterator().next();
-            MetaModelInstance metaModel = doc.getMetaModel();
+            MetaModel metaModel = doc.getMetaModel();
             int layer = metaModel.layerFor(elementClass);
             LayerContainer lc = doc.getLayer(layer);
             if (lc != null) {
@@ -120,7 +120,7 @@ public class SimpleRedundancyAnalysis {
     public void removeGraphTexts() {
         AbstractMetaPath metaPath = definition.getMetaPath();
         Class<? extends ModelElement> elementClass = metaPath.getStartClasses().iterator().next();
-        MetaModelInstance metaModel = doc.getMetaModel();
+        MetaModel metaModel = doc.getMetaModel();
         int layer = metaModel.layerFor(elementClass);
         LayerContainer lc = doc.getLayer(layer);
         if (lc != null) {
@@ -193,7 +193,7 @@ public class SimpleRedundancyAnalysis {
     private String getRedundanceString(final float redundance, final float saturation) {
         AbstractMetaPath metaPath = definition.getMetaPath();
         StringBuilder sb = new StringBuilder();
-        MetaModelInstance metaModel = doc.getMetaModel();
+        MetaModel metaModel = doc.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         sb.append(elementsNameBuilder.getDisplayablePluralName(metaPath.getStartClasses()));
         sb.append(" -> ");

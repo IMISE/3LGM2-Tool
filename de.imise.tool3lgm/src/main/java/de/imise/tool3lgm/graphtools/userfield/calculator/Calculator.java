@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
 
 import javax.swing.JOptionPane;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -464,7 +464,7 @@ public class Calculator {
 
         //nächster Token ist der Name der Elementclass, deren
         // <code>UserField<code>swert geholt wird
-        MetaModelInstance metaModel = definitions.getMetaModel();
+        MetaModel metaModel = definitions.getMetaModel();
         Class<?> elementClass = metaModel.getClassForName(st.nextToken());
 
         //Der nächste String ist der Hashcode des <code>UserFields</code>,
@@ -548,7 +548,7 @@ public class Calculator {
 
         //nächster Token ist der Name der Edge über die UserFields der
         // verbundenen Elemente aufsummiert werden sollen
-        MetaModelInstance metaModel = definitions.getMetaModel();
+        MetaModel metaModel = definitions.getMetaModel();
         Class<? extends Edge> edgeClass = metaModel.getClassForName(st.nextToken()).asSubclass(Edge.class);
 
         //nächster Token ist der HashString des UserFields das aufsummiert
@@ -657,7 +657,7 @@ public class Calculator {
 
         //nächster Token ist der Name der Edge über die UserFields der
         // verbundenen Elemente aufsummiert werden sollen
-        MetaModelInstance metaModel = definitions.getMetaModel();
+        MetaModel metaModel = definitions.getMetaModel();
         Class<? extends Edge> edgeClass = metaModel.getClassForName(st.nextToken()).asSubclass(Edge.class);
 
         //nächster Token ist der HashString des UserFields das aufsummiert
@@ -737,7 +737,7 @@ public class Calculator {
 
         //nächster Token ist der Name der Edge über die UserFields der
         // verbundenen Elemente aufsummiert werden sollen
-        MetaModelInstance metaModel = definitions.getMetaModel();
+        MetaModel metaModel = definitions.getMetaModel();
         Class<? extends Edge> edgeClass = metaModel.getClassForName(st.nextToken()).asSubclass(Edge.class);
 
         me.countConnections(edgeClass);

@@ -139,7 +139,7 @@ public abstract class MetaModelDefinition implements Serializable {
      * unter den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit den Oberklassen.
      */
     public Class<? extends ModelElement>[] getTreeDomainLayerVisibleAbstractNodes() {
-        return MetaModelInstance.EMPTY_ELEMENT_CLASS_ARRAY;
+        return MetaModel.EMPTY_ELEMENT_CLASS_ARRAY;
     }
 
     /** Alle Node zw. FE und LWE als Array */
@@ -154,7 +154,7 @@ public abstract class MetaModelDefinition implements Serializable {
      * unter den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit den Oberklassen.
      */
     public Class<? extends ModelElement>[] getTreeLogicalLayerVisibleAbstractNodes() {
-        return MetaModelInstance.EMPTY_ELEMENT_CLASS_ARRAY;
+        return MetaModel.EMPTY_ELEMENT_CLASS_ARRAY;
     }
 
     /** Alle Node zw. LWE und PWE als Array */
@@ -170,7 +170,7 @@ public abstract class MetaModelDefinition implements Serializable {
      * unter den Layer-Knoten gehängt, sondern unter den (oder die) Zwischenknoten mit den Oberklassen.
      */
     public Class<? extends ModelElement>[] getTreePhysicalLayerVisibleAbstractNodes() {
-        return MetaModelInstance.EMPTY_ELEMENT_CLASS_ARRAY;
+        return MetaModel.EMPTY_ELEMENT_CLASS_ARRAY;
     }
 
     private Class[] allNodes = null;

@@ -18,7 +18,7 @@ import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisD
 public class AnalysesDefinition {
 
     /** Metamodel der Definition */
-    protected final MetaModelInstance metaModel;
+    protected final MetaModel metaModel;
 
     /** Definition aller SimpleRedundancyAnalysis für dieses Metamodell */
     protected final SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinitions = new SimpleRedundancyAnalysisDefinitions();
@@ -42,7 +42,7 @@ public class AnalysesDefinition {
     /**
      * @param metaModel
      */
-    public AnalysesDefinition(final MetaModelInstance metaModel) {
+    public AnalysesDefinition(final MetaModel metaModel) {
         this.metaModel = metaModel;
         redundancyAnalysisDefinitions = new RedundancyAnalysisDefinitions(metaModel);
     }

@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.util.Alphabetical;
@@ -118,7 +118,7 @@ public class MetaPathSelector implements ActionListener {
         class1ComboBox = new AlphabeticalComboBox();
         Set<Class<? extends ModelElement>> startElementClassesInPaths = model.getStartElementClassesInPaths(pathsForSubClasses, pathsForSuperClasses);
         endElementClassesInPaths = model.getEndElementClassesInPaths(pathsForSubClasses, pathsForSuperClasses);
-        MetaModelInstance metaModel = model.getMetaModel();
+        MetaModel metaModel = model.getMetaModel();
         elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (Class<? extends ModelElement> elementClass : startElementClassesInPaths) {
             String name = elementsNameBuilder.getDisplayableName(elementClass);

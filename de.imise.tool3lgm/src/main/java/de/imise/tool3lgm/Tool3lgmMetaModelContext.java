@@ -33,10 +33,10 @@ public final class Tool3lgmMetaModelContext {
      * Alle MetaModel-Klasse, die gefunden werden. Die Standardmetamodellklasse (= die Klasse mit dem Namen DEFAULT_METAMDOEL_NAME) befindet sich
      * immer an Position 0)
      */
-    private static final List<MetaModelInstanceContext> metaModelInstanceContexts = loadMetaModelInstanceContexts();
+    private static final List<MetaModelContext> metaModelContexts = loadMetaModelContexts();
 
     /** Das Metamodell, mit dem ein neues Modell initialisiert werden soll */
-    private static MetaModelInstanceContext metaModelInstanceContext = null;
+    private static MetaModelContext metaModelContext = null;
 
     /**
      * Liefert einen MetaModelContext. Abhängig davon, ob in den UserProperties eingestellt ist, ob per Dialog nachgefragt werden soll oder nicht,
@@ -44,40 +44,40 @@ public final class Tool3lgmMetaModelContext {
      *
      * @return
      */
-    public static MetaModelInstanceContext getNewModelMetaModelInstanceContext() {
+    public static MetaModelContext getNewModelMetaModelContext() {
         boolean showDialog = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG);
         if (!showDialog) {
-            metaModelInstanceContext = getUserpropertiesStoredMetaModelInstanceContext();
+            metaModelContext = getUserpropertiesStoredMetaModelContext();
         }
-        while (metaModelInstanceContext == null) {
+        while (metaModelContext == null) {
             if (showDialog) {
-                metaModelInstanceContext = chooseMetaModel();
+                metaModelContext = chooseMetaModel();
             } else {
-                metaModelInstanceContext = metaModelInstanceContexts.get(0); // es war gewünscht worden, dass beim initialen Start das originale Metamodell ausgewählt ist. showDialog ist initial false
+                metaModelContext = metaModelContexts.get(0); // es war gewünscht worden, dass beim initialen Start das originale Metamodell ausgewählt ist. showDialog ist initial false
             }
         }
-        return metaModelInstanceContext;
+        return metaModelContext;
     }
 
     /**
-     * Lädt alle im Plaugin-Verzeichnis auffindbaren Metamodell-Klassen in einen MetaModelInstanceContext. Die Klasse
+     * Lädt alle im Plaugin-Verzeichnis auffindbaren Metamodell-Klassen in jeweils einen MetaModelContext.
      *
      * @return
      */
-    public static final List<MetaModelInstanceContext> loadMetaModelInstanceContexts() {
+    public static final List<MetaModelContext> loadMetaModelContexts() {
         File pluginDir = new File(Tool3lgmConstants.APPLICATION_DIR, "Plugins");
         List<Class<? extends MetaModelDefinition>> metaModelClasses = PluginUtils.loadClasses(pluginDir, MetaModelDefinition.class);
-        List<MetaModelInstanceContext> metaModelInstanceContexts = new ArrayList<>();
+        List<MetaModelContext> metaModelContexts = new ArrayList<>();
         for (int i = 0; i < metaModelClasses.size(); i++) {
             Class<? extends MetaModelDefinition> metaModelClass = metaModelClasses.get(i);
-            MetaModelInstanceContext metaModelInstanceContext = new MetaModelInstanceContext(metaModelClass);
+            MetaModelContext metaModelContext = new MetaModelContext(metaModelClass);
             if (metaModelClass.getSimpleName().equals(DEFAULT_METAMDOEL_CLASS_NAME)) {
-                metaModelInstanceContexts.add(0, metaModelInstanceContext); // das DefaultMetaModelganz nach vorne holen
+                metaModelContexts.add(0, metaModelContext); // das DefaultMetaModelganz nach vorne holen
             } else {
-                metaModelInstanceContexts.add(metaModelInstanceContext);
+                metaModelContexts.add(metaModelContext);
             }
         }
-        return metaModelInstanceContexts;
+        return metaModelContexts;
     }
 
     /**
@@ -85,8 +85,8 @@ public final class Tool3lgmMetaModelContext {
      *
      * @return
      */
-    public static final MetaModelInstanceContext getDefaultMetaModelContext() {
-        return metaModelInstanceContexts.get(0);
+    public static final MetaModelContext getDefaultMetaModelContext() {
+        return metaModelContexts.get(0);
     }
 
     /**
@@ -94,64 +94,64 @@ public final class Tool3lgmMetaModelContext {
      *
      * @return
      */
-    private static final MetaModelInstanceContext getUserpropertiesStoredMetaModelInstanceContext() {
+    private static final MetaModelContext getUserpropertiesStoredMetaModelContext() {
         String storedMetaModelID = UserProperties.get(StringProperty.META_MODEL);
         if (!Strings.isNullOrEmpty(storedMetaModelID)) {
-            for (MetaModelInstanceContext metaModelInstanceContext : metaModelInstanceContexts) {
-                if (metaModelInstanceContext.getMetaModelID().equals(storedMetaModelID)) {
-                    return metaModelInstanceContext;
+            for (MetaModelContext metaModelContext : metaModelContexts) {
+                if (metaModelContext.getMetaModelID().equals(storedMetaModelID)) {
+                    return metaModelContext;
                 }
             }
         }
         return null;
     }
 
-    public static final MetaModelInstanceContext chooseMetaModel() {
-        int optionsCount = metaModelInstanceContexts.size();
-        MetaModelInstanceContext lastMetaModelInstanceContext = getUserpropertiesStoredMetaModelInstanceContext();
+    public static final MetaModelContext chooseMetaModel() {
+        int optionsCount = metaModelContexts.size();
+        MetaModelContext lastMetaModelContext = getUserpropertiesStoredMetaModelContext();
         String title = getResString("choose_meta_model_dialog_title");
         String message = null;
-        MetaModelInstanceContext[] options = new MetaModelInstanceContext[optionsCount];
-        MetaModelInstanceContext selectedOption = null;
+        MetaModelContext[] options = new MetaModelContext[optionsCount];
+        MetaModelContext selectedOption = null;
         for (int i = 0; i < optionsCount; i++) {
-            MetaModelInstanceContext metaModelInstanceContext = metaModelInstanceContexts.get(i);
-            options[i] = metaModelInstanceContext;
-            if (i == 0 || lastMetaModelInstanceContext == metaModelInstanceContext) {
+            MetaModelContext metaModelContext = metaModelContexts.get(i);
+            options[i] = metaModelContext;
+            if (i == 0 || lastMetaModelContext == metaModelContext) {
                 selectedOption = options[i];
             }
         }
         String showAgainQuestion = getResString("show_this_dialog_at_start");
         boolean showAgainQuestionSelection = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG);
-        Pair<MetaModelInstanceContext, Boolean> choosedMetaModelAnswer = MultipleOptionPane.showSingleSelectionOptionDialog(Static.getMainFrame(), title, message, options, selectedOption, showAgainQuestion, showAgainQuestionSelection);
+        Pair<MetaModelContext, Boolean> choosedMetaModelAnswer = MultipleOptionPane.showSingleSelectionOptionDialog(Static.getMainFrame(), title, message, options, selectedOption, showAgainQuestion, showAgainQuestionSelection);
         if (choosedMetaModelAnswer == null) {
             return null;
         }
-        MetaModelInstanceContext choosedMetaModelInstanceContext = choosedMetaModelAnswer.getFirstItem();
-        UserProperties.set(StringProperty.META_MODEL, choosedMetaModelInstanceContext.getMetaModelID());
+        MetaModelContext choosedMetaModelContext = choosedMetaModelAnswer.getFirstItem();
+        UserProperties.set(StringProperty.META_MODEL, choosedMetaModelContext.getMetaModelID());
         UserProperties.set(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, Boolean.TRUE.equals(choosedMetaModelAnswer.getSecondItem()));
-        return choosedMetaModelInstanceContext;
+        return choosedMetaModelContext;
     }
 
     /**
-     * Liefert den {@link MetaModelInstanceContext} anhand seiner ID. Das ist der Klassennamen@SerialVersionUID. Bei alten Modellen ist es nur der
+     * Liefert den {@link MetaModelContext} anhand seiner ID. Das ist der Klassennamen@SerialVersionUID. Bei alten Modellen ist es nur der
      * Klassenname.
      *
      * @param metaModelContextID
      * @return
      */
-    public static final MetaModelInstanceContext getMetaModelContextForID(String metaModelContextID) {
+    public static final MetaModelContext getMetaModelContextForID(String metaModelContextID) {
         if (Strings.isNullOrEmpty(metaModelContextID)) {
             metaModelContextID = DEFAULT_METAMDOEL_CLASS_NAME;
         }
-        for (MetaModelInstanceContext metaModelInstanceContext : metaModelInstanceContexts) {
-            String otherID = metaModelInstanceContext.getMetaModelID();
+        for (MetaModelContext metaModelContext : metaModelContexts) {
+            String otherID = metaModelContext.getMetaModelID();
             if (otherID.equals(metaModelContextID)) {
-                return metaModelInstanceContext;
+                return metaModelContext;
             }
             //bevor die Metamodelle mit der SerialVersionUID gekennzeichnet wurden, war einzig der SimpleClassName der Metamodellklasse die ID -> für alte Modelle daruf testen
-            otherID = metaModelInstanceContext.getMetaModelDefinitionClass().getSimpleName();
+            otherID = metaModelContext.getMetaModelDefinitionClass().getSimpleName();
             if (otherID.equals(metaModelContextID)) {
-                return metaModelInstanceContext;
+                return metaModelContext;
             }
         }
         return null;

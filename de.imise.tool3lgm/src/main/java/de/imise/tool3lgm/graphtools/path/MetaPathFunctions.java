@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -628,7 +628,7 @@ public class MetaPathFunctions {
      * @return
      */
     private static final boolean isCompositionFromMasterToSlave(final Class<? extends Edge> edgeClass, final Direction direction) {
-        boolean isEdgeMasterToSlaveComposition = MetaModelInstance.isComposition(edgeClass);
+        boolean isEdgeMasterToSlaveComposition = MetaModel.isComposition(edgeClass);
         if (!isEdgeMasterToSlaveComposition) {
             return false;
         }
@@ -703,7 +703,7 @@ public class MetaPathFunctions {
 
         Class<? extends ModelElement> elementClass2Create = getElementaryPathsConnectingClass(edgeClassToNewElement, directionToNewElement, edgeClassFromNewElement, directionFromNewElement);
         //abstracte Elemente können nicht angelegt werden! hier wird nicht auf null gecheckt, weil man diese Funktion nur mit SimpleMetaPaths aufrufen sollte, die creatable sind!
-        if (MetaModelInstance.isAbstract(elementClass2Create)) {
+        if (MetaModel.isAbstract(elementClass2Create)) {
             return null;
         }
 
@@ -743,7 +743,7 @@ public class MetaPathFunctions {
         }
 
         //alle Kantentpyen der neu angelegten Elementart holen
-        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        MetaModel metaModel = gdcoll.getMetaModel();
         Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(elementClass2Create);
         //für jede dieser Kantenarten
         boolean interrupted = false;

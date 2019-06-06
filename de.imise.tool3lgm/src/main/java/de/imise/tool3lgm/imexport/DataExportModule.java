@@ -17,7 +17,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -76,7 +76,7 @@ public class DataExportModule {
                 elements = doc.getModelItems(ModelElement.class, true, true);
             }
 
-            MetaModelInstance metaModel = doc.getMetaModel();
+            MetaModel metaModel = doc.getMetaModel();
 
             //Alle Elementklassen in der Reihenfolge zusammen sammeln, in der sie exportiert werden sollen (erst
             //alphabetisch alle Knotenklassen, dann alle Kantenklassen
@@ -100,7 +100,7 @@ public class DataExportModule {
                     if (elementClass != classElement) {
                         classElement = elementClass;
                         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
-                        String displayableClassName = MetaModelInstance.isEdgeType(elementClass) ? elementsNameBuilder.getFullForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : elementsNameBuilder.getDisplayableName(elementClass);
+                        String displayableClassName = MetaModel.isEdgeType(elementClass) ? elementsNameBuilder.getFullForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : elementsNameBuilder.getDisplayableName(elementClass);
                         caption = displayableClassName + "\tName\tDescription\tHashString";
                         for (SimpleMetaPath metaPath : metaPaths2Export) {
                             if (metaPath.getStartClass().isAssignableFrom(elementClass)) {

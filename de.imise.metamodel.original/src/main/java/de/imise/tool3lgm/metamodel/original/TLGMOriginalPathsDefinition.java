@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
@@ -39,7 +39,7 @@ public class TLGMOriginalPathsDefinition extends MetaPathDefinition {
     /**
      * @param metaModel
      */
-    public TLGMOriginalPathsDefinition(final MetaModelInstance metaModel) {
+    public TLGMOriginalPathsDefinition(final MetaModel metaModel) {
         super(metaModel);
     }
 

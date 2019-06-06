@@ -19,7 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
@@ -76,7 +76,7 @@ public class InternalAccountingPanel extends AbstractInputPanel implements Actio
         Class<? extends UserFieldTarget> userFieldTargetClass = userField.getTargetClass();
         if (ModelElement.class.isAssignableFrom(userFieldTargetClass)) {
             Class<? extends ModelElement> elementClass = userFieldTargetClass.asSubclass(ModelElement.class);
-            MetaModelInstance metaModel = definitions.getMetaModel();
+            MetaModel metaModel = definitions.getMetaModel();
             for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(elementClass)) {
                 if (SubordinationEdge.class.isAssignableFrom(edgeClass)) {
                     vgComboBox.addItem(UNIFORMLY_DISTRIBUTED);

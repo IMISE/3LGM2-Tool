@@ -18,7 +18,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import de.imise.tool3lgm.MetaModelInstanceContext;
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
@@ -96,7 +96,7 @@ public class ToolXMLParser {
         parser.getXMLReader().setDTDHandler(new ToolDTDHandler());
 
         version = extractVersionAndMetaModel(parseStream);
-        gdcoll.setMetaModelContext(version.metaModelInstanceContext);
+        gdcoll.setMetaModelContext(version.metaModelContext);
 
         /* XML Version */
         if (version.xmlVersionIndex < 0) {
@@ -104,7 +104,7 @@ public class ToolXMLParser {
         }
 
         /* Metamodell passt nicht */ // das hier tritt nun nicht mehr auf. Es sollte schon vorher fesgestellt werden, dass das Metamodell des Files nicht im Plugins-Ordner gefunden wurde
-        //        if (version.metaModelInstanceContext == Tool3lgmMetaModelContext.getMetaModelClass()) {
+        //        if (version.metaModelContext == Tool3lgmMetaModelContext.getMetaModelClass()) {
         //            String fileMetaModelName = Tool3lgmMetaModelContext.getMetaModelDisplayableName(version.metaModelClass);
         //            String toolMetaModelName = Tool3lgmMetaModelContext.getMetaModelDisplayableName(Tool3lgmMetaModelContext.getMetaModelClass());
         //            JOptionPane.showMessageDialog(Static.getTool(), getResString("wrong_metamodel_open_warning", fileMetaModelName, toolMetaModelName), getResString("warnung"), JOptionPane.WARNING_MESSAGE);
@@ -325,16 +325,16 @@ public class ToolXMLParser {
     private static boolean isParseableFileVersion(final FileInputStream fileStream) throws FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
         fileStream.getChannel().position(0);
         FileVersion version = extractVersionAndMetaModel(fileStream);
-        return version.xmlVersionIndex >= 0 && version.lgmVersionIndex >= 0 && version.metaModelInstanceContext != null;
+        return version.xmlVersionIndex >= 0 && version.lgmVersionIndex >= 0 && version.metaModelContext != null;
     }
 
     public static class FileVersion {
         public int xmlVersionIndex = -1;
         public int lgmVersionIndex = -1;
-        public MetaModelInstanceContext metaModelInstanceContext = null;
+        public MetaModelContext metaModelContext = null;
         @Override
         public String toString() {
-            return "MetaModel=" + metaModelInstanceContext + " xmlVersion='" + supportedXMLVersions[xmlVersionIndex] + "' lgmVersion='" + supportedFileVersions[lgmVersionIndex] + "'";
+            return "MetaModel=" + metaModelContext + " xmlVersion='" + supportedXMLVersions[xmlVersionIndex] + "' lgmVersion='" + supportedFileVersions[lgmVersionIndex] + "'";
         }
     }
 
@@ -377,7 +377,7 @@ public class ToolXMLParser {
         if (result.lgmVersionIndex == -1) {
             throw new LGMVersionException(getResString("lgmversionsfehler"));
         }
-        result.metaModelInstanceContext = Tool3lgmMetaModelContext.getDefaultMetaModelContext();
+        result.metaModelContext = Tool3lgmMetaModelContext.getDefaultMetaModelContext();
         int indexToOpenComma = VERSION_STRING_METAMODEL_CLASS.length() - 1;
         int metaModelStart = line.indexOf(VERSION_STRING_METAMODEL_CLASS.substring(0, indexToOpenComma - 1));
         if (metaModelStart >= 0) {
@@ -387,8 +387,8 @@ public class ToolXMLParser {
             String s = line.substring(classNameStart, classNameEnd);
             //es ist eine Metamodellklasse angegeben:
             if (s.length() > 0) {
-                result.metaModelInstanceContext = Tool3lgmMetaModelContext.getMetaModelContextForID(s);
-                if (result.metaModelInstanceContext == null) {
+                result.metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForID(s);
+                if (result.metaModelContext == null) {
                     throw new LGMVersionException(getResString("lgmversionsfehler"));
                 }
             }

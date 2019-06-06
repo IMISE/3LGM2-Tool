@@ -26,7 +26,7 @@ import javax.swing.JScrollPane;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -77,7 +77,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
         my_mapping.adapt(doc.getMapping());
         setTitle(getResString("layout_edit"));
 
-        MetaModelInstance metaModel = gdcoll.getMetaModel();
+        MetaModel metaModel = gdcoll.getMetaModel();
         GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
 
         wieviele = graphViewDefinition.getMetaModelSpecificPaintableNodes().size();
@@ -153,7 +153,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
             int currentLayer = ModelConstants.VISIBLE_LAYERS[l];
             for (int c = 0; c < metaModelSpecificPaintableNodes.size(); c++) {
                 Class<? extends ModelElement> paintbaleClass = metaModelSpecificPaintableNodes.get(c);
-                if (MetaModelInstance.isAbstract(paintbaleClass)) {
+                if (MetaModel.isAbstract(paintbaleClass)) {
                     continue;
                 }
                 // nur für Node kann man das Layout im Moment festlegen -> Kanten auslassen

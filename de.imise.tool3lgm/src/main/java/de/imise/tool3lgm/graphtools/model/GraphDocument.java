@@ -41,13 +41,13 @@ import javax.swing.SwingConstants;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.MetaModelInstanceContext;
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -196,7 +196,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     protected InternalGraphFrame frame = null;
 
     /** MetaModel dieses Modells */
-    protected final MetaModelInstance metaModel;
+    protected final MetaModel metaModel;
 
     /**
      * @param _gdcoll
@@ -223,7 +223,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     // Verwaltung globaler Modelldaten --- Anfang ---
 
     /** Liefert das zu Grunde liegende MetaModel */
-    public MetaModelInstance getMetaModel() {
+    public MetaModel getMetaModel() {
         return metaModel;
     }
 
@@ -235,7 +235,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *
      * @param key
      * @return
-     * @see MetaModelInstanceContext#getResString(String)
+     * @see MetaModelContext#getResString(String)
      */
     public String getResString(final String key) {
         return getMetaModel().getResString(key);
@@ -246,7 +246,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * Kanten die gerichteten Namen.
      *
      * @return
-     * @see MetaModelInstanceContext#getElementsNameBuilder()
+     * @see MetaModelContext#getElementsNameBuilder()
      */
     public ElementsNameBuilder getElementsNameBuilder() {
         return getMetaModel().getElementsNameBuilder();
@@ -4743,10 +4743,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //Knickpunkte
             if (clazz == Bendpoint.class) {
                 layerElements.add(lc.getBendpointContainers());
-            } else if (MetaModelInstance.isNodeType(clazz)) {
+            } else if (MetaModel.isNodeType(clazz)) {
                 layerElements.add(lc.getNodeContainersAlphabetical());
                 //Kanten
-            } else if (MetaModelInstance.isEdgeType(clazz)) {
+            } else if (MetaModel.isEdgeType(clazz)) {
                 layerElements.add(lc.getEdgeContainers());
             }
 
@@ -4779,7 +4779,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         //wenn alphabetisch sortiert werden soll und andere Elemente als die bereits in der aplhabetisch sortierten
         //Knotenliste enthaltenen zur Rückgabeliste hinzugefügt wurden
-        if (clazz == Bendpoint.class || !MetaModelInstance.isNodeType(clazz)) {
+        if (clazz == Bendpoint.class || !MetaModel.isNodeType(clazz)) {
             //aplhabetisch sortieren
             Alphabetical.sort(objects);
         }

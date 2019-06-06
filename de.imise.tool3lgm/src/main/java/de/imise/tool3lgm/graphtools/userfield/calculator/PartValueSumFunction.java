@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
@@ -248,7 +248,7 @@ public class PartValueSumFunction {
             }
             //Der erste Token ist der Name der Assoziation, die das VG beherbegrt
             // -> hole die Kantenklasse
-            MetaModelInstance metaModel = definitions.getMetaModel();
+            MetaModel metaModel = definitions.getMetaModel();
             edgeClass = metaModel.getClassForName(token).asSubclass(Edge.class);
 
             String ufHash = st.nextToken();

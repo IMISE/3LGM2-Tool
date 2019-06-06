@@ -25,7 +25,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -123,7 +123,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
         gbc.gridy++;
 
         UserFieldDefinitions definitions = userField.getDefinitions();
-        MetaModelInstance metaModel = definitions.getMetaModel();
+        MetaModel metaModel = definitions.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         add(new JLabel(getResString("Edge") + ": " + elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass)), gbc);
         ButtonGroup bg = new ButtonGroup();
@@ -238,7 +238,7 @@ public class ReferencePanel extends JPanel implements ActionListener {
      */
     private void setClassesInLists(final AlphabeticalJList classesList) {
         UserFieldDefinitions definitions = userField.getDefinitions();
-        MetaModelInstance metaModel = definitions.getMetaModel();
+        MetaModel metaModel = definitions.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (int i = 0; i < classes.length; i++) {
             classesList.addItem(classes[i], elementsNameBuilder.getDisplayableName(classes[i]));

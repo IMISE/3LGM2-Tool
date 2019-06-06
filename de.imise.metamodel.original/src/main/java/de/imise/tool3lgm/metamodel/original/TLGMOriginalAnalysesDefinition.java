@@ -7,7 +7,7 @@ import javax.swing.Action;
 
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.metamodel.original.analyse.DataAvailabilityFinder;
 import de.imise.tool3lgm.metamodel.original.analyse.InterfaceCanSendOTAnalysis;
@@ -30,7 +30,7 @@ import de.imise.tool3lgm.metamodel.original.node.Softwareprodukt;
 
 public class TLGMOriginalAnalysesDefinition extends AnalysesDefinition {
 
-    public TLGMOriginalAnalysesDefinition(final MetaModelInstance metaModel) {
+    public TLGMOriginalAnalysesDefinition(final MetaModel metaModel) {
         super(metaModel);
         initSimpleRedundancyAnalyses();
         initRedundancyAnalyses();

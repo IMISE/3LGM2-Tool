@@ -40,7 +40,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.TabbedPanel;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
@@ -207,10 +207,10 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     private List<Class<? extends HasPartEdge>> getRecursiveHasPartEdges() {
         List<Class<? extends HasPartEdge>> recursiveHasPartEdges = new ArrayList<>();
         Class<? extends ModelElement> elementClass = modelElement.getClass();
-        MetaModelInstance metaModel = modelElement.getMetaModel();
+        MetaModel metaModel = modelElement.getMetaModel();
         Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(elementClass);
         for (Class<? extends Edge> edgeClass : edgeTypes) {
-            if (MetaModelInstance.isRecursiveHasPartEdge(edgeClass)) {
+            if (MetaModel.isRecursiveHasPartEdge(edgeClass)) {
                 Class<? extends HasPartEdge> hasPartEdgeClass = edgeClass.asSubclass(HasPartEdge.class);
                 if (HasPartEdge.isParentClass(hasPartEdgeClass, elementClass)) {
                     recursiveHasPartEdges.add(hasPartEdgeClass);
@@ -470,7 +470,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        MetaModelInstance metaModel = modelElement.getMetaModel();
+        MetaModel metaModel = modelElement.getMetaModel();
         if (metaModel.isVisible(simpleMetaPath) || Static.isExpertMode()) {
             descripPanel.addSingleConnectionPanel(labelLastEdgeName, metaModel.isEditable(simpleMetaPath), simpleMetaPath);
         }
@@ -551,15 +551,15 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     private void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final boolean add2SubTab) {
         SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClass);
-        MetaModelInstance metaModel = modelElement.getMetaModel();
+        MetaModel metaModel = modelElement.getMetaModel();
         if (!metaModel.isVisible(metaPath)) {
             return;
         }
         boolean editable = metaModel.isEditable(metaPath);
         ElementDialogPanel panel2Add = null;
-        if (MetaModelInstance.isComposition(edgeClass)) {
+        if (MetaModel.isComposition(edgeClass)) {
             panel2Add = new MutipleCompositionPanel(this, editable, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
-        } else if (MetaModelInstance.isDoubleMeaningEdge(edgeClass)) {
+        } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
             panel2Add = new DoubleMeaningEdgePanel(this, editable, searchElementClass, edgeClass);
             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
         } else if (Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && metaModel.isDirectedEdge(edgeClass)) {
@@ -588,7 +588,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     private final void addTablePanelInternal(final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
         boolean editable = true;
         Set<SimpleMetaPath> allDifferentSimpleMetaPaths = new HashSet<>();
-        MetaModelInstance metaModel = modelElement.getMetaModel();
+        MetaModel metaModel = modelElement.getMetaModel();
         for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
             Collection<SimpleMetaPath> simpleMetaPathsNonAbstract = SimpleMetaPathCreator.getSimpleMetaPathsNonAbstract(simpleMetaPath);
             allDifferentSimpleMetaPaths.addAll(simpleMetaPathsNonAbstract);

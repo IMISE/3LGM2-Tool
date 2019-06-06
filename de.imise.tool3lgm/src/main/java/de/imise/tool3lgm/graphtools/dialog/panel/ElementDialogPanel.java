@@ -21,7 +21,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMComponentListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMWindowListener;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -268,7 +268,7 @@ public abstract class ElementDialogPanel extends JPanel {
         return dialog.getModelElement();
     }
 
-    public final MetaModelInstance getMetaModel() {
+    public final MetaModel getMetaModel() {
         return mainDoc.getMetaModel();
     }
 

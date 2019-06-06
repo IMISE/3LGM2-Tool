@@ -55,7 +55,7 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
@@ -191,10 +191,10 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         oldFormulaString = userField.getFormula();
         Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
         Class<? extends ModelElement> elementClass = ModelElement.class.isAssignableFrom(targetClass) ? targetClass.asSubclass(ModelElement.class) : null;
-        MetaModelInstance.isNodeType(targetClass);
+        MetaModel.isNodeType(targetClass);
         GDCollection gdcoll = def.getCollection();
         ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
-        String targetClassDisplayName = elementClass == null || MetaModelInstance.isEdgeType(targetClass) ? "" : "  -  " + elementsNameBuilder.getDisplayableName(elementClass);
+        String targetClassDisplayName = elementClass == null || MetaModel.isEdgeType(targetClass) ? "" : "  -  " + elementsNameBuilder.getDisplayableName(elementClass);
         setTitle(getResString("formulaEditorDialog") + targetClassDisplayName + "  -  " + newUserFieldName);
         setLocationByPlatform(true);
 
@@ -687,7 +687,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         private void addButtons() {
             Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
             GDCollection gdcoll = definitions.getCollection();
-            MetaModelInstance metaModel = gdcoll.getMetaModel();
+            MetaModel metaModel = gdcoll.getMetaModel();
             boolean targetClassCanHaveEdges = ModelElement.class.isAssignableFrom(targetClass) && metaModel.getEdgeTypes(targetClass.asSubclass(ModelElement.class)).length > 0;
             if (targetClassCanHaveEdges) {
                 add(buttonsum);
@@ -698,7 +698,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 add(buttonmittelwert);
                 add(buttonindikator);
             }
-            if (MetaModelInstance.isEdgeType(userField.getTargetClass())) {
+            if (MetaModel.isEdgeType(userField.getTargetClass())) {
                 add(buttonReference);
             }
         }

@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.view.container;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -74,7 +74,7 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
      * @param doc
      */
     protected void init(final GraphDocument doc) {
-        MetaModelInstance metaModel = doc.getMetaModel();
+        MetaModel metaModel = doc.getMetaModel();
         Class<? extends ModelElement> elementClass = me.getClass();
         int layer = metaModel.layerFor(elementClass);
         LayerContainer lc = doc.getLayer(layer);

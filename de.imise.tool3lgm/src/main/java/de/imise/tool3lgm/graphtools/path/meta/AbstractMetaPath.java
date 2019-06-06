@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
 
@@ -59,12 +59,12 @@ public abstract class AbstractMetaPath {
     protected InvalidityCheckResult invalidityCheckResult;
 
     /** Das MetaModel aus dem die Knoten- und Kantenklassen des Pfades stammen */
-    protected final MetaModelInstance metaModel;
+    protected final MetaModel metaModel;
 
     /**
      * @param metaModel
      */
-    public AbstractMetaPath(final MetaModelInstance metaModel) {
+    public AbstractMetaPath(final MetaModel metaModel) {
         this(metaModel, null);
     }
 
@@ -73,7 +73,7 @@ public abstract class AbstractMetaPath {
      * @param name
      *            Anzeigenamen
      */
-    public AbstractMetaPath(final MetaModelInstance metaModel, final String name) {
+    public AbstractMetaPath(final MetaModel metaModel, final String name) {
         this(metaModel, (Class<? extends ModelElement>) null, (Class<? extends ModelElement>) null, name);
     }
 
@@ -82,7 +82,7 @@ public abstract class AbstractMetaPath {
      * @param startElementClass
      * @param endElementClass
      */
-    public AbstractMetaPath(final MetaModelInstance metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
+    public AbstractMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
         this(metaModel, startElementClass, endElementClass, null);
 
     }
@@ -93,7 +93,7 @@ public abstract class AbstractMetaPath {
      * @param endElementClass
      * @param name
      */
-    public AbstractMetaPath(final MetaModelInstance metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
+    public AbstractMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
         this(metaModel, startElementClass != null ? ImmutableSet.of(startElementClass) : null, endElementClass != null ? ImmutableSet.of(endElementClass) : null, name);
 
     }
@@ -104,7 +104,7 @@ public abstract class AbstractMetaPath {
      * @param endElementClasses
      * @param name
      */
-    public AbstractMetaPath(final MetaModelInstance metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
+    public AbstractMetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
         this.metaModel = metaModel;
         this.startElementClasses = startElementClasses == null ? ImmutableSet.of() : ImmutableSet.class.isAssignableFrom(startElementClasses.getClass()) ? startElementClasses : ImmutableSet.copyOf(startElementClasses);
         this.endElementClasses = endElementClasses == null ? ImmutableSet.of() : ImmutableSet.class.isAssignableFrom(endElementClasses.getClass()) ? endElementClasses : ImmutableSet.copyOf(endElementClasses);
@@ -112,7 +112,7 @@ public abstract class AbstractMetaPath {
     }
 
     /** Liefert das zugrunde liegende MetaModell */
-    public final MetaModelInstance getMetaModel() {
+    public final MetaModel getMetaModel() {
         return metaModel;
     }
 

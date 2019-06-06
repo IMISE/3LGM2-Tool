@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.path.meta;
 
 import java.util.HashMap;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -18,7 +18,7 @@ import de.imise.util.ReflectionUtils;
 public final class ElementaryMetaPathHandler {
 
     /** Das MetaModel, für das dieser Handler die Pfade verwaltet */
-    private final MetaModelInstance metaModel;
+    private final MetaModel metaModel;
 
     /** Platzhaltermetapfad für die Definition einer beliebigen Verbindung z. B. in einem {@link SequenceMetaPath} */
     public final ElementaryMetaPath generalElementarySuperPath;
@@ -33,7 +33,7 @@ public final class ElementaryMetaPathHandler {
     /**
      * @param metaModel
      */
-    public ElementaryMetaPathHandler(final MetaModelInstance metaModel) {
+    public ElementaryMetaPathHandler(final MetaModel metaModel) {
         this.metaModel = metaModel;
         generalElementarySuperPath = new ElementaryMetaPath(metaModel, Edge.class, Direction.FORWARD);
     }
@@ -59,7 +59,7 @@ public final class ElementaryMetaPathHandler {
     private final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
         ElementaryMetaPath[] metaPathes = EDGE_CLASS_TO_FORWARD_AND_BACKWARD_METAPATHES.get(edgeClass);
         if (metaPathes == null) {
-            boolean isDoubleMeaningEdge = MetaModelInstance.isDoubleMeaningEdge(edgeClass);
+            boolean isDoubleMeaningEdge = MetaModel.isDoubleMeaningEdge(edgeClass);
             //Kanten mit doppelter Bedeutung haben für jeden ConnectionState (null, FORWARD, BACKWARD, DOUBLE) und jede Richtung (FORWARD,
             //BACKWARD) je einen Elementarmetapfad mit eigener Bedeutung. Alle anderen haben nur für jede Richtung eine Bedeutung.
             //Index des Elementarpfades ergibt sich aus dem ConnectionState = connectionState == null ? 0 : connectionState.ordinal() + 1

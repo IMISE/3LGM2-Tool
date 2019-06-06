@@ -4,7 +4,7 @@ import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -18,7 +18,7 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
      * @param metaModel
      * @param maxRowCount
      */
-    public UserFieldDeclarationDialogClassComboBox(final MetaModelInstance metaModel, final int maxRowCount) {
+    public UserFieldDeclarationDialogClassComboBox(final MetaModel metaModel, final int maxRowCount) {
         super();
         setMaximumRowCount(13);
         addItem(GLOBAL_USERFIELD_IDENTIFIER_CLASS, getDisplayableGlobalFieldIdentifierName());
@@ -26,7 +26,7 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         //alle nicht abstracten Knotenklassen hinzufügen
         for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
-            if (!MetaModelInstance.isAbstract(elementClass)) {
+            if (!MetaModel.isAbstract(elementClass)) {
                 addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
             }
         }
@@ -37,7 +37,7 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
             //2 Elementen geben kann. D.h. bei MultipleEges würde immer nur die erste Kante beachtet werden.
             //Da weder druchdacht ist noch ausprobiert wurde, was passiert, wenn man Kanten mehrfach verknüpft
             //und dann mit Verteilungegewichten bestückt, sind diese Kanten hier erstmal ausßen vor.
-            if (!MetaModelInstance.isMultipleEdgeClass(edgeClass)) {
+            if (!MetaModel.isMultipleEdgeClass(edgeClass)) {
                 addItem(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
                 addItem(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
             }

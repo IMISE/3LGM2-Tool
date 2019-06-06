@@ -4,7 +4,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelInstance;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 
 /**
  * Oberklasse für alle Kantenklassen mit doppelter Bedeutung. Also Kanten, die 2 Assoziationen in einer zwischen 2 Klassen sind.
@@ -138,7 +138,7 @@ public abstract class DoubleMeaningEdge extends Edge {
             switchClasses = true;
         }
         //bei allen Kanten, bei denen die Richtung egal ist, wird sie immer auf DOUBLE gesetzt (das macht die GDCollection in link auch!)
-        MetaModelInstance metaModel = getMetaModel();
+        MetaModel metaModel = getMetaModel();
         if (!metaModel.isDirectedEdge(getClass())) {
             connectionState = DOUBLE;
         }

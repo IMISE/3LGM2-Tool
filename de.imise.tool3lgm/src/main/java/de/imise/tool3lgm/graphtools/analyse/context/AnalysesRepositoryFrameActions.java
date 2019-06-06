@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.MetaModelInstanceContext;
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.log.Log;
@@ -226,7 +226,7 @@ public class AnalysesRepositoryFrameActions {
     /**
      * Action für das starten der ausgewählten Analysen
      */
-    static final Action createACTION_NEW_ANALYSIS(final MetaModelInstanceContext metaModelContext) {
+    static final Action createACTION_NEW_ANALYSIS(final MetaModelContext metaModelContext) {
         return new AbstractAction(getResString("ana_new")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
