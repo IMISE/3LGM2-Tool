@@ -40,7 +40,9 @@ public class TLGMOriginalGraphViewDefinion extends GraphViewDefinition {
         super(metaModel);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({
+            "unchecked", "rawtypes"
+    })
     @Override
     protected final Class[] getPaintableNodes() {
         //diese Funtkion wird nur ein einziges Mal aufgerufen, daher ist es ok,
