@@ -218,6 +218,22 @@ public class ReflectionUtils {
     }
 
     /**
+     * Entfernt aus der übergebenen Liste alle Klassen, die nicht zuwesiungskompatibel zur übergebenen Klasse sind.
+     *
+     * @param classList
+     * @param classOrSuperClass
+     * @return
+     */
+    public static final <T> void retainSubClasses(final List<Class<? extends T>> classList, final Class<?> classOrSuperClass) {
+        for (int i = classList.size() - 1; i >= 0; i--) {
+            Class<?> clazz = classList.get(i);
+            if (!classOrSuperClass.isAssignableFrom(clazz)) {
+                classList.remove(i);
+            }
+        }
+    }
+
+    /**
      * Liefert für die übergebenen Klassen diese Klassen selbst und bis hin zur übergebenen excludeSuperClass
      * auch alle Superklassen. Die excludeSuperClass selbst ist nicht mehr mit dabei. Wird als excludeSuperClass
      * null übergeben, dann geht die Hierarchie hoch bis zu Object.class.
