@@ -34,7 +34,6 @@ import com.google.common.collect.Table;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition.DefaultMetaModelDefinitionAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -389,17 +388,6 @@ public final class MetaModel {
         elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatablePaths()));
         elementClassToNameExtensionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionPath());
         elementClassesWithNameExtensions = CollectionUtils.ensureImmutable(elementClassToNameExtensionPath.keySet());
-    }
-
-    /**
-     * @return eine neue Dummyinstanz von einem MetaModel
-     */
-    public static final MetaModel getDummyInstance() {
-        try {
-            return new MetaModel(new MetaModelContext(DefaultMetaModelDefinitionAdapter.class));
-        } catch (Exception e) {
-        }
-        return null;
     }
 
     /**

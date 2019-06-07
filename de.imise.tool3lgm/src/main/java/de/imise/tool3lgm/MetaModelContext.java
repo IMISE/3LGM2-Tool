@@ -190,8 +190,8 @@ public final class MetaModelContext {
     public MetaModel getMetaModel() {
         if (metaModel == null) {
             try {
-                metaModelResourceBundle = getMetaModelResources();
                 metaModel = new MetaModel(this);
+                metaModelResourceBundle = getMetaModelResources();
                 elementsNameBuilder = new ElementsNameBuilder(this);
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();

@@ -8,7 +8,9 @@ import java.util.List;
 
 import com.google.common.base.Strings;
 
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition.DefaultMetaModelDefinitionAdapter;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
@@ -29,8 +31,14 @@ public final class Tool3lgmMetaModelContext {
      */
     private static final String DEFAULT_METAMDOEL_CLASS_NAME = "TLGMOriginalMetaModel";
 
+    /** Dummy-Instanz eines MetamodelContexts, um Null-Checks zu vermeiden */
+    public static final MetaModelContext DUMMY_META_MODEL_CONTEXT = new MetaModelContext(DefaultMetaModelDefinitionAdapter.class);
+
+    /** Dummy-Instanz eines Metamodells, um Null-Checks zu vermeiden */
+    public static final MetaModel DUMMY_META_MODEL = DUMMY_META_MODEL_CONTEXT.getMetaModel();
+
     /**
-     * Alle MetaModel-Klasse, die gefunden werden. Die Standardmetamodellklasse (= die Klasse mit dem Namen DEFAULT_METAMDOEL_NAME) befindet sich
+     * Alle MetaModel-Klassen, die gefunden werden. Die Standardmetamodellklasse (= die Klasse mit dem Namen DEFAULT_METAMDOEL_NAME) befindet sich
      * immer an Position 0)
      */
     private static final List<MetaModelContext> metaModelContexts = loadMetaModelContexts();
