@@ -1,6 +1,7 @@
 package de.imise.tool3lgm;
 
 import java.util.Locale;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javax.annotation.Nonnull;
@@ -61,8 +62,18 @@ public final class MetaModelContext {
     /**
      * @return Klasse der MetaModell-Definition dieses Kontextes
      */
-    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+    public final Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
         return metaModelDefinitionClass;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Definitionklasse des Metamodells dieselbe ist, die für diesen Kontext gesetzt ist.
+     *
+     * @param metaModelDefinitionClass
+     * @return
+     */
+    public final boolean hasDefinition(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        return Objects.equals(this.metaModelDefinitionClass, metaModelDefinitionClass);
     }
 
     /**
