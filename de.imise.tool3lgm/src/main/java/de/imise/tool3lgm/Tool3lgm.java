@@ -276,7 +276,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      * lädt ein 3LGM²-Dokument (legt die Teilmodell-Fenster an, aktualisiert das Fenster Menu und ModelBrowser)
      */
     public boolean createNewModel() {
-        MetaModelContext choosedMetaModelContext = Tool3lgmMetaModelContext.chooseMetaModel();
+        MetaModelContext choosedMetaModelContext = Tool3lgmMetaModelContext.getNewModelMetaModelContext();
         if (choosedMetaModelContext == null) {
             return false;
         }

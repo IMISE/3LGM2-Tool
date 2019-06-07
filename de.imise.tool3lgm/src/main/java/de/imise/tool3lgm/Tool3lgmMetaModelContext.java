@@ -43,21 +43,19 @@ public final class Tool3lgmMetaModelContext {
      */
     private static final List<MetaModelContext> metaModelContexts = loadMetaModelContexts();
 
-    /** Das Metamodell, mit dem ein neues Modell initialisiert werden soll */
-    private static MetaModelContext metaModelContext = null;
-
     /**
      * Liefert einen MetaModelContext. Abhängig davon, ob in den UserProperties eingestellt ist, ob per Dialog nachgefragt werden soll oder nicht,
      * wird der in den den UserProperties gespeicherte einfach zurück gegeben oder per Dialog nachgefragt.
      *
-     * @return
+     * @return gewählten MetaModelContext oder <code>null</code>, wenn im AuswahlDialog auf Abbrechen gdrückt wurde
      */
     public static MetaModelContext getNewModelMetaModelContext() {
         boolean showDialog = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG);
+        MetaModelContext metaModelContext = null;
         if (!showDialog) {
             metaModelContext = getUserpropertiesStoredMetaModelContext();
         }
-        while (metaModelContext == null) {
+        if (metaModelContext == null) {
             if (showDialog) {
                 metaModelContext = chooseMetaModel();
             } else {
