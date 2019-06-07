@@ -1,11 +1,11 @@
-package de.imise.tool3lgm.imexport;
+package de.imise.tool3lgm.imexport.csv;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import de.imise.tool3lgm.imexport.linehandler.line.AbstractImportLine;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.AbstractImportLine;
 
 /**
  * Collection of {@link ImportError} for a verification

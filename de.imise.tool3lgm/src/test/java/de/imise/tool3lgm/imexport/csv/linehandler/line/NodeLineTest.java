@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.imexport.linehandler.line;
+package de.imise.tool3lgm.imexport.csv.linehandler.line;
 
 import static org.testng.Assert.assertEquals;
 
@@ -7,6 +7,8 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.NodeHeaderLine;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.NodeLine;
 import mockit.Mock;
 import mockit.MockUp;
 

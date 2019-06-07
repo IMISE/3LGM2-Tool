@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.imexport;
+package de.imise.tool3lgm.imexport.csv;
 
 import java.util.ArrayList;
 import java.util.HashMap;

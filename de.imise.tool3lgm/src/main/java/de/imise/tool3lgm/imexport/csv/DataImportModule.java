@@ -1,7 +1,7 @@
 /*
  * Created on 21.04.2005
  */
-package de.imise.tool3lgm.imexport;
+package de.imise.tool3lgm.imexport.csv;
 
 import static javax.swing.JOptionPane.QUESTION_MESSAGE;
 import static javax.swing.JOptionPane.YES_NO_OPTION;

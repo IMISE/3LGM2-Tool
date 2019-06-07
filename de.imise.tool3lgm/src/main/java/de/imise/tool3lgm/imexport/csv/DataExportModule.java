@@ -1,7 +1,7 @@
 /*
  * Created on 21.04.2005
  */
-package de.imise.tool3lgm.imexport;
+package de.imise.tool3lgm.imexport.csv;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 

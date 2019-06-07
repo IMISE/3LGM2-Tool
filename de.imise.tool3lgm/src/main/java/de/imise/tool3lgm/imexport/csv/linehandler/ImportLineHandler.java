@@ -1,17 +1,17 @@
-package de.imise.tool3lgm.imexport.linehandler;
+package de.imise.tool3lgm.imexport.csv.linehandler;
 
-import static de.imise.tool3lgm.imexport.linehandler.LineParser.EMPTY_STRING;
+import static de.imise.tool3lgm.imexport.csv.linehandler.LineParser.EMPTY_STRING;
 
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.imexport.DisplayableNameHandler;
-import de.imise.tool3lgm.imexport.linehandler.line.AbstractImportLine;
-import de.imise.tool3lgm.imexport.linehandler.line.EdgeHeaderLine;
-import de.imise.tool3lgm.imexport.linehandler.line.EdgeLine;
-import de.imise.tool3lgm.imexport.linehandler.line.NodeHeaderLine;
-import de.imise.tool3lgm.imexport.linehandler.line.NodeLine;
+import de.imise.tool3lgm.imexport.csv.DisplayableNameHandler;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.AbstractImportLine;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.EdgeHeaderLine;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.EdgeLine;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.NodeHeaderLine;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.NodeLine;
 
 /**
  * Creates {@link NodeLine}, {@link EdgeLine} {@link NodeHeaderLine} and {@link EdgeHeaderLine} from an input line string.

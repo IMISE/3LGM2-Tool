@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.imexport;
+package de.imise.tool3lgm.imexport.csv;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;

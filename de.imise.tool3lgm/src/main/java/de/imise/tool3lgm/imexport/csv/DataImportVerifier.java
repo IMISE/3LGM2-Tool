@@ -1,18 +1,18 @@
-package de.imise.tool3lgm.imexport;
+package de.imise.tool3lgm.imexport.csv;
 
-import static de.imise.tool3lgm.imexport.ImportError.ErrorType.FILE_ERROR;
-import static de.imise.tool3lgm.imexport.ImportError.ErrorType.HASH_CONFLICT;
-import static de.imise.tool3lgm.imexport.ImportError.ErrorType.HASH_DUPLICATE;
-import static de.imise.tool3lgm.imexport.ImportError.ErrorType.HEADER_MISSING;
-import static de.imise.tool3lgm.imexport.ImportError.ErrorType.HEADER_UNKNOWN_ELEMENT_TYPE;
-import static de.imise.tool3lgm.imexport.ImportError.ErrorType.NODE_OR_EDGE_EMPTY_NAME;
-import static de.imise.tool3lgm.imexport.ImportError.ErrorType.UNKNOWN_LINE;
-import static de.imise.tool3lgm.imexport.ImportError.ErrorType.USERFIELD_MISSING;
-import static de.imise.tool3lgm.imexport.linehandler.ImportLineHandler.COLUMN_INDEX_EDGE_USERFIELD_NAMES_START;
-import static de.imise.tool3lgm.imexport.linehandler.ImportLineHandler.COLUMN_INDEX_ELEMENT_TYPE;
-import static de.imise.tool3lgm.imexport.linehandler.ImportLineHandler.COLUMN_INDEX_HASH;
-import static de.imise.tool3lgm.imexport.linehandler.ImportLineHandler.COLUMN_INDEX_NAME;
-import static de.imise.tool3lgm.imexport.linehandler.ImportLineHandler.COLUMN_INDEX_NODE_USERFIELD_NAMES_START;
+import static de.imise.tool3lgm.imexport.csv.ImportError.ErrorType.FILE_ERROR;
+import static de.imise.tool3lgm.imexport.csv.ImportError.ErrorType.HASH_CONFLICT;
+import static de.imise.tool3lgm.imexport.csv.ImportError.ErrorType.HASH_DUPLICATE;
+import static de.imise.tool3lgm.imexport.csv.ImportError.ErrorType.HEADER_MISSING;
+import static de.imise.tool3lgm.imexport.csv.ImportError.ErrorType.HEADER_UNKNOWN_ELEMENT_TYPE;
+import static de.imise.tool3lgm.imexport.csv.ImportError.ErrorType.NODE_OR_EDGE_EMPTY_NAME;
+import static de.imise.tool3lgm.imexport.csv.ImportError.ErrorType.UNKNOWN_LINE;
+import static de.imise.tool3lgm.imexport.csv.ImportError.ErrorType.USERFIELD_MISSING;
+import static de.imise.tool3lgm.imexport.csv.linehandler.ImportLineHandler.COLUMN_INDEX_EDGE_USERFIELD_NAMES_START;
+import static de.imise.tool3lgm.imexport.csv.linehandler.ImportLineHandler.COLUMN_INDEX_ELEMENT_TYPE;
+import static de.imise.tool3lgm.imexport.csv.linehandler.ImportLineHandler.COLUMN_INDEX_HASH;
+import static de.imise.tool3lgm.imexport.csv.linehandler.ImportLineHandler.COLUMN_INDEX_NAME;
+import static de.imise.tool3lgm.imexport.csv.linehandler.ImportLineHandler.COLUMN_INDEX_NODE_USERFIELD_NAMES_START;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,12 +26,12 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.imexport.linehandler.ImportLineHandler;
-import de.imise.tool3lgm.imexport.linehandler.line.AbstractImportLine;
-import de.imise.tool3lgm.imexport.linehandler.line.EdgeHeaderLine;
-import de.imise.tool3lgm.imexport.linehandler.line.EdgeLine;
-import de.imise.tool3lgm.imexport.linehandler.line.NodeHeaderLine;
-import de.imise.tool3lgm.imexport.linehandler.line.NodeLine;
+import de.imise.tool3lgm.imexport.csv.linehandler.ImportLineHandler;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.AbstractImportLine;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.EdgeHeaderLine;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.EdgeLine;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.NodeHeaderLine;
+import de.imise.tool3lgm.imexport.csv.linehandler.line.NodeLine;
 
 /**
  * Class to verify a import file. The main result is a {@link ImportErrorConfiguration} which contains all {@link ImportError} for the file.

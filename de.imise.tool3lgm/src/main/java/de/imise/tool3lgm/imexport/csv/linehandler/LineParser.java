@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.imexport.linehandler;
+package de.imise.tool3lgm.imexport.csv.linehandler;
 
 import java.util.ArrayList;
 import java.util.List;
