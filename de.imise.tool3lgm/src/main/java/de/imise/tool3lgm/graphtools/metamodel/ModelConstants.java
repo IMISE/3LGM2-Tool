@@ -7,20 +7,6 @@ import de.imise.tool3lgm.Tool3lgmConstants;
  */
 public final class ModelConstants {
 
-    //    private static MetaModel metaModel = initMetaModel();
-    //
-    //    public static MetaModel initMetaModel() {
-    //        try {
-    //            Sys.err("jetzt");
-    //            Class<? extends MetaModel> metaModelClass = Tool3lgmMetaModelContext.getMetaModelClass();
-    //            MetaModel metaModel = metaModelClass.newInstance();
-    //            return metaModel;
-    //        } catch (Exception e) {
-    //            e.printStackTrace();
-    //        }
-    //        return null;
-    //    }
-
     //Bei Gelegenheit mal ersetzen (Das ist aber schon etwas mehr Arbeit)
     //public enum LAYER {NO_LAYER, PHYSICAL_LAYER, INTER_LOGICAL_PHYSICAL_LAYER, LOGICAL_LAYER, INTER_DOMAIN_LOGICAL_LAYER, DOMAIN_LAYER};
     public static final int NO_LAYER = -1;
