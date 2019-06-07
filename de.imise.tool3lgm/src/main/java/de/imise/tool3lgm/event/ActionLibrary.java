@@ -648,7 +648,8 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY = new StaticAction(ActionIdentifier.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY, PPP) {
             @Override
             public void actionPerformed() {
-                BrowseUtils.browseApplicationPathRelativeFile(getResString("modlib_verz"));
+                File modelLibraryDir = new File(Tool3lgmConstants.APPLICATION_DIR, getResString("modlib_verz"));
+                getTool().openModelFile(modelLibraryDir);
             }
         };
 

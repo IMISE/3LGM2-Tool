@@ -291,7 +291,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public boolean openModelFile(File file) {
         file = chooseModelFile(file);
-        if (file != null) {
+        if (file != null && !file.isDirectory()) {
             try {
                 return openModel(file, null);
             } catch (Exception e) {
@@ -302,10 +302,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     private File chooseModelFile(File file) {
-        if (file != null) {
+        if (file != null && !file.isDirectory()) {
             return file;
         }
-        ExtendedFileChooser chooser = new ExtendedFileChooser(null, UserProperties.getWorkingDirectory());
+        ExtendedFileChooser chooser = new ExtendedFileChooser(null, file.isDirectory() ? file : UserProperties.getWorkingDirectory());
         chooser.setMultiSelectionEnabled(false);
         FileNameExtensionFilter[] lgmFileFilter = Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED);
         int chooserAnswer = chooser.showOpenDialog(this, false, lgmFileFilter);
@@ -313,8 +313,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (chooserAnswer == ExtendedFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile();
             chooser.setVisible(false);
+            return file;
         }
-        return file;
+        return null;
     }
 
     /**
