@@ -93,7 +93,7 @@ public abstract class MetaModelDefinition implements Serializable {
     // GraphViewDefinition //
     /////////////////////////
 
-    protected Class<? extends GraphViewDefinition> getGraphViewDefinitionClass() {
+    public Class<? extends GraphViewDefinition> getGraphViewDefinitionClass() {
         return DefaultGraphViewDefinitionAdapter.class;
     }
 
@@ -131,7 +131,7 @@ public abstract class MetaModelDefinition implements Serializable {
     // ExtrasActionsDefinition //
     /////////////////////////////
 
-    protected Class<? extends ExtrasActionsDefinition> getExtrasActionsDefinitionClass() {
+    public Class<? extends ExtrasActionsDefinition> getExtrasActionsDefinitionClass() {
         return ExtrasActionsDefinition.class;
     }
 
@@ -140,7 +140,7 @@ public abstract class MetaModelDefinition implements Serializable {
     ////////////
 
     /** Alle Node der FE als Array */
-    protected abstract Class<? extends ModelElement>[] getAllDomainLayerNodes();
+    public abstract Class<? extends ModelElement>[] getAllDomainLayerNodes();
 
     /**
      * Alle abstracten Klassen, die im Baum auf der FE auftauchen sollen. Werden hier irgendwelche
@@ -320,7 +320,7 @@ public abstract class MetaModelDefinition implements Serializable {
     public static class DefaultMetaModelDefinitionAdapter extends MetaModelDefinition {
 
         @Override
-        protected Class<? extends ModelElement>[] getAllDomainLayerNodes() {
+        public Class<? extends ModelElement>[] getAllDomainLayerNodes() {
             return new Class[0];
         }
 

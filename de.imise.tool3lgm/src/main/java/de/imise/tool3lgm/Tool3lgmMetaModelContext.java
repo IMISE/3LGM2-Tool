@@ -11,15 +11,17 @@ import com.google.common.base.Strings;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition.DefaultMetaModelDefinitionAdapter;
+import de.imise.tool3lgm.graphtools.metamodel.RegularMetaModelDefinition;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.PluginUtils;
+import de.imise.util.ReflectionUtils;
 import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
- * Klasse, die die verfügbaeren Metamodelle verwaltet, initialisiert und bereitstellt.
+ * Klasse, die die verfügbaren Metamodelle verwaltet, initialisiert und bereitstellt.
  *
  * @author AXS (12.06.2018)
  */
@@ -38,7 +40,7 @@ public final class Tool3lgmMetaModelContext {
     public static final MetaModel DUMMY_META_MODEL = DUMMY_META_MODEL_CONTEXT.getMetaModel();
 
     /**
-     * Alle MetaModel-Klassen, die gefunden werden. Die Standardmetamodellklasse (= die Klasse mit dem Namen DEFAULT_METAMDOEL_NAME) befindet sich
+     * Alle MetaModel-Kontexte, die gefunden werden. Die Standardmetamodellklasse (= die Klasse mit dem Namen DEFAULT_METAMDOEL_NAME) befindet sich
      * immer an Position 0)
      */
     private static final List<MetaModelContext> metaModelContexts = loadMetaModelContexts();
@@ -73,6 +75,7 @@ public final class Tool3lgmMetaModelContext {
     public static final List<MetaModelContext> loadMetaModelContexts() {
         File pluginDir = new File(Tool3lgmConstants.APPLICATION_DIR, "Plugins");
         List<Class<? extends MetaModelDefinition>> metaModelClasses = PluginUtils.loadClasses(pluginDir, MetaModelDefinition.class);
+        ReflectionUtils.retainSubClasses(metaModelClasses, RegularMetaModelDefinition.class);
         List<MetaModelContext> metaModelContexts = new ArrayList<>();
         for (int i = 0; i < metaModelClasses.size(); i++) {
             Class<? extends MetaModelDefinition> metaModelClass = metaModelClasses.get(i);

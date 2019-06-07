@@ -9,6 +9,7 @@ import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.RegularMetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationInterface_Edge;
@@ -86,7 +87,7 @@ import de.imise.tool3lgm.metamodel.service.node.Use;
 @SuppressWarnings({
         "unchecked", "rawtypes"
 })
-public class TLGMServiceMetaModel extends MetaModelDefinition {
+public class TLGMServiceMetaModel extends MetaModelDefinition implements RegularMetaModelDefinition {
 
     /**
      * ID des Metamodells für die Serialisierung.
@@ -168,7 +169,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition {
     /////////////////////////////
 
     @Override
-    protected Class<? extends ExtrasActionsDefinition> getExtrasActionsDefinitionClass() {
+    public Class<? extends ExtrasActionsDefinition> getExtrasActionsDefinitionClass() {
         //im Moment hat dieses Metamodell keine eigene Pfaddefinition. Man könnte diese Funktion auch weglassen.
         return super.getExtrasActionsDefinitionClass();
     }
