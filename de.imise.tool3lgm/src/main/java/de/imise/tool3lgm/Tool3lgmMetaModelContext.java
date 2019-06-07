@@ -39,11 +39,32 @@ public final class Tool3lgmMetaModelContext {
     /** Dummy-Instanz eines Metamodells, um Null-Checks zu vermeiden */
     public static final MetaModel DUMMY_META_MODEL = DUMMY_META_MODEL_CONTEXT.getMetaModel();
 
+    /** Liste aller MetaModelContext, die im Plugins-Ordner gefunden wurden */
+    private static final List<MetaModelContext> ALL_METAMODEL_CONTEXTS = loadMetaModelContexts();
+
     /**
-     * Alle MetaModel-Kontexte, die gefunden werden. Die Standardmetamodellklasse (= die Klasse mit dem Namen DEFAULT_METAMDOEL_NAME) befindet sich
-     * immer an Position 0)
+     * Alle MetaModel-Kontexte, die das Interface {@link RegularMetaModelDefinition} implementieren. Das sind die Metamodell-Definitionen, die man zum
+     * Modellieren nehmen kann. Die Standardmetamodellklasse (= die Klasse mit dem Namen DEFAULT_METAMDOEL_NAME) befindet sich immer an Position 0)
      */
-    private static final List<MetaModelContext> metaModelContexts = loadMetaModelContexts();
+    private static final List<MetaModelContext> REGULAR_METAMODEL_CONTEXTS = getMetaModelContexts(ALL_METAMODEL_CONTEXTS, RegularMetaModelDefinition.class);
+
+    /**
+     * Liefert aus der übergebenen Liste von {@link MetaModelContext} eine neue Liste aller Kontexte zurück, deren Definitionsklasse
+     * zuwesiungskompatibel zur übergebenen Klasse ist.
+     *
+     * @param metaModelContexts
+     * @param metaModelDefinitonClassOrSuperClass
+     * @return
+     */
+    private static final List<MetaModelContext> getMetaModelContexts(final List<MetaModelContext> metaModelContexts, final Class<?> metaModelDefinitonClassOrSuperClass) {
+        List<MetaModelContext> returnList = new ArrayList<>();
+        for (MetaModelContext metaModelContext : metaModelContexts) {
+            if (metaModelContext.hasDefinitionSubClass(metaModelDefinitonClassOrSuperClass)) {
+                returnList.add(metaModelContext);
+            }
+        }
+        return returnList;
+    }
 
     /**
      * Liefert einen MetaModelContext. Abhängig davon, ob in den UserProperties eingestellt ist, ob per Dialog nachgefragt werden soll oder nicht,
@@ -61,7 +82,7 @@ public final class Tool3lgmMetaModelContext {
             if (showDialog) {
                 metaModelContext = chooseMetaModel();
             } else {
-                metaModelContext = metaModelContexts.get(0); // es war gewünscht worden, dass beim initialen Start das originale Metamodell ausgewählt ist. showDialog ist initial false
+                metaModelContext = REGULAR_METAMODEL_CONTEXTS.get(0); // es war gewünscht worden, dass beim initialen Start das originale Metamodell ausgewählt ist. showDialog ist initial false
             }
         }
         return metaModelContext;
@@ -95,7 +116,7 @@ public final class Tool3lgmMetaModelContext {
      * @return
      */
     public static final MetaModelContext getDefaultMetaModelContext() {
-        return metaModelContexts.get(0);
+        return REGULAR_METAMODEL_CONTEXTS.get(0);
     }
 
     /**
@@ -106,7 +127,7 @@ public final class Tool3lgmMetaModelContext {
     private static final MetaModelContext getUserpropertiesStoredMetaModelContext() {
         String storedMetaModelID = UserProperties.get(StringProperty.META_MODEL);
         if (!Strings.isNullOrEmpty(storedMetaModelID)) {
-            for (MetaModelContext metaModelContext : metaModelContexts) {
+            for (MetaModelContext metaModelContext : REGULAR_METAMODEL_CONTEXTS) {
                 if (metaModelContext.getMetaModelID().equals(storedMetaModelID)) {
                     return metaModelContext;
                 }
@@ -116,14 +137,14 @@ public final class Tool3lgmMetaModelContext {
     }
 
     public static final MetaModelContext chooseMetaModel() {
-        int optionsCount = metaModelContexts.size();
+        int optionsCount = REGULAR_METAMODEL_CONTEXTS.size();
         MetaModelContext lastMetaModelContext = getUserpropertiesStoredMetaModelContext();
         String title = getResString("choose_meta_model_dialog_title");
         String message = null;
         MetaModelContext[] options = new MetaModelContext[optionsCount];
         MetaModelContext selectedOption = null;
         for (int i = 0; i < optionsCount; i++) {
-            MetaModelContext metaModelContext = metaModelContexts.get(i);
+            MetaModelContext metaModelContext = REGULAR_METAMODEL_CONTEXTS.get(i);
             options[i] = metaModelContext;
             if (i == 0 || lastMetaModelContext == metaModelContext) {
                 selectedOption = options[i];
@@ -152,7 +173,7 @@ public final class Tool3lgmMetaModelContext {
         if (Strings.isNullOrEmpty(metaModelContextID)) {
             metaModelContextID = DEFAULT_METAMDOEL_CLASS_NAME;
         }
-        for (MetaModelContext metaModelContext : metaModelContexts) {
+        for (MetaModelContext metaModelContext : REGULAR_METAMODEL_CONTEXTS) {
             String otherID = metaModelContext.getMetaModelID();
             if (otherID.equals(metaModelContextID)) {
                 return metaModelContext;
@@ -164,6 +185,24 @@ public final class Tool3lgmMetaModelContext {
             }
         }
         return null;
+    }
+
+    /**
+     * Liefert einen Kontext zur übergebenen Definition. Wenn es diesen Kontext bereits in der Liste aller Kontexte gibt, wird dieser zurück gegeben.
+     * Gibt es ihn nicht, wird einer neuer erzeugt und in die Liste aller Kontexte eingefügt. Hier wird die Klasse auf Identität geprüft.
+     *
+     * @param metaModelDefinitionClass
+     * @return
+     */
+    public static final MetaModelContext getMetaModelContextForDefinitionClass(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        for (MetaModelContext metaModelContext : ALL_METAMODEL_CONTEXTS) {
+            if (metaModelContext.hasDefinitionClass(metaModelDefinitionClass)) {
+                return metaModelContext;
+            }
+        }
+        MetaModelContext metaModelContext = new MetaModelContext(metaModelDefinitionClass);
+        ALL_METAMODEL_CONTEXTS.add(metaModelContext);
+        return metaModelContext;
     }
 
 }

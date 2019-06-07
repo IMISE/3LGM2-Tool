@@ -72,8 +72,18 @@ public final class MetaModelContext {
      * @param metaModelDefinitionClass
      * @return
      */
-    public final boolean hasDefinition(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+    public final boolean hasDefinitionClass(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         return Objects.equals(this.metaModelDefinitionClass, metaModelDefinitionClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse zuweisungskompatibel zur Definitionsklasse dieses Kontextes ist.
+     *
+     * @param classOrSuperClass
+     * @return
+     */
+    public final boolean hasDefinitionSubClass(final Class<?> metaModelDefinitionClassOrSuperClass) {
+        return metaModelDefinitionClassOrSuperClass.isAssignableFrom(metaModelDefinitionClass);
     }
 
     /**
