@@ -642,7 +642,7 @@ public abstract class ModelElement extends UserFieldTarget {
         if (edges == null) {
             edges = new ArrayList<>(3); // die meisten Elemente, die überhaupt Kanten haben, haben fast nie mehr als 3
         }
-        if (pos < edges.size() || pos > edges.size()) {
+        if (pos < 0 || pos > edges.size()) {
             pos = edges.size();
         }
         edges.add(pos, kante);
