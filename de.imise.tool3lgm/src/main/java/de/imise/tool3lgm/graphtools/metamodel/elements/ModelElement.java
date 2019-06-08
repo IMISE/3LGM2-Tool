@@ -215,10 +215,19 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * @return
+     * @return alle {@link GraphDocument}, in denen dieses Element vorkommt
      */
     public final Set<GraphDocument> getMySzenarios() {
         return new HashSet<>(containerTable.keySet());
+    }
+
+    /**
+     * Liefert alle Container dieses Elementes
+     *
+     * @return
+     */
+    public final Collection<ElementContainer> getElementContainers() {
+        return containerTable.values();
     }
 
     protected abstract int getMaxContainerCount();
@@ -1962,20 +1971,13 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * @return {@link HashMap} aller Container dieses Elementes
-     */
-    public Map<GraphDocument, ElementContainer> getContainerTable() {
-        return containerTable;
-    }
-
-    /**
      * Liefert das Modell, in dem dieses Element vorkommt oder <code>null</code>.
      *
      * @return
      */
     public final GDCollection getCollection() {
         //gibt vom erstbesten doc die gdcoll zurück
-        for (GraphDocument doc : getContainerTable().keySet()) {
+        for (GraphDocument doc : containerTable.keySet()) {
             return doc.getCollection();
         }
         return null;

@@ -18,7 +18,7 @@ public class AdditionalLabelTextGenerator {
     /**
      * Set aller {@link ElementContainer}, an die dieses Objekt etwas ranschreibt
      */
-    private HashSet<ElementContainer> additionalTextTargets = new HashSet<ElementContainer>();
+    private HashSet<ElementContainer> additionalTextTargets = new HashSet<>();
 
     /**
      * Liste der {@link ElementContainer}, an die dieses Objekt etwas ranschreibt / protected HashSet<ElementContainer> specialInfoTargets = null; /**
@@ -56,7 +56,7 @@ public class AdditionalLabelTextGenerator {
     /**
      * / private static final void removeAllAdditionalTextFromAllTargets(){ for (ElementContainer ec : additionalTextTargets)
      * ec.removeAllSpecialInfosFromThisContainer(); } /**
-     * 
+     *
      * @return the layout
      */
     public GraphElementLayout getLayout() {
@@ -65,7 +65,7 @@ public class AdditionalLabelTextGenerator {
 
     /**
      * specialInfoDirection kann die 4 meoglichen Werte SwingConstants.NORTH, - EAST, -SOUTH und -WEST haben
-     * 
+     *
      * @param i
      */
     public void setSpecialInfoPosition(final int specialInfoPosition) {
@@ -73,9 +73,9 @@ public class AdditionalLabelTextGenerator {
     }
 
     //	/**
-    //	 * Diese Funktion muesste für alle Node speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder 
+    //	 * Diese Funktion muesste für alle Node speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder
     //	 * in einem eigenen Container ueberschrieben werden.
-    //	 */ 
+    //	 */
     //	public boolean addSpecialInfoToMyTargets(boolean remove) {
     //		if (remove)
     //			deleteSpecialInfoFromMyTargets();
@@ -83,7 +83,7 @@ public class AdditionalLabelTextGenerator {
     //	}
 
     //	/**
-    //	 * Diese Funktion muesste für alle Node speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder 
+    //	 * Diese Funktion muesste für alle Node speziell ausgewertet werden, die SpecialInfos anzeigen sollen, oder
     //	 * in einem eigenen Container ueberschrieben werden.
     //	 */
     //	public boolean addSpecialInfoToMyTargets(boolean remove) {
@@ -126,8 +126,8 @@ public class AdditionalLabelTextGenerator {
                 continue;
             }
 
-            //im Prozess braucht jeder Container nur beim ersten auftauchen behandelt werden, denn 
-            //er bekommt mit einem mal gleich alle Nummern rangeschrieben 
+            //im Prozess braucht jeder Container nur beim ersten auftauchen behandelt werden, denn
+            //er bekommt mit einem mal gleich alle Nummern rangeschrieben
             boolean alreadyAdded = false;
             for (int j = 0; j < i; j++) {
                 if (specialInfoTargets.get(j) == me) {
@@ -140,7 +140,7 @@ public class AdditionalLabelTextGenerator {
             }
 
             if (additionalTextTargets == null) {
-                additionalTextTargets = new HashSet<ElementContainer>();
+                additionalTextTargets = new HashSet<>();
             }
             additionalTextTargets.add(ec);
 
@@ -159,15 +159,15 @@ public class AdditionalLabelTextGenerator {
     }
 
     /**
-	 * 
-	 */
+     * 
+     */
     public void deleteSpecialInfoFromTargets() {
         for (ElementContainer target : additionalTextTargets) {
             if (target == null) {
                 continue;
             }
             ModelElement me = target.getElement();
-            for (ElementContainer ec : me.getContainerTable().values()) {
+            for (ElementContainer ec : me.getElementContainers()) {
                 ec.removeSpecialInfoFromThisContainer(this, specialInfoPosition);
             }
         }

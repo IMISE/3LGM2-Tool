@@ -135,7 +135,7 @@ public class ModelCleaner {
         // Dieser Fehler trat bisher noch nicht auf, aber es ist besser, das noch einmal explizit
         // sicher zu stellen!
         for (ModelElement me : mainDoc.getModelItems(ModelElement.class, true)) {
-            for (GraphDocument doc : me.getContainerTable().keySet()) {
+            for (GraphDocument doc : me.getMySzenarios()) {
                 // Unique Elemente dürfen keinen Container außerhalb des Hauptmodells haben
                 if (me.isUnique() && doc instanceof Szenario) {
                     me.removeContainer(doc);
