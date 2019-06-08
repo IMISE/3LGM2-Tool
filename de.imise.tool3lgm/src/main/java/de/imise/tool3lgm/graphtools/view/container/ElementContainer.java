@@ -190,17 +190,26 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         retVal.doc = doc;
         retVal.me = cloneModelElement ? (ModelElement) me.clone() : me;
         retVal.me.setContainer(retVal.doc, retVal);
-        retVal.setVisible(isVisible());
-        retVal.expanded = expanded;
-        retVal.highlight = highlight;
-        retVal.layout = (GraphElementLayout) (layout == null ? null : layout.clone());
-        retVal.expandedLayout = (GraphElementLayout) (expandedLayout == null ? null : expandedLayout.clone());
-        retVal.nonExpandedLayout = (GraphElementLayout) (nonExpandedLayout == null ? null : nonExpandedLayout.clone());
-        retVal.set3LGMLayout(retVal.expanded ? retVal.expandedLayout : retVal.nonExpandedLayout);
-        if (frameColor != null) {
-            retVal.frameColor = new Color(frameColor.getRed(), frameColor.getGreen(), frameColor.getBlue(), frameColor.getAlpha());
-        }
+        adaptLayout(retVal);
         return retVal;
+    }
+
+    /**
+     * Überträgt die Layout-Eigenschaften dieses Containes auf den übergebenen
+     *
+     * @param targetContainer
+     */
+    public void adaptLayout(final ElementContainer targetContainer) {
+        targetContainer.setVisible(isVisible());
+        targetContainer.expanded = expanded;
+        targetContainer.highlight = highlight;
+        targetContainer.layout = (GraphElementLayout) (layout == null ? null : layout.clone());
+        targetContainer.expandedLayout = (GraphElementLayout) (expandedLayout == null ? null : expandedLayout.clone());
+        targetContainer.nonExpandedLayout = (GraphElementLayout) (nonExpandedLayout == null ? null : nonExpandedLayout.clone());
+        targetContainer.set3LGMLayout(targetContainer.expanded ? targetContainer.expandedLayout : targetContainer.nonExpandedLayout);
+        if (frameColor != null) {
+            targetContainer.frameColor = new Color(frameColor.getRed(), frameColor.getGreen(), frameColor.getBlue(), frameColor.getAlpha());
+        }
     }
 
     /**

@@ -161,6 +161,19 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     }
 
     /**
+     * Überträgt die Layout-Eigenschaften dieses Containes auf den übergebenen
+     *
+     * @param targetContainer
+     */
+    @Override
+    public final void adaptLayout(final ElementContainer targetContainer) {
+        super.adaptLayout(targetContainer);
+        if (targetContainer instanceof NodeContainer) {
+            ((NodeContainer) targetContainer).init();
+        }
+    }
+
+    /**
      * Setzt die Koordinaten des Knotens.
      *
      * @see java.awt.Component#setLocation(int, int)
