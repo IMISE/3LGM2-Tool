@@ -99,7 +99,7 @@ public class TLGMOriginalMetaModel extends MetaModelDefinition implements Regula
      * Java genutzt, sondern zur Serialisierung in 3LGM-Modelldateien. Sie wird per Reflection abgefragt - daher findet man nirgends einen direkten
      * Zugriff.
      */
-    private static final long serialVersionUID = -6111172173611550491L;
+    public static final long serialVersionUID = -6111172173611550491L;
 
     @Override
     protected final void putOldToNewClassNames() {

@@ -92,7 +92,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
     /**
      * ID des Metamodells für die Serialisierung.
      */
-    private static final long serialVersionUID = 2388259974838049670L;
+    public static final long serialVersionUID = 2388259974838049670L;
 
     @Override
     protected final void putOldToNewClassNames() {
