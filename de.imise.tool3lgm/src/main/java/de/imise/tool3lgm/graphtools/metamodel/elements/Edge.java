@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
+import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERROR_INT_VALUE;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
@@ -43,13 +44,27 @@ public abstract class Edge extends ModelElement {
 
     /**
      * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
-     * die getStartElementClass() und getEndElementClass() aufruft.
+     * die getStartElementClass() und getEndElementClass() aufruft. Unterklassen können eine eigene Konstante derselben Form defnieren. Da diese über
+     * Reflection geholt werden, funktioniert das mit diesen statischen Feldern genauso, als würde man eine Instanzfunktion überschreiben (trotz dass
+     * sie final sind).
      */
     public static final Class<? extends ModelElement> STCL = ModelElement.class;
 
     /**
+     * Kardinalität der Endklasse zur Startklasse. Sie gibt also immer an wie viele der Startelemente das EndElement braucht. Verwendung in
+     * Unterklassen identisch zu STCL.
+     */
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
+
+    /**
+     * Kardinalität der Startklasse zur Endklasse. Sie gibt also immer an wie viele der Startelemente das EndElement braucht. Verwendung in
+     * Unterklassen identisch zu STCL.
+     */
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
+
+    /**
      * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
-     * die getStartElementClass() und getEndElementClass() aufruft.
+     * die getStartElementClass() und getEndElementClass() aufruft. Verwendung in Unterklassen identisch zu STCL.
      */
     public static final Class<? extends ModelElement> ETCL = ModelElement.class;
 
