@@ -1836,9 +1836,12 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * @param bm
+     * @return the previous bulk mode
      */
-    public void setBulkMode(final boolean bm) {
+    public boolean setBulkMode(final boolean bm) {
+        boolean oldBulkMode = bulk_mode;
         bulk_mode = bm;
+        return oldBulkMode;
     }
 
     /**
