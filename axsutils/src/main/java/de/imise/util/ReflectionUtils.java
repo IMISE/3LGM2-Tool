@@ -424,8 +424,10 @@ public class ReflectionUtils {
             boolean breakWhile = false;
             while (elementClass != null) {
                 for (Field fld : elementClass.getDeclaredFields()) {
-                    if (fld.getName().equals(fieldName)) {
-                        if (type == null || fld.getType().equals(type)) {
+                    String fldName = fld.getName();
+                    if (fldName.equals(fieldName)) {
+                        Class<?> fldType = fld.getType();
+                        if (type == null || fldType.equals(type)) {
                             return (T) fld.get(fld);
                         }
                     }
