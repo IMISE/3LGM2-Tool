@@ -203,10 +203,11 @@ public class ModelConverter {
     }
 
     private void convertMetaPathsMappingEdges() {
-
+        //TODO: implementieren
     }
 
     private void convertMetaPathsMappingMetaPaths() {
+        //TODO: implementieren
 
     }
 
