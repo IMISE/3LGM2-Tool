@@ -5,8 +5,8 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 
 import de.imise.owl2tlgm.importmetamodel.edge.IheDomain_Edge;
-import de.imise.owl2tlgm.importmetamodel.edge.IntegrationProfile_Edge;
-import de.imise.owl2tlgm.importmetamodel.edge.Transaction_Edge;
+import de.imise.owl2tlgm.importmetamodel.edge.IheIntegrationProfile_Edge;
+import de.imise.owl2tlgm.importmetamodel.edge.IheTransaction_Edge;
 import de.imise.owl2tlgm.importmetamodel.node.Actor;
 import de.imise.owl2tlgm.importmetamodel.node.Domain;
 import de.imise.owl2tlgm.importmetamodel.node.IntegrationProfile;
@@ -48,7 +48,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
     @Override
     public Map<Class<? extends Edge>, Class<? extends Edge>> getDirectMappingEdgeClasses() {
         //IntegrationProfile_Edge -> IheIntegrationProfile_IheActor_Edge
-        return ImmutableMap.of(IntegrationProfile_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
+        return ImmutableMap.of(IheIntegrationProfile_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
         //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ruft auf ( <- ) IHE Transaction + IHE Transaction wird bereitsgestellt durch ( <- ) IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
         SimpleMetaPath actorTransactionActorMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(serviceMetaModel, IheActor.class, IheActor.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class,
                 IheProvidingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
-        return ImmutableMap.of(Transaction_Edge.class, actorTransactionActorMetaPath);
+        return ImmutableMap.of(IheTransaction_Edge.class, actorTransactionActorMetaPath);
     }
 
 }

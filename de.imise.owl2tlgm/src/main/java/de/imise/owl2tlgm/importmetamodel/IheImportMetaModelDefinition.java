@@ -5,8 +5,8 @@ import java.util.Set;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.owl2tlgm.importmetamodel.edge.IheDomain_Edge;
-import de.imise.owl2tlgm.importmetamodel.edge.IntegrationProfile_Edge;
-import de.imise.owl2tlgm.importmetamodel.edge.Transaction_Edge;
+import de.imise.owl2tlgm.importmetamodel.edge.IheIntegrationProfile_Edge;
+import de.imise.owl2tlgm.importmetamodel.edge.IheTransaction_Edge;
 import de.imise.owl2tlgm.importmetamodel.node.Actor;
 import de.imise.owl2tlgm.importmetamodel.node.Domain;
 import de.imise.owl2tlgm.importmetamodel.node.IntegrationProfile;
@@ -28,7 +28,7 @@ public class IheImportMetaModelDefinition extends ImportMetaModelDefiniton {
 
     @Override
     public Set<Class<? extends Edge>> getEdges() {
-        return ImmutableSet.of(IheDomain_Edge.class, IntegrationProfile_Edge.class, Transaction_Edge.class);
+        return ImmutableSet.of(IheDomain_Edge.class, IheIntegrationProfile_Edge.class, IheTransaction_Edge.class);
     }
 
 }
