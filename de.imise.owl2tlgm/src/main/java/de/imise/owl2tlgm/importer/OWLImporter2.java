@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import org.apache.jena.ontology.ObjectProperty;
 import org.apache.jena.ontology.OntClass;
 import org.apache.jena.ontology.OntModel;
+import org.apache.jena.ontology.OntProperty;
 import org.apache.jena.ontology.OntResource;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.NodeIterator;
@@ -95,7 +96,7 @@ public class OWLImporter2 extends UrlSourceDataImporter {
 
     /**
      * Gibt alle Objekte im übergebenen OntModel aus
-     * 
+     *
      * @param ontModel
      */
     private void printOntModel(final OntModel ontModel) {
@@ -170,8 +171,8 @@ public class OWLImporter2 extends UrlSourceDataImporter {
         ExtendedIterator<ObjectProperty> objectProperties = ontModel.listObjectProperties();
         while (objectProperties.hasNext()) {
             ObjectProperty objectProperty = objectProperties.next();
-            String name = objectProperty.getLocalName(); //ist das wirklich der richtige Name,also der Klassenname oder ist das ein Instanzname?
-            if (!objectPropertyNames.contains(name)) {
+            String name = objectProperty.getLocalName();
+            if (!objectPropertyNames.contains(name) && !isSubPropertyOfImportableObjectProperty(objectProperty, objectPropertyNames)) {
                 continue;
             }
             String edgeClassName = name + TLGM_EDGE_CLASS_NAME_POSTFIX;
@@ -185,6 +186,31 @@ public class OWLImporter2 extends UrlSourceDataImporter {
             gdcoll.link(edgeClassName, edgeHash, startElement, endElement, -1, -1, false, TransactionManager.STANDARD_PID);
         }
 
+    }
+
+    /**
+     * Prüft rekursiv, ob die übergebene ObjectProperty eine Super-ObjectProperty besitzt, deren Name zu den zu importierenden ObjectProperties
+     * gehört.
+     *
+     * @param objectProperty
+     * @param importableObjectPropertyNames
+     * @return
+     */
+    private final boolean isSubPropertyOfImportableObjectProperty(final ObjectProperty objectProperty, final Set<String> importableObjectPropertyNames) {
+        ExtendedIterator<? extends OntProperty> superProperties = objectProperty.listSuperProperties();
+        while (superProperties.hasNext()) {
+            OntProperty superProperty = superProperties.next();
+            if (superProperty.isObjectProperty()) {
+                String name = superProperty.getLocalName();
+                if (importableObjectPropertyNames.contains(name)) {
+                    return true;
+                }
+                if (isSubPropertyOfImportableObjectProperty((ObjectProperty) superProperty, importableObjectPropertyNames)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
