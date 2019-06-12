@@ -14,24 +14,24 @@ public final class ElementaryPath extends AbstractPath {
     private final Edge edge;
 
     /**
+     * @param metaPath
      * @param startElement
      * @param endElement
      * @param edge
-     * @param metaPath
      */
-    public ElementaryPath(final ModelElement startElement, final ModelElement endElement, final Edge edge, final ElementaryMetaPath metaPath) {
-        super(startElement, endElement, metaPath);
+    public ElementaryPath(final ElementaryMetaPath metaPath, final ModelElement startElement, final ModelElement endElement, final Edge edge) {
+        super(metaPath, startElement, endElement);
         this.edge = edge;
     }
 
     /**
      * Für elementare MertaPfade, die nur eine einzelne Elementart darstellen
      *
-     * @param element
      * @param metaPath
+     * @param element
      */
-    public ElementaryPath(final ModelElement element, final ElementaryMetaPath metaPath) {
-        this(element, element, null, metaPath);
+    public ElementaryPath(final ElementaryMetaPath metaPath, final ModelElement element) {
+        this(metaPath, element, element, null);
     }
 
     /**

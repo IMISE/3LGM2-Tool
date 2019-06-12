@@ -27,11 +27,11 @@ public abstract class AbstractPath {
     protected AbstractMetaPath metaPath;
 
     /**
+     * @param metaPath
      * @param startElement
      * @param endElement
-     * @param metaPath
      */
-    public AbstractPath(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
+    public AbstractPath(final AbstractMetaPath metaPath, final ModelElement startElement, final ModelElement endElement) {
         this(startElement, endElement);
         this.metaPath = metaPath;
     }

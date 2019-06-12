@@ -473,7 +473,7 @@ public class MetaPathFunctions {
                 return null;
             }
             returnPath = new ElementaryPath[1];
-            returnPath[0] = new ElementaryPath(startElement, endElement, edge, elemMetaPath);
+            returnPath[0] = new ElementaryPath(elemMetaPath, startElement, endElement, edge);
 
             //Sequencepfad anlegen
         } else if (metaPath instanceof SequenceMetaPath) {
@@ -517,7 +517,7 @@ public class MetaPathFunctions {
                 if (edge == null) {
                     break;
                 }
-                returnPath[i] = new ElementaryPath(currentStartElement, currentEndElement, edge, elementaryMetaPath);
+                returnPath[i] = new ElementaryPath(elementaryMetaPath, currentStartElement, currentEndElement, edge);
                 currentStartElement = currentEndElement;
             }
             //wenn nicht alle Verbindungen bis zur letzten angelegt wurden, dann alle angelegten zurückrollen
