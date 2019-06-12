@@ -40,44 +40,12 @@
 			<version>27.1-jre</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.jena</groupId> -->
-		<!-- <artifactId>jena</artifactId> -->
-		<!-- <version>3.11.0</version> -->
-		<!-- <type>pom</type> -->
-		<!-- </dependency> -->
-		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-base -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.jena</groupId> -->
-		<!-- <artifactId>jena-base</artifactId> -->
-		<!-- <version>3.11.0</version> -->
-		<!-- <scope>test</scope> -->
-		<!-- </dependency> -->
 		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-core -->
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-core</artifactId>
 			<version>3.11.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-iri -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.jena</groupId> -->
-		<!-- <artifactId>jena-iri</artifactId> -->
-		<!-- <version>3.11.0</version> -->
-		<!-- </dependency> -->
-		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-arq -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.jena</groupId> -->
-		<!-- <artifactId>jena-arq</artifactId> -->
-		<!-- <version>3.11.0</version> -->
-		<!-- </dependency> -->
-		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-shaded-guava -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.apache.jena</groupId> -->
-		<!-- <artifactId>jena-shaded-guava</artifactId> -->
-		<!-- <version>3.11.0</version> -->
-		<!-- </dependency> -->
 
 		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
 		<!-- <dependency> -->
@@ -93,11 +61,10 @@
 			<version>1.8.0-beta4</version>
 		</dependency>
 
-		<!-- ACHTUNG: von den folgenden 4 SLF4J Providern darf immer nur genau 1 aktiv sein! -->
-		<!-- ACHTUNG: von den folgenden 4 SLF4J Providern darf immer nur genau 1 aktiv sein! -->
-		<!-- ACHTUNG: von den folgenden 4 SLF4J Providern darf immer nur genau 1 aktiv sein! -->
-		<!-- ACHTUNG: von den folgenden 4 SLF4J Providern darf immer nur genau 1 aktiv sein! -->
+		<!-- ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG -->
+		<!--von den folgenden 4 SLF4J Providern darf immer nur genau 1 aktiv sein! -->
 		<!-- See http://www.slf4j.org/codes.html#noProviders for further details. -->
+		<!-- ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG -->
 
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
 		<dependency>
@@ -130,7 +97,7 @@
 		<!-- <version>1.8.0-beta4</version> -->
 		<!-- <scope>test</scope> -->
 		<!-- </dependency> -->
-		
+
 	</dependencies>
 
 </project>
