@@ -61,7 +61,7 @@ public class SwingUtils {
         int spaceWidth1 = SwingUtilities.computeStringWidth(fontMetrics1, " ");
         int diff = width2 - width1;
         int count = diff / spaceWidth1;
-        text1 += StringUtils.fillToLenght("", count);
+        text1 += StringUtils.fillToMinLenght("", count);
         label1.setText(text1);
     }
 
