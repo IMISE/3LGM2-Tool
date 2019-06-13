@@ -3,8 +3,11 @@ package de.imise.tool3lgm.graphtools.path.meta;
 import java.util.Arrays;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.util.collections.CollectionUtils;
 
 /**
  * Ein {@link SequenceMetaPath}, der immer nur aus einer einfachen Folge von Kanten bzw. {@link ElementaryMetaPath} besteht.
@@ -64,6 +67,40 @@ public class SimpleMetaPath extends SequenceMetaPath {
     protected SimpleMetaPath(final int metaPathStepWithPathName, final Direction direction, final ElementaryMetaPath... metaPaths) {
         super(metaPathStepWithPathName < 0 ? null : metaPaths[metaPathStepWithPathName].name, direction, metaPaths);
         this.metaPathStepWithPathName = metaPathStepWithPathName;
+    }
+
+    /**
+     * Hängt den übergebenen {@link SimpleMetaPath} an diesen {@link SimpleMetaPath} an und gibt den Gesamtpfad als neue Instanz zurück.
+     *
+     * @param simpleMetaPath
+     * @return
+     */
+    public SimpleMetaPath append(final SimpleMetaPath simpleMetaPath) {
+        return createJoined(getElementaryMetaPaths(), simpleMetaPath.getElementaryMetaPaths());
+    }
+
+    /**
+     * Hängt den übergebenen {@link ElementaryMetaPath} an diesen {@link SimpleMetaPath} an und gibt den Gesamtpfad als neue Instanz zurück.
+     *
+     * @param simpleMetaPath
+     * @return
+     */
+    public SimpleMetaPath append(final ElementaryMetaPath elementaryMetaPath) {
+        return createJoined(getElementaryMetaPaths(), ImmutableList.of(elementaryMetaPath));
+    }
+
+    /**
+     * Hängt de beiden Listen zu einem {@link SimpleMetaPath} zusammen.
+     *
+     * @param elementaryMetaPaths1
+     * @param elementaryMetaPaths2
+     * @return
+     */
+    private SimpleMetaPath createJoined(final List<ElementaryMetaPath> elementaryMetaPaths1, final List<ElementaryMetaPath> elementaryMetaPaths2) {
+        ElementaryMetaPath[] elementaryMetaPathsArray1 = elementaryMetaPaths1.toArray(new ElementaryMetaPath[0]);
+        ElementaryMetaPath[] elementaryMetaPathsArray2 = elementaryMetaPaths2.toArray(new ElementaryMetaPath[0]);
+        ElementaryMetaPath[] joinedelementaryMetaPathsArray = CollectionUtils.joinArrays(elementaryMetaPathsArray1, elementaryMetaPathsArray2);
+        return new SimpleMetaPath(joinedelementaryMetaPathsArray);
     }
 
     /**
