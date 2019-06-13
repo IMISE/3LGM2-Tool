@@ -80,19 +80,22 @@ public final class ElementaryMetaPathHandler {
 
     /**
      * Gibt einen ElementaryMetaPath zurück, der bis auf die Start- und Zielklasse identisch ist mit dem übergebenen Elementarpfad. Sind die Start-
-     * und Zielklassen dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert zurück.
+     * und Zielklassen dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert zurück. Startklasse des zurück gegebenen Pfades ist
+     * die speziellere Klasse aus der übergebenen startClass und der Startklasse des übergebenen Elementarpfades. Endklasse analog.
      *
      * @param startClass
      * @param originalElementaryMetaPath
      * @param endClass
      */
     public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final ElementaryMetaPath originalElementaryMetaPath, final Class<? extends ModelElement> endClass) {
-        Class<? extends ModelElement> originalStartClass = originalElementaryMetaPath.getStartClass();
-        Class<? extends ModelElement> originalEndClass = originalElementaryMetaPath.getEndClass();
-        if (startClass == originalStartClass && endClass == originalEndClass) {
+        Class<? extends ModelElement> realStartClass = originalElementaryMetaPath.getStartClass();
+        Class<? extends ModelElement> realEndClass = originalElementaryMetaPath.getEndClass();
+        realStartClass = ReflectionUtils.getMostSpecialElementClass(startClass, realStartClass);
+        realEndClass = ReflectionUtils.getMostSpecialElementClass(endClass, realEndClass);
+        if (startClass == realStartClass && endClass == realEndClass) {
             return originalElementaryMetaPath;
         }
-        return new ElementaryMetaPath(metaModel, startClass, originalElementaryMetaPath, endClass);
+        return new ElementaryMetaPath(metaModel, realStartClass, originalElementaryMetaPath, realEndClass);
     }
 
     /**
