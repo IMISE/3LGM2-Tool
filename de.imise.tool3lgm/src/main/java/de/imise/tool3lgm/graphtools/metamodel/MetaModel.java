@@ -58,6 +58,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
 
 /**
@@ -574,16 +575,22 @@ public final class MetaModel {
     private final Multimap<Class<? extends ModelElement>, SimpleMetaPath> getCreatableMetaPathsMap(final Collection<SimpleMetaPath> creatablePaths) {
         ImmutableListMultimap.Builder<Class<? extends ModelElement>, SimpleMetaPath> builder = ImmutableListMultimap.builder();
         if (creatablePaths != null) {
-            for (SimpleMetaPath metaPath : creatablePaths) {
-                Collection<Class<? extends ModelElement>> startClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
-                for (Class<? extends ModelElement> startClass : startClasses) {
-                    builder.put(startClass, metaPath);
+            for (SimpleMetaPath definedCreateableMetaPath : creatablePaths) {
+                Collection<SimpleMetaPath> createableMetaPathsNonAbstract = SimpleMetaPathCreator.getSimpleMetaPathsNonAbstract(definedCreateableMetaPath);
+                if (createableMetaPathsNonAbstract.isEmpty()) {
+                    Sys.errn(2, "Createable Path is not valid: " + definedCreateableMetaPath + " (" + definedCreateableMetaPath.getFullPathString() + ")");
                 }
-                //Gegenrichtung des Pfades für die Endklasse als Startklasse hinzufügen
-                metaPath = metaPath.getOtherDirection();
-                Collection<Class<? extends ModelElement>> endClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
-                for (Class<? extends ModelElement> endClass : endClasses) {
-                    builder.put(endClass, metaPath);
+                for (SimpleMetaPath metaPath : createableMetaPathsNonAbstract) {
+                    Collection<Class<? extends ModelElement>> startClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
+                    for (Class<? extends ModelElement> startClass : startClasses) {
+                        builder.put(startClass, metaPath);
+                    }
+                    //Gegenrichtung des Pfades für die Endklasse als Startklasse hinzufügen
+                    metaPath = metaPath.getOtherDirection();
+                    Collection<Class<? extends ModelElement>> endClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
+                    for (Class<? extends ModelElement> endClass : endClasses) {
+                        builder.put(endClass, metaPath);
+                    }
                 }
             }
         }
