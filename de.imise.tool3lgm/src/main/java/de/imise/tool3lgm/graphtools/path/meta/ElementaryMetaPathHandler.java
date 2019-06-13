@@ -84,18 +84,18 @@ public final class ElementaryMetaPathHandler {
      * die speziellere Klasse aus der übergebenen startClass und der Startklasse des übergebenen Elementarpfades. Endklasse analog.
      *
      * @param startClass
-     * @param originalElementaryMetaPath
+     * @param originalMetaPath
      * @param endClass
      */
-    public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final ElementaryMetaPath originalElementaryMetaPath, final Class<? extends ModelElement> endClass) {
-        Class<? extends ModelElement> realStartClass = originalElementaryMetaPath.getStartClass();
-        Class<? extends ModelElement> realEndClass = originalElementaryMetaPath.getEndClass();
-        realStartClass = ReflectionUtils.getMostSpecialElementClass(startClass, realStartClass);
-        realEndClass = ReflectionUtils.getMostSpecialElementClass(endClass, realEndClass);
-        if (startClass == realStartClass && endClass == realEndClass) {
-            return originalElementaryMetaPath;
+    public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final ElementaryMetaPath originalMetaPath, final Class<? extends ModelElement> endClass) {
+        Class<? extends ModelElement> originalMetaPathStartClass = originalMetaPath.getStartClass();
+        Class<? extends ModelElement> originalMetaPathEndClass = originalMetaPath.getEndClass();
+        Class<? extends ModelElement> realStartClass = ReflectionUtils.getMostSpecialElementClass(startClass, originalMetaPathStartClass);
+        Class<? extends ModelElement> realEndClass = ReflectionUtils.getMostSpecialElementClass(endClass, originalMetaPathEndClass);
+        if (originalMetaPathStartClass == realStartClass && originalMetaPathEndClass == realEndClass) {
+            return originalMetaPath;
         }
-        return new ElementaryMetaPath(metaModel, realStartClass, originalElementaryMetaPath, realEndClass);
+        return new ElementaryMetaPath(metaModel, realStartClass, originalMetaPath, realEndClass);
     }
 
     /**
