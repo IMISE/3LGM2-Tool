@@ -302,7 +302,8 @@ public class StringUtils {
     }
 
     /**
-     * Wandelt den ertsen Buchstaben des übergebenen Strings in einen Großbuchstaben um.
+     * Wandelt den ersten Buchstaben des übergebenen Strings in einen Großbuchstaben um und gibt diesen neuen String zurück. Ist er schon groß, kommt
+     * der originale String zurück.
      *
      * @param s
      * @return
