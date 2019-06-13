@@ -133,8 +133,7 @@ public class SimpleMetaPathCreator {
      *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
      * @param metaPaths
      */
-    public static SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName,
-            final ElementaryMetaPath... metaPaths) {
+    public static SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final ElementaryMetaPath... metaPaths) {
         return new SimpleMetaPath(metaPathStepWithPathName, initFullPath(metaModel, startClass, endClass, metaPaths));
     }
 
@@ -171,8 +170,8 @@ public class SimpleMetaPathCreator {
      * @throws IllegalArgumentException
      */
     @SafeVarargs
-    public static final SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName,
-            final Class<? extends Edge>... associations) throws IllegalArgumentException {
+    public static final SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations)
+            throws IllegalArgumentException {
         return createSimpleMetaPath(metaModel, startClass, endClass, baseResKeyOrName, -1, associations);
     }
 
@@ -210,8 +209,7 @@ public class SimpleMetaPathCreator {
      * @throws IllegalArgumentException
      */
     @SafeVarargs
-    public static final SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final int metaPathStepWithPathName, final Class<? extends Edge>... associations)
-            throws IllegalArgumentException {
+    public static final SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final int metaPathStepWithPathName, final Class<? extends Edge>... associations) throws IllegalArgumentException {
         return createSimpleMetaPath(metaModel, startClass, null, metaPathStepWithPathName, associations);
     }
 
