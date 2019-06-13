@@ -571,15 +571,24 @@ public final class MetaModel {
      * @param creatablePaths
      * @return
      */
-    private static final Multimap<Class<? extends ModelElement>, SimpleMetaPath> getCreatableMetaPathsMap(final Collection<SimpleMetaPath> creatablePaths) {
+    private final Multimap<Class<? extends ModelElement>, SimpleMetaPath> getCreatableMetaPathsMap(final Collection<SimpleMetaPath> creatablePaths) {
         ImmutableListMultimap.Builder<Class<? extends ModelElement>, SimpleMetaPath> builder = ImmutableListMultimap.builder();
         if (creatablePaths != null) {
             for (SimpleMetaPath metaPath : creatablePaths) {
-                builder.put(metaPath.getStartClass(), metaPath);
-                builder.put(metaPath.getEndClass(), metaPath.getOtherDirection());
+                Collection<Class<? extends ModelElement>> startClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
+                for (Class<? extends ModelElement> startClass : startClasses) {
+                    builder.put(startClass, metaPath);
+                }
+                //Gegenrichtung des Pfades für die Endklasse als Startklasse hinzufügen
+                metaPath = metaPath.getOtherDirection();
+                Collection<Class<? extends ModelElement>> endClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
+                for (Class<? extends ModelElement> endClass : endClasses) {
+                    builder.put(endClass, metaPath);
+                }
             }
         }
-        return builder.build();
+        ImmutableListMultimap<Class<? extends ModelElement>, SimpleMetaPath> classToCreatablePaths = builder.build();
+        return classToCreatablePaths;
     }
 
     /**
@@ -1084,7 +1093,8 @@ public final class MetaModel {
             return edgeClasses;
         }
         ArrayList<Class<? extends Edge>> resultEdgeClasses = new ArrayList<>();
-        for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass1)) {
+        Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass1);
+        for (Class<? extends Edge> edgeClass : edgeTypes) {
             if (isConnecting(edgeClass, elementClass1, elementClass2)) {
                 if (!isRemovedEdgeClass(elementClass2, edgeClass)) { // !isRemovedEdgeClass(elementClass1, edgeClass) wird schon in getEdgeTypes(elementClass1) geprüft
                     resultEdgeClasses.add(edgeClass);
