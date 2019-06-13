@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
@@ -80,7 +79,6 @@ public class MetaPathDefinition {
             }
         }
         init();
-        initCreatableMetaPaths();
     }
 
     /**
@@ -296,28 +294,6 @@ public class MetaPathDefinition {
      */
     public Collection<SimpleMetaPath> getCreatablePaths() {
         return ImmutableList.of();
-    }
-
-    private final Multimap<Class<? extends ModelElement>, SimpleMetaPath> elementClassToCreatableMetaPaths = ArrayListMultimap.create();
-
-    private final void initCreatableMetaPaths() {
-        Collection<SimpleMetaPath> creatablePaths = getCreatablePaths();
-        if (creatablePaths != null) {
-            for (SimpleMetaPath metaPath : creatablePaths) {
-                elementClassToCreatableMetaPaths.put(metaPath.getStartClass(), metaPath);
-                elementClassToCreatableMetaPaths.put(metaPath.getEndClass(), metaPath.getOtherDirection());
-            }
-        }
-    }
-
-    /**
-     * Liefert alle anlegbaren MetaPfade die für die übergebene Elementart im Metamodell definiert sind.
-     *
-     * @param elementClass
-     */
-    public Collection<SimpleMetaPath> getCreatableMetaPaths(final Class<? extends ModelElement> elementClass) {
-        Collection<SimpleMetaPath> creatablePaths = elementClassToCreatableMetaPaths.get(elementClass);
-        return creatablePaths == null ? ImmutableList.of() : creatablePaths;
     }
 
     /**
