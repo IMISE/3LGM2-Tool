@@ -81,15 +81,32 @@ public class StringUtils {
         return result;
     }
 
+    /**
+     * Liefert ein Pair von String zurück, wobei der kürzere der beiden Strings mit Leerzeichen aufgefüllt wird, bis er genauso viele Zeichen hat, wie
+     * der längere. Der längere der beiden Strings kommt unverändert als dieselbe Instanz zurück, der andere nicht. Sind beide gleich lang, bleieben
+     * beide unverändert.
+     *
+     * @param s1
+     * @param s2
+     * @return Pair von Strings
+     */
     public static Pair<String, String> makeSameLength(final String s1, final String s2) {
-        String newS1 = fillToLenght(s1, s2.length());
-        String newS2 = fillToLenght(s2, s1.length());
+        String newS1 = fillToMinLenght(s1, s2.length());
+        String newS2 = fillToMinLenght(s2, s1.length());
         Pair<String, String> pair = new Pair<>(newS1, newS2);
         return pair;
     }
 
-    public static String fillToLenght(final String s, final int newLenght) {
-        int lengthDiff = newLenght - s.length();
+    /**
+     * Füllt den übergebenen String, wenn er kürzer ist, bis zur übergebenen Länge auf. Ist seine Länge größer oder gleich der übergebenen Länge,
+     * bleibt er unverändert.
+     *
+     * @param s
+     * @param newMinLenght
+     * @return String mit der Minimallänge newLength
+     */
+    public static String fillToMinLenght(final String s, final int newMinLenght) {
+        int lengthDiff = newMinLenght - s.length();
         if (lengthDiff > 0) {
             StringBuilder sb = new StringBuilder(s);
             char[] whiteSpaces = new char[lengthDiff];
@@ -284,6 +301,12 @@ public class StringUtils {
         return range;
     }
 
+    /**
+     * Wandelt den ertsen Buchstaben des übergebenen Strings in einen Großbuchstaben um.
+     *
+     * @param s
+     * @return
+     */
     public static final String capitalizeFirstChar(final String s) {
         if (Strings.isNullOrEmpty(s)) {
             return s;
