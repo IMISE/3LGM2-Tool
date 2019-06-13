@@ -306,7 +306,8 @@ public class SimpleMetaPathCreator {
             } else if (i == metaPaths.length - 1 && endClass != null) {
                 metaPath = elementaryMetaPathHandler.getMetaPath(edgeClass, direction, endClass);
             } else {
-                metaPath = elementaryMetaPathHandler.getMetaPath(edgeClass, direction);
+                Class<? extends ModelElement> lastMetaPathEndClass = metaPaths[i - 1].getEndClass();
+                metaPath = elementaryMetaPathHandler.getMetaPath(lastMetaPathEndClass, edgeClass, direction);
             }
             metaPaths[i] = metaPath;
             start = metaPath.getEndClass();
