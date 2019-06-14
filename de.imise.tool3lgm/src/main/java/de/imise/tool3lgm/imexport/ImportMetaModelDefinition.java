@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
  *
  * @author AXS (9 Jun 2019)
  */
-public abstract class ImportMetaModelDefiniton extends DefaultMetaModelDefinitionAdapter {
+public abstract class ImportMetaModelDefinition extends DefaultMetaModelDefinitionAdapter {
 
     private final Class<? extends Node>[] nodesArray = getNodes().toArray(new Class[0]);
 
