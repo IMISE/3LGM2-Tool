@@ -4,15 +4,12 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.owl2tlgm.importmetamodel.edge.IheDomain_Edge;
-import de.imise.owl2tlgm.importmetamodel.edge.IheIntegrationProfile_Edge;
-import de.imise.owl2tlgm.importmetamodel.edge.IheTransaction_Edge;
-import de.imise.owl2tlgm.importmetamodel.node.Actor;
-import de.imise.owl2tlgm.importmetamodel.node.Domain;
-import de.imise.owl2tlgm.importmetamodel.node.IntegrationProfile;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
 import de.imise.tool3lgm.imexport.ImportMetaModelDefinition;
+import de.imise.tool3lgm.metamodel.service.node.IheIntegrationProfile;
 
 /**
  * Definition der Klassen und Kanten, die aus Protege in 3LGM importiert werden können sollen.
@@ -20,6 +17,36 @@ import de.imise.tool3lgm.imexport.ImportMetaModelDefinition;
  * @author AXS (10 Jun 2019)
  */
 public class IheImportMetaModelDefinition extends ImportMetaModelDefinition {
+
+    /** 3LGM2: Actor -> OWL: Actor */
+    public static class Actor extends Node {
+    }
+
+    /** 3LGM2: Domain -> OWL: IntegrationProfile */
+    public static class Domain extends Node {
+    }
+
+    /** 3LGM2: IntegrationProfile -> OWL: IntegrationProfile */
+    public static class IntegrationProfile extends Node {
+    }
+
+    /** 3LGM2: IheDomain_Edge -> OWL: iheDomain */
+    public static class IheDomain_Edge extends SimpleEdge {
+        public static final Class<? extends ModelElement> STCL = Domain.class;
+        public static final Class<? extends ModelElement> ETCL = IntegrationProfile.class;
+    }
+
+    /** 3LGM2: IheIntegrationProfile_Edge -> OWL: iheIntegrationProfile */
+    public static class IheIntegrationProfile_Edge extends SimpleEdge {
+        public static final Class<? extends ModelElement> STCL = IheIntegrationProfile.class;
+        public static final Class<? extends ModelElement> ETCL = Actor.class;
+    }
+
+    /** 3LGM2: IheTransaction_Edge -> OWL: iheTransaction */
+    public static class IheTransaction_Edge extends SimpleEdge {
+        public static final Class<? extends ModelElement> STCL = Actor.class;
+        public static final Class<? extends ModelElement> ETCL = Actor.class;
+    }
 
     @Override
     public Set<Class<? extends Node>> getNodes() {
