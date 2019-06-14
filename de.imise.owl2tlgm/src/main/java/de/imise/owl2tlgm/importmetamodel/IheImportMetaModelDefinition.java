@@ -22,7 +22,7 @@ public class IheImportMetaModelDefinition extends ImportMetaModelDefinition {
     public static class Actor extends Node {
     }
 
-    /** 3LGM2: Domain -> OWL: IntegrationProfile */
+    /** 3LGM2: Domain -> OWL: Domain */
     public static class Domain extends Node {
     }
 
