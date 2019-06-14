@@ -26,9 +26,9 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
     /**
      * Mappt von einem eine Knotenklassen-Instanz repräsentierenden Objekt auf den im 3LGM2-Import-Modell erzeugten korrespondierenden Knoten. Über
      * diese Map kann beim Erstellen der Kanten aus dem SorceModell herausgefunden werden, welcher Source-Knoten zu welchem Target-Knoten geworden
-     * ist. Diese Information benötigt man immer, wenn man einen Graphen mit Knoten und Kanten importieren möchte undabhängig, von der Datenquelle.
+     * ist. Diese Information benötigt man immer, wenn man einen Graphen mit Knoten und Kanten importieren möchte, undabhängig von der Datenquelle.
      */
-    private final Map<T, Node> sourceInstanceToNode = new HashMap<>();
+    private final Map<T, Node> sourceInstanceToTargetNode = new HashMap<>();
 
     /**
      * Das zu füllende Import-Modell
@@ -80,21 +80,21 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      * @return
      */
     public Node getTargetNode(final T sourceObject) {
-        return sourceInstanceToNode.get(sourceObject);
+        return sourceInstanceToTargetNode.get(sourceObject);
     }
 
     /**
      * @return importierte Quell-Knoten
      */
     public Set<T> getSourceNodes() {
-        return sourceInstanceToNode.keySet();
+        return sourceInstanceToTargetNode.keySet();
     }
 
     /**
      * @return importierte Ziel-Knoten
      */
     public Collection<Node> getTargetNodes() {
-        return sourceInstanceToNode.values();
+        return sourceInstanceToTargetNode.values();
     }
 
     /**
@@ -134,7 +134,7 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
     protected Node addNode(final T sourceObject, final Class<? extends Node> nodeClass, final String name, final String description, final String hashString) {
         NodeContainer nodeContainer = gdcoll.createKnotenWithContainer(nodeClass, name, description, hashString, TransactionManager.STANDARD_PID);
         Node node = nodeContainer.getNode();
-        sourceInstanceToNode.put(sourceObject, node);
+        sourceInstanceToTargetNode.put(sourceObject, node);
         return node;
     }
 
