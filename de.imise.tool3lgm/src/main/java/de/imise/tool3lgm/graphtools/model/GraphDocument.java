@@ -62,6 +62,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
+import de.imise.tool3lgm.graphtools.path.pathmodel.SimplePath;
 import de.imise.tool3lgm.graphtools.undoredo.CommandParser;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -3747,25 +3749,46 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         return instanceContainer;
     }
 
-    public final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final int pid) {
-        createPath(startElement, endElement, metaPath, false, pid);
+    /**
+     * @param startElement
+     * @param endElement
+     * @param metaPath
+     * @param pid
+     * @return
+     */
+    public final SimplePath createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final int pid) {
+        return createPath(startElement, endElement, metaPath, false, pid);
     }
 
-    public final void createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final boolean askNameForNewEndElement, final int pid) {
+    /**
+     * @param startElement
+     * @param endElement
+     * @param metaPath
+     * @param askNameForNewEndElement
+     * @param pid
+     * @return
+     */
+    public final SimplePath createPath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final boolean askNameForNewEndElement, final int pid) {
+        List<Edge> createdEdges = new ArrayList<>();
+        SimplePath createdSubPath = null;
         start_transaction(pid);
-
         final int lastPathStepIndex = metaPath.getMetaPathCount() - 1;
         //wenn ein EndElement ex. und die letzte Kante eine InstanciationEdge ist, wobei das EndElement der Master dieser InstanciationEdge ist, dann
         //wird das EndElement über diese Kante instanziiert und der Restpfad bis zu dieser Instanz dann wieder über diese Funktion angelegt
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         boolean createSubPath = false;
         if (lastPathStepIndex > 0 && endElement != null) {
-            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(lastPathStepIndex);
-            if (!elementaryMetaPath.hasDirectionForward()) {
-                if (elementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
-                    NodeContainer createdInstance = createInstance(this, elementaryMetaPath.getEdgeClass().asSubclass(InstanciationEdge.class), endElement, pid);
-                    SimpleMetaPath subPath = metaPath.getSubPath(0, lastPathStepIndex);
-                    createPath(startElement, createdInstance.getElement(), subPath, pid);
+            ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(lastPathStepIndex);
+            if (!lastElementaryMetaPath.hasDirectionForward()) {
+                if (lastElementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
+                    Class<? extends Edge> edgeClass = lastElementaryMetaPath.getEdgeClass();
+                    NodeContainer createdInstanceContainer = createInstance(this, edgeClass.asSubclass(InstanciationEdge.class), endElement, pid);
+                    ModelElement createdInstance = createdInstanceContainer.getElement();
+                    Edge createdInstanceEdge = endElement.getEdgeTo(createdInstance, edgeClass);
+                    ElementaryPath createdInstanceEdgeElementaryPath = new ElementaryPath(lastElementaryMetaPath, createdInstanceEdge, endElement, createdInstanceEdge);
+                    SimpleMetaPath subMetaPath = metaPath.getSubPath(0, lastPathStepIndex);
+                    createdSubPath = createPath(startElement, createdInstance, subMetaPath, pid);
+                    createdSubPath = createdSubPath.append(createdInstanceEdgeElementaryPath);
                     createSubPath = true;
                 }
             }
@@ -3786,7 +3809,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             ModelElement pathStepEndElement = null;
             for (int i = 0; i <= lastPathStepIndex; i++) {
                 //wenn ein endElement angegeben wurde, dann das im letzten Pfadschritt verknüpfen
-                boolean lastPathStepLinksEndElement = endElement != null && i == lastPathStepIndex; //true, wenn ein endElemnt verknüpft werden soll und das hier der letzte Pfadschritt ist
+                boolean lastPathStepLinksEndElement = endElement != null && i == lastPathStepIndex; //true, wenn ein endElement verknüpft werden soll und das hier der letzte Pfadschritt ist
                 boolean alreadyLinked = false;
                 ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
                 Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
@@ -3797,9 +3820,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     //selbst über den Instanziierungsmechanismus initialisiert
                 } else if (InstanciationEdge.class.isAssignableFrom(edgeClass) && elementaryMetaPath.hasDirectionForward()) {
                     boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
-                    NodeContainer createdInstance = createInstance(this, edgeClass.asSubclass(InstanciationEdge.class), pathStepStartElement, pid);
+                    NodeContainer createdInstanceContainer = createInstance(this, edgeClass.asSubclass(InstanciationEdge.class), pathStepStartElement, pid);
+                    ModelElement createdInstance = createdInstanceContainer.getElement();
+                    Edge createdInstanceEdge = endElement.getEdgeTo(createdInstance, edgeClass);
+                    createdEdges.add(createdInstanceEdge);
                     gdcoll.setInteractiveMode(oldInteractiveMode);
-                    pathStepEndElement = createdInstance.getElement();
+                    pathStepEndElement = createdInstance;
                     alreadyLinked = true;
                 } else { // nächstes Pfadschrittelement anlegen
                     Class<? extends ModelElement> pathStepEndClass = metaPath.getPathStepElementClass(i);
@@ -3809,7 +3835,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     pathStepEndElement = pathStepEndElementContainer.getElement();
                 }
                 if (!alreadyLinked) {
-                    gdcoll.link(edgeClass, pathStepStartElement, pathStepEndElement, pid);
+                    Edge edge = gdcoll.link(edgeClass, pathStepStartElement, pathStepEndElement, pid);
+                    createdEdges.add(edge);
                 }
                 if (CompositionEdge.class.isAssignableFrom(edgeClass)) {
                     if (elementaryMetaPath.hasDirectionForward()) {
@@ -3823,8 +3850,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
+        SimplePath simplePath = createSubPath ? createdSubPath : SimplePath.create(metaPath, createdEdges);
+        return simplePath;
     }
 
+    /**
+     * @param edgeClass
+     * @param direction
+     * @param pid
+     */
     public final void linkSelected(final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         start_transaction(pid);
         ModelElement lastSelecedElement = getLastSelected().getElement();
@@ -3842,6 +3876,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
+     * @param edgeClass
+     * @param direction
      * @param pid
      */
     public final void unlinkSelected(final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
