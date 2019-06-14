@@ -4,6 +4,9 @@ import java.awt.Component;
 import java.awt.HeadlessException;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 
 import javax.swing.JFileChooser;
@@ -285,15 +288,78 @@ public class ExtendedFileChooser extends JFileChooser {
     }
 
     /**
+     * Gibt den URL-String des übergebenen File-Objektes zurück oder <code>null</code>, wenn es sich nicht in eine gültige URL umwandelnd ließ.
+     * 
+     * @param file
+     * @return
+     */
+    public static String getUrl(final File file) {
+        String url = null;
+        if (file != null) {
+            try {
+                URI uri = file.toURI();
+                URL url2 = uri.toURL();
+                url = url2.toString();
+            } catch (MalformedURLException e) {
+            }
+        }
+        return url;
+    }
+
+    /**
+     * @return
+     */
+    public static final File chooseFile() {
+        return chooseFile(null);
+    }
+
+    /**
+     * @return
+     */
+    public static final String chooseFileUrl() {
+        return getUrl(chooseFile(null));
+    }
+
+    /**
+     * @param pathKey
+     * @return
+     */
+    public static final File chooseFile(final Object pathKey) {
+        return chooseFile(null, pathKey);
+    }
+
+    /**
+     * @param parent
+     * @param pathKey
+     * @return
+     */
+    public static final File chooseFile(final Component parent, final Object pathKey) {
+        return chooseFile(parent, null, pathKey);
+    }
+
+    /**
      * @param parent
      * @param filter
      * @param pathKey
      * @return
      */
     public static final File chooseFile(final Component parent, final FileNameExtensionFilter filter, final Object pathKey) {
+        return chooseFile(parent, filter, pathKey, false);
+    }
+
+    /**
+     * @param parent
+     * @param filter
+     * @param pathKey
+     * @param multiSelectionEnabled
+     * @return
+     */
+    public static final File chooseFile(final Component parent, final FileNameExtensionFilter filter, final Object pathKey, final boolean multiSelectionEnabled) {
         ExtendedFileChooser chooser = new ExtendedFileChooser(pathKey);
-        chooser.setMultiSelectionEnabled(false);
-        chooser.setFileFilters(true, filter);
+        chooser.setMultiSelectionEnabled(multiSelectionEnabled);
+        if (filter != null) {
+            chooser.setFileFilters(true, filter);
+        }
         File fileToOpen = null;
         if (chooser.showOpenDialog(parent) == ExtendedFileChooser.APPROVE_OPTION) {
             fileToOpen = chooser.getSelectedFile();
