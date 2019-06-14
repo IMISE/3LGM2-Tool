@@ -1,12 +1,8 @@
 package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_ELEMENTS_SET;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isEdgeType;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isNodeType;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.layerFor;
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 
@@ -14,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -46,21 +42,22 @@ public class GraphDocumentHandler {
             return new ArrayList<>(0);
         }
         //Problem: Suche nach Elemenklasse inkl. Unterklassen, wobei Unterklassen unique sein können -> im doc und im mainDoc suchen
+        MetaModel metaModel = doc.getMetaModel();
         if (!includeSubClasses || clazz == Bendpoint.class) {
             List<Class<? extends ModelElement>> searchClasses = new ArrayList<>();
             searchClasses.add(clazz);
-            return getModelItemsForClasses(ModelConstants.isUnique(clazz) ? doc.getCollection().getMainGraphDocument() : doc, searchClasses, absolutePartsOnly, alphabetical);
+            return getModelItemsForClasses(metaModel.isUnique(clazz) ? doc.getCollection().getMainGraphDocument() : doc, searchClasses, absolutePartsOnly, alphabetical);
             //          return getModelItemsForSingleClass(clazz, absolutePartsOnly, alphabetical);
         }
         List<ModelElement> objects = null;
         List<Class<? extends ModelElement>> searchClassesUnique = new ArrayList<>();
         List<Class<? extends ModelElement>> searchClassesNotUnique = new ArrayList<>();
-        for (Class<? extends ModelElement> elementClass : ALL_ELEMENTS_SET) {
-            if (ModelConstants.isAbstract(elementClass)) {
+        for (Class<? extends ModelElement> elementClass : metaModel.allElementsSet) {
+            if (MetaModel.isAbstract(elementClass)) {
                 continue;
             }
             if (clazz.isAssignableFrom(elementClass)) {
-                if (ModelConstants.isUnique(elementClass)) {
+                if (metaModel.isUnique(elementClass)) {
                     searchClassesUnique.add(elementClass);
                 } else {
                     searchClassesNotUnique.add(elementClass);
@@ -119,10 +116,10 @@ public class GraphDocumentHandler {
             if (Bendpoint.class == searchClass) {
                 searchBendpoints = true;
             }
-            if (!searchNodes && isNodeType(searchClass)) {
+            if (!searchNodes && MetaModel.isNodeType(searchClass)) {
                 searchNodes = true;
             }
-            if (!searchEdges && isEdgeType(searchClass)) {
+            if (!searchEdges && MetaModel.isEdgeType(searchClass)) {
                 searchEdges = true;
             }
             if (searchBendpoints && searchEdges && searchNodes) {
@@ -130,9 +127,10 @@ public class GraphDocumentHandler {
             }
         }
         //Indizes der Ebenen so anpassen, dass möglichst wenig durchsucht werden muss
+        MetaModel metaModel = doc.getMetaModel();
         for (Class<? extends ModelElement> searchClass : searchClasses) {
             //Ebene der gesuchten Elementklasse bestimmen
-            int ebene = layerFor(searchClass);
+            int ebene = metaModel.layerFor(searchClass);
             if (ebene == NO_LAYER) {
                 minLayer = MIN_LAYER_INDEX;
                 maxLayer = MAX_LAYER_INDEX;

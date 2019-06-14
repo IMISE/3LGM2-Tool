@@ -173,24 +173,6 @@ public abstract class Tool3lgmConstants {
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle(RESOURCE_BASE_NAME);
 
     /**
-     * ResourceBundle mit den metamodell-spezifischen Daten
-     */
-    private static ResourceBundle metamodelBundle = null;
-
-    private static String getMetamodelBundleName() {
-        //das Metamodel-Resourcebundle liegt im resource-package unter demselben Pfad, wie die Metamodellklasse des Packages.
-        //der ClassLoader, der das package lädt, erwartet relative Pfade ab dem Pfad dieser Klasse hier, die das Bundle lädt.
-        //z.B. liegt das speziele Metamodel im package "de.imise.tool3lgm.metamodel.tlgm_v3_0". Diese Klasse Tool3lgmConstants
-        //liegt im Hauptpackage "de.imise.tool3lgm". Das Resource-Bundle kann mit dem BundleName "metamodel.tlgm_v3_0.MetamodelResources"
-        //geladen werden. Also muss man vom package-Namen des Metamodells den package-Namen der Tool3lgmConstants abziehen und den
-        //vorgegebenen Bundle-Name "MetamodelResources" anhängen (mit Punkt dazwischen).
-        String mainPackageName = Tool3lgmConstants.class.getPackage().getName();
-        String metaModelPackageName = Tool3lgmMetaModelContext.getMetaModelClass().getPackage().getName();
-        String bundleName = metaModelPackageName.substring(mainPackageName.length() + 1) + "." + METAMODEL_RESOURCE_BASE_NAME;
-        return bundleName;
-    }
-
-    /**
      * Name der Datei mit Analysen. Unter diesem Namen ex. die Standarddatei in den localisierten Resourcen. Wenn der Benutzer irgendeine XMLAnalyse
      * mal aufgerufen hat, dann gibt es mit diesem Namen
      * im APPLICATION_PATH eine Datei (wenn der Benutzer dort Schreibrecht hat) oder in seinem user.home-Pfad (wenn er im APPLICATION_PATH kein
@@ -334,15 +316,7 @@ public abstract class Tool3lgmConstants {
         //das hier darf auf keinen Fall mit try-catch komplett umrandet werden, da mehrere Funktionen auf die
         //MissingResocureException regaieren (z.B. die Funktionen zum heraussuchen der Kantennamen bei
         //Kanten mit doppelter Bedeutung
-        try {
-            return resourceBundle.getString(key);
-        } catch (Exception e) {
-            //es muss lazy initialisiert werden!
-            if (metamodelBundle == null) {
-                metamodelBundle = ResourceBundle.getBundle(getMetamodelBundleName());
-            }
-            return metamodelBundle.getString(key);
-        }
+        return resourceBundle.getString(key);
     }
 
     /**

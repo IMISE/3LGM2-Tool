@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -19,6 +19,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
  * @create 17.02.2011
  */
 public class ConsistencyDefinition {
+
+    /** Metamodel, für das die Konsistenz definiert wird */
+    private final MetaModel metaModel;
 
     /**
      * Definition der Kardinalitäten, die bei der Konsistenzprüfung eingealten werden sollen.
@@ -34,9 +37,10 @@ public class ConsistencyDefinition {
     private final HashMap<Class<? extends ModelElement>, Collection<Class<? extends Edge>>> elementToOnlyLeafAllowedEdgeClasses = new HashMap<>();
 
     /**
-     *
+     * @param metaModel
      */
-    public ConsistencyDefinition() {
+    public ConsistencyDefinition(final MetaModel metaModel) {
+        this.metaModel = metaModel;
     }
 
     public void setCardinalityDefinition(final CardinalityDefinition cardinalityDefinition) {
@@ -62,7 +66,7 @@ public class ConsistencyDefinition {
             return;
         }
         // nur bei Elementen, die auch Teil-Von-Beziehungen haben können, ist es sinnvoll, sie sich zu merken
-        if (!ModelConstants.canHaveParts(elementClass)) {
+        if (!metaModel.canHaveParts(elementClass)) {
             return;
         }
         Collection<Class<? extends Edge>> leafAllowedEdgeClasses = elementToOnlyLeafAllowedEdgeClasses.get(elementClass);
@@ -80,7 +84,7 @@ public class ConsistencyDefinition {
      * @param elementClass
      */
     public void addOnlyLeafAllowedEdges(final Class<? extends ModelElement> elementClass) {
-        for (Class<? extends Edge> edgeClass : ModelConstants.getEdgeTypes(elementClass)) {
+        for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(elementClass)) {
             addOnlyLeafAllowedEdgeClass(elementClass, edgeClass);
         }
     }

@@ -16,7 +16,7 @@ import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
@@ -598,8 +598,9 @@ public class EdgeContainer extends ElementContainer {
         if (!kc1.isVisible() || !kc2.isVisible()) {
             Class<? extends ModelElement> startClass = me1.getClass();
             Class<? extends ModelElement> endClass = me2.getClass();
+            MetaModel metaModel = doc.getMetaModel();
             //bei Bausteinschnittsellen sollen keine surrogates gemalt werden. Vorher stand hier bei der 2. Bedingung: !(me instanceof KommBeziehung)
-            if (createSurrogates && !(ModelConstants.isSlaveType(startClass) && ModelConstants.isSlaveType(endClass))) {
+            if (createSurrogates && !(metaModel.isSlaveType(startClass) && metaModel.isSlaveType(endClass))) {
                 createSurrogateContainers(kc1, kc2);
             }
             return false;
@@ -666,7 +667,7 @@ public class EdgeContainer extends ElementContainer {
                     ConnectionState connectionState = doubleMeaningEdge.getConnectionState();
                     backward = connectionState == BACKWARD || connectionState == DOUBLE;
                 } else {
-                    backward = edge instanceof HasPartEdge || !ModelConstants.isDirectedEdge(edge.getClass());
+                    backward = edge instanceof HasPartEdge || !doc.getMetaModel().isDirectedEdge(edge.getClass());
                 }
                 if (backward) {
                     gc.rotate(rad1, startx, starty);

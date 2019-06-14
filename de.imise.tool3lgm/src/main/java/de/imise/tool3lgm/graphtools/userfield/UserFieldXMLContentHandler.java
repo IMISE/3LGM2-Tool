@@ -8,14 +8,14 @@ import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 
 /**
  * Die Variablen sind auf protected Gesetzt, damit man einen neuen ContentHandler von dieser Klasse ableiten kann aber trotzdem noch Zugriff auf alle
  * nötigen Werte hat. Ich denke, bei kleinen Änderungen (hinzukommen oder wegfallen einzelnener Felder im Dokument) muß man keinen ganz neuen
  * ContentHandler schreiben sondern muß nur einen abgeleiteten von diesem bilden. Ich würde aber empfehlen von Zeit zu Zeit einen völlig neuen
  * ContentHandler zu schreiben.
- * 
+ *
  * @author Thomas Rudert
  */
 public class UserFieldXMLContentHandler implements ContentHandler {
@@ -27,8 +27,8 @@ public class UserFieldXMLContentHandler implements ContentHandler {
     private final StringBuilder elementValue = new StringBuilder();
 
     /**
-	 * 
-	 */
+     * 
+     */
     public UserFieldXMLContentHandler(final UserFieldDefinitions def) {
         super();
         definitions = def;
@@ -66,7 +66,8 @@ public class UserFieldXMLContentHandler implements ContentHandler {
             if (elementClass == null) {
                 field = new UserField(atts.getValue("hash"), definitions);
             } else {
-                field = new UserField(ModelConstants.getClassForName(elementClass), atts.getValue("hash"), definitions);
+                MetaModel metaModel = definitions.getMetaModel();
+                field = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), definitions);
             }
         } else if (qName.equals("userFieldName")) {
 

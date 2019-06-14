@@ -3,21 +3,11 @@ package de.imise.tool3lgm.graphtools.model;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgm.getLastActionPosition;
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.isExtension;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ELEMENTS_WITH_NAME_EXTENSIONS;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYERS;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.UNIQUE_NODES;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getCopyDependencies;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getInitialSubtypes;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSubordinatedJoinbleTypes;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.hasObjektDialog;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isDoubleMeaningEdge;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isGenerateName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayerStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
@@ -66,8 +56,6 @@ import static de.imise.tool3lgm.graphtools.model.GraphDocumentHandler.getModelIt
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_ELEMENT_LAYOUT;
 import static de.imise.tool3lgm.log.Log.ERROR;
-import static de.imise.tool3lgm.xml.ToolXMLParser.isParseAbleFileVersion;
-import static de.imise.tool3lgm.xml.ToolXMLParser.isXMLFile;
 import static de.imise.util.collections.CollectionUtils.getNextIndicatedName;
 import static java.lang.Integer.parseInt;
 import static javax.swing.BoxLayout.Y_AXIS;
@@ -85,6 +73,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JDialog;
@@ -94,10 +83,14 @@ import javax.swing.JRadioButton;
 
 import com.google.common.base.Strings;
 
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -114,6 +107,7 @@ import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
+import de.imise.tool3lgm.graphtools.userfield.UserfieldResourceHandler;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -121,6 +115,7 @@ import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContai
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.util.StringUtils;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
@@ -131,6 +126,12 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
  * @author thomas, AXS
  */
 public final class GDCollection extends UserFieldTarget {
+
+    /** Das Metamodel, auf dem dieses Modell basiert */
+    private MetaModelContext metaModelContext;
+
+    /** Das Metamodel des Modells */
+    private MetaModel metaModel;
 
     /** Undo- und Redomanager */
     protected TransactionManager tman = new TransactionManager();
@@ -203,6 +204,7 @@ public final class GDCollection extends UserFieldTarget {
     /** Handler für den Im- und Export von (Teil-)Modellen */
     private final GDCollectionImExportHandler imExportHandler;
 
+    /** Momentan geöffnetes Beschreibungsfenster des Modells. Dieser View Kram gehört hier eigentlich gar nicht hin! */
     public ModelPropertyDialog descriptionFrame;
 
     /**
@@ -230,12 +232,62 @@ public final class GDCollection extends UserFieldTarget {
      *
      */
     public GDCollection() {
+        fileHandler = new GDCollectionFileHandler(this);
+        imExportHandler = new GDCollectionImExportHandler(this);
+        //Standard-Userfield-Definition laden
+    }
+
+    /**
+     * @param metaModelContext
+     */
+    public GDCollection(@Nonnull final MetaModelContext metaModelContext) {
+        this();
+        setMetaModelContext(metaModelContext);
+    }
+
+    public void setMetaModelContext(final MetaModelContext metaModelContext) {
+        this.metaModelContext = metaModelContext;
+        metaModel = metaModelContext.getMetaModel();
         doc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
         doc.addGraphDocumentListener(userFieldDefinitions);
-        imExportHandler = new GDCollectionImExportHandler(this);
-        fileHandler = new GDCollectionFileHandler(this);
         activeGraphDocumentsList.add(doc);
+        UserfieldResourceHandler.loadDefaultUserfieldDefinition(this);
+    }
+
+    /** Liefert den MetaModelContext, auf dem dieses Modell basiert */
+    public MetaModelContext getMetaModelContext() {
+        return metaModelContext;
+    }
+
+    /** Liefert das MetaModel, auf dem dieses Modell basiert */
+    public MetaModel getMetaModel() {
+        return metaModel;
+    }
+
+    /**
+     * Diese Funktion mach genau das umgekehrte wie die Funktion {@link Tool3lgmConstants#getResString(String)}. D.h. sie schaut zuerst in die
+     * Resourcen des eigenen Metamodells und wenn sie dort den key nicht gefunden hat, dann in die allgemeinen des Tools. Im Unterschied zu der
+     * Funktion aus den {@link Tool3lgmConstants} wird hier aber nicht in die Resourcen des aktuell selektierten Modells geschaut, sondern in die
+     * dieses Modells hier.
+     *
+     * @param key
+     * @return
+     * @see MetaModelContext#getResString(String)
+     */
+    public String getResString(final String key) {
+        return metaModelContext.getResString(key);
+    }
+
+    /**
+     * Liefert die Klasse, über die alle Knoten- und Kantenklassennamen generiert werden, also die Anzeigenamen in Ein- und Mehrzahl und bei den
+     * Kanten die gerichteten Namen.
+     *
+     * @return
+     * @see MetaModelContext#getElementsNameBuilder()
+     */
+    public ElementsNameBuilder getElementsNameBuilder() {
+        return metaModelContext.getElementsNameBuilder();
     }
 
     /**
@@ -474,7 +526,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param szenname
      * @return
      */
-    private static final String askName(final String szenname) {
+    private final String askName(final String szenname) {
         NameAndColorInputDialog d = new NameAndColorInputDialog(getMainFrame());
         d.showDialog(getResString("szenario_name_anfrage"), szenname);
         return d.getInputString();
@@ -484,7 +536,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param ec
      * @return
      */
-    private static final boolean askNameAndColor(final ElementContainer ec) {
+    private final boolean askNameAndColor(final ElementContainer ec) {
         ModelElement me = ec.getElement();
         while (true) {
             NameAndColorInputDialog d = new NameAndColorInputDialog(getMainFrame());
@@ -492,7 +544,7 @@ public final class GDCollection extends UserFieldTarget {
             if (dialogPosition == null) {
                 dialogPosition = new Point(100, 100);
             }
-            boolean showColorChooser = ModelConstants.hasSortedEdgeClassesToPaintable(me.getClass());
+            boolean showColorChooser = metaModel.hasSortedEdgeClassesToPaintable(me.getClass());
             d.showDialog(getResString("name_eing"), me.toString(), dialogPosition.x, dialogPosition.y, showColorChooser);
             String inputString = d.getInputString();
             if (inputString == null) {
@@ -603,7 +655,7 @@ public final class GDCollection extends UserFieldTarget {
             }
             ModelElement me = ec.getElement();
             //keine untergerodneten Elemente einfach so aus der Grafik löschen
-            if (ModelConstants.isSlaveType(me.getClass())) {
+            if (metaModel.isSlaveType(me.getClass())) {
                 continue;
             }
             if (!transctionStarted) {
@@ -693,7 +745,7 @@ public final class GDCollection extends UserFieldTarget {
         //Rückgängig machen wieder ausgeführt wird
         for (ElementContainer ec : containerToRemove) {
             ModelElement me = ec.getElement();
-            if (logSubElements || !ModelConstants.isSlaveType(me.getClass())) {
+            if (logSubElements || !metaModel.isSlaveType(me.getClass())) {
                 ecDoc.addUndoCommand(MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL + " " + ecDoc.hashString + " " + me.getHashString(), pid);
             }
         }
@@ -793,7 +845,7 @@ public final class GDCollection extends UserFieldTarget {
                 continue;
             }
             //den evtl. geöffneten Dialog des Elementes scließen
-            ElementPropertyDialog dialog = hasObjektDialog(me);
+            ElementPropertyDialog dialog = ElemenPropertyDialogsContext.hasOpenDialog(me);
             if (dialog != null) {
                 dialog.performOK();
             }
@@ -1045,7 +1097,7 @@ public final class GDCollection extends UserFieldTarget {
         Node me = null;
         NodeContainer nc = null;
         try {
-            me = elementClass.newInstance();
+            me = metaModel.createElement(elementClass);
             nc = (NodeContainer) me.createContainer(doc);
         } catch (Exception ex) {
             Log.show(ERROR, getResString("FehlerAllgemein"), ex);
@@ -1061,7 +1113,7 @@ public final class GDCollection extends UserFieldTarget {
         } else {
             String newName = nameIsEmpty ? doc.getNextNewName(me.getClass()) : name.substring(1);
             me.setName(newName, false);
-            if (isInteractiveMode() && !isGenerateName(me.getClass())) {
+            if (isInteractiveMode() && !metaModel.isGenerateName(me.getClass())) {
                 if (!askNameAndColor(nc)) {
                     return null;
                 }
@@ -1105,7 +1157,7 @@ public final class GDCollection extends UserFieldTarget {
      */
     public void createInitialSubtypes(final ModelElement me, final int pid) {
         Class<? extends ModelElement> elementClass = me.getClass();
-        for (Class<? extends Edge> subTypeEdgeClass : getInitialSubtypes(elementClass)) {
+        for (Class<? extends Edge> subTypeEdgeClass : metaModel.getInitialSubtypes(elementClass)) {
             Class<? extends ModelElement> subType = isStartClass(subTypeEdgeClass, elementClass) ? getEndClass(subTypeEdgeClass) : getStartClass(subTypeEdgeClass);
             //minimale kardinalität für die Unterelemente
             int minCardForSubType = getMinCardinality(me.getClass(), subTypeEdgeClass);
@@ -1116,9 +1168,9 @@ public final class GDCollection extends UserFieldTarget {
                 String name;
                 //wenn mehrere Unterelemene existieren können, dann durchnummerieren
                 if (minCardForSubType > 1) {
-                    name = getNextIndicatedName(ElementsNameBuilder.getDisplayableName(subType) + " ", " " + getResString("fuer") + " " + me.getName(), connectedSubTypes);
+                    name = getNextIndicatedName(getElementsNameBuilder().getDisplayableName(subType) + " ", " " + getResString("fuer") + " " + me.getName(), connectedSubTypes);
                 } else {
-                    name = ElementsNameBuilder.getDisplayableName(subType) + " " + getResString("fuer") + " " + me.getName();
+                    name = getElementsNameBuilder().getDisplayableName(subType) + " " + getResString("fuer") + " " + me.getName();
                 }
                 ModelElement skC = createKnotenWithContainer(subType.asSubclass(Node.class), name, "", null, pid).getElement();
                 link(subTypeEdgeClass, me, skC, pid);
@@ -1136,12 +1188,13 @@ public final class GDCollection extends UserFieldTarget {
         if (kc.getGraphDocument() == doc) {
             nc = kc;
         } else {
+            Node node = kc.getNode();
             if (kc instanceof BendpointContainer) {
-                nc = new BendpointContainer((Bendpoint) kc.getNode(), doc);
-            } else if (isInterLayerStartClass(kc.getElement().getClass())) {
-                kc = new InterLayerConnectedNodeContainer(kc.getNode(), doc);
+                nc = new BendpointContainer((Bendpoint) node, doc);
+            } else if (metaModel.hasInterLayerStartClass(node)) {
+                kc = new InterLayerConnectedNodeContainer(node, doc);
             } else {
-                nc = new NodeContainer(kc.getNode(), doc);
+                nc = new NodeContainer(node, doc);
             }
         }
         doc.getLayer(layerIndex).add(nc);
@@ -1277,7 +1330,7 @@ public final class GDCollection extends UserFieldTarget {
 
         Edge edge = null;
         EdgeContainer kac = null;
-        Class<? extends ModelElement> edgeClassOrNull = ModelConstants.getClassForName(edgeClassName);
+        Class<? extends ModelElement> edgeClassOrNull = metaModel.getClassForName(edgeClassName);
         if (edgeClassOrNull == null) {
             return null;
         }
@@ -1297,17 +1350,14 @@ public final class GDCollection extends UserFieldTarget {
             }
             edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
             //wenn es schon eine Kante in der Gegenrichtung gibt und diese Kante eine Kante mit doppelter Bedeutung ist -> dann Richtung auf DOUBLE setzen
-            if (isDoubleMeaningEdge(edgeClass) && edge != null) {
+            if (MetaModel.isDoubleMeaningEdge(edgeClass) && edge != null) {
                 ((DoubleMeaningEdge) edge).setConnectionState(DOUBLE);
             } else {
-                try {
-                    edge = edgeClass.newInstance();
-                } catch (Exception e) {
-                    Log.show(ERROR, getResString("FehlerAllgemein"), e);
-                    doc.undo(pid);
+                edge = metaModel.createElement(edgeClass);
+                if (edge == null) {
                     return null;
                 }
-                if (edgeHash != null && !edgeHash.equals("")) {
+                if (!Strings.isNullOrEmpty(edgeHash)) {
                     edge.setHashString(edgeHash);
                 }
                 ConnectionState connectionState = FORWARD; // wird nur für die DoubleMeaningEdges gebraucht
@@ -1317,7 +1367,7 @@ public final class GDCollection extends UserFieldTarget {
                     endElement = dummy;
                     connectionState = BACKWARD;
                 }
-                if (isDoubleMeaningEdge(edgeClass)) {
+                if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                     ((DoubleMeaningEdge) edge).setConnectionState(connectionState);
                 }
                 edge.setNodesAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
@@ -1452,7 +1502,7 @@ public final class GDCollection extends UserFieldTarget {
 
         Class<? extends ModelElement> me1Class = me1.getClass();
         Class<? extends ModelElement> me2Class = me2.getClass();
-        boolean isDirectionImportent = ModelConstants.isDoubleMeaningEdge(edgeClass) || Edge.isConnecting(edgeClass, me1Class, me2Class) && Edge.isConnecting(edgeClass, me2Class, me1Class);
+        boolean isDirectionImportent = MetaModel.isDoubleMeaningEdge(edgeClass) || Edge.isConnecting(edgeClass, me1Class, me2Class) && Edge.isConnecting(edgeClass, me2Class, me1Class);
         if (isDirectionImportent) {
             edges = me1.getEdgesTo(me2, edgeClass, me1EdgeIndex);
         } else {
@@ -1467,7 +1517,7 @@ public final class GDCollection extends UserFieldTarget {
             messagePanel.setLayout(new BoxLayout(messagePanel, Y_AXIS));
             ButtonGroup buttonGroup = new ButtonGroup();
             for (int i = 0; i < edges.size(); i++) {
-                JRadioButton b = new JRadioButton(ElementsNameBuilder.getForwardMetaAssociationName(edges.get(i).getClass()));
+                JRadioButton b = new JRadioButton(getElementsNameBuilder().getForwardMetaAssociationName(edges.get(i).getClass()));
                 if (i == 0) {
                     b.setSelected(true);
                 }
@@ -1493,7 +1543,7 @@ public final class GDCollection extends UserFieldTarget {
         //nur bei Kanten mit doppelter bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
         //ist die Richtung egal und das Unlinken ist das Löschen der Edge
         Class<? extends Edge> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
-        if (isDoubleMeaningEdge(absoluteEdgeClass)) {
+        if (MetaModel.isDoubleMeaningEdge(absoluteEdgeClass)) {
             DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
             if (doubleMeaningEdge.getConnectionState() == DOUBLE) {
                 if (edge.getStart() == me1) {
@@ -1514,7 +1564,7 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     private void updateElementNames() {
-        List<ModelElement> modelItemsWithNameExtensions = getModelItems(this, ELEMENTS_WITH_NAME_EXTENSIONS);
+        List<ModelElement> modelItemsWithNameExtensions = getModelItems(this, metaModel.getElementClassesWithNameExtensionPath());
         for (ModelElement me : modelItemsWithNameExtensions) {
             me.updateNameExtensions();
         }
@@ -1577,7 +1627,7 @@ public final class GDCollection extends UserFieldTarget {
         node2.join(node1, false);
         //knoten2.createNameWithSzens(doc);
 
-        for (Class<? extends Edge> edgeClass : getSubordinatedJoinbleTypes(node2.getClass())) {
+        for (Class<? extends Edge> edgeClass : metaModel.getSubordinatedJoinbleTypes(node2.getClass())) {
             List<ModelElement> sjt1 = node1.getConnectedElements(edgeClass);
             List<ModelElement> sjt2 = node2.getConnectedElements(edgeClass);
             if (sjt1.size() == 1 && sjt2.size() == 1) {
@@ -1786,9 +1836,12 @@ public final class GDCollection extends UserFieldTarget {
 
     /**
      * @param bm
+     * @return the previous bulk mode
      */
-    public void setBulkMode(final boolean bm) {
+    public boolean setBulkMode(final boolean bm) {
+        boolean oldBulkMode = bulk_mode;
         bulk_mode = bm;
+        return oldBulkMode;
     }
 
     /**
@@ -1968,7 +2021,7 @@ public final class GDCollection extends UserFieldTarget {
                 resolveCopyDependencies(end, elements, userFields);
             }
         }
-        for (Class<? extends ModelElement> elemClass : getCopyDependencies(me.getClass())) {
+        for (Class<? extends ModelElement> elemClass : metaModel.getCopyDependencies(me.getClass())) {
             for (ElementContainer ec : me.getConnectedContainer(elemClass, doc)) {
                 ModelElement connected = ec.getElement();
                 if (!elements.contains(connected)) {
@@ -2030,7 +2083,7 @@ public final class GDCollection extends UserFieldTarget {
         try {
             setBulkMode(true);
             FileInputStream clipStream = new FileInputStream(file);
-            if (isXMLFile(clipStream) && isParseAbleFileVersion(clipStream)) {
+            if (ToolXMLParser.isParsableXMLFile(clipStream)) {
                 clipStream.getChannel().position(0);
                 fileHandler.loadXMLFile(clipStream, true);
             }
@@ -2184,7 +2237,7 @@ public final class GDCollection extends UserFieldTarget {
      * Selektiert in allen Teilmodellen alle einmaligen Elemente
      */
     public void selectAllUniques() {
-        for (Class<? extends ModelElement> elemClass : UNIQUE_NODES) {
+        for (Class<? extends ModelElement> elemClass : metaModel.uniqueNodes) {
             for (ElementContainer ec : doc.getElementContainer(elemClass)) {
                 addToSelection(ec);
             }

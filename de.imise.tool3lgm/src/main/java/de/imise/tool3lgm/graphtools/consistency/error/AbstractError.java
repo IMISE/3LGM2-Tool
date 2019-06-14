@@ -106,7 +106,7 @@ public abstract class AbstractError extends Error {
      *
      * @return the gdcoll
      */
-    public final GDCollection getGdcoll() {
+    public final GDCollection getCollection() {
         return gdcoll;
     }
 

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
@@ -20,6 +20,13 @@ import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
  * @author AXS (16.09.2017)
  */
 public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
+
+    /**
+     * @param metaModel
+     */
+    public RedundancyAnalysisDefinitions(final MetaModel metaModel) {
+        super(metaModel);
+    }
 
     /** Die Einzel-Definitionen als Liste */
     private List<SingleRedundancyAnalysisDefinition> redundancyAnalysisDefinitionData;
@@ -159,7 +166,7 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
                 elementClassToExpandedNamePath = new HashMap<>();
             }
             for (Class<? extends ModelElement> startClass : metaPath.getStartClasses()) {
-                for (Class<? extends ModelElement> instanciableAssignableClass : ModelConstants.getInstanciableAssignableClasses(startClass)) {
+                for (Class<? extends ModelElement> instanciableAssignableClass : metaModel.getInstanciableAssignableClasses(startClass)) {
                     elementClassToExpandedNamePath.put(instanciableAssignableClass, metaPath);
                 }
             }

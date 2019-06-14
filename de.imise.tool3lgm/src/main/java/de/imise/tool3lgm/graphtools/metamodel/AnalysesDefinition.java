@@ -9,7 +9,16 @@ import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions;
 
-public abstract class AnalysesDefinition {
+/**
+ * Klasse, über die für ein Metamodell Analysen hinzugefügt werden können. Um {@link NullPointerException}s zu verhindern, wird wenn für ein
+ * Metamodell keine solche Klasse angegeben ist, immer eine Instanz dieser Kasse hier zurück gegeben, die aber keine Actions zurück liefert.
+ *
+ * @author AXS (5 Jun 2018)
+ */
+public class AnalysesDefinition {
+
+    /** Metamodel der Definition */
+    protected final MetaModel metaModel;
 
     /** Definition aller SimpleRedundancyAnalysis für dieses Metamodell */
     protected final SimpleRedundancyAnalysisDefinitions simpleRedundancyAnalysisDefinitions = new SimpleRedundancyAnalysisDefinitions();
@@ -20,7 +29,7 @@ public abstract class AnalysesDefinition {
     }
 
     /** Definition aller RedundancyAnalysis für dieses Metamodell */
-    protected final RedundancyAnalysisDefinitions redundancyAnalysisDefinitions = new RedundancyAnalysisDefinitions();
+    protected final RedundancyAnalysisDefinitions redundancyAnalysisDefinitions;
 
     /** Liefert die Definition aller RedundancyAnalysis für dieses Metamodell */
     public RedundancyAnalysisDefinitions getRedundancyAnalysisDefinitions() {
@@ -30,6 +39,17 @@ public abstract class AnalysesDefinition {
     /** Liste aller Analysen, die im Kontextmenü der Knoten zusätzlich zu denen im AnalysesRepository definierten angezeigt werden sollen */
     protected final List<AbstractAnalysis> nodeAnalyses = new ArrayList<>();
 
+    /**
+     * @param metaModel
+     */
+    public AnalysesDefinition(final MetaModel metaModel) {
+        this.metaModel = metaModel;
+        redundancyAnalysisDefinitions = new RedundancyAnalysisDefinitions(metaModel);
+    }
+
+    /**
+     * @return
+     */
     public List<AbstractAnalysis> getNodeAnalyses() {
         return nodeAnalyses;
     }

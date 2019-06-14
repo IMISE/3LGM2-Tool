@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.path.meta;
 
 import java.util.HashMap;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -11,14 +11,17 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
 
 /**
- * Dieser Hanldler merkt sich alle
+ * Dieser Handller merkt sich alle definierten Elementarpfade.
  *
  * @author AXS (5 Dec 2018)
  */
-public class ElementaryMetaPathHandler {
+public final class ElementaryMetaPathHandler {
+
+    /** Das MetaModel, für das dieser Handler die Pfade verwaltet */
+    private final MetaModel metaModel;
 
     /** Platzhaltermetapfad für die Definition einer beliebigen Verbindung z. B. in einem {@link SequenceMetaPath} */
-    public static final ElementaryMetaPath GENERAL_ELEMENTARY_SUPER_PATH = new ElementaryMetaPath(Edge.class, Direction.FORWARD);
+    public final ElementaryMetaPath generalElementarySuperPath;
 
     /**
      * Mappt von einer Edgenklasse auf ein 2-elementiges Array von MetaPathes, wobei der erste MetaPath
@@ -28,6 +31,14 @@ public class ElementaryMetaPathHandler {
     private static final HashMap<Class<? extends Edge>, ElementaryMetaPath[]> EDGE_CLASS_TO_FORWARD_AND_BACKWARD_METAPATHES = new HashMap<>();
 
     /**
+     * @param metaModel
+     */
+    public ElementaryMetaPathHandler(final MetaModel metaModel) {
+        this.metaModel = metaModel;
+        generalElementarySuperPath = new ElementaryMetaPath(metaModel, Edge.class, Direction.FORWARD);
+    }
+
+    /**
      * Liefert für eine Edge den dazugehörigen ElementarMetaPfad. Wenn der Rückgabepfad noch nicht in der Map für die
      * Vorwärts- und Rückwärtsrichtung der Elementarpfade enthalten ist, dann wird er hinzugefügt.
      *
@@ -35,23 +46,29 @@ public class ElementaryMetaPathHandler {
      * @param direction
      * @return
      */
-    public static final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction) {
+    public final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction) {
         return getMetaPath(edgeClass, direction, (ConnectionState) null);
     }
 
-    private static final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
+    /**
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @return
+     */
+    private final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
         ElementaryMetaPath[] metaPathes = EDGE_CLASS_TO_FORWARD_AND_BACKWARD_METAPATHES.get(edgeClass);
         if (metaPathes == null) {
-            boolean isDoubleMeaningEdge = ModelConstants.isDoubleMeaningEdge(edgeClass);
+            boolean isDoubleMeaningEdge = MetaModel.isDoubleMeaningEdge(edgeClass);
             //Kanten mit doppelter Bedeutung haben für jeden ConnectionState (null, FORWARD, BACKWARD, DOUBLE) und jede Richtung (FORWARD,
             //BACKWARD) je einen Elementarmetapfad mit eigener Bedeutung. Alle anderen haben nur für jede Richtung eine Bedeutung.
             //Index des Elementarpfades ergibt sich aus dem ConnectionState = connectionState == null ? 0 : connectionState.ordinal() + 1
             metaPathes = new ElementaryMetaPath[isDoubleMeaningEdge ? 4 : 1];
-            metaPathes[0] = new ElementaryMetaPath(edgeClass, Direction.FORWARD); //0 = Index des Pfades = Direction.FORWARD.ordinal(). Das hier entspricht bei DoubleMeaningEdges dem ConnectionState.null
+            metaPathes[0] = new ElementaryMetaPath(metaModel, edgeClass, Direction.FORWARD); //0 = Index des Pfades = Direction.FORWARD.ordinal(). Das hier entspricht bei DoubleMeaningEdges dem ConnectionState.null
             if (isDoubleMeaningEdge) {
-                metaPathes[1] = new ElementaryMetaPath(edgeClass, Direction.FORWARD, ConnectionState.FORWARD);
-                metaPathes[2] = new ElementaryMetaPath(edgeClass, Direction.FORWARD, ConnectionState.BACKWARD);
-                metaPathes[3] = new ElementaryMetaPath(edgeClass, Direction.FORWARD, ConnectionState.DOUBLE);
+                metaPathes[1] = new ElementaryMetaPath(metaModel, edgeClass, Direction.FORWARD, ConnectionState.FORWARD);
+                metaPathes[2] = new ElementaryMetaPath(metaModel, edgeClass, Direction.FORWARD, ConnectionState.BACKWARD);
+                metaPathes[3] = new ElementaryMetaPath(metaModel, edgeClass, Direction.FORWARD, ConnectionState.DOUBLE);
             }
             EDGE_CLASS_TO_FORWARD_AND_BACKWARD_METAPATHES.put(edgeClass, metaPathes);
         }
@@ -63,19 +80,22 @@ public class ElementaryMetaPathHandler {
 
     /**
      * Gibt einen ElementaryMetaPath zurück, der bis auf die Start- und Zielklasse identisch ist mit dem übergebenen Elementarpfad. Sind die Start-
-     * und Zielklassen dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert zurück.
+     * und Zielklassen dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert zurück. Startklasse des zurück gegebenen Pfades ist
+     * die speziellere Klasse aus der übergebenen startClass und der Startklasse des übergebenen Elementarpfades. Endklasse analog.
      *
      * @param startClass
-     * @param originalElementaryMetaPath
+     * @param originalMetaPath
      * @param endClass
      */
-    public static final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final ElementaryMetaPath originalElementaryMetaPath, final Class<? extends ModelElement> endClass) {
-        Class<? extends ModelElement> originalStartClass = originalElementaryMetaPath.getStartClass();
-        Class<? extends ModelElement> originalEndClass = originalElementaryMetaPath.getEndClass();
-        if (startClass == originalStartClass && endClass == originalEndClass) {
-            return originalElementaryMetaPath;
+    public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final ElementaryMetaPath originalMetaPath, final Class<? extends ModelElement> endClass) {
+        Class<? extends ModelElement> originalMetaPathStartClass = originalMetaPath.getStartClass();
+        Class<? extends ModelElement> originalMetaPathEndClass = originalMetaPath.getEndClass();
+        Class<? extends ModelElement> realStartClass = ReflectionUtils.getMostSpecialElementClass(startClass, originalMetaPathStartClass);
+        Class<? extends ModelElement> realEndClass = ReflectionUtils.getMostSpecialElementClass(endClass, originalMetaPathEndClass);
+        if (originalMetaPathStartClass == realStartClass && originalMetaPathEndClass == realEndClass) {
+            return originalMetaPath;
         }
-        return new ElementaryMetaPath(startClass, originalElementaryMetaPath, endClass);
+        return new ElementaryMetaPath(metaModel, realStartClass, originalMetaPath, realEndClass);
     }
 
     /**
@@ -86,7 +106,7 @@ public class ElementaryMetaPathHandler {
      * @param originalElementaryMetaPath
      * @return
      */
-    public static final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final ElementaryMetaPath originalElementaryMetaPath) {
+    public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final ElementaryMetaPath originalElementaryMetaPath) {
         return getMetaPath(startClass, originalElementaryMetaPath, originalElementaryMetaPath.getEndClass());
     }
 
@@ -98,7 +118,7 @@ public class ElementaryMetaPathHandler {
      * @param endClass
      * @return
      */
-    public static final ElementaryMetaPath getMetaPath(final ElementaryMetaPath originalElementaryMetaPath, final Class<? extends ModelElement> endClass) {
+    public final ElementaryMetaPath getMetaPath(final ElementaryMetaPath originalElementaryMetaPath, final Class<? extends ModelElement> endClass) {
         return getMetaPath(originalElementaryMetaPath.getStartClass(), originalElementaryMetaPath, endClass);
     }
 
@@ -108,7 +128,7 @@ public class ElementaryMetaPathHandler {
      * @param direction
      * @return
      */
-    public static final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Direction direction) {
+    public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Direction direction) {
         ElementaryMetaPath metaPath = getMetaPath(edgeClass, direction);
         return getMetaPath(startClass, metaPath, metaPath.getEndClass());
     }
@@ -119,7 +139,7 @@ public class ElementaryMetaPathHandler {
      * @param endClass
      * @return
      */
-    public static final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final Class<? extends ModelElement> endClass) {
+    public final ElementaryMetaPath getMetaPath(final Class<? extends Edge> edgeClass, final Direction direction, final Class<? extends ModelElement> endClass) {
         ElementaryMetaPath metaPath = getMetaPath(edgeClass, direction);
         return getMetaPath(metaPath.getStartClass(), metaPath, endClass);
     }
@@ -131,7 +151,7 @@ public class ElementaryMetaPathHandler {
      * @param endClass
      * @return
      */
-    public static final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Direction direction, final Class<? extends ModelElement> endClass) {
+    public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Direction direction, final Class<? extends ModelElement> endClass) {
         ElementaryMetaPath metaPath = getMetaPath(edgeClass, direction);
         return getMetaPath(startClass, metaPath, endClass);
     }
@@ -140,7 +160,7 @@ public class ElementaryMetaPathHandler {
      * @param edgeClass
      * @return
      */
-    public static final ElementaryMetaPath getForwardMetaPath(final Class<? extends Edge> edgeClass) {
+    public final ElementaryMetaPath getForwardMetaPath(final Class<? extends Edge> edgeClass) {
         return getMetaPath(edgeClass, Direction.FORWARD);
     }
 
@@ -157,7 +177,7 @@ public class ElementaryMetaPathHandler {
      * @param connectionState
      * @return
      */
-    public static final ElementaryMetaPath getForwardMetaPath(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass, final ConnectionState connectionState) {
+    public final ElementaryMetaPath getForwardMetaPath(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass, final ConnectionState connectionState) {
         return getMetaPath(doubleMeaningEdgeClass, Direction.FORWARD, connectionState);
     }
 
@@ -169,8 +189,8 @@ public class ElementaryMetaPathHandler {
      * @param endClass
      * @return
      */
-    public static final ElementaryMetaPath _getForwardMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
-        Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(startClass, endClass);
+    public final ElementaryMetaPath _getForwardMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
+        Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(startClass, endClass);
         Class<? extends Edge> commonSuperClass = null;
         for (Class<? extends Edge> edgeClass : edgeTypes) {
             if (Edge.isConnectingForward(edgeClass, startClass, endClass)) {

@@ -4,14 +4,6 @@ import static de.imise.tool3lgm.Static.getCollections;
 import static de.imise.tool3lgm.Static.getPreSelectedGDCollection;
 import static de.imise.tool3lgm.Tool3lgmConstants.getIcon;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getBackwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getForwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getFullBackwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getFullForwardMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getFullMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getMetaAssociationName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
@@ -89,7 +81,7 @@ import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.context.AnalysesRepository;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
@@ -118,7 +110,6 @@ import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.pair.Pair;
-import de.imise.util.swing.menu.DynamicMenu;
 import de.imise.util.swing.menu.MenuScroller;
 
 /**
@@ -159,7 +150,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * COMMENTME
      */
-    private JMenuItem nicht_trans_layer, halb_trans_layer, voll_trans_layer;
+    private JMenuItem layer_transparencey_none, layer_transparencey_semi, layer_transparencey_full;
 
     /**
      * COMMENTME
@@ -212,13 +203,13 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private boolean resizing = false;
 
     /** Icon für das Herstellen einer Verbindung */
-    static ImageIcon verbindung_anlegen = getIcon("verbindung_anlegen.gif");
+    static ImageIcon link_icon = getIcon("verbindung_anlegen.gif");
 
     /** Icon für das Trennen einer Verbindung */
-    static ImageIcon verbindung_trennen = getIcon("verbindung_trennen.gif");
+    static ImageIcon unlink_icon = getIcon("verbindung_trennen.gif");
 
-    /** Element, das den Kontekt vorgibt, also das Element auf das sich die Aktionen beziehen. */
-    private ElementContainer mc = null;
+    /** Element, das den Kontext vorgibt, also das Element auf das sich die Aktionen beziehen. */
+    private ElementContainer ec = null;
 
     /**
      * Konstruktor, den Tool3lgm am Anfang aufruft. Der ContextListener und das
@@ -280,7 +271,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         queue = getItem(MODEL_ACTION_PRINT_QUEUE);
         consistency = getItem(MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY);
 
-        internals = new DynamicMenu(getResString("intern"));
+        internals = new JMenu(getResString("intern"));
         internals.add(verify);
         internals.add(interactive);
         internals.add(expertMode);
@@ -292,15 +283,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         // weiter mit Grafik-Sachen
         normalize_layer = getItem(MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);
-        voll_trans_layer = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
-        halb_trans_layer = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
-        nicht_trans_layer = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
+        layer_transparencey_full = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
+        layer_transparencey_semi = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
+        layer_transparencey_none = getItem(MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
         color_layer = getItem(MODEL_ACTION_SET_LAYER_COLOR);
 
         JMenu trans_layer = new JMenu(getResString("layerTransparencyMenu"));
-        trans_layer.add(nicht_trans_layer);
-        trans_layer.add(halb_trans_layer);
-        trans_layer.add(voll_trans_layer);
+        trans_layer.add(layer_transparencey_none);
+        trans_layer.add(layer_transparencey_semi);
+        trans_layer.add(layer_transparencey_full);
 
         layout_layer = new JMenu(getResString("layerLayoutMenu"));
         layout_layer.add(normalize_layer);
@@ -402,25 +393,22 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         ModelElement me = ec.getElement();
         Class<? extends ModelElement> elementClass = me.getClass();
         JMenu sub_elem = new JMenu(getResString("unterg_el"));
+        MetaModel metaModel = doc.getMetaModel();
         //die Elementklasse darf man nicht bearbeiten, also auch keine Unterelemente hinzufügen -> raus
-        if (!ModelConstants.isEditable(elementClass)) {
+        if (!metaModel.isEditable(elementClass)) {
             return sub_elem;
         }
-
         HashSet<Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>>> slavePairs = new HashSet<>();
-        for (Class<? extends CompositionEdge> compositionClass : ModelConstants.getCompositionEdgeTypesForMaster(elementClass)) {
+        for (Class<? extends CompositionEdge> compositionClass : metaModel.getCompositionEdgeTypesForMaster(elementClass)) {
             Class<? extends ModelElement> abstractSlaves = CompositionEdge.getSlaveType(compositionClass);
-            for (Class<? extends ModelElement> instanciableSlaves : ModelConstants.getInstanciableAssignableClasses(abstractSlaves)) {
+            for (Class<? extends ModelElement> instanciableSlaves : metaModel.getInstanciableAssignableClasses(abstractSlaves)) {
                 slavePairs.add(new Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>>(compositionClass, instanciableSlaves));
             }
         }
-
         if (slavePairs.size() == 0) {
             return sub_elem;
         }
-
         ArrayList<JMenuItem> items = new ArrayList<>(slavePairs.size());
-
         for (Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>> slavePair : slavePairs) {
             Class<? extends CompositionEdge> compositionClass = slavePair.getFirstItem();
             JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), MODEL_ACTION_CREATE_ADDICTED, doc.getHashString() + " " + me.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
@@ -487,12 +475,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         GDCollection gdcoll = doc.getCollection();
         for (Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getTitle());
-
             /* ist Node schon mit diesem Szenario verknüpft */
-            if (mc != null && mc.getElement() instanceof Node && szen.getHashString().equals(((Node) mc.getElement()).getAssociatedDoc())) {
-                item.setEnabled(false);
+            if (ec != null) {
+                ModelElement me = ec.getElement();
+                String szenHash = szen.getHashString();
+                String associatedSzenHash = me.getAssociatedDoc();
+                if (szenHash.equals(associatedSzenHash)) {
+                    item.setEnabled(false);
+                }
             }
-
             item.addActionListener(this);
             item.setActionCommand(MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL + " " + szen.getHashString());
             link_to_szenario_menu.add(item);
@@ -513,10 +504,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param ec
      * @return
      */
-    private JPopupMenu getSingleKnotContextMenu(final Component contextSource, final ElementContainer ec) {
-        //		System.err.println("ContextGenerator.getSingleKnotContextMenu()");
+    private JPopupMenu getSingleNodeContextMenu(final Component contextSource, final ElementContainer ec) {
+        //		System.err.println("ContextGenerator.getSingleNodeContextMenu()");
         JPopupMenu menu = new JPopupMenu();
-        mc = ec;
+        this.ec = ec;
         ModelElement me = ec.getElement();
         if (!(ec instanceof BendpointContainer)) {
             addMenuItem(menu, properties);
@@ -526,14 +517,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             //Anlegbare Pfade zu anderen Elementen anbieten
             JLabel connectLabel = null;
-            for (SimpleMetaPath metaPath : ModelConstants.getCreatableMetaPaths(meClass)) {
+            MetaModel metaModel = me.getMetaModel();
+            for (SimpleMetaPath metaPath : metaModel.getCreatableMetaPaths(meClass)) {
                 if (connectLabel == null) {
                     connectLabel = new JLabel(getResString("LABEL_CONNECT"));
                     menu.add(connectLabel);
                 }
                 Class<? extends ModelElement> endClass = metaPath.getEndClass();
                 JMenu pathConnectableElements = new JMenu(metaPath.getName(false, true));
-                pathConnectableElements.setIcon(verbindung_anlegen);
+                pathConnectableElements.setIcon(link_icon);
                 List<ModelElement> endElements = doc.getModelItems(endClass, true, true);
                 pathConnectableElements.setEnabled(!endElements.isEmpty());
                 menu.add(pathConnectableElements);
@@ -546,17 +538,18 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             //InstaciationEdges -> "Neue Instanz" der verbundenen Klasse erzeugen anbieten
             JLabel newInstanceLabel = null;
-            if (!ModelConstants.isSlaveType(meClass)) {
-                for (Class<? extends Edge> edgeClass : getEdgeTypes(meClass)) {
+            if (!metaModel.isSlaveType(meClass)) {
+                ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+                for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(meClass)) {
                     if (InstanciationEdge.class.isAssignableFrom(edgeClass) && Edge.isStartClass(edgeClass, meClass)) {
                         if (newInstanceLabel == null) {
                             newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
                             menu.add(newInstanceLabel);
                         }
-                        String toolTip = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+                        String toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                         Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
-                        String label = ElementsNameBuilder.getDisplayableName(endClass);
-                        JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, edgeClass.getSimpleName(), verbindung_anlegen, true, toolTip);
+                        String label = elementsNameBuilder.getDisplayableName(endClass);
+                        JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, edgeClass.getSimpleName(), link_icon, true, toolTip);
                         menu.add(item);
                     }
                 }
@@ -593,7 +586,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                     addMenuItem(menu, show_configs);
                     addMenuItem(menu, hide_configs);
                 }
-                if (ModelConstants.hasLayout(me.getClass())) {
+                if (metaModel.hasLayout(me.getClass())) {
                     menu.addSeparator();
                     if (!ec.isVisible()) {
                         menu.add(set_visible);
@@ -662,7 +655,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param contextSource
      * @return
      */
-    private JPopupMenu getMultiKnotContextMenu(final Component contextSource) {
+    private JPopupMenu getMultiNodeContextMenu(final Component contextSource) {
 
         JPopupMenu menu = new JPopupMenu();
 
@@ -677,18 +670,21 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             List<NamedObjectContainer<JMenuItem>> connectableItems = new ArrayList<>();
             List<NamedObjectContainer<JMenuItem>> disconnectableItems = new ArrayList<>();
 
+            MetaModel metaModel = doc.getMetaModel();
+            ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
+
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                 List<Object> edgesAndPaths = new ArrayList<>();
-                edgesAndPaths.addAll(Arrays.asList(getEdgeTypes(lastSelectedClass, me2Class)));
-                edgesAndPaths.addAll(ModelConstants.getCreatableMetaPaths(lastSelectedClass, me2Class));
+                edgesAndPaths.addAll(Arrays.asList(metaModel.getEdgeTypes(lastSelectedClass, me2Class)));
+                edgesAndPaths.addAll(metaModel.getCreatableMetaPaths(lastSelectedClass, me2Class));
                 for (Object edgeClassOrMetaPath : edgesAndPaths) {
                     if (edgeClassOrMetaPath instanceof Class) {
                         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassOrMetaPath).asSubclass(Edge.class);
                         //Hat-Teil-Kante
                         if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
                             if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-                                String label = getForwardMetaAssociationName(edgeClass, false, true);
-                                String toolTip = getFullForwardMetaAssociationName(edgeClass);
+                                String label = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
+                                String toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -705,12 +701,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                         break;
                                     }
                                 }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectable, toolTip), label));
+                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
                             }
                             if (isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
-                                String label = getBackwardMetaAssociationName(edgeClass, false, true);
-                                String toolTip = getFullBackwardMetaAssociationName(edgeClass);
+                                String label = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
+                                String toolTip = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -727,16 +723,16 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                         break;
                                     }
                                 }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
+                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectable, toolTip), label));
+                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectable, toolTip), label));
                             }
                             //Kante mit Doppelter Bedeutung
-                        } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+                        } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                             if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
                                 Direction direction = Direction.FORWARD;
                                 ConnectionState connectionState = ConnectionState.FORWARD;
-                                String label = getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                String toolTip = getFullMetaAssociationName(edgeClass, direction, connectionState);
+                                String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
+                                String toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -752,12 +748,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                         break;
                                     }
                                 }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectable, toolTip), label));
+                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
 
                                 connectionState = ConnectionState.BACKWARD;
-                                label = getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                toolTip = getFullMetaAssociationName(edgeClass, direction, connectionState);
+                                label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
+                                toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
                                 connectable = false;
                                 disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -773,16 +769,16 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                         break;
                                     }
                                 }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
+                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectable, toolTip), label));
+                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectable, toolTip), label));
                             }
                             // Doppeldeutige Kanten mit identischer Start- und
                             // Endklasse brauchen nur 1x angeboten werden
                             if (isConnectingForward(edgeClass, me2Class, lastSelectedClass) && getStartClass(edgeClass) != getEndClass(edgeClass)) {
                                 Direction direction = Direction.BACKWARD;
                                 ConnectionState connectionState = ConnectionState.FORWARD;
-                                String label = getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                String toolTip = getFullMetaAssociationName(edgeClass, direction, connectionState);
+                                String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
+                                String toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -798,12 +794,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                         break;
                                     }
                                 }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectable, toolTip), label));
+                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectable, toolTip), label));
+                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
 
                                 connectionState = ConnectionState.BACKWARD;
-                                label = getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                toolTip = getFullMetaAssociationName(edgeClass, direction, connectionState);
+                                label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
+                                toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
                                 connectable = false;
                                 disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -819,16 +815,16 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                         break;
                                     }
                                 }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectable, toolTip), label));
+                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectable, toolTip), label));
+                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectable, toolTip), label));
 
                             }
                             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
-                        } else if (Edge.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && Edge.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && ModelConstants.isDirectedEdge(edgeClass)) {
-                            String labelForward = getForwardMetaAssociationName(edgeClass, false, true);
-                            String toolTipForward = getFullForwardMetaAssociationName(edgeClass);
-                            String labelBackward = getBackwardMetaAssociationName(edgeClass, false, true);
-                            String toolTipBackward = getFullBackwardMetaAssociationName(edgeClass);
+                        } else if (Edge.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && Edge.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && metaModel.isDirectedEdge(edgeClass)) {
+                            String labelForward = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
+                            String toolTipForward = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+                            String labelBackward = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
+                            String toolTipBackward = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
                             boolean connectableForward = false;
                             boolean disconnectableForward = false;
                             boolean connectableBackward = false;
@@ -851,10 +847,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(labelForward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_anlegen, connectableForward, toolTipForward), labelForward));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(labelForward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, verbindung_trennen, disconnectableForward, toolTipForward), labelForward));
-                            connectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_anlegen, connectableBackward, toolTipBackward), labelBackward));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, verbindung_trennen, disconnectableBackward, toolTipBackward), labelBackward));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(labelForward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectableForward, toolTipForward), labelForward));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(labelForward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectableForward, toolTipForward), labelForward));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectableBackward, toolTipBackward), labelBackward));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectableBackward, toolTipBackward), labelBackward));
 
                         } else if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
                             //diese Kanten sind bei Mehrfachauswahl zu ignorieren!
@@ -864,12 +860,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             String toolTip;
                             if (isStartClass(edgeClass, lastSelectedClass)) {
                                 direction = FORWARD;
-                                label = getForwardMetaAssociationName(edgeClass, false, true);
-                                toolTip = getFullForwardMetaAssociationName(edgeClass);
+                                label = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
+                                toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                             } else {
                                 direction = BACKWARD;
-                                label = getBackwardMetaAssociationName(edgeClass, false, true);
-                                toolTip = getFullBackwardMetaAssociationName(edgeClass);
+                                label = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
+                                toolTip = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
                             }
                             boolean connectable = false;
                             boolean disconnectable = false;
@@ -893,8 +889,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + direction, verbindung_anlegen, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + direction, verbindung_trennen, disconnectable, toolTip), label));
+                            connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + direction, link_icon, connectable, toolTip), label));
+                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + direction, unlink_icon, disconnectable, toolTip), label));
                         }
                     } else {
                         SimpleMetaPath metaPath = (SimpleMetaPath) edgeClassOrMetaPath;
@@ -1008,7 +1004,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param source
      * @return
      */
-    public final JPopupMenu getKnotContextMenu(final Component source) {
+    public final JPopupMenu getNodeContextMenu(final Component source) {
         JPopupMenu menu = new JPopupMenu();
         if (doc.isSelectedOnlyBendpoints()) {
             if (doc instanceof Szenario) {
@@ -1016,9 +1012,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             }
         } else {
             if (doc.isSingleSelection()) {
-                menu = getSingleKnotContextMenu(source, doc.getLastSelected());
+                menu = getSingleNodeContextMenu(source, doc.getLastSelected());
             } else if (doc.isMultipleSelection()) {
-                menu = getMultiKnotContextMenu(source);
+                menu = getMultiNodeContextMenu(source);
             }
         }
         return menu;
@@ -1027,7 +1023,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private final JPopupMenu getSingleTraceContextMenu() {
+    private final JPopupMenu getSingleEdgeContextMenu() {
         //		System.err.println("ContextGenerator.getSingleEdgeContextMenu()");
         JPopupMenu menu = new JPopupMenu();
         if (doc.isSingleSelection() && doc.getLastSelected() instanceof EdgeContainer) {
@@ -1049,7 +1045,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private final JPopupMenu getMultiTraceContextMenu() {
+    private final JPopupMenu getMultiEdgeContextMenu() {
         JPopupMenu menu = new JPopupMenu();
         if (menu.getComponentCount() > 0) {
             menu.addSeparator();
@@ -1070,11 +1066,11 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private final JPopupMenu getTraceContextMenu() {
+    private final JPopupMenu getEdgeContextMenu() {
         if (doc.isSingleSelection()) {
-            return getSingleTraceContextMenu();
+            return getSingleEdgeContextMenu();
         }
-        return getMultiTraceContextMenu();
+        return getMultiEdgeContextMenu();
     }
 
     /**
@@ -1103,13 +1099,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    private JMenu getNewKnotMenu() {
+    private JMenu getCreateNewNodesMenu() {
         int activeLayer = doc.getCollection().getActiveLayer();
-        Iterable<Class<? extends ModelElement>> creatableLayerNodes = ModelConstants.getCreatableLayerNodes(activeLayer);
+        MetaModel metaModel = doc.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        Iterable<Class<? extends ModelElement>> creatableLayerNodes = metaModel.getCreatableLayerNodes(activeLayer);
         JMenu layerMenu = new JMenu(getResString("el_neu"));
         for (Class<? extends ModelElement> elementClass : creatableLayerNodes) {
-            if (ModelConstants.isEditable(elementClass)) {
-                JMenuItem item = new JMenuItem(ElementsNameBuilder.getDisplayableName(elementClass));
+            if (metaModel.isEditable(elementClass)) {
+                JMenuItem item = new JMenuItem(elementsNameBuilder.getDisplayableName(elementClass));
                 item.addActionListener(this);
                 item.setActionCommand(MODEL_ACTION_CREATE_NODE + " " + elementClass.getName());
                 layerMenu.add(item);
@@ -1141,7 +1139,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     public final JPopupMenu getLayerContextMenu() {
         JPopupMenu menu = new JPopupMenu();
-        menu.add(getNewKnotMenu());
+        menu.add(getCreateNewNodesMenu());
         menu.add(new_text);
         menu.addSeparator();
 
@@ -1218,7 +1216,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * @return
      */
-    public boolean getResizing() {
+    public boolean isResizing() {
         return resizing;
     }
 
@@ -1232,46 +1230,46 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * COMMENTME
      */
-    protected boolean elementGetroffen = false;
+    protected boolean elementClicked = false;
 
     /**
      * @return
      */
-    public boolean getElementGetroffen() {
-        return elementGetroffen;
+    public boolean isElementClicked() {
+        return elementClicked;
     }
 
     /**
      * @param b
      */
-    public void setElementGetroffen(final boolean b) {
-        elementGetroffen = b;
+    public void setElementClicked(final boolean b) {
+        elementClicked = b;
     }
 
     /**
      * COMMENTME
      */
-    protected boolean ebeneGetroffen = false;
+    protected boolean layerClicked = false;
 
     /**
      * @return
      */
-    public boolean getEbeneGetroffen() {
-        return ebeneGetroffen;
+    public boolean isLayerClicked() {
+        return layerClicked;
     }
 
     /**
      * @param b
      */
-    public void setEbeneGetroffen(final boolean b) {
-        ebeneGetroffen = b;
+    public void setLayerClicked(final boolean b) {
+        layerClicked = b;
     }
 
     /**
-     * @param modelElementCont
+     * @param ec
      */
-    public void setModelElement(final ElementContainer modelElementCont) {
-        mc = modelElementCont;
+    public void setElementContainer(final ElementContainer ec) {
+        this.ec = ec;
     }
 
     /**
@@ -1324,11 +1322,11 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             // nur Kanten selektiert
             if (doc.isSelectedOnlyEdges()) {
                 if (left_button && !controlled) {
-                    left_knothand_noshift_traces();
+                    left_nodehand_noshift_edges();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_knothand_shift_traces();
+                    left_nodehand_shift_edges();
                     return;
                 }
                 return;
@@ -1336,56 +1334,56 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             // nur Node selektiert
             if (doc.isSelectedOnlyNodes()) {
                 if (left_button && !controlled) {
-                    left_knothand_noshift_knots();
+                    left_nodehand_noshift_nodes();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_knothand_shift_knots();
+                    left_nodehand_shift_nodes();
                     return;
                 }
                 return;
             }
             // Node und Kanten selektiert
             if (left_button && !controlled) {
-                left_knothand_noshift_multi();
+                left_nodehand_noshift_multi();
                 return;
             }
             if (left_button && controlled) {
-                left_knothand_shift_multi();
+                left_nodehand_shift_multi();
                 return;
             }
             return;
         }
 
-        if (elementGetroffen) {
+        if (elementClicked) {
             //wenn man auf einer selektierten Edge das Kontexmenü auf einem Knickpunkt öffnet,
             //dann soll das Kontextmenü aufgehen, als wäre die Edge angeklickt worden und nicht
             //der BendpointContainer, der ja ein Knotenkontainer ist und ein sinnloses Kontextmenü
             //anzeigen würde
-            if (mc instanceof BendpointContainer) {
-                EdgeContainer kc = ((Bendpoint) mc.getElement()).getOwner();
+            if (ec instanceof BendpointContainer) {
+                EdgeContainer kc = ((Bendpoint) ec.getElement()).getOwner();
                 if (doc.isSelected(kc)) {
                     if (left_button) {
-                        doc.select(mc, TransactionManager.STANDARD_PID);
+                        doc.select(ec, TransactionManager.STANDARD_PID);
                     } else {
-                        mc = kc;
+                        ec = kc;
                     }
                 }
             }
 
-            if (mc instanceof NodeContainer) {
+            if (ec instanceof NodeContainer) {
                 // nichts selektiert
                 if (!doc.isSelection()) {
                     if (left_button && !controlled) {
-                        left_knot_noshift_none();
+                        left_node_noshift_none();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_knot_shift_none();
+                        left_node_shift_none();
                         return;
                     }
                     if (right_button) {
-                        right_knot_none(gdl, xin, yin);
+                        right_node_none(gdl, xin, yin);
                         return;
                     }
                     return;
@@ -1393,15 +1391,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 // nur Kanten selektiert
                 if (doc.isSelectedOnlyEdges()) {
                     if (left_button && !controlled) {
-                        left_knot_noshift_traces();
+                        left_node_noshift_edges();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_knot_shift_traces();
+                        left_node_shift_edges();
                         return;
                     }
                     if (right_button) {
-                        right_knot_traces(gdl, xin, yin);
+                        right_node_edges(gdl, xin, yin);
                         return;
                     }
                     return;
@@ -1409,46 +1407,46 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 // nur Node selektiert
                 if (doc.isSelectedOnlyNodes()) {
                     if (left_button && !controlled) {
-                        left_knot_noshift_knots();
+                        left_node_noshift_nodes();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_knot_shift_knots();
+                        left_node_shift_nodes();
                         return;
                     }
                     if (right_button) {
-                        right_knot_knots(gdl, xin, yin);
+                        right_node_nodes(gdl, xin, yin);
                         return;
                     }
                     return;
                 }
                 // Node und Kanten selektiert
                 if (left_button && !controlled) {
-                    left_knot_noshift_multi();
+                    left_node_noshift_multi();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_knot_shift_multi();
+                    left_node_shift_multi();
                     return;
                 }
                 if (right_button) {
-                    right_knot_multi(gdl, xin, yin);
+                    right_node_multi(gdl, xin, yin);
                     return;
                 }
                 return;
-            } else if (mc instanceof EdgeContainer) {
+            } else if (ec instanceof EdgeContainer) {
                 // nichts selektiert
                 if (!doc.isSelection()) {
                     if (left_button && !controlled) {
-                        left_trace_noshift_none();
+                        left_edge_noshift_none();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_trace_shift_none();
+                        left_edge_shift_none();
                         return;
                     }
                     if (right_button) {
-                        right_trace_none(gdl, xin, yin);
+                        right_edge_none(gdl, xin, yin);
                         return;
                     }
                     return;
@@ -1456,15 +1454,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 // nur Kanten selektiert
                 if (doc.isSelectedOnlyEdges()) {
                     if (left_button && !controlled) {
-                        left_trace_noshift_traces();
+                        left_edge_noshift_edges();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_trace_shift_traces();
+                        left_edge_shift_edges();
                         return;
                     }
                     if (right_button) {
-                        right_trace_traces(gdl, xin, yin);
+                        right_edge_edges(gdl, xin, yin);
                         return;
                     }
                     return;
@@ -1472,37 +1470,37 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 // nur Node selektiert
                 if (doc.isSelectedOnlyNodes()) {
                     if (left_button && !controlled) {
-                        left_trace_noshift_knots();
+                        left_edge_noshift_nodes();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_trace_shift_knots();
+                        left_edge_shift_nodes();
                         return;
                     }
                     if (right_button) {
-                        right_trace_knots(gdl, xin, yin);
+                        right_edge_nodes(gdl, xin, yin);
                         return;
                     }
                     return;
                 }
                 // Node und Kanten selektiert
                 if (left_button && !controlled) {
-                    left_trace_noshift_multi();
+                    left_edge_noshift_multi();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_trace_shift_multi();
+                    left_edge_shift_multi();
                     return;
                 }
                 if (right_button) {
-                    right_trace_multi(gdl, xin, yin);
+                    right_edge_multi(gdl, xin, yin);
                     return;
                 }
                 return;
             }
         }
 
-        if (ebeneGetroffen) {
+        if (layerClicked) {
             // nichts selektiert
             if (!doc.isSelection()) {
                 if (left_button && !controlled) {
@@ -1522,15 +1520,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             // nur Kanten selektiert
             if (doc.isSelectedOnlyEdges()) {
                 if (left_button && !controlled) {
-                    left_layer_noshift_traces();
+                    left_layer_noshift_edges();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_layer_shift_traces();
+                    left_layer_shift_edges();
                     return;
                 }
                 if (right_button) {
-                    right_layer_traces(gdl, xin, yin);
+                    right_layer_edges(gdl, xin, yin);
                     return;
                 }
                 return;
@@ -1538,15 +1536,15 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             // nur Node selektiert
             if (doc.isSelectedOnlyNodes()) {
                 if (left_button && !controlled) {
-                    left_layer_noshift_knots();
+                    left_layer_noshift_nodes();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_layer_shift_knots();
+                    left_layer_shift_nodes();
                     return;
                 }
                 if (right_button) {
-                    right_layer_knots(gdl, xin, yin);
+                    right_layer_nodes(gdl, xin, yin);
                     return;
                 }
                 return;
@@ -1608,14 +1606,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      *
      */
-    private void left_layer_noshift_knots() {
+    private void left_layer_noshift_nodes() {
         doc.deselectAll(false);
     }
 
     /**
      *
      */
-    private void left_layer_noshift_traces() {
+    private void left_layer_noshift_edges() {
         doc.deselectAll(false);
     }
 
@@ -1635,14 +1633,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      *
      */
-    private void left_layer_shift_knots() {
+    private void left_layer_shift_nodes() {
         doc.deselectAll(false);
     }
 
     /**
      *
      */
-    private void left_layer_shift_traces() {
+    private void left_layer_shift_edges() {
         doc.deselectAll(false);
     }
 
@@ -1667,7 +1665,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private void right_layer_knots(final Component gdl, final int xin, final int yin) {
+    private void right_layer_nodes(final Component gdl, final int xin, final int yin) {
         menu = getLayerContextMenu();
         menu.show(gdl, xin, yin);
     }
@@ -1677,7 +1675,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private void right_layer_traces(final Component gdl, final int xin, final int yin) {
+    private void right_layer_edges(final Component gdl, final int xin, final int yin) {
         menu = getLayerContextMenu();
         menu.show(gdl, xin, yin);
     }
@@ -1701,9 +1699,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private void right_knot_none(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(mc, 0);
-        menu = getKnotContextMenu(gdl);
+    private void right_node_none(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(ec, 0);
+        menu = getNodeContextMenu(gdl);
         menu.show(gdl, xin, yin);
     }
 
@@ -1712,9 +1710,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private void right_knot_knots(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(mc, 0);
-        menu = getKnotContextMenu(gdl);
+    private void right_node_nodes(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(ec, 0);
+        menu = getNodeContextMenu(gdl);
         menu.show(gdl, xin, yin);
     }
 
@@ -1723,8 +1721,8 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private void right_knot_traces(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(mc, 0);
+    private void right_node_edges(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(ec, 0);
         menu = getMultiContextMenu();
         menu.show(gdl, xin, yin);
     }
@@ -1734,12 +1732,12 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private void right_knot_multi(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(mc, 0);
+    private void right_node_multi(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(ec, 0);
         //Wenn mind. 2 Node selektiert sind und das Kontextmenü auf einem Node aufgerufen wurde,
         //kann man auch das Knotenkontextmenü anbieten
         //		menu = getMultiContextMenu();
-        menu = getMultiKnotContextMenu(gdl);
+        menu = getMultiNodeContextMenu(gdl);
         menu.show(gdl, xin, yin);
     }
 
@@ -1748,61 +1746,61 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      *
      */
-    private void left_knot_noshift_none() {
-        doc.select(mc, 0);
+    private void left_node_noshift_none() {
+        doc.select(ec, 0);
     }
 
     /**
      *
      */
-    private void left_knot_noshift_knots() {
-        doc.select(mc, 0);
+    private void left_node_noshift_nodes() {
+        doc.select(ec, 0);
     }
 
     /**
      *
      */
-    private void left_knot_noshift_traces() {
-        doc.select(mc, 0);
+    private void left_node_noshift_edges() {
+        doc.select(ec, 0);
     }
 
     /**
      *
      */
-    private void left_knot_noshift_multi() {
-        doc.select(mc, 0);
+    private void left_node_noshift_multi() {
+        doc.select(ec, 0);
     }
 
     /**
      *
      */
-    private void left_knot_shift_none() {
-        doc.addToSelection(mc, 0);
+    private void left_node_shift_none() {
+        doc.addToSelection(ec, 0);
     }
 
     /**
      *
      */
-    private void left_knot_shift_knots() {
-        if (mc.isSelected()) {
-            doc.deselect(mc, 0);
+    private void left_node_shift_nodes() {
+        if (ec.isSelected()) {
+            doc.deselect(ec, 0);
         } else {
-            doc.addToSelection(mc, 0);
+            doc.addToSelection(ec, 0);
         }
     }
 
     /**
      *
      */
-    private void left_knot_shift_traces() {
-        left_knot_shift_knots();
+    private void left_node_shift_edges() {
+        left_node_shift_nodes();
     }
 
     /**
      *
      */
-    private void left_knot_shift_multi() {
-        left_knot_shift_knots();
+    private void left_node_shift_multi() {
+        left_node_shift_nodes();
     }
 
     // Klicks auf die Kanten
@@ -1810,61 +1808,61 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      *
      */
-    private void left_trace_noshift_none() {
-        doc.select(mc, 0);
+    private void left_edge_noshift_none() {
+        doc.select(ec, 0);
     }
 
     /**
      *
      */
-    private void left_trace_noshift_knots() {
-        doc.select(mc, 0);
+    private void left_edge_noshift_nodes() {
+        doc.select(ec, 0);
     }
 
     /**
      *
      */
-    private void left_trace_noshift_traces() {
-        doc.select(mc, 0);
+    private void left_edge_noshift_edges() {
+        doc.select(ec, 0);
     }
 
     /**
      *
      */
-    private void left_trace_noshift_multi() {
-        doc.select(mc, 0);
+    private void left_edge_noshift_multi() {
+        doc.select(ec, 0);
     }
 
     /**
      *
      */
-    private void left_trace_shift_none() {
-        doc.addToSelection(mc, 0);
+    private void left_edge_shift_none() {
+        doc.addToSelection(ec, 0);
     }
 
     /**
      *
      */
-    private void left_trace_shift_knots() {
-        if (mc.isSelected()) {
-            doc.deselect(mc, 0);
+    private void left_edge_shift_nodes() {
+        if (ec.isSelected()) {
+            doc.deselect(ec, 0);
         } else {
-            doc.addToSelection(mc, 0);
+            doc.addToSelection(ec, 0);
         }
     }
 
     /**
      *
      */
-    private void left_trace_shift_traces() {
-        left_trace_shift_knots();
+    private void left_edge_shift_edges() {
+        left_edge_shift_nodes();
     }
 
     /**
      *
      */
-    private void left_trace_shift_multi() {
-        left_trace_shift_knots();
+    private void left_edge_shift_multi() {
+        left_edge_shift_nodes();
     }
 
     /**
@@ -1872,9 +1870,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private void right_trace_none(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(mc, 0);
-        menu = getTraceContextMenu();
+    private void right_edge_none(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(ec, 0);
+        menu = getEdgeContextMenu();
         menu.show(gdl, xin, yin);
     }
 
@@ -1883,9 +1881,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private void right_trace_knots(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(mc, 0);
-        menu = getTraceContextMenu();
+    private void right_edge_nodes(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(ec, 0);
+        menu = getEdgeContextMenu();
         menu.show(gdl, xin, yin);
     }
 
@@ -1894,9 +1892,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private void right_trace_traces(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(mc, 0);
-        menu = getTraceContextMenu();
+    private void right_edge_edges(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(ec, 0);
+        menu = getEdgeContextMenu();
         menu.show(gdl, xin, yin);
     }
 
@@ -1905,9 +1903,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param xin
      * @param yin
      */
-    private void right_trace_multi(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(mc, 0);
-        menu = getTraceContextMenu();
+    private void right_edge_multi(final Component gdl, final int xin, final int yin) {
+        doc.addToSelection(ec, 0);
+        menu = getEdgeContextMenu();
         menu.show(gdl, xin, yin);
     }
 
@@ -1915,11 +1913,11 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     // Klicks mit rechts
     /*
-     * private void right_knothand_knots() {
+     * private void right_nodehand_nodes() {
      * }
-     * private void right_knothand_traces() {
+     * private void right_nodehand_edges() {
      * }
-     * private void right_knothand_multi() {
+     * private void right_nodehand_multi() {
      * }
      */
     // Klicks mit links
@@ -1927,40 +1925,40 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      *
      */
-    private void left_knothand_noshift_knots() {
-        doc.select(mc, 0);
+    private void left_nodehand_noshift_nodes() {
+        doc.select(ec, 0);
     }
 
     /**
      *
      */
-    private void left_knothand_noshift_traces() {
-        doc.select(mc, 0);
+    private void left_nodehand_noshift_edges() {
+        doc.select(ec, 0);
     }
 
     /**
      *
      */
-    private void left_knothand_noshift_multi() {
-        doc.select(mc, 0);
+    private void left_nodehand_noshift_multi() {
+        doc.select(ec, 0);
     }
 
     /**
      *
      */
-    private void left_knothand_shift_knots() {
+    private void left_nodehand_shift_nodes() {
     }
 
     /**
      *
      */
-    private void left_knothand_shift_traces() {
+    private void left_nodehand_shift_edges() {
     }
 
     /**
      *
      */
-    private void left_knothand_shift_multi() {
+    private void left_nodehand_shift_multi() {
     }
 
     /**
@@ -2011,7 +2009,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         if (ec != null && ec.getElement() instanceof Node) {
             // Alle Analysen für die ausgewählte Klasse holen
             Class<? extends ModelElement> elementClass = ec.getElement().getClass();
-            List<AbstractAnalysis> analysis = AnalysesRepository.getAnalyses(elementClass);
+            List<AbstractAnalysis> analysis = AnalysesRepository.getAnalyses(Static.getSelectedMetaModel(), elementClass);
             // Analysen ins Menü eintragen
             for (final AbstractAnalysis ana : analysis) {
                 JMenuItem item = new JMenuItem(ana.getName());
@@ -2031,7 +2029,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private Action createPathAction(final SimpleMetaPath path2create) {
-        return createPathAction(path2create, doc.getSelectedElements(), path2create.getName(false, true), verbindung_anlegen);
+        return createPathAction(path2create, doc.getSelectedElements(), path2create.getName(false, true), link_icon);
     }
 
     /**
@@ -2140,7 +2138,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private JMenuItem getJoinMenu() {
-        if (mc == null) {
+        if (ec == null) {
             return null;
         }
         if (Static.getCollectionCount() < 2) {
@@ -2188,13 +2186,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * Liefert eine Kanteart zwischen den beiden übergebenen Elementarte zurück, wenn es mind. eine gibt. Gibt es mehrere, wird der Benutzer mit einem
      * Dialog vor die Auswahl gestellt.
      *
+     * @param metaModel
      * @param elementClass1
      * @param elementClass2
      * @return
      */
-    public static Class<? extends Edge> requestCurrentEdgeType(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+    public static Class<? extends Edge> requestCurrentEdgeType(final MetaModel metaModel, final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
         Class<? extends Edge> edgeClass = null;
-        Class<? extends Edge>[] edgeClasses = getEdgeTypes(elementClass1, elementClass2);
+        Class<? extends Edge>[] edgeClasses = metaModel.getEdgeTypes(elementClass1, elementClass2);
         if (edgeClasses == null || edgeClasses.length == 0) {
             return null;
         }
@@ -2203,8 +2202,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             JPanel messagePanel = new JPanel();
             messagePanel.setLayout(new BoxLayout(messagePanel, Y_AXIS));
             ButtonGroup buttonGroup = new ButtonGroup();
+            ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
             for (int i = 0; i < edgeClasses.length; i++) {
-                JRadioButton b = new JRadioButton(ElementsNameBuilder.getForwardMetaAssociationName(edgeClasses[i]));
+                JRadioButton b = new JRadioButton(elementsNameBuilder.getForwardMetaAssociationName(edgeClasses[i]));
                 b.setActionCommand(edgeClasses[i].getName());
                 messagePanel.add(b);
                 buttonGroup.add(b);
@@ -2216,7 +2216,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             JDialog dialog = optionPane.createDialog(Static.getMainFrame(), getResString("choose_trace"));
             dialog.setVisible(true);
             String edgeClassName = buttonGroup.getSelection().getActionCommand();
-            edgeClass = getClassForName(edgeClassName).asSubclass(Edge.class);
+            edgeClass = metaModel.getClassForName(edgeClassName).asSubclass(Edge.class);
         }
         return edgeClass;
     }

@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getSortedEdgeClasses;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_FONT;
 
 import java.awt.Color;
@@ -18,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -191,17 +190,26 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         retVal.doc = doc;
         retVal.me = cloneModelElement ? (ModelElement) me.clone() : me;
         retVal.me.setContainer(retVal.doc, retVal);
-        retVal.setVisible(isVisible());
-        retVal.expanded = expanded;
-        retVal.highlight = highlight;
-        retVal.layout = (GraphElementLayout) (layout == null ? null : layout.clone());
-        retVal.expandedLayout = (GraphElementLayout) (expandedLayout == null ? null : expandedLayout.clone());
-        retVal.nonExpandedLayout = (GraphElementLayout) (nonExpandedLayout == null ? null : nonExpandedLayout.clone());
-        retVal.set3LGMLayout(retVal.expanded ? retVal.expandedLayout : retVal.nonExpandedLayout);
-        if (frameColor != null) {
-            retVal.frameColor = new Color(frameColor.getRed(), frameColor.getGreen(), frameColor.getBlue(), frameColor.getAlpha());
-        }
+        adaptLayout(retVal);
         return retVal;
+    }
+
+    /**
+     * Überträgt die Layout-Eigenschaften dieses Containes auf den übergebenen
+     *
+     * @param targetContainer
+     */
+    public void adaptLayout(final ElementContainer targetContainer) {
+        targetContainer.setVisible(isVisible());
+        targetContainer.expanded = expanded;
+        targetContainer.highlight = highlight;
+        targetContainer.layout = (GraphElementLayout) (layout == null ? null : layout.clone());
+        targetContainer.expandedLayout = (GraphElementLayout) (expandedLayout == null ? null : expandedLayout.clone());
+        targetContainer.nonExpandedLayout = (GraphElementLayout) (nonExpandedLayout == null ? null : nonExpandedLayout.clone());
+        targetContainer.set3LGMLayout(targetContainer.expanded ? targetContainer.expandedLayout : targetContainer.nonExpandedLayout);
+        if (frameColor != null) {
+            targetContainer.frameColor = new Color(frameColor.getRed(), frameColor.getGreen(), frameColor.getBlue(), frameColor.getAlpha());
+        }
     }
 
     /**
@@ -312,8 +320,9 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     @Override
     public final void setVisible(final boolean visible) {
         super.setVisible(visible);
+        MetaModel metaModel = me.getMetaModel();
         if (visible) {
-            Set<Class<? extends Edge>> sortedEdgeClasses = getSortedEdgeClasses(me.getClass());
+            Set<Class<? extends Edge>> sortedEdgeClasses = metaModel.getSortedEdgeClasses(me.getClass());
             if (sortedEdgeClasses != null) {
                 for (Class<? extends Edge> edgeClass : sortedEdgeClasses) {
                     if (additionalLabelTextGenerator == null) {
@@ -325,7 +334,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         } else if (additionalLabelTextGenerator != null) {
             additionalLabelTextGenerator.deleteSpecialInfoFromTargets();
         }
-        for (Class<? extends ModelElement> c : ModelConstants.getSlaveElementTypes(me.getClass())) {
+        for (Class<? extends ModelElement> c : metaModel.getSlaveElementTypes(me.getClass())) {
             for (ElementContainer sC : me.getConnectedContainer(c, doc)) {
                 sC.setVisible(visible);
             }

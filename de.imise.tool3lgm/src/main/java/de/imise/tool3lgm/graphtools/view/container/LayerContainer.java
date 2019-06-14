@@ -12,7 +12,7 @@ import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -599,7 +599,8 @@ public class LayerContainer extends ElementContainer {
             }
             Alphabetical.insert(treeNodeContainers, nc);
             Node node = nc.getNode();
-            if (ModelConstants.hasSortedEdgeClassesToPaintable(node.getClass())) {
+            MetaModel metaModel = doc.getMetaModel();
+            if (metaModel.hasSortedEdgeClassesToPaintable(node.getClass())) {
                 numberedEdgesNodeContainer.add(nc);
             }
         }

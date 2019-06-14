@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
+import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERROR_INT_VALUE;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
@@ -43,13 +44,27 @@ public abstract class Edge extends ModelElement {
 
     /**
      * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
-     * die getStartElementClass() und getEndElementClass() aufruft.
+     * die getStartElementClass() und getEndElementClass() aufruft. Unterklassen können eine eigene Konstante derselben Form defnieren. Da diese über
+     * Reflection geholt werden, funktioniert das mit diesen statischen Feldern genauso, als würde man eine Instanzfunktion überschreiben (trotz dass
+     * sie final sind).
      */
     public static final Class<? extends ModelElement> STCL = ModelElement.class;
 
     /**
+     * Kardinalität der Endklasse zur Startklasse. Sie gibt also immer an wie viele der Startelemente das EndElement braucht. Verwendung in
+     * Unterklassen identisch zu STCL.
+     */
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
+
+    /**
+     * Kardinalität der Startklasse zur Endklasse. Sie gibt also immer an wie viele der Startelemente das EndElement braucht. Verwendung in
+     * Unterklassen identisch zu STCL.
+     */
+    public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
+
+    /**
      * Auch für Kanten muss angegeben, welche Elementarten sie verbinden können, damit die Vererbung bei der Definition der MetaPfade funktioniert,
-     * die getStartElementClass() und getEndElementClass() aufruft.
+     * die getStartElementClass() und getEndElementClass() aufruft. Verwendung in Unterklassen identisch zu STCL.
      */
     public static final Class<? extends ModelElement> ETCL = ModelElement.class;
 
@@ -81,7 +96,7 @@ public abstract class Edge extends ModelElement {
     public final int layerFor() {
         int layer = super.layerFor();
         if (layer == ModelConstants.NO_LAYER) {
-            layer = ModelConstants.getEdgeLayer(startElement.getClass(), endElement.getClass());
+            layer = getMetaModel().getEdgeLayer(startElement.getClass(), endElement.getClass());
         }
         return layer;
     }
@@ -439,7 +454,7 @@ public abstract class Edge extends ModelElement {
      */
     public static final boolean isStartClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         Class<? extends ModelElement> startClass = getStartClass(edgeClass);
-        return ReflectionUtils.isAssignable(startClass, elementClass);
+        return startClass.isAssignableFrom(elementClass);
     }
 
     /**
@@ -461,7 +476,7 @@ public abstract class Edge extends ModelElement {
      */
     public static final boolean isEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return ReflectionUtils.isAssignable(endClass, elementClass);
+        return endClass.isAssignableFrom(elementClass);
     }
 
     /**
@@ -521,7 +536,7 @@ public abstract class Edge extends ModelElement {
     public static boolean isRecursive(final Class<? extends Edge> edgeClass) {
         Class<? extends ModelElement> startClass = getStartClass(edgeClass);
         Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return ReflectionUtils.isAssignable(startClass, endClass);
+        return startClass.isAssignableFrom(endClass);
     }
 
     ////////////////////
@@ -535,7 +550,7 @@ public abstract class Edge extends ModelElement {
      */
     private static final EdgeCardinality getCardinality(final Class<? extends Edge> edgeClass, final boolean backward) {
         String fieldName = backward ? START_CARDINALITY_FIELD_NAME : END_CARDINALITY_FIELD_NAME;
-        return (EdgeCardinality) ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
+        return ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName, EdgeCardinality.class);
     }
 
     /**
@@ -710,7 +725,7 @@ public abstract class Edge extends ModelElement {
         if (startElement != null && endElement != null) {
             return startElement.isUnique() || endElement.isUnique();
         }
-        return ModelConstants.isUnique(getClass());
+        return super.isUnique();
     }
 
     @Override

@@ -55,8 +55,9 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyComponents;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -190,8 +191,10 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
         oldFormulaString = userField.getFormula();
         Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
         Class<? extends ModelElement> elementClass = ModelElement.class.isAssignableFrom(targetClass) ? targetClass.asSubclass(ModelElement.class) : null;
-        ModelConstants.isNodeType(targetClass);
-        String targetClassDisplayName = elementClass == null || ModelConstants.isEdgeType(targetClass) ? "" : "  -  " + ElementsNameBuilder.getDisplayableName(elementClass);
+        MetaModel.isNodeType(targetClass);
+        GDCollection gdcoll = def.getCollection();
+        ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
+        String targetClassDisplayName = elementClass == null || MetaModel.isEdgeType(targetClass) ? "" : "  -  " + elementsNameBuilder.getDisplayableName(elementClass);
         setTitle(getResString("formulaEditorDialog") + targetClassDisplayName + "  -  " + newUserFieldName);
         setLocationByPlatform(true);
 
@@ -683,7 +686,9 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
 
         private void addButtons() {
             Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
-            boolean targetClassCanHaveEdges = ModelElement.class.isAssignableFrom(targetClass) && ModelConstants.getEdgeTypes(targetClass.asSubclass(ModelElement.class)).length > 0;
+            GDCollection gdcoll = definitions.getCollection();
+            MetaModel metaModel = gdcoll.getMetaModel();
+            boolean targetClassCanHaveEdges = ModelElement.class.isAssignableFrom(targetClass) && metaModel.getEdgeTypes(targetClass.asSubclass(ModelElement.class)).length > 0;
             if (targetClassCanHaveEdges) {
                 add(buttonsum);
                 add(buttonMult);
@@ -693,7 +698,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
                 add(buttonmittelwert);
                 add(buttonindikator);
             }
-            if (ModelConstants.isEdgeType(userField.getTargetClass())) {
+            if (MetaModel.isEdgeType(userField.getTargetClass())) {
                 add(buttonReference);
             }
         }

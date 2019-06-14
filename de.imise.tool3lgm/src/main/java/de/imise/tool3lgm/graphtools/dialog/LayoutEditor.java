@@ -26,9 +26,11 @@ import javax.swing.JScrollPane;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -64,16 +66,19 @@ public class LayoutEditor extends JDialog implements ActionListener {
      * @param f
      * @param document
      */
-    public LayoutEditor(final JFrame f, final GraphDocument document) {
+    public LayoutEditor(final JFrame f, final GraphDocument doc) {
         super(f);
         setLocationByPlatform(true);
-        doc = document;
-        mydoc = new LGMGraphDocument(null);
+        this.doc = doc;
+        GDCollection gdcoll = doc.getCollection();
+        gdcoll = new GDCollection(gdcoll.getMetaModelContext());
+        mydoc = new LGMGraphDocument(gdcoll);
         my_mapping = mydoc.getMapping();
         my_mapping.adapt(doc.getMapping());
         setTitle(getResString("layout_edit"));
 
-        GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
+        MetaModel metaModel = gdcoll.getMetaModel();
+        GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
 
         wieviele = graphViewDefinition.getMetaModelSpecificPaintableNodes().size();
 
@@ -148,23 +153,24 @@ public class LayoutEditor extends JDialog implements ActionListener {
             int currentLayer = ModelConstants.VISIBLE_LAYERS[l];
             for (int c = 0; c < metaModelSpecificPaintableNodes.size(); c++) {
                 Class<? extends ModelElement> paintbaleClass = metaModelSpecificPaintableNodes.get(c);
-                if (ModelConstants.isAbstract(paintbaleClass)) {
+                if (MetaModel.isAbstract(paintbaleClass)) {
                     continue;
                 }
                 // nur für Node kann man das Layout im Moment festlegen -> Kanten auslassen
                 if (!Node.class.isAssignableFrom(paintbaleClass)) {
                     continue;
                 }
-                if (ModelConstants.layerFor(paintbaleClass) != currentLayer) {
+                if (metaModel.layerFor(paintbaleClass) != currentLayer) {
                     continue;
                 }
                 if (c > maxInRow) {
                     maxInRow = c;
                 }
                 int index = counter + offset;
-                NodeContainer kc = new NodeContainer((Node) ModelConstants.createElement(paintbaleClass, true), mydoc);
+                NodeContainer kc = new NodeContainer((Node) metaModel.createElement(paintbaleClass, true), mydoc);
                 knoten[index] = kc;
-                kc.getNode().setName(ElementsNameBuilder.getDisplayableName(paintbaleClass));
+                ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+                kc.getNode().setName(elementsNameBuilder.getDisplayableName(paintbaleClass));
                 kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
                 kc.setFont(mydoc.getMapping().getStandardFont(kc));
 

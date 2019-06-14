@@ -27,6 +27,7 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTablePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescripPanel;
@@ -39,7 +40,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.TabbedPanel;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
@@ -101,13 +102,9 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
      * @param gdcoll
      */
     public ElementPropertyDialog(final ModelElement modelElement, final GDCollection gdcoll) {
-
         super(gdcoll);
-
         setTitle(getResString("eigensch_dial"));
-
         getContentPane().setLayout(new BorderLayout());
-
         this.modelElement = modelElement;
 
         JComponent tabComponent = getTabComponent();
@@ -183,8 +180,8 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             setLastWidth(DEFAULT_SIZE.width);
             setLastHeight(DEFAULT_SIZE.height);
         } else {
-            for (int i = 0; i < ModelConstants.dialogs.size(); i++) {
-                ElementPropertyDialog pd = ModelConstants.dialogs.get(i);
+            for (int i = 0; i < ElemenPropertyDialogsContext.getDialogCount(); i++) {
+                ElementPropertyDialog pd = ElemenPropertyDialogsContext.getDialog(i);
                 if (pd.getLocation().x == xx && pd.getLocation().y == yy) {
                     xx += 20;
                     yy += 20;
@@ -210,9 +207,10 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     private List<Class<? extends HasPartEdge>> getRecursiveHasPartEdges() {
         List<Class<? extends HasPartEdge>> recursiveHasPartEdges = new ArrayList<>();
         Class<? extends ModelElement> elementClass = modelElement.getClass();
-        Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass);
+        MetaModel metaModel = modelElement.getMetaModel();
+        Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(elementClass);
         for (Class<? extends Edge> edgeClass : edgeTypes) {
-            if (ModelConstants.isRecursiveHasPartEdge(edgeClass)) {
+            if (MetaModel.isRecursiveHasPartEdge(edgeClass)) {
                 Class<? extends HasPartEdge> hasPartEdgeClass = edgeClass.asSubclass(HasPartEdge.class);
                 if (HasPartEdge.isParentClass(hasPartEdgeClass, elementClass)) {
                     recursiveHasPartEdges.add(hasPartEdgeClass);
@@ -264,11 +262,11 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             }
         }
         //alle anderen Dialoge updaten
-        for (ElementPropertyDialog pd : ModelConstants.getDialogs()) {
+        for (ElementPropertyDialog pd : ElemenPropertyDialogsContext.getDialogs()) {
             // this wird in update klargemacht...
             if (pd != this) {
-                for (int m = 0; m < getTabCount(); m++) {
-                    Component comp = getTabComponentAt(m);
+                for (int m = 0; m < pd.getTabCount(); m++) {
+                    Component comp = pd.getTabComponentAt(m);
                     if (comp instanceof ElementDialogPanel) {
                         ((ElementDialogPanel) comp).update();
                     }
@@ -303,7 +301,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     private void close() {
-        ModelConstants.removeDialog(modelElement);
+        ElemenPropertyDialogsContext.removeDialog(modelElement);
         doc.finish_transaction(getTransactionID());
         doc.removeInTransactionListener(this);
         dispose();
@@ -410,7 +408,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     @SafeVarargs
     public final SimpleMetaPath createSimpleMetaPath(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        return SimpleMetaPathCreator.createSimpleMetaPath(getModelElement().getClass(), searchElementClass, edgeClasses);
+        return getModelElement().createSimpleMetaPath(searchElementClass, edgeClasses);
     }
 
     @Override
@@ -423,6 +421,12 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     private TabbedPanel lastCreatedTabbedPanel;
+
+    public final void addTabbedPanel(final Class<? extends ModelElement> elementClass) {
+        ElementsNameBuilder elementsNameBuilder = modelElement.getElementsNameBuilder();
+        String displayablePluralName = elementsNameBuilder.getDisplayablePluralName(elementClass);
+        addTabbedPanel(displayablePluralName);
+    }
 
     public final void addTabbedPanel(final String nameResKey) {
         lastCreatedTabbedPanel = new TabbedPanel(this);
@@ -466,8 +470,9 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        if (Static.isExpertMode() || isVisible(simpleMetaPath)) {
-            descripPanel.addSingleConnectionPanel(labelLastEdgeName, ModelConstants.isEditable(simpleMetaPath), simpleMetaPath);
+        MetaModel metaModel = modelElement.getMetaModel();
+        if (metaModel.isVisible(simpleMetaPath) || Static.isExpertMode()) {
+            descripPanel.addSingleConnectionPanel(labelLastEdgeName, metaModel.isEditable(simpleMetaPath), simpleMetaPath);
         }
     }
 
@@ -546,17 +551,18 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     private void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final boolean add2SubTab) {
         SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClass);
-        if (!isVisible(metaPath)) {
+        MetaModel metaModel = modelElement.getMetaModel();
+        if (!metaModel.isVisible(metaPath)) {
             return;
         }
-        boolean editable = ModelConstants.isEditable(metaPath);
+        boolean editable = metaModel.isEditable(metaPath);
         ElementDialogPanel panel2Add = null;
-        if (ModelConstants.isComposition(edgeClass)) {
+        if (MetaModel.isComposition(edgeClass)) {
             panel2Add = new MutipleCompositionPanel(this, editable, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
-        } else if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+        } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
             panel2Add = new DoubleMeaningEdgePanel(this, editable, searchElementClass, edgeClass);
             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
-        } else if (Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && ModelConstants.isDirectedEdge(edgeClass)) {
+        } else if (Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && metaModel.isDirectedEdge(edgeClass)) {
             panel2Add = new DoubleMeaningEdgePanel(this, editable, searchElementClass, edgeClass);
         } else {
             panel2Add = new PathConnectionPanel(this, editable, metaPath);
@@ -570,7 +576,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     @SafeVarargs
     public final void addTablePanel(final ConnectedElementsTableDefinition tableDefinition, final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
-        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(modelElement.getClass(), metaPathStepWithPathName, edgeClasses);
+        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(doc.getMetaModel(), modelElement.getClass(), metaPathStepWithPathName, edgeClasses);
         addTablePanel(tableDefinition, simpleMetaPath);
     }
 
@@ -582,12 +588,13 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     private final void addTablePanelInternal(final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
         boolean editable = true;
         Set<SimpleMetaPath> allDifferentSimpleMetaPaths = new HashSet<>();
+        MetaModel metaModel = modelElement.getMetaModel();
         for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
             Collection<SimpleMetaPath> simpleMetaPathsNonAbstract = SimpleMetaPathCreator.getSimpleMetaPathsNonAbstract(simpleMetaPath);
             allDifferentSimpleMetaPaths.addAll(simpleMetaPathsNonAbstract);
             if (editable) {
                 for (SimpleMetaPath nonAbstractSimpleMetaPaths : simpleMetaPathsNonAbstract) {
-                    if (!ModelConstants.isEditable(nonAbstractSimpleMetaPaths)) {
+                    if (!metaModel.isEditable(nonAbstractSimpleMetaPaths)) {
                         editable = false;
                         break;
                     }
@@ -595,26 +602,6 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             }
         }
         addTab(new ConnectedElementsTablePanel(this, editable, tableDefinition, allDifferentSimpleMetaPaths));
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn ein Panel mit diesem Pfad angezeigt werden soll. Ob es angezeigt werden soll entscheidet sich anhand der
-     * Zielklasse des Pfades. Ist diese nur im Expert-Mode anzuzeigen, der Modeus aber nicht an, dann sollte ein Panel mit diesem MetaPath nicht
-     * angezeigt werden.
-     *
-     * @param metaPath
-     * @return
-     */
-    private static final boolean isVisible(final SimpleMetaPath metaPath) {
-        if (Static.isExpertMode()) {
-            return true;
-        }
-        for (Class<? extends ModelElement> endClass : metaPath.getEndClasses()) {
-            if (ModelConstants.isHiddenClass(endClass)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override

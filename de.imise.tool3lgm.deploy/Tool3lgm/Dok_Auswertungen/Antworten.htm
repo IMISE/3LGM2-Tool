@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta content="text/html; charset=ISO-8859-1"
+ http-equiv="content-type">
+  <title>Antworten</title>
+  <style type="text/css">
+	<!--
+		ol li {color:blue}
+		ol ul li {color:black; font-weight:bold}
+		p.antw {background-color:lightgrey; font-weight:normal}
+	---> 
+
+	</style>
+</head>
+<body bgcolor="azure">
+<ol>
+  <h2> <li> <a name="fkt">Funktionale Redundanz und
+&Uuml;bers&auml;ttigung</a> </li>
+  </h2>
+  <ul>
+    <li>Welche Funktionen sind in mehreren Werkzeugen
+verf&uuml;gbar (potentielle Werkzeugredundanz) oder werden in mehreren
+Werkzeugen genutzt (tats&auml;chliche
+Werkzeugredundanz)?</li>
+    <p class="antw"> Im 3LGM&sup2;-Baukasten ist keine Unterscheidung
+zwischen potentieller und tats&auml;chlicher Werkzeugredundanz
+m&ouml;glich. Es stehen jedoch <a href="Kurzhilfe.htm#ana">Analysen</a>
+zur Verf&uuml;gung, die
+Aufschluss dar&uuml;ber geben, wie man
+f&uuml;r eine Aufgabe bestimmt, ob sie mit einem oder mehreren
+Werkzeugen
+durchgef&uuml;hrt werden kann. (<a href="Kurzhilfe.htm#ana">Analyse</a>:
+"Welche Anwendungsbausteine
+werden zur Erf&uuml;llung ben&ouml;tigt?" bzw. <a
+ href="Kurzhilfe.htm#ana">Analyse</a>:
+"Welche Anwendungsbausteine und welche physischen DV-Bausteine werden
+zur Erf&uuml;llung ben&ouml;tigt.") Zus&auml;tzlich liefert die <a
+ href="Kurzhilfe.htm#opt">Analyse-Option</a> "Konfigurationsredundanz
+von Aufgaben" ein Ma&szlig; daf&uuml;r, wie viele Werkzeuge f&uuml;r
+die
+Durchf&uuml;hrung einer Aufgabe zur Verf&uuml;gung stehen. Nach
+Ausf&uuml;hrung dieser Option
+erscheint im Modell neben jeder Aufgabe eine Zahl, die das Ma&szlig;
+f&uuml;r die Konfigurationsredundanz angibt.</p>
+    <li>Welche Funktionen sind verf&uuml;gbar, werden aber nicht
+genutzt (funktionale &Uuml;bers&auml;ttigung)?</li>
+    <p class="antw">Hierf&uuml;r gibt es im 3LGM&sup2;-Baukasten keine
+Beschreibungsm&ouml;glichkeiten. Aber m&ouml;glicherweise kann der
+Vergleich des erstellten Modells mit vorhandenen Dokumenten zur
+Werkzeugfunktionalit&auml;t hilfreich sein. </p>
+  </ul>
+  <br>
+  <h2><li><a name="daten">Datenmanagement und -kommunikation</a></li>
+  </h2>
+  <ul>
+    <li>K&ouml;nnen Daten einfach wieder verwendet werden (multiple
+Verwendbarkeit von Daten)? </li>
+    <p class="antw">Daten sind multipel verwendbar, wenn sie zwischen
+verschiedenen Anwendungsbausteinen
+ausgetauscht werden k&ouml;nnen. Die <a href="Kurzhilfe.htm#ana">Analyse</a>
+"Wo wird er kommuniziert?"
+f&uuml;r Objekttypen gibt
+Aufschluss dar&uuml;ber, zwischen welchen Anwendungsbausteinen Daten
+ausgetauscht werden.</p>
+    <br>
+    <li>Werden Daten unkontrolliert dupliziert bzw. mehrfach erhoben
+und
+erfasst (Datenredundanz)?</li>
+    <p class="antw">Mit der f&uuml;r Objekttypen verf&uuml;gbaren <a
+ href="Kurzhilfe.htm#ana">Analyse</a> "Wo wird er gespeichert?"
+kann man herausfinden, in welchen
+Datenbanken der zum Objekttyp geh&ouml;rige Datensatztyp gespeichert
+ist und ob
+folglich eine redundante Datenhaltung vorliegt. Weiterhin kann als <a
+ href="Kurzhilfe.htm#opt">Analyse-Option</a> die Datenredundanz
+von Objekttypen berechnet werden, die dann im Modell neben der
+graphischen Repr&auml;sentation des jeweiligen
+Objekttyps angezeigt wird.</p>
+    <li>Wie gewinnt man Aussagen &uuml;ber die Heterogenit&auml;t der
+Daten?</li>
+    <p class="antw">Dazu ist es notwendig zu wissen, welche Objekttypen
+mit
+mehreren Nachrichtentypen verkn&uuml;pft sind und ob sie letztendlich
+&uuml;ber verschiedene Kommunikationsstandards kommuniziert werden.
+Dies kann man durch eigene kleine <a href="Kurzhilfe.htm#dia">Analysen</a>
+herausfinden, die &uuml;ber den <a href="Kurzhilfe.htm#dia">Analyse-Dialog</a>
+zusammengestellt werden
+k&ouml;nnen. F&uuml;r obige Fragestellung sind <a
+ href="Kurzhilfe.htm#dia">Analysen</a> vom Objekttyp
+zum Nachrichtentyp, vom Nachrichtentyp zur ETNT-Kombination und von
+dort aus
+zum Kommunikationsstandard geeignet.</p>
+    <li>Welche Daten werden an Subsysteme gesandt?</li>
+    <p class="antw">F&uuml;r einen konkreten Objekttyp kann man unter
+Zuhilfenahme der <a href="Kurzhilfe.htm#ana">Analyse</a> "Wo wird er
+kommuniziert?" herausfinden,
+zwischen welchen Anwendungsbausteinen dieser ausgetauscht wird.
+Ob es sich dabei um Subsysteme handelt, erschlie&szlig;t sich f&uuml;r
+den Modellierer mit einem
+Blick auf das Modell.</p>
+    <li>Funktioniert das &#8222;Stornosystem&#8220; von Daten in Subsystemen gleich
+wie in der
+Masterdatenbank?</li>
+    <p class="antw">Diese Frage kann nicht mit dem
+3LGM&sup2;-Baukasten beantwortet werden.</p>
+  </ul>
+  <br>
+  <h2><li><a name="homo">Homogenit&auml;t und Heterogenit&auml;t des
+Informationssystems</a></li>
+  </h2>
+  <ul>
+    <li>Welche Aufgaben werden durch papierbasierte oder
+rechnerbasierte
+Anwendungsbausteine bzw. durch eine Kombination von beiden
+durchgef&uuml;hrt?</li>
+    <p class="antw">Nach Ausf&uuml;hrung des <a
+ href="Kurzhilfe.htm#xsl">XSLT-Skripts</a> &#8222;020.xsl&#8220;
+erh&auml;lt man eine Zuordnung aller
+Aufgaben zu Anwendungsbausteinen und deren Art.</p>
+    <li>Wie h&auml;ufig werden im Rahmen des Arbeitsprozesses Werkzeuge
+gewechselt? Wie
+h&auml;ufig wird zwischen konventionellen und rechnerunterst&uuml;tzten
+Werkzeugen
+gewechselt? </li>
+    <p class="antw">Im Eigenschaftsdialog von Prozessen unter dem
+Reiter Kommunikationsprozesse
+werden diese Fragen implizit beantwortet. Die Anzahl der Wechsel von
+Werkzeugen l&auml;sst sich aus der Tabelle &uuml;ber den Vergleich von
+Start- und Endkonfigurationen (6. und 8. Spalte) gewinnen. Dar&uuml;ber
+hinaus geben in
+der letzten Tabellenspalte die Medienbr&uuml;che Auskunft dar&uuml;ber,
+wie oft zwischen
+konventionellen
+und rechnerunterst&uuml;tzten Werkzeugen gewechselt wird. </p>
+    <li>Wie viele verschiedene physische
+Datenverarbeitungswerkzeuge
+m&uuml;ssen von
+einem Mitarbeiter in einer bestimmten Rolle an einem bestimmten
+Arbeitsplatz
+benutzt werden?</li>
+    <p class="antw">Zur Beantwortung steht das XSLT-Skript &quot;023.xsl&quot; zur Verf&uuml;gung. </p>
+    <p class="antw">Die Frage kann auch durch die Kombination
+  einer <a href="Kurzhilfe.htm#ana">Analyse</a> und eines <a
+ href="Kurzhilfe.htm#xsl">XSLT-Skripts</a> beantwortet werden. Ein
+  Zwischenergebnis liefert die <a href="Kurzhilfe.htm#ana">Analyse</a> &#8222;Welche Anwendungsbausteine werden
+  durch Mitarbeiter
+  in der Rolle X genutzt?&#8220; Anschlie&szlig;end k&ouml;nnen den
+  Anwendungsbausteinen durch das <a href="Kurzhilfe.htm#xsl">XSLT-Skript</a> "040.xsl" die jeweiligen physischen Datenverarbeitungswerkzeuge zugeordnet werden.</p>
+  </ul>
+  <br>
+  <h2><li><a name="aufg">Zuordnung von Aufgaben und Anwendungsbausteinen</a></li>
+  </h2>
+  <ul>
+    <li>Durch welche Anwendungsbausteine kann eine Aufgabe erledigt
+werden?</li>
+    <p class="antw">Eine direkte Antwort auf diese Frage erh&auml;lt
+man
+durch die <a href="Kurzhilfe.htm#ana">Analyse</a> "Welche
+Anwendungsbausteine werden zur Erf&uuml;llung
+der Aufgabe ben&ouml;tigt?". Weitere M&ouml;glichkeiten bietet der
+Export &uuml;ber die <a href="Kurzhilfe.htm#xsl">XSLT-Skripte</a>
+"024.xsl" oder
+"025.xsl", die dar&uuml;ber hinaus
+die zugeh&ouml;rigen Organisationseinheiten angeben.</p>
+    <li> Welche Aufgaben kann ein Anwendungsbaustein durchf&uuml;hren?</li>
+    <p class="antw">Hierf&uuml;r kann das <a
+ href="Kurzhilfe.htm#xsl">XSLT-Skript</a> "030.xsl" genutzt
+werden.</p>
+    <li> Wie bestimmt man den Abdeckungsgrad der Funktionen?</li>
+    <p class="antw">Um zu erfahren, inwieweit Aufgaben durch
+Anwendungsbausteine erledigt bzw. abgedeckt werden,
+kann die <a href="Kurzhilfe.htm#opt">Analyse-Option</a>
+"Konfigurationsredundanz von Aufgaben"
+n&uuml;tzlich sein. Erscheint bei Ausf&uuml;hrung dieser Option neben
+einer Funktion ein Wert &lt;0, dann wird diese durch keinen
+Anwendungsbaustein unterst&uuml;tzt. &Uuml;ber dem Fenster der
+fachlichen Ebene wird zus&auml;tzlich der Unters&auml;ttigungsfaktor
+f&uuml;r die Gesamtheit der Funktionen angegeben.</p>
+  </ul>
+  <br>
+  <h2><li><a name="ausfall">Systemausfall und seine Folgen</a></li>
+  </h2>
+  <ul>
+    <li>Wie wirkt sich der Ausfall von einzelnen Systemen aus, wer ist
+betroffen?</li>
+    <p class="antw">Eine Kombination verschiedener <a
+ href="Kurzhilfe.htm#ana">Analysen</a> kann bei
+der Beantwortung helfen. Zun&auml;chst liefert die <a
+ href="Kurzhilfe.htm#ana">Analyse</a> "Welche
+Anwendungsbausteine werden durch Mitarbeiter in der Rolle X genutzt?"
+Auskunft dar&uuml;ber, wer vom Ausfall eines Anwendungsbausteins
+betroffen ist. Um zu wissen, auf welchem physischen
+Datenverarbeitungsbaustein dieser Anwendungsbaustein installiert ist,
+kann die Bottom-Up-<a href="Kurzhilfe.htm#ana">Analyse</a> "Welche
+Anwendungsbausteine sind darauf
+installiert?" benutzt werden.</p>
+    <li>Welche Anwendungsbausteine und welche Aufgaben k&ouml;nnen
+nicht mehr durchgef&uuml;hrt werden bei Netzwerkausfall, Serverausfall
+oder Schnittstellenausfall?</li>
+    <p class="antw">Netzwerkausf&auml;lle und Serverausf&auml;lle
+finden auf der Physischen Werkzeugebene statt,
+insofern helfen Bottom-Up-<a href="Kurzhilfe.htm#ana">Analysen</a>, die
+Auswirkungen eines Ausfalls
+absch&auml;tzen zu
+k&ouml;nnen. F&uuml;r physische Datenverarbeitungsbausteine stellt der
+3LGM&sup2;-Baukasten
+dazu u.a. die <a href="Kurzhilfe.htm#ana">Analysen</a> "Welche
+Aufgaben werden mit diesem Phys.
+DV-Baustein unterst&uuml;tzt?"
+sowie "Welche Anwendungsbausteine sind darauf installiert" bereit.</p>
+  </ul>
+  <br>
+  <h2><li><a name="trans">Transkription und Medienbruch</a></li>
+  </h2>
+  <ul>
+    <li>Wie kann ein Wechsel von rechnerbasierten zu papierbasierten
+Anwendungsbausteinen und Nachrichtentypen zu Dokumenttypen im Modell
+identifiziert werden?</li>
+    <p class="antw">Durch Modellierung eines Prozesses, welcher den
+entsprechenden Objekttyp kommuniziert. In der
+Kommunikationsprozesstabelle, die man im Eigenschaftsdialog von
+Prozessen findet, wird in der letzten Spalte die Anzahl der
+Medienbr&uuml;che ausgegeben. </p>
+    <li>Der Transfer von Daten von einer Speichereinheit zu einer
+anderen f&uuml;hrt m&ouml;glicherweise zu Transkriptionsfehlern. Wie
+k&ouml;nnen diese entdeckt werden?</li>
+    <p class="antw">Eine konkrete Identifizierung von
+Transkriptionsfehlern ist nicht m&ouml;glich. Dennoch k&ouml;nnen durch
+Wechsel von &Uuml;bertragungsmedien entstehende Medienbr&uuml;che durch
+die Modellierung von Prozessen gefunden werden. In der zu einem Prozess
+geh&ouml;rigen Kommunikationstabelle (im Eigenschaftsdialog von
+Prozessen) ist in der letzten Spalte die Anzahl der Medienbr&uuml;che
+f&uuml;r diesen Prozess angegeben. </p>
+  </ul>
+  <br>
+  <h2><li><a name="stats">Statistik des Informationssystems</a></li>
+  </h2>
+  <ul>
+    <li>Wie kann die Anzahl modellierter Anwendungsbausteine ermittelt
+werden?</li>
+    <p class="antw">Antwort gibt das <a href="Kurzhilfe.htm#xsl">XSLT-Exportskript</a> "000.xsl", welches die genaue
+Anzahl der Anwendungsbausteine auch f&uuml;r einzelne Teilmodelle
+liefert. </p>
+    <li>Wie kann Anzahl der verwendeten Softwareprodukte sowie
+Informationen zur Software und eventuelle Wartungsvertr&auml;ge
+ermittelt werden?</li>
+    <p class="antw">&Uuml;ber das <a href="Kurzhilfe.htm#xsl">XSLT-Exportskript</a>
+"000.xsl"
+kann die Anzahl der Softwareprodukte ermittelt werden. Konkrete
+Informationen zur Software k&ouml;nnen dann &uuml;ber die
+zugeh&ouml;rigen Eigenschaften eingesehen werden. Wartungsvertr&auml;ge
+sind im 3LGM&sup2;-Modell nicht explizit vorgesehen, k&ouml;nnen aber
+durch benutzerdefinierte Eigenschaftsfelder leicht hinzugef&uuml;gt und
+durch eigene Analysen &uuml;berwacht werden.</p>
+    <li>Wo kann man die Anzahl der modellierten physischen
+Datenverarbeitungsbausteine sehen?</li>
+    <p class="antw">Mithilfe des <a href="Kurzhilfe.htm#xsl">XSLT-Exportskripts</a> "000.xsl" kann die Anzahl ermittelt werden.</p>
+    <li>Mithilfe welcher Methoden kann die Anzahl der modellierten
+Server ermittelt werden?</li>
+    <p class="antw">Mit den <a href="Kurzhilfe.htm#xsl">XSLT-Exportskripts</a> "009.xsl" k&ouml;nnen die physischen Datenverarbeitungsbausteine inkl. der Bausteintypen ausgegeben werden. </p>
+    <li>Ist es m&ouml;glich, die Anzahl der verwendeten Formulare zu
+ermitteln</li>
+    <p class="antw">Formulare sollten als Dokumententypen modelliert werden. Dann kann &uuml;ber die Modellstatistik die Anzahl der modellierten Formulare ermittelt werden. </p>
+  </ul>
+  <br>
+  <h2><li><a name="interf">Schnittstellenmanagement</a></li>
+  </h2>
+  <ul>
+    <li>Wie viele rechnerbasierte, papierbasierte sowie parallele
+Schnittstellen gibt es?</li>
+    <p class="antw">&Uuml;ber das <a href="Kurzhilfe.htm#xsl">XSLT-Exportskript</a> "000.xsl" kann die Gesamtanzahl
+der Schnittstellen ermittelt und
+angezeigt werden. Wenn alle rechnerbasierten Anwendungsbausteine markiert und in ein Teilmodell &uuml;bernommen werden, kann das Statistik-Skript &quot;000.xsl&quot; f&uuml;r dieses Teilmodell aufgerufen werden und damit die Anzahl der rechnerbasierten Schnittstellen ermittelt werden. </p>
+    <li>Welche Systeme kommunizieren wie miteinander?</li>
+    <p class="antw">Mithilfe der <a href="Kurzhilfe.htm#ana">Analyse</a>
+von Kommunikationsstandards: "Wo wird er angewendet?" kann diese Frage
+weitestgehend beantwortet werden. Erg&auml;nzend steht das <a href="Kurzhilfe.htm#xsl">XSLT-Exportskript</a> "034.xsl" zur Verf&uuml;gung. </p>
+    <li>Welche Schnittstellen sind aus der Perspektive eines einzelnen
+Systems sichtbar?</li>
+    <p class="antw">Dazu steht das <a href="Kurzhilfe.htm#xsl">XSLT-Exportskript</a> "031.xsl" zur Verf&uuml;gung. </p>
+    <p class="antw">Erg&auml;nzend kann durch Anwendung der <a href="Kurzhilfe.htm#ana">Analyse</a> von Rechnerbasierten
+  Anwendungsbausteinen: "Welche Kommunikationsbeziehungen hat er?" eine Sicht auf die Schnittstellen aus der Perspektive jedes einzelnen
+  Systems erzeugt werden. </p>
+    <li>Wie verfolgt man Schnittstelleninformationen (z.B. ADT) im
+Gewirr der Systeme?</li>
+    <p class="antw">Dazu steht das <a href="Kurzhilfe.htm#xsl">XSLT-Exportskript</a> "027.xsl" zur Verf&uuml;gung. </p>
+    <p class="antw">Zus&auml;tzlich hilft die <a href="Kurzhilfe.htm#ana">Analyse</a> f&uuml;r Objekttypen: "Wo wird er kommuniziert?", Schnittstelleninformationen einfach verfolgen zu k&ouml;nnen. </p>
+    </ul>
+  <br>
+  <h2><li><a name="tausch">Systemtausch und Simulation
+unterschiedlicher Architekturen<br>
+    </a></li>
+  </h2>
+  <ul>
+    <li>Ist eine Darstellung der Auswirkungen und m&ouml;glicher
+Probleme bei einem Systemtausch m&ouml;glich? </li>
+    <p class="antw">Durch Modellierung von Prozessen und der Analyse
+der Fehlerausgabe des Prozesses nach dem Austausch des Systems
+k&ouml;nnen die Auswirkungen und m&ouml;glichen Probleme gut analysiert
+werden. </p>
+    <li>Ist eine Simulation unterschiedlicher Architekturen
+m&ouml;glich d.h. die Darstellung der Folgen bzw. den Nutzen beim
+Austausch von speziellen Werkzeugen durch andere?</li>
+    <p class="antw">Je nach Fragestellung und erwarteten Folgen ist ein
+anderes Vorgehen von N&ouml;ten. Dennoch bietet der Baukasten alle
+n&ouml;tigen Werkzeuge zur Beantwortung solcher Fragestellungen.
+Mithilfe der Prozessmodellierung und den verschiedenen <a
+ href="Kurzhilfe.htm#ana">Analysen</a> auf
+allen Ebenen des Modells k&ouml;nnen die Folgen des Austausches gut
+analysiert werden. Die erneute Anwendung ausgew&auml;hlter Prozesse und
+    <a href="Kurzhilfe.htm#ana">Analysen</a> vor und nach Austausch des
+entsprechenden Werkzeugs bietet
+einen beliebig ausf&uuml;hrlichen Blick auf die Risiken und Folgen
+eines solchen Austausches.</p>
+  </ul>
+  <br>
+  <h2><li><a name="strat">Strategieerreichung - Planerreichung -
+Projekterf&uuml;llung</a></li>
+  </h2>
+  <ul>
+    <li>Wird die vorhandene IT-Strategie komplett umgesetzt, d.h.
+konnten Projekte erfolgreich
+beendet werden, wie sieht der Status quo aus?</li>
+    <p class="antw">Diese Fragen des Informationsmanagements sind nicht
+unmittelbar mit dem Baukasten zu beantworten, k&ouml;nnen aber zum Teil &uuml;ber den
+Vergleich von Soll- und Ist-Modellen beantwortet werden.</p>
+  </ul>
+  <br>
+  <h2><li><a name="vergl">Vergleich mit "Musterinformationssystemen"</a></li>
+  </h2>
+  <ul>
+    <li>Existiert ein "Musterinformationssystem", mit dem man ein
+eigenes Informationssystem
+planen oder vergleichen kann?</li>
+    <p class="antw">Es gibt bereits Referenzmodelle f&uuml;r die
+Fachliche Ebene und die Logische Werkzeugebene, welche verschiedene
+Aspekte aber auch ganze Informationssysteme darstellen und als
+Orientierung dienen oder auch direkt &uuml;bernommen werden k&ouml;nnen.</p>
+  </ul>
+  <br>
+  <h2><li><a name="not">Notfallsabl&auml;ufe und Workarounds</a></li>
+  </h2>
+  <ul>
+    <li>Wie kann man Notfallsabl&auml;ufe bzw. Workarounds basierend
+auf Auswertungen planen?</li>
+    <p class="antw">Eine solche Planung kann durch die Analysen, die Verkn&uuml;pfungen zwischen Aufgaben bzw. Objekttypen und den daf&uuml;r vorgesehenen Anwendungsbausteinen bzw. physischen Datenverarbeitungsbausteinen aufzeigen, unterst&uuml;tzt werden. </p>
+  </ul>
+</ol>
+<br>
+<br>
+</body>
+</html>

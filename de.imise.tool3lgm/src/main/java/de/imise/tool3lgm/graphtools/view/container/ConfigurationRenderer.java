@@ -14,7 +14,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
@@ -85,9 +85,9 @@ public class ConfigurationRenderer {
                 if (configurationEndContainer == null) {
                     configurationEndContainer = new ArrayList<>();
                     ModelElement me = configurationStart.getElement();
-                    Class<? extends ModelElement> elementClass = me.getClass();
-                    GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
-                    SimpleMetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(elementClass);
+                    MetaModel metaModel = me.getMetaModel();
+                    GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
+                    SimpleMetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(me);
                     Collection<ModelElement> interLayerConnectedElements = MetaPathFunctions.getConnectedElements(me, interLayerMetaPath);
                     for (ModelElement connected : interLayerConnectedElements) {
                         ElementContainer connectedEc = connected.getContainer(doc);
@@ -95,8 +95,8 @@ public class ConfigurationRenderer {
                             configurationEndContainer.add(connectedEc);
                         }
                     }
-                    int layerOfStartElement = ModelConstants.layerFor(elementClass);
-                    int layerOfEndElement = ModelConstants.layerFor(interLayerMetaPath.getEndClass());
+                    int layerOfStartElement = metaModel.layerFor(me.getClass());
+                    int layerOfEndElement = metaModel.layerFor(interLayerMetaPath.getEndClass());
                     int shiftCount = (layerOfStartElement - layerOfEndElement) / 2;
                     LayerContainer layer = doc.getLayer(layerOfEndElement);
                     x_shift = (int) layer.x_shift * shiftCount;

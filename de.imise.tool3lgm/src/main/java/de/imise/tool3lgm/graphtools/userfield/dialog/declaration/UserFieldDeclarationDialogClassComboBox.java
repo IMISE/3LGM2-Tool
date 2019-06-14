@@ -1,11 +1,10 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.declaration;
 
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_NODES;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -16,29 +15,31 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
     private static int lastSelectedIndex = 0;
 
     /**
+     * @param metaModel
      * @param maxRowCount
      */
-    public UserFieldDeclarationDialogClassComboBox(final int maxRowCount) {
+    public UserFieldDeclarationDialogClassComboBox(final MetaModel metaModel, final int maxRowCount) {
         super();
         setMaximumRowCount(13);
         addItem(GLOBAL_USERFIELD_IDENTIFIER_CLASS, getDisplayableGlobalFieldIdentifierName());
         addSeparator(true);
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         //alle nicht abstracten Knotenklassen hinzufügen
-        for (Class<? extends ModelElement> elementClass : ALL_NODES) {
-            if (!ModelConstants.isAbstract(elementClass)) {
-                addItem(elementClass, ElementsNameBuilder.getDisplayableName(elementClass));
+        for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
+            if (!MetaModel.isAbstract(elementClass)) {
+                addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
             }
         }
         addSeparator(true);
         //alle Kantenklassen jeweils mit hin und Rückrichtung
-        for (Class<? extends Edge> edgeClass : ModelConstants.ALL_EDGES_SET) {
+        for (Class<? extends Edge> edgeClass : metaModel.allEdgesSet) {
             //Im Moment geht der ganze Mechanismus davon aus, dass es immer nur eine derselben Art Kante zwischen
             //2 Elementen geben kann. D.h. bei MultipleEges würde immer nur die erste Kante beachtet werden.
             //Da weder druchdacht ist noch ausprobiert wurde, was passiert, wenn man Kanten mehrfach verknüpft
             //und dann mit Verteilungegewichten bestückt, sind diese Kanten hier erstmal ausßen vor.
-            if (!ModelConstants.isMultipleEdgeClass(edgeClass)) {
-                addItem(edgeClass, ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
-                addItem(edgeClass, ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
+            if (!MetaModel.isMultipleEdgeClass(edgeClass)) {
+                addItem(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
+                addItem(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
             }
         }
     }

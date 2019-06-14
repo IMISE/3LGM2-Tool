@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getDisplayableName;
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getDisplayablePluralName;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
@@ -16,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
@@ -26,7 +25,7 @@ import de.imise.tool3lgm.graphtools.consistency.error.MinCardinalityError;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -63,17 +62,26 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * diese Variable <code>null</code> ist, werden alle Kanten mit ihren Originalen Kardinalitäten
      * geprüft.
      */
-    private ConsistencyDefinition consistencyDefinition = new ConsistencyDefinition();
+    private ConsistencyDefinition consistencyDefinition;
 
     private final UniqueIDChecker idChecker;
 
     /**
      * Erzeugt einen neuen <code>ConsistencyChecker</code> mit initialisierter <code>ErrorSolutionLibraryVersion</code>.
+     *
+     * @param gdcoll
+     * @param changeContext
      */
-    private ConsistencyChecker() {
-        super();
+    private ConsistencyChecker(final GDCollection gdcoll, final boolean changeContext) {
         solutionsLibrary = new ErrorSolutionLibraryVersion();
         idChecker = new UniqueIDChecker();
+        consistencyDefinition = new ConsistencyDefinition(gdcoll.getMetaModel());
+        if (changeContext) {
+            changeContext(gdcoll);
+        } else {
+            this.gdcoll = gdcoll;
+        }
+
     }
 
     /**
@@ -83,8 +91,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * @param gdcoll
      */
     public ConsistencyChecker(final GDCollection gdcoll) {
-        this();
-        changeContext(gdcoll);
+        this(gdcoll, true);
     }
 
     /**
@@ -109,7 +116,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * @param consistencyDefinition
      */
     public void resetConsistencyDefinition() {
-        consistencyDefinition = new ConsistencyDefinition();
+        consistencyDefinition = new ConsistencyDefinition(gdcoll.getMetaModel());
     }
 
     /**
@@ -135,8 +142,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * löschen.
      */
     public static void clearUnfixableErrors(final GDCollection gdcoll) {
-        ConsistencyChecker checker = new ConsistencyChecker();
-        checker.gdcoll = gdcoll;
+        ConsistencyChecker checker = new ConsistencyChecker(gdcoll, false);
         // dieses Löschen muss man nicht rückgängig machen können -> BulkMode einschalten
         boolean oldBulkMode = checker.gdcoll.isBulkMode();
         checker.gdcoll.setBulkMode(true);
@@ -263,83 +269,83 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      */
     private void addCardinalityErrors(final ModelElement me, final List<AbstractError> returnList) {
         Class<? extends ModelElement> meClass = me.getClass();
-        Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(meClass);
+        MetaModel metaModel = gdcoll.getMetaModel();
+        ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
+        Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(meClass);
         // nur Elementarten beachten, die wenigstens eine Edge besitzen können
-        if (edgeTypes != null) {
-            for (Class<? extends Edge> edgeClass : edgeTypes) {
-                EdgeCardinality forwardCardinality = consistencyDefinition.getForwardCardinality(edgeClass);
-                EdgeCardinality backwardCardinality = consistencyDefinition.getBackwardCardinality(edgeClass);
-                //wenn es keine Min-Max-Fehler geben kann -> weiter
-                if (forwardCardinality == ZERO_UNLIMITED && backwardCardinality == ZERO_UNLIMITED) {
-                    continue;
-                }
+        for (Class<? extends Edge> edgeClass : edgeTypes) {
+            EdgeCardinality forwardCardinality = consistencyDefinition.getForwardCardinality(edgeClass);
+            EdgeCardinality backwardCardinality = consistencyDefinition.getBackwardCardinality(edgeClass);
+            //wenn es keine Min-Max-Fehler geben kann -> weiter
+            if (forwardCardinality == ZERO_UNLIMITED && backwardCardinality == ZERO_UNLIMITED) {
+                continue;
+            }
 
-                List<Edge> connections = me.getEdges(edgeClass);
-                List<Edge> meIsStartConnections = new ArrayList<>();
-                List<Edge> meIsEndConnections = new ArrayList<>();
-                for (Edge edge : connections) {
-                    if (edge.isStart(me)) {
-                        meIsStartConnections.add(edge);
-                    } else {
-                        meIsEndConnections.add(edge);
-                    }
-                }
-
-                // entweder für die aktuelle Kantenklasse die neu gesetzten Kardinalitäten holen
-                // oder die Standardwaerte laden, wenn keine neuen gesetzt wurden
-                int minStartCard = forwardCardinality.min();
-                int maxStartCard = forwardCardinality.max();
-                int minEndCard = backwardCardinality.min();
-                int maxEndCard = backwardCardinality.max();
-                boolean meHasStartClass = isStartClass(edgeClass, meClass);
-                boolean meHasEndClass = isEndClass(edgeClass, meClass);
-
-                ElementaryMetaPath forwardElementaryMetaPath = ElementaryMetaPathHandler.getForwardMetaPath(edgeClass);
-                // Bei Teil-Von-Beziehungen oder Beziehungen bei denen meClass
-                // sowohl Start- als auch Endklasse sein können
-                if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
-                    if (meHasStartClass) {
-                        if (meIsStartConnections.size() < minStartCard) {
-                            returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, minEndCard));
-                        }
-                        if (meIsStartConnections.size() > maxStartCard) {
-                            returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, meIsStartConnections, gdcoll, maxEndCard));
-                        }
-                    }
-                    if (meHasEndClass) {
-                        if (meIsEndConnections.size() < minEndCard) {
-                            returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), gdcoll, minStartCard));
-                        }
-                        if (meIsEndConnections.size() > maxEndCard) {
-                            returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), meIsEndConnections, gdcoll, maxStartCard));
-                        }
-                    }
-                } else if (meHasStartClass && meHasEndClass) {
-                    int card = minStartCard < minEndCard ? minEndCard : minStartCard;
-                    if (connections.size() < card) {
-                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, card));
-                    }
-                    card = maxStartCard < maxEndCard ? maxStartCard : maxEndCard;
-                    if (connections.size() > card) {
-                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, connections, gdcoll, card));
-                    }
-                } else if (meHasStartClass) {
-                    if (connections.size() < minStartCard) {
-                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, minStartCard));
-                    }
-                    if (connections.size() > maxStartCard) {
-                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, connections, gdcoll, maxStartCard));
-                    }
-                } else if (meHasEndClass) {
-                    if (connections.size() < minEndCard) {
-                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), gdcoll, minEndCard));
-                    }
-                    if (connections.size() > maxEndCard) {
-                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), connections, gdcoll, maxEndCard));
-                    }
+            List<Edge> connections = me.getEdges(edgeClass);
+            List<Edge> meIsStartConnections = new ArrayList<>();
+            List<Edge> meIsEndConnections = new ArrayList<>();
+            for (Edge edge : connections) {
+                if (edge.isStart(me)) {
+                    meIsStartConnections.add(edge);
                 } else {
-                    System.err.println("Die Edge darf gar nicht für dieses Element existieren!");
+                    meIsEndConnections.add(edge);
                 }
+            }
+
+            // entweder für die aktuelle Kantenklasse die neu gesetzten Kardinalitäten holen
+            // oder die Standardwaerte laden, wenn keine neuen gesetzt wurden
+            int minStartCard = forwardCardinality.min();
+            int maxStartCard = forwardCardinality.max();
+            int minEndCard = backwardCardinality.min();
+            int maxEndCard = backwardCardinality.max();
+            boolean meHasStartClass = isStartClass(edgeClass, meClass);
+            boolean meHasEndClass = isEndClass(edgeClass, meClass);
+
+            ElementaryMetaPath forwardElementaryMetaPath = elementaryMetaPathHandler.getForwardMetaPath(edgeClass);
+            // Bei Teil-Von-Beziehungen oder Beziehungen bei denen meClass
+            // sowohl Start- als auch Endklasse sein können
+            if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
+                if (meHasStartClass) {
+                    if (meIsStartConnections.size() < minStartCard) {
+                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, minEndCard));
+                    }
+                    if (meIsStartConnections.size() > maxStartCard) {
+                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, meIsStartConnections, gdcoll, maxEndCard));
+                    }
+                }
+                if (meHasEndClass) {
+                    if (meIsEndConnections.size() < minEndCard) {
+                        returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), gdcoll, minStartCard));
+                    }
+                    if (meIsEndConnections.size() > maxEndCard) {
+                        returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), meIsEndConnections, gdcoll, maxStartCard));
+                    }
+                }
+            } else if (meHasStartClass && meHasEndClass) {
+                int card = minStartCard < minEndCard ? minEndCard : minStartCard;
+                if (connections.size() < card) {
+                    returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, card));
+                }
+                card = maxStartCard < maxEndCard ? maxStartCard : maxEndCard;
+                if (connections.size() > card) {
+                    returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, connections, gdcoll, card));
+                }
+            } else if (meHasStartClass) {
+                if (connections.size() < minStartCard) {
+                    returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath, gdcoll, minStartCard));
+                }
+                if (connections.size() > maxStartCard) {
+                    returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath, connections, gdcoll, maxStartCard));
+                }
+            } else if (meHasEndClass) {
+                if (connections.size() < minEndCard) {
+                    returnList.add(new MinCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), gdcoll, minEndCard));
+                }
+                if (connections.size() > maxEndCard) {
+                    returnList.add(new MaxCardinalityError(me, forwardElementaryMetaPath.getOtherDirection(), connections, gdcoll, maxEndCard));
+                }
+            } else {
+                System.err.println("Die Edge darf gar nicht für dieses Element existieren!");
             }
         }
     }
@@ -410,7 +416,8 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 ModelElement me = cardError.getModelElement();
                 ElementPropertyDialog dialog = me.getPropertyDialog();
                 Class<? extends ModelElement> errorConnectedClass = elementaryMetaPath.getEndClass();
-                String tabName = elementaryMetaPath.isSingleConnection() ? getDisplayableName(errorConnectedClass) : getDisplayablePluralName(errorConnectedClass);
+                ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
+                String tabName = elementaryMetaPath.isSingleConnection() ? elementsNameBuilder.getDisplayableName(errorConnectedClass) : elementsNameBuilder.getDisplayablePluralName(errorConnectedClass);
                 int existingTabIndex = dialog.selectTab(tabName, PathConnectionPanel.class);
                 ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
                 if (existingTabIndex < 0) {

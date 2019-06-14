@@ -3,6 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.event;
 
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentAdapter;
@@ -35,6 +36,11 @@ public abstract class UserFieldDefinitionChangeHandler extends GraphDocumentAdap
      */
     public GDCollection getCollection() {
         return gdcoll;
+    }
+
+    /** Liefert das MetaModel der zugehörigen {@link GDCollection} */
+    public MetaModel getMetaModel() {
+        return gdcoll.getMetaModel();
     }
 
     /**

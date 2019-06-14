@@ -18,8 +18,9 @@ import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
@@ -75,11 +76,6 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
     private MatrixViewInternalFrame controlledFrame;
 
     /**
-     * Das Model mit den auswählbaren Elementklassen und Pfaden für den {@link MetaPathSelector}
-     */
-    private static final MetaPathDefinition METAPATH_SELECTOR_MODEL = ModelConstants.getPathsDefinition();
-
-    /**
      * Maximale Anzahle gleichzeitig auswählbarer Metapfade, wenn es mehrere gibt
      */
     public static final int MAX_PARALLEL_SELECTED_METAPATHS = 4;
@@ -109,7 +105,11 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
         pathNameLabel = new JLabel("");
         pathNameLabel.setFont(pathNameLabel.getFont().deriveFont(Font.BOLD));
 
-        metaPathSelector = new MetaPathSelector(METAPATH_SELECTOR_MODEL, MAX_PARALLEL_SELECTED_METAPATHS);
+        GDCollection gdcoll = controlledFrame.getCollection();
+        MetaModel metaModel = gdcoll.getMetaModel();
+
+        MetaPathDefinition pathsDefinition = metaModel.getMetaPathsDefinition();
+        metaPathSelector = new MetaPathSelector(pathsDefinition, MAX_PARALLEL_SELECTED_METAPATHS);
         metaPathSelector.addChangeListener(this);
 
         //ab 6 Legendeneinträgen ist diese Einstellung nicht mehr hoch genug
@@ -190,8 +190,10 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
         legendPanel.removeAll();
         if (metaPathSelector.isValidSelection()) {
             MetaPathSelection metaPathSelection = metaPathSelector.getSelection();
-            String startClassName = ElementsNameBuilder.getDisplayableName(metaPathSelection.class1);
-            String endClassName = ElementsNameBuilder.getDisplayableName(metaPathSelection.class2);
+            GDCollection gdcoll = controlledFrame.getCollection();
+            ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
+            String startClassName = elementsNameBuilder.getDisplayableName(metaPathSelection.class1);
+            String endClassName = elementsNameBuilder.getDisplayableName(metaPathSelection.class2);
             String and = " " + Tool3lgmConstants.getResString("und") + " ";
             List<AbstractMetaPath> metaPaths = metaPathSelection.selectedMetaPaths;
             int metaPathCount = metaPaths.size();

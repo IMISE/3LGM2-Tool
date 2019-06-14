@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
@@ -29,28 +29,25 @@ import de.imise.util.collections.CollectionUtils;
  */
 public class ModelSelection implements Set<ElementContainer> {
 
+    /** MetaModel des Modells zu dem diese Selektion gehört */
+    private final MetaModel metaModel;
+
     /**
      * Speziellste Oberklasse der {@link ModelElement}s aller selektierbaren {@link NodeContainer}. Das
      * sollte in alle Metamodellen {@link ModelElement} sein, muss es aber in Zukunft nicht.
      */
-    private static final Class<?> COMMON_REAL_ELEMENTS_SUPER_CLASS = ReflectionUtils.getCommonSuperClass(ModelConstants.ALL_NODES);
+    private final Class<?> commonRealElementsSuperClass;
 
-    /**
-     * Liste, die die selektierten {@link NodeContainer} enthält.
-     */
+    /** Liste, die die selektierten {@link NodeContainer} enthält. */
     private final HashSet<NodeContainer> selectedRealNodeContainer;
-    /**
-     * Liste, die die selektierten {@link BendpointContainer} enthält.
-     */
+
+    /** Liste, die die selektierten {@link BendpointContainer} enthält. */
     private final HashSet<BendpointContainer> selectedBendpointContainer;
-    /**
-     * Liste, die die selektierten {@link EdgeContainer} enthält.
-     */
+
+    /** Liste, die die selektierten {@link EdgeContainer} enthält. */
     private final HashSet<EdgeContainer> selectedEdgeContainer;
 
-    /**
-     * Zuletzt selektiertes Element
-     */
+    /** Zuletzt selektiertes Element */
     private ElementContainer lastSelected = null;
 
     /**
@@ -60,17 +57,16 @@ public class ModelSelection implements Set<ElementContainer> {
      */
     private Class<? extends ModelElement> mostSpecialRealElementClass = null;
 
-    /**
-     * Wenn viele Elemente hinzugefügt oder entfernt werden sollen, muss nicht bei jedem hinzufügen
-     * einzeln
-     */
+    /** Wenn viele Elemente hinzugefügt oder entfernt werden sollen, muss nicht bei jedem Hinzufügen einzeln. */
     private boolean preventUpdate = false;
 
     /**
+     * @param metaModel
      * @param initialCapacity
      */
-    public ModelSelection(final int initialCapacity) {
-        super();
+    public ModelSelection(final MetaModel metaModel, final int initialCapacity) {
+        this.metaModel = metaModel;
+        commonRealElementsSuperClass = ReflectionUtils.getCommonSuperClass(metaModel.allNodesSet);
         selectedRealNodeContainer = new HashSet<>(initialCapacity);
         selectedBendpointContainer = new HashSet<>(initialCapacity);
         selectedEdgeContainer = new HashSet<>(initialCapacity);
@@ -78,16 +74,21 @@ public class ModelSelection implements Set<ElementContainer> {
 
     /**
      * Erzeugt ein neues Selektionsobjekt mit einer leeren Selektionsliste.
+     *
+     * @param metaModel
      */
-    public ModelSelection() {
-        this(100);
+    public ModelSelection(final MetaModel metaModel) {
+        this(metaModel, 100);
     }
 
     /**
      * Erzeugt eine neue Selektion mit den übergebenen Objeckten als Selektionsmenge.
+     *
+     * @param metaModel
+     * @param selection
      */
-    public ModelSelection(final Collection<? extends ElementContainer> selection) {
-        this(selection.size());
+    public ModelSelection(final MetaModel metaModel, final Collection<? extends ElementContainer> selection) {
+        this(metaModel, selection.size());
         addAll(selection);
     }
 
@@ -521,7 +522,7 @@ public class ModelSelection implements Set<ElementContainer> {
         for (Iterator<NodeContainer> elemIt = selectedRealNodeContainer.iterator(); elemIt.hasNext();) {
             NodeContainer kc = elemIt.next();
             mostSpecialRealElementClass = ReflectionUtils.getCommonSuperClass(mostSpecialRealElementClass, kc.getElement().getClass()).asSubclass(ModelElement.class);
-            if (mostSpecialRealElementClass == COMMON_REAL_ELEMENTS_SUPER_CLASS) {
+            if (mostSpecialRealElementClass == commonRealElementsSuperClass) {
                 break;
             }
         }
@@ -566,7 +567,7 @@ public class ModelSelection implements Set<ElementContainer> {
      */
     public boolean isSelectedOnlyUniqueNodes() {
         for (ElementContainer ec : selectedRealNodeContainer) {
-            if (!ModelConstants.isUnique(ec.getElement().getClass())) {
+            if (!metaModel.isUnique(ec.getElement().getClass())) {
                 return false;
             }
         }
@@ -585,7 +586,7 @@ public class ModelSelection implements Set<ElementContainer> {
      */
     public boolean isSelectedOnlySlaveRealNodes() {
         for (ElementContainer ec : selectedRealNodeContainer) {
-            if (!ModelConstants.isSlaveType(ec.getElement().getClass())) {
+            if (!metaModel.isSlaveType(ec.getElement().getClass())) {
                 return false;
             }
         }

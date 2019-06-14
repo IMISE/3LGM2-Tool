@@ -30,7 +30,7 @@ import javax.swing.event.ListSelectionListener;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -40,6 +40,9 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
 /** @author thomas, AXS, xhb */
 public class AnalysisEditor extends JDialog implements ActionListener {
+
+    /** Das MetaModel, für das die Analsysen erstellt werden sollen */
+    private final MetaModel metaModel;
 
     /**
      * Diese Componente besteht aus zwei Listen, die Elementklassen enthalten. In der ersten sind
@@ -222,7 +225,8 @@ public class AnalysisEditor extends JDialog implements ActionListener {
             Class<? extends ModelElement>[] connectable = getConnectableElementClasses(selectedPathStepElements);
 
             for (int i = 0; i < connectable.length; i++) {
-                String resName = getResString(connectable[i].getSimpleName());
+                String simpleElementClassName = connectable[i].getSimpleName();
+                String resName = metaModel.getResString(simpleElementClassName);
                 if (!newList) {
                     conditionElementTypeList.addItem(connectable[i], resName);
                 }
@@ -251,14 +255,14 @@ public class AnalysisEditor extends JDialog implements ActionListener {
      * @param elementClassArray
      */
     @SuppressWarnings("unchecked")
-    private static Class<? extends ModelElement>[] getConnectableElementClasses(final Object[] elementClassArray) {
+    private Class<? extends ModelElement>[] getConnectableElementClasses(final Object[] elementClassArray) {
         if (elementClassArray == null || elementClassArray.length == 0) {
             return new Class[0];
         }
         HashSet<Class<? extends ModelElement>> connectedTypes = new HashSet<>();
         for (int e = 0; e < elementClassArray.length; e++) {
             Class<? extends ModelElement> elementClass = ((Class<?>) elementClassArray[e]).asSubclass(ModelElement.class);
-            Class<? extends Edge>[] edgeClasses = ModelConstants.getEdgeTypes(elementClass);
+            Class<? extends Edge>[] edgeClasses = metaModel.getEdgeTypes(elementClass);
             for (int i = 0; i < edgeClasses.length; i++) {
                 Class<? extends ModelElement> edgeElementClass = getStartClass(edgeClasses[i]);
                 boolean selectedPathStartClassIsEdgeStartClass = false;
@@ -273,7 +277,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
         }
         HashSet<Class<? extends ModelElement>> allNonAbstractClasses = new HashSet<>(connectedTypes.size());
         for (Class<? extends ModelElement> c : connectedTypes) {
-            allNonAbstractClasses.addAll(ModelConstants.getInstanciableAssignableClasses(c));
+            allNonAbstractClasses.addAll(metaModel.getInstanciableAssignableClasses(c));
         }
         Class<? extends ModelElement>[] returnClasses = new Class[allNonAbstractClasses.size()];
         System.arraycopy(allNonAbstractClasses.toArray(), 0, returnClasses, 0, returnClasses.length);
@@ -284,10 +288,11 @@ public class AnalysisEditor extends JDialog implements ActionListener {
      * Zeigt den AnalysisEditor an.
      *
      * @param owner
+     * @param metaModel
      */
-    public static void showDialog(final JDialog owner) {
+    public static void showDialog(final JDialog owner, final MetaModel metaModel) {
         if (editor == null) {
-            editor = new AnalysisEditor(owner);
+            editor = new AnalysisEditor(owner, metaModel);
         }
         editor.setVisible(true);
     }
@@ -296,10 +301,11 @@ public class AnalysisEditor extends JDialog implements ActionListener {
      * Zeigt den AnalysisEditor an.
      *
      * @param owner
+     * @param metaModel
      */
-    public static void showDialog(final JFrame owner) {
+    public static void showDialog(final JFrame owner, final MetaModel metaModel) {
         if (editor == null) {
-            editor = new AnalysisEditor(owner);
+            editor = new AnalysisEditor(owner, metaModel);
         }
         editor.setVisible(true);
     }
@@ -330,15 +336,23 @@ public class AnalysisEditor extends JDialog implements ActionListener {
     /** Die Instanz dieser Klasse, die dann tatsächlich angezeigt wird. */
     static AnalysisEditor editor = null;
 
-    /** @param owner */
-    private AnalysisEditor(final Frame owner) {
+    /**
+     * @param owner
+     * @param metaModel
+     */
+    private AnalysisEditor(final Frame owner, final MetaModel metaModel) {
         super(owner);
+        this.metaModel = metaModel;
         init();
     }
 
-    /** @param owner */
-    private AnalysisEditor(final JDialog owner) {
+    /**
+     * @param owner
+     * @param metaModel
+     */
+    private AnalysisEditor(final JDialog owner, final MetaModel metaModel) {
         super(owner);
+        this.metaModel = metaModel;
         init();
     }
 
@@ -349,13 +363,13 @@ public class AnalysisEditor extends JDialog implements ActionListener {
             dispose();
         } else if (str.equals(getResString("ana_start"))) {
             GraphDocument doc = Static.getSelectedDoc();
-            if (doc == null) {
+            if (doc == null || !doc.getMetaModel().equals(metaModel)) {
                 return;
             }
             PathStepComponent first = pathPanels.get(0);
             if (!(first.pathStepElementTypeList.isSelectionEmpty() && first.conditionElementTypeList.isSelectionEmpty())) {
                 try {
-                    XMLAnalysis.createAnalysis(getAnalysisString()).setAnalysisResult(doc);
+                    XMLAnalysis.createAnalysis(doc.getCollection().getMetaModelContext(), getAnalysisString()).setAnalysisResult(doc);
                 } catch (SAXException e1) {
                     Log.log(Log.ERROR, "Can't execute analysis\n" + getAnalysisString());
                     // e1.printStackTrace();
@@ -399,7 +413,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
                 }
                 XMLAnalysis toadd = null;
                 try {
-                    toadd = XMLAnalysis.createAnalysis(val, getAnalysisString());
+                    toadd = XMLAnalysis.createAnalysis(Static.getSelectedMetaModelContext(), val, getAnalysisString());
                 } catch (SAXException ex) {
                     Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
                 }
@@ -524,9 +538,11 @@ public class AnalysisEditor extends JDialog implements ActionListener {
         pathStepMainPanelConstraints.anchor = GridBagConstraints.NORTHWEST;
 
         PathStepComponent pathComponent = new PathStepComponent(this);
-        for (int i = 0; i < ModelConstants.ALL_NODES.length; i++) {
-            String resName = getResString(ModelConstants.ALL_NODES[i].getSimpleName());
-            pathComponent.pathStepElementTypeList.addItem(ModelConstants.ALL_NODES[i], resName);
+
+        for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
+            String simpleElementClassName = elementClass.getSimpleName();
+            String resName = metaModel.getResString(simpleElementClassName);
+            pathComponent.pathStepElementTypeList.addItem(elementClass, resName);
         }
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));

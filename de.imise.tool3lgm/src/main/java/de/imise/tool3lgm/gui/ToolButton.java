@@ -14,7 +14,7 @@ import javax.swing.JToggleButton;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -42,18 +42,24 @@ public class ToolButton extends JToggleButton {
      */
     private NodeContainer paintedNodeContainer;
 
-    private ToolButton(final Class<? extends ModelElement> paintableElementClass, final boolean isEdgeButton) {
-        this.isEdgeButton = isEdgeButton;
-        paintedNode = paintableElementClass == null ? null : (Node) ModelConstants.createElement(paintableElementClass);
+    /**
+     * @param metaModel
+     * @param paintableElementClass
+     * @param isEdgeButton
+     */
+    private ToolButton(final MetaModel metaModel, final Class<? extends ModelElement> paintableElementClass) {
+        isEdgeButton = metaModel == null;
+        paintedNode = paintableElementClass == null ? null : (Node) metaModel.createElement(paintableElementClass);
         setPreferredSize(PREFRERRED_SIZE);
     }
 
     /**
+     * @param metaModel
      * @param paintableElementClass
      * @return
      */
-    public static ToolButton createNodeButton(final Class<? extends Node> paintableElementClass) {
-        final ToolButton button = new ToolButton(paintableElementClass, false);
+    public static ToolButton createNodeButton(final MetaModel metaModel, final Class<? extends Node> paintableElementClass) {
+        final ToolButton button = new ToolButton(metaModel, paintableElementClass);
         button.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -63,7 +69,8 @@ public class ToolButton extends JToggleButton {
                 }
             }
         });
-        button.setToolTipText(ElementsNameBuilder.getDisplayableName(paintableElementClass));
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        button.setToolTipText(elementsNameBuilder.getDisplayableName(paintableElementClass));
         button.setIcon("ICON_LARGE_BACKGROUND_NORMAL.gif");
         button.setSelectedIcon("ICON_LARGE_BACKGROUND_SELECTED.gif");
         CSH.setHelpIDString(button, "GRAPH_TOOLBAR_" + paintableElementClass.getSimpleName());
@@ -73,12 +80,13 @@ public class ToolButton extends JToggleButton {
     }
 
     /**
+     * @param metaModel
      * @param dummyPaintableElementClass
      *            irgendeine der grafisch darstellbaren Klassen, die man braucht, um einen Strich auf den Button der Kanten zu malen
      * @return
      */
-    public static ToolButton createEdgeButton(final Class<? extends Node> dummyPaintableElementClass) {
-        ToolButton button = new ToolButton(dummyPaintableElementClass, true);
+    public static ToolButton createEdgeButton(final MetaModel metaModel, final Class<? extends Node> dummyPaintableElementClass) {
+        ToolButton button = new ToolButton(null, dummyPaintableElementClass);
         button.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -88,14 +96,15 @@ public class ToolButton extends JToggleButton {
                 }
             }
         });
-        button.setToolTipText(ElementsNameBuilder.getDisplayableName(Edge.class));
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        button.setToolTipText(elementsNameBuilder.getDisplayableName(Edge.class));
         button.setIcon("ICON_LARGE_BACKGROUND_NORMAL.gif");
         button.setSelectedIcon("ICON_LARGE_BACKGROUND_SELECTED.gif");
         return button;
     }
 
     public static ToolButton createDisableMouseMakesElementsButton() {
-        ToolButton button = new ToolButton(null, false);
+        ToolButton button = new ToolButton(null, null);
         button.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {

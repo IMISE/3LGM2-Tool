@@ -144,4 +144,9 @@ public class GDCollectionPrinter {
         Sys.errn(2, new GDCollectionPrinter(gdcoll));
     }
 
+    public static final void print(final GDCollectionOwner gdcollOwner) {
+        GDCollection gdcoll = gdcollOwner.getCollection();
+        Sys.errn(2, new GDCollectionPrinter(gdcoll));
+    }
+
 }

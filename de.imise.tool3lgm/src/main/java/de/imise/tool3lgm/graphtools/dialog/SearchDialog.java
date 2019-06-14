@@ -24,7 +24,9 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
@@ -57,7 +59,7 @@ import javax.swing.text.JTextComponent;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -74,9 +76,6 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
-import gnu.regexp.RE;
-import gnu.regexp.REException;
-import gnu.regexp.REMatch;
 
 public class SearchDialog extends JDialog implements ActionListener, ListSelectionListener, WindowListener, ItemListener {
 
@@ -120,16 +119,16 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     private int checkBoxMode = 0;
 
     /** Checkbox für ignore case Bezeichnung */
-    private final JCheckBox elementName_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInName);
+    private final JCheckBox elementName_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInName);
 
     /** Checkbox für ignore case Beschreibung */
-    private final JCheckBox elementDescription_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInDescription);
+    private final JCheckBox elementDescription_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInDescription);
 
     /** Checkbox für ignore case Benutzerdef Eigenschaften */
-    private final JCheckBox elementUserField_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CBText"), SearchDialog.ignoreCaseInUserField);
+    private final JCheckBox elementUserField_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInUserField);
 
     /** Checkbox Checkboxsuche */
-    private JComboBox checkBoxAuswahl = new AlphabeticalComboBox();
+    private JComboBox<String> checkBoxAuswahl = new AlphabeticalComboBox();
 
     /** Typbox der benutzerdef. Eigenschaften wie Checkbox, Textfeld usw. */
     private AlphabeticalComboBox userFieldTypeComboBox;
@@ -317,7 +316,6 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         inputPane.add(searchButton, constraints);
 
         // Selectboxen befüllen
-        fillElementClassBox();
         fillModelBox();
 
         getContentPane().setLayout(new BorderLayout());
@@ -357,21 +355,25 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
         if (e.getSource() == modelBox) {
             fillSubModelBox();
+            fillElementClassBox();
         }
 
         // wenn Groß-/KLeinschreibung ignorieren, dann wandle in kleine namen um
-        String name = elementName_cb.isSelected() ? cleanName((String) elementName.getSelectedItem()) : (String) elementName.getSelectedItem();
-        String bez = elementDescription_cb.isSelected() ? cleanName((String) elementDescription.getSelectedItem()) : (String) elementDescription.getSelectedItem();
-        String ud = elementUserField_cb.isSelected() ? cleanName((String) elementUserField.getSelectedItem()) : (String) elementUserField.getSelectedItem();
+        String name = elementName_cb.isSelected() ? (String) elementName.getSelectedItem() : cleanName((String) elementName.getSelectedItem());
+        String bez = elementDescription_cb.isSelected() ? (String) elementDescription.getSelectedItem() : cleanName((String) elementDescription.getSelectedItem());
+        String ud = elementUserField_cb.isSelected() ? (String) elementUserField.getSelectedItem() : cleanName((String) elementUserField.getSelectedItem());
 
         // Null abfangen
         if (name == null || name.equals("")) {
-            name = ".*";
+            //            name = ".*";
+            name = "";
         } else {
             name = name.replaceAll("\\*", ".*").replaceAll("\\?", ".");
         }
         if (bez == null) {
             bez = "";
+        } else {
+            bez = bez.replaceAll("\\*", ".*").replaceAll("\\?", ".");
         }
         if (ud == null) {
             ud = "";
@@ -388,33 +390,35 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         List<ElementContainer> searchSet = doc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true);
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
         if (doc != mainDoc) {
+            MetaModel metaModel = doc.getMetaModel();
             for (ElementContainer ec : mainDoc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true)) {
-                if (ModelConstants.isUnique(ec.getElement().getClass())) {
+                if (metaModel.isUnique(ec.getElement().getClass())) {
                     Alphabetical.insert(searchSet, ec);
                 }
             }
         }
-        RE re1 = null;
+
+        Pattern re1 = null;
         if (!name.equals("")) {
             try {
-                re1 = new RE(name);
-            } catch (REException error) {
+                re1 = Pattern.compile(name);
+            } catch (PatternSyntaxException error) {
                 Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
             }
         }
-        RE re2 = null;
+        Pattern re2 = null;
         if (!bez.equals("")) {
             try {
-                re2 = new RE(bez);
-            } catch (REException error) {
+                re2 = Pattern.compile(bez);
+            } catch (PatternSyntaxException error) {
                 Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
             }
         }
-        RE re3 = null;
+        Pattern re3 = null;
         if (!ud.equals("")) {
             try {
-                re3 = new RE(ud);
-            } catch (REException error) {
+                re3 = Pattern.compile(ud);
+            } catch (PatternSyntaxException error) {
                 Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
             }
         }
@@ -422,17 +426,17 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         for (int i = searchSet.size() - 1; i >= 0; i--) {
             ModelElement me = searchSet.get(i).getElement();
             if (re1 != null) {
-                String string = elementName_cb.isSelected() ? cleanName(me.getName()) : me.getName();
-                REMatch match1 = re1.getMatch(string);
-                if (match1 == null) {
+                String string = elementName_cb.isSelected() ? me.getName() : cleanName(me.getName());
+                Matcher match1 = re1.matcher(string);
+                if (!match1.find()) {
                     searchSet.remove(i);
                     continue;
                 }
             }
             if (re2 != null) {
-                String string = elementDescription_cb.isSelected() ? cleanName(me.getDescription()) : me.getDescription();
-                REMatch match2 = re2.getMatch(string);
-                if (match2 == null) {
+                String string = elementDescription_cb.isSelected() ? me.getDescription() : cleanName(me.getDescription());
+                Matcher match2 = re2.matcher(string);
+                if (!match2.find()) {
                     searchSet.remove(i);
                 }
                 continue;
@@ -442,8 +446,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             // eingeschränkt wird
             if (re3 == null && !userFieldTypeComboBox.getSelectedObject().equals(getResString("SEARCH_DIALOG_USERFIELD_all"))) {
                 try {
-                    re3 = new RE(" ");
-                } catch (REException e1) {
+                    re3 = Pattern.compile(" ");
+                } catch (PatternSyntaxException e1) {
                     e1.printStackTrace();
                 }
             }
@@ -464,7 +468,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
                             boolean nameOfCheckBoxMatched = false;// (+ zusätzlich muss label
                                                                   // stimmen)
-                            REMatch matchNameOfCheckBox = re3.getMatch(key.getName());
+                            Matcher matchNameOfCheckBox = re3.matcher(key.getName());
                             if (matchNameOfCheckBox != null) {
                                 nameOfCheckBoxMatched = true;
                             }
@@ -487,9 +491,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                                 string = string.replaceAll("\\.", ",");
                             }
 
-                            string = elementUserField_cb.isSelected() ? cleanName(string) : string;
-                            REMatch match3 = re3.getMatch(string);
-                            if (match3 == null) {
+                            string = elementUserField_cb.isSelected() ? string : cleanName(string);
+                            Matcher match3 = re3.matcher(string);
+                            if (!match3.find()) {
                                 continue;
                             }
                             found = true;
@@ -510,6 +514,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             mod.removeRow(0);
         }
 
+        ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
         int rowCounter = 1;
         Object[] data = new Object[3];
         for (ElementContainer ec : searchSet) {
@@ -517,9 +522,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             data[1] = ec;
             // data[2] = ec.getGraphDocument().getTitle();
             if (ec.getElement() instanceof Edge) {
-                data[2] = ElementsNameBuilder.getDisplayableName(ec.getElement()) + ": " + ElementsNameBuilder.getFullForwardMetaAssociationName(ec.getElement().getClass().asSubclass(Edge.class));
+                data[2] = elementsNameBuilder.getDisplayableName(ec.getElement()) + ": " + elementsNameBuilder.getFullForwardMetaAssociationName(ec.getElement().getClass().asSubclass(Edge.class));
             } else {
-                data[2] = ElementsNameBuilder.getDisplayableName(ec.getElement());
+                data[2] = elementsNameBuilder.getDisplayableName(ec.getElement());
             }
             mod.addRow(data);
             rowCounter++;
@@ -595,10 +600,10 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                         ((GraphDocument) subModelBox.getSelectedObject()).showPropertyDialog(true);
                     }
                 } else {
-                    ContextGenerator cg = Tool3lgm.getContextGenerator();
-                    cg.changeContext((LGMGraphDocument) subModelBox.getSelectedObject());
+                    ContextGenerator ontextGenerator = Tool3lgm.getContextGenerator();
+                    ontextGenerator.changeContext((LGMGraphDocument) subModelBox.getSelectedObject());
 
-                    JPopupMenu jpm = cg.getSearchDialogContextMenu();
+                    JPopupMenu jpm = ontextGenerator.getSearchDialogContextMenu();
                     // refresh
 
                     jpm.show(table, e.getX(), e.getY());
@@ -668,24 +673,29 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * Befüllt die elementClassBox
      */
     private void fillElementClassBox() {
+
+        elementClassBox.removeAllItems();
         elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_USERFIELD_AlleElementeArten"));
         elementClassBox.addSeparator(true);
 
         elementClassBox.addItem(Node.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKnoten"));
         elementClassBox.addSeparator(true);
-        for (int i = 0; i < ModelConstants.ALL_NODES.length; i++) {
-            if (Modifier.isAbstract(ModelConstants.ALL_NODES[i].getModifiers())) {
+        GDCollection gdcoll = (GDCollection) modelBox.getSelectedObject();
+        MetaModel metaModel = gdcoll.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
+        for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
+            if (Modifier.isAbstract(elementClass.getModifiers())) {
                 continue;
             }
-            elementClassBox.addItem(ModelConstants.ALL_NODES[i], ElementsNameBuilder.getDisplayableName(ModelConstants.ALL_NODES[i]));
+            elementClassBox.addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
         }
         elementClassBox.addSeparator(true);
         elementClassBox.addItem(Edge.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKanten"));
         elementClassBox.addSeparator(true);
 
-        for (Class<? extends Edge> edgeClass : ModelConstants.ALL_EDGES_SET) {
-            elementClassBox.addItem(edgeClass, ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
-            elementClassBox.addItem(edgeClass, ElementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
+        for (Class<? extends Edge> edgeClass : metaModel.allEdgesSet) {
+            elementClassBox.addItem(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
+            elementClassBox.addItem(edgeClass, elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass));
         }
         elementClassBox.setSelectedObject(ModelElement.class);
     }
@@ -745,6 +755,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
         modelBox.setSelectedObject(Static.getSelectedGDCollection());
         fillSubModelBox();
+        fillElementClassBox();
     }
 
     /**
@@ -783,7 +794,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         userFieldTypeComboBox.addItem(UserField.Style.ID, CostingUtil.getDisplayableStyleName(UserField.Style.ID));
 
         // auswahlmodi für die checkboxen
-        checkBoxAuswahl = new JComboBox();
+        checkBoxAuswahl = new JComboBox<>();
         checkBoxAuswahl.addItem(getResString("SEARCH_DIALOG_USERFIELD_activated_deactivated"));
         checkBoxAuswahl.addItem(getResString("SEARCH_DIALOG_USERFIELD_activated"));
         checkBoxAuswahl.addItem(getResString("SEARCH_DIALOG_USERFIELD_deactivated"));
@@ -892,9 +903,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     }
 
     private void addCBListeners() {
-        elementName_cb.addActionListener(e -> ignoreCaseInName = elementName_cb.isSelected());
-        elementDescription_cb.addActionListener(e -> ignoreCaseInDescription = elementDescription_cb.isSelected());
-        elementUserField_cb.addActionListener(e -> ignoreCaseInUserField = elementUserField_cb.isSelected());
+        elementName_cb.addActionListener(e -> ignoreCaseInName = !elementName_cb.isSelected());
+        elementDescription_cb.addActionListener(e -> ignoreCaseInDescription = !elementDescription_cb.isSelected());
+        elementUserField_cb.addActionListener(e -> ignoreCaseInUserField = !elementUserField_cb.isSelected());
 
     }
 

@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.path;
 
-import static de.imise.tool3lgm.graphtools.ElementsNameBuilder.getDisplayableName;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -19,6 +17,8 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.util.Alphabetical;
@@ -38,6 +38,9 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * @create 13.11.2007
  */
 public class MetaPathSelector implements ActionListener {
+
+    /** Der ElementsNameBuilder, der zum zugehörigen MetaModel gehört */
+    private final ElementsNameBuilder elementsNameBuilder;
 
     /**
      * ComboBox für die erste Klasse
@@ -115,8 +118,10 @@ public class MetaPathSelector implements ActionListener {
         class1ComboBox = new AlphabeticalComboBox();
         Set<Class<? extends ModelElement>> startElementClassesInPaths = model.getStartElementClassesInPaths(pathsForSubClasses, pathsForSuperClasses);
         endElementClassesInPaths = model.getEndElementClassesInPaths(pathsForSubClasses, pathsForSuperClasses);
+        MetaModel metaModel = model.getMetaModel();
+        elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (Class<? extends ModelElement> elementClass : startElementClassesInPaths) {
-            String name = getDisplayableName(elementClass);
+            String name = elementsNameBuilder.getDisplayableName(elementClass);
             if (name != null && name != "") {
                 class1ComboBox.addItem(elementClass, name);
             }
@@ -148,7 +153,7 @@ public class MetaPathSelector implements ActionListener {
             for (Class<? extends ModelElement> elementClass : endElementClassesInPaths) {
                 Set<AbstractMetaPath> metaPathes = model.getMetaPaths(class1BoxSelection, elementClass, pathsForSubClasses, pathsForSuperClasses, false);
                 if (metaPathes != null && metaPathes.size() > 0) {
-                    class2ComboBox.addItem(elementClass, getDisplayableName(elementClass));
+                    class2ComboBox.addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
                 }
             }
             selectedMetaPaths.clear();

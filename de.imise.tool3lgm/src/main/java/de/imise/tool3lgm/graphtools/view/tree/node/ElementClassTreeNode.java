@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.view.tree.node;
 
-import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
@@ -11,16 +10,16 @@ public class ElementClassTreeNode extends LGMTreeNode {
     /**
      * @param elementClass
      */
-    public ElementClassTreeNode(final Class<? extends ModelElement> elementClass) {
-        super(elementClass, ElementsNameBuilder.getDisplayableName(elementClass), true);
+    public ElementClassTreeNode(final Class<? extends ModelElement> elementClass, final String label) {
+        super(elementClass, label, true);
     }
 
     /**
      * @param elementClass
      * @param sort
      */
-    public ElementClassTreeNode(final Class<? extends ModelElement> elementClass, final boolean sort) {
-        super(elementClass, ElementsNameBuilder.getDisplayableName(elementClass), sort);
+    public ElementClassTreeNode(final Class<? extends ModelElement> elementClass, final String label, final boolean sort) {
+        super(elementClass, label, sort);
     }
 
     @SuppressWarnings("unchecked")

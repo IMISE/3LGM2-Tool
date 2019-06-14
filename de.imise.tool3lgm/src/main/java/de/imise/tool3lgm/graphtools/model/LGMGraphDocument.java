@@ -1,13 +1,6 @@
-/*
- * Created on 16.02.2004
- * To change the template for this generated file go to
- * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
- */
 package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
 
 import java.io.File;
 import java.io.InputStream;
@@ -23,7 +16,6 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -39,6 +31,7 @@ import de.imise.tool3lgm.xml.ToolXMLClipboardWriter;
 
 /**
  * @author thomas
+ * @created 16.02.2004
  */
 public class LGMGraphDocument extends GraphDocument {
 
@@ -66,8 +59,8 @@ public class LGMGraphDocument extends GraphDocument {
             break;
 
         case MODEL_ACTION_HIDE_UNASSOCIATED: {
-            Class<? extends ModelElement> elementClass = getClassForName(argv[0]);
-            Class<? extends Edge> egdeClass = getClassForName(argv[1]).asSubclass(Edge.class);
+            Class<? extends ModelElement> elementClass = metaModel.getClassForName(argv[0]);
+            Class<? extends Edge> egdeClass = metaModel.getClassForName(argv[1]).asSubclass(Edge.class);
             for (ElementContainer ec : getElementContainers(elementClass, true)) {
                 ModelElement me = ec.getElement();
                 List<ElementContainer> connectedContainer = me.getConnectedContainer(this, egdeClass);
@@ -79,7 +72,7 @@ public class LGMGraphDocument extends GraphDocument {
             break;
         }
         case MODEL_ACTION_UNHIDE_ALL: {
-            Class<? extends ModelElement> elementClass = getClassForName(argv[0]);
+            Class<? extends ModelElement> elementClass = metaModel.getClassForName(argv[0]);
             for (ElementContainer ec : getElementContainers(elementClass, true)) {
                 ec.setVisible(true);
             }
@@ -631,49 +624,47 @@ public class LGMGraphDocument extends GraphDocument {
 
         me1.refreshText();
 
-        for (Edge kante : me2.getEdges()) {
+        for (Edge edge : me2.getEdges()) {
             Edge oldKante;
             /* vorwaerts */
-            if (kante.getStart().equals(me2)) {
-                me3 = findElementCoded(kante.getEnd().getHashString());
-
+            if (edge.getStart().equals(me2)) {
+                me3 = findElementCoded(edge.getEnd().getHashString());
                 if (me3 == null || me3 == me1) {
                     continue;
                 }
-                if (me1.isConnectedWith(me3, kante.getClass())) {
+                if (me1.isConnectedWith(me3, edge.getClass())) {
                     continue;
                 }
 
-                oldKante = kante;
-                kante = (Edge) ModelConstants.createElement(kante, true);
-                kante.setStartAndInsert(me1);
-                kante.setEndAndInsert(me3);
+                oldKante = edge;
+                edge = (Edge) metaModel.createElement(edge, true);
+                edge.setStartAndInsert(me1);
+                edge.setEndAndInsert(me3);
                 /* rueckwaerts */
-            } else if (kante.getEnd().equals(me2)) {
-                me3 = findElementCoded(kante.getStart().getHashString());
-
+            } else if (edge.getEnd().equals(me2)) {
+                me3 = findElementCoded(edge.getStart().getHashString());
                 if (me3 == null || me3 == me1) {
                     continue;
                 }
-                if (me1.isConnectedWith(me3, kante.getClass())) {
+                if (me1.isConnectedWith(me3, edge.getClass())) {
                     continue;
                 }
 
-                oldKante = kante;
-                kante = (Edge) ModelConstants.createElement(kante, true);
-                kante.setStartAndInsert(me3);
-                kante.setEndAndInsert(me1);
+                oldKante = edge;
+                edge = (Edge) metaModel.createElement(edge, true);
+                edge.setStartAndInsert(me3);
+                edge.setEndAndInsert(me1);
             } else {
                 continue;
             }
 
-            gdcoll.getMainGraphDocument().getLayer(kante.layerFor()).add(kante.createContainer(gdcoll.getMainGraphDocument()));
+            gdcoll.getMainGraphDocument().getLayer(edge.layerFor()).add(edge.createContainer(gdcoll.getMainGraphDocument()));
 
             if (this != gdcoll.getMainGraphDocument() && me1.getContainer(this) != null && me3.getContainer(this) != null) {
-                getLayer(kante.layerFor()).add(kante.createContainer(this));
+                getLayer(edge.layerFor()).add(edge.createContainer(this));
             }
 
-            joinElements(kante, oldKante, doc2, saveInBoth);
+            joinElements(edge, oldKante, doc2, saveInBoth);
         }
     }
 

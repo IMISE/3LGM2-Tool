@@ -13,52 +13,91 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
-	<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-base -->
+
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-base</artifactId>
-			<version>3.11.0</version>
-			<scope>test</scope>
+			<groupId>de.imise</groupId>
+			<artifactId>tool3lgm</artifactId>
+			<version>1.0</version>
 		</dependency>
+		<dependency>
+			<groupId>de.axs</groupId>
+			<artifactId>de-axs-utils</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>de.imise</groupId>
+			<artifactId>tool3lgm.metamodel.service</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>27.1-jre</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-core -->
 		<dependency>
 			<groupId>org.apache.jena</groupId>
 			<artifactId>jena-core</artifactId>
 			<version>3.11.0</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-iri -->
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-iri</artifactId>
-			<version>3.11.0</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-shaded-guava -->
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-shaded-guava</artifactId>
-			<version>3.11.0</version>
-		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>log4j</groupId> -->
+		<!-- <artifactId>log4j</artifactId> -->
+		<!-- <version>1.2.17</version> -->
+		<!-- </dependency> -->
+
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.26</version>
+			<version>1.8.0-beta4</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+
+		<!-- ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG -->
+		<!--von den folgenden 4 SLF4J Providern darf immer nur genau 1 aktiv sein! -->
+		<!-- See http://www.slf4j.org/codes.html#noProviders for further details. -->
+		<!-- ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG -->
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.26</version>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.8.0-beta4</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.slf4j</groupId> -->
+		<!-- <artifactId>slf4j-log4j12</artifactId> -->
+		<!-- <version>1.8.0-beta4</version> -->
+		<!-- <scope>test</scope> -->
+		<!-- </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-nop -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.slf4j</groupId> -->
+		<!-- <artifactId>slf4j-nop</artifactId> -->
+		<!-- <version>1.8.0-beta4</version> -->
+		<!-- <scope>test</scope> -->
+		<!-- </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.slf4j</groupId> -->
+		<!-- <artifactId>slf4j-simple</artifactId> -->
+		<!-- <version>1.8.0-beta4</version> -->
+		<!-- <scope>test</scope> -->
+		<!-- </dependency> -->
+
 	</dependencies>
 
 </project>

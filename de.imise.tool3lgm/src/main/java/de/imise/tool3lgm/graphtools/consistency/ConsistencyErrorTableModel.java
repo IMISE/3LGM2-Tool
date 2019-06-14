@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.NamedObjectContainer;
 
 /**
@@ -82,7 +83,9 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
             ModelElement me = error.getModelElement();
 
             // Elementtyp
-            setValueAt(ElementsNameBuilder.getDisplayableName(me.getClass()), i, COL_NAMES.elementType.ordinal());
+            GDCollection gdcoll = error.getCollection();
+            ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
+            setValueAt(elementsNameBuilder.getDisplayableName(me.getClass()), i, COL_NAMES.elementType.ordinal());
 
             // Element
             setValueAt(me, i, COL_NAMES.element.ordinal());

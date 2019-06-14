@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 
 import org.xml.sax.SAXException;
 
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.log.Log;
@@ -225,19 +226,21 @@ public class AnalysesRepositoryFrameActions {
     /**
      * Action für das starten der ausgewählten Analysen
      */
-    static final Action ACTION_NEW_ANALYSIS = new AbstractAction(getResString("ana_new")) {
-        @Override
-        public void actionPerformed(final ActionEvent e) {
-            try {
-                AnalysesRepositoryFrame.addAnalysis(XMLAnalysis.createAnalysis("", ""), true);
-            } catch (SAXException ex) {
-                Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
+    static final Action createACTION_NEW_ANALYSIS(final MetaModelContext metaModelContext) {
+        return new AbstractAction(getResString("ana_new")) {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                try {
+                    AnalysesRepositoryFrame.addAnalysis(XMLAnalysis.createAnalysis(metaModelContext, "", ""), true);
+                } catch (SAXException ex) {
+                    Log.show(Log.ERROR, getResString("ANALYSIS_CANT_CREATE") + "\n" + ex.getMessage(), ex);
+                }
+                AnalysesRepositoryFrame.analysisChanged = true;
+                AnalysesRepositoryFrame.table.update();
+                AnalysesRepositoryFrame.refreshActionStates();
             }
-            AnalysesRepositoryFrame.analysisChanged = true;
-            AnalysesRepositoryFrame.table.update();
-            AnalysesRepositoryFrame.refreshActionStates();
-        }
-    };
+        };
+    }
 
     /**
      * Action für das starten der ausgewählten Analysen
@@ -269,7 +272,7 @@ public class AnalysesRepositoryFrameActions {
     static final Action ACTION_ANALYSIS_EDITOR = new AbstractAction(getResString("analysis_editor")) {
         @Override
         public void actionPerformed(final ActionEvent e) {
-            AnalysisEditor.showDialog(AnalysesRepositoryFrame.dialog);
+            AnalysisEditor.showDialog(AnalysesRepositoryFrame.dialog, Static.getSelectedMetaModel());
         }
     };
 

@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.path.meta;
 
 import java.util.Set;
 
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
@@ -34,13 +35,13 @@ public class WrapperMetaPath extends SequenceMetaPath {
         wrappedMetaPathSize += endClassPathIndex < 0 ? endClassPathIndex : 0; // bleibt 3 oder wird 2 oder wird 1
         AbstractMetaPath[] wrapped = new AbstractMetaPath[wrappedMetaPathSize];
         if (startClassPathIndex == 0) {
-            wrapped[0] = new ElementaryMetaPath(newStartClass);
+            wrapped[0] = new ElementaryMetaPath(wrapped[0].metaModel, newStartClass);
             wrapped[1] = wrappedMetaPath;
         } else {
             wrapped[0] = wrappedMetaPath;
         }
         if (endClassPathIndex > 0) {
-            wrapped[endClassPathIndex] = new ElementaryMetaPath(newEndClass);
+            wrapped[endClassPathIndex] = new ElementaryMetaPath(wrapped[endClassPathIndex].metaModel, newEndClass);
         }
         return wrapped;
     }
@@ -64,7 +65,9 @@ public class WrapperMetaPath extends SequenceMetaPath {
         if (startClass != null && endClass != null) {
             if (originalMetaPath instanceof ElementaryMetaPath) {
                 //Elementarpfade werden nicht gewrapped sondern neu angelegt, d.h. sie 'wrappen sich selbst'
-                return ElementaryMetaPathHandler.getMetaPath(startClass, (ElementaryMetaPath) originalMetaPath, endClass);
+                MetaModel metaModel = originalMetaPath.getMetaModel();
+                ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
+                return elementaryMetaPathHandler.getMetaPath(startClass, (ElementaryMetaPath) originalMetaPath, endClass);
             }
             return new WrapperMetaPath(startClass, endClass, originalMetaPath);
         }

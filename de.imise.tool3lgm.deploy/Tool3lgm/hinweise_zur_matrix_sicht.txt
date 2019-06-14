@@ -1,0 +1,5 @@
+Hinweise zur Matrix-Sicht:
+
+- Matrix-Sicht-Fenster gehören nicht zum Modell und werden auch nicht mit gespeichert
+- es können beliebig viele Fenster geöffnet werden
+- eine Matrix-Sicht bezieht sich immer auf das (Teil-)Modell, welches aktiviert war als die Matrix-Sicht aufgerufen wurde

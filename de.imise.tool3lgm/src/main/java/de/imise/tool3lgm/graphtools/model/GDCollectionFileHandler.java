@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.xml.ToolXMLParser.isParseAbleFileVersion;
-import static de.imise.tool3lgm.xml.ToolXMLParser.isXMLFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -325,7 +323,7 @@ public class GDCollectionFileHandler {
      * @author Thomas Rudert
      */
     private boolean loadFromFileInputStream(final FileInputStream fileStream) throws IOException, LGMVersionException, XMLVersionException, FileNotFoundException {
-        if (!isXMLFile(fileStream) || !isParseAbleFileVersion(fileStream)) {
+        if (!ToolXMLParser.isParsableXMLFile(fileStream)) {
             throw new LGMVersionException(getResString("to_old_file_format"));
         }
         fileStream.getChannel().position(0);

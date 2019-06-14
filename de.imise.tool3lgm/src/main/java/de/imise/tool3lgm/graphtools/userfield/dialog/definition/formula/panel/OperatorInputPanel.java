@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.definition.formula.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getEdgeTypes;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 
@@ -16,10 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -157,12 +157,14 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
 
         //es
         HashSet<Class<? extends ModelElement>> elementClassAssignable = new HashSet<>();
-        for (Class<? extends ModelElement> assClass : ModelConstants.ALL_NODES_SET) {
+        GDCollection gdcoll = definitions.getCollection();
+        MetaModel metaModel = gdcoll.getMetaModel();
+        for (Class<? extends ModelElement> assClass : metaModel.allNodesSet) {
             if (elementClass.isAssignableFrom(assClass)) {
                 elementClassAssignable.add(assClass);
             }
         }
-        for (Class<? extends ModelElement> assClass : ModelConstants.ALL_EDGES_SET) {
+        for (Class<? extends ModelElement> assClass : metaModel.allEdgesSet) {
             if (elementClass.isAssignableFrom(assClass)) {
                 elementClassAssignable.add(assClass);
             }
@@ -233,8 +235,13 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         associationBox.removeAllItems();
         //Die Assoziationen zur Box hinzufügenen, bei denen die Startklasse
         // gleich der Element-Klasse ist
-        Class<? extends Edge>[] edgeClasses = getEdgeTypes(userField.getTargetClass().asSubclass(ModelElement.class));
+        UserFieldDefinitions definitions = userField.getDefinitions();
+        GDCollection gdcoll = definitions.getCollection();
+        MetaModel metaModel = gdcoll.getMetaModel();
 
+        Class<? extends Edge>[] edgeClasses = metaModel.getEdgeTypes(userField.getTargetClass().asSubclass(ModelElement.class));
+
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (int i = 0; i < edgeClasses.length; i++) {
             Class<? extends Edge> tmpEdgeClass = edgeClasses[i];
             Class<? extends ModelElement> startClass = getStartClass(tmpEdgeClass);
@@ -247,8 +254,8 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             //Zielklassen-Arrays gleich, aber die Namen in Vorwärts- und Rückwärtsrichtung
             //sind unterscheidlich. Bei der Beziehung "Phys.-DV-Baustein ist verbunden mit
             //Phys.-DV-Baustein" kann man keine eindeutige Richtung zuordnen.
-            String forwardName = ElementsNameBuilder.getFullForwardMetaAssociationName(tmpEdgeClass);
-            String backwardName = ElementsNameBuilder.getFullBackwardMetaAssociationName(tmpEdgeClass);
+            String forwardName = elementsNameBuilder.getFullForwardMetaAssociationName(tmpEdgeClass);
+            String backwardName = elementsNameBuilder.getFullBackwardMetaAssociationName(tmpEdgeClass);
             if (forwardName.equals(backwardName) && (startClass.isAssignableFrom(endClass) || endClass.isAssignableFrom(startClass))) {
                 continue;
             }
@@ -329,8 +336,11 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
             if (edgeClass == null) {
                 return;
             }
+            UserFieldDefinitions definitions = userField.getDefinitions();
+            GDCollection gdcoll = definitions.getCollection();
+            ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
             String displayName = associationBox.getSelectedItem().toString();
-            String tmp_string = ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+            String tmp_string = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
             if (displayName.equals(tmp_string)) {
                 updateFieldListAttributesOfAssociatedClass(getEndClass(edgeClass));
             } else {

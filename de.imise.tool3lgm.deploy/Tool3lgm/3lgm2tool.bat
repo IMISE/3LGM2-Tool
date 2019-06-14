@@ -1,0 +1,14 @@
+@echo off
+::Max Memory for 32-Bit Systems
+SET MEMORY32=-Xmx512m -Xss20m 
+::Max Memory for 64-Bit Systems
+SET MEMORY64=-Xmx1024m -Xss64m
+::Set Max Memory to 32-Bit
+SET MEMORY=%MEMORY32%
+::wmic os get osarchitecture -> if return String contains "64" -> Set Max Memory to 64-Bit
+wmic os get osarchitecture | FINDSTR /IL "64" > NUL
+IF %ERRORLEVEL% EQU 0 SET MEMORY=%MEMORY64%
+set PATH=%PATH%;.;lib
+@echo on
+java %MEMORY% -jar ./lib/tool3lgm.jar
+pause

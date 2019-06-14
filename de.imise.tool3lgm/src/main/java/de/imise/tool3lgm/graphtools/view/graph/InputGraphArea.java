@@ -6,7 +6,6 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.layerFor;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
@@ -29,7 +28,6 @@ import java.util.Set;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -77,14 +75,14 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      * Für jede der 5 Ebenen eine X und Y-Koordinate in die die Input-Koordinaten je nach dargestelltem
      * Ausschnitt, Neigung usw. der Ebene umgerechnet wird.
      */
-    private final int[] xreal = new int[ModelConstants.LAYERS.length], yreal = new int[ModelConstants.LAYERS.length];
+    private final int[] xreal = new int[LAYERS.length], yreal = new int[LAYERS.length];
 
     /**
      * Im Grunde das gleiche wie <code>xreal</code> und <code>yreal</code>. Beim Draggen auf Kanten und der Entstehung der
      * neuen Knickpunkte muss man aber die Koordinaten kennen, bei denen die Maus vor dem Draggen war, sonst haut die
      * Positionsbestimmung des neuen Knickpunktes nicht hin.
      */
-    private final int[] lastXreal = new int[ModelConstants.LAYERS.length], lastYreal = new int[ModelConstants.LAYERS.length];
+    private final int[] lastXreal = new int[LAYERS.length], lastYreal = new int[LAYERS.length];
 
     /**
      * Wenn Node verschoben werden, dann grenzen diese Koordinaten den minimalen Bereich ein, in dem alle
@@ -390,7 +388,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         ElementContainer returnContainer = null;
         if (multiView) {
             for (int c = MAX_LAYER_INDEX; c >= MIN_LAYER_INDEX; c--) {
-                if (!ModelConstants.isInterLayer(c)) {
+                if (!isInterLayer(c)) {
                     returnContainer = chooseObject(szenario.getLayer(c), xreal[c], yreal[c]);
                     if (returnContainer != null) {
                         break;
@@ -479,7 +477,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             left_button = true;
         }
         for (int layerIndex = MAX_LAYER_INDEX; layerIndex >= MIN_LAYER_INDEX; layerIndex--) {
-            if (ModelConstants.isInterLayer(layerIndex)) {
+            if (isInterLayer(layerIndex)) {
                 continue;
             }
             final GDCollection gdcoll = szenario.getCollection();
@@ -506,7 +504,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 }
             } else if (mouse_makes_node != null && left_button) {
                 if (isInPage(x, y)) {
-                    if (layerFor(mouse_makes_node) == layerIndex) {
+                    if (szenario.getMetaModel().layerFor(mouse_makes_node) == layerIndex) {
                         Tool3lgm.setLastActionPosition(xin + getX(), yin + getY());
                         szenario.createKnotenWithContainer(mouse_makes_node, STANDARD_PID);
                         revalidate();
@@ -520,7 +518,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 // 1. Ob man in eine Hand eines Knotens getroffen hat
                 ka = chooseResizable(layer, x, y);
                 if (ka != null) {
-                    contextGenerator.setModelElement(ka);
+                    contextGenerator.setElementContainer(ka);
                     contextGenerator.setResizing(true);
                     if (left_button && layerIndex != activeLayerIndex) {
                         gdcoll.setActiveLayer(layerIndex);
@@ -535,8 +533,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 ka = chooseObject(layer, x, y);
                 //System.out.println("    start context generating..." + System.currentTimeMillis());
                 if (ka != null) {
-                    contextGenerator.setModelElement(ka);
-                    contextGenerator.setElementGetroffen(true);
+                    contextGenerator.setElementContainer(ka);
+                    contextGenerator.setElementClicked(true);
                     if (left_button && layerIndex != activeLayerIndex) {
                         gdcoll.setActiveLayer(layerIndex);
                     }
@@ -553,7 +551,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 }
                 // 3. Ob man die Ebene selbst getroffen hat
                 {
-                    contextGenerator.setEbeneGetroffen(true);
+                    contextGenerator.setLayerClicked(true);
                     if (isMultiView()) {
                         for (int j = layerIndex; j >= MIN_LAYER_INDEX; j--) {
                             if (!isInterLayer(j)) {
@@ -628,7 +626,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     Set<Class<? extends ModelElement>> selectedRealElementClasses = szenario.getSelectedRealElementClasses();
                     if (!selectedRealElementClasses.isEmpty()) {
                         Class<? extends ModelElement> otherSelectedClass = ReflectionUtils.getCommonSuperClass(selectedRealElementClasses).asSubclass(ModelElement.class);
-                        Class<? extends Edge> edgeClass = ContextGenerator.requestCurrentEdgeType(lastSelectedClass, otherSelectedClass);
+                        Class<? extends Edge> edgeClass = ContextGenerator.requestCurrentEdgeType(szenario.getMetaModel(), lastSelectedClass, otherSelectedClass);
                         if (edgeClass != null) {
                             szenario.linkSelected(edgeClass, BACKWARD, STANDARD_PID);
                         }
@@ -651,13 +649,13 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     continue;
                 }
                 // 1. Ob man in eine Hand eines Knotens getroffen hat
-                if (contextGenerator.getResizing()) {
+                if (contextGenerator.isResizing()) {
                     contextGenerator.setResizing(false);
                     sized = false;
                     break;
                 }
                 // 2. Ob man in ein Objekt direkt getroffen hat: Node oder Edge
-                if (contextGenerator.getElementGetroffen()) {
+                if (contextGenerator.isElementClicked()) {
                     if (was_selected) {
                         was_selected = false;
                         if (!mouse_dragged) {
@@ -730,13 +728,13 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                             }
                         }
                     }
-                    contextGenerator.setElementGetroffen(false);
+                    contextGenerator.setElementClicked(false);
                     grabbed = false;
                     break;
                 }
                 // 3. Ob man die Ebene selbst getroffen hat
-                if (contextGenerator.getEbeneGetroffen()) {
-                    contextGenerator.setEbeneGetroffen(false);
+                if (contextGenerator.isLayerClicked()) {
+                    contextGenerator.setLayerClicked(false);
                     break;
                 }
             } // loop

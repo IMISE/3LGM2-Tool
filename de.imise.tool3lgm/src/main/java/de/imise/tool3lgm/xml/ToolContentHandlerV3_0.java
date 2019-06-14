@@ -4,8 +4,6 @@
 package de.imise.tool3lgm.xml;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.createElement;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getClassForName;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -20,6 +18,8 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -238,6 +238,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("element")) {
                 Class<? extends ModelElement> elementClass = null;
+                MetaModel metaModel = doc.getMetaModel();
                 try {
                     String className = atts.getValue("class");
                     if (className.startsWith("Knickpunkt")) { //KnickpunktKnoten umbenannt in Knickpunkt umbenannt in Bendpoint
@@ -245,7 +246,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     } else if (className.startsWith("Textfeld")) { //TextfeldFach, TextfeldLog und TextfeldPhy umbenannt in Textfield
                         elementClass = Textfield.class;
                     } else {
-                        elementClass = getClassForName(className);
+                        elementClass = metaModel.getClassForName(className);
                     }
                 } catch (Exception e) {
                     throw new SAXException("Klasse für Element nicht gefunden!\n Name=" + qName + "\n UserField=" + attsToString(atts));
@@ -254,10 +255,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (avoidDuplicates) {
                     element = doc.findElementCoded(atts.getValue("hash"));
                     if (element == null) {
-                        element = createElement(elementClass, false);
+                        element = metaModel.createElement(elementClass, false);
                     }
                 } else {
-                    element = createElement(elementClass, false);
+                    element = metaModel.createElement(elementClass, false);
                 }
 
                 if (element != null) {
@@ -360,7 +361,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                         layout = new GraphElementLayout();
                         container.set3LGMLayout(layout);
                     }
-                } else if ((classType = ModelConstants.getClassForName(atts.getValue("class"))) != null) {
+                } else if ((classType = szenario.getMetaModel().getClassForName(atts.getValue("class"))) != null) {
                     layout = szenario.getMapping().getStandardElementLayout(classType);
                 }
             } else if (qName.equals("nelayout")) {
@@ -389,7 +390,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 //            } else if (qName.equals("description")) {
                 //
             } else if (qName.equals("mapping")) {
-                szenario.setMapping(new ElementsLayoutDefinition(true));
+                MetaModel metaModel = szenario.getMetaModel();
+                GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
+                ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+                szenario.setMapping(new ElementsLayoutDefinition(defaultElementsLayout));
 
             } else if (qName.equals("bitmap")) {
                 if (atts.getValue("type").equals("gif/base64")) {
@@ -416,7 +420,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 if (elementClass == null) {
                     userField = new UserField(atts.getValue("hash"), collection.getUserFieldDefinitions());
                 } else {
-                    userField = new UserField(getClassForName(elementClass), atts.getValue("hash"), collection.getUserFieldDefinitions());
+                    MetaModel metaModel = collection.getMetaModel();
+                    userField = new UserField(metaModel.getClassForName(elementClass), atts.getValue("hash"), collection.getUserFieldDefinitions());
                 }
             } else if (qName.equals("replacerEntry")) {
                 String elementHash = atts.getValue("elementHash");
@@ -430,7 +435,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 String edgeClassName = atts.getValue("edgeClass");
                 String replaceUserFieldHash = atts.getValue("replaceUserFieldHash");
                 WeightReplacer replacer = userFieldDefinitions.getWeightReplacer();
-                Class<? extends Edge> edgeClass = getClassForName(edgeClassName).asSubclass(Edge.class);
+                MetaModel metaModel = collection.getMetaModel();
+                Class<? extends Edge> edgeClass = metaModel.getClassForName(edgeClassName).asSubclass(Edge.class);
                 replacer.setUniformDistributionReplacement(elementHash, edgeClass, replaceUserFieldHash);
 
                 //            } else if (qName.equals("userFieldName")) {
@@ -741,8 +747,10 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("layout")) {
                 if (container != null) {
-                    Class<? extends ModelElement> elementClass = container.getElement().getClass();
-                    if (ModelConstants.hasSortedEdgeClassesToPaintable(elementClass)) {
+                    ModelElement me = container.getElement();
+                    Class<? extends ModelElement> elementClass = me.getClass();
+                    MetaModel metaModel = me.getMetaModel();
+                    if (metaModel.hasSortedEdgeClassesToPaintable(elementClass)) {
                         container.checkTreeIcon();
                     }
                 }

@@ -11,7 +11,7 @@ import java.util.Vector;
 import javax.swing.AbstractAction;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -107,14 +107,15 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
      */
     private void setElementClassBoxContent() {
         UserFieldDefinitions definitions = getUserFieldDefinitions();
-        loop: for (int i = 0; i < ModelConstants.ALL_ELEMENTS.length; i++) {
-            Class<? extends ModelElement> elementClass = ModelConstants.ALL_ELEMENTS[i];
-            Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass);
+        MetaModel metaModel = definitions.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        loop: for (Class<? extends ModelElement> elementClass : metaModel.allElementsSet) {
+            Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(elementClass);
             //mind. eine Kantenklase mit Kennzahlen oder Kennzahlformeln?
             for (int k = 0; k < edgeTypes.length; k++) {
                 Class<? extends Edge> edgeClass = edgeTypes[k];
                 if (definitions.getAnalyzer().hasNumberFields(edgeClass)) {
-                    elementClassBox.addItem(elementClass, ElementsNameBuilder.getDisplayableName(elementClass));
+                    elementClassBox.addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
                     continue loop;
                 }
             }
@@ -208,15 +209,15 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         Class<? extends ModelElement> elementClass = (Class<? extends ModelElement>) elementClassBox.getSelectedObject();
         UserFieldDefinitions definitions = getUserFieldDefinitions();
         edgeClassBox.removeAllItems();
-
         edgeClassBox.addSeparator(getResString("userFieldEditor_edge_type"));
-
-        Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(elementClass);
+        MetaModel metaModel = definitions.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(elementClass);
         //mind. eine Kantenklase mit Kennzahlen oder Kennzahlformeln?
         for (int k = 0; k < edgeTypes.length; k++) {
             Class<? extends Edge> edgeClass = edgeTypes[k];
             if (definitions.getAnalyzer().hasNumberFields(edgeClass)) {
-                edgeClassBox.addItem(edgeClass, ElementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
+                edgeClassBox.addItem(edgeClass, elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass));
                 //                edgeClassBox.addItem(edgeClass, ModelConstants.getFullBackwardMetaAssociationName(edgeClass));
             }
         }

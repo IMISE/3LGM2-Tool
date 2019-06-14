@@ -1,20 +1,27 @@
 package de.imise.tool3lgm.graphtools.path;
 
-import static de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler.getForwardMetaPath;
-
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
@@ -29,26 +36,46 @@ import de.imise.util.Alphabetical;
  */
 public class MetaPathDefinition {
 
+    /** Das MetaModel der für das diese Definition gilt */
+    protected final MetaModel metaModel;
+
     /** Sammlung aller definierten Metapfade */
     private final Set<AbstractMetaPath> definedMetaPaths = new HashSet<>();
+
+    /** Der MetaPathCreator zum zugehörigen Metamodel */
+    protected final SimpleMetaPathCreator simpleMetaPathCreator;
+
+    /**
+     * Legt eine neue Pfaddefinition an, in der nichts definiert ist.
+     *
+     * @param metaModel
+     */
+    @SuppressWarnings("unchecked")
+    public MetaPathDefinition(final MetaModel metaModel) {
+        this(metaModel, new Class[0]);
+    }
 
     /**
      * Legt eine neue Pfaddefinition an. Werden dem Konstruktor Kantenklassen übergeben, dann werden nur diese Kantenklassen als
      * {@link ElementaryMetaPath} zur Definition hinzugefügt. Ist das übergebene Array leer,dann werden alle Kanten des Metamodells hinzugefügt.
      *
+     * @param metaModel
      * @param edgeClasses
      */
     @SafeVarargs
-    public MetaPathDefinition(final Class<? extends Edge>... edgeClasses) {
-        Iterable<Class<? extends Edge>> edgeClassesIt = edgeClasses == null || edgeClasses.length == 0 ? ModelConstants.ALL_EDGES_SET : Arrays.asList(edgeClasses);
+    public MetaPathDefinition(final MetaModel metaModel, final Class<? extends Edge>... edgeClasses) {
+        this.metaModel = metaModel;
+        simpleMetaPathCreator = new SimpleMetaPathCreator(metaModel);
+        Iterable<Class<? extends Edge>> edgeClassesIt = edgeClasses == null || edgeClasses.length == 0 ? metaModel.allEdgesSet : Arrays.asList(edgeClasses);
+        ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
         //Alle Edgen in beiden Richtungen für alle direkten Startklassen und ihre Unterklassen als MetaPfade hinzufügen
         for (Class<? extends Edge> edgeClass : edgeClassesIt) {
             if (DoubleMeaningEdge.class.isAssignableFrom(edgeClass)) {
                 Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass = edgeClass.asSubclass(DoubleMeaningEdge.class);
-                put(getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.FORWARD));
-                put(getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.BACKWARD));
+                put(elementaryMetaPathHandler.getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.FORWARD));
+                put(elementaryMetaPathHandler.getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.BACKWARD));
             } else {
-                put(getForwardMetaPath(edgeClass));
+                put(elementaryMetaPathHandler.getForwardMetaPath(edgeClass));
             }
         }
         init();
@@ -58,6 +85,23 @@ public class MetaPathDefinition {
      * Kann in Unterklassen zur Initialisierung überschrieben werden und wird im Konstruktor aufgerufen
      */
     protected void init() {
+    }
+
+    /**
+     * @return
+     */
+    public final MetaModel getMetaModel() {
+        return metaModel;
+    }
+
+    /**
+     * Liefert <code>Tool3lgmConstants.getResString(resKey)</code>. Dient nur zur Verkürzung des Codes.
+     *
+     * @param resKey
+     * @return
+     */
+    public static final String _s(final String resKey) {
+        return Tool3lgmConstants.getResString(resKey);
     }
 
     /**
@@ -138,7 +182,7 @@ public class MetaPathDefinition {
      */
     @SafeVarargs
     protected final SimpleMetaPath put(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) {
-        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(startClass, endClass, baseResKeyOrName, associations);
+        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, startClass, endClass, baseResKeyOrName, associations);
         put(simpleMetaPath);
         return simpleMetaPath;
     }
@@ -220,7 +264,7 @@ public class MetaPathDefinition {
                 //für jede der neuen Startklasse aus allen Elementklassen alle Unter- oder Oberklassen bestimmen
                 for (Class<? extends ModelElement> newElementClass : newElementClasses) {
                     //ModelConstants.ALL_MODELELEMENT_CLASSES enthält alle Elementklassen (auch alle abstracten bis hin zu ModelElement.class)
-                    for (Class<? extends ModelElement> elementClass : ModelConstants.ALL_MODELELEMENT_CLASSES_WITH_SUPER_CLASSES) {
+                    for (Class<? extends ModelElement> elementClass : metaModel.allModelElementClassesWithSuperClasses) {
                         //die Startklasse selbst ist schon in der Liste -> weiter
                         if (elementClass == newElementClass) {
                             continue;
@@ -240,14 +284,57 @@ public class MetaPathDefinition {
         return pathsElementClassesSet;
     }
 
+    //////////////////////////////
+    // weitere PfadDefinitionen //
+    //////////////////////////////
+
     /**
-     * Liefert <code>Tool3lgmConstants.getResString(resKey)</code>. Dient nur zur Verkürzung des Codes.
+     * @return Liefert eine Sammlung aller {@link SimpleMetaPath}, die man zwischen 2 Elementen anlegen kann, wobei die Zwischenelemente ebenfalls neu
+     *         angelegt werden. Diese Pfade werden im Kontextmenü bei Mehrfachselektion oder Einfachselektion angeboten.
+     */
+    public Collection<SimpleMetaPath> getCreatablePaths() {
+        return ImmutableList.of();
+    }
+
+    /**
+     * Liefert für die übergebene Kantenklasse den MetaPfad, über den die verbindbaren Elemente ebenfalls bereits verbunden sein müssen.
+     * Dieser Mechanismus ist dafür gedacht, verbindbare Elemente einzuschränken auf bestimmte Elemente.
      *
-     * @param resKey
      * @return
      */
-    public static final String _s(final String resKey) {
-        return Tool3lgmConstants.getResString(resKey);
+    public Map<Class<? extends Edge>, SimpleMetaPath> getConditionPaths() {
+        return ImmutableMap.of();
+    }
+
+    /**
+     * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
+     * Kantenklasse durchgeführt wird. <br>
+     * Jeder der Pfade muss zwingend bei derselben Klasse starten, bei der diese Kante startet.<br>
+     * Der Pfad hat nur einen Effekt, wenn seine Startklasse zur Startklasse dieser Kante zuweisungskompatibel ist und er mind. eine
+     * {@link InstanciationEdge} enthält. Der hiermit verbundene Mechanismus geht durch die Kantenklassen des Pfades. Ist die aktuelle
+     * Kantenklasse keine {@link InstanciationEdge}, dann suche von den aktuellen Elementen ausgehend (am Anfang ist das das Startelement dieser
+     * Kante) alle damit über diese Kantenart verbundenen Elemente und nimmt sie für den nächsten Schritt als Startelemente. Sobald im Pfad eine
+     * {@link InstanciationEdge} auftaucht, werden alle Elementarten und Kanten der dahinter liegenden Pfadschritte kompeltt neu erzeugt und die
+     * entstehenden Elemente immer mit den vorherigen verbunden. Wenn der Pfad mit einer Klasse endet (was er in den meisten Fällen tun wird, damit
+     * das ganze sinnvoll ist), die zuweisungskompatibel zur Endklasse dieser Kante ist (also zum durch diese Kante neu erzeugten Element), dann wird
+     * die letzte Verbindung bzw. die letzte Kante hin zum EndElementdieser Kante erzeugt und nicht nochmal ein Element der Endelementart angelegt.
+     * Damit kann man "Nebenbedingungspfade" für das Startelement gleich mit anlegen, wenn man das Startelement über diese Kante hier intsanziiert.
+     *
+     * @param instanciationEdgeClass
+     * @return
+     */
+    public Multimap<Class<? extends InstanciationEdge>, SimpleMetaPath> getInstanciationEdgeToAdditionalInstanciationMetaPaths() {
+        return ImmutableListMultimap.of();
+    }
+
+    /**
+     * Liefert eine Map, die für alle Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern unter der eigentlichen
+     * Elementart angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen Elementen liefert.
+     *
+     * @return
+     */
+    public Map<Class<? extends ModelElement>, AbstractMetaPath> getElementClassToNameExtensionPath() {
+        return ImmutableMap.of();
     }
 
 }

@@ -28,7 +28,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDropActionChain;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -406,6 +406,9 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         return targetTreeSelectionPath;
     }
 
+    /**
+     * @return
+     */
     protected LGMAction getConnectAction() {
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
 
@@ -430,11 +433,19 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         };
     }
 
+    /**
+     * @param treePath
+     * @return
+     */
     private static ModelElement getPathModelElement(final TreePath treePath) {
         LGMTreeNode node = (LGMTreeNode) treePath.getLastPathComponent();
         return getNodeModelElement(node);
     }
 
+    /**
+     * @param node
+     * @return
+     */
     protected static ModelElement getNodeModelElement(final LGMTreeNode node) {
         ElementContainer ec = (ElementContainer) node.getUserObject();
         ModelElement me = ec.getElement();
@@ -472,6 +483,11 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         };
     }
 
+    /**
+     * @param startInPath
+     * @param endInPath
+     * @param edgeIndexInPath
+     */
     protected final void disconnect(final ModelElement startInPath, final ModelElement endInPath, final int edgeIndexInPath) {
         GraphDocument selDoc = getSelectedGraphDocument();
         GDCollection gdcoll = selDoc.getCollection();
@@ -533,11 +549,15 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         connect(targetElement, elements2Connect.build(), targetTreePathEdgeIndex);
     }
 
+    /**
+     * @return
+     */
     private LGMAction getNewConnectedElementAction() {
         if (!metaPath.isCreatable()) {
             return null;
         }
-        if (ModelConstants.isSlaveType(searchElementClass)) {
+        MetaModel metaModel = getMetaModel();
+        if (metaModel.isSlaveType(searchElementClass)) {
             return null;
         }
         return new LGMAction("", Tool3lgmConstants.getIcon("ICON_LARGE_ACTION_DIALOG_NEW_ELEMENT.gif")) {

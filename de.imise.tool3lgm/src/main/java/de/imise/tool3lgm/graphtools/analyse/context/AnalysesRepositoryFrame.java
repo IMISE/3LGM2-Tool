@@ -148,7 +148,7 @@ public class AnalysesRepositoryFrame extends JFrame {
         menuFile.add(new JSeparator());
         menuFile.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_CLOSE_DIALOG));
         JMenu menuAnalysis = new JMenu(getResString("analysis"));
-        menuAnalysis.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_NEW_ANALYSIS));
+        menuAnalysis.add(new JMenuItem(AnalysesRepositoryFrameActions.createACTION_NEW_ANALYSIS(Static.getSelectedMetaModelContext())));
         menuAnalysis.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_DELETE_ANALYSIS));
         menuAnalysis.add(new JSeparator());
         menuAnalysis.add(new JMenuItem(AnalysesRepositoryFrameActions.ACTION_ANALYSIS_EDITOR));

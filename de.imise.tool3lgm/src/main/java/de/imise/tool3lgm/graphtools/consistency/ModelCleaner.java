@@ -1,9 +1,6 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_ELEMENTS_SET;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.ALL_NODES_SET;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.getInitialSubtypes;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
@@ -17,7 +14,7 @@ import java.util.Set;
 
 import com.google.common.collect.Lists;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
@@ -47,10 +44,11 @@ public class ModelCleaner {
     /** Wenn <code>true</code> werden einige berichtigte Fehler ausgegeben */
     private final boolean PRINT_ERRORS = false;
 
-    /**
-     * Das Modell, das bereinigt werden soll
-     */
+    /** Das Modell, das bereinigt werden soll */
     private final GDCollection gdcoll;
+
+    /** Das MetaModel der zu bereinigen GDCollection */
+    private final MetaModel metaModel;
 
     /**
      * Initialisiert einen neuen <code>ModelCleaner</code>.
@@ -60,6 +58,7 @@ public class ModelCleaner {
     public ModelCleaner(final GDCollection gdcoll) {
         super();
         this.gdcoll = gdcoll;
+        metaModel = gdcoll.getMetaModel();
     }
 
     /**
@@ -136,7 +135,7 @@ public class ModelCleaner {
         // Dieser Fehler trat bisher noch nicht auf, aber es ist besser, das noch einmal explizit
         // sicher zu stellen!
         for (ModelElement me : mainDoc.getModelItems(ModelElement.class, true)) {
-            for (GraphDocument doc : me.getContainerTable().keySet()) {
+            for (GraphDocument doc : me.getMySzenarios()) {
                 // Unique Elemente dürfen keinen Container außerhalb des Hauptmodells haben
                 if (me.isUnique() && doc instanceof Szenario) {
                     me.removeContainer(doc);
@@ -208,7 +207,7 @@ public class ModelCleaner {
             }
             // Kanten löschen, die nicht mehrfach vorkommen dürfen, aber mehrfach vorkommen
             // (alle bis auf eine löschen)
-            if (ModelConstants.isMultipleEdgeClass(edge.getClass())) {
+            if (MetaModel.isMultipleEdgeClass(edge.getClass())) {
                 continue;
             }
             for (Edge edge2 : edge.getStart().getEdgesTo(edge.getEnd(), edge.getClass())) {
@@ -274,7 +273,7 @@ public class ModelCleaner {
             }
 
             UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
-            for (Class<? extends ModelElement> elementClass : ALL_ELEMENTS_SET) {
+            for (Class<? extends ModelElement> elementClass : metaModel.allElementsSet) {
                 for (UserField uf : definitions.getUserFields(elementClass)) {
                     // eigentlich haben Checkboxen keine Listenwerte, da sie nur true oder false für
                     // eine einzelne Box darsellen, aber falls aus der einzelnen Checkbox mal eine
@@ -315,8 +314,8 @@ public class ModelCleaner {
 
         // Alle initial vorhandenen untergeordneten Elemente erzeugen, die nicht mehr da sind.
         // Diese kann man nicht von Hand neu erzeugen
-        for (Class<? extends ModelElement> elementClass : ALL_NODES_SET) {
-            Set<Class<? extends Edge>> subTypeEdges = getInitialSubtypes(elementClass);
+        for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
+            Set<Class<? extends Edge>> subTypeEdges = metaModel.getInitialSubtypes(elementClass);
             if (subTypeEdges == null || subTypeEdges.size() == 0) {
                 continue;
             }

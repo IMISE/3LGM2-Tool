@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.analyse.context;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -12,7 +12,7 @@ public class GraphAnalysis {
 
     /**
      * Prüft, ob ein Element(Container) den angegebenen Kriterien entspricht
-     * 
+     *
      * @param doc
      * @param ec
      * @param verbundenState
@@ -26,9 +26,10 @@ public class GraphAnalysis {
         boolean tmpmatch = false;
         // Ist eine Klasse aus "Verbundene" gewählt? Wenn nein, dann okay!
         ModelElement kn = ec.getElement();
+        MetaModel metaModel = doc.getMetaModel();
         for (int i = 0; i < connectedNames.size() && !tmpmatch; i++) {
             for (int j = 0; j < kn.getEdgesCount() && !tmpmatch; j++) {
-                if (kn.getConnectedElement(j).getClass() == ModelConstants.getClassForName(connectedNames.get(i))) {
+                if (kn.getConnectedElement(j).getClass() == metaModel.getClassForName(connectedNames.get(i))) {
                     tmpmatch = true;
                 }
             }
@@ -42,7 +43,7 @@ public class GraphAnalysis {
 
     /**
      * Erste Suche nach passenden Elementen
-     * 
+     *
      * @param doc
      * @param typ
      * @param getVerbundenState
@@ -50,9 +51,10 @@ public class GraphAnalysis {
      * @return
      */
     public static List<ElementContainer> performSearch(final GraphDocument doc, final List<String> typ, final boolean getVerbundenState, final List<String> connectedNames) {
-        List<ElementContainer> ergebnis = new ArrayList<ElementContainer>(50);
+        List<ElementContainer> ergebnis = new ArrayList<>(50);
+        MetaModel metaModel = doc.getMetaModel();
         for (String t : typ) {
-            for (ElementContainer ec : doc.getElementContainer(ModelConstants.getClassForName(t))) {
+            for (ElementContainer ec : doc.getElementContainer(metaModel.getClassForName(t))) {
                 if (matchesCriteria(doc, ec, getVerbundenState, connectedNames)) {
                     if (!ergebnis.contains(ec)) {
                         ergebnis.add(ec);
@@ -66,7 +68,7 @@ public class GraphAnalysis {
     /**
      * Sucht nach passenden Elementen. Diesmal müssen sie aber bereits mit im übergebenen Vektor
      * "origin" enthaltenen Elementen verbunden sein.
-     * 
+     *
      * @param doc
      * @param origin
      * @param exclude
@@ -79,12 +81,13 @@ public class GraphAnalysis {
      */
     public static List<ElementContainer> searchWithinConnected(final GraphDocument doc, final List<ElementContainer> origin, final List<ElementContainer> exclude, final List<String> typ, final boolean getVerbundenState, final List<String> connectedNames,
             final boolean searchParts, final boolean searchParents) {
-        ArrayList<ElementContainer> ergebnis = new ArrayList<ElementContainer>(50);
+        ArrayList<ElementContainer> ergebnis = new ArrayList<>(50);
 
+        MetaModel metaModel = doc.getMetaModel();
         for (ElementContainer orgC : origin) {
             ModelElement kn = orgC.getElement();
             for (String t : typ) {
-                for (ElementContainer conC : kn.getConnectedContainer(ModelConstants.getClassForName(t), doc)) {
+                for (ElementContainer conC : kn.getConnectedContainer(metaModel.getClassForName(t), doc)) {
                     if (matchesCriteria(doc, conC, getVerbundenState, connectedNames)) {
                         if (!ergebnis.contains(conC) && !origin.contains(conC) && !exclude.contains(conC)) {
                             ergebnis.add(conC);
@@ -97,7 +100,7 @@ public class GraphAnalysis {
                         if (ergebnis.contains(kc) || origin.contains(kc) || exclude.contains(kc)) {
                             continue;
                         }
-                        List<ElementContainer> tmpL = new ArrayList<ElementContainer>(1);
+                        List<ElementContainer> tmpL = new ArrayList<>(1);
                         tmpL.add(kc);
                         List<ElementContainer> a = searchWithinConnected(doc, tmpL, exclude, typ, true, null, true, false);
                         if (a.size() > 0) {
@@ -112,7 +115,7 @@ public class GraphAnalysis {
                         if (ergebnis.contains(kc) || origin.contains(kc) || exclude.contains(kc)) {
                             continue;
                         }
-                        List<ElementContainer> tmpL = new ArrayList<ElementContainer>(1);
+                        List<ElementContainer> tmpL = new ArrayList<>(1);
                         tmpL.add(kc);
                         List<ElementContainer> a = searchWithinConnected(doc, tmpL, exclude, typ, true, null, false, true);
                         if (a.size() > 0) {

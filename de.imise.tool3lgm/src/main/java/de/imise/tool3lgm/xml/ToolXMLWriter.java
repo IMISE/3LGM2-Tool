@@ -230,7 +230,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
 
     protected void writeStartDocument() throws XMLStreamException {
         writeStartDocument("UTF-8", "1.0");
-        writeComment(ToolXMLParser.getCurrentFileVersionBare());
+        writeComment(ToolXMLParser.getCurrentFileVersionBare(gdcoll));
     }
 
     //////////////////////////

@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
 
@@ -57,49 +58,62 @@ public abstract class AbstractMetaPath {
      */
     protected InvalidityCheckResult invalidityCheckResult;
 
+    /** Das MetaModel aus dem die Knoten- und Kantenklassen des Pfades stammen */
+    protected final MetaModel metaModel;
+
     /**
-     *
+     * @param metaModel
      */
-    public AbstractMetaPath() {
-        this(null);
+    public AbstractMetaPath(final MetaModel metaModel) {
+        this(metaModel, null);
     }
 
     /**
+     * @param metaModel
      * @param name
      *            Anzeigenamen
      */
-    public AbstractMetaPath(final String name) {
-        this((Class<? extends ModelElement>) null, (Class<? extends ModelElement>) null, name);
+    public AbstractMetaPath(final MetaModel metaModel, final String name) {
+        this(metaModel, (Class<? extends ModelElement>) null, (Class<? extends ModelElement>) null, name);
     }
 
     /**
+     * @param metaModel
      * @param startElementClass
      * @param endElementClass
      */
-    public AbstractMetaPath(final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
-        this(startElementClass, endElementClass, null);
+    public AbstractMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
+        this(metaModel, startElementClass, endElementClass, null);
 
     }
 
     /**
+     * @param metaModel
      * @param startElementClass
      * @param endElementClass
      * @param name
      */
-    public AbstractMetaPath(final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
-        this(startElementClass != null ? ImmutableSet.of(startElementClass) : null, endElementClass != null ? ImmutableSet.of(endElementClass) : null, name);
+    public AbstractMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
+        this(metaModel, startElementClass != null ? ImmutableSet.of(startElementClass) : null, endElementClass != null ? ImmutableSet.of(endElementClass) : null, name);
 
     }
 
     /**
+     * @param metaModel
      * @param startElementClasses
      * @param endElementClasses
      * @param name
      */
-    public AbstractMetaPath(final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
+    public AbstractMetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
+        this.metaModel = metaModel;
         this.startElementClasses = startElementClasses == null ? ImmutableSet.of() : ImmutableSet.class.isAssignableFrom(startElementClasses.getClass()) ? startElementClasses : ImmutableSet.copyOf(startElementClasses);
         this.endElementClasses = endElementClasses == null ? ImmutableSet.of() : ImmutableSet.class.isAssignableFrom(endElementClasses.getClass()) ? endElementClasses : ImmutableSet.copyOf(endElementClasses);
         this.name = name;
+    }
+
+    /** Liefert das zugrunde liegende MetaModell */
+    public final MetaModel getMetaModel() {
+        return metaModel;
     }
 
     /**
@@ -518,12 +532,15 @@ public abstract class AbstractMetaPath {
      * @return
      */
     public String getName(final boolean withStartClasses, final boolean withEndClasses) {
-        if (withStartClasses && withEndClasses) {
-            return ElementsNameBuilder.getDisplayableClassesNames(getStartClasses()) + " " + getName() + " " + ElementsNameBuilder.getDisplayableClassesNames(getEndClasses());
-        } else if (withStartClasses) {
-            return ElementsNameBuilder.getDisplayableClassesNames(getStartClasses()) + " " + getName();
-        } else if (withEndClasses) {
-            return getName() + " " + ElementsNameBuilder.getDisplayableClassesNames(getEndClasses());
+        if (withStartClasses || withEndClasses) {
+            ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+            if (withStartClasses && withEndClasses) {
+                return elementsNameBuilder.getDisplayableClassesNames(getStartClasses()) + " " + getName() + " " + elementsNameBuilder.getDisplayableClassesNames(getEndClasses());
+            } else if (withStartClasses) {
+                return elementsNameBuilder.getDisplayableClassesNames(getStartClasses()) + " " + getName();
+            } else if (withEndClasses) {
+                return getName() + " " + elementsNameBuilder.getDisplayableClassesNames(getEndClasses());
+            }
         }
         return getName();
     }

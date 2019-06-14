@@ -26,7 +26,7 @@ public class RecursiveMetaPath extends AbstractMetaPath {
      * @param name
      */
     public RecursiveMetaPath(final AbstractMetaPath metaPath, final String name) {
-        super(metaPath.startElementClasses, metaPath.endElementClasses, name);
+        super(metaPath.metaModel, metaPath.startElementClasses, metaPath.endElementClasses, name);
     }
 
     /**
@@ -34,7 +34,7 @@ public class RecursiveMetaPath extends AbstractMetaPath {
      * @param name
      */
     public RecursiveMetaPath(final AbstractMetaPath metaPath, final String forwardName, final String backwardName) {
-        super(metaPath.startElementClasses, metaPath.endElementClasses, forwardName);
+        super(metaPath.metaModel, metaPath.startElementClasses, metaPath.endElementClasses, forwardName);
     }
 
     /**

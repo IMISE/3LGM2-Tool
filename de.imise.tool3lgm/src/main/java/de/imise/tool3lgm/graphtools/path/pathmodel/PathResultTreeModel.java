@@ -332,7 +332,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
             //eine einelementige Startelementliste wurde übergeben
         } else {
             for (ModelElement me : startElements.get(0)) {
-                PathResultTreeNode node = new PathResultTreeNode(new ElementaryPath(me, null), PathResultTreeNode.NodeType.START_ELEMENT);
+                PathResultTreeNode node = new PathResultTreeNode(new ElementaryPath(null, me), PathResultTreeNode.NodeType.START_ELEMENT);
                 completePathLeafs.addAll(addPath(node, metaPath, false));
                 if (node.getChildCount() > 0) {
                     root.add(node);
@@ -568,12 +568,12 @@ public class PathResultTreeModel extends DefaultTreeModel {
                         continue;
                     }
                 }
-                resultNodes.add(new PathResultTreeNode(new ElementaryPath(me, edge.getOther(me), edge, metaPath), nodeType));
+                resultNodes.add(new PathResultTreeNode(new ElementaryPath(metaPath, me, edge.getOther(me), edge), nodeType));
                 //wenn der MetaPfad nur eine Elementart beschreibt (Start und Endklasse sind gleich und die Kantenklasse ist null)
             }
         } else if (metaPath.getType() == Type.SINGLE_ELEMENT) {
             if (endClass.isAssignableFrom(me.getClass())) {
-                resultNodes.add(new PathResultTreeNode(new ElementaryPath(me, metaPath), nodeType));
+                resultNodes.add(new PathResultTreeNode(new ElementaryPath(metaPath, me), nodeType));
                 //wenn der MetaPfad bei einer Kantenklasse startet und auf ein oder beide Enden dieser Kante verweist (je nach Richtung)
             }
         } else if (metaPath.getType() == Type.START_WITH_EDGE) {
@@ -582,21 +582,21 @@ public class PathResultTreeModel extends DefaultTreeModel {
             if (metaPath.getDirection() == Direction.FORWARD) {
                 ModelElement endElement = edge.getEnd();
                 if (endClass.isAssignableFrom(endElement.getClass())) {
-                    resultNodes.add(new PathResultTreeNode(new ElementaryPath(edge, endElement, edge, metaPath), nodeType));
+                    resultNodes.add(new PathResultTreeNode(new ElementaryPath(metaPath, edge, endElement, edge), nodeType));
                 }
             } else if (metaPath.getDirection() == Direction.BACKWARD) {
                 ModelElement startElement = edge.getStart();
                 if (endClass.isAssignableFrom(startElement.getClass())) {
-                    resultNodes.add(new PathResultTreeNode(new ElementaryPath(edge, startElement, edge, metaPath), nodeType));
+                    resultNodes.add(new PathResultTreeNode(new ElementaryPath(metaPath, edge, startElement, edge), nodeType));
                 }
             } else {
                 ModelElement element = edge.getStart();
                 if (endClass.isAssignableFrom(element.getClass())) {
-                    resultNodes.add(new PathResultTreeNode(new ElementaryPath(edge, element, edge, metaPath), nodeType));
+                    resultNodes.add(new PathResultTreeNode(new ElementaryPath(metaPath, edge, element, edge), nodeType));
                 }
                 element = edge.getEnd();
                 if (endClass.isAssignableFrom(element.getClass())) {
-                    resultNodes.add(new PathResultTreeNode(new ElementaryPath(edge, element, edge, metaPath), nodeType));
+                    resultNodes.add(new PathResultTreeNode(new ElementaryPath(metaPath, edge, element, edge), nodeType));
                 }
             }
             //wenn der MetaPfad bei einer zur Kantenklasse des MetaPfades zuweisungskompatiblen Elementklasse endet
@@ -611,7 +611,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
             }
             for (Edge edge : edges) {
                 if (endClass.isAssignableFrom(edge.getClass())) {
-                    resultNodes.add(new PathResultTreeNode(new ElementaryPath(me, edge, edge, metaPath), nodeType));
+                    resultNodes.add(new PathResultTreeNode(new ElementaryPath(metaPath, me, edge, edge), nodeType));
                 }
             }
         }

@@ -204,10 +204,10 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
 
         mainDoc.select(cknot.getContainer(mainDoc), TransactionManager.STANDARD_PID);
-        Tool3lgm.getContextGenerator().setModelElement(rknot.getContainer(mainDoc));
-        Tool3lgm.getContextGenerator().setElementGetroffen(true);
+        Tool3lgm.getContextGenerator().setElementContainer(rknot.getContainer(mainDoc));
+        Tool3lgm.getContextGenerator().setElementClicked(true);
         Tool3lgm.getContextGenerator().processMouseEvent(left_button, right_button, cellPanel, e.getX(), e.getY());
-        Tool3lgm.getContextGenerator().setElementGetroffen(false);
+        Tool3lgm.getContextGenerator().setElementClicked(false);
     }
 
     /**

@@ -3,8 +3,9 @@ package de.imise.tool3lgm.graphtools.analyse.context;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -14,11 +15,20 @@ import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 public abstract class AbstractAnalysis {
 
+    protected final MetaModelContext metaModelContext;
+
     /** der Name der Analyse. */
     protected String name;
 
     /** der Node, bei dem die Analyse beginnt. */
     protected List<Class<? extends ModelElement>> startClasses = new ArrayList<>();
+
+    /**
+     * @param metaModelContext
+     */
+    protected AbstractAnalysis(final MetaModelContext metaModelContext) {
+        this.metaModelContext = metaModelContext;
+    }
 
     /**
      * Gibt den Namen der XMLAnalyse zurück.
@@ -57,11 +67,13 @@ public abstract class AbstractAnalysis {
             return "";
         }
         StringBuilder sb = new StringBuilder();
+        MetaModel metaModel = metaModelContext.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (int i = 0; i < startClasses.size() - 1; i++) {
-            sb.append(ElementsNameBuilder.getDisplayableName(ModelConstants.getClassForName(startClasses.get(i).getName())));
+            sb.append(elementsNameBuilder.getDisplayableName(metaModel.getClassForName(startClasses.get(i).getName())));
             sb.append(", ");
         }
-        sb.append(ElementsNameBuilder.getDisplayableName(ModelConstants.getClassForName(startClasses.get(startClasses.size() - 1).getName())));
+        sb.append(elementsNameBuilder.getDisplayableName(metaModel.getClassForName(startClasses.get(startClasses.size() - 1).getName())));
         return sb.toString();
     }
 

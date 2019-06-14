@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxBackwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxForwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwardCardinality;
@@ -26,16 +25,20 @@ import org.apache.commons.collections4.map.Flat3Map;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -98,6 +101,9 @@ public abstract class ModelElement extends UserFieldTarget {
 
     private static final StringBuilder textBuf = new StringBuilder("");
 
+    /** MetaModel aus dem die Klasse dieses Elementes stammt. */
+    private MetaModel metaModel;
+
     /**
      * HashString des Teilmodells, mit dem das Element verknüpft ist. Diese Verknüpfung sagt einfach nur aus, dass das Element in dem Teilmodell näher
      * berschrieben wird (z.B. duch seine Teile). Es kann, aber muss selbst nicht in diesem Teilmodell
@@ -110,13 +116,41 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public ModelElement() {
         hashstring = getNewHashString(this);
-        initContainerTable(this);
     }
 
     private static void initContainerTable(final ModelElement me) {
-        //bei allen Elementen, die sowieso nie mehr als 3 Container haben können (uniques und Knickpunkte) wird
-        //eine optimierte Map für die Container initialisiert
-        me.containerTable = me.getMaxContainerCount() > 3 ? new HashMap<>(3, 1) : new Flat3Map<>();
+        if (me.containerTable == null) {
+            //bei allen Elementen, die sowieso nie mehr als 3 Container haben können (uniques und Knickpunkte) wird
+            //eine optimierte Map für die Container initialisiert
+            me.containerTable = me.getMaxContainerCount() > 3 ? new HashMap<>(3, 1) : new Flat3Map<>();
+        }
+    }
+
+    /**
+     * Setzt das MetaModel, zu dem dieses Element gehört. Diese Funktion ist nur für das package sichtbar und es gibt es nur, weil zwar jedes
+     * ModelElement das Metamodel kennen muss, aber nicht jede Unterklasse von ModelElement einen Konstruktor mit Parameter {@link MetaModelInsance}
+     * haben soll, sondern alle nur den leeren. Bei jedem ModelElement muss das MetaModel sofort (!) nach dem Anlegen über diese Funktion gesetzt
+     * werden, damit das ModelElement richtig funktioniert. Anlegen und setzen macht beides der {@link ModelElementInstanceCreator}.
+     */
+    final void setMetaModel(final MetaModel metaModel) {
+        if (this.metaModel == null) {
+            this.metaModel = metaModel;
+            initContainerTable(this);
+        }
+    }
+
+    /** Liefert das MetaModel, aus dem dieses Element kommt */
+    public MetaModel getMetaModel() {
+        return metaModel;
+    }
+
+    /**
+     * Liefert den Handler zum Erzeugen der der Metamdellnamen der Knoten- und Kantenklassen
+     *
+     * @return
+     */
+    public final ElementsNameBuilder getElementsNameBuilder() {
+        return metaModel.getElementsNameBuilder();
     }
 
     public void printContainer() {
@@ -134,13 +168,13 @@ public abstract class ModelElement extends UserFieldTarget {
 
     /**
      * Liefert den Index der Ebene, auf dem das Element liegt. Diese Funktion wird von den konkreten Elementen überschrieben. Das braucht man neben
-     * den der Möglichkeit das für eine Klasse über die {@link ModelConstants} zu sagen, weil es nicht bei allen
-     * Klassen der Layer feststeht (Knickpunkte)
+     * den der Möglichkeit das für eine Klasse über die {@link ModelConstants} zu sagen, weil es nicht bei allen Klassen der Layer feststeht
+     * (Knickpunkte)
      *
      * @return
      */
     public int layerFor() {
-        int layer = ModelConstants.layerFor(getClass());
+        int layer = metaModel.layerFor(getClass());
         if (layer == ModelConstants.NO_LAYER) {
             for (ElementContainer ec : containerTable.values()) {
                 Container parent = ec.getParent();
@@ -181,10 +215,19 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * @return
+     * @return alle {@link GraphDocument}, in denen dieses Element vorkommt
      */
     public final Set<GraphDocument> getMySzenarios() {
         return new HashSet<>(containerTable.keySet());
+    }
+
+    /**
+     * Liefert alle Container dieses Elementes
+     *
+     * @return
+     */
+    public final Collection<ElementContainer> getElementContainers() {
+        return containerTable.values();
     }
 
     protected abstract int getMaxContainerCount();
@@ -337,7 +380,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public String getNameWithSzens() {
-        if (nameWithSzens == null || ModelConstants.isGenerateName(getClass())) {
+        if (nameWithSzens == null || metaModel.isGenerateName(getClass())) {
             updateNameWithSzens();
         }
         return nameWithSzens;
@@ -358,22 +401,19 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Name der Funtkion, die den MetaPfad zu verbundenen Elementen angibt, von denen der Name
-     * zusätzlich zum eigenen Elementnamen in der Grafik angezeigt werden soll.
-     */
-    public static final String GET_NAME_EXTENSION_METHOD_NAME = "getNameExtensionPath";
-
-    /**
      * Liefert für alle Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern
      * unter der eigentlichen Elementart angezeigt werden soll, den MetaPfad zu den anzuzeigenden verbundenen
      * Elementen.
      * Diese Funktion darf nicht einfach refactored werden und wenn doch, dann muss das Feld GET_NAME_EXTENSION_METHOD_NAME
      * ebenfalls umbenannt werden.
      */
-    protected SimpleMetaPath getNameExtensionPath() {
-        return null;
+    private final AbstractMetaPath getNameExtensionPath() {
+        return metaModel.getNameExtensionPath(getClass());
     }
 
+    /**
+     * Aktualisiert den Namen, wenn das Element hinter seinem Namen auch den Namen verbundener Elemente anzeigen soll
+     */
     public void updateNameExtensions() {
         if (getNameExtensionPath() != null) {
             setName(name);
@@ -414,11 +454,12 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     public String getNameExtension() {
-        updateHTMLNameSuffixBuffer(getNameExtensionPath());
+        AbstractMetaPath nameExtensionPath = getNameExtensionPath();
+        updateHTMLNameSuffixBuffer(nameExtensionPath);
         return suffixBuf.toString();
     }
 
-    private void updateHTMLNameSuffixBuffer(final SimpleMetaPath nameExtension) {
+    private void updateHTMLNameSuffixBuffer(final AbstractMetaPath nameExtension) {
         suffixBuf.setLength(0);
         if (nameExtension != null) {
             Collection<ModelElement> directConnectedElements = MetaPathFunctions.getConnectedElements(this, nameExtension);
@@ -447,7 +488,7 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     private void updateHTMLName() {
-        SimpleMetaPath nameExtension = getNameExtensionPath();
+        AbstractMetaPath nameExtension = getNameExtensionPath();
         updateHTMLNameSuffixBuffer(nameExtension);
         textBuf.setLength(0);
         textBuf.append("<HTML><CENTER>");
@@ -460,7 +501,7 @@ public abstract class ModelElement extends UserFieldTarget {
         }
         textBuf.append(suffixBuf.length() > 0 ? "<BR>" : "");
         if (suffixBuf.length() > 0) {
-            GraphViewDefinition graphViewDefinition = ModelConstants.getGraphViewDefinition();
+            GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
             ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
             Class<? extends ModelElement> nameExtendsionClass = nameExtension.getEndClass();
             GraphElementLayout nameExtendsionClassLayout = defaultElementsLayout.getStandardElementLayout(nameExtendsionClass);
@@ -601,7 +642,7 @@ public abstract class ModelElement extends UserFieldTarget {
         if (edges == null) {
             edges = new ArrayList<>(3); // die meisten Elemente, die überhaupt Kanten haben, haben fast nie mehr als 3
         }
-        if (pos < edges.size() || pos > edges.size()) {
+        if (pos < 0 || pos > edges.size()) {
             pos = edges.size();
         }
         edges.add(pos, kante);
@@ -1624,9 +1665,9 @@ public abstract class ModelElement extends UserFieldTarget {
                 switch (direction) {
                 case FORWARD:
                     //bei allen gerichteten Kanten
-                    if (ModelConstants.isDirectedEdge(edgeClass)) {
+                    if (metaModel.isDirectedEdge(edgeClass)) {
                         //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                        if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+                        if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                             switch (((DoubleMeaningEdge) edge).getConnectionState()) {
                             case FORWARD:
                                 knot = edge.isEnd(this) ? null : edge.getEnd();
@@ -1648,9 +1689,9 @@ public abstract class ModelElement extends UserFieldTarget {
                     break;
                 case BACKWARD:
                     //bei allen gerichteten Kanten
-                    if (ModelConstants.isDirectedEdge(edgeClass)) {
+                    if (metaModel.isDirectedEdge(edgeClass)) {
                         //bei Kanten mit doppelter Bedeutung ist nur der ConnectionState entscheidenend
-                        if (ModelConstants.isDoubleMeaningEdge(edgeClass)) {
+                        if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                             switch (((DoubleMeaningEdge) edge).getConnectionState()) {
                             case FORWARD:
                                 knot = edge.isEnd(this) ? edge.getStart() : null;
@@ -1712,12 +1753,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public ElementPropertyDialog getPropertyDialog() {
-        ElementPropertyDialog prop = ModelConstants.hasObjektDialog(this);
-        if (prop == null) {
-            prop = createPropertyDialog();
-            ModelConstants.dialogs.add(prop);
-        }
-        return prop;
+        return ElemenPropertyDialogsContext.getDialog(this);
     }
 
     /**
@@ -1732,6 +1768,16 @@ public abstract class ModelElement extends UserFieldTarget {
             return null;
         }
         return new ElementPropertyDialog(this, gdcoll);
+    }
+
+    /**
+     * Ruft einfach nur {@link #createPropertyDialog()} auf. Diese Funktion wurde notwendig, damit für den neuen {@link ElemenPropertyDialogsContext}
+     * nicht die Sichtbarkeit von {@link #createPropertyDialog()} geändert werden musste.
+     *
+     * @return
+     */
+    public final ElementPropertyDialog getNewPropertyDialogInsance() {
+        return createPropertyDialog();
     }
 
     /**
@@ -1809,7 +1855,7 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public boolean isConsistent() {
         Class<? extends ModelElement> meClass = getClass();
-        Class<? extends Edge>[] edgeTypes = ModelConstants.getEdgeTypes(meClass);
+        Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(meClass);
         //für alle Kantenarten dieser ModelElement-Klasse
         for (Class<? extends Edge> edgeType : edgeTypes) {
             //minimale Kardinalität wird erst einmal als 0 angenommen
@@ -1843,7 +1889,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * Ueberprueft, ob der Node zur Menge der UNIQUE_KNOTS gehoert, ob er also ein Node ist, der im gesamten Modell nur einmal vorkommt
      */
     public boolean isUnique() {
-        return ModelConstants.isUnique(getClass());
+        return metaModel.isUnique(getClass());
     }
 
     /**
@@ -1852,7 +1898,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public boolean isSlave() {
-        return ModelConstants.isSlaveType(getClass());
+        return metaModel.isSlaveType(getClass());
     }
 
     /**
@@ -1860,25 +1906,25 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public boolean isPaintable() {
         //diese Funktion wird sehr oft augerufen und der Aufruf über getGraphViewDefinition() ist eine Stufe kürzer als direkt über die "Abkürzungsfunktion" in ModelConstants
-        return ModelConstants.getGraphViewDefinition().isPaintable(getClass());
+        return metaModel.getGraphViewDefinition().isPaintable(getClass());
     }
 
     public final boolean hasLayout() {
-        return ModelConstants.hasLayout(getClass());
+        return metaModel.hasLayout(getClass());
     }
 
     /**
      * @return <code>true</code>, wenn die Elementart eine {@link HasPartEdge} hat
      */
     public final boolean canHaveParts() {
-        return ModelConstants.canHaveParts(getClass());
+        return metaModel.canHaveParts(getClass());
     }
 
     /**
      * @return <code>true</code>, wenn die Elementart eine {@link HasPartEdge} hat
      */
     public final boolean canHaveParents() {
-        return ModelConstants.canHaveParents(getClass());
+        return metaModel.canHaveParents(getClass());
     }
 
     /**
@@ -1895,7 +1941,7 @@ public abstract class ModelElement extends UserFieldTarget {
             return false;
         }
         //Wenn es sich bei dieser Kantenart nicht um eine mehrfach zwischend denselben Elementen anlgebare Edge handelt
-        if (!ModelConstants.isMultipleEdgeClass(edgeClass)) {
+        if (!MetaModel.isMultipleEdgeClass(edgeClass)) {
             //wenn schon eine solche Edge zwischen den beiden Elementen existiert
             List<Edge> edges = getEdgesTo(me, edgeClass);
             if (edges != null && edges.size() > 0) {
@@ -1925,20 +1971,13 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * @return {@link HashMap} aller Container dieses Elementes
-     */
-    public Map<GraphDocument, ElementContainer> getContainerTable() {
-        return containerTable;
-    }
-
-    /**
      * Liefert das Modell, in dem dieses Element vorkommt oder <code>null</code>.
      *
      * @return
      */
     public final GDCollection getCollection() {
         //gibt vom erstbesten doc die gdcoll zurück
-        for (GraphDocument doc : getContainerTable().keySet()) {
+        for (GraphDocument doc : containerTable.keySet()) {
             return doc.getCollection();
         }
         return null;
@@ -1956,7 +1995,7 @@ public abstract class ModelElement extends UserFieldTarget {
             hashstring = other.getHashString();
         }
 
-        String joined = getResString("joined");
+        String joined = Tool3lgmConstants.getResString("joined");
         if (!name.trim().equals(other.name.trim())) {
             name = name.concat("\n-" + joined + "-\n" + other.name);
         }
@@ -2038,7 +2077,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     @SafeVarargs
-    protected final SimpleMetaPath createSimpleMetaPath(final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
+    public final SimpleMetaPath createSimpleMetaPath(final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
         return createSimpleMetaPath(null, metaPathStepWithPathName, edgeClasses);
     }
 
@@ -2047,7 +2086,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     @SafeVarargs
-    protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends Edge>... edgeClasses) {
+    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends Edge>... edgeClasses) {
         return createSimpleMetaPath((Class<? extends ModelElement>) null, edgeClasses);
     }
 
@@ -2057,8 +2096,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     @SafeVarargs
-    protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final Class<? extends Edge>... edgeClasses) {
-        return SimpleMetaPathCreator.createSimpleMetaPath(getClass(), endClass, edgeClasses);
+    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final Class<? extends Edge>... edgeClasses) {
+        return SimpleMetaPathCreator.createSimpleMetaPath(getMetaModel(), getClass(), endClass, edgeClasses);
     }
 
     /**
@@ -2067,7 +2106,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     @SafeVarargs
-    protected final SimpleMetaPath createSimpleMetaPath(final String baseResKeyOrName, final Class<? extends Edge>... edgeClasses) {
+    public final SimpleMetaPath createSimpleMetaPath(final String baseResKeyOrName, final Class<? extends Edge>... edgeClasses) {
         return createSimpleMetaPath(null, baseResKeyOrName, edgeClasses);
     }
 
@@ -2078,8 +2117,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     @SafeVarargs
-    protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... edgeClasses) {
-        return SimpleMetaPathCreator.createSimpleMetaPath(getClass(), endClass, baseResKeyOrName, edgeClasses);
+    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... edgeClasses) {
+        return SimpleMetaPathCreator.createSimpleMetaPath(getMetaModel(), getClass(), endClass, baseResKeyOrName, edgeClasses);
     }
 
     /**
@@ -2091,8 +2130,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     @SafeVarargs
-    protected final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
-        return SimpleMetaPathCreator.createSimpleMetaPath(getClass(), endClass, metaPathStepWithPathName, edgeClasses);
+    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
+        return SimpleMetaPathCreator.createSimpleMetaPath(getMetaModel(), getClass(), endClass, metaPathStepWithPathName, edgeClasses);
     }
 
     /**
@@ -2104,8 +2143,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     @SafeVarargs
-    protected final SimpleMetaPath[] createSimpleMetaPaths(final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
-        return SimpleMetaPathCreator.createSimpleMetaPaths(getClass(), metaPathStepWithPathName, edgeClasses);
+    public final SimpleMetaPath[] createSimpleMetaPaths(final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
+        return SimpleMetaPathCreator.createSimpleMetaPaths(getMetaModel(), getClass(), metaPathStepWithPathName, edgeClasses);
     }
 
 }

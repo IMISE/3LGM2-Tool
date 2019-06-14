@@ -16,6 +16,8 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -55,10 +57,10 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     protected JButton helpButton;
 
     /** Modell in dessen Kontext der Dialog steht */
-    protected GDCollection gdcoll;
+    protected final GDCollection gdcoll;
 
     /** Hauptmodell der GDCollection */
-    protected LGMGraphDocument doc;
+    protected final LGMGraphDocument doc;
 
     /** ID des Dialoges mit der alle Transaktionen durchgeführt werden */
     protected int transactionID;
@@ -81,6 +83,8 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      */
     public AbstractPropertyDialog(final Frame owner, final GDCollection gdcoll) {
         super(owner, "", false);
+        this.gdcoll = gdcoll;
+        doc = gdcoll.getMainGraphDocument();
         init(gdcoll);
     }
 
@@ -90,6 +94,8 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      */
     public AbstractPropertyDialog(final Dialog owner, final GDCollection gdcoll) {
         super(owner, "", owner instanceof AbstractPropertyDialog);
+        this.gdcoll = gdcoll;
+        doc = gdcoll.getMainGraphDocument();
         init(gdcoll);
     }
 
@@ -104,9 +110,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      * @param gdcoll
      */
     private void init(final GDCollection gdcoll) {
-        this.gdcoll = gdcoll;
         addWindowListener(this);
-        doc = gdcoll.getMainGraphDocument();
         okButton = new JButton(getResString("ok"));
         cancelButton = new JButton(getResString("cancel"));
         applyButton = new JButton(getResString("apply"));
@@ -141,6 +145,20 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
      */
     public final LGMGraphDocument getGraphDocument() {
         return doc;
+    }
+
+    /**
+     * @return {@link MetaModel}
+     */
+    public final MetaModel getMetaModel() {
+        return gdcoll.getMetaModel();
+    }
+
+    /**
+     * @return {@link ElementsNameBuilder}
+     */
+    public final ElementsNameBuilder getElementsNameBuilder() {
+        return gdcoll.getElementsNameBuilder();
     }
 
     /**
