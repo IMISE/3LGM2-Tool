@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.EdgesMappingMetaPathsCreationDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -15,6 +16,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.pathmodel.SimplePath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
@@ -174,7 +176,7 @@ public class ModelConverter {
 
     private void convertEdgesMappingMetaPaths() {
         //Map der Kantenklassen, die auf Pfade gemappt werden holen
-        Map<Class<? extends Edge>, SimpleMetaPath> edgesMappingMetaPaths = modelConverterDefinition.getEdgesMappingMetaPaths();
+        Map<Class<? extends Edge>, EdgesMappingMetaPathsCreationDefinition> edgesMappingMetaPaths = modelConverterDefinition.getEdgeClassesMappingMetaPaths();
         //Set aller Kantenklassen holen, die in die Metapfade umgewandelt werden sollen
         Set<Class<? extends Edge>> sourceEdgeClasses = edgesMappingMetaPaths.keySet();
         //Hauptdokument des umzuwandelnden Modells (Ausgangsmodell)
@@ -186,7 +188,8 @@ public class ModelConverter {
             //hole aus dem Ausgangsmodell alle Kanten der umzuwandelnden Art
             List<ModelElement> sourceEdges = sourceMainDoc.getModelItems(sourceEdgeClass, true);
             //hole den MetaPfad der im Zielmodell für die Kante angelet werden soll
-            SimpleMetaPath targetMetaPath = edgesMappingMetaPaths.get(sourceEdgeClass);
+            EdgesMappingMetaPathsCreationDefinition edgesMappingMetaPathsCreationDefinition = edgesMappingMetaPaths.get(sourceEdgeClass);
+            SimpleMetaPath targetMetaPath = edgesMappingMetaPathsCreationDefinition.getSimpleMetaPath2Create();
             //für jeden dieser umzuwandelnden Kanten
             for (ModelElement sourceEdgeElement : sourceEdges) {
                 Edge sourceEdge = (Edge) sourceEdgeElement;
@@ -197,7 +200,9 @@ public class ModelConverter {
                 ModelElement targetStartElement = targetMainDoc.findKnotenCoded(sourceStartElementHash);
                 ModelElement targetEndElement = targetMainDoc.findKnotenCoded(sourceEndElementHash);
                 //lege den MetaPfad im Zielmodell an
-                targetMainDoc.createPath(targetStartElement, targetEndElement, targetMetaPath, STANDARD_PID);
+                SimplePath createdPath = targetMainDoc.createPath(targetStartElement, targetEndElement, targetMetaPath, STANDARD_PID);
+                //nach der Definiton der Umbenennungen die Namen der Elemente in Abhängigkeit von der Source-Edge umbenennen
+                edgesMappingMetaPathsCreationDefinition.renameElements(createdPath, sourceEdge);
             }
         }
     }

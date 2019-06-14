@@ -1,17 +1,22 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
+import de.imise.tool3lgm.graphtools.path.pathmodel.SimplePath;
 
 /**
  * Definition der Transformation eines (Meta-)Modells in ein anderes.<br>
@@ -147,11 +152,13 @@ public abstract class ModelConverterDefinition {
     }
 
     /**
-     * Liefert eine Map, die von Kantenklassen aus dem Source-Metamodell auf einen Pfad im Targetmetamodell mappt. Deckt den Fall 4 ab.
+     * Liefert eine Map, die von Kantenklassen aus dem Source-Metamodell auf einen Pfad im Targetmetamodell mappt. Deckt den Fall 4 ab. Der Pfad
+     * steckt in den Value-Klassen und außerdem noch eine Definition, wie Namen von Zwischenelemente, die beim Erzeugen des Pfades angelegt werden
+     * erzeugt werden sollen.
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
-    public Map<Class<? extends Edge>, SimpleMetaPath> getEdgesMappingMetaPaths() {
+    public Map<Class<? extends Edge>, EdgesMappingMetaPathsCreationDefinition> getEdgeClassesMappingMetaPaths() {
         return new HashMap<>();
     }
 
@@ -183,4 +190,114 @@ public abstract class ModelConverterDefinition {
     public void transform(final GDCollection source, final GDCollection target) {
         //subclasses can do special transforms here
     }
+
+    /**
+     * Spezielle Datenklasse für das Mapping von Kanten auf SimpleMetaPaths. Außer welcher Pfad aus der jeweiligen Kante entstehen soll, wird hier
+     * auch noch defniert, welche Namen die neu anzulegenden Zwischenelemente erhalten sollen. Diese Namen bleiben entweder die generierten
+     * Standardnamen oder werden ein String, der sich irgendwie aus der Kante bzw. deren Name oder dem Namen der durch die Kante verbundenen Elemente
+     * ergibt.
+     *
+     * @author AXS (12 Jun 2019)
+     */
+    public static class EdgesMappingMetaPathsCreationDefinition {
+
+        public enum NameSource {
+            /** Name des Startelementes der Kante */
+            PATH_STEP_START_ELEMENT_NAME,
+            /** Name des Endelementes der Kante */
+            PATH_STEP_END_ELEMENT_NAME,
+            /** Name der Kante */
+            PATH_STEP_EDGE_NAME,
+        }
+
+        private final SimpleMetaPath simpleMetaPath2Create;
+
+        private Map<Integer, Object[]> pathStepElementIndexToElementNameCreationPattern;
+
+        /**
+         * @param simpleMetaPath2Create
+         */
+        public EdgesMappingMetaPathsCreationDefinition(final SimpleMetaPath simpleMetaPath2Create) {
+            this.simpleMetaPath2Create = simpleMetaPath2Create;
+        }
+
+        /**
+         * Fügt ein Pattern für den Pfadschritt mit dem angegebenen Index hinzu
+         *
+         * @param pathStepElementIndex
+         *            Index des Zwischenelementes im Pfad, dessen Name generiert werden soll.
+         * @param patternObjects
+         *            Die Objekte, aus denen der Name generiert wird. Das ist eine Liste von beliebigen Objekten und {@link NameSource}s. Alle Objekte
+         *            außer {@link NameSource}s werden einfach über {@link String#valueOf(Object)} in Strings umgewandelt und aneinandergehängt. Die
+         *            NameSources werden durch den von ihnen beschriebenen String ersetzt und dann angehängt.
+         */
+        public void addElementNameCreationPattern(final int pathStepElementIndex, final Object... patternObjects) {
+            if (pathStepElementIndexToElementNameCreationPattern == null) {
+                pathStepElementIndexToElementNameCreationPattern = new HashMap<>();
+            }
+            pathStepElementIndexToElementNameCreationPattern.put(pathStepElementIndex, patternObjects);
+        }
+
+        /**
+         * @return the simpleMetaPath2Create
+         */
+        public SimpleMetaPath getSimpleMetaPath2Create() {
+            return simpleMetaPath2Create;
+        }
+
+        /**
+         * @param simplePath
+         * @param nameSourceEdge
+         */
+        public void renameElements(final SimplePath simplePath, final Edge nameSourceEdge) {
+            Set<Integer> pathStepIndices = pathStepElementIndexToElementNameCreationPattern.keySet();
+            for (int pathStepIndex : pathStepIndices) {
+                List<ElementaryPath> elementaryPaths = simplePath.getElementaryPaths();
+                ElementaryPath elementaryPath = elementaryPaths.get(pathStepIndex);
+                ModelElement pathStepEndElement = elementaryPath.getEndElement();
+                Object[] patternObjetcs = pathStepElementIndexToElementNameCreationPattern.get(pathStepIndex);
+                renameElement(pathStepEndElement, nameSourceEdge, patternObjetcs);
+            }
+        }
+
+        /**
+         * @param element2Rename
+         * @param nameSourceEdge
+         * @param patternObjetcs
+         */
+        private void renameElement(final ModelElement element2Rename, final Edge nameSourceEdge, final Object[] patternObjetcs) {
+            if (patternObjetcs == null || patternObjetcs.length == 0) {
+                return;
+            }
+            StringBuilder newName = new StringBuilder();
+            for (Object patternObject : patternObjetcs) {
+                if (patternObject instanceof NameSource) {
+                    ModelElement nameSourceElement = null;
+                    NameSource nameSource = (NameSource) patternObject;
+                    switch (nameSource) {
+                    case PATH_STEP_START_ELEMENT_NAME:
+                        nameSourceElement = nameSourceEdge.getStart();
+                        break;
+                    case PATH_STEP_END_ELEMENT_NAME:
+                        nameSourceElement = nameSourceEdge.getEnd();
+                        break;
+                    case PATH_STEP_EDGE_NAME:
+                        nameSourceElement = nameSourceEdge;
+                        break;
+                    default:
+                        break;
+                    }
+                    if (nameSourceElement != null) {
+                        newName.append(nameSourceElement.getName());
+                    }
+
+                } else {
+                    newName.append(String.valueOf(patternObject));
+                }
+            }
+            element2Rename.setName(newName.toString());
+        }
+
+    }
+
 }
