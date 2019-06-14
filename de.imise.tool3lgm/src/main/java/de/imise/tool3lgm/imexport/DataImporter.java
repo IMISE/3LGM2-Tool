@@ -101,7 +101,11 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
     }
 
     /**
+     * Fügt im Zielmodell einen Knoten hinzu.
+     *
      * @param sourceObject
+     *            ein Objetct aus der Source, über das man auf den neuen Knoten mappen kann. Es sollte der korrespondierende Knoten im SourceModell
+     *            sein.
      * @param nodeClass
      * @param name
      * @param description
@@ -112,7 +116,11 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
     }
 
     /**
+     * Fügt im Zielmodell einen Knoten hinzu.
+     *
      * @param sourceObject
+     *            ein Objetct aus der Source, über das man auf den neuen Knoten mappen kann. Es sollte der korrespondierende Knoten im SourceModell
+     *            sein.
      * @param nodeClass
      * @param name
      * @param description
@@ -127,6 +135,8 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
     }
 
     /**
+     * Fügt im Zielmodell eine Kante hinzu.
+     *
      * @param edgeClassName
      * @param edgeHash
      * @param startNode
@@ -137,6 +147,8 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
         return addEdge(edgeClassName, null, edgeHash, startNode, endNode);
     }
     /**
+     * Fügt im Zielmodell eine Kante hinzu.
+     *
      * @param edgeClassName
      * @param edgeName
      * @param edgeHash
