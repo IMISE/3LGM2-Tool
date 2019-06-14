@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
+import de.imise.tool3lgm.graphtools.model.GDCollectionPrinter;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
@@ -149,6 +150,13 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
             edge.setName(edgeName);
         }
         return edge;
+    }
+
+    /**
+     * Gibt den Inhalt des importierten Modells aus
+     */
+    public final void printModel() {
+        GDCollectionPrinter.print(this);
     }
 
 }
