@@ -82,7 +82,7 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      * @param sourceObject
      * @return
      */
-    public Node getNode(final T sourceObject) {
+    public Node getTargetNode(final T sourceObject) {
         return sourceInstanceToNode.get(sourceObject);
     }
 
