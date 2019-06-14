@@ -26,7 +26,7 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
     /**
      * Mappt von einem eine Knotenklassen-Instanz repräsentierenden Objekt auf den im 3LGM2-Import-Modell erzeugten korrespondierenden Knoten. Über
      * diese Map kann beim Erstellen der Kanten aus dem SorceModell herausgefunden werden, welcher Source-Knoten zu welchem Target-Knoten geworden
-     * ist. Diese Information benötigt man immer, wenn man einen Graphen mit Knoten und Kanten importieren möchte undabhängig von der Datenquelle.
+     * ist. Diese Information benötigt man immer, wenn man einen Graphen mit Knoten und Kanten importieren möchte undabhängig, von der Datenquelle.
      */
     private final Map<T, Node> sourceInstanceToNode = new HashMap<>();
 
@@ -41,17 +41,14 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
     }
 
     /**
-     * Importiert alle Daten aus einer Datenquelle in das übergebene Modell.
+     * Importiert alle Daten aus einer Datenquelle ins übergebene Modell.
      *
-     * @param gdcoll Zielmodell des Imports
      * @return <code>true</code>, wenn der Import erfolgreich war
      */
     protected abstract boolean importData();
 
     /**
-     * Liefert die Klasse des Metamodells, das dem Modell (der {@link GDCollection}) zugrunde liegt, in die importiert wird.
-     *
-     * @return
+     * @return Klasse des Metamodells, das dem Modell (der {@link GDCollection}) zugrunde liegt, in die importiert wird.
      */
     public abstract Class<? extends ImportMetaModelDefinition> getImportMetaModelClass();
 
@@ -107,8 +104,11 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      *            ein Objetct aus der Source, über das man auf den neuen Knoten mappen kann. Es sollte der korrespondierende Knoten im SourceModell
      *            sein.
      * @param nodeClass
+     *            3LGM2 Knotenklasse, die im Target-Modell angelegt werden soll
      * @param name
+     *            Name des Knotens im Target-Modell
      * @param description
+     *            Beschreibung des Knotens im Target-Modell
      * @return
      */
     protected Node addNode(final T sourceObject, final Class<? extends Node> nodeClass, final String name, final String description) {
@@ -122,10 +122,14 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      *            ein Objetct aus der Source, über das man auf den neuen Knoten mappen kann. Es sollte der korrespondierende Knoten im SourceModell
      *            sein.
      * @param nodeClass
+     *            3LGM2 Knotenklasse, die im Target-Modell angelegt werden soll
      * @param name
+     *            Name des Knotens im Target-Modell
      * @param description
+     *            Beschreibung des Knotens im Target-Modell
      * @param hashString
-     * @return
+     *            HashString des Knotens im Target-Modell
+     * @return den erzeugten Knoten
      */
     protected Node addNode(final T sourceObject, final Class<? extends Node> nodeClass, final String name, final String description, final String hashString) {
         NodeContainer nodeContainer = gdcoll.createKnotenWithContainer(nodeClass, name, description, hashString, TransactionManager.STANDARD_PID);
@@ -138,28 +142,37 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      * Fügt im Zielmodell eine Kante hinzu.
      *
      * @param edgeClassName
-     * @param edgeHash
+     *            3LGM2 Kantenklasse, die im Target-Modell angelegt werden soll
+     * @param name
+     *            HashString der Kanten im Target-Modell
      * @param startNode
+     *            Startknoten der Kante im Target-Modell
      * @param endNode
-     * @return
+     *            Endknoten der Kante im Target-Modell
+     * @return die erzeugte Kante
      */
-    public Edge addEdge(final String edgeClassName, final String edgeHash, final Node startNode, final Node endNode) {
-        return addEdge(edgeClassName, null, edgeHash, startNode, endNode);
+    public Edge addEdge(final String edgeClassName, final String name, final Node startNode, final Node endNode) {
+        return addEdge(edgeClassName, name, null, startNode, endNode);
     }
     /**
      * Fügt im Zielmodell eine Kante hinzu.
      *
      * @param edgeClassName
-     * @param edgeName
-     * @param edgeHash
+     *            3LGM2 Kantenklasse, die im Target-Modell angelegt werden soll
+     * @param name
+     *            Name des Knotens im Target-Modell
+     * @param hashString
+     *            HashString der Kante im Target-Modell
      * @param startNode
+     *            Startknoten der Kante im Target-Modell
      * @param endNode
-     * @return
+     *            Endknoten der Kante im Target-Modell
+     * @return die erzeugte Kante
      */
-    public Edge addEdge(final String edgeClassName, final String edgeName, final String edgeHash, final Node startNode, final Node endNode) {
-        Edge edge = gdcoll.link(edgeClassName, edgeHash, startNode, endNode, -1, -1, false, TransactionManager.STANDARD_PID);
-        if (!Strings.isNullOrEmpty(edgeName)) {
-            edge.setName(edgeName);
+    public Edge addEdge(final String edgeClassName, final String name, final String hashString, final Node startNode, final Node endNode) {
+        Edge edge = gdcoll.link(edgeClassName, hashString, startNode, endNode, -1, -1, false, TransactionManager.STANDARD_PID);
+        if (!Strings.isNullOrEmpty(name)) {
+            edge.setName(name);
         }
         return edge;
     }
