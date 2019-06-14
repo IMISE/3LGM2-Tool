@@ -13,7 +13,7 @@ import de.imise.owl2tlgm.importmetamodel.node.IntegrationProfile;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.EdgesMappingMetaPathsCreationDefinition.NameSource;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMetaPathsCreationDefinition.NameSource;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -41,32 +41,32 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
     }
 
     @Override
-    public Map<Class<? extends Node>, Class<? extends Node>> getDirectMappingNodeClasses() {
+    public Map<Class<? extends Node>, Class<? extends Node>> getSourceNodeClassesToTargetNodeClasses() {
         //Actor -> IheActor   Domain -> IheDomain    IntegrationProfile -> IheIntegrationProfile
         return ImmutableMap.of(Actor.class, IheActor.class, Domain.class, IheDomain.class, IntegrationProfile.class, IheIntegrationProfile.class);
     }
 
     @Override
-    public Map<Class<? extends Edge>, Class<? extends Edge>> getDirectMappingEdgeClasses() {
+    public Map<Class<? extends Edge>, Class<? extends Edge>> getSourceEdgeClassesToTargetEdgeClasses() {
         //IntegrationProfile_Edge -> IheIntegrationProfile_IheActor_Edge
         return ImmutableMap.of(IheIntegrationProfile_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
     }
 
     @Override
-    public Map<Class<? extends Edge>, Class<? extends Edge>> getDirectMappingSwitchedEdgeClasses() {
+    public Map<Class<? extends Edge>, Class<? extends Edge>> getSourceEdgeClassesToSwitchedTargetEdgeClasses() {
         //IheDomain_Edge -> IheIntegrationProfile_IheDomain_Edge
         return ImmutableMap.of(IheDomain_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
     }
 
     @Override
-    public Map<Class<? extends Edge>, EdgesMappingMetaPathsCreationDefinition> getEdgeClassesMappingMetaPaths() {
+    public Map<Class<? extends Edge>, TargetMetaPathsCreationDefinition> getSourceEdgeClassesToTargetMetaPaths() {
         MetaModelContext serviceMetaModelContext = new MetaModelContext(getTargetMetaModelDefinitionClass());
         MetaModel serviceMetaModel = serviceMetaModelContext.getMetaModel();
 
         //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ruft auf ( <- ) IHE Transaction + IHE Transaction wird bereitsgestellt durch ( <- ) IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
         SimpleMetaPath actorTransactionActorMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(serviceMetaModel, IheActor.class, IheActor.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class,
                 IheProvidingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
-        EdgesMappingMetaPathsCreationDefinition def = new EdgesMappingMetaPathsCreationDefinition(actorTransactionActorMetaPath);
+        TargetMetaPathsCreationDefinition def = new TargetMetaPathsCreationDefinition(actorTransactionActorMetaPath);
         def.addElementNameCreationPattern(1, NameSource.PATH_STEP_EDGE_NAME); //EndElement der 2.Kante im Pfad ( IheInvokingInterface_IheTransaction_Edge -> EndElement = Transaction) soll den Namen der Ursprungskante bekommen
         return ImmutableMap.of(IheTransaction_Edge.class, def);
     }

@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.MetaModelContext;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.EdgesMappingMetaPathsCreationDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMetaPathsCreationDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -103,7 +103,7 @@ public class ModelConverter {
      */
     private void convertDirectMappingNodes() {
         //Map der direkt aufeinander abbildbaren Knotenklassen holen
-        Map<Class<? extends Node>, Class<? extends Node>> directMappingNodeClasses = modelConverterDefinition.getDirectMappingNodeClasses();
+        Map<Class<? extends Node>, Class<? extends Node>> directMappingNodeClasses = modelConverterDefinition.getSourceNodeClassesToTargetNodeClasses();
         //Set aller Knotenklassen holen, die in die Zielklassen umgewandelt werden sollen
         Set<Class<? extends Node>> sourceNodeClasses = directMappingNodeClasses.keySet();
         //Hauptdokument des umzuwandelnden Modells (Ausgangsmodell)
@@ -140,7 +140,7 @@ public class ModelConverter {
 
     private void convertDirectMappingEdges(final boolean switchDirection) {
         //Map der direkt aufeinander abbildbaren Kantenklassen holen
-        Map<Class<? extends Edge>, Class<? extends Edge>> directMappingEdgeClasses = !switchDirection ? modelConverterDefinition.getDirectMappingEdgeClasses() : modelConverterDefinition.getDirectMappingSwitchedEdgeClasses();
+        Map<Class<? extends Edge>, Class<? extends Edge>> directMappingEdgeClasses = !switchDirection ? modelConverterDefinition.getSourceEdgeClassesToTargetEdgeClasses() : modelConverterDefinition.getSourceEdgeClassesToSwitchedTargetEdgeClasses();
         //Set aller Kantenklassen holen, die in die Zielklassen umgewandelt werden sollen
         Set<Class<? extends Edge>> sourceEdgeClasses = directMappingEdgeClasses.keySet();
         //Hauptdokument des umzuwandelnden Modells (Ausgangsmodell)
@@ -176,7 +176,7 @@ public class ModelConverter {
 
     private void convertEdgesMappingMetaPaths() {
         //Map der Kantenklassen, die auf Pfade gemappt werden holen
-        Map<Class<? extends Edge>, EdgesMappingMetaPathsCreationDefinition> edgesMappingMetaPaths = modelConverterDefinition.getEdgeClassesMappingMetaPaths();
+        Map<Class<? extends Edge>, TargetMetaPathsCreationDefinition> edgesMappingMetaPaths = modelConverterDefinition.getSourceEdgeClassesToTargetMetaPaths();
         //Set aller Kantenklassen holen, die in die Metapfade umgewandelt werden sollen
         Set<Class<? extends Edge>> sourceEdgeClasses = edgesMappingMetaPaths.keySet();
         //Hauptdokument des umzuwandelnden Modells (Ausgangsmodell)
@@ -188,7 +188,7 @@ public class ModelConverter {
             //hole aus dem Ausgangsmodell alle Kanten der umzuwandelnden Art
             List<ModelElement> sourceEdges = sourceMainDoc.getModelItems(sourceEdgeClass, true);
             //hole den MetaPfad der im Zielmodell für die Kante angelet werden soll
-            EdgesMappingMetaPathsCreationDefinition edgesMappingMetaPathsCreationDefinition = edgesMappingMetaPaths.get(sourceEdgeClass);
+            TargetMetaPathsCreationDefinition edgesMappingMetaPathsCreationDefinition = edgesMappingMetaPaths.get(sourceEdgeClass);
             SimpleMetaPath targetMetaPath = edgesMappingMetaPathsCreationDefinition.getSimpleMetaPath2Create();
             //für jeden dieser umzuwandelnden Kanten
             for (ModelElement sourceEdgeElement : sourceEdges) {

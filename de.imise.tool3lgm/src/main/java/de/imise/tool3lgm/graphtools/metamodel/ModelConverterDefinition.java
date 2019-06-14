@@ -127,7 +127,7 @@ public abstract class ModelConverterDefinition {
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
-    public Map<Class<? extends Node>, Class<? extends Node>> getDirectMappingNodeClasses() {
+    public Map<Class<? extends Node>, Class<? extends Node>> getSourceNodeClassesToTargetNodeClasses() {
         return new HashMap<>();
     }
 
@@ -137,7 +137,7 @@ public abstract class ModelConverterDefinition {
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
-    public Map<Class<? extends Edge>, Class<? extends Edge>> getDirectMappingEdgeClasses() {
+    public Map<Class<? extends Edge>, Class<? extends Edge>> getSourceEdgeClassesToTargetEdgeClasses() {
         return new HashMap<>();
     }
 
@@ -147,7 +147,7 @@ public abstract class ModelConverterDefinition {
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
-    public Map<Class<? extends Edge>, Class<? extends Edge>> getDirectMappingSwitchedEdgeClasses() {
+    public Map<Class<? extends Edge>, Class<? extends Edge>> getSourceEdgeClassesToSwitchedTargetEdgeClasses() {
         return new HashMap<>();
     }
 
@@ -158,7 +158,7 @@ public abstract class ModelConverterDefinition {
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
-    public Map<Class<? extends Edge>, EdgesMappingMetaPathsCreationDefinition> getEdgeClassesMappingMetaPaths() {
+    public Map<Class<? extends Edge>, TargetMetaPathsCreationDefinition> getSourceEdgeClassesToTargetMetaPaths() {
         return new HashMap<>();
     }
 
@@ -167,7 +167,7 @@ public abstract class ModelConverterDefinition {
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
-    public Map<SimpleMetaPath, Class<? extends Edge>> getMetaPathsMappingEdges() {
+    public Map<SimpleMetaPath, Class<? extends Edge>> getSourceMetaPathsToEdgeClasses() {
         return new HashMap<>();
     }
 
@@ -176,7 +176,7 @@ public abstract class ModelConverterDefinition {
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
-    public Map<AbstractMetaPath, SimpleMetaPath> getMetaPathsMappingMetaPaths() {
+    public Map<AbstractMetaPath, SimpleMetaPath> getSourceMetaPathsToTargetMetaPaths() {
         return new HashMap<>();
     }
 
@@ -199,7 +199,7 @@ public abstract class ModelConverterDefinition {
      *
      * @author AXS (12 Jun 2019)
      */
-    public static class EdgesMappingMetaPathsCreationDefinition {
+    public static class TargetMetaPathsCreationDefinition {
 
         public enum NameSource {
             /** Name des Startelementes der Kante */
@@ -217,7 +217,7 @@ public abstract class ModelConverterDefinition {
         /**
          * @param simpleMetaPath2Create
          */
-        public EdgesMappingMetaPathsCreationDefinition(final SimpleMetaPath simpleMetaPath2Create) {
+        public TargetMetaPathsCreationDefinition(final SimpleMetaPath simpleMetaPath2Create) {
             this.simpleMetaPath2Create = simpleMetaPath2Create;
         }
 
