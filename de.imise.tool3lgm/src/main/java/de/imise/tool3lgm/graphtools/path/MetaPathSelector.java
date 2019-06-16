@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.path;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -175,12 +176,9 @@ public class MetaPathSelector implements ActionListener {
                     selectableMetaPaths = ImmutableList.of(metaPath);
                     selectedMetaPaths.add(metaPath);
                 } else if (selectableMetaPaths.size() > 1) {
-                    Object[] selected = new Object[selectableMetaPaths.size()];
-                    @SuppressWarnings("unchecked")
-                    NamedObjectContainer<AbstractMetaPath>[] pathNames = new NamedObjectContainer[selected.length];
-                    int i = 0;
+                    List<NamedObjectContainer<AbstractMetaPath>> pathNames = new ArrayList<>(selectableMetaPaths.size());
                     for (AbstractMetaPath metaPath : selectableMetaPaths) {
-                        pathNames[i++] = new NamedObjectContainer<>(metaPath, metaPath.getFullName());
+                        pathNames.add(new NamedObjectContainer<>(metaPath, metaPath.getFullName()));
                     }
 
                     StringBuilder sb = new StringBuilder(Tool3lgmConstants.getResString("text_path_1"));
@@ -199,13 +197,16 @@ public class MetaPathSelector implements ActionListener {
                         sb.append(" ");
                         sb.append(Tool3lgmConstants.getResString("text_path_4_2"));
                     }
+                    Object[] selectedArray = new Object[selectableMetaPaths.size()];
+                    List<?> selected = Arrays.asList(selectedArray);
                     while (selected != null && (selectedMetaPaths.size() == 0 || selectedMetaPaths.size() > maxParallelSelectedPaths)) {
                         selectedMetaPaths.clear();
                         selected = MultipleOptionPane.showCheckBoxOptionDialog(Static.getTool(), Tool3lgmConstants.getResString("choice"), sb.toString(), pathNames, null, false);
-                        for (i = 0; selected != null && i < selected.length; i++) {
-                            if (selected[i] != null) {
+                        for (int i = 0; selected != null && i < selected.size(); i++) {
+                            Object selectedI = selected.get(i);
+                            if (selectedI != null) {
                                 @SuppressWarnings("unchecked")
-                                NamedObjectContainer<AbstractMetaPath> metaPathCont = (NamedObjectContainer<AbstractMetaPath>) selected[i];
+                                NamedObjectContainer<AbstractMetaPath> metaPathCont = (NamedObjectContainer<AbstractMetaPath>) selectedI;
                                 selectedMetaPaths.add(metaPathCont.getObject());
                             }
                         }

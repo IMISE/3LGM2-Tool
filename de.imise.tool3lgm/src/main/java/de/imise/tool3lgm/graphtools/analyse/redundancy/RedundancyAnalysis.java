@@ -12,6 +12,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Set;
@@ -73,7 +74,7 @@ public class RedundancyAnalysis extends WindowAdapter {
      * Legt die Vorauswahl der selektierten Optionen im Auswahldialog fest. Es sind nur 2 booleans
      * dort enthalten, einer für Anwendungssysteme und einer für Organisationssysteme.
      */
-    private static Object[] selectedOptions = null;
+    private static List<?> selectedOptions = null;
 
     /**
      * <code>Thread</code> für die eigentliche Berechnung.<br>
@@ -135,19 +136,19 @@ public class RedundancyAnalysis extends WindowAdapter {
 
             //immer die erste Analyse bereits vorauswählen (wenn für ein Metamodell mal gar keine eigenen Analysen definiert werden, dann
             //ist die einzig verfügbare immer die selbsdefinierte Analyse. Und diese ist dann auf jeden Fall gelich ausgewählt.
-            boolean[] preseleced = new boolean[options.length];
+            Boolean[] preseleced = new Boolean[options.length];
             preseleced[0] = true;
 
             // null wenn Abrechen gedrückt wurde, sonst ein gültiges Boolean-Array
-            selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Static.getMainFrame(), getResString("redundancy_analysis"), message, options, preseleced, true);
+            selectedOptions = MultipleOptionPane.showCheckBoxOptionDialog(Static.getMainFrame(), getResString("redundancy_analysis"), message, Arrays.asList(options), Arrays.asList(preseleced), true);
 
             // wenn abgebrochen werden soll
             if (selectedOptions == null) {
                 return;
             }
 
-            for (int i = 0; i < selectedOptions.length - 1; i++) {
-                if (selectedOptions[i] != null) {
+            for (int i = 0; i < selectedOptions.size() - 1; i++) {
+                if (selectedOptions.get(i) != null) {
                     SingleRedundancyAnalysisDefinition definition = redundancyAnalysisDefinitions.get(i);
                     result = new RedundancyAnalysisResult(gdcoll, definition, options[i]);
                     break;
@@ -155,7 +156,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             }
 
             // selbst definierte XMLAnalyse
-            if (result == null && selectedOptions[selectedOptions.length - 1] != null) {
+            if (result == null && selectedOptions.get(selectedOptions.size() - 1) != null) {
                 MetaPathSelector mps = MetaPathSelector.showDialog(redundancyAnalysisDefinitions, getResString("ana_fr_class1_label"), getResString("ana_fr_class2_label"), getResString("metapath"), 1);
                 if (mps.isValidSelection()) {
                     MetaPathSelection metaPathSelection = mps.getSelection();
