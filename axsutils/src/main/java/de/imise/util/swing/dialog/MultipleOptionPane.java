@@ -5,6 +5,9 @@ package de.imise.util.swing.dialog;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -15,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 
-import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 
 import de.imise.util.pair.Pair;
 
@@ -101,11 +104,13 @@ public class MultipleOptionPane extends JOptionPane {
      *         Boolean-Wert mit der Selektion der angezeigten Chekcbox oder <code>null</code> bei Abbrechen oder Schließen über das Kreuz
      */
     public static final Boolean showSingleCheckboxDialog(final Component parentComponent, final String title, final String message, final String option, final boolean selected) {
-        Object[] answer = showCheckBoxOptionDialog(parentComponent, title, message, null, null, false, option, selected);
-        if (answer == null) {
+        ImmutableList<String> options = ImmutableList.of(option);
+        ImmutableList<Boolean> selecteds = ImmutableList.of(selected);
+        List<String> answer = showCheckBoxOptionDialog(parentComponent, title, message, options, selecteds, true);
+        if (answer == null || answer.isEmpty()) {
             return null;
         }
-        return answer[0] == null;
+        return answer.get(0) == null;
     }
 
     /**
@@ -125,24 +130,47 @@ public class MultipleOptionPane extends JOptionPane {
      * @return <code>null</code> wenn nichts gewählt wurde sonst ein Paar, das als erstes Elenent die gewählte Option enthält und als zweites den
      *         Selektionszustand der Zusatzfrage. Dieser ist immer <code>null</code>, wenn die Zusatzfrage gar nicht angezeigt werden sollte.
      */
-    public static final <T> Pair<T, Boolean> showSingleSelectionOptionDialog(final Component parentComponent, final String title, final String message, final T[] options, final Object selected, final String additionalSeparatedOption,
+    public static final <T> Pair<T, Boolean> showSingleSelectionOptionDialog(final Component parentComponent, final String title, final String message, final List<T> options, final T selected, final String additionalSeparatedOption,
             final boolean additionalSeparatedOptionSelected) {
-        boolean selectedOptions[] = new boolean[options.length];
+        int optionsCount = options.size();
+        Boolean selectedOptions[] = new Boolean[optionsCount];
         for (int i = 0; i < selectedOptions.length; i++) {
-            selectedOptions[i] = options[i] == null ? selected == null : options[i].equals(selected);
+            selectedOptions[i] = options.get(i) == null ? selected == null : options.get(i).equals(selected);
             if (selectedOptions[i]) {
                 break;
             }
         }
-        Object[] answer = showCheckBoxOptionDialog(parentComponent, title, message, options, selectedOptions, true, additionalSeparatedOption, additionalSeparatedOptionSelected);
+        List<Boolean> selectedOptionsList = Arrays.asList(selectedOptions);
+
+        Pair<List<T>, Boolean> answer = showCheckBoxOptionDialog(parentComponent, title, message, options, selectedOptionsList, true, additionalSeparatedOption, additionalSeparatedOptionSelected);
         if (answer != null) {
-            for (int i = 0; i < options.length; i++) {
-                if (answer[i] != null) {
-                    return new Pair<>((T) answer[i], Strings.isNullOrEmpty(additionalSeparatedOption) ? null : answer[answer.length - 1] != null);
+            List<T> optionsList = answer.getFirstItem();
+            for (int i = 0; i < optionsCount; i++) {
+                if (optionsList.get(i) != null) {
+                    return new Pair<>(optionsList.get(i), additionalSeparatedOption == null ? null : answer.getSecondItem());
                 }
             }
         }
         return null;
+    }
+
+    /**
+     * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine Checkbox darstellt.<br>
+     * Alle Checkboxen sind nicht selektiert.
+     *
+     * @param parentComponent
+     *            Besitzerkomponente des Dialoges
+     * @param title
+     *            Titel des Dialoges
+     * @param message
+     *            Nachricht des Dialoges
+     * @param options
+     *            Optionen, die über Checkboxen zur Auswahl gestellt werden sollen. Diese Optionen werden über
+     *            ihre toString()-Methode im Dialog angezeigt.
+     * @return Array der übergebenen Options. War die Option ausgewählt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>
+     */
+    public static final <T> List<T> showCheckBoxOptionDialog(final Component parentComponent, final String title, final String message, final List<T> options) {
+        return showCheckBoxOptionDialog(parentComponent, title, message, options, null, false);
     }
 
     /**
@@ -166,8 +194,9 @@ public class MultipleOptionPane extends JOptionPane {
      *            legt fest, ob immer nur eine Checkbox oder mehrere gleichzeitig selektiert sein können
      * @return Array der übergebenen Options. War die Option ausgewählt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>.
      */
-    public static final Object[] showCheckBoxOptionDialog(final Component parentComponent, final String title, final String message, final Object[] options, final boolean[] selected, final boolean singleSelection) {
-        return showCheckBoxOptionDialog(parentComponent, title, message, options, selected, singleSelection, null, false);
+    public static final <T> List<T> showCheckBoxOptionDialog(final Component parentComponent, final String title, final String message, final List<T> options, final List<Boolean> selected, final boolean singleSelection) {
+        Pair<List<T>, Boolean> choosedOptions = showCheckBoxOptionDialog(parentComponent, title, message, options, selected, singleSelection, null, false);
+        return choosedOptions == null ? null : choosedOptions.getFirstItem();
     }
 
     /**
@@ -194,18 +223,19 @@ public class MultipleOptionPane extends JOptionPane {
      *            Optionen anzubieten
      * @param additionalSeparatedOptionSelected
      *            wenn <code>true</code>, dann wird die übergebene additionalSeparatedOption vorselektiert, sonst nicht
-     * @return Array der übergebenen Options. War die Option ausgewählt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>. Wurde ein
-     *         gültiger String bei additionalSeparatedOption übergeben, dann ist die letzte Option in diesem Array der Wert dieser Checkbox bzw.
-     *         <code>null</code> wenn diese Checkbox nicht selektiert war oder der übergebene String additionalSeparatedOption selbst, wenn die
-     *         Box selektiert war
+     * @return Liste der übergebenen Options. War die Option ausgewählt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>. Wurde ein
+     *         gültiger String bei additionalSeparatedOption übergeben, dann ist der letzte Wert in der Liste <code>null</code>, wenn diese Checkbox
+     *         nicht selektiert war oder immer die erste Option, wenn die Box selektiert war. Man sollte als in diesem Fall nur auf <code>null</code>
+     *         testen. Dieses Vorgehen ist nötig, um eine typisierte Liste zurück geben zu können. Der 2 Rückgabewert im Pair - der Boolean - gibt den
+     *         Wert des
      */
-    public static final Object[] showCheckBoxOptionDialog(final Component parentComponent, final String title, final String message, final Object[] options, final boolean[] selected, final boolean singleSelection, final String additionalSeparatedOption,
-            final boolean additionalSeparatedOptionSelected) {
+    public static final <T> Pair<List<T>, Boolean> showCheckBoxOptionDialog(final Component parentComponent, final String title, final String message, final List<T> options, final List<Boolean> selected, final boolean singleSelection,
+            final String additionalSeparatedOption, final boolean additionalSeparatedOptionSelected) {
         JOptionPane optionPane = new MultipleOptionPane();
-        int optionsCount = options == null ? 0 : options.length;
+        int optionsCount = options == null ? 0 : options.size();
         AbstractButton[] boxes = new AbstractButton[optionsCount];
         ButtonGroup buttonGroup = singleSelection ? new ButtonGroup() : null;
-        boolean showAdditionalOption = !Strings.isNullOrEmpty(additionalSeparatedOption);
+        boolean showAdditionalOption = additionalSeparatedOption != null;
         //Anzahl der Zeilen im Panel:
         // - wenn es mind. eine Option gibt und die "Diesen Dialog nicht mehr anzeigen"-Frage gezeigt werden soll, dann wird ein Separator zwischen den Optinen und der Frage eingebaut (optionsCount + 2)
         // - keine Option aber die "Diesen Dialog nicht mehr anzeigen"-Frage = nur die Frage wird angezeigt (= 1)
@@ -214,14 +244,14 @@ public class MultipleOptionPane extends JOptionPane {
         int panelLength = showAdditionalOption ? optionsCount > 0 ? optionsCount + 2 : 1 : optionsCount > 0 ? optionsCount : 0;
         JPanel checkBoxPanel = panelLength > 0 ? new JPanel(new GridLayout(panelLength, 1)) : null;
         for (int i = 0; i < optionsCount; i++) {
-            String name = options[i].toString();
+            String name = options.get(i).toString();
             AbstractButton checkBox = singleSelection ? new JRadioButton(name) : new JCheckBox(name);
             boxes[i] = checkBox;
             if (buttonGroup != null) {
                 buttonGroup.add(checkBox);
             }
             if (selected != null) {
-                checkBox.setSelected(selected[i]);
+                checkBox.setSelected(selected.get(i));
             }
             checkBox.setActionCommand(new Integer(i).toString());
             checkBoxPanel.add(checkBox);
@@ -231,7 +261,7 @@ public class MultipleOptionPane extends JOptionPane {
             if (optionsCount > 0) {
                 checkBoxPanel.add(new JSeparator());
             }
-            dontShowThisDialogAgainOption = new JCheckBox(additionalSeparatedOption);
+            dontShowThisDialogAgainOption = new JCheckBox(additionalSeparatedOption.toString());
             dontShowThisDialogAgainOption.setSelected(additionalSeparatedOptionSelected);
             checkBoxPanel.add(dontShowThisDialogAgainOption);
         }
@@ -254,36 +284,15 @@ public class MultipleOptionPane extends JOptionPane {
         int i = ((Integer) value).intValue();
         // Schließen oder OK
         if (i == JOptionPane.CLOSED_OPTION || i == JOptionPane.OK_OPTION) {
-            Object[] returnValue = new Object[optionsCount + (showAdditionalOption ? 1 : 0)];
+            List<T> returnValue = new ArrayList<>(optionsCount);
             for (int j = 0; j < optionsCount; j++) {
-                returnValue[j] = boxes[j].isSelected() ? options[j] : null;
+                returnValue.add(boxes[j].isSelected() ? options.get(j) : null);
             }
-            if (showAdditionalOption) {
-                returnValue[optionsCount] = dontShowThisDialogAgainOption.isSelected() ? additionalSeparatedOption : null;
-            }
-            return returnValue;
+            Boolean additionalOptionValue = showAdditionalOption && dontShowThisDialogAgainOption.isSelected();
+            return new Pair<>(returnValue, additionalOptionValue);
             // Abbrechen gedrückt
         }
         return null;
-    }
-
-    /**
-     * Zeigt einen Optionen-Dialog an, der für jede übergebene Option eine Checkbox darstellt.<br>
-     * Alle Checkboxen sind nicht selektiert.
-     *
-     * @param parentComponent
-     *            Besitzerkomponente des Dialoges
-     * @param title
-     *            Titel des Dialoges
-     * @param message
-     *            Nachricht des Dialoges
-     * @param options
-     *            Optionen, die über Checkboxen zur Auswahl gestellt werden sollen. Diese Optionen werden über
-     *            ihre toString()-Methode im Dialog angezeigt.
-     * @return Array der übergebenen Options. War die Option ausgewählt, ist sie nicht <code>null</code>, sost ist sie <code>null</code>
-     */
-    public static final Object[] showCheckBoxOptionDialog(final Component parentComponent, final String title, final String message, final Object[] options) {
-        return showCheckBoxOptionDialog(parentComponent, title, message, options, null, false, null, false);
     }
 
     /**
@@ -331,10 +340,6 @@ public class MultipleOptionPane extends JOptionPane {
         return ((Integer) value).intValue();
     }
 
-    /*
-     * (non-Javadoc)
-     * @see javax.swing.JOptionPane#getMaxCharactersPerLineCount()
-     */
     @Override
     public int getMaxCharactersPerLineCount() {
         return maxCharactersPerLineCount;
