@@ -250,9 +250,7 @@ public class MultipleOptionPane extends JOptionPane {
             if (buttonGroup != null) {
                 buttonGroup.add(checkBox);
             }
-            if (selected != null) {
-                checkBox.setSelected(selected.get(i));
-            }
+            checkBox.setSelected(Boolean.TRUE.equals(selected.get(i)));
             checkBox.setActionCommand(new Integer(i).toString());
             checkBoxPanel.add(checkBox);
         }
