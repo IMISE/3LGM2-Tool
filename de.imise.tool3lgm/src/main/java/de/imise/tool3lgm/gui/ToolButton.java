@@ -47,8 +47,8 @@ public class ToolButton extends JToggleButton {
      * @param paintableElementClass
      * @param isEdgeButton
      */
-    private ToolButton(final MetaModel metaModel, final Class<? extends ModelElement> paintableElementClass) {
-        isEdgeButton = metaModel == null;
+    private ToolButton(final MetaModel metaModel, final Class<? extends ModelElement> paintableElementClass, final boolean isEdgeButton) {
+        this.isEdgeButton = isEdgeButton;
         paintedNode = paintableElementClass == null ? null : (Node) metaModel.createElement(paintableElementClass);
         setPreferredSize(PREFRERRED_SIZE);
     }
@@ -59,7 +59,7 @@ public class ToolButton extends JToggleButton {
      * @return
      */
     public static ToolButton createNodeButton(final MetaModel metaModel, final Class<? extends Node> paintableElementClass) {
-        final ToolButton button = new ToolButton(metaModel, paintableElementClass);
+        final ToolButton button = new ToolButton(metaModel, paintableElementClass, false);
         button.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -86,7 +86,7 @@ public class ToolButton extends JToggleButton {
      * @return
      */
     public static ToolButton createEdgeButton(final MetaModel metaModel, final Class<? extends Node> dummyPaintableElementClass) {
-        ToolButton button = new ToolButton(null, dummyPaintableElementClass);
+        ToolButton button = new ToolButton(metaModel, dummyPaintableElementClass, true);
         button.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -104,7 +104,7 @@ public class ToolButton extends JToggleButton {
     }
 
     public static ToolButton createDisableMouseMakesElementsButton() {
-        ToolButton button = new ToolButton(null, null);
+        ToolButton button = new ToolButton(null, null, false);
         button.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
