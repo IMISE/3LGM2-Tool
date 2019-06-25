@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -39,7 +40,7 @@ public class ExtendedFileChooser extends JFileChooser {
      * dieser Klasse gestartet wurde, wird sich der zuletzt gewählte Pfad in dieser Map gemerkt.
      * Default ist das Key-Object <code>null</code>
      */
-    private static final HashMap<Object, File> KEY_TO_PATH_MAP = new HashMap<>();
+    private static final Map<Object, File> KEY_TO_PATH_MAP = new HashMap<>();
 
     /** Default Key für den letzten Pfad dieses Dialoges, wenn kein anderes Key-Object gesetzt wurde. */
     private Object pathKey = null;
@@ -289,7 +290,7 @@ public class ExtendedFileChooser extends JFileChooser {
 
     /**
      * Gibt den URL-String des übergebenen File-Objektes zurück oder <code>null</code>, wenn es sich nicht in eine gültige URL umwandelnd ließ.
-     * 
+     *
      * @param file
      * @return
      */

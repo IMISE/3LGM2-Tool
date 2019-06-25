@@ -406,7 +406,7 @@ public class MenuCreator {
      * @param menu
      */
     public static JMenuItem[] getAllItems(final JPopupMenu menu) {
-        ArrayList<JMenuItem> itemList = new ArrayList<>(menu.getComponentCount());
+        List<JMenuItem> itemList = new ArrayList<>(menu.getComponentCount());
         for (Component c : menu.getComponents()) {
             if (c instanceof JMenuItem) {
                 itemList.add((JMenuItem) c);

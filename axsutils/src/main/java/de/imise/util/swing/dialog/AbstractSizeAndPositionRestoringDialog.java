@@ -10,18 +10,19 @@ import java.awt.Window;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JDialog;
 
 /**
  * Dialog, der seine Größe immer werder herstellen kann, wenn er neu geöffnet wird.
- * 
+ *
  * @author Ich
  * @create 12.09.2015
  */
 public abstract class AbstractSizeAndPositionRestoringDialog extends JDialog {
 
-    private static final HashMap<Class<? extends AbstractSizeAndPositionRestoringDialog>, Rectangle> DIALOG_CLASS_TO_SIZE_AND_POSITION_MAP = new HashMap<Class<? extends AbstractSizeAndPositionRestoringDialog>, Rectangle>();
+    private static final Map<Class<? extends AbstractSizeAndPositionRestoringDialog>, Rectangle> DIALOG_CLASS_TO_SIZE_AND_POSITION_MAP = new HashMap<>();
 
     boolean initialized = false;
 
@@ -134,7 +135,7 @@ public abstract class AbstractSizeAndPositionRestoringDialog extends JDialog {
 
     /**
      * Liefert die Default-Größe des Dialogs
-     * 
+     *
      * @return
      */
     public abstract Dimension getDefaultSize();

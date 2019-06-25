@@ -26,7 +26,7 @@ public class PluginUtils {
      * @return
      */
     public static <T> List<Class<? extends T>> loadClasses(final File file, final Class<? extends T> superClassOfResultClasses) {
-        ArrayList<Class<? extends T>> resultClasses = new ArrayList<>();
+        List<Class<? extends T>> resultClasses = new ArrayList<>();
         loadClasses(resultClasses, file, superClassOfResultClasses);
         return resultClasses;
     }
@@ -37,7 +37,7 @@ public class PluginUtils {
      * @param superClassOfResultClasses
      * @return
      */
-    private static <T> List<Class<? extends T>> loadClasses(ArrayList<Class<? extends T>> resultClasses, final File directoryOrJarFile, final Class<? extends T> superClassOfResultClasses) {
+    private static <T> List<Class<? extends T>> loadClasses(List<Class<? extends T>> resultClasses, final File directoryOrJarFile, final Class<? extends T> superClassOfResultClasses) {
         if (resultClasses == null) {
             resultClasses = new ArrayList<>();
         }
@@ -62,7 +62,7 @@ public class PluginUtils {
      *            (Ober-)Klasse, der zu findenden Klassen
      * @return Liste aller Klassen, die im Jar-File gefunden wurden und zuweisungkompatibel zur übergebenen Klasse sind
      */
-    private static <T> List<Class<? extends T>> loadClassesFromJar(ArrayList<Class<? extends T>> resultClasses, final File jarFileFile, final Class<? extends T> superClassOfResultClasses) {
+    private static <T> List<Class<? extends T>> loadClassesFromJar(List<Class<? extends T>> resultClasses, final File jarFileFile, final Class<? extends T> superClassOfResultClasses) {
         if (resultClasses == null) {
             resultClasses = new ArrayList<>();
         }

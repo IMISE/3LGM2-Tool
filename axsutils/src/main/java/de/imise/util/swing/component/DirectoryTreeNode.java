@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -95,7 +96,7 @@ public class DirectoryTreeNode extends DefaultMutableTreeNode {
         if (files == null) {
             return;
         }
-        ArrayList<File> childDirectories = new ArrayList<>();
+        List<File> childDirectories = new ArrayList<>();
         for (int i = 0; i < files.length; i++) {
             if (fileSystemView.isTraversable(files[i]).booleanValue()) {
                 childDirectories.add(files[i]);

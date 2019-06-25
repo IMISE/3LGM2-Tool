@@ -1,6 +1,3 @@
-/*
- * Created on 26.10.2007
- */
 package de.imise.util.collections;
 
 import java.util.AbstractSet;
@@ -22,7 +19,7 @@ import de.imise.util.Alphabetical;
  * genutzt und nicht um festzustellen, ob Elemente bereits vorhanden sidn oder nicht! Das wird hier über die equals-Methode
  * der enthaltenen Elemente entschieden.
  *
- * @author AXS
+ * @author AXS (26.10.2007)
  */
 public class AlphabeticalSet<E> extends AbstractSet<E> implements Cloneable {
 

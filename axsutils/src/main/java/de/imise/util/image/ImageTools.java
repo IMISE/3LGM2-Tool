@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
@@ -62,7 +63,7 @@ public class ImageTools {
      * @param color
      * @return
      */
-    public static final BufferedImage getCommonImage(final ArrayList<BufferedImage> images, final Color color) {
+    public static final BufferedImage getCommonImage(final List<BufferedImage> images, final Color color) {
         if (images.size() < 2) {
             return null;
         }
@@ -101,7 +102,7 @@ public class ImageTools {
      * @param differenceColor
      * @return
      */
-    public static final BufferedImage getDifferenceImage(final ArrayList<BufferedImage> images, final Color differenceColor) {
+    public static final BufferedImage getDifferenceImage(final List<BufferedImage> images, final Color differenceColor) {
         BufferedImage firstImage = images.get(0);
         int w = firstImage.getWidth();
         int h = firstImage.getHeight();
@@ -191,7 +192,7 @@ public class ImageTools {
      * @param targetImageIndex
      * @return
      */
-    public static final Point getUniquePoint(final ArrayList<BufferedImage> images, final int targetImageIndex) {
+    public static final Point getUniquePoint(final List<BufferedImage> images, final int targetImageIndex) {
         if (images.size() < 1) {
             return null;
         }
@@ -233,7 +234,7 @@ public class ImageTools {
      * @param targetImageIndex
      * @return
      */
-    public static final BufferedImage getUniquePixelsImage(final ArrayList<BufferedImage> images, final int targetImageIndex) {
+    public static final BufferedImage getUniquePixelsImage(final List<BufferedImage> images, final int targetImageIndex) {
         if (images.size() < 1) {
             return null;
         }
@@ -320,7 +321,7 @@ public class ImageTools {
      * @param stopIndex
      * @return
      */
-    public static final ArrayList<BufferedImage> getAllImages(final String fullPathPrefix, String fileExtension, int startIndex, int stopIndex) {
+    public static final List<BufferedImage> getAllImages(final String fullPathPrefix, String fileExtension, int startIndex, int stopIndex) {
         if (startIndex > stopIndex) {
             int dummy = startIndex;
             startIndex = stopIndex;
@@ -332,7 +333,7 @@ public class ImageTools {
         }
 
         StringBuilder pathBuilder = new StringBuilder(fullPathPrefix);
-        ArrayList<BufferedImage> returnList = new ArrayList<>(stopIndex - startIndex);
+        List<BufferedImage> returnList = new ArrayList<>(stopIndex - startIndex);
         for (; startIndex < stopIndex; startIndex++) {
             pathBuilder.setLength(fullPathPrefix.length());
             pathBuilder.append(startIndex);
@@ -590,9 +591,7 @@ public class ImageTools {
                 sb.append(y);
                 sb.append(", new Color(");
                 int[] rgb = {
-                        c.getRed(),
-                        c.getGreen(),
-                        c.getBlue()
+                        c.getRed(), c.getGreen(), c.getBlue()
                 };
                 for (int i = 0; i < rgb.length; i++) {
                     String s = new String("" + rgb[i]);

@@ -1014,7 +1014,7 @@ public abstract class CollectionUtils {
         @Override
         protected Sub clone() {
             Sub s = (Sub) super.clone();
-            //            s.map = (HashMap<String, String>) ((HashMap<String, String>) map).clone();
+            //            s.map = (Map<String, String>) ((Map<String, String>) map).clone();
             s.map = new HashMap<>(map);
             return s;
         }
