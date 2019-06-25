@@ -114,6 +114,11 @@ public class MenuCreator {
                 for (Object subEntry : (Object[]) entry) {
                     allMenuEntries.add(subEntry);
                 }
+            } else if (entry instanceof Iterable<?>) {
+                Iterable<?> iterable = (Iterable<?>) entry;
+                for (Object subEntry : iterable) {
+                    allMenuEntries.add(subEntry);
+                }
             } else {
                 allMenuEntries.add(entry instanceof ActionSource ? ((ActionSource) entry).createAction() : entry);
             }
