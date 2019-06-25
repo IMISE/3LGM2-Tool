@@ -3,12 +3,13 @@ package de.imise.tool3lgm.imexport.csv;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
  * Speichert die Hashes aller Elemente während des Imports. Damit können Widersprüche bei der Verwendung der Hashes erkannt werden.
- * 
+ *
  * @author AXS
  * @create 06.10.2014
  */
@@ -19,23 +20,23 @@ public class ImportHashConfiguration {
     /**
      * Mappt von einem Hash auf die Elementklasse des Elementes mit diesem Hash
      */
-    private final HashMap<String, Class<? extends ModelElement>> hashToElementClass = new HashMap<String, Class<? extends ModelElement>>();
+    private final Map<String, Class<? extends ModelElement>> hashToElementClass = new HashMap<>();
 
     /**
      * Liste aller bisher verwendeten Element-Hashes. Beim Import wird für jede Zeile erst einmal ein Default-Hash eingetragen und
      * dann durch einen eventuell gefundenen Hash ersetzt.
      */
-    private final List<String> hashes = new ArrayList<String>();
+    private final List<String> hashes = new ArrayList<>();
 
     /**
      * Mappt von einem Hash einer Edge auf den Hash des Elementes, bei dem die Edge startet
      */
-    private final HashMap<String, String> edgeHashToStartElementHash = new HashMap<String, String>();
+    private final Map<String, String> edgeHashToStartElementHash = new HashMap<>();
 
     /**
      * Mappt von einem Hash einer Edge auf den Hash des Elementes, bei dem die Edge endet
      */
-    private final HashMap<String, String> edgeHashToEndElementHash = new HashMap<String, String>();
+    private final Map<String, String> edgeHashToEndElementHash = new HashMap<>();
 
     public ImportHashConfiguration() {
     }
@@ -49,7 +50,7 @@ public class ImportHashConfiguration {
 
     /**
      * Ersetzt den letzten Hash durch den übergebenen
-     * 
+     *
      * @param hash
      */
     public void setLastHash(final String hash) {
@@ -58,7 +59,7 @@ public class ImportHashConfiguration {
 
     /**
      * Speichert für einen Hash die zugehöroge Elementklasse
-     * 
+     *
      * @param hash
      * @param elementClass
      */
@@ -68,7 +69,7 @@ public class ImportHashConfiguration {
 
     /**
      * Liefert für einen Hash die zugehörige Elementklasse
-     * 
+     *
      * @param hash
      * @return
      */
@@ -78,7 +79,7 @@ public class ImportHashConfiguration {
 
     /**
      * Gibt den Index zurück, an dem sich ein Hash in der Liste aller Hashes befindet.
-     * 
+     *
      * @param hash
      * @return
      */
@@ -88,7 +89,7 @@ public class ImportHashConfiguration {
 
     /**
      * Speichert für einen gegebenen Kantenhash den Hash des Startelementes und des Endelmentes
-     * 
+     *
      * @param edgeHash
      * @param startElementHash
      * @param endElementHash

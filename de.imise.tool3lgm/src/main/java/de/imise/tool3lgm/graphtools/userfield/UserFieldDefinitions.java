@@ -842,7 +842,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         //in der Liste aller Formel-UserFields (formulaUserFieldList) ein UserField für die
         //betreffende Elementart gefunden wurde. Beim nächsten UserField für diese Elementart
         //braucht man nicht noch einmal alle UserFields zu löschen)
-        HashSet<Class<?>> resetedElementClasses = new HashSet<>(15);
+        Set<Class<?>> resetedElementClasses = new HashSet<>(15);
 
         //Das Hauptdokument der GDCollection holen (UserField-Änderungen gelten immer für alle
         //Elemente, also immer im Hauptdokument arbeiten)

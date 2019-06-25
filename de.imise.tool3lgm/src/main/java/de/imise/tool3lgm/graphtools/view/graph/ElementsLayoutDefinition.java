@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -14,7 +15,7 @@ public class ElementsLayoutDefinition {
     /**
      * Mappt von der Elementklasse auf das zugehörige Standard-<code>GraphElementLayout</code>
      */
-    private HashMap<Class<? extends ModelElement>, GraphElementLayout> elementClassToStandardLayoutMap = new HashMap<>();
+    private Map<Class<? extends ModelElement>, GraphElementLayout> elementClassToStandardLayoutMap = new HashMap<>();
 
     /**
      * Standardelementlayout. Initial entspricht es dem Standardlayout aus <code>GraphElementLayout</code>
@@ -65,7 +66,7 @@ public class ElementsLayoutDefinition {
 
     /**
      * Gibt das Standardlayout für ModellElemente der übergebenen Art zurcük.<br>
-     * Existiert in der HashMap mit den Layouts für alle Elemente kein eigener
+     * Existiert in der Map mit den Layouts für alle Elemente kein eigener
      * Eintrag für diese Elementart, wird das StandardLayout zurück gegeben.<br>
      * Will man das Layout für eine spezielle Elementart setzen, muss man das
      * Layout übder die Funktion <code>getElementClassSpecificLayout(Class)</code> holen.
@@ -91,9 +92,9 @@ public class ElementsLayoutDefinition {
     }
 
     /**
-     * Gibt für die übergebene Elementklasse das eigene Standardlayout zurück. Sollte in der HashMap mit allen
+     * Gibt für die übergebene Elementklasse das eigene Standardlayout zurück. Sollte in der Map mit allen
      * Layouts bisher kein eigenes für diese Elementart vorhanden sein, wird das Standardlayout geclont, in die
-     * HashMap eingetragen und zurückgegeben.<br>
+     * Map eingetragen und zurückgegeben.<br>
      * Über diese Funktion sollte das Layout einer Elementart immer ermittelt werden, wenn man einen Wert setzen
      * möchte. Bei reinen Abfragen kann man das immer über <code>getStandardGraphElementLayout(Class)</code> tun.
      *

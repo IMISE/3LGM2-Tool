@@ -3,8 +3,9 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -61,7 +62,7 @@ public class RedundancyAnalysisResult {
      * Die betrachteten Aufgaben sind bereits eingeschränkt um alle Aufgaben, die bereits von den
      * exklusiven AWB unterstützt werden.
      */
-    ArrayList<AlphabeticalSet<ModelElement>> equalsSets;
+    List<AlphabeticalSet<ModelElement>> equalsSets;
 
     /**
      * Mappt von einem überflüssigen AWB auf alle AWB, die nicht verzichtbar sind und die diesen AWB
@@ -69,7 +70,7 @@ public class RedundancyAnalysisResult {
      * oder <code>moreNeededAWB</code> vorkommen und mind. eine Aufgabe des überflüssigen AWB
      * unterstützen.
      */
-    HashMap<ModelElement, AlphabeticalSet<ModelElement>> uselessToNeeded = new HashMap<>();
+    Map<ModelElement, AlphabeticalSet<ModelElement>> uselessToNeeded = new HashMap<>();
 
     /**
      * Modell das analysiert werden soll

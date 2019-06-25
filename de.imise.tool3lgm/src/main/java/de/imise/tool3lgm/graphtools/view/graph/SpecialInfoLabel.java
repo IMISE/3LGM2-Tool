@@ -6,6 +6,7 @@ package de.imise.tool3lgm.graphtools.view.graph;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLabel;
 
@@ -157,19 +158,19 @@ public class SpecialInfoLabel extends JLabel {
         /**
          * COMMENTME
          */
-        private final ArrayList<Object> objects;
+        private final List<Object> objects;
 
         /**
          * COMMENTME
          */
-        private final ArrayList<String> strings;
+        private final List<String> strings;
 
         /**
          *
          */
         public ObjectAndText() {
-            objects = new ArrayList<Object>();
-            strings = new ArrayList<String>();
+            objects = new ArrayList<>();
+            strings = new ArrayList<>();
         }
 
         /**

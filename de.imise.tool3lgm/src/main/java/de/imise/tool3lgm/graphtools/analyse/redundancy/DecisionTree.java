@@ -188,7 +188,7 @@ public class DecisionTree {
             }
         }
 
-        // Jetzt sind die 2 HashMaps, die für jeden AWB auf alle von ihm unterstützten
+        // Jetzt sind die 2 Maps, die für jeden AWB auf alle von ihm unterstützten
         // Aufgaben mappen (awbToFuncsSets)und für jede Aufgabe auf die sie unterstützenden
         // AWBs (funcToAWBSets), initialisiert.
         // Für Aufgaben, die von gar keinem AWB unterstützt werden, gibts es keinen Eintrag

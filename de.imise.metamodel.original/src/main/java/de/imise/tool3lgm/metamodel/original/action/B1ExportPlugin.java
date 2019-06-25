@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -352,8 +353,8 @@ public class B1ExportPlugin {
      */
     public int getHierarchyDepth(final ElementContainer ec) {
         GraphDocument doc = ec.getGraphDocument();
-        HashSet<ElementContainer> nextStepStartContainer = new HashSet<>();
-        HashSet<ElementContainer> resultContainer = new HashSet<>();
+        Set<ElementContainer> nextStepStartContainer = new HashSet<>();
+        Set<ElementContainer> resultContainer = new HashSet<>();
         nextStepStartContainer.add(ec);
         int hierarchy = 1;
         while (true) {

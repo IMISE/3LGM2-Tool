@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.view.tree.node;
 
 import java.awt.Color;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -147,7 +148,7 @@ public abstract class LGMTreeNode extends DefaultMutableTreeNode {
             return retVal;
         }
 
-        HashSet<Color> colors = new HashSet<>();
+        Set<Color> colors = new HashSet<>();
         if (retVal != Color.black) {
             colors.add(retVal);
         }

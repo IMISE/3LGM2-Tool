@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.imexport.csv;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -12,7 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 public class DisplayableNameHandler {
 
     /** */
-    private final HashMap<String, Class<? extends ModelElement>> displayableName2ClassMap = new HashMap<>();
+    private final Map<String, Class<? extends ModelElement>> displayableName2ClassMap = new HashMap<>();
 
     /**
      * @param metaModel

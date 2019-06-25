@@ -15,6 +15,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.BorderFactory;
@@ -112,13 +114,13 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
      * Wenn Formate über dieses Panel gelöscht werden, dann wird in dieser Map jeweils in einer <code>ArrayList</code> gespeichert, welche UserFields
      * dieses Format benutzt haben. Wenn Abbrechen aufgerufen wird, müssen die Formate wieder alle gesetzt werden.
      */
-    private final HashMap<UserField, ArrayList<UserField>> deletedFormatToFormatUser = new HashMap<>();
+    private final Map<UserField, List<UserField>> deletedFormatToFormatUser = new HashMap<>();
 
     /**
      * In dieser Liste werden die neu angelegten Format- <code>UserField</code> s gespeichert bis <code>commit()</code> aufgerufen wurde. Im Falle von
      * <code>cancel()</code>, werden diese dann auch wieder aus den <code>definitions</code> entfernt.
      */
-    private final ArrayList<UserField> newFormatesList;
+    private final List<UserField> newFormatesList;
 
     /**
      * @param owner

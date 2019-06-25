@@ -462,7 +462,7 @@ public class ElementsNameBuilder {
     //        if (elementClassToHashShortName == null) {
     //            elementClassToHashShortName = new HashMap<>();
     //            //Set in das alle bisher gefundenen ShortNames eingetragen werden, um zu prüfen, ob ein shortName bereits existiert
-    //            HashSet<String> allShortNames = new HashSet<>();
+    //            Set<String> allShortNames = new HashSet<>();
     //            loop1: for (Class<? extends ModelElement> nodeClass : ModelConstants.ALL_NODES_SET) {
     //                String s = nodeClass.getSimpleName();
     //                //wenn der Klassenname aus weniger als 4 Zeichen besteht

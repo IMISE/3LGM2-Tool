@@ -10,6 +10,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -156,7 +157,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
         //TODO: das hier sollte eine eigen Funktion der UserFieldDefinitions werden
 
         //es
-        HashSet<Class<? extends ModelElement>> elementClassAssignable = new HashSet<>();
+        Set<Class<? extends ModelElement>> elementClassAssignable = new HashSet<>();
         GDCollection gdcoll = definitions.getCollection();
         MetaModel metaModel = gdcoll.getMetaModel();
         for (Class<? extends ModelElement> assClass : metaModel.allNodesSet) {
@@ -169,7 +170,7 @@ public class OperatorInputPanel extends JPanel implements ActionListener {
                 elementClassAssignable.add(assClass);
             }
         }
-        HashSet<Class<? extends ModelElement>> allElementClassAssignable = new HashSet<>();
+        Set<Class<? extends ModelElement>> allElementClassAssignable = new HashSet<>();
         for (Class<? extends ModelElement> assClass : elementClassAssignable) {
             allElementClassAssignable.add(assClass);
             while (assClass != elementClass) {

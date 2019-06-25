@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.undoredo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -17,7 +18,7 @@ public class TransactionManager {
     /**
      * Liste aller <code>TransactionListener</code>
      */
-    private final ArrayList<TransactionListener> listenerList = new ArrayList<TransactionListener>(3);
+    private final List<TransactionListener> listenerList = new ArrayList<>(3);
 
     /**
      * Liste aller durchgeführten Transaktionen, die sich auch rückgängig machen lassen sollen.

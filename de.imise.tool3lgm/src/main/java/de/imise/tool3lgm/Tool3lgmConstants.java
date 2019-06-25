@@ -7,6 +7,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.swing.Icon;
@@ -150,7 +151,7 @@ public abstract class Tool3lgmConstants {
     public static final String FILE_FILTER_RESOURCE_EXTENSION_POSTFIX = "_EXT";
 
     /** Mappt von einem {@link FileFilterType} auf den dazugehörigen {@link FileNameExtensionFilter} */
-    private static final HashMap<FileFilterType, FileNameExtensionFilter> FILE_FILTER_TYPE_TO_FILENAME_EXTENSION_FILTER = new HashMap<>();
+    private static final Map<FileFilterType, FileNameExtensionFilter> FILE_FILTER_TYPE_TO_FILENAME_EXTENSION_FILTER = new HashMap<>();
 
     // Ende FileFilter
 

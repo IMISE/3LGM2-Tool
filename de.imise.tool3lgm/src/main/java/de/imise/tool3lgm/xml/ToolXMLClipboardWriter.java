@@ -73,7 +73,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         }
         writeEndElement(); //</objects>
         writeStartElement("szenario"); //<szenario>
-        HashSet<String> icons = new HashSet<>();
+        Set<String> icons = new HashSet<>();
         int lastLayer = -1;
         for (ModelElement me : copyElements) {
             if (me.isUnique()) {

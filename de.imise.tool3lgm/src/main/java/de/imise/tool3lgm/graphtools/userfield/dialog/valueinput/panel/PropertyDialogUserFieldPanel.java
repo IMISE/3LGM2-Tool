@@ -74,7 +74,7 @@ import de.imise.util.swing.component.text.NumberTextField;
  */
 public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
-    private final ArrayList<UserFieldEditorComponent> fieldComponents = new ArrayList<>();
+    private final List<UserFieldEditorComponent> fieldComponents = new ArrayList<>();
 
     private final PropertyDialogUserFieldPanelChangeListener changeHandler = new PropertyDialogUserFieldPanelChangeListener(this);
 

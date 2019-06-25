@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.consistency;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -34,7 +35,7 @@ public class ConsistencyDefinition {
      * keine Edge der in der Liste befindlichen Art haben, wenn ihnen über eine Teil-Von-Beziehung
      * ein anderes Element untergeordnet ist.
      */
-    private final HashMap<Class<? extends ModelElement>, Collection<Class<? extends Edge>>> elementToOnlyLeafAllowedEdgeClasses = new HashMap<>();
+    private final Map<Class<? extends ModelElement>, Collection<Class<? extends Edge>>> elementToOnlyLeafAllowedEdgeClasses = new HashMap<>();
 
     /**
      * @param metaModel

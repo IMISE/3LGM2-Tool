@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.help.CSH;
 import javax.swing.AbstractButton;
@@ -36,7 +37,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
 
     private final JButton forward, backward, undo, redo;
 
-    private final ArrayList<AbstractInternalFrame> windowList = new ArrayList<>();
+    private final List<AbstractInternalFrame> windowList = new ArrayList<>();
 
     private boolean operatingWindowList = false;
 

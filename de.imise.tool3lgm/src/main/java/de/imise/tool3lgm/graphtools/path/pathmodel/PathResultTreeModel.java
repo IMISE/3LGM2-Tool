@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -447,7 +448,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
             }
         }
         //Set aller Elemente, die Ergebiselemente des Pfades sein können
-        HashSet<ModelElement> possiblePathEndElements = new HashSet<>();
+        Set<ModelElement> possiblePathEndElements = new HashSet<>();
         for (PathResultTreeNode resultNode : resultNodes) {
             possiblePathEndElements.add(resultNode.getEndElement());
         }

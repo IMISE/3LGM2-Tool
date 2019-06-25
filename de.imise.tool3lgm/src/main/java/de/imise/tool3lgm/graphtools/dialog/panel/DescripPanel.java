@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -31,7 +32,7 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
 
     private final LimitedSizeScrollTextPane nameTextPane;
 
-    private final ArrayList<ElementDialogPanel> panels = new ArrayList<>();
+    private final List<ElementDialogPanel> panels = new ArrayList<>();
 
     private final GridBagConstraints gbc = new GridBagConstraints();
 

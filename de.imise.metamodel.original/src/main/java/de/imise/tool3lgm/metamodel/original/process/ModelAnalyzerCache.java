@@ -3,6 +3,7 @@ package de.imise.tool3lgm.metamodel.original.process;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -38,50 +39,50 @@ public class ModelAnalyzerCache {
      * anderen AWBs übergehen, die mit dem AWB über einen beliebigen Pfad aus Teil-Von-Beziehungen
      * verbunden sind.
      */
-    private final HashMap<ModelElement, Set<ModelElement>> appSysToInterfaceSet = new HashMap<>();
+    private final Map<ModelElement, Set<ModelElement>> appSysToInterfaceSet = new HashMap<>();
 
     /**
      * Mappt für jeden <code>Anwendungsbaustein</code> auf die Liste aller seiner Eltern, Kinder und
      * Geschwister - also aller Anwendungsbausteine, mit denen er eine Einheit bildet.
      */
-    private final HashMap<ModelElement, Collection<ModelElement>> appSysToSameAppSysCollection = new HashMap<>();
+    private final Map<ModelElement, Collection<ModelElement>> appSysToSameAppSysCollection = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf eine <code>Collection</code>, die ihn selbst und alle seine
      * übergeordneten Objekttypen enthält.
      */
-    private final HashMap<ModelElement, Collection<ModelElement>> objectTypeToObjectTypeAndParentsCollection = new HashMap<>();
+    private final Map<ModelElement, Collection<ModelElement>> objectTypeToObjectTypeAndParentsCollection = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf alle Anwendungsbausteine, auf denen er als gespeichert gilt.
      * Dies sind alle Eltern, Kindern und Geschwister der Anwendungssysteme, die den Objekttypen
      * direkt speichern.
      */
-    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToFullStoringAppSysSet = new HashMap<>();
+    private final Map<ModelElement, Set<ModelElement>> objectTypeToFullStoringAppSysSet = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf alle Anwendungsbausteine, auf denen er direkt gespeichert wird.
      */
-    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToDirectStoringAppSysSet = new HashMap<>();
+    private final Map<ModelElement, Set<ModelElement>> objectTypeToDirectStoringAppSysSet = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf alle Anwendungsbausteine mit, die den Objekttyp als Master
      * speichern und alle Eltern, Kindern und Geschwister dieses Knotens.
      */
-    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToFullMasterAppSysSet = new HashMap<>();
+    private final Map<ModelElement, Set<ModelElement>> objectTypeToFullMasterAppSysSet = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf ein Set alle Anwendungsbausteine die den Objekttyp oder einen
      * seiner Parent-Objekttypen als Master speichern. Dies darf aus Konsistenzgründen eigentlich
      * immer nur einer sein.
      */
-    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToDirectMasterAppSysSet = new HashMap<>();
+    private final Map<ModelElement, Set<ModelElement>> objectTypeToDirectMasterAppSysSet = new HashMap<>();
 
     /**
      * Mappt von einem Objekttyp auf seine Master-Datenbanksysteme (das darf eigentlich immer nur 1
      * sein)
      */
-    private final HashMap<ModelElement, Set<ModelElement>> objectTypeToMasterDBSSet = new HashMap<>();
+    private final Map<ModelElement, Set<ModelElement>> objectTypeToMasterDBSSet = new HashMap<>();
 
     /**
      * @param gdcoll Modell, für das ein Analyzer angelegt werden soll
@@ -146,7 +147,7 @@ public class ModelAnalyzerCache {
      * verbundenen Elemente enthalten sind.
      */
     public Set<ModelElement> expandPartOfElementSet(final Collection<ModelElement> modelElements) {
-        HashSet<ModelElement> returnSet = new HashSet<>(modelElements.size() * 2);
+        Set<ModelElement> returnSet = new HashSet<>(modelElements.size() * 2);
         for (ModelElement me : modelElements) {
             if (me instanceof Anwendungsbaustein) {
                 returnSet.addAll(getSameApplicationSystems(me));
@@ -176,7 +177,7 @@ public class ModelAnalyzerCache {
     public Set<ModelElement> getDirectMasterAndStorageApplicationSystems(final Objekttyp objectType) {
         Set<ModelElement> master = getDirectMasterApplicationSystems(objectType);
         Set<ModelElement> storage = getDirectStorageApplicationSystems(objectType);
-        HashSet<ModelElement> returnSet = new HashSet<>(master.size() + storage.size());
+        Set<ModelElement> returnSet = new HashSet<>(master.size() + storage.size());
         returnSet.addAll(master);
         returnSet.addAll(storage);
         return returnSet;
@@ -244,7 +245,7 @@ public class ModelAnalyzerCache {
      * @return
      */
     public Set<ModelElement> getMultipleParentElements(final Class<? extends ModelElement> elementClass) {
-        HashSet<ModelElement> returnSet = new HashSet<>();
+        Set<ModelElement> returnSet = new HashSet<>();
         MetaModel metaModel = gdcoll.getMetaModel();
         if (metaModel.canHaveParts(elementClass)) {
             for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(elementClass, true, true)) {
@@ -298,11 +299,11 @@ public class ModelAnalyzerCache {
      */
     private void initOTStorageAndMaster(final Objekttyp objectType) {
         Collection<ModelElement> otAndParents = getObjectTypeAndParents(objectType);
-        HashSet<ModelElement> fullStoreAWB = new HashSet<>();
-        HashSet<ModelElement> directStoreAWB = new HashSet<>();
-        HashSet<ModelElement> fullMasterAWBs = new HashSet<>();
-        HashSet<ModelElement> directMasterAWBs = new HashSet<>();
-        HashSet<ModelElement> allMasterDBS = new HashSet<>();
+        Set<ModelElement> fullStoreAWB = new HashSet<>();
+        Set<ModelElement> directStoreAWB = new HashSet<>();
+        Set<ModelElement> fullMasterAWBs = new HashSet<>();
+        Set<ModelElement> directMasterAWBs = new HashSet<>();
+        Set<ModelElement> allMasterDBS = new HashSet<>();
         for (ModelElement otOrParent : otAndParents) {
             // hole das Master-DBS oder Dok-Sammlung
             for (ModelElement master : otOrParent.getConnectedElements(ModelElement.class, ObjLogspVerbindung.class)) {

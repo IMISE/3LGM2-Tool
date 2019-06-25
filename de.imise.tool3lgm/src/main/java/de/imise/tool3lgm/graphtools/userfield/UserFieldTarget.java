@@ -5,6 +5,7 @@ package de.imise.tool3lgm.graphtools.userfield;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import de.imise.util.htmlxml.XMLCharacterCoder;
@@ -22,13 +23,13 @@ public class UserFieldTarget implements Cloneable {
     /**
      * Mappt von den für das Modell definierten <code>UserField</code>s auf die vom Benutzer eingegebenen Werte.
      */
-    private HashMap<UserField, String> userFieldToInputValuesMap = null;
+    private Map<UserField, String> userFieldToInputValuesMap = null;
 
     /**
      * Mappt von den für das Modell definierten <code>UserField</code>s auf die berechneten Werte. Die Map wird nur initialisiert, wenn das
      * <code>UserFieldTarget</code> mind. einen berechneten Wert hat.
      */
-    private HashMap<UserField, String> userFieldToCalculatedValuesMap = null;
+    private Map<UserField, String> userFieldToCalculatedValuesMap = null;
 
     /**
      * Ein konstant lereres Set

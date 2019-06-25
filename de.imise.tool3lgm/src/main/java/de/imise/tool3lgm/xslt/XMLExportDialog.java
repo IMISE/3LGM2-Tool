@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -101,7 +100,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
         header[4] = getResString("trans_author");
 
         //Kopie der Standardscripte holen (die Kopie macht Tool3lgmConstants)
-        ArrayList<XSLTScript> scripts = xsltResourceHandler.getStandardScripts();
+        List<XSLTScript> scripts = xsltResourceHandler.getStandardScripts();
         scripts.addAll(XSLTFileHandler.getXSLTScripts(UserProperties.getXSLSearchDirs()));
         Alphabetical.sort(scripts);
         tableModel = new TableModel(scripts);
@@ -348,7 +347,7 @@ public class XMLExportDialog extends JDialog implements ActionListener {
     }
 
     private class TableModel extends DefaultTableModel {
-        private final ArrayList<XSLTScript> xslScripts;
+        private final List<XSLTScript> xslScripts;
 
         @Override
         public int getRowCount() {
@@ -367,12 +366,12 @@ public class XMLExportDialog extends JDialog implements ActionListener {
             return 5;
         }
 
-        public TableModel(final ArrayList<XSLTScript> xslScripts) {
+        public TableModel(final List<XSLTScript> xslScripts) {
             super();
             this.xslScripts = xslScripts;
         }
 
-        public void addScripts(final ArrayList<XSLTScript> newXSLScripts) {
+        public void addScripts(final List<XSLTScript> newXSLScripts) {
             for (int i = 0; i < newXSLScripts.size(); i++) {
                 if (!xslScripts.contains(newXSLScripts.get(i))) {
                     xslScripts.add(newXSLScripts.get(i));

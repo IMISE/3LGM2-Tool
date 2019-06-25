@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.gui.menu;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -15,7 +16,7 @@ import de.imise.util.swing.menu.MenuCreator;
 public class MenuBar extends JMenuBar {
 
     /** Liste aller toplevel Menus */
-    private final ArrayList<JMenu> allMenus;
+    private final List<JMenu> allMenus;
 
     /**
      * Konstruktor

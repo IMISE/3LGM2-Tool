@@ -24,6 +24,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
@@ -69,7 +70,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
      * Liste mit allen UserFields, die gelöscht wurden. Wird der Dialog mit OK verlassen, werden bei allen <code>UserFieldTarget</code>s die Werte
      * dieser UserFields *unwiederbringlich* gelöscht.
      */
-    private final ArrayList<UserField> removedUserFields = new ArrayList<>();
+    private final List<UserField> removedUserFields = new ArrayList<>();
 
     /**
      * ist true, wenn eine Warnung angezeigt werden soll, dass die Werte einer Kennzahl gelöscht werden - sonst false.

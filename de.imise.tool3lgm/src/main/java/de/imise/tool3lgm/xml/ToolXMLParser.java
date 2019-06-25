@@ -43,7 +43,7 @@ public class ToolXMLParser {
     //	 *
     //	 * TODO:implementieren
     //	 */
-    //	private static HashSet<String> _deprecatedElementHashes;
+    //	private static Set<String> _deprecatedElementHashes;
 
     /**
      * Die Collection, die dieser Parser einliest

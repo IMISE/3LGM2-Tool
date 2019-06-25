@@ -39,13 +39,13 @@ public class ModelSelection implements Set<ElementContainer> {
     private final Class<?> commonRealElementsSuperClass;
 
     /** Liste, die die selektierten {@link NodeContainer} enthält. */
-    private final HashSet<NodeContainer> selectedRealNodeContainer;
+    private final Set<NodeContainer> selectedRealNodeContainer;
 
     /** Liste, die die selektierten {@link BendpointContainer} enthält. */
-    private final HashSet<BendpointContainer> selectedBendpointContainer;
+    private final Set<BendpointContainer> selectedBendpointContainer;
 
     /** Liste, die die selektierten {@link EdgeContainer} enthält. */
-    private final HashSet<EdgeContainer> selectedEdgeContainer;
+    private final Set<EdgeContainer> selectedEdgeContainer;
 
     /** Zuletzt selektiertes Element */
     private ElementContainer lastSelected = null;

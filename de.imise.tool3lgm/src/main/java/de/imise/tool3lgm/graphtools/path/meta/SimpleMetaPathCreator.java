@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -475,7 +476,7 @@ public class SimpleMetaPathCreator {
      * @return
      */
     public static Iterable<SimpleMetaPath> getSimpleMetaPathsNonAbstract(final Iterable<SimpleMetaPath> simpleMetaPaths) {
-        HashSet<SimpleMetaPath> allSimpleMetaPathsNonAbstract = new HashSet<>();
+        Set<SimpleMetaPath> allSimpleMetaPathsNonAbstract = new HashSet<>();
         for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
             Collection<SimpleMetaPath> simpleMetaPathsNonAbstract = getSimpleMetaPathsNonAbstract(simpleMetaPath);
             allSimpleMetaPathsNonAbstract.addAll(simpleMetaPathsNonAbstract);

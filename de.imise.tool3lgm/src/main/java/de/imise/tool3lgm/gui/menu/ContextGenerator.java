@@ -52,6 +52,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -398,7 +399,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         if (!metaModel.isEditable(elementClass)) {
             return sub_elem;
         }
-        HashSet<Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>>> slavePairs = new HashSet<>();
+        Set<Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>>> slavePairs = new HashSet<>();
         for (Class<? extends CompositionEdge> compositionClass : metaModel.getCompositionEdgeTypesForMaster(elementClass)) {
             Class<? extends ModelElement> abstractSlaves = CompositionEdge.getSlaveType(compositionClass);
             for (Class<? extends ModelElement> instanciableSlaves : metaModel.getInstanciableAssignableClasses(abstractSlaves)) {

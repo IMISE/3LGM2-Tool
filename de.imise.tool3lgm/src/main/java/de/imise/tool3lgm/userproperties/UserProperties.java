@@ -508,7 +508,7 @@ public class UserProperties {
     ///////////////////
 
     /** Liste mit Verzeichnissen, in denen XSL-Skripte gesucht werden; */
-    private static final ArrayList<File> xslSearchDirs = new ArrayList<File>() {
+    private static final List<File> xslSearchDirs = new ArrayList<File>() {
         @Override
         public boolean add(final File o) {
             if (contains(o)) {
@@ -519,7 +519,7 @@ public class UserProperties {
     };
 
     /** @return Kopie der Liste aller Verzeichnisse, in denen nach XSLT-Scripten gesucht wird */
-    public static ArrayList<File> getXSLSearchDirs() {
+    public static List<File> getXSLSearchDirs() {
         return new ArrayList<>(xslSearchDirs);
     }
 

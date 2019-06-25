@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.view.container;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.SwingConstants;
 
@@ -18,7 +19,7 @@ public class AdditionalLabelTextGenerator {
     /**
      * Set aller {@link ElementContainer}, an die dieses Objekt etwas ranschreibt
      */
-    private HashSet<ElementContainer> additionalTextTargets = new HashSet<>();
+    private Set<ElementContainer> additionalTextTargets = new HashSet<>();
 
     /**
      * Liste der {@link ElementContainer}, an die dieses Objekt etwas ranschreibt / protected HashSet<ElementContainer> specialInfoTargets = null; /**
@@ -159,7 +160,7 @@ public class AdditionalLabelTextGenerator {
     }
 
     /**
-     * 
+     *
      */
     public void deleteSpecialInfoFromTargets() {
         for (ElementContainer target : additionalTextTargets) {
@@ -218,7 +219,7 @@ public class AdditionalLabelTextGenerator {
     //	/**
     //	 * @param newTargets
     //	 */
-    //	public void setSpecialInfoTargets(ArrayList<ElementContainer> newTargets) {
+    //	public void setSpecialInfoTargets(List<ElementContainer> newTargets) {
     //		specialInfoTargets = newTargets;
     //	}
     //

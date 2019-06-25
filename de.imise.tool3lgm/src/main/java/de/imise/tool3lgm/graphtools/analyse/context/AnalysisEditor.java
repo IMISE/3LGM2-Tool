@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -259,7 +261,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
         if (elementClassArray == null || elementClassArray.length == 0) {
             return new Class[0];
         }
-        HashSet<Class<? extends ModelElement>> connectedTypes = new HashSet<>();
+        Set<Class<? extends ModelElement>> connectedTypes = new HashSet<>();
         for (int e = 0; e < elementClassArray.length; e++) {
             Class<? extends ModelElement> elementClass = ((Class<?>) elementClassArray[e]).asSubclass(ModelElement.class);
             Class<? extends Edge>[] edgeClasses = metaModel.getEdgeTypes(elementClass);
@@ -275,7 +277,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
                 connectedTypes.add(edgeElementClass);
             }
         }
-        HashSet<Class<? extends ModelElement>> allNonAbstractClasses = new HashSet<>(connectedTypes.size());
+        Set<Class<? extends ModelElement>> allNonAbstractClasses = new HashSet<>(connectedTypes.size());
         for (Class<? extends ModelElement> c : connectedTypes) {
             allNonAbstractClasses.addAll(metaModel.getInstanciableAssignableClasses(c));
         }
@@ -314,7 +316,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
      * Liste aller <code>PathStepComponent</code>s, über die weitere Pfadschritte und bedinungen
      * eingegeben werden können
      */
-    private final ArrayList<PathStepComponent> pathPanels = new ArrayList<>();
+    private final List<PathStepComponent> pathPanels = new ArrayList<>();
 
     /** Button, mit dem das letzte Panel eines Pfadschrittes wieder entfernt werden kann */
     private final JButton addPathStepPanelBut = new JButton("+"/* getResString("erw") */);

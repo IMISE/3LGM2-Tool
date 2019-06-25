@@ -111,7 +111,7 @@ public class ShortestCommunicationPathFinder {
     // System.out.println("#########################################################################################");
     // for (Iterator it = awbToBSSList.keySet().iterator(); it.hasNext();){
     // ModelElement awb = (ModelElement)it.next();
-    // ArrayList list = (ArrayList)awbToBSSList.get(awb);
+    // List list = (List)awbToBSSList.get(awb);
     // int size = list.size();
     // System.out.println(awb + " hat die Schnitstellen: ");
     // for (int k=0; k<list.size(); k++)

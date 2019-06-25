@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JMenuItem;
@@ -35,8 +36,9 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
      */
     private final ConsistencyChecker checker;
 
-    private ArrayList<AbstractError> errors;
-    private final ArrayList<ModelElement> selectedErrorElements = new ArrayList<>();
+    private List<AbstractError> errors;
+
+    private final List<ModelElement> selectedErrorElements = new ArrayList<>();
 
     /**
      *

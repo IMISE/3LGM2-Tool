@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -48,7 +49,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
     /**
      * Liste, in die alle Panels, die der Dialog anzeigt
      */
-    private final ArrayList<AbstractInputPanel> panelList = new ArrayList<>();
+    private final List<AbstractInputPanel> panelList = new ArrayList<>();
 
     /**
      * Rückgabewert des Dialoges, wenn er über den Abbrechen-Knopf verlassen wurde

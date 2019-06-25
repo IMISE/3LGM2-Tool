@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -15,7 +16,7 @@ public class ElemenPropertyDialogsContext {
     /**
      * Liste aller geöffneten Dialoge
      */
-    private static final ArrayList<ElementPropertyDialog> dialogs = new ArrayList<>();
+    private static final List<ElementPropertyDialog> dialogs = new ArrayList<>();
 
     /**
      * Überprueft, ob fuer ein Objekt schon ein Dialog existiert und gibt diesen ggf. zurück
@@ -54,7 +55,7 @@ public class ElemenPropertyDialogsContext {
      *
      * @return ArrayList mit allen geoeffneten Dialogen
      */
-    public static final ArrayList<ElementPropertyDialog> getDialogs() {
+    public static final List<ElementPropertyDialog> getDialogs() {
         return dialogs;
     }
 

@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -28,7 +29,7 @@ public final class ElementaryMetaPathHandler {
      * im Array der zur Edge gehörige Metapath in Richtung Edge.Direction.FORWARD und der zweite in
      * Richtung Edge.Direction.BACKWARD ist.
      */
-    private static final HashMap<Class<? extends Edge>, ElementaryMetaPath[]> EDGE_CLASS_TO_FORWARD_AND_BACKWARD_METAPATHES = new HashMap<>();
+    private static final Map<Class<? extends Edge>, ElementaryMetaPath[]> EDGE_CLASS_TO_FORWARD_AND_BACKWARD_METAPATHES = new HashMap<>();
 
     /**
      * @param metaModel

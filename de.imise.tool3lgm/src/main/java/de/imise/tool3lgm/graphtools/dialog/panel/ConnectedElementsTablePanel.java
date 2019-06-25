@@ -207,7 +207,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     private ModelElement getModelElementAt(final int row, final int col) {
         Object selectedRowValue = table.getValueAt(row, col);
         if (selectedRowValue instanceof NamedObjectContainer) {
-            NamedObjectContainer<?> noc = (NamedObjectContainer) selectedRowValue;
+            NamedObjectContainer<?> noc = (NamedObjectContainer<?>) selectedRowValue;
             selectedRowValue = noc.getObject();
         }
         return selectedRowValue instanceof ModelElement ? (ModelElement) selectedRowValue : selectedRowValue instanceof ElementContainer ? ((ElementContainer) selectedRowValue).getElement() : null;

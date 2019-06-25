@@ -115,7 +115,7 @@ public class UniqueIDChecker {
     //     * @param me
     //     * @param returnList
     //     */
-    //    public void _addIDErrors(final ModelElement me, final ArrayList<AbstractError> returnList) {
+    //    public void _addIDErrors(final ModelElement me, final List<AbstractError> returnList) {
     //        List<IDNotUniqueError> idErrors = _getIDErrors(me);
     //        returnList.addAll(idErrors);
     //    }

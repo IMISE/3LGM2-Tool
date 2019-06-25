@@ -5,6 +5,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.StringUtils;
@@ -26,8 +27,8 @@ public class XSLTFileHandler {
      *
      * @param path
      */
-    public static ArrayList<XSLTScript> getXSLTScripts(final ArrayList<File> searchPath) {
-        ArrayList<XSLTScript> list = new ArrayList<>();
+    public static List<XSLTScript> getXSLTScripts(final Iterable<File> searchPath) {
+        List<XSLTScript> list = new ArrayList<>();
         for (File f : searchPath) {
             if (!f.isDirectory()) {
                 continue;
@@ -82,11 +83,7 @@ public class XSLTFileHandler {
     private static String[] check(final RandomAccessFile file) {
         try {
             String[] attr = {
-                    "",
-                    "",
-                    "",
-                    "",
-                    ""
+                    "", "", "", "", ""
             };
             String line;
             int endIndex;

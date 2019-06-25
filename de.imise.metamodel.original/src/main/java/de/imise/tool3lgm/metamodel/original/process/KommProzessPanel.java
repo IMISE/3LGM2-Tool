@@ -935,7 +935,7 @@ public class KommProzessPanel extends ElementDialogPanel {
     //  /*
     //
     //
-    //  public ArrayList _getKommProzessStepCombinations(GraphDocument doc, ArrayList aufgaben){
+    //  public ArrayList _getKommProzessStepCombinations(GraphDocument doc, List aufgaben){
     //      if (aufgaben.size()<2) return null;
     ////        System.out.println("aufgaben besteht aus " + aufgabenAnzahl + " Aufgaben");
     //

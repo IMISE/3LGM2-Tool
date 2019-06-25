@@ -367,7 +367,7 @@ public class ShortestCommunicationPathFinderOld {
         // //sind, die kommuniziert wird
         // loop: for (Iterator otIt = objectTypes.iterator(); otIt.hasNext();){
         // Objekttyp ot = (Objekttyp)otIt.next();
-        // HashSet repForms = new HashSet(ot.getConnectedElements(Repraesentationsform.class));
+        // Set repForms = new HashSet(ot.getConnectedElements(Repraesentationsform.class));
         // Set parents = ot.getParents();
         // for (Iterator parentsIt = parents.iterator(); parentsIt.hasNext();){
         // Objekttyp parent = (Objekttyp)parentsIt.next();

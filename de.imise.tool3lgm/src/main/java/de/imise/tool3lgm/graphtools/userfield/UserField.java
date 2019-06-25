@@ -1255,7 +1255,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
             return null;
         }
         StringTokenizer st = new StringTokenizer(formulaString, " ()+-/*|");
-        HashSet<String> hashList = new HashSet<>(st.countTokens());
+        Set<String> hashList = new HashSet<>(st.countTokens());
         while (st.hasMoreElements()) {
             String token = st.nextToken();
             if (token.startsWith(USERFIELD_HASH_STRING_PREFIX)) {

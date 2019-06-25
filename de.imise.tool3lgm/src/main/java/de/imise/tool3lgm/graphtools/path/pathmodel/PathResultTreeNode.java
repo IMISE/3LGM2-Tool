@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.path.pathmodel;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -139,7 +140,7 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public final ArrayList<PathResultTreeNode> getChildrenCopy() {
+    public final List<PathResultTreeNode> getChildrenCopy() {
         return new ArrayList<PathResultTreeNode>(children);
     }
 

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
@@ -406,7 +407,7 @@ public class WebExportDialog extends JDialog {
      */
     private class TableModel extends AbstractTableModel {
         private Boolean[] selections;
-        private final ArrayList<XSLTScript> xslScripts;
+        private final List<XSLTScript> xslScripts;
 
         @Override
         public int getRowCount() {
@@ -429,7 +430,7 @@ public class WebExportDialog extends JDialog {
         /**
          * @param xslScripts
          */
-        public TableModel(final ArrayList<XSLTScript> xslScripts) {
+        public TableModel(final List<XSLTScript> xslScripts) {
             super();
             this.xslScripts = xslScripts;
             selections = new Boolean[xslScripts.size()];
@@ -441,7 +442,7 @@ public class WebExportDialog extends JDialog {
         /**
          * @param newXSLScripts
          */
-        public void addScripts(final ArrayList<XSLTScript> newXSLScripts) {
+        public void addScripts(final List<XSLTScript> newXSLScripts) {
             for (int i = 0; i < newXSLScripts.size(); i++) {
                 if (!xslScripts.contains(newXSLScripts.get(i))) {
                     xslScripts.add(newXSLScripts.get(i));

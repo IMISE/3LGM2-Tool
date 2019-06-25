@@ -104,19 +104,19 @@ public final class MetaModel {
     // Knoten //
     ////////////
 
-    /** Alle Node der FE als HashSet */
+    /** Alle Node der FE als Set */
     public final Set<Class<? extends ModelElement>> allDomainLayerNodesSet;
 
-    /** Alle Node zw. FE und LWE als HashSet */
+    /** Alle Node zw. FE und LWE als Set */
     public final Set<Class<? extends ModelElement>> allInterDomainLogicalLayerNodesSet;
 
-    /** Alle Node der LWE als HashSet */
+    /** Alle Node der LWE als Set */
     public final Set<Class<? extends ModelElement>> allLogicalLayerNodesSet;
 
-    /** Alle Node zw. LWE und PWE als HashSet */
+    /** Alle Node zw. LWE und PWE als Set */
     public final Set<Class<? extends ModelElement>> allInterLogicalPhysicalLayerNodesSet;
 
-    /** Alle Node der PWE als HashSet */
+    /** Alle Node der PWE als Set */
     public final Set<Class<? extends ModelElement>> allPhysicalLayerNodesSet;
 
     /** Set aller Knotenklassen */
@@ -209,7 +209,7 @@ public final class MetaModel {
     /**
      * Mappt von einer Elementklasse auf alle Kanten, die diese Elementklasse selbst besitzt oder von einer ihrer Oberklassen erbt.
      */
-    private final HashMap<Class<? extends ModelElement>, Class<? extends Edge>[]> elementClassToEdgeClasses = new HashMap<>();
+    private final Map<Class<? extends ModelElement>, Class<? extends Edge>[]> elementClassToEdgeClasses = new HashMap<>();
 
     /**
      * Mappt vomn 2 Elementklassen auf ein Array von Kantenklassen mappt. Das Array der Kantenklassen enthält alle Kanten, die zwischen den beiden
