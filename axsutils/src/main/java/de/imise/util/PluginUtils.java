@@ -99,4 +99,29 @@ public class PluginUtils {
         return resultClasses;
     }
 
+    /**
+     * Lädt aus dem übergebenen Verzeichnis alle Klassen der übergebenen Art, ruft dann von jeder Klasse den parameterlosen Konstruktor auf und gibt
+     * alle Instanzen zurück, bei denen der Aufruf des Konstruktors ohne Fehler geklappt hat.
+     *
+     * @param file
+     * @param superClassOfResultClasses
+     * @return Instanzen der übergebenen Klasse aus dem übergebenen Verzeichnis
+     */
+    public static <T> List<T> loadInstances(final File file, final Class<T> superClassOfResultClasses) {
+        List<Class<? extends T>> classes = PluginUtils.loadClasses(file, superClassOfResultClasses);
+        List<T> instances = new ArrayList<>();
+        for (Class<? extends T> clazz : classes) {
+            T instance = null;
+            try {
+                instance = clazz.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if (instance != null) {
+                instances.add(instance);
+            }
+        }
+        return instances;
+    }
+
 }
