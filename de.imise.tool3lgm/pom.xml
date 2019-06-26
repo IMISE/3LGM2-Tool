@@ -44,9 +44,11 @@
 			<groupId>de.axs</groupId>
 			<artifactId>de-axs-utils</artifactId>
 			<version>1.0.0</version>
-			<!-- Das hier muss man machen, wenn man per Maven eine Datei lokal verlinken 
-				will. Hierbei liget die Datei im Projektordner unter Plugins/ -->
-			<!-- <scope>system</scope> <systemPath>${basedir}/../Plugins/de-axs-utils-1.0.0.jar</systemPath> -->
+			<!-- Das hier muss man machen, wenn man per Maven eine Datei lokal -->
+			<!-- verlinken will. Hierbei liget die Datei im Projektordner unter -->
+			<!-- Plugins/ -->
+			<!-- <scope>system</scope> -->
+			<!-- <systemPath>${basedir}/../Plugins/de-axs-utils-1.0.0.jar</systemPath> -->
 		</dependency>
 		<!-- <dependency> <groupId>de.imise</groupId> <artifactId>de.imise.twatd</artifactId> 
 			<version>0.0.1</version> </dependency> -->
@@ -63,8 +65,71 @@
 			<version>4.3</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-		<!-- <dependency> <groupId>org.apache.commons</groupId> <artifactId>commons-lang3</artifactId> 
-			<version>3.9</version> </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.commons</groupId> -->
+		<!-- <artifactId>commons-lang3</artifactId> -->
+		<!-- <version>3.9</version> -->
+		<!-- </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/org.apache.jena/jena-core -->
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<version>3.11.0</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/log4j/log4j -->
+		<!-- <dependency> -->
+		<!-- <groupId>log4j</groupId> -->
+		<!-- <artifactId>log4j</artifactId> -->
+		<!-- <version>1.2.17</version> -->
+		<!-- </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.8.0-beta4</version>
+		</dependency>
+
+		<!-- ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG -->
+		<!--von den folgenden 4 SLF4J Providern darf immer nur genau 1 aktiv sein! -->
+		<!-- See http://www.slf4j.org/codes.html#noProviders for further details. -->
+		<!-- ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG ACHTUNG -->
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.8.0-beta4</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12 -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.slf4j</groupId> -->
+		<!-- <artifactId>slf4j-log4j12</artifactId> -->
+		<!-- <version>1.8.0-beta4</version> -->
+		<!-- <scope>test</scope> -->
+		<!-- </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-nop -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.slf4j</groupId> -->
+		<!-- <artifactId>slf4j-nop</artifactId> -->
+		<!-- <version>1.8.0-beta4</version> -->
+		<!-- <scope>test</scope> -->
+		<!-- </dependency> -->
+
+		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.slf4j</groupId> -->
+		<!-- <artifactId>slf4j-simple</artifactId> -->
+		<!-- <version>1.8.0-beta4</version> -->
+		<!-- <scope>test</scope> -->
+		<!-- </dependency> -->
+
+
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
