@@ -6,16 +6,17 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
 import de.imise.tool3lgm.imexport.ImportMetaModelDefinition;
-import de.imise.tool3lgm.metamodel.service.node.IheIntegrationProfile;
 
 /**
  * Definition der Klassen und Kanten, die aus Protege in 3LGM importiert werden können sollen.
  *
  * @author AXS (10 Jun 2019)
  */
+@SuppressWarnings("serial")
 public class IheImportMetaModelDefinition extends ImportMetaModelDefinition {
 
     /** 3LGM2: Actor -> OWL: Actor */
@@ -38,12 +39,12 @@ public class IheImportMetaModelDefinition extends ImportMetaModelDefinition {
 
     /** 3LGM2: IheIntegrationProfile_Edge -> OWL: iheIntegrationProfile */
     public static class IheIntegrationProfile_Edge extends SimpleEdge {
-        public static final Class<? extends ModelElement> STCL = IheIntegrationProfile.class;
-        public static final Class<? extends ModelElement> ETCL = Actor.class;
+        public static final Class<? extends ModelElement> STCL = Actor.class;
+        public static final Class<? extends ModelElement> ETCL = IntegrationProfile.class;
     }
 
     /** 3LGM2: IheTransaction_Edge -> OWL: iheTransaction */
-    public static class IheTransaction_Edge extends SimpleEdge {
+    public static class IheTransaction_Edge extends MultipleEdge { //MultipleEdge, weil dieselben Akteure mehrfach über TransactionLinks verbunden sein können
         public static final Class<? extends ModelElement> STCL = Actor.class;
         public static final Class<? extends ModelElement> ETCL = Actor.class;
     }
