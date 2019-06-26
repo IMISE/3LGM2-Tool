@@ -171,7 +171,7 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      */
     public Edge addEdge(final String edgeClassName, final String name, final String hashString, final Node startNode, final Node endNode) {
         Edge edge = gdcoll.link(edgeClassName, hashString, startNode, endNode, -1, -1, false, TransactionManager.STANDARD_PID);
-        if (!Strings.isNullOrEmpty(name)) {
+        if (edge != null && !Strings.isNullOrEmpty(name)) {
             edge.setName(name);
         }
         return edge;
