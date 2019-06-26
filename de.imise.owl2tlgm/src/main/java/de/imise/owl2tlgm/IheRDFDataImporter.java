@@ -1,7 +1,5 @@
 package de.imise.owl2tlgm;
 
-import de.imise.owl2tlgm.importmetamodel.IheImportMetaModelDefinition;
-import de.imise.owl2tlgm.importmetamodel.IheModelConverterDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverter;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition;
 import de.imise.tool3lgm.graphtools.model.GDCollection;

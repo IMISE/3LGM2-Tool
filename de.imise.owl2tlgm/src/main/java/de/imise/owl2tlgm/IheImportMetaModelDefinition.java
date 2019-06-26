@@ -1,4 +1,4 @@
-package de.imise.owl2tlgm.importmetamodel;
+package de.imise.owl2tlgm;
 
 import java.util.Set;
 
