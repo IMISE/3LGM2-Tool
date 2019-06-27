@@ -156,13 +156,29 @@
 					</archive>
 				</configuration>
 			</plugin>
-			<!-- lib-Verzeichnis im Deploy-Projekt leeren -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>2.5</version>
 				<configuration>
+					<!-- Plugins-Verzeichnis im Deploy-Projekt leeren -->
 					<filesets>
+						<fileset>
+							<directory>../de.imise.tool3lgm.deploy/Tool3lgm/Plugins</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+						<!-- Plugins-Verzeichnis im Eclipse-Development-Projekt leeren -->
+						<fileset>
+							<directory>../de.imise.tool3lgm/Plugins/</directory>
+							<includes>
+								<include>**/*</include>
+							</includes>
+							<followSymlinks>false</followSymlinks>
+						</fileset>
+						<!-- lib-Verzeichnis im Deploy-Projekt leeren -->
 						<fileset>
 							<directory>../de.imise.tool3lgm.deploy/Tool3lgm/lib</directory>
 							<includes>
