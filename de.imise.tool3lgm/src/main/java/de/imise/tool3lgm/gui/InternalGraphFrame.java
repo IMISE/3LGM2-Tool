@@ -14,7 +14,6 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -42,7 +41,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
      * @param inputGraphArea
      * @param doc
      */
-    public InternalGraphFrame(final JDesktopPane pane, final InputGraphArea inputGraphArea, final LGMGraphDocument doc) {
+    public InternalGraphFrame(final JDesktopPane pane, final InputGraphArea inputGraphArea, final GraphDocument doc) {
         super(doc, "");
 
         // Diese Reihenfolge ist wichtig! Im Konstruktor von Werkzeugleiste
@@ -165,7 +164,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     /**
      * @return
      */
-    public LGMGraphDocument getSzenario() {
+    public GraphDocument getSzenario() {
         return getGraphDocument();
     }
 

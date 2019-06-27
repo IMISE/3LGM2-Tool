@@ -211,7 +211,7 @@ public final class GDCollectionImExportHandler {
                 }
             }
 
-            Static.getTool().createSzenarioFrame(newSzenario);
+            Static.getTool().createFrame(newSzenario);
         }
         Static.closeProgressDialog();
         gdcoll.getUserFieldDefinitions().hasCrossReferences();

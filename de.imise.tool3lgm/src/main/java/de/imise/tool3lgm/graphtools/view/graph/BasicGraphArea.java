@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JSeparator;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -148,11 +149,11 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     private PaintState paintState = PaintState.REGULAR;
 
     /**
-     * @param szenario
+     * @param doc
      */
-    public BasicGraphArea(final Szenario szen) {
+    public BasicGraphArea(final GraphDocument doc) {
         setLayout(null);
-        szenario = szen;
+        szenario = doc instanceof Szenario ? (Szenario) doc : null;
         if (szenario != null) {
             layerWidth = szenario.getPageWidth();
             layerHeight = szenario.getPageHeight();

@@ -360,7 +360,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         gdcoll.addGraphDocumentListener(this);
 
         Static.setProgressDialogStatusLabel("create_frame", gdcoll.getMainGraphDocument().getTitle());
-        createMainFrame(gdcoll.getMainGraphDocument());
+        createFrame(gdcoll.getMainGraphDocument());
 
         LGMGraphDocument selectedDoc = gdcoll.getMainGraphDocument();
         AbstractInternalFrame lastFrame = null;
@@ -373,7 +373,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             if (szen.getViewParameter().selected) {
                 selectedDoc = szen;
             }
-            lastFrame = createSzenarioFrame(szen);
+            lastFrame = createFrame(szen);
         }
 
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
@@ -410,39 +410,21 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * @param maindoc
+     * @param doc
      * @return
      */
-    private AbstractInternalFrame createMainFrame(final LGMGraphDocument maindoc) {
-        InputGraphArea area = new InputGraphArea();
-        InternalGraphFrame frame = new InternalGraphFrame(desktop, area, maindoc);
-        modelBrowserPanel.addGraphDocument(maindoc);
+    public AbstractInternalFrame createFrame(final GraphDocument doc) {
+        InputGraphArea area = new InputGraphArea(doc);
+        InternalGraphFrame frame = new InternalGraphFrame(desktop, area, doc);
+        modelBrowserPanel.addGraphDocument(doc);
         frame.addInternalFrameListener(this);
         Rectangle bounds = desktop.getBounds();
+        if (doc instanceof Szenario) {
+            bounds.height = bounds.height - 32;
+            setWorkArea(frame);
+            desktop.add(frame);
+        }
         frame.setBounds(bounds);
-
-        desktop.add(frame);
-        frame.setVisible(true);
-
-        return frame;
-    }
-
-    /* *** */
-
-    /**
-     * @param szenario
-     * @return
-     */
-    public AbstractInternalFrame createSzenarioFrame(final Szenario szenario) {
-        InputGraphArea area = new InputGraphArea(szenario);
-        InternalGraphFrame frame = new InternalGraphFrame(desktop, area, szenario);
-        modelBrowserPanel.addGraphDocument(szenario);
-        frame.addInternalFrameListener(this);
-        Rectangle bounds = desktop.getBounds();
-        bounds.height = bounds.height - 32;
-        frame.setBounds(bounds);
-        setWorkArea(frame);
-        desktop.add(frame);
         frame.setVisible(true);
         return frame;
     }
@@ -1068,7 +1050,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     @Override
     public void internalFrameActivated(final InternalFrameEvent e) {
         activeFrame = (AbstractInternalFrame) e.getInternalFrame();
-        LGMGraphDocument doc = activeFrame.getGraphDocument();
+        GraphDocument doc = activeFrame.getGraphDocument();
         doc.addGraphDocumentListener(graphAreaToolbarManager);
         graphAreaToolbarManager.updateToolBar();
         //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
@@ -1090,7 +1072,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     @Override
     public void internalFrameDeactivated(final InternalFrameEvent e) {
-        LGMGraphDocument graphDocument = activeFrame.getGraphDocument();
+        GraphDocument graphDocument = activeFrame.getGraphDocument();
         graphDocument.removeGraphDocumentListener(graphAreaToolbarManager);
         activeFrame = null;
         graphAreaToolbarManager.updateToolBar();

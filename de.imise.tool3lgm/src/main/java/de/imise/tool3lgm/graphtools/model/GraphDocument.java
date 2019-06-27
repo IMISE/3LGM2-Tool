@@ -1208,7 +1208,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 finish_transaction(pid);
                 return;
             }
-            Static.getTool().createSzenarioFrame(szen);
+            Static.getTool().createFrame(szen);
             break;
 
         case MODEL_ACTION_DELETE_SUBMODEL: {
@@ -4444,7 +4444,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             finish_transaction(pid);
             return;
         }
-        Static.getTool().createSzenarioFrame(szen);
+        Static.getTool().createFrame(szen);
         szen.setPageSizeFactor(getPageSizeFactor());
         szen.getMapping().adapt(getMapping());
         szen.getFrame().getInputGraphArea().adaptSettings(frame.getInputGraphArea());
@@ -4511,7 +4511,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             finish_transaction(pid);
             return;
         }
-        Static.getTool().createSzenarioFrame(szen);
+        Static.getTool().createFrame(szen);
         for (ElementContainer ec : elements) {
             linkElementToSzenario(szen.getHashString(), ec.getHashString(), pid);
         }

@@ -9,7 +9,6 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
-import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
@@ -20,8 +19,9 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  * @author Thomas Rudert
  */
 public abstract class AbstractInternalFrame extends JInternalFrame implements GraphDocumentListener, InTransactionListener {
+
     /** darzustellendes (Teil-)Modell */
-    protected LGMGraphDocument doc;
+    protected GraphDocument doc;
 
     /** die JScrollFläche für den Inhalt */
     protected JScrollPane scrollPane;
@@ -32,12 +32,12 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
      * @param _graphDocument darzustellendes (Teil-)Modell
      * @param _title Fensterüberschrift
      */
-    public AbstractInternalFrame(final LGMGraphDocument _graphDocument, final String _title) {
+    public AbstractInternalFrame(final GraphDocument doc, final String _title) {
 
         /* JInternalFrame mit Titel, resizable, closable, maximizable, and iconifiable */
         super(_title, true, false, true, true);
 
-        doc = _graphDocument;
+        this.doc = doc;
         scrollPane = new JScrollPane();
         getContentPane().add(scrollPane);
 
@@ -67,7 +67,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
      *
      * @return GraphDocument
      */
-    public LGMGraphDocument getGraphDocument() {
+    public GraphDocument getGraphDocument() {
         return doc;
     }
 

@@ -32,6 +32,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -151,27 +152,25 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      */
     private boolean was_selected = false;
 
-    public InputGraphArea() {
-        super(null);
-    }
-
     /**
      * COMMENTME
      *
-     * @param gdoc
+     * @param doc
      */
-    public InputGraphArea(final Szenario szenario) {
-        super(szenario);
-        addMouseListener(this);
-        addMouseMotionListener(this);
-        addMouseWheelListener(this);
-        Static.getTool().getContentPane().addMouseListener(this);
-        xin = 0;
-        yin = 0;
-        grabbed = false;
-        sized = false;
-        setMouseMakesKnot(null);
-        check_size();
+    public InputGraphArea(final GraphDocument doc) {
+        super(doc);
+        if (doc instanceof Szenario) {
+            addMouseListener(this);
+            addMouseMotionListener(this);
+            addMouseWheelListener(this);
+            Static.getTool().getContentPane().addMouseListener(this);
+            xin = 0;
+            yin = 0;
+            grabbed = false;
+            sized = false;
+            setMouseMakesKnot(null);
+            check_size();
+        }
     }
 
     // --- kleine Hilfsmethoden --- Anfang ---
