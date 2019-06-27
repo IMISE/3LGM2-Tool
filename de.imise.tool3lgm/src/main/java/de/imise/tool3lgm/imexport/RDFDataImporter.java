@@ -33,13 +33,12 @@ import de.imise.util.DataPrinter;
 import de.imise.util.StringUtils;
 
 /**
+ * Allgemeiner Importer für OWL RDF-Dateien. Der Importer fragt das OWL-Model nach genau den Knoten- und Kantenklassen bzw. deren Instanzen im
+ * OWL-Model und baut daraus ein äquivalentes 3LGM2-Modell zusammen.
+ *
  * @author AXS (26 Jun 2019)
  */
 public abstract class RDFDataImporter extends UrlSourceDataImporter<OntResource> implements DataPrinter {
-
-    ///////////////////////////////////
-    // Eigentlicher Start der Klasse //
-    ///////////////////////////////////
 
     /**
      * @param urlString
