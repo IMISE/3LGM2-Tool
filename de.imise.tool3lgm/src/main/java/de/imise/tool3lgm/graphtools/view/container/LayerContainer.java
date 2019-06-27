@@ -641,7 +641,7 @@ public class LayerContainer extends ElementContainer {
      * Sortiert die EdgeContainer in der Liste aller EdgeContainer so um, dass ihre Reihenfolge für alle NodeContainer
      * mit Kanten, deren Reihenfolge eine Bedeutung hat, der Reihenfolge der Kanten in ihrer ArrayList connections entspricht.
      */
-    public void sortEdges() {
+    public void sortEdgeContainers() {
         //fuer alle NodeContainer in numberedEdgesNodeContainer
         for (NodeContainer kc : numberedEdgesNodeContainer) {
             //fuer jede seiner Kanten

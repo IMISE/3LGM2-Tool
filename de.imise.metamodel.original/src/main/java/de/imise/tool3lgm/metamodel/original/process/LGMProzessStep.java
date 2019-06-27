@@ -53,7 +53,7 @@ public class LGMProzessStep {
     /**
      * Sequenz der Kanten, über die dieser Prozess kommuniziert werden kann
      */
-    private List<Edge> kommProzessKanten;
+    private List<Edge> kommProzessEdges;
 
     /**
      * KonfigurationContainer, an denen die mögliche Kommunikation wirklich startet
@@ -189,8 +189,8 @@ public class LGMProzessStep {
     /**
      * @param list
      */
-    public void setKommProzessKanten(final List<Edge> list) {
-        kommProzessKanten = list;
+    public void setKommProzessEdges(final List<Edge> list) {
+        kommProzessEdges = list;
     }
 
     /**
@@ -288,11 +288,11 @@ public class LGMProzessStep {
     /**
      * @return
      */
-    public List<Edge> getKommProzessKanten() {
-        if (kommProzessKanten == null) {
+    public List<Edge> getKommProzessEdges() {
+        if (kommProzessEdges == null) {
             return new ArrayList<>(1);
         }
-        return kommProzessKanten;
+        return kommProzessEdges;
     }
 
     /**

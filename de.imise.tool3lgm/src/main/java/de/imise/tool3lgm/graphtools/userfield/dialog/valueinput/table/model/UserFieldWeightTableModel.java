@@ -134,7 +134,7 @@ public class UserFieldWeightTableModel extends AbstractUserFieldTableModel {
      *
      * @param edgeClass
      * @param direction Richtung in der die ausgwählte Edge zu lesen ist. In der Tabelle sthen die Startklassen der Edge in den Zeilen, wenn
-     *            <code>DoubleTrace.FORWARD</code> übergeben wurde. Bei <code>DoubleTrace.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
+     *            <code>Direction.FORWARD</code> übergeben wurde. Bei <code>Direction.BACKWARD</code> stehen die Endklassenelemente in den Zeilen.
      * @param field
      */
     private void setData(final Class<? extends Edge> edgeClass, final Direction direction, final UserField field, final ModelElement columnElement) {

@@ -119,7 +119,7 @@ public class ModelConverter {
             //für jeden dieser umzuwandelnden Knoten
             for (ModelElement sourceNode : sourceNodes) {
                 //lege im Hauptdokument des Zielmodells einen Knoten der neuen Art an mit gleichem Namen, gleicher Beschreibung und gleichem HashString, wie der entsprechende Knoten im Ausgangsmodell hatte
-                NodeContainer targetMainDocContainer = targetMainDoc.createKnotenWithContainer(targetNodeClass, sourceNode.getName(), sourceNode.getDescription(), sourceNode.getHashString(), STANDARD_PID);
+                NodeContainer targetMainDocContainer = targetMainDoc.createNodeAndContainer(targetNodeClass, sourceNode.getName(), sourceNode.getDescription(), sourceNode.getHashString(), STANDARD_PID);
                 //für alle Teilmodelle, in denen der umzuwandelnde Knoten im Ausgangsmodell vorkommt
                 for (GraphDocument sourceDoc : sourceNode.getMySzenarios()) {
                     //wenn es nicht das Hauptdokument ist
@@ -160,8 +160,8 @@ public class ModelConverter {
                 ModelElement sourceEdgeEndElement = sourceEdge.getEnd();
                 String sourceStartElementHash = sourceEdgeStartElement.getHashString();
                 String sourceEndElementHash = sourceEdgeEndElement.getHashString();
-                ModelElement targetStartElement = targetMainDoc.findKnotenCoded(sourceStartElementHash);
-                ModelElement targetEndElement = targetMainDoc.findKnotenCoded(sourceEndElementHash);
+                ModelElement targetStartElement = targetMainDoc.findNodeCoded(sourceStartElementHash);
+                ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEndElementHash);
                 int startElementEdgeIndex = sourceEdgeStartElement.getEdgeIndex(sourceEdge);
                 int endElementEdgeIndex = sourceEdgeEndElement.getEdgeIndex(sourceEdge);
                 //linke die entsprechende Kante im Target-Modell mit demselben Hash und zwischen den Elementen mit demselben Hash
@@ -197,8 +197,8 @@ public class ModelConverter {
                 ModelElement sourceEdgeEndElement = sourceEdge.getEnd();
                 String sourceStartElementHash = sourceEdgeStartElement.getHashString();
                 String sourceEndElementHash = sourceEdgeEndElement.getHashString();
-                ModelElement targetStartElement = targetMainDoc.findKnotenCoded(sourceStartElementHash);
-                ModelElement targetEndElement = targetMainDoc.findKnotenCoded(sourceEndElementHash);
+                ModelElement targetStartElement = targetMainDoc.findNodeCoded(sourceStartElementHash);
+                ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEndElementHash);
                 //lege den MetaPfad im Zielmodell an
                 SimplePath createdPath = targetMainDoc.createPath(targetStartElement, targetEndElement, targetMetaPath, STANDARD_PID);
                 //nach der Definiton der Umbenennungen die Namen der Elemente in Abhängigkeit von der Source-Edge umbenennen

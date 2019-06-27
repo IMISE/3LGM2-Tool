@@ -43,10 +43,10 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
             LGMTreeNode node = null;
             for (int i = 0; i < paths.length; i++) {
                 node = (LGMTreeNode) paths[i].getLastPathComponent();
-                Object uo = node.getUserObject();
-                if (uo != null && uo instanceof NodeContainer) {
+                Object userObject = node.getUserObject();
+                if (userObject != null && userObject instanceof NodeContainer) {
                     if (node.isSelectable()) {
-                        NodeContainer knot = (NodeContainer) uo;
+                        NodeContainer knot = (NodeContainer) userObject;
                         doc.addToSelection(knot, DynamicTree.PID);
                     } else {
                         correctingSelectionCount++;

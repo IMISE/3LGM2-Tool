@@ -328,9 +328,9 @@ public class ModelCleaner {
         // positioniert sind also einfach nochmal pauschal alle Kanten-Container initialisieren (das
         // wird und muss bereits einmal nach dem Beenden des Einlesens im ToolContentHandler getan werden)
         for (GraphDocument doc : docs) {
-            doc.initKnotContainers();
-            //doc.initTraceContainers(); Das hier darf auf keinen Fall gemacht werden, weil die Variable BendpointContainer.index einfach nicht richtig gesetzt ist, sondern nur beim Einlesen und nur da keine Probleme macht.
-            //wenn man das initTraceContainers() hier nochmal aufruft, haben Knickpunktcontainer einen Falschen Wert bei Index (nämlich 0) und sie werden in der Knickpunktliste der Kante einfach nach vorne geschrieben und
+            doc.initNodeContainers();
+            //doc.initEdgeContainers(); Das hier darf auf keinen Fall gemacht werden, weil die Variable BendpointContainer.index einfach nicht richtig gesetzt ist, sondern nur beim Einlesen und nur da keine Probleme macht.
+            //wenn man das initEdgeContainers() hier nochmal aufruft, haben Knickpunktcontainer einen Falschen Wert bei Index (nämlich 0) und sie werden in der Knickpunktliste der Kante einfach nach vorne geschrieben und
             //stehen dann mehrfach drin und der eigentliche Knickpunkt an position 0 ist weg
         }
 

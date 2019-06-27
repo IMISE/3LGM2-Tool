@@ -367,7 +367,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                 for (NodeContainer kc : lc.getNodeContainersAlphabetical()) {
                     writeModelElement(kc.getElement());
                 }
-                doc.sortKanten();
+                doc.sortEdgeContainers();
                 for (EdgeContainer kc : lc.getEdgeContainers()) {
                     writeModelElement(kc.getElement());
                 }

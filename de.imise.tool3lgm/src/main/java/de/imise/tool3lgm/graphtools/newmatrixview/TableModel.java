@@ -128,14 +128,14 @@ public class TableModel implements Iterable<TableCell> {
     /**
      * @return {@link Node} für Zeilenelement
      */
-    public Node getRowKnot(final int rowIndex) {
+    public Node getRowElement(final int rowIndex) {
         return rowIndex < rowHeader.size() ? (Node) rowHeader.get(rowIndex) : null;
     }
 
     /**
      * @return {@link Node} für Spaltenelement
      */
-    public Node getColKnot(final int colIndex) {
+    public Node getColElement(final int colIndex) {
         return colIndex < colHeader.size() ? (Node) colHeader.get(colIndex) : null;
     }
 

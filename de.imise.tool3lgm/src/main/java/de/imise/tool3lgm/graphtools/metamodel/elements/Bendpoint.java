@@ -33,21 +33,21 @@ public final class Bendpoint extends Node {
     /**
      * @return
      */
-    public String getKantenHash() {
+    public String getEdgeHash() {
         return edgeHash;
     }
 
     /**
      * @param egdeHash
      */
-    public void setKantenHash(final String egdeHash) {
+    public void setEdgeHash(final String egdeHash) {
         edgeHash = egdeHash == null ? "" : egdeHash;
     }
 
     @Override
     public boolean putXMLFieldString(final String field, final String value) {
         if (field.equals("kantenHash")) {
-            setKantenHash(value);
+            setEdgeHash(value);
             return true;
         }
         if (field.equals("index")) {

@@ -52,10 +52,10 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     protected Map<String, String> hashCodes;
 
     /** Kanten deren hashStrings (start, end) aufgelöst werden müssen (bei copyAndPaste) */
-    protected List<Edge> kanten;
+    protected List<Edge> edges;
 
     /** KantenContainer deren computeBorderPoints()-Methode aufgerufen werden muss */
-    protected List<EdgeContainer> kantenContainer;
+    protected List<EdgeContainer> edgeContainers;
 
     /** GDCollection in die die Element geschrieben werden */
     protected GDCollection collection;
@@ -148,14 +148,14 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
     @Override
     public void endDocument() throws SAXException {
         if (isCopyAndPaste()) {
-            for (EdgeContainer kc : kantenContainer) {
+            for (EdgeContainer kc : edgeContainers) {
                 kc.computeBorderPoints();
             }
 
         } else {
             for (Szenario szen : collection.getSzenarios()) {
-                szen.initKnotContainers();
-                szen.initTraceContainers();
+                szen.initNodeContainers();
+                szen.initEdgeContainers();
                 //				collection.getSzenario(i).refreshSpecialInfoTargets();
             }
         }
@@ -202,7 +202,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                     if (isCopyAndPaste()) {
                         hashCodes.put(atts.getValue("hash"), element.getHashString());
                         if (element instanceof Edge) {
-                            kanten.add((Edge) element);
+                            edges.add((Edge) element);
                         }
                     } else {
                         element.setHashString(atts.getValue("hash"));
@@ -229,7 +229,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                     }
 
                     if (isCopyAndPaste() && container instanceof EdgeContainer) {
-                        kantenContainer.add((EdgeContainer) container);
+                        edgeContainers.add((EdgeContainer) container);
                     }
                 }
                 element = null;
@@ -344,8 +344,8 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 szenario = collection.getSelectedDoc();
                 szenario.clearSelection();
                 hashCodes = new HashMap<>();
-                kanten = new ArrayList<>();
-                kantenContainer = new ArrayList<>();
+                edges = new ArrayList<>();
+                edgeContainers = new ArrayList<>();
 
             } else if (qName.equals("objects")) {
                 Static.setProgressDialogStatusLabel("labelReadElements");
@@ -593,12 +593,12 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
 
                 /* die HashStrings für das Start- bzw. End-Objekt einer Edge auflösen und die wirklichen Node setzten */
                 if (isCopyAndPaste()) {
-                    Edge kante;
-                    for (int i = 0; i < kanten.size(); i++) {
-                        kante = kanten.get(i);
-                        kante.putXMLFieldString("start", hashCodes.get(kante.getStartHash()));
-                        kante.putXMLFieldString("end", hashCodes.get(kante.getEndHash()));
-                        kante.decodeHashStrings(doc);
+                    Edge edge;
+                    for (int i = 0; i < edges.size(); i++) {
+                        edge = edges.get(i);
+                        edge.putXMLFieldString("start", hashCodes.get(edge.getStartHash()));
+                        edge.putXMLFieldString("end", hashCodes.get(edge.getEndHash()));
+                        edge.decodeHashStrings(doc);
                     }
                 } else {
                     for (int i = 0; i < ModelConstants.LAYERS.length; i++) {

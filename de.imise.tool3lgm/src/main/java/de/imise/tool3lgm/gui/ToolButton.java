@@ -65,7 +65,7 @@ public class ToolButton extends JToggleButton {
             public void actionPerformed(final ActionEvent e) {
                 if (button.frame != null) {
                     InputGraphArea area = button.frame.getInputGraphArea();
-                    area.setMouseMakesKnot(paintableElementClass);
+                    area.setMouseClickCreatesNode(paintableElementClass);
                 }
             }
         });
@@ -92,7 +92,7 @@ public class ToolButton extends JToggleButton {
             public void actionPerformed(final ActionEvent e) {
                 if (button.frame != null) {
                     InputGraphArea area = button.frame.getInputGraphArea();
-                    area.setMouseMakesTrace(true);
+                    area.setMouseCreatesEdge(true);
                 }
             }
         });
@@ -110,8 +110,8 @@ public class ToolButton extends JToggleButton {
             public void actionPerformed(final ActionEvent e) {
                 if (button.frame != null) {
                     InputGraphArea area = button.frame.getInputGraphArea();
-                    area.setMouseMakesKnot(null);
-                    area.setMouseMakesTrace(false);
+                    area.setMouseClickCreatesNode(null);
+                    area.setMouseCreatesEdge(false);
                 }
             }
         });

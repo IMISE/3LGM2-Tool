@@ -168,7 +168,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             yin = 0;
             grabbed = false;
             sized = false;
-            setMouseMakesKnot(null);
+            setMouseClickCreatesNode(null);
             check_size();
         }
     }
@@ -188,7 +188,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      *
      * @param k
      */
-    public final void setMouseMakesKnot(final Class<? extends Node> k) {
+    public final void setMouseClickCreatesNode(final Class<? extends Node> k) {
         if (k == null) {
             setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
         } else {
@@ -203,7 +203,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      *
      * @param b
      */
-    public final void setMouseMakesTrace(final boolean b) {
+    public final void setMouseCreatesEdge(final boolean b) {
         if (b) {
             mouse_makes_node = null;
         }
@@ -491,7 +491,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             final int rasterWidth = UserProperties.get(IntProperty.PROPERTY_INT_RASTER_WIDTH);
             final int insertPositionX = Math.round(x / rasterWidth) * rasterWidth;
             final int insertPositionY = Math.round(y / rasterWidth) * rasterWidth;
-            szenario.setKnotInsertPosition(insertPositionX, insertPositionY);
+            szenario.setNodeContainerInsertPosition(insertPositionX, insertPositionY);
             if (mouse_makes_edge && left_button) {
                 szenario.deselectAll(false);
                 ka = chooseObject(layer, x, y);
@@ -505,7 +505,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 if (isInPage(x, y)) {
                     if (szenario.getMetaModel().layerFor(mouse_makes_node) == layerIndex) {
                         Tool3lgm.setLastActionPosition(xin + getX(), yin + getY());
-                        szenario.createKnotenWithContainer(mouse_makes_node, STANDARD_PID);
+                        szenario.createNodeAndContainer(mouse_makes_node, STANDARD_PID);
                         revalidate();
                         repaint();
                     }
@@ -904,7 +904,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 xd = r_bound - xreal[ebene];
                 yd = h;
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE) {
-                    szenario.coordinateKnot(kc, r_bound - xd / 2, ym, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, r_bound - xd / 2, ym, xd, yd, STANDARD_PID);
                 }
                 break;
             case Cursor.N_RESIZE_CURSOR:
@@ -912,7 +912,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 xd = w;
                 yd = d_bound - yreal[ebene];
                 if (yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.coordinateKnot(kc, xm, d_bound - yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, xm, d_bound - yd / 2, xd, yd, STANDARD_PID);
                 }
                 break;
             case Cursor.E_RESIZE_CURSOR:
@@ -920,7 +920,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 xd = xreal[ebene] - l_bound;
                 yd = h;
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE) {
-                    szenario.coordinateKnot(kc, l_bound + xd / 2, ym, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, l_bound + xd / 2, ym, xd, yd, STANDARD_PID);
                 }
                 break;
             case Cursor.S_RESIZE_CURSOR:
@@ -928,7 +928,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 xd = w;
                 yd = yreal[ebene] - u_bound;
                 if (yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.coordinateKnot(kc, xm, u_bound + yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, xm, u_bound + yd / 2, xd, yd, STANDARD_PID);
                 }
                 break;
             case Cursor.SW_RESIZE_CURSOR:
@@ -937,7 +937,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 xd = Math.abs(r_bound - xreal[ebene]);
                 yd = Math.abs(yreal[ebene] - u_bound);
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE && yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.coordinateKnot(kc, r_bound - xd / 2, u_bound + yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, r_bound - xd / 2, u_bound + yd / 2, xd, yd, STANDARD_PID);
                 }
                 break;
             case Cursor.NW_RESIZE_CURSOR:
@@ -946,7 +946,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 xd = Math.abs(r_bound - xreal[ebene]);
                 yd = Math.abs(d_bound - yreal[ebene]);
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE && yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.coordinateKnot(kc, r_bound - xd / 2, d_bound - yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, r_bound - xd / 2, d_bound - yd / 2, xd, yd, STANDARD_PID);
                 }
                 break;
             case Cursor.NE_RESIZE_CURSOR:
@@ -955,7 +955,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 xd = Math.abs(l_bound - xreal[ebene]);
                 yd = Math.abs(d_bound - yreal[ebene]);
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE && yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.coordinateKnot(kc, l_bound + xd / 2, d_bound - yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, l_bound + xd / 2, d_bound - yd / 2, xd, yd, STANDARD_PID);
                 }
                 break;
             case Cursor.SE_RESIZE_CURSOR:
@@ -964,7 +964,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 xd = Math.abs(l_bound - xreal[ebene]);
                 yd = Math.abs(u_bound - yreal[ebene]);
                 if (xd >= NodeContainer.MIN_X_SIZE && xd <= NodeContainer.MAX_X_SIZE && yd >= NodeContainer.MIN_Y_SIZE && yd <= NodeContainer.MAX_Y_SIZE) {
-                    szenario.coordinateKnot(kc, l_bound + xd / 2, u_bound + yd / 2, xd, yd, STANDARD_PID);
+                    szenario.moveNodeContainer(kc, l_bound + xd / 2, u_bound + yd / 2, xd, yd, STANDARD_PID);
                 }
                 break;
             default:

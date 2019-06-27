@@ -122,12 +122,12 @@ public abstract class Edge extends ModelElement {
     /**
      * @param startElement
      * @param endElement
-     * @param registerInKnots
+     * @param registerInNodes
      */
-    public void setNodes(final ModelElement startElement, final ModelElement endElement, final boolean registerInKnots) {
+    public void setNodes(final ModelElement startElement, final ModelElement endElement, final boolean registerInNodes) {
         this.startElement = startElement;
         this.endElement = endElement;
-        if (registerInKnots) {
+        if (registerInNodes) {
             if (startElement != null) {
                 startElement.addEdge(this);
             }

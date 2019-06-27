@@ -476,21 +476,21 @@ public class Calculator {
             direction = st.nextToken();
         }
 
-        Edge kante = (Edge) me;
+        Edge edge = (Edge) me;
         BigDecimal refVg = BigDecimal.ZERO;
         ModelElement elementWithUserField = null;
         // Wenn es sich um eine Teil-von-Beziehung handelt
-        if (HasPartEdge.class.isAssignableFrom(kante.getClass()) && direction != null) {
-            HasPartEdge hasPartEdge = (HasPartEdge) kante;
+        if (HasPartEdge.class.isAssignableFrom(edge.getClass()) && direction != null) {
+            HasPartEdge hasPartEdge = (HasPartEdge) edge;
             if (UserField.DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
                 elementWithUserField = hasPartEdge.getParent();
             } else if (UserField.DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {
                 elementWithUserField = hasPartEdge.getPart();
             }
         } else { // Wenn es sich um keine Teil-Von-Beziehung handelt
-            elementWithUserField = kante.getStart();
+            elementWithUserField = edge.getStart();
             if (elementWithUserField.getClass() != elementClass) {
-                elementWithUserField = kante.getEnd();
+                elementWithUserField = edge.getEnd();
             }
         }
         if (elementWithUserField != null && elementWithUserField.getClass() == elementClass) {
@@ -522,16 +522,16 @@ public class Calculator {
      * @return
      */
     public static final List<Edge> getEdges(final ModelElement me, final Class<? extends ModelElement> elemClass, final Class<? extends Edge> edgeClass, final String direction) {
-        List<Edge> kanten = null;
+        List<Edge> edges = null;
         //Alle Kanten mit der richtigen Richtung holen
         if (UserField.DIRECTION_FROM_WHOLE_TO_PART.equals(direction)) {
-            kanten = me.getEdgesTo(elemClass, edgeClass);
+            edges = me.getEdgesTo(elemClass, edgeClass);
         } else if (UserField.DIRECTION_FROM_PART_TO_WHOLE.equals(direction)) {
-            kanten = me.getEdgesFrom(elemClass, edgeClass);
+            edges = me.getEdgesFrom(elemClass, edgeClass);
         } else {
-            kanten = me.getEdgesWith(elemClass, edgeClass);
+            edges = me.getEdgesWith(elemClass, edgeClass);
         }
-        return kanten;
+        return edges;
     }
 
     /**
@@ -561,10 +561,10 @@ public class Calculator {
         }
         Class<? extends ModelElement> conntectedElementClass = userField.getTargetClass().asSubclass(ModelElement.class);
 
-        List<Edge> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
+        List<Edge> edges = getEdges(me, conntectedElementClass, edgeClass, direction);
 
         //Keine Verbindung zu anderen Elementen
-        if (kanten.size() == 0) {
+        if (edges.size() == 0) {
             return UserField.NO_ELEMENTS_CONNECTED;
         }
 
@@ -574,8 +574,8 @@ public class Calculator {
         }
 
         //für jede dieser Kanten
-        for (int j = 0; j < kanten.size(); j++) {
-            Edge k = kanten.get(j);
+        for (int j = 0; j < edges.size(); j++) {
+            Edge k = edges.get(j);
             //das verbundene Element holen
             ModelElement connectedElement = k.getStart();
             if (me == connectedElement) {
@@ -672,21 +672,21 @@ public class Calculator {
         Class<? extends ModelElement> conntectedElementClass = userField.getTargetClass().asSubclass(ModelElement.class);
 
         //Alle Kanten mit der richtigen Richtung holen
-        List<Edge> kanten = getEdges(me, conntectedElementClass, edgeClass, direction);
+        List<Edge> edges = getEdges(me, conntectedElementClass, edgeClass, direction);
 
         //Keine Verbindung zu anderen Elementen
-        if (kanten.size() == 0) {
+        if (edges.isEmpty()) {
             return UserField.NO_ELEMENTS_CONNECTED;
         }
 
         String result = ZERO;
         //für jede dieser Kanten
-        for (int j = 0; j < kanten.size(); j++) {
-            Edge k = kanten.get(j);
+        for (int j = 0; j < edges.size(); j++) {
+            Edge edge = edges.get(j);
             //das verbundene Element holen
-            ModelElement connectedElement = k.getStart();
+            ModelElement connectedElement = edge.getStart();
             if (me == connectedElement) {
-                connectedElement = k.getEnd();
+                connectedElement = edge.getEnd();
             }
             //den Eingabewert des aufzusummierenden Feldes holen
             String value = userField.getValue(connectedElement);

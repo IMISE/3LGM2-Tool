@@ -47,7 +47,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
 
     private final JScrollPane jsp;
     private final JPanel flaeche;
-    private final NodeContainer[] knoten;
+    private final NodeContainer[] nodeContainers;
     private final JButton[] form_trigger, farbe_trigger, font_trigger;
     private final JPopupMenu farbe_menu, form_menu, font_menu;
     private JMenuItem[] farbe;
@@ -83,7 +83,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
         wieviele = graphViewDefinition.getMetaModelSpecificPaintableNodes().size();
 
         insets = new Insets(0, 0, 0, 0);
-        knoten = new NodeContainer[wieviele];
+        nodeContainers = new NodeContainer[wieviele];
         form_trigger = new JButton[wieviele];
         farbe_trigger = new JButton[wieviele];
         font_trigger = new JButton[wieviele];
@@ -168,7 +168,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
                 }
                 int index = counter + offset;
                 NodeContainer kc = new NodeContainer((Node) metaModel.createElement(paintbaleClass, true), mydoc);
-                knoten[index] = kc;
+                nodeContainers[index] = kc;
                 ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
                 kc.getNode().setName(elementsNameBuilder.getDisplayableName(paintbaleClass));
                 kc.setCoordinates(akt_x + 90, akt_y + 50, 100, 60);
@@ -261,24 +261,24 @@ public class LayoutEditor extends JDialog implements ActionListener {
             if (e.getSource() == farbe_trigger[c]) {
                 setAktuelles(c);
 
-                Color oldColor = my_mapping.getStandardBackGroundColor(knoten[aktuelles]);
+                Color oldColor = my_mapping.getStandardBackGroundColor(nodeContainers[aktuelles]);
                 Color newColor = JColorChooser.showDialog(new JFrame(), getResString("farbe_ausw"), oldColor);
 
                 if (newColor == null) {
                     return;
                 }
-                my_mapping.setStandardBackGroundColor(knoten[aktuelles].getNode().getClass(), newColor);
+                my_mapping.setStandardBackGroundColor(nodeContainers[aktuelles].getNode().getClass(), newColor);
                 flaeche.repaint();
             }
             if (e.getSource() == form_trigger[c]) {
                 setAktuelles(c);
-                form_menu.show(flaeche, knoten[c].getX() - 50, knoten[c].getY() + 45);
+                form_menu.show(flaeche, nodeContainers[c].getX() - 50, nodeContainers[c].getY() + 45);
             }
             if (e.getSource() == font_trigger[c]) {
                 setAktuelles(c);
-                Font font = EasyDialogAccess.getFontByChooser(this, knoten[aktuelles].getFont());
+                Font font = EasyDialogAccess.getFontByChooser(this, nodeContainers[aktuelles].getFont());
                 if (font != null) {
-                    my_mapping.setStandardFont(knoten[aktuelles].getNode().getClass(), font);
+                    my_mapping.setStandardFont(nodeContainers[aktuelles].getNode().getClass(), font);
                 }
                 flaeche.repaint();
             }
@@ -286,7 +286,7 @@ public class LayoutEditor extends JDialog implements ActionListener {
 
         if (e.getActionCommand().startsWith("form ")) {
             try {
-                my_mapping.setStandardForm(knoten[aktuelles].getNode().getClass(), GraphElementLayout.SHAPE.valueOf(e.getActionCommand().substring("form ".length())));
+                my_mapping.setStandardForm(nodeContainers[aktuelles].getNode().getClass(), GraphElementLayout.SHAPE.valueOf(e.getActionCommand().substring("form ".length())));
                 flaeche.repaint();
             } catch (Exception ne) {
                 Log.show(Log.ERROR, getResString("Fehler beim Form setzen."), ne);
@@ -299,12 +299,12 @@ public class LayoutEditor extends JDialog implements ActionListener {
      */
     public void mypaint(final Graphics2D g) {
         for (int c = 0; c < wieviele; c++) {
-            if (knoten[c] == null) {
+            if (nodeContainers[c] == null) {
                 continue;
             }
-            knoten[c].setFont(my_mapping.getStandardFont(knoten[c]));
-            knoten[c].refreshText();
-            knoten[c].paint(g);
+            nodeContainers[c].setFont(my_mapping.getStandardFont(nodeContainers[c]));
+            nodeContainers[c].refreshText();
+            nodeContainers[c].paint(g);
         }
     }
 

@@ -18,9 +18,9 @@ import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 public class TreeRenderer extends DefaultTreeCellRenderer {
 
-    static ImageIcon traceIcon_up = Tool3lgmConstants.getIcon("trace2.gif");
-    static ImageIcon traceIcon_down = Tool3lgmConstants.getIcon("trace.gif");
-    static ImageIcon traceIcon_both = Tool3lgmConstants.getIcon("trace1.gif");
+    static ImageIcon edgeIcon_up = Tool3lgmConstants.getIcon("trace2.gif");
+    static ImageIcon edgeIcon_down = Tool3lgmConstants.getIcon("trace.gif");
+    static ImageIcon edgeIcon_both = Tool3lgmConstants.getIcon("trace1.gif");
     static ImageIcon rectIcon = Tool3lgmConstants.getIcon("knot.gif");
     static ImageIcon circleIcon = Tool3lgmConstants.getIcon("circle.gif");
     static ImageIcon triangleIcon = Tool3lgmConstants.getIcon("triangle.gif");

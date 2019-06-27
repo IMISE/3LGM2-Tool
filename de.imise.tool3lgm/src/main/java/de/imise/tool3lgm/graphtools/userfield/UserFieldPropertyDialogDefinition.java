@@ -48,7 +48,7 @@ public class UserFieldPropertyDialogDefinition {
         boolean bulkMode = gdcoll.isBulkMode();
         gdcoll.setBulkMode(true);
         gdcoll.setInteractiveMode(false);
-        NodeContainer nc = gdcoll.getMainGraphDocument().createKnotenWithContainer(elementClass, TransactionManager.STANDARD_PID);
+        NodeContainer nc = gdcoll.getMainGraphDocument().createNodeAndContainer(elementClass, TransactionManager.STANDARD_PID);
         ModelElement me = nc.getElement();
         ElementPropertyDialog propertyDialogTemplate = me.getPropertyDialog();
         gdcoll.delete(me);

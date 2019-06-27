@@ -206,7 +206,7 @@ public class KommProzessPanel extends ElementDialogPanel {
         try {
             LGMAction showTeilmodelleAction = getShowTeilModelleAction(this);
             LGMAction enumerateSchnittstellenAction = getRefreshHighlightsAndSpecialInfoAction(this, _getResString("schnitt_nummern"));
-            LGMAction enumerateKantenAction = getRefreshHighlightsAndSpecialInfoAction(this, _getResString("kanten_nummern"));
+            LGMAction enumerateEdgesAction = getRefreshHighlightsAndSpecialInfoAction(this, _getResString("kanten_nummern"));
             LGMAction writeObjekttypenAction = getRefreshHighlightsAndSpecialInfoAction(this, _getResString("Objekttyp_p"));
             LGMAction showKonfsAction = getRefreshHighlightsAndSpecialInfoAction(this, _getResString("Anwendungsbaustein_p"));
             LGMAction highlightAllCommElementsAction = getRefreshHighlightsAndSpecialInfoAction(this, _getResString("alles_hervorheben"));
@@ -220,7 +220,7 @@ public class KommProzessPanel extends ElementDialogPanel {
 
             enumerateEdgesCheck = new JCheckBox();
             enumerateEdgesCheck.setSelected(enumerateEdges);
-            enumerateEdgesCheck.setAction(enumerateKantenAction);
+            enumerateEdgesCheck.setAction(enumerateEdgesAction);
 
             writeObjectTypesCheck = new JCheckBox();
             writeObjectTypesCheck.setSelected(writeObjectTypes);
@@ -614,18 +614,18 @@ public class KommProzessPanel extends ElementDialogPanel {
                     // specialInfoTargetContainer, prozessC.get3LGMLayout());
                 }
 
-                List<Edge> kantenListe = selectedStep.getKommProzessKanten();
-                List<ElementContainer> kantenContainerListe = doc.getElementContainer(kantenListe);
+                List<Edge> edges = selectedStep.getKommProzessEdges();
+                List<ElementContainer> edgeContainers = doc.getElementContainer(edges);
                 if (enumerateEdges) {
-                    allSpecialInfoTargetContainer.addAll(kantenContainerListe);
+                    allSpecialInfoTargetContainer.addAll(edgeContainers);
                     // ElementContainer.writeNumberListToTartgets(selectedStep,
                     // kantenContainerListe, prozessC.get3LGMLayout());
                 }
 
                 if (writeObjectTypes) {
                     String ot = selectedStep.getObjektTyp().getClearName();
-                    for (ElementContainer kc : kantenContainerListe) {
-                        kc.addSpecialInfoToThisContainer(new AdditionalLabelTextGenerator(selectedStep, prozessC.get3LGMLayout()), ot, SwingConstants.SOUTH, true);
+                    for (ElementContainer ec : edgeContainers) {
+                        ec.addSpecialInfoToThisContainer(new AdditionalLabelTextGenerator(selectedStep, prozessC.get3LGMLayout()), ot, SwingConstants.SOUTH, true);
                     }
                 }
 
@@ -658,7 +658,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                     highlight.addAll(doc.getElementContainer(selectedStep.getStartAufgabeKonfBausteine()));
                     highlight.addAll(doc.getElementContainer(selectedStep.getEndAufgabeKonfBausteine()));
                 }
-                highlight.addAll(doc.getElementContainer(selectedStep.getKommProzessKanten()));
+                highlight.addAll(doc.getElementContainer(selectedStep.getKommProzessEdges()));
 
                 for (int j = 0; j < highlight.size(); j++) {
                     // ElementContainer hc =

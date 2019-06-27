@@ -421,7 +421,7 @@ public class SimpleMetaPathCreator {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(currentPathStepIndex);
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
             //wenn die Kantenklasse abstract ist
-            if (MetaModel.isAbstract(edgeClass)) {
+            if (MetaModel.isAbstract(edgeClass)) { //hier muss man auch testen, ob die Zwischenklassen abstract sind und durch alle Varianten nichtabstrakter Zwischenklassen ersetzen
                 //Start- und Edklasse des aktuellen Pfadschrittes aus dem originalen MetaPfad ermitteln
                 Class<? extends ModelElement> pathStepConnectingStartClass = currentPathStepIndex == 0 ? simpleMetaPath.getStartClass() : simpleMetaPath.getPathStepElementClass(currentPathStepIndex - 1);
                 Class<? extends ModelElement> pathStepConnectingEndClass = simpleMetaPath.getPathStepElementClass(currentPathStepIndex);

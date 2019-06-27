@@ -17,6 +17,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.log.Log;
@@ -64,17 +65,19 @@ public class LGMActionLibrary {
                 if (paths != null) {
                     panel.removeHighLights();
                     for (int i = 0; i < paths.length; i++) {
-                        LGMTreeNode node = (LGMTreeNode) paths[i].getLastPathComponent();
-                        if (!(node.getUserObject() instanceof String)) {
-                            if (node.isSelectable()) {
+                        LGMTreeNode treeNode = (LGMTreeNode) paths[i].getLastPathComponent();
+                        if (!(treeNode.getUserObject() instanceof String)) {
+                            if (treeNode.isSelectable()) {
                                 // das hier muss sein, falls im Baum ein Element
                                 // keinen Container im aktuellen Doc besitzt
-                                ElementContainer ec = (ElementContainer) node.getUserObject();
-                                ElementContainer knotCont = ec.getElement().getContainer(panel.getGraphDocument());
-                                if (knotCont != null) {
+                                ElementContainer ec = (ElementContainer) treeNode.getUserObject();
+                                ModelElement me = ec.getElement();
+                                GraphDocument doc = panel.getGraphDocument();
+                                ElementContainer docEc = me.getContainer(doc);
+                                if (docEc != null) {
                                     // highlight ist eine Container-Eigenschaft
-                                    panel.addHighlight(knotCont);
-                                    knotCont.setHighLight(true);
+                                    panel.addHighlight(docEc);
+                                    docEc.setHighLight(true);
                                 }
                                 // selected ist eine Container-Eigenschaft
                                 panel.getGraphDocument().addToSelection(ec, panel.getDialog().getTransactionID());

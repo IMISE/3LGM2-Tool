@@ -201,8 +201,8 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
     @Override
     public void endDocument() throws SAXException {
         for (Szenario szen : collection.getSzenarios()) {
-            szen.initKnotContainers();
-            szen.initTraceContainers();
+            szen.initNodeContainers();
+            szen.initEdgeContainers();
             //			collection.getSzenario(i).refreshSpecialInfoTargets();
         }
         doc.deselectAll(true);
@@ -773,7 +773,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
             } else if (qName.equals("szenario")) {
                 for (BendpointContainer benpointContainer : hashToSzenarioBendpointContainer.values()) {
                     Bendpoint bendpoint = benpointContainer.getBendpoint();
-                    String bendpointEdgeHash = bendpoint.getKantenHash();
+                    String bendpointEdgeHash = bendpoint.getEdgeHash();
 
                     if (isCopyAndPaste()) {
                         bendpointEdgeHash = oldToNewHashString.get(bendpointEdgeHash);
@@ -858,7 +858,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     for (ElementContainer ec : hashToMainDocContainer.values()) {
                         if (ec instanceof BendpointContainer) {
                             Bendpoint bendpoint = ((BendpointContainer) ec).getBendpoint();
-                            bendpoint.putXMLFieldString("kanteHash", oldToNewHashString.get(bendpoint.getKantenHash()));
+                            bendpoint.putXMLFieldString("kanteHash", oldToNewHashString.get(bendpoint.getEdgeHash()));
                         }
                     }
                 }

@@ -166,7 +166,7 @@ public final class GDCollectionImExportHandler {
                 LayerContainer importLayerContainer = importDoc.getLayer(ModelConstants.LAYERS[i]);
                 newSzenario.getLayer(ModelConstants.LAYERS[i]).set3LGMLayout(importLayerContainer.get3LGMLayout());
                 for (NodeContainer importKC : importLayerContainer.getGraphNodeContainers()) {
-                    ModelElement element = mainDoc.findKnotenCoded(importKC.getElement().getHashString());
+                    ModelElement element = mainDoc.findNodeCoded(importKC.getElement().getHashString());
                     ElementContainer container = element.createContainer(newSzenario);
                     container.set3LGMLayout(importKC.get3LGMLayout());
                     container.setE3LGMLayout(importKC.getE3LGMLayout());
@@ -177,7 +177,7 @@ public final class GDCollectionImExportHandler {
                 }
 
                 for (EdgeContainer importKC : importLayerContainer.getEdgeContainers()) {
-                    ModelElement element = mainDoc.findKanteCoded(importKC.getElement().getHashString());
+                    ModelElement element = mainDoc.findEdgeCoded(importKC.getElement().getHashString());
                     if (element == null) {
                         continue;
                     }
@@ -193,7 +193,7 @@ public final class GDCollectionImExportHandler {
 
                 for (BendpointContainer importKC : importLayerContainer.getBendpointContainers()) {
                     ModelElement element = mainDoc.findKnickpunktCoded(importKC.getElement().getHashString());
-                    EdgeContainer kc = newSzenario.findEdgeContainerCoded(((Bendpoint) element).getKantenHash());
+                    EdgeContainer kc = newSzenario.findEdgeContainerCoded(((Bendpoint) element).getEdgeHash());
                     if (kc == null) {
                         continue;
                     }

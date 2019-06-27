@@ -191,7 +191,7 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
                 int h = largetsDimension.height;
                 int x = largetsDimension.x + (w + vGap) * c;
                 int y = largetsDimension.y + (h + hGap) * r;
-                doc.coordinateKnot(ec, x, y, w, h, pid);
+                doc.moveNodeContainer(ec, x, y, w, h, pid);
             }
         }
         doc.finish_transaction(pid);

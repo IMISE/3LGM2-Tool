@@ -1165,14 +1165,14 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                     // wenn rechts etwas selektiert war
                     if (selPath != null) {
                         // den selektierten Node ermitteln
-                        LGMTreeNode node = (LGMTreeNode) selPath.getLastPathComponent();
+                        LGMTreeNode treeNode = (LGMTreeNode) selPath.getLastPathComponent();
                         // wenn es sich bei dem rechts selektierten Node
                         // um eine Aufgabe handelt
-                        if (node.getUserObject() instanceof NodeContainer) {
+                        if (treeNode.getUserObject() instanceof NodeContainer) {
                             // seinen Container holen (diese muessen links
                             // im Baum geaddet werden)
-                            NodeContainer knot = (NodeContainer) node.getUserObject();
-                            if (knot.getElement() instanceof Aufgabe) {
+                            NodeContainer nc = (NodeContainer) treeNode.getUserObject();
+                            if (nc.getElement() instanceof Aufgabe) {
                                 // wenn links was selektiert ist, dann muss
                                 // die naechste Aufgabe ueber bzw. vor der
                                 // selektierten eingefuegt werden
@@ -1181,12 +1181,12 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                                 // wenn links etwas selektiert war
                                 if (selPath != null) {
                                     nothingSelected = false;
-                                    node = (LGMTreeNode) selPath.getLastPathComponent();
+                                    treeNode = (LGMTreeNode) selPath.getLastPathComponent();
                                     // prüfen, ob eine Aufgabe selektiert ist
-                                    if (node.getUserObject() instanceof NodeContainer && ((NodeContainer) node.getUserObject()).getElement() instanceof Aufgabe) {
+                                    if (treeNode.getUserObject() instanceof NodeContainer && ((NodeContainer) treeNode.getUserObject()).getElement() instanceof Aufgabe) {
                                         int selRow = targetTree.getRowForPath(selPath);
-                                        int index = lmodel.getIndexOfChild(lroot, node);
-                                        gdcoll.link(PrzAufVerbindung.class, modelElement, knot.getElement(), index, GDCommands.INVALID_EDGE_INDEX, dialog.getTransactionID());
+                                        int index = lmodel.getIndexOfChild(lroot, treeNode);
+                                        gdcoll.link(PrzAufVerbindung.class, modelElement, nc.getElement(), index, GDCommands.INVALID_EDGE_INDEX, dialog.getTransactionID());
                                         // ((NodeContainer)modelElement.getContainer(doc)).addSpecialInfoTarget(index,knot);
                                         selRow++;
                                         while (targetTree.getPathForRow(selRow).getPathCount() != 2) {
@@ -1202,7 +1202,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                                     // es wird eine neue ProzessKante
                                     // angelegt, aber der rechte Baum
                                     // braucht nicht aktualisiert werden
-                                    gdcoll.link(PrzAufVerbindung.class, modelElement, knot.getElement(), modelElement.getEdgesCount(), GDCommands.INVALID_EDGE_INDEX, dialog.getTransactionID());
+                                    gdcoll.link(PrzAufVerbindung.class, modelElement, nc.getElement(), modelElement.getEdgesCount(), GDCommands.INVALID_EDGE_INDEX, dialog.getTransactionID());
                                     targetTree.scrollRowToVisible(targetTree.getRowCount() - 1);
                                 }
                             }

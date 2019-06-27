@@ -635,8 +635,8 @@ public abstract class ModelElement extends UserFieldTarget {
     /**
      * Fügt diesem Node in der List connections an der Position pos die Edge kante hinzu.
      */
-    public boolean insertEdge(final Edge kante, int pos) {
-        if (kante == null || edges != null && edges.contains(kante)) {
+    public boolean insertEdge(final Edge edge, int pos) {
+        if (edge == null || edges != null && edges.contains(edge)) {
             return false;
         }
         if (edges == null) {
@@ -645,7 +645,7 @@ public abstract class ModelElement extends UserFieldTarget {
         if (pos < 0 || pos > edges.size()) {
             pos = edges.size();
         }
-        edges.add(pos, kante);
+        edges.add(pos, edge);
         return true;
     }
 
@@ -1041,26 +1041,26 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit allen gefundenen Kanten
      */
     private final List<Edge> getEdgesWith(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass, final Direction direction) {
-        List<Edge> l_connections = new ArrayList<>();
-        for (Edge o_kante : getEdges()) {
-            if (edgeClass != null && !edgeClass.isAssignableFrom(o_kante.getClass())) {
+        List<Edge> edges = new ArrayList<>();
+        for (Edge edge : getEdges()) {
+            if (edgeClass != null && !edgeClass.isAssignableFrom(edge.getClass())) {
                 continue;
             }
             if (direction == FORWARD) {
-                if (o_kante.getStart() == this && elementClass.isAssignableFrom(o_kante.getEnd().getClass())) {
-                    l_connections.add(o_kante);
+                if (edge.getStart() == this && elementClass.isAssignableFrom(edge.getEnd().getClass())) {
+                    edges.add(edge);
                 }
             } else if (direction == BACKWARD) {
-                if (o_kante.getEnd() == this && elementClass.isAssignableFrom(o_kante.getStart().getClass())) {
-                    l_connections.add(o_kante);
+                if (edge.getEnd() == this && elementClass.isAssignableFrom(edge.getStart().getClass())) {
+                    edges.add(edge);
                 }
             } else {
-                if (o_kante.getStart() == this && elementClass.isAssignableFrom(o_kante.getEnd().getClass()) || o_kante.getEnd() == this && elementClass.isAssignableFrom(o_kante.getStart().getClass())) {
-                    l_connections.add(o_kante);
+                if (edge.getStart() == this && elementClass.isAssignableFrom(edge.getEnd().getClass()) || edge.getEnd() == this && elementClass.isAssignableFrom(edge.getStart().getClass())) {
+                    edges.add(edge);
                 }
             }
         }
-        return l_connections;
+        return edges;
     }
 
     /**
@@ -1648,11 +1648,11 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit allen verbundenen <code>ModelElement</code>s oder <code>ElementContainer</code>n
      */
     private final List<?> getConnected(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean container, final boolean alphabetical) {
-        List<Object> knoten = new ArrayList<>(getEdgesCount());
+        List<Object> connectedElements = new ArrayList<>(getEdgesCount());
 
         if (doc == null && container) {
             System.err.println("Can't find ElementContainer with an null-GraphDocument");
-            return knoten;
+            return connectedElements;
         }
 
         for (Edge edge : getEdges()) {
@@ -1660,7 +1660,7 @@ public abstract class ModelElement extends UserFieldTarget {
                 continue;
             }
 
-            ModelElement knot = null;
+            ModelElement connected = null;
             if (direction != null) {
                 switch (direction) {
                 case FORWARD:
@@ -1670,21 +1670,21 @@ public abstract class ModelElement extends UserFieldTarget {
                         if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                             switch (((DoubleMeaningEdge) edge).getConnectionState()) {
                             case FORWARD:
-                                knot = edge.isEnd(this) ? null : edge.getEnd();
+                                connected = edge.isEnd(this) ? null : edge.getEnd();
                                 break;
                             case BACKWARD:
-                                knot = edge.isEnd(this) ? edge.getStart() : null;
+                                connected = edge.isEnd(this) ? edge.getStart() : null;
                                 break;
                             default:
-                                knot = edge.getOther(this);
+                                connected = edge.getOther(this);
                             }
                         } else {
                             //bei allen anderen gerichteten Kanten wird hier immer in Vorwärts-Richtung geschaut
-                            knot = edge.isEnd(this) ? null : edge.getEnd();
+                            connected = edge.isEnd(this) ? null : edge.getEnd();
                         }
                     } else {
                         //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
-                        knot = edge.getOther(this);
+                        connected = edge.getOther(this);
                     }
                     break;
                 case BACKWARD:
@@ -1694,55 +1694,55 @@ public abstract class ModelElement extends UserFieldTarget {
                         if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                             switch (((DoubleMeaningEdge) edge).getConnectionState()) {
                             case FORWARD:
-                                knot = edge.isEnd(this) ? edge.getStart() : null;
+                                connected = edge.isEnd(this) ? edge.getStart() : null;
                                 break;
                             case BACKWARD:
-                                knot = edge.isEnd(this) ? null : edge.getEnd();
+                                connected = edge.isEnd(this) ? null : edge.getEnd();
                                 break;
                             default:
-                                knot = edge.getOther(this);
+                                connected = edge.getOther(this);
                             }
                         } else {
                             //bei allen anderen gerichteten Kanten wird hier immer in Rückwärts-Richtung geschaut
-                            knot = edge.isStart(this) ? null : edge.getStart();
+                            connected = edge.isStart(this) ? null : edge.getStart();
                         }
                     } else {
                         //bei allen ungerichteten Kanten wird davon ausgegangen, dass sie einfach immer beide Richtungen verbinden
-                        knot = edge.getOther(this);
+                        connected = edge.getOther(this);
                     }
                     break;
                 }
             } else {
-                knot = edge.getEnd() == this ? edge.getStart() : edge.getEnd();
+                connected = edge.getEnd() == this ? edge.getStart() : edge.getEnd();
             }
 
-            if (knot == null) {
+            if (connected == null) {
                 continue;
             }
-            if (!searchElementClass.isAssignableFrom(knot.getClass())) {
+            if (!searchElementClass.isAssignableFrom(connected.getClass())) {
                 continue;
             }
             if (container) {
-                ElementContainer ec = knot.getContainer(knot.isUnique() ? doc.getCollection().getMainGraphDocument() : doc);
+                ElementContainer ec = connected.getContainer(connected.isUnique() ? doc.getCollection().getMainGraphDocument() : doc);
                 if (ec != null) {
                     if (alphabetical) {
-                        Alphabetical.insert(knoten, ec);
+                        Alphabetical.insert(connectedElements, ec);
                     } else {
-                        knoten.add(ec);
+                        connectedElements.add(ec);
                     }
                 }
             } else {
-                if (doc != null && knot.getContainer(knot.isUnique() ? doc.getCollection().getMainGraphDocument() : doc) == null) {
+                if (doc != null && connected.getContainer(connected.isUnique() ? doc.getCollection().getMainGraphDocument() : doc) == null) {
                     continue;
                 }
                 if (alphabetical) {
-                    Alphabetical.insert(knoten, knot);
+                    Alphabetical.insert(connectedElements, connected);
                 } else {
-                    knoten.add(knot);
+                    connectedElements.add(connected);
                 }
             }
         }
-        return knoten;
+        return connectedElements;
     }
 
     /**

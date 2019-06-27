@@ -461,11 +461,11 @@ public class ShortestCommunicationPathFinderOld {
 
             for (Direction direction : Direction.values()) {
 
-                List<ModelElement> ntAndDtOfKante = commLink.getConnectedElements(EreignisNachrichtenTyp.class, mainDoc, KommbezEtntVerbindung.class, direction, false);
-                ntAndDtOfKante.addAll(commLink.getConnectedElements(EreignisDokumentenTyp.class, mainDoc, KommbezEtntVerbindung.class, direction, false));
+                List<ModelElement> ntAndDtOfEdge = commLink.getConnectedElements(EreignisNachrichtenTyp.class, mainDoc, KommbezEtntVerbindung.class, direction, false);
+                ntAndDtOfEdge.addAll(commLink.getConnectedElements(EreignisDokumentenTyp.class, mainDoc, KommbezEtntVerbindung.class, direction, false));
 
                 // für jede dieser EtNt-Kombinationen
-                for (ModelElement nt : ntAndDtOfKante) {
+                for (ModelElement nt : ntAndDtOfEdge) {
                     List<ModelElement> ntOfEtnt = nt.getConnectedElements(EtntNatVerbindung.class);
                     ntOfEtnt.addAll(nt.getConnectedElements(EtntDotVerbindung.class));
                     for (ModelElement nachrichtentyp : ntOfEtnt) {

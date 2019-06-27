@@ -1019,27 +1019,27 @@ public final class GDCollection extends UserFieldTarget {
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //ANFANG ADD //
     /**
-     * @param szenHashString
-     * @param kanteHashString
-     * @param bendpointHashString
+     * @param szenHash
+     * @param edgeHash
+     * @param bendpointHash
      * @param x
      * @param y
      * @param bendpointIndex
      *            Index des Knickpunktes auf dem {@link EdgeContainer}
      * @param pid
      */
-    public final BendpointContainer insertBendingPoint(final String szenHashString, final String kanteHashString, final String bendpointHashString, final int x, final int y, int bendpointIndex, final int pid) {
-        GraphDocument szen = getGraphDocumentCoded(szenHashString);
+    public final BendpointContainer insertBendingPoint(final String szenHash, final String edgeHash, final String bendpointHash, final int x, final int y, int bendpointIndex, final int pid) {
+        GraphDocument szen = getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
             return null;
         }
-        BendpointContainer bendpointContainer = szen.findBendpointContainerCoded(bendpointHashString);
+        BendpointContainer bendpointContainer = szen.findBendpointContainerCoded(bendpointHash);
         if (bendpointContainer != null) {
             return bendpointContainer;
         }
         EdgeContainer edgeContainer = null;
-        if (!isNullOrEmpty(kanteHashString)) {
-            edgeContainer = szen.findEdgeContainerCoded(kanteHashString);
+        if (!isNullOrEmpty(edgeHash)) {
+            edgeContainer = szen.findEdgeContainerCoded(edgeHash);
         }
         if (edgeContainer != null) {
             szen.select(edgeContainer, pid);
@@ -1052,15 +1052,15 @@ public final class GDCollection extends UserFieldTarget {
         Bendpoint bendpoint = new Bendpoint();
         bendpoint.setName(doc.getNextNewName(bendpoint.getClass()));
         bendpointContainer = new BendpointContainer(bendpoint, szen);
-        if (!isNullOrEmpty(bendpointHashString)) {
-            bendpointContainer.getNode().setHashString(bendpointHashString);
+        if (!isNullOrEmpty(bendpointHash)) {
+            bendpointContainer.getNode().setHashString(bendpointHash);
         }
         szen.start_transaction(pid);
         if (bendpointIndex == INVALID_BENDPOINT_INDEX) {
             bendpointIndex = edgeContainer.getBendpointInsertIndex(x, y);
         }
         //[0] = SzenHash, [1] = HashString der Edge, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
-        szen.addRedoCommand(MODEL_ACTION_INSERT_BENDING_POINT + " " + szenHashString + " " + edgeContainer.getHashString() + " " + bendpoint.getHashString() + " " + x + " " + y + " " + bendpointIndex, pid);
+        szen.addRedoCommand(MODEL_ACTION_INSERT_BENDING_POINT + " " + szenHash + " " + edgeContainer.getHashString() + " " + bendpoint.getHashString() + " " + x + " " + y + " " + bendpointIndex, pid);
         szen.addUndoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + bendpoint.getHashString(), pid);
         // den Layer bestimmen auf dem der Knickpunkt eingefügt werden soll (= der Layer der Edge)
         int layerNumber = edgeContainer.getElement().layerFor();
@@ -1089,7 +1089,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      * @return
      */
-    public NodeContainer createKnotenWithContainer(final Class<? extends Node> elementClass, final String name, final String description, final String hashString, final int pid) {
+    public NodeContainer createNodeAndContainer(final Class<? extends Node> elementClass, final String name, final String description, final String hashString, final int pid) {
         //Knickpunkte kann man über diese Funktion nicht anlegen
         if (Bendpoint.class.isAssignableFrom(elementClass)) {
             return null;
@@ -1172,7 +1172,7 @@ public final class GDCollection extends UserFieldTarget {
                 } else {
                     name = getElementsNameBuilder().getDisplayableName(subType) + " " + getResString("fuer") + " " + me.getName();
                 }
-                ModelElement skC = createKnotenWithContainer(subType.asSubclass(Node.class), name, "", null, pid).getElement();
+                ModelElement skC = createNodeAndContainer(subType.asSubclass(Node.class), name, "", null, pid).getElement();
                 link(subTypeEdgeClass, me, skC, pid);
                 connectedSubTypes.add(skC);
             }
@@ -1421,36 +1421,36 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * @param knothash1
-     * @param knothash2
+     * @param nodehash1
+     * @param nodehash2
      * @param edgeIndex
      * @param pid
      */
-    public void unlink(final String knothash1, final String knothash2, final int edgeIndex, final int pid) {
-        unlink(knothash1, knothash2, null, edgeIndex, pid);
+    public void unlink(final String nodehash1, final String nodehash2, final int edgeIndex, final int pid) {
+        unlink(nodehash1, nodehash2, null, edgeIndex, pid);
     }
 
     /**
-     * @param knothash1
-     * @param knothash2
+     * @param nodehash1
+     * @param nodehash2
      * @param edgeClass
      * @param edgeIndex
      * @param pid
      */
-    public void unlink(final String knothash1, final String knothash2, final Class<? extends Edge> edgeClass, final int edgeIndex, final int pid) {
-        ModelElement me1 = doc.findElementCoded(knothash1);
-        ModelElement me2 = doc.findElementCoded(knothash2);
+    public void unlink(final String nodehash1, final String nodehash2, final Class<? extends Edge> edgeClass, final int edgeIndex, final int pid) {
+        ModelElement me1 = doc.findElementCoded(nodehash1);
+        ModelElement me2 = doc.findElementCoded(nodehash2);
         unlink(me1, me2, edgeClass, edgeIndex, pid);
     }
 
     /**
-     * @param k1
-     * @param k2
+     * @param me1
+     * @param me2
      * @param edgeClass
      * @param pid
      */
-    public final void unlink(final ModelElement k1, final ModelElement k2, final Class<? extends Edge> edgeClass, final int pid) {
-        unlink(k1, k2, edgeClass, INVALID_EDGE_INDEX, pid);
+    public final void unlink(final ModelElement me1, final ModelElement me2, final Class<? extends Edge> edgeClass, final int pid) {
+        unlink(me1, me2, edgeClass, INVALID_EDGE_INDEX, pid);
     }
 
     /**
@@ -1647,75 +1647,74 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
         //Das hier ist Hardcore, weil hier das IterableObject zurück auf List gecastet wird-> eigentlich müsste sich Edge selbst irgenwie darum kümmern!
-        List<Edge> kantenVector1 = (List<Edge>) node1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
-        List<Edge> kantenVector2 = (List<Edge>) node2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
-        ModelElement startKnoten, endKnoten;
+        List<Edge> deleteNodeEdges = (List<Edge>) node1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
+        List<Edge> remainNodeEdges = (List<Edge>) node2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
         //für jede Edge vom zu löschenden Node
-        while (kantenVector1.size() > 0) {
-            Edge kante = kantenVector1.get(0);
-            startKnoten = kante.getStart(); //Startknoten der zu übernehmenden Edge merken
-            endKnoten = kante.getEnd(); //Endknoten -"-
+        while (deleteNodeEdges.size() > 0) {
+            Edge egde = deleteNodeEdges.get(0);
+            ModelElement startElement = egde.getStart(); //Startknoten der zu übernehmenden Edge merken
+            ModelElement endElement = egde.getEnd(); //Endknoten -"-
             //zu löschenden Node durch den verbleibenden ersetzen
-            if (startKnoten == node1) {
-                startKnoten = node2;
-                endKnoten = kante.getEnd();
+            if (startElement == node1) {
+                startElement = node2;
+                endElement = egde.getEnd();
             } else {
-                startKnoten = kante.getStart();
-                endKnoten = node2;
+                startElement = egde.getStart();
+                endElement = node2;
             }
-            boolean deleteKante = false;
-            if (startKnoten == endKnoten) {
-                deleteKante = true;
+            boolean deleteEdge = false;
+            if (startElement == endElement) {
+                deleteEdge = true;
             } else {
                 //abfangen, ob im verbleibenden Node an gleicher Stelle schon eine Edge vorkommt, Edge testKante = new Edge(startKnoten, endKnoten, false);
-                Edge testKante;
+                Edge testEdge;
                 try {
-                    testKante = kante.getClass().newInstance();
+                    testEdge = egde.getClass().newInstance();
                 } catch (Exception e) {
                     Log.show(ERROR, getResString("FehlerAllgemein"), e);
                     continue;
                 }
-                testKante.setNodes(startKnoten, endKnoten, false);
+                testEdge.setNodes(startElement, endElement, false);
                 //TODO:AXS: ich glaube hier fliegen Kanten raus, die in unterschiedliche Richtungen zeigen, weil isEqualTo nur die Elemente und die Kanteklasse prüft
-                for (int i = 0; i < kantenVector2.size(); i++) {
+                for (int i = 0; i < remainNodeEdges.size(); i++) {
                     //für jede Edge des verbleibenden Elementes prüfen, ob umzuhängende Edge und eine Edge in
                     // kantenVector2 dieselben Elemente verbindet
-                    if (kantenVector2.get(i).isEqualTo(testKante)) {
-                        deleteKante = true;
+                    if (remainNodeEdges.get(i).isEqualTo(testEdge)) {
+                        deleteEdge = true;
                         break;
                     }
                 }
             }
-            if (deleteKante) { //wenn die Edge doppelt vorkommen würde
-                deleteElement(kante, doc, pid);
+            if (deleteEdge) { //wenn die Edge doppelt vorkommen würde
+                deleteElement(egde, doc, pid);
                 //              doc.removeEdge(kante, pid);//Edge einfach komplett löschen
             } else { //Edge muss umgehängt werden
-                node1.removeEdge(kante); //im zu löschenden Node die Edge entfernen
-                kante.setNodes(startKnoten, endKnoten);//die Edge wirklich an knoten2 binden
+                node1.removeEdge(egde); //im zu löschenden Node die Edge entfernen
+                egde.setNodes(startElement, endElement);//die Edge wirklich an knoten2 binden
             }
         }
         for (Szenario szen : szenarios) {
-            NodeContainer kc1 = (NodeContainer) node1.getContainer(szen);
-            NodeContainer kc2 = (NodeContainer) node2.getContainer(szen);
+            NodeContainer nc1 = (NodeContainer) node1.getContainer(szen);
+            NodeContainer nc2 = (NodeContainer) node2.getContainer(szen);
             // jetzt umhängen aller Container von knoten1 auf knoten2 in allen Teilmodellen
-            if (kc2 == null && kc1 != null) {
+            if (nc2 == null && nc1 != null) {
                 //              szen.removeKnotContainer((NodeContainer) knoten1.getContainer(szen), pid);
                 removeContainerFromSubmodel(node1.getContainer(szen), pid);
-                kc1.setElement(node2);
-                szen.getLayer(node2.layerFor()).add(kc1);
+                nc1.setElement(node2);
+                szen.getLayer(node2.layerFor()).add(nc1);
             }
             NodeContainer nc = null;
-            if (kc2 != null) {
-                nc = kc2;
-            } else if (kc1 != null) {
-                nc = kc1;
+            if (nc2 != null) {
+                nc = nc2;
+            } else if (nc1 != null) {
+                nc = nc1;
             }
             if (nc != null) {
                 szen.createEdgeContainer(nc, szen, false, pid);
                 nc.refreshText();
                 // alle abhängigen Node vor den zusammengeführten stellen
                 szen.start_transaction(TransactionManager.STANDARD_PID, false);
-                szen.moveDependentKnotsUp(nc, TransactionManager.STANDARD_PID, false);
+                szen.moveDependentNodeContainersUp(nc, TransactionManager.STANDARD_PID, false);
                 szen.finish_transaction(TransactionManager.STANDARD_PID, false);
             }
         }
@@ -1992,6 +1991,11 @@ public final class GDCollection extends UserFieldTarget {
      * @param knoten der dessen abhängige Element gefunden werden sollen
      * @return HashSet mit den HashStrings der gefundenen Elementen
      */
+    /**
+     * @param me Element dessen abhängige Elemente gefunden werden sollen
+     * @param elements
+     * @param userFields
+     */
     private void resolveCopyDependencies(final ModelElement me, final List<ModelElement> elements, final Set<UserField> userFields) {
         if (me instanceof Bendpoint) {
             return;
@@ -2000,12 +2004,12 @@ public final class GDCollection extends UserFieldTarget {
             userFields.add(userField);
         }
         if (me instanceof Edge) {
-            for (BendpointContainer kpC : doc.getLayer(me.layerFor()).getBendpointContainers()) {
-                Bendpoint kp = kpC.getBendpoint();
-                String kantenHash = kp.getKantenHash();
-                if (kantenHash != null && kantenHash.equals(me.getHashString())) {
-                    if (!elements.contains(kp)) {
-                        elements.add(kp);
+            for (BendpointContainer bpc : doc.getLayer(me.layerFor()).getBendpointContainers()) {
+                Bendpoint bendpoint = bpc.getBendpoint();
+                String edgeHash = bendpoint.getEdgeHash();
+                if (edgeHash != null && edgeHash.equals(me.getHashString())) {
+                    if (!elements.contains(bendpoint)) {
+                        elements.add(bendpoint);
                     }
                 }
             }
@@ -2021,8 +2025,8 @@ public final class GDCollection extends UserFieldTarget {
                 resolveCopyDependencies(end, elements, userFields);
             }
         }
-        for (Class<? extends ModelElement> elemClass : metaModel.getCopyDependencies(me.getClass())) {
-            for (ElementContainer ec : me.getConnectedContainer(elemClass, doc)) {
+        for (Class<? extends ModelElement> elementClass : metaModel.getCopyDependencies(me.getClass())) {
+            for (ElementContainer ec : me.getConnectedContainer(elementClass, doc)) {
                 ModelElement connected = ec.getElement();
                 if (!elements.contains(connected)) {
                     elements.add(connected);

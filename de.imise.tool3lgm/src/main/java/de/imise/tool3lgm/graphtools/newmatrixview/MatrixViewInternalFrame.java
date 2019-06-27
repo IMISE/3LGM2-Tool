@@ -194,17 +194,17 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
             left_button = true;
         }
 
-        Node rknot = tableModel.getRowKnot(rowHeaderPanel.getRowIndex(e.getY()));
-        Node cknot = tableModel.getColKnot(colHeaderPanel.getColIndex(e.getX()));
+        Node rowNode = tableModel.getRowElement(rowHeaderPanel.getRowIndex(e.getY()));
+        Node colNode = tableModel.getColElement(colHeaderPanel.getColIndex(e.getX()));
 
-        if (rknot == null || cknot == null) {
+        if (rowNode == null || colNode == null) {
             return;
         }
 
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
 
-        mainDoc.select(cknot.getContainer(mainDoc), TransactionManager.STANDARD_PID);
-        Tool3lgm.getContextGenerator().setElementContainer(rknot.getContainer(mainDoc));
+        mainDoc.select(colNode.getContainer(mainDoc), TransactionManager.STANDARD_PID);
+        Tool3lgm.getContextGenerator().setElementContainer(rowNode.getContainer(mainDoc));
         Tool3lgm.getContextGenerator().setElementClicked(true);
         Tool3lgm.getContextGenerator().processMouseEvent(left_button, right_button, cellPanel, e.getX(), e.getY());
         Tool3lgm.getContextGenerator().setElementClicked(false);

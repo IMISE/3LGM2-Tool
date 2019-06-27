@@ -83,14 +83,14 @@ public abstract class SubordinationEdge extends Edge {
     }
 
     @Override
-    public final void setNodes(final ModelElement superElement, final ModelElement subElement, final boolean registerInKnots) {
+    public final void setNodes(final ModelElement superElement, final ModelElement subElement, final boolean registerInNodes) {
         ModelElement start = startElement;
         ModelElement end = endElement;
-        super.setNodes(superElement, subElement, registerInKnots);
+        super.setNodes(superElement, subElement, registerInNodes);
         if (isInCircle()) {
             subElement.removeEdge(this);
             superElement.removeEdge(this);
-            super.setNodes(start, end, registerInKnots);
+            super.setNodes(start, end, registerInNodes);
         }
     }
 

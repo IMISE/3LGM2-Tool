@@ -134,7 +134,7 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      * @return den erzeugten Knoten
      */
     protected Node addNode(final T sourceObject, final Class<? extends Node> nodeClass, final String name, final String description, final String hashString) {
-        NodeContainer nodeContainer = gdcoll.createKnotenWithContainer(nodeClass, name, description, hashString, TransactionManager.STANDARD_PID);
+        NodeContainer nodeContainer = gdcoll.createNodeAndContainer(nodeClass, name, description, hashString, TransactionManager.STANDARD_PID);
         Node node = nodeContainer.getNode();
         sourceInstanceToTargetNode.put(sourceObject, node);
         return node;

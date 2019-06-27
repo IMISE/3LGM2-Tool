@@ -516,14 +516,14 @@ public class LGMGraphDocument extends GraphDocument {
                     }
                 }
             }
-            for (Edge kante : edges) {
-                if (!kante.reconnect(destGDColl)) {
-                    destGDColl.deleteElement(kante, pid);
+            for (Edge edge : edges) {
+                if (!edge.reconnect(destGDColl)) {
+                    destGDColl.deleteElement(edge, pid);
                 } else {
-                    int edgeLayer = kante.layerFor();
-                    destGDColl.addEdge((EdgeContainer) kante.getContainer(destMainDoc), pid);
-                    if (!kante.isUnique() && dest instanceof Szenario) {
-                        EdgeContainer newC = (EdgeContainer) kante.getContainer(dest);
+                    int edgeLayer = edge.layerFor();
+                    destGDColl.addEdge((EdgeContainer) edge.getContainer(destMainDoc), pid);
+                    if (!edge.isUnique() && dest instanceof Szenario) {
+                        EdgeContainer newC = (EdgeContainer) edge.getContainer(dest);
                         if (newC == null) {
                             throw new Exception(getResString("fehler"));
                         }
@@ -534,7 +534,7 @@ public class LGMGraphDocument extends GraphDocument {
                         }
                         newC.computeBorderPoints();
                     }
-                    destMainDoc.addToSelection(kante.getContainer(destMainDoc), pid);
+                    destMainDoc.addToSelection(edge.getContainer(destMainDoc), pid);
                 }
             }
             List<EdgeContainer> edgeConts = new ArrayList<>();
@@ -547,7 +547,7 @@ public class LGMGraphDocument extends GraphDocument {
                 if (oldKP == null) {
                     continue;
                 }
-                EdgeContainer kC = dest.findEdgeContainerCoded(kp.getBendpoint().getKantenHash());
+                EdgeContainer kC = dest.findEdgeContainerCoded(kp.getBendpoint().getEdgeHash());
                 EdgeContainer oldKC = oldKP.getBendpoint().getOwner();
                 if (oldKC == null) {
                     oldKC = findEdgeContainerCoded(kC.getHashString());
@@ -625,7 +625,7 @@ public class LGMGraphDocument extends GraphDocument {
         me1.refreshText();
 
         for (Edge edge : me2.getEdges()) {
-            Edge oldKante;
+            Edge oldEdge;
             /* vorwaerts */
             if (edge.getStart().equals(me2)) {
                 me3 = findElementCoded(edge.getEnd().getHashString());
@@ -636,7 +636,7 @@ public class LGMGraphDocument extends GraphDocument {
                     continue;
                 }
 
-                oldKante = edge;
+                oldEdge = edge;
                 edge = (Edge) metaModel.createElement(edge, true);
                 edge.setStartAndInsert(me1);
                 edge.setEndAndInsert(me3);
@@ -650,7 +650,7 @@ public class LGMGraphDocument extends GraphDocument {
                     continue;
                 }
 
-                oldKante = edge;
+                oldEdge = edge;
                 edge = (Edge) metaModel.createElement(edge, true);
                 edge.setStartAndInsert(me3);
                 edge.setEndAndInsert(me1);
@@ -664,7 +664,7 @@ public class LGMGraphDocument extends GraphDocument {
                 getLayer(edge.layerFor()).add(edge.createContainer(this));
             }
 
-            joinElements(edge, oldKante, doc2, saveInBoth);
+            joinElements(edge, oldEdge, doc2, saveInBoth);
         }
     }
 

@@ -167,13 +167,13 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 if (selpaths != null) {
                     for (int n = 0; n < selpaths.length; n++) {
                         // if(lomodel.getChildCount(loroot)>0) return;
-                        LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
-                        ElementContainer knot = (ElementContainer) node.getUserObject();
+                        LGMTreeNode treeNode = (LGMTreeNode) selpaths[n].getLastPathComponent();
+                        ElementContainer ec = (ElementContainer) treeNode.getUserObject();
 
                         ModelElement topLevelModelElement;
                         topLevelModelElement = getModelElement();
                         GDCollection gdcoll = getGraphDocument().getCollection();
-                        unlink(gdcoll, topLevelModelElement, knot.getElement(), getLastEdgeClassInPath(), MASTER_TO_SLAVE_DIRECTION, getTransactionID());
+                        unlink(gdcoll, topLevelModelElement, ec.getElement(), getLastEdgeClassInPath(), MASTER_TO_SLAVE_DIRECTION, getTransactionID());
                     }
                 }
             }

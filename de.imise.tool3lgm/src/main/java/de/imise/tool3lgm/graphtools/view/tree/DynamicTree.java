@@ -548,11 +548,11 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     }
 
     /**
-     * @param knot
+     * @param node
      * @return
      */
-    public static final int getLayerOf(final Node knot) {
-        return knot.layerFor();
+    public static final int getLayerOf(final Node node) {
+        return node.layerFor();
     }
 
     /**

@@ -72,7 +72,7 @@ public class LGMKommProzessFinder {
             // System.out.println(stepCount+".]\t"+step.getGraphDocument());
 
             if (!step.isCorrect()) {
-                step.setKommProzessKanten(null);
+                step.setKommProzessEdges(null);
                 step.setKommProzessSchnittstellen(null);
                 step.setKommProzessLength(-1);
                 continue;
@@ -87,7 +87,7 @@ public class LGMKommProzessFinder {
             // durchlaufen werden) und
             // Medienbrüche mitzählen
             // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            List<Edge> kantenList = new ArrayList<Edge>();
+            List<Edge> edges = new ArrayList<Edge>();
             List<ModelElement> kommProzessSchnittstellen = step.getKommProzessSchnittstellen();
             int count = kommProzessSchnittstellen.size() - 1;
 
@@ -128,7 +128,7 @@ public class LGMKommProzessFinder {
 
                 // zw. 2 Schnittstellen kann es max. eine BSS_BSS_VERBINDUNG geben
                 // Edge zur Liste der im Prozessschritt durchlaufenen Kanten hinzufügen
-                kantenList.add(ol.get(0));
+                edges.add(ol.get(0));
 
                 // neue Berechnung der Medienbrüche (AXS: 20.10.05)
                 // über ModelConstants.ANWENDUNGSBAUSTEIN bekommt man alle Arten von AWBs
@@ -149,7 +149,7 @@ public class LGMKommProzessFinder {
                 }
             }
 
-            step.setKommProzessKanten(kantenList);
+            step.setKommProzessEdges(edges);
 
             // wenn Kommunikation möglich ist, müssen die tatsächlichen Start- und Endbausteine der
             // Kommunikation gesetzt werden

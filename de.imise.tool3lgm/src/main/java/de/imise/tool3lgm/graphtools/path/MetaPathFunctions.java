@@ -499,7 +499,7 @@ public class MetaPathFunctions {
                 //wenn das noch nicht der letzte MetaPfad in der Liste ist
                 if (i + 1 < pathLength) {
                     //neues Element für das EndElement des Pfades anlegen
-                    NodeContainer nc = doc.createKnotenWithContainer(elementaryMetaPath.getEndClass(), pid);
+                    NodeContainer nc = doc.createNodeAndContainer(elementaryMetaPath.getEndClass(), pid);
                     if (nc == null) {
                         break;
                     }
@@ -716,7 +716,7 @@ public class MetaPathFunctions {
             createdDependent = GraphDocument.createAddicted(doc, startElement, compositionEdgeClass, elementClass2Create, pid);
         } else {
             //das neue Element gleich mit Container im doc anlegen
-            createdContainer = doc.createKnotenWithContainer(elementClass2Create, pid);
+            createdContainer = doc.createNodeAndContainer(elementClass2Create, pid);
             if (createdContainer == null) {
                 return null;
             }

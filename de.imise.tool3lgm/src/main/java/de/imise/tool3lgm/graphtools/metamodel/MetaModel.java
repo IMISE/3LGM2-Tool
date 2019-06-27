@@ -40,7 +40,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
+import de.imise.tool3lgm.graphtools.metamodel.elements.LayerNode;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElementInstanceCreator;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
@@ -504,7 +504,7 @@ public final class MetaModel {
     private Set<Class<? extends ModelElement>> getElementClassesWithLayout() {
         ImmutableSet.Builder<Class<? extends ModelElement>> elementClassesWithLayoutBuilder = ImmutableSet.<Class<? extends ModelElement>> builder();
         //LayerKnoten
-        elementClassesWithLayoutBuilder.add(LayerKnoten.class);
+        elementClassesWithLayoutBuilder.add(LayerNode.class);
         //alle Knoten die Paintable sind oder ihre Kantennummern an andere Knoten schreiben
         GraphViewDefinition graphViewDefinition = getGraphViewDefinition();
         for (Class<? extends ModelElement> clazz : allNodesSet) {
@@ -874,7 +874,7 @@ public final class MetaModel {
     /**
      * Liefert <code>true</code>, wenn die übergebene Elementklasse ein Layout besitzt (und damit nicht unique ist).
      * Das trifft auf alle Elemenklassen zu, die paintable sind oder ihre Kantennummern an paintable-Elemente schreiben.
-     * Auérdem brauchen die Layer-Knoten ein Layout.
+     * Außerdem brauchen die Layer-Knoten ein Layout.
      *
      * @param elementClass
      * @return

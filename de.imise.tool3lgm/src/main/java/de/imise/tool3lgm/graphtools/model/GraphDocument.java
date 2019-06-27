@@ -55,7 +55,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.LayerKnoten;
+import de.imise.tool3lgm.graphtools.metamodel.elements.LayerNode;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
@@ -216,7 +216,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         layer = new LayerContainer[LAYER_COUNT];
         for (int c = 0; c < layer.length; c++) {
-            layer[c] = new LayerContainer(new LayerKnoten(metaModel, c), this, c);
+            layer[c] = new LayerContainer(new LayerNode(metaModel, c), this, c);
             layer[c].setColor(Color.white);
         }
         setPageSizeFactor(1.0);
@@ -704,7 +704,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             } catch (Exception e) {
                 //Die Argumente 1-3 sind optional; deshalb keine Fehlermeldung, wenn das Parsen fehlschlägt
             }
-            createKnotenWithContainer(metaModel.getClassForName(classname), name, description, hashcode, pid);
+            createNodeAndContainer(metaModel.getClassForName(classname), name, description, hashcode, pid);
             break;
 
         case MODEL_ACTION_DELETE_FROM_MODEL:
@@ -992,7 +992,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     int y = Integer.parseInt(argv[3]);
                     int width = Integer.parseInt(argv[4]);
                     int height = Integer.parseInt(argv[5]);
-                    coordinateKnot(gdcoll, szenHash, hashCode, x, y, width, height, pid);
+                    moveNodeContainer(gdcoll, szenHash, hashCode, x, y, width, height, pid);
                 } catch (Exception e) {
                     Log(e);
                     break;
@@ -1536,7 +1536,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param x
      * @param y
      */
-    public final void setKnotInsertPosition(final int x, final int y) {
+    public final void setNodeContainerInsertPosition(final int x, final int y) {
         next_x_pos = x;
         next_y_pos = y;
     }
@@ -2203,7 +2203,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param height
      * @param pid
      */
-    public final void coordinateKnot(final NodeContainer nc, final int x, final int y, final int width, final int height, final int pid) {
+    public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final int pid) {
         if (nc == null || !nc.getElement().isPaintable()) {
             return;
         }
@@ -2268,12 +2268,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         List<ElementContainer> selection = expandSelection(moveSubelements);
         for (NodeContainer kc : getSelectedRealElementContainerIterable()) {
             if (layer == ModelConstants.NO_LAYER || layer == kc.layerFor()) {
-                coordinateKnot(kc, kc.getX() + deltaX, kc.getY() + deltaY, kc.getWidth(), kc.getHeight(), pid);
+                moveNodeContainer(kc, kc.getX() + deltaX, kc.getY() + deltaY, kc.getWidth(), kc.getHeight(), pid);
             }
         }
         for (BendpointContainer kc : getSelectedBendpointContainerIterable()) {
             if (layer == ModelConstants.NO_LAYER || layer == kc.layerFor()) {
-                coordinateKnot(kc, kc.getX() + deltaX, kc.getY() + deltaY, kc.getWidth(), kc.getHeight(), pid);
+                moveNodeContainer(kc, kc.getX() + deltaX, kc.getY() + deltaY, kc.getWidth(), kc.getHeight(), pid);
             }
         }
         setSelection(selection);
@@ -2289,7 +2289,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param height
      * @param pid
      */
-    private static final void coordinateKnot(final GDCollection gdcoll, final String szenHash, final String elementHashCode, final int x, final int y, final int width, final int height, final int pid) {
+    private static final void moveNodeContainer(final GDCollection gdcoll, final String szenHash, final String elementHashCode, final int x, final int y, final int width, final int height, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
             return;
@@ -2302,7 +2302,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         NodeContainer k = mc;
-        szen.coordinateKnot(k, x, y, width, height, pid);
+        szen.moveNodeContainer(k, x, y, width, height, pid);
     }
 
     /**
@@ -2373,7 +2373,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 System.out.println("Falscher Orientierungswert.");
                 break;
             }
-            coordinateKnot(nc, x, y, w, h, pid);
+            moveNodeContainer(nc, x, y, w, h, pid);
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
@@ -3066,8 +3066,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public NodeContainer createKnotenWithContainer(final String elementClassName, final int pid) {
-        return createKnotenWithContainer(metaModel.getClassForName(elementClassName), pid);
+    public NodeContainer createNodeAndContainer(final String elementClassName, final int pid) {
+        return createNodeAndContainer(metaModel.getClassForName(elementClassName), pid);
     }
 
     /**
@@ -3075,8 +3075,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public NodeContainer createKnotenWithContainer(final Class<? extends ModelElement> elementClass, final int pid) {
-        return createKnotenWithContainer(elementClass, GDCommands.INVALID_NAME, GDCommands.INVALID_DESCRIPTION, GDCommands.INVALID_HASH_STRING, pid);
+    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final int pid) {
+        return createNodeAndContainer(elementClass, GDCommands.INVALID_NAME, GDCommands.INVALID_DESCRIPTION, GDCommands.INVALID_HASH_STRING, pid);
     }
 
     /**
@@ -3085,8 +3085,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public NodeContainer createKnotenWithContainer(final Class<? extends ModelElement> elementClass, final String name, final int pid) {
-        return createKnotenWithContainer(elementClass, name, GDCommands.INVALID_DESCRIPTION, GDCommands.INVALID_HASH_STRING, pid);
+    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final String name, final int pid) {
+        return createNodeAndContainer(elementClass, name, GDCommands.INVALID_DESCRIPTION, GDCommands.INVALID_HASH_STRING, pid);
     }
 
     /**
@@ -3096,8 +3096,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public NodeContainer createKnotenWithContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final int pid) {
-        return createKnotenWithContainer(elementClass, name, description, GDCommands.INVALID_HASH_STRING, pid);
+    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final int pid) {
+        return createNodeAndContainer(elementClass, name, description, GDCommands.INVALID_HASH_STRING, pid);
     }
 
     /**
@@ -3108,8 +3108,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    public NodeContainer createKnotenWithContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final String hashString, final int pid) {
-        return createKnotenWithContainer(elementClass, name, description, hashString, GDCommands.INVALID_POSITION_X, GDCommands.INVALID_POSITION_Y, GDCommands.INVALID_WIDTH, GDCommands.INVALID_HEIGHT, GDCommands.INVALID_COLOR_RGB, GDCommands.INVALID_SHAPE,
+    public NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final String hashString, final int pid) {
+        return createNodeAndContainer(elementClass, name, description, hashString, GDCommands.INVALID_POSITION_X, GDCommands.INVALID_POSITION_Y, GDCommands.INVALID_WIDTH, GDCommands.INVALID_HEIGHT, GDCommands.INVALID_COLOR_RGB, GDCommands.INVALID_SHAPE,
                 GDCommands.INVALID_BENDPOINT_INDEX, pid);
     }
 
@@ -3129,19 +3129,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    private NodeContainer createKnotenWithContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final String hashString, int x, int y, final int width, final int height, final int rgb,
+    private NodeContainer createNodeAndContainer(final Class<? extends ModelElement> elementClass, final String name, final String description, final String hashString, int x, int y, final int width, final int height, final int rgb,
             final GraphElementLayout.SHAPE form, final int bendpoint_index, final int pid) {
         lastCreated = null;
         start_transaction(pid);
         if (Node.class.isAssignableFrom(elementClass)) {
             //das neue Element im Hauptdokument anlegen
-            lastCreated = gdcoll.createKnotenWithContainer(elementClass.asSubclass(Node.class), name, description, hashString, pid);
+            lastCreated = gdcoll.createNodeAndContainer(elementClass.asSubclass(Node.class), name, description, hashString, pid);
         }
         if (lastCreated != null && !lastCreated.getElement().isUnique() && this instanceof Szenario) {
             lastCreated = addElementToSzenario(this.hashString, lastCreated, pid);
             x = x != GDCommands.INVALID_POSITION_X ? x : next_x_pos;
             y = y != GDCommands.INVALID_POSITION_Y ? y : next_y_pos;
-            coordinateKnot(lastCreated, x, y, width, height, pid);
+            moveNodeContainer(lastCreated, x, y, width, height, pid);
         }
         if (!gdcoll.isBulkMode()) {
             select(lastCreated, pid);
@@ -3177,7 +3177,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return null;
         }
 
-        ModelElement me = findKnotenCoded(hashString);
+        ModelElement me = findNodeCoded(hashString);
         if (me == null) {
             return null;
         }
@@ -3194,7 +3194,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return null;
         }
 
-        ModelElement me = findKanteCoded(hashString);
+        ModelElement me = findEdgeCoded(hashString);
         if (me == null) {
             return null;
         }
@@ -3270,11 +3270,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (hashString == null) {
             return null;
         }
-        ModelElement me = findKnotenCoded(hashString);
+        ModelElement me = findNodeCoded(hashString);
         if (me != null) {
             return me;
         }
-        me = findKanteCoded(hashString);
+        me = findEdgeCoded(hashString);
         if (me != null) {
             return me;
         }
@@ -3287,16 +3287,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param hashString
      * @return
      */
-    public ModelElement findKnotenCoded(final String hashString) {
+    public Node findNodeCoded(final String hashString) {
         if (getCollection().getMainGraphDocument() != this) {
-            return getCollection().getMainGraphDocument().findKnotenCoded(hashString);
+            return getCollection().getMainGraphDocument().findNodeCoded(hashString);
         }
         if (hashString != null) {
             for (LayerContainer lc : layer) {
-                for (ElementContainer ec : lc.getNodeContainersAlphabetical()) {
+                for (NodeContainer ec : lc.getNodeContainersAlphabetical()) {
                     String ecHash = ec.getHashString();
                     if (hashString.equals(ecHash)) {
-                        return ec.getElement();
+                        return ec.getNode();
                     }
                 }
             }
@@ -3308,9 +3308,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param hashString
      * @return
      */
-    public Edge findKanteCoded(final String hashString) {
+    public Edge findEdgeCoded(final String hashString) {
         if (getCollection().getMainGraphDocument() != this) {
-            return getCollection().getMainGraphDocument().findKanteCoded(hashString);
+            return getCollection().getMainGraphDocument().findEdgeCoded(hashString);
         }
         if (hashString != null) {
             for (LayerContainer lc : layer) {
@@ -3395,7 +3395,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         String name = slaveName == null || slaveName.trim().equals("") ? doc.getNextNewName(master.getClearName() + "_", slaveClass) : slaveName;
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
-        NodeContainer slaveContainer = mainDoc.createKnotenWithContainer(slaveClass, name, GDCommands.INVALID_DESCRIPTION, slaveHashString, pid);
+        NodeContainer slaveContainer = mainDoc.createNodeAndContainer(slaveClass, name, GDCommands.INVALID_DESCRIPTION, slaveHashString, pid);
         if (slaveContainer == null) {
             doc.finish_transaction(pid);
             return null;
@@ -3478,15 +3478,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param szenHash
      * @param edgeClassName
      * @param edgeHash
-     * @param knothash1
-     * @param knothash2
+     * @param nodehash1
+     * @param nodehash2
      * @param position
      * @param pid
      * @return
      */
-    public final Edge addict(final String szenHash, final String edgeClassName, final String edgeHash, final String knothash1, final String knothash2, final int position, final int pid) {
-        ModelElement me1 = findElementCoded(knothash1);
-        ModelElement me2 = findElementCoded(knothash2);
+    public final Edge addict(final String szenHash, final String edgeClassName, final String edgeHash, final String nodehash1, final String nodehash2, final int position, final int pid) {
+        ModelElement me1 = findElementCoded(nodehash1);
+        ModelElement me2 = findElementCoded(nodehash2);
         return addict(szenHash, edgeClassName, edgeHash, me1, me2, position, pid);
     }
 
@@ -3720,7 +3720,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //Hauptkante anlegen
         Class<? extends ModelElement> class2Create = Edge.getEndClass(instanciationEdgeClass);
         String name = GENERATED_NAME_PREFIX + master.getName() + " " + Tool3lgmConstants.getResString("INSTANCE");
-        NodeContainer instanceContainer = doc.createKnotenWithContainer(class2Create, name, pid);
+        NodeContainer instanceContainer = doc.createNodeAndContainer(class2Create, name, pid);
         ModelElement instanceElement = instanceContainer.getElement();
         gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
 
@@ -3796,7 +3796,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (!createSubPath && endElement == null) {
             Class<? extends ModelElement> pathEndClass = metaPath.getPathStepElementClass(lastPathStepIndex);
             boolean oldInteractiveMode = gdcoll.setInteractiveMode(askNameForNewEndElement);
-            NodeContainer pathEndElementContainer = createKnotenWithContainer(pathEndClass, pid);
+            NodeContainer pathEndElementContainer = createNodeAndContainer(pathEndClass, pid);
             gdcoll.setInteractiveMode(oldInteractiveMode);
             if (pathEndElementContainer != null) { // kann passieren, wenn der Benutzer abbrechen im Namensdialog drückt
                 createPath(startElement, pathEndElementContainer.getElement(), metaPath, pid);
@@ -3830,7 +3830,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 } else { // nächstes Pfadschrittelement anlegen
                     Class<? extends ModelElement> pathStepEndClass = metaPath.getPathStepElementClass(i);
                     boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
-                    NodeContainer pathStepEndElementContainer = createKnotenWithContainer(pathStepEndClass, pid);
+                    NodeContainer pathStepEndElementContainer = createNodeAndContainer(pathStepEndClass, pid);
                     gdcoll.setInteractiveMode(oldInteractiveMode);
                     pathStepEndElement = pathStepEndElementContainer.getElement();
                 }
@@ -3902,23 +3902,23 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * denen die Reihenfolge der Kanten eine Bedeutung hat. Z.B. Prozesse in Bezug auf
      * Aufgaben = Reihenfolge, in der die Aufgaben in dem Prozess ablaufen.
      *
-     * @param knothash
+     * @param nodehash
      * @param edgeIndex1
      * @param edgeIndex2
      * @param pid
      */
-    public final void swapEdgePositions(final String knothash, final String edgeIndex1, final String edgeIndex2, final int pid) {
-        ModelElement knot;
+    public final void swapEdgePositions(final String nodehash, final String edgeIndex1, final String edgeIndex2, final int pid) {
+        ModelElement me;
         int pos1, pos2;
         try {
-            knot = findElementCoded(knothash);
+            me = findElementCoded(nodehash);
             pos1 = new Integer(edgeIndex1).intValue();
             pos2 = new Integer(edgeIndex2).intValue();
         } catch (Exception e) {
             Log(e);
             return;
         }
-        swapEdgePositions(knot, pos1, pos2, pid);
+        swapEdgePositions(me, pos1, pos2, pid);
     }
 
     /**
@@ -4546,10 +4546,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * @param szenHashString
-     * @param hashCode
-     * @param createTraces
+     * @param sourceDocHash
+     * @param targetSzenHash
+     * @param elementHashCode
      * @param pid
+     * @return
      */
     private final ElementContainer addElementToSzenario(final String sourceDocHash, final String targetSzenHash, final String elementHashCode, final int pid) {
         GraphDocument sourceDoc = sourceDocHash == null ? gdcoll.getMainGraphDocument() : gdcoll.getGraphDocumentCoded(sourceDocHash);
@@ -4623,7 +4624,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @param log
      */
-    public void moveDependentKnotsUp(final NodeContainer kc, final int pid, final boolean log) {
+    public void moveDependentNodeContainersUp(final NodeContainer kc, final int pid, final boolean log) {
         if (!isMyElement(kc)) {
             return;
         }
@@ -4961,16 +4962,16 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      *
      */
-    public void sortKanten() {
+    public void sortEdgeContainers() {
         for (int i = 0; i < layer.length; i++) {
-            layer[i].sortEdges();
+            layer[i].sortEdgeContainers();
         }
     }
 
     /**
      *
      */
-    public void initKnotContainers() {
+    public void initNodeContainers() {
         for (int i = 0; i < layer.length; i++) {
             for (NodeContainer kc : layer[i].getGraphNodeContainers()) {
                 if (kc != null) {
@@ -4989,7 +4990,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      *
      */
-    public void initTraceContainers() {
+    public void initEdgeContainers() {
         for (int i = 0; i < layer.length; i++) {
             for (BendpointContainer kpC : layer[i].getBendpointContainers()) {
                 if (kpC == null) {
@@ -4999,7 +5000,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 if (kp == null) {
                     continue;
                 }
-                EdgeContainer kc = layer[i].getEdgeContainer(kp.getKantenHash());
+                EdgeContainer kc = layer[i].getEdgeContainer(kp.getEdgeHash());
                 if (kc == null) {
                     continue;
                 }

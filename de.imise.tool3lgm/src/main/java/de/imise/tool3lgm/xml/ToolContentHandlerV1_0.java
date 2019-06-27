@@ -118,8 +118,8 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
     public void endDocument() throws SAXException {
         Static.setProgressDialogStatusLabel("label_convert");
         for (Szenario szen : collection.getSzenarios()) {
-            szen.initKnotContainers();
-            szen.initTraceContainers();
+            szen.initNodeContainers();
+            szen.initEdgeContainers();
             //szen.refreshSpecialInfoTargets();
         }
         doc = null;

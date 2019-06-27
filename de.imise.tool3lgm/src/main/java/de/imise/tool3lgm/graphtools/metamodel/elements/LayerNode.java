@@ -9,9 +9,9 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 /**
  * @author thomas
  */
-public class LayerKnoten extends Node {
+public class LayerNode extends Node {
 
-    public LayerKnoten(final MetaModel metaModel, final int layer) {
+    public LayerNode(final MetaModel metaModel, final int layer) {
         this.layer = layer;
         setMetaModel(metaModel);
         setName(ModelConstants.getVisibleLayerName(layer));
