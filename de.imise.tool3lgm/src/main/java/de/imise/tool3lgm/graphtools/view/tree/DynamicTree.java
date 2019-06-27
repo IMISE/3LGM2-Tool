@@ -57,17 +57,17 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     /**
      * Node für die Fachliche Ebene
      */
-    private final LGMTreeNode fachebene = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.DOMAIN_LAYER));
+    private final LGMTreeNode domainLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.DOMAIN_LAYER));
 
     /**
      * Node für die Logische Werkzeugebene
      */
-    private final LGMTreeNode logebene = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.LOGICAL_LAYER));
+    private final LGMTreeNode logicalLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.LOGICAL_LAYER));
 
     /**
      * Node für die physische Werkzeugebene
      */
-    private final LGMTreeNode phyebene = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.PHYSICAL_LAYER));
+    private final LGMTreeNode physicalLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.PHYSICAL_LAYER));
 
     /**
      * COMMENTME
@@ -249,17 +249,17 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
 
     private void initTree() {
         LGMTreeNode top = (LGMTreeNode) treeModel.getRoot();
-        top.add(fachebene);
-        top.add(logebene);
-        top.add(phyebene);
+        top.add(domainLayer);
+        top.add(logicalLayer);
+        top.add(physicalLayer);
         MetaModel metaModel = doc.getMetaModel();
-        initLayer(fachebene, metaModel.getTreeDomainLayerVisibleAbstractNodes(), metaModel.treeDomainLayerNodes);
-        initLayer(logebene, metaModel.getTreeLogicalLayerVisibleAbstractNodes(), metaModel.treeLogicalLayerNodes);
-        initLayer(phyebene, metaModel.getTreePhysicalLayerVisibleAbstractNodes(), metaModel.treePhysicalLayerNodes);
+        initLayer(domainLayer, metaModel.getTreeDomainLayerVisibleAbstractNodes(), metaModel.treeDomainLayerNodes);
+        initLayer(logicalLayer, metaModel.getTreeLogicalLayerVisibleAbstractNodes(), metaModel.treeLogicalLayerNodes);
+        initLayer(physicalLayer, metaModel.getTreePhysicalLayerVisibleAbstractNodes(), metaModel.treePhysicalLayerNodes);
     }
 
     public boolean isLayerNode(final Object o) {
-        return o == fachebene || o == logebene || o == phyebene;
+        return o == domainLayer || o == logicalLayer || o == physicalLayer;
     }
 
     public void setTransactionListenerActive(final boolean active) {
@@ -294,14 +294,14 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         for (LGMTreeNode node : nodesToClear) {
             node.removeAllChildren();
         }
-        if (textFieldDomainLayer != null && textFieldDomainLayer.getParent() == fachebene) {
-            fachebene.remove(textFieldDomainLayer);
+        if (textFieldDomainLayer != null && textFieldDomainLayer.getParent() == domainLayer) {
+            domainLayer.remove(textFieldDomainLayer);
         }
-        if (textFieldLogicalLayer != null && textFieldLogicalLayer.getParent() == logebene) {
-            logebene.remove(textFieldLogicalLayer);
+        if (textFieldLogicalLayer != null && textFieldLogicalLayer.getParent() == logicalLayer) {
+            logicalLayer.remove(textFieldLogicalLayer);
         }
-        if (textFieldPhysicalLayer != null && textFieldPhysicalLayer.getParent() == phyebene) {
-            phyebene.remove(textFieldPhysicalLayer);
+        if (textFieldPhysicalLayer != null && textFieldPhysicalLayer.getParent() == physicalLayer) {
+            physicalLayer.remove(textFieldPhysicalLayer);
         }
     }
 
@@ -465,13 +465,13 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         Node me = (Node) obj.getElement();
         if (me instanceof Textfield) {
             if (layer == DOMAIN_LAYER) {
-                textFieldDomainLayer = getOrCreateTextFieldNode(fachebene, textFieldDomainLayer);
+                textFieldDomainLayer = getOrCreateTextFieldNode(domainLayer, textFieldDomainLayer);
                 return textFieldDomainLayer;
             } else if (layer == LOGICAL_LAYER) {
-                textFieldLogicalLayer = getOrCreateTextFieldNode(logebene, textFieldLogicalLayer);
+                textFieldLogicalLayer = getOrCreateTextFieldNode(logicalLayer, textFieldLogicalLayer);
                 return textFieldLogicalLayer;
             } else if (layer == PHYSICAL_LAYER) {
-                textFieldPhysicalLayer = getOrCreateTextFieldNode(phyebene, textFieldPhysicalLayer);
+                textFieldPhysicalLayer = getOrCreateTextFieldNode(physicalLayer, textFieldPhysicalLayer);
                 return textFieldPhysicalLayer;
             }
         }
@@ -591,13 +591,13 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         TreePath path = null;
         switch (layer) {
         case DOMAIN_LAYER:
-            path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(fachebene));
+            path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(domainLayer));
             break;
         case LOGICAL_LAYER:
-            path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(logebene));
+            path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(logicalLayer));
             break;
         case PHYSICAL_LAYER:
-            path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(phyebene));
+            path = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(physicalLayer));
             break;
         }
         setSelectionPath(path);
@@ -613,13 +613,13 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
      */
     public boolean setActiveLayer(final LGMTreeNode node) {
         boolean layerChanged = false;
-        if (node == fachebene) {
+        if (node == domainLayer) {
             layerChanged = true;
             doc.getCollection().setActiveLayer(DOMAIN_LAYER);
-        } else if (node == logebene) {
+        } else if (node == logicalLayer) {
             layerChanged = true;
             doc.getCollection().setActiveLayer(LOGICAL_LAYER);
-        } else if (node == phyebene) {
+        } else if (node == physicalLayer) {
             layerChanged = true;
             doc.getCollection().setActiveLayer(PHYSICAL_LAYER);
         }
