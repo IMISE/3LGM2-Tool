@@ -422,9 +422,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (doc instanceof Szenario) {
             bounds.height = bounds.height - 32;
             setWorkArea(frame);
-            desktop.add(frame);
         }
         frame.setBounds(bounds);
+        desktop.add(frame);
         frame.setVisible(true);
         return frame;
     }
