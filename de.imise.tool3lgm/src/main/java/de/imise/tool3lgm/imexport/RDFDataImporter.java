@@ -64,8 +64,8 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<OntResource>
 
     /**
      * Fragt in der Ontologie alle Class-Knoten ab, deren Klasse denselben Namen hat, wie eine Klasse aus dem Metamodell des zu füllenden
-     * 3LGM2-Modells und legt in diesem 3LGM2-Modell dafür einen Knoten an. Außerdem werden die Class-Knoten und der korrespondierende 3LGM2-Knoten in
-     * einer Map in DataImporter gespeichert.
+     * 3LGM2-Modells und legt in diesem 3LGM2-Modell für jede Instanz des Class-Knotens im RDF-Quellmodell einen Knoten im 3LGM2-Zielmodell an.
+     * Außerdem werden die Class-Knoten und der korrespondierende 3LGM2-Knoten in einer Map in DataImporter gespeichert.
      *
      * @param ontModel Quellmodell
      */
