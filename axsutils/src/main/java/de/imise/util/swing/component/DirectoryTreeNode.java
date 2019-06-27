@@ -71,9 +71,9 @@ public class DirectoryTreeNode extends DefaultMutableTreeNode {
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("rawtypes")
     @Override
-    public Enumeration<DirectoryTreeNode> children() {
+    public Enumeration children() {
         ensureChildrenAreLoaded();
         return super.children();
     }
