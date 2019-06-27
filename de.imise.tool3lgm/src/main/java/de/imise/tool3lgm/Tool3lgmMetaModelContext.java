@@ -2,7 +2,6 @@ package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition.DefaultMetaModelDefinitionAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.RegularMetaModelDefinition;
+import de.imise.tool3lgm.imexport.ImportMetaModelDefinition;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
@@ -95,8 +95,7 @@ public final class Tool3lgmMetaModelContext {
      * @return
      */
     public static final List<MetaModelContext> loadMetaModelContexts() {
-        File pluginDir = new File(Tool3lgmConstants.APPLICATION_DIR, "Plugins");
-        List<Class<? extends MetaModelDefinition>> metaModelClasses = PluginUtils.loadClasses(pluginDir, MetaModelDefinition.class);
+        List<Class<? extends MetaModelDefinition>> metaModelClasses = PluginUtils.loadClasses(Tool3lgmConstants.PLUGIN_DIR, MetaModelDefinition.class);
         ReflectionUtils.retainSubClasses(metaModelClasses, RegularMetaModelDefinition.class);
         List<MetaModelContext> metaModelContexts = new ArrayList<>();
         for (int i = 0; i < metaModelClasses.size(); i++) {
@@ -232,7 +231,10 @@ public final class Tool3lgmMetaModelContext {
             }
         }
         MetaModelContext metaModelContext = new MetaModelContext(metaModelDefinitionClass);
-        ALL_METAMODEL_CONTEXTS.add(metaModelContext);
+        //die Definition nur merken, wenn es keine ImportDefinition ist. Die ImportDefinitionen sind sehr einfach aufgebaut und können einfach immer wieder initialisiert werden
+        if (!ImportMetaModelDefinition.class.isAssignableFrom(metaModelDefinitionClass)) {
+            ALL_METAMODEL_CONTEXTS.add(metaModelContext);
+        }
         return metaModelContext;
     }
 

@@ -82,6 +82,9 @@ public abstract class Tool3lgmConstants {
     /** path for temp-files */
     public static final String TEMP_PATH = USER_HOME_DIR_NAME + "/";
 
+    /** Plugin Verzeichnis */
+    public static final File PLUGIN_DIR = new File(APPLICATION_DIR, "Plugins");
+
     /**
      * Datei-Endung für große Icons.
      * <p>
