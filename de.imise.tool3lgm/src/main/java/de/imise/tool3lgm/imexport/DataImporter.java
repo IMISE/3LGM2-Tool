@@ -8,6 +8,8 @@ import java.util.Set;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.Tool3lgmMetaModelContext;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -36,7 +38,7 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
     protected final GDCollection gdcoll;
 
     public DataImporter() {
-        gdcoll = createModel();
+        gdcoll = createModel(getImportMetaModelClass());
         gdcoll.setBulkMode(true);
     }
 
@@ -45,22 +47,22 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      *
      * @return <code>true</code>, wenn der Import erfolgreich war
      */
-    protected abstract boolean importData();
+    public abstract boolean importData();
 
     /**
      * @return Klasse des Metamodells, das dem Modell (der {@link GDCollection}) zugrunde liegt, in die importiert wird.
      */
-    public abstract Class<? extends ImportMetaModelDefinition> getImportMetaModelClass();
+    public abstract Class<? extends MetaModelDefinition> getImportMetaModelClass();
 
     /**
-     * Initialisiert ein Modell ({@link GDCollection}) mit dem Metamodel, das durch die Klasse aus der Funktion {@link #getImportMetaModelClass()}
-     * definiert wird.
+     * Initialisiert ein Modell ({@link GDCollection}) mit dem übergebenen Metamodel. Diese Funktion könnte woanders hin, wo evtl auch der
+     * Tool3lgmMetaModelContext abgefragt wird, damit das Metamodel nicht doppelt initialisiert wird.
      *
+     * @param Definitionsklasse des Metamodells des zu erzeugenden Modells
      * @return Leeres Modell mit ImportMetaModel
      */
-    private final GDCollection createModel() {
-        Class<? extends ImportMetaModelDefinition> importMetaModelClass = getImportMetaModelClass();
-        MetaModelContext metaModelContext = new MetaModelContext(importMetaModelClass);
+    public static final GDCollection createModel(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        MetaModelContext metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(metaModelDefinitionClass);
         GDCollection gdcoll = new GDCollection(metaModelContext);
         return gdcoll;
     }
