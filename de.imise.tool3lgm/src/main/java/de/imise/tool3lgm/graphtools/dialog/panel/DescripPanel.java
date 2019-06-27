@@ -43,6 +43,11 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
 
     /** Beschreibung des ModelElements beim letzten Update des Dialoges */
     private String lastDescription = null;
+    /**
+     * Bleibt <code>true</code>, wenn keine Unterklasse von {@link ElementPropertyDialog} das Panel erweitert hat, sondern er im Ausgangszustand (Name
+     * + Beschreibung) geblieben ist.
+     */
+    private boolean isUnchangedDefaultPanel = true;
 
     /**
      * @param dialog
@@ -77,6 +82,14 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = 0;
 
+    }
+
+    /**
+     * @return <code>true</code>, wenn keine Unterklasse von {@link ElementPropertyDialog} das Panel erweitert hat, sondern er im Ausgangszustand
+     *         (Name + Beschreibung) geblieben ist.
+     */
+    public boolean isUnchangedDefaultPanel() {
+        return isUnchangedDefaultPanel;
     }
 
     @Override
@@ -132,10 +145,12 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
             add(this, panel.getWestLabel(), gbc, 0, gridy, 1, 1);
             add(this, panel, gbc, 1, gridy++, 1, 1);
         }
+        isUnchangedDefaultPanel = false;
     }
 
     public final void addSeparator() {
         add(this, new JSeparator(), gbc, 0, gridy++, 2, 1);
+        isUnchangedDefaultPanel = false;
     }
 
     @Override

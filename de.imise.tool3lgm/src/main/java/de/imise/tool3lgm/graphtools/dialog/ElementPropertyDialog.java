@@ -95,7 +95,11 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
      */
     boolean closing = false;
 
+    /** Das Panel des Allgemein-Reiters */
     private final DescripPanel descripPanel;
+
+    /** Das Panel für die benutzerdefinierten Eigenschaften */
+    private final PropertyDialogUserFieldPanel propertyDialogUserFieldPanel;
 
     /**
      * @param modelElement
@@ -121,7 +125,10 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
         if (doc.getCollection().getUserFieldDefinitions().hasUserFields(modelElement.getClass())) {
-            addTab(getResString("userfields"), new PropertyDialogUserFieldPanel(this));
+            propertyDialogUserFieldPanel = new PropertyDialogUserFieldPanel(this);
+            addTab(getResString("userfields"), propertyDialogUserFieldPanel);
+        } else {
+            propertyDialogUserFieldPanel = null;
         }
 
         JPanel buttonpanel = new JPanel();
@@ -147,6 +154,41 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         addSizeOrPositionChangedListener();
         setSizeAndLocation();
         opening = true;
+    }
+
+    /**
+     * Bleibt <code>true</code>, wenn keine Unterklasse den Dialog erweitert, sondern der Dialog nur aus dem Allgemein-Reiter besteht, auf dem auch
+     * nichts durch eine Unterklasse hinzugefügt wurde.
+     */
+    private final boolean isUnchangedDefaultDialog() {
+        if (!descripPanel.isUnchangedDefaultPanel()) {
+            return false;
+        }
+        int tabCount = getTabCount();
+        if (tabCount == 0 || tabCount > 2) {
+            return false;
+        }
+        if (getTabComponentAt(0) != descripPanel) {
+            return false;
+        }
+        if (tabCount == 2 && getTabComponentAt(1) != propertyDialogUserFieldPanel) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Wenn der Dialog von keiner Unterklasse des ModelElements aus seinem Default-Zustand (DescripPanel + evtl. Benutzerdef. Eigenschaften) geändert
+     * wurde, dann werden hier automatisch für alle Kanten des Elementes passende Panels hinzugefügt.
+     */
+    public void extendDefaultDialog() {
+        if (isUnchangedDefaultDialog()) {
+            MetaModel metaModel = getMetaModel();
+            Class<? extends ModelElement> elementClass = modelElement.getClass();
+            for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(elementClass)) {
+                addEdgePanel(edgeClass);
+            }
+        }
     }
 
     private void addSizeOrPositionChangedListener() {

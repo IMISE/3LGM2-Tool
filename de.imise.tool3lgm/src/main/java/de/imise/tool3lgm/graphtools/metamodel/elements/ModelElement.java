@@ -1777,7 +1777,9 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final ElementPropertyDialog getNewPropertyDialogInsance() {
-        return createPropertyDialog();
+        ElementPropertyDialog propertyDialog = createPropertyDialog();
+        propertyDialog.extendDefaultDialog();
+        return propertyDialog;
     }
 
     /**
