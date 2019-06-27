@@ -416,7 +416,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     private AbstractInternalFrame createMainFrame(final LGMGraphDocument maindoc) {
         InputGraphArea area = new InputGraphArea();
         InternalGraphFrame frame = new InternalGraphFrame(desktop, area, maindoc);
-        frame.setTitle(maindoc.getCollection().getName() + " - " + maindoc.getTitle());
         modelBrowserPanel.addGraphDocument(maindoc);
         frame.addInternalFrameListener(this);
         Rectangle bounds = desktop.getBounds();
@@ -437,7 +436,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     public AbstractInternalFrame createSzenarioFrame(final Szenario szenario) {
         InputGraphArea area = new InputGraphArea(szenario);
         InternalGraphFrame frame = new InternalGraphFrame(desktop, area, szenario);
-        frame.setTitle(szenario.getCollection().getName() + " - " + szenario.getTitle());
         modelBrowserPanel.addGraphDocument(szenario);
         frame.addInternalFrameListener(this);
         Rectangle bounds = desktop.getBounds();

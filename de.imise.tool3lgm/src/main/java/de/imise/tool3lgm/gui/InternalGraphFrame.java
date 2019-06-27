@@ -10,7 +10,9 @@ import javax.swing.JDesktopPane;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -112,7 +114,12 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
      * Setzt den Titel des Frames
      */
     public void updateTitle() {
-        super.setTitle(getCollection().getName() + " - " + getGraphDocument().getTitle());
+        GDCollection gdcoll = getCollection();
+        String gdcollName = gdcoll.getName();
+        String docName = getGraphDocument().getTitle();
+        MetaModelContext metaModelContext = gdcoll.getMetaModelContext();
+        String metaModelDisplayName = metaModelContext.getMetaModelDisplayName();
+        super.setTitle(gdcollName + " - " + docName + "   (" + metaModelDisplayName + ")");
     }
 
     @Override
