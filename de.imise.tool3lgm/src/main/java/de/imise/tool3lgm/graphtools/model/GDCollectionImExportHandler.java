@@ -33,22 +33,43 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLWriter;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
+/**
+ * Importiert ein Modell komplett oder teilweise (Teilmodelle) in ein anderes.
+ *
+ * @author AXS (18 Jun 2010)
+ */
 public final class GDCollectionImExportHandler {
 
+    /** Das Modell, in das importiert wird */
     private final GDCollection gdcoll;
 
+    /**
+     * @param gdcoll Modell, in das importiert wird
+     */
     public GDCollectionImExportHandler(final GDCollection gdcoll) {
         this.gdcoll = gdcoll;
     }
 
+    /**
+     * Zeigt einen Dialog an, um eine Modelldatei zu wählen und stellt dann die darin enthaltenen Teilmodelle zur Auswahl, die dann importiert werden.
+     */
     public static final void importSzenarios() {
         importModel(true);
     }
 
+    /**
+     * Zeigt einen Dialog an, um eine Modelldatei zu wählen und importiert dann das Gesamtmodell.
+     */
     public static final void importModel() {
         importModel(false);
     }
 
+    /**
+     * Zeigt einen Dialog an, um eine Modelldatei zu wählen, die importiert werden soll.
+     *
+     * @param chooseSubmodels wenn <code>true</code> wird auch ein Auswahldialog für zu importierende Teilmodelle angezeigt. Bei <code>false</code>
+     *            wird das Gesamtmodell importiert.
+     */
     private static final void importModel(final boolean chooseSubmodels) {
         ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
         oeffnenDialog.setMultiSelectionEnabled(false);
