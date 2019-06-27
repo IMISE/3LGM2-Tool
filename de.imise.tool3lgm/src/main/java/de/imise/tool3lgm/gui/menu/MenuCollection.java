@@ -120,7 +120,7 @@ public class MenuCollection {
     static class FileSubMenus {
 
         /** Das Import-Menu */
-        public static final JMenu IMPORT_MENU = createMenu("import", ImportActions.ACTION_IMPORT_SUBMODEL, ImportActions.ACTION_IMPORT_MODEL, new JSeparator(), ImportActions.ACTION_IMPORT_DATA);
+        public static final JMenu IMPORT_MENU = createMenu("import", ImportActions.ACTION_IMPORT_SUBMODEL, ImportActions.ACTION_IMPORT_MODEL, ImportActions.IMPORT_PLUGIN_ACTIONS, new JSeparator(), ImportActions.ACTION_IMPORT_DATA);
 
         /** Das Export-Menu */
         public static final JMenu EXPORT_MENU = createMenu("export", ExportActions.ACTION_EXPORT_GRAPHIC, ExportActions.ACTION_EXPORT_GRAPHML_YED, ExportActions.ACTION_EXPORT_GRAPHML_YFILES, new JSeparator(), ExportActions.ACTION_EXPORT_XSLT,

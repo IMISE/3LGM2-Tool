@@ -73,6 +73,7 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.help.Help;
+import de.imise.tool3lgm.imexport.DataImporter;
 import de.imise.tool3lgm.imexport.csv.DataExportModule;
 import de.imise.tool3lgm.imexport.csv.DataImportModule;
 import de.imise.tool3lgm.imexport.graphml.GraphmlExporter;
@@ -84,6 +85,7 @@ import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Alphabetical;
 import de.imise.util.BrowseUtils;
+import de.imise.util.PluginUtils;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.DirectoryChooser;
@@ -192,6 +194,28 @@ public class ActionLibrary {
                     new DataImportModule(getSelectedGDCollection());
                 }
             };
+
+            public static final List<Action> IMPORT_PLUGIN_ACTIONS = getImportPluginActions();
+
+            @SuppressWarnings("rawtypes")
+            private static final List<Action> getImportPluginActions() {
+                List<Action> importPluginActions = new ArrayList<>();
+                List<DataImporter> dataImporters = PluginUtils.loadInstances(Tool3lgmConstants.PLUGIN_DIR, DataImporter.class);
+                for (final DataImporter dataImporter : dataImporters) {
+                    Action importAction = new StaticAction(dataImporter.getClass()) {
+                        @Override
+                        protected void actionPerformed() {
+                            if (dataImporter.importData()) {
+                                GDCollection gdcoll = dataImporter.getCollection();
+                                Static.getTool().openModel(gdcoll);
+                            }
+                        }
+                    };
+                    importPluginActions.add(importAction);
+                }
+                return importPluginActions;
+            }
+
         }
 
         /**

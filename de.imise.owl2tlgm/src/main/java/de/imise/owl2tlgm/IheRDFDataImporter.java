@@ -45,6 +45,13 @@ public class IheRDFDataImporter extends RDFDataImporter {
     }
 
     /**
+     *
+     */
+    public IheRDFDataImporter() {
+        super(TEST_FILE);
+    }
+
+    /**
      * @param urlString
      */
     public IheRDFDataImporter(final String urlString) {

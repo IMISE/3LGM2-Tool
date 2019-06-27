@@ -340,7 +340,19 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             }
         }
         UserProperties.setWorkingDirectory(file);
+        return openModel(gdcoll);
+    }
 
+    /**
+     * Legt ein neues Modell an oder lädt ein bestehendes aus einer Datei.
+     *
+     * @param file
+     *            zu ladende Datei. Wenn <code>null</code> übergeben wird, wird eine neue Datei angelegt.
+     * @param metaModelContext
+     *            MetaModelContext der zu öffnenden Datei oder des neu anzulegenden Modells
+     * @return <code>true</code>, wenn die Datei geöffnet werden konnte oder ein neues Modell angelegt wurde
+     */
+    public boolean openModel(final GDCollection gdcoll) {
         Static.setProgressDialogStatusLabel("finish_progress");
         modelBrowserPanel.addCollection(gdcoll);
 
