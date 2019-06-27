@@ -15,7 +15,6 @@ import java.util.MissingResourceException;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.MetaModelContext;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -50,8 +49,8 @@ public class ElementsNameBuilder {
     /**
      * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
      *
-     * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
+     * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
     @SafeVarargs
@@ -62,34 +61,52 @@ public class ElementsNameBuilder {
         return getDisplayableName(plural, Arrays.asList(classes));
     }
 
+    /**
+     * @param plural
+     * @param classes
+     * @return
+     */
     private final String getDisplayableName(final boolean plural, final Collection<Class<? extends ModelElement>> classes) {
         if (classes == null) {
             return "";
         }
-        int classCount = classes.size();
         StringBuilder names = new StringBuilder();
-        Iterator<Class<? extends ModelElement>> classIt = classes.iterator();
-        for (int i = 0; i < classCount; i++) {
-            Class<? extends ModelElement> clazz = classIt.next();
-            while (ModelElement.class.isAssignableFrom(clazz)) {
-                try {
-                    String resKey = clazz.getSimpleName();
-                    if (plural) {
-                        resKey += ModelConstants.PLURAL_NAME_RES_KEY_SUFFIX;
-                    }
-                    String name = metaModelContext != null ? metaModelContext.getResString(resKey) : Tool3lgmConstants.getResString(resKey);
-                    names.append(name);
-                    if (i < classCount - 1) {
-                        names.append(", ");
-                    } else {
-                        break;
-                    }
-                } catch (MissingResourceException mre) {
-                    clazz = clazz.getSuperclass().asSubclass(ModelElement.class);
-                }
+        for (Iterator<Class<? extends ModelElement>> classesIt = classes.iterator(); classesIt.hasNext();) {
+            Class<? extends ModelElement> elementClass = classesIt.next();
+            String name = getDisplayableName(elementClass, plural);
+            if (name == null) {
+                name = elementClass.getSimpleName();
+            }
+            names.append(name);
+            if (classesIt.hasNext()) {
+                names.append(", ");
             }
         }
         return names.toString();
+    }
+
+    /**
+     * @param elementClass
+     * @param plural
+     * @return
+     */
+    private String getDisplayableName(Class<? extends ModelElement> elementClass, final boolean plural) {
+        //wenn der Anzeigename gleich für eine allg. Klasse heruas gesucht werden soll, dann muss der Resourcenname genommen werden, sonst der SimpleClassName
+        boolean dontReturnSimpleClassName = elementClass.getPackage() == ModelElement.class.getPackage();
+        while (ModelElement.class.isAssignableFrom(elementClass) && elementClass.getPackage() != ModelElement.class.getPackage() || dontReturnSimpleClassName) {
+            try {
+                String resKey = elementClass.getSimpleName();
+                if (plural) {
+                    resKey += ModelConstants.PLURAL_NAME_RES_KEY_SUFFIX;
+                }
+                return metaModelContext.getResString(resKey);
+            } catch (MissingResourceException mre) {
+                elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
+            } catch (NullPointerException e) {
+                break;
+            }
+        }
+        return null;
     }
 
     /**

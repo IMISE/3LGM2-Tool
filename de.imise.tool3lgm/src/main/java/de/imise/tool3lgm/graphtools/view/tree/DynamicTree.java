@@ -199,15 +199,8 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             abstractClassNodes.add(new ElementClassTreeNode(abstractClass, label));
         }
         //jetzt die ElementKnoten unter die abstrakten Knoten hängen oder unter den LayerKnoten selbst, wenn es keinen abstakten Oberklassenkoten gibt
-        //das hier ist der Name einer Klasse, für die keine Resourcen gefunden wurden -> einfach den SimpleClassName als Anzeigename nehmen.
-        //Das ist nur interessant, wenn man ein Test- oder Importmetamodell nutzt, für das man keine vollstänfdigen Resourcen braucht, das man aber mal im
-        //Baum anzeigen mächte.
-        String nodeLabel = elementsNameBuilder.getDisplayableName(Node.class);
         for (Class<? extends ModelElement> elementClass : treeLayerVisibleInstancialeNodes) {
             String label = elementsNameBuilder.getDisplayableName(elementClass);
-            if (label.equals(nodeLabel)) {
-                label = elementClass.getSimpleName();
-            }
             LGMTreeNode instanciableClassNode = new ElementClassTreeNode(elementClass, label, false); // muss nicht selbst sortieren, weil die Elemente bereits sortiert reinkommen
             elementClassToParentNode.put(elementClass, instanciableClassNode);
             boolean superClassFound = false;
