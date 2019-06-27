@@ -28,7 +28,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.imexport.UrlSourceDataImporter;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.DataPrinter;
 import de.imise.util.StringUtils;
