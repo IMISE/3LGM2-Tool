@@ -197,9 +197,9 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<OntResource>
             String superPropertyName = name;
             if (!objectPropertyNames.contains(name)) {
                 superPropertyName = getImportableSuperObjectPropertyName(objectProperty, objectPropertyNames);
-                if (!Strings.isNullOrEmpty(superPropertyName)) {
-                    importableObjectPropertiesToTargetEdgeClassName.put(objectProperty, superPropertyName);
-                }
+            }
+            if (!Strings.isNullOrEmpty(superPropertyName)) {
+                importableObjectPropertiesToTargetEdgeClassName.put(objectProperty, superPropertyName);
             }
         }
         return importableObjectPropertiesToTargetEdgeClassName;
