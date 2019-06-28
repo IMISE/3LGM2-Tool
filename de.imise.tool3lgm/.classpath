@@ -34,5 +34,8 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="Plugins/owl2tlgm-1.0.0.jar"/>
+	<classpathentry kind="lib" path="Plugins/tool3lgm.metamodel.original-1.0.0.jar"/>
+	<classpathentry kind="lib" path="Plugins/tool3lgm.metamodel.service-1.0.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
