@@ -102,6 +102,33 @@ public abstract class ModelConverterDefinition {
     }
 
     /**
+     * @param clazz
+     * @return <code>true</code>, wenn die übergebene Klasse zuweisungskompatibel zur {@link #sourceMetaModelDefinitionClass} ist, sonst
+     *         <code>false</code>
+     */
+    public final boolean isSourceMetaModelDefinitionClass(final Class<?> clazz) {
+        return sourceMetaModelDefinitionClass.isAssignableFrom(clazz);
+    }
+
+    /**
+     * @param clazz
+     * @return <code>true</code>, wenn die übergebene Klasse zuweisungskompatibel zur {@link #targetMetaModelDefinitionClass} ist, sonst
+     *         <code>false</code>
+     */
+    public final boolean isTargetMetaModelDefinitionClass(final Class<?> clazz) {
+        return targetMetaModelDefinitionClass.isAssignableFrom(clazz);
+    }
+
+    /**
+     * @param metaModelDefinitionClass
+     * @return <code>true</code>, wenn die übergebene MetaModelDefinition-Klasse der {@link #sourceMetaModelDefinitionClass} entspricht, sonst
+     *         <code>false</code>
+     */
+    public final boolean canConvert(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        return isSourceMetaModelDefinitionClass(metaModelDefinitionClass);
+    }
+
+    /**
      * @return {@link MetaModelContext} zur {@link #sourceMetaModelDefinitionClass}.
      */
     public final MetaModelContext getSourceMetaModelContext() {
