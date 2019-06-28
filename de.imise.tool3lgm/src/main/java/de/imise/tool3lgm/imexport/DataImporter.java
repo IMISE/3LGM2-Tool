@@ -35,11 +35,9 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
     /**
      * Das zu füllende Import-Modell
      */
-    protected final GDCollection gdcoll;
+    protected GDCollection gdcoll;
 
     public DataImporter() {
-        gdcoll = createModel(getImportMetaModelClass());
-        gdcoll.setBulkMode(true);
     }
 
     /**
@@ -47,12 +45,23 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      *
      * @return <code>true</code>, wenn der Import erfolgreich war
      */
-    public abstract boolean importData();
+    public final boolean startImport() {
+        gdcoll = createModel(getImportMetaModelDefinitionClass());
+        gdcoll.setBulkMode(true);
+        return importData();
+    }
+
+    /**
+     * Diese Funktion sollten Unterklassen überschreiben und den eigentlichen Import darin durchführen.
+     *
+     * @return <code>true</code>, wenn der Import geklappt hat, sonst <code>false</code>
+     */
+    protected abstract boolean importData();
 
     /**
      * @return Klasse des Metamodells, das dem Modell (der {@link GDCollection}) zugrunde liegt, in die importiert wird.
      */
-    public abstract Class<? extends MetaModelDefinition> getImportMetaModelClass();
+    public abstract Class<? extends MetaModelDefinition> getImportMetaModelDefinitionClass();
 
     /**
      * Initialisiert ein Modell ({@link GDCollection}) mit dem übergebenen Metamodel. Diese Funktion könnte woanders hin, wo evtl auch der

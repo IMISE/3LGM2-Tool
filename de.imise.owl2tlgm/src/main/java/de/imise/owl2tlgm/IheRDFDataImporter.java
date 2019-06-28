@@ -20,9 +20,14 @@ public class IheRDFDataImporter extends RDFDataImporter {
      */
     private static final String TLGM_EDGE_CLASS_NAME_POSTFIX = "_Edge";
 
+    /**
+     * Nur für Testzwecke
+     *
+     * @param args
+     */
     public static void main(final String[] args) {
         RDFDataImporter importer = new IheRDFDataImporter(TEST_FILE);
-        importer.importData();
+        importer.startImport();
         if (importer.isDebug()) {
             importer.printModel();
         }
@@ -40,7 +45,7 @@ public class IheRDFDataImporter extends RDFDataImporter {
     }
 
     @Override
-    public Class<? extends ImportMetaModelDefinition> getImportMetaModelClass() {
+    public Class<? extends ImportMetaModelDefinition> getImportMetaModelDefinitionClass() {
         return IheImportMetaModelDefinition.class;
     }
 

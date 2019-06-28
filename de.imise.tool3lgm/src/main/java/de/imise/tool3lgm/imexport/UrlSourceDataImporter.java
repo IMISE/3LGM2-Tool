@@ -16,12 +16,15 @@ public abstract class UrlSourceDataImporter<T> extends DataImporter<T> {
     public UrlSourceDataImporter(final String urlString) {
         //TODO: wenn hier null oder ein leerer String übergeben wird, könnte man festlegen, dass die Datenquell-URL aus einer Property-Datei mit demselben Namen wie die Importer-Klasse (this.getCLass().getsimpleName()) und im selben Verzeichnis wie das Jar-File des Importers liegen muss. Dann könnte man das sehr einfach von außen steuern.
         this.urlString = urlString;
-        gdcoll.setName(urlString);
     }
 
     @Override
-    public boolean importData() {
-        return importData(urlString);
+    protected final boolean importData() {
+        boolean imported = importData(urlString);
+        if (imported) {
+            gdcoll.setName(urlString);
+        }
+        return imported;
     }
 
     /**
