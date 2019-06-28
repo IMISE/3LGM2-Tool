@@ -77,16 +77,6 @@ public final class MetaModelContext {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse zuweisungskompatibel zur Definitionsklasse dieses Kontextes ist.
-     *
-     * @param classOrSuperClass
-     * @return
-     */
-    public final boolean hasDefinitionSubClass(final Class<?> metaModelDefinitionClassOrSuperClass) {
-        return metaModelDefinitionClassOrSuperClass.isAssignableFrom(metaModelDefinitionClass);
-    }
-
-    /**
      * Lädt das ResoruceBundle zu diesem Metamdoell und gibt es zurück. Wird keines gefunden, kommt ohne Fehler <code>null</code> zurück.
      *
      * @return ResoruceBundle zu diesem Metamdoell

@@ -60,11 +60,20 @@ public final class Tool3lgmMetaModelContext {
     private static final List<MetaModelContext> getMetaModelContexts(final List<MetaModelContext> metaModelContexts, final Class<?> metaModelDefinitonClassOrSuperClass) {
         List<MetaModelContext> returnList = new ArrayList<>();
         for (MetaModelContext metaModelContext : metaModelContexts) {
-            if (metaModelContext.hasDefinitionSubClass(metaModelDefinitonClassOrSuperClass)) {
+            Class<? extends MetaModelDefinition> metaModelDefinitionClass = metaModelContext.getMetaModelDefinitionClass();
+            if (metaModelDefinitonClassOrSuperClass.isAssignableFrom(metaModelDefinitionClass)) {
                 returnList.add(metaModelContext);
             }
         }
         return returnList;
+    }
+
+    /**
+     * @param metaModelDefinitionClass
+     * @return <code>true</code>, wenn die <code>metaModelDefinitionClass</code> das Interface {@link RegularMetaModelDefinition} implementiert
+     */
+    public static boolean isRegularMetaModelDefinition(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        return RegularMetaModelDefinition.class.isAssignableFrom(metaModelDefinitionClass);
     }
 
     /**
