@@ -38,7 +38,7 @@ import de.imise.util.StringUtils;
  *
  * @author AXS (26 Jun 2019)
  */
-public abstract class RDFDataImporter extends UrlSourceDataImporter<OntResource> implements DataPrinter {
+public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> implements DataPrinter {
 
     /**
      * @param urlString
@@ -106,75 +106,40 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<OntResource>
     }
 
     /**
-     * Fragt im Quellmodell alle ObjectProperties ab, deren Klassenname auch im Metamodell des Zielmodells als Kantenklassenname vorkommt. Dann werden
-     * im Zielmodell die entsprechenden Elemente verlinkt, die die Objectproperty im Quellmodell verbindet.
-     *
-     * @param ontModel Quellmodell
-     */
-    private void importEdges(final OntModel ontModel) {
-        Map<Statement, String> edgeStatementsToTargetEdgeClassName = getEdgeStatements(ontModel);
-        print(edgeStatementsToTargetEdgeClassName);
-        int i = 1;
-        for (Statement statement : edgeStatementsToTargetEdgeClassName.keySet()) {
-            //Statement
-            String targetEdgeClassName = edgeStatementsToTargetEdgeClassName.get(statement);
-            targetEdgeClassName += getEdgeClassNamePostfix();
-            targetEdgeClassName = StringUtils.capitalizeFirstChar(targetEdgeClassName); //Kantenklassennamen sind immer groß geschrieben - zugehörige, gleich heißende EdgeProperty evtl. klein -> Umwandeln
-            //Predicate -> Edge
-            Property predicate = statement.getPredicate();
-            String predicateUri = predicate.getURI();
-            String predicateLocalName = predicate.getLocalName();
-            //Subject -> startNode
-            Resource subjectResource = statement.getSubject();
-            String subjectUri = subjectResource.getURI();
-            OntResource subject = ontModel.getIndividual(subjectUri);
-            Node startNode = getTargetNode(subject);
-            //Object -> endNode
-            RDFNode objectNode = statement.getObject();
-            Resource objectResource = objectNode.asResource();
-            String objectUri = objectResource.getURI();
-            OntResource object = ontModel.getIndividual(objectUri);
-            Node endNode = getTargetNode(object);
-            //Edge
-            Edge lgmEdge = addEdge(targetEdgeClassName, predicateLocalName, predicateUri, startNode, endNode);
-            printe(i++ + "\t" + targetEdgeClassName + " -> " + startNode + "  ->  " + endNode + " " + lgmEdge);
-        }
-    }
-
-    /**
      * Liefert alle Statements, die eine Kante repräsentieren, die ins Zielmodell übernommen werden muss.
      *
      * @param ontModel
      * @return Map mit allen Statements, die eine zu importierende Kante repräsentieren als Key und dem Namen der daraus zu erzeugenden Kantenart im
      *         Zielmodell als value
      */
-    private Map<Statement, String> getEdgeStatements(final OntModel ontModel) {
-        Map<Statement, String> edgeStatementToTargetEdgeClassName = new HashMap<>();
+    private void importEdges(final OntModel ontModel) {
         //ObjectProperty -> Kantenklassenname
         Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName = getImportableObjetctProperties(ontModel);
-        Set<ObjectProperty> importableObjectProperties = importableObjectPropertiesToTargetEdgeClassName.keySet();
-        StmtIterator statements = ontModel.listStatements();
-        Set<OntResource> sourceNodes = getSourceNodes();
-        while (statements.hasNext()) {
+        int i = 1;
+        for (StmtIterator statements = ontModel.listStatements(); statements.hasNext();) {
             //Statement
             Statement statement = statements.next();
-            //Predicate
+            //Predicate == importiertbare ObjectProperty?
             Property predicate = statement.getPredicate();
-            if (importableObjectProperties.contains(predicate)) {
-                //Subject
-                Resource subject = statement.getSubject();
-                if (sourceNodes.contains(subject)) {
-                    //Object
-                    RDFNode object = statement.getObject();
-                    if (sourceNodes.contains(object)) {
-                        //Edge
-                        String targetEdgeClassName = importableObjectPropertiesToTargetEdgeClassName.get(predicate);
-                        edgeStatementToTargetEdgeClassName.put(statement, targetEdgeClassName);
+            String targetEdgeClassName = importableObjectPropertiesToTargetEdgeClassName.get(predicate);
+            if (targetEdgeClassName != null) {
+                //Subject == Knoten aus dem SourceModel?
+                Resource subjectResource = statement.getSubject();
+                Node startNode = getTargetNode(subjectResource);
+                if (startNode != null) {
+                    //Object == Knoten aus dem SourceModel?
+                    RDFNode objectNode = statement.getObject();
+                    Node endNode = getTargetNode(objectNode);
+                    if (endNode != null) {
+                        //Predicate -> Edge
+                        String predicateUri = predicate.getURI();
+                        String predicateLocalName = predicate.getLocalName();
+                        Edge lgmEdge = addEdge(targetEdgeClassName, predicateLocalName, predicateUri, startNode, endNode);
+                        printe(i++ + "\t" + targetEdgeClassName + " -> " + startNode + "  ->  " + endNode + " " + lgmEdge);
                     }
                 }
             }
         }
-        return edgeStatementToTargetEdgeClassName;
     }
 
     /**
@@ -199,6 +164,8 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<OntResource>
                 superPropertyName = getImportableSuperObjectPropertyName(objectProperty, objectPropertyNames);
             }
             if (!Strings.isNullOrEmpty(superPropertyName)) {
+                superPropertyName += getEdgeClassNamePostfix();
+                superPropertyName = StringUtils.capitalizeFirstChar(superPropertyName); //Kantenklassennamen sind immer groß geschrieben - zugehörige, gleich heißende EdgeProperty evtl. klein -> Umwandeln
                 importableObjectPropertiesToTargetEdgeClassName.put(objectProperty, superPropertyName);
             }
         }
