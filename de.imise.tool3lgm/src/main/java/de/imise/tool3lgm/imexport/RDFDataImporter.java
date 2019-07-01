@@ -149,8 +149,8 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
      * Bestimmt alle ObjectProperties, die ins Zielmodell als Kante übernommen werden sollen.
      *
      * @param ontModel
-     * @return Map, die von ObjectProperties, bei denen der eigene Name oder der einer SuperProperty mit einem Kantenklassennamen aus dem
-     *         ImportMetamodell übereinstimmt, auf den Namen Art der ObjectProperty mappt = Klassennamen der ObjectProperty.
+     * @return Map, die von ObjectProperties, bei denen der eigene Name oder der einer SuperProperty sich der Name aus einem Kantenklassennamen aus
+     *         dem ImportMetamodell ableiten lässt, auf den Namen dieser Kantenklasse aus dem ImportMetaModell
      */
     private Map<ObjectProperty, String> getImportableObjetctProperties(final OntModel ontModel) {
         Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName = new HashMap<>();
