@@ -48,14 +48,14 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
 
     @Override
     public Map<Class<? extends Edge>, Class<? extends Edge>> getSourceEdgeClassesToTargetEdgeClasses() {
-        //IntegrationProfile_Edge -> IheIntegrationProfile_IheActor_Edge
-        return ImmutableMap.of(IheIntegrationProfile_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
+        return ImmutableMap.of();
     }
 
     @Override
     public Map<Class<? extends Edge>, Class<? extends Edge>> getSourceEdgeClassesToSwitchedTargetEdgeClasses() {
+        //IntegrationProfile_Edge -> IheIntegrationProfile_IheActor_Edge
         //IheDomain_Edge -> IheIntegrationProfile_IheDomain_Edge
-        return ImmutableMap.of(IheDomain_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
+        return ImmutableMap.of(IheIntegrationProfile_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheDomain_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
     }
 
     @Override
