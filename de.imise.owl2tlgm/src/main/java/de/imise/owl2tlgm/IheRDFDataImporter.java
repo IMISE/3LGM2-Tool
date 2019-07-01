@@ -6,6 +6,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionPrinter;
 import de.imise.tool3lgm.imexport.ImportMetaModelDefinition;
 import de.imise.tool3lgm.imexport.RDFDataImporter;
+import de.imise.util.Sys;
 
 /**
  * @author AXS (26 Jun 2019)
@@ -26,22 +27,33 @@ public class IheRDFDataImporter extends RDFDataImporter {
      * @param args
      */
     public static void main(final String[] args) {
-        RDFDataImporter importer = new IheRDFDataImporter(TEST_FILE);
-        importer.startImport();
-        if (importer.isDebug()) {
-            importer.printModel();
+        IheRDFDataImporter importer = new IheRDFDataImporter(TEST_FILE);
+
+        final int SINGLE_IMPORTS = 1; //300;
+        final int SINGLE_IMPORT_FULL_ROUNDS = 1;//30;
+
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < SINGLE_IMPORT_FULL_ROUNDS; i++) {
+            long start2 = System.currentTimeMillis();
+            for (int j = 0; j < SINGLE_IMPORTS; j++) {
+                importer.startImport();
+            }
+            long end2 = System.currentTimeMillis();
+            System.err.println(end2 - start2);
         }
+        long end = System.currentTimeMillis();
+        Sys.err(end - start);
+
+        importer.printModel();
         ModelConverterDefinition converterDefinition = new IheModelConverterDefinition();
         GDCollection targetModel = ModelConverter.convert(converterDefinition, importer.getCollection());
         targetModel.setName("Imported OWL Target Model");
-        if (importer.isDebug()) {
-            GDCollectionPrinter.print(targetModel);
-        }
+        GDCollectionPrinter.print(targetModel);
     }
 
     @Override
     public boolean isDebug() {
-        return true;
+        return false;
     }
 
     @Override
