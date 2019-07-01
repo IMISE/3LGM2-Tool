@@ -79,7 +79,7 @@ public class GraphDocumentHandler {
                 objects.addAll(elems);
             }
         }
-        return objects;
+        return objects == null ? new ArrayList<>() : objects;
     }
 
     /**
