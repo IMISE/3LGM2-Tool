@@ -240,8 +240,13 @@ public abstract class ModelConverterDefinition {
             PATH_STEP_EDGE_NAME,
         }
 
+        /** MetaPfad, der über diese Defintion angelegt werden kann */
         private final SimpleMetaPath simpleMetaPath2Create;
 
+        /**
+         * Mappt von dem Index des Endelementes eines Pfadschrittes auf ein Pattern, über das Elemente, die an diesem Pfadschritt angelegt wurden,
+         * umbenannt werden können.
+         */
         private Map<Integer, Object[]> pathStepElementIndexToElementNameCreationPattern;
 
         /**
@@ -269,7 +274,7 @@ public abstract class ModelConverterDefinition {
         }
 
         /**
-         * @return the simpleMetaPath2Create
+         * @return the simpleMetaPath2Create MetaPfad, der über diese Defintion angelegt werden kann
          */
         public SimpleMetaPath getSimpleMetaPath2Create() {
             return simpleMetaPath2Create;
