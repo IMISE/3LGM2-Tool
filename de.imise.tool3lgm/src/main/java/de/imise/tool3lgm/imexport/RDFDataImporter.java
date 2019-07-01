@@ -30,6 +30,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.DataPrinter;
+import de.imise.util.HashStringGenerator;
 import de.imise.util.StringUtils;
 
 /**
@@ -136,9 +137,10 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     if (endNode != null) {
                         //Predicate -> Edge
                         String predicateUri = predicate.getURI();
+                        String edgeHash = HashStringGenerator.getHash(predicateUri);
                         String predicateLocalName = predicate.getLocalName();
-                        Edge lgmEdge = addEdge(targetEdgeClassName, predicateLocalName, predicateUri, startNode, endNode);
-                        printe(i++ + "\t" + targetEdgeClassName + " -> " + startNode + "  ->  " + endNode + " " + lgmEdge);
+                            Edge lgmEdge = addEdge(targetEdgeClassName, predicateLocalName, edgeHash, startNode, endNode);
+                            printe(i++ + "\t" + targetEdgeClassName + " (" + lgmEdge.getHashString() + ")" + " -> " + startNode + "  ->  " + endNode + " " + lgmEdge);
                     }
                 }
             }
