@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -13,10 +14,12 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.SimplePath;
+import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 
 /**
  * Definition der Transformation eines (Meta-)Modells in ein anderes.<br>
@@ -273,17 +276,50 @@ public abstract class ModelConverterDefinition {
         }
 
         /**
+         * Zwischenelemente des übergebenen Pfades werden entsprechend der Definition umbenannt und wenn sie dann gleich heißen, wie bereits zuvor
+         * umbenannte Elemente derselben Art, dann werden die Elemente vereinigt.
+         *
          * @param simplePath
          * @param nameSourceEdge
+         * @return Set aller umbenannten Elemente
          */
-        public void renameElements(final SimplePath simplePath, final Edge nameSourceEdge) {
+        public Set<ModelElement> renameAndJoinEqualNamedElements(final SimplePath simplePath, final Edge nameSourceEdge, final Set<ModelElement> alreadyRenamedElements) {
             Set<Integer> pathStepIndices = pathStepElementIndexToElementNameCreationPattern.keySet();
             for (int pathStepIndex : pathStepIndices) {
                 List<ElementaryPath> elementaryPaths = simplePath.getElementaryPaths();
                 ElementaryPath elementaryPath = elementaryPaths.get(pathStepIndex);
                 ModelElement pathStepEndElement = elementaryPath.getEndElement();
                 Object[] patternObjetcs = pathStepElementIndexToElementNameCreationPattern.get(pathStepIndex);
-                renameElement(pathStepEndElement, nameSourceEdge, patternObjetcs);
+                ModelElement renamedElement = renameElement(pathStepEndElement, nameSourceEdge, patternObjetcs);
+                addOrJoinRenamedElement(renamedElement, alreadyRenamedElements);
+            }
+            return alreadyRenamedElements;
+        }
+
+        private void addOrJoinRenamedElement(final ModelElement renamedElement, final Set<ModelElement> alreadyRenamedElements) {
+            if (renamedElement == null) {
+                return;
+            }
+            String renamedName = renamedElement.getName();
+            String renamedHash = renamedElement.getHashString();
+            GDCollection gdcoll = renamedElement.getCollection();
+            LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+            Class<? extends ModelElement> renamedElementClass = renamedElement.getClass();
+            boolean joined = false;
+            for (ModelElement me : alreadyRenamedElements) {
+                Class<? extends ModelElement> elementClass = me.getClass();
+                if (elementClass == renamedElementClass) {
+                    String name = me.getName();
+                    if (Objects.equals(name, renamedName)) {
+                        String hash = me.getHashString();
+                        //System.err.println("JOINED ########## " + renamedElement);
+                        joined = gdcoll.join(hash, renamedHash, mainDoc, TransactionManager.STANDARD_PID);
+                        break;
+                    }
+                }
+            }
+            if (!joined) {
+                alreadyRenamedElements.add(renamedElement);
             }
         }
 
@@ -292,9 +328,9 @@ public abstract class ModelConverterDefinition {
          * @param nameSourceEdge
          * @param patternObjetcs
          */
-        private void renameElement(final ModelElement element2Rename, final Edge nameSourceEdge, final Object[] patternObjetcs) {
+        private ModelElement renameElement(final ModelElement element2Rename, final Edge nameSourceEdge, final Object[] patternObjetcs) {
             if (patternObjetcs == null || patternObjetcs.length == 0) {
-                return;
+                return null;
             }
             StringBuilder newName = new StringBuilder();
             for (Object patternObject : patternObjetcs) {
@@ -323,8 +359,8 @@ public abstract class ModelConverterDefinition {
                 }
             }
             element2Rename.setName(newName.toString());
+            return element2Rename;
         }
-
     }
 
 }

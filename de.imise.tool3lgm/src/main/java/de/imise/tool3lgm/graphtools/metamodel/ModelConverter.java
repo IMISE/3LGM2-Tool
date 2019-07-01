@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -192,6 +193,8 @@ public class ModelConverter {
             //hole den MetaPfad der im Zielmodell für die Kante angelet werden soll
             TargetMetaPathsCreationDefinition edgesMappingMetaPathsCreationDefinition = edgesMappingMetaPaths.get(sourceEdgeClass);
             SimpleMetaPath targetMetaPath = edgesMappingMetaPathsCreationDefinition.getSimpleMetaPath2Create();
+            //Set, in das alle Pfadzwischenelemente kommen, die umbenannt wurden. Diese werden pauschal als identisch betrachtet, wenn sie denselben Namen haben. Diese Elemente werden dann zusammengeführt.
+            Set<ModelElement> generatedRenamedElements = new HashSet<>();
             //für jeden dieser umzuwandelnden Kanten
             for (ModelElement sourceEdgeElement : sourceEdges) {
                 Edge sourceEdge = (Edge) sourceEdgeElement;
@@ -204,7 +207,7 @@ public class ModelConverter {
                 //lege den MetaPfad im Zielmodell an
                 SimplePath createdPath = targetMainDoc.createPath(targetStartElement, targetEndElement, targetMetaPath, STANDARD_PID);
                 //nach der Definiton der Umbenennungen die Namen der Elemente in Abhängigkeit von der Source-Edge umbenennen
-                edgesMappingMetaPathsCreationDefinition.renameElements(createdPath, sourceEdge);
+                generatedRenamedElements = edgesMappingMetaPathsCreationDefinition.renameAndJoinEqualNamedElements(createdPath, sourceEdge, generatedRenamedElements);
             }
         }
     }
