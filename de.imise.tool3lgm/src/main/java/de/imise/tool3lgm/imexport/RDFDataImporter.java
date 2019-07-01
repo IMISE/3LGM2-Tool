@@ -140,8 +140,13 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                         String predicateUri = predicate.getURI();
                         String edgeHash = HashStringGenerator.getHash(predicateUri);
                         String predicateLocalName = predicate.getLocalName();
+                        try {
                             Edge lgmEdge = addEdge(targetEdgeClassName, predicateLocalName, edgeHash, startNode, endNode);
                             printe(i++ + "\t" + targetEdgeClassName + " (" + lgmEdge.getHashString() + ")" + " -> " + startNode + "  ->  " + endNode + " " + lgmEdge);
+                        } catch (Exception e) {
+                            // hier kann es zu java.lang.InstantiationExceptions kommen, wenn die EdgeClass abstract ist, weil nur für Unterklassen der ObjectProperty Edges angelegt werden sollen
+                            printe("SKIPPED " + statement);
+                        }
                     }
                 }
             }
@@ -163,6 +168,10 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
         for (Iterator<ObjectProperty> objectProperties = ontModel.listObjectProperties(); objectProperties.hasNext();) {
             //ObjectProperty-Instanz
             ObjectProperty objectProperty = objectProperties.next();
+            //ObjectProperties mit echten Unterklassen sollen selbst nicht hinzugefügt werden
+            if (hasSubProperties(objectProperty)) {
+                continue;
+            }
             String name = objectProperty.getLocalName();
             //solange die Oberklassen durchsuchen, bis ein gültiger ObjectProperty-Klassenname gefunden wurde oder nicht
             String superPropertyName = name;
@@ -176,6 +185,23 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
             }
         }
         return importableObjectPropertiesToTargetEdgeClassName;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn dei übergebene ObjectProperty wenigstens eine SubProperty hat, die nicht sie selbst ist (das ist nämlich immer
+     * eine SubProperty)
+     *
+     * @param objectProperty
+     * @return
+     */
+    private final boolean hasSubProperties(final ObjectProperty objectProperty) {
+        for (Iterator<? extends OntProperty> subProperties = objectProperty.listSubProperties(); subProperties.hasNext();) {
+            OntProperty subProperty = subProperties.next();
+            if (!objectProperty.equals(subProperty)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
