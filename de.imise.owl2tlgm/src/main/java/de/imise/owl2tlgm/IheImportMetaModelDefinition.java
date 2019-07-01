@@ -52,11 +52,18 @@ public class IheImportMetaModelDefinition extends ImportMetaModelDefinition {
     @Override
     public Set<Class<? extends Node>> getNodes() {
         return ImmutableSet.of(Domain.class, IntegrationProfile.class, Actor.class);
+        //zum Testen kann man die unteren Kombinationen zurück geben lassen (bei den Edges immer dieselbe Position einschalten dann hat man immer 2 Knotenklassen und 1 Kante dazwischen und nicht alle 3 Knoten- und alle 3 Kantenklassen gleichzeitig)
+        //        return ImmutableSet.of(Domain.class, IntegrationProfile.class);
+        //        return ImmutableSet.of(IntegrationProfile.class, Actor.class);
+        //        return ImmutableSet.of(Actor.class);
     }
 
     @Override
     public Set<Class<? extends Edge>> getEdges() {
         return ImmutableSet.of(IheDomain_Edge.class, IheIntegrationProfile_Edge.class, IheTransaction_Edge.class);
+        //        return ImmutableSet.of(IheDomain_Edge.class);
+        //        return ImmutableSet.of(IheIntegrationProfile_Edge.class);
+        //        return ImmutableSet.of(IheTransaction_Edge.class);
     }
 
 }
