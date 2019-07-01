@@ -164,11 +164,13 @@ public class ModelConverter {
                 ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEndElementHash);
                 int startElementEdgeIndex = sourceEdgeStartElement.getEdgeIndex(sourceEdge);
                 int endElementEdgeIndex = sourceEdgeEndElement.getEdgeIndex(sourceEdge);
+                String sourceEdgeHash = sourceEdge.getHashString();
+                String targetEdgeClassName = targetEdgeClass.getName();
                 //linke die entsprechende Kante im Target-Modell mit demselben Hash und zwischen den Elementen mit demselben Hash
                 if (!switchDirection) {
-                    targetModel.link(targetEdgeClass.getName(), sourceEdge.getHashString(), targetStartElement, targetEndElement, startElementEdgeIndex, endElementEdgeIndex, true, STANDARD_PID);
+                    targetModel.link(targetEdgeClassName, sourceEdgeHash, targetStartElement, targetEndElement, startElementEdgeIndex, endElementEdgeIndex, true, STANDARD_PID);
                 } else {
-                    targetModel.link(targetEdgeClass.getName(), sourceEdge.getHashString(), targetEndElement, targetStartElement, endElementEdgeIndex, startElementEdgeIndex, true, STANDARD_PID);
+                    targetModel.link(targetEdgeClassName, sourceEdgeHash, targetEndElement, targetStartElement, endElementEdgeIndex, startElementEdgeIndex, true, STANDARD_PID);
                 }
             }
         }
