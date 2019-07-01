@@ -35,6 +35,9 @@ import de.imise.util.StringUtils;
 /**
  * Allgemeiner Importer für OWL RDF-Dateien. Der Importer fragt das OWL-Model nach genau den Knoten- und Kantenklassen bzw. deren Instanzen im
  * OWL-Model und baut daraus ein äquivalentes 3LGM2-Modell zusammen.
+ * Der DataImporter wird mit dem Typ &ltObject&gt initialisiert, weil anscheinend alle Objekte, die man aus dem OntModel holen kann, immer als
+ * hashCode den hashCode der Uri zurück liefern. Daher kann man in die Map der Source-Knoten auf die Target-Knoten mit jedem Object fragen und nicht
+ * nur mit Objecten eines ganz bestimmten Typs.
  *
  * @author AXS (26 Jun 2019)
  */
