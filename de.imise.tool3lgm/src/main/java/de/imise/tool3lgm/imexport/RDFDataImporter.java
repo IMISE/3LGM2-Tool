@@ -101,6 +101,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                         String name = ontNode.getLocalName();
                         String description = ontNode.getComment(localeCountry);
                         String hashString = ontNode.getURI();
+                        hashString = HashStringGenerator.getHash(hashString); //TimeStamp und eine Nummer and die URI als Hash anhängen
                         Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, hashString);
                         printe(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
                     }
