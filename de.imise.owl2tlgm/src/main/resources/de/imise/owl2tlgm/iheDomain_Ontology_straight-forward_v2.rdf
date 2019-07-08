@@ -325,8 +325,14 @@
     <!-- http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#status -->
 
     <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#status">
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
-        <rdfs:domain rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#IntegrationProfile"/>
+        <rdfs:domain>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
+                    <rdf:Description rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#IntegrationProfile"/>
+                </owl:unionOf>
+            </owl:Class>
+        </rdfs:domain>
         <rdfs:range>
             <rdfs:Datatype>
                 <owl:oneOf>
@@ -851,6 +857,7 @@
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#IntegrationProfile"/>
+        <lgm2ihe:iheDomain rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI"/>
         <lgm2ihe:status>Final Text</lgm2ihe:status>
         <ontology:abbreviation>XDS.b</ontology:abbreviation>
         <terms:description>The Cross-Enterprise Document Sharing (XDS.b) IHE Integration Profile facilitates the registration, distribution and access across health enterprises of patient electronic health records. Cross-Enterprise Document Sharing is focused on providing a standards-based specification for managing the sharing of documents between any healthcare enterprise, ranging from a private physician office to a clinic to an acute care in-patient facility.</terms:description>
