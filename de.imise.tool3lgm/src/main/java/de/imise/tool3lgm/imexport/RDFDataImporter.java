@@ -86,13 +86,12 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                 Class<? extends ModelElement> lgmClass = metaModel.getClassForName(ontClassName);
                 Class<? extends Node> lgmNodeClass = lgmClass.asSubclass(Node.class);
                 print(ontClassName + " > " + lgmClass);
-                print(ontClass.listInstances(true));
                 int i = 1;
                 for (Iterator<? extends OntResource> ontNodes = ontClass.listInstances(true); ontNodes.hasNext();) {
-                    //Aus irgendeinem kruden Grund kommen bei der IntegrationProfile-Klasse auch Instances von IheActor zurück???
-                    //Und bei IheAcor auch InheIntegrationProfiles
+                    //Wenn die Ontologie nicht ganz richtig modelliert ist, kann es vorkommen, dass ontClass.listInstances(true) auch
+                    //Instanzen anderer als der eigentlichen Zielklasse zurück liefert.
                     //Das lässt sich durch das nun folgende beheben, indem man aus dem Model über dei URI die Individuals holt und
-                    //von denen die Klasse vergleicht.
+                    //von denen die Klasse vergleicht. Das hier behebt aber nur die Symptome. Die Ursache ist ein Fehler in der Ontologie!
                     OntResource ontNode = ontNodes.next();
                     String uri = ontNode.getURI();
                     Individual individual = ontModel.getIndividual(uri);
@@ -104,6 +103,8 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                         hashString = HashStringGenerator.getHash(hashString); //TimeStamp und eine Nummer and die URI als Hash anhängen
                         Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, hashString);
                         printe(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
+                    } else {
+                        printe("ERROR: " + individualOntClass + "  !=  " + ontClass + "      ------>      " + individual);
                     }
                 }
             }
