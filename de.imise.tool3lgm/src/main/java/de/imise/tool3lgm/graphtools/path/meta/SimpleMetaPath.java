@@ -200,4 +200,9 @@ public class SimpleMetaPath extends SequenceMetaPath {
         return sb.toString();
     }
 
+    @Override
+    public String createName() {
+        return getFullPathString();
+    }
+
 }
