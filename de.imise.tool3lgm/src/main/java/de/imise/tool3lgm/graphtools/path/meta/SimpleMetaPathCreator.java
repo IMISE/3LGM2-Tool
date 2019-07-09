@@ -190,6 +190,7 @@ public class SimpleMetaPathCreator {
      * @return
      * @throws IllegalArgumentException
      */
+    @SuppressWarnings("unchecked")
     public SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final int metaPathStepWithPathName, final Class<? extends Edge>... associations) throws IllegalArgumentException {
         return createSimpleMetaPath(metaModel, startClass, metaPathStepWithPathName, associations);
     }
