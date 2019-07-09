@@ -333,7 +333,7 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     public enum InvalidReason {
-        INVALID_SEQUENCE_INCOMPATIBLE_PATH_STEP_END_START_CLASSES,
+        INVALID_SEQUENCE_INCOMPATIBLE_PATH_STEP_AND_EDGE_CLASSES,
     }
 
     @Override
@@ -346,7 +346,7 @@ public class SequenceMetaPath extends ListMetaPath {
                 Set<Class<? extends ModelElement>> pathStepElementClasses = getPathStepConnectingClasses(i);
                 //2 aufienanderfolgende Pfade passen nicht zusmammen
                 if (pathStepElementClasses.isEmpty()) {
-                    invalidityCheckResult = new InvalidityCheckResult(InvalidReason.INVALID_SEQUENCE_INCOMPATIBLE_PATH_STEP_END_START_CLASSES, i);
+                    invalidityCheckResult = new InvalidityCheckResult(InvalidReason.INVALID_SEQUENCE_INCOMPATIBLE_PATH_STEP_AND_EDGE_CLASSES, i);
                     break;
                 }
             }
