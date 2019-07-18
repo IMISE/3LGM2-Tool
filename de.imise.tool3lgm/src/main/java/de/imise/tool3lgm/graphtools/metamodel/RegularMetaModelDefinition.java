@@ -3,7 +3,6 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -141,22 +140,18 @@ public interface RegularMetaModelDefinition {
     public Set<Class<? extends ModelElement>> getImportableNodes();
 
     /**
-     * Liefert die {@link #elementClassToRemovedEdgeClasses}
+     * Liefert die {@link #elementClassToRemovedEdgeClassesForStartClass}
      *
      * @return
      */
-    public Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClasses();
-
-    ///////////////////////////////////
-    // spezielle Kanteneigenschaften //
-    ///////////////////////////////////
+    public Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClassesForStartClass();
 
     /**
-     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
-     * Bedeutung haben. Elementklasse ohne wenigestens eine solche Edge werden hier nicht eingtragen. D.h. es kommt <code>null</code> zurück, wenn
-     * man nach solcher Elementklasse in der Map sucht und kein leeres Set.
+     * Liefert die {@link #elementClassToRemovedEdgeClassesForEndClass}
+     *
+     * @return
      */
-    public ImmutableSetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToSortedEdges();
+    public Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClassesForEndClass();
 
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//

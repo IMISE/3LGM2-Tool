@@ -159,7 +159,9 @@ public abstract class SubordinationEdge extends Edge {
      * @return
      */
     public final boolean isRecursive() {
-        return MetaModel.isRecursiveSubordination(getClass());
+        MetaModel metaModel = getMetaModel();
+        Class<? extends SubordinationEdge> edgeClass = getClass();
+        return metaModel.isRecursiveSubordination(edgeClass);
     }
 
 }

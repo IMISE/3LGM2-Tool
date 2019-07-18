@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -298,8 +296,8 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
             int maxStartCard = forwardCardinality.max();
             int minEndCard = backwardCardinality.min();
             int maxEndCard = backwardCardinality.max();
-            boolean meHasStartClass = isStartClass(edgeClass, meClass);
-            boolean meHasEndClass = isEndClass(edgeClass, meClass);
+            boolean meHasStartClass = metaModel.isStartClass(edgeClass, meClass);
+            boolean meHasEndClass = metaModel.isEndClass(edgeClass, meClass);
 
             ElementaryMetaPath forwardElementaryMetaPath = elementaryMetaPathHandler.getForwardMetaPath(edgeClass);
             // Bei Teil-Von-Beziehungen oder Beziehungen bei denen meClass

@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.path;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwardCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
@@ -216,14 +215,15 @@ public class MetaPathFunctions {
                 return false;
             }
         }
+        MetaModel metaModel = metaPath.getMetaModel();
         if (metaPath.getDirection() == Direction.FORWARD) {
             //für das Startelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (Edge.getMaxForwardCardinality(metaPath.getEdgeClass()) <= modelElement.countStartConnections(metaPath.getEdgeClass())) {
+            if (metaModel.getMaxForwardCardinality(metaPath.getEdgeClass()) <= modelElement.countStartConnections(metaPath.getEdgeClass())) {
                 return false;
             }
         } else if (metaPath.getDirection() == Direction.BACKWARD) {
             //für das Endelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (Edge.getMaxBackwardCardinality(metaPath.getEdgeClass()) <= modelElement.countEndConnections(metaPath.getEdgeClass())) {
+            if (metaModel.getMaxBackwardCardinality(metaPath.getEdgeClass()) <= modelElement.countEndConnections(metaPath.getEdgeClass())) {
                 return false;
             }
         }
@@ -755,9 +755,9 @@ public class MetaPathFunctions {
                 continue;
             }
             //wenn das neu angelegte Element StartElement der Edge ist
-            if (Edge.isStartClass(edgeType, elementClass2Create)) {
+            if (metaModel.isStartClass(edgeType, elementClass2Create)) {
                 //hole die MinKardnalität zu dem anderen Element der Edge
-                int minCardinalityForwardToOther = Edge.getMinForwardCardinality(edgeType);
+                int minCardinalityForwardToOther = metaModel.getMinForwardCardinality(edgeType);
                 if (minCardinalityForwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
                     List<Edge> edgesForwardTo = createdDependent.getEdgesTo(ModelElement.class, edgeType);
@@ -778,7 +778,7 @@ public class MetaPathFunctions {
                 //wenn das neu angelegte Element EndElement der Edge ist
             } else {
                 //hole die MinKardnalität zu dem anderen Element der Edge
-                int minCardinalityBackwardToOther = getMinBackwardCardinality(edgeType);
+                int minCardinalityBackwardToOther = metaModel.getMinBackwardCardinality(edgeType);
                 if (minCardinalityBackwardToOther > 0) {
                     //hole alle Kanten des neu angelgten Elementes, die denselben Typ haben
                     List<Edge> edgesBackwardTo = createdDependent.getEdgesFrom(ModelElement.class, edgeType);

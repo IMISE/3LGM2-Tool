@@ -97,7 +97,7 @@ public class ConsistencyDefinition {
      * @return
      */
     public EdgeCardinality getForwardCardinality(final Class<? extends Edge> edgeClass) {
-        return cardinalityDefinition.getForwardCardinality(edgeClass);
+        return cardinalityDefinition.getForwardCardinality(metaModel, edgeClass);
     }
 
     /**
@@ -107,7 +107,7 @@ public class ConsistencyDefinition {
      * @return
      */
     public EdgeCardinality getBackwardCardinality(final Class<? extends Edge> edgeClass) {
-        return cardinalityDefinition.getBackwardCardinality(edgeClass);
+        return cardinalityDefinition.getBackwardCardinality(metaModel, edgeClass);
     }
 
 }

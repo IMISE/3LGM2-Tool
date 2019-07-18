@@ -570,11 +570,6 @@ public abstract class AbstractMetaPath {
      * @param endClass
      *            zu testenden Endklasse des Metapfades
      * @return
-     *         /
-     *         public final boolean isCreatable(Class<? extends ModelElement> startClass, Class<? extends ModelElement> endClass) {
-     *         return isStartClassOrSubClass(startClass) && isEndClassOrSubClass(endClass) && isCreatable();
-     *         }
-     *         /**
      *         Liefert <code>true</code>, wenn der Pfad zwischen Elementen der Start- und Zielklasse den prinzipiell angelegt werden kann.
      *         Das ist der Fall, wenn es sich um eine einfache Assoziationsfolge ohne parallele Pfade oder Verweigungen zu Assoziationsklassen
      *         dazwischen handelt und alle Zwischenelementklassen und Zwischenkantenklassen nicht abstrakt sind. Außerdem müssen die Start-

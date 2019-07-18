@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,13 +8,11 @@ import java.util.Set;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSetMultimap;
 import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.DefaultGraphViewDefinitionAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.collections.CollectionUtils;
@@ -234,13 +230,28 @@ public abstract class MetaModelDefinition implements Serializable {
      * ererbte Kanten abgeschaltet werden. Z.B. wenn man eine Unterklasse einer bestehenden Metamodellklasse definiert, die aber nicht mehr wie die
      * Oberklasse in Teilelemente zerlegt werden könen soll, dann muss man hier die Unterklasse und die 'abzuschaltende' HatTeil-Kante angeben.
      * Es müssen alle konkreten Element-Klassen angegeben werden, für die eine konkrete Kantenklasse nicht gelten soll. D.h. die Klassen hier werden
-     * auf Identität geprüft und nicht auf Unterklassen
+     * auf Identität geprüft und nicht auf Unterklassen.
+     * Die Richtung ist wichtig, weil man nur so ausdrücken kann, dass z.B. eine Element zwar Teil eines Oberelementes von einer Oberklasse sein kann,
+     * aber selbst nicht mehr in Teile zerlegt werden darf. Das gilt auch für andere als HasPart-Kantenarten, die zwischen einer Elementart und einer
+     * Unterklasse bestehen, bei der die Kante für die Unterklasse nicht mehr gelten soll.
      */
-    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClasses = ArrayListMultimap.create();
+    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClassesForStartClass = ArrayListMultimap.create();
+    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClassesForEndClass = ArrayListMultimap.create();
 
     @SafeVarargs
-    protected final void addRemovedEdgeClasses(final Class<? extends ModelElement> elementClass, final Class<? extends Edge>... edgeClasses) {
-        elementClassToRemovedEdgeClasses.putAll(elementClass, Arrays.asList(edgeClasses));
+    protected final void addRemovedEdgeClassesForStartClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge>... edgeClasses) {
+        elementClassToRemovedEdgeClassesForStartClass.putAll(elementClass, Arrays.asList(edgeClasses));
+    }
+
+    @SafeVarargs
+    protected final void addRemovedEdgeClassesForEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge>... edgeClasses) {
+        elementClassToRemovedEdgeClassesForEndClass.putAll(elementClass, Arrays.asList(edgeClasses));
+    }
+
+    @SafeVarargs
+    protected final void addRemovedEdgeClassesForStartAndEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge>... edgeClasses) {
+        addRemovedEdgeClassesForStartClass(elementClass, edgeClasses);
+        addRemovedEdgeClassesForEndClass(elementClass, edgeClasses);
     }
 
     /**
@@ -251,44 +262,21 @@ public abstract class MetaModelDefinition implements Serializable {
     }
 
     /**
-     * Liefert die {@link #elementClassToRemovedEdgeClasses}
+     * Liefert die {@link #elementClassToRemovedEdgeClassesForStartClass}
      *
      * @return
      */
-    public final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClasses() {
-        return elementClassToRemovedEdgeClasses;
+    public final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClassesForStartClass() {
+        return elementClassToRemovedEdgeClassesForStartClass;
     }
-
-    ///////////////////////////////////
-    // spezielle Kanteneigenschaften //
-    ///////////////////////////////////
 
     /**
-     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
-     * Bedeutung haben. Elementklasse ohne wenigestens eine solche Edge werden hier nicht eingtragen. D.h. es kommt <code>null</code> zurück, wenn
-     * man nach solcher Elementklasse in der Map sucht und kein leeres Set.
+     * Liefert die {@link #elementClassToRemovedEdgeClassesForEndClass}
+     *
+     * @return
      */
-    public final ImmutableSetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToSortedEdges() {
-        ImmutableSetMultimap.Builder<Class<? extends ModelElement>, Class<? extends Edge>> mapBuilder = ImmutableSetMultimap.builder();
-        Iterable<Class<? extends Edge>> sortedEdges = getSortedEdges();
-        for (Class<? extends ModelElement> elementClass : getAllNodes()) {
-            for (Class<? extends Edge> edgeClass : sortedEdges) {
-                if (isStartClass(edgeClass, elementClass)) {
-                    mapBuilder.put(elementClass, edgeClass);
-                }
-            }
-        }
-        return mapBuilder.build();
-    }
-
-    private ImmutableSet<Class<? extends Edge>> getSortedEdges() {
-        ImmutableSet.Builder<Class<? extends Edge>> sortedEdges = new ImmutableSet.Builder<>();
-        for (Class<? extends Edge> edgeClass : getAllEdges()) {
-            if (MultipleEdge.class.isAssignableFrom(edgeClass)) {
-                sortedEdges.add(edgeClass);
-            }
-        }
-        return sortedEdges.build();
+    public final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClassesForEndClass() {
+        return elementClassToRemovedEdgeClassesForEndClass;
     }
 
     ///////////////////////////////////////////////////////////////////

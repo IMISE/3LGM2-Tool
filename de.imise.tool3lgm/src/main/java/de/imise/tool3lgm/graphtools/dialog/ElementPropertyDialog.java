@@ -252,7 +252,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         MetaModel metaModel = modelElement.getMetaModel();
         Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(elementClass);
         for (Class<? extends Edge> edgeClass : edgeTypes) {
-            if (MetaModel.isRecursiveHasPartEdge(edgeClass)) {
+            if (metaModel.isRecursiveHasPartEdge(edgeClass)) {
                 Class<? extends HasPartEdge> hasPartEdgeClass = edgeClass.asSubclass(HasPartEdge.class);
                 if (HasPartEdge.isParentClass(hasPartEdgeClass, elementClass)) {
                     recursiveHasPartEdges.add(hasPartEdgeClass);

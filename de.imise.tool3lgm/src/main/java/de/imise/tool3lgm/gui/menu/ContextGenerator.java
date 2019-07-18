@@ -6,8 +6,6 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getIcon;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS;
@@ -413,7 +411,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         for (Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>> slavePair : slavePairs) {
             Class<? extends CompositionEdge> compositionClass = slavePair.getFirstItem();
             JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), MODEL_ACTION_CREATE_ADDICTED, doc.getHashString() + " " + me.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
-            item.setEnabled(me.countConnections(compositionClass) < CompositionEdge.getMaxMasterToSlaveCardinality(compositionClass));
+            item.setEnabled(me.countConnections(compositionClass) < metaModel.getMaxMasterToSlaveCardinality(compositionClass));
             items.add(item);
         }
         Alphabetical.sort(items);
@@ -542,7 +540,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             if (!metaModel.isSlaveType(meClass)) {
                 ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
                 for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(meClass)) {
-                    if (InstanciationEdge.class.isAssignableFrom(edgeClass) && Edge.isStartClass(edgeClass, meClass)) {
+                    if (metaModel.isInstanciationEdgeMaster(meClass, edgeClass)) {
                         if (newInstanceLabel == null) {
                             newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
                             menu.add(newInstanceLabel);
@@ -683,7 +681,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassOrMetaPath).asSubclass(Edge.class);
                         //Hat-Teil-Kante
                         if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
-                            if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
+                            if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
                                 String label = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
                                 String toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                                 boolean connectable = false;
@@ -705,7 +703,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                 connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectable, toolTip), label));
                                 disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
                             }
-                            if (isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
+                            if (metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
                                 String label = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
                                 String toolTip = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
                                 boolean connectable = false;
@@ -729,7 +727,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             }
                             //Kante mit Doppelter Bedeutung
                         } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
-                            if (isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
+                            if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
                                 Direction direction = Direction.FORWARD;
                                 ConnectionState connectionState = ConnectionState.FORWARD;
                                 String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
@@ -775,7 +773,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             }
                             // Doppeldeutige Kanten mit identischer Start- und
                             // Endklasse brauchen nur 1x angeboten werden
-                            if (isConnectingForward(edgeClass, me2Class, lastSelectedClass) && getStartClass(edgeClass) != getEndClass(edgeClass)) {
+                            if (metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && getStartClass(edgeClass) != getEndClass(edgeClass)) {
                                 Direction direction = Direction.BACKWARD;
                                 ConnectionState connectionState = ConnectionState.FORWARD;
                                 String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
@@ -821,7 +819,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
                             }
                             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
-                        } else if (Edge.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && Edge.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && metaModel.isDirectedEdge(edgeClass)) {
+                        } else if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && metaModel.isDirectedEdge(edgeClass)) {
                             String labelForward = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
                             String toolTipForward = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
                             String labelBackward = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
@@ -859,7 +857,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                             Direction direction;
                             String label;
                             String toolTip;
-                            if (isStartClass(edgeClass, lastSelectedClass)) {
+                            if (metaModel.isStartClass(edgeClass, lastSelectedClass)) {
                                 direction = FORWARD;
                                 label = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
                                 toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
@@ -875,10 +873,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                                     continue;
                                 }
                                 Class<? extends ModelElement> selectedClass = selected.getClass();
-                                if (direction == FORWARD && !Edge.isConnectingForward(edgeClass, lastSelectedClass, selectedClass)) {
+                                if (direction == FORWARD && !metaModel.isConnectingForward(edgeClass, lastSelectedClass, selectedClass)) {
                                     continue;
                                 }
-                                if (direction == BACKWARD && !Edge.isConnectingForward(edgeClass, selectedClass, lastSelectedClass)) {
+                                if (direction == BACKWARD && !metaModel.isConnectingForward(edgeClass, selectedClass, lastSelectedClass)) {
                                     continue;
                                 }
                                 if (!lastSelected.isConnectedWith(selected, edgeClass)) {

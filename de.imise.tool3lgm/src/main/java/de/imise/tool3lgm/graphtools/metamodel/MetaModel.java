@@ -1,11 +1,7 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnecting;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartOrEndClass;
+import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERROR_INT_VALUE;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
@@ -38,6 +34,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerNode;
@@ -58,6 +55,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.util.ReflectionUtils;
 import de.imise.util.Sys;
 import de.imise.util.collections.CollectionUtils;
 
@@ -224,9 +222,13 @@ public final class MetaModel {
      * ererbte Kanten abgeschaltet werden. Z.B. wenn man eine Unterklasse einer bestehenden Metamodellklasse definiert, die aber nicht mehr wie die
      * Oberklasse in Teilelemente zerlegt werden könen soll, dann muss man hier die Unterklasse und die 'abzuschaltende' HatTeil-Kante angeben.
      * Es müssen alle konkreten Element-Klassen angegeben werden, für die eine konkrete Kantenklasse nicht gelten soll. D.h. die Klassen hier werden
-     * auf Identität geprüft und nicht auf Unterklassen
+     * auf Identität geprüft und nicht auf Unterklassen.
+     * Die Richtung ist wichtig, weil man nur so ausdrücken kann, dass z.B. eine Element zwar Teil eines Oberelementes von einer Oberklasse sein kann,
+     * aber selbst nicht mehr in Teile zerlegt werden darf. Das gilt auch für andere als HasPart-Kantenarten, die zwischen einer Elementart und einer
+     * Unterklasse bestehen, bei der die Kante für die Unterklasse nicht mehr gelten soll.
      */
-    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClasses;
+    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClassesForStartClass;
+    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClassesForEndClass;
 
     /**
      * Mappt vom Klassennamen auf die Klasse. Es ist immer der SimpleName und der FullName der Klasse in der Map. Dies ist der Cache für die Funktion
@@ -347,24 +349,23 @@ public final class MetaModel {
         allEdgesSet = ImmutableSet.copyOf(Arrays.asList(metaModelDefinition.getAllEdges()));
         //alle Elementklassen
         allElementsSet = ImmutableSet.<Class<? extends ModelElement>> builder().addAll(allNodesSet).addAll(allEdgesSet).build();
-        allModelElementClassesWithSuperClasses = CollectionUtils.ensureImmutable(getAllModelelementClassesWithSuperClasses());
+        allModelElementClassesWithSuperClasses = CollectionUtils.ensureImmutable(getAllElementClassesWithSuperClasses());
         elementClassNameToElementClass = CollectionUtils.ensureImmutable(getElementClassNameToElementClass());
-
-        elementClassToSortedEdges = CollectionUtils.ensureImmutable(metaModelDefinition.getElementClassToSortedEdges());
 
         //jetzt die GraphViewDefinition, weil die gleich gebraucht wird
         graphViewDefinition = getInstance(metaModelDefinition.getGraphViewDefinitionClass());
         //spezielle Knoteneigenschaften
         onlyExpertModeEditableNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getOnlyExpertModeEditableNodes());
         onlyExpertModeVisibleNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getOnlyExpertModeVisibleNodes());
-        elementClassesWithSortedEdgesToPaintable = CollectionUtils.ensureImmutable(getElementClassesWithSortedEdgeClassesToPaintable()); //muss vor elementClassesWithLayout, da für dessen init notwendig!
-        elementClassesWithLayout = CollectionUtils.ensureImmutable(getElementClassesWithLayout());
         treeDomainLayerVisibleAbstractNodes = metaModelDefinition.getTreeDomainLayerVisibleAbstractNodes();
         treeLogicalLayerVisibleAbstractNodes = metaModelDefinition.getTreeLogicalLayerVisibleAbstractNodes();
         treePhysicalLayerVisibleAbstractNodes = metaModelDefinition.getTreePhysicalLayerVisibleAbstractNodes();
-        // Maps von Elementklassen auf Sets von Elementklassen (und mehr)
         oldToNewClassName = CollectionUtils.ensureImmutable(metaModelDefinition.getOldToNewClassNameMap());
-        elementClassToRemovedEdgeClasses = CollectionUtils.ensureImmutable(metaModelDefinition.getElementClassToRemovedEdgeClasses());
+        elementClassToRemovedEdgeClassesForStartClass = CollectionUtils.ensureImmutable(metaModelDefinition.getElementClassToRemovedEdgeClassesForStartClass());
+        elementClassToRemovedEdgeClassesForEndClass = CollectionUtils.ensureImmutable(metaModelDefinition.getElementClassToRemovedEdgeClassesForEndClass());
+        elementClassToSortedEdges = getElementClassToSortedEdges(); //muss nach den elementClassToRemovedEdgeClasses... und vor elementClassesWithSortedEdgesToPaintable, da für dessen init notwendig!
+        elementClassesWithSortedEdgesToPaintable = CollectionUtils.ensureImmutable(getElementClassesWithSortedEdgeClassesToPaintable()); //muss vor elementClassesWithLayout, da für dessen init notwendig!
+        elementClassesWithLayout = CollectionUtils.ensureImmutable(getElementClassesWithLayout());
         // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException
         treeDomainLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(allDomainLayerNodesSet, false));
         creatableDomainLayerNodes = CollectionUtils.ensureImmutable(getTreeVisibleNodes(treeDomainLayerNodes, true));
@@ -462,7 +463,7 @@ public final class MetaModel {
      *
      * @return
      */
-    private Set<Class<? extends ModelElement>> getAllModelelementClassesWithSuperClasses() {
+    private Set<Class<? extends ModelElement>> getAllElementClassesWithSuperClasses() {
         //Menge aller Elementklassen und aller ihrer Oberklassen bis hin zu ModelElement zusammenbauen
         ArrayList<Class<? extends ModelElement>> allElementClasses = new ArrayList<>(allNodesSet.size() + allEdgesSet.size() + 20);
         allElementClasses.addAll(allNodesSet);
@@ -493,6 +494,34 @@ public final class MetaModel {
             elementClassNameToElementClass.put(elementClass.getName(), elementClass);
         }
         return elementClassNameToElementClass.build();
+    }
+
+    /**
+     * Mappt von Elementklassen auf alle Kantenklassen, bei der die Reihenfolge von Instanzen dieser Kantenklasse für Elemente der Elementklasse eine
+     * Bedeutung haben. Elementklasse ohne wenigestens eine solche Edge werden hier nicht eingtragen. D.h. es kommt <code>null</code> zurück, wenn
+     * man nach solcher Elementklasse in der Map sucht und kein leeres Set.
+     */
+    public final ImmutableSetMultimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToSortedEdges() {
+        ImmutableSetMultimap.Builder<Class<? extends ModelElement>, Class<? extends Edge>> mapBuilder = ImmutableSetMultimap.builder();
+        Iterable<Class<? extends Edge>> sortedEdges = getSortedEdges();
+        for (Class<? extends ModelElement> elementClass : allNodesSet) {
+            for (Class<? extends Edge> edgeClass : sortedEdges) {
+                if (isStartClass(edgeClass, elementClass)) {
+                    mapBuilder.put(elementClass, edgeClass);
+                }
+            }
+        }
+        return mapBuilder.build();
+    }
+
+    private ImmutableSet<Class<? extends Edge>> getSortedEdges() {
+        ImmutableSet.Builder<Class<? extends Edge>> sortedEdges = new ImmutableSet.Builder<>();
+        for (Class<? extends Edge> edgeClass : allEdgesSet) {
+            if (MultipleEdge.class.isAssignableFrom(edgeClass)) {
+                sortedEdges.add(edgeClass);
+            }
+        }
+        return sortedEdges.build();
     }
 
     /**
@@ -632,10 +661,9 @@ public final class MetaModel {
             for (Class<? extends Edge> c : getEdgeTypes(elementClass)) {
                 if (HasPartEdge.class.isAssignableFrom(c)) {
                     Class<? extends HasPartEdge> hasPartEdgeClass = c.asSubclass(HasPartEdge.class);
-                    if (direction == HasPartEdge.PARENT_TO_PART_DIRECTION && HasPartEdge.isParentClass(hasPartEdgeClass, elementClass)) {
-                        elementClassesWithPartEdges.add(elementClass);
-                        break;
-                    } else if (direction == HasPartEdge.PARENT_TO_PART_DIRECTION && HasPartEdge.isPartClass(hasPartEdgeClass, elementClass)) {
+                    boolean isHasPartOrPartOfClass = direction == HasPartEdge.PARENT_TO_PART_DIRECTION;
+                    isHasPartOrPartOfClass = isHasPartOrPartOfClass ? HasPartEdge.isParentClass(hasPartEdgeClass, elementClass) : HasPartEdge.isPartClass(hasPartEdgeClass, elementClass);
+                    if (!isRemovedEdgeClass(elementClass, hasPartEdgeClass, direction == Direction.FORWARD)) {
                         elementClassesWithPartEdges.add(elementClass);
                         break;
                     }
@@ -687,7 +715,7 @@ public final class MetaModel {
         for (Class<? extends ModelElement> elementClass : allElementsSet) {
             Class<? extends CompositionEdge>[] compositionEdgeTypes = getCompositionEdgeTypes(elementClass, true);
             for (Class<? extends CompositionEdge> compositionEdgeType : compositionEdgeTypes) {
-                if (CompositionEdge.getMinMasterToSlaveCardinality(compositionEdgeType) > ZERO) {
+                if (getMinForwardCardinality(compositionEdgeType) > ZERO) {
                     initialSubtypes.put(elementClass, compositionEdgeType);
                 }
             }
@@ -822,15 +850,56 @@ public final class MetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse für die übergebene Elementklasse als nicht mehr gültig definiert wurde.
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse für die übergebene Elementklasse in Vorwärtsrichtung nicht mehr gelten soll.
      *
      * @param elementClass
      * @param edgeClass
      * @return
      */
-    public boolean isRemovedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+    public boolean isRemovedEdgeClassForStartClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        return isRemovedEdgeClass(elementClass, edgeClass, true);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse für die übergebene Elementklasse in Rückwärtsrichtung nicht mehr gelten soll.
+     *
+     * @param elementClass
+     * @param edgeClass
+     * @return
+     */
+    public boolean isRemovedEdgeClassForEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        return isRemovedEdgeClass(elementClass, edgeClass, false);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse für die übergebene Elementklasse in Vorwärts- und Rückwärtsrichtung nicht mehr
+     * gelten soll.
+     *
+     * @param elementClass
+     * @param edgeClass
+     * @return
+     */
+    public boolean isRemovedEdgeClassForStartAndEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        return isRemovedEdgeClass(elementClass, edgeClass, true) && isRemovedEdgeClass(elementClass, edgeClass, false);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse für die übergebene Elementklasse als nicht mehr gültig definiert wurde.
+     *
+     * @param elementClass
+     * @param edgeClass
+     * @param asStartClass
+     * @return
+     */
+    private boolean isRemovedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass, final boolean asStartClass) {
+        Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClasses = asStartClass ? elementClassToRemovedEdgeClassesForStartClass : elementClassToRemovedEdgeClassesForEndClass;
         Collection<Class<? extends Edge>> removedEdgeClasses = elementClassToRemovedEdgeClasses.get(elementClass);
-        return removedEdgeClasses != null && removedEdgeClasses.contains(edgeClass);
+        if (removedEdgeClasses != null) {
+            if (removedEdgeClasses.contains(edgeClass)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     ///////////////////////////////////
@@ -1048,10 +1117,10 @@ public final class MetaModel {
         if (edgeClasses != null) {
             return edgeClasses;
         }
-        ArrayList<Class<? extends Edge>> elementClassEdgeClasses = new ArrayList<>();
+        List<Class<? extends Edge>> elementClassEdgeClasses = new ArrayList<>();
         for (Class<? extends Edge> edgeClass : allEdgesSet) {
             if (isStartOrEndClass(edgeClass, elementClass)) {
-                if (!isRemovedEdgeClass(elementClass, edgeClass)) {
+                if (!isRemovedEdgeClassForStartAndEndClass(elementClass, edgeClass)) {
                     elementClassEdgeClasses.add(edgeClass);
                 }
             }
@@ -1103,7 +1172,7 @@ public final class MetaModel {
         Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass1);
         for (Class<? extends Edge> edgeClass : edgeTypes) {
             if (isConnecting(edgeClass, elementClass1, elementClass2)) {
-                if (!isRemovedEdgeClass(elementClass2, edgeClass)) { // !isRemovedEdgeClass(elementClass1, edgeClass) wird schon in getEdgeTypes(elementClass1) geprüft
+                if (!isRemovedEdgeClassForStartAndEndClass(elementClass2, edgeClass)) { // !isRemovedEdgeClass(elementClass1, edgeClass) wird schon in getEdgeTypes(elementClass1) geprüft
                     resultEdgeClasses.add(edgeClass);
                 }
             }
@@ -1204,11 +1273,11 @@ public final class MetaModel {
      * @param elementClass
      * @return
      */
-    public final boolean isAssociationClass(final Class<?> elementClass) {
+    public final boolean isAssociationClass(final Class<? extends ModelElement> elementClass) {
         if (!Edge.class.isAssignableFrom(elementClass)) {
             return false;
         }
-        Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass.asSubclass(ModelElement.class));
+        Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass);
         return edgeTypes != null && edgeTypes.length != 0;
     }
 
@@ -1223,15 +1292,282 @@ public final class MetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse Startklasse eines Interebenenmetapfades ist.
+     * Liefert <code>true</code>, wenn es sich bei der übergebenen Kantenklasse um eine {@link InstanciationEdge} handelt und die übergebene
+     * Elementklasse davon das StartElement - also das instanziierbare Element ist und nicht die Instanz.
      *
-     * @param metaModel
+     * @param elementClass
+     * @param edgeClass
+     * @return
+     */
+    public boolean isInstanciationEdgeMaster(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        return InstanciationEdge.class.isAssignableFrom(edgeClass) && isStartClass(edgeClass, elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Edge oder eine Unterklasse davon ist und die Kantenklasse
+     * für diese Elementart nicht entfernt wurde.
+     *
+     * @param edgeClass
      * @param elementClass
      * @return
      */
-    public final boolean isInterLayerStartClass(final MetaModel metaModel, final Class<? extends ModelElement> elementClass) {
-        return getGraphViewDefinition().getInterLayerMetaPath(metaModel, elementClass) != null;
+    public final boolean isStartClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        if (isRemovedEdgeClassForStartClass(elementClass, edgeClass)) {
+            return false;
+        }
+        Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
+        return startClass.isAssignableFrom(elementClass);
     }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Edge oder eine Unterklasse davon ist und die Kantenklasse
+     * für diese Elementart nicht entfernt wurde.
+     *
+     * @param edgeClass
+     * @param elementClass
+     * @return
+     */
+    public final boolean isEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        if (isRemovedEdgeClassForEndClass(elementClass, edgeClass)) {
+            return false;
+        }
+        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+        return endClass.isAssignableFrom(elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Start- oder Endklasse der Edge oder eine Ober- oder Unterklasse davon ist.
+     *
+     * @param edgeClass
+     * @param elementClass
+     * @return
+     */
+    public final boolean isStartOrEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        return isStartClass(edgeClass, elementClass) || isEndClass(edgeClass, elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten miteinander verbindet.
+     *
+     * @param edgeClass
+     * @param elementClass1
+     * @param elementClass2
+     * @return
+     */
+    public final boolean isConnecting(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+        return isConnectingForward(edgeClass, elementClass1, elementClass2) || isConnectingForward(edgeClass, elementClass2, elementClass1);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten in Vorwärtsrichtung miteinander verbindet. Also
+     * <code>startElementClass</code> die Startklasse der Kantenklasse oder eine Unterklasse davon ist und <code>endElementClass</code> die Endklasse
+     * der Kantenklasse oder eine Unterklasse davon ist.
+     *
+     * @param edgeClass
+     * @param startElementClass
+     * @param endElementClass
+     * @return
+     */
+    public final boolean isConnectingForward(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
+        return isStartClass(edgeClass, startElementClass) && isEndClass(edgeClass, endElementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die Start- und Endelemente von derselben Klasse sein können, d.h. wenn die beiden Klassen
+     * gleich sind oder eine eine Oberklasse der anderen ist.
+     *
+     * @param edgeClass
+     * @return
+     */
+    public boolean isRecursive(final Class<? extends Edge> edgeClass) {
+        Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
+        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+        if (startClass.isAssignableFrom(endClass)) {
+            return !isRemovedEdgeClassForEndClass(endClass, edgeClass);
+        } else if (endClass.isAssignableFrom(startClass)) {
+            return !isRemovedEdgeClassForStartClass(startClass, edgeClass);
+        }
+        return false;
+    }
+
+    /**
+     * Wenn die übergebene Elementklasse durch eine Edge der angegebenen Art mit anderen Elementen verbunden sein kann, dann wird die Elementklasse
+     * dieser anderen Elemente zurück gegeben. Passen Edge und Elementklasse nicht zusammen, kommt <code>null</code> zurück.
+     *
+     * @param edgeClass Kantanklasse, von der die andere verbundene Elementklasse zurück gegeben werden soll
+     * @param meClass Elementklasse der Edge, deren Gegenelementklasse zurück gegeben werden soll
+     * @return die andere Elementklasse der Edge, als die übergebene Klasse oder <code>null</code>, wenn die Klasse gar nicht passt
+     */
+    public final Class<? extends ModelElement> getOther(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> meClass) {
+        if (isStartClass(edgeClass, meClass)) {
+            return Edge.getEndClass(edgeClass);
+        }
+        if (isEndClass(edgeClass, meClass)) {
+            return Edge.getStartClass(edgeClass);
+        }
+        return null;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Slave-Klasse der übergebenen Kompositionsklasse ist.
+     *
+     * @param compositionClass
+     * @param elementClass
+     * @return
+     */
+    public final boolean isSlaveType(final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> elementClass) {
+        return isEndClass(compositionClass, elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Master-Klasse der übergebenen Kompositionsklasse ist.
+     *
+     * @param compositionClass
+     * @param elementClass
+     * @return
+     */
+    public final boolean isMasterType(final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> elementClass) {
+        return isStartClass(compositionClass, elementClass);
+    }
+
+    ////////////////////
+    // Kardinalitäten //
+    ////////////////////
+
+    /**
+     * @param edgeClass
+     * @param backward
+     * @return
+     */
+    private static final EdgeCardinality getCardinality(final Class<? extends Edge> edgeClass, final boolean backward) {
+        String fieldName = backward ? Edge.START_CARDINALITY_FIELD_NAME : Edge.END_CARDINALITY_FIELD_NAME;
+        return ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName, EdgeCardinality.class);
+    }
+
+    /**
+     * Liefert die Kardinalität für Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen hat.
+     *
+     * @param edgeClass
+     * @param elementClass
+     * @return
+     */
+    public final EdgeCardinality getCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        if (isStartClass(edgeClass, elementClass)) {
+            return getCardinality(edgeClass, false);
+        }
+        if (isEndClass(edgeClass, elementClass)) {
+            return getCardinality(edgeClass, true);
+        }
+        return null;
+    }
+
+    /**
+     * Liefert die minimale Anzahl von Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen haben muss.
+     *
+     * @param edgeClass
+     * @param elementClass
+     * @return
+     */
+    public final int getMinCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        EdgeCardinality cardinality = getCardinality(elementClass, edgeClass);
+        return cardinality != null ? cardinality.min() : STANDARD_ERROR_INT_VALUE;
+    }
+
+    /**
+     * Liefert die maximale Anzahl von Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen haben kann.
+     *
+     * @param edgeClass
+     * @param elementClass
+     * @return
+     */
+    public final int getMaxCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+        EdgeCardinality cardinality = getCardinality(elementClass, edgeClass);
+        return cardinality != null ? cardinality.max() : STANDARD_ERROR_INT_VALUE;
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final EdgeCardinality getForwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, false);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final EdgeCardinality getBackwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, true);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final int getMinForwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, false).min();
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final int getMaxForwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, false).max();
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final int getMinBackwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, true).min();
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final int getMaxBackwardCardinality(final Class<? extends Edge> edgeClass) {
+        return getCardinality(edgeClass, true).max();
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final int getMinMasterToSlaveCardinality(final Class<? extends CompositionEdge> edgeClass) {
+        return getMinForwardCardinality(edgeClass);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final int getMaxMasterToSlaveCardinality(final Class<? extends CompositionEdge> edgeClass) {
+        return getMaxForwardCardinality(edgeClass);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final int getMinSlaveToMasterCardinality(final Class<? extends CompositionEdge> edgeClass) {
+        return getMinBackwardCardinality(edgeClass);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final int getMaxSlaveToMasterCardinality(final Class<? extends CompositionEdge> edgeClass) {
+        return getMaxBackwardCardinality(edgeClass);
+    }
+
+    /////////////////////////////////
+    // Namen auflösen oder liefern //
+    /////////////////////////////////
 
     /**
      * Gibt die Klasse zu einem Klassennamen zurück. Der Klassenname kann voll qualifiziert sein oder aber nur aus dem simplen Klassenamen bestehen.
@@ -1259,15 +1595,11 @@ public final class MetaModel {
         return HasPartEdge.class.isAssignableFrom(edgeClass);
     }
 
-    public static boolean isRecursive(final Class<? extends Edge> edgeClass) {
-        return Edge.isRecursive(edgeClass);
-    }
-
-    public static boolean isRecursiveHasPartEdge(final Class<? extends Edge> edgeClass) {
+    public boolean isRecursiveHasPartEdge(final Class<? extends Edge> edgeClass) {
         return isHasPartEdge(edgeClass) && isRecursive(edgeClass);
     }
 
-    public static boolean isRecursiveSubordination(final Class<? extends Edge> edgeClass) {
+    public boolean isRecursiveSubordination(final Class<? extends Edge> edgeClass) {
         return SubordinationEdge.class.isAssignableFrom(edgeClass) && isRecursive(edgeClass);
     }
 
@@ -1450,9 +1782,9 @@ public final class MetaModel {
         for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass)) {
             //System.err.print(elementClass.getSimpleName() + "  --->  " + edgeClass.getSimpleName() + "  --->  " + Edge.getMinCardinality(elementClass, edgeClass) + "  --->  ");
             //minimale Kardinalität von 1 zu anderen Elementen -> dieses Element braucht mind. ein anderes, damit es konsistent ist
-            if (Edge.getMinCardinality(elementClass, edgeClass) > 0) {
+            if (getMinCardinality(elementClass, edgeClass) > 0) {
                 //wenn das andere, benötigte Element aber mit einer Compostion untergeordnet ist, dann wird dieses benötigte, untergeordnete Element in der GDCollection-Funktion createInitialSubtypes(...) auomatisch erzeugt und somit die Konsistenz automatisch hergestellt und damit gilt dieses Element nicht als anhängig
-                if (!isComposition(edgeClass) || CompositionEdge.isSlaveType(edgeClass.asSubclass(CompositionEdge.class), elementClass)) {
+                if (!isComposition(edgeClass) || isEndClass(edgeClass, elementClass)) {
                     //System.err.println(true);
                     return true;
                 }
@@ -1473,8 +1805,8 @@ public final class MetaModel {
     public final Set<Class<? extends Edge>> getSubordinatedJoinbleTypes(final Class<? extends ModelElement> elementClass) {
         Set<Class<? extends Edge>> edgeClassesToSubordinatedJoinbleTypes = new HashSet<>();
         for (Class<? extends Edge> edgeClass : getEdgeTypes(elementClass)) {
-            Edge.getOther(edgeClass, elementClass);
-            int maxCardinality = Edge.getMaxCardinality(elementClass, edgeClass);
+            getOther(edgeClass, elementClass);
+            int maxCardinality = getMaxCardinality(elementClass, edgeClass);
             if (maxCardinality == 1) {
                 edgeClassesToSubordinatedJoinbleTypes.add(edgeClass);
             }

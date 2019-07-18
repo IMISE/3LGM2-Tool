@@ -194,7 +194,7 @@ public final class ElementaryMetaPathHandler {
         Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(startClass, endClass);
         Class<? extends Edge> commonSuperClass = null;
         for (Class<? extends Edge> edgeClass : edgeTypes) {
-            if (Edge.isConnectingForward(edgeClass, startClass, endClass)) {
+            if (metaModel.isConnectingForward(edgeClass, startClass, endClass)) {
                 if (commonSuperClass == null) {
                     commonSuperClass = edgeClass;
                 } else {

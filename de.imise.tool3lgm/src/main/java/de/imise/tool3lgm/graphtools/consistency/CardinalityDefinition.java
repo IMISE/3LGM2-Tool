@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 
 /**
@@ -112,24 +113,24 @@ public class CardinalityDefinition {
      * @param edgeClass
      * @return
      */
-    public final EdgeCardinality getForwardCardinality(final Class<? extends Edge> edgeClass) {
+    public final EdgeCardinality getForwardCardinality(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
         EdgeCardinality newForwardCardinality = getNewForwardCardinality(edgeClass);
         //Wenn für die Kante neue Kardinalitäten angegeben wurden, gib diese zurück. Wenn keien neuen da sind und gefltert werden soll (= nur neue
         //Kardinalitäten sollen zu Konsistenzfehlern führen), dann gibt für alle Kanten ohne neue Kardinalitäten ZERO_UNLIMITED zurück (-> keine Fehler bei diesen Kanten).
         //Wenn aber nicht gefiltert werden soll und keine neuen Kardinalitäten definiert wurden, dann gib die originalen Kantenkardinalitäten zurück.
-        return newForwardCardinality != null ? newForwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : Edge.getForwardCardinality(edgeClass);
+        return newForwardCardinality != null ? newForwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : metaModel.getForwardCardinality(edgeClass);
     }
 
     /**
      * @param edgeClass
      * @return
      */
-    public final EdgeCardinality getBackwardCardinality(final Class<? extends Edge> edgeClass) {
+    public final EdgeCardinality getBackwardCardinality(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
         EdgeCardinality newBackwardCardinality = getNewBackwardCardinality(edgeClass);
         //Wenn für die Kante neue Kardinalitäten angegeben wurden, gib diese zurück. Wenn keien neuen da sind und gefltert werden soll (= nur neue
         //Kardinalitäten sollen zu Konsistenzfehlern führen), dann gibt für alle Kanten ohne neue Kardinalitäten ZERO_UNLIMITED zurück (-> keine Fehler bei diesen Kanten).
         //Wenn aber nicht gefiltert werden soll und keine neuen Kardinalitäten definiert wurden, dann gib die originalen Kantenkardinalitäten zurück.
-        return newBackwardCardinality != null ? newBackwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : Edge.getBackwardCardinality(edgeClass);
+        return newBackwardCardinality != null ? newBackwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : metaModel.getBackwardCardinality(edgeClass);
     }
 
 }

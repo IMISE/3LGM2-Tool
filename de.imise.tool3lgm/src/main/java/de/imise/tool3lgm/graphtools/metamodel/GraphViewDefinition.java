@@ -104,17 +104,16 @@ public abstract class GraphViewDefinition {
      * @return
      */
     public final SimpleMetaPath getInterLayerMetaPath(final ModelElement me) {
-        return getInterLayerMetaPath(me.getMetaModel(), me.getClass());
+        return getInterLayerMetaPath(me.getClass());
     }
 
     /**
      * Liefert den MetaPfade, der als Interebenenbeziehung dargestellt werden soll, wenn es einen solchen gibt.
      *
-     * @param metaModel
      * @param elementClass
      * @return
      */
-    public final SimpleMetaPath getInterLayerMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> elementClass) {
+    public final SimpleMetaPath getInterLayerMetaPath(final Class<? extends ModelElement> elementClass) {
         //es muss ein lazy-init sein, weil es sonst zu einer Init-Exception in der Reflection-Methode Edge.getStartClass(...)
         if (classToConfigurationPaths == null) {
             classToConfigurationPaths = new HashMap<>();

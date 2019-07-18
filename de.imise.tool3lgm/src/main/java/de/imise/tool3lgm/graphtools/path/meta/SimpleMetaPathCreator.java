@@ -288,7 +288,7 @@ public class SimpleMetaPathCreator {
                 //solange zur vorherigen Kante zurück gehen, bis man eine findet, die sowohl vorwärts als auch rückwärts passt und diese dann mit rückwärts probieren
                 for (--i; i >= 0; i--) {
                     if (metaPaths[i].hasDirectionForward()) { //das bedeutet, dass die aktuelle Kante in Vorwärsrichtung gelesen genommen wurde, was immer die zuerst gesuchte Richtung ist
-                        if (isEdgeDirectionBackward(startClass, edgeClass)) { //falls die Kante auch rückwärts im Pfad sein kann
+                        if (isEdgeDirectionBackward(metaModel, startClass, edgeClass)) { //falls die Kante auch rückwärts im Pfad sein kann
                             direction = Direction.BACKWARD;
                             break;
                         }
@@ -381,8 +381,8 @@ public class SimpleMetaPathCreator {
         return direction;
     }
 
-    public static boolean isEdgeDirectionBackward(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {
-        return Edge.isEndClass(edgeClass, startClass);
+    public static boolean isEdgeDirectionBackward(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {
+        return metaModel.isEndClass(edgeClass, startClass);
     }
 
     /**

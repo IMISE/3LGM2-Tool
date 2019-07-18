@@ -12,11 +12,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinCardinality;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnecting;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ACTIVE_LAYER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.SELECTION_CHANGED;
@@ -871,7 +867,7 @@ public final class GDCollection extends UserFieldTarget {
                     //der minimalen Kardinalität für diese Kantenart ist, dann muss das verbundene Element auch gelöscht werden
                     //auf Gleichheit muss getestet werden, weil die Edge ja noch nicht wirklich gelöscht ist und somit mitgezählt wird
                     Class<? extends Edge> edgeClass = edge.getClass();
-                    if (elem != null && elem.countConnections(edgeClass) <= getMinCardinality(elem.getClass(), edgeClass)) {
+                    if (elem != null && elem.countConnections(edgeClass) <= metaModel.getMinCardinality(elem.getClass(), edgeClass)) {
                         if (!allElementsToDelete.contains(elem)) {
                             allElementsToDelete.add(elem);
                             dependentDeletedElements.add(elem);
@@ -1158,9 +1154,9 @@ public final class GDCollection extends UserFieldTarget {
     public void createInitialSubtypes(final ModelElement me, final int pid) {
         Class<? extends ModelElement> elementClass = me.getClass();
         for (Class<? extends Edge> subTypeEdgeClass : metaModel.getInitialSubtypes(elementClass)) {
-            Class<? extends ModelElement> subType = isStartClass(subTypeEdgeClass, elementClass) ? getEndClass(subTypeEdgeClass) : getStartClass(subTypeEdgeClass);
+            Class<? extends ModelElement> subType = metaModel.isStartClass(subTypeEdgeClass, elementClass) ? getEndClass(subTypeEdgeClass) : getStartClass(subTypeEdgeClass);
             //minimale kardinalität für die Unterelemente
-            int minCardForSubType = getMinCardinality(me.getClass(), subTypeEdgeClass);
+            int minCardForSubType = metaModel.getMinCardinality(me.getClass(), subTypeEdgeClass);
             //bisher verbundene Anzahl von Unterelementen
             List<ModelElement> connectedSubTypes = me.getConnectedElements(subType, subTypeEdgeClass);
             //soviele Unterelemente wie fehlen neu anlegen
@@ -1335,7 +1331,7 @@ public final class GDCollection extends UserFieldTarget {
             return null;
         }
         Class<? extends Edge> edgeClass = edgeClassOrNull == null ? null : edgeClassOrNull.asSubclass(Edge.class);
-        if (edgeClass != null && !isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
+        if (edgeClass != null && !metaModel.isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
             return null;
         }
 
@@ -1361,7 +1357,7 @@ public final class GDCollection extends UserFieldTarget {
                     edge.setHashString(edgeHash);
                 }
                 ConnectionState connectionState = FORWARD; // wird nur für die DoubleMeaningEdges gebraucht
-                if (!isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
+                if (!metaModel.isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
                     ModelElement dummy = startElement;
                     startElement = endElement;
                     endElement = dummy;
@@ -1502,7 +1498,7 @@ public final class GDCollection extends UserFieldTarget {
 
         Class<? extends ModelElement> me1Class = me1.getClass();
         Class<? extends ModelElement> me2Class = me2.getClass();
-        boolean isDirectionImportent = MetaModel.isDoubleMeaningEdge(edgeClass) || Edge.isConnecting(edgeClass, me1Class, me2Class) && Edge.isConnecting(edgeClass, me2Class, me1Class);
+        boolean isDirectionImportent = MetaModel.isDoubleMeaningEdge(edgeClass) || metaModel.isConnecting(edgeClass, me1Class, me2Class) && metaModel.isConnecting(edgeClass, me2Class, me1Class);
         if (isDirectionImportent) {
             edges = me1.getEdgesTo(me2, edgeClass, me1EdgeIndex);
         } else {

@@ -4,7 +4,6 @@
  */
 package de.imise.tool3lgm.metamodel.original.process;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getOther;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
@@ -227,7 +226,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         ModelElement me = dialog.getModelElement();
         Class<? extends ModelElement> elementClass = me.getClass();
         MetaModel metaModel = dialog.getMetaModel();
-        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, elementClass, getOther(multipleConnectionEgdeClass, elementClass), multipleConnectionEgdeClass);
+        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, elementClass, metaModel.getOther(multipleConnectionEgdeClass, elementClass), multipleConnectionEgdeClass);
         return simpleMetaPath;
     }
 

@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
-import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERROR_INT_VALUE;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -81,7 +81,7 @@ public abstract class Edge extends ModelElement {
     public enum Direction {
         FORWARD,
         BACKWARD;
-        //ACHTUNG: toString() darf nicht überschreiben werden und muss dasselbe wie name() zurück liefern, weil das in den UNDO-REDO-Kommandos genutzt wird
+        //ACHTUNG: toString() darf nicht überschrieben werden und muss dasselbe wie name() zurück liefern, weil das in den UNDO-REDO-Kommandos genutzt wird
     }
 
     @Override
@@ -240,24 +240,6 @@ public abstract class Edge extends ModelElement {
         return null;
     }
 
-    /**
-     * Wenn die übergebene Elementklasse durch eine Edge der angegebenen Art mit anderen Elementen verbunden sein kann, dann wird die Elementklasse
-     * dieser anderen Elemente zurück gegeben. Passen Edge und Elementklasse nicht zusammen, kommt <code>null</code> zurück.
-     *
-     * @param edgeClass Kantanklasse, von der die andere verbundene Elementklasse zurück gegeben werden soll
-     * @param meClass Elementklasse der Edge, deren Gegenelementklasse zurück gegeben werden soll
-     * @return die andere Elementklasse der Edge, als die übergebene Klasse oder <code>null</code>, wenn die Klasse gar nicht passt
-     */
-    public static final Class<? extends ModelElement> getOther(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> meClass) {
-        if (isStartClass(edgeClass, meClass)) {
-            return getEndClass(edgeClass);
-        }
-        if (isEndClass(edgeClass, meClass)) {
-            return getStartClass(edgeClass);
-        }
-        return null;
-    }
-
     @Override
     public boolean putXMLFieldString(final String field, final String value) {
         if (field.equals("start")) {
@@ -350,19 +332,21 @@ public abstract class Edge extends ModelElement {
         boolean startClassOk = false, endClassOk = false;
         boolean switchStart = false, switchEnd = false;
         if (startElement != null && endElement != null) {
-            Class<? extends ModelElement> clazz = startElement.getClass();
+            Class<? extends ModelElement> elementClass = startElement.getClass();
+            MetaModel metaModel = getMetaModel();
+            Class<? extends Edge> edgeClass = getClass();
             //prüfen, ob das StartElement von einer der Startklassen ist
-            if (!isStartClass(clazz)) {
+            if (!metaModel.isStartClass(edgeClass, elementClass)) {
                 //wenn nicht
-                switchStart = isEndClass(clazz);
+                switchStart = isEndClass(elementClass);
             } else {
                 startClassOk = true;
             }
-            clazz = endElement.getClass();
+            elementClass = endElement.getClass();
             //prüfen, ob das EndElement von einer der Endklassen ist
-            if (!isEndClass(clazz)) {
+            if (!isEndClass(elementClass)) {
                 //wenn nicht
-                switchEnd = isStartClass(clazz);
+                switchEnd = isStartClass(elementClass);
             } else {
                 endClassOk = true;
             }
@@ -442,19 +426,8 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public final Class<? extends ModelElement> getEndClass() {
-        return getEndClass(getClass());
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Edge oder eine Ober- oder Unterklasse davon ist.
-     *
-     * @param edgeClass
-     * @param elementClass
-     * @return
-     */
-    public static final boolean isStartClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
-        Class<? extends ModelElement> startClass = getStartClass(edgeClass);
-        return startClass.isAssignableFrom(elementClass);
+        Class<? extends Edge> edgeClass = getClass();
+        return getEndClass(edgeClass);
     }
 
     /**
@@ -464,19 +437,9 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public final boolean isStartClass(final Class<? extends ModelElement> elementClass) {
-        return isStartClass(getClass(), elementClass);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Edge oder eine Ober- oder Unterklasse davon ist.
-     *
-     * @param edgeClass
-     * @param elementClass
-     * @return
-     */
-    public static final boolean isEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
-        Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return endClass.isAssignableFrom(elementClass);
+        MetaModel metaModel = getMetaModel();
+        Class<? extends Edge> edgeClass = getClass();
+        return metaModel.isStartClass(edgeClass, elementClass);
     }
 
     /**
@@ -486,188 +449,45 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public final boolean isEndClass(final Class<? extends ModelElement> elementClass) {
-        return isEndClass(getClass(), elementClass);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Klasse die Start- oder Endklasse der Edge oder eine Ober- oder Unterklasse davon ist.
-     *
-     * @param edgeClass
-     * @param elementClass
-     * @return
-     */
-    public static final boolean isStartOrEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
-        return isStartClass(edgeClass, elementClass) || isEndClass(edgeClass, elementClass);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten miteinander verbindet.
-     *
-     * @param edgeClass
-     * @param elementClass1
-     * @param elementClass2
-     * @return
-     */
-    public static final boolean isConnecting(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
-        return isConnectingForward(edgeClass, elementClass1, elementClass2) || isConnectingForward(edgeClass, elementClass2, elementClass1);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten in Vorwärtsrichtung miteinander verbindet. Also
-     * <code>startElementClass</code> die Startklasse der Kantenklasse oder eine Unterklasse davon ist und <code>endElementClass</code> die Endklasse
-     * der Kantenklasse oder eine Unterklasse davon ist.
-     *
-     * @param edgeClass
-     * @param startElementClass
-     * @param endElementClass
-     * @return
-     */
-    public static final boolean isConnectingForward(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
-        return isStartClass(edgeClass, startElementClass) && isEndClass(edgeClass, endElementClass);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die Start- und Endelemente von derselben Klasse sein können, d.h. wenn die beiden Klassen
-     * gleich sind oder eine eine Oberklasse der anderen ist.
-     *
-     * @param edgeClass
-     * @return
-     */
-    public static boolean isRecursive(final Class<? extends Edge> edgeClass) {
-        Class<? extends ModelElement> startClass = getStartClass(edgeClass);
-        Class<? extends ModelElement> endClass = getEndClass(edgeClass);
-        return startClass.isAssignableFrom(endClass);
-    }
-
-    ////////////////////
-    // Kardinalitäten //
-    ////////////////////
-
-    /**
-     * @param edgeClass
-     * @param backward
-     * @return
-     */
-    private static final EdgeCardinality getCardinality(final Class<? extends Edge> edgeClass, final boolean backward) {
-        String fieldName = backward ? START_CARDINALITY_FIELD_NAME : END_CARDINALITY_FIELD_NAME;
-        return ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName, EdgeCardinality.class);
-    }
-
-    /**
-     * Liefert die Kardinalität für Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen hat.
-     *
-     * @param edgeClass
-     * @param elementClass
-     * @return
-     */
-    public static final EdgeCardinality getCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        if (isStartClass(edgeClass, elementClass)) {
-            return getCardinality(edgeClass, false);
-        }
-        if (isEndClass(edgeClass, elementClass)) {
-            return getCardinality(edgeClass, true);
-        }
-        return null;
-    }
-
-    /**
-     * Liefert die minimale Anzahl von Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen haben muss.
-     *
-     * @param edgeClass
-     * @param elementClass
-     * @return
-     */
-    public static final int getMinCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        EdgeCardinality cardinality = getCardinality(elementClass, edgeClass);
-        return cardinality != null ? cardinality.min() : STANDARD_ERROR_INT_VALUE;
-    }
-
-    /**
-     * Liefert die maximale Anzahl von Kanten der übergebenen Art, die ein Element der übergebenen Art zu anderen Elementen haben kann.
-     *
-     * @param edgeClass
-     * @param elementClass
-     * @return
-     */
-    public static final int getMaxCardinality(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        EdgeCardinality cardinality = getCardinality(elementClass, edgeClass);
-        return cardinality != null ? cardinality.max() : STANDARD_ERROR_INT_VALUE;
-    }
-
-    /**
-     * @param edgeClass
-     * @return
-     */
-    public static final EdgeCardinality getForwardCardinality(final Class<? extends Edge> edgeClass) {
-        return getCardinality(edgeClass, false);
-    }
-
-    /**
-     * @param edgeClass
-     * @return
-     */
-    public static final EdgeCardinality getBackwardCardinality(final Class<? extends Edge> edgeClass) {
-        return getCardinality(edgeClass, true);
-    }
-
-    /**
-     * @param edgeClass
-     * @return
-     */
-    public static final int getMinForwardCardinality(final Class<? extends Edge> edgeClass) {
-        return getCardinality(edgeClass, false).min();
+        MetaModel metaModel = getMetaModel();
+        Class<? extends Edge> edgeClass = getClass();
+        return metaModel.isEndClass(edgeClass, elementClass);
     }
 
     /**
      * @return
      */
     public final int getMinForwardCardinality() {
-        return getMinForwardCardinality(getClass());
-    }
-
-    /**
-     * @param edgeClass
-     * @return
-     */
-    public static final int getMaxForwardCardinality(final Class<? extends Edge> edgeClass) {
-        return getCardinality(edgeClass, false).max();
+        MetaModel metaModel = getMetaModel();
+        Class<? extends Edge> edgeClass = getClass();
+        return metaModel.getMinForwardCardinality(edgeClass);
     }
 
     /**
      * @return
      */
     public final int getMaxForwardCardinality() {
-        return getMaxForwardCardinality(getClass());
-    }
-
-    /**
-     * @param edgeClass
-     * @return
-     */
-    public static final int getMinBackwardCardinality(final Class<? extends Edge> edgeClass) {
-        return getCardinality(edgeClass, true).min();
+        MetaModel metaModel = getMetaModel();
+        Class<? extends Edge> edgeClass = getClass();
+        return metaModel.getMaxForwardCardinality(edgeClass);
     }
 
     /**
      * @return
      */
     public final int getMinBackwardCardinality() {
-        return getMinBackwardCardinality(getClass());
-    }
-
-    /**
-     * @param edgeClass
-     * @return
-     */
-    public static final int getMaxBackwardCardinality(final Class<? extends Edge> edgeClass) {
-        return getCardinality(edgeClass, true).max();
+        MetaModel metaModel = getMetaModel();
+        Class<? extends Edge> edgeClass = getClass();
+        return metaModel.getMinBackwardCardinality(edgeClass);
     }
 
     /**
      * @return
      */
     public final int getMaxBackwardCardinality() {
-        return getMaxBackwardCardinality(getClass());
+        MetaModel metaModel = getMetaModel();
+        Class<? extends Edge> edgeClass = getClass();
+        return metaModel.getMaxBackwardCardinality(edgeClass);
     }
 
     /**

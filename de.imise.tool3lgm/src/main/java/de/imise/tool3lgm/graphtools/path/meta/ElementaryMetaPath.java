@@ -159,8 +159,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @param type
      */
-    private ElementaryMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final Direction direction,
-            final ConnectionState connectionState, final Type type) {
+    private ElementaryMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final Direction direction, final ConnectionState connectionState,
+            final Type type) {
         super(metaModel, startClass == null ? getStartClass(edgeClass, direction) : startClass, endClass == null ? getEndClass(edgeClass, direction) : endClass);
         Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
         Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
@@ -203,8 +203,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @return
      */
     public static Class<? extends ModelElement> getEndClass(final Class<? extends Edge> edgeClass, final Direction direction) {
-        Class<? extends ModelElement> startClass = getStartClass(edgeClass, direction);
-        return Edge.getOther(edgeClass, startClass);
+        return direction == Direction.BACKWARD ? Edge.getStartClass(edgeClass) : Edge.getEndClass(edgeClass);
     }
 
     @Override
@@ -529,7 +528,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     public EdgeCardinality getForwardCardinality() {
         //Wird die Kante in Vorwärtsrichtung gelesen, dann ist es auch die Vorwärtskardinalität der Kante, sonst die Rückwärtskardinalität
-        return direction == Direction.BACKWARD ? Edge.getBackwardCardinality(edgeClass) : Edge.getForwardCardinality(edgeClass);
+        return direction == Direction.BACKWARD ? metaModel.getBackwardCardinality(edgeClass) : metaModel.getForwardCardinality(edgeClass);
     }
 
     /**
@@ -537,7 +536,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     public EdgeCardinality getBackwardCardinality() {
         //Wird die Kante in Vorwärtsrichtung gelesen, dann ist es die Rückwärtskardinalität der Kante, sonst die Vorwärtskardinalität
-        return direction == Direction.BACKWARD ? Edge.getForwardCardinality(edgeClass) : Edge.getBackwardCardinality(edgeClass);
+        return direction == Direction.BACKWARD ? metaModel.getForwardCardinality(edgeClass) : metaModel.getBackwardCardinality(edgeClass);
     }
 
 }

@@ -93,8 +93,8 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
             //alle Standardkardinalitäten der Kanten des MetaPfades zur cardinalityDefinition hinzufügen
             for (ElementaryMetaPath elementaryMetaPath : metaPath.getElementaryMetaPaths()) {
                 Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-                cardinalityDefinition.setNewForwardCardinality(edgeClass, Edge.getForwardCardinality(edgeClass));
-                cardinalityDefinition.setNewBackwardCardinality(edgeClass, Edge.getBackwardCardinality(edgeClass));
+                cardinalityDefinition.setNewForwardCardinality(edgeClass, metaModel.getForwardCardinality(edgeClass));
+                cardinalityDefinition.setNewBackwardCardinality(edgeClass, metaModel.getBackwardCardinality(edgeClass));
             }
         }
 
@@ -141,7 +141,7 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
          * @return
          */
         public final EdgeCardinality getNewForwardCardinality(final Class<? extends Edge> edgeClass) {
-            return cardinalityDefinition.getForwardCardinality(edgeClass);
+            return cardinalityDefinition.getForwardCardinality(metaModel, edgeClass);
         }
 
         /**
@@ -149,7 +149,7 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
          * @return
          */
         public final EdgeCardinality getNewBackwardCardinality(final Class<? extends Edge> edgeClass) {
-            return cardinalityDefinition.getBackwardCardinality(edgeClass);
+            return cardinalityDefinition.getBackwardCardinality(metaModel, edgeClass);
         }
 
         /**

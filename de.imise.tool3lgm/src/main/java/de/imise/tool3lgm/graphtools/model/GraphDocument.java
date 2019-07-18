@@ -3386,11 +3386,12 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (master == null || edgeClass == null || slaveClass == null) {
             return null;
         }
-        if (!Edge.isConnecting(edgeClass, master.getClass(), slaveClass)) {
+        MetaModel metaModel = doc.getMetaModel();
+        if (!metaModel.isConnecting(edgeClass, master.getClass(), slaveClass)) {
             return null;
         }
         doc.start_transaction(pid);
-        if (master.countConnections(edgeClass) >= CompositionEdge.getMaxMasterToSlaveCardinality(edgeClass)) {
+        if (master.countConnections(edgeClass) >= metaModel.getMaxMasterToSlaveCardinality(edgeClass)) {
             return null;
         }
         String name = slaveName == null || slaveName.trim().equals("") ? doc.getNextNewName(master.getClearName() + "_", slaveClass) : slaveName;

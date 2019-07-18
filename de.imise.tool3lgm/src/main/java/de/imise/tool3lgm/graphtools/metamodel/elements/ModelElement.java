@@ -1,12 +1,5 @@
 package de.imise.tool3lgm.graphtools.metamodel.elements;
 
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxBackwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMaxForwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinBackwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getMinForwardCardinality;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isConnectingForward;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.isStartClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.EMPTY_STRING;
@@ -1562,7 +1555,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> edgeOrElementClass) {
-        if (Edge.class.isAssignableFrom(edgeOrElementClass) && Edge.isStartOrEndClass(edgeOrElementClass.asSubclass(Edge.class), getClass())) {
+        if (Edge.class.isAssignableFrom(edgeOrElementClass) && metaModel.isStartOrEndClass(edgeOrElementClass.asSubclass(Edge.class), getClass())) {
             return getConnectedElements(ModelElement.class, edgeOrElementClass.asSubclass(Edge.class));
         }
         return getConnectedElements(edgeOrElementClass, (Class<? extends Edge>) null);
@@ -1863,9 +1856,9 @@ public abstract class ModelElement extends UserFieldTarget {
             //minimale Kardinalität wird erst einmal als 0 angenommen
             int minCardinality = 0;
             //wenn diese Elementart Startklasse der aktuellen Kantenart ist
-            if (isStartClass(edgeType, meClass)) {
+            if (metaModel.isStartClass(edgeType, meClass)) {
                 //minimale Kardinalität zur Endklasse holen
-                minCardinality = getMinForwardCardinality(edgeType);
+                minCardinality = metaModel.getMinForwardCardinality(edgeType);
                 //wenn diese minimale Kardinalität > 0 ist, aber dieses Element weniger Kanten zu anderen Elementen hat, als nötig
                 if (minCardinality > 0 && getEdgesTo(ModelElement.class, edgeType).size() < minCardinality) {
                     //nicht konsistent
@@ -1873,9 +1866,9 @@ public abstract class ModelElement extends UserFieldTarget {
                 }
             }
             //OHNE ELSE-IF! Wenn diese Elementart Endklasse der aktuellen Kantenart ist
-            if (isEndClass(edgeType, meClass)) {
+            if (metaModel.isEndClass(edgeType, meClass)) {
                 //minimale Kardinalität zur Startklasse holen
-                minCardinality = getMinBackwardCardinality(edgeType);
+                minCardinality = metaModel.getMinBackwardCardinality(edgeType);
                 //wenn diese minimale Kardinalität > 0 ist, aber dieses Element weniger Kanten von anderen Elementen zu sich hat, als nötig
                 if (minCardinality > 0 && getEdgesFrom(ModelElement.class, edgeType).size() < minCardinality) {
                     //nicht konsistent
@@ -1939,7 +1932,7 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public final boolean isForwardLinkable(final ModelElement me, final Class<? extends Edge> edgeClass, final boolean testCardinality) {
         //wenn die Edge die beiden Elemente nicht in Vorwärtsrichtung verbinden kann
-        if (!isConnectingForward(edgeClass, getClass(), me.getClass())) {
+        if (!metaModel.isConnectingForward(edgeClass, getClass(), me.getClass())) {
             return false;
         }
         //Wenn es sich bei dieser Kantenart nicht um eine mehrfach zwischend denselben Elementen anlgebare Edge handelt
@@ -1960,11 +1953,11 @@ public abstract class ModelElement extends UserFieldTarget {
         //wenn das Überschreiten der Kardinalität geprüft werden soll
         if (testCardinality) {
             //für das Startelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (getMaxForwardCardinality(edgeClass) <= countConnections(edgeClass)) {
+            if (metaModel.getMaxForwardCardinality(edgeClass) <= countConnections(edgeClass)) {
                 return false;
             }
             //für das Endelement ist die maximale Verbindungsanzahl bereits erreicht?
-            if (getMaxBackwardCardinality(edgeClass) <= me.countConnections(edgeClass)) {
+            if (metaModel.getMaxBackwardCardinality(edgeClass) <= me.countConnections(edgeClass)) {
                 return false;
             }
         }
