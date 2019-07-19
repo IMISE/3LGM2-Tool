@@ -207,11 +207,11 @@ public class MetaPathFunctions {
             return false;
         }
         if (modelElementAsStartElement) {
-            if (!metaPath.isStartClass(modelElement.getClass(), true, false)) {
+            if (!metaPath.isStartClass(modelElement.getClass())) {
                 return false;
             }
         } else {
-            if (!metaPath.isEndClass(modelElement.getClass(), true, false)) {
+            if (!metaPath.isEndClass(modelElement.getClass())) {
                 return false;
             }
         }

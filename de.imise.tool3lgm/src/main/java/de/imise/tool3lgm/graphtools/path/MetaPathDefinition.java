@@ -70,7 +70,7 @@ public class MetaPathDefinition {
         ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
         //Alle Edgen in beiden Richtungen für alle direkten Startklassen und ihre Unterklassen als MetaPfade hinzufügen
         for (Class<? extends Edge> edgeClass : edgeClassesIt) {
-            if (DoubleMeaningEdge.class.isAssignableFrom(edgeClass)) {
+            if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                 Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass = edgeClass.asSubclass(DoubleMeaningEdge.class);
                 put(elementaryMetaPathHandler.getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.FORWARD));
                 put(elementaryMetaPathHandler.getForwardMetaPath(doubleMeaningEdgeClass, ConnectionState.BACKWARD));
@@ -108,14 +108,12 @@ public class MetaPathDefinition {
      * Liefert alle MetaPaths die für die übergebene Klasse definiert sind.
      *
      * @param startClass
-     * @param asSubClass
-     * @param asSuperClass
      * @return
      */
-    public final Set<AbstractMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass, final boolean asSubClass, final boolean asSuperClass) {
+    public final Set<AbstractMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass) {
         Set<AbstractMetaPath> metaPaths = new HashSet<>();
         for (AbstractMetaPath metaPath : definedMetaPaths) {
-            if (AbstractMetaPath.isStartClass(metaPath, startClass, asSubClass, asSuperClass)) {
+            if (AbstractMetaPath.isStartClass(metaPath, startClass)) {
                 metaPaths.add(metaPath);
             }
         }
@@ -127,19 +125,15 @@ public class MetaPathDefinition {
      *
      * @param startClass
      * @param endClass
-     * @param asSubClass
-     *            Wenn <code>true</code> dürfen die übergebenen Elementklassen auch Unterklasse der Pfadklassen sein
-     * @param asSuperClass
-     *            Wenn <code>true</code> dürfen die übergebenen Elementklassen auch Oberklasse der Pfadklassen sein
      * @param wrap
      *            Wenn <code>true</code>, dann werden bei den gefundenen MetaPfaden die Start- und Endklasse(n) durch die übergebene Start- und
      *            Endklasse ersetzt, wenn sie nicht bereits übereinstimmen
      * @return
      */
-    public final Set<AbstractMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean asSubClass, final boolean asSuperClass, final boolean wrap) {
+    public final Set<AbstractMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean wrap) {
         Set<AbstractMetaPath> metaPaths = new HashSet<>();
         for (AbstractMetaPath metaPath : definedMetaPaths) {
-            if (AbstractMetaPath.isStartAndEndClass(metaPath, startClass, endClass, asSubClass, asSuperClass)) {
+            if (AbstractMetaPath.isStartAndEndClass(metaPath, startClass, endClass)) {
                 if (wrap) {
                     metaPath = WrapperMetaPath.wrapMetaPath(startClass, endClass, metaPath);
                 }
@@ -208,40 +202,28 @@ public class MetaPathDefinition {
     /**
      * Liefert alle Elementklassen, für die Pfade als Startklasse definiert sind.
      *
-     * @param subClasses
-     *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Unterklassen einer Startklasse eines Pfades sind.
-     * @param superClasses
-     *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Oberklassen einer Startklasse eines Pfades sind.
      * @return
      */
-    public final Set<Class<? extends ModelElement>> getStartElementClassesInPaths(final boolean subClasses, final boolean superClasses) {
-        return getElementClassesInPaths(true, subClasses, superClasses);
+    public final Set<Class<? extends ModelElement>> getStartElementClassesInPaths() {
+        return getElementClassesInPaths(true);
     }
 
     /**
      * Liefert alle Elementklassen, für die Pfade als Startklasse definiert sind.
      *
-     * @param subClasses
-     *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Unterklassen einer Startklasse eines Pfades sind.
-     * @param superClasses
-     *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Oberklassen einer Startklasse eines Pfades sind.
      * @return
      */
-    public final Set<Class<? extends ModelElement>> getEndElementClassesInPaths(final boolean subClasses, final boolean superClasses) {
-        return getElementClassesInPaths(false, subClasses, superClasses);
+    public final Set<Class<? extends ModelElement>> getEndElementClassesInPaths() {
+        return getElementClassesInPaths(false);
     }
 
     /**
      * Liefert alle Elementklassen, für die Pfade definiert sind.
      *
      * @param start wenn <code>true</code> werden alle Startklassen aller Pfade rausgesucht, bei <code>false</code> alle Endklassen
-     * @param subClasses
-     *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Unterklassen einer Startklasse eines Pfades sind.
-     * @param superClasses
-     *            Wenn <code>true</code> werden auch alle Modelelementklassen zurück gegeben, die Oberklassen einer Startklasse eines Pfades sind.
      * @return
      */
-    private final Set<Class<? extends ModelElement>> getElementClassesInPaths(final boolean start, final boolean subClasses, final boolean superClasses) {
+    private final Set<Class<? extends ModelElement>> getElementClassesInPaths(final boolean start) {
         Set<Class<? extends ModelElement>> pathsElementClassesSet = new HashSet<>();
         //alle Metapfade durchlaufen und alle neu gefundenen Startklassen zur Rückgabeliste hinzufügen
         for (AbstractMetaPath metaPath : definedMetaPaths) {
@@ -260,23 +242,17 @@ public class MetaPathDefinition {
             //alle neuen Startklassen in der Gesamtliste speichern
             pathsElementClassesSet.addAll(newElementClasses);
             //wenn auch die Unter- oder Oberklassen der Startklassen zurück gegeben werden sollen
-            if (subClasses || superClasses) {
-                //für jede der neuen Startklasse aus allen Elementklassen alle Unter- oder Oberklassen bestimmen
-                for (Class<? extends ModelElement> newElementClass : newElementClasses) {
-                    //ModelConstants.ALL_MODELELEMENT_CLASSES enthält alle Elementklassen (auch alle abstracten bis hin zu ModelElement.class)
-                    for (Class<? extends ModelElement> elementClass : metaModel.allModelElementClassesWithSuperClasses) {
-                        //die Startklasse selbst ist schon in der Liste -> weiter
-                        if (elementClass == newElementClass) {
-                            continue;
-                        }
-                        //wenn Unterklassen auch zurück gegeben werden sollen und die Startklasse eine Oberklasse der Elementklasse ist
-                        if (subClasses && newElementClass.isAssignableFrom(elementClass)) {
-                            pathsElementClassesSet.add(elementClass);
-                        }
-                        //wenn Oberklassen auch zurück gegeben werden sollen und die Startklasse eine Unterklasse der Elementklasse ist
-                        if (superClasses && elementClass.isAssignableFrom(newElementClass)) {
-                            pathsElementClassesSet.add(elementClass);
-                        }
+            //für jede der neuen Startklasse aus allen Elementklassen alle Unter- oder Oberklassen bestimmen
+            for (Class<? extends ModelElement> newElementClass : newElementClasses) {
+                //ModelConstants.ALL_MODELELEMENT_CLASSES enthält alle Elementklassen (auch alle abstracten bis hin zu ModelElement.class)
+                for (Class<? extends ModelElement> elementClass : metaModel.allModelElementClassesWithSuperClasses) {
+                    //die Startklasse selbst ist schon in der Liste -> weiter
+                    if (elementClass == newElementClass) {
+                        continue;
+                    }
+                    //auch Unterklassen zurück geben, wenn die Startklasse eine Oberklasse der Elementklasse ist
+                    if (newElementClass.isAssignableFrom(elementClass)) {
+                        pathsElementClassesSet.add(elementClass);
                     }
                 }
             }

@@ -65,7 +65,7 @@ public class RecursiveMetaPath extends AbstractMetaPath {
                 invalidReason = InvalidReason.INVALID_RECURSIVE_START_CLASSES;
             } else if (!endElementClasses.equals(realMetaPath.endElementClasses)) {
                 invalidReason = InvalidReason.INVALID_RECURSIVE_END_CLASSES;
-            } else if (!isStartClass(endElementClasses, true, true)) { //Endelemente müssen auch wieder Startelemente sein können
+            } else if (!isStartClass(endElementClasses)) { //Endelemente müssen auch wieder Startelemente sein können
                 invalidReason = InvalidReason.INVALID_RECURSIVE_START_END_CLASSES;
             }
             invalidityCheckResult = new InvalidityCheckResult(invalidReason);

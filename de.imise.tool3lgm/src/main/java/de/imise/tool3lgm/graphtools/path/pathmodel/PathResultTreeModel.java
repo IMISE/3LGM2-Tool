@@ -538,7 +538,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
         }
         Class<? extends ModelElement> meClass = me.getClass();
         //In jedem Fall muss die Startklasse des MetaPfades zuweisungskompatibel zur Klasse des übergebenen Elementes sein
-        if (!metaPath.isStartClass(meClass, true, false)) {
+        if (!metaPath.isStartClass(meClass)) {
             return resultNodes;
         }
         Class<? extends Edge> edgeClass = metaPath.getEdgeClass();
