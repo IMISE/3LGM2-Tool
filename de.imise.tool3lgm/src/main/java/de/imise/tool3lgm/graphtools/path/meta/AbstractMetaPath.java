@@ -150,24 +150,6 @@ public abstract class AbstractMetaPath {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Startklasse des übergebenen Metapfades ist.
-     *
-     * @param metaPath
-     *            MetaPfad dessen Startklassen geprüft werden sollen
-     * @param elementClass
-     *            Elementklasse, die als Startklasse geprüft werden soll
-     * @return
-     */
-    public static final boolean isStartClass(final AbstractMetaPath metaPath, final Class<? extends ModelElement> elementClass) {
-        for (Class<? extends ModelElement> startClass : metaPath.getStartClasses()) {
-            if (startClass.isAssignableFrom(elementClass)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Startklasse dieses Metapfades ist.
      *
      * @param elementClass
@@ -175,21 +157,8 @@ public abstract class AbstractMetaPath {
      * @return
      */
     public final boolean isStartClass(final Class<? extends ModelElement> elementClass) {
-        return isStartClass(this, elementClass);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine Startklasse des übergebenen Metapfades ist.
-     *
-     * @param metaPath
-     *            MetaPfad dessen Startklassen geprüft werden sollen
-     * @param elementClasses
-     *            Elementklassen, die als Startklasse geprüft werden sollen
-     * @return
-     */
-    public static final boolean isStartClass(final AbstractMetaPath metaPath, final Collection<Class<? extends ModelElement>> elementClasses) {
-        for (Class<? extends ModelElement> elementClass : elementClasses) {
-            if (isStartClass(metaPath, elementClass)) {
+        for (Class<? extends ModelElement> startClass : getStartClasses()) {
+            if (startClass.isAssignableFrom(elementClass)) {
                 return true;
             }
         }
@@ -204,21 +173,8 @@ public abstract class AbstractMetaPath {
      * @return
      */
     public final boolean isStartClass(final Collection<Class<? extends ModelElement>> elementClasses) {
-        return isStartClass(this, elementClasses);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau die Endklasse des übergebenen MetaPfades ist.
-     *
-     * @param metaPath
-     *            MetaPfad dessen Endklassen geprüft werden sollen
-     * @param elementClass
-     *            Elementklasse, die als Endklasse geprüft werden soll
-     * @return
-     */
-    public static final boolean isEndClass(final AbstractMetaPath metaPath, final Class<? extends ModelElement> elementClass) {
-        for (Class<? extends ModelElement> endClass : metaPath.getEndClasses()) {
-            if (endClass.isAssignableFrom(elementClass)) {
+        for (Class<? extends ModelElement> elementClass : elementClasses) {
+            if (isStartClass(elementClass)) {
                 return true;
             }
         }
@@ -233,21 +189,8 @@ public abstract class AbstractMetaPath {
      * @return
      */
     public final boolean isEndClass(final Class<? extends ModelElement> elementClass) {
-        return isEndClass(this, elementClass);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn eine übergebene Elementklasse genau eine Endklasse des übergebenen MetaPfades ist.
-     *
-     * @param metaPath
-     *            MetaPfad dessen Endklassen geprüft werden sollen
-     * @param elementClasses
-     *            Elementklasseen, die als Endklasse geprüft werden sollen
-     * @return
-     */
-    public static final boolean isEndClass(final AbstractMetaPath metaPath, final Collection<Class<? extends ModelElement>> elementClasses) {
-        for (Class<? extends ModelElement> elementClass : elementClasses) {
-            if (isEndClass(metaPath, elementClass)) {
+        for (Class<? extends ModelElement> endClass : getEndClasses()) {
+            if (endClass.isAssignableFrom(elementClass)) {
                 return true;
             }
         }
@@ -262,22 +205,12 @@ public abstract class AbstractMetaPath {
      * @return
      */
     public final boolean isEndClass(final Collection<Class<? extends ModelElement>> elementClasses) {
-        return isEndClass(this, elementClasses);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau die Endklasse des übergebenen MetaPfades ist.
-     *
-     * @param metaPath
-     *            MetaPfad deren Startklasse geprüft werden soll
-     * @param startClass
-     *            Elementklasse, die als Startklasse der Kantenklasse geprüft werden soll
-     * @param startClass
-     *            Elementklasse, die als Endklasse der Kantenklasse geprüft werden soll
-     * @return
-     */
-    public static final boolean isStartAndEndClass(final AbstractMetaPath metaPath, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
-        return isStartClass(metaPath, startClass) && isEndClass(metaPath, endClass);
+        for (Class<? extends ModelElement> elementClass : elementClasses) {
+            if (isEndClass(elementClass)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -290,7 +223,7 @@ public abstract class AbstractMetaPath {
      * @return
      */
     public final boolean isStartAndEndClass(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
-        return isStartAndEndClass(this, startClass, endClass);
+        return isStartClass(startClass) && isEndClass(endClass);
     }
 
     /**
@@ -510,7 +443,7 @@ public abstract class AbstractMetaPath {
      * @return
      */
     public final boolean isCreatable(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
-        return isStartClass(this, startClass) && isEndClass(this, endClass) && isCreatable();
+        return isStartClass(startClass) && isEndClass(endClass) && isCreatable();
     }
 
     /**
@@ -563,7 +496,7 @@ public abstract class AbstractMetaPath {
      */
     public final boolean isRecursive() {
         for (Class<? extends ModelElement> endClass : getEndClasses()) {
-            if (isStartClass(this, endClass)) {
+            if (isStartClass(endClass)) {
                 return true;
             }
         }

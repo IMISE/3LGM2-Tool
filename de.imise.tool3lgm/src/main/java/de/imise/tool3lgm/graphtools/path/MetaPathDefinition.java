@@ -113,7 +113,7 @@ public class MetaPathDefinition {
     public final Set<AbstractMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass) {
         Set<AbstractMetaPath> metaPaths = new HashSet<>();
         for (AbstractMetaPath metaPath : definedMetaPaths) {
-            if (AbstractMetaPath.isStartClass(metaPath, startClass)) {
+            if (metaPath.isStartClass(startClass)) {
                 metaPaths.add(metaPath);
             }
         }
@@ -133,7 +133,7 @@ public class MetaPathDefinition {
     public final Set<AbstractMetaPath> getMetaPaths(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean wrap) {
         Set<AbstractMetaPath> metaPaths = new HashSet<>();
         for (AbstractMetaPath metaPath : definedMetaPaths) {
-            if (AbstractMetaPath.isStartAndEndClass(metaPath, startClass, endClass)) {
+            if (metaPath.isStartAndEndClass(startClass, endClass)) {
                 if (wrap) {
                     metaPath = WrapperMetaPath.wrapMetaPath(startClass, endClass, metaPath);
                 }
