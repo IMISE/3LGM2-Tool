@@ -399,21 +399,91 @@ public class SimpleMetaPathCreator {
         simpleMetaPaths.add(simpleMetaPath);
         //jetzt für jeden Elementarpfadschritt des Ausgangspfades immer alle Pfade in die Ergebnisliste schreiben, die nur noch Elementarpfadschritte mit nocht-abstrakten Kantenklassen haben
         List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
+        //jetzt für jeden Elementarpfadschritt des Ausgangspfades immer alle Pfade in die Ergebnisliste schreiben, die nur noch Elementarpfadschritte mit nocht-abstrakten Knotenklassen haben
         for (int i = 0; i < elementaryMetaPaths.size(); i++) {
-            getSimpleMetaPathsNonAbstract(simpleMetaPaths, i);
+            replaceSimpleMetaPathsWithNonAbstractNodeClasses(simpleMetaPaths, i);
+        }
+        //dann alle Varianten von abstracten Kanten in den Pfaden ersetzen
+        for (int i = 0; i < elementaryMetaPaths.size(); i++) {
+            replaceSimpleMetaPathsWithNonAbstractEdgeClasses(simpleMetaPaths, i);
         }
         return simpleMetaPaths;
     }
 
     /**
-     * Für jeden der Pfade in der Liste wird geprüft, ob der Elementarpfadschritt mit dem übergebenen Index abstract ist. Wenn er abstract ist, dann
-     * wird der Metapfad in der Liste durch alle MetaPfade ersetzt, bei denen die abstrakte Kantenklasse durch alle konkreten ersetzt wurde.
+     * Für jeden der Pfade in der Liste wird geprüft, ob das Zwischenelement des Elementarpfadschrittes mit dem übergebenen Index und des darauf
+     * folgenden abstract ist. Wenn es abstract ist, dann wird der Metapfad in der Liste durch alle MetaPfade ersetzt, bei denen die abstrakte
+     * Zwischenklasse durch alle konkreten ersetzt wurde.
      *
      * @param simpleMetaPaths
      * @param currentPathStepIndex
      * @return
      */
-    private static List<SimpleMetaPath> getSimpleMetaPathsNonAbstract(final List<SimpleMetaPath> simpleMetaPaths, final int currentPathStepIndex) {
+    private static List<SimpleMetaPath> replaceSimpleMetaPathsWithNonAbstractNodeClasses(final List<SimpleMetaPath> simpleMetaPaths, final int currentPathStepIndex) {
+        //bei jedem MetaPfad der Liste
+        for (int p = 0; p < simpleMetaPaths.size(); p++) {
+            SimpleMetaPath simpleMetaPath = simpleMetaPaths.get(p);
+            //alle nicht-abstrakten Knotenklassen der Start- und Endklasse ermitteln
+            MetaModel metaModel = simpleMetaPath.getMetaModel();
+
+            //Start- und Endklasse des aktuellen Pfadschrittes aus dem originalen MetaPfad ermitteln
+            Class<? extends ModelElement> pathStepConnectingStartClass = currentPathStepIndex == 0 ? simpleMetaPath.getStartClass() : simpleMetaPath.getPathStepElementClass(currentPathStepIndex - 1);
+            Class<? extends ModelElement> pathStepConnectingEndClass = simpleMetaPath.getPathStepElementClass(currentPathStepIndex);
+
+            Collection<Class<? extends ModelElement>> instanciableAssignableStartClasses = metaModel.getInstanciableAssignableClasses(pathStepConnectingStartClass);
+            Collection<Class<? extends ModelElement>> instanciableAssignableEndClasses = metaModel.getInstanciableAssignableClasses(pathStepConnectingEndClass);
+
+            int startClassesCount = instanciableAssignableStartClasses.size();
+            int endClassesCount = instanciableAssignableEndClasses.size();
+            if (startClassesCount == 0 || endClassesCount == 0) {
+                simpleMetaPaths.remove(p--);
+                continue;
+            }
+            if (startClassesCount > 1 || endClassesCount > 1 || instanciableAssignableStartClasses.iterator().next() != pathStepConnectingStartClass || instanciableAssignableEndClasses.iterator().next() != pathStepConnectingEndClass) {
+                List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
+                ElementaryMetaPath originalElementaryMetaPath = elementaryMetaPaths.get(currentPathStepIndex);
+                boolean replaceOriginalMetaPathInResultList = true;
+                ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
+                for (Class<? extends ModelElement> startClass : instanciableAssignableStartClasses) {
+                    for (Class<? extends ModelElement> endClass : instanciableAssignableEndClasses) {
+                        ElementaryMetaPath newElementaryMetaPath = elementaryMetaPathHandler.getMetaPath(startClass, originalElementaryMetaPath, endClass);
+                        SimpleMetaPath newSimpleMetaPath = getPathStepReplacedMetaPath(elementaryMetaPaths, newElementaryMetaPath, currentPathStepIndex);
+                        //bei der ersten nicht-abstrakten Kantenklasse wird der neue MetaPfad in der Ergebnisliste einfach über den neuen geschrieben
+                        if (replaceOriginalMetaPathInResultList) {
+                            replaceOriginalMetaPathInResultList = false;
+                            simpleMetaPaths.set(p, newSimpleMetaPath); //den originalen MetaPfad durch den ersten neuen ersetzen
+                        } else {
+                            simpleMetaPaths.add(++p, newSimpleMetaPath); //den neuen MetaPfad einfügen und Index des aktuellen MetaPfades in der Gesamtliste hochsetzen
+                        }
+                    }
+                }
+            }
+            //den endgültigen Pfad auf Validität prüfen -> invald? -> raus damit
+            simpleMetaPath = simpleMetaPaths.get(p);
+            if (!simpleMetaPath.isValid()) {
+                simpleMetaPaths.remove(p--);
+            }
+        }
+        return simpleMetaPaths;
+    }
+
+    private static SimpleMetaPath getPathStepReplacedMetaPath(final List<ElementaryMetaPath> elementaryMetaPaths, final ElementaryMetaPath elementaryMetaPath, final int pathStepIndex) {
+        ElementaryMetaPath[] elementaryMetaPathArray = new ElementaryMetaPath[elementaryMetaPaths.size()];
+        elementaryMetaPathArray = elementaryMetaPaths.toArray(elementaryMetaPathArray);
+        elementaryMetaPathArray[pathStepIndex] = elementaryMetaPath;
+        return new SimpleMetaPath(elementaryMetaPathArray);
+    }
+
+    /**
+     * Für jeden der Pfade in der Liste wird geprüft, ob die Kantensklasse des Elementarpfadschrittes mit dem übergebenen Index abstract ist. Wenn er
+     * abstract ist, dann wird der Metapfad in der Liste durch alle MetaPfade ersetzt, bei denen die abstrakte Kantenklasse durch alle konkreten
+     * ersetzt wurde.
+     *
+     * @param simpleMetaPaths
+     * @param currentPathStepIndex
+     * @return
+     */
+    private static List<SimpleMetaPath> replaceSimpleMetaPathsWithNonAbstractEdgeClasses(final List<SimpleMetaPath> simpleMetaPaths, final int currentPathStepIndex) {
         //bei jedem MetaPfad der Liste
         for (int p = 0; p < simpleMetaPaths.size(); p++) {
             SimpleMetaPath simpleMetaPath = simpleMetaPaths.get(p);
@@ -421,15 +491,16 @@ public class SimpleMetaPathCreator {
             //hole die Kantenklasse des aktuellen Pfadschrittes
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(currentPathStepIndex);
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-            //wenn die Kantenklasse abstract ist
-            if (MetaModel.isAbstract(edgeClass)) { //hier muss man auch testen, ob die Zwischenklassen abstract sind und durch alle Varianten nichtabstrakter Zwischenklassen ersetzen
+
+            //wenn die Kantenklasse oder das Start- oder Endelement des Pfadschrittes abstract sind
+            if (MetaModel.isAbstract(edgeClass)) {
+                //alle nicht-abstrakten Kantenklassen zwischen dieser Start- und Endklasse ermitteln
+                MetaModel metaModel = simpleMetaPath.getMetaModel();
                 //Start- und Edklasse des aktuellen Pfadschrittes aus dem originalen MetaPfad ermitteln
                 Class<? extends ModelElement> pathStepConnectingStartClass = currentPathStepIndex == 0 ? simpleMetaPath.getStartClass() : simpleMetaPath.getPathStepElementClass(currentPathStepIndex - 1);
                 Class<? extends ModelElement> pathStepConnectingEndClass = simpleMetaPath.getPathStepElementClass(currentPathStepIndex);
-                //alle nicht-abstrakten Kantenklassen zwischen dieser Start- und Endklasse ermitteln
-                MetaModel metaModel = simpleMetaPath.getMetaModel();
                 Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(pathStepConnectingStartClass, pathStepConnectingEndClass);
-                //Der erste neue SimpleMetaPtah, bei dem der aktuelle Elementarpfadschritt durch einen mit nicht-abstrakter Kantenklasse ersetzt wurde, muss in der Ergenisliste den Original-MetaPfad ersetzen.
+                //Der erste neue SimpleMetaPath, bei dem der aktuelle Elementarpfadschritt durch einen mit nicht-abstrakter Kantenklasse ersetzt wurde, muss in der Ergenisliste den Original-MetaPfad ersetzen.
                 //All anderen danach werden dahinter eingefügt und der Index des aktuellen Elementarpfadschrittes erhöht.
                 boolean replaceOriginalMetaPathInResultList = true;
                 //für alle gefundenen nicht-abstrakten Kantenarten zwischen der Start- und Endklasse des Original-MetaPfades
@@ -467,6 +538,11 @@ public class SimpleMetaPathCreator {
                 if (replaceOriginalMetaPathInResultList) {
                     simpleMetaPaths.remove(p--);
                 }
+            }
+            //den endgültigen Pfad auf Validität prüfen -> invald? -> raus damit
+            simpleMetaPath = simpleMetaPaths.get(p);
+            if (!simpleMetaPath.isValid()) {
+                simpleMetaPaths.remove(p--);
             }
         }
         return simpleMetaPaths;

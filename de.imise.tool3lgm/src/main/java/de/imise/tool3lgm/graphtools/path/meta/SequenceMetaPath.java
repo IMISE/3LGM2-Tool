@@ -304,12 +304,62 @@ public class SequenceMetaPath extends ListMetaPath {
             for (Class<? extends ModelElement> startClass : nextStartClasses) {
                 Class<? extends ModelElement> pathStepClass = ReflectionUtils.getMostSpecialElementClass(endClass, startClass);
                 //null tritt ein, wenn die Elemente der aufeinanderfolgenden Elementarpfade nicht zusammenpassen
-                if (pathStepClass != null) {
+                if (pathStepClass != null && isValidElementaryPathStepConnectingClass(metaPath, nextMetaPath, pathStepClass)) {
                     pathStepClasses.add(pathStepClass);
                 }
             }
         }
         return pathStepClasses;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn beide Pfade {@link ElementaryMetaPath} sind und die übergebene Elementklasse diese Pfade aber nicht haben darf,
+     * da die
+     * Kantenklassen des Elementarpfades für die Elementklasse nicht gelten sollen (laut MetaModel {@link MetaModel#isRemovedEdgeClass(Class, Class)},
+     * sonst <code>false</code>.
+     *
+     * @param metaPath
+     * @param nextMetaPath
+     * @param elementClass
+     * @return
+     */
+    private boolean isValidElementaryPathStepConnectingClass(final AbstractMetaPath metaPath, final AbstractMetaPath nextMetaPath, final Class<? extends ModelElement> elementClass) {
+        if (metaPath != null) {
+            if (metaPath instanceof ElementaryMetaPath) {
+                ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) metaPath;
+                Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+                if (elementaryMetaPath.hasDirectionForward()) {
+                    if (!metaModel.isEndClass(edgeClass, elementClass)) {
+                        return false;
+                    }
+                }
+
+                boolean checkAsEndClass = elementaryMetaPath.hasDirectionForward();
+                boolean invalid = checkAsEndClass ? metaModel.isRemovedEdgeClassForEndClass(elementClass, edgeClass) : metaModel.isRemovedEdgeClassForStartClass(elementClass, edgeClass);
+                if (invalid) {
+                    return false;
+                }
+            }
+        }
+
+        if (metaPath instanceof ElementaryMetaPath && nextMetaPath instanceof ElementaryMetaPath) {
+            ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) metaPath;
+
+            Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+            boolean checkAsEndClass = elementaryMetaPath.hasDirectionForward();
+            boolean invalid = checkAsEndClass ? metaModel.isRemovedEdgeClassForEndClass(elementClass, edgeClass) : metaModel.isRemovedEdgeClassForStartClass(elementClass, edgeClass);
+            if (invalid) {
+                return false;
+            }
+            elementaryMetaPath = (ElementaryMetaPath) nextMetaPath;
+            edgeClass = elementaryMetaPath.getEdgeClass();
+            boolean checkAsStartClass = elementaryMetaPath.hasDirectionForward();
+            invalid = checkAsStartClass ? metaModel.isRemovedEdgeClassForStartClass(elementClass, edgeClass) : metaModel.isRemovedEdgeClassForEndClass(elementClass, edgeClass);
+            if (invalid) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -326,7 +376,7 @@ public class SequenceMetaPath extends ListMetaPath {
         if (elementaryMetaPaths.isEmpty()) {
             return null;
         }
-        ElementaryMetaPath elementaryMetaPath1 = elementaryMetaPaths.get(pathStepIndex);
+        ElementaryMetaPath elementaryMetaPath1 = pathStepIndex >= 0 ? elementaryMetaPaths.get(pathStepIndex) : null;
         ElementaryMetaPath elementaryMetaPath2 = pathStepIndex == elementaryMetaPaths.size() - 1 ? null : elementaryMetaPaths.get(pathStepIndex + 1);
         Class<? extends ModelElement> connectingClass = MetaPathFunctions.getElementaryPathsConnectingClass(elementaryMetaPath1, elementaryMetaPath2);
         return connectingClass;
@@ -344,7 +394,7 @@ public class SequenceMetaPath extends ListMetaPath {
             for (int i = 0; i < metaPaths.size(); i++) {
                 //Hole alle Elementklassen die einen Pfad mit dem nächsten verbinden
                 Set<Class<? extends ModelElement>> pathStepElementClasses = getPathStepConnectingClasses(i);
-                //2 aufienanderfolgende Pfade passen nicht zusmammen
+                //2 aufeinanderfolgende Pfade passen nicht zusmammen
                 if (pathStepElementClasses.isEmpty()) {
                     invalidityCheckResult = new InvalidityCheckResult(InvalidReason.INVALID_SEQUENCE_INCOMPATIBLE_PATH_STEP_AND_EDGE_CLASSES, i);
                     break;
