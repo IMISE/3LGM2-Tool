@@ -245,6 +245,55 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Startklasse dieses Metapfades ist.
+     *
+     * @param elementClass
+     *            Elementklasse, die als Startklasse geprüft werden soll
+     * @return
+     */
+    @Override
+    public final boolean isStartClass(final Class<? extends ModelElement> elementClass) {
+        return isStartOrEndClass(elementClass, getStartClasses(), hasDirectionForward());
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau eine Endklasse dieses MetaPfades ist.
+     *
+     * @param elementClass
+     *            Elementklasse, die als Endklasse geprüft werden soll
+     * @return
+     */
+    @Override
+    public final boolean isEndClass(final Class<? extends ModelElement> elementClass) {
+        return isStartOrEndClass(elementClass, getEndClasses(), !hasDirectionForward());
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse je nach Option (und damit Richtung) als Start- oder Endklasse der in diesem
+     * MetaPtah enthaltenen Kantenklasse gilt. Die Abfrage über das MetaModel stellt sicher, dass für Unterklassen entfernte Kantenklassen dann auch
+     * tatsächlich nicht mehr für die Unterklasse gelten.
+     *
+     * @param elementClass
+     * @param startOrEndClasses
+     * @param testStartClass
+     * @return
+     */
+    private final boolean isStartOrEndClass(final Class<? extends ModelElement> elementClass, final Iterable<Class<? extends ModelElement>> startOrEndClasses, final boolean testStartClass) {
+        for (Class<? extends ModelElement> startOrEndClass : startOrEndClasses) {
+            if (testStartClass) {
+                if (metaModel.isStartClass(edgeClass, startOrEndClass)) {
+                    return true;
+                }
+            } else {
+                if (metaModel.isEndClass(edgeClass, startOrEndClass)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * @return the direction
      */
     public Direction getDirection() {

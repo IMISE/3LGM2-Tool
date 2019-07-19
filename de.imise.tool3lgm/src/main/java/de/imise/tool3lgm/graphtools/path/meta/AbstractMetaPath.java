@@ -156,7 +156,7 @@ public abstract class AbstractMetaPath {
      *            Elementklasse, die als Startklasse geprüft werden soll
      * @return
      */
-    public final boolean isStartClass(final Class<? extends ModelElement> elementClass) {
+    public boolean isStartClass(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends ModelElement> startClass : getStartClasses()) {
             if (startClass.isAssignableFrom(elementClass)) {
                 return true;
@@ -188,7 +188,7 @@ public abstract class AbstractMetaPath {
      *            Elementklasse, die als Endklasse geprüft werden soll
      * @return
      */
-    public final boolean isEndClass(final Class<? extends ModelElement> elementClass) {
+    public boolean isEndClass(final Class<? extends ModelElement> elementClass) {
         for (Class<? extends ModelElement> endClass : getEndClasses()) {
             if (endClass.isAssignableFrom(elementClass)) {
                 return true;
