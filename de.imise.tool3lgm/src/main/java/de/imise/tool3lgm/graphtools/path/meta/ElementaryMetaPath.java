@@ -258,7 +258,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @return
      */
     public boolean hasDirectionForward() {
-        return direction == Direction.FORWARD;
+        return direction != Direction.BACKWARD;
     }
 
     /**
