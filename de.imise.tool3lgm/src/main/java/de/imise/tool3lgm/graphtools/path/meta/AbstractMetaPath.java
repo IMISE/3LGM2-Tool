@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
+import de.imise.util.collections.CollectionUtils;
 
 /**
  * Oberklasse für alle Metapfade.
@@ -106,8 +107,8 @@ public abstract class AbstractMetaPath {
      */
     public AbstractMetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
         this.metaModel = metaModel;
-        this.startElementClasses = startElementClasses == null ? ImmutableSet.of() : ImmutableSet.class.isAssignableFrom(startElementClasses.getClass()) ? startElementClasses : ImmutableSet.copyOf(startElementClasses);
-        this.endElementClasses = endElementClasses == null ? ImmutableSet.of() : ImmutableSet.class.isAssignableFrom(endElementClasses.getClass()) ? endElementClasses : ImmutableSet.copyOf(endElementClasses);
+        this.startElementClasses = CollectionUtils.ensureImmutable(startElementClasses);
+        this.endElementClasses = CollectionUtils.ensureImmutable(endElementClasses);
         this.name = name;
     }
 
