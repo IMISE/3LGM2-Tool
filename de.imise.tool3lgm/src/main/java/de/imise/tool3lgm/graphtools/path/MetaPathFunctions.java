@@ -590,13 +590,16 @@ public class MetaPathFunctions {
      * @return
      */
     public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final ElementaryMetaPath elementaryMetaPath1, final ElementaryMetaPath elementaryMetaPath2) {
-        //ACHTUNG: diese FUnktion nicht einfach durch die andere mit den EdgeClasses laufen lassen, da die Start- und Endklasse der ElementaryMetaPaths was anderes sein können, als die Start- bzw. die Endklasse der enthaltenen Kantenklasse
-        Class<? extends ModelElement> endClass = elementaryMetaPath1.getEndClass();
-        if (elementaryMetaPath2 == null) {
-            return endClass;
+        //ACHTUNG: diese Funktion nicht einfach durch die andere mit den EdgeClasses laufen lassen, da die Start- und Endklasse der ElementaryMetaPaths was anderes sein können, als die Start- bzw. die Endklasse der enthaltenen Kantenklasse
+        if (elementaryMetaPath1 == null) { //tritt auf, wenn es um den ersten Pfaschritt geht, also den Anfang des Pfades
+            return elementaryMetaPath2.getStartClass();
         }
+        if (elementaryMetaPath2 == null) { //tritt auf, wenn es um den letzten Pfadschritt geht, also das Ende des Pfades
+            return elementaryMetaPath1.getEndClass();
+        }
+        Class<? extends ModelElement> lastEndClass = elementaryMetaPath1.getEndClass();
         Class<? extends ModelElement> nextStartClass = elementaryMetaPath2.getStartClass();
-        Class<? extends ModelElement> connectingClass = ReflectionUtils.getMostSpecialElementClass(endClass, nextStartClass);
+        Class<? extends ModelElement> connectingClass = ReflectionUtils.getMostSpecialElementClass(lastEndClass, nextStartClass);
         return connectingClass;
     }
 
