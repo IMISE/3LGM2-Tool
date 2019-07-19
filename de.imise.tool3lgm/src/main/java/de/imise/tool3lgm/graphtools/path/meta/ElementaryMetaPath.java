@@ -43,7 +43,11 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         INVALID_END_CLASS,
         INVALID_EDGE_CLASS,
         INVALID_DIRECTION,
-        INVALID_TYPE
+        INVALID_TYPE,
+        INVALID_EDGE_STARTCLASS_AND_METAPATH_STARTCLASS,
+        INVALID_EDGE_STARTCLASS_AND_METAPATH_ENDCLASS,
+        INVALID_EDGE_ENDCLASS_AND_METAPATH_STARTCLASS,
+        INVALID_EDGE_ENDCLASS_AND_METAPATH_ENDCLASS,
     }
 
     /**
@@ -398,6 +402,20 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
                 invalidReason = InvalidReason.INVALID_END_CLASS;
             } else if (direction != null && edgeClass == null) {
                 invalidReason = InvalidReason.INVALID_DIRECTION;
+            } else if (type != Type.SINGLE_ELEMENT) {
+                if (direction == Direction.FORWARD) {
+                    if (!metaModel.isStartClass(edgeClass, startClass)) {
+                        invalidReason = InvalidReason.INVALID_EDGE_STARTCLASS_AND_METAPATH_STARTCLASS;
+                    } else if (!metaModel.isEndClass(edgeClass, endClass)) {
+                        invalidReason = InvalidReason.INVALID_EDGE_ENDCLASS_AND_METAPATH_ENDCLASS;
+                    }
+                } else {
+                    if (!metaModel.isStartClass(edgeClass, endClass)) {
+                        invalidReason = InvalidReason.INVALID_EDGE_STARTCLASS_AND_METAPATH_ENDCLASS;
+                    } else if (!metaModel.isEndClass(edgeClass, startClass)) {
+                        invalidReason = InvalidReason.INVALID_EDGE_ENDCLASS_AND_METAPATH_STARTCLASS;
+                    }
+                }
             }
             invalidityCheckResult = new InvalidityCheckResult(invalidReason);
         }
