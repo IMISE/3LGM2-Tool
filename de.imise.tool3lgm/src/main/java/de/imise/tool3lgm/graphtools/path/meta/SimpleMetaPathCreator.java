@@ -397,17 +397,27 @@ public class SimpleMetaPathCreator {
         List<SimpleMetaPath> simpleMetaPaths = new ArrayList<>();
         //übergebenen MetaPfad als erstes in die Ergebnisliste schreiben
         simpleMetaPaths.add(simpleMetaPath);
-        //jetzt für jeden Elementarpfadschritt des Ausgangspfades immer alle Pfade in die Ergebnisliste schreiben, die nur noch Elementarpfadschritte mit nocht-abstrakten Kantenklassen haben
         List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
         //jetzt für jeden Elementarpfadschritt des Ausgangspfades immer alle Pfade in die Ergebnisliste schreiben, die nur noch Elementarpfadschritte mit nocht-abstrakten Knotenklassen haben
         for (int i = 0; i < elementaryMetaPaths.size(); i++) {
             replaceSimpleMetaPathsWithNonAbstractNodeClasses(simpleMetaPaths, i);
         }
+        removeInvalidMetaPaths(simpleMetaPaths);
         //dann alle Varianten von abstracten Kanten in den Pfaden ersetzen
         for (int i = 0; i < elementaryMetaPaths.size(); i++) {
             replaceSimpleMetaPathsWithNonAbstractEdgeClasses(simpleMetaPaths, i);
         }
+        removeInvalidMetaPaths(simpleMetaPaths);
         return simpleMetaPaths;
+    }
+
+    private static void removeInvalidMetaPaths(final List<SimpleMetaPath> simpleMetaPaths) {
+        for (int i = simpleMetaPaths.size() - 1; i >= 0; i--) {
+            SimpleMetaPath simpleMetaPath = simpleMetaPaths.get(i);
+            if (!simpleMetaPath.isValid()) {
+                simpleMetaPaths.remove(i);
+            }
+        }
     }
 
     /**
@@ -458,11 +468,6 @@ public class SimpleMetaPathCreator {
                     }
                 }
             }
-            //den endgültigen Pfad auf Validität prüfen -> invald? -> raus damit
-            simpleMetaPath = simpleMetaPaths.get(p);
-            if (!simpleMetaPath.isValid()) {
-                simpleMetaPaths.remove(p--);
-            }
         }
         return simpleMetaPaths;
     }
@@ -510,15 +515,21 @@ public class SimpleMetaPathCreator {
                         //Erzeuge ein neues Array aus Elementarpfaden, bei dem der aktuelle Pfadschritt immer durch einen Elementarmetapfad mit der nicht-abstrakten Kantenklasse ersetzt wird
                         ElementaryMetaPath[] elementaryMetaPathArray = new ElementaryMetaPath[elementaryMetaPaths.size()];
                         elementaryMetaPathArray = elementaryMetaPaths.toArray(elementaryMetaPathArray);
-                        Direction direction = elementaryMetaPath.getDirection();
+                        Direction elementaryMetaPathDirection = elementaryMetaPath.getDirection();
+                        Direction edgeDirection = metaModel.isConnectingForward(edgeType, pathStepConnectingStartClass, pathStepConnectingEndClass) ? Direction.FORWARD : Direction.BACKWARD; // die Kante kann FORWARD sein, aber der Pfad kann rückwärts sein
+                        boolean readEdgeForward = elementaryMetaPathDirection == edgeDirection;
+
                         //Start- und Endklasse des neuen Pfadschrittes ist die speziellere der jeweilgen Klassen vom Original-MetaPafd und der nicht-abstrakten Kantenklasse
-                        Class<? extends ModelElement> pathStepStartClass = direction == Direction.BACKWARD ? Edge.getEndClass(edgeType) : Edge.getStartClass(edgeType);
-                        Class<? extends ModelElement> pathStepEndClass = direction == Direction.BACKWARD ? Edge.getStartClass(edgeType) : Edge.getEndClass(edgeType);
+                        Class<? extends ModelElement> pathStepStartClass = readEdgeForward ? Edge.getStartClass(edgeType) : Edge.getEndClass(edgeType);
+                        Class<? extends ModelElement> pathStepEndClass = readEdgeForward ? Edge.getEndClass(edgeType) : Edge.getStartClass(edgeType);
                         pathStepStartClass = ReflectionUtils.getMostSpecialElementClass(pathStepConnectingStartClass, pathStepStartClass);
                         pathStepEndClass = ReflectionUtils.getMostSpecialElementClass(pathStepConnectingEndClass, pathStepEndClass);
                         ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
                         //jetzt den neuen Elementarpfadschritt mit den speziellen Start- und Endklasse in derselben Richtung wie das Original anlegen
                         elementaryMetaPathArray[currentPathStepIndex] = elementaryMetaPathHandler.getMetaPath(pathStepStartClass, edgeType, elementaryMetaPath.getDirection(), pathStepEndClass);
+                        if (!readEdgeForward) {
+                            elementaryMetaPathArray[currentPathStepIndex] = elementaryMetaPathArray[currentPathStepIndex].getOtherDirection();
+                        }
                         //den neuen SimpleMetaPfad mit der nicht-abstrakten Kantenklasse analog zum original anlegen (also mit den Index der Kante, die den Namen festlegt übernehmen)
                         int metaPathStepWithPathName = simpleMetaPath.getMetaPathStepWithPathName();
                         SimpleMetaPath newSimpleMetaPath = new SimpleMetaPath(metaPathStepWithPathName, elementaryMetaPathArray);
@@ -538,11 +549,6 @@ public class SimpleMetaPathCreator {
                 if (replaceOriginalMetaPathInResultList) {
                     simpleMetaPaths.remove(p--);
                 }
-            }
-            //den endgültigen Pfad auf Validität prüfen -> invald? -> raus damit
-            simpleMetaPath = simpleMetaPaths.get(p);
-            if (!simpleMetaPath.isValid()) {
-                simpleMetaPaths.remove(p--);
             }
         }
         return simpleMetaPaths;
