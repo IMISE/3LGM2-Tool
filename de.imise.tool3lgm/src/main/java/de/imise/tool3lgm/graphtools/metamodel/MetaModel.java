@@ -1162,8 +1162,21 @@ public final class MetaModel {
      * @param elementClass2
      * @return
      */
-    @SuppressWarnings("unchecked")
     public final Class<? extends Edge>[] getEdgeTypes(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2) {
+        return getEdgeTypes(elementClass1, elementClass2, Edge.class);
+    }
+
+    /**
+     * Liefert ein Array aller Kantenklassen, die zwischen den beiden übergebenen Elementklassen existieren können. Gibt es keine Kantenklasse
+     * zwischen den Elementen so kommt ein leeres Array (length==0) zurück.
+     *
+     * @param elementClass1
+     * @param elementClass2
+     * @param edgeSuperClass Oberklasse der zu findenden Kantenklasse. Damit kann man filtern
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public final Class<? extends Edge>[] getEdgeTypes(final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2, final Class<? extends Edge> edgeSuperClass) {
         Class<? extends Edge>[] edgeClasses = elementClassesToEdgeClasses.get(elementClass1, elementClass2);
         if (edgeClasses != null) {
             return edgeClasses;
@@ -1173,7 +1186,9 @@ public final class MetaModel {
         for (Class<? extends Edge> edgeClass : edgeTypes) {
             if (isConnecting(edgeClass, elementClass1, elementClass2)) {
                 if (!isRemovedEdgeClassForStartAndEndClass(elementClass2, edgeClass)) { // !isRemovedEdgeClass(elementClass1, edgeClass) wird schon in getEdgeTypes(elementClass1) geprüft
-                    resultEdgeClasses.add(edgeClass);
+                    if (edgeSuperClass.isAssignableFrom(edgeClass)) {
+                        resultEdgeClasses.add(edgeClass);
+                    }
                 }
             }
         }
