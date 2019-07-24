@@ -516,8 +516,7 @@ public class SimpleMetaPathCreator {
                         ElementaryMetaPath[] elementaryMetaPathArray = new ElementaryMetaPath[elementaryMetaPaths.size()];
                         elementaryMetaPathArray = elementaryMetaPaths.toArray(elementaryMetaPathArray);
                         Direction elementaryMetaPathDirection = elementaryMetaPath.getDirection();
-                        Direction edgeDirection = metaModel.isConnectingForward(edgeType, pathStepConnectingStartClass, pathStepConnectingEndClass) ? Direction.FORWARD : Direction.BACKWARD; // die Kante kann FORWARD sein, aber der Pfad kann rückwärts sein
-                        boolean readEdgeForward = elementaryMetaPathDirection == edgeDirection;
+                        boolean readEdgeForward = elementaryMetaPathDirection == Direction.FORWARD;
 
                         //Start- und Endklasse des neuen Pfadschrittes ist die speziellere der jeweilgen Klassen vom Original-MetaPafd und der nicht-abstrakten Kantenklasse
                         Class<? extends ModelElement> pathStepStartClass = readEdgeForward ? Edge.getStartClass(edgeType) : Edge.getEndClass(edgeType);
@@ -525,11 +524,8 @@ public class SimpleMetaPathCreator {
                         pathStepStartClass = ReflectionUtils.getMostSpecialElementClass(pathStepConnectingStartClass, pathStepStartClass);
                         pathStepEndClass = ReflectionUtils.getMostSpecialElementClass(pathStepConnectingEndClass, pathStepEndClass);
                         ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
-                        //jetzt den neuen Elementarpfadschritt mit den speziellen Start- und Endklasse in derselben Richtung wie das Original anlegen
-                        elementaryMetaPathArray[currentPathStepIndex] = elementaryMetaPathHandler.getMetaPath(pathStepStartClass, edgeType, elementaryMetaPath.getDirection(), pathStepEndClass);
-                        if (!readEdgeForward) {
-                            elementaryMetaPathArray[currentPathStepIndex] = elementaryMetaPathArray[currentPathStepIndex].getOtherDirection();
-                        }
+                        //jetzt den neuen Elementarpfadschritt mit den speziellen Start- und Endklasse in derselben Richtung, in der die nicht abstrakte Kantenklasse gilt, anlegen
+                        elementaryMetaPathArray[currentPathStepIndex] = elementaryMetaPathHandler.getMetaPath(pathStepStartClass, edgeType, elementaryMetaPathDirection, pathStepEndClass);
                         //den neuen SimpleMetaPfad mit der nicht-abstrakten Kantenklasse analog zum original anlegen (also mit den Index der Kante, die den Namen festlegt übernehmen)
                         int metaPathStepWithPathName = simpleMetaPath.getMetaPathStepWithPathName();
                         SimpleMetaPath newSimpleMetaPath = new SimpleMetaPath(metaPathStepWithPathName, elementaryMetaPathArray);
