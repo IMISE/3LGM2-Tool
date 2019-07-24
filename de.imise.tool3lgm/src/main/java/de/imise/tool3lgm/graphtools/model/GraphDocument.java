@@ -3823,7 +3823,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
                     NodeContainer createdInstanceContainer = createInstance(this, edgeClass.asSubclass(InstanciationEdge.class), pathStepStartElement, pid);
                     ModelElement createdInstance = createdInstanceContainer.getElement();
-                    Edge createdInstanceEdge = endElement.getEdgeTo(createdInstance, edgeClass);
+                    Edge createdInstanceEdge = pathStepStartElement.getEdgeTo(createdInstance, edgeClass);
                     createdEdges.add(createdInstanceEdge);
                     gdcoll.setInteractiveMode(oldInteractiveMode);
                     pathStepEndElement = createdInstance;
