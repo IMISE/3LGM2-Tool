@@ -409,7 +409,7 @@ public abstract class AbstractMetaPath {
 
     @Override
     public final String toString() {
-        return getName();
+        return getFullName();
     }
 
     /**
