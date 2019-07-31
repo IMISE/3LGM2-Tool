@@ -2,7 +2,6 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
-import static de.imise.tool3lgm.graphtools.path.MetaPathFunctions.createNodeWithContainerAndDependents;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -568,7 +567,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 if (isConnectionPointUnique) {
                     connectToFirstPath(null);
                 } else { //es ist nicht klar, wohin ein neues Element gehängt werden sollte -> nur neu erzeugen und nicht verknüpfen
-                    createNodeWithContainerAndDependents(doc.getCollection().getSelectedDoc(), null, getLastEdgeClassInPath(), getLastDirectionInPath(), null, FORWARD, getTransactionID());
+                    MetaPathFunctions.createNodeWithContainerAndDependents(doc.getCollection().getSelectedDoc(), null, getLastEdgeClassInPath(), getLastDirectionInPath(), null, FORWARD, getTransactionID());
                 }
             }
         };
