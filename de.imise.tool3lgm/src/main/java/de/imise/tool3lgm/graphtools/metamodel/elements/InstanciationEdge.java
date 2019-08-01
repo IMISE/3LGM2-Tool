@@ -14,9 +14,9 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FOR
 public abstract class InstanciationEdge extends Edge {
 
     /** Richtung, in der die Kante vom Oberelement auf das Unterelement zeigt */
-    public static final Direction TEMPLATE_MASTER_TO_INSTANCE_DIRECTION = FORWARD;
+    public static final Direction MASTER_TO_INSTANCE_DIRECTION = FORWARD;
 
     /** Richtung, in der die Kante vom Unterelement auf das Oberelement zeigt */
-    public static final Direction INSTANCE_TO_TEMPLATE_MASTER_DIRECTION = BACKWARD;
+    public static final Direction INSTANCE_TO_MASTER_DIRECTION = BACKWARD;
 
 }

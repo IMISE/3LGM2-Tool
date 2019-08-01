@@ -820,7 +820,7 @@ public final class MetaModel {
                         return false;
                     }
                     //die Kante ist eine InstanciantionEdge, die von der Insstanz auf das Klassenelement (Template) zeigt
-                    if (InstanciationEdge.class.isAssignableFrom(elementaryMetaPath.getEdgeClass()) && InstanciationEdge.INSTANCE_TO_TEMPLATE_MASTER_DIRECTION.equals(elementaryMetaPath.getDirection())) {
+                    if (InstanciationEdge.class.isAssignableFrom(elementaryMetaPath.getEdgeClass()) && InstanciationEdge.INSTANCE_TO_MASTER_DIRECTION.equals(elementaryMetaPath.getDirection())) {
                         return false;
                     }
                 }
