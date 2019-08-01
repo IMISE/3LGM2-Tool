@@ -3714,7 +3714,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      * @return
      */
-    private NodeContainer createInstance(GraphDocument doc, final Class<? extends InstanciationEdge> instanciationEdgeClass, ModelElement master, final int pid) {
+    public NodeContainer createInstance(GraphDocument doc, final Class<? extends InstanciationEdge> instanciationEdgeClass, ModelElement master, final int pid) {
         doc = doc == null ? this : doc;
         master = master == null ? doc.getLastSelected().getElement() : master;
         doc.start_transaction(pid);
@@ -3722,29 +3722,30 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         Class<? extends ModelElement> class2Create = Edge.getEndClass(instanciationEdgeClass);
         String name = GENERATED_NAME_PREFIX + master.getName() + " " + Tool3lgmConstants.getResString("INSTANCE");
         NodeContainer instanceContainer = doc.createNodeAndContainer(class2Create, name, pid);
-        ModelElement instanceElement = instanceContainer.getElement();
-        gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
+        if (instanceContainer != null) { // kann null sein, wenn der Dialig zur Namenseingae abgebrochen wurde
+            ModelElement instanceElement = instanceContainer.getElement();
+            gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
 
-        //Ebenfalls zu instanziierende Nebenpfade anlegen
-        for (SimpleMetaPath metaPath : metaModel.getInstanciablePath(instanciationEdgeClass)) {
-            int path2CreateStartIndex = 0;
-            for (; path2CreateStartIndex < metaPath.getMetaPathCount(); path2CreateStartIndex++) {
-                List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-                ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(path2CreateStartIndex);
-                if (elementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
-                    break;
+            //Ebenfalls zu instanziierende Nebenpfade anlegen
+            for (SimpleMetaPath metaPath : metaModel.getInstanciablePath(instanciationEdgeClass)) {
+                int path2CreateStartIndex = 0;
+                for (; path2CreateStartIndex < metaPath.getMetaPathCount(); path2CreateStartIndex++) {
+                    List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+                    ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(path2CreateStartIndex);
+                    if (elementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
+                        break;
+                    }
+                }
+                //für diesen Pfadteil müssen die verbundenen Elemente herausgesucht werden
+                SimpleMetaPath subPathConnected = metaPath.getSubPath(0, path2CreateStartIndex);
+                Collection<ModelElement> connectedElements = MetaPathFunctions.getConnectedElements(master, subPathConnected);
+                for (ModelElement me : connectedElements) {
+                    //ab diesem Pfadteil muss neu angelegt werden
+                    SimpleMetaPath subPathCreate = metaPath.getSubPath(path2CreateStartIndex);
+                    doc.createPath(me, instanceElement, subPathCreate, pid);
                 }
             }
-            //für diesen Pfadteil müssen die verbundenen Elemente herausgesucht werden
-            SimpleMetaPath subPathConnected = metaPath.getSubPath(0, path2CreateStartIndex);
-            Collection<ModelElement> connectedElements = MetaPathFunctions.getConnectedElements(master, subPathConnected);
-            for (ModelElement me : connectedElements) {
-                //ab diesem Pfadteil muss neu angelegt werden
-                SimpleMetaPath subPathCreate = metaPath.getSubPath(path2CreateStartIndex);
-                doc.createPath(me, instanceElement, subPathCreate, pid);
-            }
         }
-
         doc.finish_transaction(pid);
         doc.distributeEvent(DATA_CHANGED, pid);
         return instanceContainer;

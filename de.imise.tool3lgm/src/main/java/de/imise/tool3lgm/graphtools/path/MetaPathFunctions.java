@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -639,6 +640,22 @@ public class MetaPathFunctions {
         return isEdgeMasterToSlaveComposition;
     }
 
+    /**
+     * Liefert true, wenn die Kantenklasse eine Composition ist und die zugehörige Richtung (direction) vom Master auf den Slave zeigt.
+     *
+     * @param edgeClass
+     * @param direction
+     * @return
+     */
+    private static final boolean isInstanciationFromMasterToInstance(final Class<? extends Edge> edgeClass, final Direction direction) {
+        boolean isEdgeMasterToInstanceInstanciation = MetaModel.isInstaciation(edgeClass);
+        if (!isEdgeMasterToInstanceInstanciation) {
+            return false;
+        }
+        isEdgeMasterToInstanceInstanciation = direction == InstanciationEdge.MASTER_TO_INSTANCE_DIRECTION;
+        return isEdgeMasterToInstanceInstanciation;
+    }
+
     //    /**
     //     * Erzeugt ein neues Element und verknüpft es mit dem übergebenen Startelelement. Für das neue Element werden alle anderen
     //     * Elemente angelegt, die es braucht, damit keine Verletzung irgendwelcher Kardinalitäten bestehen.
@@ -717,6 +734,11 @@ public class MetaPathFunctions {
             //erzeuge ein untergeordnetes Element
             Class<? extends CompositionEdge> compositionEdgeClass = edgeClassToNewElement.asSubclass(CompositionEdge.class);
             createdDependent = GraphDocument.createAddicted(doc, startElement, compositionEdgeClass, elementClass2Create, pid);
+        } else if (startElement != null && isInstanciationFromMasterToInstance(edgeClassToNewElement, directionToNewElement)) {
+            //erzeuge eine Instanz aus dem Master
+            Class<? extends InstanciationEdge> instanciationEdgeClass = edgeClassToNewElement.asSubclass(InstanciationEdge.class);
+            NodeContainer createdInstance = doc.createInstance(doc, instanciationEdgeClass, startElement, pid);
+            createdDependent = createdInstance != null ? createdInstance.getElement() : null;
         } else {
             //das neue Element gleich mit Container im doc anlegen
             createdContainer = doc.createNodeAndContainer(elementClass2Create, pid);
