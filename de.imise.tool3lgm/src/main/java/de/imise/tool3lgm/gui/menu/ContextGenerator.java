@@ -540,7 +540,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             if (!metaModel.isSlaveType(meClass)) {
                 ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
                 for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(meClass)) {
-                    if (metaModel.isInstanciationEdgeMaster(meClass, edgeClass)) {
+                    if (metaModel.isInstanciationMaster(edgeClass, meClass)) {
                         if (newInstanceLabel == null) {
                             newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
                             menu.add(newInstanceLabel);

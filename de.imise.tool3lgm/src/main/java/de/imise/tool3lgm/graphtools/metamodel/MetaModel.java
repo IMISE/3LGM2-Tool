@@ -1310,12 +1310,12 @@ public final class MetaModel {
      * Liefert <code>true</code>, wenn es sich bei der übergebenen Kantenklasse um eine {@link InstanciationEdge} handelt und die übergebene
      * Elementklasse davon das StartElement - also das instanziierbare Element ist und nicht die Instanz.
      *
-     * @param elementClass
      * @param edgeClass
+     * @param elementClass
      * @return
      */
-    public boolean isInstanciationEdgeMaster(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return InstanciationEdge.class.isAssignableFrom(edgeClass) && isStartClass(edgeClass, elementClass);
+    public boolean isInstanciationMaster(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        return isInstaciation(edgeClass) && isStartClass(edgeClass, elementClass);
     }
 
     /**
@@ -1675,8 +1675,20 @@ public final class MetaModel {
         return layer == null ? ModelConstants.NO_LAYER : layer.intValue();
     }
 
+    /**
+     * @param edgeClass
+     * @return
+     */
     public static final boolean isComposition(final Class<? extends Edge> edgeClass) {
         return CompositionEdge.class.isAssignableFrom(edgeClass);
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public static final boolean isInstaciation(final Class<? extends Edge> edgeClass) {
+        return InstanciationEdge.class.isAssignableFrom(edgeClass);
     }
 
     /**
