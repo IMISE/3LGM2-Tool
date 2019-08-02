@@ -30,6 +30,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.template.TemplateGDCollection;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -98,6 +99,12 @@ public abstract class ModelElement extends UserFieldTarget {
     private MetaModel metaModel;
 
     /**
+     * {@link GDCollection}, zu der dieses Element gehört. Dieser Wert ist nur als Cache gedacht, d.h. auch innerhalb von ModelElement sollte die
+     * GDCollection immer über {@link #getCollection()} geholt werden.
+     */
+    private GDCollection gdcoll;
+
+    /**
      * HashString des Teilmodells, mit dem das Element verknüpft ist. Diese Verknüpfung sagt einfach nur aus, dass das Element in dem Teilmodell näher
      * berschrieben wird (z.B. duch seine Teile). Es kann, aber muss selbst nicht in diesem Teilmodell
      * vorkommen.
@@ -153,6 +160,7 @@ public abstract class ModelElement extends UserFieldTarget {
     @Override
     public ModelElement clone() {
         ModelElement retVal = (ModelElement) super.clone();
+        gdcoll = null;
         retVal.hashstring = getNewHashString(this);
         initContainerTable(retVal);
         retVal.edges = null;
@@ -1971,11 +1979,14 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final GDCollection getCollection() {
-        //gibt vom erstbesten doc die gdcoll zurück
-        for (GraphDocument doc : containerTable.keySet()) {
-            return doc.getCollection();
+        if (gdcoll == null) {
+            //gibt vom erstbesten doc die gdcoll zurück
+            for (GraphDocument doc : containerTable.keySet()) {
+                gdcoll = doc.getCollection();
+                break;
+            }
         }
-        return null;
+        return gdcoll;
     }
 
     /**
