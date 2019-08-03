@@ -3,6 +3,8 @@ package de.imise.util;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import com.google.common.base.Strings;
+
 /**
  * Erzeugt einen neuen Handler, der die Resourcen für eine übergebene Klasse zurückgeben kann.
  *
@@ -13,21 +15,55 @@ public class SimpleResourceHandler {
     /**
      * ResourceBundles mit den speziellen Ressourcen für eine bestimmte Klasse
      */
-    protected ResourceBundle resourceBundle;
+    private final ResourceBundle resourceBundle;
 
     /**
      * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse zurückgeben kann.
      *
      * @param ressourceNameClassSource
-     *            Klassenname, der den Namen der zu ladenden Ressorcendatei vorgibt.
+     *            Klassenname, der den Namen der zu ladenden Ressorcendatei vorgibt. Außerdem wird von dieser Klasse der ClassLoader genutzt,
+     *            um das ResourceBundle zu laden.
      */
     public SimpleResourceHandler(final Class<?> ressourceNameClassSource) {
-        super();
-        if (ressourceNameClassSource == null) {
-            return;
+        this(ressourceNameClassSource, null);
+    }
+
+    /**
+     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse zurückgeben kann.
+     *
+     * @param ressourcePackageNameSource
+     *            Klassen, deren Package das Package des zu ladenden ResouceBundles vorgibt. Außerdem wird von dieser Klasse der ClassLoader genutzt,
+     *            um das ResourceBundle zu laden.
+     * @param resourceBundleSimpleName
+     *            SimpleName des ResouceBundles. Dieser wird dan den Package-Namen des obigen Packages angehängt. Ist dieser SimpleName
+     *            <code>null</code>, dann wird der GesamtName aus <code>ressourcePackageNameSource</code> gebildet - also nicht nur das Package
+     *            genommen, sondern auch der SimpleName der Klasse als Package-Name.
+     */
+    public SimpleResourceHandler(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName) {
+        this(ressourcePackageNameSource, resourceBundleSimpleName, Locale.getDefault());
+    }
+
+    /**
+     * Erzeugt einen neuen Handler, der die Resourcen für die übergebene Klasse zurückgeben kann
+     *
+     * @param ressourcePackageNameSource
+     *            Klassen, deren Package das Package des zu ladenden ResouceBundles vorgibt. Außerdem wird von dieser Klasse der ClassLoader genutzt,
+     *            um das ResourceBundle zu laden.
+     * @param resourceBundleSimpleName
+     *            SimpleName des ResouceBundles. Dieser wird dan den Package-Namen des obigen Packages angehängt. Ist dieser SimpleName
+     *            <code>null</code>, dann wird der GesamtName aus <code>ressourcePackageNameSource</code> gebildet - also nicht nur das Package
+     *            genommen, sondern auch der SimpleName der Klasse als Package-Name.
+     * @param locale
+     *            Locale des ResourceBundles
+     */
+    public SimpleResourceHandler(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName, final Locale locale) {
+        boolean appendSimpleName = !Strings.isNullOrEmpty(resourceBundleSimpleName);
+        String resourceFileName = !appendSimpleName ? ressourcePackageNameSource.getName() : ressourcePackageNameSource.getPackage().getName();
+        if (appendSimpleName) {
+            resourceFileName += "." + resourceBundleSimpleName;
         }
-        String resourceFileName = ressourceNameClassSource.getName().replace('.', '/');
-        resourceBundle = ResourceBundle.getBundle(resourceFileName, Locale.getDefault(), ressourceNameClassSource.getClassLoader());
+        resourceFileName = resourceFileName.replace('.', '/');
+        resourceBundle = ResourceBundle.getBundle(resourceFileName, Locale.getDefault(), ressourcePackageNameSource.getClassLoader());
     }
 
     /**
