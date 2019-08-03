@@ -2,7 +2,6 @@ package de.imise.tool3lgm;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.ResourceBundle;
 
 import javax.annotation.Nonnull;
 
@@ -11,6 +10,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ReflectionUtils;
+import de.imise.util.SimpleResourceHandler;
 
 /**
  * Klasse, die die Klasse eines Metamodells und das dazugehörige ResouceBundle dieses Metamodells enthält. Es enthält noch nicht das MetaModel
@@ -33,7 +33,7 @@ public final class MetaModelContext {
     private MetaModel metaModel;
 
     /** Das ResourceBundle des MetaModels. Es ist nur nicht <code>null</code>, wenn auch metaModel nicht <code>null</code> ist */
-    private ResourceBundle metaModelResourceBundle;
+    private final SimpleResourceHandler metaModelResourceBundle;
 
     /**
      * NameBuilder für die metamodellspezifischen Knoten- und Kantenklassen. Auch diese Klasse wird erst initialisiert, wenn das Metamodel geladen
@@ -49,13 +49,18 @@ public final class MetaModelContext {
      */
     public MetaModelContext(@Nonnull final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         this.metaModelDefinitionClass = metaModelDefinitionClass;
-        ResourceBundle resources = getMetaModelResources();
+        Locale locale = UserProperties.getLocale();
         String metaModelName;
+        SimpleResourceHandler metaModelResourceBundle;
         try {
-            metaModelName = getMetaModelDisplayName(resources);
+            metaModelResourceBundle = new SimpleResourceHandler(metaModelDefinitionClass, Tool3lgmConstants.METAMODEL_RESOURCE_BASE_NAME, locale);
+            String metaModelNameResKey = metaModelDefinitionClass.getSimpleName(); //immer der SimpleName der Klasse ist der Resourcenschlüssel zum Namen des Metamodells
+            metaModelName = metaModelResourceBundle.getString(metaModelNameResKey);
         } catch (Exception e) {
+            metaModelResourceBundle = null;
             metaModelName = metaModelDefinitionClass.getSimpleName();
         }
+        this.metaModelResourceBundle = metaModelResourceBundle;
         this.metaModelName = metaModelName;
     }
 
@@ -74,58 +79,6 @@ public final class MetaModelContext {
      */
     public final boolean hasDefinitionClass(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         return Objects.equals(this.metaModelDefinitionClass, metaModelDefinitionClass);
-    }
-
-    /**
-     * Lädt das ResoruceBundle zu diesem Metamdoell und gibt es zurück. Wird keines gefunden, kommt ohne Fehler <code>null</code> zurück.
-     *
-     * @return ResoruceBundle zu diesem Metamdoell
-     */
-    private final ResourceBundle getMetaModelResources() {
-        if (metaModelResourceBundle != null) {
-            return metaModelResourceBundle;
-        }
-        Locale locale = UserProperties.getLocale();
-        ClassLoader loader = metaModelDefinitionClass.getClassLoader();
-        String baseName = getMetamodelBundleName(metaModelDefinitionClass);
-        ResourceBundle resourceBundle = null;
-        try {
-            resourceBundle = ResourceBundle.getBundle(baseName, locale, loader);
-        } catch (Exception e) {
-        }
-        return resourceBundle;
-    }
-
-    /**
-     * Lädt das ResoruceBundle zur übergebenen Metamodell-Klasse und gibt es zurück
-     *
-     * @param metaModelDefinitionClass
-     * @return ResoruceBundle zur übergebenen Metamodell-Klasse
-     */
-    private static String getMetamodelBundleName(@Nonnull final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
-        //das Metamodel-Resourcebundle liegt im resource-package unter demselben Pfad, wie die Metamodellklasse des Packages.
-        //der ClassLoader, der das package lädt, erwartet relative Pfade ab dem Pfad dieser Klasse hier, die das Bundle lädt.
-        //z.B. liegt das speziele Metamodel im package "de.imise.tool3lgm.metamodel.tlgm_v3_0". Diese Klasse Tool3lgmConstants
-        //liegt im Hauptpackage "de.imise.tool3lgm". Das Resource-Bundle kann mit dem BundleName "metamodel.tlgm_v3_0.MetamodelResources"
-        //geladen werden. Also muss man vom package-Namen des Metamodells den package-Namen der Tool3lgmConstants abziehen und den
-        //vorgegebenen Bundle-Name "MetamodelResources" anhängen (mit Punkt dazwischen).
-        //        String mainPackageName = Tool3lgmConstants.class.getPackage().getName();
-        String metaModelPackageName = metaModelDefinitionClass.getPackage().getName();
-        //        String bundleName = metaModelPackageName.substring(mainPackageName.length() + 1) + "." + METAMODEL_RESOURCE_BASE_NAME;
-        String bundleName = metaModelPackageName + "." + Tool3lgmConstants.METAMODEL_RESOURCE_BASE_NAME;
-        return bundleName;
-    }
-
-    /**
-     * Liefert den Anzeigenamen des Metamodells aus den übergebenen Resourcen. Der Schlüssel entspricht dem simplen Klassennamen.
-     *
-     * @param resources
-     * @return
-     */
-    private final String getMetaModelDisplayName(final ResourceBundle resources) {
-        String metaModelNameResKey = metaModelDefinitionClass.getSimpleName(); //immer der SimpleName der Klasse ist der Resourcenschlüssel zum Namen des Metamodells
-        String metaModelName = resources.getString(metaModelNameResKey);
-        return metaModelName;
     }
 
     /**
@@ -155,9 +108,8 @@ public final class MetaModelContext {
         //das hier darf auf keinen Fall mit try-catch komplett umrandet werden, da mehrere Funktionen auf die
         //MissingResocureException regaieren (z.B. die Funktionen zum heraussuchen der Kantennamen bei
         //Kanten mit doppelter Bedeutung
-        ResourceBundle metaModelResources = getMetaModelResources();
         try {
-            return metaModelResources.getString(key);
+            return metaModelResourceBundle.getString(key);
         } catch (Exception e) {
             return Tool3lgmConstants.getResString(key);
         }
@@ -202,7 +154,6 @@ public final class MetaModelContext {
         if (metaModel == null) {
             try {
                 metaModel = new MetaModel(this);
-                metaModelResourceBundle = getMetaModelResources();
                 elementsNameBuilder = new ElementsNameBuilder(this);
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
