@@ -1,6 +1,5 @@
 package de.imise.tool3lgm;
 
-import java.util.Locale;
 import java.util.Objects;
 
 import javax.annotation.Nonnull;
@@ -21,7 +20,7 @@ import de.imise.util.SimpleResourceHandler;
  *
  * @author AXS (8 May 2019)
  */
-public final class MetaModelContext {
+public final class MetaModelContext extends SimpleResourceHandler {
 
     /** Klasse des Metamodells */
     private final Class<? extends MetaModelDefinition> metaModelDefinitionClass;
@@ -31,9 +30,6 @@ public final class MetaModelContext {
 
     /** Das tatsächlich über die MetaModelDefintion initialiserte Metamodell */
     private MetaModel metaModel;
-
-    /** Das ResourceBundle des MetaModels. Es ist nur nicht <code>null</code>, wenn auch metaModel nicht <code>null</code> ist */
-    private final SimpleResourceHandler metaModelResourceBundle;
 
     /**
      * NameBuilder für die metamodellspezifischen Knoten- und Kantenklassen. Auch diese Klasse wird erst initialisiert, wenn das Metamodel geladen
@@ -48,20 +44,10 @@ public final class MetaModelContext {
      * @param metaModelDefinitionClass
      */
     public MetaModelContext(@Nonnull final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        super(metaModelDefinitionClass, Tool3lgmConstants.METAMODEL_RESOURCE_BASE_NAME, UserProperties.getLocale());
         this.metaModelDefinitionClass = metaModelDefinitionClass;
-        Locale locale = UserProperties.getLocale();
-        String metaModelName;
-        SimpleResourceHandler metaModelResourceBundle;
-        try {
-            metaModelResourceBundle = new SimpleResourceHandler(metaModelDefinitionClass, Tool3lgmConstants.METAMODEL_RESOURCE_BASE_NAME, locale);
-            String metaModelNameResKey = metaModelDefinitionClass.getSimpleName(); //immer der SimpleName der Klasse ist der Resourcenschlüssel zum Namen des Metamodells
-            metaModelName = metaModelResourceBundle.getString(metaModelNameResKey);
-        } catch (Exception e) {
-            metaModelResourceBundle = null;
-            metaModelName = metaModelDefinitionClass.getSimpleName();
-        }
-        this.metaModelResourceBundle = metaModelResourceBundle;
-        this.metaModelName = metaModelName;
+        String metaModelNameResKey = metaModelDefinitionClass.getSimpleName(); //immer der SimpleName der Klasse ist der Resourcenschlüssel zum Namen des Metamodells
+        metaModelName = getResStringWithoutError(metaModelNameResKey);
     }
 
     /**
@@ -104,12 +90,13 @@ public final class MetaModelContext {
      * @param key
      * @return
      */
+    @Override
     public String getResString(final String key) {
         //das hier darf auf keinen Fall mit try-catch komplett umrandet werden, da mehrere Funktionen auf die
         //MissingResocureException regaieren (z.B. die Funktionen zum heraussuchen der Kantennamen bei
         //Kanten mit doppelter Bedeutung
         try {
-            return metaModelResourceBundle.getString(key);
+            return super.getResString(key);
         } catch (Exception e) {
             return Tool3lgmConstants.getResString(key);
         }
