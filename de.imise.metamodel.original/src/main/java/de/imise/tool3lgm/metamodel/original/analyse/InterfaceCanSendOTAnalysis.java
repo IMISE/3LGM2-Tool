@@ -29,6 +29,7 @@ import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.original.node.Repraesentationsform;
 import de.imise.tool3lgm.metamodel.original.node.Schnittstelle;
 import de.imise.util.SimpleResourceHandler;
+import de.imise.util.SimpleResourceSource;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -46,7 +47,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
         super(metaModelContext);
         startClasses.add(Bausteinschnittstelle.class);
         SimpleResourceHandler resHandler = new SimpleResourceHandler(getClass());
-        name = resHandler.getString("ANALYSIS_NAME");
+        name = resHandler.getResString("ANALYSIS_NAME");
     }
 
     @Override
@@ -63,17 +64,17 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
             connectedObjectTypes.addAll(getSendableObjectTypes(bs));
         }
 
-        SimpleResourceHandler resHandler = new SimpleResourceHandler(getClass());
+        SimpleResourceSource resHandler = new SimpleResourceHandler(getClass());
 
         // die Schnittstelle versendet nichts
         if (connectedObjectTypes.size() == 0) {
-            MultipleOptionPane.showInformationMessageDialog(Static.getMainFrame(), resHandler.getString("NOT_SENDING_INTERFACE_DIALOG_TITLE"), resHandler.getString("NOT_SENDING_INTERFACE_DIALOG_MESSAGE"));
+            MultipleOptionPane.showInformationMessageDialog(Static.getMainFrame(), resHandler.getResString("NOT_SENDING_INTERFACE_DIALOG_TITLE"), resHandler.getResString("NOT_SENDING_INTERFACE_DIALOG_MESSAGE"));
             return null;
         }
         // Dialog zur Auswahl der interessierenden OT anbieten
         AlphabeticalJList objectTypeList = new AlphabeticalJList(connectedObjectTypes);
         objectTypeList.setBorder(BorderFactory.createEtchedBorder());
-        if (new MultipleOptionPane().showComponentDialog(Static.getMainFrame(), resHandler.getString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), resHandler.getString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), objectTypeList) != MultipleOptionPane.OK_OPTION) {
+        if (new MultipleOptionPane().showComponentDialog(Static.getMainFrame(), resHandler.getResString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), resHandler.getResString("CHOOSE_OBJECT_TYPE_DIALOG_TITLE"), objectTypeList) != MultipleOptionPane.OK_OPTION) {
             return null;
         }
         List<ModelElement> objectTypes = new ArrayList<>();

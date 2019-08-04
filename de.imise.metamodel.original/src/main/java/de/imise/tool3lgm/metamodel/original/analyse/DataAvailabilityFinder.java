@@ -281,7 +281,7 @@ public class DataAvailabilityFinder {
         // System.err.println("*************************************************");
         // }
 
-        OutputDialog outputDialog = new OutputDialog(Static.getMainFrame(), resHandler.getString("data_availability"));
+        OutputDialog outputDialog = new OutputDialog(Static.getMainFrame(), resHandler.getResString("data_availability"));
 
         outputDialog.appendln("##############################################################");
         outputDialog.appendln("#                        UnavailableET                       #");
@@ -441,7 +441,7 @@ public class DataAvailabilityFinder {
     }
 
     public static final Action getAction() {
-        return new GraphDocumentAction(DataAvailabilityFinder.class, null, new SimpleResourceHandler(DataAvailabilityFinder.class).getString("data_availability"), null) {
+        return new GraphDocumentAction(DataAvailabilityFinder.class, null, new SimpleResourceHandler(DataAvailabilityFinder.class).getResString("data_availability"), null) {
             @Override
             protected void actionPerformed() {
                 // Dieser Aufruf startet auch die Ausgabe des DataAvailabilityFinder

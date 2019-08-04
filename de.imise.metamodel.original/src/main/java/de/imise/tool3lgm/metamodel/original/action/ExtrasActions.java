@@ -20,10 +20,11 @@ import de.imise.tool3lgm.metamodel.original.edge.KommbezEtntVerbindung;
 import de.imise.tool3lgm.metamodel.original.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.metamodel.original.node.EtntEtdtKombination;
 import de.imise.util.SimpleResourceHandler;
+import de.imise.util.SimpleResourceSource;
 
 public class ExtrasActions {
 
-    private final SimpleResourceHandler resHandler = new SimpleResourceHandler(getClass());
+    private final SimpleResourceSource resHandler = new SimpleResourceHandler(getClass());
 
     public Action[] getActions() {
         return new Action[] {
@@ -32,7 +33,7 @@ public class ExtrasActions {
     }
 
     private Action getRelinkETNTAction() {
-        GraphDocumentAction relinkETNT = new GraphDocumentAction(getClass(), null, resHandler.getString("ACTION_NAME_RELINK_ETNT"), null) {
+        GraphDocumentAction relinkETNT = new GraphDocumentAction(getClass(), null, resHandler.getResString("ACTION_NAME_RELINK_ETNT"), null) {
             @Override
             public void actionPerformed() {
                 LGMGraphDocument doc = Static.getSelectedDoc();
@@ -62,7 +63,7 @@ public class ExtrasActions {
                 doc.distributeEvent(DATA_CHANGED);
             }
         };
-        relinkETNT.setShortDescription(resHandler.getString("ACTION_TOOLTIP_RELINK_ETNT"));
+        relinkETNT.setShortDescription(resHandler.getResString("ACTION_TOOLTIP_RELINK_ETNT"));
         return relinkETNT;
     }
 
