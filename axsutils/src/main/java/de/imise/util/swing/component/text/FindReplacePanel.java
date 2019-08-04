@@ -65,31 +65,31 @@ public class FindReplacePanel extends JPanel implements ActionListener {
      * Groß/Kleinschreibung
      */
     private static boolean ignoreCase = true;
-    private final JCheckBox ignoreCase_cb = new JCheckBox(resHandler.getString("TOOLS_FINDREPLACEPANEL_CB_IC"), ignoreCase);
+    private final JCheckBox ignoreCase_cb = new JCheckBox(resHandler.getResString("TOOLS_FINDREPLACEPANEL_CB_IC"), ignoreCase);
 
     /**
      * Reguläre Ausdrücke
      */
     private static boolean allowREs = false;
-    private final JCheckBox allowREs_cb = new JCheckBox(resHandler.getString("TOOLS_FINDREPLACEPANEL_CB_RE"), allowREs);
+    private final JCheckBox allowREs_cb = new JCheckBox(resHandler.getResString("TOOLS_FINDREPLACEPANEL_CB_RE"), allowREs);
 
     /**
      * ganzes Wort
      */
     private static boolean onlyWholeWord = false;
-    private final JCheckBox onlyWholeWord_cb = new JCheckBox(resHandler.getString("TOOLS_FINDREPLACEPANEL_CB_WW"), onlyWholeWord);
+    private final JCheckBox onlyWholeWord_cb = new JCheckBox(resHandler.getResString("TOOLS_FINDREPLACEPANEL_CB_WW"), onlyWholeWord);
 
     /**
      * Umbrechen
      */
-    private final JCheckBox wrapAround_cb = new JCheckBox(resHandler.getString("TOOLS_FINDREPLACEPANEL_CB_WA"), onlyWholeWord);
+    private final JCheckBox wrapAround_cb = new JCheckBox(resHandler.getResString("TOOLS_FINDREPLACEPANEL_CB_WA"), onlyWholeWord);
 
     /**
      * normal_direction: true vorwärts, false rückwärts;
      */
     private static boolean normal_direction = true;
-    private final JRadioButton normal_direction_rb = new JRadioButton(resHandler.getString("TOOLS_FINDREPLACEPANEL_RB_F"), normal_direction);
-    private final JRadioButton back_direction_rb = new JRadioButton(resHandler.getString("TOOLS_FINDREPLACEPANEL_RB_B"), !normal_direction);
+    private final JRadioButton normal_direction_rb = new JRadioButton(resHandler.getResString("TOOLS_FINDREPLACEPANEL_RB_F"), normal_direction);
+    private final JRadioButton back_direction_rb = new JRadioButton(resHandler.getResString("TOOLS_FINDREPLACEPANEL_RB_B"), !normal_direction);
 
     // Buttons
     private JButton jbSearch;
@@ -132,7 +132,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
 
         JDialog dialog = new JDialog(getFrameOrDialog(textComponent) != null && JDialog.class.isAssignableFrom(getFrameOrDialog(textComponent).getClass()) ? (JDialog) getFrameOrDialog(textComponent) : (JFrame) getFrameOrDialog(textComponent));
         dialog.getContentPane().add(new FindReplacePanel(textComponent));
-        dialog.setTitle(resHandler.getString("TOOLS_FINDREPLACEPANEL_TITLE"));
+        dialog.setTitle(resHandler.getResString("TOOLS_FINDREPLACEPANEL_TITLE"));
         dialog.setVisible(true);
         dialog.setMinimumSize(new Dimension(400, 250));
         dialog.setLocation(x, y);
@@ -193,9 +193,9 @@ public class FindReplacePanel extends JPanel implements ActionListener {
         constraints.weightx = 1;
 
         // erste Spalte
-        this.add(new JLabel(resHandler.getString("TOOLS_FINDREPLACEPANEL_FIND")), constraints);
+        this.add(new JLabel(resHandler.getResString("TOOLS_FINDREPLACEPANEL_FIND")), constraints);
         constraints.gridy++;
-        this.add(new JLabel(resHandler.getString("TOOLS_FINDREPLACEPANEL_R")), constraints);
+        this.add(new JLabel(resHandler.getResString("TOOLS_FINDREPLACEPANEL_R")), constraints);
         constraints.gridy++;
 
         // nächste Spalte
@@ -217,7 +217,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
         constraints.gridy++;
 
         JPanel directionPanel = new JPanel();
-        directionPanel.setBorder(BorderFactory.createTitledBorder(resHandler.getString("TOOLS_FINDREPLACEPANEL_RBS_SCOPE")));
+        directionPanel.setBorder(BorderFactory.createTitledBorder(resHandler.getResString("TOOLS_FINDREPLACEPANEL_RBS_SCOPE")));
         directionPanel.setLayout(new BoxLayout(directionPanel, BoxLayout.PAGE_AXIS));
 
         directionPanel.add(normal_direction_rb);
@@ -230,14 +230,14 @@ public class FindReplacePanel extends JPanel implements ActionListener {
         constraints.gridy++;
 
         JPanel optPanel = new JPanel();
-        optPanel.setBorder(BorderFactory.createTitledBorder(resHandler.getString("TOOLS_FINDREPLACEPANEL_CBS_OPT")));
+        optPanel.setBorder(BorderFactory.createTitledBorder(resHandler.getResString("TOOLS_FINDREPLACEPANEL_CBS_OPT")));
         optPanel.setLayout(new BoxLayout(optPanel, BoxLayout.PAGE_AXIS));
 
         optPanel.add(ignoreCase_cb);
         optPanel.add(allowREs_cb);
         optPanel.add(onlyWholeWord_cb);
 
-        onlyWholeWord_cb.setToolTipText(resHandler.getString("TOOLS_FINDREPLACEPANEL_TT_WW"));
+        onlyWholeWord_cb.setToolTipText(resHandler.getResString("TOOLS_FINDREPLACEPANEL_TT_WW"));
         optPanel.add(wrapAround_cb);
 
         this.add(optPanel, constraints);
@@ -300,7 +300,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
      * @return
      */
     private Action getSearchAction(final JTextComponent elemFindEditor) {
-        return new AbstractAction(resHandler.getString("TOOLS_FINDREPLACEPANEL_FIND")) {
+        return new AbstractAction(resHandler.getResString("TOOLS_FINDREPLACEPANEL_FIND")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 HistoryComboBox.addToHistory(elementFind);
@@ -327,7 +327,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
      * @return
      */
     private Action getReplaceSearchAction(final JTextComponent elemFindEditor, final JTextComponent targetComponent, final boolean withSearch) {
-        return new AbstractAction(resHandler.getString(withSearch ? "TOOLS_FINDREPLACEPANEL_RF" : "TOOLS_FINDREPLACEPANEL_R")) {
+        return new AbstractAction(resHandler.getResString(withSearch ? "TOOLS_FINDREPLACEPANEL_RF" : "TOOLS_FINDREPLACEPANEL_R")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 try {
@@ -411,7 +411,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
      * @return
      */
     private Action getReplaceAllAction(final JTextComponent elemFindEditor, final JTextComponent targetComponent) {
-        return new AbstractAction(resHandler.getString("TOOLS_FINDREPLACEPANEL_REPLACE_ALL")) {
+        return new AbstractAction(resHandler.getResString("TOOLS_FINDREPLACEPANEL_REPLACE_ALL")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 HistoryComboBox.addToHistory(elementFind);

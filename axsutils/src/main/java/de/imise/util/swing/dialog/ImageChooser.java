@@ -62,7 +62,7 @@ public class ImageChooser extends ExtendedFileChooser {
     private final FileNameExtensionFilter[] getFileNameExtensionFilters(final FileFilterType... filterNames) {
         FileNameExtensionFilter[] returnFilter = new FileNameExtensionFilter[filterNames.length];
         for (int i = 0; i < filterNames.length; i++) {
-            returnFilter[i] = new FileNameExtensionFilter(drh.getString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i]), StringUtils.tokenize(drh.getString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i] + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false));
+            returnFilter[i] = new FileNameExtensionFilter(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i]), StringUtils.tokenize(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i] + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false));
         }
         return returnFilter;
     }
@@ -91,7 +91,7 @@ public class ImageChooser extends ExtendedFileChooser {
      */
     public ImageChooser(final Object pathKey, final File defaultPath) {
         super(pathKey, defaultPath);
-        setDialogTitle(drh.getString("TITLE"));
+        setDialogTitle(drh.getResString("TITLE"));
         setFileSystemView(FileSystemView.getFileSystemView());
         setFileSelectionMode(FILES_ONLY);
         setFileFilters(false, getFileNameExtensionFilters(FileFilterType.values()));
@@ -117,7 +117,7 @@ public class ImageChooser extends ExtendedFileChooser {
     }
 
     public int showDialog(final Component parent) throws HeadlessException {
-        return super.showDialog(parent, drh.getString("BUTTON_OPEN"));
+        return super.showDialog(parent, drh.getResString("BUTTON_OPEN"));
     }
 
     public static File getImageFile(final Component parent, final File defaultPath) {
@@ -192,7 +192,7 @@ public class ImageChooser extends ExtendedFileChooser {
          *
          */
         public PreviewPanel() {
-            JLabel label = new JLabel(new DialogResourceHandler(ImageChooser.class).getString("LABEL_PREVIEW"), SwingConstants.CENTER);
+            JLabel label = new JLabel(new DialogResourceHandler(ImageChooser.class).getResString("LABEL_PREVIEW"), SwingConstants.CENTER);
 
             setPreferredSize(new Dimension(150, 0));
             setBorder(BorderFactory.createEtchedBorder());

@@ -145,7 +145,7 @@ public class ProgressDialog extends JDialog {
 	 * @param showStatusLabel
 	 */
 	public ProgressDialog(Frame owner, boolean showStatusLabel) {
-		this(owner, new DialogResourceHandler(ProgressDialog.class).getString("pleaseWait"), showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
+		this(owner, new DialogResourceHandler(ProgressDialog.class).getResString("pleaseWait"), showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class ProgressDialog extends JDialog {
 	 * @param showStatusLabel
 	 */
 	public ProgressDialog(Dialog owner, boolean showStatusLabel) {
-		this(owner, new DialogResourceHandler(ProgressDialog.class).getString("pleaseWait"), showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
+		this(owner, new DialogResourceHandler(ProgressDialog.class).getResString("pleaseWait"), showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
 	}
 
 	/////////////////////////////////////////

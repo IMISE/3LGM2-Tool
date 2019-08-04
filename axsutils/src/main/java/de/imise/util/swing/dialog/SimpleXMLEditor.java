@@ -71,10 +71,10 @@ public class SimpleXMLEditor extends JDialog implements ActionListener {
 		contentPane.add(new JScrollPane(pane), BorderLayout.CENTER);
 		
 		DialogResourceHandler drh = new DialogResourceHandler(null);
-		okButton = new JButton(drh.getString("ok"));
+		okButton = new JButton(drh.getResString("ok"));
 		okButton.setMnemonic(okButton.getText().charAt(0));
 		okButton.addActionListener(this);
-		cancelButton = new JButton(drh.getString("cancel"));
+		cancelButton = new JButton(drh.getResString("cancel"));
 		cancelButton.addActionListener(this);
 		cancelButton.setMnemonic(cancelButton.getText().charAt(0));
 

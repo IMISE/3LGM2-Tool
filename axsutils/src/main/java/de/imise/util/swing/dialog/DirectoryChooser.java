@@ -138,15 +138,15 @@ public class DirectoryChooser extends JDialog {
 
 		final JButton button;
 
-		setTitle(drh.getString("labelChooseDir"));
+		setTitle(drh.getResString("labelChooseDir"));
 
 		JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-		button = new JButton(new AbstractAction(drh.getString("labelNewDir")) {
+		button = new JButton(new AbstractAction(drh.getResString("labelNewDir")) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (selectedDir == null)
 					return;
-				String dirName = JOptionPane.showInputDialog(null, DirectoryChooser.drh.getString("name"), DirectoryChooser.drh.getString("labelNewDir"), JOptionPane.QUESTION_MESSAGE);
+				String dirName = JOptionPane.showInputDialog(null, DirectoryChooser.drh.getResString("name"), DirectoryChooser.drh.getResString("labelNewDir"), JOptionPane.QUESTION_MESSAGE);
 					
 				if (dirName == null)
 					return;
@@ -156,7 +156,7 @@ public class DirectoryChooser extends JDialog {
 		button.setEnabled(false);
 		panel.add(button);
 
-		panel.add(new JButton(new AbstractAction(drh.getString("ok")) {
+		panel.add(new JButton(new AbstractAction(drh.getResString("ok")) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				approveOption = true;
@@ -164,7 +164,7 @@ public class DirectoryChooser extends JDialog {
 
 			}
 		}));
-		panel.add(new JButton(new AbstractAction(drh.getString("cancel")) {
+		panel.add(new JButton(new AbstractAction(drh.getResString("cancel")) {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				dispose();

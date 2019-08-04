@@ -108,16 +108,6 @@ public class SimpleResourceHandler implements SimpleResourceSource {
     }
 
     /**
-     * Liefert den Resourcen-String zum übergebenen Schlüssel
-     *
-     * @param key
-     * @return
-     */
-    public String getString(final String key) {
-        return getResString(key);
-    }
-
-    /**
      * Liefert <code>true</code>, wenn ein gültiges ResourceBundle geladen werden konnte.
      *
      * @return

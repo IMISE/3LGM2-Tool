@@ -84,7 +84,7 @@ public class ComponentAsImageExportHandler {
     private final FileNameExtensionFilter[] getFileNameExtensionFilters(final FileFilterType... filterNames) {
         FileNameExtensionFilter[] returnFilter = new FileNameExtensionFilter[filterNames.length];
         for (int i = 0; i < filterNames.length; i++) {
-            returnFilter[i] = new FileNameExtensionFilter(drh.getString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i]), StringUtils.tokenize(drh.getString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i] + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false));
+            returnFilter[i] = new FileNameExtensionFilter(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i]), StringUtils.tokenize(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i] + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false));
         }
         return returnFilter;
     }
@@ -185,9 +185,9 @@ public class ComponentAsImageExportHandler {
             encoder.encode(buffer);
             os.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getString("ERROR_MESSAGE"), drh.getString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
         } catch (Error err) {
-            JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getString("ERROR_MESSAGE"), drh.getString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -203,11 +203,11 @@ public class ComponentAsImageExportHandler {
         if (comp instanceof ZoomableComponent) {
             JPanel sizeOptionPanel = new JPanel(new BorderLayout());
             sizeOptionPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
-            JLabel label = new JLabel("<html>" + drh.getString("MESSAGE_OUT_OF_MEMORY") + "</html>");
+            JLabel label = new JLabel("<html>" + drh.getResString("MESSAGE_OUT_OF_MEMORY") + "</html>");
             sizeOptionPanel.add(label, BorderLayout.CENTER);
 
-            JRadioButton saveOriginalSizeRBut = new JRadioButton(drh.getString("RADIO_BUTTON_ORIGINAL_SIZE"));
-            saveMaximumSizeRBut = new JRadioButton(drh.getString("RADIO_BUTTON_MAXIMUM_SIZE"));
+            JRadioButton saveOriginalSizeRBut = new JRadioButton(drh.getResString("RADIO_BUTTON_ORIGINAL_SIZE"));
+            saveMaximumSizeRBut = new JRadioButton(drh.getResString("RADIO_BUTTON_MAXIMUM_SIZE"));
             ButtonGroup buttonGroup = new ButtonGroup();
             buttonGroup.add(saveOriginalSizeRBut);
             buttonGroup.add(saveMaximumSizeRBut);
@@ -225,7 +225,7 @@ public class ComponentAsImageExportHandler {
 
         fc.setMultiSelectionEnabled(false);
         FileNameExtensionFilter[] fileFilters = getFileNameExtensionFilters(FileFilterType.values());
-        fc.showSaveDialog(comp, drh.getString("DIALOG_TITLE"), false, fileFilters);
+        fc.showSaveDialog(comp, drh.getResString("DIALOG_TITLE"), false, fileFilters);
 
         boolean maximizeImage = saveMaximumSizeRBut != null && saveMaximumSizeRBut.isSelected();
         FileFilterType type = null;

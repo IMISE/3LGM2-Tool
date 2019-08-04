@@ -69,7 +69,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
     private void init(final JTextComponent textComponent) {
         final SimpleResourceHandler resHandler = new SimpleResourceHandler(TextComponentStandardPopup.class);
 
-        final String cutString = resHandler.getString("TOOLS_CONTEXTMENU_CUT");
+        final String cutString = resHandler.getResString("TOOLS_CONTEXTMENU_CUT");
         final JMenuItem cutIt = new JMenuItem(cutString);
         cutIt.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, MENU_SHORTCUT_KEY_MASK));
         cutIt.setAction(new AbstractAction(cutString) {
@@ -89,7 +89,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
 
         });
 
-        final String pasteString = resHandler.getString("TOOLS_CONTEXTMENU_PASTE");
+        final String pasteString = resHandler.getResString("TOOLS_CONTEXTMENU_PASTE");
         final JMenuItem pasteIt = new JMenuItem(pasteString);
         pasteIt.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, MENU_SHORTCUT_KEY_MASK));
         pasteIt.setAction(new AbstractAction(pasteString) {
@@ -109,7 +109,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
 
         });
 
-        final String deleteString = resHandler.getString("TOOLS_CONTEXTMENU_DELETE_ALL");
+        final String deleteString = resHandler.getResString("TOOLS_CONTEXTMENU_DELETE_ALL");
         final JMenuItem deleteIt = new JMenuItem(deleteString);
         deleteIt.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, MENU_SHORTCUT_KEY_MASK));
         deleteIt.setAction(new AbstractAction(deleteString) {
@@ -129,7 +129,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
 
         });
 
-        final String copyString = resHandler.getString("TOOLS_CONTEXTMENU_COPY");
+        final String copyString = resHandler.getResString("TOOLS_CONTEXTMENU_COPY");
         final JMenuItem copyIt = new JMenuItem(copyString);
         copyIt.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, MENU_SHORTCUT_KEY_MASK));
         copyIt.setAction(new AbstractAction(copyString) {
@@ -149,7 +149,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
 
         });
 
-        final String selectAllString = resHandler.getString("TOOLS_CONTEXTMENU_SELECT_ALL");
+        final String selectAllString = resHandler.getResString("TOOLS_CONTEXTMENU_SELECT_ALL");
         final JMenuItem selectAllIt = new JMenuItem(selectAllString);
         selectAllIt.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, MENU_SHORTCUT_KEY_MASK));
         selectAllIt.setAction(new AbstractAction(selectAllString) {
@@ -171,7 +171,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
         add(selectAllIt);
 
         // Optionales suche und ersetzen
-        final String findString = resHandler.getString("TOOLS_CONTEXTMENU_FIND");
+        final String findString = resHandler.getResString("TOOLS_CONTEXTMENU_FIND");
         final JMenuItem findIt = new JMenuItem(findString);
         if (isExtensionFindReplace()) {
 

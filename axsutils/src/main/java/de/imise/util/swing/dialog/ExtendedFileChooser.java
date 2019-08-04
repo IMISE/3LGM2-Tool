@@ -217,7 +217,7 @@ public class ExtendedFileChooser extends JFileChooser {
             } catch (IOException e) {
             }
             if (!correctFileName) {
-                MultipleOptionPane.showConfirmDialog(parent, drh.getString("MESSAGE_SAVE_ERROR"), drh.getString("MESSAGE_INVALID_CHARS"), MultipleOptionPane.DEFAULT_OPTION, MultipleOptionPane.ERROR_MESSAGE);
+                MultipleOptionPane.showConfirmDialog(parent, drh.getResString("MESSAGE_SAVE_ERROR"), drh.getResString("MESSAGE_INVALID_CHARS"), MultipleOptionPane.DEFAULT_OPTION, MultipleOptionPane.ERROR_MESSAGE);
                 continue;
             }
 
@@ -247,7 +247,7 @@ public class ExtendedFileChooser extends JFileChooser {
             if (selectedFile.exists()) {
                 //wenn beschreibbar -> Fragen, ob drüberspeichern
                 if (selectedFile.canWrite()) {
-                    switch (JOptionPane.showConfirmDialog(parent, drh.getString("MESSAGE_OVERWRITE_1") + selectedFile.getName() + drh.getString("MESSAGE_OVERWRITE_2"))) {
+                    switch (JOptionPane.showConfirmDialog(parent, drh.getResString("MESSAGE_OVERWRITE_1") + selectedFile.getName() + drh.getResString("MESSAGE_OVERWRITE_2"))) {
                     case JOptionPane.YES_OPTION:
                         return APPROVE_OPTION;
                     case JOptionPane.NO_OPTION:
@@ -267,7 +267,7 @@ public class ExtendedFileChooser extends JFileChooser {
             //wenn sich die neue Datei nicht anlegen lässt oder doch aus irgendwelchen Gründen nicht beschreibbar ist
             if (!FileHandler.guaranteeWriteableFile(selectedFile)) {
                 correctFileName = false;
-                MultipleOptionPane.showConfirmDialog(parent, drh.getString("MESSAGE_SAVE_ERROR"), drh.getString("MESSAGE_CANT_WRITE"), MultipleOptionPane.DEFAULT_OPTION, MultipleOptionPane.ERROR_MESSAGE);
+                MultipleOptionPane.showConfirmDialog(parent, drh.getResString("MESSAGE_SAVE_ERROR"), drh.getResString("MESSAGE_CANT_WRITE"), MultipleOptionPane.DEFAULT_OPTION, MultipleOptionPane.ERROR_MESSAGE);
                 continue;
             }
         }
@@ -285,7 +285,7 @@ public class ExtendedFileChooser extends JFileChooser {
      * @param parent
      */
     public static final void showSaveErrorMessage(final Component parent) {
-        MultipleOptionPane.showConfirmDialog(parent, drh.getString("MESSAGE_SAVE_ERROR"), drh.getString("MESSAGE_CANT_WRITE"), MultipleOptionPane.DEFAULT_OPTION, MultipleOptionPane.ERROR_MESSAGE);
+        MultipleOptionPane.showConfirmDialog(parent, drh.getResString("MESSAGE_SAVE_ERROR"), drh.getResString("MESSAGE_CANT_WRITE"), MultipleOptionPane.DEFAULT_OPTION, MultipleOptionPane.ERROR_MESSAGE);
     }
 
     /**

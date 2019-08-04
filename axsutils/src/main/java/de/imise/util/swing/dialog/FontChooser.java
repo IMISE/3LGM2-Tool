@@ -142,21 +142,21 @@ public class FontChooser extends JDialog {
 
         DialogResourceHandler drh = new DialogResourceHandler(FontChooser.class);
 
-        setTitle(drh.getString("font"));
+        setTitle(drh.getResString("font"));
 
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
         JPanel p = new JPanel(new GridLayout(1, 2, 10, 2));
-        p.setBorder(new TitledBorder(new EtchedBorder(), drh.getString("font")));
-        _fontNameList = new OpenList(fontNames, drh.getString("fonttype"));
+        p.setBorder(new TitledBorder(new EtchedBorder(), drh.getResString("font")));
+        _fontNameList = new OpenList(fontNames, drh.getResString("fonttype"));
         p.add(_fontNameList);
-        _fontSizeList = new OpenList(fontSizes, drh.getString("fontsize"));
+        _fontSizeList = new OpenList(fontSizes, drh.getResString("fontsize"));
         p.add(_fontSizeList);
         getContentPane().add(p);
         p = new JPanel(new GridLayout(2, 3, 10, 5));
-        p.setBorder(new TitledBorder(new EtchedBorder(), drh.getString("fontstyle")));
-        _boldCheck = new JCheckBox(drh.getString("bold"));
+        p.setBorder(new TitledBorder(new EtchedBorder(), drh.getResString("fontstyle")));
+        _boldCheck = new JCheckBox(drh.getResString("bold"));
         p.add(_boldCheck);
-        _italicCheck = new JCheckBox(drh.getString("italic"));
+        _italicCheck = new JCheckBox(drh.getResString("italic"));
         p.add(_italicCheck);
 
         //      _underlineCheck = new JCheckBox( "Underline" );
@@ -196,7 +196,7 @@ public class FontChooser extends JDialog {
          */
 
         p = new JPanel(new BorderLayout());
-        p.setBorder(new TitledBorder(new EtchedBorder(), drh.getString("preview")));
+        p.setBorder(new TitledBorder(new EtchedBorder(), drh.getResString("preview")));
         _preview = new JLabel("<html><body>" + previewText + "</html></body>", JLabel.CENTER);
         _preview.setBackground(Color.WHITE);
         _preview.setForeground(Color.BLACK);
@@ -206,13 +206,13 @@ public class FontChooser extends JDialog {
         p.add(_preview, BorderLayout.CENTER);
         getContentPane().add(p);
 
-        JButton okButton = new JButton(drh.getString("ok"));
+        JButton okButton = new JButton(drh.getResString("ok"));
         okButton.addActionListener(ev -> {
             _option = JOptionPane.OK_OPTION;
             setVisible(false);
         });
 
-        JButton cancelButton = new JButton(drh.getString("cancel"));
+        JButton cancelButton = new JButton(drh.getResString("cancel"));
         cancelButton.addActionListener(ev -> {
             _option = JOptionPane.CANCEL_OPTION;
             setVisible(false);

@@ -122,10 +122,10 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
         JPanel buttonpanel = new JPanel();
 
         DialogResourceHandler drh = new DialogResourceHandler(null);
-        ok_button = new JButton(drh.getString("ok"));
+        ok_button = new JButton(drh.getResString("ok"));
         ok_button.addActionListener(this);
         buttonpanel.add(ok_button);
-        cancel_button = new JButton(drh.getString("cancel"));
+        cancel_button = new JButton(drh.getResString("cancel"));
         cancel_button.addActionListener(this);
         buttonpanel.add(cancel_button);
 
