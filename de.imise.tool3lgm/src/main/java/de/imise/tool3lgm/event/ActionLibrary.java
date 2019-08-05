@@ -202,7 +202,9 @@ public class ActionLibrary {
 
             public static final List<Action> IMPORT_PLUGIN_ACTIONS = getImportPluginActions();
 
-            @SuppressWarnings("rawtypes")
+            @SuppressWarnings({
+                    "rawtypes", "unchecked"
+            })
             private static final List<Action> getImportPluginActions() {
                 List<Action> importPluginActions = new ArrayList<>();
                 List<DataImporter> dataImporters = PluginUtils.loadInstances(Tool3lgmConstants.PLUGIN_DIR, DataImporter.class);
