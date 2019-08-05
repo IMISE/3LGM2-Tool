@@ -62,9 +62,9 @@ public class MenuCollection {
             GDCommands.MODEL_ACTION_CUT, GDCommands.MODEL_ACTION_PASTE, new JSeparator(), GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL, GDCommands.MODEL_ACTION_DELETE_FROM_MODEL);
 
     /** Das Ansicht-Menu */
-    public static final JMenu VIEW_MENU = createMenu("viewMenu", ViewSubMenus.TOOLBAR_MENU, BooleanProperty.OPTION_MODEL_BROWSER_SHOW, new JSeparator(), ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE,
-            ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER, ViewActions.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, new JSeparator(),
-            ViewActions.ACTION_OPEN_MATRIX_VIEW);
+    public static final JMenu VIEW_MENU = createMenu("viewMenu", ViewSubMenus.TOOLBAR_MENU, BooleanProperty.OPTION_MODEL_BROWSER_SHOW, BooleanProperty.OPTION_TEMPLATE_BROWSER_SHOW, new JSeparator(),
+            ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE, ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER,
+            ViewActions.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, new JSeparator(), ViewActions.ACTION_OPEN_MATRIX_VIEW);
 
     /** Das Einfügen-Menu */
     public static final JMenu INSERT_MENU = new InsertMenu();

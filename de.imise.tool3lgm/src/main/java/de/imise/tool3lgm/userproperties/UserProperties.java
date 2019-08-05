@@ -353,6 +353,8 @@ public class UserProperties {
         OPTION_SHOW_STANDARD_TOOLBAR,
         /** ModelBrowser an/aus */
         OPTION_MODEL_BROWSER_SHOW,
+        /** TemplateBrowser an/aus */
+        OPTION_TEMPLATE_BROWSER_SHOW,
         /** Beim Start den Abfrgadedialog anzeigen, mit dem man das Metamodell wählen kann an/aus */
         OPTION_SHOW_CHOOSE_METAMODEL_DIALOG,
 
