@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
-import static de.imise.tool3lgm.Tool3lgm.getContextGenerator;
+import static de.imise.tool3lgm.Static.contextGenerator;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYERS;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
@@ -409,7 +409,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             return;
         }
         if ((e.getModifiers() & (InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)) != 0) {
-            Tool3lgm.getContextGenerator().setControlled(true);
+            contextGenerator.setControlled(true);
         }
         ElementContainer ka = getMouseOverElementContainer();
         // ElementContainer ka = null;
@@ -463,7 +463,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     @Override
     public void mousePressed(final MouseEvent e) {
         if ((e.getModifiers() & (InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)) != 0) {
-            Tool3lgm.getContextGenerator().setControlled(true);
+            contextGenerator.setControlled(true);
         }
         xin = e.getX();
         yin = e.getY();
@@ -513,7 +513,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             } else {
                 // Jede einzelne der 3 Ebenen wird erstmal durchkaemmt.
                 ka = null;
-                final ContextGenerator contextGenerator = getContextGenerator();
+                final ContextGenerator contextGenerator = Static.contextGenerator;
                 // 1. Ob man in eine Hand eines Knotens getroffen hat
                 ka = chooseResizable(layer, x, y);
                 if (ka != null) {
@@ -608,7 +608,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         xin = e.getX();
         yin = e.getY();
         computeRealCoordinates(false);
-        final ContextGenerator contextGenerator = Tool3lgm.getContextGenerator();
+        final ContextGenerator contextGenerator = Static.contextGenerator;
         if (mouse_makes_edge && left_button) {
             for (int layerIndex = MAX_LAYER_INDEX; layerIndex >= MIN_LAYER_INDEX; layerIndex--) {
                 if (isInterLayer(layerIndex)) {

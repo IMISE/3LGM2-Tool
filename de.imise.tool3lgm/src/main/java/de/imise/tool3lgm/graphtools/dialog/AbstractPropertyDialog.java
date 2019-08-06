@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -182,7 +181,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
 
     @Override
     public void windowActivated(final WindowEvent e) {
-        Tool3lgm.getContextGenerator().changeContext(doc);
+        Static.contextGenerator.changeContext(doc);
     }
 
     @Override

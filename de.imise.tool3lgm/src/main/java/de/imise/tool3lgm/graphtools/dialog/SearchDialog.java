@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Static.contextGenerator;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.BorderLayout;
@@ -57,7 +58,6 @@ import javax.swing.table.TableRowSorter;
 import javax.swing.text.JTextComponent;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -71,7 +71,6 @@ import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -600,14 +599,10 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                         ((GraphDocument) subModelBox.getSelectedObject()).showPropertyDialog(true);
                     }
                 } else {
-                    ContextGenerator ontextGenerator = Tool3lgm.getContextGenerator();
-                    ontextGenerator.changeContext((LGMGraphDocument) subModelBox.getSelectedObject());
-
-                    JPopupMenu jpm = ontextGenerator.getSearchDialogContextMenu();
+                    contextGenerator.changeContext((LGMGraphDocument) subModelBox.getSelectedObject());
+                    JPopupMenu jpm = contextGenerator.getSearchDialogContextMenu();
                     // refresh
-
                     jpm.show(table, e.getX(), e.getY());
-
                     Component[] comps = jpm.getComponents();
                     for (Component component : comps) {
                         if (component instanceof JMenuItem) {
@@ -617,11 +612,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                                 jmi.addActionListener(e1 -> SwingUtilities.invokeLater(() -> callSearch(new ActionEvent(searchButton, 0, ""))));
                             }
                         }
-
                     }
-
                 }
-
             }
         });
 

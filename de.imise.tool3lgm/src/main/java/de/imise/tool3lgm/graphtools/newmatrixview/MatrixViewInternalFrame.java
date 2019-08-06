@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.newmatrixview;
 
+import static de.imise.tool3lgm.Static.contextGenerator;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -10,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -204,10 +205,10 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
 
         mainDoc.select(colNode.getContainer(mainDoc), TransactionManager.STANDARD_PID);
-        Tool3lgm.getContextGenerator().setElementContainer(rowNode.getContainer(mainDoc));
-        Tool3lgm.getContextGenerator().setElementClicked(true);
-        Tool3lgm.getContextGenerator().processMouseEvent(left_button, right_button, cellPanel, e.getX(), e.getY());
-        Tool3lgm.getContextGenerator().setElementClicked(false);
+        contextGenerator.setElementContainer(rowNode.getContainer(mainDoc));
+        contextGenerator.setElementClicked(true);
+        contextGenerator.processMouseEvent(left_button, right_button, cellPanel, e.getX(), e.getY());
+        contextGenerator.setElementClicked(false);
     }
 
     /**

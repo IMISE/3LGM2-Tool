@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.Static.contextGenerator;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
@@ -13,11 +14,11 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JLabel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -462,7 +463,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         }
         if (popup && doc.isSelection()) {
             boolean showOnlyOpenPropertiesInContexMenu = sourceIs(e, JTable.class);
-            Tool3lgm.getContextGenerator().getDialogSelectionContextMenu(showOnlyOpenPropertiesInContexMenu).show(e.getComponent(), e.getX() + 3, e.getY() + 3);
+            JPopupMenu dialogSelectionContextMenu = contextGenerator.getDialogSelectionContextMenu(showOnlyOpenPropertiesInContexMenu);
+            dialogSelectionContextMenu.show(e.getComponent(), e.getX() + 3, e.getY() + 3);
         }
     }
 

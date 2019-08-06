@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
+import static de.imise.tool3lgm.Static.contextGenerator;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
@@ -99,7 +100,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
     @Override
     public void mousePressed(final MouseEvent e) {
         if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) {
-            Tool3lgm.getContextGenerator().setControlled(true);
+            contextGenerator.setControlled(true);
         }
         boolean right_button = false;
         int xin = e.getX();
@@ -135,7 +136,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
             Object lastPathComponent = path.getLastPathComponent();
             if (tree.isLayerNode(lastPathComponent)) {
                 if (right_button) {
-                    JPopupMenu pm = Tool3lgm.getContextGenerator().getLayerContextMenu();
+                    JPopupMenu pm = contextGenerator.getLayerContextMenu();
                     if (pm != null) {
                         pm.show(tree, xin + 3, yin + 3);
                     }
@@ -162,7 +163,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                     //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
                     //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
                     ec.getGraphDocument().addToSelection(ec, DynamicTree.PID);
-                    JPopupMenu pm = Tool3lgm.getContextGenerator().getNodeContextMenu(tree);
+                    JPopupMenu pm = contextGenerator.getNodeContextMenu(tree);
                     if (pm != null) {
                         pm.show(tree, xin + 3, yin + 3);
                     }
@@ -173,7 +174,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
 
     @Override
     public void mouseReleased(final MouseEvent e) {
-        Tool3lgm.getContextGenerator().setControlled(false);
+        contextGenerator.setControlled(false);
     }
 
     /**

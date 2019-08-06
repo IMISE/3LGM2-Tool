@@ -58,7 +58,6 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.ToolBar;
-import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.log.Log;
@@ -109,9 +108,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     /** Position of divider betweeen the tree and the graph view in pixel from the left side */
     private int dividerLocation = getToolkit().getScreenSize().width / 5;
-
-    /** Holds the current context and generates context menus */
-    public static ContextGenerator contextGenerator;
 
     /** Checks the consistency of a model */
     private ConsistencyChecker consistencyChecker;
@@ -167,7 +163,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //        setVisible(false);
         //        setLocation(0, 0);
 
-        contextGenerator = new ContextGenerator();
         modelBrowserPanel = new ModelBrowserPanel();
 
         //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen können
@@ -225,13 +220,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             title += " " + getResString("tool3lgm_title_extension") + " " + metaModelName;
         }
         super.setTitle(title);
-    }
-
-    /**
-     * @return instance of ContextGenerator
-     */
-    public static ContextGenerator getContextGenerator() {
-        return contextGenerator;
     }
 
     @Override
@@ -665,7 +653,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             }
         }
         setCheckConsistencyState(isCheckConsistency);
-        getContextGenerator().changeContext((LGMGraphDocument) doc);
+        Static.contextGenerator.changeContext((LGMGraphDocument) doc);
         toolbar.selectedDocChanged();
     }
 
@@ -1114,7 +1102,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     @Override
     public void windowActivated(final WindowEvent e) {
-        contextGenerator.changeContext(getSelectedDoc());
+        Static.contextGenerator.changeContext(getSelectedDoc());
     }
 
     @Override

@@ -27,6 +27,7 @@ import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Sys;
@@ -46,6 +47,16 @@ public class Static {
 
     /** Progress-Dialog */
     private static ProgressDialog progressDialog;
+
+    /** Holds the current context and generates context menus */
+    public static final ContextGenerator contextGenerator = new ContextGenerator();
+
+    /**
+     * @return instance of ContextGenerator
+     */
+    public static ContextGenerator getContextGenerator() {
+        return contextGenerator;
+    }
 
     /** Gibt die gerade laufende Instanz von 3lgm wieder */
     public static Tool3lgm getTool() {
