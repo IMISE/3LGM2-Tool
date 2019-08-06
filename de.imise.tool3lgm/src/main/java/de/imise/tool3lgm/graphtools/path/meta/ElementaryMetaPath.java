@@ -257,7 +257,11 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     @Override
     public final boolean isStartClass(final Class<? extends ModelElement> elementClass) {
-        return isStartOrEndClass(elementClass, getStartClasses(), hasDirectionForward());
+        if (metaModel.isStartClass(edgeClass, elementClass)) {
+            Class<? extends ModelElement> startClass = getStartClass();
+            return startClass.isAssignableFrom(elementClass);
+        }
+        return false;
     }
 
     /**
@@ -269,30 +273,9 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     @Override
     public final boolean isEndClass(final Class<? extends ModelElement> elementClass) {
-        return isStartOrEndClass(elementClass, getEndClasses(), !hasDirectionForward());
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse je nach Option (und damit Richtung) als Start- oder Endklasse der in diesem
-     * MetaPtah enthaltenen Kantenklasse gilt. Die Abfrage über das MetaModel stellt sicher, dass für Unterklassen entfernte Kantenklassen dann auch
-     * tatsächlich nicht mehr für die Unterklasse gelten.
-     *
-     * @param elementClass
-     * @param startOrEndClasses
-     * @param testStartClass
-     * @return
-     */
-    private final boolean isStartOrEndClass(final Class<? extends ModelElement> elementClass, final Iterable<Class<? extends ModelElement>> startOrEndClasses, final boolean testStartClass) {
-        for (Class<? extends ModelElement> startOrEndClass : startOrEndClasses) {
-            if (testStartClass) {
-                if (metaModel.isStartClass(edgeClass, startOrEndClass)) {
-                    return true;
-                }
-            } else {
-                if (metaModel.isEndClass(edgeClass, startOrEndClass)) {
-                    return true;
-                }
-            }
+        if (metaModel.isEndClass(edgeClass, elementClass)) {
+            Class<? extends ModelElement> endClass = getEndClass();
+            return endClass.isAssignableFrom(elementClass);
         }
         return false;
     }
