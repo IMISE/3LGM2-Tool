@@ -969,7 +969,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (frame != null) {
             frame.updateTitle();
         }
-        getModelBrowserPanel().updateTitle(szen);
+        modelBrowserPanel.updateTitle(szen);
         GraphDocument mainDoc = szen.getCollection().getMainGraphDocument();
         //Alt = in allen Szenarions allen Elementen (und eben nicht allen Containern) den neuen Namen verpassen
         // for (ModelElement me : sz.getModelItems(ModelElement.class, true))
@@ -1190,7 +1190,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /** (De-)Aktiviert den ModelBrowser */
     private void showModelBrowser(final boolean b) {
         if (b) {
-            verticalSplitPane.setLeftComponent(getModelBrowserPanel());
+            verticalSplitPane.setLeftComponent(modelBrowserPanel);
             verticalSplitPane.setDividerLocation(dividerLocation);
             getWorkArea().revalidate();
         } else {
@@ -1225,10 +1225,10 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * @return
+     * @param gdcoll
      */
-    public ModelBrowserPanel getModelBrowserPanel() {
-        return modelBrowserPanel;
+    public void updateTitle(final GDCollection gdcoll) {
+        modelBrowserPanel.updateTitle(gdcoll);
     }
 
     /**

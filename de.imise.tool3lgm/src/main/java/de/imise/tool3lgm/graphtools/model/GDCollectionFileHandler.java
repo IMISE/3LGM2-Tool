@@ -202,7 +202,7 @@ public class GDCollectionFileHandler {
         for (AbstractInternalFrame f : Static.getAllFrames()) {
             if (f.getCollection().equals(gdcoll)) {
                 f.setTitle(name);
-                Static.getTool().getModelBrowserPanel().updateTitle(gdcoll);
+                Static.getTool().updateTitle(gdcoll);
             }
         }
     }
