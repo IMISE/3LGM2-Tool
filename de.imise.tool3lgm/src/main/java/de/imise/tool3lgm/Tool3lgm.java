@@ -119,27 +119,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     private static Point lastActionPosition = null;
 
     /**
-     * Liefert die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
-     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     *
-     * @return
-     */
-    public static final Point getLastActionPosition() {
-        return lastActionPosition;
-    }
-
-    /**
-     * Setzt die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
-     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     *
-     * @param x
-     * @param y
-     */
-    public static final void setLastActionPosition(final int x, final int y) {
-        Tool3lgm.lastActionPosition = new Point(x, y);
-    }
-
-    /**
      * constructor
      *
      * @see java.lang.Object#Object()
@@ -211,6 +190,27 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         setVisible(visible);
         toolbar.selectedDocChanged();
 
+    }
+
+    /**
+     * Liefert die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
+     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
+     *
+     * @return
+     */
+    public static final Point getLastActionPosition() {
+        return lastActionPosition;
+    }
+
+    /**
+     * Setzt die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
+     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
+     *
+     * @param x
+     * @param y
+     */
+    public static final void setLastActionPosition(final int x, final int y) {
+        Tool3lgm.lastActionPosition = new Point(x, y);
     }
 
     @Override
