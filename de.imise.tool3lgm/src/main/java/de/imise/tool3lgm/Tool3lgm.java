@@ -109,9 +109,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     /** Position of divider betweeen the tree and the graph view in pixel from the left side */
     private int dividerLocation = getToolkit().getScreenSize().width / 5;
 
-    /** Checks the consistency of a model */
-    private ConsistencyChecker consistencyChecker;
-
     /**
      * Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus klickt, um an
      * der entsprechenden Stelle einen Dialog auf gehen zu lassen.
@@ -527,19 +524,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * @return
-     */
-    public ConsistencyChecker getConsistencyChecker() {
-        if (consistencyChecker == null) {
-            GDCollection gdcoll = getSelectedGDCollection();
-            if (gdcoll != null) {
-                consistencyChecker = new ConsistencyChecker(gdcoll);
-            }
-        }
-        return consistencyChecker;
-    }
-
-    /**
      * Diese Variable wird in <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht,
      * um beim Aktivieren eines Matix-Fensters zwar den dazugehörigen ModelBrowser in den
      * Vordergrund zu bringen (wenn er noch nicht im Vordergrund ist), aber nicht den Grafischen
@@ -577,7 +561,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (doc == null) {
             setCheckConsistencyState(isCheckConsistency);
             toolbar.selectedDocChanged();
-            if (consistencyChecker != null && isCheckConsistency) {
+            if (isCheckConsistency) {
+                ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
                 consistencyChecker.changeContext(null);
             }
             return;
@@ -651,13 +636,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             Tool3lgm.activateGraphView = true;
         }
 
-        if (isCheckConsistency) {
-            if (consistencyChecker == null) {
-                consistencyChecker = new ConsistencyChecker(gdcoll);
-            } else {
-                consistencyChecker.changeContext(gdcoll);
-            }
-        }
         setCheckConsistencyState(isCheckConsistency);
         Static.contextGenerator.changeContext((LGMGraphDocument) doc);
         toolbar.selectedDocChanged();
@@ -675,11 +653,9 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (gdcoll == null) {
             state = false;
         }
+        ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
         if (!state) {
-            ConsistencyChecker checker = getConsistencyChecker();
-            if (checker != null) {
-                checker.resetConsistencyDefinition();
-            }
+            consistencyChecker.resetConsistencyDefinition();
             if (verticalSplitPane.getParent() == workarea) {
                 return;
             }
@@ -690,20 +666,16 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             horizontalSplitPane = null;
             // falls vorher schonmal die Konsistenzprüfung eingeschaltet war -> Listener zur
             // Tabellenaktualisierung wieder entfernen
-            if (consistencyChecker != null) {
-                consistencyChecker.changeContext(null);
-            }
+            consistencyChecker.changeContext(null); //löst updateErrorTable() aus
         } else {
             if (horizontalSplitPane == null) {
-                //wenn der consistencyChecker noch nicht initialisiert war, wird er es hier (man könnte die Zuweisung auch weg lassen)
-                consistencyChecker = getConsistencyChecker();
                 horizontalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, verticalSplitPane, new JScrollPane(consistencyChecker.getErrorTable()));
                 horizontalSplitPane.setOneTouchExpandable(true);
                 horizontalSplitPane.setDividerSize(10);
                 horizontalSplitPane.setDividerLocation(workarea.getHeight() / 4 * 3);
                 workarea.add(horizontalSplitPane, BorderLayout.CENTER);
             }
-            consistencyChecker.changeContext(gdcoll);
+            consistencyChecker.changeContext(gdcoll); //löst updateErrorTable() aus
         }
         workarea.revalidate();
         repaint();

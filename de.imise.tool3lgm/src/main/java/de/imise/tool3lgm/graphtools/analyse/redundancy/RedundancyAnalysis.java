@@ -3,7 +3,6 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
-import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.WindowAdapter;
@@ -194,7 +193,7 @@ public class RedundancyAnalysis extends WindowAdapter {
         if (Static.getSelectedGDCollection() != gdcoll) {
             Static.setSelectedDoc(gdcoll.getSelectedDoc(), true);
         }
-        ConsistencyChecker consistencyChecker = getTool().getConsistencyChecker();
+        ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
         consistencyChecker.resetConsistencyDefinition();
         ConsistencyDefinition consistencyDefinition = consistencyChecker.getConsistencyDefinition();
         CardinalityDefinition cardinalityDefinition = consistencyDefinition.getCardinalityDefinition();

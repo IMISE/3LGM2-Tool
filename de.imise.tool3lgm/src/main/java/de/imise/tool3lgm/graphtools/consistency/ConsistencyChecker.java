@@ -11,6 +11,7 @@ import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
@@ -43,7 +44,10 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDi
  *
  * @author AXS created on 06.08.2008
  */
-public class ConsistencyChecker extends GraphDocumentAdapter {
+public final class ConsistencyChecker extends GraphDocumentAdapter {
+
+    /** Checks the consistency of a model. This instance is used for the current selected Model */
+    private static ConsistencyChecker consistencyChecker;
 
     /**
      * Modell, das überprüft wird.
@@ -73,7 +77,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     private ConsistencyChecker(final GDCollection gdcoll, final boolean changeContext) {
         solutionsLibrary = new ErrorSolutionLibraryVersion();
         idChecker = new UniqueIDChecker();
-        consistencyDefinition = new ConsistencyDefinition(gdcoll.getMetaModel());
+        consistencyDefinition = gdcoll == null ? null : new ConsistencyDefinition(gdcoll.getMetaModel());
         if (changeContext) {
             changeContext(gdcoll);
         } else {
@@ -93,6 +97,26 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     }
 
     /**
+     * @return <code>true</code>, wenn diese Instanz eine {@link ConsistencyDefinition} besitzt
+     */
+    private boolean isValid() {
+        return consistencyDefinition != null;
+    }
+
+    /**
+     * @return the ConsistencyChecker instance for the current selected model (GDCollection)
+     */
+    public static ConsistencyChecker getConsistencyChecker() {
+        GDCollection gdcoll = Static.getSelectedGDCollection();
+        if (consistencyChecker == null) {
+            consistencyChecker = new ConsistencyChecker(gdcoll);
+        } else if (consistencyChecker.gdcoll != gdcoll) {
+            consistencyChecker.changeContext(gdcoll);
+        }
+        return consistencyChecker;
+    }
+
+    /**
      * Setzt die übergebene Collection als aktuelle Collection
      *
      * @param gscoll
@@ -107,6 +131,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
                 gdcoll.addGraphDocumentListener(this);
             }
         }
+        resetConsistencyDefinition();
         updateErrorTable();
     }
 
@@ -114,7 +139,7 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * @param consistencyDefinition
      */
     public void resetConsistencyDefinition() {
-        consistencyDefinition = new ConsistencyDefinition(gdcoll.getMetaModel());
+        consistencyDefinition = gdcoll != null ? new ConsistencyDefinition(gdcoll.getMetaModel()) : null;
     }
 
     /**
@@ -211,9 +236,8 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
     @Override
     public void dataChanged(final GraphDocument source) {
         // nicht abgeschlossene Dialogtransaktionen ignorieren -> erst updaten, wenn keine
-        // Transaktion mehr
-        // offen ist
-        if (!gdcoll.getTman().isInTransaction()) {
+        // Transaktion mehr offen ist
+        if (gdcoll != null && !gdcoll.getTman().isInTransaction()) {
             updateErrorTable();
         }
     }
@@ -266,6 +290,9 @@ public class ConsistencyChecker extends GraphDocumentAdapter {
      * @param returnList
      */
     private void addCardinalityErrors(final ModelElement me, final List<AbstractError> returnList) {
+        if (!isValid()) {
+            return;
+        }
         Class<? extends ModelElement> meClass = me.getClass();
         MetaModel metaModel = gdcoll.getMetaModel();
         ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
