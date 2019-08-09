@@ -1,6 +1,11 @@
 package de.imise.tool3lgm.gui;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_CHECK_CONSISTENCY;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_MODEL_BROWSER_SHOW;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -31,7 +36,6 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * @author AXS (6 Aug 2019)
@@ -97,9 +101,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         add(workarea, BorderLayout.CENTER);
         //add(new StatusBar(), BorderLayout.SOUTH);
 
-        setShowStandardToolbar(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR.isTrue());
+        setShowStandardToolbar();
         UserProperties.addPropertyChangeListener(this);
-
     }
 
     /**
@@ -117,10 +120,10 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     }
 
     /**
-     * @param showStandardToolbar
+     *
      */
-    private void setShowStandardToolbar(final boolean showStandardToolbar) {
-        if (showStandardToolbar) {
+    private void setShowStandardToolbar() {
+        if (OPTION_SHOW_STANDARD_TOOLBAR.isTrue()) {
             add(toolbar, BorderLayout.NORTH);
         } else {
             remove(toolbar);
@@ -130,15 +133,15 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (BooleanProperty.OPTION_CHECK_CONSISTENCY.isChanged(evt)) {
+        if (OPTION_CHECK_CONSISTENCY.isChanged(evt)) {
             setCheckConsistencyState();
-        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_MODEL_BROWSER_SHOW, evt)) {
-            showModelBrowser(UserProperties.is(BooleanProperty.OPTION_MODEL_BROWSER_SHOW));
-        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR, evt)) {
-            toolbarManager.setToolBarVisible(UserProperties.is(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR));
-        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR, evt)) {
-            setShowStandardToolbar(UserProperties.is(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR));
-        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_ENABLE_EXPERT_MODE, evt)) {
+        } else if (OPTION_MODEL_BROWSER_SHOW.isChanged(evt)) {
+            showModelBrowser();
+        } else if (OPTION_SHOW_PAINTING_TOOLBAR.isChanged(evt)) {
+            toolbarManager.setToolBarVisibility();
+        } else if (OPTION_SHOW_STANDARD_TOOLBAR.isChanged(evt)) {
+            setShowStandardToolbar();
+        } else if (OPTION_ENABLE_EXPERT_MODE.isChanged(evt)) {
             modelBrowserPanel.updateModelBrowsers();
         }
     }
@@ -150,7 +153,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      * @return <code>true</code>, wenn dei Konsistenzprüfung durchgeführt und angezeigt wurde
      */
     private boolean setCheckConsistencyState() {
-        boolean state = BooleanProperty.OPTION_CHECK_CONSISTENCY.isTrue();
+        boolean state = OPTION_CHECK_CONSISTENCY.isTrue();
         GDCollection gdcoll = Static.getSelectedGDCollection();
         if (gdcoll == null) {
             state = false;
@@ -185,8 +188,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     }
 
     /** (De-)Aktiviert den ModelBrowser */
-    public final void showModelBrowser(final boolean b) {
-        if (b) {
+    private final void showModelBrowser() {
+        if (OPTION_MODEL_BROWSER_SHOW.isTrue()) {
             verticalSplitPane.setLeftComponent(modelBrowserPanel);
             verticalSplitPane.setDividerLocation(dividerLocation);
         } else {

@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.gui;
 
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR;
+
 import java.awt.BorderLayout;
 import java.awt.Container;
 
@@ -13,8 +15,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
@@ -63,7 +63,7 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
                         addToolBar();
                     }
                 }
-                setToolBarVisible(UserProperties.is(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR));
+                setToolBarVisibility();
             } else if (activeFrame instanceof MatrixViewInternalFrame) {
                 MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) activeFrame;
                 if (currentToolBar == null || !(currentToolBar instanceof InternalMatrixFrameToolBar)) {
@@ -138,8 +138,9 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
     /**
      * @param visible
      */
-    public void setToolBarVisible(final boolean visible) {
+    public void setToolBarVisibility() {
         if (currentToolBar != null) {
+            boolean visible = OPTION_SHOW_PAINTING_TOOLBAR.isTrue();
             Container parent = currentToolBar.getParent();
             if (!visible && parent != null) {
                 removeToolBar();
