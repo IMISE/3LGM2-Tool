@@ -56,10 +56,6 @@ public class Tool3lgmMain {
 
         setUIDefaults();
 
-        //als allererstes müssen die statischen Felder der Tool3lgm-Klasse initialisert werden, damit
-        //die Ressourcen gefunden werden
-        Tool3lgm.init();
-
         // Erkennbare Argumente
         boolean visible = true;
         for (String arg : args) {

@@ -71,12 +71,6 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 /** Hauptklasse der Anwendung 3lgm */
 public class Tool3lgm extends JFrame implements WindowListener, InternalFrameListener, GraphDocumentListener, PropertyChangeListener {
 
-    //Als allerstes muss aus der Main-Funktion ausßerhalb dieser Klasse diese init()-Funktion
-    //aufgerufen werden, damit alle statischen Elemente einmal initialisert werden. Diese Funktion
-    //muss unbedingt ganz oben stehen!
-    public static final void init() {
-    }
-
     /** Panel with verticalSplitPane and werkzeugleiste */
     private final JPanel workarea = new JPanel();
 
