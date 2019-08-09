@@ -17,6 +17,13 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
+/**
+ * Diese Klasse kümmert sich darum, je nach Kontext, die Toolbar zu updaten, die für den gerade aktiven Frame angezeigt werden muss. Einerseits
+ * kümmert sie sich darum, die richtige Toolbar anzuzeigen (GraphFrame oder MatrixView) und dann darum, die Toolbar je nach Kontext zu updaten
+ * (selektierter Layer -> spezielle Elemente zum Zeichnen anbieten).
+ *
+ * @author AXS (8 Aug 2017)
+ */
 public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGraphAreaChangeListener {
 
     /** toolbar with tools for active layer and sliders for zoom, angel and distance (Graph) or MetaPathSelector (Matrix) */
@@ -25,12 +32,19 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
     /** Container, an dem die Toolbar an South angezeigt wird */
     private final Container toolbarParent;
 
+    /** der gerade aktive Frame */
     private AbstractInternalFrame currentFrame;
 
+    /**
+     * @param toolbarParent
+     */
     public GraphAreaToolbarManager(final Container toolbarParent) {
         this.toolbarParent = toolbarParent;
     }
 
+    /**
+     * Aktualisiert die Toolbar, wenn sich der aktive Frame geändert hat.
+     */
     public void updateToolBar() {
         AbstractInternalFrame activeFrame = Static.getActiveFrame();
         if (currentFrame != activeFrame) {
@@ -71,6 +85,9 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
         }
     }
 
+    /**
+     *
+     */
     private void removeChangeListener() {
         if (currentFrame != null && currentFrame instanceof InternalGraphFrame) {
             InternalGraphFrame graphFrame = (InternalGraphFrame) currentFrame;
@@ -79,6 +96,9 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
         }
     }
 
+    /**
+     *
+     */
     private void addChangeListener() {
         if (currentFrame != null && currentFrame instanceof InternalGraphFrame) {
             InternalGraphFrame graphFrame = (InternalGraphFrame) currentFrame;
@@ -87,10 +107,37 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
         }
     }
 
-    public GraphAreaToolBar getGraphAreaToolBar() {
-        return currentToolBar != null && currentToolBar instanceof GraphAreaToolBar ? (GraphAreaToolBar) currentToolBar : null;
+    /**
+     * @return <code>true</code>, wenn die aktuelle Toolbar eine {@link GraphAreaToolBar} ist
+     */
+    public final boolean isGraphAreaToolBar() {
+        return currentToolBar != null && currentToolBar instanceof GraphAreaToolBar;
     }
 
+    /**
+     * @return <code>true</code>, wenn die aktuelle Toolbar eine {@link GraphAreaToolBar} ist
+     */
+    public final boolean isMatrixViewToolBar() {
+        return currentToolBar != null && currentToolBar instanceof InternalMatrixFrameToolBar;
+    }
+
+    /**
+     * @return
+     */
+    public GraphAreaToolBar getGraphAreaToolBar() {
+        return isGraphAreaToolBar() ? (GraphAreaToolBar) currentToolBar : null;
+    }
+
+    /**
+     * @return
+     */
+    public InternalMatrixFrameToolBar getMatrixViewToolBar() {
+        return isMatrixViewToolBar() ? (InternalMatrixFrameToolBar) currentToolBar : null;
+    }
+
+    /**
+     * @param visible
+     */
     public void setToolBarVisible(final boolean visible) {
         if (currentToolBar != null) {
             Container parent = currentToolBar.getParent();
@@ -102,6 +149,9 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
         }
     }
 
+    /**
+     *
+     */
     private void removeToolBar() {
         if (currentToolBar != null) {
             toolbarParent.remove(currentToolBar);
@@ -110,6 +160,9 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
         }
     }
 
+    /**
+     *
+     */
     private void addToolBar() {
         if (currentToolBar != null) {
             toolbarParent.add(currentToolBar, BorderLayout.SOUTH);

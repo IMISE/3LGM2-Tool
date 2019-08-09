@@ -2,8 +2,6 @@ package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -13,24 +11,16 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.help.CSH;
-import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.WindowConstants;
-import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.google.common.base.Strings;
@@ -48,60 +38,32 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
-import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
-import de.imise.tool3lgm.gui.ToolBar;
+import de.imise.tool3lgm.gui.MainFrameContentPane;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.BrowseUtils;
 import de.imise.util.robot.ScreenRobot;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
-/** Hauptklasse der Anwendung 3lgm */
-public class Tool3lgm extends JFrame implements WindowListener, InternalFrameListener, GraphDocumentListener, PropertyChangeListener {
-
-    /** Panel with verticalSplitPane and werkzeugleiste */
-    private final JPanel workarea = new JPanel();
-
-    /** splitted pane with modelBrowserPanel on the left and desktop on the right */
-    private final JSplitPane verticalSplitPane;
-
-    /** splitted pane with modelBrowserPanel and the graph on the top and the error table bottom */
-    private JSplitPane horizontalSplitPane;
-
-    /** panel to hold one or more modelBrowsers */
-    private final ModelBrowserPanel modelBrowserPanel;
+/** Hauptfenster der Anwendung 3lgm */
+public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentListener {
 
     /** Menü-Leiste des Tools */
-    private static MenuBar menuBar;
+    private final MenuBar menuBar;
 
-    /** ToolBar with general tools */
-    private final ToolBar toolbar;
-
-    private final GraphAreaToolbarManager graphAreaToolbarManager = new GraphAreaToolbarManager(workarea);
-
-    /** contain all windows of opened documents (JDesktopPane is a container used to create a multiple-document interface or a virtual desktop) */
-    private final JDesktopPane desktop;
-
-    /** InternalFrame in desktop, which has the focus */
-    private AbstractInternalFrame activeFrame = null;
+    /** Pane, das in das ContentPane dieses Frames gelegt wird */
+    private final MainFrameContentPane contentPane;
 
     /** alle GDCollections */
     private final List<GDCollection> collections = new ArrayList<>();
-
-    /** Position of divider betweeen the tree and the graph view in pixel from the left side */
-    private int dividerLocation = getToolkit().getScreenSize().width / 5;
 
     /**
      * Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus klickt, um an
@@ -133,54 +95,26 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //        setVisible(false);
         //        setLocation(0, 0);
 
-        modelBrowserPanel = new ModelBrowserPanel();
-
         //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen können
         Rectangle maxBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         Dimension screenSize = new Dimension(maxBounds.width, maxBounds.height);
         setSize(screenSize);
 
-        //Arbeitsfläche mit SplitPane (rechts JDesktopPane für InternalFrame,
-        // links ModelBrowser)
-        desktop = new JDesktopPane();
-        getContentPane().setLayout(new BorderLayout());
-        workarea.setLayout(new BorderLayout());
-
-        //Toolbar defienieren nicht verschiebbar
-        toolbar = new ToolBar();
-
-        getContentPane().add(toolbar, BorderLayout.NORTH);
-        getContentPane().add(workarea, BorderLayout.CENTER);
-        //getContentPane().add(new StatusBar(), BorderLayout.SOUTH);
-
-        JScrollPane desktopscroll = new JScrollPane(desktop);
-        verticalSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktopscroll);
-        verticalSplitPane.setOneTouchExpandable(true);
-        verticalSplitPane.setDividerSize(10);
-        verticalSplitPane.setDividerLocation(dividerLocation);
-
-        setCheckConsistencyState(UserProperties.is(BooleanProperty.OPTION_CHECK_CONSISTENCY));
-        UserProperties.addPropertyChangeListener(this);
+        contentPane = new MainFrameContentPane();
+        getContentPane().add(contentPane);
 
         addWindowListener(this);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         // Direkthilfe einschalten
         Help.getHelp().enableHelpKey(rootPane, "willkommen");
-        // Direkthilfe für die einzelnen Baukastenteile
-        CSH.setHelpIDString(modelBrowserPanel, "uebersicht_modellbrowser");
 
         menuBar = new MenuBar();
         CSH.setHelpIDString(menuBar, "uebersicht_menueleiste");
         KeyStrokes.registerPublicKeyStrokes(getRootPane());
         setJMenuBar(menuBar);
-
-        setShowStandardToolbar(UserProperties.is(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR));
-        showModelBrowser(UserProperties.is(BooleanProperty.OPTION_MODEL_BROWSER_SHOW));
-
         setVisible(visible);
-        toolbar.selectedDocChanged();
-
+        contentPane.selectedDocChanged();
     }
 
     /**
@@ -215,9 +149,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
     @Override
     public void setCursor(final Cursor cursor) {
-        if (activeFrame != null) {
-            activeFrame.setCursor(cursor);
-        }
+        contentPane.setCursor(cursor);
         super.setCursor(cursor);
     }
 
@@ -339,7 +271,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public boolean openModel(final GDCollection gdcoll) {
         Static.setProgressDialogStatusLabel("finish_progress");
-        modelBrowserPanel.addCollection(gdcoll);
+        //TODO: das hier sollte ein PropertyChange sein, so dass das ContentPane als Listener darauf reagieren kann und nicht direkt die Funktion an das darin enthaltene WorkArea weiter leiten muss
+        contentPane.addCollection(gdcoll);
 
         collections.add(gdcoll);
         gdcoll.addGraphDocumentListener(this);
@@ -381,7 +314,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         //Dieser Spass hier dient nur dazu, nach dem Öffnen einer Modelldatei nochmal ein
         //neu Zeichnen auszulösen, was nur mit einem Klick in den Frame zuverlässig passiert
-        //Erst dadurch fällt der Swing-Bug mit der am Anfanng nicht korrekt positionierten
+        //Erst dadurch fällt der Swing-Bug mit der am Anfang nicht korrekt positionierten
         //Schrift nicht mehr auf.
         Point location = MouseInfo.getPointerInfo().getLocation();
         if (lastFrame != null && lastFrame.isVisible()) {
@@ -399,83 +332,15 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      * @return
      */
     public AbstractInternalFrame createFrame(final GraphDocument doc) {
-        InputGraphArea area = new InputGraphArea(doc);
-        InternalGraphFrame frame = new InternalGraphFrame(desktop, area, doc);
-        modelBrowserPanel.addGraphDocument(doc);
-        frame.addInternalFrameListener(this);
-        Rectangle bounds = desktop.getBounds();
-        if (doc instanceof Szenario) {
-            bounds.height = bounds.height - 32;
-            setWorkArea(frame);
-        }
-        frame.setBounds(bounds);
-        desktop.add(frame);
-        frame.setVisible(true);
-        return frame;
+        //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GraphDocumentListener laufen (SZENARIO_ADDED)
+        return contentPane.createFrame(doc);
     }
 
     /**
-     * Create new MatrixViewFrame and add it to parent GraphDocument
      *
-     * @author Thomas Rudert
-     * @param _graphDocument
-     *            parent
-     * @return boolean with true, if methode run successful
      */
-    public boolean createTableInternalFrame(final LGMGraphDocument _graphDocument) {
-        if (_graphDocument == null) {
-            return false;
-        }
-        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(_graphDocument);
-        String title = _graphDocument.getCollection().getName() + " - " + _graphDocument.getTitle() + " - " + getResString("matrix") + " #";
-
-        matrixView.setTitle(title.concat(String.valueOf(countFramesWithSameTitle(title) + 1)));
-
-        Rectangle bounds = desktop.getBounds();
-        bounds.height = bounds.height - 39;
-        matrixView.setBounds(bounds);
-        desktop.add(matrixView);
-        matrixView.addInternalFrameListener(this);
-        matrixView.setVisible(true);
-        desktop.setSelectedFrame(matrixView);
-        return true;
-    }
-
-    private int countFramesWithSameTitle(final String title) {
-        JInternalFrame[] frames = desktop.getAllFrames();
-        int max = 0;
-        for (int i = 0; i < frames.length; i++) {
-            if (frames[i].getTitle().startsWith(title)) {
-                try {
-                    int temp = Integer.parseInt(frames[i].getTitle().substring(frames[i].getTitle().lastIndexOf("#") + 1));
-                    max = temp > max ? temp : max;
-                } catch (Exception e) {
-                    Log.show(Log.FATAL, getResString("FehlerAllgemein"), e);
-                }
-            }
-        }
-        return max;
-    }
-
-    /* *** */
-
-    /**
-     * set parameters of InputGraphArea to standard
-     *
-     * @param InputGraphArea
-     *            to set
-     */
-    private void setWorkArea(final InternalGraphFrame frame) {
-        Szenario szenario = (Szenario) frame.getGraphDocument();
-        ViewParameter view = szenario.getViewParameter();
-        InputGraphArea bgp = frame.getInputGraphArea();
-        bgp.setMultiView(view.multiView);
-        frame.getGraphDocument().getCollection().setActiveLayer(view.activeLayer);
-        bgp.setMultiViewLayerAngle(view.layerAngle);
-        bgp.setMultiViewLayerGap(view.layerGap);
-        bgp.setZoom(view.zoom);
-        frame.getScrollPane().getViewport().setViewPosition(new Point(view.viewPositionX, view.viewPositionY));
-        szenario.deleteViewParameter(); // die ViewParameter werden nur für diesen Init gebraucht -> danach können sie gelöscht werden
+    public void openMatrixView() {
+        contentPane.createTableInternalFrame(getSelectedDoc());
     }
 
     /**
@@ -518,15 +383,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
     }
 
     /**
-     * Diese Variable wird in <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht,
-     * um beim Aktivieren eines Matix-Fensters zwar den dazugehörigen ModelBrowser in den
-     * Vordergrund zu bringen (wenn er noch nicht im Vordergrund ist), aber nicht den Grafischen
-     * View des Teilmodells, weil ja dann das Matrix-Fenster sofort nicht mehr im Vordergrund
-     * wäre.
-     */
-    private static boolean activateGraphView = true;
-
-    /**
      * Über diese Variable wird beim Schließen eines Modells die Selektion
      * der einzelnen Teilmodelle verhindert.
      */
@@ -543,251 +399,49 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      *            Grafikfenster in den Vordergrund geholt, sonst nicht.
      */
     void setSelectedDoc(final GraphDocument doc) {
-        boolean activateGraphView = doc != null;
         if (ignoreDocSelection) {
             return;
         }
-        boolean isCheckConsistency = UserProperties.is(BooleanProperty.OPTION_CHECK_CONSISTENCY);
-
-        //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den
-        //geladenen Teilmodellen gefüllt wird. Im ModelBrowserPanel wird bei jedem Hinzufügen eines
-        //Teilmodell-Tabs immer diese Funktion hier aufgerufen.
-        //Es kann auch null sein, wenn das letzte Modell geschlossen wurde
-        if (doc == null) {
-            setCheckConsistencyState(isCheckConsistency);
-            toolbar.selectedDocChanged();
-            if (isCheckConsistency) {
-                ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
-                consistencyChecker.changeContext(null);
-            }
-            return;
+        if (doc != null) {
+            //das zu aktivierende Graphdocument und dessen Collection an die richtige Position bringen
+            GDCollection gdcoll = doc.getCollection();
+            //die Collection des übergebenne doc als letzte in die Collection-Liste bringen
+            collections.remove(gdcoll);
+            collections.add(gdcoll);
+            //das aktive doc in der Collection selbst setzen
+            gdcoll.setActiveGraphDocument(doc);
         }
-
-        //Die folgenden beiden Zeilen nicht aktivieren. Sie sind auskommentiert
-        //stehen geblieben, damit nicht irgendwann mal einer auf die Idee  kommt,
-        //über diesen Weg optimieren zu wollen
-        //if (doc == oldDoc)
-        //return;
-
-        //das zu aktivierende Graphdocument und dessen Collection an die
-        // richtige Position bringen
-        GDCollection gdcoll = doc.getCollection();
-        //die Collection des übergebenne doc als letzte in die Collection-Liste
-        // bringen
-        collections.remove(gdcoll);
-        collections.add(gdcoll);
-        //das aktive doc in der Collection selbst setzen
-        gdcoll.setActiveGraphDocument(doc);
-
-        //wenn der interne Frame mit dem grafischen View in den Vordergrund geholt werden soll,
-        if (activateGraphView) {
-            //wenn nicht grade vorher ein Matrix-View aktiviert wurde (nur dann wäre die statische
-            //Variable==false)
-            if (Tool3lgm.activateGraphView) {
-                //den richtigen Frame nach vorne holen
-                InternalGraphFrame frame = doc.getFrame();
-                if (frame != null) {
-                    if (!frame.isSelected()) {
-                        try {
-                            frame.setSelected(true);
-                        } catch (Exception ex) {
-                            Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
-                        }
-                    }
-                } else {
-                    JInternalFrame oldframe = desktop.getSelectedFrame();
-                    if (oldframe != null) {
-                        if (oldframe.isSelected()) {
-                            try {
-                                oldframe.setSelected(false);
-                            } catch (Exception ex) {
-                                Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
-                            }
-                        }
-                    }
-                }
-
-                //wenn vorher ein Matrix-View diese Funktion ausgelöst hat, dann nur merken, dass beim
-                //nächsten Kontextwechsel wieder auch der grafische View gewechselt werden soll
-            } else {
-                Tool3lgm.activateGraphView = true;
-            }
-            //wenn ein Matrix-View nach vorne geholt wurde und somit nicht der grafische View aktiviert
-            //werden soll -> statisch diesen Fakt merken, so dass beim Wechel des ModelBrowsers, nicht
-            //doch der GraphView nach vorne geholt wird
-        } else {
-            Tool3lgm.activateGraphView = false;
-        }
-
-        //wenn sich das im ModelBrowser ausgewählte Teimodell geändert hat
-        if (doc != ModelBrowserPanel.getSelectedDoc()) {
-            //aktiviere es. Dabei wird diese Funktion auch noch einmal aufgerufen und je nachdem
-            //wie die Tool3lgm.activateGraphView gerade steht, wird der GraphView nach vorne geholt
-            //oder eben nicht
-            modelBrowserPanel.setSelectedDoc(doc);
-            //wenn sich das Teilmodell nicht geändert hat
-        } else {
-            //beim nächsten Konextwechsel auch das nach Vorne holen des grafischen Views wieder einschalten
-            Tool3lgm.activateGraphView = true;
-        }
-
-        setCheckConsistencyState(isCheckConsistency);
-        Static.contextGenerator.changeContext((LGMGraphDocument) doc);
-        toolbar.selectedDocChanged();
+        contentPane.setSelectedDoc(doc, doc != null);
     }
 
     /**
-     * Je nach Paramter wir die Konsitenzprüfung bei <code>true</code> ein und bei <code>false</code> ausgeschaltet. Das beinhaltet auch das Anzeigen
-     * der Fehlertabelle.
-     *
-     * @param state
-     *            wenn <code>true</code> wird die Konsistenzprüfung eingeschaltet, sonst wird sie abgeschaltet
+     * ordnet alle InternalFrames neu an (überlappt)
      */
-    public void setCheckConsistencyState(boolean state) {
-        GDCollection gdcoll = getSelectedGDCollection();
-        if (gdcoll == null) {
-            state = false;
-        }
-        ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
-        if (!state) {
-            consistencyChecker.resetConsistencyDefinition();
-            if (verticalSplitPane.getParent() == workarea) {
-                return;
-            }
-            if (horizontalSplitPane != null) {
-                workarea.remove(horizontalSplitPane);
-            }
-            workarea.add(verticalSplitPane, BorderLayout.CENTER);
-            horizontalSplitPane = null;
-            // falls vorher schonmal die Konsistenzprüfung eingeschaltet war -> Listener zur
-            // Tabellenaktualisierung wieder entfernen
-            consistencyChecker.changeContext(null); //löst updateErrorTable() aus
-        } else {
-            if (horizontalSplitPane == null) {
-                horizontalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, verticalSplitPane, new JScrollPane(consistencyChecker.getErrorTable()));
-                horizontalSplitPane.setOneTouchExpandable(true);
-                horizontalSplitPane.setDividerSize(10);
-                horizontalSplitPane.setDividerLocation(workarea.getHeight() / 4 * 3);
-                workarea.add(horizontalSplitPane, BorderLayout.CENTER);
-            }
-            consistencyChecker.changeContext(gdcoll); //löst updateErrorTable() aus
-        }
-        workarea.revalidate();
-        repaint();
-    }
-
-    private void setShowStandardToolbar(final boolean showStandardToolbar) {
-        Container contentPane = getContentPane();
-        ToolBar toolBar = getToolBar();
-        if (showStandardToolbar) {
-            contentPane.add(toolBar, BorderLayout.NORTH);
-        } else {
-            contentPane.remove(toolBar);
-        }
-        getWorkArea().revalidate();
-    }
-
-    /** ordnet alle InternalFrames neu an (überlappt) */
-    public void fensterUeberlappen() {
-        JInternalFrame[] frames = desktop.getAllFrames();
-        Rectangle rect = desktop.getVisibleRect();
-        double height = rect.getHeight();
-        double width = rect.getWidth();
-        int xOffset = 10, yOffset = 10;
-        int openFrameCount = 0;
-        for (int n = frames.length; n > 0; n--) {
-            ++openFrameCount;
-            double count = openFrameCount;
-            if (height - yOffset * count < 50) {
-                count = (height - 50) / yOffset;
-            }
-            frames[n - 1].setSize((int) width - xOffset * (int) count, (int) height - yOffset * (int) count);
-            frames[n - 1].setLocation(xOffset * (int) count, yOffset * (int) count);
-        }
-        try {
-            frames[frames.length - 1].setMaximum(false);
-        } catch (java.beans.PropertyVetoException evt) {
-            Log.show(Log.FATAL, getResString("FehlerAllgemein"), evt);
-        }
-    }
-
-    /** ordnet alle InternalFrames neu an (nebeneinander) */
-    public void fensterNebeneinander() {
-        JInternalFrame[] frames = desktop.getAllFrames();
-        try {
-            frames[frames.length - 1].setMaximum(false);
-        } catch (java.beans.PropertyVetoException evt) {
-            Log.show(Log.FATAL, getResString("FehlerAllgemein"), evt);
-        }
-        Rectangle rect = desktop.getVisibleRect();
-        double height = rect.getHeight();
-        double width = rect.getWidth();
-        int spalten, zeilen;
-        double hilfe = Math.sqrt(frames.length);
-        if ((int) hilfe * (int) hilfe == frames.length) {
-            zeilen = (int) hilfe;
-            spalten = (int) hilfe;
-        } else {
-            zeilen = (int) hilfe + 1;
-            spalten = (int) hilfe;
-        }
-        int count = 0;
-        for (int m = 0; m < zeilen - 1; m++) {
-            for (int n = 0; n < spalten; n++) {
-                frames[count].setBounds(0 + n * (int) width / spalten, 0 + m * (int) height / zeilen, (int) width / spalten, (int) height / zeilen);
-                count++;
-            }
-        }
-        int rest = frames.length - count;
-        for (int k = count; k < frames.length; k++) {
-            frames[k].setBounds(0 + (k - count) * (int) width / rest, (int) height / zeilen * (zeilen - 1), (int) width / rest, (int) height / zeilen);
-        }
+    public void reorderFramesWithOverlap() {
+        contentPane.reorderFramesWithOverlap();
     }
 
     /**
-     * @param szen
-     * @return
+     * ordnet alle InternalFrames neu an (nebeneinander)
      */
-    public AbstractInternalFrame findFirstInternalFrame(final GraphDocument szen) {
-        JInternalFrame[] frames = getAllFrames();
-        AbstractInternalFrame frame = null;
-        for (int c = 0; c < frames.length; c++) {
-            if (((AbstractInternalFrame) frames[c]).getGraphDocument() == szen) {
-                frame = (AbstractInternalFrame) frames[c];
-                break;
-            }
-        }
-        return frame;
+    public void reorderFramesSideBySide() {
+        contentPane.reorderFramesSideBySide();
     }
 
+    //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GraphDocumentListener laufen (SZENARIO_REMOVED)
     /**
      * @param szen
      */
     public void closeFrame(final GraphDocument szen) {
-        AbstractInternalFrame frame = findFirstInternalFrame(szen);
-        while (frame != null) {
-            toolbar.removeWindow(frame);
-            if (frame instanceof MatrixViewInternalFrame) {
-                frame.dispose();
-            } else {
-                //erst das dispose und erst dann als Tab removen, sonst haut
-                // das Einfügen-Menü nicht mehr hin, weil
-                //die Ereignisse internalFrameDeactivated(),
-                // internalFrameClosed() und internalFrameActivated()
-                //sonst in einer ungünstigen Reihenfolge kommen.
-                frame.dispose();
-                modelBrowserPanel.removeGraphDocument(frame.getGraphDocument());
-            }
-            frame = findFirstInternalFrame(szen);
-        }
+        contentPane.closeFrame(szen);
     }
 
+    //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GraphDocumentListener laufen (MODEL_CLOSED) (analog sollte es dann auch MODEL_OPENED geben)
+    /**
+     * @param gdcoll
+     */
     public void closeAllFramesAndTabs(final GDCollection gdcoll) {
-        modelBrowserPanel.removeGraphDocument(gdcoll.getMainGraphDocument());
-        closeFrame(gdcoll.getMainGraphDocument());
-        for (Szenario szen : gdcoll.getSzenarios()) {
-            closeFrame(szen);
-        }
+        contentPane.closeAllFramesAndTabs(gdcoll);
     }
 
     /**
@@ -876,17 +530,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         System.gc();
 
         Static.closeProgressDialog();
-
-        AbstractInternalFrame lastFrame = toolbar.getNextWindow();
-        if (lastFrame == null) {
-            lastFrame = toolbar.getPreviousWindow();
-        }
-        if (lastFrame != null) {
-            try {
-                lastFrame.setSelected(true);
-            } catch (PropertyVetoException ex) {
-            }
-        }
+        contentPane.selectLastFrame();
         return true;
     }
 
@@ -923,12 +567,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         if (!saveToFile(gdcoll)) {
             return false;
         }
-        JInternalFrame[] allFrames = desktop.getAllFrames();
-        for (JInternalFrame frame : allFrames) {
-            if (frame instanceof InternalGraphFrame) {
-                ((InternalGraphFrame) frame).updateTitle();
-            }
-        }
+        contentPane.updateFrameTitles();
         System.gc();
         //		long end = System.currentTimeMillis();
         //		System.out.println("Time to write file " + datei.getName() + " (" + datei.length() + " Bytes): " + (end - start) + " Milliseconds");
@@ -956,87 +595,24 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         return true;
     }
 
+    //TODO: auch das hier sollte ziemlich sicher über einen Listener laufen!
+    /**
+     * Reagiert auf ein umbenanntes Modell
+     *
+     * @param gdcoll
+     */
+    public void modelRenamed(final GDCollection gdcoll) {
+        contentPane.modelRenamed(gdcoll);
+    }
+
+    //TODO: auch das hier sollte ziemlich sicher über einen Listener laufen!
     /**
      * reagiert auf ein umbenanntes Szenario
+     *
+     * @param szen
      */
     public void szenarioRenamed(final Szenario szen) {
-        InternalGraphFrame frame = szen.getFrame();
-        if (frame != null) {
-            frame.updateTitle();
-        }
-        modelBrowserPanel.updateTitle(szen);
-        GraphDocument mainDoc = szen.getCollection().getMainGraphDocument();
-        //Alt = in allen Szenarions allen Elementen (und eben nicht allen Containern) den neuen Namen verpassen
-        // for (ModelElement me : sz.getModelItems(ModelElement.class, true))
-        for (ModelElement me : mainDoc.getModelItems(ModelElement.class, true)) {
-            me.invalidateNameWithSzens();
-        }
-
-    }
-
-    @Override
-    public void internalFrameClosing(final InternalFrameEvent e) {
-    }
-
-    @Override
-    public void internalFrameClosed(final InternalFrameEvent e) {
-        JInternalFrame[] frames = desktop.getAllFrames();
-        AbstractInternalFrame frame = (AbstractInternalFrame) e.getSource();
-        if (!(frame instanceof MatrixViewInternalFrame)) {
-            workarea.revalidate();
-        }
-
-        toolbar.removeWindow(frame);
-
-        if (frames.length == 0) {
-            activeFrame = null;
-            graphAreaToolbarManager.updateToolBar();
-            toolbar.repaint();
-
-        }
-    }
-
-    @Override
-    public void internalFrameOpened(final InternalFrameEvent e) {
-    }
-
-    @Override
-    public void internalFrameIconified(final InternalFrameEvent e) {
-    }
-
-    @Override
-    public void internalFrameDeiconified(final InternalFrameEvent e) {
-    }
-
-    @Override
-    public void internalFrameActivated(final InternalFrameEvent e) {
-        activeFrame = (AbstractInternalFrame) e.getInternalFrame();
-        GraphDocument doc = activeFrame.getGraphDocument();
-        doc.addGraphDocumentListener(graphAreaToolbarManager);
-        graphAreaToolbarManager.updateToolBar();
-        //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
-        //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
-        setSelectedDoc(doc, activeFrame instanceof InternalGraphFrame);
-        try {
-            activeFrame.setSelected(true);
-        } catch (Exception ex) {
-            Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
-        }
-        toolbar.revalidate();
-        toolbar.repaint();
-        workarea.revalidate();
-        workarea.repaint();
-        activeLayerChanged(activeFrame.getGraphDocument());
-
-        toolbar.addWindow(activeFrame);
-    }
-
-    @Override
-    public void internalFrameDeactivated(final InternalFrameEvent e) {
-        GraphDocument graphDocument = activeFrame.getGraphDocument();
-        graphDocument.removeGraphDocumentListener(graphAreaToolbarManager);
-        activeFrame = null;
-        graphAreaToolbarManager.updateToolBar();
+        contentPane.szenarioRenamed(szen);
     }
 
     @Override
@@ -1140,59 +716,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      * @return JInternalFrame[]
      */
     public AbstractInternalFrame[] getAllFrames() {
-        JInternalFrame[] intFrames = desktop.getAllFrames();
-        AbstractInternalFrame[] frames = new AbstractInternalFrame[intFrames.length];
-        System.arraycopy(intFrames, 0, frames, 0, intFrames.length);
-        return frames;
-    }
-
-    /**
-     * return the toolbar of application
-     *
-     * @return ToolBar
-     */
-    public ToolBar getToolBar() {
-        return toolbar;
-    }
-
-    /**
-     * return the workarea of application
-     *
-     * @return JPanel
-     */
-    public JPanel getWorkArea() {
-        return workarea;
-    }
-
-    /**
-     * return the horizontalSplitPane of application
-     *
-     * @return JSplitPane
-     */
-    public JSplitPane getHorizontalSplitPane() {
-        return horizontalSplitPane;
-    }
-
-    /**
-     * return the internal frame toolbar
-     *
-     * @return UnfloatableToolBar
-     */
-    public final GraphAreaToolbarManager getGraphAreaToolBarManager() {
-        return graphAreaToolbarManager;
-    }
-
-    /** (De-)Aktiviert den ModelBrowser */
-    private void showModelBrowser(final boolean b) {
-        if (b) {
-            verticalSplitPane.setLeftComponent(modelBrowserPanel);
-            verticalSplitPane.setDividerLocation(dividerLocation);
-            getWorkArea().revalidate();
-        } else {
-            dividerLocation = verticalSplitPane.getDividerLocation();
-            verticalSplitPane.remove(verticalSplitPane.getLeftComponent());
-            getWorkArea().revalidate();
-        }
+        return contentPane.getAllFrames();
     }
 
     /**
@@ -1217,13 +741,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      */
     public List<GDCollection> getCollections() {
         return new ArrayList<>(collections);
-    }
-
-    /**
-     * @param gdcoll
-     */
-    public void updateTitle(final GDCollection gdcoll) {
-        modelBrowserPanel.updateTitle(gdcoll);
     }
 
     /**
@@ -1279,7 +796,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      * @return Returns the activeFrame.
      */
     public AbstractInternalFrame getActiveFrame() {
-        return activeFrame;
+        return contentPane.getActiveFrame();
     }
 
     /**
@@ -1374,25 +891,6 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
             System.arraycopy(params, 0, newParams, 1, params.length);
             processCommand("open", newParams);
         }
-    }
-
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        if (UserProperties.isPropertyChange(BooleanProperty.OPTION_CHECK_CONSISTENCY, evt)) {
-            setCheckConsistencyState(UserProperties.is(BooleanProperty.OPTION_CHECK_CONSISTENCY));
-        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR, evt)) {
-            graphAreaToolbarManager.setToolBarVisible(UserProperties.is(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR));
-        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR, evt)) {
-            setShowStandardToolbar(UserProperties.is(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR));
-        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_MODEL_BROWSER_SHOW, evt)) {
-            showModelBrowser(UserProperties.is(BooleanProperty.OPTION_MODEL_BROWSER_SHOW));
-        } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_ENABLE_EXPERT_MODE, evt)) {
-            setExpertMode(UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE));
-        }
-    }
-
-    private void setExpertMode(final boolean enabled) {
-        modelBrowserPanel.updateModelBrowsers();
     }
 
 }

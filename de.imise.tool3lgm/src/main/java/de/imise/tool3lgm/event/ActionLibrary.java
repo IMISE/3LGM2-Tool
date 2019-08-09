@@ -998,7 +998,7 @@ public class ActionLibrary {
         public static final Action ACTION_OPEN_MATRIX_VIEW = new GraphDocumentAction(ActionIdentifier.ACTION_OPEN_MATRIX_VIEW) {
             @Override
             public void actionPerformed() {
-                getTool().createTableInternalFrame(getSelectedDoc());
+                getTool().openMatrixView();
             }
         };
 
@@ -1015,7 +1015,7 @@ public class ActionLibrary {
         public static final Action ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT) {
             @Override
             public void actionPerformed() {
-                getTool().fensterNebeneinander();
+                getTool().reorderFramesSideBySide();
             }
         };
 
@@ -1023,7 +1023,7 @@ public class ActionLibrary {
         public static final Action ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT) {
             @Override
             public void actionPerformed() {
-                getTool().fensterUeberlappen();
+                getTool().reorderFramesWithOverlap();
             }
         };
     }

@@ -467,8 +467,13 @@ public final class GDCollection extends UserFieldTarget {
         doc.addUndoCommand(MODEL_ACTION_RENAME_SUBMODEL + " " + szen.hashString + " " + getParseSaveString(oldTitle), pid);
         doc.addRedoCommand(MODEL_ACTION_RENAME_SUBMODEL + " " + szen.hashString + " " + getParseSaveString(szenTitle), pid);
 
-        //sowas hier müsste eigentlich über Liestener laufen!
+        //sowas hier müsste eigentlich über Listener laufen!
         Static.getTool().szenarioRenamed((Szenario) szen);
+        GraphDocument mainDoc = szen.getCollection().getMainGraphDocument();
+        for (ModelElement me : mainDoc.getModelItems(ModelElement.class, true)) {
+            me.invalidateNameWithSzens();
+        }
+
         if (descriptionFrame != null) {
             descriptionFrame.update();
         }

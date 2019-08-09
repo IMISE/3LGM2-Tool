@@ -11,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -23,7 +22,7 @@ import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
-import de.imise.util.swing.component.UnfloatableToolBar;
+import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
 
 /**
  * Klasse zur Darstellung von Verbindungen zwischen Objekten in einer Tabelle
@@ -32,41 +31,34 @@ import de.imise.util.swing.component.UnfloatableToolBar;
  */
 public class MatrixViewInternalFrame extends AbstractInternalFrame implements MouseMotionListener, MouseListener, GraphDocumentListener {
 
-    /**
-     * Panel für die Zeilenbeschriftungen (Elementnamen)
-     */
+    /** Liefert die aktuelle Toolbar */
+    private final GraphAreaToolbarManager toolbarManager;
+
+    /** Panel für die Zeilenbeschriftungen (Elementnamen) */
     private final RowPanel rowHeaderPanel;
 
-    /**
-     * Panel für die Spaltenbeschriftungen (Elementnamen)
-     */
+    /** Panel für die Spaltenbeschriftungen (Elementnamen) */
     private final ColPanel colHeaderPanel;
 
-    /**
-     * Panel für die Darstellung der Verbindungen
-     */
+    /** Panel für die Darstellung der Verbindungen */
     private final CellPanel cellPanel;
 
-    /**
-     * Panel, das angezeigt wird, solange kein korrekter MetaPfad ausgewählt ist.
-     */
+    /** Panel, das angezeigt wird, solange kein korrekter MetaPfad ausgewählt ist. */
     private final JPanel msgPanel;
 
-    /**
-     * Das Model nach dem die Tabelle aufgebaut wird
-     */
+    /** Das Model nach dem die Tabelle aufgebaut wird */
     private final TableModel tableModel;
 
-    /**
-     * Einstellungen, welche Klassen und welche Pfade in der Matrix dargestellt werden sollen
-     */
+    /** Einstellungen, welche Klassen und welche Pfade in der Matrix dargestellt werden sollen */
     private MetaPathSelection metaPathSelection;
 
     /**
      * @param graphDocument
+     * @param toolbarManager
      */
-    public MatrixViewInternalFrame(final LGMGraphDocument graphDocument) {
+    public MatrixViewInternalFrame(final LGMGraphDocument graphDocument, final GraphAreaToolbarManager toolbarManager) {
         super(graphDocument, "");
+        this.toolbarManager = toolbarManager;
         setClosable(true);
         tableModel = new TableModel(getGraphDocument());
 
@@ -139,11 +131,10 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
 
     @Override
     public void mouseMoved(final MouseEvent e) {
-        UnfloatableToolBar toolbar = Static.getTool().getToolBar();
         ModelElement colElement = colHeaderPanel.getCol(e.getX());
         ModelElement rowElement = rowHeaderPanel.getRow(e.getY());
-        if (toolbar instanceof InternalMatrixFrameToolBar) {
-            InternalMatrixFrameToolBar matrixFrameToolBar = (InternalMatrixFrameToolBar) toolbar;
+        if (toolbarManager.isMatrixViewToolBar()) {
+            InternalMatrixFrameToolBar matrixFrameToolBar = toolbarManager.getMatrixViewToolBar();
             TableCell cell = tableModel.getCell(colHeaderPanel.getColIndex(e.getX()), rowHeaderPanel.getRowIndex(e.getY()));
             String pathName = cell == null ? null : matrixFrameToolBar.getPathName(cell.getColor());
             matrixFrameToolBar.positionChanged(colElement, rowElement, pathName);

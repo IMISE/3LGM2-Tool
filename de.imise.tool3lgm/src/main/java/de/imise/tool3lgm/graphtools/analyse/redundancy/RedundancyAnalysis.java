@@ -216,11 +216,8 @@ public class RedundancyAnalysis extends WindowAdapter {
             int answer = JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("ana_fr_error_message"), getResString("ana_fr_error_message_title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
             if (answer == JOptionPane.YES_OPTION) {
                 UserProperties.set(BooleanProperty.OPTION_CHECK_CONSISTENCY, true);
-                Static.getTool().setCheckConsistencyState(true);
-                return;
-            } else if (answer == JOptionPane.CANCEL_OPTION) {
-                return;
             }
+            return;
         }
         // Redundanzberechnung starten
         rc.redundancyThread = new RedundancyThread(result);

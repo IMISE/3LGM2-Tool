@@ -21,7 +21,6 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.xml.LGMVersionException;
@@ -199,12 +198,8 @@ public class GDCollectionFileHandler {
 
         String name = newName + (isReadOnly ? " " + getResString("text_readOnly") : "");
         gdcoll.setName(name);
-        for (AbstractInternalFrame f : Static.getAllFrames()) {
-            if (f.getCollection().equals(gdcoll)) {
-                f.setTitle(name);
-                Static.getTool().updateTitle(gdcoll);
-            }
-        }
+        //TODO: das hier ist Mist und sollte über einen Listener laufen
+        Static.getTool().modelRenamed(gdcoll);
     }
 
     /**
