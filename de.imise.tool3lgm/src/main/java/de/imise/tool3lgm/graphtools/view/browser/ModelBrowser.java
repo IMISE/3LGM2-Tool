@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.browser;
 
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
@@ -15,8 +17,6 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.component.TabbedPane;
 
 /** Erzeugt ModelBrowser für 3lgm */
@@ -174,7 +174,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      * Hebt den aktiven Tab hervor und löscht die Hervorhebung beim letzten aktiven Tab.
      */
     private void updateActiveBrowserTab() {
-        boolean isShowModelsInSeparateBrowser = UserProperties.is(BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER);
+        boolean isShowModelsInSeparateBrowser = OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER.is();
         if (isShowModelsInSeparateBrowser && lastActiveBrowser == this) {
             return;
         }

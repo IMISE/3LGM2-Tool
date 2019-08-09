@@ -1,6 +1,7 @@
 package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,6 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition.DefaultMetaMod
 import de.imise.tool3lgm.graphtools.metamodel.RegularMetaModelDefinition;
 import de.imise.tool3lgm.imexport.ImportMetaModelDefinition;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.PluginUtils;
@@ -83,7 +83,7 @@ public final class Tool3lgmMetaModelContext {
      * @return gewählten MetaModelContext oder <code>null</code>, wenn im AuswahlDialog auf Abbrechen gdrückt wurde
      */
     public static MetaModelContext getNewModelMetaModelContext() {
-        boolean showDialog = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG);
+        boolean showDialog = OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.is();
         MetaModelContext metaModelContext = null;
         if (!showDialog) {
             metaModelContext = getUserpropertiesStoredMetaModelContext();
@@ -161,7 +161,7 @@ public final class Tool3lgmMetaModelContext {
             }
         }
         String showAgainQuestion = getResString("show_this_dialog_at_start");
-        boolean showAgainQuestionSelection = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG);
+        boolean showAgainQuestionSelection = OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.is();
         Pair<NamedObjectContainer<MetaModelContext>, Boolean> choosedMetaModelAnswer = MultipleOptionPane.showSingleSelectionOptionDialog(Static.getMainFrame(), title, message, options, selectedOption, showAgainQuestion, showAgainQuestionSelection);
         if (choosedMetaModelAnswer == null) {
             return null;
@@ -169,35 +169,7 @@ public final class Tool3lgmMetaModelContext {
         NamedObjectContainer<MetaModelContext> choosedMetaModelContextContainer = choosedMetaModelAnswer.getFirstItem();
         MetaModelContext choosedMetaModelContext = choosedMetaModelContextContainer.getObject();
         UserProperties.set(StringProperty.META_MODEL, choosedMetaModelContext.getMetaModelID());
-        UserProperties.set(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, Boolean.TRUE.equals(choosedMetaModelAnswer.getSecondItem()));
-        return choosedMetaModelContext;
-    }
-
-    public static final MetaModelContext showChooseMetaModelDialog() {
-        int optionsCount = REGULAR_METAMODEL_CONTEXTS.size();
-        MetaModelContext lastMetaModelContext = getUserpropertiesStoredMetaModelContext();
-        String title = getResString("choose_meta_model_dialog_title");
-        String message = null;
-        List<NamedObjectContainer<MetaModelContext>> options = new ArrayList<>();
-        NamedObjectContainer<MetaModelContext> selectedOption = null;
-        for (int i = 0; i < optionsCount; i++) {
-            MetaModelContext metaModelContext = REGULAR_METAMODEL_CONTEXTS.get(i);
-            NamedObjectContainer<MetaModelContext> metaModelContextContainer = new NamedObjectContainer<>(metaModelContext, metaModelContext.getMetaModelDisplayName());
-            options.add(metaModelContextContainer);
-            if (i == 0 || lastMetaModelContext == metaModelContext) {
-                selectedOption = options.get(i);
-            }
-        }
-        String showAgainQuestion = getResString("show_this_dialog_at_start");
-        boolean showAgainQuestionSelection = UserProperties.is(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG);
-        Pair<NamedObjectContainer<MetaModelContext>, Boolean> choosedMetaModelAnswer = MultipleOptionPane.showSingleSelectionOptionDialog(Static.getMainFrame(), title, message, options, selectedOption, showAgainQuestion, showAgainQuestionSelection);
-        if (choosedMetaModelAnswer == null) {
-            return null;
-        }
-        NamedObjectContainer<MetaModelContext> choosedMetaModelContextContainer = choosedMetaModelAnswer.getFirstItem();
-        MetaModelContext choosedMetaModelContext = choosedMetaModelContextContainer.getObject();
-        UserProperties.set(StringProperty.META_MODEL, choosedMetaModelContext.getMetaModelID());
-        UserProperties.set(BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, Boolean.TRUE.equals(choosedMetaModelAnswer.getSecondItem()));
+        OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.set(Boolean.TRUE.equals(choosedMetaModelAnswer.getSecondItem()));
         return choosedMetaModelContext;
     }
 

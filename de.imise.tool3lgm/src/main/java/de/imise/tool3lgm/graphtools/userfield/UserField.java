@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.userfield;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_FORMAT_IDENTIFIER_CLASS;
 import static de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions.GLOBAL_USERFIELD_IDENTIFIER_CLASS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -15,8 +16,6 @@ import java.util.StringTokenizer;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.HashStringGenerator;
 
 /**
@@ -1002,7 +1001,7 @@ public final class UserField implements Cloneable, Comparator<UserFieldTarget>, 
         //wenn es eine Kennzahlformel ist, deren Wert ermittelt werden soll
         if (style == Style.CLASSIFICATION_NUMBER_FORMULA) {
             //wenn die globale Option der Berechnung eingeschaltet ist
-            if (UserProperties.is(BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION)) {
+            if (OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION.is()) {
                 //alle berechneten Kennzahl Werte löschen
                 definitions.reset();
                 //falls das reset nicht ausgeführt wurde, da sich nichts geändert

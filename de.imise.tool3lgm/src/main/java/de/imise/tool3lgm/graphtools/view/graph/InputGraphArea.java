@@ -11,6 +11,10 @@ import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_HASH_STRING;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_USE_RASTER;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RASTER_WIDTH;
 import static java.awt.Cursor.DEFAULT_CURSOR;
 
 import java.awt.Cursor;
@@ -42,7 +46,6 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.util.ReflectionUtils;
 
@@ -347,7 +350,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     continue;
                 }
                 grabbedElementsRealRect = getIncludingRectangle(grabbedElementsRealRect, kc);
-                for (ElementContainer ec : kc.getElement().getSubordinatedContainer(szenario, UserProperties.is(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS))) {
+                for (ElementContainer ec : kc.getElement().getSubordinatedContainer(szenario, OPTION_GRAPH_MOVE_SUBELEMENTS.is())) {
                     ModelElement me = ec.getElement();
                     if (!me.isPaintable() || !ec.isVisible() || !multiView && kc.layerFor() != ebene) {
                         continue;
@@ -793,7 +796,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             return null;
         }
         int counter;
-        if (!UserProperties.is(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS)) {
+        if (OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS.isNot()) {
             for (counter = lc.getBendpointContainerCount() - 1; counter >= 0; counter--) {
                 BendpointContainer k = lc.getBendpointContainer(counter);
                 if (!k.getElement().isPaintable()) {
@@ -879,8 +882,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             // float ratio = (float) w / (float) h;
             int u_bound, d_bound, r_bound, l_bound, xd, yd;
             // Beim Resizen rastern
-            if (UserProperties.is(BooleanProperty.OPTION_USE_RASTER)) {
-                float rasterWidth = UserProperties.get(IntProperty.PROPERTY_INT_RASTER_WIDTH);
+            if (OPTION_USE_RASTER.is()) {
+                float rasterWidth = PROPERTY_INT_RASTER_WIDTH.get();
                 xreal[ebene] = (int) (Math.round(xreal[ebene] / rasterWidth) * rasterWidth);
                 yreal[ebene] = (int) (Math.round(yreal[ebene] / rasterWidth) * rasterWidth);
             }
@@ -895,7 +898,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             } else if (yreal[ebene] > layerHeight / 2) {
                 yreal[ebene] = layerHeight / 2;
             }
-            boolean isMoveSubElements = UserProperties.set(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS, false);
+            boolean isMoveSubElements = OPTION_GRAPH_MOVE_SUBELEMENTS.set(false);
             switch (getCursor().getType()) {
             case Cursor.DEFAULT_CURSOR:
                 break;
@@ -970,7 +973,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             default:
                 break;
             }
-            UserProperties.set(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS, isMoveSubElements);
+            OPTION_GRAPH_MOVE_SUBELEMENTS.set(isMoveSubElements);
         }
         if (grabbed) {
             if (ka instanceof NodeContainer) {
@@ -980,11 +983,11 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 // die sein Vorgänger- oder Nachfolger auf der Edge haben
                 int bendpointTolerance = 3;
                 // wenn gerastert werden soll
-                if (UserProperties.is(BooleanProperty.OPTION_USE_RASTER)) {
+                if (OPTION_USE_RASTER.is()) {
                     // X - Richtung
                     grabbedElementsRealRect.x -= deltaX;
                     grabbedElementsRealRect.width -= deltaX;
-                    float rasterWidth = UserProperties.get(IntProperty.PROPERTY_INT_RASTER_WIDTH);
+                    float rasterWidth = UserProperties.get(PROPERTY_INT_RASTER_WIDTH);
                     //einzelne Knickpunkte nicht nur direkt auf dem Raster docken, sondern auch auf Höhe und Weite ihrer Nachbarknickpunkte
                     boolean rasterElement = true;
                     if (ka instanceof BendpointContainer && szenario.isSingleSelection()) {

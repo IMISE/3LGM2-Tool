@@ -123,7 +123,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      *
      */
     private void setShowStandardToolbar() {
-        if (OPTION_SHOW_STANDARD_TOOLBAR.isTrue()) {
+        if (OPTION_SHOW_STANDARD_TOOLBAR.is()) {
             add(toolbar, BorderLayout.NORTH);
         } else {
             remove(toolbar);
@@ -153,7 +153,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      * @return <code>true</code>, wenn dei Konsistenzprüfung durchgeführt und angezeigt wurde
      */
     private boolean setCheckConsistencyState() {
-        boolean state = OPTION_CHECK_CONSISTENCY.isTrue();
+        boolean state = OPTION_CHECK_CONSISTENCY.is();
         GDCollection gdcoll = Static.getSelectedGDCollection();
         if (gdcoll == null) {
             state = false;
@@ -189,7 +189,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
 
     /** (De-)Aktiviert den ModelBrowser */
     private final void showModelBrowser() {
-        if (OPTION_MODEL_BROWSER_SHOW.isTrue()) {
+        if (OPTION_MODEL_BROWSER_SHOW.is()) {
             verticalSplitPane.setLeftComponent(modelBrowserPanel);
             verticalSplitPane.setDividerLocation(dividerLocation);
         } else {

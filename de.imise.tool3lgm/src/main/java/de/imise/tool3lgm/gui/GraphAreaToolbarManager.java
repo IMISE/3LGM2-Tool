@@ -140,7 +140,7 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
      */
     public void setToolBarVisibility() {
         if (currentToolBar != null) {
-            boolean visible = OPTION_SHOW_PAINTING_TOOLBAR.isTrue();
+            boolean visible = OPTION_SHOW_PAINTING_TOOLBAR.is();
             Container parent = currentToolBar.getParent();
             if (!visible && parent != null) {
                 removeToolBar();

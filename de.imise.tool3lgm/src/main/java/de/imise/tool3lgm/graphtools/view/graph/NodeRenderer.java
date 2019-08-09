@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -20,8 +23,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * Die Klasse zeichnet grafische Elemente Funktionen bereit, um für Punkte zu entscheiden, ob er sich
@@ -107,7 +108,7 @@ public final class NodeRenderer {
         }
 
         Stroke str = gc.getStroke();
-        if (UserProperties.is(BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN) && !kc.isExpanded()) {
+        if (TRANSIENT_OPTION_SHOW_EXPANSION_SIGN.is() && !kc.isExpanded()) {
             gc.setStroke(neStroke);
         }
         boolean isResult = doc.isAnalysisResult(kc);
@@ -256,7 +257,7 @@ public final class NodeRenderer {
         }
 
         // Symbol für Verlinkung mit Teilmodell
-        if (kc.getNode().getAssociatedDoc() != null && UserProperties.is(BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS)) {
+        if (kc.getNode().getAssociatedDoc() != null && OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS.is()) {
             g.drawImage(linkIcon, xm + 2, yp - 13, kc);
         }
 

@@ -106,7 +106,7 @@ public class UserProperties {
      * @param event
      * @return
      */
-    public static final boolean isPropertyChange(final Object property, final PropertyChangeEvent event) {
+    private static final boolean isPropertyChange(final Object property, final PropertyChangeEvent event) {
         return property.toString().equals(event.getPropertyName());
     }
 
@@ -153,7 +153,7 @@ public class UserProperties {
      * @param value
      * @return the old value
      */
-    public static boolean set(final BooleanProperty property, final boolean value) {
+    private static boolean set(final BooleanProperty property, final boolean value) {
         Object oldValue = put(property, value);
         return oldValue == null ? false : Boolean.valueOf(oldValue.toString());
     }
@@ -162,7 +162,7 @@ public class UserProperties {
      * @param property
      * @return the boolean value of this Property
      */
-    public static boolean is(final BooleanProperty property) {
+    private static boolean is(final BooleanProperty property) {
         String value = properties.getProperty(property.toString());
         return value == null ? property.getDefault() : Boolean.parseBoolean(value);
     }
@@ -494,11 +494,19 @@ public class UserProperties {
         public boolean set(final boolean value) {
             return UserProperties.set(this, value);
         }
+
         /**
-         * @return the boolean value, if or if not this option is set in the UserProperties
+         * @return the boolean value, this option is set to <code>true</code> in the UserProperties
          */
-        public boolean isTrue() {
+        public boolean is() {
             return UserProperties.is(this);
+        }
+
+        /**
+         * @return the boolean value, this option is set to <code>false</code> in the UserProperties
+         */
+        public boolean isNot() {
+            return !is();
         }
 
         /**

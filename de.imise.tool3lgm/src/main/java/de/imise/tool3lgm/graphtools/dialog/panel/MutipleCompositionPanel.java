@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.MASTER_TO_SLAVE_DIRECTION;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -30,8 +32,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * Panel für {@link CompositionEdge}s, die ein Element mehrfach zu den über die Compositions untergeordneten Elementen haben kann.
@@ -114,7 +114,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
             LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
             root.add(node);
         }
-        if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS)) {
+        if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) {
             all = ((Node) modelElement).getPartConnectedContainer(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
                 LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
@@ -122,7 +122,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 root.add(node);
             }
         }
-        if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS)) {
+        if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
             all = ((Node) modelElement).getParentConnectedContainer(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
                 LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);

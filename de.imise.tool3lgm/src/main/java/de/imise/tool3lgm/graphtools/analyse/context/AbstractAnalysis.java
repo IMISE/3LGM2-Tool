@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.analyse.context;
 
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,8 +12,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 public abstract class AbstractAnalysis {
 
@@ -84,7 +84,7 @@ public abstract class AbstractAnalysis {
     public final void setAnalysisResult(final GraphDocument doc) {
         List<ElementContainer> result = getResult(doc);
         if (result != null) {
-            if (UserProperties.is(BooleanProperty.OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT)) {
+            if (OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT.is()) {
                 doc.addContainerToNewSzenario(result, TransactionManager.STANDARD_PID);
             } else {
                 doc.setAnalysisResult(result);

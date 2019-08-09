@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.MEDUIM_STROKE;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_COLORS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -21,8 +22,6 @@ import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 public class ConfigurationRenderer {
 
@@ -61,7 +60,7 @@ public class ConfigurationRenderer {
                 configurationStart.setInterLayerConnectionColor(STANDARD_COLORS[colorCounter]);
             }
             Color elem_col = null;
-            if (UserProperties.is(BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS)) {
+            if (OPTION_ASSIGN_CONFIGURATION_COLORS.is()) {
                 elem_col = configurationStart.getInterLayerConnectionColor();
             } else {
                 elem_col = Color.black;

@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.metamodel;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERROR_INT_VALUE;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
@@ -53,7 +54,6 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.Sys;
@@ -767,7 +767,7 @@ public final class MetaModel {
      */
     public final boolean isHiddenClass(final Class<? extends ModelElement> elementClass) {
         //im ExperMode ist nichts versteckt
-        if (UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE)) {
+        if (OPTION_ENABLE_EXPERT_MODE.is()) {
             return false;
         }
         Set<Class<? extends ModelElement>> onlyExpertModeVisibleNodes = getOnlyExpertModeVisibleNodes();

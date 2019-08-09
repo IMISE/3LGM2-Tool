@@ -4,6 +4,7 @@
 package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 
 import java.awt.Component;
 import java.awt.dnd.DropTarget;
@@ -28,8 +29,6 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Sys;
 import de.imise.util.swing.dialog.OutputDialog;
 import de.imise.util.swing.dialog.ProgressDialog;
@@ -205,7 +204,7 @@ public class Static {
 
     /** Gibt zurück, ob der ExpertMode aktiv ist */
     public static boolean isExpertMode() {
-        return UserProperties.is(BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
+        return OPTION_ENABLE_EXPERT_MODE.is();
     }
 
     private static boolean paintSimpleGraph = false;

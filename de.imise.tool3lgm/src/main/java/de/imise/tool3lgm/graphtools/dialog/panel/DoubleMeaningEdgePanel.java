@@ -3,6 +3,8 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -27,8 +29,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.StringUtils;
 import de.imise.util.swing.SwingUtils;
 
@@ -184,8 +184,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         childrenToExcludeFromRotree.clear();
         childrenToExcludeFromRutree.clear();
 
-        boolean searchParts = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
-        boolean searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
+        boolean searchParts = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is();
+        boolean searchParents = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is();
 
         ModelElement modelElement = getModelElement();
         for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {

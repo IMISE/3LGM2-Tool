@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.view.browser;
 
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -18,7 +20,6 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * @author Rudi, AXS
@@ -43,7 +44,7 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     public ModelBrowserPanel() {
         super();
         setLayout(new GridLayout(1, 1, 0, 0));
-        showModelsInSeparateBrowser = UserProperties.is(BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER);
+        showModelsInSeparateBrowser = OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER.is();
         inactiveColor = new ModelBrowser().getForeground();
         UserProperties.addPropertyChangeListener(this);
     }
@@ -164,7 +165,7 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
      */
     private void updateShowModelsInSeparateBrowser() {
         //wenn nichts zu tun ist -> raus
-        boolean showModelsInSeparateBrowser = UserProperties.is(BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER);
+        boolean showModelsInSeparateBrowser = OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER.is();
         if (this.showModelsInSeparateBrowser == showModelsInSeparateBrowser) {
             return;
         }
@@ -199,7 +200,7 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (UserProperties.isPropertyChange(BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER, evt)) {
+        if (OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER.isChanged(evt)) {
             updateShowModelsInSeparateBrowser();
         }
     }

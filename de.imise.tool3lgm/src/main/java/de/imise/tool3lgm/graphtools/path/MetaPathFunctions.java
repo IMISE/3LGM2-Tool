@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.path;
 
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,8 +25,6 @@ import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -343,7 +343,7 @@ public class MetaPathFunctions {
      * @return
      */
     public static final PathConnectionState getConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
-        return getConnectionState(startElement, endElement, metaPath, UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS), UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS));
+        return getConnectionState(startElement, endElement, metaPath, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is());
     }
 
     /**

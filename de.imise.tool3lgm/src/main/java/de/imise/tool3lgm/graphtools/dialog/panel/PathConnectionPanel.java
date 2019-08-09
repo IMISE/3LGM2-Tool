@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -41,8 +43,6 @@ import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.StringUtils;
 import de.imise.util.swing.SwingUtils;
 import de.imise.util.swing.component.LimitedHeightScrollTreePane;
@@ -304,10 +304,10 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         addChildrenToExcludeFromRtree(edgeIndex, all, true);
         // nur Node für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
         int firstNonSelectableIndex = all.size();
-        if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS)) {
+        if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) {
             all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc, edgeClass, direction));
         }
-        if (UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS)) {
+        if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
             all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc, edgeClass, direction));
         }
         ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();

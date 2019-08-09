@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -15,8 +17,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.component.tree.CorrectSelectionTree;
 
 public class ElementDialogPanelTree extends CorrectSelectionTree {
@@ -45,7 +45,7 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
             if (checkAlreadyAdded && elementsAdded.contains(kc)) {
                 return null;
             }
-            boolean showPartOfHierarchy = UserProperties.is(BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY);
+            boolean showPartOfHierarchy = OPTION_SHOW_PART_OF_HIERARCHY.is();
             if (showPartOfHierarchy && !force && !kc.getElement().getParentElements().isEmpty()) {
                 return null;
             }

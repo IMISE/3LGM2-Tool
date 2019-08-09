@@ -38,6 +38,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK_
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDCOLL_INTERACTIVE_MODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.JOptionPane.DEFAULT_OPTION;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
@@ -105,7 +106,6 @@ import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContai
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.pair.Pair;
@@ -440,7 +440,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
             szenario_menu.add(item);
 
-            if (UserProperties.is(BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER) && szen == Static.getSelectedDoc()) {
+            if (OPTION_ENABLE_SUBMODEL_BROWSER.is() && szen == Static.getSelectedDoc()) {
                 item.setEnabled(false);
                 continue;
             }

@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.analyse.context;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
 
 import java.io.Reader;
 import java.io.StringReader;
@@ -18,8 +20,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 public class AnalysisXMLParser extends DefaultHandler {
 
@@ -122,8 +122,8 @@ public class AnalysisXMLParser extends DefaultHandler {
                 return;
             }
             state = IN_ANALYSE;
-            boolean searchParts = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS);
-            boolean searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
+            boolean searchParts = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is();
+            boolean searchParents = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is();
             if (suchcnt == 0) {
                 if (doc.getSelectionSize() > 0) {
                     Collection<ElementContainer> selection = doc.getSelectedContainer();

@@ -16,6 +16,7 @@ import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.SINGLE_LINE
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.exportDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationImportExportHandler.importDefinitions;
 import static de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog.OK;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER;
 
 import java.awt.Frame;
 import java.awt.HeadlessException;
@@ -35,8 +36,6 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.UserFieldDefinitionDialog;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.event.DoubleClickListener;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
@@ -165,7 +164,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         if (is(okButton)) {
             dispose();
             gdcoll.removeUserFieldValues(removedUserFields);
-            if (!UserProperties.is(BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER)) {
+            if (OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER.isNot()) {
                 return;
             }
             GDCollection gdcoll = definitions.getCollection();

@@ -18,6 +18,8 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SWAP_EDGE_POSITIONS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_REMOVE_WARNING;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -82,7 +84,6 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.OptionsSupport;
 import de.imise.util.collections.CollectionUtils;
@@ -450,14 +451,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //-> beim Rückgängigmachen der Verschiebungen dürfen die Unterelemente nicht durch das
         //Zürücksetzen der Größe und Position der Oberelemente mit verschoben werden, sondern nur,
         //wenn sie beim ursprünglichen Kommando mitverschoben wurden, was geloogt wurde
-        boolean isMoveSubElements = UserProperties.set(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS, false);
+        boolean isMoveSubElements = OPTION_GRAPH_MOVE_SUBELEMENTS.set(false);
         TransactionManager tman = getCollection().getTman();
         if (undo) {
             tman.undo(pid);
         } else {
             tman.redo(pid);
         }
-        UserProperties.set(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS, isMoveSubElements);
+        OPTION_GRAPH_MOVE_SUBELEMENTS.set(isMoveSubElements);
         transStackTable.decrease(pid);
         distributeEvent(DATA_CHANGED, pid);
     }
@@ -643,13 +644,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         // - alle selektierten Elemente sind unique (= ohne grafische Repräsentation sind sie immer in allen Teilmodellen)
         // - das Element ist ein untergeordnetes Element, aber sein übergeordnetes ist auch in dem Teilmodell
         else if (this == gdcoll.getMainGraphDocument() || isSelectedOnlyUnique() || isSelectedOnlySlaveRealNodes()) {
-            if (UserProperties.is(BooleanProperty.OPTION_SHOW_REMOVE_WARNING)) {
+            if (OPTION_SHOW_REMOVE_WARNING.is()) {
                 Boolean answer = MultipleOptionPane.showSingleCheckboxDialog(Static.getMainFrame(), getResString("attention"), getResString("remove_element_warning"), getResString("dont_ask_again"), false);
                 //es wurde nicht Abbrechen sonder Ok gedrückt
                 if (answer != null) {
                     dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
                     if (!answer) { // die Checkbox ist nicht selektiert -> Globale Option "Warnmeldung vor dem Löschen" soll true sein
-                        BooleanProperty.OPTION_SHOW_REMOVE_WARNING.createAction().perform();
+                        OPTION_SHOW_REMOVE_WARNING.createAction().perform();
                     }
                 }
             } else {
@@ -2264,8 +2265,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         //Unterelemente ebenfalls selektieren, damit sie mitverschoben werden und ihr Verschieben
         //dann auch als Undo gelogt wird
-        boolean moveSubelements = UserProperties.is(BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS);
-        List<ElementContainer> selection = expandSelection(moveSubelements);
+        List<ElementContainer> selection = expandSelection(OPTION_GRAPH_MOVE_SUBELEMENTS.is());
         for (NodeContainer kc : getSelectedRealElementContainerIterable()) {
             if (layer == ModelConstants.NO_LAYER || layer == kc.layerFor()) {
                 moveNodeContainer(kc, kc.getX() + deltaX, kc.getY() + deltaY, kc.getWidth(), kc.getHeight(), pid);

@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_RASTER;
+
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
@@ -25,7 +28,6 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
@@ -374,7 +376,7 @@ public class LayerContainer extends ElementContainer {
                 gc.setStroke(stroke_thin);
             }
 
-            if (UserProperties.is(BooleanProperty.OPTION_SHOW_RASTER) && paintState != PaintState.WEBEXPORT) {
+            if (OPTION_SHOW_RASTER.is() && paintState != PaintState.WEBEXPORT) {
                 Stroke stk = gc.getStroke();
                 g.setColor(Color.darkGray);
                 int maxX = page_width / 2 + 1;
@@ -465,7 +467,7 @@ public class LayerContainer extends ElementContainer {
             }
             ec.paint(g);
         }
-        boolean isPaintEdgesOnlyForSelectedElements = UserProperties.is(BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS);
+        boolean isPaintEdgesOnlyForSelectedElements = OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS.is();
         for (EdgeContainer ec : edgeContainers) {
             if (isPaintEdgesOnlyForSelectedElements) {
                 Edge edge = (Edge) ec.getElement();

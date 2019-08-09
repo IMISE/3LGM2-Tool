@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.newmatrixview;
 
-import static de.imise.tool3lgm.userproperties.UserProperties.is;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
 
@@ -227,7 +226,7 @@ public class TableModel implements Iterable<TableCell> {
                         if (containsPartOf) {
                             connected = MetaPathFunctions.getConnectionState(rowHeader.get(i), colHeader.get(j), metaPath, false, false) != null;
                         } else {
-                            connected = MetaPathFunctions.getConnectionState(rowHeader.get(i), colHeader.get(j), metaPath, is(OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS), is(OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS)) != null;
+                            connected = MetaPathFunctions.getConnectionState(rowHeader.get(i), colHeader.get(j), metaPath, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) != null;
                         }
                         if (connected) {
                             connectionBitPattern += 1 << k;

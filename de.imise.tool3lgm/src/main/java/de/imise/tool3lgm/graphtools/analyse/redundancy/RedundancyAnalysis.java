@@ -4,6 +4,8 @@
 package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_CHECK_CONSISTENCY;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -39,8 +41,6 @@ import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.WrapperMetaPath;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 import de.imise.util.swing.dialog.OutputDialog;
@@ -109,7 +109,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             String message = "";
 
             // wenn die Option "beim Suchen übergeordnete Elemente berücksichtigen" ausgeschaltet ist
-            if (!UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS)) {
+            if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.isNot()) {
                 message += getResString("ana_fr_search_parents_option_message1");
                 message += getResString("itv-bezogene_Opt") + " -> " + getResString("consider_parents") + getResString("ana_fr_search_parents_option_message2") + "\n\n";
             }
@@ -215,7 +215,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             };
             int answer = JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("ana_fr_error_message"), getResString("ana_fr_error_message_title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
             if (answer == JOptionPane.YES_OPTION) {
-                UserProperties.set(BooleanProperty.OPTION_CHECK_CONSISTENCY, true);
+                OPTION_CHECK_CONSISTENCY.set(true);
             }
             return;
         }
@@ -494,16 +494,16 @@ public class RedundancyAnalysis extends WindowAdapter {
         @Override
         public void run() {
             // Originalwert von searchParents merken
-            searchParents = UserProperties.is(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS);
+            searchParents = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is();
             // übergeordnete Elemente auf jeden Fall mit berücksichtigen
-            UserProperties.set(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, true);
+            OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.set(true);
             // füllt alle results
             for (int i = 0; i < resultList.size(); i++) {
                 // der Konstruktoraufruf füllt die übergebene Liste
                 new DecisionTree(resultList.get(i));
             }
             // Originalwert wieder herstellen
-            UserProperties.set(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, searchParents);
+            OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.set(searchParents);
             RedundancyAnalysis.showResult(resultList);
         }
 
@@ -514,7 +514,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             }
             super.interrupt();
             // Originalwert wieder herstellen
-            UserProperties.set(BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, searchParents);
+            OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.set(searchParents);
         }
     }
 

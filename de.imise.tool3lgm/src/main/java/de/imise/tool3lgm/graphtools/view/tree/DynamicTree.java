@@ -8,6 +8,9 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,8 +49,6 @@ import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
  * @author N.N.
@@ -347,7 +348,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         ElementContainer kc = elementNode.getUserObject();
         LGMTreeNode parent = (LGMTreeNode) elementNode.getParent();
         GraphDocument maindoc = doc.getCollection().getMainGraphDocument();
-        boolean isEnableSubmodelBrowser = UserProperties.is(BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER);
+        boolean isEnableSubmodelBrowser = OPTION_ENABLE_SUBMODEL_BROWSER.is();
         List<ElementContainer> all = kc.getElement().getDirectPartContainer(isEnableSubmodelBrowser ? selDoc : maindoc);
         loop1: for (ElementContainer pc : all) {
             ModelElement me = pc.getElement();
@@ -488,9 +489,9 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         selectionListener.setActive(false);
         createTree();
         saveExpansionState();
-        showPartOfHierarchy = UserProperties.is(BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY);
+        showPartOfHierarchy = OPTION_SHOW_PART_OF_HIERARCHY.is();
         showUserDefinedProperties = isShowUserDefinedPropertiesInModelBrowser();
-        boolean isEnableSubmodelBrowser = UserProperties.is(BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER);
+        boolean isEnableSubmodelBrowser = OPTION_ENABLE_SUBMODEL_BROWSER.is();
         for (int ebene = MAX_LAYER_INDEX; ebene >= MIN_LAYER_INDEX; ebene--) {
             if (isInterLayer(ebene)) {
                 continue;
@@ -636,7 +637,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     }
 
     private boolean isShowUserDefinedPropertiesInModelBrowser() {
-        return UserProperties.is(BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER);
+        return OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER.is();
     }
 
     ///////////////////////
