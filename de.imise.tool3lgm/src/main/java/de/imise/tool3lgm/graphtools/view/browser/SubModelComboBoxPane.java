@@ -107,7 +107,7 @@ public class SubModelComboBoxPane extends SubModelsBrowser implements ItemListen
         //hat und der Baum einige Klassenknoten aus- oder einblenden soll.
         tree.setGraphDocument(mySelDoc);
         if (mySelDoc != Static.getSelectedDoc()) {
-            Static.setSelectedDoc(mySelDoc, true);
+            Static.setSelectedDoc(mySelDoc);
         }
     }
 

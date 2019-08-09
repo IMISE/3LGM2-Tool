@@ -363,7 +363,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
 
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
         ConsistencyChecker.clearUnfixableErrors(gdcoll);
-        setSelectedDoc(selectedDoc, true);
+        setSelectedDoc(selectedDoc);
         gdcoll.setChanged(false);
         System.gc();
         Static.closeProgressDialog();
@@ -542,7 +542,8 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
      *            Wenn <code>true</code> ist, wird auch das dazugehörige
      *            Grafikfenster in den Vordergrund geholt, sonst nicht.
      */
-    void setSelectedDoc(final GraphDocument doc, final boolean activateGraphView) {
+    void setSelectedDoc(final GraphDocument doc) {
+        boolean activateGraphView = doc != null;
         if (ignoreDocSelection) {
             return;
         }
@@ -859,7 +860,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         closeAllFramesAndTabs(gdcoll);
 
         ignoreDocSelection = false;
-        setSelectedDoc(ModelBrowserPanel.getSelectedDoc(), true);
+        setSelectedDoc(ModelBrowserPanel.getSelectedDoc());
 
         gdcoll.removeGraphDocumentListener(this);
 
@@ -1045,7 +1046,7 @@ public class Tool3lgm extends JFrame implements WindowListener, InternalFrameLis
         //die letzte ist immer die aktive
         for (int i = collections.size() - 1; i >= 0; i--) {
             GDCollection gdcoll = collections.get(i);
-            setSelectedDoc(gdcoll.getSelectedDoc(), true);
+            setSelectedDoc(gdcoll.getSelectedDoc());
             if (!askUserCloseModel(gdcoll)) {
                 return;
             }

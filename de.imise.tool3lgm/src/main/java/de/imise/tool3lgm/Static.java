@@ -117,12 +117,16 @@ public class Static {
         return tool.getSelectedDoc();
     }
 
-    /** Setzt das ausgewählte Modell und holt bei Bedarf den dazugehörigen Frame nach vorne */
-    public static void setSelectedDoc(final GraphDocument doc, final boolean activateGraphView) {
+    /**
+     * Setzt das ausgewählte Modell und holt bei Bedarf den dazugehörigen Frame nach vorne
+     *
+     * @param doc
+     */
+    public static void setSelectedDoc(final GraphDocument doc) {
         if (tool == null) {
             return;
         }
-        tool.setSelectedDoc(doc, activateGraphView);
+        tool.setSelectedDoc(doc);
     }
 
     /**

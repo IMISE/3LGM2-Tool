@@ -193,7 +193,7 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
             }
             setLayout(new GridLayout(1, 1, 0, 0));
         }
-        Static.setSelectedDoc(activeDoc, true);
+        Static.setSelectedDoc(activeDoc);
         revalidate();
     }
 

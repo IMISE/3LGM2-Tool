@@ -191,7 +191,7 @@ public class RedundancyAnalysis extends WindowAdapter {
         // eigentlich sollte hier immer schon dieselbe GDCollection selektiert sein, aber zur
         // Sicherheit wird mal dahin gewechselt
         if (Static.getSelectedGDCollection() != gdcoll) {
-            Static.setSelectedDoc(gdcoll.getSelectedDoc(), true);
+            Static.setSelectedDoc(gdcoll.getSelectedDoc());
         }
         ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
         consistencyChecker.resetConsistencyDefinition();

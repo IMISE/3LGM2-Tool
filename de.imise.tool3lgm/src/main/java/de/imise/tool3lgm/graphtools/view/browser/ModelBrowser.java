@@ -215,7 +215,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
     public void stateChanged(final ChangeEvent e) {
         updateActiveBrowserTab();
         GraphDocument doc = getSelectedDoc();
-        Static.setSelectedDoc(doc, doc != null);
+        Static.setSelectedDoc(doc);
     }
 
     @Override
