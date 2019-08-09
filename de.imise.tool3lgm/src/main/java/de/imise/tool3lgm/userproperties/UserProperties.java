@@ -174,7 +174,7 @@ public class UserProperties {
      * @param value
      * @return the old value
      */
-    public static int set(final IntProperty property, final int value) {
+    private static int set(final IntProperty property, final int value) {
         Object oldValue = put(property, value);
         return oldValue == null ? -1 : Integer.valueOf(oldValue.toString());
     }
@@ -183,7 +183,7 @@ public class UserProperties {
      * @param property
      * @return the int value of the Property
      */
-    public static final int get(final IntProperty property) {
+    private static final int get(final IntProperty property) {
         String value = properties.getProperty(property.toString());
         return value == null ? property.getDefault() : Integer.parseInt(value);
     }
@@ -195,7 +195,7 @@ public class UserProperties {
      * @param value
      * @return the old value
      */
-    public static String set(final StringProperty property, final String value) {
+    private static String set(final StringProperty property, final String value) {
         Object oldValue = put(property, value);
         return oldValue == null ? null : oldValue.toString();
     }
@@ -204,7 +204,7 @@ public class UserProperties {
      * @param property
      * @return the String value of the Property
      */
-    public static final String get(final StringProperty property) {
+    private static final String get(final StringProperty property) {
         String value = properties.getProperty(property.toString());
         return value == null ? null : value;
     }

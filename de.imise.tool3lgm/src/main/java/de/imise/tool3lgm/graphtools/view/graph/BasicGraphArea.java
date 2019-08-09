@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -23,8 +24,6 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.util.image.ComponentAsImageExportHandler.ZoomableComponent;
 
 /**
@@ -632,7 +631,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      *            Graphics2D which RenderingHints are to set
      */
     public static void setRenderingHints(final Graphics2D g2) {
-        int renderingHints = UserProperties.get(IntProperty.PROPERTY_INT_RENDER_SETTINGS);
+        int renderingHints = PROPERTY_INT_RENDER_SETTINGS.get();
         if ((renderingHints & 1) == 1) {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }

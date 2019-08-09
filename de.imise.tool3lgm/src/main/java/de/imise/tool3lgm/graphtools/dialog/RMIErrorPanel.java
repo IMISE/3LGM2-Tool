@@ -4,6 +4,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -21,9 +22,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 /**
  * @author hboehme RMI-fehlerPanel für die RMI-Konfiguration. Das Panel beinhaltet zwei
@@ -113,7 +111,7 @@ public class RMIErrorPanel extends JPanel implements ItemListener {
         gbc.gridx++;
         add(new JLabel(""), gbc);
 
-        int rmiPort = UserProperties.get(IntProperty.PROPERTY_INT_RMI_PORT);
+        int rmiPort = PROPERTY_INT_RMI_PORT.get();
         if (rmiPort < 0) {
             rmiRegistryPortTextField.setText("");
         } else {

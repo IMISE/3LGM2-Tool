@@ -1,6 +1,7 @@
 package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
 import java.rmi.Naming;
 import java.rmi.Remote;
@@ -19,7 +20,6 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.rmi.Tool3lgmServer;
 import de.imise.tool3lgm.rmi.Tool3lgmServerImpl;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 public class Tool3lgmMain {
 
@@ -135,7 +135,7 @@ public class Tool3lgmMain {
         try {
             Registry registry = LocateRegistry.getRegistry("127.0.0.1");
             // hole den vom User eingestellen RegistryPort
-            int rmiPort = UserProperties.get(IntProperty.PROPERTY_INT_RMI_PORT);
+            int rmiPort = PROPERTY_INT_RMI_PORT.get();
             String regValue = String.valueOf(rmiPort);
 
             // hier wird geprüft, ob der Wert ungleich "" ist und mittels regulären Ausdruck, ob nur Ziffern enthalten sind.
@@ -194,7 +194,7 @@ public class Tool3lgmMain {
 
                         // Wenn der alte regPort ungleich dem neuen ist, wird der neue gespeichert und beim nächsten Programmstart als Standard-Port angewandt.
                         if (regPort != oldRegPort) {
-                            UserProperties.set(IntProperty.PROPERTY_INT_RMI_PORT, regPort);
+                            PROPERTY_INT_RMI_PORT.set(regPort);
                             JOptionPane.showMessageDialog(Static.tool, getResString("rmiNewRegPortIs") + " " + regPort);
                         }
 
@@ -219,7 +219,7 @@ public class Tool3lgmMain {
                                 // Sollte en fehler auftreten, wir dder Errordialog wieder angezeigt.
                                 else {
                                     regPort = Integer.parseInt(rmip.getRmiRegistryPortTextFieldValue());
-                                    UserProperties.set(IntProperty.PROPERTY_INT_RMI_PORT, regPort);
+                                    PROPERTY_INT_RMI_PORT.set(regPort);
                                 }
                             }
                         }

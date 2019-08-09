@@ -45,8 +45,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -491,7 +489,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             final LayerContainer layer = szenario.getLayer(layerIndex);
             final int x = xreal[layerIndex];
             final int y = yreal[layerIndex];
-            final int rasterWidth = UserProperties.get(IntProperty.PROPERTY_INT_RASTER_WIDTH);
+            final int rasterWidth = PROPERTY_INT_RASTER_WIDTH.get();
             final int insertPositionX = Math.round(x / rasterWidth) * rasterWidth;
             final int insertPositionY = Math.round(y / rasterWidth) * rasterWidth;
             szenario.setNodeContainerInsertPosition(insertPositionX, insertPositionY);
@@ -987,7 +985,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     // X - Richtung
                     grabbedElementsRealRect.x -= deltaX;
                     grabbedElementsRealRect.width -= deltaX;
-                    float rasterWidth = UserProperties.get(PROPERTY_INT_RASTER_WIDTH);
+                    float rasterWidth = PROPERTY_INT_RASTER_WIDTH.get();
                     //einzelne Knickpunkte nicht nur direkt auf dem Raster docken, sondern auch auf Höhe und Weite ihrer Nachbarknickpunkte
                     boolean rasterElement = true;
                     if (ka instanceof BendpointContainer && szenario.isSingleSelection()) {

@@ -5,6 +5,8 @@ import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.event.action.StaticAction.PPP;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -84,7 +86,6 @@ import de.imise.tool3lgm.imexport.csv.DataImportModule;
 import de.imise.tool3lgm.imexport.graphml.GraphmlExporter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
@@ -837,7 +838,7 @@ public class ActionLibrary {
         public static class Graphics {
 
             /** Öffnet ein Fenster für allgemeine Grafik-Einstellungen */
-            public static final Action ACTION_PROPERTY_INT_RENDER_SETTINGS = new StaticAction(IntProperty.PROPERTY_INT_RENDER_SETTINGS, PPP) {
+            public static final Action ACTION_PROPERTY_INT_RENDER_SETTINGS = new StaticAction(PROPERTY_INT_RENDER_SETTINGS, PPP) {
                 @Override
                 public void actionPerformed() {
                     GraphicPropertyDialog dialog = new GraphicPropertyDialog(getTool());
@@ -881,7 +882,7 @@ public class ActionLibrary {
         }
 
         /** Öffnet ein Fenster zum Auswählen des RMI-Ports */
-        public static final Action ACTION_PROPERTY_INT_RMI_PORT = new StaticAction(IntProperty.PROPERTY_INT_RMI_PORT, PPP) {
+        public static final Action ACTION_PROPERTY_INT_RMI_PORT = new StaticAction(PROPERTY_INT_RMI_PORT, PPP) {
 
             @Override
             public void actionPerformed() {
@@ -890,11 +891,11 @@ public class ActionLibrary {
                 // Nach dem OK, werden die Values des Panels abgefragt.
                 RMIPropertyPanel rmip = new RMIPropertyPanel();
 
-                int oldRegPort = UserProperties.get(IntProperty.PROPERTY_INT_RMI_PORT);
-                if (JOptionPane.showOptionDialog(null, rmip, getResString(IntProperty.PROPERTY_INT_RMI_PORT.name()), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
-                    UserProperties.set(IntProperty.PROPERTY_INT_RMI_PORT, rmip.getRmiRegistryPortTextFieldValue());
+                int oldRegPort = PROPERTY_INT_RMI_PORT.get();
+                if (JOptionPane.showOptionDialog(null, rmip, getResString(PROPERTY_INT_RMI_PORT.name()), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
+                    PROPERTY_INT_RMI_PORT.set(rmip.getRmiRegistryPortTextFieldValue());
                 }
-                if (oldRegPort != UserProperties.get(IntProperty.PROPERTY_INT_RMI_PORT)) {
+                if (oldRegPort != PROPERTY_INT_RMI_PORT.get()) {
                     JOptionPane.showMessageDialog(getTool(), getResString("RMI_SETTINGS_INFO"));
                 }
             }

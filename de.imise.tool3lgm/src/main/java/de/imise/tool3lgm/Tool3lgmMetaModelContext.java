@@ -13,7 +13,6 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition.DefaultMetaModelDefinitionAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.RegularMetaModelDefinition;
 import de.imise.tool3lgm.imexport.ImportMetaModelDefinition;
-import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.PluginUtils;
@@ -134,7 +133,7 @@ public final class Tool3lgmMetaModelContext {
      * @return
      */
     private static final MetaModelContext getUserpropertiesStoredMetaModelContext() {
-        String storedMetaModelID = UserProperties.get(StringProperty.META_MODEL);
+        String storedMetaModelID = StringProperty.META_MODEL.get();
         if (!Strings.isNullOrEmpty(storedMetaModelID)) {
             for (MetaModelContext metaModelContext : REGULAR_METAMODEL_CONTEXTS) {
                 if (metaModelContext.getMetaModelID().equals(storedMetaModelID)) {
@@ -168,7 +167,7 @@ public final class Tool3lgmMetaModelContext {
         }
         NamedObjectContainer<MetaModelContext> choosedMetaModelContextContainer = choosedMetaModelAnswer.getFirstItem();
         MetaModelContext choosedMetaModelContext = choosedMetaModelContextContainer.getObject();
-        UserProperties.set(StringProperty.META_MODEL, choosedMetaModelContext.getMetaModelID());
+        StringProperty.META_MODEL.set(choosedMetaModelContext.getMetaModelID());
         OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.set(Boolean.TRUE.equals(choosedMetaModelAnswer.getSecondItem()));
         return choosedMetaModelContext;
     }

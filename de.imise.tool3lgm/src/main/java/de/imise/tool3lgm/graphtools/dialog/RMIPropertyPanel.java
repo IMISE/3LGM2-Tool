@@ -4,6 +4,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -17,9 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 /**
  * @author hboehme Eigenschaftenpanel für die RMI-Konfiguration. Das Panel beinhaltet zwei
@@ -76,7 +74,7 @@ public class RMIPropertyPanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy++;
 
-        int rmiPort = UserProperties.get(IntProperty.PROPERTY_INT_RMI_PORT);
+        int rmiPort = PROPERTY_INT_RMI_PORT.get();
         if (rmiPort < 0) {
             rmiRegistryPortTextField.setText("");
         } else {

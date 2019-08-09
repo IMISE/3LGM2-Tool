@@ -5,6 +5,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
 
 import java.awt.BorderLayout;
 import java.awt.Frame;
@@ -14,9 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
-
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 /**
  * @author Thomas Rudert Dialog for setting the properties for drawing graphics
@@ -49,7 +47,7 @@ public class GraphicPropertyDialog extends JDialog {
         JPanel checkBoxPanel = new JPanel();
         checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
 
-        int renderingHints = UserProperties.get(IntProperty.PROPERTY_INT_RENDER_SETTINGS);
+        int renderingHints = PROPERTY_INT_RENDER_SETTINGS.get();
 
         for (int i = 0; i < checkBoxArray.length; i++) {
             checkBoxArray[i] = new JCheckBox(checkBoxText[i]);
@@ -87,7 +85,7 @@ public class GraphicPropertyDialog extends JDialog {
             bitPattern |= checkBoxArray[i].isSelected() ? 1 << i : 0;
         }
 
-        UserProperties.set(IntProperty.PROPERTY_INT_RENDER_SETTINGS, bitPattern);
+        PROPERTY_INT_RENDER_SETTINGS.set(bitPattern);
         getParent().repaint();
     }
 }

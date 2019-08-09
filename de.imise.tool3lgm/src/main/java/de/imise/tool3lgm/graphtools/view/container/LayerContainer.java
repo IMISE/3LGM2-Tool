@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_RASTER;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RASTER_WIDTH;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -27,8 +28,6 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
@@ -381,7 +380,7 @@ public class LayerContainer extends ElementContainer {
                 g.setColor(Color.darkGray);
                 int maxX = page_width / 2 + 1;
                 int maxY = page_height / 2 + 1;
-                int rasterWidth = UserProperties.get(IntProperty.PROPERTY_INT_RASTER_WIDTH);
+                int rasterWidth = PROPERTY_INT_RASTER_WIDTH.get();
 
                 //				malt das Raster mit durchgezogenen Linien -> kann man für Kontrollzwecke wieder einblenden
                 //				g.setColor(Color.lightGray);
