@@ -168,7 +168,7 @@ public class UserProperties {
     }
 
     /**
-     * Sets the value for property to the value
+     * Sets the value of the property to the value
      *
      * @param property
      * @param value
@@ -181,7 +181,7 @@ public class UserProperties {
 
     /**
      * @param property
-     * @return the int value of this Property
+     * @return the int value of the Property
      */
     public static final int get(final IntProperty property) {
         String value = properties.getProperty(property.toString());
@@ -189,7 +189,7 @@ public class UserProperties {
     }
 
     /**
-     * Sets the value for property to the value
+     * Sets the value of the property to the value
      *
      * @param property
      * @param value
@@ -202,7 +202,7 @@ public class UserProperties {
 
     /**
      * @param property
-     * @return the String value of this Property
+     * @return the String value of the Property
      */
     public static final String get(final StringProperty property) {
         String value = properties.getProperty(property.toString());
@@ -485,6 +485,30 @@ public class UserProperties {
             return action;
         }
 
+        /**
+         * Sets the value for this property to the value
+         *
+         * @param value
+         * @return the old value
+         */
+        public boolean set(final boolean value) {
+            return UserProperties.set(this, value);
+        }
+        /**
+         * @return the boolean value, if or if not this option is set in the UserProperties
+         */
+        public boolean isTrue() {
+            return UserProperties.is(this);
+        }
+
+        /**
+         * @param event
+         * @return <code>true</code> if the event is a change event for this property
+         */
+        public boolean isChanged(final PropertyChangeEvent event) {
+            return UserProperties.isPropertyChange(this, event);
+        }
+
     }
 
     /**
@@ -522,8 +546,28 @@ public class UserProperties {
                 return 1099;
             }
         };
+
+        /** Liefert den Default-Wert dieser Property */
         public int getDefault() {
             return -1;
+        }
+
+        /**
+         * Sets the value of the this property to the value
+         *
+         * @param value
+         * @return the old value
+         */
+        public int set(final int value) {
+            return UserProperties.set(this, value);
+        }
+
+        /**
+         * @param property
+         * @return the int value of this Property
+         */
+        public final int get() {
+            return UserProperties.get(this);
         }
     }
 
@@ -558,6 +602,25 @@ public class UserProperties {
          */
         public int getMaxListSize() {
             return 1;
+        }
+
+        /**
+         * Sets the value of this property to the value
+         *
+         * @param property
+         * @param value
+         * @return the old value
+         */
+        public String set(final String value) {
+            return UserProperties.set(this, value);
+        }
+
+        /**
+         * @param property
+         * @return the String value of this Property
+         */
+        public final String get() {
+            return UserProperties.get(this);
         }
 
     }
