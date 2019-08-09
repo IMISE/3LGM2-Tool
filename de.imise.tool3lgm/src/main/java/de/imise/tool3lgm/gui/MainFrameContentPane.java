@@ -302,6 +302,9 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      *
      * @param doc
      *            Teilmodell, in dessen Kontext gewechselt werden soll
+     * @param activateGraphView
+     *            Wenn <code>true</code> ist, wird auch das dazugehörige
+     *            Grafikfenster in den Vordergrund geholt, sonst nicht.
      */
     public void setSelectedDoc(final GraphDocument doc, final boolean activateGraphView) {
         //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den
