@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
 import static de.imise.tool3lgm.Static.contextGenerator;
+import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYERS;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
@@ -30,7 +31,6 @@ import java.awt.event.MouseWheelListener;
 import java.util.Set;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -164,7 +164,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             addMouseListener(this);
             addMouseMotionListener(this);
             addMouseWheelListener(this);
-            Static.getTool().getContentPane().addMouseListener(this);
+            getMainFrame().addMouseListener(this);
             xin = 0;
             yin = 0;
             grabbed = false;
@@ -505,7 +505,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             } else if (mouse_makes_node != null && left_button) {
                 if (isInPage(x, y)) {
                     if (szenario.getMetaModel().layerFor(mouse_makes_node) == layerIndex) {
-                        Tool3lgm.setLastActionPosition(xin + getX(), yin + getY());
+                        Static.setLastActionPosition(xin + getX(), yin + getY());
                         szenario.createNodeAndContainer(mouse_makes_node, STANDARD_PID);
                         revalidate();
                         repaint();
@@ -1130,6 +1130,6 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      * Entfernt dieses Panel aus den Listener/Listen, in denen es vorkommt.
      */
     public void dispose() {
-        Static.getTool().getContentPane().removeMouseListener(this);
+        getMainFrame().removeMouseListener(this);
     }
 }

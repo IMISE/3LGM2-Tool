@@ -3,27 +3,15 @@ package de.imise.tool3lgm;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.GraphicsEnvironment;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.help.CSH;
-import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
-import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
@@ -43,33 +31,21 @@ import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
-import de.imise.tool3lgm.gui.MainFrameContentPane;
-import de.imise.tool3lgm.gui.menu.MenuBar;
-import de.imise.tool3lgm.help.Help;
+import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.BrowseUtils;
-import de.imise.util.robot.ScreenRobot;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
-/** Hauptfenster der Anwendung 3lgm */
-public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentListener {
-
-    /** Menü-Leiste des Tools */
-    private final MenuBar menuBar;
-
-    /** Pane, das in das ContentPane dieses Frames gelegt wird */
-    private final MainFrameContentPane contentPane;
+/** Die eigentliche Anwendung 3lgm */
+public class Tool3lgm implements GraphDocumentListener {
 
     /** alle GDCollections */
     private final List<GDCollection> collections = new ArrayList<>();
 
-    /**
-     * Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus klickt, um an
-     * der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     */
-    private static Point lastActionPosition = null;
+    /** Das Hauptfenster */
+    private final MainFrame mainFrame;
 
     /**
      * constructor
@@ -84,8 +60,9 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
             Thread.sleep(1000);
         } catch (InterruptedException e) {
         }
-        setIconImage(Tool3lgmConstants.getIcon("toolIcon.gif").getImage());
-        setTitle(null);
+
+        mainFrame = new MainFrame();
+        mainFrame.setVisible(visible);
 
         //den Hauptframe in die Mitte setzen
         //setLocationRelativeTo(null);
@@ -95,62 +72,18 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
         //        setVisible(false);
         //        setLocation(0, 0);
 
-        //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen können
-        Rectangle maxBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-        Dimension screenSize = new Dimension(maxBounds.width, maxBounds.height);
-        setSize(screenSize);
-
-        contentPane = new MainFrameContentPane();
-        getContentPane().add(contentPane);
-
-        addWindowListener(this);
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-
-        // Direkthilfe einschalten
-        Help.getHelp().enableHelpKey(rootPane, "willkommen");
-
-        menuBar = new MenuBar();
-        CSH.setHelpIDString(menuBar, "uebersicht_menueleiste");
-        KeyStrokes.registerPublicKeyStrokes(getRootPane());
-        setJMenuBar(menuBar);
-        setVisible(visible);
-        contentPane.selectedDocChanged();
     }
 
-    /**
-     * Liefert die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
-     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     *
-     * @return
-     */
-    public static final Point getLastActionPosition() {
-        return lastActionPosition;
-    }
-
-    /**
-     * Setzt die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
-     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     *
-     * @param x
-     * @param y
-     */
-    public static final void setLastActionPosition(final int x, final int y) {
-        Tool3lgm.lastActionPosition = new Point(x, y);
-    }
-
-    @Override
     public void setTitle(final String metaModelName) {
-        String title = getResString("tool3lgm");
-        if (!Strings.isNullOrEmpty(metaModelName)) {
-            title += " " + getResString("tool3lgm_title_extension") + " " + metaModelName;
-        }
-        super.setTitle(title);
+        mainFrame.setTitle(metaModelName);
     }
 
-    @Override
     public void setCursor(final Cursor cursor) {
-        contentPane.setCursor(cursor);
-        super.setCursor(cursor);
+        mainFrame.setCursor(cursor);
+    }
+
+    public boolean hasVisibleMainFrame() {
+        return mainFrame.isVisible();
     }
 
     /**
@@ -162,14 +95,14 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
         try {
             GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
             if (!fileHandler.setFile(file)) {
-                if (JOptionPane.showConfirmDialog(this, getResString("datei_gesperrt"), "", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
+                if (!hasVisibleMainFrame() || JOptionPane.showConfirmDialog(mainFrame, getResString("datei_gesperrt"), "", JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
                     return null;
                 }
             }
             Static.showProgressDialog(true);
             Static.setProgressDialogTitle(getResString("load_model") + " " + file.getName());
             Static.setProgressDialogStatusLabel("read_progress");
-            update(getGraphics());
+            mainFrame.update(mainFrame.getGraphics());
             boolean retVal = fileHandler.loadFromRAF();
             return retVal ? gdcoll : null;
         } catch (Exception e) {
@@ -177,7 +110,7 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
             Object[] buttons = new Object[] {
                     getResString("ok")
             };
-            JOptionPane.showOptionDialog(this, getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
+            JOptionPane.showOptionDialog(mainFrame, getResString("oeffnenfehler") + "\n" + file.getPath() + "\n" + e.getMessage(), getResString("tool3lgm"), JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE, null, buttons, null);
             Static.closeProgressDialog();
             return null;
         }
@@ -225,7 +158,7 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
         ExtendedFileChooser chooser = new ExtendedFileChooser(null, file);
         chooser.setMultiSelectionEnabled(false);
         FileNameExtensionFilter[] lgmFileFilter = Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED);
-        int chooserAnswer = chooser.showOpenDialog(this, false, lgmFileFilter);
+        int chooserAnswer = chooser.showOpenDialog(mainFrame, false, lgmFileFilter);
         UserProperties.setWorkingDirectory(chooser.getCurrentDirectory());
         if (chooserAnswer == ExtendedFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile();
@@ -271,28 +204,10 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
      */
     public boolean openModel(final GDCollection gdcoll) {
         Static.setProgressDialogStatusLabel("finish_progress");
-        //TODO: das hier sollte ein PropertyChange sein, so dass das ContentPane als Listener darauf reagieren kann und nicht direkt die Funktion an das darin enthaltene WorkArea weiter leiten muss
-        contentPane.addCollection(gdcoll);
-
         collections.add(gdcoll);
         gdcoll.addGraphDocumentListener(this);
-
-        Static.setProgressDialogStatusLabel("create_frame", gdcoll.getMainGraphDocument().getTitle());
-        createFrame(gdcoll.getMainGraphDocument());
-
-        LGMGraphDocument selectedDoc = gdcoll.getMainGraphDocument();
-        AbstractInternalFrame lastFrame = null;
-        for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
-            Szenario szen = gdcoll.getSzenario(i);
-            Static.setProgressDialogStatusLabel("create_frame", szen.getTitle());
-            if (i == 0) {
-                selectedDoc = szen;
-            }
-            if (szen.getViewParameter().selected) {
-                selectedDoc = szen;
-            }
-            lastFrame = createFrame(szen);
-        }
+        //TODO: das hier sollte ein PropertyChange sein, so dass das ContentPane als Listener darauf reagieren kann und nicht direkt die Funktion an das darin enthaltene WorkArea weiter leiten muss
+        GraphDocument selectedDoc = mainFrame.addCollection(gdcoll);
 
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
         ConsistencyChecker.clearUnfixableErrors(gdcoll);
@@ -312,19 +227,47 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
         //		printStatistic(gdcoll, false, true);
         //		System.err.println("###########################################################################");
 
-        //Dieser Spass hier dient nur dazu, nach dem Öffnen einer Modelldatei nochmal ein
-        //neu Zeichnen auszulösen, was nur mit einem Klick in den Frame zuverlässig passiert
-        //Erst dadurch fällt der Swing-Bug mit der am Anfang nicht korrekt positionierten
-        //Schrift nicht mehr auf.
-        Point location = MouseInfo.getPointerInfo().getLocation();
-        if (lastFrame != null && lastFrame.isVisible()) {
-            Point locationOnScreen = lastFrame.getLocationOnScreen();
-            Dimension size = lastFrame.getSize();
-            ScreenRobot.setMouse(locationOnScreen.x + size.width / 2, locationOnScreen.y + size.height / 2);
-            ScreenRobot.click();
-        }
-        ScreenRobot.setMouse(location);
         return true;
+    }
+
+    public void close() {
+        //man muss die Liste Clonen, da sie sich durch setSelectedDoc() ändert
+        List<GDCollection> collections = new ArrayList<>(this.collections);
+        //die letzte ist immer die aktive
+        for (int i = collections.size() - 1; i >= 0; i--) {
+            GDCollection gdcoll = collections.get(i);
+            setSelectedDoc(gdcoll.getSelectedDoc());
+            if (!askUserCloseModel(gdcoll)) {
+                return;
+            }
+        }
+
+        //Liste der zuletzt geöffneten Dateien merken
+        for (int i = collections.size() - 1; i >= 0; i--) {
+            GDCollection gdcoll = collections.get(i);
+            try {
+                File file = gdcoll.getFile();
+                String path = file.getCanonicalPath();
+                UserProperties.addListValue(StringProperty.LAST_USED_MODEL_FILES, path);
+            } catch (Exception ex) {
+            }
+        }
+        new File(Tool3lgmConstants.CLIPBOARD_PATH).delete();
+
+        File temp = new File(Tool3lgmConstants.TEMP_PATH + "temp_3lgm_export_file.html");
+        if (temp.exists()) {
+            temp.delete();
+        }
+
+        UserProperties.save();
+        System.exit(0);
+    }
+
+    /**
+     * @return Hauptfenster der Anwendung
+     */
+    public MainFrame getMainFrame() {
+        return mainFrame;
     }
 
     /**
@@ -333,14 +276,14 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
      */
     public AbstractInternalFrame createFrame(final GraphDocument doc) {
         //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GraphDocumentListener laufen (SZENARIO_ADDED)
-        return contentPane.createFrame(doc);
+        return mainFrame.createFrame(doc);
     }
 
     /**
      *
      */
     public void openMatrixView() {
-        contentPane.createTableInternalFrame(getSelectedDoc());
+        mainFrame.createTableInternalFrame(getSelectedDoc());
     }
 
     /**
@@ -394,9 +337,6 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
      *
      * @param doc
      *            Teilmodell, in dessen Kontext gewechselt werden soll
-     * @param activateGraphView
-     *            Wenn <code>true</code> ist, wird auch das dazugehörige
-     *            Grafikfenster in den Vordergrund geholt, sonst nicht.
      */
     void setSelectedDoc(final GraphDocument doc) {
         if (ignoreDocSelection) {
@@ -411,37 +351,7 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
             //das aktive doc in der Collection selbst setzen
             gdcoll.setActiveGraphDocument(doc);
         }
-        contentPane.setSelectedDoc(doc, doc != null);
-    }
-
-    /**
-     * ordnet alle InternalFrames neu an (überlappt)
-     */
-    public void reorderFramesWithOverlap() {
-        contentPane.reorderFramesWithOverlap();
-    }
-
-    /**
-     * ordnet alle InternalFrames neu an (nebeneinander)
-     */
-    public void reorderFramesSideBySide() {
-        contentPane.reorderFramesSideBySide();
-    }
-
-    //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GraphDocumentListener laufen (SZENARIO_REMOVED)
-    /**
-     * @param szen
-     */
-    public void closeFrame(final GraphDocument szen) {
-        contentPane.closeFrame(szen);
-    }
-
-    //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GraphDocumentListener laufen (MODEL_CLOSED) (analog sollte es dann auch MODEL_OPENED geben)
-    /**
-     * @param gdcoll
-     */
-    public void closeAllFramesAndTabs(final GDCollection gdcoll) {
-        contentPane.closeAllFramesAndTabs(gdcoll);
+        mainFrame.setSelectedDoc(doc);
     }
 
     /**
@@ -458,8 +368,8 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
                 getResString("yes"), getResString("no"), getResString("cancel")
         };
         File file = gdcoll.getFile();
-        int answer = JOptionPane.showOptionDialog(this, getResString("speicherfrage") + "\n" + (file == null ? gdcoll.getName() : file.getName()), getResString("tool3lgm"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons,
-                null);
+        int answer = JOptionPane.showOptionDialog(getMainFrame(), getResString("speicherfrage") + "\n" + (file == null ? gdcoll.getName() : file.getName()), getResString("tool3lgm"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                buttons, null);
 
         if (answer == JOptionPane.YES_OPTION) {
             boolean retVal = fileSave(false);
@@ -511,7 +421,7 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
 
         ignoreDocSelection = true;
 
-        closeAllFramesAndTabs(gdcoll);
+        mainFrame.closeAllFramesAndTabs(gdcoll);
 
         ignoreDocSelection = false;
         setSelectedDoc(ModelBrowserPanel.getSelectedDoc());
@@ -530,7 +440,7 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
         System.gc();
 
         Static.closeProgressDialog();
-        contentPane.selectLastFrame();
+        mainFrame.selectLastFrame();
         return true;
     }
 
@@ -567,7 +477,8 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
         if (!saveToFile(gdcoll)) {
             return false;
         }
-        contentPane.updateFrameTitles();
+        //TODO: eigentlich über Listener zu regeln
+        mainFrame.updateFrameTitles();
         System.gc();
         //		long end = System.currentTimeMillis();
         //		System.out.println("Time to write file " + datei.getName() + " (" + datei.length() + " Bytes): " + (end - start) + " Milliseconds");
@@ -602,7 +513,7 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
      * @param gdcoll
      */
     public void modelRenamed(final GDCollection gdcoll) {
-        contentPane.modelRenamed(gdcoll);
+        mainFrame.modelRenamed(gdcoll);
     }
 
     //TODO: auch das hier sollte ziemlich sicher über einen Listener laufen!
@@ -612,66 +523,7 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
      * @param szen
      */
     public void szenarioRenamed(final Szenario szen) {
-        contentPane.szenarioRenamed(szen);
-    }
-
-    @Override
-    public void windowClosing(final WindowEvent e) {
-        //man muss die Liste Clonen, da sie sich durch setSelectedDoc() ändert
-        List<GDCollection> collections = new ArrayList<>(this.collections);
-        //die letzte ist immer die aktive
-        for (int i = collections.size() - 1; i >= 0; i--) {
-            GDCollection gdcoll = collections.get(i);
-            setSelectedDoc(gdcoll.getSelectedDoc());
-            if (!askUserCloseModel(gdcoll)) {
-                return;
-            }
-        }
-
-        //Liste der zuletzt geöffneten Dateien merken
-        for (int i = collections.size() - 1; i >= 0; i--) {
-            GDCollection gdcoll = collections.get(i);
-            try {
-                File file = gdcoll.getFile();
-                String path = file.getCanonicalPath();
-                UserProperties.addListValue(StringProperty.LAST_USED_MODEL_FILES, path);
-            } catch (Exception ex) {
-            }
-        }
-        new File(Tool3lgmConstants.CLIPBOARD_PATH).delete();
-
-        File temp = new File(Tool3lgmConstants.TEMP_PATH + "temp_3lgm_export_file.html");
-        if (temp.exists()) {
-            temp.delete();
-        }
-
-        UserProperties.save();
-        System.exit(0);
-    }
-
-    @Override
-    public void windowActivated(final WindowEvent e) {
-        Static.contextGenerator.changeContext(getSelectedDoc());
-    }
-
-    @Override
-    public void windowClosed(final WindowEvent e) {
-    }
-
-    @Override
-    public void windowDeactivated(final WindowEvent e) {
-    }
-
-    @Override
-    public void windowDeiconified(final WindowEvent e) {
-    }
-
-    @Override
-    public void windowIconified(final WindowEvent e) {
-    }
-
-    @Override
-    public void windowOpened(final WindowEvent e) {
+        mainFrame.szenarioRenamed(szen);
     }
 
     @Override
@@ -687,13 +539,13 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
     @Override
     public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
         source.getCollection().setChanged(true);
-        repaint();
+        mainFrame.repaint();
     }
 
     @Override
     public void layoutChanged(final GraphDocument source) {
         source.getCollection().setChanged(true);
-        repaint();
+        mainFrame.repaint();
     }
 
     @Override
@@ -716,7 +568,14 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
      * @return JInternalFrame[]
      */
     public AbstractInternalFrame[] getAllFrames() {
-        return contentPane.getAllFrames();
+        return mainFrame.getAllFrames();
+    }
+
+    /**
+     * @return Returns the activeFrame.
+     */
+    public AbstractInternalFrame getActiveFrame() {
+        return mainFrame.getActiveFrame();
     }
 
     /**
@@ -793,19 +652,12 @@ public class Tool3lgm extends JFrame implements WindowListener, GraphDocumentLis
     }
 
     /**
-     * @return Returns the activeFrame.
-     */
-    public AbstractInternalFrame getActiveFrame() {
-        return contentPane.getActiveFrame();
-    }
-
-    /**
      * @param command
      * @param params
      */
     public void processCommand(final String command, final String[] params) {
-        setState(Frame.NORMAL);
-        toFront();
+        mainFrame.setState(Frame.NORMAL);
+        mainFrame.toFront();
         if (command == null) {
             return;
         } else if (command.equalsIgnoreCase("open")) {

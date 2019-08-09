@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.event.action;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
@@ -230,7 +231,7 @@ public abstract class StaticAction extends ExtendedAction {
         try {
             String confirmQuestion = getResString(confirmQuestionResKey);
             //wenn es eine confirm-Question in den Resourcen gibt -> Confirm-Frage stellen
-            int answer = JOptionPane.showConfirmDialog(Static.getTool(), confirmQuestion, getResString("confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int answer = JOptionPane.showConfirmDialog(getMainFrame(), confirmQuestion, getResString("confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (answer == JOptionPane.YES_OPTION) {
                 //wenn ja gedrückt wurde -> Action ausführen
                 perform = true;

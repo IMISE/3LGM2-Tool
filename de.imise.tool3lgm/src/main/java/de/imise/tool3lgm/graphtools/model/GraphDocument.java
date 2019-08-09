@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.Static.getTool;
+import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResStringWithoutError;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
@@ -581,7 +581,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         } else if (command.startsWith(GDCommands.MODEL_ACTION_COMMAND_LINE.toString())) {
             String title = getResStringWithoutError("tool3lgm");
             String message = getResStringWithoutError(GDCommands.MODEL_ACTION_COMMAND_LINE.name());
-            String answer = (String) JOptionPane.showInputDialog(Static.getTool(), message, title, JOptionPane.QUESTION_MESSAGE, null, null, null);
+            String answer = (String) JOptionPane.showInputDialog(getMainFrame(), message, title, JOptionPane.QUESTION_MESSAGE, null, null, null);
             if (answer != null && !answer.equals("") && !answer.equals("COMMAND_LINE")) {
                 exec(answer, "", pid, log);
             }
@@ -1772,7 +1772,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void chooseIcon(final int pid) {
-        File iconFile = ImageChooser.getImageFile(getTool(), UserProperties.getIconPath());
+        File iconFile = ImageChooser.getImageFile(getMainFrame(), UserProperties.getIconPath());
         if (iconFile != null) {
             setIcon(iconFile, pid);
         }

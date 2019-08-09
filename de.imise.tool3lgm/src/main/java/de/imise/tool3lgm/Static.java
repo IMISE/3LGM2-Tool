@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 
 import java.awt.Component;
+import java.awt.Point;
 import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.util.Sys;
 import de.imise.util.swing.dialog.OutputDialog;
@@ -41,8 +43,6 @@ import de.imise.util.swing.dialog.ProgressDialog;
 public class Static {
 
     static Tool3lgm tool;
-
-    private static JFrame mainFrame;
 
     /** Progress-Dialog */
     private static ProgressDialog progressDialog;
@@ -62,16 +62,21 @@ public class Static {
         return tool;
     }
 
+    /** Beendet die Anwendung */
+    public static void close() {
+        if (tool == null) {
+            System.exit(0);
+        }
+        tool.close();
+    }
+
     /**
      * Liefert den MainFrame des Tools
      *
      * @return mainFrame
      */
-    public static JFrame getMainFrame() {
-        if (mainFrame == null) {
-            mainFrame = tool;
-        }
-        return mainFrame;
+    public static MainFrame getMainFrame() {
+        return tool == null ? null : tool.getMainFrame();
     }
 
     /** Liefert den MetaModelContext des aktuell selektierten Modells */
@@ -202,6 +207,33 @@ public class Static {
         return f != null && f instanceof MatrixViewInternalFrame && f.isVisible();
     }
 
+    /**
+     * Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus klickt, um an
+     * der entsprechenden Stelle einen Dialog auf gehen zu lassen.
+     */
+    private static Point lastActionPosition = null;
+
+    /**
+     * Liefert die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
+     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
+     *
+     * @return
+     */
+    public static final Point getLastActionPosition() {
+        return lastActionPosition;
+    }
+
+    /**
+     * Setzt die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
+     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
+     *
+     * @param x
+     * @param y
+     */
+    public static final void setLastActionPosition(final int x, final int y) {
+        lastActionPosition = new Point(x, y);
+    }
+
     /** Gibt zurück, ob der ExpertMode aktiv ist */
     public static boolean isExpertMode() {
         return OPTION_ENABLE_EXPERT_MODE.is();
@@ -242,7 +274,7 @@ public class Static {
     public static void showProgressDialog(final boolean showStatusLabel) {
         //ist null, wenn der Baukasten extern z.B. über den Reporter geladen wird
         if (tool != null) {
-            showProgressDialog(tool, showStatusLabel);
+            showProgressDialog(getMainFrame(), showStatusLabel);
         }
     }
 

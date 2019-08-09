@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.path;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -16,7 +18,6 @@ import javax.swing.event.ChangeListener;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -185,7 +186,7 @@ public class MetaPathSelector implements ActionListener {
                     List<?> selected = Arrays.asList(selectedArray);
                     while (selected != null && (selectedMetaPaths.size() == 0 || selectedMetaPaths.size() > maxParallelSelectedPaths)) {
                         selectedMetaPaths.clear();
-                        selected = MultipleOptionPane.showCheckBoxOptionDialog(Static.getTool(), Tool3lgmConstants.getResString("choice"), sb.toString(), pathNames, null, false);
+                        selected = MultipleOptionPane.showCheckBoxOptionDialog(getMainFrame(), Tool3lgmConstants.getResString("choice"), sb.toString(), pathNames, null, false);
                         for (int i = 0; selected != null && i < selected.size(); i++) {
                             Object selectedI = selected.get(i);
                             if (selectedI != null) {

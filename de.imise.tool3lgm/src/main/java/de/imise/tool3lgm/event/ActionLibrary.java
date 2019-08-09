@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.event;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Static.getSelectedDoc;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getTool;
@@ -10,7 +11,6 @@ import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPER
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
 import java.beans.PropertyVetoException;
 import java.io.File;
 import java.util.ArrayList;
@@ -138,7 +138,7 @@ public class ActionLibrary {
             protected void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
                 if (!tool3lgm.fileSave(false)) {
-                    JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(getMainFrame(), getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -149,7 +149,7 @@ public class ActionLibrary {
             protected void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
                 if (!tool3lgm.fileSave(true)) {
-                    JOptionPane.showMessageDialog(tool3lgm, getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(getMainFrame(), getResString("save_failed"), "", JOptionPane.ERROR_MESSAGE);
                 }
             }
         };
@@ -294,7 +294,7 @@ public class ActionLibrary {
             public static final Action ACTION_EXPORT_GRAPHML_YED = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHML_YED, PPP) {
                 @Override
                 protected void actionPerformed() {
-                    File path = DirectoryChooser.showDialog(Static.getTool(), "graphml");// den String braucht man nicht auslagern
+                    File path = DirectoryChooser.showDialog(getMainFrame(), "graphml");// den String braucht man nicht auslagern
                     if (path != null) {
                         //                    File path = new File("/Users/astruebi/Projekte/eclipse/IMISE/graphml-export");
                         //                    File path = new File("/Users/astruebi/Dropbox/2017_Bachelorarbeit_MBraungardt/Mapping/test_exports");
@@ -308,7 +308,7 @@ public class ActionLibrary {
             public static final Action ACTION_EXPORT_GRAPHML_YFILES = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_GRAPHML_YFILES, PPP) {
                 @Override
                 protected void actionPerformed() {
-                    File path = DirectoryChooser.showDialog(Static.getTool(), "graphml");// den String braucht man nicht auslagern
+                    File path = DirectoryChooser.showDialog(getMainFrame(), "graphml");// den String braucht man nicht auslagern
                     if (path != null) {
                         //                  File path = new File("/Users/astruebi/Projekte/eclipse/IMISE/graphml-export");
                         //                  File path = new File("/Users/astruebi/Dropbox/2017_Bachelorarbeit_MBraungardt/Mapping/test_exports");
@@ -323,7 +323,7 @@ public class ActionLibrary {
                 @Override
                 protected void actionPerformed() {
                     // der Dialog zeigt sich im Konstuktor selbst an
-                    new XMLExportDialog(getTool(), getSelectedGDCollection());
+                    new XMLExportDialog(getMainFrame(), getSelectedGDCollection());
                 }
             };
 
@@ -331,7 +331,7 @@ public class ActionLibrary {
             public static final Action ACTION_EXPORT_SUBMODEL = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_SUBMODEL, PPP) {
                 @Override
                 protected void actionPerformed() {
-                    SzenarioDialog.showExportDialog(getTool(), getSelectedGDCollection());
+                    SzenarioDialog.showExportDialog(getMainFrame(), getSelectedGDCollection());
                 }
             };
 
@@ -339,7 +339,7 @@ public class ActionLibrary {
             public static final Action ACTION_EXPORT_HTML = new GraphDocumentAction(ActionIdentifier.ACTION_EXPORT_HTML, PPP) {
                 @Override
                 protected void actionPerformed() {
-                    WebExportDialog.showWebExportDialog(getTool(), getSelectedGDCollection());
+                    WebExportDialog.showWebExportDialog(getMainFrame(), getSelectedGDCollection());
                 }
             };
 
@@ -361,7 +361,7 @@ public class ActionLibrary {
             @Override
             protected void actionPerformed() {
                 Tool3lgm tool3lgm = getTool();
-                tool3lgm.windowClosing(new WindowEvent(tool3lgm, WindowEvent.WINDOW_CLOSING));
+                tool3lgm.close();
             }
         };
     }
@@ -385,7 +385,7 @@ public class ActionLibrary {
         public static final Action ACTION_ANALYSIS_OPEN_EDITOR = new GraphDocumentAction(ActionIdentifier.ACTION_ANALYSIS_OPEN_EDITOR, PPP) {
             @Override
             protected void actionPerformed() {
-                AnalysisEditor.showDialog(getTool(), Static.getSelectedMetaModel());
+                AnalysisEditor.showDialog(getMainFrame(), Static.getSelectedMetaModel());
             }
         };
 
@@ -412,7 +412,7 @@ public class ActionLibrary {
         public static final Action ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR = new StaticAction(ActionIdentifier.ACTION_ANALYSIS_CHOOSE_GRAPH_ANALYSIS_RESULT_COLOR, PPP) {
             @Override
             public void actionPerformed() {
-                NodeRenderer.analysisColor = JColorChooser.showDialog(getTool(), getText(), NodeRenderer.analysisColor);
+                NodeRenderer.analysisColor = JColorChooser.showDialog(getMainFrame(), getText(), NodeRenderer.analysisColor);
             }
         };
 
@@ -603,7 +603,7 @@ public class ActionLibrary {
         public static final Action ACTION_SEARCH = new GraphDocumentAction(ActionIdentifier.ACTION_SEARCH, PPP) {
             @Override
             protected void actionPerformed() {
-                SearchDialog sd = new SearchDialog(Static.getTool());
+                SearchDialog sd = new SearchDialog(getMainFrame());
                 sd.showDialog();
             }
         };
@@ -632,10 +632,10 @@ public class ActionLibrary {
             @Override
             public void actionPerformed() {
                 if (ElemenPropertyDialogsContext.hasOpenDialogs()) {
-                    JOptionPane.showMessageDialog(getTool(), getResString("message_close_all_dialogs"));
+                    JOptionPane.showMessageDialog(getMainFrame(), getResString("message_close_all_dialogs"));
                     return;
                 }
-                UserFieldDeclarationDialog.showDialog(getTool(), getSelectedGDCollection());
+                UserFieldDeclarationDialog.showDialog(getMainFrame(), getSelectedGDCollection());
             }
         };
 
@@ -644,11 +644,11 @@ public class ActionLibrary {
             @Override
             public void actionPerformed() {
                 if (ElemenPropertyDialogsContext.hasOpenDialogs()) {
-                    JOptionPane.showMessageDialog(getTool(), getResString("message_close_all_dialogs"));
+                    JOptionPane.showMessageDialog(getMainFrame(), getResString("message_close_all_dialogs"));
                     return;
                 }
                 if (getSelectedDoc() != null) {
-                    UserFieldEditorDialog.getDialog(getTool(), getSelectedGDCollection()).setVisible(true);
+                    UserFieldEditorDialog.getDialog(getMainFrame(), getSelectedGDCollection()).setVisible(true);
                 }
                 return;
             }
@@ -841,7 +841,7 @@ public class ActionLibrary {
             public static final Action ACTION_PROPERTY_INT_RENDER_SETTINGS = new StaticAction(PROPERTY_INT_RENDER_SETTINGS, PPP) {
                 @Override
                 public void actionPerformed() {
-                    GraphicPropertyDialog dialog = new GraphicPropertyDialog(getTool());
+                    GraphicPropertyDialog dialog = new GraphicPropertyDialog(getMainFrame());
                     dialog.setVisible(true);
                 }
             };
@@ -896,7 +896,7 @@ public class ActionLibrary {
                     PROPERTY_INT_RMI_PORT.set(rmip.getRmiRegistryPortTextFieldValue());
                 }
                 if (oldRegPort != PROPERTY_INT_RMI_PORT.get()) {
-                    JOptionPane.showMessageDialog(getTool(), getResString("RMI_SETTINGS_INFO"));
+                    JOptionPane.showMessageDialog(getMainFrame(), getResString("RMI_SETTINGS_INFO"));
                 }
             }
         };
@@ -1016,7 +1016,7 @@ public class ActionLibrary {
         public static final Action ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT) {
             @Override
             public void actionPerformed() {
-                getTool().reorderFramesSideBySide();
+                getMainFrame().reorderFramesSideBySide();
             }
         };
 
@@ -1024,7 +1024,7 @@ public class ActionLibrary {
         public static final Action ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT) {
             @Override
             public void actionPerformed() {
-                getTool().reorderFramesWithOverlap();
+                getMainFrame().reorderFramesWithOverlap();
             }
         };
     }

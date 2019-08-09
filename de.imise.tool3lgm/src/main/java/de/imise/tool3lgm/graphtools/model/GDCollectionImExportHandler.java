@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
-import static de.imise.tool3lgm.Static.getTool;
 import static de.imise.tool3lgm.Tool3lgmConstants.getFileNameExtensionFilters;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
@@ -74,7 +74,7 @@ public final class GDCollectionImExportHandler {
         ExtendedFileChooser oeffnenDialog = new ExtendedFileChooser(null);
         oeffnenDialog.setMultiSelectionEnabled(false);
         oeffnenDialog.setFileFilters(false, getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED));
-        if (oeffnenDialog.showOpenDialog(getTool()) == ExtendedFileChooser.APPROVE_OPTION) {
+        if (oeffnenDialog.showOpenDialog(getMainFrame()) == ExtendedFileChooser.APPROVE_OPTION) {
             GDCollection selectedGDColl = getSelectedGDCollection();
             GDCollectionImExportHandler imExportHandler = selectedGDColl.getImExportHandler();
             imExportHandler.importSzenarios(oeffnenDialog.getSelectedFile(), chooseSubmodels);

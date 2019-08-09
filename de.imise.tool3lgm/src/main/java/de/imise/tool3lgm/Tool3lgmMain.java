@@ -1,5 +1,6 @@
 package de.imise.tool3lgm;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
@@ -195,7 +196,7 @@ public class Tool3lgmMain {
                         // Wenn der alte regPort ungleich dem neuen ist, wird der neue gespeichert und beim nächsten Programmstart als Standard-Port angewandt.
                         if (regPort != oldRegPort) {
                             PROPERTY_INT_RMI_PORT.set(regPort);
-                            JOptionPane.showMessageDialog(Static.tool, getResString("rmiNewRegPortIs") + " " + regPort);
+                            JOptionPane.showMessageDialog(getMainFrame(), getResString("rmiNewRegPortIs") + " " + regPort);
                         }
 
                     } catch (RemoteException e) {
@@ -205,7 +206,7 @@ public class Tool3lgmMain {
                         RMIErrorPanel rmip = new RMIErrorPanel();
 
                         if (showErrorDialog) {
-                            if (JOptionPane.showOptionDialog(Static.tool, rmip, getResString("rmiError"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
+                            if (JOptionPane.showOptionDialog(getMainFrame(), rmip, getResString("rmiError"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, null) == JOptionPane.YES_OPTION) {
                                 if (rmip.isRmiAutoNextFreePortCheckBox()) {
                                     // Es wird ein neue Port bis 65500 gesucht, wenn bis dahin keiner frei ist, wird wieder beim standardPort begonnen
                                     if (regPort < 65500) {

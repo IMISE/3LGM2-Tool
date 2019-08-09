@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.event.action;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
@@ -10,7 +11,6 @@ import java.util.ResourceBundle;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 
-import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
@@ -83,7 +83,7 @@ public class ChangeLocaleAction extends ExtendedAction {
         String info_title_newLocale = newLocaleBundle.getString("restart_required");
         String info_title = info_title_oldLocale + " / " + info_title_newLocale;
 
-        JOptionPane.showMessageDialog(Static.getTool(), info, info_title, JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(getMainFrame(), info, info_title, JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void setSelected(final boolean b) {

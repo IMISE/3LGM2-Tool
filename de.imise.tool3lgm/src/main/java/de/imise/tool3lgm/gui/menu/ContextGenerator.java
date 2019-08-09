@@ -75,7 +75,6 @@ import javax.swing.event.PopupMenuListener;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -1297,7 +1296,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     public void processMouseEvent(final boolean left_button, final boolean right_button, final Component gdl, final int xin, final int yin) {
         // System.err.println("ContextGenerator.processMouseEvent " + xin + " " + yin + " " + gdl.getX() + " " + gdl.getY());
-        Tool3lgm.setLastActionPosition(xin + gdl.getX(), yin + gdl.getY());
+        Static.setLastActionPosition(xin + gdl.getX(), yin + gdl.getY());
         processMouseEventInternal(left_button, right_button, gdl, xin, yin);
     }
 

@@ -239,17 +239,15 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     /**
      * Create new MatrixViewFrame and add it to parent GraphDocument
      *
-     * @author Thomas Rudert
-     * @param _graphDocument
-     *            parent
+     * @param doc Sub-Model as source for the MatrixView
      * @return boolean with true, if methode run successful
      */
-    public boolean createTableInternalFrame(final LGMGraphDocument _graphDocument) {
-        if (_graphDocument == null) {
+    public boolean createTableInternalFrame(final LGMGraphDocument doc) {
+        if (doc == null) {
             return false;
         }
-        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(_graphDocument, toolbarManager);
-        String title = _graphDocument.getCollection().getName() + " - " + _graphDocument.getTitle() + " - " + getResString("matrix") + " #";
+        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, toolbarManager);
+        String title = doc.getCollection().getName() + " - " + doc.getTitle() + " - " + getResString("matrix") + " #";
 
         matrixView.setTitle(title.concat(String.valueOf(countFramesWithSameTitle(title) + 1)));
 
@@ -304,9 +302,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      *
      * @param doc
      *            Teilmodell, in dessen Kontext gewechselt werden soll
-     * @param activateGraphView
-     *            Wenn <code>true</code> ist, wird auch das dazugehörige
-     *            Grafikfenster in den Vordergrund geholt, sonst nicht.
      */
     public void setSelectedDoc(final GraphDocument doc, final boolean activateGraphView) {
         //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den

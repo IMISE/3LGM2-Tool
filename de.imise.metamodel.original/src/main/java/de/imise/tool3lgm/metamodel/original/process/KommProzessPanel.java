@@ -4,6 +4,7 @@
  */
 package de.imise.tool3lgm.metamodel.original.process;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
@@ -26,8 +27,6 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
-import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
@@ -42,6 +41,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.AdditionalLabelTextGenerator;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AufObjVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbkAufOrgVerbindung;
@@ -90,6 +90,11 @@ public class KommProzessPanel extends ElementDialogPanel {
     //    schnitt_nummern             Interface numbers
     //    alles_hervorheben           Highlight all
     //
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = -237203812909200319L;
 
     protected Prozess prozess;
 
@@ -258,9 +263,9 @@ public class KommProzessPanel extends ElementDialogPanel {
     public void update() {
         // das Panel braucht nur geupdatet zu werden, wenn es sichtbar ist
         if (isVisible()) { // componentShown(new ComponentEvent(this, -1));
-            Tool3lgm tool = Static.getTool();
-            Cursor cursor = tool.getCursor();
-            tool.setCursor(Tool3lgmConstants.getWaitCursor());
+            MainFrame mainFrame = getMainFrame();
+            Cursor cursor = mainFrame.getCursor();
+            mainFrame.setCursor(Tool3lgmConstants.getWaitCursor());
 
             setColumnWidth = true;
             updateTable(true);
@@ -272,7 +277,7 @@ public class KommProzessPanel extends ElementDialogPanel {
             showConfigsCheck.setSelected(showConfigs);
             highlightAllCommElementsCheck.setSelected(highlightAllCommElements);
 
-            tool.setCursor(cursor);
+            mainFrame.setCursor(cursor);
         }
     }
 

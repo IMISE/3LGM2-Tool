@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.BorderLayout;
@@ -12,7 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.gui.GraphAreaOptionSliders;
 import de.imise.tool3lgm.gui.GraphAreaOptionSliders.SliderWithTextField;
@@ -39,7 +39,7 @@ public class GraphViewOptionsDialog extends JDialog {
      *
      */
     public GraphViewOptionsDialog() {
-        super(Static.getTool());
+        super(getMainFrame());
     }
 
     private static final JPanel createPanel() {

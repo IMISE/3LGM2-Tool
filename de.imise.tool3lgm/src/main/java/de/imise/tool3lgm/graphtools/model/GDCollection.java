@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
+import static de.imise.tool3lgm.Static.getLastActionPosition;
 import static de.imise.tool3lgm.Static.getMainFrame;
-import static de.imise.tool3lgm.Tool3lgm.getLastActionPosition;
 import static de.imise.tool3lgm.Tool3lgmConstants.isExtension;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYERS;
@@ -444,7 +444,7 @@ public final class GDCollection extends UserFieldTarget {
             descriptionFrame.update();
             //			descriptionFrame.removeTab(szenario);
         }
-        Static.getTool().closeFrame(szen);
+        getMainFrame().closeFrame(szen);
         doc.finish_transaction(pid);
         changed = true;
     }

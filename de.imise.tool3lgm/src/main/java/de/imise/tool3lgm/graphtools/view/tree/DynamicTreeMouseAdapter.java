@@ -16,7 +16,6 @@ import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -190,7 +189,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
 
         menu.add(new JMenuItem(action));
 
-        Tool3lgm.setLastActionPosition(x + tree.getX(), y + tree.getY());
+        Static.setLastActionPosition(x + tree.getX(), y + tree.getY());
         menu.show(tree, x, y);
 
         return menu;
