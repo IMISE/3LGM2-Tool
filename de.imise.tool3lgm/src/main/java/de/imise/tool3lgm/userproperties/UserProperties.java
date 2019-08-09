@@ -40,12 +40,23 @@ public class UserProperties {
     /** Pfad zur Datei mit den Optionen eines Benutzers */
     private static final File USER_INFO_FILE = new File(System.getProperty("user.home"), ".tool3lgm2UserInfo");
 
+    /** Mit diesem Namenspräfix sind alle Properties zu versehen, die nicht gepspeichert werden sollen */
     private static final String TRANSIENT_PROPERTY_NAME_PREFIX = "TRANSIENT_";
 
+    /**
+     * Liefert <code>true</code>, wenn der übergebene Property-Name mit dem String beginnt, der angibt, dass diese Property nicht gespeichert werden
+     * soll.
+     *
+     * @param propertyName
+     * @return
+     */
     private static final boolean isTransient(final Object propertyName) {
         return propertyName.toString().startsWith(TRANSIENT_PROPERTY_NAME_PREFIX);
     }
 
+    /**
+     * Das eigentliche Property-Objekct, das alle Properties aufnimmt
+     */
     static Properties properties = new Properties();
 
     /**
@@ -109,6 +120,9 @@ public class UserProperties {
         readUserInfo();
     }
 
+    /**
+     * Setzt für alle Properties die Defaults
+     */
     private static void initDefaults() {
         for (BooleanProperty property : BooleanProperty.values()) {
             put(property, property.getDefault());
@@ -118,6 +132,13 @@ public class UserProperties {
         }
     }
 
+    /**
+     * Fügt für die übergebene Property den übergebenen Wert hinzu
+     *
+     * @param key
+     * @param value
+     * @return the old value
+     */
     private static Object put(final Object key, final Object value) {
         String newValue = String.valueOf(value);
         Object oldValue = properties.put(key.toString(), newValue);
@@ -125,37 +146,73 @@ public class UserProperties {
         return oldValue;
     }
 
-    public static boolean is(final BooleanProperty property) {
-        String value = properties.getProperty(property.toString());
-        return value == null ? property.getDefault() : Boolean.parseBoolean(value);
-    }
-
+    /**
+     * Sets the value for property to the value
+     *
+     * @param property
+     * @param value
+     * @return the old value
+     */
     public static boolean set(final BooleanProperty property, final boolean value) {
         Object oldValue = put(property, value);
         return oldValue == null ? false : Boolean.valueOf(oldValue.toString());
     }
 
+    /**
+     * @param property
+     * @return the boolean value of this Property
+     */
+    public static boolean is(final BooleanProperty property) {
+        String value = properties.getProperty(property.toString());
+        return value == null ? property.getDefault() : Boolean.parseBoolean(value);
+    }
+
+    /**
+     * Sets the value for property to the value
+     *
+     * @param property
+     * @param value
+     * @return the old value
+     */
     public static int set(final IntProperty property, final int value) {
         Object oldValue = put(property, value);
         return oldValue == null ? -1 : Integer.valueOf(oldValue.toString());
     }
 
+    /**
+     * @param property
+     * @return the int value of this Property
+     */
     public static final int get(final IntProperty property) {
         String value = properties.getProperty(property.toString());
         return value == null ? property.getDefault() : Integer.parseInt(value);
     }
 
+    /**
+     * Sets the value for property to the value
+     *
+     * @param property
+     * @param value
+     * @return the old value
+     */
     public static String set(final StringProperty property, final String value) {
         Object oldValue = put(property, value);
         return oldValue == null ? null : oldValue.toString();
     }
 
+    /**
+     * @param property
+     * @return the String value of this Property
+     */
     public static final String get(final StringProperty property) {
         String value = properties.getProperty(property.toString());
         return value == null ? null : value;
     }
 
-    //Da es nur 2 Listenschlüssel gibt, kann man hier eine Flat3Map nehmen
+    /**
+     * Map, die für StringProperties, die eine Liste bilden, angibt, wie viele Elemente in der Liste enthalten sind.
+     */
+    //Da es im Moment nur 2 Listenschlüssel gibt, die eine Lsite bilden, kann man hier eine Flat3Map nehmen (siehe StringProperty.getMaxListSize())
     private static final Map<StringProperty, Integer> listKeyToListSize = new Flat3Map<>();
 
     /**
@@ -198,6 +255,12 @@ public class UserProperties {
         }
     }
 
+    /**
+     * Fügt für eine StringProperty, die eine Liste bildet, einen Liste von Werten hinzu
+     *
+     * @param property
+     * @param values
+     */
     public static void setListValues(final StringProperty property, final List<String> values) {
         remove(property);
         for (int i = values.size() - 1; i >= 0; i--) {
@@ -205,6 +268,11 @@ public class UserProperties {
         }
     }
 
+    /**
+     * Entfernt eine StringProperty aus den Properties und löscht eventuell vorhandene Listenwerte
+     *
+     * @param property
+     */
     public static void remove(final StringProperty property) {
         String propertyName = property.toString();
         Integer sizeI = listKeyToListSize.get(property);
@@ -219,6 +287,12 @@ public class UserProperties {
         listKeyToListSize.remove(property);
     }
 
+    /**
+     * Liefert für eine StringProperty, die eine Liste bildet, die Liste aller Werte-Strings dieser Property.
+     *
+     * @param property
+     * @return Liste aller Werte-Strings der Property
+     */
     public static List<String> getListValues(final StringProperty property) {
         String propertyName = property.toString();
         Integer sizeI = listKeyToListSize.get(property);
@@ -285,6 +359,9 @@ public class UserProperties {
         }
     }
 
+    /**
+     * Speichert die Properties in der Datei
+     */
     public static void save() {
         try {
             if (!USER_INFO_FILE.exists()) {
@@ -308,6 +385,11 @@ public class UserProperties {
         }
     }
 
+    /**
+     * Alle User-Optionen, die sich durch einen Boolean repräsentieren lassen.
+     *
+     * @author AXS (9 Aug 2017)
+     */
     public static enum BooleanProperty implements ActionSource {
         /** Kennzeichne ModelElemente mit verknüpftem Teilmodell */
         OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS,
@@ -370,14 +452,23 @@ public class UserProperties {
          */
         TRANSIENT_OPTION_SHOW_EXPANSION_SIGN;
 
+        /**
+         * Alle BooleanProperties, deren Default-Wert <code>true</code> ist
+         */
         private static final Set<BooleanProperty> DEFAULT_TRUE_PROERTIES = ImmutableSet.of(OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, OPTION_GRAPH_MOVE_SUBELEMENTS, OPTION_SHOW_PAINTING_TOOLBAR,
                 OPTION_SHOW_STANDARD_TOOLBAR, OPTION_MODEL_BROWSER_SHOW, OPTION_ENABLE_SUBMODEL_BROWSER, OPTION_SHOW_PART_OF_HIERARCHY, OPTION_USE_PROPERTY_COLORS, OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING,
                 TRANSIENT_OPTION_SHOW_EXPANSION_SIGN);
 
+        /**
+         * @return Default-Wert dieser Property
+         */
         private boolean getDefault() {
             return DEFAULT_TRUE_PROERTIES.contains(this);
         }
 
+        /**
+         * ChangeAction dieser Property
+         */
         private UserPropertyBooleanChangeAction action;
 
         @Override
@@ -396,6 +487,11 @@ public class UserProperties {
 
     }
 
+    /**
+     * Alle User-Optionen, die sich durch einen Integer repräsentieren lassen.
+     *
+     * @author AXS (9 Aug 2017)
+     */
     public static enum IntProperty {
         PROPERTY_INT_RASTER_WIDTH {
             @Override
@@ -431,6 +527,11 @@ public class UserProperties {
         }
     }
 
+    /**
+     * Alle User-Optionen, die sich durch einen String repräsentieren lassen.
+     *
+     * @author AXS (9 Aug 2017)
+     */
     public static enum StringProperty {
         LOCALE,
         WORKING_DIRECTORY,
