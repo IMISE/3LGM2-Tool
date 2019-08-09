@@ -90,14 +90,14 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
 
         // Direkthilfe für die einzelnen Baukastenteile
         CSH.setHelpIDString(modelBrowserPanel, "uebersicht_modellbrowser");
-        setCheckConsistencyState(UserProperties.is(BooleanProperty.OPTION_CHECK_CONSISTENCY));
+        setCheckConsistencyState();
 
         setLayout(new BorderLayout());
         add(toolbar, BorderLayout.NORTH);
         add(workarea, BorderLayout.CENTER);
         //add(new StatusBar(), BorderLayout.SOUTH);
 
-        setShowStandardToolbar(UserProperties.is(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR));
+        setShowStandardToolbar(BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR.isTrue());
         UserProperties.addPropertyChangeListener(this);
 
     }
@@ -130,8 +130,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (UserProperties.isPropertyChange(BooleanProperty.OPTION_CHECK_CONSISTENCY, evt)) {
-            setCheckConsistencyState(UserProperties.is(BooleanProperty.OPTION_CHECK_CONSISTENCY));
+        if (BooleanProperty.OPTION_CHECK_CONSISTENCY.isChanged(evt)) {
+            setCheckConsistencyState();
         } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_MODEL_BROWSER_SHOW, evt)) {
             showModelBrowser(UserProperties.is(BooleanProperty.OPTION_MODEL_BROWSER_SHOW));
         } else if (UserProperties.isPropertyChange(BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR, evt)) {
@@ -144,13 +144,13 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     }
 
     /**
-     * Je nach Paramter wir die Konsitenzprüfung bei <code>true</code> ein und bei <code>false</code> ausgeschaltet. Das beinhaltet auch das Anzeigen
-     * der Fehlertabelle.
+     * Je nachdem, ob in den UserProperties die Konsitenzprüfung ein- oder ausgeschaltet ist, wird sie hier durchgeführt und die Fehlertabelle
+     * angezeigt.
      *
-     * @param state
-     *            wenn <code>true</code> wird die Konsistenzprüfung eingeschaltet, sonst wird sie abgeschaltet
+     * @return <code>true</code>, wenn dei Konsistenzprüfung durchgeführt und angezeigt wurde
      */
-    public void setCheckConsistencyState(boolean state) {
+    private boolean setCheckConsistencyState() {
+        boolean state = BooleanProperty.OPTION_CHECK_CONSISTENCY.isTrue();
         GDCollection gdcoll = Static.getSelectedGDCollection();
         if (gdcoll == null) {
             state = false;
@@ -159,7 +159,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         if (!state) {
             consistencyChecker.resetConsistencyDefinition();
             if (verticalSplitPane.getParent() == workarea) {
-                return;
+                return state;
             }
             if (horizontalSplitPane != null) {
                 workarea.remove(horizontalSplitPane);
@@ -181,6 +181,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         }
         revalidate();
         repaint();
+        return state;
     }
 
     /** (De-)Aktiviert den ModelBrowser */
@@ -305,14 +306,12 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      *            Grafikfenster in den Vordergrund geholt, sonst nicht.
      */
     public void setSelectedDoc(final GraphDocument doc, final boolean activateGraphView) {
-        boolean isCheckConsistency = UserProperties.is(BooleanProperty.OPTION_CHECK_CONSISTENCY);
-
         //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den
         //geladenen Teilmodellen gefüllt wird. Im ModelBrowserPanel wird bei jedem Hinzufügen eines
         //Teilmodell-Tabs immer diese Funktion hier aufgerufen.
         //Es kann auch null sein, wenn das letzte Modell geschlossen wurde
         if (doc == null) {
-            setCheckConsistencyState(isCheckConsistency);
+            boolean isCheckConsistency = setCheckConsistencyState();
             toolbar.selectedDocChanged();
             if (isCheckConsistency) {
                 ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
@@ -378,7 +377,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
             this.activateGraphView = true;
         }
 
-        setCheckConsistencyState(isCheckConsistency);
+        setCheckConsistencyState();
+        //TODO: das sollte der ContextGenerator als Listener mitbekommen (CONTEXT_CHANGED oder sowas)
         Static.contextGenerator.changeContext((LGMGraphDocument) doc);
         toolbar.selectedDocChanged();
     }
