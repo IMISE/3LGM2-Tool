@@ -1050,7 +1050,7 @@ public final class GDCollection extends UserFieldTarget {
             }
             edgeContainer = (EdgeContainer) szen.getLastSelected();
         }
-        Bendpoint bendpoint = new Bendpoint();
+        Bendpoint bendpoint = metaModel.createElement(Bendpoint.class);
         bendpoint.setName(doc.getNextNewName(bendpoint.getClass()));
         bendpointContainer = new BendpointContainer(bendpoint, szen);
         if (!isNullOrEmpty(bendpointHash)) {
