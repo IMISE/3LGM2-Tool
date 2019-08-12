@@ -1764,9 +1764,16 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
+     * @see #setChanged(boolean) mit false
+     */
+    public void setUnchaged() {
+        setChanged(false);
+    }
+
+    /**
      * @param c
      */
-    public void setChanged(final boolean c) {
+    private void setChanged(final boolean c) {
         changed = c;
         lastModificationTime = System.currentTimeMillis();
     }
@@ -1803,6 +1810,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param pid
      */
     public final void distribute(final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final GraphDocument source, final int pid) {
+        setChanged(true);
         if (isBulkMode()) {
             return;
         }

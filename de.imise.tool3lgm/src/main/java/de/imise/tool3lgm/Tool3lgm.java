@@ -212,7 +212,7 @@ public class Tool3lgm implements GraphDocumentListener {
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
         ConsistencyChecker.clearUnfixableErrors(gdcoll);
         setSelectedDoc(selectedDoc);
-        gdcoll.setChanged(false);
+        gdcoll.setUnchaged();
         System.gc();
         Static.closeProgressDialog();
 
@@ -502,7 +502,7 @@ public class Tool3lgm implements GraphDocumentListener {
             Log.show(Log.FATAL, getResString("FehlerAllgemein") + "\n" + exp, exp);
             return false;
         }
-        gdcoll.setChanged(false);
+        gdcoll.setUnchaged();
         return true;
     }
 
@@ -528,34 +528,28 @@ public class Tool3lgm implements GraphDocumentListener {
 
     @Override
     public void activeLayerChanged(final GraphDocument source) {
-        source.getCollection().setChanged(true);
     }
 
     @Override
     public void dataChanged(final GraphDocument source) {
-        source.getCollection().setChanged(true);
     }
 
     @Override
     public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
-        source.getCollection().setChanged(true);
         mainFrame.repaint();
     }
 
     @Override
     public void layoutChanged(final GraphDocument source) {
-        source.getCollection().setChanged(true);
         mainFrame.repaint();
     }
 
     @Override
     public void groupOrderChanged(final GraphDocument source) {
-        source.getCollection().setChanged(true);
     }
 
     @Override
     public void colorsChanged(final GraphDocument source) {
-        source.getCollection().setChanged(true);
     }
 
     @Override

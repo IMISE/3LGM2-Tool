@@ -537,7 +537,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             description = string;
         } else if (!string.equals(description)) {
             description = string;
-            gdcoll.setChanged(true);
         }
     }
 

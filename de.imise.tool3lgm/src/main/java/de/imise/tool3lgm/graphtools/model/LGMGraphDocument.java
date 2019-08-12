@@ -570,7 +570,6 @@ public class LGMGraphDocument extends GraphDocument {
             destMainDoc.undo(pid);
             Log.show(Log.ERROR, getResString("FehlerKorrupt") + "\n" + destGDColl.getName(), ex);
         }
-        destGDColl.setChanged(true);
         start_transaction(TransactionManager.STANDARD_PID, false);
         deselectAll(true);
         for (int j = 0; j < tmpActive.size(); j++) {
