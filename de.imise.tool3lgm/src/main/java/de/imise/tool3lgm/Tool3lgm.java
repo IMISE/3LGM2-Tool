@@ -469,8 +469,8 @@ public class Tool3lgm implements GraphDocumentListener {
                 return true;
             }
         }
-        File datei = fileHandler.getFile();
-        if (datei == null) {
+        File file = fileHandler.getFile();
+        if (file == null) {
             return fileSave(true);
         }
         new ModelCleaner(gdcoll).cleanModel();
