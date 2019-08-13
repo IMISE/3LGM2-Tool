@@ -17,7 +17,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 /**
  * @author Ich
  */
-public class SubModelComboBoxPane extends SubModelsBrowser implements ItemListener {
+public class ComboBoxSubModelBrowser extends SubModelsBrowser implements ItemListener {
 
     /**
      * Combobox, in der das aktuelle Teilmodell ausgewählt werden kann
@@ -27,7 +27,7 @@ public class SubModelComboBoxPane extends SubModelsBrowser implements ItemListen
     /**
      * @param gdcoll
      */
-    public SubModelComboBoxPane(final GDCollection gdcoll) {
+    public ComboBoxSubModelBrowser(final GDCollection gdcoll) {
         super(gdcoll);
         JScrollPane scrollPane = new JScrollPane(tree);
         scrollPane.addMouseListener(this);
