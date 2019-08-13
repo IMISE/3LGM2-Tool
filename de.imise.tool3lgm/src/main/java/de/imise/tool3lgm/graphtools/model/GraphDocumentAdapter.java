@@ -1,20 +1,17 @@
-/*
- * Created on 21.02.2008
- */
 package de.imise.tool3lgm.graphtools.model;
 
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
- * Abstracte Implementeirung von <code>GraphDocumentListener</code>. In keiner
+ * Abstracte Implementierung von <code>GraphDocumentListener</code>. In keiner
  * der Methoden wird etwas ausgeführt.
  *
- * @author AXS
+ * @author AXS (Created on 21.02.2008)
  */
 public abstract class GraphDocumentAdapter implements GraphDocumentListener {
 
     /**
-     * 
+     *
      */
     public GraphDocumentAdapter() {
         super();
@@ -46,6 +43,10 @@ public abstract class GraphDocumentAdapter implements GraphDocumentListener {
 
     @Override
     public void selectionChanged(final GraphDocument source) {
+    }
+
+    @Override
+    public void modelOrSzenarioRenamed(final GraphDocument source) {
     }
 
 }

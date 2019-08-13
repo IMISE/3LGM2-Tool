@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ACTIVE_LAYER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.ELEMENT_NAME_CHANGED;
@@ -2759,6 +2760,11 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case SELECTION_CHANGED:
             for (GraphDocumentListener gdl : listener) {
                 gdl.selectionChanged(this);
+            }
+            break;
+        case MODEL_OR_SZENARIO_RENAMED:
+            for (GraphDocumentListener gdl : listener) {
+                gdl.modelOrSzenarioRenamed(this);
             }
             break;
         default:

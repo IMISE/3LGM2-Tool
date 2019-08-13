@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeType.MODEL_OR_SZENARIO_RENAMED;
+
 import java.util.Date;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -195,6 +197,15 @@ public class Szenario extends LGMGraphDocument {
         }
 
         return super.isMyElement(me);
+    }
+
+    /**
+     * @param newTitle
+     */
+    @Override
+    public final void setTitle(final String newTitle) {
+        super.setTitle(newTitle);
+        distributeEvent(MODEL_OR_SZENARIO_RENAMED);
     }
 
     /**

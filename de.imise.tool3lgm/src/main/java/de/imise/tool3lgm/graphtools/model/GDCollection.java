@@ -80,7 +80,6 @@ import javax.swing.JRadioButton;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.MetaModelContext;
-import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
@@ -449,6 +448,11 @@ public final class GDCollection extends UserFieldTarget {
         changed = true;
     }
 
+    /**
+     * @param szenHash
+     * @param title
+     * @param pid
+     */
     public void renameSzenario(final String szenHash, final String title, final int pid) {
         GraphDocument szen = getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
@@ -462,13 +466,13 @@ public final class GDCollection extends UserFieldTarget {
         if (szenTitle == null || szenTitle.equals(oldTitle)) {
             return;
         }
+
         doc.start_transaction(pid);
-        szen.setTitle(szenTitle);
         doc.addUndoCommand(MODEL_ACTION_RENAME_SUBMODEL + " " + szen.hashString + " " + getParseSaveString(oldTitle), pid);
         doc.addRedoCommand(MODEL_ACTION_RENAME_SUBMODEL + " " + szen.hashString + " " + getParseSaveString(szenTitle), pid);
+        doc.finish_transaction(pid);
 
-        //sowas hier müsste eigentlich über Listener laufen!
-        Static.getTool().szenarioRenamed((Szenario) szen);
+        szen.setTitle(szenTitle);
         GraphDocument mainDoc = szen.getCollection().getMainGraphDocument();
         for (ModelElement me : mainDoc.getModelItems(ModelElement.class, true)) {
             me.invalidateNameWithSzens();
@@ -478,8 +482,6 @@ public final class GDCollection extends UserFieldTarget {
             descriptionFrame.update();
         }
 
-        doc.finish_transaction(pid);
-        distribute(DATA_CHANGED, null, null, doc, STANDARD_PID);
         changed = true;
     }
 
@@ -1868,6 +1870,7 @@ public final class GDCollection extends UserFieldTarget {
 
     public void setName(final String name) {
         this.name = name;
+        distribute(GDCollectionChangeType.MODEL_OR_SZENARIO_RENAMED, null, null, getMainGraphDocument(), STANDARD_PID);
     }
 
     /**
@@ -2192,6 +2195,11 @@ public final class GDCollection extends UserFieldTarget {
         case SELECTION_CHANGED:
             for (GraphDocumentListener l : listener) {
                 l.selectionChanged(source);
+            }
+            break;
+        case MODEL_OR_SZENARIO_RENAMED:
+            for (GraphDocumentListener l : listener) {
+                l.modelOrSzenarioRenamed(source);
             }
             break;
         default:

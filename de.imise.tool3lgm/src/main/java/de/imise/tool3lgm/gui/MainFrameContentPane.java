@@ -28,10 +28,12 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.log.Log;
@@ -40,7 +42,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * @author AXS (6 Aug 2019)
  */
-public class MainFrameContentPane extends JPanel implements PropertyChangeListener, InternalFrameListener {
+public class MainFrameContentPane extends JPanel implements GraphDocumentListener, PropertyChangeListener, InternalFrameListener {
 
     /** ToolBar with general tools */
     private final ToolBar toolbar = new ToolBar();
@@ -206,6 +208,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      */
     public void addCollection(final GDCollection gdcoll) {
         modelBrowserPanel.addCollection(gdcoll);
+        gdcoll.addGraphDocumentListener(this);
     }
 
     @Override
@@ -220,7 +223,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      * @param doc
      * @return
      */
-    public AbstractInternalFrame createFrame(final GraphDocument doc) {
+    public InternalGraphFrame createGraphFrame(final GraphDocument doc) {
         InputGraphArea area = new InputGraphArea(doc);
         InternalGraphFrame frame = new InternalGraphFrame(desktop, area, doc);
         modelBrowserPanel.addGraphDocument(doc);
@@ -242,14 +245,12 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      * @param doc Sub-Model as source for the MatrixView
      * @return boolean with true, if methode run successful
      */
-    public boolean createTableInternalFrame(final LGMGraphDocument doc) {
+    public boolean createTableInternalFrame(final GraphDocument doc) {
         if (doc == null) {
             return false;
         }
-        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, toolbarManager);
-        String title = doc.getCollection().getName() + " - " + doc.getTitle() + " - " + getResString("matrix") + " #";
-
-        matrixView.setTitle(title.concat(String.valueOf(countFramesWithSameTitle(title) + 1)));
+        int nextMatrixViewTitleIndex = getNextMatrixViewTitleIndex(doc);
+        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, toolbarManager, nextMatrixViewTitleIndex);
 
         Rectangle bounds = desktop.getBounds();
         bounds.height = bounds.height - 39;
@@ -261,16 +262,16 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         return true;
     }
 
-    private int countFramesWithSameTitle(final String title) {
+    private int getNextMatrixViewTitleIndex(final GraphDocument doc) {
         JInternalFrame[] frames = desktop.getAllFrames();
-        int max = 0;
+        int max = 1;
         for (int i = 0; i < frames.length; i++) {
-            if (frames[i].getTitle().startsWith(title)) {
-                try {
-                    int temp = Integer.parseInt(frames[i].getTitle().substring(frames[i].getTitle().lastIndexOf("#") + 1));
-                    max = temp > max ? temp : max;
-                } catch (Exception e) {
-                    Log.show(Log.FATAL, getResString("FehlerAllgemein"), e);
+            if (frames[i] instanceof MatrixViewInternalFrame) {
+                MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) frames[i];
+                if (matrixFrame.getGraphDocument() == doc) {
+                    if (matrixFrame.titleIndex >= max) {
+                        max = matrixFrame.titleIndex + 1;
+                    }
                 }
             }
         }
@@ -422,11 +423,9 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
             if (frame instanceof MatrixViewInternalFrame) {
                 frame.dispose();
             } else {
-                //erst das dispose und erst dann als Tab removen, sonst haut
-                // das Einfügen-Menü nicht mehr hin, weil
-                //die Ereignisse internalFrameDeactivated(),
-                // internalFrameClosed() und internalFrameActivated()
-                //sonst in einer ungünstigen Reihenfolge kommen.
+                //erst das dispose und erst dann als Tab removen, sonst haut das Einfügen-Menü nicht mehr hin, weil
+                //die Ereignisse internalFrameDeactivated(), internalFrameClosed() und internalFrameActivated() sonst
+                //in einer ungünstigen Reihenfolge kommen.
                 frame.dispose();
                 modelBrowserPanel.removeGraphDocument(frame.getGraphDocument());
             }
@@ -445,28 +444,11 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         }
     }
 
-    //TODO: auch das hier sollte ziemlich sicher über einen Listener laufen!
     /**
-     * reagiert auf ein umbenanntes Szenario
+     * Aktualisiert das ModelBrowserPanel vollständig, z.B. falls sich die Namen der Teilmodell geändert haben.
      */
-    public void szenarioRenamed(final Szenario szen) {
-        InternalGraphFrame frame = szen.getFrame();
-        if (frame != null) {
-            frame.updateTitle();
-        }
-        modelBrowserPanel.updateTitle(szen);
-    }
-
-    /**
-     *
-     */
-    public void updateFrameTitles() {
-        JInternalFrame[] allFrames = desktop.getAllFrames();
-        for (JInternalFrame frame : allFrames) {
-            if (frame instanceof InternalGraphFrame) {
-                ((InternalGraphFrame) frame).updateTitle();
-            }
-        }
+    public void updateModelBrowser() {
+        modelBrowserPanel.updateModelBrowsers();
     }
 
     /**
@@ -546,6 +528,47 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         }
     }
 
+    ///////////////////////////
+    // GraphDocumentListener //
+    ///////////////////////////
+
+    @Override
+    public void activeLayerChanged(final GraphDocument source) {
+    }
+
+    @Override
+    public void dataChanged(final GraphDocument source) {
+    }
+
+    @Override
+    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
+        invalidate();
+        repaint();
+    }
+
+    @Override
+    public void layoutChanged(final GraphDocument source) {
+        invalidate();
+        repaint();
+    }
+
+    @Override
+    public void groupOrderChanged(final GraphDocument source) {
+    }
+
+    @Override
+    public void colorsChanged(final GraphDocument source) {
+    }
+
+    @Override
+    public void selectionChanged(final GraphDocument source) {
+    }
+
+    @Override
+    public void modelOrSzenarioRenamed(final GraphDocument source) {
+        updateModelBrowser();
+    }
+
     /////////////////////////
     // InternalFrameListener //
     ///////////////////////////
@@ -611,19 +634,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         graphDocument.removeGraphDocumentListener(toolbarManager);
         activeFrame = null;
         toolbarManager.updateToolBar();
-    }
-
-    /**
-     * @param gdcoll
-     */
-    public void modelRenamed(final GDCollection gdcoll) {
-        String name = gdcoll.getName();
-        for (AbstractInternalFrame f : Static.getAllFrames()) {
-            if (f.getCollection().equals(gdcoll)) {
-                f.setTitle(name);
-                modelBrowserPanel.updateTitle(gdcoll);
-            }
-        }
     }
 
 }

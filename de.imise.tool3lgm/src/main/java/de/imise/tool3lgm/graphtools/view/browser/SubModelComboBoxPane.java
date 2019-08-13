@@ -87,11 +87,6 @@ public class SubModelComboBoxPane extends SubModelsBrowser implements ItemListen
     }
 
     @Override
-    public void updateTitle(final GraphDocument doc) {
-        submodelBox.resort();
-    }
-
-    @Override
     public void itemStateChanged(final ItemEvent e) {
         update();
     }
@@ -109,6 +104,7 @@ public class SubModelComboBoxPane extends SubModelsBrowser implements ItemListen
         if (mySelDoc != Static.getSelectedDoc()) {
             Static.setSelectedDoc(mySelDoc);
         }
+        submodelBox.resort();
     }
 
 }

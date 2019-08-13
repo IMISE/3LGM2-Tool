@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.newmatrixview;
 
 import static de.imise.tool3lgm.Static.contextGenerator;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -15,8 +16,6 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
-import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -29,7 +28,7 @@ import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
  *
  * @author Thomas Rudert, AXS
  */
-public class MatrixViewInternalFrame extends AbstractInternalFrame implements MouseMotionListener, MouseListener, GraphDocumentListener {
+public class MatrixViewInternalFrame extends AbstractInternalFrame implements MouseMotionListener, MouseListener {
 
     /** Liefert die aktuelle Toolbar */
     private final GraphAreaToolbarManager toolbarManager;
@@ -53,12 +52,21 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
     private MetaPathSelection metaPathSelection;
 
     /**
-     * @param graphDocument
-     * @param toolbarManager
+     * Zähler, der an den Titel des Fensters angehängt wird. Man kann beliebig viele Matrixfenster für dasselbe Teilmodell öffnen. Der Title soll
+     * unterscheidbar sein und das wird er durch diese Nummer.
      */
-    public MatrixViewInternalFrame(final LGMGraphDocument graphDocument, final GraphAreaToolbarManager toolbarManager) {
-        super(graphDocument, "");
+    public final int titleIndex;
+
+    /**
+     * @param doc
+     * @param toolbarManager
+     * @param titleIndex Zähler, der an den Titel des Fensters angehängt wird. Man kann beliebig viele Matrixfenster für dasselbe Teilmodell öffnen.
+     *            Der Title soll unterscheidbar sein und das wird er durch diese Nummer.
+     */
+    public MatrixViewInternalFrame(final GraphDocument doc, final GraphAreaToolbarManager toolbarManager, final int titleIndex) {
+        super(doc, "");
         this.toolbarManager = toolbarManager;
+        this.titleIndex = titleIndex;
         setClosable(true);
         tableModel = new TableModel(getGraphDocument());
 
@@ -70,7 +78,13 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
         cellPanel.addMouseMotionListener(this);
         cellPanel.addMouseListener(this);
         setComponents();
+        updateTitle();
+    }
 
+    @Override
+    public void updateTitle() {
+        String title = doc.getCollection().getName() + " - " + doc.getTitle() + " - " + getResString("matrix") + " #" + titleIndex;
+        setTitle(title);
     }
 
     /**

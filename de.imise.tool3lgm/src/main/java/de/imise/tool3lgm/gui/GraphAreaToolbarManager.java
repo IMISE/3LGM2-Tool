@@ -7,11 +7,10 @@ import java.awt.Container;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentAdapter;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.InternalMatrixFrameToolBar;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -24,7 +23,7 @@ import de.imise.util.swing.component.UnfloatableToolBar;
  *
  * @author AXS (8 Aug 2017)
  */
-public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGraphAreaChangeListener {
+public class GraphAreaToolbarManager extends GraphDocumentAdapter implements BasicGraphAreaChangeListener {
 
     /** toolbar with tools for active layer and sliders for zoom, angel and distance (Graph) or MetaPathSelector (Matrix) */
     private UnfloatableToolBar currentToolBar;
@@ -177,34 +176,10 @@ public class GraphAreaToolbarManager implements GraphDocumentListener, BasicGrap
     ///////////////////////////
 
     @Override
-    public void dataChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
-    }
-
-    @Override
-    public void layoutChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void groupOrderChanged(final GraphDocument source) {
-    }
-
-    @Override
     public void activeLayerChanged(final GraphDocument source) {
         if (currentToolBar instanceof GraphAreaToolBar) {
             ((GraphAreaToolBar) currentToolBar).setLayer(source.getCollection().getActiveLayer());
         }
-    }
-
-    @Override
-    public void colorsChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void selectionChanged(final GraphDocument source) {
     }
 
     //////////////////////////////////

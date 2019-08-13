@@ -71,6 +71,15 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements GraphDo
     }
 
     @Override
+    public void modelOrSzenarioRenamed(final GraphDocument source) {
+        if (active) {
+            //      System.out.println("modelOrSzenarioRenamed");
+            tree.refreshTree();
+            //      repaint();
+        }
+    }
+
+    @Override
     public void activeLayerChanged(final GraphDocument source) {
         if (active) {
             GraphDocument doc = tree.getGraphDocument();

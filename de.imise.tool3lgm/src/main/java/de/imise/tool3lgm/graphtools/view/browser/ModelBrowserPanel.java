@@ -110,20 +110,6 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     }
 
     /**
-     * @param doc
-     */
-    public void updateTitle(final GraphDocument doc) {
-        getModelBrowser(doc.getCollection()).updateTitle(doc);
-    }
-
-    /**
-     * @param gdcoll
-     */
-    public void updateTitle(final GDCollection gdcoll) {
-        getModelBrowser(gdcoll).updateTitle(gdcoll);
-    }
-
-    /**
      * @param gdcoll
      * @return
      */

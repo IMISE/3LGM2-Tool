@@ -9,7 +9,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -52,8 +51,8 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      * @return
      */
     protected void addCollection(final GDCollection gdcoll) {
-        JComponent panel = new SubModelComboBoxPane(gdcoll);
-        addTab(gdcoll.getName(), panel);
+        SubModelsBrowser panel = new SubModelComboBoxPane(gdcoll);
+        addTab(panel.getTitle(), panel);
         setSelectedComponent(panel);
     }
 
@@ -123,27 +122,6 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
     }
 
     /**
-     * @param doc
-     */
-    protected void updateTitle(final GraphDocument doc) {
-        SubModelsBrowser pane = getCollectionPane(doc.getCollection());
-        if (pane != null) {
-            pane.updateTitle(doc);
-        }
-    }
-
-    /**
-     * @param gdcoll
-     */
-    protected void updateTitle(final GDCollection gdcoll) {
-        SubModelsBrowser modelPane = getCollectionPane(gdcoll);
-        if (modelPane != null) {
-            int index = indexOfComponent(modelPane);
-            setTitleAt(index, gdcoll.getName());
-        }
-    }
-
-    /**
      * @param index
      * @return
      */
@@ -206,8 +184,9 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
 
     public void updateAllSubModelBrowsers() {
         for (int i = 0; i < getTabCount(); i++) {
-            SubModelsBrowser collectionPane = (SubModelsBrowser) getComponentAt(i);
-            collectionPane.update();
+            SubModelsBrowser subModelsBrowser = (SubModelsBrowser) getComponentAt(i);
+            setTitleAt(i, subModelsBrowser.getTitle());
+            subModelsBrowser.update();
         }
     }
 

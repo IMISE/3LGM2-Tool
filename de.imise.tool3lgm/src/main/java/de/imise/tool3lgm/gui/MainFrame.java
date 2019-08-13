@@ -129,9 +129,9 @@ public class MainFrame extends JFrame implements WindowListener {
      * @param doc
      * @return
      */
-    public AbstractInternalFrame createFrame(final GraphDocument doc) {
+    public InternalGraphFrame createFrame(final GraphDocument doc) {
         //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GraphDocumentListener laufen (SZENARIO_ADDED)
-        return contentPane.createFrame(doc);
+        return contentPane.createGraphFrame(doc);
     }
 
     /**
@@ -209,32 +209,9 @@ public class MainFrame extends JFrame implements WindowListener {
         contentPane.selectLastFrame();
     }
 
-    /**
-     *
-     */
-    public void updateFrameTitles() {
-        contentPane.updateFrameTitles();
-    }
-
-    //TODO: auch das hier sollte ziemlich sicher über einen Listener laufen!
-    /**
-     * Reagiert auf ein umbenanntes Modell
-     *
-     * @param gdcoll
-     */
-    public void modelRenamed(final GDCollection gdcoll) {
-        contentPane.modelRenamed(gdcoll);
-    }
-
-    //TODO: auch das hier sollte ziemlich sicher über einen Listener laufen!
-    /**
-     * reagiert auf ein umbenanntes Szenario
-     *
-     * @param szen
-     */
-    public void szenarioRenamed(final Szenario szen) {
-        contentPane.szenarioRenamed(szen);
-    }
+    ///////////////////
+    // MouseListener //
+    ///////////////////
 
     @Override
     public synchronized void addMouseListener(final MouseListener l) {
@@ -247,6 +224,10 @@ public class MainFrame extends JFrame implements WindowListener {
         contentPane.removeMouseListener(l);
         super.removeMouseListener(l);
     }
+
+    ////////////////////
+    // WindowListener //
+    ////////////////////
 
     @Override
     public void windowClosing(final WindowEvent e) {

@@ -329,6 +329,11 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
         updateButtons();
     }
 
+    @Override
+    public void modelOrSzenarioRenamed(final GraphDocument source) {
+        updateButtons();
+    }
+
     private final class ToolbarButton extends JButton {
 
         public ToolbarButton(final Action a) {

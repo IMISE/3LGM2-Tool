@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
 
 /**
  * Interface für alle {@link Component}, die im {@link ModelBrowser} Teilmodelle anzeigen.
- * 
+ *
  * @author AXS
  */
 public abstract class SubModelsBrowser extends JPanel implements MouseListener, FocusListener {
@@ -51,15 +51,8 @@ public abstract class SubModelsBrowser extends JPanel implements MouseListener, 
     public abstract void addGraphDocument(GraphDocument doc);
 
     /**
-     * Aktualisiert den Titel des Tabs des übergebenen {@link GraphDocument}
-     * 
-     * @param doc
-     */
-    public abstract void updateTitle(GraphDocument doc);
-
-    /**
      * Liefert das aktuell selektierte {@link GraphDocument}
-     * 
+     *
      * @return
      */
     public abstract GraphDocument getSelectedDoc();
@@ -76,10 +69,17 @@ public abstract class SubModelsBrowser extends JPanel implements MouseListener, 
 
     /**
      * Liefert die Anzahl von {@link GraphDocument}, die dieser Browser darstellt
-     * 
+     *
      * @return
      */
     public abstract int getDocCount();
+
+    /**
+     * @return Namen des Modells, das dieser Browser darstellt
+     */
+    public final String getTitle() {
+        return gdcoll.getName();
+    }
 
     /**
      * Aktualisiert die Komponente

@@ -23,7 +23,6 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -39,7 +38,7 @@ import de.imise.util.BrowseUtils;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /** Die eigentliche Anwendung 3lgm */
-public class Tool3lgm implements GraphDocumentListener {
+public class Tool3lgm {
 
     /** alle GDCollections */
     private final List<GDCollection> collections = new ArrayList<>();
@@ -205,7 +204,6 @@ public class Tool3lgm implements GraphDocumentListener {
     public boolean openModel(final GDCollection gdcoll) {
         Static.setProgressDialogStatusLabel("finish_progress");
         collections.add(gdcoll);
-        gdcoll.addGraphDocumentListener(this);
         //TODO: das hier sollte ein PropertyChange sein, so dass das ContentPane als Listener darauf reagieren kann und nicht direkt die Funktion an das darin enthaltene WorkArea weiter leiten muss
         GraphDocument selectedDoc = mainFrame.addCollection(gdcoll);
 
@@ -426,8 +424,6 @@ public class Tool3lgm implements GraphDocumentListener {
         ignoreDocSelection = false;
         setSelectedDoc(ModelBrowserPanel.getSelectedDoc());
 
-        gdcoll.removeGraphDocumentListener(this);
-
         GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
         fileHandler.close();
         try {
@@ -477,8 +473,6 @@ public class Tool3lgm implements GraphDocumentListener {
         if (!saveToFile(gdcoll)) {
             return false;
         }
-        //TODO: eigentlich über Listener zu regeln
-        mainFrame.updateFrameTitles();
         System.gc();
         //		long end = System.currentTimeMillis();
         //		System.out.println("Time to write file " + datei.getName() + " (" + datei.length() + " Bytes): " + (end - start) + " Milliseconds");
@@ -504,56 +498,6 @@ public class Tool3lgm implements GraphDocumentListener {
         }
         gdcoll.setUnchaged();
         return true;
-    }
-
-    //TODO: auch das hier sollte ziemlich sicher über einen Listener laufen!
-    /**
-     * Reagiert auf ein umbenanntes Modell
-     *
-     * @param gdcoll
-     */
-    public void modelRenamed(final GDCollection gdcoll) {
-        mainFrame.modelRenamed(gdcoll);
-    }
-
-    //TODO: auch das hier sollte ziemlich sicher über einen Listener laufen!
-    /**
-     * reagiert auf ein umbenanntes Szenario
-     *
-     * @param szen
-     */
-    public void szenarioRenamed(final Szenario szen) {
-        mainFrame.szenarioRenamed(szen);
-    }
-
-    @Override
-    public void activeLayerChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void dataChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
-        mainFrame.repaint();
-    }
-
-    @Override
-    public void layoutChanged(final GraphDocument source) {
-        mainFrame.repaint();
-    }
-
-    @Override
-    public void groupOrderChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void colorsChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void selectionChanged(final GraphDocument source) {
     }
 
     /**

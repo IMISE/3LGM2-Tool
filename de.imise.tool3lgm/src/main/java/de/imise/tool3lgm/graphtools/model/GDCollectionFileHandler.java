@@ -198,8 +198,6 @@ public class GDCollectionFileHandler {
 
         String name = newName + (isReadOnly ? " " + getResString("text_readOnly") : "");
         gdcoll.setName(name);
-        //TODO: das hier ist Mist und sollte über einen Listener laufen
-        Static.getTool().modelRenamed(gdcoll);
     }
 
     /**

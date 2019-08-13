@@ -113,6 +113,13 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements Gr
         dataChanged(source);
     }
 
+    @Override
+    public void modelOrSzenarioRenamed(final GraphDocument source) {
+        updateTitle();
+    }
+
+    public abstract void updateTitle();
+
     /**
      * COMMENTME
      */

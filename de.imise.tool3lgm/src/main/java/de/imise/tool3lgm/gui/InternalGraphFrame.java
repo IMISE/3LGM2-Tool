@@ -112,13 +112,14 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     /**
      * Setzt den Titel des Frames
      */
+    @Override
     public void updateTitle() {
         GDCollection gdcoll = getCollection();
         String gdcollName = gdcoll.getName();
         String docName = getGraphDocument().getTitle();
         MetaModelContext metaModelContext = gdcoll.getMetaModelContext();
         String metaModelDisplayName = metaModelContext.getMetaModelDisplayName();
-        super.setTitle(gdcollName + " - " + docName + "   (" + metaModelDisplayName + ")");
+        setTitle(gdcollName + " - " + docName + "   (" + metaModelDisplayName + ")");
     }
 
     @Override
