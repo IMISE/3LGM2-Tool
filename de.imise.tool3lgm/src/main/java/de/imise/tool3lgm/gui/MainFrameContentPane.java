@@ -27,13 +27,12 @@ import javax.swing.event.InternalFrameListener;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.log.Log;
@@ -42,7 +41,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * @author AXS (6 Aug 2019)
  */
-public class MainFrameContentPane extends JPanel implements GDCollectionChangeListener, PropertyChangeListener, InternalFrameListener {
+public class MainFrameContentPane extends JPanel implements PropertyChangeListener, InternalFrameListener {
 
     /** ToolBar with general tools */
     private final ToolBar toolbar = new ToolBar();
@@ -208,7 +207,12 @@ public class MainFrameContentPane extends JPanel implements GDCollectionChangeLi
      */
     public void addCollection(final GDCollection gdcoll) {
         modelBrowserPanel.addCollection(gdcoll);
-        gdcoll.addGDCollectionChangeListener(this);
+        gdcoll.addGDCollectionChangeListener(new GDCollectionChangeListenerSimple() {
+            @Override
+            public void modelOrSzenarioRenamed(final GraphDocument source) {
+                modelBrowserPanel.updateModelBrowsers();
+            }
+        });
     }
 
     @Override
@@ -431,13 +435,6 @@ public class MainFrameContentPane extends JPanel implements GDCollectionChangeLi
     }
 
     /**
-     * Aktualisiert das ModelBrowserPanel vollständig, z.B. falls sich die Namen der Teilmodell geändert haben.
-     */
-    public void updateModelBrowser() {
-        modelBrowserPanel.updateModelBrowsers();
-    }
-
-    /**
      *
      */
     public void selectLastFrame() {
@@ -512,47 +509,6 @@ public class MainFrameContentPane extends JPanel implements GDCollectionChangeLi
         for (int k = count; k < frames.length; k++) {
             frames[k].setBounds(0 + (k - count) * (int) width / rest, (int) height / zeilen * (zeilen - 1), (int) width / rest, (int) height / zeilen);
         }
-    }
-
-    ////////////////////////////////
-    // GDCollectionChangeListener //
-    ////////////////////////////////
-
-    @Override
-    public void activeLayerChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void dataChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
-        invalidate();
-        repaint();
-    }
-
-    @Override
-    public void layoutChanged(final GraphDocument source) {
-        invalidate();
-        repaint();
-    }
-
-    @Override
-    public void groupOrderChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void colorsChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void selectionChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void modelOrSzenarioRenamed(final GraphDocument source) {
-        updateModelBrowser();
     }
 
     /////////////////////////
