@@ -322,12 +322,6 @@ public class MainFrameContentPane extends JPanel implements GraphDocumentListene
             return;
         }
 
-        //Die folgenden beiden Zeilen nicht aktivieren. Sie sind auskommentiert
-        //stehen geblieben, damit nicht irgendwann mal einer auf die Idee  kommt,
-        //über diesen Weg optimieren zu wollen
-        //if (doc == oldDoc)
-        //return;
-
         //wenn der interne Frame mit dem grafischen View in den Vordergrund geholt werden soll,
         if (activateGraphView) {
             //wenn nicht grade vorher ein Matrix-View aktiviert wurde (nur dann wäre die globale Variable==false)
@@ -367,17 +361,9 @@ public class MainFrameContentPane extends JPanel implements GraphDocumentListene
             this.activateGraphView = false;
         }
 
-        //wenn sich das im ModelBrowser ausgewählte Teimodell geändert hat
-        if (doc != ModelBrowserPanel.getSelectedDoc()) {
-            //aktiviere es. Dabei wird diese Funktion auch noch einmal aufgerufen und je nachdem
-            //wie die this.activateGraphView gerade steht, wird der GraphView nach vorne geholt
-            //oder eben nicht
-            modelBrowserPanel.setSelectedDoc(doc);
-            //wenn sich das Teilmodell nicht geändert hat
-        } else {
-            //beim nächsten Konextwechsel auch das nach Vorne holen des grafischen Views wieder einschalten
-            this.activateGraphView = true;
-        }
+        modelBrowserPanel.setCurrentDoc(doc);
+        //beim nächsten Konextwechsel auch das nach Vorne holen des grafischen Views wieder einschalten
+        this.activateGraphView = true;
 
         setCheckConsistencyState();
         //TODO: das sollte der ContextGenerator als Listener mitbekommen (CONTEXT_CHANGED oder sowas)

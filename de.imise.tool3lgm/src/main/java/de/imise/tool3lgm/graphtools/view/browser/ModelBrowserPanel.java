@@ -15,7 +15,6 @@ import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -132,18 +131,11 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     /**
      * Aktiviert die Baumansicht für das übergebene <code>GraphDocument</code>
      */
-    public void setSelectedDoc(final GraphDocument doc) {
+    public void setCurrentDoc(final GraphDocument doc) {
         ModelBrowser modelBrowser = getModelBrowser(doc.getCollection());
         if (modelBrowser != null) {
-            modelBrowser.setSelectedDoc(doc);
+            modelBrowser.setCurrentDoc(doc);
         }
-    }
-
-    /**
-     * @return
-     */
-    public static final GraphDocument getSelectedDoc() {
-        return ModelBrowser.lastActiveBrowser != null ? ModelBrowser.lastActiveBrowser.getSelectedDoc() : null;
     }
 
     /**
@@ -155,9 +147,6 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
         if (this.showModelsInSeparateBrowser == showModelsInSeparateBrowser) {
             return;
         }
-        //Zuerst das aktuell selektierte GraphDocument holen. Das muss noch mit dem alten globalen Wert
-        //von showModelsInSeparateBrowser passieren, sonst kommt hier null zurück
-        GraphDocument activeDoc = getSelectedDoc();
         //erst jetzt den neuen Wert setzen, weil getSelectedDoc() nur das Richtige tut, wenn
         //noch der alte Wert gesetzt ist
         this.showModelsInSeparateBrowser = showModelsInSeparateBrowser;
@@ -180,7 +169,6 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
             }
             setLayout(new GridLayout(1, 1, 0, 0));
         }
-        Static.setSelectedDoc(activeDoc);
         revalidate();
     }
 

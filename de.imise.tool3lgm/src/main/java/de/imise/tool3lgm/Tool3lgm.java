@@ -26,7 +26,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
@@ -349,7 +348,7 @@ public class Tool3lgm {
             //das aktive doc in der Collection selbst setzen
             gdcoll.setActiveGraphDocument(doc);
         }
-        mainFrame.setSelectedDoc(doc);
+        mainFrame.setCurrentDoc(doc);
     }
 
     /**
@@ -422,7 +421,6 @@ public class Tool3lgm {
         mainFrame.closeAllFramesAndTabs(gdcoll);
 
         ignoreDocSelection = false;
-        setSelectedDoc(ModelBrowserPanel.getSelectedDoc());
 
         GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
         fileHandler.close();

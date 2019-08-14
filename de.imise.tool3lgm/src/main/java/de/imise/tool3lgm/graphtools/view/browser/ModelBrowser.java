@@ -51,9 +51,9 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      * @return
      */
     protected void addCollection(final GDCollection gdcoll) {
-        SubModelsBrowser panel = new ComboBoxSubModelBrowser(gdcoll);
-        addTab(panel.getTitle(), panel);
-        setSelectedComponent(panel);
+        SubModelsBrowser subModelsBrowser = new ComboBoxSubModelBrowser(gdcoll);
+        addTab(subModelsBrowser.getTitle(), subModelsBrowser);
+        setSelectedComponent(subModelsBrowser);
     }
 
     /**
@@ -62,9 +62,9 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      * @return
      */
     protected void addGraphDocument(final GraphDocument doc) {
-        SubModelsBrowser collectionPane = getCollectionPane(doc.getCollection());
-        if (collectionPane != null) {
-            collectionPane.addGraphDocument(doc);
+        SubModelsBrowser subModelsBrowser = getCollectionPane(doc.getCollection());
+        if (subModelsBrowser != null) {
+            subModelsBrowser.addGraphDocument(doc);
         }
     }
 
@@ -72,36 +72,36 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      * @param doc
      */
     protected void removeGraphDocument(final GraphDocument doc) {
-        SubModelsBrowser collectionPane = getCollectionPane(doc.getCollection());
-        if (collectionPane != null) {
-            collectionPane.removeGraphDocument(doc);
+        SubModelsBrowser subModelsBrowser = getCollectionPane(doc.getCollection());
+        if (subModelsBrowser != null) {
+            subModelsBrowser.removeGraphDocument(doc);
         }
-        if (collectionPane.getDocCount() == 0) {
-            remove(collectionPane);
+        if (subModelsBrowser.getDocCount() == 0) {
+            remove(subModelsBrowser);
         }
     }
 
     /**
      * @return <code>GraphDocument</code> of the selected <code>ModelBrowser</code> -tree
      */
-    protected GraphDocument getSelectedDoc() {
-        SubModelsBrowser collectionPane = (SubModelsBrowser) getSelectedComponent();
-        if (collectionPane == null) {
+    private GraphDocument getCurrentDoc() {
+        SubModelsBrowser subModelsBrowser = (SubModelsBrowser) getSelectedComponent();
+        if (subModelsBrowser == null) {
             return null;
         }
-        return collectionPane.getSelectedDoc();
+        return subModelsBrowser.getCurrentDoc();
     }
 
     /**
      * @param doc
      * @return tab-index of document/model-pane or -1
      */
-    protected final void setSelectedDoc(final GraphDocument doc) {
+    protected final void setCurrentDoc(final GraphDocument doc) {
         if (doc != null) {
-            SubModelsBrowser pane = getCollectionPane(doc.getCollection());
-            setSelectedComponent(pane);
-            if (pane != null) {
-                pane.setSelectedDoc(doc);
+            SubModelsBrowser subModelsBrowser = getCollectionPane(doc.getCollection());
+            setSelectedComponent(subModelsBrowser);
+            if (subModelsBrowser != null) {
+                subModelsBrowser.setCurrentDoc(doc);
             }
             updateActiveBrowserTab();
         }
@@ -113,9 +113,9 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      */
     private SubModelsBrowser getCollectionPane(final GDCollection coll) {
         for (int i = 0; i < getTabCount(); i++) {
-            SubModelsBrowser collectionPane = (SubModelsBrowser) getComponentAt(i);
-            if (collectionPane.getCollection() == coll) {
-                return collectionPane;
+            SubModelsBrowser subModelsBrowser = (SubModelsBrowser) getComponentAt(i);
+            if (subModelsBrowser.getCollection() == coll) {
+                return subModelsBrowser;
             }
         }
         return null;
@@ -193,7 +193,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
     @Override
     public void stateChanged(final ChangeEvent e) {
         updateActiveBrowserTab();
-        GraphDocument doc = getSelectedDoc();
+        GraphDocument doc = getCurrentDoc();
         Static.setSelectedDoc(doc);
     }
 

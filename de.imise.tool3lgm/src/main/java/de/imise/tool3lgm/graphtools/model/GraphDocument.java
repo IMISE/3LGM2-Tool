@@ -4456,9 +4456,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         szen.getMapping().adapt(getMapping());
         szen.getFrame().getInputGraphArea().adaptSettings(frame.getInputGraphArea());
         addElementsToSzenario(szen.getHashString(), elements, pid);
-        Static.getTool().activeLayerChanged(szen);
         finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
+        szen.distributeEvent(ACTIVE_LAYER_CHANGED, pid);
+        szen.distributeEvent(DATA_CHANGED, pid);
     }
 
     /**

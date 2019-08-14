@@ -55,12 +55,12 @@ public abstract class SubModelsBrowser extends JPanel implements MouseListener, 
      *
      * @return
      */
-    public abstract GraphDocument getSelectedDoc();
+    abstract GraphDocument getCurrentDoc();
 
     /**
      * @param doc
      */
-    public abstract void setSelectedDoc(GraphDocument doc);
+    abstract void setCurrentDoc(GraphDocument doc);
 
     /**
      * @param doc

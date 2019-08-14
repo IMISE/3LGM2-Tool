@@ -170,7 +170,7 @@ public class MainFrame extends JFrame implements WindowListener {
      *            Wenn <code>true</code> ist, wird auch das dazugehörige
      *            Grafikfenster in den Vordergrund geholt, sonst nicht.
      */
-    public void setSelectedDoc(final GraphDocument doc) {
+    public void setCurrentDoc(final GraphDocument doc) {
         contentPane.setSelectedDoc(doc, doc != null);
     }
 
