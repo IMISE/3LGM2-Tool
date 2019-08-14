@@ -10,7 +10,7 @@ public interface GDCollectionChangeListener {
     public void dataChanged(GraphDocument source);
 
     /** Hier reagiert nur die GraphArea */
-    public void elementGraphicsChanged(GraphDocument source, ElementContainer element);
+    public void elementGraphicsChanged(ElementContainer ec);
 
     /** Wenn sich das Standard-GraphElementLayout geaendert hat (nur GraphArea) */
     public void layoutChanged(GraphDocument source);

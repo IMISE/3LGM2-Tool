@@ -383,7 +383,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     @Override
-    public final void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
+    public final void elementGraphicsChanged(final ElementContainer element) {
     }
 
     @Override

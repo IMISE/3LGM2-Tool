@@ -21,15 +21,14 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.action.StaticAction;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 // TODO:alle Buttons auf Actions umstellen (so wie zum Teil schon geschehen)
-public class ToolBar extends UnfloatableToolBar implements ActionListener, MouseListener, GDCollectionChangeListener {
+public class ToolBar extends UnfloatableToolBar implements ActionListener, MouseListener, GDCollectionChangeListenerSimple {
 
     private GraphDocument doc = null;
 
@@ -295,42 +294,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
     }
 
     @Override
-    public void activeLayerChanged(final GraphDocument source) {
-        updateButtons();
-    }
-
-    @Override
-    public void colorsChanged(final GraphDocument source) {
-        updateButtons();
-    }
-
-    @Override
-    public void dataChanged(final GraphDocument source) {
-        updateButtons();
-    }
-
-    @Override
-    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
-        updateButtons();
-    }
-
-    @Override
-    public void groupOrderChanged(final GraphDocument source) {
-        updateButtons();
-    }
-
-    @Override
-    public void layoutChanged(final GraphDocument source) {
-        updateButtons();
-    }
-
-    @Override
-    public void selectionChanged(final GraphDocument source) {
-        updateButtons();
-    }
-
-    @Override
-    public void modelOrSzenarioRenamed(final GraphDocument source) {
+    public void changed() {
         updateButtons();
     }
 

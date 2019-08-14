@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
@@ -29,7 +29,7 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements GDColle
     }
 
     @Override
-    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
+    public void elementGraphicsChanged(final ElementContainer element) {
         if (active) {
             //      System.out.println("elementGraphicsChanged");
             tree.refreshTree();

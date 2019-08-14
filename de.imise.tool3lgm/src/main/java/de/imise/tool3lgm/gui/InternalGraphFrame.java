@@ -128,7 +128,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     }
 
     @Override
-    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
+    public void elementGraphicsChanged(final ElementContainer element) {
         area.revalidateRepaint(element);
     }
 
@@ -149,17 +149,17 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
 
     @Override
     public void colorsChanged(final GraphDocument source) {
-        area.repaint();
+        area.revalidateRepaint();
     }
 
     @Override
     public void selectionChanged(final GraphDocument source) {
-        area.repaint();
+        area.revalidateRepaint();
     }
 
     @Override
     public void userFieldValueChanged(final ElementContainer ec) {
-        area.repaint();
+        area.revalidateRepaint();
     }
 
     /**
@@ -179,7 +179,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
         GraphDocument doc = getGraphDocument();
         ElementContainer thisEc = ecDoc == doc ? ec : ec.getElement().getContainer(doc);
         ec.refreshText();
-        elementGraphicsChanged(getGraphDocument(), thisEc);
+        elementGraphicsChanged(thisEc);
         revalidate();
         repaint();
     }

@@ -5,11 +5,12 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /** momentan wird dieser Listener ausschliesslich von den Dialogen genutzt */
 public interface InTransactionListener {
+
     /** Hier die generelle Nachricht - alle sollten sich komplett erneuern */
     public void dataChanged(GraphDocument source, int pid);
 
     /** Hier reagiert bisher niemand, da Dialogen sowas egal ist */
-    public void elementGraphicsChanged(GraphDocument source, ElementContainer ec);
+    public void elementGraphicsChanged(ElementContainer ec);
 
     /** Hier reagieren alle, die den Namen anzeigen */
     public void elementNameChanged(ElementContainer ec);

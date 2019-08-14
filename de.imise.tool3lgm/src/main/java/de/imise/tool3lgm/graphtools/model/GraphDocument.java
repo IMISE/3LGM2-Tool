@@ -2651,7 +2651,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     break;
                 case ELEMENT_GRAPHICS_CHANGED:
                     for (InTransactionListener itl : inlistener) {
-                        itl.elementGraphicsChanged(this, last_elem);
+                        itl.elementGraphicsChanged(last_elem);
                     }
                     break;
                 case ELEMENT_NAME_CHANGED:
@@ -2699,7 +2699,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     break;
                 case ELEMENT_GRAPHICS_CHANGED:
                     for (InTransactionListener itl : inlistener) {
-                        itl.elementGraphicsChanged(this, last_elem);
+                        itl.elementGraphicsChanged(last_elem);
                     }
                     break;
                 case ELEMENT_NAME_CHANGED:
@@ -2734,7 +2734,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             break;
         case ELEMENT_GRAPHICS_CHANGED:
             for (GDCollectionChangeListener gdl : listener) {
-                gdl.elementGraphicsChanged(this, last_elem);
+                gdl.elementGraphicsChanged(last_elem);
             }
             break;
         case LAYOUT_CHANGED:

@@ -2153,7 +2153,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param last_group
      * @param pid
      */
-    public final void distributeEventIntern(GraphDocument source, final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
+    private final void distributeEventIntern(GraphDocument source, final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
         if (isBulkMode()) {
             return;
         }
@@ -2169,7 +2169,7 @@ public final class GDCollection extends UserFieldTarget {
             break;
         case ELEMENT_GRAPHICS_CHANGED:
             for (GDCollectionChangeListener l : listener) {
-                l.elementGraphicsChanged(source, last_elem);
+                l.elementGraphicsChanged(last_elem);
             }
             break;
         case LAYOUT_CHANGED:

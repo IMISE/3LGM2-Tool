@@ -246,7 +246,7 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
     }
 
     @Override
-    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
+    public void elementGraphicsChanged(final ElementContainer element) {
     }
 
     @Override

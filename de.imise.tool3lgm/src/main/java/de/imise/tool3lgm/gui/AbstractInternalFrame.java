@@ -85,7 +85,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements GD
     }
 
     @Override
-    public void elementGraphicsChanged(final GraphDocument source, final ElementContainer element) {
+    public void elementGraphicsChanged(final ElementContainer element) {
     }
 
     @Override
