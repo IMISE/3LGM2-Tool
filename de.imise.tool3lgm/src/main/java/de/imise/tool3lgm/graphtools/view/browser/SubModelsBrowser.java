@@ -46,17 +46,26 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
     public SubModelsBrowser(final GDCollection gdcoll) {
         super(new BorderLayout());
         this.gdcoll = gdcoll;
-        tree = new DynamicTree(gdcoll.getMainGraphDocument());
-        tree.addMouseListener(this);
-        JScrollPane scrollPane = new JScrollPane(tree);
-        scrollPane.addMouseListener(this);
-        scrollPane.getHorizontalScrollBar().addMouseListener(this);
-        scrollPane.getVerticalScrollBar().addMouseListener(this);
-        submodelBox = new AlphabeticalComboBox();
-        submodelBox.addItemListener(this);
-        submodelBox.addMouseListener(this);
+        //Submodel ComboBox
+        submodelBox = addListener(new AlphabeticalComboBox());
+        //ModelElements Tree
+        tree = addListener(new DynamicTree(gdcoll.getMainGraphDocument()));
+        JScrollPane scrollPane = addListener(new JScrollPane(tree));
+        addListener(scrollPane.getHorizontalScrollBar());
+        addListener(scrollPane.getVerticalScrollBar());
+        //add
         add(submodelBox, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
+    }
+
+    /**
+     * @param comp
+     * @return
+     */
+    private <T extends Component> T addListener(final T comp) {
+        comp.addMouseListener(this);
+        comp.addFocusListener(this);
+        return comp;
     }
 
     /**
@@ -136,10 +145,14 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
         return gdcoll.getName();
     }
 
-    @Override
-    public void itemStateChanged(final ItemEvent e) {
+    private void setSelectedDoc() {
         GraphDocument currentDoc = getCurrentDoc();
         Static.setSelectedDoc(currentDoc);
+    }
+
+    @Override
+    public void itemStateChanged(final ItemEvent e) {
+        setSelectedDoc();
     }
 
     @Override
@@ -156,7 +169,7 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
 
     @Override
     public void mousePressed(final MouseEvent e) {
-        update();
+        setSelectedDoc();
     }
 
     @Override
@@ -165,7 +178,7 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
 
     @Override
     public void focusGained(final FocusEvent e) {
-        update();
+        setSelectedDoc();
     }
 
     @Override
