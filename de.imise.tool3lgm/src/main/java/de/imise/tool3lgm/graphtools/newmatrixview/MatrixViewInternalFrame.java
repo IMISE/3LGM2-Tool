@@ -246,36 +246,8 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
     }
 
     @Override
-    public void elementGraphicsChanged(final ElementContainer element) {
-    }
-
-    @Override
-    public void layoutChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void groupOrderChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void activeLayerChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void colorsChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void selectionChanged(final GraphDocument source) {
-    }
-
-    @Override
     public void elementNameChanged(final ElementContainer ec) {
         dataChanged(ec.getGraphDocument());
-    }
-
-    @Override
-    public void userFieldValueChanged(final ElementContainer ec) {
     }
 
 }
