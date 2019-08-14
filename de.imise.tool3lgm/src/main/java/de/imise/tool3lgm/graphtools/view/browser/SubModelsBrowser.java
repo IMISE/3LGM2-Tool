@@ -4,31 +4,41 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
+import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
  * Interface für alle {@link Component}, die im {@link ModelBrowser} Teilmodelle anzeigen.
  *
  * @author AXS
  */
-public abstract class SubModelsBrowser extends JPanel implements MouseListener, FocusListener {
+public final class SubModelsBrowser extends JPanel implements MouseListener, FocusListener, ItemListener {
 
     /**
      * Das Modell das über dieses Tab-Pane dargestellt wird
      */
-    protected GDCollection gdcoll;
+    private final GDCollection gdcoll;
 
     /**
      * Der Baum, in dem in diesem TeilomodellBrwoser alle Daten angezeigt werden. Er wird immer in den Tab im Vordergrund eingebaut.
      */
-    protected DynamicTree tree;
+    private final DynamicTree tree;
+
+    /**
+     * Combobox, in der das aktuelle Teilmodell ausgewählt werden kann
+     */
+    private final AlphabeticalComboBox submodelBox;
 
     /**
      * @param gdcoll
@@ -38,41 +48,86 @@ public abstract class SubModelsBrowser extends JPanel implements MouseListener, 
         this.gdcoll = gdcoll;
         tree = new DynamicTree(gdcoll.getMainGraphDocument());
         tree.addMouseListener(this);
+        JScrollPane scrollPane = new JScrollPane(tree);
+        scrollPane.addMouseListener(this);
+        scrollPane.getHorizontalScrollBar().addMouseListener(this);
+        scrollPane.getVerticalScrollBar().addMouseListener(this);
+        submodelBox = new AlphabeticalComboBox();
+        submodelBox.addItemListener(this);
+        submodelBox.addMouseListener(this);
+        add(submodelBox, BorderLayout.NORTH);
+        add(scrollPane, BorderLayout.CENTER);
     }
 
     /**
-     * @return Returns the Model.
-     */
-    public abstract GDCollection getCollection();
-
-    /**
      * @param doc
      */
-    public abstract void addGraphDocument(GraphDocument doc);
+    public void addGraphDocument(final GraphDocument doc) {
+        submodelBox.addItem(doc);
+        //das erste doc ist immer das Gesamtmodell -> erstes Doc in eigene Liste packen (also einen
+        //Separator nach dem ersten einfügen), damit es immer oben steht (egal wie es heißt) und nur
+        //die Elemente darunter (alle Szenarios) sortiert werden
+        if (submodelBox.getItemCount() == 1) {
+            submodelBox.addSeparator(false);
+        }
+    }
 
     /**
-     * Liefert das aktuell selektierte {@link GraphDocument}
-     *
      * @return
      */
-    abstract GraphDocument getCurrentDoc();
+    public GDCollection getCollection() {
+        return gdcoll;
+    }
 
     /**
-     * @param doc
-     */
-    abstract void setCurrentDoc(GraphDocument doc);
-
-    /**
-     * @param doc
-     */
-    public abstract void removeGraphDocument(GraphDocument doc);
-
-    /**
-     * Liefert die Anzahl von {@link GraphDocument}, die dieser Browser darstellt
-     *
      * @return
      */
-    public abstract int getDocCount();
+    public int getDocCount() {
+        int count = 0;
+        for (int i = 0; i < submodelBox.getItemCount(); i++) {
+            if (submodelBox.getObjectAt(i) instanceof GraphDocument) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * @param doc
+     */
+    public void removeGraphDocument(final GraphDocument doc) {
+        submodelBox.removeItem(doc);
+    }
+
+    /**
+     * @return
+     */
+    GraphDocument getCurrentDoc() {
+        Object o = submodelBox.getSelectedObject();
+        if (o instanceof GraphDocument) {
+            return (GraphDocument) o;
+        }
+        return null;
+    }
+
+    /**
+     * @param doc
+     */
+    void setCurrentDoc(final GraphDocument doc) {
+        submodelBox.removeItemListener(this);
+        submodelBox.setSelectedObject(doc);
+        tree.setGraphDocument(doc);
+        submodelBox.addItemListener(this);
+    }
+
+    /**
+     *
+     */
+    public void update() {
+        submodelBox.removeItemListener(this);
+        submodelBox.resort();
+        submodelBox.addItemListener(this);
+    }
 
     /**
      * @return Namen des Modells, das dieser Browser darstellt
@@ -81,10 +136,11 @@ public abstract class SubModelsBrowser extends JPanel implements MouseListener, 
         return gdcoll.getName();
     }
 
-    /**
-     * Aktualisiert die Komponente
-     */
-    public abstract void update();
+    @Override
+    public void itemStateChanged(final ItemEvent e) {
+        GraphDocument currentDoc = getCurrentDoc();
+        Static.setSelectedDoc(currentDoc);
+    }
 
     @Override
     public void mouseClicked(final MouseEvent e) {

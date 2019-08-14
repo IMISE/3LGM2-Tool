@@ -51,7 +51,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      * @return
      */
     protected void addCollection(final GDCollection gdcoll) {
-        SubModelsBrowser subModelsBrowser = new ComboBoxSubModelBrowser(gdcoll);
+        SubModelsBrowser subModelsBrowser = new SubModelsBrowser(gdcoll);
         addTab(subModelsBrowser.getTitle(), subModelsBrowser);
         setSelectedComponent(subModelsBrowser);
     }
