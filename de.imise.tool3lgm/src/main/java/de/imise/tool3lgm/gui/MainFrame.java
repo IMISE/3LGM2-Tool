@@ -130,7 +130,7 @@ public class MainFrame extends JFrame implements WindowListener {
      * @return
      */
     public InternalGraphFrame createFrame(final GraphDocument doc) {
-        //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GraphDocumentListener laufen (SZENARIO_ADDED)
+        //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GDCollectionChangeListener laufen (SZENARIO_ADDED)
         return contentPane.createGraphFrame(doc);
     }
 
@@ -188,7 +188,7 @@ public class MainFrame extends JFrame implements WindowListener {
         contentPane.reorderFramesSideBySide();
     }
 
-    //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GraphDocumentListener laufen (SZENARIO_REMOVED)
+    //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GDCollectionChangeListener laufen (SZENARIO_REMOVED)
     /**
      * @param szen
      */
@@ -196,7 +196,7 @@ public class MainFrame extends JFrame implements WindowListener {
         contentPane.closeFrame(szen);
     }
 
-    //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GraphDocumentListener laufen (MODEL_CLOSED) (analog sollte es dann auch MODEL_OPENED geben)
+    //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GDCollectionChangeListener laufen (MODEL_CLOSED) (analog sollte es dann auch MODEL_OPENED geben)
     /**
      * @param gdcoll
      */

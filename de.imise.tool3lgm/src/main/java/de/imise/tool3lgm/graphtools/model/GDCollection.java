@@ -162,7 +162,7 @@ public final class GDCollection extends UserFieldTarget {
     /** Hauptdokument der Collection */
     private LGMGraphDocument doc;
 
-    /** Liste aller <code>GraphDocumentListener</code> */
+    /** Liste aller {@link GDCollectionChangeListener} */
     private final List<GDCollectionChangeListener> listener = new ArrayList<>();
 
     /**
@@ -245,7 +245,7 @@ public final class GDCollection extends UserFieldTarget {
         metaModel = metaModelContext.getMetaModel();
         doc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
-        doc.addGraphDocumentListener(userFieldDefinitions);
+        doc.addGDCollectionChangeListener(userFieldDefinitions);
         activeGraphDocumentsList.add(doc);
         UserfieldResourceHandler.loadDefaultUserfieldDefinition(this);
     }
@@ -393,7 +393,7 @@ public final class GDCollection extends UserFieldTarget {
             doc.addRedoCommand(MODEL_ACTION_CREATE_SUBMODEL + " " + getParseSaveString(szenario.getTitle()) + " " + getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
             doc.finish_transaction(pid);
         }
-        szenario.addGraphDocumentListener(userFieldDefinitions);
+        szenario.addGDCollectionChangeListener(userFieldDefinitions);
         if (descriptionFrame != null) {
             descriptionFrame.update();
         }
@@ -2135,14 +2135,14 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * @param gdl
      */
-    public final void addGraphDocumentListener(final GDCollectionChangeListener gdl) {
+    public final void addGDCollectionChangeListener(final GDCollectionChangeListener gdl) {
         listener.add(gdl);
     }
 
     /**
      * @param gdl
      */
-    public final void removeGraphDocumentListener(final GDCollectionChangeListener gdl) {
+    public final void removeGDCollectionChangeListener(final GDCollectionChangeListener gdl) {
         listener.remove(gdl);
     }
 

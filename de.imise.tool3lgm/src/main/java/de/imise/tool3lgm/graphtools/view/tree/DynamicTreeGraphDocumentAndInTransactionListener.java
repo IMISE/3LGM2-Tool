@@ -102,13 +102,13 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements GDColle
     }
 
     public void remove() {
-        tree.getGraphDocument().removeGraphDocumentListener(this);
+        tree.getGraphDocument().removeGDCollectionChangeListener(this);
         tree.getGraphDocument().getCollection().getMainGraphDocument().removeInTransactionListener(this);
     }
 
     public void add() {
         remove(); //zur Sicherheit erstmal removen
-        tree.getGraphDocument().addGraphDocumentListener(this);
+        tree.getGraphDocument().addGDCollectionChangeListener(this);
         tree.getGraphDocument().getCollection().getMainGraphDocument().addInTransactionListener(this);
     }
 

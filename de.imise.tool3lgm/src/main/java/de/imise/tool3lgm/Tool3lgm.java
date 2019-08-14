@@ -272,7 +272,7 @@ public class Tool3lgm {
      * @return
      */
     public AbstractInternalFrame createFrame(final GraphDocument doc) {
-        //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GraphDocumentListener laufen (SZENARIO_ADDED)
+        //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GDCollectionChangeListener laufen (SZENARIO_ADDED)
         return mainFrame.createFrame(doc);
     }
 

@@ -3,17 +3,16 @@ package de.imise.tool3lgm.graphtools.model;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
- * Abstracte Implementierung von <code>GraphDocumentListener</code>. In keiner
- * der Methoden wird etwas ausgeführt.
+ * Abstracte Implementierung von {@link GDCollectionChangeListener}. In keiner der Methoden wird etwas ausgeführt.
  *
  * @author AXS (Created on 21.02.2008)
  */
-public abstract class GraphDocumentAdapter implements GDCollectionChangeListener {
+public abstract class GDCollectionChangeAdapter implements GDCollectionChangeListener {
 
     /**
      *
      */
-    public GraphDocumentAdapter() {
+    public GDCollectionChangeAdapter() {
         super();
     }
 

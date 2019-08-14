@@ -2597,14 +2597,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @param gdl
      */
-    public final void addGraphDocumentListener(final GDCollectionChangeListener gdl) {
+    public final void addGDCollectionChangeListener(final GDCollectionChangeListener gdl) {
         listener.add(gdl);
     }
 
     /**
      * @param gdl
      */
-    public final void removeGraphDocumentListener(final GDCollectionChangeListener gdl) {
+    public final void removeGDCollectionChangeListener(final GDCollectionChangeListener gdl) {
         listener.remove(gdl);
     }
 

@@ -231,7 +231,7 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
         matrixViewToolBar.positionChanged(null, null, null);
     }
 
-    //  Methoden des Interfaces GraphDocumentListener --- Anfang ---
+    //  Methoden des Interfaces GDCollectionChangeListener --- Anfang ---
 
     @Override
     public void dataChanged(final GraphDocument source) {

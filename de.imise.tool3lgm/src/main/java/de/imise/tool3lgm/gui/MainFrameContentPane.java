@@ -27,8 +27,8 @@ import javax.swing.event.InternalFrameListener;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
@@ -208,7 +208,7 @@ public class MainFrameContentPane extends JPanel implements GDCollectionChangeLi
      */
     public void addCollection(final GDCollection gdcoll) {
         modelBrowserPanel.addCollection(gdcoll);
-        gdcoll.addGraphDocumentListener(this);
+        gdcoll.addGDCollectionChangeListener(this);
     }
 
     @Override
@@ -514,9 +514,9 @@ public class MainFrameContentPane extends JPanel implements GDCollectionChangeLi
         }
     }
 
-    ///////////////////////////
-    // GraphDocumentListener //
-    ///////////////////////////
+    ////////////////////////////////
+    // GDCollectionChangeListener //
+    ////////////////////////////////
 
     @Override
     public void activeLayerChanged(final GraphDocument source) {
@@ -597,7 +597,7 @@ public class MainFrameContentPane extends JPanel implements GDCollectionChangeLi
     public void internalFrameActivated(final InternalFrameEvent e) {
         activeFrame = (AbstractInternalFrame) e.getInternalFrame();
         GraphDocument doc = activeFrame.getGraphDocument();
-        doc.addGraphDocumentListener(toolbarManager);
+        doc.addGDCollectionChangeListener(toolbarManager);
         toolbarManager.updateToolBar();
         //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
         //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
@@ -617,7 +617,7 @@ public class MainFrameContentPane extends JPanel implements GDCollectionChangeLi
     @Override
     public void internalFrameDeactivated(final InternalFrameEvent e) {
         GraphDocument graphDocument = activeFrame.getGraphDocument();
-        graphDocument.removeGraphDocumentListener(toolbarManager);
+        graphDocument.removeGDCollectionChangeListener(toolbarManager);
         activeFrame = null;
         toolbarManager.updateToolBar();
     }

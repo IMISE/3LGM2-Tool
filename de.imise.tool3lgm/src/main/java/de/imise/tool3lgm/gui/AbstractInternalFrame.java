@@ -43,7 +43,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements GD
 
         setFrameIcon(Tool3lgmConstants.getIcon("toolIcon.gif"));
 
-        doc.addGraphDocumentListener(this);
+        doc.addGDCollectionChangeListener(this);
         doc.addInTransactionListener(this);
     }
 
@@ -137,7 +137,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements GD
 
     @Override
     public void dispose() {
-        doc.removeGraphDocumentListener(this);
+        doc.removeGDCollectionChangeListener(this);
         doc.removeInTransactionListener(this);
         super.dispose();
     }

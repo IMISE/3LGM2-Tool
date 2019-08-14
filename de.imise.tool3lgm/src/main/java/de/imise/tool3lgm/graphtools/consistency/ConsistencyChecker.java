@@ -30,7 +30,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.GraphDocumentAdapter;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeAdapter;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
@@ -44,7 +44,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDi
  *
  * @author AXS created on 06.08.2008
  */
-public final class ConsistencyChecker extends GraphDocumentAdapter {
+public final class ConsistencyChecker extends GDCollectionChangeAdapter {
 
     /** Checks the consistency of a model. This instance is used for the current selected Model */
     private static ConsistencyChecker consistencyChecker;
@@ -124,11 +124,11 @@ public final class ConsistencyChecker extends GraphDocumentAdapter {
     public void changeContext(final GDCollection gdcoll) {
         if (this.gdcoll != gdcoll) {
             if (this.gdcoll != null) {
-                this.gdcoll.removeGraphDocumentListener(this);
+                this.gdcoll.removeGDCollectionChangeListener(this);
             }
             this.gdcoll = gdcoll;
             if (this.gdcoll != null) {
-                gdcoll.addGraphDocumentListener(this);
+                gdcoll.addGDCollectionChangeListener(this);
             }
         }
         resetConsistencyDefinition();
