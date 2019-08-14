@@ -17,11 +17,6 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements GDColle
     }
 
     @Override
-    public void dataChanged(final GraphDocument source, final int pid) {
-        dataChanged(source);
-    }
-
-    @Override
     public void dataChanged(final GraphDocument source) {
         if (active) {
             tree.buildTree();

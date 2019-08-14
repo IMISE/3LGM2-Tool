@@ -2646,7 +2646,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 switch (changeType) {
                 case DATA_CHANGED:
                     for (InTransactionListener itl : inlistener) {
-                        itl.dataChanged(this, pid);
+                        itl.dataChanged(this);
                     }
                     break;
                 case ELEMENT_GRAPHICS_CHANGED:
@@ -2694,7 +2694,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 switch (changeType) {
                 case DATA_CHANGED:
                     for (InTransactionListener itl : inlistener) {
-                        itl.dataChanged(this, pid);
+                        itl.dataChanged(this);
                     }
                     break;
                 case ELEMENT_GRAPHICS_CHANGED:
@@ -2729,7 +2729,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 gdl.dataChanged(this);
             }
             for (InTransactionListener itl : inlistener) {
-                itl.dataChanged(this, pid);
+                itl.dataChanged(this);
             }
             break;
         case ELEMENT_GRAPHICS_CHANGED:

@@ -7,8 +7,8 @@ import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
@@ -106,11 +106,6 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements GD
 
     @Override
     public void selectionChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void dataChanged(final GraphDocument source, final int pid) {
-        dataChanged(source);
     }
 
     @Override

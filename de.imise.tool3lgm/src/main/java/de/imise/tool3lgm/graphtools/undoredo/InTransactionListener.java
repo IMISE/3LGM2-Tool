@@ -7,7 +7,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 public interface InTransactionListener {
 
     /** Hier die generelle Nachricht - alle sollten sich komplett erneuern */
-    public void dataChanged(GraphDocument source, int pid);
+    public void dataChanged(GraphDocument source);
 
     /** Hier reagiert bisher niemand, da Dialogen sowas egal ist */
     public void elementGraphicsChanged(ElementContainer ec);
