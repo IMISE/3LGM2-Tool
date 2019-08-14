@@ -37,7 +37,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -157,7 +157,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
     }
 
     /**
-     * Setzt das übergebene {@link GraphDocument} für diesen Baum und fügt den Baum als {@link GraphDocumentListener} hinzu. Beim vorherigen
+     * Setzt das übergebene {@link GraphDocument} für diesen Baum und fügt den Baum als {@link GDCollectionChangeListener} hinzu. Beim vorherigen
      * {@link GraphDocument} des Baumes wird der Baum als Listener entfernt.
      *
      * @param doc

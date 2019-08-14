@@ -1,11 +1,11 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
-public class DynamicTreeGraphDocumentAndInTransactionListener implements GraphDocumentListener, InTransactionListener {
+public class DynamicTreeGraphDocumentAndInTransactionListener implements GDCollectionChangeListener, InTransactionListener {
 
     private final DynamicTree tree;
 

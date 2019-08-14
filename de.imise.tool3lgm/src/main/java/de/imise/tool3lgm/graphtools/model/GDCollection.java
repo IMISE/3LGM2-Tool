@@ -163,7 +163,7 @@ public final class GDCollection extends UserFieldTarget {
     private LGMGraphDocument doc;
 
     /** Liste aller <code>GraphDocumentListener</code> */
-    private final List<GraphDocumentListener> listener = new ArrayList<>();
+    private final List<GDCollectionChangeListener> listener = new ArrayList<>();
 
     /**
      * Liste aller <code>GraphDocument</code>s in der Reihenfolge, dass immer das selektierte ganz hinten steht,
@@ -2135,14 +2135,14 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * @param gdl
      */
-    public final void addGraphDocumentListener(final GraphDocumentListener gdl) {
+    public final void addGraphDocumentListener(final GDCollectionChangeListener gdl) {
         listener.add(gdl);
     }
 
     /**
      * @param gdl
      */
-    public final void removeGraphDocumentListener(final GraphDocumentListener gdl) {
+    public final void removeGraphDocumentListener(final GDCollectionChangeListener gdl) {
         listener.remove(gdl);
     }
 
@@ -2162,43 +2162,43 @@ public final class GDCollection extends UserFieldTarget {
         }
         switch (changeType) {
         case DATA_CHANGED:
-            for (GraphDocumentListener l : listener) {
+            for (GDCollectionChangeListener l : listener) {
                 l.dataChanged(source);
             }
             updateElementNames();
             break;
         case ELEMENT_GRAPHICS_CHANGED:
-            for (GraphDocumentListener l : listener) {
+            for (GDCollectionChangeListener l : listener) {
                 l.elementGraphicsChanged(source, last_elem);
             }
             break;
         case LAYOUT_CHANGED:
-            for (GraphDocumentListener l : listener) {
+            for (GDCollectionChangeListener l : listener) {
                 l.layoutChanged(source);
             }
             break;
         case GROUP_ORDER_CHANGED:
-            for (GraphDocumentListener l : listener) {
+            for (GDCollectionChangeListener l : listener) {
                 l.groupOrderChanged(source);
             }
             break;
         case ACTIVE_LAYER_CHANGED:
-            for (GraphDocumentListener l : listener) {
+            for (GDCollectionChangeListener l : listener) {
                 l.activeLayerChanged(source);
             }
             break;
         case COLORS_CHANGED:
-            for (GraphDocumentListener l : listener) {
+            for (GDCollectionChangeListener l : listener) {
                 l.colorsChanged(source);
             }
             break;
         case SELECTION_CHANGED:
-            for (GraphDocumentListener l : listener) {
+            for (GDCollectionChangeListener l : listener) {
                 l.selectionChanged(source);
             }
             break;
         case MODEL_OR_SZENARIO_RENAMED:
-            for (GraphDocumentListener l : listener) {
+            for (GDCollectionChangeListener l : listener) {
                 l.modelOrSzenarioRenamed(source);
             }
             break;

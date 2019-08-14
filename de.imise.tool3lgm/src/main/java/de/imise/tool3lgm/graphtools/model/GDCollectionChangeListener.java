@@ -4,7 +4,7 @@ import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 
-public interface GraphDocumentListener {
+public interface GDCollectionChangeListener {
 
     /** Hier die generelle Nachricht - alle sollten sich komplett erneuern */
     public void dataChanged(GraphDocument source);

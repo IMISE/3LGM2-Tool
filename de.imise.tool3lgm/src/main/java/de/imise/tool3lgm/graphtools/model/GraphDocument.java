@@ -112,7 +112,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * COMMENTME
      */
-    private final List<GraphDocumentListener> listener;
+    private final List<GDCollectionChangeListener> listener;
 
     /**
      * COMMENTME
@@ -2597,14 +2597,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @param gdl
      */
-    public final void addGraphDocumentListener(final GraphDocumentListener gdl) {
+    public final void addGraphDocumentListener(final GDCollectionChangeListener gdl) {
         listener.add(gdl);
     }
 
     /**
      * @param gdl
      */
-    public final void removeGraphDocumentListener(final GraphDocumentListener gdl) {
+    public final void removeGraphDocumentListener(final GDCollectionChangeListener gdl) {
         listener.remove(gdl);
     }
 
@@ -2725,7 +2725,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         switch (changeType) {
         case DATA_CHANGED:
-            for (GraphDocumentListener gdl : listener) {
+            for (GDCollectionChangeListener gdl : listener) {
                 gdl.dataChanged(this);
             }
             for (InTransactionListener itl : inlistener) {
@@ -2733,37 +2733,37 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             break;
         case ELEMENT_GRAPHICS_CHANGED:
-            for (GraphDocumentListener gdl : listener) {
+            for (GDCollectionChangeListener gdl : listener) {
                 gdl.elementGraphicsChanged(this, last_elem);
             }
             break;
         case LAYOUT_CHANGED:
-            for (GraphDocumentListener gdl : listener) {
+            for (GDCollectionChangeListener gdl : listener) {
                 gdl.layoutChanged(this);
             }
             break;
         case GROUP_ORDER_CHANGED:
-            for (GraphDocumentListener gdl : listener) {
+            for (GDCollectionChangeListener gdl : listener) {
                 gdl.groupOrderChanged(this);
             }
             break;
         case ACTIVE_LAYER_CHANGED:
-            for (GraphDocumentListener gdl : listener) {
+            for (GDCollectionChangeListener gdl : listener) {
                 gdl.activeLayerChanged(this);
             }
             break;
         case COLORS_CHANGED:
-            for (GraphDocumentListener gdl : listener) {
+            for (GDCollectionChangeListener gdl : listener) {
                 gdl.colorsChanged(this);
             }
             break;
         case SELECTION_CHANGED:
-            for (GraphDocumentListener gdl : listener) {
+            for (GDCollectionChangeListener gdl : listener) {
                 gdl.selectionChanged(this);
             }
             break;
         case MODEL_OR_SZENARIO_RENAMED:
-            for (GraphDocumentListener gdl : listener) {
+            for (GDCollectionChangeListener gdl : listener) {
                 gdl.modelOrSzenarioRenamed(this);
             }
             break;

@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  *
  * @author AXS (Created on 21.02.2008)
  */
-public abstract class GraphDocumentAdapter implements GraphDocumentListener {
+public abstract class GraphDocumentAdapter implements GDCollectionChangeListener {
 
     /**
      *

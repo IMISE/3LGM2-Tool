@@ -28,7 +28,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.GraphDocumentListener;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
@@ -42,7 +42,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * @author AXS (6 Aug 2019)
  */
-public class MainFrameContentPane extends JPanel implements GraphDocumentListener, PropertyChangeListener, InternalFrameListener {
+public class MainFrameContentPane extends JPanel implements GDCollectionChangeListener, PropertyChangeListener, InternalFrameListener {
 
     /** ToolBar with general tools */
     private final ToolBar toolbar = new ToolBar();
