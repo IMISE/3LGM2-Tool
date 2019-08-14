@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.undoredo;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /** momentan wird dieser Listener ausschliesslich von den Dialogen genutzt */
@@ -16,6 +17,6 @@ public interface InTransactionListener {
     public void elementNameChanged(ElementContainer ec);
 
     /** Hier reagieren alle, die UserFields anzeigen */
-    public void userFieldValueChanged(ElementContainer ec);
+    public void userFieldValueChanged(UserFieldTarget userFieldTarget);
 
 }

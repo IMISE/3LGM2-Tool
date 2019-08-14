@@ -15,6 +15,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 
@@ -158,7 +159,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     }
 
     @Override
-    public void userFieldValueChanged(final ElementContainer ec) {
+    public void userFieldValueChanged(final UserFieldTarget userFieldTarget) {
         area.revalidateRepaint();
     }
 

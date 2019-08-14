@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 
@@ -8,6 +9,12 @@ public interface GDCollectionChangeListener {
 
     /** Hier die generelle Nachricht - alle sollten sich komplett erneuern */
     public void dataChanged(GraphDocument source);
+
+    /** Hier reagieren alle, die den Namen anzeigen */
+    public void elementNameChanged(ElementContainer ec);
+
+    /** Hier reagieren alle, die UserFields anzeigen */
+    public void userFieldValueChanged(UserFieldTarget userFieldTarget);
 
     /** Hier reagiert nur die GraphArea */
     public void elementGraphicsChanged(ElementContainer ec);

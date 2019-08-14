@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
@@ -18,6 +19,12 @@ public interface GDCollectionChangeListenerSimple extends GDCollectionChangeList
 
     @Override
     public default void elementNameChanged(final ElementContainer source) {
+        changed();
+        changed(source);
+    }
+
+    @Override
+    default void userFieldValueChanged(final UserFieldTarget source) {
         changed();
         changed(source);
     }
@@ -71,6 +78,9 @@ public interface GDCollectionChangeListenerSimple extends GDCollectionChangeList
     }
 
     public default void changed(final ElementContainer elementContainer) {
+    }
+
+    public default void changed(final UserFieldTarget userFieldTarget) {
     }
 
 }

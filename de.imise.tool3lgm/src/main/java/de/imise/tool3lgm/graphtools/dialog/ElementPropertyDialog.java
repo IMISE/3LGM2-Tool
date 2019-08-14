@@ -51,6 +51,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.swing.component.TabbedPane;
@@ -392,7 +393,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     @Override
-    public final void userFieldValueChanged(final ElementContainer ec) {
+    public final void userFieldValueChanged(final UserFieldTarget userFieldTarget) {
         update();
     }
 

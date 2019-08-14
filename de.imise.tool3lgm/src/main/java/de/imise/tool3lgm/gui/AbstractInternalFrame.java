@@ -10,6 +10,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
@@ -106,6 +107,10 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements GD
 
     @Override
     public void selectionChanged(final GraphDocument source) {
+    }
+
+    @Override
+    public void userFieldValueChanged(final UserFieldTarget userFieldTarget) {
     }
 
     @Override

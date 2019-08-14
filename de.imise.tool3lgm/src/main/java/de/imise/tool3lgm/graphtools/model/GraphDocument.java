@@ -73,6 +73,7 @@ import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -2661,7 +2662,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     break;
                 case USER_FIELD_VALUE_CHANGED:
                     for (InTransactionListener itl : inlistener) {
-                        itl.userFieldValueChanged(last_elem);
+                        UserFieldTarget userFieldTarget = last_elem == null ? null : last_elem.getElement();
+                        itl.userFieldValueChanged(userFieldTarget);
                     }
                     break;
                 default:
@@ -2708,8 +2710,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     }
                     break;
                 case USER_FIELD_VALUE_CHANGED:
+                    UserFieldTarget userFieldTarget = last_elem == null ? null : last_elem.getElement();
                     for (InTransactionListener itl : inlistener) {
-                        itl.userFieldValueChanged(last_elem);
+                        itl.userFieldValueChanged(userFieldTarget);
                     }
                     break;
                 default:
@@ -2735,6 +2738,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         case ELEMENT_GRAPHICS_CHANGED:
             for (GDCollectionChangeListener gdl : listener) {
                 gdl.elementGraphicsChanged(last_elem);
+            }
+            break;
+        case ELEMENT_NAME_CHANGED:
+            for (GDCollectionChangeListener gdl : listener) {
+                gdl.elementNameChanged(last_elem);
+            }
+            break;
+        case USER_FIELD_VALUE_CHANGED:
+            UserFieldTarget userFieldTarget = last_elem == null ? null : last_elem.getElement();
+            for (GDCollectionChangeListener gdl : listener) {
+                gdl.userFieldValueChanged(userFieldTarget);
             }
             break;
         case LAYOUT_CHANGED:

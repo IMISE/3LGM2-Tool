@@ -2172,6 +2172,17 @@ public final class GDCollection extends UserFieldTarget {
                 l.elementGraphicsChanged(last_elem);
             }
             break;
+        case ELEMENT_NAME_CHANGED:
+            for (GDCollectionChangeListener l : listener) {
+                l.elementNameChanged(last_elem);
+            }
+            break;
+        case USER_FIELD_VALUE_CHANGED:
+            UserFieldTarget userFieldTarget = last_elem == null ? null : last_elem.getElement();
+            for (GDCollectionChangeListener l : listener) {
+                l.userFieldValueChanged(userFieldTarget);
+            }
+            break;
         case LAYOUT_CHANGED:
             for (GDCollectionChangeListener l : listener) {
                 l.layoutChanged(source);
