@@ -6,8 +6,8 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.InternalMatrixFrameToolBar;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
@@ -23,7 +23,7 @@ import de.imise.util.swing.component.UnfloatableToolBar;
  *
  * @author AXS (8 Aug 2017)
  */
-public class GraphAreaToolbarManager implements GDCollectionChangeListenerSimple, BasicGraphAreaChangeListener {
+public class GraphAreaToolbarManager implements LGMChangeListenerSimple, BasicGraphAreaChangeListener {
 
     /** toolbar with tools for active layer and sliders for zoom, angel and distance (Graph) or MetaPathSelector (Matrix) */
     private UnfloatableToolBar currentToolBar;

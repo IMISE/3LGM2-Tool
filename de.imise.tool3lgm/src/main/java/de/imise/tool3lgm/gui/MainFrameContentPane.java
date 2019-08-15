@@ -27,8 +27,8 @@ import javax.swing.event.InternalFrameListener;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
@@ -207,7 +207,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      */
     public void addCollection(final GDCollection gdcoll) {
         modelBrowserPanel.addCollection(gdcoll);
-        gdcoll.addGDCollectionChangeListener(new GDCollectionChangeListenerSimple() {
+        gdcoll.addGDCollectionChangeListener(new LGMChangeListenerSimple() {
             @Override
             public void modelOrSzenarioNameChanged(final GraphDocument source) {
                 modelBrowserPanel.updateModelBrowsers();

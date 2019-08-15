@@ -21,14 +21,14 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.action.StaticAction;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 // TODO:alle Buttons auf Actions umstellen (so wie zum Teil schon geschehen)
-public class ToolBar extends UnfloatableToolBar implements ActionListener, MouseListener, GDCollectionChangeListenerSimple {
+public class ToolBar extends UnfloatableToolBar implements ActionListener, MouseListener, LGMChangeListenerSimple {
 
     private GraphDocument doc = null;
 

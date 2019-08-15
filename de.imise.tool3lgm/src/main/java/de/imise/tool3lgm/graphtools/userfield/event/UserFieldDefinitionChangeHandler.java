@@ -5,15 +5,15 @@ package de.imise.tool3lgm.graphtools.userfield.event;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 
 /**
  * @author AXS
  */
-public abstract class UserFieldDefinitionChangeHandler implements GDCollectionChangeListenerSimple {
+public abstract class UserFieldDefinitionChangeHandler implements LGMChangeListenerSimple {
 
     /**
      * Wenn diese Variable <code>true</code> ist, wird bei der Abfrage irgendeines Kennzahlformelwertes alles neu berechnet. Sie wird bei allen

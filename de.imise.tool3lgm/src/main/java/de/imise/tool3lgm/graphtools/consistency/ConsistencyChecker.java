@@ -29,8 +29,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
@@ -44,7 +44,7 @@ import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDi
  *
  * @author AXS created on 06.08.2008
  */
-public final class ConsistencyChecker implements GDCollectionChangeListenerSimple {
+public final class ConsistencyChecker implements LGMChangeListenerSimple {
 
     /** Checks the consistency of a model. This instance is used for the current selected Model */
     private static ConsistencyChecker consistencyChecker;

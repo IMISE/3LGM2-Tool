@@ -9,7 +9,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  *
  * @author AXS (Created on 21.02.2008)
  */
-public interface GDCollectionChangeListenerSimple extends LGMChangeListener {
+public interface LGMChangeListenerSimple extends LGMChangeListener {
 
     @Override
     public default void dataChanged(final GraphDocument source) {
