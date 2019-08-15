@@ -7,7 +7,7 @@ import javax.swing.JCheckBoxMenuItem;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.util.swing.event.OptionAction;
 
 /**

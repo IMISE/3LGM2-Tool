@@ -7,6 +7,22 @@ import de.imise.tool3lgm.gui.InternalGraphFrame;
 
 public interface GDCollectionChangeListener {
 
+    public enum GDCollectionChangeType {
+
+        DATA_CHANGED,
+        ELEMENT_NAME_CHANGED,
+        USER_FIELD_VALUE_CHANGED,
+        ELEMENT_GRAPHICS_CHANGED,
+        LAYOUT_CHANGED,
+        GROUP_ORDER_CHANGED,
+        ACTIVE_LAYER_CHANGED,
+        COLORS_CHANGED,
+        SELECTION_CHANGED,
+
+        MODEL_OR_SZENARIO_RENAMED,
+
+    }
+
     /** Hier die generelle Nachricht - alle sollten sich komplett erneuern */
     public void dataChanged(GraphDocument source);
 
@@ -61,11 +77,6 @@ public interface GDCollectionChangeListener {
                 gdl.dataChanged(source);
             }
             break;
-        case ELEMENT_GRAPHICS_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.elementGraphicsChanged(last_elem);
-            }
-            break;
         case ELEMENT_NAME_CHANGED:
             for (GDCollectionChangeListener gdl : listener) {
                 gdl.elementNameChanged(last_elem);
@@ -75,6 +86,11 @@ public interface GDCollectionChangeListener {
             UserFieldTarget userFieldTarget = last_elem == null ? null : last_elem.getElement();
             for (GDCollectionChangeListener gdl : listener) {
                 gdl.userFieldValueChanged(userFieldTarget);
+            }
+            break;
+        case ELEMENT_GRAPHICS_CHANGED:
+            for (GDCollectionChangeListener gdl : listener) {
+                gdl.elementGraphicsChanged(last_elem);
             }
             break;
         case LAYOUT_CHANGED:
