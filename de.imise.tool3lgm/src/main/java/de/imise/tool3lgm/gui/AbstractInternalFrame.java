@@ -8,9 +8,7 @@ import javax.swing.JScrollPane;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 
 /**
  * Abstrakte Klasse für alle internen Fenster zur Darstellung von (Teil-)
@@ -18,7 +16,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  *
  * @author Thomas Rudert
  */
-public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListener {
+public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListenerSimple {
 
     /** darzustellendes (Teil-)Modell */
     protected GraphDocument doc;
@@ -77,38 +75,6 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      */
     public JScrollPane getScrollPane() {
         return scrollPane;
-    }
-
-    @Override
-    public void dataChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void elementGraphicsChanged(final ElementContainer element) {
-    }
-
-    @Override
-    public void layoutChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void groupOrderChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void activeLayerChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void colorsChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void selectionChanged(final GraphDocument source) {
-    }
-
-    @Override
-    public void userFieldValueChanged(final UserFieldTarget userFieldTarget) {
     }
 
     @Override
