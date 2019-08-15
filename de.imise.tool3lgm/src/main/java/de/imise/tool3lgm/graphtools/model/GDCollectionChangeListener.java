@@ -109,9 +109,9 @@ public interface GDCollectionChangeListener {
     public void selectionChanged(GraphDocument source);
 
     /**
-     * Aktualisiert je nach Parameter alle Components, die den Title eines Modells oder Teilmodells anzeigen. Wenn (<code>source == null</code>), nur
-     * die Fenster eines bestimmtem Modells (<code!(source instanceof Szenario)</code>) oder nur die Fenster eines bestimmten Szenarios
-     * (<code>source instanceof Szenario</code>). Ein Szenario hat max. einen {@link InternalGraphFrame} und dann noch beliebig viele
+     * Aktualisiert je nach Parameter alle Components, die den Title eines Modells oder Teilmodells anzeigen. Wenn
+     * <code>!(source instanceof Szenario)</code>, dann nur die Fenster eines bestimmtem Modells () oder wenn <code>source instanceof Szenario</code>,
+     * dann nur die Fenster eines bestimmten Szenarios. Ein Szenario hat max. einen {@link InternalGraphFrame} und dann noch beliebig viele
      * {@link MatrixViewInternalFrame}. ModelBrowser + FrameTitle + Fenster-Actions im Menü + ...
      *
      * @param source <code>null</code> = alle Modelle, Szenario = nur dieses Teilmodell, GraphDocument = Hauptmodell des Modells, bei dem alle
