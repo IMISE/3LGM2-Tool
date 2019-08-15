@@ -24,6 +24,19 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements LGMChan
     }
 
     @Override
+    public void elementNameChanged(final ElementContainer ec) {
+        tree.revalidate();
+        tree.repaint();
+    }
+
+    @Override
+    public void userFieldValueChanged(final UserFieldTarget userFieldTarget) {
+        if (active) {
+            tree.buildTree();
+        }
+    }
+
+    @Override
     public void elementGraphicsChanged(final ElementContainer element) {
         if (active) {
             //      System.out.println("elementGraphicsChanged");
@@ -43,6 +56,15 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements LGMChan
     public void groupOrderChanged(final GraphDocument source) {
         if (active) {
             //      System.out.println("groupOrderChanged");
+        }
+    }
+
+    @Override
+    public void activeLayerChanged(final GraphDocument source) {
+        if (active) {
+            GraphDocument doc = tree.getGraphDocument();
+            int layer = doc.getCollection().getActiveLayer();
+            tree.selectLayerNode(layer);
         }
     }
 
@@ -71,28 +93,6 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements LGMChan
             //      System.out.println("modelOrSzenarioRenamed");
             tree.refreshTree();
             //      repaint();
-        }
-    }
-
-    @Override
-    public void activeLayerChanged(final GraphDocument source) {
-        if (active) {
-            GraphDocument doc = tree.getGraphDocument();
-            int layer = doc.getCollection().getActiveLayer();
-            tree.selectLayerNode(layer);
-        }
-    }
-
-    @Override
-    public void elementNameChanged(final ElementContainer ec) {
-        tree.revalidate();
-        tree.repaint();
-    }
-
-    @Override
-    public void userFieldValueChanged(final UserFieldTarget userFieldTarget) {
-        if (active) {
-            tree.buildTree();
         }
     }
 
