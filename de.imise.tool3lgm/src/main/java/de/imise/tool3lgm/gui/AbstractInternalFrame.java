@@ -112,7 +112,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
     }
 
     @Override
-    public void modelOrSzenarioRenamed(final GraphDocument source) {
+    public final void modelOrSzenarioNameChanged(final GraphDocument source) {
         updateTitle();
     }
 

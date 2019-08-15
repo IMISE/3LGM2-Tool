@@ -67,7 +67,7 @@ public interface LGMChangeListener {
         MODEL_OR_SZENARIO_NAME_CHANGED {
             @Override
             protected void deliverEvent(final LGMChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
-                gdl.modelOrSzenarioRenamed(source);
+                gdl.modelOrSzenarioNameChanged(source);
             }
         };
 
@@ -127,7 +127,7 @@ public interface LGMChangeListener {
      * @param source <code>null</code> = alle Modelle, Szenario = nur dieses Teilmodell, GraphDocument = Hauptmodell des Modells, bei dem alle
      *            Teilmodelle betroffen sind
      */
-    public void modelOrSzenarioRenamed(GraphDocument source);
+    public void modelOrSzenarioNameChanged(GraphDocument source);
 
     /**
      * @param listeners

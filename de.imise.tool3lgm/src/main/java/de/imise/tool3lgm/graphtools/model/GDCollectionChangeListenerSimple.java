@@ -66,7 +66,7 @@ public interface GDCollectionChangeListenerSimple extends LGMChangeListener {
     }
 
     @Override
-    public default void modelOrSzenarioRenamed(final GraphDocument source) {
+    public default void modelOrSzenarioNameChanged(final GraphDocument source) {
         changed();
         changed(source);
     }

@@ -209,7 +209,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         modelBrowserPanel.addCollection(gdcoll);
         gdcoll.addGDCollectionChangeListener(new GDCollectionChangeListenerSimple() {
             @Override
-            public void modelOrSzenarioRenamed(final GraphDocument source) {
+            public void modelOrSzenarioNameChanged(final GraphDocument source) {
                 modelBrowserPanel.updateModelBrowsers();
             }
         });
