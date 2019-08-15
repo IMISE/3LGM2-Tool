@@ -95,15 +95,12 @@ public class LGMActionLibrary {
     }
 
     /**
-     * Methode liefert eine <code>LGMAction</code> zurück, die beim Eintreten eines
-     * DragNDrop-Ereignisses, die konkrete Drop-Location im targetTree ermittelt. Dabei wird das
-     * Element, was sich dem Mouse-Zeiger am nächsten befindet, als SelectionPath des targetTrees
-     * gesetzt. Damit ist es möglich Elemente an eine bestimmte Position innerhalb eines Trees zu
-     * verschieben. Methode wird hier automatisch in
-     * <code>getAddElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code>
-     * und in
-     * <code>getRemoveElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code>
-     * aufgerufen --> Panel muss sich also darum nicht kümmern
+     * Methode liefert eine <code>LGMAction</code> zurück, die beim Eintreten eines DragNDrop-Ereignisses, die konkrete Drop-Location im targetTree
+     * ermittelt. Dabei wird das Element, was sich dem Mouse-Zeiger am nächsten befindet, als SelectionPath des targetTrees gesetzt. Damit ist es
+     * möglich Elemente an eine bestimmte Position innerhalb eines Trees zu verschieben. Methode wird hier automatisch in
+     * <code>getAddElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code> und in
+     * <code>getRemoveElementAction(JTree srcTree, JTree targetTree, ElementDialogPanel edp, boolean switchTree)</code> aufgerufen --> Panel muss sich
+     * also darum nicht kümmern
      *
      * @param tree
      */
