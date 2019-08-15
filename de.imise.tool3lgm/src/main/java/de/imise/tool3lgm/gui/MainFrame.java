@@ -166,9 +166,6 @@ public class MainFrame extends JFrame implements WindowListener {
      *
      * @param doc
      *            Teilmodell, in dessen Kontext gewechselt werden soll
-     * @param activateGraphView
-     *            Wenn <code>true</code> ist, wird auch das dazugehörige
-     *            Grafikfenster in den Vordergrund geholt, sonst nicht.
      */
     public void setCurrentDoc(final GraphDocument doc) {
         contentPane.setSelectedDoc(doc, doc != null);
