@@ -66,7 +66,7 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements LGMChan
     }
 
     @Override
-    public void modelOrSzenarioRenamed(final GraphDocument source) {
+    public void modelOrSzenarioNameChanged(final GraphDocument source) {
         if (active) {
             //      System.out.println("modelOrSzenarioRenamed");
             tree.refreshTree();
