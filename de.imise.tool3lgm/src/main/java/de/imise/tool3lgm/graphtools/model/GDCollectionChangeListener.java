@@ -9,17 +9,75 @@ public interface GDCollectionChangeListener {
 
     public enum GDCollectionChangeType {
 
-        DATA_CHANGED,
-        ELEMENT_NAME_CHANGED,
-        USER_FIELD_VALUE_CHANGED,
-        ELEMENT_GRAPHICS_CHANGED,
-        LAYOUT_CHANGED,
-        GROUP_ORDER_CHANGED,
-        ACTIVE_LAYER_CHANGED,
-        COLORS_CHANGED,
-        SELECTION_CHANGED,
+        DATA_CHANGED {
+            @Override
+            protected void deliverEvent(final GDCollectionChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.dataChanged(source);
+            }
+        },
+        ELEMENT_NAME_CHANGED {
+            @Override
+            protected void deliverEvent(final GDCollectionChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.elementNameChanged(last_elem);
+            }
+        },
+        USER_FIELD_VALUE_CHANGED {
+            @Override
+            protected void deliverEvent(final GDCollectionChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                UserFieldTarget userFieldTarget = last_elem == null ? null : last_elem.getElement();
+                gdl.userFieldValueChanged(userFieldTarget);
+            }
+        },
+        ELEMENT_GRAPHICS_CHANGED {
+            @Override
+            protected void deliverEvent(final GDCollectionChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.elementGraphicsChanged(last_elem);
+            }
+        },
+        LAYOUT_CHANGED {
+            @Override
+            protected void deliverEvent(final GDCollectionChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.layoutChanged(source);
+            }
+        },
+        GROUP_ORDER_CHANGED {
+            @Override
+            protected void deliverEvent(final GDCollectionChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.groupOrderChanged(source);
+            }
+        },
+        ACTIVE_LAYER_CHANGED {
+            @Override
+            protected void deliverEvent(final GDCollectionChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.activeLayerChanged(source);
+            }
+        },
+        COLORS_CHANGED {
+            @Override
+            protected void deliverEvent(final GDCollectionChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.colorsChanged(source);
+            }
+        },
+        SELECTION_CHANGED {
+            @Override
+            protected void deliverEvent(final GDCollectionChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.selectionChanged(source);
+            }
+        },
+        MODEL_OR_SZENARIO_RENAMED {
+            @Override
+            protected void deliverEvent(final GDCollectionChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.modelOrSzenarioRenamed(source);
+            }
+        };
 
-        MODEL_OR_SZENARIO_RENAMED,
+        protected abstract void deliverEvent(GDCollectionChangeListener l, final GraphDocument source, final ElementContainer last_elem);
+
+        protected void deliverEvent(final Iterable<GDCollectionChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem) {
+            for (GDCollectionChangeListener l : listeners) {
+                deliverEvent(l, source, last_elem);
+            }
+        }
 
     }
 
@@ -61,7 +119,12 @@ public interface GDCollectionChangeListener {
      */
     public void modelOrSzenarioRenamed(GraphDocument source);
 
-    public static void distributeEvent(final GDCollectionChangeType changeType, final Iterable<GDCollectionChangeListener> listener, final GraphDocument source, final ElementContainer last_elem) {
+    /**
+     * @param listeners
+     * @param source
+     * @param last_elem
+     */
+    public static void distributeEvent(final GDCollectionChangeType changeType, final Iterable<GDCollectionChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem) {
         if (source != null) {
             GDCollection gdcoll = source.getCollection();
             if (gdcoll.isBulkMode()) {
@@ -71,62 +134,7 @@ public interface GDCollectionChangeListener {
                 System.out.println("distributeEvent: " + changeType);
             }
         }
-        switch (changeType) {
-        case DATA_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.dataChanged(source);
-            }
-            break;
-        case ELEMENT_NAME_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.elementNameChanged(last_elem);
-            }
-            break;
-        case USER_FIELD_VALUE_CHANGED:
-            UserFieldTarget userFieldTarget = last_elem == null ? null : last_elem.getElement();
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.userFieldValueChanged(userFieldTarget);
-            }
-            break;
-        case ELEMENT_GRAPHICS_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.elementGraphicsChanged(last_elem);
-            }
-            break;
-        case LAYOUT_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.layoutChanged(source);
-            }
-            break;
-        case GROUP_ORDER_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.groupOrderChanged(source);
-            }
-            break;
-        case ACTIVE_LAYER_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.activeLayerChanged(source);
-            }
-            break;
-        case COLORS_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.colorsChanged(source);
-            }
-            break;
-        case SELECTION_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.selectionChanged(source);
-            }
-            break;
-        case MODEL_OR_SZENARIO_RENAMED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.modelOrSzenarioRenamed(source);
-            }
-            break;
-        default:
-            break;
-        }
-
+        changeType.deliverEvent(listeners, source, last_elem);
     }
 
 }
