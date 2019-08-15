@@ -670,7 +670,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      * @param element
      */
     public void revalidateRepaint(final ElementContainer element) {
-        if (element != null) {
+        if (element != null && element.getParent() != null) {
             element.getParent().validate();
             element.getParent().repaint();
         } else {
