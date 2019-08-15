@@ -261,6 +261,14 @@ public abstract class ElementDialogPanel extends JPanel {
         correctingSelectionCount = correctedCount;
     }
 
+    public void increaseCorrectingSelectionCount() {
+        correctingSelectionCount++;
+    }
+
+    public void decreaseCorrectingSelectionCount() {
+        correctingSelectionCount--;
+    }
+
     /**
      * @return modelElement
      */

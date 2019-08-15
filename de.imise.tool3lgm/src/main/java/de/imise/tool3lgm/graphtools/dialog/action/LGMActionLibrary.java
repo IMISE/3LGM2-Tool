@@ -1,7 +1,6 @@
-/*
- * Created on 23.11.2007
- */
 package de.imise.tool3lgm.graphtools.dialog.action;
+
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
 
 import java.awt.Point;
 import java.awt.dnd.DropTargetDropEvent;
@@ -16,17 +15,16 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.log.Log;
 
 /**
- * @author fstephan Diese Klasse stellt statische Methoden zur Erzeugung von <code>LGMAction</code>
- *         s bereit. Panels erzeugen und verwenden diese Actions um Funktionen wie etwa das
- *         Verschieben von Elementen zwischen ihren Trees bereitstellen zu können.
- *         <code>LGMActions</code> bereit.
+ * Diese Klasse stellt statische Methoden zur Erzeugung von <code>LGMAction</code>s bereit. Panels erzeugen und verwenden diese Actions um Funktionen
+ * wie etwa das Verschieben von Elementen zwischen ihren Trees bereitstellen zu können. <code>LGMActions</code> bereit.
+ *
+ * @author fstephan (23.11.2007)
  */
 public class LGMActionLibrary {
 
@@ -62,6 +60,9 @@ public class LGMActionLibrary {
                 JTree tree = (JTree) e.getSource();
 
                 TreePath[] paths = tree.getSelectionPaths();
+                GraphDocument doc = panel.getGraphDocument();
+                ElementPropertyDialog dialog = panel.getDialog();
+                int pid = dialog.getTransactionID();
                 if (paths != null) {
                     panel.removeHighLights();
                     for (int i = 0; i < paths.length; i++) {
@@ -72,7 +73,6 @@ public class LGMActionLibrary {
                                 // keinen Container im aktuellen Doc besitzt
                                 ElementContainer ec = (ElementContainer) treeNode.getUserObject();
                                 ModelElement me = ec.getElement();
-                                GraphDocument doc = panel.getGraphDocument();
                                 ElementContainer docEc = me.getContainer(doc);
                                 if (docEc != null) {
                                     // highlight ist eine Container-Eigenschaft
@@ -80,16 +80,16 @@ public class LGMActionLibrary {
                                     docEc.setHighLight(true);
                                 }
                                 // selected ist eine Container-Eigenschaft
-                                panel.getGraphDocument().addToSelection(ec, panel.getDialog().getTransactionID());
+                                doc.addToSelection(ec, pid);
                             } else {
-                                panel.setCorrectingSelectionCount(panel.getCorrectingSelectionCount() + 1);
+                                panel.increaseCorrectingSelectionCount();
                                 tree.removeSelectionPath(paths[i]);
-                                panel.setCorrectingSelectionCount(panel.getCorrectingSelectionCount() - 1);
+                                panel.decreaseCorrectingSelectionCount();
                             }
                         }
                     }
                 }
-                panel.getGraphDocument().distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, panel.getDialog().getTransactionID());
+                doc.distributeEvent(SELECTION_CHANGED, pid);
             }
         };
     }
