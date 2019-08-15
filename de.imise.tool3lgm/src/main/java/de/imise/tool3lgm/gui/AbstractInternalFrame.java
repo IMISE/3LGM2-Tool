@@ -9,7 +9,6 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
@@ -19,7 +18,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  *
  * @author Thomas Rudert
  */
-public abstract class AbstractInternalFrame extends JInternalFrame implements GDCollectionChangeListener, InTransactionListener {
+public abstract class AbstractInternalFrame extends JInternalFrame implements GDCollectionChangeListener {
 
     /** darzustellendes (Teil-)Modell */
     protected GraphDocument doc;
@@ -44,8 +43,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements GD
 
         setFrameIcon(Tool3lgmConstants.getIcon("toolIcon.gif"));
 
-        doc.addGDCollectionChangeListener(this);
-        doc.addInTransactionListener(this);
+        doc.addAllTransactionsListener(this);
     }
 
     @Override
@@ -137,8 +135,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements GD
 
     @Override
     public void dispose() {
-        doc.removeGDCollectionChangeListener(this);
-        doc.removeInTransactionListener(this);
+        doc.removeAllTransactionsListener(this);
         super.dispose();
     }
 

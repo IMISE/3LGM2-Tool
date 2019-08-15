@@ -553,7 +553,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     public void internalFrameActivated(final InternalFrameEvent e) {
         activeFrame = (AbstractInternalFrame) e.getInternalFrame();
         GraphDocument doc = activeFrame.getGraphDocument();
-        doc.addGDCollectionChangeListener(toolbarManager);
+        doc.addClosedTransactionsListener(toolbarManager);
         toolbarManager.updateToolBar();
         //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
         //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
@@ -573,7 +573,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     @Override
     public void internalFrameDeactivated(final InternalFrameEvent e) {
         GraphDocument graphDocument = activeFrame.getGraphDocument();
-        graphDocument.removeGDCollectionChangeListener(toolbarManager);
+        graphDocument.removeClosedTransactionsListener(toolbarManager);
         activeFrame = null;
         toolbarManager.updateToolBar();
     }

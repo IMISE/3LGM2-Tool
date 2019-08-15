@@ -120,13 +120,13 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     @Override
-    public final void distributeEventIntern(final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
+    public final void distributeEventIntern(final GDCollectionChangeType changeType, final ElementContainer last_elem, final int pid) {
         if (changeType == GDCollectionChangeType.DATA_CHANGED) {
             for (SimpleRedundancyAnalysis redundancyAnalysis : simpleRedundancyAnalysis) {
                 redundancyAnalysis.computeRedundancy();
             }
         }
-        super.distributeEventIntern(changeType, last_elem, last_group, pid);
+        super.distributeEventIntern(changeType, last_elem, pid);
     }
 
     /**
@@ -471,7 +471,7 @@ public class LGMGraphDocument extends GraphDocument {
                 if ((newE = destMainDoc.findElementCoded(insert.getHashString())) != null) {
                     if ((overwriteJoinNothing & 1) == 0) {
                         select(insertC, pid);
-                        distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, insertC, null, pid);
+                        distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, insertC, pid);
                         overwriteJoinNothing = OverwriteDialog.showDialog(Static.getMainFrame(), newE, insert);
                     }
 

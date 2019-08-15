@@ -68,12 +68,10 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.SimplePath;
 import de.imise.tool3lgm.graphtools.undoredo.CommandParser;
-import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
-import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.WeightReplacer;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -111,14 +109,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     protected LayerContainer[] layer;
 
     /**
-     * COMMENTME
+     * Alle {@link GDCollectionChangeListener}, die immer benachrichtigt werden - egal ob eine Transaktion durch einen Dialog offen ist oder nicht.
      */
-    private final List<GDCollectionChangeListener> listener;
+    private final List<GDCollectionChangeListener> allListener;
 
     /**
-     * COMMENTME
+     * Alle {@link GDCollectionChangeListener}, die nur benachrichtigt werden, wenn sie keine Transaktion geöffnet ist bzw. die nur auf Transaktionen
+     * reagieren, die abgeschlossen sind.Das ist der Fall, wenn das Change-Ereignis nicht durch eine geöffneten Dialog kommt.
      */
-    private final List<InTransactionListener> inlistener;
+    private final List<GDCollectionChangeListener> closedListener;
 
     /**
      * COMMENTME
@@ -213,8 +212,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         hashString = "DOC" + "_" + new Date().getTime();
 
         analysisResult = new ArrayList<>();
-        listener = new ArrayList<>();
-        inlistener = new ArrayList<>();
+        allListener = new ArrayList<>();
+        closedListener = new ArrayList<>();
         mapping = new ElementsLayoutDefinition(metaModel.getGraphViewDefinition().getDefaultElementsLayout());
 
         layer = new LayerContainer[LAYER_COUNT];
@@ -1766,7 +1765,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + mc.getHashString(), iconKey, pid);
         mc.setIcon(iconKey, gdcoll.getIconTable());
         szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
+        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, mc, pid);
     }
 
     /**
@@ -1824,7 +1823,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE + " " + szenHash + " " + mc.getHashString(), "", pid);
         mc.setIcon(null, gdcoll.getIconTable());
         szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, mc, null, pid);
+        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, mc, pid);
     }
 
     /**
@@ -1912,7 +1911,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         ec.setColor(color);
         ecDoc.finish_transaction(pid);
-        ecDoc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, null, pid);
+        ecDoc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
 
     /**
@@ -1994,7 +1993,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         szen.layer[layer_idx].setColor(col);
         szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, null, szen.layer[layer_idx], pid);
+        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, szen.layer[layer_idx], pid);
     }
 
     /**
@@ -2055,7 +2054,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + ec.getHashString(), ec.getAlpha(), pid);
         ec.setAlpha(alphaMode);
         ecDoc.finish_transaction(pid);
-        ecDoc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, null, pid);
+        ecDoc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
 
     /**
@@ -2081,7 +2080,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getAlpha(), pid);
         szen.layer[layer_idx].setAlpha(alphaMode);
         szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, null, szen.layer[layer_idx], pid);
+        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, szen.layer[layer_idx], pid);
     }
 
     /**
@@ -2116,7 +2115,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         szen.layer[layer_idx].setColor(Color.white);
         szen.layer[layer_idx].setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
         szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, null, szen.layer[layer_idx], pid);
+        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, szen.layer[layer_idx], pid);
     }
 
     /**
@@ -2142,7 +2141,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         ec.setFont(font);
         ec.refreshText();
         ecDoc.finish_transaction(pid);
-        ecDoc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, null, pid);
+        ecDoc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
 
     /**
@@ -2236,7 +2235,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             ((BendpointContainer) nc).getBendpoint().getOwner().computeBorderPoints();
         }
         finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, nc, null, pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, nc, pid);
     }
 
     /**
@@ -2584,29 +2583,29 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @param gdl
      */
-    public final void addInTransactionListener(final InTransactionListener gdl) {
-        inlistener.add(gdl);
+    public final void addAllTransactionsListener(final GDCollectionChangeListener gdl) {
+        allListener.add(gdl);
     }
 
     /**
      * @param gdl
      */
-    public final void removeInTransactionListener(final InTransactionListener gdl) {
-        inlistener.remove(gdl);
+    public final void removeAllTransactionsListener(final GDCollectionChangeListener gdl) {
+        allListener.remove(gdl);
     }
 
     /**
      * @param gdl
      */
-    public final void addGDCollectionChangeListener(final GDCollectionChangeListener gdl) {
-        listener.add(gdl);
+    public final void addClosedTransactionsListener(final GDCollectionChangeListener gdl) {
+        closedListener.add(gdl);
     }
 
     /**
      * @param gdl
      */
-    public final void removeGDCollectionChangeListener(final GDCollectionChangeListener gdl) {
-        listener.remove(gdl);
+    public final void removeClosedTransactionsListener(final GDCollectionChangeListener gdl) {
+        closedListener.remove(gdl);
     }
 
     /**
@@ -2627,162 +2626,46 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void distributeEvent(final GDCollectionChangeType changeType, final int pid) {
-        distributeEvent(changeType, null, null, pid);
+        distributeEvent(changeType, null, pid);
     }
 
     /**
      * @param changeType
      * @param last_elem
-     * @param last_group
      * @param pid
      */
-    public final void distributeEvent(final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
+    public final void distributeEvent(final GDCollectionChangeType changeType, final ElementContainer last_elem, final int pid) {
         Integer pidInteger = new Integer(pid);
         Integer transStackInteger = gdcoll.getTransStackTable().get(pidInteger);
         if (transStackInteger == null) {
             transStackInteger = new Integer(0);
         }
-        if (transStackInteger.intValue() > 0) {
-            if (transStackInteger.intValue() == 1) {
-                switch (changeType) {
-                case DATA_CHANGED:
-                    for (InTransactionListener itl : inlistener) {
-                        itl.dataChanged(this);
-                    }
-                    break;
-                case ELEMENT_GRAPHICS_CHANGED:
-                    for (InTransactionListener itl : inlistener) {
-                        itl.elementGraphicsChanged(last_elem);
-                    }
-                    break;
-                case ELEMENT_NAME_CHANGED:
-                    for (InTransactionListener itl : inlistener) {
-                        itl.elementNameChanged(last_elem);
-                    }
-                    break;
-                case USER_FIELD_VALUE_CHANGED:
-                    for (InTransactionListener itl : inlistener) {
-                        UserFieldTarget userFieldTarget = last_elem == null ? null : last_elem.getElement();
-                        itl.userFieldValueChanged(userFieldTarget);
-                    }
-                    break;
-                default:
-                    break;
-                }
-            }
-        } else {
-            gdcoll.distribute(changeType, last_elem, last_group, this, pid);
+        if (transStackInteger.intValue() == 1) {
+            GDCollectionChangeListener.distributeEvent(changeType, allListener, this, last_elem);
+        } else if (transStackInteger.intValue() == 0) {
+            gdcoll.distribute(changeType, last_elem, this, pid);
         }
     }
 
     /**
      * @param changeType
      * @param last_elem
-     * @param last_group
      * @param pid
      */
-    public void distributeEventIntern(final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
+    public void distributeEventIntern(final GDCollectionChangeType changeType, final ElementContainer last_elem, final int pid) {
         if (gdcoll.isBulkMode()) {
             return;
         }
-
         Integer pidInteger = new Integer(pid);
         Integer transStackInteger = gdcoll.getTransStackTable().get(pidInteger);
         if (transStackInteger == null) {
             transStackInteger = new Integer(0);
         }
-        if (transStackInteger.intValue() > 0) {
-            if (transStackInteger.intValue() == 1) {
-                switch (changeType) {
-                case DATA_CHANGED:
-                    for (InTransactionListener itl : inlistener) {
-                        itl.dataChanged(this);
-                    }
-                    break;
-                case ELEMENT_GRAPHICS_CHANGED:
-                    for (InTransactionListener itl : inlistener) {
-                        itl.elementGraphicsChanged(last_elem);
-                    }
-                    break;
-                case ELEMENT_NAME_CHANGED:
-                    for (InTransactionListener itl : inlistener) {
-                        itl.elementNameChanged(last_elem);
-                    }
-                    break;
-                case USER_FIELD_VALUE_CHANGED:
-                    UserFieldTarget userFieldTarget = last_elem == null ? null : last_elem.getElement();
-                    for (InTransactionListener itl : inlistener) {
-                        itl.userFieldValueChanged(userFieldTarget);
-                    }
-                    break;
-                default:
-                    break;
-                }
-            }
-            return;
+        if (transStackInteger <= 1) {
+            GDCollectionChangeListener.distributeEvent(changeType, allListener, this, last_elem);
         }
-
-        if (isVerificationMode()) {
-            System.out.println("distributeEvent: " + changeType);
-        }
-
-        switch (changeType) {
-        case DATA_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.dataChanged(this);
-            }
-            for (InTransactionListener itl : inlistener) {
-                itl.dataChanged(this);
-            }
-            break;
-        case ELEMENT_GRAPHICS_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.elementGraphicsChanged(last_elem);
-            }
-            break;
-        case ELEMENT_NAME_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.elementNameChanged(last_elem);
-            }
-            break;
-        case USER_FIELD_VALUE_CHANGED:
-            UserFieldTarget userFieldTarget = last_elem == null ? null : last_elem.getElement();
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.userFieldValueChanged(userFieldTarget);
-            }
-            break;
-        case LAYOUT_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.layoutChanged(this);
-            }
-            break;
-        case GROUP_ORDER_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.groupOrderChanged(this);
-            }
-            break;
-        case ACTIVE_LAYER_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.activeLayerChanged(this);
-            }
-            break;
-        case COLORS_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.colorsChanged(this);
-            }
-            break;
-        case SELECTION_CHANGED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.selectionChanged(this);
-            }
-            break;
-        case MODEL_OR_SZENARIO_RENAMED:
-            for (GDCollectionChangeListener gdl : listener) {
-                gdl.modelOrSzenarioRenamed(this);
-            }
-            break;
-        default:
-            break;
+        if (transStackInteger == 0) {
+            GDCollectionChangeListener.distributeEvent(changeType, closedListener, this, last_elem);
         }
     }
 
@@ -2987,7 +2870,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //		System.err.println("GraphDocument.addToSelection(): " + layerElemMe.getClass().getSimpleName() + " " + this + " " + layerElemMe.getClearName() + " " + layerElemMe.getHashString() + " " + layerElemMe.getCreationDate().toLocaleString());
 
         gdcoll.addToSelection(mc);
-        distributeEvent(SELECTION_CHANGED, mc, null, pid);
+        distributeEvent(SELECTION_CHANGED, mc, pid);
     }
 
     /**
@@ -3002,7 +2885,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         deselectAll(true);
         addToSelection(mc, pid);
-        distributeEvent(SELECTION_CHANGED, mc, null, pid);
+        distributeEvent(SELECTION_CHANGED, mc, pid);
     }
 
     /**
@@ -3023,7 +2906,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         gdcoll.deselect(ec);
-        distributeEvent(SELECTION_CHANGED, ec, null, pid);
+        distributeEvent(SELECTION_CHANGED, ec, pid);
     }
 
     /**
@@ -3379,7 +3262,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         int ebene = kn.layerFor();
         if (!ModelConstants.isInterLayer(ebene)) {
             layer[ebene].raiseSlaves(kn, 0);
-            distributeEvent(GROUP_ORDER_CHANGED, null, layer[ebene], 0);
+            distributeEvent(GROUP_ORDER_CHANGED, layer[ebene], 0);
         }
     }
 
@@ -3438,9 +3321,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
 
         doc.finish_transaction(pid);
-        doc.distributeEvent(DATA_CHANGED, slaveContainer, null, pid);
+        doc.distributeEvent(DATA_CHANGED, slaveContainer, pid);
         if (doc != mainDoc) {
-            mainDoc.distributeEvent(DATA_CHANGED, slaveContainer, null, pid); //das hier muss auch noch sein, weil die Dialoge nur am mainDoc lauschen
+            mainDoc.distributeEvent(DATA_CHANGED, slaveContainer, pid); //das hier muss auch noch sein, weil die Dialoge nur am mainDoc lauschen
         }
         doc.select(slaveContainer, pid);
         return slaveContainer.getElement();
@@ -3987,7 +3870,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + mc.getGraphDocument().hashString + " " + mc.getHashString() + " " + doc.layer[ebene].indexOf(mc), pid);
         doc.layer[ebene].z_move_up(mc);
         doc.finish_transaction(pid);
-        distributeEvent(GROUP_ORDER_CHANGED, null, doc.layer[ebene], pid);
+        distributeEvent(GROUP_ORDER_CHANGED, doc.layer[ebene], pid);
     }
 
     /**
@@ -4033,7 +3916,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + mc.getGraphDocument().hashString + " " + mc.getHashString() + " " + doc.layer[ebene].indexOf(mc), pid);
         doc.layer[ebene].z_move_down(mc);
         doc.finish_transaction(pid);
-        distributeEvent(GROUP_ORDER_CHANGED, null, doc.layer[ebene], pid);
+        distributeEvent(GROUP_ORDER_CHANGED, doc.layer[ebene], pid);
     }
 
     /**
@@ -4084,7 +3967,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + ec.getGraphDocument().hashString + " " + ec.getHashString() + " " + szen.layer[ebene].indexOf(ec), pid);
         szen.layer[ebene].z_move(ec, position);
         szen.finish_transaction(pid);
-        distributeEvent(GROUP_ORDER_CHANGED, null, szen.layer[ebene], pid);
+        distributeEvent(GROUP_ORDER_CHANGED, szen.layer[ebene], pid);
     }
 
     /**
@@ -4125,7 +4008,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         doc.layer[ebene].z_step_up(ec);
         doc.finish_transaction(pid, log);
-        distributeEvent(GROUP_ORDER_CHANGED, null, doc.layer[ebene], pid);
+        distributeEvent(GROUP_ORDER_CHANGED, doc.layer[ebene], pid);
     }
 
     /**
@@ -4159,7 +4042,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
         doc.layer[ebene].z_step_down(ec);
         doc.finish_transaction(pid);
-        distributeEvent(GROUP_ORDER_CHANGED, null, doc.layer[ebene], pid);
+        distributeEvent(GROUP_ORDER_CHANGED, doc.layer[ebene], pid);
     }
 
     /**
@@ -4242,7 +4125,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN + " " + mode, pid);
         kc.get3LGMLayout().valign = mode;
         finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, kc, null, pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, kc, pid);
     }
 
     /**
@@ -4276,7 +4159,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN + " " + mode, pid);
         kc.get3LGMLayout().halign = mode;
         finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, kc, null, pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, kc, pid);
     }
 
     /**
@@ -4307,7 +4190,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //irgendein Container dieses Elementes muss ins Event gapackt werden. Welcher ist egal, da eigentlich das Element selsbt wichtig wäre
         ElementContainer ec = me.getContainer(this);
         finish_transaction(pid);
-        distributeEvent(ELEMENT_NAME_CHANGED, ec, null, pid);
+        distributeEvent(ELEMENT_NAME_CHANGED, ec, pid);
     }
 
     /**
@@ -4637,7 +4520,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addUndoCommand(GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL + " " + oldSzenHash + " " + ec.getHashString(), pid);
         addRedoCommand(GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL + " " + szenHashString + " " + ec.getHashString(), pid);
         finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, ec, null, 0);
+        distributeEvent(DATA_CHANGED, ec, 0);
     }
 
     /**

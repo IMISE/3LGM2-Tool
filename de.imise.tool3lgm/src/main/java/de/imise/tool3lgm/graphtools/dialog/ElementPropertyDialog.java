@@ -46,11 +46,11 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
-import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -61,7 +61,7 @@ import de.imise.util.swing.component.TabbedPane;
  *
  * @author N.N., AXS
  */
-public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implements ActionListener, InTransactionListener {
+public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implements ActionListener, GDCollectionChangeListenerSimple {
 
     /**
      * COMMENTME
@@ -280,7 +280,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     public void showDialog() {
         if (opening) {
             doc.start_transaction(getTransactionID());
-            doc.addInTransactionListener(this);
+            doc.addAllTransactionsListener(this);
             opening = false;
         }
         setVisible(true);
@@ -346,7 +346,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     private void close() {
         ElemenPropertyDialogsContext.removeDialog(modelElement);
         doc.finish_transaction(getTransactionID());
-        doc.removeInTransactionListener(this);
+        doc.removeAllTransactionsListener(this);
         dispose();
     }
 
@@ -375,16 +375,12 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         }
     }
 
-    // InTransactionListener Begin
+    // GDCollectionChangeListener Begin
     // ###################################################################################
 
     @Override
     public final void dataChanged(final GraphDocument source) {
         update();
-    }
-
-    @Override
-    public final void elementGraphicsChanged(final ElementContainer element) {
     }
 
     @Override
@@ -397,7 +393,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         update();
     }
 
-    // InTransactionListener Ende
+    // GDCollectionChangeListener Ende
     // ####################################################################################
 
     /**

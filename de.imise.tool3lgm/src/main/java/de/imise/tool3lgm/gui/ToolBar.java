@@ -98,11 +98,11 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
 
     public void selectedDocChanged() {
         if (doc != null) {
-            doc.removeGDCollectionChangeListener(this);
+            doc.removeClosedTransactionsListener(this);
         }
         doc = Static.getSelectedDoc();
         if (doc != null) {
-            doc.addGDCollectionChangeListener(this);
+            doc.addClosedTransactionsListener(this);
         }
         updateButtons();
     }

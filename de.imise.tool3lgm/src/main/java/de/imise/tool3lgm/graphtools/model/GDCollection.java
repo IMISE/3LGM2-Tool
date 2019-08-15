@@ -245,7 +245,7 @@ public final class GDCollection extends UserFieldTarget {
         metaModel = metaModelContext.getMetaModel();
         doc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
-        doc.addGDCollectionChangeListener(userFieldDefinitions);
+        doc.addClosedTransactionsListener(userFieldDefinitions);
         activeGraphDocumentsList.add(doc);
         UserfieldResourceHandler.loadDefaultUserfieldDefinition(this);
     }
@@ -393,7 +393,7 @@ public final class GDCollection extends UserFieldTarget {
             doc.addRedoCommand(MODEL_ACTION_CREATE_SUBMODEL + " " + getParseSaveString(szenario.getTitle()) + " " + getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
             doc.finish_transaction(pid);
         }
-        szenario.addGDCollectionChangeListener(userFieldDefinitions);
+        szenario.addClosedTransactionsListener(userFieldDefinitions);
         if (descriptionFrame != null) {
             descriptionFrame.update();
         }
@@ -1011,9 +1011,8 @@ public final class GDCollection extends UserFieldTarget {
         szen.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + bendpoint.getHashString(), pid);
         szen.addUndoCommand(MODEL_ACTION_INSERT_BENDING_POINT + " " + szen.getHashString() + " " + edgeC.getHashString() + " " + bendpointContainer.getHashString() + " " + bendpointContainer.getX() + " " + bendpointContainer.getY() + " " + oldIndex, pid);
         szen.finish_transaction(pid);
-        LayerContainer lc = doc.layer[bendpoint.layerFor()];
-        szen.distributeEvent(DATA_CHANGED, bendpointContainer, lc, pid);
-        szen.distributeEvent(SELECTION_CHANGED, bendpointContainer, lc, pid);
+        szen.distributeEvent(DATA_CHANGED, bendpointContainer, pid);
+        szen.distributeEvent(SELECTION_CHANGED, bendpointContainer, pid);
     }
 
     //ENDE REMOVE //
@@ -1729,7 +1728,7 @@ public final class GDCollection extends UserFieldTarget {
         //Der TransaktionQueue wird einfach gelöscht. Das muss unbedingt mal geändert werden -> also alles richtig UNDO-/REDO-mässig
         tman.clearTransactionQueue();
         doc.finish_transaction(pid);
-        distribute(DATA_CHANGED, null, null, source, pid);
+        distribute(DATA_CHANGED, null, source, pid);
         return true;
     }
 
@@ -1801,31 +1800,30 @@ public final class GDCollection extends UserFieldTarget {
      * @param changeType
      */
     public final void distribute(final GDCollectionChangeType changeType) {
-        distribute(changeType, null, null, null, STANDARD_PID);
+        distribute(changeType, null, null, STANDARD_PID);
     }
 
     /**
      * @param changeType
      * @param last_elem
-     * @param last_group
      * @param source
      * @param pid
      */
-    public final void distribute(final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final GraphDocument source, final int pid) {
+    public final void distribute(final GDCollectionChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
         setChanged(true);
         if (isBulkMode()) {
             return;
         }
         if (source != null) {
-            source.distributeEventIntern(changeType, last_elem, last_group, pid);
+            source.distributeEventIntern(changeType, last_elem, pid);
         }
-        distributeEventIntern(source, changeType, last_elem, last_group, pid);
+        GDCollectionChangeListener.distributeEvent(changeType, listener, source == null ? doc : source, last_elem);
         if (doc != source) {
-            doc.distributeEventIntern(changeType, last_elem, last_group, pid);
+            doc.distributeEventIntern(changeType, last_elem, pid);
         }
         for (Szenario s : szenarios) {
             if (s != source) {
-                s.distributeEventIntern(changeType, last_elem, last_group, pid);
+                s.distributeEventIntern(changeType, last_elem, pid);
             }
         }
     }
@@ -1870,7 +1868,7 @@ public final class GDCollection extends UserFieldTarget {
 
     public void setName(final String name) {
         this.name = name;
-        distribute(GDCollectionChangeType.MODEL_OR_SZENARIO_RENAMED, null, null, getMainGraphDocument(), STANDARD_PID);
+        distribute(GDCollectionChangeType.MODEL_OR_SZENARIO_RENAMED, null, getMainGraphDocument(), STANDARD_PID);
     }
 
     /**
@@ -2144,78 +2142,6 @@ public final class GDCollection extends UserFieldTarget {
      */
     public final void removeGDCollectionChangeListener(final GDCollectionChangeListener gdl) {
         listener.remove(gdl);
-    }
-
-    /**
-     * @param source
-     * @param changeType
-     * @param last_elem
-     * @param last_group
-     * @param pid
-     */
-    private final void distributeEventIntern(GraphDocument source, final GDCollectionChangeType changeType, final ElementContainer last_elem, final LayerContainer last_group, final int pid) {
-        if (isBulkMode()) {
-            return;
-        }
-        if (source == null) {
-            source = doc;
-        }
-        switch (changeType) {
-        case DATA_CHANGED:
-            for (GDCollectionChangeListener l : listener) {
-                l.dataChanged(source);
-            }
-            updateElementNames();
-            break;
-        case ELEMENT_GRAPHICS_CHANGED:
-            for (GDCollectionChangeListener l : listener) {
-                l.elementGraphicsChanged(last_elem);
-            }
-            break;
-        case ELEMENT_NAME_CHANGED:
-            for (GDCollectionChangeListener l : listener) {
-                l.elementNameChanged(last_elem);
-            }
-            break;
-        case USER_FIELD_VALUE_CHANGED:
-            UserFieldTarget userFieldTarget = last_elem == null ? null : last_elem.getElement();
-            for (GDCollectionChangeListener l : listener) {
-                l.userFieldValueChanged(userFieldTarget);
-            }
-            break;
-        case LAYOUT_CHANGED:
-            for (GDCollectionChangeListener l : listener) {
-                l.layoutChanged(source);
-            }
-            break;
-        case GROUP_ORDER_CHANGED:
-            for (GDCollectionChangeListener l : listener) {
-                l.groupOrderChanged(source);
-            }
-            break;
-        case ACTIVE_LAYER_CHANGED:
-            for (GDCollectionChangeListener l : listener) {
-                l.activeLayerChanged(source);
-            }
-            break;
-        case COLORS_CHANGED:
-            for (GDCollectionChangeListener l : listener) {
-                l.colorsChanged(source);
-            }
-            break;
-        case SELECTION_CHANGED:
-            for (GDCollectionChangeListener l : listener) {
-                l.selectionChanged(source);
-            }
-            break;
-        case MODEL_OR_SZENARIO_RENAMED:
-            for (GDCollectionChangeListener l : listener) {
-                l.modelOrSzenarioRenamed(source);
-            }
-            break;
-        default:
-            break;
-        }
     }
 
     /**

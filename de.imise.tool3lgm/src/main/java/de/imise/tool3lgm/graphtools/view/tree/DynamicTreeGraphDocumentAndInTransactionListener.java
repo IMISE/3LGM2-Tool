@@ -2,11 +2,10 @@ package de.imise.tool3lgm.graphtools.view.tree;
 
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.undoredo.InTransactionListener;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
-public class DynamicTreeGraphDocumentAndInTransactionListener implements GDCollectionChangeListener, InTransactionListener {
+public class DynamicTreeGraphDocumentAndInTransactionListener implements GDCollectionChangeListener {
 
     private final DynamicTree tree;
 
@@ -98,14 +97,14 @@ public class DynamicTreeGraphDocumentAndInTransactionListener implements GDColle
     }
 
     public void remove() {
-        tree.getGraphDocument().removeGDCollectionChangeListener(this);
-        tree.getGraphDocument().getCollection().getMainGraphDocument().removeInTransactionListener(this);
+        GraphDocument doc = tree.getGraphDocument();
+        doc.removeAllTransactionsListener(this);
     }
 
     public void add() {
         remove(); //zur Sicherheit erstmal removen
-        tree.getGraphDocument().addGDCollectionChangeListener(this);
-        tree.getGraphDocument().getCollection().getMainGraphDocument().addInTransactionListener(this);
+        GraphDocument doc = tree.getGraphDocument();
+        doc.addAllTransactionsListener(this);
     }
 
     public void setActive(final boolean active) {
