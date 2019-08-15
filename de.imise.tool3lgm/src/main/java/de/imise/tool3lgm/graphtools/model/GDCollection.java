@@ -15,6 +15,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.ACTIVE_LAYER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.MODEL_OR_SZENARIO_RENAMED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS_NAME;
@@ -1869,7 +1870,7 @@ public final class GDCollection extends UserFieldTarget {
 
     public void setName(final String name) {
         this.name = name;
-        distribute(GDCollectionChangeType.MODEL_OR_SZENARIO_RENAMED, null, getMainGraphDocument(), STANDARD_PID);
+        distribute(MODEL_OR_SZENARIO_RENAMED, null, getMainGraphDocument(), STANDARD_PID);
     }
 
     /**

@@ -4,6 +4,7 @@
 package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.LAYOUT_CHANGED;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 
 import java.awt.Component;
@@ -21,7 +22,6 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -255,7 +255,7 @@ public class Static {
         //nichts ändert immer noch die volle Grafik in der Anzeige erhalten
         GraphDocument doc = getSelectedDoc();
         if (doc != null) {
-            doc.distributeEvent(GDCollectionChangeType.LAYOUT_CHANGED);
+            doc.distributeEvent(LAYOUT_CHANGED);
         }
     }
 

@@ -3,6 +3,8 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
+
 import java.awt.Component;
 import java.awt.GridBagLayout;
 import java.awt.event.ComponentEvent;
@@ -18,7 +20,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
@@ -34,7 +36,7 @@ import de.imise.util.clipboard.ContentExchangeListener;
  * tool3lgm.graphtools.userfield.dialog.valueinput.GeneralUserFieldEditorPanel <br>
  * tool3lgm.graphtools.userfield.dialog.valueinput.DistributionWeigthEditorPanel <br>
  * tool3lgm.graphtools.userfield.dialog.valueinput.ModelVariableEditorPanel
- * 
+ *
  * @author fstephan
  */
 public abstract class AbstractUserFieldEditorPanel extends JPanel implements ComponentListener {
@@ -66,7 +68,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
 
     /**
      * Konstruktor
-     * 
+     *
      * @param dialog Der Dialog, der dieses Panel beinhaltet
      */
     public AbstractUserFieldEditorPanel(final UserFieldEditorDialog dialog, final String name) {
@@ -154,7 +156,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     /**
      * Sichert die spezielle Darstellung von <code>UserFieldTable</code>s. Es wird nicht der <code>UserFieldTable</code> selbst, sondern dass ihn
      * beinhaltende <code>JScrollPane</code> angefügt.
-     * 
+     *
      * @see java.awt.Container#add(java.awt.Component, java.lang.Object)
      */
     @Override
@@ -171,7 +173,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     /**
      * Sichert das korrekte Entfernen des <code>table</code>s zu. Es wird nicht der Table, sondern das ihn beinhaltende <code>JScrollPane</code>
      * entfernt.
-     * 
+     *
      * @see java.awt.Container#remove(java.awt.Component)
      */
     @Override
@@ -186,7 +188,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     /**
      * Methode verändert das Attribut <code>table</code> und löst ein Update aus. Das Model bzw. die EditCondition des <code>table</code>s wird auf
      * <code>newModel</code> bzw. <code>newController</code> gesetzt.
-     * 
+     *
      * @param newModel
      * @param newController
      */
@@ -204,7 +206,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
 
     /**
      * Gibt den Dialog wieder, der dieses Panel enthält
-     * 
+     *
      * @return dialog
      */
     public UserFieldEditorDialog getDialog() {
@@ -243,11 +245,13 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
 
     /**
      * Führt im GraphDocument eine Selection_Changed Aktion aus
-     * 
+     *
      * @param panel
      */
     protected void distributeSelectionChangedEvent() {
-        dialog.getGraphDocument().distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, getDialog().getTransactionID());
+        LGMGraphDocument doc = dialog.getGraphDocument();
+        int pid = dialog.getTransactionID();
+        doc.distributeEvent(SELECTION_CHANGED, pid);
     }
 
     /**
@@ -260,7 +264,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
 
     /**
      * Gibt wieder, ob sich Daten im {@link #table} geändert haben.
-     * 
+     *
      * @return
      */
     public boolean dataChanged() {
@@ -270,7 +274,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     /**
      * Setzt das Attribut {@link #dataChanged} und bestimmt damit, ob dem {@link #dialog} angezeigt werden soll, dass Änderungen gemacht wurden, oder
      * nicht.
-     * 
+     *
      * @param b
      */
     public void dataChanged(final boolean b) {
@@ -279,7 +283,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
 
     /**
      * Gibt das Reihen- und Spaltenelement an der aktuellen Mouse-Position im Table wieder.
-     * 
+     *
      * @return {@link #elementsAtMousePointer}
      */
     public String[] getElementsAtMousePointer() {
@@ -295,11 +299,11 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
 
     /**
      * Liefert die {@link UserFieldDefinitions} der {@link GDCollection} des Dialoges dieses Panels
-     * 
+     *
      * @return
      */
     public UserFieldDefinitions getUserFieldDefinitions() {
-        return getDialog().getUserFieldDefinitions();
+        return dialog.getUserFieldDefinitions();
     }
 
     @Override

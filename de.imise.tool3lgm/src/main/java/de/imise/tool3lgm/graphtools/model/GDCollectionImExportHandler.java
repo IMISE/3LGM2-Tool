@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Tool3lgmConstants.getFileNameExtensionFilters;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -21,7 +22,6 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -215,7 +215,7 @@ public final class GDCollectionImExportHandler {
         }
         Static.closeProgressDialog();
         gdcoll.getUserFieldDefinitions().hasCrossReferences();
-        gdcoll.distribute(GDCollectionChangeType.DATA_CHANGED);
+        gdcoll.distribute(DATA_CHANGED);
     }
 
     /**

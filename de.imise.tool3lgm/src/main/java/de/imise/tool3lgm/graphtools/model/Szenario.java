@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.MODEL_OR_SZENARIO_RENAMED;
 
 import java.util.Date;
@@ -8,7 +9,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -176,7 +176,7 @@ public class Szenario extends LGMGraphDocument {
                 }
             }
             finish_transaction(pid, false);
-            distributeEvent(GDCollectionChangeType.DATA_CHANGED);
+            distributeEvent(DATA_CHANGED);
         }
     }
 

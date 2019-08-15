@@ -1,11 +1,13 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.ACTIVE_LAYER_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
+
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
@@ -61,9 +63,9 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
         //wenn das hier ein Layerknoten ist, wird im Tree der Layer gewechselt und es komtm true zurück
         boolean layerChanged = tree.setActiveLayer(selectedLayerNode);
         doc.finish_transaction(DynamicTree.PID, false);
-        doc.distributeEvent(GDCollectionChangeType.SELECTION_CHANGED);
+        doc.distributeEvent(SELECTION_CHANGED);
         if (layerChanged) {
-            doc.distributeEvent(GDCollectionChangeType.ACTIVE_LAYER_CHANGED);
+            doc.distributeEvent(ACTIVE_LAYER_CHANGED);
         }
         tree.setTransactionListenerActive(true);
     }

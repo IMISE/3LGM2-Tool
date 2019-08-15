@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,7 +32,6 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -246,12 +246,12 @@ public class LayoutEditor extends JDialog implements ActionListener {
         }
         if (e.getSource() == uebernehmen) {
             doc.adaptMapping(my_mapping);
-            doc.distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED);
+            doc.distributeEvent(ELEMENT_GRAPHICS_CHANGED);
             return;
         }
         if (e.getSource() == beenden) {
             doc.adaptMapping(my_mapping);
-            doc.distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED);
+            doc.distributeEvent(ELEMENT_GRAPHICS_CHANGED);
             dispose();
             // setVisible(false);
             return;

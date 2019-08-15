@@ -1,6 +1,10 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.io.File;
 import java.io.InputStream;
@@ -69,7 +73,7 @@ public class LGMGraphDocument extends GraphDocument {
                     ec.setVisible(false);
                 }
             }
-            distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED, pid);
+            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
         }
         case MODEL_ACTION_UNHIDE_ALL: {
@@ -77,7 +81,7 @@ public class LGMGraphDocument extends GraphDocument {
             for (ElementContainer ec : getElementContainers(elementClass, true)) {
                 ec.setVisible(true);
             }
-            distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED, pid);
+            distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
         }
         default:
@@ -144,12 +148,12 @@ public class LGMGraphDocument extends GraphDocument {
      *
      */
     private synchronized void cutToClipboard() {
-        start_transaction(TransactionManager.STANDARD_PID);
+        start_transaction(STANDARD_PID);
         copyToClipboard();
         //man muss die Selektion clonen, da sie sich wärend des Löschens ändert
-        gdcoll.deleteElements(getSelectedElements(), this, TransactionManager.STANDARD_PID);
-        finish_transaction(TransactionManager.STANDARD_PID);
-        distributeEvent(GDCollectionChangeType.DATA_CHANGED);
+        gdcoll.deleteElements(getSelectedElements(), this, STANDARD_PID);
+        finish_transaction(STANDARD_PID);
+        distributeEvent(DATA_CHANGED);
     }
 
     /**
@@ -194,21 +198,20 @@ public class LGMGraphDocument extends GraphDocument {
         }
 
         finish_transaction(pid);
-        distributeEvent(GDCollectionChangeType.DATA_CHANGED, pid);
+        distributeEvent(DATA_CHANGED, pid);
     }
 
     /**
      * @param istream
      */
     public synchronized void pasteInputStream(final InputStream istream) {
-        int pid = TransactionManager.STANDARD_PID;
-        start_transaction(pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL + " ", pid);
+        start_transaction(STANDARD_PID);
+        addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL + " ", STANDARD_PID);
         deselectAll(true);
         try {
             getCollection().loadFile(istream);
         } catch (Exception e) {
-            undo(pid);
+            undo(STANDARD_PID);
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
             Object[] buttons = new Object[] {
                     getResString("ok")
@@ -218,8 +221,8 @@ public class LGMGraphDocument extends GraphDocument {
             return;
         }
 
-        finish_transaction(pid);
-        distributeEvent(GDCollectionChangeType.DATA_CHANGED, pid);
+        finish_transaction(STANDARD_PID);
+        distributeEvent(DATA_CHANGED, STANDARD_PID);
     }
 
     //	/**
@@ -450,8 +453,7 @@ public class LGMGraphDocument extends GraphDocument {
 
         mainDoc.deselectAll(false);
 
-        int pid = TransactionManager.STANDARD_PID;
-        destMainDoc.start_transaction(pid);
+        destMainDoc.start_transaction(STANDARD_PID);
 
         try {
             destMainDoc.deselectAll(true);
@@ -471,8 +473,8 @@ public class LGMGraphDocument extends GraphDocument {
 
                 if ((newE = destMainDoc.findElementCoded(insert.getHashString())) != null) {
                     if ((overwriteJoinNothing & 1) == 0) {
-                        select(insertC, pid);
-                        distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, insertC, pid);
+                        select(insertC, STANDARD_PID);
+                        distributeEvent(SELECTION_CHANGED, insertC, STANDARD_PID);
                         overwriteJoinNothing = OverwriteDialog.showDialog(Static.getMainFrame(), newE, insert);
                     }
 
@@ -511,7 +513,7 @@ public class LGMGraphDocument extends GraphDocument {
                                     newC.refreshText();
                                     dest.getLayer(newE.layerFor()).add(newC);
                                 }
-                                destMainDoc.addToSelection(newMainC, pid);
+                                destMainDoc.addToSelection(newMainC, STANDARD_PID);
                             }
                         }
                     }
@@ -519,10 +521,10 @@ public class LGMGraphDocument extends GraphDocument {
             }
             for (Edge edge : edges) {
                 if (!edge.reconnect(destGDColl)) {
-                    destGDColl.deleteElement(edge, pid);
+                    destGDColl.deleteElement(edge, STANDARD_PID);
                 } else {
                     int edgeLayer = edge.layerFor();
-                    destGDColl.addEdge((EdgeContainer) edge.getContainer(destMainDoc), pid);
+                    destGDColl.addEdge((EdgeContainer) edge.getContainer(destMainDoc), STANDARD_PID);
                     if (!edge.isUnique() && dest instanceof Szenario) {
                         EdgeContainer newC = (EdgeContainer) edge.getContainer(dest);
                         if (newC == null) {
@@ -535,7 +537,7 @@ public class LGMGraphDocument extends GraphDocument {
                         }
                         newC.computeBorderPoints();
                     }
-                    destMainDoc.addToSelection(edge.getContainer(destMainDoc), pid);
+                    destMainDoc.addToSelection(edge.getContainer(destMainDoc), STANDARD_PID);
                 }
             }
             List<EdgeContainer> edgeConts = new ArrayList<>();
@@ -566,19 +568,19 @@ public class LGMGraphDocument extends GraphDocument {
                 kc.computeBorderPoints();
             }
 
-            destMainDoc.finish_transaction(pid);
+            destMainDoc.finish_transaction(STANDARD_PID);
         } catch (Exception ex) {
-            destMainDoc.undo(pid);
+            destMainDoc.undo(STANDARD_PID);
             Log.show(Log.ERROR, getResString("FehlerKorrupt") + "\n" + destGDColl.getName(), ex);
         }
-        start_transaction(TransactionManager.STANDARD_PID, false);
+        start_transaction(STANDARD_PID, false);
         deselectAll(true);
         for (int j = 0; j < tmpActive.size(); j++) {
-            addToSelection(tmpActive.get(j), TransactionManager.STANDARD_PID);
+            addToSelection(tmpActive.get(j), STANDARD_PID);
         }
-        finish_transaction(TransactionManager.STANDARD_PID, false);
-        distributeEvent(GDCollectionChangeType.SELECTION_CHANGED);
-        dest.distributeEvent(GDCollectionChangeType.DATA_CHANGED);
+        finish_transaction(STANDARD_PID, false);
+        distributeEvent(SELECTION_CHANGED);
+        dest.distributeEvent(DATA_CHANGED);
     }
 
     /**
@@ -597,7 +599,7 @@ public class LGMGraphDocument extends GraphDocument {
 
         joinElements(me1, me2, doc2, saveInBoth);
 
-        distributeEvent(GDCollectionChangeType.DATA_CHANGED);
+        distributeEvent(DATA_CHANGED);
     }
 
     /**

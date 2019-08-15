@@ -1,6 +1,8 @@
 package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Cursor;
 import java.awt.Frame;
@@ -20,12 +22,10 @@ import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
@@ -643,17 +643,16 @@ public class Tool3lgm {
             if (doc == null) {
                 return;
             }
-            final int PID = TransactionManager.STANDARD_PID;
-            doc.start_transaction(PID, false);
+            doc.start_transaction(STANDARD_PID, false);
             doc.deselectAll(true);
             for (int i = 0; i < params.length; i++) {
                 ElementContainer ec = doc.findContainerCoded(params[i]);
                 if (ec != null) {
-                    doc.addToSelection(ec, PID);
+                    doc.addToSelection(ec, STANDARD_PID);
                 }
             }
-            doc.finish_transaction(PID, false);
-            doc.distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, PID);
+            doc.finish_transaction(STANDARD_PID, false);
+            doc.distributeEvent(SELECTION_CHANGED, STANDARD_PID);
         } else if (command.equalsIgnoreCase("selectByUserField")) {
             if (params == null || params.length < 2) {
                 return;
@@ -662,17 +661,16 @@ public class Tool3lgm {
             if (doc == null) {
                 return;
             }
-            final int PID = TransactionManager.STANDARD_PID;
-            doc.start_transaction(PID, false);
+            doc.start_transaction(STANDARD_PID, false);
             doc.deselectAll(true);
             for (int i = 1; i < params.length; i++) {
                 ElementContainer ec = doc.findElementWithUserField(params[0], params[i]).getContainer(doc);
                 if (ec != null) {
-                    doc.addToSelection(ec, PID);
+                    doc.addToSelection(ec, STANDARD_PID);
                 }
             }
-            doc.finish_transaction(PID, false);
-            doc.distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, PID);
+            doc.finish_transaction(STANDARD_PID, false);
+            doc.distributeEvent(SELECTION_CHANGED, STANDARD_PID);
         } else {
             String[] newParams = new String[params.length + 1];
             newParams[0] = command;

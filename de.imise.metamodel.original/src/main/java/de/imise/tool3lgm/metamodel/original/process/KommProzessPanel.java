@@ -7,6 +7,8 @@ package de.imise.tool3lgm.metamodel.original.process;
 import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -35,7 +37,6 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.AdditionalLabelTextGenerator;
@@ -673,9 +674,10 @@ public class KommProzessPanel extends ElementDialogPanel {
                     hc.setHighLight(true);
                 }
             }
-            doc.select(getModelElement().getContainer(doc), dialog.getTransactionID());
-            doc.distributeEvent(GDCollectionChangeType.SELECTION_CHANGED);
-            doc.distributeEvent(GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED, dialog.getTransactionID());
+            int pid = dialog.getTransactionID();
+            doc.select(getModelElement().getContainer(doc), pid);
+            doc.distributeEvent(SELECTION_CHANGED);
+            doc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
         }
     }
 

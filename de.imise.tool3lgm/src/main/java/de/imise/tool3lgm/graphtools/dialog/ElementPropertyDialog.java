@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -47,7 +49,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListenerSimple;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
@@ -333,7 +334,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             }
         }
         doc.finish_transaction(getTransactionID());
-        doc.distributeEvent(GDCollectionChangeType.DATA_CHANGED, getTransactionID());
+        doc.distributeEvent(DATA_CHANGED, getTransactionID());
         doc.start_transaction(createNewTransactionID());
     }
 
@@ -363,7 +364,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
             commit(true);
         }
         doc.select(modelElement.getContainer(doc), getTransactionID());
-        doc.distributeEvent(GDCollectionChangeType.SELECTION_CHANGED, getTransactionID());
+        doc.distributeEvent(SELECTION_CHANGED, getTransactionID());
     }
 
     @Override

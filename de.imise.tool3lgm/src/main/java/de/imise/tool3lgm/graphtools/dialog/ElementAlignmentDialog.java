@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -22,7 +23,6 @@ import javax.swing.event.ChangeListener;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -195,7 +195,7 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
             }
         }
         doc.finish_transaction(pid);
-        doc.distributeEvent(GDCollectionChangeType.DATA_CHANGED);
+        doc.distributeEvent(DATA_CHANGED);
     }
 
     private Rectangle getLargestDimension() {
