@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -19,7 +20,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -99,7 +99,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             add(connectedElementName, BorderLayout.CENTER);
         } else {
             connectedElementsBox = new AlphabeticalComboBox();
-            itemListener = new LGMItemListener(getItemStateChangedAction(this, searchElementClass));
+            itemListener = new LGMItemListener(getItemStateChangedAction(this));
             connectedElementName = null;
             connectedElementViewComponent = connectedElementsBox;
 
@@ -192,23 +192,23 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      * Dies ist die Action, wenn sich die Combobox-Auswahl ändert
      *
      * @param panel
-     * @param elementClass
      * @return
      */
-    private static final LGMAction getItemStateChangedAction(final SingleConnectionPanel panel, final Class<? extends ModelElement> elementClass) {
-        final GraphDocument mainDoc = panel.getGraphDocument();
-        final ElementPropertyDialog dialog = panel.getDialog();
-        final ModelElement modelElement = panel.getModelElement();
-
+    private static final LGMAction getItemStateChangedAction(final SingleConnectionPanel panel) {
         return new LGMAction() {
             @Override
             public void execute(final EventObject eo) {
                 if (!(eo instanceof ItemEvent)) {
                     return;
                 }
+                GraphDocument mainDoc = panel.getGraphDocument();
+                ElementPropertyDialog dialog = panel.getDialog();
+                ModelElement modelElement = panel.getModelElement();
+
                 ItemEvent e = (ItemEvent) eo;
                 Object selected = e.getItem();
-                mainDoc.start_transaction(dialog.getTransactionID());
+                int pid = dialog.getTransactionID();
+                mainDoc.start_transaction(pid);
 
                 // vor jedem select gibt es ein Deselect, wenn erst etwas selektiert war -> alte
                 // Verbindung trennen
@@ -216,7 +216,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                     if (selected instanceof NodeContainer) {
                         panel.unlinkAll();
                         modelElement.getContainer(mainDoc).refreshText();
-                        mainDoc.finish_transaction(dialog.getTransactionID());
+                        mainDoc.finish_transaction(pid);
                         return;
                     }
                 }
@@ -231,8 +231,8 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                     panel.connectToFirstPath(element2Connect);
                 }
                 modelElement.getContainer(mainDoc).refreshText();
-                mainDoc.finish_transaction(dialog.getTransactionID());
-                mainDoc.distributeEvent(GDCollectionChangeType.DATA_CHANGED, dialog.getTransactionID());
+                mainDoc.finish_transaction(pid);
+                mainDoc.distributeEvent(DATA_CHANGED, pid);
             }
         };
     }
