@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.imexport.csv.linehandler.line.NodeHeaderLine;
 
 public class NodeHeaderLineTest {
 

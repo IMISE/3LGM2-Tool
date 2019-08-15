@@ -9,8 +9,8 @@ package de.imise.tool3lgm.graphtools.dialog.action;
 public class ActionNotDefinedForClassException extends Exception {
 
     /**
-	 * 
-	 */
+     * @param panelClassName
+     */
     public ActionNotDefinedForClassException(final String panelClassName) {
         super("Die Aktion ist für " + panelClassName + " nicht definiert!");
     }

@@ -666,6 +666,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         setPageSize(szenario.getPageWidth(), szenario.getPageHeight());
         firePageSizeChangedChanged();
     }
+
     /**
      * @param element
      */

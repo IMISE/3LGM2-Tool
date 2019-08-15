@@ -11,8 +11,8 @@ package de.imise.tool3lgm.xml;
 public class LGMVersionException extends Exception {
 
     /**
-	 * 
-	 */
+     * 
+     */
     public LGMVersionException() {
         super();
     }

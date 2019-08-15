@@ -662,7 +662,8 @@ public abstract class UserFieldTableController {
     /* ************************* Beginn: Unterklassen ******************************************** */
 
     /**
-     * Ändert und überwacht {@link #selectionChangeMode} in Abhängigkeit davon, ob Shift oder Strg gedrückt wurde bzw. ein MouseDragging erfolgt ist. <br>
+     * Ändert und überwacht {@link #selectionChangeMode} in Abhängigkeit davon, ob Shift oder Strg gedrückt wurde bzw. ein MouseDragging erfolgt ist.
+     * <br>
      * Beim Drücken von Strg- und Pfeiltasten erfolgt ein Springen der Selektion an den jeweiligen Rand des {@link #table}s. <br>
      * MouseDragging wird als gedrücktes Shift interpretiert.
      * <p>

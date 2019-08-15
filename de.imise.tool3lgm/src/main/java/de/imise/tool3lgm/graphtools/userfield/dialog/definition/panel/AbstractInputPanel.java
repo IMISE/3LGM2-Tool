@@ -13,8 +13,8 @@ import javax.swing.JPanel;
 public abstract class AbstractInputPanel extends JPanel {
 
     /**
-	 * 
-	 */
+     * 
+     */
     public AbstractInputPanel() {
         super();
     }
