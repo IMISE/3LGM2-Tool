@@ -3,7 +3,7 @@
  */
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel;
 
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 
 import java.awt.Component;
 import java.awt.GridBagLayout;

@@ -4,7 +4,7 @@
 package de.imise.tool3lgm.graphtools.userfield.dialog.valueinput;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CLASSIFICATION_NUMBER;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.COMBO_BOX;
 import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.HYPERLINK;

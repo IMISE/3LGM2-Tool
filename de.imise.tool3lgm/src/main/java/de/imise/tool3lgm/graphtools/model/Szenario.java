@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.model;
 
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.MODEL_OR_SZENARIO_RENAMED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.MODEL_OR_SZENARIO_NAME_CHANGED;
 
 import java.util.Date;
 
@@ -206,7 +206,7 @@ public class Szenario extends LGMGraphDocument {
     @Override
     public final void setTitle(final String newTitle) {
         super.setTitle(newTitle);
-        distributeEvent(MODEL_OR_SZENARIO_RENAMED);
+        distributeEvent(MODEL_OR_SZENARIO_NAME_CHANGED);
     }
 
     /**

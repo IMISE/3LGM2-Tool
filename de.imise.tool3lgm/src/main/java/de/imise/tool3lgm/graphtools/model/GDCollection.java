@@ -13,10 +13,10 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.ACTIVE_LAYER_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.MODEL_OR_SZENARIO_RENAMED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ACTIVE_LAYER_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.MODEL_OR_SZENARIO_NAME_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_BENDPOINT_INDEX;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_CLASS_NAME;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.INVALID_EDGE_INDEX;
@@ -98,7 +98,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -164,8 +164,8 @@ public final class GDCollection extends UserFieldTarget {
     /** Hauptdokument der Collection */
     private LGMGraphDocument doc;
 
-    /** Liste aller {@link GDCollectionChangeListener} */
-    private final List<GDCollectionChangeListener> listener = new ArrayList<>();
+    /** Liste aller {@link LGMChangeListener} */
+    private final List<LGMChangeListener> listener = new ArrayList<>();
 
     /**
      * Liste aller <code>GraphDocument</code>s in der Reihenfolge, dass immer das selektierte ganz hinten steht,
@@ -1801,7 +1801,7 @@ public final class GDCollection extends UserFieldTarget {
      *
      * @param changeType
      */
-    public final void distribute(final GDCollectionChangeType changeType) {
+    public final void distribute(final LGMChangeType changeType) {
         distribute(changeType, null, null, STANDARD_PID);
     }
 
@@ -1811,7 +1811,7 @@ public final class GDCollection extends UserFieldTarget {
      * @param source
      * @param pid
      */
-    public final void distribute(final GDCollectionChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
+    public final void distribute(final LGMChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
         setChanged(true);
         if (isBulkMode()) {
             return;
@@ -1819,7 +1819,7 @@ public final class GDCollection extends UserFieldTarget {
         if (source != null) {
             source.distributeEventIntern(changeType, last_elem, pid);
         }
-        GDCollectionChangeListener.distributeEvent(changeType, listener, source == null ? doc : source, last_elem);
+        LGMChangeListener.distributeEvent(changeType, listener, source == null ? doc : source, last_elem);
         if (doc != source) {
             doc.distributeEventIntern(changeType, last_elem, pid);
         }
@@ -1870,7 +1870,7 @@ public final class GDCollection extends UserFieldTarget {
 
     public void setName(final String name) {
         this.name = name;
-        distribute(MODEL_OR_SZENARIO_RENAMED, null, getMainGraphDocument(), STANDARD_PID);
+        distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainGraphDocument(), STANDARD_PID);
     }
 
     /**
@@ -2135,14 +2135,14 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * @param gdl
      */
-    public final void addGDCollectionChangeListener(final GDCollectionChangeListener gdl) {
+    public final void addGDCollectionChangeListener(final LGMChangeListener gdl) {
         listener.add(gdl);
     }
 
     /**
      * @param gdl
      */
-    public final void removeGDCollectionChangeListener(final GDCollectionChangeListener gdl) {
+    public final void removeGDCollectionChangeListener(final LGMChangeListener gdl) {
         listener.remove(gdl);
     }
 

@@ -4,12 +4,12 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
- * Vereinfachung des Interfaces {@link GDCollectionChangeListener}. In jeder der Methoden wird die abstrakte Methode {@link #changed()} und
+ * Vereinfachung des Interfaces {@link LGMChangeListener}. In jeder der Methoden wird die abstrakte Methode {@link #changed()} und
  * {@link #changed(GraphDocument)} oder {@link #changed(ElementContainer)} aufgerufen (je nach Context).
  *
  * @author AXS (Created on 21.02.2008)
  */
-public interface GDCollectionChangeListenerSimple extends GDCollectionChangeListener {
+public interface GDCollectionChangeListenerSimple extends LGMChangeListener {
 
     @Override
     public default void dataChanged(final GraphDocument source) {

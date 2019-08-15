@@ -7,7 +7,7 @@ import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -18,7 +18,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  *
  * @author Thomas Rudert
  */
-public abstract class AbstractInternalFrame extends JInternalFrame implements GDCollectionChangeListener {
+public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListener {
 
     /** darzustellendes (Teil-)Modell */
     protected GraphDocument doc;

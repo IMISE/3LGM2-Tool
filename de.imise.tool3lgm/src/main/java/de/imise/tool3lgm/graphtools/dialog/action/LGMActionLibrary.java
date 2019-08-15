@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.action;
 
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 
 import java.awt.Point;
 import java.awt.dnd.DropTargetDropEvent;

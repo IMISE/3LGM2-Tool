@@ -61,7 +61,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.Szenario;
@@ -797,7 +797,7 @@ public class ActionLibrary {
                 for (int i = 0; i < returnActions.length; i++) {
                     //Definition einer der aktuellen SimpleRedundancyAnalysis holen
                     final SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition = simpleRedundancyAnalysisDefinition.get(i);
-                    GlobalOptionAction action = new GlobalOptionAction(ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS, GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED) {
+                    GlobalOptionAction action = new GlobalOptionAction(ActionIdentifier.OPTIONS_SIMPLE_REDUNDANCY_ANALYSIS, LGMChangeType.ELEMENT_GRAPHICS_CHANGED) {
                         @Override
                         public void changeOption() {
                             boolean oldState = isSelected();

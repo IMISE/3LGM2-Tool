@@ -1,9 +1,9 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.io.File;
@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -125,8 +125,8 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     @Override
-    public final void distributeEventIntern(final GDCollectionChangeType changeType, final ElementContainer last_elem, final int pid) {
-        if (changeType == GDCollectionChangeType.DATA_CHANGED) {
+    public final void distributeEventIntern(final LGMChangeType changeType, final ElementContainer last_elem, final int pid) {
+        if (changeType == LGMChangeType.DATA_CHANGED) {
             for (SimpleRedundancyAnalysis redundancyAnalysis : simpleRedundancyAnalysis) {
                 redundancyAnalysis.computeRedundancy();
             }

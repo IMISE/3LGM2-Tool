@@ -7,13 +7,13 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.NO_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.ACTIVE_LAYER_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.DATA_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.ELEMENT_GRAPHICS_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.ELEMENT_NAME_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.GROUP_ORDER_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.SELECTION_CHANGED;
-import static de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType.USER_FIELD_VALUE_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ACTIVE_LAYER_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_NAME_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.GROUP_ORDER_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.USER_FIELD_VALUE_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADDICT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON;
@@ -62,7 +62,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.LayerNode;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -110,15 +110,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     protected LayerContainer[] layer;
 
     /**
-     * Alle {@link GDCollectionChangeListener}, die immer benachrichtigt werden - egal ob eine Transaktion durch einen Dialog offen ist oder nicht.
+     * Alle {@link LGMChangeListener}, die immer benachrichtigt werden - egal ob eine Transaktion durch einen Dialog offen ist oder nicht.
      */
-    private final List<GDCollectionChangeListener> allListener;
+    private final List<LGMChangeListener> allListener;
 
     /**
-     * Alle {@link GDCollectionChangeListener}, die nur benachrichtigt werden, wenn sie keine Transaktion geöffnet ist bzw. die nur auf Transaktionen
+     * Alle {@link LGMChangeListener}, die nur benachrichtigt werden, wenn sie keine Transaktion geöffnet ist bzw. die nur auf Transaktionen
      * reagieren, die abgeschlossen sind.Das ist der Fall, wenn das Change-Ereignis nicht durch eine geöffneten Dialog kommt.
      */
-    private final List<GDCollectionChangeListener> closedListener;
+    private final List<LGMChangeListener> closedListener;
 
     /**
      * COMMENTME
@@ -2584,28 +2584,28 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * @param gdl
      */
-    public final void addAllTransactionsListener(final GDCollectionChangeListener gdl) {
+    public final void addAllTransactionsListener(final LGMChangeListener gdl) {
         allListener.add(gdl);
     }
 
     /**
      * @param gdl
      */
-    public final void removeAllTransactionsListener(final GDCollectionChangeListener gdl) {
+    public final void removeAllTransactionsListener(final LGMChangeListener gdl) {
         allListener.remove(gdl);
     }
 
     /**
      * @param gdl
      */
-    public final void addClosedTransactionsListener(final GDCollectionChangeListener gdl) {
+    public final void addClosedTransactionsListener(final LGMChangeListener gdl) {
         closedListener.add(gdl);
     }
 
     /**
      * @param gdl
      */
-    public final void removeClosedTransactionsListener(final GDCollectionChangeListener gdl) {
+    public final void removeClosedTransactionsListener(final LGMChangeListener gdl) {
         closedListener.remove(gdl);
     }
 
@@ -2615,7 +2615,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      *
      * @param changeType
      */
-    public final void distributeEvent(final GDCollectionChangeType changeType) {
+    public final void distributeEvent(final LGMChangeType changeType) {
         distributeEvent(changeType, TransactionManager.STANDARD_PID);
     }
 
@@ -2626,7 +2626,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param changeType
      * @param pid
      */
-    public final void distributeEvent(final GDCollectionChangeType changeType, final int pid) {
+    public final void distributeEvent(final LGMChangeType changeType, final int pid) {
         distributeEvent(changeType, null, pid);
     }
 
@@ -2635,14 +2635,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param last_elem
      * @param pid
      */
-    public final void distributeEvent(final GDCollectionChangeType changeType, final ElementContainer last_elem, final int pid) {
+    public final void distributeEvent(final LGMChangeType changeType, final ElementContainer last_elem, final int pid) {
         Integer pidInteger = new Integer(pid);
         Integer transStackInteger = gdcoll.getTransStackTable().get(pidInteger);
         if (transStackInteger == null) {
             transStackInteger = new Integer(0);
         }
         if (transStackInteger.intValue() == 1) {
-            GDCollectionChangeListener.distributeEvent(changeType, allListener, this, last_elem);
+            LGMChangeListener.distributeEvent(changeType, allListener, this, last_elem);
         } else if (transStackInteger.intValue() == 0) {
             gdcoll.distribute(changeType, last_elem, this, pid);
         }
@@ -2653,7 +2653,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param last_elem
      * @param pid
      */
-    public void distributeEventIntern(final GDCollectionChangeType changeType, final ElementContainer last_elem, final int pid) {
+    public void distributeEventIntern(final LGMChangeType changeType, final ElementContainer last_elem, final int pid) {
         if (gdcoll.isBulkMode()) {
             return;
         }
@@ -2663,10 +2663,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             transStackInteger = new Integer(0);
         }
         if (transStackInteger <= 1) {
-            GDCollectionChangeListener.distributeEvent(changeType, allListener, this, last_elem);
+            LGMChangeListener.distributeEvent(changeType, allListener, this, last_elem);
         }
         if (transStackInteger == 0) {
-            GDCollectionChangeListener.distributeEvent(changeType, closedListener, this, last_elem);
+            LGMChangeListener.distributeEvent(changeType, closedListener, this, last_elem);
         }
     }
 

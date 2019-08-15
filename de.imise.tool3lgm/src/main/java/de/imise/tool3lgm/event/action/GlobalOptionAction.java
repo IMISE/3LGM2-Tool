@@ -7,7 +7,7 @@ import javax.swing.JCheckBoxMenuItem;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GDCollectionChangeListener.GDCollectionChangeType;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.util.swing.event.OptionAction;
 
 /**
@@ -17,13 +17,13 @@ import de.imise.util.swing.event.OptionAction;
  */
 public abstract class GlobalOptionAction extends StaticAction implements OptionAction {
 
-    private final GDCollectionChangeType changeType;
+    private final LGMChangeType changeType;
 
     public GlobalOptionAction(final Object identifier) {
-        this(identifier, GDCollectionChangeType.DATA_CHANGED);
+        this(identifier, LGMChangeType.DATA_CHANGED);
     }
 
-    public GlobalOptionAction(final Object identifier, final GDCollectionChangeType changeType) {
+    public GlobalOptionAction(final Object identifier, final LGMChangeType changeType) {
         super(identifier);
         this.changeType = changeType;
     }
@@ -44,7 +44,7 @@ public abstract class GlobalOptionAction extends StaticAction implements OptionA
     }
 
     /** Benachrichtigt das Tool über das Eintreten des spezifizierten Ereignisses */
-    private void distributeOptionChange(final GDCollectionChangeType eventCode) {
+    private void distributeOptionChange(final LGMChangeType eventCode) {
         List<GDCollection> collections = Static.getTool().getCollections();
         for (int i = 0; i < collections.size(); i++) {
             GDCollection col = collections.get(i);
