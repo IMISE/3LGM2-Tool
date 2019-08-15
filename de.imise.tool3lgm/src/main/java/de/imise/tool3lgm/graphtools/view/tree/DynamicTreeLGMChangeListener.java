@@ -5,13 +5,13 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
-public class DynamicTreeGraphDocumentAndInTransactionListener implements LGMChangeListener {
+public class DynamicTreeLGMChangeListener implements LGMChangeListener {
 
     private final DynamicTree tree;
 
     private boolean active = true;
 
-    public DynamicTreeGraphDocumentAndInTransactionListener(final DynamicTree tree) {
+    public DynamicTreeLGMChangeListener(final DynamicTree tree) {
         this.tree = tree;
         add();
     }

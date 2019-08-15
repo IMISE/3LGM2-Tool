@@ -92,7 +92,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
 
     private final DynamicTreeSelectionListener selectionListener;
 
-    private final DynamicTreeGraphDocumentAndInTransactionListener transactionListener;
+    private final DynamicTreeLGMChangeListener transactionListener;
 
     /**
      * Transaktions-ID, mit der der Baum alle seine Änderungen vornimmt.
@@ -127,7 +127,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         KeyStrokes.registerPublicKeyStrokes(this);
         DynamicTreeMouseAdapter.addAdapter(this);
         selectionListener = new DynamicTreeSelectionListener(this);
-        transactionListener = new DynamicTreeGraphDocumentAndInTransactionListener(this);
+        transactionListener = new DynamicTreeLGMChangeListener(this);
         setCellRenderer(new TreeRenderer(doc));
         ((TreeRenderer) getCellRenderer()).setBackgroundNonSelectionColor(getBackground());
         setBackground(getBackground());
