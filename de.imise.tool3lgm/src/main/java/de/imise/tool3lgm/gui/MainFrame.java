@@ -44,9 +44,9 @@ public class MainFrame extends JFrame implements WindowListener {
     private final MainFrameContentPane contentPane;
 
     /**
-     *
+     * @param visible
      */
-    public MainFrame() {
+    public MainFrame(final boolean visible) {
         setIconImage(Tool3lgmConstants.getIcon("toolIcon.gif").getImage());
         setTitle(null);
 
@@ -70,6 +70,8 @@ public class MainFrame extends JFrame implements WindowListener {
         setJMenuBar(menuBar);
 
         contentPane.selectedDocChanged();
+
+        setVisible(visible);
     }
 
     @Override

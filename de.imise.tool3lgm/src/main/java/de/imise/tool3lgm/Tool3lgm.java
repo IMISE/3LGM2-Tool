@@ -59,8 +59,7 @@ public class Tool3lgm {
         } catch (InterruptedException e) {
         }
 
-        mainFrame = new MainFrame();
-        mainFrame.setVisible(visible);
+        mainFrame = new MainFrame(visible);
 
         //den Hauptframe in die Mitte setzen
         //setLocationRelativeTo(null);
@@ -72,14 +71,23 @@ public class Tool3lgm {
 
     }
 
+    /**
+     * @param metaModelName
+     */
     public void setTitle(final String metaModelName) {
         mainFrame.setTitle(metaModelName);
     }
 
+    /**
+     * @param cursor
+     */
     public void setCursor(final Cursor cursor) {
         mainFrame.setCursor(cursor);
     }
 
+    /**
+     * @return
+     */
     public boolean hasVisibleMainFrame() {
         return mainFrame.isVisible();
     }
@@ -143,6 +151,10 @@ public class Tool3lgm {
         return false;
     }
 
+    /**
+     * @param file
+     * @return
+     */
     private File chooseModelFile(File file) {
         if (file != null) {
             if (!file.isDirectory()) {
@@ -227,6 +239,9 @@ public class Tool3lgm {
         return true;
     }
 
+    /**
+     *
+     */
     public void close() {
         //man muss die Liste Clonen, da sie sich durch setSelectedDoc() ändert
         List<GDCollection> collections = new ArrayList<>(this.collections);
