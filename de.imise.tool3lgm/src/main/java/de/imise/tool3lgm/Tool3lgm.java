@@ -1,5 +1,7 @@
 package de.imise.tool3lgm;
 
+import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_CLOSED;
+import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_MODEL_OPENED;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
@@ -15,6 +17,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
@@ -34,6 +37,7 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.BrowseUtils;
+import de.imise.util.event.ListenerSupport;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /** Die eigentliche Anwendung 3lgm */
@@ -41,6 +45,9 @@ public class Tool3lgm {
 
     /** alle GDCollections */
     private final List<GDCollection> collections = new ArrayList<>();
+
+    /** alle ChangeListener, die auf Toolereignisse reagieren müssen */
+    private final ListenerSupport<Tool3lgmChangeListener> toolChangeListenerSupport = new ListenerSupport<>();
 
     /** Das Hauptfenster */
     private final MainFrame mainFrame;
@@ -72,10 +79,33 @@ public class Tool3lgm {
     }
 
     /**
-     * @param metaModelName
+     * @param tcl
      */
-    public void setTitle(final String metaModelName) {
-        mainFrame.setTitle(metaModelName);
+    public final void addChangeListener(final Tool3lgmChangeListener tcl) {
+        toolChangeListenerSupport.add(tcl);
+    }
+
+    /**
+     * @param tcl
+     */
+    public final void removeChangeListener(final Tool3lgmChangeListener tcl) {
+        toolChangeListenerSupport.remove(tcl);
+    }
+
+    /**
+     * @param changeType
+     * @param source
+     */
+    public void distribute(final Tool3lgmChangeType changeType, final GraphDocument source) {
+        changeType.deliverEvent(toolChangeListenerSupport, source);
+    }
+
+    /**
+     * @param changeType
+     * @param source
+     */
+    public void distribute(final Tool3lgmChangeType changeType, final GDCollection source) {
+        distribute(changeType, source.getMainGraphDocument());
     }
 
     /**
@@ -108,6 +138,7 @@ public class Tool3lgm {
             Static.showProgressDialog(true);
             Static.setProgressDialogTitle(getResString("load_model") + " " + file.getName());
             Static.setProgressDialogStatusLabel("read_progress");
+            //das hier mal prüfen, was passiert, wenn man das nicht macht und ob es vllt. die Lösung auch für andere Probleme ist
             mainFrame.update(mainFrame.getGraphics());
             boolean retVal = fileHandler.loadFromRAF();
             return retVal ? gdcoll : null;
@@ -215,13 +246,12 @@ public class Tool3lgm {
     public boolean openModel(final GDCollection gdcoll) {
         Static.setProgressDialogStatusLabel("finish_progress");
         collections.add(gdcoll);
-        //TODO: das hier sollte ein PropertyChange sein, so dass das ContentPane als Listener darauf reagieren kann und nicht direkt die Funktion an das darin enthaltene WorkArea weiter leiten muss
-        GraphDocument selectedDoc = mainFrame.addCollection(gdcoll);
-
+        distribute(MODEL_CHANGE_MODEL_OPENED, gdcoll);
+        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
         ConsistencyChecker.clearUnfixableErrors(gdcoll);
         setSelectedDoc(selectedDoc);
-        gdcoll.setUnchaged();
+        gdcoll.setUnchanged();
         System.gc();
         Static.closeProgressDialog();
 
@@ -280,15 +310,6 @@ public class Tool3lgm {
      */
     public MainFrame getMainFrame() {
         return mainFrame;
-    }
-
-    /**
-     * @param doc
-     * @return
-     */
-    public AbstractInternalFrame createFrame(final GraphDocument doc) {
-        //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GDCollectionChangeListener laufen (SZENARIO_ADDED)
-        return mainFrame.createFrame(doc);
     }
 
     /**
@@ -427,13 +448,9 @@ public class Tool3lgm {
         //ab hier ist sicher, dass das Modell geschlossen werden soll
         gdcoll.simpleRemoveGraphDocuments();
 
-        if (gdcoll.descriptionFrame != null) {
-            gdcoll.descriptionFrame.dispose();
-        }
-
         ignoreDocSelection = true;
 
-        mainFrame.closeAllFramesAndTabs(gdcoll);
+        distribute(MODEL_CHANGE_MODEL_CLOSED, selDoc);
 
         ignoreDocSelection = false;
 
@@ -449,7 +466,6 @@ public class Tool3lgm {
         System.gc();
 
         Static.closeProgressDialog();
-        mainFrame.selectLastFrame();
         return true;
     }
 
@@ -509,7 +525,7 @@ public class Tool3lgm {
             Log.show(Log.FATAL, getResString("FehlerAllgemein") + "\n" + exp, exp);
             return false;
         }
-        gdcoll.setUnchaged();
+        gdcoll.setUnchanged();
         return true;
     }
 

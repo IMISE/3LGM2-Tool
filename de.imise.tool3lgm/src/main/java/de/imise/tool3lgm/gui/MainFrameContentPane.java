@@ -410,17 +410,10 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         AbstractInternalFrame frame = findFirstInternalFrame(szen);
         while (frame != null) {
             toolbar.removeWindow(frame);
-            if (frame instanceof MatrixViewInternalFrame) {
-                frame.dispose();
-            } else {
-                //erst das dispose und erst dann als Tab removen, sonst haut das Einfügen-Menü nicht mehr hin, weil
-                //die Ereignisse internalFrameDeactivated(), internalFrameClosed() und internalFrameActivated() sonst
-                //in einer ungünstigen Reihenfolge kommen.
-                frame.dispose();
-                modelBrowserPanel.removeGraphDocument(frame.getGraphDocument());
-            }
+            frame.dispose();
             frame = findFirstInternalFrame(szen);
         }
+        modelBrowserPanel.removeGraphDocument(szen);
     }
 
     /**

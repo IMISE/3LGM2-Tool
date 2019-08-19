@@ -50,6 +50,8 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.MODEL_OR_SZENARIO_NAME_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SZENARIO_ADDED;
+import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SZENARIO_REMOVED;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_ELEMENT_LAYOUT;
 import static de.imise.tool3lgm.log.Log.ERROR;
@@ -85,7 +87,6 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
@@ -111,6 +112,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.util.StringUtils;
@@ -200,9 +202,6 @@ public final class GDCollection extends UserFieldTarget {
 
     /** Handler für den Im- und Export von (Teil-)Modellen */
     private final GDCollectionImExportHandler imExportHandler;
-
-    /** Momentan geöffnetes Beschreibungsfenster des Modells. Dieser View Kram gehört hier eigentlich gar nicht hin! */
-    public ModelPropertyDialog descriptionFrame;
 
     /**
      * Verzeichnis der Bitmap-Icons
@@ -396,11 +395,8 @@ public final class GDCollection extends UserFieldTarget {
             doc.finish_transaction(pid);
         }
         szenario.addClosedTransactionsListener(userFieldDefinitions);
-        if (descriptionFrame != null) {
-            descriptionFrame.update();
-        }
-        //			descriptionFrame.addTab(szenario);
-        changed = true;
+        setChanged(true);
+        distribute(SZENARIO_ADDED, null, szenario, pid);
         return szenario;
     }
 
@@ -440,14 +436,9 @@ public final class GDCollection extends UserFieldTarget {
         }
         doc.addUndoCommand(MODEL_ACTION_CREATE_SUBMODEL + " " + getParseSaveString(szen.getTitle()) + " " + getParseSaveString(szen.getDescription()) + " " + szen.hashString, pid);
         doc.addRedoCommand(MODEL_ACTION_DELETE_SUBMODEL + " " + szen.hashString, pid);
-        //wenn das Beschreibungsfenster offen ist -> den Tab des zu löschenden Teimodells löschen
-        if (descriptionFrame != null) {
-            descriptionFrame.update();
-            //			descriptionFrame.removeTab(szenario);
-        }
-        getMainFrame().closeFrame(szen);
         doc.finish_transaction(pid);
-        changed = true;
+        setChanged(true);
+        distribute(SZENARIO_REMOVED, null, szen, pid);
     }
 
     /**
@@ -479,12 +470,7 @@ public final class GDCollection extends UserFieldTarget {
         for (ModelElement me : mainDoc.getModelItems(ModelElement.class, true)) {
             me.invalidateNameWithSzens();
         }
-
-        if (descriptionFrame != null) {
-            descriptionFrame.update();
-        }
-
-        changed = true;
+        setChanged(true);
     }
 
     /**
@@ -497,12 +483,25 @@ public final class GDCollection extends UserFieldTarget {
         activeGraphDocumentsList.add((LGMGraphDocument) doc);
     }
 
+    private boolean selectedDocInitialized = false;
+
     /**
      * Gibt das aktuell selektierte <code>GraphDocument</code> zurück.
      */
     public LGMGraphDocument getSelectedDoc() {
         if (activeGraphDocumentsList.size() < 1) {
             return null;
+        }
+        //bei der allerersten Abfrage sollte das aktive GraphDocument aus den eingelesenen ViewParametern kommen
+        if (!selectedDocInitialized) {
+            for (Szenario szen : szenarios) {
+                ViewParameter viewParameter = szen.getViewParameter();
+                if (viewParameter != null && viewParameter.selected) {
+                    setActiveGraphDocument(szen);
+                    break;
+                }
+            }
+            selectedDocInitialized = true;
         }
         return activeGraphDocumentsList.get(activeGraphDocumentsList.size() - 1);
     }
@@ -514,16 +513,6 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      */
     public void simpleRemoveGraphDocuments() {
-        activeGraphDocumentsList.clear();
-    }
-
-    public void removeGraphDocuments() {
-        for (Szenario szen : szenarios) {
-            szen.gdcoll = null;
-        }
-        doc.gdcoll = null;
-        szenarios.clear();
-        doc = null;
         activeGraphDocumentsList.clear();
     }
 
@@ -1769,7 +1758,7 @@ public final class GDCollection extends UserFieldTarget {
     /**
      * @see #setChanged(boolean) mit false
      */
-    public void setUnchaged() {
+    public void setUnchanged() {
         setChanged(false);
     }
 
@@ -1819,13 +1808,15 @@ public final class GDCollection extends UserFieldTarget {
         if (source != null) {
             source.distributeEventIntern(changeType, last_elem, pid);
         }
-        LGMChangeListener.distributeEvent(changeType, listener, source == null ? doc : source, last_elem);
-        if (doc != source) {
-            doc.distributeEventIntern(changeType, last_elem, pid);
-        }
-        for (Szenario s : szenarios) {
-            if (s != source) {
-                s.distributeEventIntern(changeType, last_elem, pid);
+        LGMChangeListener.distributeEvent(changeType, listener, source == null ? doc : source, last_elem, false);
+        if (!changeType.isSzenarioSpecific()) {
+            if (doc != source) {
+                doc.distributeEventIntern(changeType, last_elem, pid);
+            }
+            for (Szenario s : szenarios) {
+                if (s != source) {
+                    s.distributeEventIntern(changeType, last_elem, pid);
+                }
             }
         }
     }
@@ -1886,21 +1877,6 @@ public final class GDCollection extends UserFieldTarget {
             }
         }
         return title;
-    }
-
-    /**
-     * Öffnet oder schliesst den Frame mit den Modellbeschreibungen
-     */
-    public void showDescriptionFrame(final boolean b) {
-        if (b) {
-            if (descriptionFrame == null) {
-                descriptionFrame = new ModelPropertyDialog(this);
-            }
-            descriptionFrame.setVisible(true);
-        } else {
-            descriptionFrame.dispose();
-            descriptionFrame = null;
-        }
     }
 
     /**

@@ -19,8 +19,11 @@ import javax.swing.WindowConstants;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.KeyStrokes;
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -35,7 +38,7 @@ import de.imise.util.robot.ScreenRobot;
  *
  * @author AXS (9 Aug 2019)
  */
-public class MainFrame extends JFrame implements WindowListener {
+public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowListener {
 
     /** Menü-Leiste des Tools */
     private final MenuBar menuBar;
@@ -71,16 +74,27 @@ public class MainFrame extends JFrame implements WindowListener {
 
         contentPane.selectedDocChanged();
 
+        addAsToolChangeListener();
+
         setVisible(visible);
     }
 
-    @Override
-    public void setTitle(final String metaModelName) {
+    /**
+     *
+     */
+    private void updateTitle() {
+        GDCollection gdcoll = Static.getSelectedGDCollection();
+        String metaModelName = null;
+        if (gdcoll != null) {
+            MetaModel metaModel = gdcoll.getMetaModel();
+            MetaModelContext metaModelContext = metaModel.getMetaModelContext();
+            metaModelName = metaModelContext.getMetaModelDisplayName();
+        }
         String title = getResString("tool3lgm");
         if (!Strings.isNullOrEmpty(metaModelName)) {
             title += " " + getResString("tool3lgm_title_extension") + " " + metaModelName;
         }
-        super.setTitle(title);
+        setTitle(title);
     }
 
     @Override
@@ -94,23 +108,16 @@ public class MainFrame extends JFrame implements WindowListener {
      *
      * @param gdcoll Modell, das hinzugefügt werden soll
      */
-    public GraphDocument addCollection(final GDCollection gdcoll) {
+    private void addCollection(final GDCollection gdcoll) {
         contentPane.addCollection(gdcoll);
         Static.setProgressDialogStatusLabel("create_frame", gdcoll.getMainGraphDocument().getTitle());
-        createFrame(gdcoll.getMainGraphDocument());
+        createGraphFrame(gdcoll.getMainGraphDocument());
 
-        LGMGraphDocument selectedDoc = gdcoll.getMainGraphDocument();
         AbstractInternalFrame lastFrame = null;
         for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
             Szenario szen = gdcoll.getSzenario(i);
             Static.setProgressDialogStatusLabel("create_frame", szen.getTitle());
-            if (i == 0) {
-                selectedDoc = szen;
-            }
-            if (szen.getViewParameter().selected) {
-                selectedDoc = szen;
-            }
-            lastFrame = createFrame(szen);
+            lastFrame = createGraphFrame(szen);
         }
         //Dieser Spass hier dient nur dazu, nach dem Öffnen einer Modelldatei nochmal ein
         //neu Zeichnen auszulösen, was nur mit einem Klick in den Frame zuverlässig passiert
@@ -124,15 +131,13 @@ public class MainFrame extends JFrame implements WindowListener {
             ScreenRobot.click();
         }
         ScreenRobot.setMouse(location);
-        return selectedDoc;
     }
 
     /**
      * @param doc
      * @return
      */
-    public InternalGraphFrame createFrame(final GraphDocument doc) {
-        //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GDCollectionChangeListener laufen (SZENARIO_ADDED)
+    private InternalGraphFrame createGraphFrame(final GraphDocument doc) {
         return contentPane.createGraphFrame(doc);
     }
 
@@ -187,25 +192,45 @@ public class MainFrame extends JFrame implements WindowListener {
         contentPane.reorderFramesSideBySide();
     }
 
-    //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GDCollectionChangeListener laufen (SZENARIO_REMOVED)
-    /**
-     * @param szen
-     */
-    public void closeFrame(final GraphDocument szen) {
-        contentPane.closeFrame(szen);
+    //    /** Holt den erstbesten Frame in den Vordergrund (und damit das dazugehörige Doc) */
+    //    private void selectLastFrame() {
+    //        contentPane.selectLastFrame();
+    //    }
+    //
+    ////////////////////////////
+    // Tool3lgmChangeListener //
+    ////////////////////////////
+
+    @Override
+    public void model_change_model_opened(final GraphDocument source) {
+        GDCollection gdcoll = source.getCollection();
+        addCollection(gdcoll);
     }
 
-    //TODO: das hier sollte von außen nicht augerufen werden, sondern das sollte über den (oder einen neuen anderen) GDCollectionChangeListener laufen (MODEL_CLOSED) (analog sollte es dann auch MODEL_OPENED geben)
-    /**
-     * @param gdcoll
-     */
-    public void closeAllFramesAndTabs(final GDCollection gdcoll) {
+    @Override
+    public void model_change_model_closed(final GraphDocument source) {
+        GDCollection gdcoll = source.getCollection();
         contentPane.closeAllFramesAndTabs(gdcoll);
+        contentPane.selectLastFrame();
     }
 
-    /** Holt den erstbesten Frame in den Vordergrund (und damit das dazugehörige Doc) */
-    public void selectLastFrame() {
-        contentPane.selectLastFrame();
+    @Override
+    public void model_change_model_saved(final GraphDocument source) {
+        updateTitle();
+    }
+
+    @Override
+    public void model_change_selected_szenario_changed(final GraphDocument source) {
+        updateTitle();
+    }
+
+    @Override
+    public void model_change_szenario_added(final GraphDocument source) {
+    }
+
+    @Override
+    public void model_change_szenario_removed(final GraphDocument source) {
+        contentPane.closeFrame(source);
     }
 
     ///////////////////

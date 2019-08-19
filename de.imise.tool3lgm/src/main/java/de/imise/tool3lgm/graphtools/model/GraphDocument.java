@@ -188,7 +188,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     /**
      * COMMENTME
      */
-    protected GDCollection gdcoll;
+    protected final GDCollection gdcoll;
 
     /**
      * COMMENTME
@@ -1210,7 +1210,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 finish_transaction(pid);
                 return;
             }
-            Static.getTool().createFrame(szen);
             break;
 
         case MODEL_ACTION_DELETE_SUBMODEL: {
@@ -2585,6 +2584,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param gdl
      */
     public final void addAllTransactionsListener(final LGMChangeListener gdl) {
+        //        System.err.println("addAllTransactionsListener " + this);
+        //        Sys.err(gdl.getClass().getSimpleName());
         allListener.add(gdl);
     }
 
@@ -2592,6 +2593,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param gdl
      */
     public final void removeAllTransactionsListener(final LGMChangeListener gdl) {
+        //        System.err.println("removeAllTransactionsListener " + this);
+        //        Sys.err(gdl.getClass().getSimpleName());
         allListener.remove(gdl);
     }
 
@@ -2642,7 +2645,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             transStackInteger = new Integer(0);
         }
         if (transStackInteger.intValue() == 1) {
-            LGMChangeListener.distributeEvent(changeType, allListener, this, last_elem);
+            LGMChangeListener.distributeEvent(changeType, allListener, this, last_elem, true);
         } else if (transStackInteger.intValue() == 0) {
             gdcoll.distribute(changeType, last_elem, this, pid);
         }
@@ -2662,11 +2665,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (transStackInteger == null) {
             transStackInteger = new Integer(0);
         }
+        boolean deliverStatic = true;
         if (transStackInteger <= 1) {
-            LGMChangeListener.distributeEvent(changeType, allListener, this, last_elem);
+            LGMChangeListener.distributeEvent(changeType, allListener, this, last_elem, deliverStatic);
+            deliverStatic = false;
         }
         if (transStackInteger == 0) {
-            LGMChangeListener.distributeEvent(changeType, closedListener, this, last_elem);
+            LGMChangeListener.distributeEvent(changeType, closedListener, this, last_elem, deliverStatic);
         }
     }
 
@@ -4349,7 +4354,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             finish_transaction(pid);
             return;
         }
-        Static.getTool().createFrame(szen);
         szen.setPageSizeFactor(getPageSizeFactor());
         szen.getMapping().adapt(getMapping());
         szen.getFrame().getInputGraphArea().adaptSettings(frame.getInputGraphArea());
@@ -4416,7 +4420,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             finish_transaction(pid);
             return;
         }
-        Static.getTool().createFrame(szen);
         for (ElementContainer ec : elements) {
             linkElementToSzenario(szen.getHashString(), ec.getHashString(), pid);
         }

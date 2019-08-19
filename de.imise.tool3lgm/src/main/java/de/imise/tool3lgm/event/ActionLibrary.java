@@ -48,6 +48,7 @@ import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.GraphViewOptionsDialog;
 import de.imise.tool3lgm.graphtools.dialog.GraphicPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.LayoutEditor;
+import de.imise.tool3lgm.graphtools.dialog.ModelPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.RMIPropertyPanel;
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.dialog.SzenarioDialog;
@@ -166,7 +167,9 @@ public class ActionLibrary {
         public static final Action ACTION_SHOW_MODEL_DESCRIPTION_FRAME = new GraphDocumentAction(ActionIdentifier.ACTION_SHOW_MODEL_DESCRIPTION_FRAME, PPP) {
             @Override
             protected void actionPerformed() {
-                getSelectedGDCollection().showDescriptionFrame(true);
+                GDCollection gdcoll = getSelectedGDCollection();
+                ModelPropertyDialog dialog = ModelPropertyDialog.getDialog(gdcoll);
+                dialog.setVisible(true);
             }
         };
 

@@ -96,6 +96,27 @@ public class DynamicTreeLGMChangeListener implements LGMChangeListener {
         }
     }
 
+    @Override
+    public void modelDescriptionChanged(final GraphDocument source) {
+        if (active) {
+            //      System.out.println("modelDescriptionChanged");
+        }
+    }
+
+    @Override
+    public void szenarioAdded(final GraphDocument source) {
+        if (active) {
+            //      System.out.println("szenarioAdded");
+        }
+    }
+
+    @Override
+    public void szenarioRemoved(final GraphDocument source) {
+        if (active) {
+            //      System.out.println("szenarioRemoved");
+        }
+    }
+
     public void remove() {
         GraphDocument doc = tree.getGraphDocument();
         doc.removeAllTransactionsListener(this);

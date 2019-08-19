@@ -11,8 +11,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 
 /**
- * Abstrakte Klasse für alle internen Fenster zur Darstellung von (Teil-)
- * Modellen
+ * Abstrakte Klasse für alle internen Fenster zur Darstellung von (Teil-)Modellen
  *
  * @author Thomas Rudert
  */
@@ -83,6 +82,13 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
     }
 
     public abstract void updateTitle();
+
+    @Override
+    public void szenarioRemoved(final GraphDocument source) {
+        if (source == getGraphDocument()) {
+            dispose();
+        }
+    }
 
     /**
      * COMMENTME

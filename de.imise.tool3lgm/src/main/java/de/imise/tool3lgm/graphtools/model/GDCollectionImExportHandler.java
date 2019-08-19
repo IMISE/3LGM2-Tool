@@ -211,7 +211,6 @@ public final class GDCollectionImExportHandler {
                     kc.computeBorderPoints();
                 }
             }
-            Static.getTool().createFrame(newSzenario);
         }
         Static.closeProgressDialog();
         gdcoll.getUserFieldDefinitions().hasCrossReferences();

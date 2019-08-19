@@ -36,6 +36,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
 
     private final JButton forward, backward, undo, redo;
 
+    /** List of all InternalFrames in the order they were active */
     private final List<AbstractInternalFrame> windowList = new ArrayList<>();
 
     private boolean operatingWindowList = false;

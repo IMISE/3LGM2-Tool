@@ -71,6 +71,24 @@ public interface LGMChangeListenerSimple extends LGMChangeListener {
         changed(source);
     }
 
+    @Override
+    default void modelDescriptionChanged(final GraphDocument source) {
+        changed();
+        changed(source);
+    }
+
+    @Override
+    default void szenarioAdded(final GraphDocument source) {
+        changed();
+        changed(source);
+    }
+
+    @Override
+    default void szenarioRemoved(final GraphDocument source) {
+        changed();
+        changed(source);
+    }
+
     public default void changed() {
     }
 

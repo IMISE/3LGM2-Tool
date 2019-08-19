@@ -1,5 +1,15 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_SZENARIO_ADDED;
+import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_SZENARIO_REMOVED;
+
+import java.util.Collection;
+import java.util.List;
+
+import com.google.common.collect.ImmutableSet;
+
+import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -69,7 +79,42 @@ public interface LGMChangeListener {
             protected void deliverEvent(final LGMChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
                 gdl.modelOrSzenarioNameChanged(source);
             }
-        };
+        },
+        MODEL_DESCRIPTION_CHANGED {
+            @Override
+            protected void deliverEvent(final LGMChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.modelDescriptionChanged(source);
+            }
+        },
+        SZENARIO_ADDED {
+            @Override
+            protected void deliverEvent(final LGMChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.szenarioAdded(source);
+            }
+        },
+        SZENARIO_REMOVED {
+            @Override
+            protected void deliverEvent(final LGMChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.szenarioRemoved(source);
+            }
+        },
+
+        ;
+
+        /** Enthält alle {@link LGMChangeType}s, für die die Funktion {@link #isSzenarioSpecific()} <code>false</code> liefern soll */
+        private static final Collection<LGMChangeType> NOT_SZENARIO_SPECIFIC_CHANGE_TYPES = ImmutableSet.of(DATA_CHANGED, ELEMENT_NAME_CHANGED, USER_FIELD_VALUE_CHANGED, SELECTION_CHANGED);
+
+        /**
+         * Liefert <code>true</code>, wenn dieses Ereignis nur für ein bestimmtes Szenario ausgelöst werden soll. Soll es für alle ausgelöst werden,
+         * dann muss das Ereignis <code>false</code> liefern. Bsp.: DATA_CHANGED oder ELEMENT_NAME_CHANGED muss in allen Szenarios durchschlagen, also
+         * muss diese Funktion <code>false</code> liefern. SZENARIO_REMOVED aber darf nur für das tatsächlich gelöschte Szenario aufgerufen werden, da
+         * sonst auch alle anderen melden, dass sie gelöscht seien und die Fenster alle zugehen.
+         *
+         * @return
+         */
+        public boolean isSzenarioSpecific() {
+            return !NOT_SZENARIO_SPECIFIC_CHANGE_TYPES.contains(this);
+        }
 
         /**
          * @param l
@@ -82,10 +127,30 @@ public interface LGMChangeListener {
          * @param listeners
          * @param source
          * @param last_elem
+         * @param deliverStatic if <code>true</code>, the SZENARIO_ADDED and SZENARIO_REMOVED will be distributet as MODEL_CHANGE_SZENARIO_ADDED and
+         *            MODEL_CHANGE_SZENARIO_REMOVED to the {@link Tool3lgmChangeListener}
          */
-        protected void deliverEvent(final Iterable<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem) {
-            for (LGMChangeListener l : listeners) {
+        protected void deliverEvent(final List<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem, final boolean deliverStatic) {
+            //das hier muss sein, weil es vorkommen kann, dass sich bei deliverEvent(l, source, last_elem); der aktuelle Listener aus der Listener-Liste löscht
+            //eine andere VAriante wäre, die Liste vorher zu clonen und auf dem Clone zu iterieren
+            LGMChangeListener lastListener = null;
+            for (int i = 0; i < listeners.size();) {
+                LGMChangeListener l = listeners.get(i);
+                if (l == lastListener) {
+                    i++;
+                    continue;
+                }
+                lastListener = l;
                 deliverEvent(l, source, last_elem);
+            }
+            //Das hier stellt die Verbindung zwischen dem globalen Listener des Tools und dem für ein GraphDocument bzw. eine GDCollection.
+            //Diese beiden Ereignisse werden von beiden Listenern weiter geleitet.
+            if (deliverStatic) {
+                if (this == SZENARIO_ADDED) {
+                    Static.distribute(MODEL_CHANGE_SZENARIO_ADDED, source);
+                } else if (this == SZENARIO_REMOVED) {
+                    Static.distribute(MODEL_CHANGE_SZENARIO_REMOVED, source);
+                }
             }
         }
 
@@ -129,12 +194,31 @@ public interface LGMChangeListener {
      */
     public void modelOrSzenarioNameChanged(GraphDocument source);
 
+    /** Hier Dialog(e), der/die die Beschreibung anzeigen */
+    public void modelDescriptionChanged(GraphDocument source);
+
+    /**
+     * alle, die die Teilmodelle dieses Modells darstellen oder repräsentieren.
+     * ACHTUNG: {@link Tooll3gmChangeListener} hat auch so ein Ereignis, das aber immer gefeuert wird, wenn bei irgendeinem Modell ein Teilmodell
+     * hinzugefügt wurde.
+     */
+    public void szenarioAdded(GraphDocument source);
+
+    /**
+     * alle, die die Teilmodelle dieses Modells darstellen oder repräsentieren.
+     * ACHTUNG: {@link Tooll3gmChangeListener} hat auch so ein Ereignis, das aber immer gefeuert wird, wenn bei irgendeinem Modell ein Teilmodell
+     * entfernt wurde.
+     */
+    public void szenarioRemoved(GraphDocument source);
+
     /**
      * @param listeners
      * @param source
      * @param last_elem
+     * @param deliverStatic if <code>true</code>, the SZENARIO_ADDED and SZENARIO_REMOVED will be distributet as MODEL_CHANGE_SZENARIO_ADDED and
+     *            MODEL_CHANGE_SZENARIO_REMOVED to the {@link Tool3lgmChangeListener}
      */
-    public static void distributeEvent(final LGMChangeType changeType, final Iterable<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem) {
+    public static void distributeEvent(final LGMChangeType changeType, final List<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem, final boolean deliverStatic) {
         if (source != null) {
             GDCollection gdcoll = source.getCollection();
             if (gdcoll.isBulkMode()) {
@@ -144,7 +228,7 @@ public interface LGMChangeListener {
                 System.out.println("distributeEvent: " + changeType);
             }
         }
-        changeType.deliverEvent(listeners, source, last_elem);
+        changeType.deliverEvent(listeners, source, last_elem, deliverStatic);
     }
 
 }

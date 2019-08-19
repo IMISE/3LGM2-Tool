@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities;
 
 import com.google.common.base.Strings;
 
+import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -68,6 +69,16 @@ public class Static {
             System.exit(0);
         }
         tool.close();
+    }
+
+    /**
+     * @param changeType
+     * @param source
+     */
+    public static void distribute(final Tool3lgmChangeType changeType, final GraphDocument source) {
+        if (tool != null) {
+            tool.distribute(changeType, source);
+        }
     }
 
     /**
