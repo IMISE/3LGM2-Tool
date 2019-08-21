@@ -21,6 +21,12 @@ public interface ActionSource {
     public static final String PPP = "...";
 
     /**
+     * Alle Actions, bei denen an den Namen im Menü noch 3 Punkte angehängt werden sollen, müssen im Namen ihres Enums am Ende diesen String haben.
+     * Das sollten alle Actions sein, bei denen eine Interaktion des Nutzers bei der Durchführung der Action nötig ist, also ein Dialog aufgeht.
+     */
+    public static final String INTERACTIVE_ACTION_NAME_POSTFIX = "_PPP";
+
+    /**
      * Mappt von einer ActionSource auf die Action-Klasse, die für diese ActionSource initialisiert werden soll.
      */
     public static final Map<ActionSource, Class<? extends ExtendedAction>> ACTION_CLASS = new HashMap<>();
@@ -59,12 +65,22 @@ public interface ActionSource {
     public static void put(final Class<? extends ExtendedAction> actionClass, final ActionSource... actionSources) {
         for (ActionSource actionSource : actionSources) {
             ACTION_CLASS.put(actionSource, actionClass);
+            String name = actionSource.toString();
+            boolean isInteractive = name.endsWith(INTERACTIVE_ACTION_NAME_POSTFIX);
+            if (!isInteractive && actionSource instanceof Enum<?>) {
+                name = ((Enum<?>) actionSource).name();
+                isInteractive = name.endsWith(INTERACTIVE_ACTION_NAME_POSTFIX);
+            }
+            if (isInteractive) {
+                INTERACTIVE_ACTIONS.add(actionSource);
+            }
         }
     }
 
     /**
      * Actions bei denen irgendwie ein Dialog nach dem Aufruf angezeigt wird, sollten über diese put-Funktion geadded werden.
-     * Einzige Auswirkung ist, dass sie im Menü 3 Punkte hinter ihren Namen bekommen.
+     * Einzige Auswirkung ist, dass sie im Menü 3 Punkte hinter ihren Namen bekommen. Alternativ kann man den Namen der ActionSource am Ende mit
+     * "_PPP" versehen.
      *
      * @param actionClass
      * @param actionSources
