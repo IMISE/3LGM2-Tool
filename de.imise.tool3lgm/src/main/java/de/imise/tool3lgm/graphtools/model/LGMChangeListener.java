@@ -102,7 +102,7 @@ public interface LGMChangeListener {
         ;
 
         /** Enthält alle {@link LGMChangeType}s, für die die Funktion {@link #isSzenarioSpecific()} <code>false</code> liefern soll */
-        private static final Collection<LGMChangeType> NOT_SZENARIO_SPECIFIC_CHANGE_TYPES = ImmutableSet.of(DATA_CHANGED, ELEMENT_NAME_CHANGED, USER_FIELD_VALUE_CHANGED, SELECTION_CHANGED);
+        private static final Collection<LGMChangeType> NOT_SZENARIO_SPECIFIC_CHANGE_TYPES = ImmutableSet.of(DATA_CHANGED, ELEMENT_NAME_CHANGED, USER_FIELD_VALUE_CHANGED, SELECTION_CHANGED, ACTIVE_LAYER_CHANGED); //ACTIVE_LAYER wird in der Collection gespeichert und gilt immer für alle docs
 
         /**
          * Liefert <code>true</code>, wenn dieses Ereignis nur für ein bestimmtes Szenario ausgelöst werden soll. Soll es für alle ausgelöst werden,

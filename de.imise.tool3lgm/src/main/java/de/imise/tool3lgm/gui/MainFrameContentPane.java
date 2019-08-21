@@ -43,14 +43,14 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  */
 public class MainFrameContentPane extends JPanel implements PropertyChangeListener, InternalFrameListener {
 
-    /** ToolBar with general tools */
-    private final ToolBar toolbar = new ToolBar();
-
-    /** Aktualisiert die Toolbar je nach Kontext des aktiven Frames */
-    private final GraphAreaToolbarManager toolbarManager = new GraphAreaToolbarManager(toolbar);
-
     /** Panel with verticalSplitPane and werkzeugleiste */
     private final JPanel workarea = new JPanel();
+
+    /** ToolBar with general tools */
+    private final ToolBar mainFrameToolbar = new ToolBar();
+
+    /** Aktualisiert die Toolbar je nach Kontext des aktiven Frames */
+    private final GraphAreaToolbarManager toolbarManager = new GraphAreaToolbarManager(workarea);
 
     /** splitted pane with modelBrowserPanel on the left and desktop on the right */
     private final JSplitPane verticalSplitPane;
@@ -98,19 +98,12 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         setCheckConsistencyState();
 
         setLayout(new BorderLayout());
-        add(toolbar, BorderLayout.NORTH);
+        add(mainFrameToolbar, BorderLayout.NORTH);
         add(workarea, BorderLayout.CENTER);
         //add(new StatusBar(), BorderLayout.SOUTH);
 
         setShowStandardToolbar();
         UserProperties.addPropertyChangeListener(this);
-    }
-
-    /**
-     *
-     */
-    public void selectedDocChanged() {
-        toolbar.selectedDocChanged();
     }
 
     /**
@@ -125,9 +118,9 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      */
     private void setShowStandardToolbar() {
         if (OPTION_SHOW_STANDARD_TOOLBAR.is()) {
-            add(toolbar, BorderLayout.NORTH);
+            add(mainFrameToolbar, BorderLayout.NORTH);
         } else {
-            remove(toolbar);
+            remove(mainFrameToolbar);
         }
         workarea.revalidate();
     }
@@ -311,14 +304,14 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      *            Wenn <code>true</code> ist, wird auch das dazugehörige
      *            Grafikfenster in den Vordergrund geholt, sonst nicht.
      */
-    public void setSelectedDoc(final GraphDocument doc, final boolean activateGraphView) {
+    public void setCurrentDoc(final GraphDocument doc, final boolean activateGraphView) {
         //das doc kann null sein, wenn eine Datei geladen wird und das ModelBrowserPanel grade mit den
         //geladenen Teilmodellen gefüllt wird. Im ModelBrowserPanel wird bei jedem Hinzufügen eines
         //Teilmodell-Tabs immer diese Funktion hier aufgerufen.
         //Es kann auch null sein, wenn das letzte Modell geschlossen wurde
         if (doc == null) {
             boolean isCheckConsistency = setCheckConsistencyState();
-            toolbar.selectedDocChanged();
+            mainFrameToolbar.update();
             if (isCheckConsistency) {
                 ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
                 consistencyChecker.changeContext(null);
@@ -372,7 +365,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         setCheckConsistencyState();
         //TODO: das sollte der ContextGenerator als Listener mitbekommen (CONTEXT_CHANGED oder sowas)
         Static.contextGenerator.changeContext((LGMGraphDocument) doc);
-        toolbar.selectedDocChanged();
+        mainFrameToolbar.update();
     }
 
     /**
@@ -409,7 +402,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     public final void closeFrame(final GraphDocument szen) {
         AbstractInternalFrame frame = findFirstInternalFrame(szen);
         while (frame != null) {
-            toolbar.removeWindow(frame);
+            mainFrameToolbar.removeWindow(frame);
             frame.dispose();
             frame = findFirstInternalFrame(szen);
         }
@@ -431,9 +424,9 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      *
      */
     public void selectLastFrame() {
-        AbstractInternalFrame lastFrame = toolbar.getNextWindow();
+        AbstractInternalFrame lastFrame = mainFrameToolbar.getNextWindow();
         if (lastFrame == null) {
-            lastFrame = toolbar.getPreviousWindow();
+            lastFrame = mainFrameToolbar.getPreviousWindow();
         }
         if (lastFrame != null) {
             try {
@@ -520,12 +513,12 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
             workarea.revalidate();
         }
 
-        toolbar.removeWindow(frame);
+        mainFrameToolbar.removeWindow(frame);
 
         if (frames.length == 0) {
             activeFrame = null;
             toolbarManager.updateToolBar();
-            toolbar.repaint();
+            mainFrameToolbar.repaint();
 
         }
     }
@@ -550,17 +543,17 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         toolbarManager.updateToolBar();
         //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
         //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
-        setSelectedDoc(doc, activeFrame instanceof InternalGraphFrame);
+        setCurrentDoc(doc, activeFrame instanceof InternalGraphFrame);
         try {
             activeFrame.setSelected(true);
         } catch (Exception ex) {
             Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
         }
-        toolbar.revalidate();
-        toolbar.repaint();
+        mainFrameToolbar.revalidate();
+        mainFrameToolbar.repaint();
         workarea.revalidate();
         workarea.repaint();
-        toolbar.addWindow(activeFrame);
+        mainFrameToolbar.addWindow(activeFrame);
     }
 
     @Override

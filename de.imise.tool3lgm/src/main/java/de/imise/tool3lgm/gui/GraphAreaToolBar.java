@@ -9,7 +9,7 @@ import javax.swing.ButtonGroup;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.GraphAreaOptionSliders.SliderWithTextField;
 import de.imise.util.swing.component.UnfloatableToolBar;
@@ -27,6 +27,8 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
     private InternalGraphFrame frame;
 
     private final ButtonGroup buttonGroup = new ButtonGroup();
+
+    private int currentLayer = -1;
 
     /** Mappt vom LayerIndex auf die Elementklassen, für die auf der Toolbar ein Button angezeigt werden soll */
     //    private static final Multimap<Integer, Class<? extends Node>> layerGraphElementClasses = getLayerGraphElementClasses();
@@ -92,51 +94,57 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
         return paintableNodeClasses;
     }
 
-    public void setFrame(final InternalGraphFrame frame) {
+    void setFrame(final InternalGraphFrame frame) {
         this.frame = frame;
         sliders.setFrame(frame);
-        Szenario szen = (Szenario) frame.getSzenario();
-        setLayer(szen.getCollection().getActiveLayer());
+        update();
     }
 
-    public void setLayer(final int layer) {
-        for (ToolButton button : buttonsCreateElement) {
-            buttonGroup.remove(button);
+    private void updateLayer() {
+        if (frame == null) {
+            return;
         }
-        buttonsCreateElement.clear();
-        MetaModel metaModel = frame.doc.getMetaModel();
-        //        for (Class<? extends Node> paintableLayerElementClass : layerGraphElementClasses.get(layer)) {
-        for (Class<? extends Node> paintableLayerElementClass : getLayerGraphElementClasses(layer)) {
-            ToolButton createNodeButton = ToolButton.createNodeButton(metaModel, paintableLayerElementClass);
-            buttonsCreateElement.add(createNodeButton);
-            createNodeButton.setFrame(frame);
-            buttonGroup.add(createNodeButton);
-        }
-        buttonCreateEdge.setFrame(frame);
-        buttonSwitchMouseMode.setFrame(frame);
-
-        removeAll();
-        add(buttonSwitchMouseMode);
-        for (ToolButton button : buttonsCreateElement) {
-            add(button);
-        }
-        add(buttonCreateEdge);
-        addSeparator();
-        addSliders();
-        revalidate();
-        repaint();
-
-        InputGraphArea area = frame.getInputGraphArea();
-        Class<? extends Node> mouseMakesNodeClass = area.getMouseMakesNodeClass();
-        boolean mouseMakesEdge = area.isMouseMakesEdge();
-        if (mouseMakesNodeClass != null) {
-            buttonSwitchMouseMode.setSelected(mouseMakesNodeClass == null && !mouseMakesEdge);
-            buttonCreateEdge.setSelected(mouseMakesEdge);
-            for (ToolButton createNodeButton : buttonsCreateElement) {
-                createNodeButton.setEnabled(createNodeButton.hasNodeClass(mouseMakesNodeClass));
+        GDCollection gdcoll = frame.getCollection();
+        int activeLayer = gdcoll.getActiveLayer();
+        if (currentLayer != activeLayer) {
+            currentLayer = activeLayer;
+            for (ToolButton button : buttonsCreateElement) {
+                buttonGroup.remove(button);
             }
+            buttonsCreateElement.clear();
+            MetaModel metaModel = frame.doc.getMetaModel();
+            for (Class<? extends Node> paintableLayerElementClass : getLayerGraphElementClasses(currentLayer)) {
+                ToolButton createNodeButton = ToolButton.createNodeButton(metaModel, paintableLayerElementClass);
+                buttonsCreateElement.add(createNodeButton);
+                createNodeButton.setFrame(frame);
+                buttonGroup.add(createNodeButton);
+            }
+            buttonCreateEdge.setFrame(frame);
+            buttonSwitchMouseMode.setFrame(frame);
+
+            removeAll();
+            add(buttonSwitchMouseMode);
+            for (ToolButton button : buttonsCreateElement) {
+                add(button);
+            }
+            add(buttonCreateEdge);
+            addSeparator();
+            addSliders();
+            revalidate();
+            repaint();
+
+            InputGraphArea area = frame.getInputGraphArea();
+            Class<? extends Node> mouseMakesNodeClass = area.getMouseMakesNodeClass();
+            boolean mouseMakesEdge = area.isMouseMakesEdge();
+            if (mouseMakesNodeClass != null) {
+                buttonSwitchMouseMode.setSelected(mouseMakesNodeClass == null && !mouseMakesEdge);
+                buttonCreateEdge.setSelected(mouseMakesEdge);
+                for (ToolButton createNodeButton : buttonsCreateElement) {
+                    createNodeButton.setEnabled(createNodeButton.hasNodeClass(mouseMakesNodeClass));
+                }
+            }
+            buttonSwitchMouseMode.setSelected(true);
         }
-        buttonSwitchMouseMode.setSelected(true);
     }
 
     private void addSliders() {
@@ -154,8 +162,12 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
         add(slider);
     }
 
+    @Override
     public void update() {
         sliders.updateValues();
+        updateLayer();
+        revalidate();
+        repaint();
     }
 
 }

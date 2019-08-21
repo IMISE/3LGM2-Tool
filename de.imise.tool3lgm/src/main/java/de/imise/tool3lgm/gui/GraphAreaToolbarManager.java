@@ -11,7 +11,6 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.InternalMatrixFrameToolBar;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
-import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.util.swing.component.UnfloatableToolBar;
@@ -47,7 +46,7 @@ public class GraphAreaToolbarManager implements LGMChangeListenerSimple, BasicGr
     public void updateToolBar() {
         AbstractInternalFrame activeFrame = Static.getActiveFrame();
         if (currentFrame != activeFrame) {
-            removeChangeListener();
+            removeMeAsGraphFrameChangeListener();
             if (activeFrame == null) {
                 removeToolBar();
             } else if (activeFrame instanceof InternalGraphFrame && activeFrame.getGraphDocument() instanceof Szenario) {
@@ -80,14 +79,17 @@ public class GraphAreaToolbarManager implements LGMChangeListenerSimple, BasicGr
                 removeToolBar();
             }
             currentFrame = activeFrame;
-            addChangeListener();
+            addMeAsGraphFrameChangeListener();
+        }
+        if (currentToolBar != null) {
+            currentToolBar.update();
         }
     }
 
     /**
      *
      */
-    private void removeChangeListener() {
+    private void removeMeAsGraphFrameChangeListener() {
         if (currentFrame != null && currentFrame instanceof InternalGraphFrame) {
             InternalGraphFrame graphFrame = (InternalGraphFrame) currentFrame;
             InputGraphArea inputGraphArea = graphFrame.getInputGraphArea();
@@ -98,7 +100,7 @@ public class GraphAreaToolbarManager implements LGMChangeListenerSimple, BasicGr
     /**
      *
      */
-    private void addChangeListener() {
+    private void addMeAsGraphFrameChangeListener() {
         if (currentFrame != null && currentFrame instanceof InternalGraphFrame) {
             InternalGraphFrame graphFrame = (InternalGraphFrame) currentFrame;
             InputGraphArea inputGraphArea = graphFrame.getInputGraphArea();
@@ -177,9 +179,7 @@ public class GraphAreaToolbarManager implements LGMChangeListenerSimple, BasicGr
 
     @Override
     public void activeLayerChanged(final GraphDocument source) {
-        if (currentToolBar instanceof GraphAreaToolBar) {
-            ((GraphAreaToolBar) currentToolBar).setLayer(source.getCollection().getActiveLayer());
-        }
+        updateToolBar();
     }
 
     //////////////////////////////////
@@ -188,14 +188,7 @@ public class GraphAreaToolbarManager implements LGMChangeListenerSimple, BasicGr
 
     @Override
     public void graphAreaChanged() {
-        if (currentToolBar instanceof GraphAreaToolBar) {
-            ((GraphAreaToolBar) currentToolBar).update();
-        }
-    }
-
-    @Override
-    public void layerViewChanged(final BasicGraphArea source) {
-        activeLayerChanged(source.getSzenario());
+        updateToolBar();
     }
 
 }

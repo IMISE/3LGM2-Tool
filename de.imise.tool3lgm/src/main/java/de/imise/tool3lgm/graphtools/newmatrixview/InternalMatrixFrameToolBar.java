@@ -181,7 +181,8 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
      * Aktualisiert die Matrix und die Einträge in der Legende (gewählter Pfad und Bedeutung der
      * Markierungen in der Matrix)
      */
-    private void update() {
+    @Override
+    public void update() {
         // Tabelle updaten
         // den Frame und somit die Tabelle mit den gewählten Klassen und dem MetaPfad neu aufbauen
         controlledFrame.setMetaPathSelection(metaPathSelector.getSelection());

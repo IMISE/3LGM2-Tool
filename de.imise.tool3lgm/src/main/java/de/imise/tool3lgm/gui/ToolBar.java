@@ -23,6 +23,7 @@ import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.UnfloatableToolBar;
@@ -97,18 +98,22 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
 
     }
 
-    public void selectedDocChanged() {
-        if (doc != null) {
-            doc.removeClosedTransactionsListener(this);
+    private void checkCurrentGraphDocument() {
+        LGMGraphDocument selectedDoc = Static.getSelectedDoc();
+        if (doc != selectedDoc) {
+            if (doc != null) {
+                doc.removeClosedTransactionsListener(this);
+            }
+            doc = selectedDoc;
+            if (doc != null) {
+                doc.addClosedTransactionsListener(this);
+            }
         }
-        doc = Static.getSelectedDoc();
-        if (doc != null) {
-            doc.addClosedTransactionsListener(this);
-        }
-        updateButtons();
     }
 
-    private void updateButtons() {
+    @Override
+    public void update() {
+        checkCurrentGraphDocument();
         //Alle Knöpfe aktualisieren
         for (Component component : getComponents()) {
             if (component instanceof AbstractButton) {
@@ -118,9 +123,15 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
                     button.setEnabled(action.isEnabled());
                     button.setText("");
                 }
-
             }
         }
+        revalidate();
+        repaint();
+    }
+
+    @Override
+    public void changed() {
+        update();
     }
 
     @Override
@@ -292,11 +303,6 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
             identifier = redo.getAction().getValue(StaticAction.IDENTIFIER_KEY).toString();
             redo.setToolTipText(getResString(StaticAction.TOOLTIP_RESSOURCE_PREFIX + identifier));
         }
-    }
-
-    @Override
-    public void changed() {
-        updateButtons();
     }
 
     private final class ToolbarButton extends JButton {

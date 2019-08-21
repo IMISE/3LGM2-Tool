@@ -71,11 +71,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
         CSH.setHelpIDString(menuBar, "uebersicht_menueleiste");
         KeyStrokes.registerPublicKeyStrokes(getRootPane());
         setJMenuBar(menuBar);
-
-        contentPane.selectedDocChanged();
-
         addAsToolChangeListener();
-
         setVisible(visible);
     }
 
@@ -175,7 +171,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
      *            Teilmodell, in dessen Kontext gewechselt werden soll
      */
     public void setCurrentDoc(final GraphDocument doc) {
-        contentPane.setSelectedDoc(doc, doc != null);
+        contentPane.setCurrentDoc(doc, doc != null);
     }
 
     /**

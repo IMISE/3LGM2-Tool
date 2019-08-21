@@ -18,7 +18,7 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListenerSimple {
 
     /** darzustellendes (Teil-)Modell */
-    protected GraphDocument doc;
+    protected final GraphDocument doc;
 
     /** die JScrollFläche für den Inhalt */
     protected JScrollPane scrollPane;
