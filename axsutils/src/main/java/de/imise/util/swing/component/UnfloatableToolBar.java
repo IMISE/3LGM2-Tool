@@ -11,4 +11,6 @@ public abstract class UnfloatableToolBar extends JToolBar {
     public UnfloatableToolBar() {
         setFloatable(false);
     }
+
+    public abstract void update();
 }
