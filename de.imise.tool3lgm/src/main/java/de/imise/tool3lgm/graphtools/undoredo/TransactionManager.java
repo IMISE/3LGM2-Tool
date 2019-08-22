@@ -7,6 +7,7 @@ import java.util.List;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 
 /**
  * Verwaltet die Undo-/Redo-Steuerung
@@ -409,12 +410,13 @@ public class TransactionManager {
         gdcoll.setBulkMode(true);
 
         is_doing = true;
-        boolean flag = doc.getCollection().isInteractiveMode();
-        doc.getCollection().setInteractiveMode(false);
+        boolean flag = gdcoll.isInteractiveMode();
+        gdcoll.setInteractiveMode(false);
 
         doc.deselectAll(true);
         for (int k = 0; k < trans_q[j].getPostSelectionSize(); k++) {
-            doc.addToSelection(trans_q[j].getPostSelectionItem(k), pid);
+            String postSelectionItem = trans_q[j].getPostSelectionItem(k);
+            doc.addToSelection(postSelectionItem, pid);
         }
 
         int transactions = trans_q[j].getUndoSize();
@@ -428,14 +430,16 @@ public class TransactionManager {
             // ein Teilmodell betreffen (Layout-Änderungen, Entfernen  Hinzufügen von Elemente usw.)
             // müssen immer den HashString des Szenarios beachten, für das sie ausgeführt werden sollen
             String undoCommand = trans_q[j].getUndoCommand(i2);
-            doc.getCollection().getMainGraphDocument().exec(undoCommand, pid);
+            LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+            mainDoc.exec(undoCommand, pid);
             if (showProgressDialog) {
                 Static.setProgressDialogStatusLabel("undo", transactions - i2 + " / " + transactions);
             }
         }
         doc.deselectAll(true);
         for (int j2 = 0; j2 < trans_q[j].getPreSelectionSize(); j2++) {
-            doc.addToSelection(trans_q[j].getPreSelectionItem(j2), pid);
+            String preSelectionItem = trans_q[j].getPreSelectionItem(j2);
+            doc.addToSelection(preSelectionItem, pid);
         }
 
         is_doing = false;
@@ -484,7 +488,8 @@ public class TransactionManager {
         }
         for (int i2 = 0; i2 < trans_q[j].getRedoSize(); i2++) {
             //			System.err.println("12345AXS " + trans_q[j].getRedoCommand(i2));
-            doc.exec(trans_q[j].getRedoCommand(i2), pid);
+            String redoCommand = trans_q[j].getRedoCommand(i2);
+            doc.exec(redoCommand, pid);
         }
         doc.deselectAll(true);
         for (int j2 = 0; j2 < trans_q[j].getPostSelectionSize(); j2++) {

@@ -454,7 +454,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //Zürücksetzen der Größe und Position der Oberelemente mit verschoben werden, sondern nur,
         //wenn sie beim ursprünglichen Kommando mitverschoben wurden, was geloogt wurde
         boolean isMoveSubElements = OPTION_GRAPH_MOVE_SUBELEMENTS.set(false);
-        TransactionManager tman = getCollection().getTman();
+        TransactionManager tman = gdcoll.getTman();
         if (undo) {
             tman.undo(pid);
         } else {
@@ -471,7 +471,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public void addUndoCommand(final String command, final int pid) {
         if (!gdcoll.isBulkMode()) {
-            getCollection().getTman().addUndoCommand(command, pid);
+            TransactionManager transactionManager = gdcoll.getTman();
+            transactionManager.addUndoCommand(command, pid);
         }
     }
 
@@ -481,7 +482,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public void addRedoCommand(final String command, final int pid) {
         if (!gdcoll.isBulkMode()) {
-            getCollection().getTman().addRedoCommand(command, pid);
+            TransactionManager transactionManager = gdcoll.getTman();
+            transactionManager.addRedoCommand(command, pid);
         }
     }
 
@@ -495,7 +497,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     private void addRedoCommandOrReplace(final String commandPrefix, final Object commandArguments, final int pid) {
         if (!gdcoll.isBulkMode()) {
-            getCollection().getTman().addOrReplaceRedoCommand(commandPrefix, commandArguments.toString(), pid);
+            TransactionManager transactionManager = gdcoll.getTman();
+            String arguments = commandArguments.toString();
+            transactionManager.addOrReplaceRedoCommand(commandPrefix, arguments, pid);
         }
     }
 
@@ -510,7 +514,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     private void addUndoCommandIfNotExist(final String commandPrefix, final Object commandArguments, final int pid) {
         if (!gdcoll.isBulkMode()) {
-            getCollection().getTman().addUndoCommandIfNotExist(commandPrefix, commandArguments.toString(), pid);
+            TransactionManager transactionManager = gdcoll.getTman();
+            String arguments = commandArguments.toString();
+            transactionManager.addUndoCommandIfNotExist(commandPrefix, arguments.toString(), pid);
         }
     }
 
@@ -1204,7 +1210,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             if (argc == 0) {
                 szen = gdcoll.createSzenario(true);
             } else {
-                szen = gdcoll.createSzenario(argv[0], false, getDecodedParseSaveString(argv[1]), argv[2], pid);
+                String szenName = getDecodedParseSaveString(argv[1]);
+                szen = gdcoll.createSzenario(argv[0], false, szenName, argv[2], pid);
             }
             if (szen == null) {
                 finish_transaction(pid);
