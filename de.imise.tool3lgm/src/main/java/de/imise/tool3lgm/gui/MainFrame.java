@@ -165,17 +165,6 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
     }
 
     /**
-     * Wechselt den Kontext auf das übergebene Teilmodell. In jedem Fall wird der <code>ModelBrowser</code> des aktivierten Teilmodells in den
-     * Vordergrund gebracht.
-     *
-     * @param doc
-     *            Teilmodell, in dessen Kontext gewechselt werden soll
-     */
-    private void setCurrentDoc(final GraphDocument doc) {
-        contentPane.setCurrentDoc(doc, doc != null);
-    }
-
-    /**
      * ordnet alle InternalFrames neu an (überlappt)
      */
     public void reorderFramesWithOverlap() {
