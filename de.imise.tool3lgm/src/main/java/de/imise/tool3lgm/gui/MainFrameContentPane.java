@@ -50,7 +50,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     private final ToolBar mainFrameToolbar = new ToolBar();
 
     /** Aktualisiert die Toolbar je nach Kontext des aktiven Frames */
-    private final GraphAreaToolbarManager toolbarManager = new GraphAreaToolbarManager(workarea);
+    //    private final GraphAreaToolbarManager toolbarManager = new GraphAreaToolbarManager(workarea);
+    private final GraphAreaToolbarManager toolbarManager = new GraphAreaToolbarManager(mainFrameToolbar);
 
     /** splitted pane with modelBrowserPanel on the left and desktop on the right */
     private final JSplitPane verticalSplitPane;

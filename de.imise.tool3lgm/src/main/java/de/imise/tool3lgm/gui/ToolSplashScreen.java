@@ -20,6 +20,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.util.BrowseUtils;
@@ -107,6 +109,9 @@ public class ToolSplashScreen implements MouseMotionListener, MouseListener {
         g.drawString(getResString("fullToolName1"), 20, 50);
         g.drawString(getResString("fullToolName2"), 20, 70);
         g.drawString(getResString("version") + " " + Tool3lgmConstants.TOOL_VERSION, 20, 100);
+        if (!Strings.isNullOrEmpty(Tool3lgmConstants.Branch)) {
+            g.drawString("Branch " + Tool3lgmConstants.Branch, 20, 120);
+        }
         g.drawString(getResString("instituteName1"), 20, 260);
         g.drawString(getResString("instituteName2"), 20, 280);
         g.drawString(getResString("instituteName3"), 20, 300);
