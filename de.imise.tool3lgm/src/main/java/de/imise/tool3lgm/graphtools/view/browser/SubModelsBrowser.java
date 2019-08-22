@@ -47,12 +47,13 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
         super(new BorderLayout());
         this.gdcoll = gdcoll;
         //Submodel ComboBox
-        submodelBox = addListener(new AlphabeticalComboBox());
+        submodelBox = addMouseAndFocusListener(new AlphabeticalComboBox());
+        submodelBox.addItemListener(this);
         //ModelElements Tree
-        tree = addListener(new DynamicTree(gdcoll.getMainGraphDocument()));
-        JScrollPane scrollPane = addListener(new JScrollPane(tree));
-        addListener(scrollPane.getHorizontalScrollBar());
-        addListener(scrollPane.getVerticalScrollBar());
+        tree = addMouseAndFocusListener(new DynamicTree(gdcoll.getMainGraphDocument()));
+        JScrollPane scrollPane = addMouseAndFocusListener(new JScrollPane(tree));
+        addMouseAndFocusListener(scrollPane.getHorizontalScrollBar());
+        addMouseAndFocusListener(scrollPane.getVerticalScrollBar());
         //add
         add(submodelBox, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
@@ -62,7 +63,7 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
      * @param comp
      * @return
      */
-    private <T extends Component> T addListener(final T comp) {
+    private <T extends Component> T addMouseAndFocusListener(final T comp) {
         comp.addMouseListener(this);
         comp.addFocusListener(this);
         return comp;
@@ -125,7 +126,6 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
     void setCurrentDoc(final GraphDocument doc) {
         submodelBox.removeItemListener(this);
         submodelBox.setSelectedObject(doc);
-        tree.setGraphDocument(doc);
         submodelBox.addItemListener(this);
     }
 
@@ -147,7 +147,9 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
 
     private void setSelectedDoc() {
         GraphDocument currentDoc = getCurrentDoc();
-        Static.setSelectedDoc(currentDoc);
+        if (currentDoc != Static.getSelectedDoc()) {
+            Static.setSelectedDoc(currentDoc);
+        }
     }
 
     @Override
