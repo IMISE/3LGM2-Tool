@@ -213,6 +213,14 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
 
     @Override
     public void model_change_szenario_added(final GraphDocument source) {
+        try {
+            contentPane.createGraphFrame(source);
+        } catch (Exception e) {
+            //dieses try-catch muss sein, weil beim Anlegen eines neuen Modells immer auch ein Szenario
+            //geaddet wird, für dessen Collection es aber noch keinen ModelBrowser gibt, so dass es nicht
+            //geht. Bei neuen Modellen werden GraphFrames in der Funktion addCollection(GDCollection)
+            //hinzugefügt.
+        }
     }
 
     @Override
