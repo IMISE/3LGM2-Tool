@@ -1810,7 +1810,7 @@ public final class GDCollection extends UserFieldTarget {
             source.distributeEventIntern(changeType, last_elem, deliverStatic, pid);
             deliverStatic = false;
         }
-        LGMChangeListener.distributeEvent(changeType, listener, source == null ? doc : source, last_elem, false);
+        LGMChangeListener.distributeEvent(changeType, listener, source == null ? doc : source, last_elem, deliverStatic);
         if (!changeType.isSzenarioSpecific()) {
             if (doc != source) {
                 doc.distributeEventIntern(changeType, last_elem, deliverStatic, pid);
