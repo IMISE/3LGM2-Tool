@@ -54,6 +54,12 @@ public interface LGMChangeListenerSimple extends LGMChangeListener {
     }
 
     @Override
+    default void selectedSzenarioChanged(final GraphDocument source) {
+        changed();
+        changed(source);
+    }
+
+    @Override
     public default void colorsChanged(final GraphDocument source) {
         changed();
         changed(source);

@@ -162,7 +162,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
      *
      * @param doc
      */
-    public void setGraphDocument(final GraphDocument doc) {
+    void setGraphDocument(final GraphDocument doc) {
         if (this.doc != null) {
             transactionListener.remove();
             this.doc = doc;
@@ -256,7 +256,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         return o == domainLayer || o == logicalLayer || o == physicalLayer;
     }
 
-    public void setTransactionListenerActive(final boolean active) {
+    void setTransactionListenerActive(final boolean active) {
         transactionListener.setActive(active);
     }
 

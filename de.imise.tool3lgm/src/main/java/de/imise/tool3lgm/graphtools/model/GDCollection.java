@@ -481,6 +481,7 @@ public final class GDCollection extends UserFieldTarget {
     public void setActiveGraphDocument(final GraphDocument doc) {
         activeGraphDocumentsList.remove(doc);
         activeGraphDocumentsList.add((LGMGraphDocument) doc);
+        distribute(LGMChangeType.SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
     }
 
     private boolean selectedDocInitialized = false;

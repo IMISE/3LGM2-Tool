@@ -62,6 +62,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
         getContentPane().add(contentPane);
 
         addWindowListener(this);
+        addAsToolChangeListener();
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         // Direkthilfe einschalten
@@ -170,7 +171,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
      * @param doc
      *            Teilmodell, in dessen Kontext gewechselt werden soll
      */
-    public void setCurrentDoc(final GraphDocument doc) {
+    private void setCurrentDoc(final GraphDocument doc) {
         contentPane.setCurrentDoc(doc, doc != null);
     }
 
@@ -218,6 +219,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
     @Override
     public void model_change_selected_szenario_changed(final GraphDocument source) {
         updateTitle();
+        contentPane.setCurrentDoc(source, source != null);
     }
 
     @Override

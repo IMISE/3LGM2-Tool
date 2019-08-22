@@ -1,7 +1,10 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
+import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
@@ -69,6 +72,15 @@ public class DynamicTreeLGMChangeListener implements LGMChangeListener {
     }
 
     @Override
+    public void selectedSzenarioChanged(final GraphDocument source) {
+        if (active) {
+            //      System.out.println("groupOrderChanged");
+            LGMGraphDocument selectedDoc = Static.getSelectedDoc();
+            tree.setGraphDocument(selectedDoc); //source geht hier nicht, weil das das Ereignis auslösende doc ist nicht (unbedingt) das neue selektierte
+        }
+    }
+
+    @Override
     public void colorsChanged(final GraphDocument source) {
         if (active) {
             //      System.out.println("colorsChanged");
@@ -119,13 +131,15 @@ public class DynamicTreeLGMChangeListener implements LGMChangeListener {
 
     public void remove() {
         GraphDocument doc = tree.getGraphDocument();
-        doc.removeAllTransactionsListener(this);
+        GDCollection gdcoll = doc.getCollection();
+        gdcoll.removeGDCollectionChangeListener(this);
     }
 
     public void add() {
         remove(); //zur Sicherheit erstmal removen
         GraphDocument doc = tree.getGraphDocument();
-        doc.addAllTransactionsListener(this);
+        GDCollection gdcoll = doc.getCollection();
+        gdcoll.addGDCollectionChangeListener(this);
     }
 
     public void setActive(final boolean active) {

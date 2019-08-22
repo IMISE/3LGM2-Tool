@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
+import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_SELECTED_SZENARIO_CHANGED;
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_SZENARIO_ADDED;
 import static de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType.MODEL_CHANGE_SZENARIO_REMOVED;
 
@@ -60,6 +61,12 @@ public interface LGMChangeListener {
             @Override
             protected void deliverEvent(final LGMChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
                 gdl.activeLayerChanged(source);
+            }
+        },
+        SELECTED_SZENARIO_CHANGED {
+            @Override
+            protected void deliverEvent(final LGMChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
+                gdl.selectedSzenarioChanged(source);
             }
         },
         COLORS_CHANGED {
@@ -150,6 +157,8 @@ public interface LGMChangeListener {
                     Static.distribute(MODEL_CHANGE_SZENARIO_ADDED, source);
                 } else if (this == SZENARIO_REMOVED) {
                     Static.distribute(MODEL_CHANGE_SZENARIO_REMOVED, source);
+                } else if (this == SELECTED_SZENARIO_CHANGED) {
+                    Static.distribute(MODEL_CHANGE_SELECTED_SZENARIO_CHANGED, source);
                 }
             }
         }
@@ -176,6 +185,9 @@ public interface LGMChangeListener {
 
     /** Wichtig fuer die Werkzeugleiste, GraphArea sollte sich auch erneueern */
     public void activeLayerChanged(GraphDocument source);
+
+    /** Wichtig für den ModelBrowser und die Frames */
+    public void selectedSzenarioChanged(GraphDocument source);
 
     /** Hier die GraphArea und evtl. Farb-Buttons neu machen */
     public void colorsChanged(GraphDocument source);

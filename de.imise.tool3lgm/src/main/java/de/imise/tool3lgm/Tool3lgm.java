@@ -384,7 +384,6 @@ public class Tool3lgm {
             //das aktive doc in der Collection selbst setzen
             gdcoll.setActiveGraphDocument(doc);
         }
-        mainFrame.setCurrentDoc(doc);
     }
 
     /**
