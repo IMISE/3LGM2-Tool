@@ -232,10 +232,6 @@ public interface LGMChangeListener {
      */
     public static void distributeEvent(final LGMChangeType changeType, final List<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem, final boolean deliverStatic) {
         if (source != null) {
-            GDCollection gdcoll = source.getCollection();
-            if (gdcoll.isBulkMode()) {
-                return;
-            }
             if (source.isVerificationMode()) {
                 System.out.println("distributeEvent: " + changeType);
             }

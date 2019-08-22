@@ -1803,9 +1803,6 @@ public final class GDCollection extends UserFieldTarget {
      */
     public final void distribute(final LGMChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
         setChanged(true);
-        if (isBulkMode()) {
-            return;
-        }
         boolean deliverStatic = true;
         if (source != null) {
             source.distributeEventIntern(changeType, last_elem, deliverStatic, pid);
