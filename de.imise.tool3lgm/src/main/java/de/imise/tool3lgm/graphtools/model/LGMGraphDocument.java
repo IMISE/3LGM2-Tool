@@ -125,13 +125,13 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     @Override
-    public final void distributeEventIntern(final LGMChangeType changeType, final ElementContainer last_elem, final int pid) {
+    public final void distributeEventIntern(final LGMChangeType changeType, final ElementContainer last_elem, final boolean deliverStatic, final int pid) {
         if (changeType == LGMChangeType.DATA_CHANGED) {
             for (SimpleRedundancyAnalysis redundancyAnalysis : simpleRedundancyAnalysis) {
                 redundancyAnalysis.computeRedundancy();
             }
         }
-        super.distributeEventIntern(changeType, last_elem, pid);
+        super.distributeEventIntern(changeType, last_elem, deliverStatic, pid);
     }
 
     /**

@@ -1805,17 +1805,21 @@ public final class GDCollection extends UserFieldTarget {
         if (isBulkMode()) {
             return;
         }
+        boolean deliverStatic = true;
         if (source != null) {
-            source.distributeEventIntern(changeType, last_elem, pid);
+            source.distributeEventIntern(changeType, last_elem, deliverStatic, pid);
+            deliverStatic = false;
         }
         LGMChangeListener.distributeEvent(changeType, listener, source == null ? doc : source, last_elem, false);
         if (!changeType.isSzenarioSpecific()) {
             if (doc != source) {
-                doc.distributeEventIntern(changeType, last_elem, pid);
+                doc.distributeEventIntern(changeType, last_elem, deliverStatic, pid);
+                deliverStatic = false;
             }
             for (Szenario s : szenarios) {
                 if (s != source) {
-                    s.distributeEventIntern(changeType, last_elem, pid);
+                    s.distributeEventIntern(changeType, last_elem, deliverStatic, pid);
+                    deliverStatic = false;
                 }
             }
         }

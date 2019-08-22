@@ -2656,7 +2656,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param last_elem
      * @param pid
      */
-    public void distributeEventIntern(final LGMChangeType changeType, final ElementContainer last_elem, final int pid) {
+    public void distributeEventIntern(final LGMChangeType changeType, final ElementContainer last_elem, boolean deliverStatic, final int pid) {
         if (gdcoll.isBulkMode()) {
             return;
         }
@@ -2665,7 +2665,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (transStackInteger == null) {
             transStackInteger = new Integer(0);
         }
-        boolean deliverStatic = true;
         if (transStackInteger <= 1) {
             LGMChangeListener.distributeEvent(changeType, allListener, this, last_elem, deliverStatic);
             deliverStatic = false;
