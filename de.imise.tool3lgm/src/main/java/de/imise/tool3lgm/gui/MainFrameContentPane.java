@@ -558,8 +558,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
 
     @Override
     public void internalFrameDeactivated(final InternalFrameEvent e) {
-        GraphDocument graphDocument = activeFrame.getGraphDocument();
-        graphDocument.removeClosedTransactionsListener(toolbarManager);
+        GraphDocument doc = activeFrame.getGraphDocument();
+        doc.removeClosedTransactionsListener(toolbarManager);
         activeFrame = null;
         toolbarManager.updateToolBar();
     }
