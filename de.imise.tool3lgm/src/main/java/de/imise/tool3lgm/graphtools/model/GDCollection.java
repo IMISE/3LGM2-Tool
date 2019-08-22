@@ -166,8 +166,16 @@ public final class GDCollection extends UserFieldTarget {
     /** Hauptdokument der Collection */
     private LGMGraphDocument doc;
 
-    /** Liste aller {@link LGMChangeListener} */
-    private final List<LGMChangeListener> listener = new ArrayList<>();
+    /**
+     * Alle {@link LGMChangeListener}, die immer benachrichtigt werden - egal ob eine Transaktion durch einen Dialog offen ist oder nicht.
+     */
+    private final List<LGMChangeListener> allListener = new ArrayList<>();
+
+    /**
+     * Alle {@link LGMChangeListener}, die nur benachrichtigt werden, wenn sie keine Transaktion geöffnet ist bzw. die nur auf Transaktionen
+     * reagieren, die abgeschlossen sind.Das ist der Fall, wenn das Change-Ereignis nicht durch eine geöffneten Dialog kommt.
+     */
+    private final List<LGMChangeListener> closedListener = new ArrayList<>();
 
     /**
      * Liste aller <code>GraphDocument</code>s in der Reihenfolge, dass immer das selektierte ganz hinten steht,
@@ -246,7 +254,7 @@ public final class GDCollection extends UserFieldTarget {
         metaModel = metaModelContext.getMetaModel();
         doc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
-        doc.addClosedTransactionsListener(userFieldDefinitions);
+        addClosedTransactionsListener(userFieldDefinitions);
         activeGraphDocumentsList.add(doc);
         UserfieldResourceHandler.loadDefaultUserfieldDefinition(this);
     }
@@ -322,6 +330,38 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
+     * @param gdl
+     */
+    public final void addAllTransactionsListener(final LGMChangeListener gdl) {
+        //        System.err.println("addAllTransactionsListener " + this);
+        //        Sys.err(gdl.getClass().getSimpleName());
+        allListener.add(gdl);
+    }
+
+    /**
+     * @param gdl
+     */
+    public final void removeAllTransactionsListener(final LGMChangeListener gdl) {
+        //        System.err.println("removeAllTransactionsListener " + this);
+        //        Sys.err(gdl.getClass().getSimpleName());
+        allListener.remove(gdl);
+    }
+
+    /**
+     * @param gdl
+     */
+    public final void addClosedTransactionsListener(final LGMChangeListener gdl) {
+        closedListener.add(gdl);
+    }
+
+    /**
+     * @param gdl
+     */
+    public final void removeClosedTransactionsListener(final LGMChangeListener gdl) {
+        closedListener.remove(gdl);
+    }
+
+    /**
      * @return
      */
     public Szenario createSzenario() {
@@ -394,7 +434,6 @@ public final class GDCollection extends UserFieldTarget {
             doc.addRedoCommand(MODEL_ACTION_CREATE_SUBMODEL + " " + getParseSaveString(szenario.getTitle()) + " " + getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
             doc.finish_transaction(pid);
         }
-        szenario.addClosedTransactionsListener(userFieldDefinitions);
         setChanged(true);
         distribute(SZENARIO_ADDED, null, szenario, pid);
         return szenario;
@@ -1795,30 +1834,25 @@ public final class GDCollection extends UserFieldTarget {
         distribute(changeType, null, null, STANDARD_PID);
     }
 
-    /**
-     * @param changeType
-     * @param last_elem
-     * @param source
-     * @param pid
-     */
     public final void distribute(final LGMChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
-        setChanged(true);
+        Integer pidInteger = new Integer(pid);
+        Integer transStackInteger = getTransStackTable().get(pidInteger);
+        if (transStackInteger == null) {
+            transStackInteger = new Integer(0);
+        }
         boolean deliverStatic = true;
-        if (source != null) {
-            source.distributeEventIntern(changeType, last_elem, deliverStatic, pid);
+        if (transStackInteger <= 1) {
+            LGMChangeListener.distributeEvent(changeType, allListener, source, last_elem, deliverStatic);
             deliverStatic = false;
         }
-        LGMChangeListener.distributeEvent(changeType, listener, source == null ? doc : source, last_elem, deliverStatic);
-        if (!changeType.isSzenarioSpecific()) {
-            if (doc != source) {
-                doc.distributeEventIntern(changeType, last_elem, deliverStatic, pid);
-                deliverStatic = false;
-            }
-            for (Szenario s : szenarios) {
-                if (s != source) {
-                    s.distributeEventIntern(changeType, last_elem, deliverStatic, pid);
-                    deliverStatic = false;
-                }
+        if (transStackInteger == 0) {
+            LGMChangeListener.distributeEvent(changeType, closedListener, source, last_elem, deliverStatic);
+        }
+        //TODO: das hier ist hässlich und sollte anders laufen. die SimpleRedundancyAnalysis sollte wahrscheinlich selbst Listener sein und das hier allein erledigen
+        if (!isBulkMode() && changeType == DATA_CHANGED) {
+            doc.updateSimpleRedundancyAnalysis();
+            for (Szenario szen : szenarios) {
+                szen.updateSimpleRedundancyAnalysis();
             }
         }
     }
@@ -2111,20 +2145,6 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * @param gdl
-     */
-    public final void addGDCollectionChangeListener(final LGMChangeListener gdl) {
-        listener.add(gdl);
-    }
-
-    /**
-     * @param gdl
-     */
-    public final void removeGDCollectionChangeListener(final LGMChangeListener gdl) {
-        listener.remove(gdl);
-    }
-
-    /**
      * @return
      */
     public TransactionManager getTman() {
@@ -2226,7 +2246,9 @@ public final class GDCollection extends UserFieldTarget {
      */
     public void setUserFieldDefinitions(final UserFieldDefinitions newDef) {
         if (newDef != null && newDef != userFieldDefinitions) {
+            removeClosedTransactionsListener(userFieldDefinitions);
             userFieldDefinitions = newDef;
+            addClosedTransactionsListener(userFieldDefinitions);
             //die eigenen UserFields mit den neuen ersetzen
             replaceUserFields(newDef);
             //hier müssen bei allen UserfieldTargets alle Userfields ausgetauscht werden, die sie über ihre UserField2Value-Maps referenzieren

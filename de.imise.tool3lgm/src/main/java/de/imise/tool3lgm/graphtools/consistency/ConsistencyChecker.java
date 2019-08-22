@@ -124,11 +124,11 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple {
     public void changeContext(final GDCollection gdcoll) {
         if (this.gdcoll != gdcoll) {
             if (this.gdcoll != null) {
-                this.gdcoll.removeGDCollectionChangeListener(this);
+                this.gdcoll.removeClosedTransactionsListener(this);
             }
             this.gdcoll = gdcoll;
             if (this.gdcoll != null) {
-                gdcoll.addGDCollectionChangeListener(this);
+                gdcoll.addClosedTransactionsListener(this);
             }
         }
         resetConsistencyDefinition();

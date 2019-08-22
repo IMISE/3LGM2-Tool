@@ -110,17 +110,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     protected LayerContainer[] layer;
 
     /**
-     * Alle {@link LGMChangeListener}, die immer benachrichtigt werden - egal ob eine Transaktion durch einen Dialog offen ist oder nicht.
-     */
-    private final List<LGMChangeListener> allListener;
-
-    /**
-     * Alle {@link LGMChangeListener}, die nur benachrichtigt werden, wenn sie keine Transaktion geöffnet ist bzw. die nur auf Transaktionen
-     * reagieren, die abgeschlossen sind.Das ist der Fall, wenn das Change-Ereignis nicht durch eine geöffneten Dialog kommt.
-     */
-    private final List<LGMChangeListener> closedListener;
-
-    /**
      * COMMENTME
      */
     private final List<ElementContainer> analysisResult;
@@ -213,8 +202,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         hashString = "DOC" + "_" + new Date().getTime();
 
         analysisResult = new ArrayList<>();
-        allListener = new ArrayList<>();
-        closedListener = new ArrayList<>();
         mapping = new ElementsLayoutDefinition(metaModel.getGraphViewDefinition().getDefaultElementsLayout());
 
         layer = new LayerContainer[LAYER_COUNT];
@@ -2593,7 +2580,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void addAllTransactionsListener(final LGMChangeListener gdl) {
         //        System.err.println("addAllTransactionsListener " + this);
         //        Sys.err(gdl.getClass().getSimpleName());
-        allListener.add(gdl);
+        gdcoll.addAllTransactionsListener(gdl);
     }
 
     /**
@@ -2602,21 +2589,21 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     public final void removeAllTransactionsListener(final LGMChangeListener gdl) {
         //        System.err.println("removeAllTransactionsListener " + this);
         //        Sys.err(gdl.getClass().getSimpleName());
-        allListener.remove(gdl);
+        gdcoll.removeAllTransactionsListener(gdl);
     }
 
     /**
      * @param gdl
      */
     public final void addClosedTransactionsListener(final LGMChangeListener gdl) {
-        closedListener.add(gdl);
+        gdcoll.addClosedTransactionsListener(gdl);
     }
 
     /**
      * @param gdl
      */
     public final void removeClosedTransactionsListener(final LGMChangeListener gdl) {
-        closedListener.remove(gdl);
+        gdcoll.removeClosedTransactionsListener(gdl);
     }
 
     /**
@@ -2640,45 +2627,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         distributeEvent(changeType, null, pid);
     }
 
-    /**
-     * @param changeType
-     * @param last_elem
-     * @param pid
-     */
     public final void distributeEvent(final LGMChangeType changeType, final ElementContainer last_elem, final int pid) {
-        Integer pidInteger = new Integer(pid);
-        Integer transStackInteger = gdcoll.getTransStackTable().get(pidInteger);
-        if (transStackInteger == null) {
-            transStackInteger = new Integer(0);
-        }
-        if (transStackInteger.intValue() == 1) {
-            LGMChangeListener.distributeEvent(changeType, allListener, this, last_elem, true);
-        } else if (transStackInteger.intValue() == 0) {
-            gdcoll.distribute(changeType, last_elem, this, pid);
-        }
-    }
-
-    /**
-     * @param changeType
-     * @param last_elem
-     * @param pid
-     */
-    public void distributeEventIntern(final LGMChangeType changeType, final ElementContainer last_elem, boolean deliverStatic, final int pid) {
-        if (gdcoll.isBulkMode()) {
-            return;
-        }
-        Integer pidInteger = new Integer(pid);
-        Integer transStackInteger = gdcoll.getTransStackTable().get(pidInteger);
-        if (transStackInteger == null) {
-            transStackInteger = new Integer(0);
-        }
-        if (transStackInteger <= 1) {
-            LGMChangeListener.distributeEvent(changeType, allListener, this, last_elem, deliverStatic);
-            deliverStatic = false;
-        }
-        if (transStackInteger == 0) {
-            LGMChangeListener.distributeEvent(changeType, closedListener, this, last_elem, deliverStatic);
-        }
+        gdcoll.distribute(changeType, last_elem, this, pid);
     }
 
     // --- Event-Verwaltung --- Ende ---

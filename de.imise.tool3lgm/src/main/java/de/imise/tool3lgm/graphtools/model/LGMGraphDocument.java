@@ -23,7 +23,6 @@ import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -115,6 +114,10 @@ public class LGMGraphDocument extends GraphDocument {
         }
     }
 
+    /**
+     * @param singleSimpleRedundancyDefinition
+     * @return
+     */
     public boolean isSimpleRedundancyAnalysis(final SingleSimpleRedundancyAnalysisDefinition singleSimpleRedundancyDefinition) {
         for (SimpleRedundancyAnalysis analysis : simpleRedundancyAnalysis) {
             if (analysis.hasDefinition(singleSimpleRedundancyDefinition)) {
@@ -124,14 +127,13 @@ public class LGMGraphDocument extends GraphDocument {
         return false;
     }
 
-    @Override
-    public final void distributeEventIntern(final LGMChangeType changeType, final ElementContainer last_elem, final boolean deliverStatic, final int pid) {
-        if (changeType == LGMChangeType.DATA_CHANGED) {
-            for (SimpleRedundancyAnalysis redundancyAnalysis : simpleRedundancyAnalysis) {
-                redundancyAnalysis.computeRedundancy();
-            }
+    /**
+     *
+     */
+    public void updateSimpleRedundancyAnalysis() {
+        for (SimpleRedundancyAnalysis redundancyAnalysis : simpleRedundancyAnalysis) {
+            redundancyAnalysis.computeRedundancy();
         }
-        super.distributeEventIntern(changeType, last_elem, deliverStatic, pid);
     }
 
     /**

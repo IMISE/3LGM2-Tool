@@ -95,7 +95,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
         docBox.setSelectedItem(gdcoll.getSelectedDoc());
 
         //als Listener registrieren
-        gdcoll.addGDCollectionChangeListener(this);
+        gdcoll.addClosedTransactionsListener(this);
         addAsToolChangeListener();
     }
 
@@ -151,7 +151,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
             lastActiveDoc.setDescription(textPane.getText());
             GDCOLLECTION_TO_OPEN_DIALOG.remove(gdcoll);
             //als Listener abmelden
-            gdcoll.removeGDCollectionChangeListener(this);
+            gdcoll.removeClosedTransactionsListener(this);
             removeAsToolChangeListener();
         }
         if (e.getID() == WindowEvent.WINDOW_DEACTIVATED) {

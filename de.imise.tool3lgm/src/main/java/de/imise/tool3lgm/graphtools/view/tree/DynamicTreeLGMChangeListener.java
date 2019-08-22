@@ -132,14 +132,14 @@ public class DynamicTreeLGMChangeListener implements LGMChangeListener {
     public void remove() {
         GraphDocument doc = tree.getGraphDocument();
         GDCollection gdcoll = doc.getCollection();
-        gdcoll.removeGDCollectionChangeListener(this);
+        gdcoll.removeAllTransactionsListener(this);
     }
 
     public void add() {
         remove(); //zur Sicherheit erstmal removen
         GraphDocument doc = tree.getGraphDocument();
         GDCollection gdcoll = doc.getCollection();
-        gdcoll.addGDCollectionChangeListener(this);
+        gdcoll.addAllTransactionsListener(this);
     }
 
     public void setActive(final boolean active) {
