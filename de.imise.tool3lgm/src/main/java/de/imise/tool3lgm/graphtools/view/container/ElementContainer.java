@@ -220,6 +220,13 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
+     * @return
+     */
+    public GDCollection getCollection() {
+        return doc.getCollection();
+    }
+
+    /**
      * @param me
      */
     public void setElement(final ModelElement me) {
