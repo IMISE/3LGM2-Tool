@@ -363,7 +363,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      *
      * @return JInternalFrame[]
      */
-    public final AbstractInternalFrame[] getAllFrames() {
+    public final JInternalFrame[] getAllFrames() {
         JInternalFrame[] intFrames = desktop.getAllFrames();
         AbstractInternalFrame[] frames = new AbstractInternalFrame[intFrames.length];
         System.arraycopy(intFrames, 0, frames, 0, intFrames.length);

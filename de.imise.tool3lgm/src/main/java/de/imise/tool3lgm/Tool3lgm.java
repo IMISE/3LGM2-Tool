@@ -533,7 +533,7 @@ public class Tool3lgm {
      *
      * @return JInternalFrame[]
      */
-    public AbstractInternalFrame[] getAllFrames() {
+    public JInternalFrame[] getAllFrames() {
         return mainFrame.getAllFrames();
     }
 

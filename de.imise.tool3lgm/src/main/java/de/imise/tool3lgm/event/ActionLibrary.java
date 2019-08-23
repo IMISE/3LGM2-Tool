@@ -20,6 +20,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JColorChooser;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
@@ -537,12 +538,12 @@ public class ActionLibrary {
         /** Gibt ein Array zurück, dessen Elemente Actions zum Öffnen der Teilmodell-Frames sind */
         public static final Action[] getSelectInternalFrameActions() {
 
-            AbstractInternalFrame[] internalFrames = Static.getAllFrames();
-            AbstractInternalFrame selectedFrame = Static.getActiveFrame();
+            JInternalFrame[] internalFrames = Static.getAllFrames();
+            JInternalFrame selectedFrame = Static.getActiveFrame();
 
             Action[] actions = new Action[internalFrames.length];
             int index = 0, next;
-            for (final AbstractInternalFrame internalFrame : internalFrames) {
+            for (final JInternalFrame internalFrame : internalFrames) {
 
                 if (internalFrame != selectedFrame) {
                     next = ++index;

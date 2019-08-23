@@ -14,6 +14,7 @@ import java.awt.event.WindowListener;
 
 import javax.help.CSH;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.WindowConstants;
 
 import com.google.common.base.Strings;
@@ -153,7 +154,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
      *
      * @return JInternalFrame[]
      */
-    public AbstractInternalFrame[] getAllFrames() {
+    public JInternalFrame[] getAllFrames() {
         return contentPane.getAllFrames();
     }
 

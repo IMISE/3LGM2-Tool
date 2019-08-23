@@ -15,6 +15,7 @@ import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -186,7 +187,7 @@ public class Static {
      *
      * @return AbstractInternalFrame[]
      */
-    public static AbstractInternalFrame[] getAllFrames() {
+    public static JInternalFrame[] getAllFrames() {
         if (tool == null) {
             return null;
         }
