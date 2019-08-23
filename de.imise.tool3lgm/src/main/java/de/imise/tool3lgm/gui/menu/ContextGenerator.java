@@ -2,6 +2,7 @@ package de.imise.tool3lgm.gui.menu;
 
 import static de.imise.tool3lgm.Static.getCollections;
 import static de.imise.tool3lgm.Static.getPreSelectedGDCollection;
+import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Tool3lgmConstants.getIcon;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
@@ -183,11 +184,6 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      * COMMENTME
      */
-    private LGMGraphDocument doc;
-
-    /**
-     * COMMENTME
-     */
     private boolean controlled = false;
 
     /**
@@ -231,17 +227,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     public GraphDocument getDoc() {
-        return doc;
-    }
-
-    /**
-     * Setzt das GraphDocument auf das übergebene und tauscht bei allen
-     * MenuItems den ContextListener aus
-     *
-     * @param GraphDocument
-     */
-    public void changeContext(final LGMGraphDocument document) {
-        doc = document;
+        return Static.getSelectedDoc();
     }
 
     // --- Methoden zur Statusveraenderung --- Ende ---
@@ -387,6 +373,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private JMenu getSubElemMenu() {
+        GraphDocument doc = getDoc();
         ElementContainer ec = doc.getLastSelected();
         ModelElement me = ec.getElement();
         Class<? extends ModelElement> elementClass = me.getClass();
@@ -432,7 +419,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         szenario_menu.add(item);
         szenario_menu.add(new JSeparator());
 
-        GDCollection gdcoll = doc.getCollection();
+        GDCollection gdcoll = getSelectedGDCollection();
 
         for (Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getTitle());
@@ -470,7 +457,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         link_to_szenario_menu.add(item);
         link_to_szenario_menu.add(new JSeparator());
 
-        GDCollection gdcoll = doc.getCollection();
+        GDCollection gdcoll = getSelectedGDCollection();
         for (Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getTitle());
             /* ist Node schon mit diesem Szenario verknüpft */
@@ -524,6 +511,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
                 Class<? extends ModelElement> endClass = metaPath.getEndClass();
                 JMenu pathConnectableElements = new JMenu(metaPath.getName(false, true));
                 pathConnectableElements.setIcon(link_icon);
+                GraphDocument doc = getDoc();
                 List<ModelElement> endElements = doc.getModelItems(endClass, true, true);
                 pathConnectableElements.setEnabled(!endElements.isEmpty());
                 menu.add(pathConnectableElements);
@@ -578,6 +566,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             if (me.getAssociatedDoc() != null) {
                 menu.add(unlinkToSzenario);
             }
+            GraphDocument doc = getDoc();
             if (doc instanceof Szenario) {
                 if (ec instanceof InterLayerConnectedNodeContainer && contextSource instanceof InputGraphArea) {
                     menu.addSeparator();
@@ -637,7 +626,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         //wenn das selektierte Element in mehr als einem Teilmodell vorkommt
         //und nicht der <Alle-Elemte>-Browser aktiviert ist.
         if (!ec.getElement().isUnique() && !ec.getElement().isSlave()) {
-            if (doc instanceof Szenario) {
+            if (getDoc() instanceof Szenario) {
                 menu.add(delete_selected_from_szenario);
             }
         }
@@ -657,6 +646,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
         JPopupMenu menu = new JPopupMenu();
 
+        GraphDocument doc = getDoc();
         boolean knickpunkte = doc.isSelectedOnlyBendpoints();
 
         if (!knickpunkte) {
@@ -987,6 +977,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     public JPopupMenu getSearchDialogContextMenu() {
         JPopupMenu menu = new JPopupMenu();
+        GraphDocument doc = getDoc();
         if (doc.isSingleSelection()) {
             addMenuItem(menu, properties);
             menu.addSeparator();
@@ -1004,6 +995,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     public final JPopupMenu getNodeContextMenu(final Component source) {
         JPopupMenu menu = new JPopupMenu();
+        GraphDocument doc = getDoc();
         if (doc.isSelectedOnlyBendpoints()) {
             if (doc instanceof Szenario) {
                 menu.add(delete_selected_from_szenario);
@@ -1024,6 +1016,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private final JPopupMenu getSingleEdgeContextMenu() {
         //		System.err.println("ContextGenerator.getSingleEdgeContextMenu()");
         JPopupMenu menu = new JPopupMenu();
+        GraphDocument doc = getDoc();
         if (doc.isSingleSelection() && doc.getLastSelected() instanceof EdgeContainer) {
             addMenuItem(menu, properties);
         }
@@ -1065,6 +1058,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private final JPopupMenu getEdgeContextMenu() {
+        GraphDocument doc = getDoc();
         if (doc.isSingleSelection()) {
             return getSingleEdgeContextMenu();
         }
@@ -1086,7 +1080,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         }
 
         menu.addSeparator();
-        if (doc instanceof Szenario) {
+        if (getDoc() instanceof Szenario) {
             menu.add(delete_selected_from_szenario);
         }
         menu.add(delete_selected);
@@ -1098,6 +1092,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private JMenu getCreateNewNodesMenu() {
+        GraphDocument doc = getDoc();
         int activeLayer = doc.getCollection().getActiveLayer();
         MetaModel metaModel = doc.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
@@ -1159,6 +1154,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     public void check_cb_menu() {
         check_undo_redo();
+        GraphDocument doc = getDoc();
         if (doc == null) {
             cb_copy.setEnabled(false);
             cb_cut.setEnabled(false);
@@ -1194,6 +1190,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      *
      */
     private void check_undo_redo() {
+        GraphDocument doc = getDoc();
         if (doc == null) {
             undo.setEnabled(false);
             redo.setEnabled(false);
@@ -1308,6 +1305,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param yin
      */
     private void processMouseEventInternal(final boolean left_button, final boolean right_button, final Component gdl, final int xin, final int yin) {
+        GraphDocument doc = getDoc();
         if (resizing) {
             if (right_button) {
                 return;
@@ -1581,6 +1579,11 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     // Namensgebung: Button_ObjektTyp_Shift_Selection
 
+    private void deselectAll() {
+        GraphDocument doc = getDoc();
+        doc.deselectAll(false);
+    }
+
     /**
      *
      */
@@ -1591,35 +1594,35 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      *
      */
     private void left_noshift_outside() {
-        doc.deselectAll(false);
+        deselectAll();
     }
 
     /**
      *
      */
     private void left_layer_noshift_none() {
-        doc.deselectAll(false);
+        deselectAll();
     }
 
     /**
      *
      */
     private void left_layer_noshift_nodes() {
-        doc.deselectAll(false);
+        deselectAll();
     }
 
     /**
      *
      */
     private void left_layer_noshift_edges() {
-        doc.deselectAll(false);
+        deselectAll();
     }
 
     /**
      *
      */
     private void left_layer_noshift_multi() {
-        doc.deselectAll(false);
+        deselectAll();
     }
 
     /**
@@ -1632,14 +1635,14 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      *
      */
     private void left_layer_shift_nodes() {
-        doc.deselectAll(false);
+        deselectAll();
     }
 
     /**
      *
      */
     private void left_layer_shift_edges() {
-        doc.deselectAll(false);
+        deselectAll();
     }
 
     /**
@@ -1698,6 +1701,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param yin
      */
     private void right_node_none(final Component gdl, final int xin, final int yin) {
+        GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
         menu = getNodeContextMenu(gdl);
         menu.show(gdl, xin, yin);
@@ -1709,6 +1713,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param yin
      */
     private void right_node_nodes(final Component gdl, final int xin, final int yin) {
+        GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
         menu = getNodeContextMenu(gdl);
         menu.show(gdl, xin, yin);
@@ -1720,6 +1725,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param yin
      */
     private void right_node_edges(final Component gdl, final int xin, final int yin) {
+        GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
         menu = getMultiContextMenu();
         menu.show(gdl, xin, yin);
@@ -1731,6 +1737,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param yin
      */
     private void right_node_multi(final Component gdl, final int xin, final int yin) {
+        GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
         //Wenn mind. 2 Node selektiert sind und das Kontextmenü auf einem Node aufgerufen wurde,
         //kann man auch das Knotenkontextmenü anbieten
@@ -1744,36 +1751,52 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     /**
      *
      */
+    private void select() {
+        GraphDocument doc = getDoc();
+        doc.select(ec, STANDARD_PID);
+    }
+
+    /**
+     *
+     */
+    private void addToSelection() {
+        GraphDocument doc = getDoc();
+        doc.addToSelection(ec, STANDARD_PID);
+    }
+
+    /**
+     *
+     */
     private void left_node_noshift_none() {
-        doc.select(ec, 0);
+        select();
     }
 
     /**
      *
      */
     private void left_node_noshift_nodes() {
-        doc.select(ec, 0);
+        select();
     }
 
     /**
      *
      */
     private void left_node_noshift_edges() {
-        doc.select(ec, 0);
+        select();
     }
 
     /**
      *
      */
     private void left_node_noshift_multi() {
-        doc.select(ec, 0);
+        select();
     }
 
     /**
      *
      */
     private void left_node_shift_none() {
-        doc.addToSelection(ec, 0);
+        addToSelection();
     }
 
     /**
@@ -1781,9 +1804,9 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private void left_node_shift_nodes() {
         if (ec.isSelected()) {
-            doc.deselect(ec, 0);
+            select();
         } else {
-            doc.addToSelection(ec, 0);
+            addToSelection();
         }
     }
 
@@ -1807,35 +1830,35 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      *
      */
     private void left_edge_noshift_none() {
-        doc.select(ec, 0);
+        select();
     }
 
     /**
      *
      */
     private void left_edge_noshift_nodes() {
-        doc.select(ec, 0);
+        select();
     }
 
     /**
      *
      */
     private void left_edge_noshift_edges() {
-        doc.select(ec, 0);
+        select();
     }
 
     /**
      *
      */
     private void left_edge_noshift_multi() {
-        doc.select(ec, 0);
+        select();
     }
 
     /**
      *
      */
     private void left_edge_shift_none() {
-        doc.addToSelection(ec, 0);
+        addToSelection();
     }
 
     /**
@@ -1843,9 +1866,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private void left_edge_shift_nodes() {
         if (ec.isSelected()) {
-            doc.deselect(ec, 0);
+            GraphDocument doc = getDoc();
+            doc.deselect(ec, STANDARD_PID);
         } else {
-            doc.addToSelection(ec, 0);
+            addToSelection();
         }
     }
 
@@ -1869,7 +1893,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param yin
      */
     private void right_edge_none(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(ec, 0);
+        addToSelection();
         menu = getEdgeContextMenu();
         menu.show(gdl, xin, yin);
     }
@@ -1880,7 +1904,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param yin
      */
     private void right_edge_nodes(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(ec, 0);
+        addToSelection();
         menu = getEdgeContextMenu();
         menu.show(gdl, xin, yin);
     }
@@ -1891,7 +1915,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param yin
      */
     private void right_edge_edges(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(ec, 0);
+        addToSelection();
         menu = getEdgeContextMenu();
         menu.show(gdl, xin, yin);
     }
@@ -1902,7 +1926,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @param yin
      */
     private void right_edge_multi(final Component gdl, final int xin, final int yin) {
-        doc.addToSelection(ec, 0);
+        addToSelection();
         menu = getEdgeContextMenu();
         menu.show(gdl, xin, yin);
     }
@@ -1924,21 +1948,21 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      *
      */
     private void left_nodehand_noshift_nodes() {
-        doc.select(ec, 0);
+        select();
     }
 
     /**
      *
      */
     private void left_nodehand_noshift_edges() {
-        doc.select(ec, 0);
+        select();
     }
 
     /**
      *
      */
     private void left_nodehand_noshift_multi() {
-        doc.select(ec, 0);
+        select();
     }
 
     /**
@@ -1967,6 +1991,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         addMenuItem(menu, properties);
         if (!propertiesOnly) {
             menu.addSeparator();
+            GraphDocument doc = getDoc();
             boolean do_join = doc.isJoinableElementsSelected();
             if (do_join) {
                 menu.add(join_selected);
@@ -1989,6 +2014,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     public JPopupMenu getDialogSelectionContextMenu(final ElementContainer ec) {
         JPopupMenu menu = new JPopupMenu();
+        GraphDocument doc = ec.getGraphDocument();
         doc.addSimpleToSelection(ec);
         addMenuItem(menu, properties);
         menu.addPopupMenuListener(this);
@@ -2003,6 +2029,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      */
     private JMenu getAnalysisMenu() {
         JMenu menu = new JMenu(getResString("analysis"));
+        GraphDocument doc = getDoc();
         ElementContainer ec = doc.getLastSelected();
         if (ec != null && ec.getElement() instanceof Node) {
             // Alle Analysen für die ausgewählte Klasse holen
@@ -2027,7 +2054,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * @return
      */
     private Action createPathAction(final SimpleMetaPath path2create) {
-        return createPathAction(path2create, doc.getSelectedElements(), path2create.getName(false, true), link_icon);
+        GraphDocument doc = getDoc();
+        List<ModelElement> selectedElements = doc.getSelectedElements();
+        String pathName = path2create.getName(false, true);
+        return createPathAction(path2create, selectedElements, pathName, link_icon);
     }
 
     /**
@@ -2057,6 +2087,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             public void actionPerformed(final ActionEvent e) {
                 Class<? extends ModelElement> startClass = path2create.getStartClass();
                 Class<? extends ModelElement> endClass = path2create.getEndClass();
+                GraphDocument doc = getDoc();
                 ModelElement lastSelected = doc.getLastSelected().getElement();
                 if (!startClass.isAssignableFrom(lastSelected.getClass())) {
                     return;
@@ -2076,6 +2107,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
+        GraphDocument doc = getDoc();
         doc.exec(e.getActionCommand(), STANDARD_PID);
     }
 
@@ -2108,6 +2140,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         }
         JMenu menu = new JMenu(getResString("inmodel"));
         for (GDCollection gdcoll : getCollections()) {
+            GraphDocument doc = getDoc();
             if (gdcoll != doc.getCollection()) {
                 menu.add(getSubModelMenu(gdcoll));
             }
@@ -2122,6 +2155,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     private final JMenuItem getSubModelMenu(final GDCollection gdcoll) {
         JMenu menu = new JMenu(gdcoll.getName());
         JMenuItem item = new JMenuItem(getResString("main_model"));
+        LGMGraphDocument doc = (LGMGraphDocument) getDoc();
         item.addActionListener(e -> doc.copySelectedToModel(gdcoll.getMainGraphDocument()));
         menu.add(item);
         for (final Szenario szen : gdcoll.getSzenarios()) {
@@ -2142,6 +2176,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         if (Static.getCollectionCount() < 2) {
             return null;
         }
+        LGMGraphDocument doc = (LGMGraphDocument) getDoc();
         if (!doc.isSingleSelection()) {
             return null;
         }

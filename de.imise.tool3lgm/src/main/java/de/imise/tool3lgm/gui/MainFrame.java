@@ -256,7 +256,6 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
 
     @Override
     public void windowActivated(final WindowEvent e) {
-        Static.contextGenerator.changeContext(Static.getSelectedDoc());
     }
 
     @Override

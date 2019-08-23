@@ -180,7 +180,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
 
     @Override
     public void windowActivated(final WindowEvent e) {
-        Static.contextGenerator.changeContext(doc);
+        Static.setSelectedDoc(doc);
     }
 
     @Override

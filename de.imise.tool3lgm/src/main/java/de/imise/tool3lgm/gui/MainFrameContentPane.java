@@ -29,7 +29,6 @@ import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
-import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
@@ -354,8 +353,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         this.activateGraphView = true;
 
         setCheckConsistencyState();
-        //TODO: das sollte der ContextGenerator als Listener mitbekommen (CONTEXT_CHANGED oder sowas)
-        Static.contextGenerator.changeContext((LGMGraphDocument) doc);
     }
 
     /**
@@ -363,7 +360,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      *
      * @return JInternalFrame[]
      */
-    public final JInternalFrame[] getAllFrames() {
+    public final AbstractInternalFrame[] getAllFrames() {
         JInternalFrame[] intFrames = desktop.getAllFrames();
         AbstractInternalFrame[] frames = new AbstractInternalFrame[intFrames.length];
         System.arraycopy(intFrames, 0, frames, 0, intFrames.length);

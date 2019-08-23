@@ -65,7 +65,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
@@ -599,7 +598,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                         ((GraphDocument) subModelBox.getSelectedObject()).showPropertyDialog(true);
                     }
                 } else {
-                    contextGenerator.changeContext((LGMGraphDocument) subModelBox.getSelectedObject());
+                    GraphDocument selectedDoc = (GraphDocument) subModelBox.getSelectedObject();
+                    Static.setSelectedDoc(selectedDoc);
                     JPopupMenu jpm = contextGenerator.getSearchDialogContextMenu();
                     // refresh
                     jpm.show(table, e.getX(), e.getY());
