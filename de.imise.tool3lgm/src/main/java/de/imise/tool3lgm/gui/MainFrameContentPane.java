@@ -508,9 +508,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     public void internalFrameClosed(final InternalFrameEvent e) {
         JInternalFrame[] frames = desktop.getAllFrames();
         AbstractInternalFrame frame = (AbstractInternalFrame) e.getSource();
-        if (!(frame instanceof MatrixViewInternalFrame)) {
-            workarea.revalidate();
-        }
+        workarea.revalidate();
         mainFrameToolbar.removeWindow(frame);
         if (frames.length == 0) {
             activeFrame = null;
@@ -544,8 +542,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         } catch (Exception ex) {
             Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
         }
-        mainFrameToolbar.revalidate();
-        mainFrameToolbar.repaint();
         workarea.revalidate();
         workarea.repaint();
         mainFrameToolbar.addWindow(activeFrame);
