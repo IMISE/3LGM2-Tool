@@ -37,6 +37,7 @@ import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**
  * Die Klasse prüft die Konsistenz eines Modells. Es werden alle Kardinalitäten überprüft und
@@ -240,6 +241,11 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple {
         if (gdcoll != null && !gdcoll.getTman().isInTransaction()) {
             updateErrorTable();
         }
+    }
+
+    @Override
+    public void elementNameChanged(final ElementContainer source) {
+        dataChanged(null); //doc ist egal
     }
 
     /** Gibt wieder, ob Kardinalitäts-Inkonsistenzen im Modell bestehen */
