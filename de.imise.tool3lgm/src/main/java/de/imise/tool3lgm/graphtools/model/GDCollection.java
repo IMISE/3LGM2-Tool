@@ -1855,6 +1855,7 @@ public final class GDCollection extends UserFieldTarget {
                 szen.updateSimpleRedundancyAnalysis();
             }
         }
+        setChanged(true);
     }
 
     /**
