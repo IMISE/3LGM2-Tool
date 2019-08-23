@@ -312,7 +312,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         //Es kann auch null sein, wenn das letzte Modell geschlossen wurde
         if (doc == null) {
             boolean isCheckConsistency = setCheckConsistencyState();
-            mainFrameToolbar.update();
             if (isCheckConsistency) {
                 ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
                 consistencyChecker.changeContext(null);
@@ -366,7 +365,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         setCheckConsistencyState();
         //TODO: das sollte der ContextGenerator als Listener mitbekommen (CONTEXT_CHANGED oder sowas)
         Static.contextGenerator.changeContext((LGMGraphDocument) doc);
-        mainFrameToolbar.update();
     }
 
     /**
@@ -513,14 +511,10 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         if (!(frame instanceof MatrixViewInternalFrame)) {
             workarea.revalidate();
         }
-
         mainFrameToolbar.removeWindow(frame);
-
         if (frames.length == 0) {
             activeFrame = null;
             toolbarManager.updateToolBar();
-            mainFrameToolbar.repaint();
-
         }
     }
 

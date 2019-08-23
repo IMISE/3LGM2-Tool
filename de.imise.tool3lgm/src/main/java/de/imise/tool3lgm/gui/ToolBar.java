@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.ToolTipManager;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.action.StaticAction;
@@ -28,8 +29,7 @@ import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
-// TODO:alle Buttons auf Actions umstellen (so wie zum Teil schon geschehen)
-public class ToolBar extends UnfloatableToolBar implements ActionListener, MouseListener, LGMChangeListenerSimple {
+public class ToolBar extends UnfloatableToolBar implements ActionListener, MouseListener, LGMChangeListenerSimple, Tool3lgmChangeListener {
 
     private GraphDocument doc = null;
 
@@ -43,10 +43,6 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
     private boolean operatingWindowList = false;
 
     public ToolBar() {
-        super();
-
-        setFloatable(false);
-
         JButton switchView = new ToolbarButton(ActionLibrary.ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE);
 
         JButton fach = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER);
@@ -96,9 +92,12 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
         add(backward);
         add(forward);
 
+        addAsToolChangeListener();
+
     }
 
-    private void checkCurrentGraphDocument() {
+    @Override
+    public void model_change_changed(final GraphDocument source) {
         LGMGraphDocument selectedDoc = Static.getSelectedDoc();
         if (doc != selectedDoc) {
             if (doc != null) {
@@ -109,11 +108,11 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
                 doc.addClosedTransactionsListener(this);
             }
         }
+        update();
     }
 
     @Override
     public void update() {
-        checkCurrentGraphDocument();
         //Alle Knöpfe aktualisieren
         for (Component component : getComponents()) {
             if (component instanceof AbstractButton) {
