@@ -1684,15 +1684,15 @@ public final class GDCollection extends UserFieldTarget {
         List<Edge> remainNodeEdges = (List<Edge>) node2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
         //für jede Edge vom zu löschenden Node
         while (deleteNodeEdges.size() > 0) {
-            Edge egde = deleteNodeEdges.get(0);
-            ModelElement startElement = egde.getStart(); //Startknoten der zu übernehmenden Edge merken
-            ModelElement endElement = egde.getEnd(); //Endknoten -"-
+            Edge edge = deleteNodeEdges.get(0);
+            ModelElement startElement = edge.getStart(); //Startknoten der zu übernehmenden Edge merken
+            ModelElement endElement = edge.getEnd(); //Endknoten -"-
             //zu löschenden Node durch den verbleibenden ersetzen
             if (startElement == node1) {
                 startElement = node2;
-                endElement = egde.getEnd();
+                endElement = edge.getEnd();
             } else {
-                startElement = egde.getStart();
+                startElement = edge.getStart();
                 endElement = node2;
             }
             boolean deleteEdge = false;
@@ -1700,11 +1700,9 @@ public final class GDCollection extends UserFieldTarget {
                 deleteEdge = true;
             } else {
                 //abfangen, ob im verbleibenden Node an gleicher Stelle schon eine Edge vorkommt, Edge testKante = new Edge(startKnoten, endKnoten, false);
-                Edge testEdge;
-                try {
-                    testEdge = egde.getClass().newInstance();
-                } catch (Exception e) {
-                    Log.show(ERROR, getResString("FehlerAllgemein"), e);
+                Class<? extends Edge> edgeClass = edge.getClass();
+                Edge testEdge = metaModel.createElement(edgeClass);
+                if (testEdge == null) {
                     continue;
                 }
                 testEdge.setNodes(startElement, endElement, false);
@@ -1719,11 +1717,11 @@ public final class GDCollection extends UserFieldTarget {
                 }
             }
             if (deleteEdge) { //wenn die Edge doppelt vorkommen würde
-                deleteElement(egde, doc, pid);
+                deleteElement(edge, doc, pid);
                 //              doc.removeEdge(kante, pid);//Edge einfach komplett löschen
             } else { //Edge muss umgehängt werden
-                node1.removeEdge(egde); //im zu löschenden Node die Edge entfernen
-                egde.setNodes(startElement, endElement);//die Edge wirklich an knoten2 binden
+                node1.removeEdge(edge); //im zu löschenden Node die Edge entfernen
+                edge.setNodes(startElement, endElement);//die Edge wirklich an knoten2 binden
             }
         }
         for (Szenario szen : szenarios) {
