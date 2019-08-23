@@ -2,6 +2,7 @@ package de.imise.tool3lgm;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
+import de.imise.util.event.ListenerSupport;
 
 /**
  * Hier sind alle Ereignisse enthalten, die im gesamten Tool selbst relevant sind. SZENARIO_ADDED und SZENARIO_REMOVED sind eigentlich
@@ -67,8 +68,17 @@ public interface Tool3lgmChangeListener {
          * @param source
          * @param last_elem
          */
-        public void deliverEvent(final Iterable<Tool3lgmChangeListener> listeners, final GraphDocument source) {
-            for (Tool3lgmChangeListener l : listeners) {
+        public void deliverEvent(final ListenerSupport<Tool3lgmChangeListener> listeners, final GraphDocument source) {
+            //das hier muss sein, weil es vorkommen kann, dass sich bei deliverEvent(l, source, last_elem); der aktuelle Listener aus der Listener-Liste löscht
+            //eine andere Variante wäre, die Liste vorher zu clonen und auf dem Clone zu iterieren
+            Tool3lgmChangeListener lastListener = null;
+            for (int i = 0; i < listeners.size();) {
+                Tool3lgmChangeListener l = listeners.get(i);
+                if (l == lastListener) {
+                    i++;
+                    continue;
+                }
+                lastListener = l;
                 //Sys.err(l.getClass().getSimpleName() + " " + source + " " + name());
                 deliverEvent(l, source);
             }
