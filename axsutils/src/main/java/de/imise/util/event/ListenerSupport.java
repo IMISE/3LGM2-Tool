@@ -1,8 +1,8 @@
 package de.imise.util.event;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Eine Klasse, die eine Liste zur Verfügung stellt, über die Elemente hinzugefügt oder entfernt werden können. Das
@@ -11,7 +11,7 @@ import java.util.Iterator;
  */
 public class ListenerSupport<T> implements Iterable<T> {
 
-    private final Collection<T> elements = new ArrayList<>();
+    private final List<T> elements = new ArrayList<>();
 
     /**
      * @param element
@@ -31,6 +31,21 @@ public class ListenerSupport<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         return elements.iterator();
+    }
+
+    /**
+     * @return
+     */
+    public int size() {
+        return elements.size();
+    }
+
+    /**
+     * @param i
+     * @return
+     */
+    public T get(final int i) {
+        return elements.get(i);
     }
 
 }
