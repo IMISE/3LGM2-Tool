@@ -9,8 +9,6 @@ import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 import javax.help.CSH;
 import javax.swing.JFrame;
@@ -39,7 +37,7 @@ import de.imise.util.robot.ScreenRobot;
  *
  * @author AXS (9 Aug 2019)
  */
-public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowListener {
+public class MainFrame extends JFrame implements Tool3lgmChangeListener {
 
     /** Menü-Leiste des Tools */
     private final MenuBar menuBar;
@@ -62,9 +60,8 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
         contentPane = new MainFrameContentPane();
         getContentPane().add(contentPane);
 
-        addWindowListener(this);
         addAsToolChangeListener();
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         // Direkthilfe einschalten
         Help.getHelp().enableHelpKey(rootPane, "willkommen");
@@ -75,6 +72,11 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
         setJMenuBar(menuBar);
         addAsToolChangeListener();
         setVisible(visible);
+    }
+
+    @Override
+    public void dispose() {
+        Static.getTool().close();
     }
 
     /**
@@ -243,39 +245,6 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, WindowL
     public synchronized void removeMouseListener(final MouseListener l) {
         contentPane.removeMouseListener(l);
         super.removeMouseListener(l);
-    }
-
-    ////////////////////
-    // WindowListener //
-    ////////////////////
-
-    @Override
-    public void windowClosing(final WindowEvent e) {
-        Static.getTool().close();
-    }
-
-    @Override
-    public void windowActivated(final WindowEvent e) {
-    }
-
-    @Override
-    public void windowClosed(final WindowEvent e) {
-    }
-
-    @Override
-    public void windowDeactivated(final WindowEvent e) {
-    }
-
-    @Override
-    public void windowDeiconified(final WindowEvent e) {
-    }
-
-    @Override
-    public void windowIconified(final WindowEvent e) {
-    }
-
-    @Override
-    public void windowOpened(final WindowEvent e) {
     }
 
 }
