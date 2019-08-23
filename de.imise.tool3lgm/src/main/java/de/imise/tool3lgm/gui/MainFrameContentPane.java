@@ -53,10 +53,10 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     private final GraphAreaToolbarManager toolbarManager = new GraphAreaToolbarManager(mainFrameToolbar);
 
     /** splitted pane with modelBrowserPanel on the left and desktop on the right */
-    private final JSplitPane verticalSplitPane;
+    private final JSplitPane leftSplitPane;
 
     /** splitted pane with modelBrowserPanel and the graph on the top and the error table bottom */
-    private JSplitPane horizontalSplitPane;
+    private JSplitPane bottomSplitPane;
 
     /** panel to hold one or more modelBrowsers */
     private final ModelBrowserPanel modelBrowserPanel;
@@ -88,10 +88,10 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         desktop = new JDesktopPane();
 
         JScrollPane desktopscroll = new JScrollPane(desktop);
-        verticalSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktopscroll);
-        verticalSplitPane.setOneTouchExpandable(true);
-        verticalSplitPane.setDividerSize(10);
-        verticalSplitPane.setDividerLocation(dividerLocation);
+        leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktopscroll);
+        leftSplitPane.setOneTouchExpandable(true);
+        leftSplitPane.setDividerSize(10);
+        leftSplitPane.setDividerLocation(dividerLocation);
 
         // Direkthilfe für die einzelnen Baukastenteile
         CSH.setHelpIDString(modelBrowserPanel, "uebersicht_modellbrowser");
@@ -155,21 +155,21 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
         if (!state) {
             consistencyChecker.resetConsistencyDefinition();
-            if (verticalSplitPane.getParent() == workarea) {
+            if (leftSplitPane.getParent() == workarea) {
                 return state;
             }
-            if (horizontalSplitPane != null) {
-                workarea.remove(horizontalSplitPane);
+            if (bottomSplitPane != null) {
+                workarea.remove(bottomSplitPane);
             }
-            workarea.add(verticalSplitPane, BorderLayout.CENTER);
-            horizontalSplitPane = null;
+            workarea.add(leftSplitPane, BorderLayout.CENTER);
+            bottomSplitPane = null;
         } else {
-            if (horizontalSplitPane == null) {
-                horizontalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, verticalSplitPane, new JScrollPane(consistencyChecker.getErrorTable()));
-                horizontalSplitPane.setOneTouchExpandable(true);
-                horizontalSplitPane.setDividerSize(10);
-                horizontalSplitPane.setDividerLocation(workarea.getHeight() / 4 * 3);
-                workarea.add(horizontalSplitPane, BorderLayout.CENTER);
+            if (bottomSplitPane == null) {
+                bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, leftSplitPane, new JScrollPane(consistencyChecker.getErrorTable()));
+                bottomSplitPane.setOneTouchExpandable(true);
+                bottomSplitPane.setDividerSize(10);
+                bottomSplitPane.setDividerLocation(workarea.getHeight() / 4 * 3);
+                workarea.add(bottomSplitPane, BorderLayout.CENTER);
             }
         }
         revalidate();
@@ -180,11 +180,11 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     /** (De-)Aktiviert den ModelBrowser */
     private final void showModelBrowser() {
         if (OPTION_MODEL_BROWSER_SHOW.is()) {
-            verticalSplitPane.setLeftComponent(modelBrowserPanel);
-            verticalSplitPane.setDividerLocation(dividerLocation);
+            leftSplitPane.setLeftComponent(modelBrowserPanel);
+            leftSplitPane.setDividerLocation(dividerLocation);
         } else {
-            dividerLocation = verticalSplitPane.getDividerLocation();
-            verticalSplitPane.remove(verticalSplitPane.getLeftComponent());
+            dividerLocation = leftSplitPane.getDividerLocation();
+            leftSplitPane.remove(leftSplitPane.getLeftComponent());
         }
         revalidate();
     }
