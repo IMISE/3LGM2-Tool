@@ -29,7 +29,7 @@ import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
-public class ToolBar extends UnfloatableToolBar implements ActionListener, MouseListener, LGMChangeListenerSimple, Tool3lgmChangeListener {
+public class MainFrameToolBar extends UnfloatableToolBar implements ActionListener, MouseListener, LGMChangeListenerSimple, Tool3lgmChangeListener {
 
     private GraphDocument doc = null;
 
@@ -42,7 +42,7 @@ public class ToolBar extends UnfloatableToolBar implements ActionListener, Mouse
 
     private boolean operatingWindowList = false;
 
-    public ToolBar() {
+    public MainFrameToolBar() {
         JButton switchView = new ToolbarButton(ActionLibrary.ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE);
 
         JButton fach = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER);

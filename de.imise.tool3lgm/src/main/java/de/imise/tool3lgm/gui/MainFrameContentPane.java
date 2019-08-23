@@ -47,7 +47,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     private final JPanel workarea = new JPanel();
 
     /** ToolBar with general tools */
-    private final ToolBar mainFrameToolbar = new ToolBar();
+    private final MainFrameToolBar mainFrameToolbar = new MainFrameToolBar();
 
     /** Aktualisiert die Toolbar je nach Kontext des aktiven Frames */
     //    private final GraphAreaToolbarManager toolbarManager = new GraphAreaToolbarManager(workarea);
