@@ -88,26 +88,41 @@ public interface Tool3lgmChangeListener {
 
     /** alle die Modelle darstellen */
     public default void model_change_model_opened(final GraphDocument source) {
+        model_change_changed(source);
     }
 
     /** alle die Modelle darstellen */
     public default void model_change_model_closed(final GraphDocument source) {
+        model_change_changed(source);
     }
 
     /** alle die Modelle darstellen */
     public default void model_change_model_saved(final GraphDocument source) {
+        model_change_changed(source);
     }
 
     /** alle, die (Teil-)Modelle darstellen oder repräsentieren */
     public default void model_change_selected_szenario_changed(final GraphDocument source) {
+        model_change_changed(source);
     }
 
     /** alle, die (Teil-)Modelle darstellen oder repräsentieren */
     public default void model_change_szenario_added(final GraphDocument source) {
+        model_change_changed(source);
     }
 
     /** alle, die (Teil-)Modelle darstellen oder repräsentieren */
     public default void model_change_szenario_removed(final GraphDocument source) {
+        model_change_changed(source);
+    }
+
+    /**
+     * In der default-Implementierung ruft jede andere change-Funktion dieses Listeners einfach diese Funktion hier auf. Überschreibt man sie, fängt
+     * man automatisch jedes Ereignis als Listener ab.
+     *
+     * @param source das Teilmodell, für das das Change-Ereignis ausgelöst wurde
+     */
+    public default void model_change_changed(final GraphDocument source) {
     }
 
 }
