@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.consistency;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,6 +14,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
@@ -38,6 +41,7 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
  * Die Klasse prüft die Konsistenz eines Modells. Es werden alle Kardinalitäten überprüft und
@@ -45,7 +49,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  *
  * @author AXS created on 06.08.2008
  */
-public final class ConsistencyChecker implements LGMChangeListenerSimple {
+public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3lgmChangeListener, PropertyChangeListener {
 
     /** Checks the consistency of a model. This instance is used for the current selected Model */
     private static ConsistencyChecker consistencyChecker;
@@ -114,6 +118,8 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple {
         } else if (consistencyChecker.gdcoll != gdcoll) {
             consistencyChecker.changeContext(gdcoll);
         }
+        UserProperties.addPropertyChangeListener(consistencyChecker);
+        consistencyChecker.addAsToolChangeListener();
         return consistencyChecker;
     }
 
@@ -122,7 +128,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple {
      *
      * @param gscoll
      */
-    public void changeContext(final GDCollection gdcoll) {
+    private void changeContext(final GDCollection gdcoll) {
         if (this.gdcoll != gdcoll) {
             if (this.gdcoll != null) {
                 this.gdcoll.removeClosedTransactionsListener(this);
@@ -227,7 +233,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple {
     /**
      * Aktualisiert die Fehlertabelle
      */
-    public void updateErrorTable() {
+    private void updateErrorTable() {
         if (tableGenerator == null) {
             return;
         }
@@ -476,6 +482,16 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple {
             ElementPropertyDialog dialog = error.getModelElement().getPropertyDialog();
             dialog.selectTab(PropertyDialogUserFieldPanel.class);
             dialog.showDialog();
+        }
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (!UserProperties.BooleanProperty.OPTION_CHECK_CONSISTENCY.is()) {
+            //die statische Instanz überall als Listener deregistrieren
+            changeContext(null);
+            removeAsToolChangeListener();
+            UserProperties.removePropertyChangeListener(this);
         }
     }
 }

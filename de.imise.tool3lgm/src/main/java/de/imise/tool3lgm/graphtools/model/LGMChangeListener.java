@@ -139,7 +139,7 @@ public interface LGMChangeListener {
          */
         protected void deliverEvent(final List<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem, final boolean deliverStatic) {
             //das hier muss sein, weil es vorkommen kann, dass sich bei deliverEvent(l, source, last_elem); der aktuelle Listener aus der Listener-Liste löscht
-            //eine andere VAriante wäre, die Liste vorher zu clonen und auf dem Clone zu iterieren
+            //eine andere Variante wäre, die Liste vorher zu clonen und auf dem Clone zu iterieren
             LGMChangeListener lastListener = null;
             for (int i = 0; i < listeners.size();) {
                 LGMChangeListener l = listeners.get(i);

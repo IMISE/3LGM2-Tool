@@ -164,9 +164,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
             }
             workarea.add(verticalSplitPane, BorderLayout.CENTER);
             horizontalSplitPane = null;
-            // falls vorher schonmal die Konsistenzprüfung eingeschaltet war -> Listener zur
-            // Tabellenaktualisierung wieder entfernen
-            consistencyChecker.changeContext(null);
         } else {
             if (horizontalSplitPane == null) {
                 horizontalSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, verticalSplitPane, new JScrollPane(consistencyChecker.getErrorTable()));
@@ -175,7 +172,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
                 horizontalSplitPane.setDividerLocation(workarea.getHeight() / 4 * 3);
                 workarea.add(horizontalSplitPane, BorderLayout.CENTER);
             }
-            consistencyChecker.changeContext(gdcoll);
         }
         revalidate();
         repaint();
@@ -311,11 +307,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         //Teilmodell-Tabs immer diese Funktion hier aufgerufen.
         //Es kann auch null sein, wenn das letzte Modell geschlossen wurde
         if (doc == null) {
-            boolean isCheckConsistency = setCheckConsistencyState();
-            if (isCheckConsistency) {
-                ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
-                consistencyChecker.changeContext(null);
-            }
             return;
         }
 
