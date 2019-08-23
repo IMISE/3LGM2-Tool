@@ -6,6 +6,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_MODEL_BROWSER_SHOW;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_TEMPLATE_BROWSER_SHOW;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -34,6 +35,7 @@ import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
+import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserPanel;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
@@ -55,11 +57,17 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     /** splitted pane with modelBrowserPanel on the left and desktop on the right */
     private final JSplitPane leftSplitPane;
 
+    /** splitted pane with desktop on the left and TemplateBrowserPanel on the right */
+    private JSplitPane rightSplitPane;
+
     /** splitted pane with modelBrowserPanel and the graph on the top and the error table bottom */
     private JSplitPane bottomSplitPane;
 
     /** panel to hold one or more modelBrowsers */
     private final ModelBrowserPanel modelBrowserPanel;
+
+    /** panel to hold one or more modelBrowsers */
+    private TemplateBrowserPanel templateBrowserPanel;
 
     /** contain all windows of opened documents (JDesktopPane is a container used to create a multiple-document interface or a virtual desktop) */
     private final JDesktopPane desktop;
@@ -68,7 +76,10 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     private AbstractInternalFrame activeFrame = null;
 
     /** Position of divider betweeen the tree and the graph view in pixel from the left side */
-    private int dividerLocation = getToolkit().getScreenSize().width / 5;
+    private int leftDividerLocation = getToolkit().getScreenSize().width / 5;
+
+    /** Position of divider betweeen the tree and the graph view in pixel from the left side */
+    private int rightDividerLocation = getToolkit().getScreenSize().width - leftDividerLocation;
 
     /**
      * Diese Variable wird in <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht,
@@ -91,14 +102,14 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktopscroll);
         leftSplitPane.setOneTouchExpandable(true);
         leftSplitPane.setDividerSize(10);
-        leftSplitPane.setDividerLocation(dividerLocation);
+        leftSplitPane.setDividerLocation(leftDividerLocation);
 
         // Direkthilfe für die einzelnen Baukastenteile
         CSH.setHelpIDString(modelBrowserPanel, "uebersicht_modellbrowser");
-        setCheckConsistencyState();
+        checkConsistencyTableVisibility();
+        checkTemplateBrowserVisibility();
 
         setLayout(new BorderLayout());
-        add(mainFrameToolbar, BorderLayout.NORTH);
         add(workarea, BorderLayout.CENTER);
         //add(new StatusBar(), BorderLayout.SOUTH);
 
@@ -128,9 +139,11 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (OPTION_CHECK_CONSISTENCY.isChanged(evt)) {
-            setCheckConsistencyState();
+            checkConsistencyTableVisibility();
+        } else if (OPTION_TEMPLATE_BROWSER_SHOW.isChanged(evt)) {
+            checkTemplateBrowserVisibility();
         } else if (OPTION_MODEL_BROWSER_SHOW.isChanged(evt)) {
-            showModelBrowser();
+            checkModelBrowserVisibility();
         } else if (OPTION_SHOW_PAINTING_TOOLBAR.isChanged(evt)) {
             toolbarManager.setToolBarVisibility();
         } else if (OPTION_SHOW_STANDARD_TOOLBAR.isChanged(evt)) {
@@ -146,26 +159,22 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      *
      * @return <code>true</code>, wenn dei Konsistenzprüfung durchgeführt und angezeigt wurde
      */
-    private boolean setCheckConsistencyState() {
-        boolean state = OPTION_CHECK_CONSISTENCY.is();
-        GDCollection gdcoll = Static.getSelectedGDCollection();
-        if (gdcoll == null) {
-            state = false;
-        }
+    private void checkConsistencyTableVisibility() {
+        boolean isCheckConsistency = OPTION_CHECK_CONSISTENCY.is() && Static.getSelectedGDCollection() != null;
         ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
-        if (!state) {
+        JSplitPane topComponent = rightSplitPane != null ? rightSplitPane : leftSplitPane;
+        if (!isCheckConsistency) {
             consistencyChecker.resetConsistencyDefinition();
-            if (leftSplitPane.getParent() == workarea) {
-                return state;
+            if (topComponent.getParent() == workarea) {
+                return;
             }
             if (bottomSplitPane != null) {
                 workarea.remove(bottomSplitPane);
             }
-            workarea.add(leftSplitPane, BorderLayout.CENTER);
-            bottomSplitPane = null;
+            workarea.add(topComponent, BorderLayout.CENTER);
         } else {
             if (bottomSplitPane == null) {
-                bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, leftSplitPane, new JScrollPane(consistencyChecker.getErrorTable()));
+                bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topComponent, new JScrollPane(consistencyChecker.getErrorTable()));
                 bottomSplitPane.setOneTouchExpandable(true);
                 bottomSplitPane.setDividerSize(10);
                 bottomSplitPane.setDividerLocation(workarea.getHeight() / 4 * 3);
@@ -174,16 +183,55 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         }
         revalidate();
         repaint();
-        return state;
+    }
+
+    /** (De-)Aktiviert den TemplateBrowser */
+    private final void checkTemplateBrowserVisibility() {
+        boolean isCheckConsistency = OPTION_CHECK_CONSISTENCY.is() && Static.getSelectedGDCollection() != null;
+        if (OPTION_TEMPLATE_BROWSER_SHOW.is()) {
+            if (rightSplitPane != null) {
+                return; //das Ding ist nur null, wenn der templateBroweser nicht angezeigt wird
+            }
+            if (templateBrowserPanel == null) {
+                templateBrowserPanel = new TemplateBrowserPanel();
+            }
+            rightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSplitPane, templateBrowserPanel);
+            rightSplitPane.setOneTouchExpandable(true);
+            rightSplitPane.setDividerSize(10);
+            rightSplitPane.setDividerLocation(rightDividerLocation);
+            if (!isCheckConsistency) {
+                workarea.add(rightSplitPane, BorderLayout.CENTER);
+            } else {
+                int dividerLocation = bottomSplitPane.getDividerLocation();
+                bottomSplitPane.setTopComponent(rightSplitPane);
+                bottomSplitPane.setDividerLocation(dividerLocation);
+            }
+        } else {
+            if (rightSplitPane == null) {
+                return;
+            }
+            rightDividerLocation = rightSplitPane.getDividerLocation();
+            workarea.remove(rightSplitPane);
+            if (!isCheckConsistency) {
+                workarea.add(leftSplitPane, BorderLayout.CENTER);
+            } else {
+                int dividerLocation = bottomSplitPane.getDividerLocation();
+                bottomSplitPane.setTopComponent(leftSplitPane);
+                bottomSplitPane.setDividerLocation(dividerLocation);
+            }
+            rightSplitPane = null;
+        }
+        revalidate();
+        repaint();
     }
 
     /** (De-)Aktiviert den ModelBrowser */
-    private final void showModelBrowser() {
+    private final void checkModelBrowserVisibility() {
         if (OPTION_MODEL_BROWSER_SHOW.is()) {
             leftSplitPane.setLeftComponent(modelBrowserPanel);
-            leftSplitPane.setDividerLocation(dividerLocation);
+            leftSplitPane.setDividerLocation(leftDividerLocation);
         } else {
-            dividerLocation = leftSplitPane.getDividerLocation();
+            leftDividerLocation = leftSplitPane.getDividerLocation();
             leftSplitPane.remove(leftSplitPane.getLeftComponent());
         }
         revalidate();
@@ -352,7 +400,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         //beim nächsten Konextwechsel auch das nach Vorne holen des grafischen Views wieder einschalten
         this.activateGraphView = true;
 
-        setCheckConsistencyState();
+        checkConsistencyTableVisibility();
     }
 
     /**
