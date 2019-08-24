@@ -388,9 +388,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         List<ElementContainer> searchSet = doc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true);
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
         if (doc != mainDoc) {
-            MetaModel metaModel = doc.getMetaModel();
             for (ElementContainer ec : mainDoc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true)) {
-                if (metaModel.isUnique(ec.getElement().getClass())) {
+                if (ec.isUnique()) {
                     Alphabetical.insert(searchSet, ec);
                 }
             }

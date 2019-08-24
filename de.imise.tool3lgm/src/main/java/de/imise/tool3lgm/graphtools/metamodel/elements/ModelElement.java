@@ -1885,10 +1885,16 @@ public abstract class ModelElement extends UserFieldTarget {
     }
 
     /**
-     * Ueberprueft, ob der Node zur Menge der UNIQUE_KNOTS gehoert, ob er also ein Node ist, der im gesamten Modell nur einmal vorkommt
+     * Checks if the type of this element has only one {@link ElementContainer} in the whole model.
+     *
+     * @return <code>true</code> if this element is unique (only 1 element container in the whole model and no graphical representation for this
+     *         element) otherwise <code>false</code>
+     * @see MetaModel#isUnique(Class, boolean)
      */
     public boolean isUnique() {
-        return metaModel.isUnique(getClass());
+        GDCollection gdcoll = getCollection();
+        boolean memberOfTemplateModel = gdcoll != null && gdcoll.isTemplateModel();
+        return metaModel.isUnique(getClass(), memberOfTemplateModel);
     }
 
     /**

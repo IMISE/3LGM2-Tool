@@ -167,6 +167,12 @@ public final class GDCollection extends UserFieldTarget {
     private LGMGraphDocument doc;
 
     /**
+     * If <code>true</code> this model is interpreted as template model. The consequence is that there are no unique elements in this model. This
+     * implies that not any type of elements is unique and so no elements are inserted in every submodel automatically.
+     */
+    private final boolean templateModel;
+
+    /**
      * Alle {@link LGMChangeListener}, die immer benachrichtigt werden - egal ob eine Transaktion durch einen Dialog offen ist oder nicht.
      */
     private final List<LGMChangeListener> allListener = new ArrayList<>();
@@ -236,8 +242,16 @@ public final class GDCollection extends UserFieldTarget {
      *
      */
     public GDCollection() {
+        this(false);
+    }
+
+    /**
+     * @param templateModel
+     */
+    public GDCollection(final boolean templateModel) {
         fileHandler = new GDCollectionFileHandler(this);
         imExportHandler = new GDCollectionImExportHandler(this);
+        this.templateModel = templateModel;
         //Standard-Userfield-Definition laden
     }
 
@@ -245,7 +259,15 @@ public final class GDCollection extends UserFieldTarget {
      * @param metaModelContext
      */
     public GDCollection(@Nonnull final MetaModelContext metaModelContext) {
-        this();
+        this(metaModelContext, false);
+    }
+
+    /**
+     * @param metaModelContext
+     * @param templateModel
+     */
+    public GDCollection(@Nonnull final MetaModelContext metaModelContext, final boolean templateModel) {
+        this(templateModel);
         setMetaModelContext(metaModelContext);
     }
 
@@ -267,6 +289,17 @@ public final class GDCollection extends UserFieldTarget {
     /** Liefert das MetaModel, auf dem dieses Modell basiert */
     public MetaModel getMetaModel() {
         return metaModel;
+    }
+
+    /**
+     * If <code>true</code> this model is a template model. The consequence is that there are no unique elements in this model. This implies that not
+     * any type of elements is unique and so no elements are inserted in every submodel automatically.
+     *
+     * @return
+     *         <code>true</code> if this model is a template model
+     */
+    public boolean isTemplateModel() {
+        return templateModel;
     }
 
     /**

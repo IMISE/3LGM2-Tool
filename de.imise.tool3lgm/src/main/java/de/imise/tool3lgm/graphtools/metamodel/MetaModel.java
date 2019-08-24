@@ -45,6 +45,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SubordinationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
@@ -53,6 +56,7 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.ReflectionUtils;
@@ -1220,13 +1224,29 @@ public final class MetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebenen Klasse eine Knotenklassen ist, die in jedem Teilmodell vorkommt, also nicht in jedem Teilmodell
-     * einen eigenen Container besitzt.
+     * Returns <code>true</code>, if the parameter {@code elementClass} is a node class that should be insertet in every submodel automatically or is
+     * an edge class that connects 2 unique node classes. Elements of unique classes have only one {@link ElementContainer} in the main
+     * {@link GraphDocument} of the {@link GDCollection} that is presented in every submodel ({@link Szenario}) and this elements have no graphical
+     * representation. Not unique elements have always a graphical representation and are only inserted in a submodel if the user inserts them
+     * manually.
+     *
+     * @param elementClass
+     *            the element class that should be checked as unique
+     * @param template
+     *            If <code>true</code> the function always return <code>false</code> - so every element type is not unique. This is necessary for
+     *            template models so the parameters name is template.
+     * @return
+     *         <code>true</code> if the element type is unique (only 1 element container in the whole model and no graphical representation for this
+     *         element) otherwise <code>false</code>
      */
-    public final boolean isUnique(final Class<?> elementClass) {
+    public final boolean isUnique(final Class<?> elementClass, final boolean template) {
+        //in template models every element type is not unique
+        if (template) {
+            return false;
+        }
         if (Edge.class.isAssignableFrom(elementClass)) {
             Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
-            return isUnique(Edge.getStartClass(edgeClass)) || isUnique(Edge.getEndClass(edgeClass));
+            return isUnique(Edge.getStartClass(edgeClass), template) || isUnique(Edge.getEndClass(edgeClass), template);
         }
         return uniqueNodes.contains(elementClass);
     }

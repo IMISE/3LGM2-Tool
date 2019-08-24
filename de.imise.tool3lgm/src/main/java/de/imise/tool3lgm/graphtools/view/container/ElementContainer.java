@@ -195,6 +195,18 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
+     * Checks if the type of the {@link ModelElement} of this container has only one container in the whole model.
+     *
+     * @return <code>true</code> if this element is unique (only 1 element container in the whole model and so no graphical representation for this
+     *         element) otherwise <code>false</code>
+     * @see ModelElement#isUnique(Class, boolean)
+     * @see MetaModel#isUnique(Class, boolean)
+     */
+    public boolean isUnique() {
+        return me != null && me.isUnique();
+    }
+
+    /**
      * Überträgt die Layout-Eigenschaften dieses Containes auf den übergebenen
      *
      * @param targetContainer

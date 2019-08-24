@@ -43,10 +43,11 @@ public class GraphDocumentHandler {
         }
         //Problem: Suche nach Elemenklasse inkl. Unterklassen, wobei Unterklassen unique sein können -> im doc und im mainDoc suchen
         MetaModel metaModel = doc.getMetaModel();
+        boolean templateModel = doc.isTemplateModel();
         if (!includeSubClasses || clazz == Bendpoint.class) {
             List<Class<? extends ModelElement>> searchClasses = new ArrayList<>();
             searchClasses.add(clazz);
-            return getModelItemsForClasses(metaModel.isUnique(clazz) ? doc.getCollection().getMainGraphDocument() : doc, searchClasses, absolutePartsOnly, alphabetical);
+            return getModelItemsForClasses(metaModel.isUnique(clazz, templateModel) ? doc.getCollection().getMainGraphDocument() : doc, searchClasses, absolutePartsOnly, alphabetical);
             //          return getModelItemsForSingleClass(clazz, absolutePartsOnly, alphabetical);
         }
         List<ModelElement> objects = null;
@@ -57,7 +58,7 @@ public class GraphDocumentHandler {
                 continue;
             }
             if (clazz.isAssignableFrom(elementClass)) {
-                if (metaModel.isUnique(elementClass)) {
+                if (metaModel.isUnique(elementClass, templateModel)) {
                     searchClassesUnique.add(elementClass);
                 } else {
                     searchClassesNotUnique.add(elementClass);

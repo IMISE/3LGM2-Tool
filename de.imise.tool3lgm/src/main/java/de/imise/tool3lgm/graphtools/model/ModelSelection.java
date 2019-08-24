@@ -567,7 +567,7 @@ public class ModelSelection implements Set<ElementContainer> {
      */
     public boolean isSelectedOnlyUniqueNodes() {
         for (ElementContainer ec : selectedRealNodeContainer) {
-            if (!metaModel.isUnique(ec.getElement().getClass())) {
+            if (!ec.isUnique()) {
                 return false;
             }
         }
