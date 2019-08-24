@@ -556,9 +556,4 @@ public abstract class Edge extends ModelElement {
         return false;
     }
 
-    @Override
-    protected final int getMaxContainerCount() {
-        return isUnique() ? 1 : Integer.MAX_VALUE;
-    }
-
 }

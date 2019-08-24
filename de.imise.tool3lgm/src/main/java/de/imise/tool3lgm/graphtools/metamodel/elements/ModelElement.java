@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -121,7 +120,7 @@ public abstract class ModelElement extends UserFieldTarget {
         if (me.containerTable == null) {
             //bei allen Elementen, die sowieso nie mehr als 3 Container haben können (uniques und Knickpunkte) wird
             //eine optimierte Map für die Container initialisiert
-            me.containerTable = me.getMaxContainerCount() > 3 ? new HashMap<>(3, 1) : new Flat3Map<>();
+            me.containerTable = new Flat3Map<>();
         }
     }
 
@@ -229,8 +228,6 @@ public abstract class ModelElement extends UserFieldTarget {
     public final Collection<ElementContainer> getElementContainers() {
         return containerTable.values();
     }
-
-    protected abstract int getMaxContainerCount();
 
     /**
      *

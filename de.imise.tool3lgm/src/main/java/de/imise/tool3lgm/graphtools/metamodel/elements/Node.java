@@ -19,9 +19,4 @@ public abstract class Node extends ModelElement {
         return new NodeContainer(this, doc);
     }
 
-    @Override
-    protected int getMaxContainerCount() {
-        return isUnique() ? 1 : Integer.MAX_VALUE;
-    }
-
 }
