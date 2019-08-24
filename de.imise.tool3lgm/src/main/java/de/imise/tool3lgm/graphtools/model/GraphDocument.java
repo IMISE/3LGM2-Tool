@@ -214,7 +214,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     // Verwaltung globaler Modelldaten --- Anfang ---
 
-    /** Liefert das zu Grunde liegende MetaModel */
+    /**
+     * @return the {@link MetaModel} that is the basis for this (sub-)model.
+     */
     public MetaModel getMetaModel() {
         return metaModel;
     }

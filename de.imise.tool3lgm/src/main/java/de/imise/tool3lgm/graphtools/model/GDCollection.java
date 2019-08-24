@@ -120,21 +120,23 @@ import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
 /**
- * Repräsentiert ein Gesamtmodell. GDColllection = GrapDocument-Sammlung - also Sammlung aller Teilmodelle, die als Gesamtmodell gesehen werden.
+ * Represents an entire model. GDCollection = {@link GraphDocument} collection - so a collection of all sub-models. A sub-model is a selection of
+ * model elements with a seperate graph view.
  *
  * @author thomas, AXS
  */
 public final class GDCollection extends UserFieldTarget {
 
-    /** Das Metamodel, auf dem dieses Modell basiert */
+    /** Holds the {@link MetaModel} that is the basis for this model and the corresponding resource bundle */
     private MetaModelContext metaModelContext;
 
-    /** Das Metamodel des Modells */
+    /** Holds all concepts (types of model elements) and the relations between this concepts */
     private MetaModel metaModel;
 
-    /** Undo- und Redomanager */
+    /** The undo-redo-manager */
     protected TransactionManager tman = new TransactionManager();
 
+    /** The data structure to store all model changing transactions for the undo-redo-manager */
     private final TransactionStackTable transStackTable = new TransactionStackTable();
 
     //	/*{
@@ -271,6 +273,12 @@ public final class GDCollection extends UserFieldTarget {
         setMetaModelContext(metaModelContext);
     }
 
+    /**
+     * Sets the {@link MetaModelContext} for this model.
+     *
+     * @param metaModelContext
+     *            the context that contains the metamodel of this model and the corresponding resource bundle
+     */
     public void setMetaModelContext(final MetaModelContext metaModelContext) {
         this.metaModelContext = metaModelContext;
         metaModel = metaModelContext.getMetaModel();
@@ -281,12 +289,18 @@ public final class GDCollection extends UserFieldTarget {
         UserfieldResourceHandler.loadDefaultUserfieldDefinition(this);
     }
 
-    /** Liefert den MetaModelContext, auf dem dieses Modell basiert */
+    /**
+     * @return
+     *         the handler (initializer) for the metamodel of this model and the metamodel corresponding resource bundle
+     */
     public MetaModelContext getMetaModelContext() {
         return metaModelContext;
     }
 
-    /** Liefert das MetaModel, auf dem dieses Modell basiert */
+    /**
+     * @return
+     *         the metamodel that is the basis for this model
+     */
     public MetaModel getMetaModel() {
         return metaModel;
     }
