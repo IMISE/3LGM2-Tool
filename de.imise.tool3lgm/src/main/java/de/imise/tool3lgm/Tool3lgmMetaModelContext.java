@@ -1,10 +1,16 @@
 package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
 
 import com.google.common.base.Strings;
 
@@ -14,10 +20,9 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition.DefaultMetaMod
 import de.imise.tool3lgm.graphtools.metamodel.RegularMetaModelDefinition;
 import de.imise.tool3lgm.imexport.ImportMetaModelDefinition;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
-import de.imise.util.NamedObjectContainer;
 import de.imise.util.PluginUtils;
 import de.imise.util.ReflectionUtils;
-import de.imise.util.pair.Pair;
+import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
@@ -145,31 +150,51 @@ public final class Tool3lgmMetaModelContext {
     }
 
     public static final MetaModelContext chooseMetaModel() {
-        int optionsCount = REGULAR_METAMODEL_CONTEXTS.size();
-        MetaModelContext lastMetaModelContext = getUserpropertiesStoredMetaModelContext();
+        AlphabeticalComboBox chooseMetaModelComboBox = getChooseMetaModelComboBox();
+        JCheckBox expertModeCreateAsTemplateCheckBox = OPTION_ENABLE_EXPERT_MODE.is() ? new JCheckBox("Template Modell erzeugen (auslagern!!!)", false) : null;
+        JCheckBox showThisDialogAgainCheckBox = new JCheckBox(getResString("show_this_dialog_at_start"), OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.is());
+        MultipleOptionPane optionPane = new MultipleOptionPane();
+        if (expertModeCreateAsTemplateCheckBox == null) {
+            Object msg[] = {
+                    chooseMetaModelComboBox, showThisDialogAgainCheckBox
+            };
+            optionPane.setMessage(msg);
+        } else {
+            Object msg[] = {
+                    chooseMetaModelComboBox, expertModeCreateAsTemplateCheckBox, new JSeparator(), showThisDialogAgainCheckBox
+            };
+            optionPane.setMessage(msg);
+        }
+        optionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
+        optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
         String title = getResString("choose_meta_model_dialog_title");
-        String message = null;
-        List<NamedObjectContainer<MetaModelContext>> options = new ArrayList<>();
-        NamedObjectContainer<MetaModelContext> selectedOption = null;
-        for (int i = 0; i < optionsCount; i++) {
-            MetaModelContext metaModelContext = REGULAR_METAMODEL_CONTEXTS.get(i);
-            NamedObjectContainer<MetaModelContext> metaModelContextContainer = new NamedObjectContainer<>(metaModelContext, metaModelContext.getMetaModelDisplayName());
-            options.add(metaModelContextContainer);
-            if (i == 0 || lastMetaModelContext == metaModelContext) {
-                selectedOption = options.get(i);
+        JDialog dialog = optionPane.createDialog(Static.getMainFrame(), title);
+        dialog.setVisible(true);
+        int answer = optionPane.getAnswer();
+        if (answer == JOptionPane.OK_OPTION) {
+            OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.set(showThisDialogAgainCheckBox.isSelected());
+            MetaModelContext choosedMetaModelContext = (MetaModelContext) chooseMetaModelComboBox.getSelectedObject();
+            StringProperty.META_MODEL.set(choosedMetaModelContext.getMetaModelID());
+            return choosedMetaModelContext;
+        }
+        return null;
+    }
+
+    /**
+     * @return
+     */
+    private static AlphabeticalComboBox getChooseMetaModelComboBox() {
+        AlphabeticalComboBox comboBox = new AlphabeticalComboBox();
+        MetaModelContext selectedOption = null;
+        MetaModelContext lastMetaModelContext = getUserpropertiesStoredMetaModelContext();
+        for (MetaModelContext metaModelContext : REGULAR_METAMODEL_CONTEXTS) {
+            comboBox.addItem(metaModelContext, metaModelContext.getMetaModelDisplayName());
+            if (selectedOption == null || lastMetaModelContext == metaModelContext) {
+                selectedOption = metaModelContext;
             }
         }
-        String showAgainQuestion = getResString("show_this_dialog_at_start");
-        boolean showAgainQuestionSelection = OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.is();
-        Pair<NamedObjectContainer<MetaModelContext>, Boolean> choosedMetaModelAnswer = MultipleOptionPane.showSingleSelectionOptionDialog(Static.getMainFrame(), title, message, options, selectedOption, showAgainQuestion, showAgainQuestionSelection);
-        if (choosedMetaModelAnswer == null) {
-            return null;
-        }
-        NamedObjectContainer<MetaModelContext> choosedMetaModelContextContainer = choosedMetaModelAnswer.getFirstItem();
-        MetaModelContext choosedMetaModelContext = choosedMetaModelContextContainer.getObject();
-        StringProperty.META_MODEL.set(choosedMetaModelContext.getMetaModelID());
-        OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.set(Boolean.TRUE.equals(choosedMetaModelAnswer.getSecondItem()));
-        return choosedMetaModelContext;
+        comboBox.setSelectedObject(selectedOption);
+        return comboBox;
     }
 
     /**
