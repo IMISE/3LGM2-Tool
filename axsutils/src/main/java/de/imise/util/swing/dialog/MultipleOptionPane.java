@@ -320,7 +320,7 @@ public class MultipleOptionPane extends JOptionPane {
      * @param options
      */
     public static final int showConfirmDialog(final Component parentComponent, final String title, final String message, final int options, final int messageType) {
-        JOptionPane optionPane = new MultipleOptionPane();
+        MultipleOptionPane optionPane = new MultipleOptionPane();
         Object msg[] = {
                 message
         };
@@ -329,13 +329,7 @@ public class MultipleOptionPane extends JOptionPane {
         optionPane.setOptionType(options);
         JDialog dialog = optionPane.createDialog(parentComponent, title);
         dialog.setVisible(true);
-        Object value = optionPane.getValue();
-        //Schließen übers Kreuz oder irgendwas unvorhergesehenes
-        if (value == null || !(value instanceof Integer)) {
-            return CANCEL_OPTION;
-        }
-        //Schließen über einen der Knöpfe
-        return ((Integer) value).intValue();
+        return optionPane.getAnswer();
     }
 
     @Override
@@ -349,4 +343,18 @@ public class MultipleOptionPane extends JOptionPane {
     public void setMaxCharactersPerLineCount(final int maxCharactersPerLineCount) {
         this.maxCharactersPerLineCount = maxCharactersPerLineCount;
     }
+
+    /**
+     * @return the pressed button as int value or {@link JOptionPane#CANCEL_OPTION} if the button is not clear
+     */
+    public int getAnswer() {
+        Object value = super.getValue();
+        //Schließen übers Kreuz oder irgendwas unvorhergesehenes
+        if (value == null || !(value instanceof Integer)) {
+            return CANCEL_OPTION;
+        }
+        //Schließen über einen der Knöpfe
+        return ((Integer) value).intValue();
+    }
+
 }
