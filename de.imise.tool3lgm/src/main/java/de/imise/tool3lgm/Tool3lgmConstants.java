@@ -86,6 +86,9 @@ public abstract class Tool3lgmConstants {
     /** Plugin Verzeichnis */
     public static final File PLUGIN_DIR = new File(APPLICATION_DIR, "Plugins");
 
+    /** Template-Verzeichnis */
+    public static final File TEMPLATE_DIR = new File(APPLICATION_DIR, "Templates");
+
     /**
      * Datei-Endung für große Icons.
      * <p>
