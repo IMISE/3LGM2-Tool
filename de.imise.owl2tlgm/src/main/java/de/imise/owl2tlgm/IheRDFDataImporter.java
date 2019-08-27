@@ -13,7 +13,7 @@ import de.imise.util.Sys;
  */
 public class IheRDFDataImporter extends RDFDataImporter {
 
-    public static final String TEST_FILE = "file:///Users/astruebi/Projekte/eclipse/IMISE/tool-3lgm2/de.imise.owl2tlgm/src/main/resources/de/imise/owl2tlgm/iheDomain_Ontology_straight-forward_v2.rdf";
+    public static final String TEST_FILE = "file://" + Tool3lgmConstants.TEMPLATE_DIR + "/IHE/iheDomain_Ontology_straight-forward_v2.rdf";
 
     /**
      * Da ObjectProperties u.U. genauso heißen, wie Knoten-Klassen, sollte man mit diesem Namenszusatz bei 3LGM2-Kantenklassen für Eindeutigkeit
