@@ -14,6 +14,7 @@ import javax.swing.JSeparator;
 
 import com.google.common.base.Strings;
 
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition.DefaultMetaModelDefinitionAdapter;
@@ -86,20 +87,23 @@ public final class Tool3lgmMetaModelContext {
      *
      * @return gewählten MetaModelContext oder <code>null</code>, wenn im AuswahlDialog auf Abbrechen gdrückt wurde
      */
-    public static MetaModelContext getNewModelMetaModelContext() {
+    public static Tool3lgmModelType getNewModelType() {
         boolean showDialog = OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.is();
-        MetaModelContext metaModelContext = null;
+        Tool3lgmModelType modelType = null;
         if (!showDialog) {
-            metaModelContext = getUserpropertiesStoredMetaModelContext();
+            modelType = getUserpropertiesStoredModelType();
         }
-        if (metaModelContext == null) {
+        if (modelType == null) {
             if (showDialog) {
-                metaModelContext = chooseMetaModel();
+                modelType = chooseModelType();
             } else {
-                metaModelContext = REGULAR_METAMODEL_CONTEXTS.get(0); // es war gewünscht worden, dass beim initialen Start das originale Metamodell ausgewählt ist. showDialog ist initial false
+                // es war gewünscht worden, dass beim initialen Start das originale Metamodell ausgewählt ist. showDialog ist initial false
+                MetaModelContext metaModelContext = REGULAR_METAMODEL_CONTEXTS.get(0);
+                ModelCategory modelCategory = ModelCategory.REGULAR;
+                modelType = new Tool3lgmModelType(metaModelContext, modelCategory);
             }
         }
-        return metaModelContext;
+        return modelType;
     }
 
     /**
@@ -133,25 +137,40 @@ public final class Tool3lgmMetaModelContext {
     }
 
     /**
-     * Liefert anhand der ID des in den UserProperties gespeicherten MetaModels den zugehörigen Kontext.
+     * Liefert anhand der ID des in den UserProperties gespeicherten MetaModels den zugehörigen Kontext und die {@link ModelCategory}
      *
      * @return
      */
-    private static final MetaModelContext getUserpropertiesStoredMetaModelContext() {
+    private static final Tool3lgmModelType getUserpropertiesStoredModelType() {
         String storedMetaModelID = StringProperty.META_MODEL.get();
+        MetaModelContext metaModelContext = null;
         if (!Strings.isNullOrEmpty(storedMetaModelID)) {
-            for (MetaModelContext metaModelContext : REGULAR_METAMODEL_CONTEXTS) {
-                if (metaModelContext.getMetaModelID().equals(storedMetaModelID)) {
-                    return metaModelContext;
+            for (MetaModelContext context : REGULAR_METAMODEL_CONTEXTS) {
+                if (context.getMetaModelID().equals(storedMetaModelID)) {
+                    metaModelContext = context;
+                    break;
                 }
             }
         }
-        return null;
+        if (metaModelContext == null) {
+            return null;
+        }
+        String storedModelCategory = StringProperty.MODEL_CATEGORY.get();
+        ModelCategory modelCategory = null;
+        if (!Strings.isNullOrEmpty(storedModelCategory)) {
+            for (ModelCategory category : ModelCategory.values()) {
+                if (category.name().equals(storedModelCategory)) {
+                    modelCategory = category;
+                    break;
+                }
+            }
+        }
+        return new Tool3lgmModelType(metaModelContext, modelCategory);
     }
 
-    public static final MetaModelContext chooseMetaModel() {
+    public static final Tool3lgmModelType chooseModelType() {
         AlphabeticalComboBox chooseMetaModelComboBox = getChooseMetaModelComboBox();
-        JCheckBox expertModeCreateAsTemplateCheckBox = OPTION_ENABLE_EXPERT_MODE.is() ? new JCheckBox("Template Modell erzeugen (auslagern!!!)", false) : null;
+        JCheckBox expertModeCreateAsTemplateCheckBox = OPTION_ENABLE_EXPERT_MODE.is() ? new JCheckBox(getResString("choose_meta_model_dialog_create_template_model"), false) : null;
         JCheckBox showThisDialogAgainCheckBox = new JCheckBox(getResString("show_this_dialog_at_start"), OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.is());
         MultipleOptionPane optionPane = new MultipleOptionPane();
         if (expertModeCreateAsTemplateCheckBox == null) {
@@ -170,14 +189,17 @@ public final class Tool3lgmMetaModelContext {
         String title = getResString("choose_meta_model_dialog_title");
         JDialog dialog = optionPane.createDialog(Static.getMainFrame(), title);
         dialog.setVisible(true);
+        Tool3lgmModelType modelType = null;
         int answer = optionPane.getAnswer();
         if (answer == JOptionPane.OK_OPTION) {
             OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.set(showThisDialogAgainCheckBox.isSelected());
             MetaModelContext choosedMetaModelContext = (MetaModelContext) chooseMetaModelComboBox.getSelectedObject();
             StringProperty.META_MODEL.set(choosedMetaModelContext.getMetaModelID());
-            return choosedMetaModelContext;
+            ModelCategory modelCategory = expertModeCreateAsTemplateCheckBox != null && expertModeCreateAsTemplateCheckBox.isSelected() ? ModelCategory.TEMPLATE : ModelCategory.REGULAR;
+            modelType = new Tool3lgmModelType(choosedMetaModelContext, modelCategory);
+            //            return new Pair<>(choosedMetaModelContext, );
         }
-        return null;
+        return modelType;
     }
 
     /**
@@ -186,7 +208,8 @@ public final class Tool3lgmMetaModelContext {
     private static AlphabeticalComboBox getChooseMetaModelComboBox() {
         AlphabeticalComboBox comboBox = new AlphabeticalComboBox();
         MetaModelContext selectedOption = null;
-        MetaModelContext lastMetaModelContext = getUserpropertiesStoredMetaModelContext();
+        Tool3lgmModelType userpropertiesStoredModelType = getUserpropertiesStoredModelType();
+        MetaModelContext lastMetaModelContext = userpropertiesStoredModelType.getMetaModelContext();
         for (MetaModelContext metaModelContext : REGULAR_METAMODEL_CONTEXTS) {
             comboBox.addItem(metaModelContext, metaModelContext.getMetaModelDisplayName());
             if (selectedOption == null || lastMetaModelContext == metaModelContext) {

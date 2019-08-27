@@ -47,6 +47,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
@@ -222,17 +223,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * If <code>true</code> the corresponding {@link GDCollection} is a template model. The consequence is that there are no unique elements in this
-     * model. This implies that not
-     * any type of elements is unique and so no elements are inserted in every submodel automatically.
-     *
-     * @return
-     *         <code>true</code> if this submodel is a part of a template model
-     * @see
-     *      GDCollection#isTemplateModel()
+     * @return the model category of the {@link GDCollection}
      */
-    public boolean isTemplateModel() {
-        return gdcoll.isTemplateModel();
+    public ModelCategory getModelCategory() {
+        return gdcoll.getModelCategory();
     }
 
     /**
@@ -4349,7 +4343,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             for (ElementContainer ec : elements) {
                 ModelElement me = ec.getElement();
                 Class<? extends ModelElement> elementClass = me.getClass();
-                if (!(me instanceof Node) || szen.isMyElement(me) || metaModel.isUnique(elementClass, isTemplateModel())) {
+                if (!(me instanceof Node) || szen.isMyElement(me) || metaModel.isUnique(elementClass, getModelCategory())) {
                     continue;
                 }
                 if (metaModel.isSlaveType(elementClass)) {
@@ -4638,8 +4632,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         //		long start = System.currentTimeMillis();
 
-        boolean templateModel = isTemplateModel();
-        GraphDocument document = metaModel.isUnique(clazz, templateModel) ? getCollection().getMainGraphDocument() : this;
+        ModelCategory modelCategory = getModelCategory();
+        GraphDocument document = metaModel.isUnique(clazz, modelCategory) ? getCollection().getMainGraphDocument() : this;
         List<ElementContainer> objects = new ArrayList<>();
         //Ebene der gesuchten Elementklasse bestimmen
         int layer = metaModel.layerFor(clazz);

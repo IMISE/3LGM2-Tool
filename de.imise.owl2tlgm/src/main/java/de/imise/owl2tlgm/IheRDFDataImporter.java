@@ -1,5 +1,7 @@
 package de.imise.owl2tlgm;
 
+import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverter;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -36,7 +38,7 @@ public class IheRDFDataImporter extends RDFDataImporter {
         for (int i = 0; i < SINGLE_IMPORT_FULL_ROUNDS; i++) {
             long start2 = System.currentTimeMillis();
             for (int j = 0; j < SINGLE_IMPORTS; j++) {
-                importer.startImport();
+                importer.startImport(ModelCategory.REGULAR);
             }
             long end2 = System.currentTimeMillis();
             System.err.println(end2 - start2);

@@ -9,6 +9,8 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
+import de.imise.tool3lgm.Tool3lgmModelType;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -43,10 +45,12 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
     /**
      * Importiert alle Daten aus einer Datenquelle ins übergebene Modell.
      *
+     * @param modelCategory
      * @return <code>true</code>, wenn der Import erfolgreich war
      */
-    public final boolean startImport() {
-        gdcoll = createModel(getImportMetaModelDefinitionClass());
+    public final boolean startImport(final ModelCategory modelCategory) {
+        Class<? extends MetaModelDefinition> importMetaModelDefinitionClass = getImportMetaModelDefinitionClass();
+        gdcoll = createModel(importMetaModelDefinitionClass, modelCategory);
         gdcoll.setBulkMode(true);
         return importData();
     }
@@ -67,12 +71,15 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      * Initialisiert ein Modell ({@link GDCollection}) mit dem übergebenen Metamodel. Diese Funktion könnte woanders hin, wo evtl auch der
      * Tool3lgmMetaModelContext abgefragt wird, damit das Metamodel nicht doppelt initialisiert wird.
      *
-     * @param Definitionsklasse des Metamodells des zu erzeugenden Modells
+     * @param metaModelDefinitionClass
+     *            Definitionsklasse des Metamodells des zu erzeugenden Modells
+     * @param modelCategory
      * @return Leeres Modell mit ImportMetaModel
      */
-    public static final GDCollection createModel(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+    public static final GDCollection createModel(final Class<? extends MetaModelDefinition> metaModelDefinitionClass, final ModelCategory modelCategory) {
         MetaModelContext metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(metaModelDefinitionClass);
-        GDCollection gdcoll = new GDCollection(metaModelContext);
+        Tool3lgmModelType modelType = new Tool3lgmModelType(metaModelContext, modelCategory);
+        GDCollection gdcoll = new GDCollection(modelType);
         return gdcoll;
     }
 

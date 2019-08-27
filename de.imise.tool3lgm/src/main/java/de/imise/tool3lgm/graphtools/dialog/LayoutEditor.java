@@ -24,6 +24,9 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 
+import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.Tool3lgmModelType;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
@@ -71,7 +74,9 @@ public class LayoutEditor extends JDialog implements ActionListener {
         setLocationByPlatform(true);
         this.doc = doc;
         GDCollection gdcoll = doc.getCollection();
-        gdcoll = new GDCollection(gdcoll.getMetaModelContext());
+        MetaModelContext metaModelContext = gdcoll.getMetaModelContext();
+        Tool3lgmModelType modelType = new Tool3lgmModelType(metaModelContext, ModelCategory.REGULAR);
+        gdcoll = new GDCollection(modelType);
         mydoc = new LGMGraphDocument(gdcoll);
         my_mapping = mydoc.getMapping();
         my_mapping.adapt(doc.getMapping());

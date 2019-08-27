@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.Tool3lgmModelType;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMetaPathsCreationDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -62,7 +64,10 @@ public class ModelConverter {
      */
     public static GDCollection convert(final ModelConverterDefinition modelConverterDefinition, final GDCollection sourceModel) {
         MetaModelContext targetMetaModelContext = modelConverterDefinition.getTargetMetaModelContext();
-        GDCollection targetModel = new GDCollection(targetMetaModelContext);
+        Tool3lgmModelType sourceModelType = sourceModel.getModelType();
+        ModelCategory modelCategory = sourceModelType.getModelCategory();
+        Tool3lgmModelType targetModelType = new Tool3lgmModelType(targetMetaModelContext, modelCategory); //das hier muss nicht immer richtig sein, aber beim Umstellen auf die ModelTypes statt nur MetaModelContexts war es erstmal richtig und zu aufwendig den TargetModelType auch noch parametrierbar zu machen. Daher werden hier jetzt erstmal nur gelcihartige Modelle ineinander umgewandelt.
+        GDCollection targetModel = new GDCollection(targetModelType);
         convert(modelConverterDefinition, sourceModel, targetModel);
         return targetModel;
     }

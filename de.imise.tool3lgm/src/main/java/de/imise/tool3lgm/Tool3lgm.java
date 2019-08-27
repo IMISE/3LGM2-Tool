@@ -157,11 +157,11 @@ public class Tool3lgm {
      * lädt ein 3LGM²-Dokument (legt die Teilmodell-Fenster an, aktualisiert das Fenster Menu und ModelBrowser)
      */
     public boolean createNewModel() {
-        MetaModelContext choosedMetaModelContext = Tool3lgmMetaModelContext.getNewModelMetaModelContext();
-        if (choosedMetaModelContext == null) {
+        Tool3lgmModelType choosedModelType = Tool3lgmMetaModelContext.getNewModelType();
+        if (choosedModelType == null) {
             return false;
         }
-        return openModel(null, choosedMetaModelContext);
+        return openModel(null, choosedModelType);
     }
 
     /**
@@ -218,10 +218,10 @@ public class Tool3lgm {
      *            MetaModelContext der zu öffnenden Datei oder des neu anzulegenden Modells
      * @return <code>true</code>, wenn die Datei geöffnet werden konnte oder ein neues Modell angelegt wurde
      */
-    private boolean openModel(final File file, final MetaModelContext metaModelContext) {
+    private boolean openModel(final File file, final Tool3lgmModelType modelType) {
         GDCollection gdcoll;
         if (file == null) {
-            gdcoll = new GDCollection(metaModelContext);
+            gdcoll = new GDCollection(modelType);
             gdcoll.createSzenario();
         } else {
             gdcoll = loadFile(file);

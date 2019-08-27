@@ -21,6 +21,8 @@ import org.xml.sax.XMLReader;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
+import de.imise.tool3lgm.Tool3lgmModelType;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -51,30 +53,38 @@ public class ToolXMLParser {
     private final GDCollection gdcoll;
 
     /** unterstützte XML und Datei Versionen (aktuellste Version steht im Array ganz hinten, also mit Index = length-1) */
-    private static String[] supportedXMLVersions = {
+    private static final String[] SUPPORTED_XML_VERSIONS = {
             "<?xml version='1.0' encoding='utf-8'?>", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
     };
 
-    private static String[] supportedFileVersions = {
-            "<!--Tool3lgmFile version='1.0'-->", //0
-            "<!--Tool3lgmFile version='1.1'-->", //1
-            "<!--Tool3lgmFile version='1.2'-->", //2
-            "<!--Tool3lgmFile version='2.0'-->", //3
-            "<!--Tool3lgmFile version='3.0'-->", //4
-            "<!--Tool3lgmFile version='3.1'-->", //5
-            "<!--Tool3lgmFile version='3.2'-->", //6
-            "<!--Tool3lgmFile version='3.3'-->", //7
-            "<!--Tool3lgmFile version='3.4'-->", //8
-            "<!--Tool3lgmFile version='3.5'-->", //9
-            "<!--Tool3lgmFile version='3.6'-->", //10
-            "<!--Tool3lgmFile version='3.7'-->", //11 -> nach Tool-Version 3.4.0.2 (Beta)
+    private static final String FILE_VERSION_LINE_START = "<!--Tool3lgmFile ";
+
+    /** Präfix vor der Angabe der Metamodell-Klasse in der Zeile der FileVersion */
+    private static final String FILE_VERSION_NUMBER_PREFIX = " version='";
+
+    /** Alle unterstützten FileVersions */
+    private static final String[] FILE_VERSION_SUPPORTED_NUMBERS = {
+            "1.0", //"<!--Tool3lgmFile version='1.0'-->", //0
+            "1.1", //"<!--Tool3lgmFile version='1.1'-->", //1
+            "1.2", //"<!--Tool3lgmFile version='1.2'-->", //2
+            "2.0", //"<!--Tool3lgmFile version='2.0'-->", //3
+            "3.0", //"<!--Tool3lgmFile version='3.0'-->", //4
+            "3.1", //"<!--Tool3lgmFile version='3.1'-->", //5
+            "3.2", //"<!--Tool3lgmFile version='3.2'-->", //6
+            "3.3", //"<!--Tool3lgmFile version='3.3'-->", //7
+            "3.4", //"<!--Tool3lgmFile version='3.4'-->", //8
+            "3.5", //"<!--Tool3lgmFile version='3.5'-->", //9
+            "3.6", //"<!--Tool3lgmFile version='3.6'-->", //10
+            "3.7", //"<!--Tool3lgmFile version='3.7'-->", //11 -> nach Tool-Version 3.4.0.2 (Beta)
     };
 
     /**
      * String der in den supportedFileVersions-String gebaut wird, um das Metamodell der Dateiversion zu kennzeichnen. Hinter das Hochkomma
      * am Ende kommt der SimpleClassName der Metamodel-Klasse und danach noch ein Hochkomma.
      */
-    private static final String VERSION_STRING_METAMODEL_CLASS = " MetaModel=''";
+    private static final String FILE_VERSION_METAMODEL_CLASS_PREFIX = " metamodel='";
+
+    private static final String FILE_VERSION_MODEL_CATEGORY_PREFIX = " category='";
 
     private final SAXParser parser;
 
@@ -96,7 +106,8 @@ public class ToolXMLParser {
         parser.getXMLReader().setDTDHandler(new ToolDTDHandler());
 
         version = extractVersionAndMetaModel(parseStream);
-        gdcoll.setMetaModelContext(version.metaModelContext);
+        Tool3lgmModelType modelType = new Tool3lgmModelType(version.metaModelContext, version.modelCategory);
+        gdcoll.setModelType(modelType);
 
         /* XML Version */
         if (version.xmlVersionIndex < 0) {
@@ -332,9 +343,10 @@ public class ToolXMLParser {
         public int xmlVersionIndex = -1;
         public int lgmVersionIndex = -1;
         public MetaModelContext metaModelContext = null;
+        public ModelCategory modelCategory = null;
         @Override
         public String toString() {
-            return "MetaModel=" + metaModelContext + " xmlVersion='" + supportedXMLVersions[xmlVersionIndex] + "' lgmVersion='" + supportedFileVersions[lgmVersionIndex] + "'";
+            return "MetaModel=" + metaModelContext + " xmlVersion='" + SUPPORTED_XML_VERSIONS[xmlVersionIndex] + "' lgmVersion='" + FILE_VERSION_SUPPORTED_NUMBERS[lgmVersionIndex] + "'";
         }
     }
 
@@ -353,10 +365,11 @@ public class ToolXMLParser {
     @SuppressWarnings("deprecation")
     public static FileVersion extractVersionAndMetaModel(final InputStream inputStream) throws FileNotFoundException, IOException, LGMVersionException, XMLVersionException {
         DataInputStream dataStream = new DataInputStream(inputStream);
+        //first line should be the xml version ("<?xml version='1.0' encoding='utf-8'?>" or "<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
         FileVersion result = new FileVersion();
         String line = dataStream.readLine();
-        for (int i = 0; i < supportedXMLVersions.length; i++) {
-            if (line.toLowerCase().equals(supportedXMLVersions[i].toLowerCase())) {
+        for (int i = 0; i < SUPPORTED_XML_VERSIONS.length; i++) {
+            if (line.toLowerCase().equals(SUPPORTED_XML_VERSIONS[i].toLowerCase())) {
                 result.xmlVersionIndex = i;
                 break;
             }
@@ -365,46 +378,80 @@ public class ToolXMLParser {
             throw new XMLVersionException(getResString("xmlversionsfehler"));
         }
 
-        line = dataStream.readLine();
-        for (int i = 0; i < supportedFileVersions.length; i++) {
-            String s = supportedFileVersions[i];
-            s = s.substring(0, s.length() - "-->".length());
-            if (line.toLowerCase().startsWith(s.toLowerCase())) {
-                result.lgmVersionIndex = i;
-                break;
-            }
-        }
-        if (result.lgmVersionIndex == -1) {
-            throw new LGMVersionException(getResString("lgmversionsfehler"));
-        }
-        result.metaModelContext = Tool3lgmMetaModelContext.getDefaultMetaModelContext();
-        int indexToOpenComma = VERSION_STRING_METAMODEL_CLASS.length() - 1;
-        int metaModelStart = line.indexOf(VERSION_STRING_METAMODEL_CLASS.substring(0, indexToOpenComma - 1));
-        if (metaModelStart >= 0) {
-            int classNameStart = metaModelStart + indexToOpenComma;
-            char comma = VERSION_STRING_METAMODEL_CLASS.charAt(VERSION_STRING_METAMODEL_CLASS.length() - 1);
-            int classNameEnd = line.indexOf(comma, classNameStart);
-            String s = line.substring(classNameStart, classNameEnd);
-            //es ist eine Metamodellklasse angegeben:
-            if (s.length() > 0) {
-                result.metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForID(s);
-                if (result.metaModelContext == null) {
-                    throw new LGMVersionException(getResString("lgmversionsfehler"));
+        //FILE_VERSION_SUPPORTED_NUMBERS
+        //next line should start with "<!--Tool3lgmFile " and contains information abaout the file version, metamodel and the model category
+        line = dataStream.readLine().toLowerCase();
+        if (line.startsWith(FILE_VERSION_LINE_START.toLowerCase())) { //"<!--Tool3lgmFile "
+            //supported file version (e.g: <!--Tool3lgmFile version='3.7')
+            int versionStartIndex = line.indexOf(FILE_VERSION_NUMBER_PREFIX) + 1; //" version='"
+            int versionEndIndex = line.indexOf('\'', versionStartIndex);
+            if (versionEndIndex > versionStartIndex) {
+                String versionNumer = line.substring(versionStartIndex, versionEndIndex);
+                for (int i = 0; i < FILE_VERSION_SUPPORTED_NUMBERS.length; i++) {
+                    if (FILE_VERSION_SUPPORTED_NUMBERS[i].equals(versionNumer)) {
+                        result.lgmVersionIndex = i;
+                        break;
+                    }
                 }
             }
+            if (result.lgmVersionIndex == -1) {
+                throw new LGMVersionException(getResString("lgmversionsfehler"));
+            }
+
+            //Metamodell is next statement in this line
+            result.metaModelContext = Tool3lgmMetaModelContext.getDefaultMetaModelContext();
+            int metaModelNameStartIndex = line.indexOf(FILE_VERSION_METAMODEL_CLASS_PREFIX); //" metamodel='"
+            int metaModelNameEndIndex = line.indexOf('\'', metaModelNameStartIndex);
+            if (metaModelNameEndIndex > metaModelNameStartIndex) {
+                String metaModelName = line.substring(metaModelNameStartIndex, metaModelNameEndIndex);
+                result.metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForID(metaModelName);
+            }
+            if (result.metaModelContext == null) {
+                throw new LGMVersionException(getResString("lgmversionsfehler"));
+            }
+
+            //Model Category (REGULAR or TEMPLATE)
+            result.modelCategory = ModelCategory.REGULAR;
+            int modelCategoryStartIndex = line.indexOf(FILE_VERSION_MODEL_CATEGORY_PREFIX); //" category='"
+            int modelCategoryEndIndex = line.indexOf('\'', modelCategoryStartIndex);
+            if (modelCategoryEndIndex > modelCategoryStartIndex) {
+                String modelCategoryName = line.substring(modelCategoryStartIndex, modelCategoryEndIndex).toUpperCase();
+                result.modelCategory = Enum.valueOf(ModelCategory.class, modelCategoryName);
+            }
+            if (result.modelCategory == null) {
+                throw new LGMVersionException(getResString("lgmversionsfehler"));
+            }
+
         }
         return result;
     }
 
     //scheint im Moment ungenutzt, wird aber eigentlich beim DataImportModule gebraucht
     public static String getCurrentVersionString(final GDCollection gdcoll) {
-        return supportedXMLVersions[supportedXMLVersions.length - 1] + "\n" + getCurrentFileVersion(gdcoll) + "\n";
+        return SUPPORTED_XML_VERSIONS[SUPPORTED_XML_VERSIONS.length - 1] + "\n" + getCurrentFileVersion(gdcoll) + "\n";
     }
 
     private static final String getCurrentFileVersion(final GDCollection gdcoll) {
-        StringBuilder sb = new StringBuilder(supportedFileVersions[supportedFileVersions.length - 1]);
-        sb.insert(sb.length() - "-->".length(), VERSION_STRING_METAMODEL_CLASS);
-        sb.insert(sb.length() - "'-->".length(), gdcoll.getMetaModelContext().getMetaModelID());
+        //"<!--Tool3lgmFile"
+        StringBuilder sb = new StringBuilder(FILE_VERSION_LINE_START.trim()); //trim() removes the last whitespace
+        //"<!--Tool3lgmFile version='"
+        sb.append(FILE_VERSION_NUMBER_PREFIX);
+        //"<!--Tool3lgmFile version='3.7"
+        sb.append(FILE_VERSION_SUPPORTED_NUMBERS[FILE_VERSION_SUPPORTED_NUMBERS.length - 1]);
+        //"<!--Tool3lgmFile version='3.7'"
+        sb.append("'");
+        //"<!--Tool3lgmFile version='3.7' metamodel='"
+        sb.append(FILE_VERSION_METAMODEL_CLASS_PREFIX);
+        //"<!--Tool3lgmFile version='3.7' metamodel='TLGMServiceMetaModel@2388259974838049670"
+        sb.append(gdcoll.getMetaModelContext().getMetaModelID());
+        //"<!--Tool3lgmFile version='3.7' metamodel='TLGMServiceMetaModel@2388259974838049670'"
+        sb.append("'");
+        //"<!--Tool3lgmFile version='3.7' metamodel='TLGMServiceMetaModel@2388259974838049670' category='"
+        sb.append(FILE_VERSION_MODEL_CATEGORY_PREFIX);
+        //"<!--Tool3lgmFile version='3.7' metamodel='TLGMServiceMetaModel@2388259974838049670' category='REGULAR"
+        sb.append(gdcoll.getModelCategory().name());
+        //"<!--Tool3lgmFile version='3.7' metamodel='TLGMServiceMetaModel@2388259974838049670' category='REGULAR'-->"
+        sb.append("'-->");
         return sb.toString();
     }
 

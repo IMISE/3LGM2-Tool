@@ -31,6 +31,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.event.action.GlobalOptionAction;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
@@ -218,13 +219,17 @@ public class ActionLibrary {
                     Class<? extends MetaModelDefinition> importMetaModelDefinitionClass = dataImporter.getImportMetaModelDefinitionClass();
                     //wenn das Metamodel, in das importiert werden soll, ein reguläres Modellierungsmetamodell ist, dann eine direkte Import-Action anbieten
                     if (Tool3lgmMetaModelContext.isRegularMetaModelDefinition(importMetaModelDefinitionClass)) {
-                        Action importAction = createImportAction(dataImporter, null);
+                        Action importAction = createImportAction(dataImporter, null, ModelCategory.REGULAR);
+                        importPluginActions.add(importAction);
+                        importAction = createImportAction(dataImporter, null, ModelCategory.TEMPLATE);
                         importPluginActions.add(importAction);
                     }
                     //jetzt für jeden Converter, der in ein reguläres Modellierungsmetamodell übersetzt, eine Action hinzufügen, die erst importiert und dann konvertiert
                     for (ModelConverterDefinition modelConverterDefinition : modelConverterDefinitions) {
                         if (modelConverterDefinition.canConvert(importMetaModelDefinitionClass)) {
-                            Action importAction = createImportAction(dataImporter, modelConverterDefinition);
+                            Action importAction = createImportAction(dataImporter, modelConverterDefinition, ModelCategory.REGULAR);
+                            importPluginActions.add(importAction);
+                            importAction = createImportAction(dataImporter, modelConverterDefinition, ModelCategory.TEMPLATE);
                             importPluginActions.add(importAction);
                         }
                     }
@@ -233,18 +238,18 @@ public class ActionLibrary {
             }
 
             @SuppressWarnings("rawtypes")
-            private static final Action createImportAction(final DataImporter dataImporter, final ModelConverterDefinition modelConverterDefinition) {
+            private static final Action createImportAction(final DataImporter dataImporter, final ModelConverterDefinition modelConverterDefinition, final ModelCategory modelCategory) {
                 Class<? extends DataImporter> dataImporterClass = dataImporter.getClass();
                 String actionName = dataImporterClass.getSimpleName();
                 if (modelConverterDefinition != null) {
                     MetaModelContext targetMetaModelContext = modelConverterDefinition.getTargetMetaModelContext();
                     String metaModelDisplayName = targetMetaModelContext.getMetaModelDisplayName();
-                    actionName += " -> " + metaModelDisplayName;
+                    actionName += " -> " + metaModelDisplayName + " (" + modelCategory.name() + ")";
                 }
                 Action importAction = new StaticAction(actionName) {
                     @Override
                     protected void actionPerformed() {
-                        if (dataImporter.startImport()) {
+                        if (dataImporter.startImport(modelCategory)) {
                             GDCollection gdcoll = dataImporter.getCollection();
                             if (modelConverterDefinition != null) {
                                 gdcoll = ModelConverter.convert(modelConverterDefinition, gdcoll);

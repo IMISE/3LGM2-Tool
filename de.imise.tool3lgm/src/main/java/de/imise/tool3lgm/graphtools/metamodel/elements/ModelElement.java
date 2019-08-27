@@ -18,6 +18,7 @@ import org.apache.commons.collections4.map.Flat3Map;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -1893,8 +1894,8 @@ public abstract class ModelElement extends UserFieldTarget {
      */
     public boolean isUnique() {
         GDCollection gdcoll = getCollection();
-        boolean memberOfTemplateModel = gdcoll != null && gdcoll.isTemplateModel();
-        return metaModel.isUnique(getClass(), memberOfTemplateModel);
+        ModelCategory modelCategory = gdcoll != null ? gdcoll.getModelCategory() : null;
+        return metaModel.isUnique(getClass(), modelCategory);
     }
 
     /**

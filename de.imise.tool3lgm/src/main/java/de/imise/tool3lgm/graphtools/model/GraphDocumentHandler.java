@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -43,11 +44,11 @@ public class GraphDocumentHandler {
         }
         //Problem: Suche nach Elemenklasse inkl. Unterklassen, wobei Unterklassen unique sein können -> im doc und im mainDoc suchen
         MetaModel metaModel = doc.getMetaModel();
-        boolean templateModel = doc.isTemplateModel();
+        ModelCategory modelCategory = doc.getModelCategory();
         if (!includeSubClasses || clazz == Bendpoint.class) {
             List<Class<? extends ModelElement>> searchClasses = new ArrayList<>();
             searchClasses.add(clazz);
-            return getModelItemsForClasses(metaModel.isUnique(clazz, templateModel) ? doc.getCollection().getMainGraphDocument() : doc, searchClasses, absolutePartsOnly, alphabetical);
+            return getModelItemsForClasses(metaModel.isUnique(clazz, modelCategory) ? doc.getCollection().getMainGraphDocument() : doc, searchClasses, absolutePartsOnly, alphabetical);
             //          return getModelItemsForSingleClass(clazz, absolutePartsOnly, alphabetical);
         }
         List<ModelElement> objects = null;
@@ -58,7 +59,7 @@ public class GraphDocumentHandler {
                 continue;
             }
             if (clazz.isAssignableFrom(elementClass)) {
-                if (metaModel.isUnique(elementClass, templateModel)) {
+                if (metaModel.isUnique(elementClass, modelCategory)) {
                     searchClassesUnique.add(elementClass);
                 } else {
                     searchClassesNotUnique.add(elementClass);

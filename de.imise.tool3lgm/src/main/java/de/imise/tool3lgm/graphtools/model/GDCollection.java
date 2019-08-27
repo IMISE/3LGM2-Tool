@@ -84,6 +84,8 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Tool3lgmModelType;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -127,8 +129,8 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
  */
 public final class GDCollection extends UserFieldTarget {
 
-    /** Holds the {@link MetaModel} that is the basis for this model and the corresponding resource bundle */
-    private MetaModelContext metaModelContext;
+    /** Holds the {@link MetaModelContext} and the type of the model ( {@link Tool3lgmModelType.ModelCategory} */
+    private Tool3lgmModelType modelType;
 
     /** Holds all concepts (types of model elements) and the relations between this concepts */
     private MetaModel metaModel;
@@ -167,12 +169,6 @@ public final class GDCollection extends UserFieldTarget {
 
     /** Hauptdokument der Collection */
     private LGMGraphDocument doc;
-
-    /**
-     * If <code>true</code> this model is interpreted as template model. The consequence is that there are no unique elements in this model. This
-     * implies that not any type of elements is unique and so no elements are inserted in every submodel automatically.
-     */
-    private final boolean templateModel;
 
     /**
      * Alle {@link LGMChangeListener}, die immer benachrichtigt werden - egal ob eine Transaktion durch einen Dialog offen ist oder nicht.
@@ -241,47 +237,31 @@ public final class GDCollection extends UserFieldTarget {
     private int active_layer = DOMAIN_LAYER;
 
     /**
-     *
+     * @param templateModel
      */
     public GDCollection() {
-        this(false);
-    }
-
-    /**
-     * @param templateModel
-     */
-    public GDCollection(final boolean templateModel) {
         fileHandler = new GDCollectionFileHandler(this);
         imExportHandler = new GDCollectionImExportHandler(this);
-        this.templateModel = templateModel;
-        //Standard-Userfield-Definition laden
-    }
-
-    /**
-     * @param metaModelContext
-     */
-    public GDCollection(@Nonnull final MetaModelContext metaModelContext) {
-        this(metaModelContext, false);
     }
 
     /**
      * @param metaModelContext
      * @param templateModel
      */
-    public GDCollection(@Nonnull final MetaModelContext metaModelContext, final boolean templateModel) {
-        this(templateModel);
-        setMetaModelContext(metaModelContext);
+    public GDCollection(@Nonnull final Tool3lgmModelType modelType) {
+        this();
+        setModelType(modelType);
     }
 
     /**
      * Sets the {@link MetaModelContext} for this model.
      *
-     * @param metaModelContext
-     *            the context that contains the metamodel of this model and the corresponding resource bundle
+     * @param modelype
+     *            the context that contains the metamodel of this model and the corresponding resource bundle and the type of the model
      */
-    public void setMetaModelContext(final MetaModelContext metaModelContext) {
-        this.metaModelContext = metaModelContext;
-        metaModel = metaModelContext.getMetaModel();
+    public void setModelType(final Tool3lgmModelType modelType) {
+        this.modelType = modelType;
+        metaModel = modelType.getMetaModel();
         doc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
         addClosedTransactionsListener(userFieldDefinitions);
@@ -290,11 +270,18 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
+     * @return the model type
+     */
+    public Tool3lgmModelType getModelType() {
+        return modelType;
+    }
+
+    /**
      * @return
      *         the handler (initializer) for the metamodel of this model and the metamodel corresponding resource bundle
      */
     public MetaModelContext getMetaModelContext() {
-        return metaModelContext;
+        return modelType.getMetaModelContext();
     }
 
     /**
@@ -306,14 +293,10 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
-     * If <code>true</code> this model is a template model. The consequence is that there are no unique elements in this model. This implies that not
-     * any type of elements is unique and so no elements are inserted in every submodel automatically.
-     *
-     * @return
-     *         <code>true</code> if this model is a template model
+     * @return the model category of the model type
      */
-    public boolean isTemplateModel() {
-        return templateModel;
+    public ModelCategory getModelCategory() {
+        return modelType.getModelCategory();
     }
 
     /**
@@ -327,6 +310,7 @@ public final class GDCollection extends UserFieldTarget {
      * @see MetaModelContext#getResString(String)
      */
     public String getResString(final String key) {
+        MetaModelContext metaModelContext = getMetaModelContext();
         return metaModelContext.getResString(key);
     }
 
@@ -338,6 +322,7 @@ public final class GDCollection extends UserFieldTarget {
      * @see MetaModelContext#getElementsNameBuilder()
      */
     public ElementsNameBuilder getElementsNameBuilder() {
+        MetaModelContext metaModelContext = getMetaModelContext();
         return metaModelContext.getElementsNameBuilder();
     }
 

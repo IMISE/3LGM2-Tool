@@ -589,6 +589,7 @@ public class UserProperties {
         WORKING_DIRECTORY,
         ICON_PATH,
         META_MODEL,
+        MODEL_CATEGORY,
         /** Liste der zuletzt benutzten ModellDateien */
         LAST_USED_MODEL_FILES {
             @Override

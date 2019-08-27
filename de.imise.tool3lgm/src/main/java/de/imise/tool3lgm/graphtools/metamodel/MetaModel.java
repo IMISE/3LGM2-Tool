@@ -30,6 +30,7 @@ import com.google.common.collect.Table;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -1232,21 +1233,21 @@ public final class MetaModel {
      *
      * @param elementClass
      *            the element class that should be checked as unique
-     * @param template
-     *            If <code>true</code> the function always return <code>false</code> - so every element type is not unique. This is necessary for
-     *            template models so the parameters name is template.
+     * @param modelCategory
+     *            The {@link ModelCategory#TEMPLATE} has no unique elements and returns alsways <code>false</code>. In the
+     *            {@link ModelCategory#REGULAR} only elements that are not visible in a graph view return <code>false</code>.
      * @return
      *         <code>true</code> if the element type is unique (only 1 element container in the whole model and no graphical representation for this
      *         element) otherwise <code>false</code>
      */
-    public final boolean isUnique(final Class<?> elementClass, final boolean template) {
+    public final boolean isUnique(final Class<?> elementClass, final ModelCategory modelCategory) {
         //in template models every element type is not unique
-        if (template) {
+        if (modelCategory == ModelCategory.TEMPLATE) {
             return false;
         }
         if (Edge.class.isAssignableFrom(elementClass)) {
             Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
-            return isUnique(Edge.getStartClass(edgeClass), template) || isUnique(Edge.getEndClass(edgeClass), template);
+            return isUnique(Edge.getStartClass(edgeClass), modelCategory) || isUnique(Edge.getEndClass(edgeClass), modelCategory);
         }
         return uniqueNodes.contains(elementClass);
     }
