@@ -3,10 +3,12 @@ package de.imise.tool3lgm.graphtools.path.pathmodel;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -66,10 +68,7 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
      */
     @SuppressWarnings("unchecked")
     public Iterable<PathResultTreeNode> getChildren() {
-        if (children == null) {
-            return EMPTY_CHILDREN;
-        }
-        return children;
+        return children == null ? EMPTY_CHILDREN : getChildrenCopy();
     }
 
     /**
@@ -139,9 +138,10 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
      *
      * @return
      */
-    @SuppressWarnings("unchecked")
     public final List<PathResultTreeNode> getChildrenCopy() {
-        return new ArrayList<PathResultTreeNode>(children);
+        List<PathResultTreeNode> childrenCopy = new ArrayList<>(children.size());
+        appendChildren(childrenCopy);
+        return childrenCopy;
     }
 
     /**
@@ -151,7 +151,11 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
      */
     @SuppressWarnings("unchecked")
     public final void appendChildren(final Collection<PathResultTreeNode> nodes) {
-        nodes.addAll(children);
+        Iterator<TreeNode> childrenIt = children.iterator();
+        while (childrenIt.hasNext()) {
+            PathResultTreeNode node = (PathResultTreeNode) childrenIt.next();
+            nodes.add(node);
+        }
     }
 
 }
