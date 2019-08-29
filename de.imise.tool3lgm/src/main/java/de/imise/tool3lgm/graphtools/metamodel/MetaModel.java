@@ -861,7 +861,7 @@ public final class MetaModel {
      * @param edgeClass
      * @return
      */
-    public boolean isRemovedEdgeClassForStartClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+    private boolean isRemovedEdgeClassForStartClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         return isRemovedEdgeClass(elementClass, edgeClass, true);
     }
 
@@ -872,7 +872,7 @@ public final class MetaModel {
      * @param edgeClass
      * @return
      */
-    public boolean isRemovedEdgeClassForEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+    private boolean isRemovedEdgeClassForEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         return isRemovedEdgeClass(elementClass, edgeClass, false);
     }
 
@@ -884,7 +884,7 @@ public final class MetaModel {
      * @param edgeClass
      * @return
      */
-    public boolean isRemovedEdgeClassForStartAndEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
+    private boolean isRemovedEdgeClassForStartAndEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
         return isRemovedEdgeClass(elementClass, edgeClass, true) && isRemovedEdgeClass(elementClass, edgeClass, false);
     }
 
@@ -1409,24 +1409,6 @@ public final class MetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die Start- und Endelemente von derselben Klasse sein können, d.h. wenn die beiden Klassen
-     * gleich sind oder eine eine Oberklasse der anderen ist.
-     *
-     * @param edgeClass
-     * @return
-     */
-    public boolean isRecursive(final Class<? extends Edge> edgeClass) {
-        Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
-        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
-        if (startClass.isAssignableFrom(endClass)) {
-            return !isRemovedEdgeClassForEndClass(endClass, edgeClass);
-        } else if (endClass.isAssignableFrom(startClass)) {
-            return !isRemovedEdgeClassForStartClass(startClass, edgeClass);
-        }
-        return false;
-    }
-
-    /**
      * Wenn die übergebene Elementklasse durch eine Edge der angegebenen Art mit anderen Elementen verbunden sein kann, dann wird die Elementklasse
      * dieser anderen Elemente zurück gegeben. Passen Edge und Elementklasse nicht zusammen, kommt <code>null</code> zurück.
      *
@@ -1631,12 +1613,40 @@ public final class MetaModel {
         return HasPartEdge.class.isAssignableFrom(edgeClass);
     }
 
+    /**
+     * Checks if this edge class is the end element can be the start element of such a HasPartEdge.
+     *
+     * @param edgeClass
+     * @return
+     */
     public boolean isRecursiveHasPartEdge(final Class<? extends Edge> edgeClass) {
-        return isHasPartEdge(edgeClass) && isRecursive(edgeClass);
+        return isRecursiveForEndElement(HasPartEdge.class, edgeClass);
     }
 
+    /**
+     * Checks if this edge class is the end element can be the start element of such a HasPartEdge.
+     *
+     * @param edgeClass
+     * @return
+     */
     public boolean isRecursiveSubordination(final Class<? extends Edge> edgeClass) {
-        return SubordinationEdge.class.isAssignableFrom(edgeClass) && isRecursive(edgeClass);
+        return isRecursiveForEndElement(SubordinationEdge.class, edgeClass);
+    }
+
+    /**
+     * Checks if this edge superclass is assignable from the edgeClass and the end element can be
+     * the start element of such a edge.
+     *
+     * @param edgeSuperClass
+     * @param edgeClass
+     * @return <code>true</code> if the edge class has the edge superclass and is recursive
+     */
+    private boolean isRecursiveForEndElement(final Class<? extends Edge> edgeSuperClass, final Class<? extends Edge> edgeClass) {
+        if (!edgeSuperClass.isAssignableFrom(edgeClass)) {
+            return false;
+        }
+        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+        return isStartClass(edgeClass, endClass); //this checks if the egdeClass is removed for the end class type
     }
 
     /*******************/

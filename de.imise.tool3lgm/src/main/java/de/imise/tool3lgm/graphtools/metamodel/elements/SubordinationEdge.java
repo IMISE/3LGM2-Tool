@@ -154,7 +154,7 @@ public abstract class SubordinationEdge extends Edge {
     }
 
     /**
-     * Liefert true, wenn ein über diese Kantenart verbundenes Oberelement gleichzeitig Unterelement eines anderen Elementes sein kann.
+     * Liefert true, wenn ein über diese Kantenart verbundenes Oberelement gleichzeitig solche Unterelemente haben kann.
      *
      * @return
      */
