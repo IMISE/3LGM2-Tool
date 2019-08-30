@@ -1642,11 +1642,35 @@ public final class MetaModel {
      * @return <code>true</code> if the edge class has the edge superclass and is recursive
      */
     private boolean isRecursiveForEndElement(final Class<? extends Edge> edgeSuperClass, final Class<? extends Edge> edgeClass) {
+        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+        return isRecursiveForElementClass(edgeSuperClass, edgeClass, endClass);
+    }
+
+    /**
+     * Checks if this edge superclass is assignable from the edgeClass and the element class can be
+     * the start and the end class of such an edge.
+     *
+     * @param edgeSuperClass
+     * @param edgeClass
+     * @param elementClass
+     * @return <code>true</code> if the edge class has the edge superclass and is recursive
+     */
+    private boolean isRecursiveForElementClass(final Class<? extends Edge> edgeSuperClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         if (!edgeSuperClass.isAssignableFrom(edgeClass)) {
             return false;
         }
-        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
-        return isStartClass(edgeClass, endClass); //this checks if the egdeClass is removed for the end class type
+        return isStartClass(edgeClass, elementClass); //this checks if the egdeClass is removed for the end class type
+    }
+
+    /**
+     * Checks, if the given element class can be the start and end class of the egde class.
+     *
+     * @param edgeClass
+     * @param elementClass
+     * @return <code>true</code>, if the given element class can be the start and end class of the egde class otherwise <code>false</code>.
+     */
+    public boolean isRecursiveForElementClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        return isRecursiveForElementClass(Edge.class, edgeClass, elementClass);
     }
 
     /*******************/
