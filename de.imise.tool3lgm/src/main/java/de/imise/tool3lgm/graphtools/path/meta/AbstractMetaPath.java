@@ -63,6 +63,12 @@ public abstract class AbstractMetaPath {
     protected final MetaModel metaModel;
 
     /**
+     * If <code>true</code> and the metapath can be recursive (ends with an element type that can be the start element type) then the path is
+     * interpreted as recursive.
+     */
+    private boolean recursive;
+
+    /**
      * @param metaModel
      */
     public AbstractMetaPath(final MetaModel metaModel) {
@@ -227,6 +233,30 @@ public abstract class AbstractMetaPath {
     }
 
     /**
+     * @return <code>true</code>, if the metapath is applicable to the endelements as startelements otherwise <code>false</code>
+     */
+    public final boolean isRecursive() {
+        return recursive;
+    }
+
+    /**
+     * @param recursive the recursive to set
+     */
+    public void setRecursive(final boolean recursive) {
+        this.recursive = recursive;
+        if (recursive) {
+            this.recursive = isForwardRecursive();
+        }
+    }
+
+    /**
+     * @param startClass
+     * @param endClass
+     * @return
+     */
+    protected abstract boolean isForwardRecursive();
+
+    /**
      * Repräsentiert den Validitätszustand eines MetaPath. Ist der invalidReason <code>null</code>, dann gilt der MetaPath als valide, sonst nicht.
      *
      * @author AXS (6 Dec 2018)
@@ -266,6 +296,9 @@ public abstract class AbstractMetaPath {
 
     }
 
+    /**
+     *
+     */
     public enum InvalidReason {
         INVALID_START_CLASSES,
         INVALID_END_CLASSES;
@@ -366,6 +399,9 @@ public abstract class AbstractMetaPath {
         return equals(obj, true);
     }
 
+    /**
+     * @return
+     */
     protected abstract String createName();
 
     /**
@@ -486,31 +522,6 @@ public abstract class AbstractMetaPath {
      * @return
      */
     public abstract List<AbstractMetaPath> getMetaPaths();
-
-    /**
-     * Liefert <code>true</code>, wenn dieser Pfad Elementarten miteinander verbindet, die
-     * zueinander zuweisungskompatibel sind. D.h. die Startklasse ist gleich der Endklasse
-     * oder die Endklasse eine Unterklasse der Startklasse.
-     *
-     * @return
-     */
-    public final boolean isRecursive() {
-        for (Class<? extends ModelElement> endClass : getEndClasses()) {
-            if (isStartClass(endClass)) {
-                return true;
-            }
-        }
-        //Das hier steht nur zur Erinnerung drin, damit klar ist, dass das nicht richtig ist. MetaPfade gelten nur als rekursiv, wenn sie es in Vorwärts-Richtung des Gesamtpfades sind.
-        //Die Rückrichtung des Gesamtpfades müsste durch den OtherDirectionMetPath ausgedrückt werden. Bei Kantenklassen aber, müssen beide Richtungen getestet werden, bei MetaPaths
-        //aber nicht, weil bei ihnen die Richtung feststeht.
-        //        for (Class<? extends ModelElement> startClass : getStartClasses()) {
-        //            if (isEndClass(this, startClass)) {
-        //                return true;
-        //            }
-        //        }
-        return false;
-    }
-
     /**
      * Liefert <code>false</code>, wenn der Pfad in beide Richtungen dasselbe bedeutet. Dafür muss
      * er dieselben Elementarten miteinander verbinden und denselben Namen in beiden Richtungen

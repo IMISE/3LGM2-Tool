@@ -589,4 +589,9 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         return direction == Direction.BACKWARD ? metaModel.getForwardCardinality(edgeClass) : metaModel.getBackwardCardinality(edgeClass);
     }
 
+    @Override
+    public boolean isForwardRecursive() {
+        return metaModel.isRecursiveForElementClass(edgeClass, endClass);
+    }
+
 }

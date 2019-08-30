@@ -313,10 +313,10 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     /**
-     * Liefert <code>true</code>, wenn beide Pfade {@link ElementaryMetaPath} sind und die übergebene Elementklasse diese Pfade aber nicht haben darf,
-     * da die
-     * Kantenklassen des Elementarpfades für die Elementklasse nicht gelten sollen (laut MetaModel {@link MetaModel#isRemovedEdgeClass(Class, Class)},
-     * sonst <code>false</code>.
+     * Liefert <code>true</code>, wenn beide Pfade {@link ElementaryMetaPath} sind und die übergebene
+     * Elementklasse diese Pfade aber nicht haben darf, da die Kantenklassen des Elementarpfades für
+     * die Elementklasse nicht gelten sollen (laut MetaModel
+     * {@link MetaModel#isRemovedEdgeClass(Class, Class)}, sonst <code>false</code>.
      *
      * @param metaPath
      * @param nextMetaPath
@@ -335,26 +335,26 @@ public class SequenceMetaPath extends ListMetaPath {
                 }
 
                 boolean checkAsEndClass = elementaryMetaPath.hasDirectionForward();
-                boolean invalid = checkAsEndClass ? metaModel.isRemovedEdgeClassForEndClass(elementClass, edgeClass) : metaModel.isRemovedEdgeClassForStartClass(elementClass, edgeClass);
+                boolean invalid = checkAsEndClass ? !metaModel.isEndClass(edgeClass, elementClass) : !metaModel.isStartClass(edgeClass, elementClass);
                 if (invalid) {
                     return false;
                 }
             }
         }
-
+        //AXS 29.08.2019: irgendwie sieht die Funktion hier komisch aus. Auf jeden Fall kann hier metaPath null sein und einen NullPointer auslösen. Außerdem scheint einiges von oben hier unten doppelt zu passieren!?
         if (metaPath instanceof ElementaryMetaPath && nextMetaPath instanceof ElementaryMetaPath) {
             ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) metaPath;
 
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
             boolean checkAsEndClass = elementaryMetaPath.hasDirectionForward();
-            boolean invalid = checkAsEndClass ? metaModel.isRemovedEdgeClassForEndClass(elementClass, edgeClass) : metaModel.isRemovedEdgeClassForStartClass(elementClass, edgeClass);
+            boolean invalid = checkAsEndClass ? metaModel.isEndClass(edgeClass, elementClass) : metaModel.isStartClass(edgeClass, elementClass);
             if (invalid) {
                 return false;
             }
             elementaryMetaPath = (ElementaryMetaPath) nextMetaPath;
             edgeClass = elementaryMetaPath.getEdgeClass();
             boolean checkAsStartClass = elementaryMetaPath.hasDirectionForward();
-            invalid = checkAsStartClass ? metaModel.isRemovedEdgeClassForStartClass(elementClass, edgeClass) : metaModel.isRemovedEdgeClassForEndClass(elementClass, edgeClass);
+            invalid = checkAsStartClass ? metaModel.isStartClass(edgeClass, elementClass) : metaModel.isEndClass(edgeClass, elementClass);
             if (invalid) {
                 return false;
             }
@@ -402,6 +402,14 @@ public class SequenceMetaPath extends ListMetaPath {
             }
         }
         return invalidityCheckResult;
+    }
+
+    @Override
+    protected boolean isForwardRecursive() {
+        Class<? extends ModelElement> endClass = getEndClass();
+        List<AbstractMetaPath> metaPaths = getMetaPaths();
+        AbstractMetaPath firstMetaPath = metaPaths.get(0);
+        return firstMetaPath.isStartClass(endClass);
     }
 
 }

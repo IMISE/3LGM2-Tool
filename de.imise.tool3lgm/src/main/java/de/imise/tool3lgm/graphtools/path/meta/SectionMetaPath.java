@@ -27,4 +27,15 @@ public class SectionMetaPath extends ParallelMetaPath {
         return "SectionMetaPath#createName() is not implemented";
     }
 
+    @Override
+    protected boolean isForwardRecursive() {
+        //bei Schnittmengenpfaden müssen alle enthaltenen Pfade rekursiv sein, damit es Ergebniselemente geben kann
+        for (AbstractMetaPath metaPath : metaPaths) {
+            if (!metaPath.isForwardRecursive()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

@@ -27,4 +27,15 @@ public class UnionMetaPath extends ParallelMetaPath {
         return "UnionMetaPath#createName() is not implemented";
     }
 
+    @Override
+    protected boolean isForwardRecursive() {
+        //bei Vereinigungsmengen reicht es, wenn einer der enthaltenen Pfade für die Elemente rekursiv ist
+        for (AbstractMetaPath metaPath : metaPaths) {
+            if (metaPath.isForwardRecursive()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
