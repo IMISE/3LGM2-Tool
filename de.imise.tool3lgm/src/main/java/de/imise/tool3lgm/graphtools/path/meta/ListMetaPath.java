@@ -96,4 +96,28 @@ public abstract class ListMetaPath extends AbstractMetaPath implements Iterable<
         return metaPaths.iterator();
     }
 
+    /**
+     * Setzt den MetaPath am angegebenen Index in der Liste der MetaPaths auf rekursiv.
+     *
+     * @param metaPathIndex
+     */
+    public final void setRecursive(final int metaPathIndex, final boolean recursive) {
+        AbstractMetaPath metaPath = metaPaths.get(metaPathIndex);
+        metaPath.setRecursive(recursive);
+    }
+
+    /**
+     * @return
+     */
+    public final AbstractMetaPath getFirstMetaPath() {
+        return metaPaths.get(0);
+    }
+
+    /**
+     * @return
+     */
+    public final AbstractMetaPath getLastMetaPath() {
+        return metaPaths.get(getMetaPathCount() - 1);
+    }
+
 }
