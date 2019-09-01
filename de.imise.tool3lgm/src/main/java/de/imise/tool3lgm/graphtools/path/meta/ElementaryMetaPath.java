@@ -257,11 +257,12 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     @Override
     public final boolean isStartClass(final Class<? extends ModelElement> elementClass) {
-        if (metaModel.isStartClass(edgeClass, elementClass)) {
+        boolean isStartClass = direction == Direction.FORWARD ? metaModel.isStartClass(edgeClass, elementClass) : metaModel.isEndClass(edgeClass, elementClass);
+        if (isStartClass) {
             Class<? extends ModelElement> startClass = getStartClass();
-            return startClass.isAssignableFrom(elementClass);
+            isStartClass = startClass.isAssignableFrom(elementClass);
         }
-        return false;
+        return isStartClass;
     }
 
     /**
@@ -273,11 +274,12 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     @Override
     public final boolean isEndClass(final Class<? extends ModelElement> elementClass) {
-        if (metaModel.isEndClass(edgeClass, elementClass)) {
+        boolean isEndClass = direction == Direction.FORWARD ? metaModel.isEndClass(edgeClass, elementClass) : metaModel.isStartClass(edgeClass, elementClass);
+        if (isEndClass) {
             Class<? extends ModelElement> endClass = getEndClass();
-            return endClass.isAssignableFrom(elementClass);
+            isEndClass = endClass.isAssignableFrom(elementClass);
         }
-        return false;
+        return isEndClass;
     }
 
     /**
