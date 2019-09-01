@@ -6,10 +6,6 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import mockit.Mock;
-import mockit.MockUp;
-
 public class NodeLineTest {
 
     @Test
@@ -32,13 +28,13 @@ public class NodeLineTest {
     @Test
     public void NodeLine2() {
 
-        new MockUp<NodeHeaderLine>() {
-            @Mock
-            public void $init(final Class<? extends ModelElement> elementClass, final String elementType, final String nameHeader, final String descriptionHeader, final String hashHeader, final List<String> userFieldNames, final int row) {
-
-            }
-
-        };
+        //        new MockUp<NodeHeaderLine>() {
+        //            @Mock
+        //            public void $init(final Class<? extends ModelElement> elementClass, final String elementType, final String nameHeader, final String descriptionHeader, final String hashHeader, final List<String> userFieldNames, final int row) {
+        //
+        //            }
+        //
+        //        };
 
         String name = "NAME";
         String description = "DESCRIPTION";
