@@ -304,62 +304,18 @@ public class SequenceMetaPath extends ListMetaPath {
             for (Class<? extends ModelElement> startClass : nextStartClasses) {
                 Class<? extends ModelElement> pathStepClass = ReflectionUtils.getMostSpecialElementClass(endClass, startClass);
                 //null tritt ein, wenn die Elemente der aufeinanderfolgenden Elementarpfade nicht zusammenpassen
-                if (pathStepClass != null && isValidElementaryPathStepConnectingClass(metaPath, nextMetaPath, pathStepClass)) {
-                    pathStepClasses.add(pathStepClass);
+                if (pathStepClass != null) {
+                    //das hier checkt auch bei ElementaryMetaPaths, ob die Kante für die pathStepClass zu den removedEdgeClasses gehört
+                    if (metaPath.isEndClass(pathStepClass)) {
+                        //das hier checkt auch bei ElementaryMetaPaths, ob die Kante für die pathStepClass zu den removedEdgeClasses gehört
+                        if (nextMetaPath.isStartClass(pathStepClass)) {
+                            pathStepClasses.add(pathStepClass);
+                        }
+                    }
                 }
             }
         }
         return pathStepClasses;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn beide Pfade {@link ElementaryMetaPath} sind und die übergebene
-     * Elementklasse diese Pfade aber nicht haben darf, da die Kantenklassen des Elementarpfades für
-     * die Elementklasse nicht gelten sollen (laut MetaModel
-     * {@link MetaModel#isRemovedEdgeClass(Class, Class)}, sonst <code>false</code>.
-     *
-     * @param metaPath
-     * @param nextMetaPath
-     * @param elementClass
-     * @return
-     */
-    private boolean isValidElementaryPathStepConnectingClass(final AbstractMetaPath metaPath, final AbstractMetaPath nextMetaPath, final Class<? extends ModelElement> elementClass) {
-        if (metaPath != null) {
-            if (metaPath instanceof ElementaryMetaPath) {
-                ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) metaPath;
-                Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-                if (elementaryMetaPath.hasDirectionForward()) {
-                    if (!metaModel.isEndClass(edgeClass, elementClass)) {
-                        return false;
-                    }
-                }
-
-                boolean checkAsEndClass = elementaryMetaPath.hasDirectionForward();
-                boolean invalid = checkAsEndClass ? !metaModel.isEndClass(edgeClass, elementClass) : !metaModel.isStartClass(edgeClass, elementClass);
-                if (invalid) {
-                    return false;
-                }
-            }
-        }
-        //AXS 29.08.2019: irgendwie sieht die Funktion hier komisch aus. Auf jeden Fall kann hier metaPath null sein und einen NullPointer auslösen. Außerdem scheint einiges von oben hier unten doppelt zu passieren!?
-        if (metaPath instanceof ElementaryMetaPath && nextMetaPath instanceof ElementaryMetaPath) {
-            ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) metaPath;
-
-            Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-            boolean checkAsEndClass = elementaryMetaPath.hasDirectionForward();
-            boolean invalid = checkAsEndClass ? metaModel.isEndClass(edgeClass, elementClass) : metaModel.isStartClass(edgeClass, elementClass);
-            if (invalid) {
-                return false;
-            }
-            elementaryMetaPath = (ElementaryMetaPath) nextMetaPath;
-            edgeClass = elementaryMetaPath.getEdgeClass();
-            boolean checkAsStartClass = elementaryMetaPath.hasDirectionForward();
-            invalid = checkAsStartClass ? metaModel.isStartClass(edgeClass, elementClass) : metaModel.isEndClass(edgeClass, elementClass);
-            if (invalid) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
