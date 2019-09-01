@@ -357,6 +357,17 @@ public class ToolXMLParser {
         return fileVersion;
     }
 
+    private static String getValueInLine(final String line, final String prefix) {
+        int startIndex = line.indexOf(prefix);
+        if (startIndex < 0) {
+            return null;
+        }
+        startIndex += prefix.length();
+        int endIndex = line.indexOf('\'', startIndex);
+        String value = endIndex > startIndex ? line.substring(startIndex, endIndex) : null;
+        return value;
+    }
+
     /**
      * @param file
      * @return int[0] = xmlVersion, int[1] = fileVersion
@@ -383,12 +394,10 @@ public class ToolXMLParser {
         line = dataStream.readLine().toLowerCase();
         if (line.startsWith(FILE_VERSION_LINE_START.toLowerCase())) { //"<!--Tool3lgmFile "
             //supported file version (e.g: <!--Tool3lgmFile version='3.7')
-            int versionStartIndex = line.indexOf(FILE_VERSION_NUMBER_PREFIX) + 1; //" version='"
-            int versionEndIndex = line.indexOf('\'', versionStartIndex);
-            if (versionEndIndex > versionStartIndex) {
-                String versionNumer = line.substring(versionStartIndex, versionEndIndex);
+            String versionNumber = getValueInLine(line, FILE_VERSION_NUMBER_PREFIX); //" version='"
+            if (versionNumber != null) {
                 for (int i = 0; i < FILE_VERSION_SUPPORTED_NUMBERS.length; i++) {
-                    if (FILE_VERSION_SUPPORTED_NUMBERS[i].equals(versionNumer)) {
+                    if (FILE_VERSION_SUPPORTED_NUMBERS[i].equals(versionNumber)) {
                         result.lgmVersionIndex = i;
                         break;
                     }
@@ -400,11 +409,9 @@ public class ToolXMLParser {
 
             //Metamodell is next statement in this line
             result.metaModelContext = Tool3lgmMetaModelContext.getDefaultMetaModelContext();
-            int metaModelNameStartIndex = line.indexOf(FILE_VERSION_METAMODEL_CLASS_PREFIX); //" metamodel='"
-            int metaModelNameEndIndex = line.indexOf('\'', metaModelNameStartIndex);
-            if (metaModelNameEndIndex > metaModelNameStartIndex) {
-                String metaModelName = line.substring(metaModelNameStartIndex, metaModelNameEndIndex);
-                result.metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForID(metaModelName);
+            String metaModelClassName = getValueInLine(line, FILE_VERSION_METAMODEL_CLASS_PREFIX); //" metamodel='"
+            if (metaModelClassName != null) {
+                result.metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForID(metaModelClassName);
             }
             if (result.metaModelContext == null) {
                 throw new LGMVersionException(getResString("lgmversionsfehler"));
@@ -412,16 +419,14 @@ public class ToolXMLParser {
 
             //Model Category (REGULAR or TEMPLATE)
             result.modelCategory = ModelCategory.REGULAR;
-            int modelCategoryStartIndex = line.indexOf(FILE_VERSION_MODEL_CATEGORY_PREFIX); //" category='"
-            int modelCategoryEndIndex = line.indexOf('\'', modelCategoryStartIndex);
-            if (modelCategoryEndIndex > modelCategoryStartIndex) {
-                String modelCategoryName = line.substring(modelCategoryStartIndex, modelCategoryEndIndex).toUpperCase();
-                result.modelCategory = Enum.valueOf(ModelCategory.class, modelCategoryName);
+            String modelCategoryName = getValueInLine(line, FILE_VERSION_METAMODEL_CLASS_PREFIX); //" category='"
+            if (modelCategoryName != null) {
+                try {
+                    result.modelCategory = Enum.valueOf(ModelCategory.class, modelCategoryName);
+                } catch (Exception e) {
+                    throw new LGMVersionException(getResString("lgmversionsfehler"));
+                }
             }
-            if (result.modelCategory == null) {
-                throw new LGMVersionException(getResString("lgmversionsfehler"));
-            }
-
         }
         return result;
     }
