@@ -13,7 +13,7 @@ import de.imise.util.Alphabetical;
 /**
  * @author N.N. (< 2005), AXS (08.04.2019)
  */
-public abstract class LGMTreeNode extends DefaultMutableTreeNode {
+public class LGMTreeNode extends DefaultMutableTreeNode {
 
     private String visibleText = null;
 
