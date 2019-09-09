@@ -156,4 +156,25 @@ public final class MetaModelContext extends SimpleResourceHandler {
     public void unloadMetaModel() {
         metaModel = null;
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(metaModelDefinitionClass);
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MetaModelContext other = (MetaModelContext) obj;
+        return Objects.equals(metaModelDefinitionClass, other.metaModelDefinitionClass);
+    }
+
 }
