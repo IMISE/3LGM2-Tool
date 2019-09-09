@@ -1,0 +1,139 @@
+package de.imise.tool3lgm.graphtools.view.pathtree;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.swing.tree.DefaultTreeModel;
+
+import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
+
+/**
+ * @author AXS (01.09.2019)
+ */
+public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific {
+
+    /** Definiton of the branches of the tree */
+    private final PathTreeDefinition treeDefinition;
+
+    /** root node as {@link LGMTreeNode} */
+    private final LGMTreeNode root;
+
+    /**
+     * @param treeDefinition
+     */
+    public PathTreeModel(final PathTreeDefinition treeDefinition) {
+        super(new StringTreeNode("Root", true));
+        root = (LGMTreeNode) super.root;
+        this.treeDefinition = treeDefinition;
+    }
+
+    /**
+     * @param parent
+     * @param hierarchyDefinitionObject
+     * @return
+     */
+    private LGMTreeNode getOrCreateHierarchyNode(final LGMTreeNode parent, final Object hierarchyDefinitionObject) {
+        for (int i = 0; i < parent.getChildCount(); i++) {
+            LGMTreeNode childNode = (LGMTreeNode) parent.getChildAt(i);
+            Object childNodeUserObject = childNode.getUserObject();
+            //check the UserObject is is equals to the current object in the hierarchy of the definition
+            if (hierarchyDefinitionObject.equals(childNodeUserObject)) {
+                return childNode;
+            }
+        }
+        if (hierarchyDefinitionObject instanceof Class) {
+            try {
+                Class<? extends ModelElement> elementClass = ((Class) hierarchyDefinitionObject).asSubclass(ModelElement.class);
+                ElementsNameBuilder elementsNameBuilder = treeDefinition.getElementsNameBuilder();
+                String elementClassName = elementsNameBuilder.getDisplayableName(elementClass);
+                return new ElementClassTreeNode(elementClass, elementClassName);
+            } catch (Exception e) {
+            }
+        }
+        String hierarchyNodeTextResourceKey = hierarchyDefinitionObject.toString();
+        String hierarchyNodeText = treeDefinition.getResString(hierarchyNodeTextResourceKey);
+        LGMTreeNode hierarchyNode = new LGMTreeNode(hierarchyDefinitionObject, hierarchyNodeText, true);
+        return hierarchyNode;
+    }
+
+    /**
+     * Creates the full hierarchy of the given branch defintion and returns the last node in this hierarchy.
+     *
+     * @param branchDefinition
+     * @return the last node of the hierarchy node defined by the given branch definition
+     */
+    private LGMTreeNode getOrCreateBranchLastHierarchyNode(final PathTreeBranchDefinition branchDefinition) {
+        LGMTreeNode lastHierarchyNode = root;
+        for (Object hiearchyObject : branchDefinition.iterableHierarchyObjects()) {
+            lastHierarchyNode = getOrCreateHierarchyNode(lastHierarchyNode, hiearchyObject);
+        }
+        return lastHierarchyNode;
+    }
+
+    /**
+     * @param parent
+     * @param metaModel
+     * @param elementClass
+     * @return
+     */
+    private Collection<LGMTreeNode> createPathStepNodes(final LGMTreeNode parent, final MetaModel metaModel, final Class<? extends ModelElement> elementClass) {
+        return null;
+    }
+
+    private List<ElementClassTreeNode> createInitialPathStepNodes(final Class<? extends ModelElement> pathStepConnectionClass, final LGMTreeNode parent) {
+        //        modelContext.getAllModels(this);
+
+    }
+
+    /**
+     * @param elementsPath
+     * @param lastHierarchyNode
+     */
+    private void addBranchModelElementsPath(final SimpleMetaPath elementsPath, final LGMTreeNode lastHierarchyNode) {
+        MetaModel metaModel = elementsPath.getMetaModel();
+        MetaModelContext metaModelContext = metaModel.getMetaModelContext();
+        List<GDCollection> collections = Static.getCollections();
+        Collection<GDCollection> models = modelContext.getAllModels(metaModelContext);
+        Class<? extends ModelElement> pathStepConnectionClass = elementsPath.getStartClass();
+        List<ElementContainerTreeNode> netxPathStepStartNodes = new ArrayList<>();
+        int pathLength = elementsPath.length();
+        for (int i = 0; i < pathLength; i++) {
+            //visiblePath.getpa
+        }
+    }
+
+    /**
+     * @param branchDefinition
+     */
+    private void addBranch(final PathTreeBranchDefinition branchDefinition) {
+        LGMTreeNode lastHierarchyNode = getOrCreateBranchLastHierarchyNode(branchDefinition);
+        SimpleMetaPath elementsPath = branchDefinition.getElementsPath();
+        addBranchModelElementsPath(elementsPath, lastHierarchyNode);
+    }
+
+    @Override
+    public void reload() {
+        root.removeAllChildren();
+        for (PathTreeBranchDefinition branchDefinition : treeDefinition) {
+            addBranch(branchDefinition);
+        }
+    }
+
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return treeDefinition.getMetaModelContext();
+    }
+
+}

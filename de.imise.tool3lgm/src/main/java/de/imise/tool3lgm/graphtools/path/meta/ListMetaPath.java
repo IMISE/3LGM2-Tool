@@ -36,7 +36,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      * @param metaPaths
      */
     public ListMetaPath(final String baseResKeyOrName, final AbstractMetaPath... metaPaths) {
-        super(metaPaths[0].metaModel);
+        super(metaPaths[0].getMetaModel());
         this.baseResKeyOrName = baseResKeyOrName;
         this.metaPaths = ImmutableList.copyOf(metaPaths);
         initStartEndClasses();

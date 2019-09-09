@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
@@ -20,7 +21,7 @@ import de.imise.util.collections.CollectionUtils;
  * @author AXS
  * @create 12.10.2010
  */
-public abstract class AbstractMetaPath {
+public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
 
     /**
      * Leere Elementarpfadliste
@@ -58,9 +59,6 @@ public abstract class AbstractMetaPath {
      * MetaPath als valide.
      */
     protected InvalidityCheckResult invalidityCheckResult;
-
-    /** Das MetaModel aus dem die Knoten- und Kantenklassen des Pfades stammen */
-    protected final MetaModel metaModel;
 
     /**
      * If <code>true</code> and the metapath can be recursive (ends with an element type that can be the start element type) then the path is
@@ -112,15 +110,10 @@ public abstract class AbstractMetaPath {
      * @param name
      */
     public AbstractMetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
-        this.metaModel = metaModel;
+        super(metaModel);
         this.startElementClasses = CollectionUtils.ensureImmutable(startElementClasses);
         this.endElementClasses = CollectionUtils.ensureImmutable(endElementClasses);
         this.name = name;
-    }
-
-    /** Liefert das zugrunde liegende MetaModell */
-    public final MetaModel getMetaModel() {
-        return metaModel;
     }
 
     /**

@@ -35,13 +35,15 @@ public class WrapperMetaPath extends SequenceMetaPath {
         wrappedMetaPathSize += endClassPathIndex < 0 ? endClassPathIndex : 0; // bleibt 3 oder wird 2 oder wird 1
         AbstractMetaPath[] wrapped = new AbstractMetaPath[wrappedMetaPathSize];
         if (startClassPathIndex == 0) {
-            wrapped[0] = new ElementaryMetaPath(wrapped[0].metaModel, newStartClass);
+            MetaModel metaModel = wrapped[0].getMetaModel();
+            wrapped[0] = new ElementaryMetaPath(metaModel, newStartClass);
             wrapped[1] = wrappedMetaPath;
         } else {
             wrapped[0] = wrappedMetaPath;
         }
         if (endClassPathIndex > 0) {
-            wrapped[endClassPathIndex] = new ElementaryMetaPath(wrapped[endClassPathIndex].metaModel, newEndClass);
+            MetaModel metaModel = wrapped[endClassPathIndex].getMetaModel();
+            wrapped[endClassPathIndex] = new ElementaryMetaPath(metaModel, newEndClass);
         }
         return wrapped;
     }
