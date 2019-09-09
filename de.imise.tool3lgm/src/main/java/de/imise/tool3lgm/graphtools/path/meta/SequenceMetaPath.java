@@ -14,6 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.util.ReflectionUtils;
+import de.imise.util.collections.CollectionUtils;
 
 /**
  * Pfad der aus einer Hintereianderreihung (Liste) anderer Pfade besteht.
@@ -240,6 +241,14 @@ public class SequenceMetaPath extends ListMetaPath {
             }
         }
         return elementaryMetaPaths;
+    }
+
+    /**
+     * @return Iterable over all ElementaryMetaPaths if this list can be created. If not, an empty iterable will be returned.
+     */
+    public Iterable<ElementaryMetaPath> iterableElementaryMetaPaths() {
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        return CollectionUtils.iterable(elementaryMetaPaths);
     }
 
     @Override

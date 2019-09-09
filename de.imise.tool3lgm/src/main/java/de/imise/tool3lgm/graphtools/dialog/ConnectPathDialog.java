@@ -53,7 +53,7 @@ public class ConnectPathDialog implements ActionListener {
     private static final SimpleMetaPath[] getSimpleMetaPathArray(final UnionMetaPath unionMetaPath) {
         SimpleMetaPath[] simpleMetaPaths = new SimpleMetaPath[unionMetaPath.getMetaPathCount()];
         int index = 0;
-        for (AbstractMetaPath metaPath : unionMetaPath) {
+        for (AbstractMetaPath metaPath : unionMetaPath.iterableMetaPaths()) {
             simpleMetaPaths[index++] = metaPath instanceof SimpleMetaPath ? (SimpleMetaPath) metaPath : null;
         }
         return simpleMetaPaths;

@@ -1,14 +1,15 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.util.collections.CollectionUtils;
+
 /**
  * @author AXS (10 Dec 2018)
  */
-public abstract class ListMetaPath extends AbstractMetaPath implements Iterable<AbstractMetaPath> {
+public abstract class ListMetaPath extends AbstractMetaPath {
 
     /**
      * Liste der Pfade, die dieser Metapfad parallel enthält.
@@ -91,9 +92,11 @@ public abstract class ListMetaPath extends AbstractMetaPath implements Iterable<
         return invalidityCheckResult;
     }
 
-    @Override
-    public final Iterator<AbstractMetaPath> iterator() {
-        return metaPaths.iterator();
+    /**
+     * @return iterable over all metapaths
+     */
+    public Iterable<AbstractMetaPath> iterableMetaPaths() {
+        return CollectionUtils.iterable(metaPaths);
     }
 
     /**
