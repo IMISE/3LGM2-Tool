@@ -94,7 +94,6 @@ import de.imise.tool3lgm.xslt.WebExportDialog;
 import de.imise.tool3lgm.xslt.XMLExportDialog;
 import de.imise.util.Alphabetical;
 import de.imise.util.BrowseUtils;
-import de.imise.util.PluginUtils;
 import de.imise.util.image.ComponentAsImageExportHandler;
 import de.imise.util.pair.Pair;
 import de.imise.util.swing.dialog.DirectoryChooser;
@@ -213,8 +212,8 @@ public class ActionLibrary {
             })
             private static final List<Action> getImportPluginActions() {
                 List<Action> importPluginActions = new ArrayList<>();
-                List<DataImporter> dataImporters = PluginUtils.loadInstances(Tool3lgmConstants.PLUGIN_DIR, DataImporter.class);
-                List<ModelConverterDefinition> modelConverterDefinitions = PluginUtils.loadInstances(Tool3lgmConstants.PLUGIN_DIR, ModelConverterDefinition.class);
+                List<DataImporter> dataImporters = Static.loadPlugins(DataImporter.class);
+                List<ModelConverterDefinition> modelConverterDefinitions = Static.loadPlugins(ModelConverterDefinition.class);
                 for (final DataImporter dataImporter : dataImporters) {
                     Class<? extends MetaModelDefinition> importMetaModelDefinitionClass = dataImporter.getImportMetaModelDefinitionClass();
                     //wenn das Metamodel, in das importiert werden soll, ein reguläres Modellierungsmetamodell ist, dann eine direkte Import-Action anbieten

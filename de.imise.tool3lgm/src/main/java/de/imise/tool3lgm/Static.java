@@ -33,6 +33,7 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
+import de.imise.util.PluginUtils;
 import de.imise.util.Sys;
 import de.imise.util.swing.dialog.OutputDialog;
 import de.imise.util.swing.dialog.ProgressDialog;
@@ -446,6 +447,33 @@ public class Static {
             return true;
         }
         return false;
+    }
+
+    // Plugin //
+
+    /**
+     * Lädt aus dem Plugin-Verzeichnis alle Klassen der übergebenen Art, ruft dann von
+     * jeder Klasse den parameterlosen Konstruktor auf und gibt alle Instanzen zurück,
+     * bei denen der Aufruf des Konstruktors ohne Fehler geklappt hat.
+     *
+     * @param superClassOfResultClasses
+     * @return Instanzen der übergebenen Klasse aus dem übergebenen Verzeichnis
+     */
+    public static <T> List<T> loadPlugins(final Class<T> superClassOfResultClasses) {
+        return PluginUtils.loadInstances(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
+    }
+
+    /**
+     * Lädt aus dem Plugin-Verzeichnis die alle Klassen der übergebenen Art, ruft
+     * dann von der jeweils nächsten Klasse den parameterlosen Konstruktor auf und
+     * gibt die erste Instanz zurück, bei denen der Aufruf des Konstruktors ohne
+     * Fehler geklappt hat.
+     *
+     * @param superClassOfResultClasses
+     * @return Instanz der übergebenen Klasse aus dem übergebenen Verzeichnis oder <code>null</code>, wenn keine Instanz gefunden wurde
+     */
+    public static <T> T loadPlugin(final Class<T> superClassOfResultClasses) {
+        return PluginUtils.loadInstance(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
     }
 
 }
