@@ -34,7 +34,7 @@ public class Tool3lgmModelType {
     private final MetaModelContext metaModelContext;
 
     /** Modell-Kategorie dieses Typs */
-    private final ModelCategory modelCategory;
+    private ModelCategory modelCategory;
 
     /**
      * @param metaModelContext
@@ -64,6 +64,13 @@ public class Tool3lgmModelType {
      */
     public ModelCategory getModelCategory() {
         return modelCategory;
+    }
+
+    /**
+     * @param modelCategory
+     */
+    public void setModelCategory(final Tool3lgmModelType.ModelCategory modelCategory) {
+        this.modelCategory = modelCategory;
     }
 
 }

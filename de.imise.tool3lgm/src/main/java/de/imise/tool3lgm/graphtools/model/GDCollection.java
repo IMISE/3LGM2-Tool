@@ -300,6 +300,13 @@ public final class GDCollection extends UserFieldTarget {
     }
 
     /**
+     * @param modelCategory
+     */
+    public void setModelCategory(final Tool3lgmModelType.ModelCategory modelCategory) {
+        modelType.setModelCategory(modelCategory);
+    }
+
+    /**
      * Diese Funktion mach genau das umgekehrte wie die Funktion {@link Tool3lgmConstants#getResString(String)}. D.h. sie schaut zuerst in die
      * Resourcen des eigenen Metamodells und wenn sie dort den key nicht gefunden hat, dann in die allgemeinen des Tools. Im Unterschied zu der
      * Funktion aus den {@link Tool3lgmConstants} wird hier aber nicht in die Resourcen des aktuell selektierten Modells geschaut, sondern in die
