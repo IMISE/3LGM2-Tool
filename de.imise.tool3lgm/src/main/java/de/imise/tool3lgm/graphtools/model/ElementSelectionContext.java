@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
@@ -16,7 +17,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
  * gegebener Selektion müssen (Kontext-)Menüeinträge angepasst werden bzw. Actions verfügbar sein oder eben nicht. Diese Klasse delegiert die
  * eigentliche Selektion und kann in die Vererbungshierarchie eingehängt werden.
  */
-public class ElementSelectionContext {
+public class ElementSelectionContext extends MetaModelSpecificAdapter {
 
     /**
      * Die eigentliche Selektion
@@ -27,6 +28,7 @@ public class ElementSelectionContext {
      * @param metaModel
      */
     public ElementSelectionContext(final MetaModel metaModel) {
+        super(metaModel);
         selectedContainer = new ModelSelection(metaModel);
     }
 

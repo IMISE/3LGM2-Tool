@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
-import static de.imise.tool3lgm.Tool3lgmConstants.getResStringWithoutError;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LAYER_COUNT;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_INDEX;
@@ -44,14 +43,13 @@ import javax.swing.SwingConstants;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
-import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -96,7 +94,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * Repräsentiert ein Teilmodell. Dieses Teilmodell kann das Hauptmodell sein (= spezielle Teilmodell das alle Elemente enthält, aber keine Grafik
  * besitzt) oder ein Szenario (= eine beliebige Elementauswahl aus allen Elementen mit einer grafischen Repräsentation)
  */
-public abstract class GraphDocument extends ElementSelectionContext implements SwingConstants {
+public abstract class GraphDocument extends ElementSelectionContext implements SwingConstants, MetaModelSpecific {
 
     /** Zeichen, das in Kommandos zusammengehörigen Text umschließt, damit er als zusammengehörig erkannt werden kann */
     public static final char GDCOMMAND_TEXT_SURROUNDER = '\'';
@@ -216,42 +214,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     // Verwaltung globaler Modelldaten --- Anfang ---
 
     /**
-     * @return the {@link MetaModel} that is the basis for this (sub-)model.
-     */
-    public MetaModel getMetaModel() {
-        return metaModel;
-    }
-
-    /**
      * @return the model category of the {@link GDCollection}
      */
     public ModelCategory getModelCategory() {
         return gdcoll.getModelCategory();
-    }
-
-    /**
-     * Diese Funktion mach genau das umgekehrte wie die Funktion {@link Tool3lgmConstants#getResString(String)}. D.h. sie schaut zuerst in die
-     * Resourcen des eigenen Metamodells und wenn sie dort den key nicht gefunden hat, dann in die allgemeinen des Tools. Im Unterschied zu der
-     * Funktion aus den {@link Tool3lgmConstants} wird hier aber nicht in die Resourcen des aktuell selektierten Modells geschaut, sondern in die
-     * dieses Modells hier.
-     *
-     * @param key
-     * @return
-     * @see MetaModelContext#getResString(String)
-     */
-    public String getResString(final String key) {
-        return getMetaModel().getResString(key);
-    }
-
-    /**
-     * Liefert die Klasse, über die alle Knoten- und Kantenklassennamen generiert werden, also die Anzeigenamen in Ein- und Mehrzahl und bei den
-     * Kanten die gerichteten Namen.
-     *
-     * @return
-     * @see MetaModelContext#getElementsNameBuilder()
-     */
-    public ElementsNameBuilder getElementsNameBuilder() {
-        return getMetaModel().getElementsNameBuilder();
     }
 
     /**
