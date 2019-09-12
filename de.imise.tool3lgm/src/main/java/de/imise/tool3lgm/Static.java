@@ -112,26 +112,17 @@ public class Static {
 
     /** Liefert das aktuelle selektierte Modell */
     public static GDCollection getSelectedGDCollection() {
-        if (tool == null) {
-            return null;
-        }
-        return tool.getSelectedGDCollection();
+        return tool == null ? null : tool.getSelectedGDCollection();
     }
 
     /** Liefert das Modell, das vor dem aktuell selektierten Modell selektiert war */
     public static GDCollection getPreSelectedGDCollection() {
-        if (tool == null) {
-            return null;
-        }
-        return tool.getPreSelectedGDCollection();
+        return tool == null ? null : tool.getPreSelectedGDCollection();
     }
 
     /** Gibt das momentan ausgewählte {@link GraphDocument} zurück */
     public static LGMGraphDocument getSelectedDoc() {
-        if (tool == null) {
-            return null;
-        }
-        return tool.getSelectedDoc();
+        return tool == null ? null : tool.getSelectedDoc();
     }
 
     /**
@@ -140,10 +131,9 @@ public class Static {
      * @param doc
      */
     public static void setSelectedDoc(final GraphDocument doc) {
-        if (tool == null) {
-            return;
-        }
+        if (tool != null) {
         tool.setSelectedDoc(doc);
+    }
     }
 
     /**
@@ -152,10 +142,7 @@ public class Static {
      * @return
      */
     public static List<GDCollection> getCollections() {
-        if (tool == null) {
-            return null;
-        }
-        return tool.getCollections();
+        return tool == null ? null : tool.getCollections();
     }
 
     /**
@@ -165,10 +152,7 @@ public class Static {
      * @return null if index < 0 or index >= collections.size(); otherwise the GDCollection with specified index
      */
     public static GDCollection getCollection(final int index) {
-        if (tool == null) {
-            return null;
-        }
-        return tool.getCollection(index);
+        return tool == null ? null : tool.getCollection(index);
     }
 
     /**
@@ -177,10 +161,7 @@ public class Static {
      * @return
      */
     public static int getCollectionCount() {
-        if (tool == null) {
-            return -1;
-        }
-        return tool.getCollectionCount();
+        return tool == null ? -1 : tool.getCollectionCount();
     }
 
     /**
@@ -189,23 +170,17 @@ public class Static {
      * @return AbstractInternalFrame[]
      */
     public static JInternalFrame[] getAllFrames() {
-        if (tool == null) {
-            return null;
-        }
-        return tool.getAllFrames();
+        return tool == null ? null : tool.getAllFrames();
     }
 
     /** Gibt das gerade aktivierte Frame zurück */
     public static AbstractInternalFrame getActiveFrame() {
-        if (tool == null) {
-            return null;
-        }
-        return tool.getActiveFrame();
+        return tool == null ? null : tool.getActiveFrame();
     }
 
     /** Gibt zurück, ob interne Frames existieren */
     public static boolean isFramesExists() {
-        return tool.getAllFrames().length > 0;
+        return tool != null && tool.getAllFrames().length > 0;
     }
 
     /** Gibt zurück, ob ein aktiver, sichtbarer Grafik-Frame existiert */
