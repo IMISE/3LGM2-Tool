@@ -5,7 +5,7 @@ import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.REGULAR;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 
 /**
- * Encapsulates all informations kapselt, which states the absulute type of a model. This contains a {@link MetaModelContext} and a
+ * Encapsulates all informations which states the absulute type of a model. This contains a {@link MetaModelContext} and a
  * {@link ModelCategory}.
  *
  * @author AXS (26.08.2019)
