@@ -205,4 +205,12 @@ public class SimpleMetaPath extends SequenceMetaPath {
         return getFullPathString();
     }
 
+    /**
+     * @return getMetaPathCount()
+     * @see #getMetaPathCount()
+     */
+    public int length() {
+        return getMetaPathCount();
+    }
+
 }
