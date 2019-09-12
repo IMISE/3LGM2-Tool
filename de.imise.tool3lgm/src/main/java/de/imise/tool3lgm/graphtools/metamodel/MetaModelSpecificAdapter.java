@@ -21,11 +21,12 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
     protected final MetaModel metaModel;
 
     /**
-     * @param metamodel
+     * @param metaModel
      *            the metamodel of this instance
      */
-    public MetaModelSpecificAdapter(final MetaModel metamodel) {
-        this(metamodel.getMetaModelContext());
+    public MetaModelSpecificAdapter(final MetaModel metaModel) {
+        this.metaModel = metaModel;
+        metaModelContext = metaModel.getMetaModelContext();
     }
 
     /**
@@ -34,7 +35,7 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
      */
     public MetaModelSpecificAdapter(final MetaModelContext metaModelContext) {
         this.metaModelContext = metaModelContext;
-        metaModel = getMetaModel();
+        metaModel = metaModelContext.getMetaModel();
     }
 
     /**
@@ -55,7 +56,7 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
 
     @Override
     public final MetaModel getMetaModel() {
-        return MetaModelSpecific.super.getMetaModel();
+        return metaModel;
     }
 
     @Override
