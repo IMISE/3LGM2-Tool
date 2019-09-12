@@ -27,6 +27,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
@@ -132,8 +133,8 @@ public class Static {
      */
     public static void setSelectedDoc(final GraphDocument doc) {
         if (tool != null) {
-        tool.setSelectedDoc(doc);
-    }
+            tool.setSelectedDoc(doc);
+        }
     }
 
     /**
@@ -193,6 +194,13 @@ public class Static {
     public static boolean isActiveFrameMatrixFrame() {
         AbstractInternalFrame f = getActiveFrame();
         return f != null && f instanceof MatrixViewInternalFrame && f.isVisible();
+    }
+
+    /**
+     * @return the template library manager
+     */
+    public TemplateLibrariesManager getTemplateLibrariesManager() {
+        return tool == null ? null : tool.getTemplateLibrariesManager();
     }
 
     /**

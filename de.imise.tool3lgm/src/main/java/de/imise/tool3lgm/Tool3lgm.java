@@ -29,6 +29,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionFileHandler;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
@@ -52,6 +53,8 @@ public class Tool3lgm {
     /** Das Hauptfenster */
     private final MainFrame mainFrame;
 
+    private final TemplateLibrariesManager templateLibrariesManager;
+
     /**
      * constructor
      *
@@ -68,6 +71,7 @@ public class Tool3lgm {
 
         mainFrame = new MainFrame(visible);
 
+        templateLibrariesManager = visible ? new TemplateLibrariesManager() : null;
         //den Hauptframe in die Mitte setzen
         //setLocationRelativeTo(null);
         //den Hauptframe initialisieren, damit die JOption-Panes der Lizenzanfrage an der richtigen Stelle sind.
@@ -120,6 +124,13 @@ public class Tool3lgm {
      */
     public boolean hasVisibleMainFrame() {
         return mainFrame.isVisible();
+    }
+
+    /**
+     * @return the templateLibrariesManager
+     */
+    public TemplateLibrariesManager getTemplateLibrariesManager() {
+        return templateLibrariesManager;
     }
 
     /**
