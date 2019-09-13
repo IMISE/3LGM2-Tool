@@ -3,6 +3,7 @@ package de.imise.util.collections;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -755,6 +756,36 @@ public abstract class CollectionUtils {
             max = Math.max(max, col.size());
         }
         return max;
+    }
+
+    /**
+     * Wraps the Iterator with an new Iterable.
+     *
+     * @param <T>
+     * @param iterator
+     * @return
+     */
+    public static <T> Iterable<T> iterable(final Iterator<T> iterator) {
+        return () -> iterator;
+    }
+
+    /**
+     * Wraps the list wit an new Iterable. If the list ist <code>null</code> an empty iterable will be returned.
+     *
+     * @param <T>
+     * @param list
+     * @return
+     */
+    public static <T> Iterable<T> iterable(final List<T> list) {
+        return new Iterable<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                if (list == null) {
+                    return Collections.emptyIterator();
+                }
+                return list.iterator();
+            }
+        };
     }
 
     /**
