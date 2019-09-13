@@ -12,6 +12,8 @@ import javax.swing.KeyStroke;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
+import com.google.common.base.Strings;
+
 import de.imise.util.pair.Pair;
 
 /**
@@ -336,6 +338,10 @@ public abstract class ExtendedAction extends AbstractAction {
                 item.setEnabled(isEnabled());
             }
         });
+        String toolTip = getShortDescription();
+        if (!Strings.isNullOrEmpty(toolTip)) {
+            item.setToolTipText(toolTip);
+        }
         return item;
     }
 
