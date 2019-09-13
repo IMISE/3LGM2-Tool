@@ -524,15 +524,16 @@ public class ActionLibrary {
                     //nichts machen
                 }
             }
-            Action[] actions = new Action[files.size()];
+            ExtendedAction[] actions = new ExtendedAction[files.size()];
             for (int i = 0; i < actions.length; i++) {
                 final File file = files.get(i);
-                actions[i] = new AbstractAction(file.getName()) {
+                actions[i] = new ExtendedAction(file.getName()) {
                     @Override
                     public void actionPerformed(final ActionEvent e) {
                         Static.getTool().openModelFile(file);
                     }
                 };
+                actions[i].setShortDescription(file.getPath());
             }
             // Die Actions werden hier nicht alphabetisch sortiert, da die durch die
             // UserProperties gegebene Reihenfolge entscheidend ist
