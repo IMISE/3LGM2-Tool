@@ -358,7 +358,10 @@ public class ToolXMLParser {
     }
 
     private static String getValueInLine(final String line, final String prefix) {
-        int startIndex = line.indexOf(prefix);
+        //Lower case muss sein, weil es Modelle gab, bei denen die prefixe mit Großbuchstaben und dann später nur klein geschrieben wurden
+        String lowerCaseLine = line.toLowerCase();
+        String lowerCasePrefix = prefix.toLowerCase();
+        int startIndex = lowerCaseLine.indexOf(lowerCasePrefix);
         if (startIndex < 0) {
             return null;
         }
