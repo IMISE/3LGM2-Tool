@@ -391,8 +391,8 @@ public class ToolXMLParser {
 
         //FILE_VERSION_SUPPORTED_NUMBERS
         //next line should start with "<!--Tool3lgmFile " and contains information abaout the file version, metamodel and the model category
-        line = dataStream.readLine().toLowerCase();
-        if (line.startsWith(FILE_VERSION_LINE_START.toLowerCase())) { //"<!--Tool3lgmFile "
+        line = dataStream.readLine();
+        if (line.startsWith(FILE_VERSION_LINE_START)) { //"<!--Tool3lgmFile "
             //supported file version (e.g: <!--Tool3lgmFile version='3.7')
             String versionNumber = getValueInLine(line, FILE_VERSION_NUMBER_PREFIX); //" version='"
             if (versionNumber != null) {
@@ -419,7 +419,7 @@ public class ToolXMLParser {
 
             //Model Category (REGULAR or TEMPLATE)
             result.modelCategory = ModelCategory.REGULAR;
-            String modelCategoryName = getValueInLine(line, FILE_VERSION_METAMODEL_CLASS_PREFIX); //" category='"
+            String modelCategoryName = getValueInLine(line, FILE_VERSION_MODEL_CATEGORY_PREFIX); //" category='"
             if (modelCategoryName != null) {
                 try {
                     result.modelCategory = Enum.valueOf(ModelCategory.class, modelCategoryName);
