@@ -3,7 +3,7 @@ package de.imise.util.event;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-public abstract class PropertyChangeHandler {
+public class PropertyChangeHandler {
 
     /**
      * Stellt Property-Change-Funktionalität zur Verfügung. <br>
