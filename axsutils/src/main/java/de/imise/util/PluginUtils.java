@@ -105,9 +105,12 @@ public class PluginUtils {
      *
      * @param file
      * @param superClassOfResultClasses
+     * @param findOnlyOne
+     *            wenn <code>true</code> ist in der Rückgabeliste nur 1 Element und zwar das zuerst gefundene. Damit kann man die weitere Suche
+     *            abbrechen, wenn klar ist, dass max. 1 Element zurück kommen kann.
      * @return Instanzen der übergebenen Klasse aus dem übergebenen Verzeichnis
      */
-    public static <T> List<T> loadInstances(final File file, final Class<T> superClassOfResultClasses) {
+    private static <T> List<T> loadInstances(final File file, final Class<T> superClassOfResultClasses, final boolean findOnlyOne) {
         List<Class<? extends T>> classes = PluginUtils.loadClasses(file, superClassOfResultClasses);
         List<T> instances = new ArrayList<>();
         for (Class<? extends T> clazz : classes) {
@@ -119,9 +122,42 @@ public class PluginUtils {
             }
             if (instance != null) {
                 instances.add(instance);
+                if (findOnlyOne) {
+                    break;
+                }
             }
         }
         return instances;
+    }
+
+    /**
+     * Lädt aus dem übergebenen Verzeichnis alle Klassen der übergebenen Art, ruft
+     * dann von jeder Klasse den parameterlosen Konstruktor auf und gibt alle
+     * Instanzen zurück, bei denen der Aufruf des Konstruktors ohne Fehler geklappt
+     * hat.
+     *
+     * @param file
+     * @param superClassOfResultClasses
+     * @return Instanzen der übergebenen Klasse aus dem übergebenen Verzeichnis
+     */
+    public static <T> List<T> loadInstances(final File file, final Class<T> superClassOfResultClasses) {
+        return loadInstances(file, superClassOfResultClasses, false);
+    }
+
+    /**
+     * Lädt aus dem übergebenen Verzeichnis die alle Klassen der übergebenen Art,
+     * ruft dann von der jeweils nächsten Klasse den parameterlosen Konstruktor auf
+     * und gibt die erste Instanz zurück, bei denen der Aufruf des Konstruktors
+     * ohne Fehler geklappt hat.
+     *
+     * @param file
+     * @param superClassOfResultClasses
+     * @return Instanz der übergebenen Klasse aus dem übergebenen Verzeichnis oder
+     *         <code>null</code>, wenn keine Instanz gefunden wurde
+     */
+    public static <T> T loadInstance(final File file, final Class<T> superClassOfResultClasses) {
+        List<T> instances = loadInstances(file, superClassOfResultClasses, true);
+        return instances.size() > 0 ? instances.get(0) : null;
     }
 
 }
