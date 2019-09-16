@@ -38,6 +38,7 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.BrowseUtils;
+import de.imise.util.collections.CollectionUtils;
 import de.imise.util.event.ListenerSupport;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
@@ -575,8 +576,8 @@ public class Tool3lgm {
     /**
      * @return Kopie der Liste der <code>GDCollection</code>s
      */
-    public List<GDCollection> getCollections() {
-        return new ArrayList<>(collections);
+    public Iterable<GDCollection> iterableCollections() {
+        return CollectionUtils.iterable(collections);
     }
 
     /**

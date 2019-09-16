@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.event.action;
 
 import java.awt.event.ActionEvent;
-import java.util.List;
 
 import javax.swing.JCheckBoxMenuItem;
 
@@ -45,9 +44,8 @@ public abstract class GlobalOptionAction extends StaticAction implements OptionA
 
     /** Benachrichtigt das Tool über das Eintreten des spezifizierten Ereignisses */
     private void distributeOptionChange(final LGMChangeType eventCode) {
-        List<GDCollection> collections = Static.getTool().getCollections();
-        for (int i = 0; i < collections.size(); i++) {
-            GDCollection col = collections.get(i);
+        for (int i = 0; i < Static.getCollectionCount(); i++) {
+            GDCollection col = Static.getCollection(i);
             col.distribute(eventCode);
         }
     }

@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.gui.menu;
 
-import static de.imise.tool3lgm.Static.getCollections;
 import static de.imise.tool3lgm.Static.getPreSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Tool3lgmConstants.getIcon;
@@ -2139,7 +2138,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
             return null;
         }
         JMenu menu = new JMenu(getResString("inmodel"));
-        for (GDCollection gdcoll : getCollections()) {
+        for (GDCollection gdcoll : Static.iterableCollections()) {
             GraphDocument doc = getDoc();
             if (gdcoll != doc.getCollection()) {
                 menu.add(getSubModelMenu(gdcoll));
@@ -2183,7 +2182,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
         JMenu menu = new JMenu(getResString("join_elements"));
         JMenuItem item;
         ModelElement me1 = doc.getLastSelected().getElement();
-        for (GDCollection gdcoll : Static.getCollections()) {
+        for (GDCollection gdcoll : Static.iterableCollections()) {
             if (gdcoll == doc.getCollection()) {
                 continue;
             }

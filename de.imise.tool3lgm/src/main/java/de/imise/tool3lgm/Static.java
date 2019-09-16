@@ -19,6 +19,8 @@ import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import org.apache.commons.collections4.IterableUtils;
+
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
@@ -142,8 +144,8 @@ public class Static {
      *
      * @return
      */
-    public static List<GDCollection> getCollections() {
-        return tool == null ? null : tool.getCollections();
+    public static Iterable<GDCollection> iterableCollections() {
+        return tool == null ? IterableUtils.emptyIterable() : tool.iterableCollections();
     }
 
     /**
