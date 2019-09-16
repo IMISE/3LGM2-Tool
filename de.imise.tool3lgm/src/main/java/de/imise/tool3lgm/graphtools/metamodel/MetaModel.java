@@ -2069,4 +2069,34 @@ public final class MetaModel {
         return createElement(me.getClass(), log);
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (metaModelContext == null ? 0 : metaModelContext.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MetaModel other = (MetaModel) obj;
+        if (metaModelContext == null) {
+            if (other.metaModelContext != null) {
+                return false;
+            }
+        } else if (!metaModelContext.equals(other.metaModelContext)) {
+            return false;
+        }
+        return true;
+    }
+
 }
