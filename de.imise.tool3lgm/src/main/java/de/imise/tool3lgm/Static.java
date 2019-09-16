@@ -201,7 +201,7 @@ public class Static {
     /**
      * @return the template library manager
      */
-    public TemplateLibrariesManager getTemplateLibrariesManager() {
+    public static TemplateLibrariesManager getTemplateLibrariesManager() {
         return tool == null ? null : tool.getTemplateLibrariesManager();
     }
 
