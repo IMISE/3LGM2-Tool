@@ -90,6 +90,7 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -127,7 +128,7 @@ import de.imise.util.swing.dialog.NameAndColorInputDialog;
  *
  * @author thomas, AXS
  */
-public final class GDCollection extends UserFieldTarget {
+public final class GDCollection extends UserFieldTarget implements MetaModelSpecific {
 
     /** Holds the {@link MetaModelContext} and the type of the model ( {@link Tool3lgmModelType.ModelCategory} */
     private Tool3lgmModelType modelType;
@@ -280,6 +281,7 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      *         the handler (initializer) for the metamodel of this model and the metamodel corresponding resource bundle
      */
+    @Override
     public MetaModelContext getMetaModelContext() {
         return modelType.getMetaModelContext();
     }
@@ -288,6 +290,7 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      *         the metamodel that is the basis for this model
      */
+    @Override
     public MetaModel getMetaModel() {
         return metaModel;
     }
@@ -316,6 +319,7 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      * @see MetaModelContext#getResString(String)
      */
+    @Override
     public String getResString(final String key) {
         MetaModelContext metaModelContext = getMetaModelContext();
         return metaModelContext.getResString(key);
@@ -328,6 +332,7 @@ public final class GDCollection extends UserFieldTarget {
      * @return
      * @see MetaModelContext#getElementsNameBuilder()
      */
+    @Override
     public ElementsNameBuilder getElementsNameBuilder() {
         MetaModelContext metaModelContext = getMetaModelContext();
         return metaModelContext.getElementsNameBuilder();
