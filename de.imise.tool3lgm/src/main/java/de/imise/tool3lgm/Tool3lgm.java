@@ -70,9 +70,13 @@ public class Tool3lgm {
         } catch (InterruptedException e) {
         }
 
+        // der templateLibrariesManager muss vor dem MainFrame initilaisiert werden, weil er vor dem
+        // eventuell sichtbaren TemplateBrowser als Tool3lgmChangeListener registriert sein muuss, damit
+        // er sich korrekt updated, bevor der TemplateBrowser beim selben Ereignis (selectedModelChanged)
+        // auf ihn zugreift
+        templateLibrariesManager = visible ? new TemplateLibrariesManager() : null;
         mainFrame = new MainFrame(visible);
 
-        templateLibrariesManager = visible ? new TemplateLibrariesManager() : null;
         //den Hauptframe in die Mitte setzen
         //setLocationRelativeTo(null);
         //den Hauptframe initialisieren, damit die JOption-Panes der Lizenzanfrage an der richtigen Stelle sind.

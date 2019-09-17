@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collection;
 import java.util.List;
 
 import de.imise.tool3lgm.MetaModelContext;
@@ -12,6 +13,8 @@ import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
+import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
@@ -46,8 +49,6 @@ public class TemplateLibrariesManager implements PropertyChangeListener, Tool3lg
     *
     */
     private void loadOrUnloadTemplates() {
-        //        Sys.err1("BEFORE");
-        //        templateLibrariesContext.print();
         //unload
         if (!OPTION_TEMPLATE_BROWSER_SHOW.is()) {
             templateLibrariesContext.clear();
@@ -60,30 +61,54 @@ public class TemplateLibrariesManager implements PropertyChangeListener, Tool3lg
             return;
         }
         Class<? extends MetaModelDefinition> metaModelDefinitionClass = selectedMetaModelContext.getMetaModelDefinitionClass();
-        List<TemplateLibraryServer> templateLibraryServers = Static.loadPlugins(TemplateLibraryServer.class);
+        List<TemplateLibraryProvider> templateLibraryServers = Static.loadPlugins(TemplateLibraryProvider.class);
         removeUnfittingTemplateLibraryServers(templateLibraryServers, metaModelDefinitionClass);
         addTemplateLibraries(templateLibraryServers);
-        //        Sys.err1("AFTER");
-        //        templateLibrariesContext.print();
     }
 
     /**
+     * Removes all template library servers which have a different metamodel definition class
+     * than the given class. Same means that the given metamodel definition class must be the
+     * same class or a superclass.
+     *
      * @param templateLibraryServers
+     * @param metaModelDefinitionClass
      */
-    private void removeUnfittingTemplateLibraryServers(final List<TemplateLibraryServer> templateLibraryServers, final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+    private void removeUnfittingTemplateLibraryServers(final List<TemplateLibraryProvider> templateLibraryServers, final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         for (int i = templateLibraryServers.size() - 1; i >= 0; i--) {
-            TemplateLibraryServer templateLibraryServer = templateLibraryServers.get(i);
+            TemplateLibraryProvider templateLibraryServer = templateLibraryServers.get(i);
             if (!templateLibraryServer.hasMetaModelDefinitionClass(metaModelDefinitionClass)) {
                 templateLibraryServers.remove(i);
             }
         }
     }
 
-    private void addTemplateLibraries(final Iterable<TemplateLibraryServer> templateLibraryServers) {
-        for (TemplateLibraryServer templateLibraryServer : templateLibraryServers) {
+    /**
+     * @param templateLibraryServers
+     */
+    private void addTemplateLibraries(final Iterable<TemplateLibraryProvider> templateLibraryServers) {
+        for (TemplateLibraryProvider templateLibraryServer : templateLibraryServers) {
             GDCollection templateModel = templateLibraryServer.getTemplateLibrary();
-            templateLibrariesContext.addTemlate(templateModel);
+            TemplateViewDefinition templateViewDefinition = templateLibraryServer.getViewDefinition();
+            List<PathTreeBranchDefinition> treeBranchDefinition = templateViewDefinition.getTreeBranchDefinition();
+            templateLibrariesContext.addTemlate(templateModel, treeBranchDefinition);
         }
+    }
+
+    /**
+     * @param metaModelContext
+     * @return
+     */
+    public Collection<GDCollection> getTemplates(final MetaModelContext metaModelContext) {
+        return templateLibrariesContext.getTemplates(metaModelContext);
+    }
+
+    /**
+     * @param metaModelContext
+     * @return
+     */
+    public PathTreeDefinition getTemplateTreeDefintion(final MetaModelContext metaModelContext) {
+        return templateLibrariesContext.getTemplateTreeDefinition(metaModelContext);
     }
 
 }

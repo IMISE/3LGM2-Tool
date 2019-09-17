@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.pathtree;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iter
     /**
      * @param metaModelContext
      */
-    public PathTreeDefinition(final MetaModelContext metaModelContext, final int i) {
+    public PathTreeDefinition(final MetaModelContext metaModelContext) {
         super(metaModelContext);
         //        propertyChangeHandler = new PropertyChangeHandler(this);
     }
@@ -32,7 +31,7 @@ public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iter
         }
     }
 
-    public void addBranches(final Collection<PathTreeBranchDefinition> branches) {
+    public void addBranches(final Iterable<PathTreeBranchDefinition> branches) {
         for (PathTreeBranchDefinition branch : branches) {
             addBranch(branch);
         }

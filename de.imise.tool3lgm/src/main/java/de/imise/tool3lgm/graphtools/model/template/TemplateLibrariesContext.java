@@ -1,13 +1,18 @@
 package de.imise.tool3lgm.graphtools.model.template;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionPrinter;
+import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
+import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 
 /**
  * Context for the templates view. It stores a set of templates for every metamodel.
@@ -16,22 +21,33 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionPrinter;
  */
 public class TemplateLibrariesContext {
 
-    /** Map with the all templates for a metamodel context */
-    private final Multimap<MetaModelContext, GDCollection> metaModelContextToTemplates;
+    /**
+     * All metaModelContexts whose templates are loaded. If there are no templates
+     * for a metaModelContext the metaModelContext is added nevertheless to indicate
+     * that there is nothing to load.
+     */
+    private final Set<MetaModelContext> metaModelContextsWithLoadedTemplates;
+
+    /** Map with all branches for the tempalte browser tree which should be visible if such an template will be displayed */
+    private final Map<GDCollection, PathTreeDefinition> templateToTreeDefinition;
 
     /**
      *
      */
     public TemplateLibrariesContext() {
-        metaModelContextToTemplates = HashMultimap.create(3, 3);
+        metaModelContextsWithLoadedTemplates = new HashSet<>();
+        templateToTreeDefinition = new HashMap<>();
     }
 
     /**
      * @param template
+     * @param treeBranchDefinitions
      */
-    public void addTemlate(final GDCollection template) {
+    public void addTemlate(final GDCollection template, final List<PathTreeBranchDefinition> treeBranchDefinitions) {
         MetaModelContext metaModelContext = template.getMetaModelContext();
-        metaModelContextToTemplates.put(metaModelContext, template);
+        PathTreeDefinition treeDefinition = new PathTreeDefinition(metaModelContext);
+        treeDefinition.addBranches(treeBranchDefinitions);
+        templateToTreeDefinition.put(template, treeDefinition);
     }
 
     /**
@@ -41,14 +57,20 @@ public class TemplateLibrariesContext {
      * @param metaModelContext
      */
     public void setNoTemplatesAvailable(final MetaModelContext metaModelContext) {
-        metaModelContextToTemplates.put(metaModelContext, null);
+        metaModelContextsWithLoadedTemplates.add(metaModelContext);
     }
 
     /**
      * @param metaModelContext
      */
-    public void removeTemplates(final MetaModelContext metaModelContext) {
-        metaModelContextToTemplates.removeAll(metaModelContext);
+    public void remove(final MetaModelContext metaModelContext) {
+        Set<GDCollection> templates = templateToTreeDefinition.keySet();
+        for (GDCollection template : templates) {
+            if (template.hasMetaModelContext(metaModelContext)) {
+                templateToTreeDefinition.remove(template);
+            }
+        }
+        metaModelContextsWithLoadedTemplates.remove(metaModelContext);
     }
 
     /**
@@ -58,30 +80,58 @@ public class TemplateLibrariesContext {
      * @return
      */
     public boolean contains(final MetaModelContext metaModelContext) {
-        Set<MetaModelContext> metaModelContexts = metaModelContextToTemplates.keySet();
-        return metaModelContexts.contains(metaModelContext);
+        return metaModelContextsWithLoadedTemplates.contains(metaModelContext);
     }
 
     /**
      * Clears all templates in the context
      */
     public void clear() {
-        metaModelContextToTemplates.clear();
+        metaModelContextsWithLoadedTemplates.clear();
+        templateToTreeDefinition.clear();
     }
 
     /**
      * @return <code>true</code> if the context is empty (no templates added or all removed)
      */
     public boolean isEmpty() {
-        return metaModelContextToTemplates.isEmpty();
+        return metaModelContextsWithLoadedTemplates.isEmpty();
     }
 
+    /**
+     *
+     */
     public void print() {
-        for (MetaModelContext metaModelContext : metaModelContextToTemplates.keys()) {
-            for (GDCollection template : metaModelContextToTemplates.get(metaModelContext)) {
-                GDCollectionPrinter.print(template);
+        for (GDCollection template : templateToTreeDefinition.keySet()) {
+            GDCollectionPrinter.print(template);
+        }
+    }
+
+    /**
+     * @param metaModelContext
+     * @return all templates with the given metaModelContext
+     */
+    public Collection<GDCollection> getTemplates(final MetaModelContext metaModelContext) {
+        ArrayList<GDCollection> templates = new ArrayList<>();
+        for (GDCollection template : templateToTreeDefinition.keySet()) {
+            if (template.hasMetaModelContext(metaModelContext)) {
+                templates.add(template);
             }
         }
+        return templates;
+    }
+
+    /**
+     * @param metaModelContext
+     * @return
+     */
+    public PathTreeDefinition getTemplateTreeDefinition(final MetaModelContext metaModelContext) {
+        PathTreeDefinition fullPathTreeDefinition = new PathTreeDefinition(metaModelContext);
+        for (GDCollection template : templateToTreeDefinition.keySet()) {
+            PathTreeDefinition pathTreeDefinition = templateToTreeDefinition.get(template);
+            fullPathTreeDefinition.addBranches(pathTreeDefinition);
+        }
+        return fullPathTreeDefinition;
     }
 
 }

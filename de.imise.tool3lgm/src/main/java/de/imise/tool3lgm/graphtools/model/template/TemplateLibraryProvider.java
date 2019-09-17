@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
  *
  * @author AXS (24.08.2019)
  */
-public abstract class TemplateLibraryServer {
+public abstract class TemplateLibraryProvider {
 
     /**
      * @return display name of this library e.g "IHE (full)" or if the library contains only the ITI part "IHE ITI Domain".

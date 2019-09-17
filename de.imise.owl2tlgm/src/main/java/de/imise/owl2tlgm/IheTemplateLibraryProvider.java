@@ -12,9 +12,8 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverter;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.template.TemplateLibraryServer;
+import de.imise.tool3lgm.graphtools.model.template.TemplateLibraryProvider;
 import de.imise.tool3lgm.graphtools.model.template.TemplateViewDefinition;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.metamodel.service.TLGMServiceMetaModel;
@@ -28,7 +27,7 @@ import de.imise.tool3lgm.metamodel.service.node.IheDomain;
  *
  * @author AXS (30.08.2019)
  */
-public class IheTemplateLibraryServer extends TemplateLibraryServer {
+public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
 
     @Override
     public String getDisplayName() {
@@ -41,11 +40,11 @@ public class IheTemplateLibraryServer extends TemplateLibraryServer {
 
             @Override
             public String getMainCategoryName() {
-                return super.getMainCategoryName();
+                return "IHE (auslagern!!!)";
             }
 
             @Override
-            public List<AbstractMetaPath> getViewMetaPaths() {
+            public List<SimpleMetaPath> getViewMetaPaths() {
                 MetaModelContext metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(getMetaModelDefinitionClass());
                 MetaModel metaModel = metaModelContext.getMetaModel();
                 SimpleMetaPath submodelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, IheDomain.class, IheActor.class, IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class);

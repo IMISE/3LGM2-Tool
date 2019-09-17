@@ -13,6 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
@@ -25,18 +26,25 @@ import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific {
 
     /** Definiton of the branches of the tree */
-    private final PathTreeDefinition treeDefinition;
+    private PathTreeDefinition treeDefinition;
 
     /** root node as {@link LGMTreeNode} */
     private final LGMTreeNode root;
 
     /**
-     * @param treeDefinition
+     *
      */
-    public PathTreeModel(final PathTreeDefinition treeDefinition) {
+    public PathTreeModel() {
         super(new StringTreeNode("Root", true));
         root = (LGMTreeNode) super.root;
+    }
+
+    /**
+     * @param treeDefinition
+     */
+    public void setTreeDefinition(final PathTreeDefinition treeDefinition) {
         this.treeDefinition = treeDefinition;
+        reload();
     }
 
     /**
@@ -63,8 +71,9 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
             }
         }
         String hierarchyNodeTextResourceKey = hierarchyDefinitionObject.toString();
-        String hierarchyNodeText = treeDefinition.getResString(hierarchyNodeTextResourceKey);
+        String hierarchyNodeText = treeDefinition.getResStringWithoutError(hierarchyNodeTextResourceKey);
         LGMTreeNode hierarchyNode = new LGMTreeNode(hierarchyDefinitionObject, hierarchyNodeText, true);
+        parent.add(hierarchyNode);
         return hierarchyNode;
     }
 
@@ -92,25 +101,24 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         return null;
     }
 
-    private List<ElementClassTreeNode> createInitialPathStepNodes(final Class<? extends ModelElement> pathStepConnectionClass, final LGMTreeNode parent) {
-        //        modelContext.getAllModels(this);
-
-    }
+    //    private List<ElementClassTreeNode> createInitialPathStepNodes(final Class<? extends ModelElement> pathStepConnectionClass, final LGMTreeNode parent) {
+    //        //        modelContext.getAllModels(this);
+    //
+    //    }
 
     /**
      * @param elementsPath
      * @param lastHierarchyNode
      */
     private void addBranchModelElementsPath(final SimpleMetaPath elementsPath, final LGMTreeNode lastHierarchyNode) {
-        MetaModel metaModel = elementsPath.getMetaModel();
-        MetaModelContext metaModelContext = metaModel.getMetaModelContext();
-        List<GDCollection> collections = Static.getCollections();
-        Collection<GDCollection> models = modelContext.getAllModels(metaModelContext);
+        MetaModelContext metaModelContext = elementsPath.getMetaModelContext();
+        TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
+        Collection<GDCollection> templates = templateLibrariesManager.getTemplates(metaModelContext);
         Class<? extends ModelElement> pathStepConnectionClass = elementsPath.getStartClass();
-        List<ElementContainerTreeNode> netxPathStepStartNodes = new ArrayList<>();
+        List<ElementContainerTreeNode> nextPathStepStartNodes = new ArrayList<>();
         int pathLength = elementsPath.length();
         for (int i = 0; i < pathLength; i++) {
-            //visiblePath.getpa
+
         }
     }
 
@@ -133,7 +141,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
 
     @Override
     public MetaModelContext getMetaModelContext() {
-        return treeDefinition.getMetaModelContext();
+        return treeDefinition == null ? null : treeDefinition.getMetaModelContext();
     }
 
 }
