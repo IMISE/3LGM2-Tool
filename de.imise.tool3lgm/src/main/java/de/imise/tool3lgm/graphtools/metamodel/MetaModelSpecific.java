@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
 import java.util.MissingResourceException;
+import java.util.Objects;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -61,6 +62,15 @@ public interface MetaModelSpecific {
         MetaModelContext metaModelContext = getMetaModelContext();
         String resString = metaModelContext.getResStringWithoutError(resKey);
         return resString;
+    }
+
+    /**
+     * @param metaModelContext
+     * @return
+     */
+    public default boolean hasMetaModelContext(final MetaModelContext metaModelContext) {
+        MetaModelContext thisMetaModelContext = getMetaModelContext();
+        return Objects.equals(metaModelContext, thisMetaModelContext);
     }
 
 }

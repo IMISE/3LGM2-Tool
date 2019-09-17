@@ -74,4 +74,9 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
         return MetaModelSpecific.super.getResStringWithoutError(resKey);
     }
 
+    @Override
+    public final boolean hasMetaModelContext(final MetaModelContext metaModelContext) {
+        return MetaModelSpecific.super.hasMetaModelContext(metaModelContext);
+    }
+
 }
