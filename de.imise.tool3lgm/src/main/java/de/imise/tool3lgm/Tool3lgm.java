@@ -399,6 +399,21 @@ public class Tool3lgm {
     }
 
     /**
+     * Checks if at least one model with the given metamodel context is open
+     *
+     * @param metaModelContext
+     * @return
+     */
+    public boolean hasOpenModels(final MetaModelContext metaModelContext) {
+        for (GDCollection gdcoll : collections) {
+            if (gdcoll.getMetaModelContext().equals(metaModelContext)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Fragt den Benutzer, ob ein geändertes Modell gepsiechert werden soll.
      *
      * @param gdcoll
