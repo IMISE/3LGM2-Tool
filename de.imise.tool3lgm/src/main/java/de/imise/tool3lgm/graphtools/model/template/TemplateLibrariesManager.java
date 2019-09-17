@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.model.template;
 
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_TEMPLATE_BROWSER_SHOW;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -35,7 +35,7 @@ public class TemplateLibrariesManager implements PropertyChangeListener, Tool3lg
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (OPTION_TEMPLATE_BROWSER_SHOW.isChanged(evt)) {
+        if (OPTION_SHOW_TEMPLATE_BROWSER.isChanged(evt)) {
             loadOrUnloadTemplates();
         }
     }
@@ -50,7 +50,7 @@ public class TemplateLibrariesManager implements PropertyChangeListener, Tool3lg
     */
     private void loadOrUnloadTemplates() {
         //unload
-        if (!OPTION_TEMPLATE_BROWSER_SHOW.is()) {
+        if (!OPTION_SHOW_TEMPLATE_BROWSER.is()) {
             templateLibrariesContext.clear();
             return;
         }

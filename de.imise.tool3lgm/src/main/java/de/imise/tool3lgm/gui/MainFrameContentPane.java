@@ -3,10 +3,10 @@ package de.imise.tool3lgm.gui;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_MODEL_BROWSER_SHOW;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_MODEL_BROWSER;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR;
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_TEMPLATE_BROWSER_SHOW;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -140,9 +140,9 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     public void propertyChange(final PropertyChangeEvent evt) {
         if (OPTION_CHECK_CONSISTENCY.isChanged(evt)) {
             checkConsistencyTableVisibility();
-        } else if (OPTION_TEMPLATE_BROWSER_SHOW.isChanged(evt)) {
+        } else if (OPTION_SHOW_TEMPLATE_BROWSER.isChanged(evt)) {
             checkTemplateBrowserVisibility();
-        } else if (OPTION_MODEL_BROWSER_SHOW.isChanged(evt)) {
+        } else if (OPTION_SHOW_MODEL_BROWSER.isChanged(evt)) {
             checkModelBrowserVisibility();
         } else if (OPTION_SHOW_PAINTING_TOOLBAR.isChanged(evt)) {
             toolbarManager.setToolBarVisibility();
@@ -188,7 +188,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     /** (De-)Aktiviert den TemplateBrowser */
     private final void checkTemplateBrowserVisibility() {
         boolean isCheckConsistency = OPTION_CHECK_CONSISTENCY.is() && Static.getSelectedGDCollection() != null;
-        if (OPTION_TEMPLATE_BROWSER_SHOW.is()) {
+        if (OPTION_SHOW_TEMPLATE_BROWSER.is()) {
             if (rightSplitPane != null) {
                 return; //das Ding ist nur null, wenn der templateBroweser nicht angezeigt wird
             }
@@ -227,7 +227,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
 
     /** (De-)Aktiviert den ModelBrowser */
     private final void checkModelBrowserVisibility() {
-        if (OPTION_MODEL_BROWSER_SHOW.is()) {
+        if (OPTION_SHOW_MODEL_BROWSER.is()) {
             leftSplitPane.setLeftComponent(modelBrowserPanel);
             leftSplitPane.setDividerLocation(leftDividerLocation);
         } else {
