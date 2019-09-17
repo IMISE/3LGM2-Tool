@@ -249,7 +249,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             rotree.reset();
             rutree.reset();
 
-            for (ElementContainer ec : mainDoc.getElementContainer(searchElementClass)) {
+            for (ElementContainer ec : mainDoc.getElementContainers(searchElementClass)) {
                 rotree.addObject(ec, roroot, childrenToExcludeFromRotree, false, true);
                 rutree.addObject(ec, ruroot, childrenToExcludeFromRutree, false, true);
             }

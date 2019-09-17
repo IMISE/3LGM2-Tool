@@ -54,7 +54,7 @@ public class GraphAnalysis {
         List<ElementContainer> ergebnis = new ArrayList<>(50);
         MetaModel metaModel = doc.getMetaModel();
         for (String t : typ) {
-            for (ElementContainer ec : doc.getElementContainer(metaModel.getClassForName(t))) {
+            for (ElementContainer ec : doc.getElementContainers(metaModel.getClassForName(t))) {
                 if (matchesCriteria(doc, ec, getVerbundenState, connectedNames)) {
                     if (!ergebnis.contains(ec)) {
                         ergebnis.add(ec);

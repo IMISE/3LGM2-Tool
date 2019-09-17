@@ -2239,7 +2239,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public void selectAllUniques() {
         for (Class<? extends ModelElement> elemClass : metaModel.uniqueNodes) {
-            for (ElementContainer ec : doc.getElementContainer(elemClass)) {
+            for (ElementContainer ec : doc.getElementContainers(elemClass)) {
                 addToSelection(ec);
             }
         }

@@ -588,7 +588,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                     List<ModelElement> specialInfoTargets = selectedStep.getRealCommunicationStartKonf();
                     List<ElementContainer> specialInfoTargetContainer = new ArrayList<>(specialInfoTargets != null ? specialInfoTargets.size() : 0);
                     if (specialInfoTargets != null) {
-                        specialInfoTargetContainer.addAll(doc.getElementContainer(specialInfoTargets));
+                        specialInfoTargetContainer.addAll(doc.getElementContainers(specialInfoTargets));
                         allSpecialInfoTargetContainer.addAll(specialInfoTargetContainer);
                         for (int b = 0; b < specialInfoTargetContainer.size(); b++) {
                             ElementContainer ec = doc.getElementContainer(specialInfoTargetContainer.get(b));
@@ -601,7 +601,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                     specialInfoTargets = selectedStep.getRealCommunicationEndKonf();
                     specialInfoTargetContainer.clear();
                     if (specialInfoTargets != null) {
-                        specialInfoTargetContainer.addAll(doc.getElementContainer(specialInfoTargets));
+                        specialInfoTargetContainer.addAll(doc.getElementContainers(specialInfoTargets));
                         allSpecialInfoTargetContainer.addAll(specialInfoTargetContainer);
                         for (int b = 0; b < specialInfoTargetContainer.size(); b++) {
                             ElementContainer ec = doc.getElementContainer(specialInfoTargetContainer.get(b));
@@ -614,14 +614,14 @@ public class KommProzessPanel extends ElementDialogPanel {
 
                 if (enumerateInterfaces) {
                     List<ModelElement> specialInfoTargets = selectedStep.getKommProzessSchnittstellen();
-                    List<ElementContainer> specialInfoTargetContainer = doc.getElementContainer(specialInfoTargets);
+                    List<ElementContainer> specialInfoTargetContainer = doc.getElementContainers(specialInfoTargets);
                     allSpecialInfoTargetContainer.addAll(specialInfoTargetContainer);
                     // ElementContainer.writeNumberListToTartgets(selectedStep,
                     // specialInfoTargetContainer, prozessC.get3LGMLayout());
                 }
 
                 List<Edge> edges = selectedStep.getKommProzessEdges();
-                List<ElementContainer> edgeContainers = doc.getElementContainer(edges);
+                List<ElementContainer> edgeContainers = doc.getElementContainers(edges);
                 if (enumerateEdges) {
                     allSpecialInfoTargetContainer.addAll(edgeContainers);
                     // ElementContainer.writeNumberListToTartgets(selectedStep,
@@ -635,7 +635,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                     }
                 }
 
-                allSpecialInfoTargetContainer = doc.getElementContainer(allSpecialInfoTargetContainer);
+                allSpecialInfoTargetContainer = doc.getElementContainers(allSpecialInfoTargetContainer);
                 // selectedStep.setSpecialInfoTargets(
                 // allSpecialInfoTargetContainer);
 
@@ -652,7 +652,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                 }
 
                 if (highlightAllCommElements) {
-                    highlight.addAll(doc.getElementContainer(selectedStep.getKommProzessSchnittstellen()));
+                    highlight.addAll(doc.getElementContainers(selectedStep.getKommProzessSchnittstellen()));
                     ec = selectedStep.getStartAufgabeKonf().getContainer(doc);
                     if (ec != null) {
                         highlight.add(ec);
@@ -661,10 +661,10 @@ public class KommProzessPanel extends ElementDialogPanel {
                     if (ec != null) {
                         highlight.add(ec);
                     }
-                    highlight.addAll(doc.getElementContainer(selectedStep.getStartAufgabeKonfBausteine()));
-                    highlight.addAll(doc.getElementContainer(selectedStep.getEndAufgabeKonfBausteine()));
+                    highlight.addAll(doc.getElementContainers(selectedStep.getStartAufgabeKonfBausteine()));
+                    highlight.addAll(doc.getElementContainers(selectedStep.getEndAufgabeKonfBausteine()));
                 }
-                highlight.addAll(doc.getElementContainer(selectedStep.getKommProzessEdges()));
+                highlight.addAll(doc.getElementContainers(selectedStep.getKommProzessEdges()));
 
                 for (int j = 0; j < highlight.size(); j++) {
                     // ElementContainer hc =

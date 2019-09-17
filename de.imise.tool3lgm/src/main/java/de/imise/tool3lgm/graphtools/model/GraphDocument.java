@@ -2855,7 +2855,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     private List<ElementContainer> getSelectionInGraphOrder() {
         List<ElementContainer> returnList = new ArrayList<>(selectedContainer.size());
-        for (ElementContainer ec : getElementContainer(Node.class)) {
+        for (ElementContainer ec : getElementContainers(Node.class)) {
             if (selectedContainer.contains(ec)) {
                 returnList.add(ec);
             }
@@ -4567,7 +4567,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
      * @return Liste mit ElementContainer oder <code>null</code>
      */
-    public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz) {
+    public final List<ElementContainer> getElementContainers(final Class<? extends ModelElement> clazz) {
         return getElementContainers(clazz, true);
     }
 
@@ -4783,7 +4783,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param modelElementOrContainerList
      * @return
      */
-    public List<ElementContainer> getElementContainer(final Collection<?> modelElementOrContainerList) {
+    public List<ElementContainer> getElementContainers(final Collection<?> modelElementOrContainerList) {
         if (modelElementOrContainerList == null) {
             return null;
         }

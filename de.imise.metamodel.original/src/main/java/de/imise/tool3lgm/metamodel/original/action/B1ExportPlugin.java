@@ -52,7 +52,7 @@ public class B1ExportPlugin {
                 if (doc == null) {
                     return;
                 }
-                List<ElementContainer> functions = doc.getElementContainer(Aufgabe.class);
+                List<ElementContainer> functions = doc.getElementContainers(Aufgabe.class);
                 //maximale Tiefe der Aufgabenhierarchie feststellen
                 int maxHierarchyDepth = 0;
                 List<ElementContainer> absolutePartContainer = new ArrayList<>();
