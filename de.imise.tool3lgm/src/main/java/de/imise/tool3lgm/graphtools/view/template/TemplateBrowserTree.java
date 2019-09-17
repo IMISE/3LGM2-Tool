@@ -28,7 +28,7 @@ public class TemplateBrowserTree extends JTree implements Tool3lgmChangeListener
      */
     public TemplateBrowserTree() {
         super((TreeModel) null);
-        //setRootVisible(false);
+        setRootVisible(false);
         setShowsRootHandles(true);
         addAsToolChangeListener();
         pathTreeModel = new PathTreeModel();
@@ -44,8 +44,10 @@ public class TemplateBrowserTree extends JTree implements Tool3lgmChangeListener
         }
         TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
         PathTreeDefinition templateTreeDefinition = templateLibrariesManager.getTemplateTreeDefintion(newMetaModelContext);
+        setRootVisible(true);
         pathTreeModel.setTreeDefinition(templateTreeDefinition);
         expandRow(0);
+        setRootVisible(false);
     }
 
 }
