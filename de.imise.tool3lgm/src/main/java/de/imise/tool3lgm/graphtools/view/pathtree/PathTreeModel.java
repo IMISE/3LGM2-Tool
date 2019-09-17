@@ -9,12 +9,14 @@ import javax.swing.tree.DefaultTreeModel;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
@@ -92,21 +94,6 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     }
 
     /**
-     * @param parent
-     * @param metaModel
-     * @param elementClass
-     * @return
-     */
-    private Collection<LGMTreeNode> createPathStepNodes(final LGMTreeNode parent, final MetaModel metaModel, final Class<? extends ModelElement> elementClass) {
-        return null;
-    }
-
-    //    private List<ElementClassTreeNode> createInitialPathStepNodes(final Class<? extends ModelElement> pathStepConnectionClass, final LGMTreeNode parent) {
-    //        //        modelContext.getAllModels(this);
-    //
-    //    }
-
-    /**
      * @param elementsPath
      * @param lastHierarchyNode
      */
@@ -115,10 +102,46 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
         Collection<GDCollection> templates = templateLibrariesManager.getTemplates(metaModelContext);
         Class<? extends ModelElement> pathStepConnectionClass = elementsPath.getStartClass();
-        List<ElementContainerTreeNode> nextPathStepStartNodes = new ArrayList<>();
+        Collection<ElementContainerTreeNode> pathStepNodes = new ArrayList<>();
+        for (GDCollection template : templates) {
+            LGMGraphDocument mainGraphDocument = template.getMainGraphDocument();
+            List<ElementContainer> elementContainers = mainGraphDocument.getElementContainers(pathStepConnectionClass);
+            createNodes(pathStepNodes, elementContainers, lastHierarchyNode);
+        }
         int pathLength = elementsPath.length();
         for (int i = 0; i < pathLength; i++) {
+            Class<? extends ModelElement> pathStepElementClass = elementsPath.getPathStepElementClass(i);
+            pathStepNodes = addPathStepNodes(pathStepNodes, pathStepElementClass);
+        }
+    }
 
+    /**
+     * @param parentNodes
+     * @param nextPathStepElementClass
+     * @return
+     */
+    private Collection<ElementContainerTreeNode> addPathStepNodes(final Iterable<ElementContainerTreeNode> parentNodes, final Class<? extends ModelElement> nextPathStepElementClass) {
+        Collection<ElementContainerTreeNode> nextPathStepNodes = new ArrayList<>();
+        for (ElementContainerTreeNode parentNode : parentNodes) {
+            ElementContainer parentEc = parentNode.getUserObject();
+            GraphDocument doc = parentEc.getGraphDocument();
+            ModelElement me = parentEc.getElement();
+            List<ElementContainer> connectedContainers = me.getConnectedContainers(nextPathStepElementClass, doc);
+            createNodes(nextPathStepNodes, connectedContainers, parentNode);
+        }
+        return nextPathStepNodes;
+    }
+
+    /**
+     * @param createdNodes
+     * @param elementContainers
+     * @param parent
+     */
+    private void createNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent) {
+        for (ElementContainer ec : elementContainers) {
+            ElementContainerTreeNode pathStepNode = new ElementContainerTreeNode(ec, true, true);
+            parent.add(pathStepNode);
+            createdNodes.add(pathStepNode);
         }
     }
 
