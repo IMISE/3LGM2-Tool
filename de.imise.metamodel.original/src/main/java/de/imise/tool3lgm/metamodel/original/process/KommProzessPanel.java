@@ -461,7 +461,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                     me = step.getStartAufgabeKonf(); // Startkonfiguration
                     if (me != null) {
                         // Startkonfigurationsbausteine
-                        table.setValueAt(me.getConnectedContainer(Anwendungsbaustein.class, doc), i, START_COMPONENTS);
+                        table.setValueAt(me.getConnectedContainers(Anwendungsbaustein.class, doc), i, START_COMPONENTS);
                         // Startorganisationseinheit
                         table.setValueAt(step.getStartAufOrgKombination().getContainer(doc), i, START_ORGUNIT);
                     } else {
@@ -472,7 +472,7 @@ public class KommProzessPanel extends ElementDialogPanel {
                     me = step.getEndAufgabeKonf(); // Endkonfiguration
                     if (me != null) {
                         // Endkonfigurationsbausteine
-                        table.setValueAt(me.getConnectedContainer(Anwendungsbaustein.class, doc), i, END_COMPONENTS);
+                        table.setValueAt(me.getConnectedContainers(Anwendungsbaustein.class, doc), i, END_COMPONENTS);
                         // Endorganisationseinheit
                         table.setValueAt(step.getEndAufOrgKombination().getContainer(doc), i, END_ORGUNIT);
                     } else {

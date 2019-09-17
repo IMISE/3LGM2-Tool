@@ -87,7 +87,7 @@ public class GraphAnalysis {
         for (ElementContainer orgC : origin) {
             ModelElement kn = orgC.getElement();
             for (String t : typ) {
-                for (ElementContainer conC : kn.getConnectedContainer(metaModel.getClassForName(t), doc)) {
+                for (ElementContainer conC : kn.getConnectedContainers(metaModel.getClassForName(t), doc)) {
                     if (matchesCriteria(doc, conC, getVerbundenState, connectedNames)) {
                         if (!ergebnis.contains(conC) && !origin.contains(conC) && !exclude.contains(conC)) {
                             ergebnis.add(conC);
@@ -96,7 +96,7 @@ public class GraphAnalysis {
                 }
                 exclude.addAll(ergebnis);
                 if (searchParts) {
-                    for (ElementContainer kc : kn.getDirectPartContainer(doc)) {
+                    for (ElementContainer kc : kn.getDirectPartContainers(doc)) {
                         if (ergebnis.contains(kc) || origin.contains(kc) || exclude.contains(kc)) {
                             continue;
                         }
@@ -111,7 +111,7 @@ public class GraphAnalysis {
                     }
                 }
                 if (searchParents) {
-                    for (ElementContainer kc : kn.getDirectParentContainer(doc)) {
+                    for (ElementContainer kc : kn.getDirectParentContainers(doc)) {
                         if (ergebnis.contains(kc) || origin.contains(kc) || exclude.contains(kc)) {
                             continue;
                         }

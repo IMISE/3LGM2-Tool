@@ -349,7 +349,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         LGMTreeNode parent = (LGMTreeNode) elementNode.getParent();
         GraphDocument maindoc = doc.getCollection().getMainGraphDocument();
         boolean isEnableSubmodelBrowser = OPTION_ENABLE_SUBMODEL_BROWSER.is();
-        List<ElementContainer> all = kc.getElement().getDirectPartContainer(isEnableSubmodelBrowser ? selDoc : maindoc);
+        List<ElementContainer> all = kc.getElement().getDirectPartContainers(isEnableSubmodelBrowser ? selDoc : maindoc);
         loop1: for (ElementContainer pc : all) {
             ModelElement me = pc.getElement();
             ElementContainer ecSelDoc = me.getContainer(selDoc);
@@ -371,7 +371,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
             ElementContainerTreeNode childNode = null;
             //bei NodeContainern werden die evtl. bereits vorhandenen TreeNodes wiederverwendet
             if (pc instanceof NodeContainer) {
-                List<ElementContainer> directParentElements = me.getDirectParentContainer(isEnableSubmodelBrowser ? selDoc : maindoc);
+                List<ElementContainer> directParentElements = me.getDirectParentContainers(isEnableSubmodelBrowser ? selDoc : maindoc);
                 // wenn es mehr als einen parent gibt, dann einfach alle Nodes neu erzeugen. Der Fall ist selten
                 //aber dann werden evtl. vorher ausgeklappte nodes nicht mehr aufgeklappt sein. Die Alternative wäre,
                 //sich statt nur eines Nodes im ElementContaier alle zu merken. Ich finde das muss nicht sein, da das

@@ -300,15 +300,15 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
         Direction direction = elementaryMetaPath.getDirection();
         ModelElement me = getModelElement();
-        List<ElementContainer> all = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClass, direction);
+        List<ElementContainer> all = me.getConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction);
         addChildrenToExcludeFromRtree(edgeIndex, all, true);
         // nur Node für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
         int firstNonSelectableIndex = all.size();
         if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) {
-            all.addAll(me.getPartConnectedContainer(pathStepEndClass, mainDoc, edgeClass, direction));
+            all.addAll(me.getPartConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction));
         }
         if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
-            all.addAll(me.getParentConnectedContainer(pathStepEndClass, mainDoc, edgeClass, direction));
+            all.addAll(me.getParentConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction));
         }
         ImmutableList.Builder<LGMTreeNode> leafs = ImmutableList.builder();
         List<LGMTreeNode> firstLevelNodes = new ArrayList<>(all.size());
@@ -326,7 +326,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             for (LGMTreeNode node : nextStepStartNodes) {
                 ElementContainer nodeElementContainer = (ElementContainer) node.getUserObject();
                 me = nodeElementContainer.getElement();
-                List<ElementContainer> connected = me.getConnectedContainer(pathStepEndClass, mainDoc, edgeClass, direction);
+                List<ElementContainer> connected = me.getConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction);
                 addChildrenToExcludeFromRtree(edgeIndex, connected, false);
                 for (ElementContainer ec : connected) {
                     LGMTreeNode newNode = ltree.addObject(ec, node, null, true, false, false);

@@ -253,7 +253,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      */
     private void appendObjectTypes(final LGMTreeNode aufgabenContainerNode) {
         ModelElement me = ((NodeContainer) aufgabenContainerNode.getUserObject()).getElement();
-        List<ElementContainer> ots = me.getConnectedContainer(Objekttyp.class, doc, null, BACKWARD, false);
+        List<ElementContainer> ots = me.getConnectedContainers(Objekttyp.class, doc, null, BACKWARD, false);
         if (ots.size() > 0) {
             String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.BACKWARD, false, false);
             LGMTreeNode tmpNode = new StringTreeNode(typeNodeName);
@@ -265,7 +265,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
             }
             aufgabenContainerNode.add(tmpNode);
         }
-        ots = me.getConnectedContainer(Objekttyp.class, doc, null, FORWARD, false);
+        ots = me.getConnectedContainers(Objekttyp.class, doc, null, FORWARD, false);
         if (ots.size() > 0) {
             String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.FORWARD, false, false);
             LGMTreeNode tmpNode = new StringTreeNode(typeNodeName);

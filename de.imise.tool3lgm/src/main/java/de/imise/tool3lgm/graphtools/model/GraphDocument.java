@@ -2363,7 +2363,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         Collection<ElementContainer> container2Select = new HashSet<>();
         for (NodeContainer nc : selectedContainer.iterableRealElementContainer()) {
             ModelElement me = nc.getElement();
-            for (ElementContainer partNc : me.getSubordinatedContainer(this, addAllParts)) {
+            for (ElementContainer partNc : me.getSubordinatedContainers(this, addAllParts)) {
                 if (!isSelected(partNc)) {
                     container2Select.add(partNc);
                 }
@@ -2484,7 +2484,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (ec == null) {
             return;
         }
-        if (ec.getElement().getDirectPartContainer(szen).size() == 0) {
+        if (ec.getElement().getDirectPartContainers(szen).size() == 0) {
             return;
         }
 
@@ -2516,7 +2516,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     private static final void expand(final GraphDocument szen, final ElementContainer ec, final int pid) {
         ec.setExpanded(true);
         ModelElement me = ec.getElement();
-        for (ElementContainer c : me.getDirectPartContainer(szen)) {
+        for (ElementContainer c : me.getDirectPartContainers(szen)) {
             c.setVisible(true);
             if (c.isExpanded()) {
                 setExpanded(true, szen.getCollection(), szen.getHashString(), c.getHashString(), false, pid);
@@ -2537,7 +2537,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             ec.setExpanded(false);
         }
         ModelElement me = ec.getElement();
-        for (ElementContainer c : me.getDirectPartContainer(szen)) {
+        for (ElementContainer c : me.getDirectPartContainers(szen)) {
             if (tmpExpandedElements.contains(c)) {
                 continue;
             }
@@ -4470,7 +4470,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         start_transaction(pid, log);
         for (Class<? extends ModelElement> c : metaModel.getCopyDependencies(kc.getNode().getClass())) {
-            List<ElementContainer> dependentObjects = kc.getNode().getConnectedContainer(c, this);
+            List<ElementContainer> dependentObjects = kc.getNode().getConnectedContainers(c, this);
             for (int j = 0; j < dependentObjects.size(); j++) {
                 NodeContainer sc = (NodeContainer) dependentObjects.get(j);
                 Node sk = sc.getNode();

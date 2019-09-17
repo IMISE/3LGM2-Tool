@@ -188,12 +188,12 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         boolean searchParents = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is();
 
         ModelElement modelElement = getModelElement();
-        for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
+        for (ElementContainer ec : modelElement.getConnectedContainers(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
             lotree.addObject(ec, loroot, null, true, false, false);
             childrenToExcludeFromRotree.add(ec);
         }
         if (searchParts) {
-            for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
+            for (ElementContainer ec : modelElement.getPartConnectedContainers(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
                 LGMTreeNode node = lotree.addObject(ec, loroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
@@ -202,7 +202,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             }
         }
         if (searchParents) {
-            for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
+            for (ElementContainer ec : modelElement.getParentConnectedContainers(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
                 LGMTreeNode node = lotree.addObject(ec, loroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
@@ -211,12 +211,12 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             }
         }
 
-        for (ElementContainer ec : modelElement.getConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
+        for (ElementContainer ec : modelElement.getConnectedContainers(searchElementClass, mainDoc, edgeClass, FORWARD)) {
             lutree.addObject(ec, luroot, null, true, false, false);
             childrenToExcludeFromRutree.add(ec);
         }
         if (searchParts) {
-            for (ElementContainer ec : modelElement.getPartConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
+            for (ElementContainer ec : modelElement.getPartConnectedContainers(searchElementClass, mainDoc, edgeClass, FORWARD)) {
                 LGMTreeNode node = lutree.addObject(ec, luroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);
@@ -225,7 +225,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             }
         }
         if (searchParents) {
-            for (ElementContainer ec : modelElement.getParentConnectedContainer(searchElementClass, mainDoc, edgeClass, FORWARD)) {
+            for (ElementContainer ec : modelElement.getParentConnectedContainers(searchElementClass, mainDoc, edgeClass, FORWARD)) {
                 LGMTreeNode node = lutree.addObject(ec, luroot, null, true, false, false);
                 if (node != null) {
                     node.setSelectable(false);

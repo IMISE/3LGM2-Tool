@@ -2093,7 +2093,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             }
         }
         for (Class<? extends ModelElement> elementClass : metaModel.getCopyDependencies(me.getClass())) {
-            for (ElementContainer ec : me.getConnectedContainer(elementClass, doc)) {
+            for (ElementContainer ec : me.getConnectedContainers(elementClass, doc)) {
                 ModelElement connected = ec.getElement();
                 if (!elements.contains(connected)) {
                     elements.add(connected);

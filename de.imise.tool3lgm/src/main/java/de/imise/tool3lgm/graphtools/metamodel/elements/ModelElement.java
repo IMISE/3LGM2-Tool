@@ -1069,8 +1069,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc Node aus diesem Dokument
      * @return List mit ElementContainer der gefundenen Node
      */
-    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
-        return getConnectedContainer(searchElementClass, doc, null, null, true);
+    public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
+        return getConnectedContainers(searchElementClass, doc, null, null, true);
     }
 
     /**
@@ -1080,8 +1080,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param searchEdgeClass Art der zu suchenden verbindungen
      * @return List mit ElementContainer der gefundenen Node
      */
-    public final List<ElementContainer> getConnectedContainer(final GraphDocument doc, final Class<? extends Edge> searchEdgeClass) {
-        return getConnectedContainer(ModelElement.class, doc, searchEdgeClass);
+    public final List<ElementContainer> getConnectedContainers(final GraphDocument doc, final Class<? extends Edge> searchEdgeClass) {
+        return getConnectedContainers(ModelElement.class, doc, searchEdgeClass);
     }
 
     /**
@@ -1090,8 +1090,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param edgeClass
      * @return
      */
-    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass) {
-        return getConnectedContainer(searchElementClass, doc, edgeClass, null, true);
+    public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass) {
+        return getConnectedContainers(searchElementClass, doc, edgeClass, null, true);
     }
 
     /**
@@ -1101,8 +1101,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction
      * @return
      */
-    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
-        return getConnectedContainer(searchElementClass, doc, edgeClass, direction, true);
+    public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
+        return getConnectedContainers(searchElementClass, doc, edgeClass, direction, true);
     }
 
     /**
@@ -1116,7 +1116,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return List mit ElementContainer der gefundenen Node
      */
     @SuppressWarnings("unchecked")
-    public final List<ElementContainer> getConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
+    public final List<ElementContainer> getConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction, final boolean alphabetical) {
         return (List<ElementContainer>) getConnected(searchElementClass, doc, edgeClass, direction, true, alphabetical);
     }
 
@@ -1135,10 +1135,10 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param searchElementClass Elementart nach der gesucht werden soll
      * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
      * @return Liste mit verbundenen <code>ModelElement</code>s
-     * @see #getPartConnectedContainer(Class, GraphDocument, Class, int)
+     * @see #getPartConnectedContainers(Class, GraphDocument, Class, int)
      */
-    public final List<ElementContainer> getPartConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
-        return getPartConnectedContainer(searchElementClass, doc, null, null);
+    public final List<ElementContainer> getPartConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
+        return getPartConnectedContainers(searchElementClass, doc, null, null);
     }
 
     /**
@@ -1152,13 +1152,13 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction Richtung, die die Kanten haben sollen, über die die verbundenen Elemente gesucht werden
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
-    public final List<ElementContainer> getPartConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
+    public final List<ElementContainer> getPartConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
         //Rückgabeliste
         List<ElementContainer> connected = new ArrayList<>();
         //Liste aller Teile holen (direkte und indirekte)
         for (ModelElement me : getPartElements(false)) {
             //füge zur Rückgabeliste alle über die angegebene Art verbundenen Node hinzu
-            connected.addAll(me.getConnectedContainer(searchElementClass, doc, edgeClass, direction));
+            connected.addAll(me.getConnectedContainers(searchElementClass, doc, edgeClass, direction));
         }
         return connected;
     }
@@ -1170,10 +1170,10 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param searchElementClass Elementart nach der gesucht werden soll
      * @param doc <code>GraphDocument</code>, in dem nach verbundenen Elementen gesucht wird
      * @return Liste mit verbundenen <code>ModelElement</code>s
-     * @see #getParentConnectedContainer(Class, GraphDocument, Class, int)
+     * @see #getParentConnectedContainers(Class, GraphDocument, Class, int)
      */
-    public final List<ElementContainer> getParentConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
-        return getParentConnectedContainer(searchElementClass, doc, null, null);
+    public final List<ElementContainer> getParentConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc) {
+        return getParentConnectedContainers(searchElementClass, doc, null, null);
     }
 
     /**
@@ -1187,7 +1187,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param direction Richtung, die die Kanten haben sollen, über die die verbundenen Elemente gesucht werden
      * @return Liste mit verbundenen <code>ModelElement</code>s
      */
-    public final List<ElementContainer> getParentConnectedContainer(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
+    public final List<ElementContainer> getParentConnectedContainers(final Class<? extends ModelElement> searchElementClass, final GraphDocument doc, final Class<? extends Edge> edgeClass, final Direction direction) {
         //Rückgabeliste
         List<ElementContainer> connected = new ArrayList<>();
         //für alle Oberelemente
@@ -1195,7 +1195,7 @@ public abstract class ModelElement extends UserFieldTarget {
 
         for (ModelElement me : al) {
             //füge zur Rückgabeliste alle über die angegebene Art verbundenen Node hinzu
-            connected.addAll(me.getConnectedContainer(searchElementClass, doc, edgeClass, direction));
+            connected.addAll(me.getConnectedContainers(searchElementClass, doc, edgeClass, direction));
         }
         return connected;
     }
@@ -1206,8 +1206,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc
      * @return Liste mit den Containern der direkten Teilelemente
      */
-    public List<ElementContainer> getDirectPartContainer(final GraphDocument doc) {
-        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUPER_TO_SUB_DIRECTION);
+    public List<ElementContainer> getDirectPartContainers(final GraphDocument doc) {
+        return getConnectedContainers(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUPER_TO_SUB_DIRECTION);
     }
 
     /**
@@ -1216,8 +1216,8 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc
      * @return Liste mit den Containern der direkten oberelemente
      */
-    public List<ElementContainer> getDirectParentContainer(final GraphDocument doc) {
-        return getConnectedContainer(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUB_TO_SUPER_DIRECTION);
+    public List<ElementContainer> getDirectParentContainers(final GraphDocument doc) {
+        return getConnectedContainers(ModelElement.class, doc, HasPartEdge.class, HasPartEdge.SUB_TO_SUPER_DIRECTION);
     }
 
     /**
@@ -1228,7 +1228,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public final boolean hasDirectParentContainer(final GraphDocument doc) {
-        return getDirectParentContainer(doc).size() > 0;
+        return getDirectParentContainers(doc).size() > 0;
     }
 
     /**
@@ -1239,7 +1239,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * @return
      */
     public boolean hasDirectPartContainer(final GraphDocument doc) {
-        return getDirectPartContainer(doc).size() > 0;
+        return getDirectPartContainers(doc).size() > 0;
     }
 
     /**
@@ -1248,11 +1248,11 @@ public abstract class ModelElement extends UserFieldTarget {
      *
      * @return Liste mit <code>ElementContainer</code>n, die die absoluten Kindelemente sind
      */
-    public final List<ElementContainer> getAbsolutePartContainer(final GraphDocument doc) {
-        List<ElementContainer> parts = getDirectPartContainer(doc);
+    public final List<ElementContainer> getAbsolutePartContainers(final GraphDocument doc) {
+        List<ElementContainer> parts = getDirectPartContainers(doc);
         for (int i = 0; i < parts.size(); i++) {
             ModelElement part = parts.get(i).getElement();
-            List<ElementContainer> partParts = part.getDirectPartContainer(doc);
+            List<ElementContainer> partParts = part.getDirectPartContainers(doc);
             if (partParts.size() > 0) {
                 parts.remove(i--);
                 parts.addAll(partParts);
@@ -1268,12 +1268,12 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param doc (Teil-)Modell in dem gesucht werden soll
      * @param withParts
      */
-    private final void getSubordinatedContainer(final Set<ElementContainer> returnSet, final ModelElement lastAddedSubElement, final GraphDocument doc, final boolean withParts) {
+    private final void getSubordinatedContainers(final Set<ElementContainer> returnSet, final ModelElement lastAddedSubElement, final GraphDocument doc, final boolean withParts) {
         Class<? extends SubordinationEdge> subordinationEdgeClass = withParts ? SubordinationEdge.class : CompositionEdge.class;
-        for (ElementContainer subEc : lastAddedSubElement.getConnectedContainer(ModelElement.class, doc, subordinationEdgeClass, SubordinationEdge.SUPER_TO_SUB_DIRECTION)) {
+        for (ElementContainer subEc : lastAddedSubElement.getConnectedContainers(ModelElement.class, doc, subordinationEdgeClass, SubordinationEdge.SUPER_TO_SUB_DIRECTION)) {
             if (!returnSet.contains(subEc)) {
                 returnSet.add(subEc);
-                getSubordinatedContainer(returnSet, subEc.getElement(), doc, withParts);
+                getSubordinatedContainers(returnSet, subEc.getElement(), doc, withParts);
             }
         }
     }
@@ -1285,13 +1285,13 @@ public abstract class ModelElement extends UserFieldTarget {
      * @param withParts
      * @return Ein <code>Set</code> gefüllt mit <code>ElementContainer</code>n der untergeorndeten Elemente.
      */
-    public final Set<ElementContainer> getSubordinatedContainer(final GraphDocument doc, final boolean withParts) {
+    public final Set<ElementContainer> getSubordinatedContainers(final GraphDocument doc, final boolean withParts) {
         Set<ElementContainer> subordinated = new HashSet<>();
         ElementContainer ec = getContainer(doc);
         if (ec != null) {
             subordinated.add(ec);
         }
-        getSubordinatedContainer(subordinated, this, doc, withParts);
+        getSubordinatedContainers(subordinated, this, doc, withParts);
         return subordinated;
     }
 

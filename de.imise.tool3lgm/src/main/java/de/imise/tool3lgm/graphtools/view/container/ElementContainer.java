@@ -354,7 +354,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
             additionalLabelTextGenerator.deleteSpecialInfoFromTargets();
         }
         for (Class<? extends ModelElement> c : metaModel.getSlaveElementTypes(me.getClass())) {
-            for (ElementContainer sC : me.getConnectedContainer(c, doc)) {
+            for (ElementContainer sC : me.getConnectedContainers(c, doc)) {
                 sC.setVisible(visible);
             }
         }
@@ -718,7 +718,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         if (retVal.size() > 0) {
             return retVal;
         }
-        List<ElementContainer> all = me.getDirectParentContainer(doc);
+        List<ElementContainer> all = me.getDirectParentContainers(doc);
         if (all.size() == 0) {
             retVal.add(this);
             return retVal;

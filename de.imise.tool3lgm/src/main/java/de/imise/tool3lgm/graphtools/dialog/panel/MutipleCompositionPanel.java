@@ -109,13 +109,13 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
     public void update() {
         root.removeAllChildren();
         ModelElement modelElement = getModelElement();
-        List<ElementContainer> all = modelElement.getConnectedContainer(searchElementClass, mainDoc);
+        List<ElementContainer> all = modelElement.getConnectedContainers(searchElementClass, mainDoc);
         for (int m = 0; m < all.size(); m++) {
             LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
             root.add(node);
         }
         if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) {
-            all = ((Node) modelElement).getPartConnectedContainer(searchElementClass, mainDoc);
+            all = ((Node) modelElement).getPartConnectedContainers(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
                 LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
                 node.setSelectable(false);
@@ -123,7 +123,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
             }
         }
         if (OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is()) {
-            all = ((Node) modelElement).getParentConnectedContainer(searchElementClass, mainDoc);
+            all = ((Node) modelElement).getParentConnectedContainers(searchElementClass, mainDoc);
             for (int m = 0; m < all.size(); m++) {
                 LGMTreeNode node = new ElementContainerTreeNode(all.get(m), false, true);
                 node.setSelectable(false);

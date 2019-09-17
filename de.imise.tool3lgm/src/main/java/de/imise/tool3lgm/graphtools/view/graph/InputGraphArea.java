@@ -348,7 +348,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     continue;
                 }
                 grabbedElementsRealRect = getIncludingRectangle(grabbedElementsRealRect, kc);
-                for (ElementContainer ec : kc.getElement().getSubordinatedContainer(szenario, OPTION_GRAPH_MOVE_SUBELEMENTS.is())) {
+                for (ElementContainer ec : kc.getElement().getSubordinatedContainers(szenario, OPTION_GRAPH_MOVE_SUBELEMENTS.is())) {
                     ModelElement me = ec.getElement();
                     if (!me.isPaintable() || !ec.isVisible() || !multiView && kc.layerFor() != ebene) {
                         continue;

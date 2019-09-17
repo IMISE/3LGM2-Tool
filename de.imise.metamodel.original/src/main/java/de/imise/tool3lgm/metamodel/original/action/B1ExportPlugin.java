@@ -115,12 +115,12 @@ public class B1ExportPlugin {
         List<ElementContainer> parents = new ArrayList<>();
         parents.add(leafFuncEc);
         parentLists.add(parents);
-        parents = func.getDirectParentContainer(doc);
+        parents = func.getDirectParentContainers(doc);
         while (parents.size() > 0) {
             parentLists.add(parents);
             List<ElementContainer> newParents = new ArrayList<>();
             for (ElementContainer parent : parents) {
-                newParents.addAll(parent.getElement().getDirectParentContainer(doc));
+                newParents.addAll(parent.getElement().getDirectParentContainers(doc));
             }
             parents = newParents;
         }
@@ -157,7 +157,7 @@ public class B1ExportPlugin {
         linePartBuilder.append("\t");
 
         //für jede AufOrgKombination bzw. damit verknüpfe OEs muss eine eigene Zeile generiert werden
-        List<ElementContainer> aufOrgCombis = func.getConnectedContainer(AufOrgKombination.class, doc);
+        List<ElementContainer> aufOrgCombis = func.getConnectedContainers(AufOrgKombination.class, doc);
         //wenn gar keine OEs verknüpft sind -> einfach nur die Aufgabenhierarchie zurück geben.
         if (aufOrgCombis.size() == 0) {
             appendNoOeConnected(linePartBuilder);
@@ -172,7 +172,7 @@ public class B1ExportPlugin {
         StringBuilder fullLinesBuilder = new StringBuilder();
 
         for (ElementContainer aufOrgComb : aufOrgCombis) {
-            List<ElementContainer> oes = aufOrgComb.getElement().getConnectedContainer(Organisationseinheit.class, doc);
+            List<ElementContainer> oes = aufOrgComb.getElement().getConnectedContainers(Organisationseinheit.class, doc);
             //an der AufOrgKombi hängen keine OEs -> Zeile ist zu Ende
             if (oes.size() == 0) {
                 fullLinesBuilder.append(lineStart);
@@ -192,8 +192,8 @@ public class B1ExportPlugin {
             //ACHTUNG: es werden einfach alle Konfigurationen ausgeblendet, also einfach nur alle verknüpften AWBs eingesammelt,
             //egal ob sie in einer oder mehreren Konfigurationen stecken. Sonst müsste man für jede Konfig eine weitere Zeile anlegen
             List<ElementContainer> awbs = new ArrayList<>();
-            for (ElementContainer awbKonf : aufOrgComb.getElement().getConnectedContainer(ABKonfiguration.class, doc)) {
-                awbs.addAll(awbKonf.getElement().getConnectedContainer(Anwendungsbaustein.class, doc));
+            for (ElementContainer awbKonf : aufOrgComb.getElement().getConnectedContainers(ABKonfiguration.class, doc)) {
+                awbs.addAll(awbKonf.getElement().getConnectedContainers(Anwendungsbaustein.class, doc));
             }
 
             //Kein AWB vorhanden -> aktuelle Zeile für diese OEs abschließen
@@ -214,12 +214,12 @@ public class B1ExportPlugin {
             //Topf geworfen, also alle PDVB
             List<ElementContainer> pdvbKonfigs = new ArrayList<>();
             for (ElementContainer awb : awbs) {
-                pdvbKonfigs.addAll(awb.getElement().getConnectedContainer(DBKonfiguration.class, doc));
+                pdvbKonfigs.addAll(awb.getElement().getConnectedContainers(DBKonfiguration.class, doc));
             }
 
             List<ElementContainer> pdvbs = new ArrayList<>();
             for (ElementContainer pdvbKonf : pdvbKonfigs) {
-                pdvbs.addAll(pdvbKonf.getElement().getConnectedContainer(PhysischerDVBaustein.class, doc));
+                pdvbs.addAll(pdvbKonf.getElement().getConnectedContainers(PhysischerDVBaustein.class, doc));
             }
 
             if (pdvbs.size() == 0) {
@@ -360,7 +360,7 @@ public class B1ExportPlugin {
         while (true) {
             resultContainer.clear();
             for (ElementContainer startEc : nextStepStartContainer) {
-                resultContainer.addAll(startEc.getElement().getDirectParentContainer(doc));
+                resultContainer.addAll(startEc.getElement().getDirectParentContainers(doc));
             }
             if (resultContainer.size() == 0) {
                 break;

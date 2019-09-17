@@ -153,7 +153,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         lotree.saveExpansionAndSelection();
         loroot.removeAllChildren();
         lotree.reset();
-        for (ElementContainer ec : me.getDirectParentContainer(mainDoc)) {
+        for (ElementContainer ec : me.getDirectParentContainers(mainDoc)) {
             childrenToExcludeFromRtree.add(ec);
             lotree.addObject(ec, loroot, null, true, false, false);
         }
@@ -163,7 +163,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         lutree.saveExpansionAndSelection();
         luroot.removeAllChildren();
         lutree.reset();
-        for (ElementContainer ec : me.getDirectPartContainer(mainDoc)) {
+        for (ElementContainer ec : me.getDirectPartContainers(mainDoc)) {
             childrenToExcludeFromRtree.add(ec);
             lutree.addObject(ec, luroot, null, true, false, false);
         }

@@ -45,15 +45,15 @@ public class ExtrasActions {
                     Bausteinschnittstelle bs1 = (Bausteinschnittstelle) kz.getStart();
                     Bausteinschnittstelle bs2 = (Bausteinschnittstelle) kz.getEnd();
                     //hin
-                    List<ElementContainer> empf = bs2.getConnectedContainer(EtntEtdtKombination.class, doc, null, FORWARD);
-                    for (ElementContainer kc : bs1.getConnectedContainer(EtntEtdtKombination.class, doc, null, BACKWARD)) {
+                    List<ElementContainer> empf = bs2.getConnectedContainers(EtntEtdtKombination.class, doc, null, FORWARD);
+                    for (ElementContainer kc : bs1.getConnectedContainers(EtntEtdtKombination.class, doc, null, BACKWARD)) {
                         if (empf.contains(kc)) {
                             gdcoll.link(KommbezEtntVerbindung.class, kc.getElement(), kz, STANDARD_PID);
                         }
                     }
                     //zurück
-                    empf = bs1.getConnectedContainer(EtntEtdtKombination.class, doc, null, FORWARD);
-                    for (ElementContainer kc : bs2.getConnectedContainer(EtntEtdtKombination.class, doc, null, BACKWARD)) {
+                    empf = bs1.getConnectedContainers(EtntEtdtKombination.class, doc, null, FORWARD);
+                    for (ElementContainer kc : bs2.getConnectedContainers(EtntEtdtKombination.class, doc, null, BACKWARD)) {
                         if (empf.contains(kc)) {
                             gdcoll.link(KommbezEtntVerbindung.class, kz, kc.getElement(), STANDARD_PID);
                         }

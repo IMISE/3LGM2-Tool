@@ -67,7 +67,7 @@ public class LGMGraphDocument extends GraphDocument {
             Class<? extends Edge> egdeClass = metaModel.getClassForName(argv[1]).asSubclass(Edge.class);
             for (ElementContainer ec : getElementContainers(elementClass, true)) {
                 ModelElement me = ec.getElement();
-                List<ElementContainer> connectedContainer = me.getConnectedContainer(this, egdeClass);
+                List<ElementContainer> connectedContainer = me.getConnectedContainers(this, egdeClass);
                 if (connectedContainer.isEmpty()) {
                     ec.setVisible(false);
                 }
