@@ -17,10 +17,12 @@ import de.imise.tool3lgm.graphtools.model.template.TemplateViewDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.metamodel.service.TLGMServiceMetaModel;
+import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheDomain_Edge;
-import de.imise.tool3lgm.metamodel.service.node.IheActor;
+import de.imise.tool3lgm.metamodel.service.edge.IheInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.node.IheDomain;
+import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
 
 /**
  * Function to load a {@link TLGMServiceMetaModel} template and the definition of the corresponding view of the template browser.
@@ -47,7 +49,8 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
             public List<SimpleMetaPath> getViewMetaPaths() {
                 MetaModelContext metaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(getMetaModelDefinitionClass());
                 MetaModel metaModel = metaModelContext.getMetaModel();
-                SimpleMetaPath submodelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, IheDomain.class, IheActor.class, IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
+                SimpleMetaPath submodelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, IheDomain.class, IheTransaction.class, IheIntegrationProfile_IheDomain_Edge.class, IheIntegrationProfile_IheActor_Edge.class,
+                        IheActor_IheInterface_Edge.class, IheInterface_IheTransaction_Edge.class);
                 return ImmutableList.of(submodelMetaPath);
             }
 
