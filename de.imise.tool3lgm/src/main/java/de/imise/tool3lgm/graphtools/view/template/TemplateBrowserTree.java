@@ -3,6 +3,8 @@ package de.imise.tool3lgm.graphtools.view.template;
 import java.util.Objects;
 
 import javax.swing.JTree;
+import javax.swing.event.AncestorEvent;
+import javax.swing.event.AncestorListener;
 import javax.swing.tree.TreeModel;
 
 import de.imise.tool3lgm.MetaModelContext;
@@ -16,7 +18,7 @@ import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 /**
  * @author AXS (05.09.2019)
  */
-public class TemplateBrowserTree extends JTree implements Tool3lgmChangeListener {
+public class TemplateBrowserTree extends JTree implements Tool3lgmChangeListener, AncestorListener {
 
     /**
      *
@@ -30,7 +32,7 @@ public class TemplateBrowserTree extends JTree implements Tool3lgmChangeListener
         super((TreeModel) null);
         setRootVisible(false);
         setShowsRootHandles(true);
-        addAsToolChangeListener();
+        addAncestorListener(this);
         pathTreeModel = new PathTreeModel();
         setModel(pathTreeModel);
     }
@@ -48,6 +50,21 @@ public class TemplateBrowserTree extends JTree implements Tool3lgmChangeListener
         pathTreeModel.setTreeDefinition(templateTreeDefinition);
         expandRow(0);
         setRootVisible(false);
+    }
+
+    @Override
+    public void ancestorAdded(final AncestorEvent event) {
+        addAsToolChangeListener();
+    }
+
+    @Override
+    public void ancestorRemoved(final AncestorEvent event) {
+        removeAsToolChangeListener();
+    }
+
+    @Override
+    public void ancestorMoved(final AncestorEvent event) {
+        //do nothing
     }
 
 }
