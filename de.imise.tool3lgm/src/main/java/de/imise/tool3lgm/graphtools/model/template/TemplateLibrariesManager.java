@@ -10,7 +10,6 @@ import java.util.List;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
-import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -60,7 +59,7 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
             templateLibrariesContext.clear();
         } else { //load
             MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
-            if (selectedMetaModelContext == Tool3lgmMetaModelContext.DUMMY_META_MODEL_CONTEXT) {
+            if (Static.isDummyMetaModelContext(selectedMetaModelContext)) {
                 templateLibrariesContext.clear();
             } else if (!templateLibrariesContext.contains(selectedMetaModelContext)) { //templates already loaded?
                 Class<? extends MetaModelDefinition> metaModelDefinitionClass = selectedMetaModelContext.getMetaModelDefinitionClass();

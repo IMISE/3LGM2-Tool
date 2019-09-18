@@ -113,6 +113,11 @@ public class Static {
         return selectedMetaModelContext.getMetaModel();
     }
 
+    /** @return <code>true</code> if the given MetaModelContext is equals to the DUMMY_META_MODEL_CONTEXT */
+    public static boolean isDummyMetaModelContext(final MetaModelContext metaModelContext) {
+        return Tool3lgmMetaModelContext.DUMMY_META_MODEL_CONTEXT.equals(metaModelContext);
+    }
+
     /** Liefert das aktuelle selektierte Modell */
     public static GDCollection getSelectedGDCollection() {
         return tool == null ? null : tool.getSelectedGDCollection();
