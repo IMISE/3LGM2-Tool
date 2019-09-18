@@ -160,6 +160,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         for (PathTreeBranchDefinition branchDefinition : treeDefinition) {
             addBranch(branchDefinition);
         }
+        super.reload();
     }
 
     @Override
