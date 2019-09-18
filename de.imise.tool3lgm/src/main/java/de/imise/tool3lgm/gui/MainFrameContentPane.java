@@ -9,6 +9,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -50,9 +51,12 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     /** ToolBar with general tools */
     private final MainFrameToolBar mainFrameToolbar = new MainFrameToolBar();
 
+    /** parent der Toolbar Workarea == unten, mainFrameToolbar = oben in der Haupt-Toolbar */
+    private final Container graphFrameToolbarParent = mainFrameToolbar;
+    private final Container matrixFrameToolbarParent = workarea;
+
     /** Aktualisiert die Toolbar je nach Kontext des aktiven Frames */
-    //    private final GraphAreaToolbarManager toolbarManager = new GraphAreaToolbarManager(workarea);
-    private final GraphAreaToolbarManager toolbarManager = new GraphAreaToolbarManager(mainFrameToolbar);
+    private final GraphAreaToolbarManager toolbarManager = new GraphAreaToolbarManager(graphFrameToolbarParent, matrixFrameToolbarParent);
 
     /** splitted pane with modelBrowserPanel on the left and desktop on the right */
     private final JSplitPane leftSplitPane;
@@ -269,12 +273,11 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         InternalGraphFrame frame = new InternalGraphFrame(desktop, area, doc);
         modelBrowserPanel.addGraphDocument(doc);
         frame.addInternalFrameListener(this);
-        Rectangle bounds = desktop.getBounds();
+        Rectangle bounds = getFrameBounds(frame);
+        frame.setBounds(bounds);
         if (doc instanceof Szenario) {
-            bounds.height = bounds.height - 32;
             setWorkArea(frame);
         }
-        frame.setBounds(bounds);
         desktop.add(frame);
         frame.setVisible(true);
         return frame;
@@ -293,8 +296,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         int nextMatrixViewTitleIndex = getNextMatrixViewTitleIndex(doc);
         MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, toolbarManager, nextMatrixViewTitleIndex);
 
-        Rectangle bounds = desktop.getBounds();
-        bounds.height = bounds.height - 39;
+        Rectangle bounds = getFrameBounds(matrixView);
         matrixView.setBounds(bounds);
         desktop.add(matrixView);
         matrixView.addInternalFrameListener(this);
@@ -303,6 +305,37 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         return true;
     }
 
+    /**
+     * @param frame
+     * @return
+     */
+    private Rectangle getFrameBounds(final AbstractInternalFrame frame) {
+        Rectangle bounds = desktop.getBounds();
+        if (toolbarParentIsWorkareaSouth(frame)) {
+            int toolbarHeight = toolbarManager.getToolbarHeight(frame);
+            bounds.height = bounds.height - toolbarHeight;
+        }
+        return bounds;
+    }
+
+    /**
+     * @param frame
+     * @return <code>true</code>, wenn die toolbar des übergebenen Frames unten angezeigt werden soll
+     */
+    private boolean toolbarParentIsWorkareaSouth(final AbstractInternalFrame frame) {
+        if (frame instanceof InternalGraphFrame) {
+            return graphFrameToolbarParent == workarea;
+        }
+        if (frame instanceof MatrixViewInternalFrame) {
+            return matrixFrameToolbarParent == workarea;
+        }
+        return true;
+    }
+
+    /**
+     * @param doc
+     * @return
+     */
     private int getNextMatrixViewTitleIndex(final GraphDocument doc) {
         JInternalFrame[] frames = desktop.getAllFrames();
         int max = 1;
