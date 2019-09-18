@@ -72,6 +72,13 @@ public class PropertyChangeHandler {
         firePropertyChange(propertyName.name(), oldValue, newValue);
     }
 
+    /**
+     * Sendet an alle <code>PropertyChangeListener</code> ein unspezifisches <code>PropertyChangeEvent</code>
+     */
+    protected void firePropertyChange() {
+        firePropertyChange("", null, null);
+    }
+
     //Ende Listener hinzufügen/entfernen/benachrichtugen
 
 }
