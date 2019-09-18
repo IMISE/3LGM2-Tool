@@ -56,7 +56,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     private final MainFrameToolBar mainFrameToolbar = new MainFrameToolBar();
 
     /** parent der Toolbar Workarea == unten, mainFrameToolbar = oben in der Haupt-Toolbar */
-    private final Container graphFrameToolbarParent = mainFrameToolbar;
+    //private final Container graphFrameToolbarParent = worarea; // auch unten wie beim MatrixView
+    private final Container graphFrameToolbarParent = mainFrameToolbar; //oben in der HauptToolbar
     private final Container matrixFrameToolbarParent = workarea;
 
     /** Aktualisiert die Toolbar je nach Kontext des aktiven Frames */
@@ -82,6 +83,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
 
     /** if the desktop size changes the frames will be resized too */
     private int desktopWidth = -1;
+    private int desktopHeight = -1;
 
     /** InternalFrame in desktop, which has the focus */
     private AbstractInternalFrame activeFrame = null;
@@ -282,8 +284,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         InternalGraphFrame frame = new InternalGraphFrame(desktop, area, doc);
         modelBrowserPanel.addGraphDocument(doc);
         frame.addInternalFrameListener(this);
-        Rectangle bounds = getFrameBounds(frame);
-        frame.setBounds(bounds);
+        frame.setBounds(desktop.getBounds());
         if (doc instanceof Szenario) {
             setWorkArea(frame);
         }
@@ -304,40 +305,11 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         }
         int nextMatrixViewTitleIndex = getNextMatrixViewTitleIndex(doc);
         MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, toolbarManager, nextMatrixViewTitleIndex);
-
-        Rectangle bounds = getFrameBounds(matrixView);
-        matrixView.setBounds(bounds);
+        matrixView.setBounds(desktop.getBounds());
         desktop.add(matrixView);
         matrixView.addInternalFrameListener(this);
         matrixView.setVisible(true);
         desktop.setSelectedFrame(matrixView);
-        return true;
-    }
-
-    /**
-     * @param frame
-     * @return
-     */
-    private Rectangle getFrameBounds(final AbstractInternalFrame frame) {
-        Rectangle bounds = desktop.getBounds();
-        if (toolbarParentIsWorkareaSouth(frame)) {
-            int toolbarHeight = toolbarManager.getToolbarHeight(frame);
-            bounds.height = bounds.height - toolbarHeight;
-        }
-        return bounds;
-    }
-
-    /**
-     * @param frame
-     * @return <code>true</code>, wenn die toolbar des übergebenen Frames unten angezeigt werden soll
-     */
-    private boolean toolbarParentIsWorkareaSouth(final AbstractInternalFrame frame) {
-        if (frame instanceof InternalGraphFrame) {
-            return graphFrameToolbarParent == workarea;
-        }
-        if (frame instanceof MatrixViewInternalFrame) {
-            return matrixFrameToolbarParent == workarea;
-        }
         return true;
     }
 
@@ -640,18 +612,18 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     /**
      * @return all internal frames with the 0 position and max width of the desktop
      */
-    private Iterable<JInternalFrame> getFramesWithMaxWidth() {
-        Set<JInternalFrame> framesWithMaxWidth = new HashSet<>();
+    private Iterable<JInternalFrame> getFramesWithMaxSize() {
+        Set<JInternalFrame> framesWithMaxSize = new HashSet<>();
         for (JInternalFrame frame : desktop.getAllFrames()) {
             Point location = frame.getLocation();
             if (location.x == 0 && location.y == 0) {
                 Rectangle frameBounds = frame.getBounds();
-                if (frameBounds.width == desktopWidth) {
-                    framesWithMaxWidth.add(frame);
+                if (frameBounds.width == desktopWidth && frameBounds.height == desktopHeight) {
+                    framesWithMaxSize.add(frame);
                 }
             }
         }
-        return framesWithMaxWidth;
+        return framesWithMaxSize;
     }
 
     /**
@@ -659,10 +631,11 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
      *
      * @param frames
      */
-    private void setFramesToMaxWidth(final Iterable<JInternalFrame> frames) {
+    private void setFramesToMaxSize(final Iterable<JInternalFrame> frames) {
         for (JInternalFrame frame : frames) {
             Rectangle frameBounds = frame.getBounds();
             frameBounds.width = desktopWidth;
+            frameBounds.height = desktopHeight;
             frame.setBounds(frameBounds);
         }
     }
@@ -672,11 +645,13 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         Object source = e.getSource();
         if (source == desktop) {
             if (desktopWidth != -1) {
-                Iterable<JInternalFrame> framesWithMaxWidth = getFramesWithMaxWidth();
+                Iterable<JInternalFrame> framesWithMaxSize = getFramesWithMaxSize();
                 desktopWidth = desktop.getWidth();
-                setFramesToMaxWidth(framesWithMaxWidth);
+                desktopHeight = desktop.getHeight();
+                setFramesToMaxSize(framesWithMaxSize);
             } else {
                 desktopWidth = desktop.getWidth();
+                desktopHeight = desktop.getHeight();
             }
         }
     }

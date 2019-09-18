@@ -4,10 +4,6 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.JComponent;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -39,8 +35,6 @@ public class GraphAreaToolbarManager implements LGMChangeListenerSimple, BasicGr
 
     /** der gerade aktive Frame */
     private AbstractInternalFrame currentFrame;
-
-    private final Map<Class<? extends AbstractInternalFrame>, Integer> frameTypeToToolbarHeight = new HashMap<>();
 
     /**
      * @param graphFrameToolbarParent
@@ -191,36 +185,6 @@ public class GraphAreaToolbarManager implements LGMChangeListenerSimple, BasicGr
             return graphFrameToolbarParent;
         }
         return matrixFrameToolbarParent;
-    }
-
-    /**
-     * @param frame
-     * @return
-     */
-    public int getToolbarHeight(final AbstractInternalFrame frame) {
-        //Gesamtmodellfenster haben keine Toolbar -> Höhe der Toolbar = 0
-        if (frame instanceof InternalGraphFrame && !(frame.getGraphDocument() instanceof Szenario)) {
-            return 0;
-        }
-        //Hole die gespeichert Höhe
-        Class<? extends AbstractInternalFrame> frameClass = frame.getClass();
-        Integer height = frameTypeToToolbarHeight.get(frameClass);
-        //keine Höhe bisher gespeichert
-        if (height == null) {
-            JComponent toolbar = null;
-            //GraphFrame -> einmal eine GraphFrameToolbar initalisieren
-            if (frame instanceof InternalGraphFrame) {
-                toolbar = new GraphAreaToolBar((InternalGraphFrame) frame);
-                //MatrixFrame -> einmal eine MatrixToolbar initalisieren
-            } else if (frame instanceof MatrixViewInternalFrame) {
-                toolbar = new InternalMatrixFrameToolBar((MatrixViewInternalFrame) frame);
-            }
-            //Preferred height bestimmen und speichern
-            height = toolbar == null ? 0 : toolbar.getPreferredSize().height;
-            frameTypeToToolbarHeight.put(frameClass, height);
-        }
-
-        return height;
     }
 
     ///////////////////////////
