@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.swing.tree.DefaultTreeModel;
 
+import org.apache.jena.ext.com.google.common.base.Strings;
+
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -33,12 +35,22 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     /** root node as {@link LGMTreeNode} */
     private final LGMTreeNode root;
 
+    private final String emptyModelInfo;
+
     /**
      *
      */
     public PathTreeModel() {
+        this(null);
+    }
+
+    /**
+     * @param emptyModelInfo
+     */
+    public PathTreeModel(final String emptyModelInfo) {
         super(new StringTreeNode("Root", true));
         root = (LGMTreeNode) super.root;
+        this.emptyModelInfo = emptyModelInfo;
     }
 
     /**
@@ -157,8 +169,17 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     @Override
     public void reload() {
         root.removeAllChildren();
-        for (PathTreeBranchDefinition branchDefinition : treeDefinition) {
-            addBranch(branchDefinition);
+        if (treeDefinition != null) {
+            if (treeDefinition.isEmpty()) {
+                if (!Strings.isNullOrEmpty(emptyModelInfo)) {
+                    StringTreeNode noTemplatesInfoNode = new StringTreeNode(emptyModelInfo);
+                    root.add(noTemplatesInfoNode);
+                }
+            } else {
+                for (PathTreeBranchDefinition branchDefinition : treeDefinition) {
+                    addBranch(branchDefinition);
+                }
+            }
         }
         super.reload();
     }

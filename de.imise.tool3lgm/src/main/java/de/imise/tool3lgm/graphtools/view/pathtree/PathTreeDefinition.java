@@ -12,9 +12,6 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
  */
 public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iterable<PathTreeBranchDefinition> {
 
-    //später, falls gebraucht
-    //    public final PropertyChangeHandler propertyChangeHandler;
-
     private final List<PathTreeBranchDefinition> branches = new ArrayList<>();
 
     /**
@@ -22,15 +19,20 @@ public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iter
      */
     public PathTreeDefinition(final MetaModelContext metaModelContext) {
         super(metaModelContext);
-        //        propertyChangeHandler = new PropertyChangeHandler(this);
     }
 
+    /**
+     * @param branch
+     */
     public void addBranch(final PathTreeBranchDefinition branch) {
         if (!branches.contains(branch)) { //falls man durch die Defintion die Reihenfolge der Braches beeinflussen können will, muss es eine Liste sein -> contais(..) abfragen
             branches.add(branch);
         }
     }
 
+    /**
+     * @param branches
+     */
     public void addBranches(final Iterable<PathTreeBranchDefinition> branches) {
         for (PathTreeBranchDefinition branch : branches) {
             addBranch(branch);
@@ -40,6 +42,13 @@ public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iter
     @Override
     public Iterator<PathTreeBranchDefinition> iterator() {
         return branches.iterator();
+    }
+
+    /**
+     * @return
+     */
+    public boolean isEmpty() {
+        return branches.isEmpty();
     }
 
 }

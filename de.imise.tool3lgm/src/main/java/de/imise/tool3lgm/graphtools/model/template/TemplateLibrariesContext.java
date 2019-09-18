@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionPrinter;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
@@ -126,6 +127,9 @@ public class TemplateLibrariesContext {
      * @return
      */
     public PathTreeDefinition getTemplateTreeDefinition(final MetaModelContext metaModelContext) {
+        if (Static.isDummyMetaModelContext(metaModelContext)) {
+            return null;
+        }
         PathTreeDefinition fullPathTreeDefinition = new PathTreeDefinition(metaModelContext);
         for (GDCollection template : templateToTreeDefinition.keySet()) {
             if (template.hasMetaModelContext(metaModelContext)) {

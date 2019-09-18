@@ -11,6 +11,7 @@ import javax.swing.tree.TreeModel;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
@@ -38,7 +39,7 @@ public class TemplateBrowserTree extends JTree implements PropertyChangeListener
         setRootVisible(false);
         setShowsRootHandles(true);
         addAncestorListener(this);
-        pathTreeModel = new PathTreeModel();
+        pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"));
         setModel(pathTreeModel);
     }
 
