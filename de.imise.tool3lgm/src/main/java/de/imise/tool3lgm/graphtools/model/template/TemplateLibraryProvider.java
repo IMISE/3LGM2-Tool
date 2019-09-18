@@ -2,13 +2,24 @@ package de.imise.tool3lgm.graphtools.model.template;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.util.SimpleResourceHandler;
+import de.imise.util.SimpleResourceSource;
 
 /**
  * Plugin base class for all handlers which load a model as a template library.
  *
  * @author AXS (24.08.2019)
  */
-public abstract class TemplateLibraryProvider {
+public abstract class TemplateLibraryProvider implements SimpleResourceSource {
+
+    private final SimpleResourceHandler resourceHandler;
+
+    /**
+     *
+     */
+    public TemplateLibraryProvider() {
+        resourceHandler = new SimpleResourceHandler(getClass());
+    }
 
     /**
      * @return display name of this library e.g "IHE (full)" or if the library contains only the ITI part "IHE ITI Domain".
@@ -39,6 +50,11 @@ public abstract class TemplateLibraryProvider {
      */
     public final boolean hasMetaModelDefinitionClass(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         return metaModelDefinitionClass.isAssignableFrom(getMetaModelDefinitionClass());
+    }
+
+    @Override
+    public String getResString(final String resKey) {
+        return resourceHandler.getResString(resKey);
     }
 
 }

@@ -42,7 +42,7 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
 
             @Override
             public String getMainCategoryName() {
-                return "IHE (auslagern!!!)";
+                return getResString("MAIN_CATEGORY_NAME");
             }
 
             @Override
