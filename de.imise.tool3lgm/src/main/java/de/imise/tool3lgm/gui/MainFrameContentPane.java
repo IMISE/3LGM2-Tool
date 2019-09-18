@@ -13,9 +13,13 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.help.CSH;
 import javax.swing.JDesktopPane;
@@ -43,7 +47,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * @author AXS (6 Aug 2019)
  */
-public class MainFrameContentPane extends JPanel implements PropertyChangeListener, InternalFrameListener {
+public class MainFrameContentPane extends JPanel implements PropertyChangeListener, InternalFrameListener, ComponentListener {
 
     /** Panel with verticalSplitPane and werkzeugleiste */
     private final JPanel workarea = new JPanel();
@@ -76,6 +80,9 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     /** contain all windows of opened documents (JDesktopPane is a container used to create a multiple-document interface or a virtual desktop) */
     private final JDesktopPane desktop;
 
+    /** if the desktop size changes the frames will be resized too */
+    private int desktopWidth = -1;
+
     /** InternalFrame in desktop, which has the focus */
     private AbstractInternalFrame activeFrame = null;
 
@@ -100,7 +107,9 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     public MainFrameContentPane() {
         workarea.setLayout(new BorderLayout());
         modelBrowserPanel = new ModelBrowserPanel();
+
         desktop = new JDesktopPane();
+        desktop.addComponentListener(this); //resize desktop -> resize frames
 
         JScrollPane desktopscroll = new JScrollPane(desktop);
         leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktopscroll);
@@ -622,6 +631,69 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         doc.removeClosedTransactionsListener(toolbarManager);
         activeFrame = null;
         toolbarManager.updateToolBar();
+    }
+
+    //////////////////////////////////////////////
+    // resize desktop -> resize internal frames //
+    //////////////////////////////////////////////
+
+    /**
+     * @return all internal frames with the 0 position and max width of the desktop
+     */
+    private Iterable<JInternalFrame> getFramesWithMaxWidth() {
+        Set<JInternalFrame> framesWithMaxWidth = new HashSet<>();
+        for (JInternalFrame frame : desktop.getAllFrames()) {
+            Point location = frame.getLocation();
+            if (location.x == 0 && location.y == 0) {
+                Rectangle frameBounds = frame.getBounds();
+                if (frameBounds.width == desktopWidth) {
+                    framesWithMaxWidth.add(frame);
+                }
+            }
+        }
+        return framesWithMaxWidth;
+    }
+
+    /**
+     * Resize all given frames to the maximum with of the desktop
+     *
+     * @param frames
+     */
+    private void setFramesToMaxWidth(final Iterable<JInternalFrame> frames) {
+        for (JInternalFrame frame : frames) {
+            Rectangle frameBounds = frame.getBounds();
+            frameBounds.width = desktopWidth;
+            frame.setBounds(frameBounds);
+        }
+    }
+
+    @Override
+    public void componentResized(final ComponentEvent e) {
+        Object source = e.getSource();
+        if (source == desktop) {
+            if (desktopWidth != -1) {
+                Iterable<JInternalFrame> framesWithMaxWidth = getFramesWithMaxWidth();
+                desktopWidth = desktop.getWidth();
+                setFramesToMaxWidth(framesWithMaxWidth);
+            } else {
+                desktopWidth = desktop.getWidth();
+            }
+        }
+    }
+
+    @Override
+    public void componentMoved(final ComponentEvent e) {
+        //do nothing
+    }
+
+    @Override
+    public void componentShown(final ComponentEvent e) {
+        //do nothing
+    }
+
+    @Override
+    public void componentHidden(final ComponentEvent e) {
+        //do nothing
     }
 
 }
