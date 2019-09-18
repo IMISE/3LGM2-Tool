@@ -39,7 +39,7 @@ public class TemplateBrowserTree extends JTree implements PropertyChangeListener
         setRootVisible(false);
         setShowsRootHandles(true);
         addAncestorListener(this);
-        pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"));
+        pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"), true);
         setModel(pathTreeModel);
     }
 

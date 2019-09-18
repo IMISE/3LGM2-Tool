@@ -35,22 +35,51 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     /** root node as {@link LGMTreeNode} */
     private final LGMTreeNode root;
 
+    /** Info that is displayed if there is nothing else to display */
     private final String emptyModelInfo;
+
+    /**
+     * If <code>true</code> the clear name of the model elements will be displayed in ElementContainerTreeNodes.
+     * If <code>false</code> the toString() method (with all submodel information) will be displayed for ElementContainerTreeNodes.
+     */
+    private final boolean setElementsClearName;
 
     /**
      *
      */
     public PathTreeModel() {
-        this(null);
+        this(null, false);
     }
 
     /**
      * @param emptyModelInfo
+     *            Info that is displayed if there is nothing else to display
      */
     public PathTreeModel(final String emptyModelInfo) {
+        this(emptyModelInfo, false);
+    }
+
+    /**
+     * @param setElementsClearName
+     *            If <code>true</code> the clear name of the model elements will be displayed in ElementContainerTreeNodes.
+     *            If <code>false</code> the toString() method (with all submodel information) will be displayed for ElementContainerTreeNodes.
+     */
+    public PathTreeModel(final boolean setElementClearName) {
+        this(null, setElementClearName);
+    }
+
+    /**
+     * @param emptyModelInfo
+     *            Info that is displayed if there is nothing else to display
+     * @param setElementsClearName
+     *            If <code>true</code> the clear name of the model elements will be displayed in ElementContainerTreeNodes.
+     *            If <code>false</code> the toString() method (with all submodel information) will be displayed for ElementContainerTreeNodes.
+     */
+    public PathTreeModel(final String emptyModelInfo, final boolean setElementsClearName) {
         super(new StringTreeNode("Root", true));
         root = (LGMTreeNode) super.root;
         this.emptyModelInfo = emptyModelInfo;
+        this.setElementsClearName = setElementsClearName;
     }
 
     /**
@@ -152,6 +181,11 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     private void createNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent) {
         for (ElementContainer ec : elementContainers) {
             ElementContainerTreeNode pathStepNode = new ElementContainerTreeNode(ec, true, false);
+            if (setElementsClearName) {
+                ModelElement me = ec.getElement();
+                String clearName = me.getClearName();
+                pathStepNode.setText(clearName);
+            }
             parent.add(pathStepNode);
             createdNodes.add(pathStepNode);
         }
