@@ -128,8 +128,10 @@ public class TemplateLibrariesContext {
     public PathTreeDefinition getTemplateTreeDefinition(final MetaModelContext metaModelContext) {
         PathTreeDefinition fullPathTreeDefinition = new PathTreeDefinition(metaModelContext);
         for (GDCollection template : templateToTreeDefinition.keySet()) {
-            PathTreeDefinition pathTreeDefinition = templateToTreeDefinition.get(template);
-            fullPathTreeDefinition.addBranches(pathTreeDefinition);
+            if (template.hasMetaModelContext(metaModelContext)) {
+                PathTreeDefinition pathTreeDefinition = templateToTreeDefinition.get(template);
+                fullPathTreeDefinition.addBranches(pathTreeDefinition);
+            }
         }
         return fullPathTreeDefinition;
     }
