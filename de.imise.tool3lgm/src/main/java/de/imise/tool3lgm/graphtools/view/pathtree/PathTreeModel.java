@@ -151,7 +151,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      */
     private void createNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent) {
         for (ElementContainer ec : elementContainers) {
-            ElementContainerTreeNode pathStepNode = new ElementContainerTreeNode(ec, true, true);
+            ElementContainerTreeNode pathStepNode = new ElementContainerTreeNode(ec, true, false);
             parent.add(pathStepNode);
             createdNodes.add(pathStepNode);
         }
