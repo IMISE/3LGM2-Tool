@@ -476,13 +476,9 @@ public class Tool3lgm {
         }
 
         //ab hier ist sicher, dass das Modell geschlossen werden soll
+        collections.remove(gdcoll);
+
         gdcoll.simpleRemoveGraphDocuments();
-
-        ignoreDocSelection = true;
-
-        distribute(MODEL_CHANGE_MODEL_CLOSED, selDoc);
-
-        ignoreDocSelection = false;
 
         GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
         fileHandler.close();
@@ -491,7 +487,11 @@ public class Tool3lgm {
         } catch (Exception e) {
         }
 
-        collections.remove(gdcoll);
+        ignoreDocSelection = true;
+
+        distribute(MODEL_CHANGE_MODEL_CLOSED, selDoc);
+
+        ignoreDocSelection = false;
 
         System.gc();
 
