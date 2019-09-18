@@ -17,13 +17,14 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.util.event.PropertyChangeHandler;
 
 /**
  * Manager for the loaded templates.
  *
  * @author AXS (11.08.2019)
  */
-public class TemplateLibrariesManager implements PropertyChangeListener, Tool3lgmChangeListener {
+public class TemplateLibrariesManager extends PropertyChangeHandler implements PropertyChangeListener, Tool3lgmChangeListener {
 
     /** Data model to store the loaded template libraries */
     private final TemplateLibrariesContext templateLibrariesContext = new TemplateLibrariesContext();
@@ -46,25 +47,30 @@ public class TemplateLibrariesManager implements PropertyChangeListener, Tool3lg
         loadOrUnloadTemplates();
     }
 
+    @Override
+    public void model_change_model_closed(final GraphDocument source) {
+        loadOrUnloadTemplates();
+    }
+
     /**
-    *
-    */
+     *
+     */
     private void loadOrUnloadTemplates() {
-        //unload
-        if (!OPTION_SHOW_TEMPLATE_BROWSER.is()) {
+        if (!OPTION_SHOW_TEMPLATE_BROWSER.is()) { //unload
             templateLibrariesContext.clear();
-            return;
+        } else { //load
+            MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
+            if (selectedMetaModelContext == Tool3lgmMetaModelContext.DUMMY_META_MODEL_CONTEXT) {
+                templateLibrariesContext.clear();
+            } else if (!templateLibrariesContext.contains(selectedMetaModelContext)) { //templates already loaded?
+                Class<? extends MetaModelDefinition> metaModelDefinitionClass = selectedMetaModelContext.getMetaModelDefinitionClass();
+                List<TemplateLibraryProvider> templateLibraryServers = Static.loadPlugins(TemplateLibraryProvider.class);
+                removeUnfittingTemplateLibraryServers(templateLibraryServers, metaModelDefinitionClass);
+                addTemplateLibraries(templateLibraryServers);
+
+            }
         }
-        //load
-        MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
-        //tamplates already loaded?
-        if (selectedMetaModelContext == Tool3lgmMetaModelContext.DUMMY_META_MODEL_CONTEXT || templateLibrariesContext.contains(selectedMetaModelContext)) {
-            return;
-        }
-        Class<? extends MetaModelDefinition> metaModelDefinitionClass = selectedMetaModelContext.getMetaModelDefinitionClass();
-        List<TemplateLibraryProvider> templateLibraryServers = Static.loadPlugins(TemplateLibraryProvider.class);
-        removeUnfittingTemplateLibraryServers(templateLibraryServers, metaModelDefinitionClass);
-        addTemplateLibraries(templateLibraryServers);
+        firePropertyChange();
     }
 
     /**

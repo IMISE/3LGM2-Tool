@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.template;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Objects;
 
 import javax.swing.JTree;
@@ -9,8 +11,6 @@ import javax.swing.tree.TreeModel;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmChangeListener;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
@@ -18,12 +18,17 @@ import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 /**
  * @author AXS (05.09.2019)
  */
-public class TemplateBrowserTree extends JTree implements Tool3lgmChangeListener, AncestorListener {
+public class TemplateBrowserTree extends JTree implements PropertyChangeListener, AncestorListener {
 
     /**
      *
      */
     private final PathTreeModel pathTreeModel;
+
+    /**
+     *
+     */
+    private TemplateLibrariesManager templateLibrariesManager;
 
     /**
      *
@@ -38,7 +43,7 @@ public class TemplateBrowserTree extends JTree implements Tool3lgmChangeListener
     }
 
     @Override
-    public void model_change_selected_szenario_changed(final GraphDocument source) {
+    public void propertyChange(final PropertyChangeEvent evt) {
         MetaModelContext currentMetaModelContext = pathTreeModel.getMetaModelContext();
         MetaModelContext newMetaModelContext = Static.getSelectedMetaModelContext();
         if (Objects.equals(currentMetaModelContext, newMetaModelContext)) {
@@ -54,12 +59,13 @@ public class TemplateBrowserTree extends JTree implements Tool3lgmChangeListener
 
     @Override
     public void ancestorAdded(final AncestorEvent event) {
-        addAsToolChangeListener();
+        templateLibrariesManager = Static.getTemplateLibrariesManager();
+        templateLibrariesManager.addPropertyChangeListener(this);
     }
 
     @Override
     public void ancestorRemoved(final AncestorEvent event) {
-        removeAsToolChangeListener();
+        templateLibrariesManager.addPropertyChangeListener(this);
     }
 
     @Override
