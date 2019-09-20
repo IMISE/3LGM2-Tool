@@ -4,10 +4,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.jena.ontology.AnnotationProperty;
 import org.apache.jena.ontology.Individual;
 import org.apache.jena.ontology.ObjectProperty;
 import org.apache.jena.ontology.OntClass;
@@ -20,6 +20,7 @@ import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.Resource;
 import org.apache.jena.rdf.model.Statement;
 import org.apache.jena.rdf.model.StmtIterator;
+import org.apache.jena.util.iterator.ExtendedIterator;
 
 import com.google.common.base.Strings;
 
@@ -28,7 +29,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.DataPrinter;
 import de.imise.util.HashStringGenerator;
 import de.imise.util.StringUtils;
@@ -77,8 +77,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
         GDCollection gdcoll = getCollection();
         MetaModel metaModel = gdcoll.getMetaModel();
         Collection<String> classNames = getSimpleClassNames(metaModel.allNodesSet, "");
-        Locale locale = UserProperties.getLocale();
-        String localeCountry = locale.getCountry();
+        AnnotationProperty descriptionProperty = getDescriptionProperty(ontModel);
         for (Iterator<OntClass> ontClasses = ontModel.listNamedClasses(); ontClasses.hasNext();) {
             OntClass ontClass = ontClasses.next();
             String ontClassName = ontClass.getLocalName();
@@ -97,8 +96,9 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     Individual individual = ontModel.getIndividual(uri);
                     OntClass individualOntClass = individual.getOntClass();
                     if (individualOntClass.equals(ontClass)) {
-                        String name = ontNode.getLocalName();
-                        String description = ontNode.getComment(localeCountry);
+                        String name = ontNode.getLabel(null); //ontNode.getLocalName(); //label ist der Anzeigename und localName ist der techn. Bezeichner
+                        RDFNode propertyValue = ontNode.getPropertyValue(descriptionProperty);
+                        String description = propertyValue == null ? "" : propertyValue.toString();
                         String hashString = ontNode.getURI();
                         hashString = HashStringGenerator.getHash(hashString); //TimeStamp und eine Nummer and die URI als Hash anhängen
                         Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, hashString);
@@ -109,6 +109,24 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                 }
             }
         }
+    }
+
+    /**
+     * Liefert die Property, die die Beschreibung enthält. Es kann sein, dass es Ontologien gibt,
+     * bei denen das hier nicht stimmt, weil {@link AnnotationProperty}s nicht in jeder OWL-Datei
+     * vorkommen oder die Description irgendwas anderes beschreibt.
+     *
+     * @param ontModel
+     * @return
+     */
+    private AnnotationProperty getDescriptionProperty(final OntModel ontModel) {
+        for (ExtendedIterator<AnnotationProperty> listAnnotationProperties = ontModel.listAnnotationProperties(); listAnnotationProperties.hasNext();) {
+            AnnotationProperty annotationProperty = listAnnotationProperties.next();
+            if ("description".equals(annotationProperty.getLocalName())) {
+                return annotationProperty;
+            }
+        }
+        return null;
     }
 
     /**
