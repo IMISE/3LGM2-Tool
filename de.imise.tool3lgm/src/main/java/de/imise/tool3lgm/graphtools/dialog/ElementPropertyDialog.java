@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTablePanel;
@@ -139,10 +140,12 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         JPanel bp = new JPanel();
         okButton.addActionListener(this);
         bp.add(okButton);
-        applyButton.addActionListener(this);
-        bp.add(applyButton);
-        cancelButton.addActionListener(this);
-        bp.add(cancelButton);
+        if (!isInfoDialog()) {
+            applyButton.addActionListener(this);
+            bp.add(applyButton);
+            cancelButton.addActionListener(this);
+            bp.add(cancelButton);
+        }
         if (helpButton != null) {
             bp.add(helpButton);
         }
@@ -156,6 +159,13 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         addSizeOrPositionChangedListener();
         setSizeAndLocation();
         opening = true;
+    }
+
+    /**
+     * @return <code>true</code> if this dialog only presents information but nothing is ediable/changeable:
+     */
+    public final boolean isInfoDialog() {
+        return gdcoll.getModelCategory() == ModelCategory.TEMPLATE;
     }
 
     /**
