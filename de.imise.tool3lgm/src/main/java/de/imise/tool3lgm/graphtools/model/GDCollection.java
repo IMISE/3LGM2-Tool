@@ -1248,8 +1248,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         EdgeContainer ec = new EdgeContainer(edgeContainer, doc);
         int layer = edge.layerFor();
         doc.getLayer(layer).add(ec);
-        boolean bulkMode = isBulkMode();
-        setBulkMode(true);
+        boolean bulkMode = setBulkMode(true);
         for (Szenario szen : szenarios) {
             szen.createEdgeContainer(edge.getStart().getContainer(szen), szen, false, pid);
         }

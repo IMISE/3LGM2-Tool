@@ -68,7 +68,9 @@ public class ModelConverter {
         ModelCategory modelCategory = sourceModelType.getModelCategory();
         Tool3lgmModelType targetModelType = new Tool3lgmModelType(targetMetaModelContext, modelCategory); //das hier muss nicht immer richtig sein, aber beim Umstellen auf die ModelTypes statt nur MetaModelContexts war es erstmal richtig und zu aufwendig den TargetModelType auch noch parametrierbar zu machen. Daher werden hier jetzt erstmal nur gelcihartige Modelle ineinander umgewandelt.
         GDCollection targetModel = new GDCollection(targetModelType);
+        targetModel.setBulkMode(true);
         convert(modelConverterDefinition, sourceModel, targetModel);
+        targetModel.setBulkMode(false);
         return targetModel;
     }
 
@@ -96,12 +98,12 @@ public class ModelConverter {
      * Legt im Target-Model alle Teilmodelle an, die es auch im SourceModel gibt. Diese werden in der Map {@link #sourceSzenToTargetSzen} gespeichert.
      */
     public void prepareTargetModel() {
-        targetModel.setBulkMode(true);
+        boolean oldBulkMode = targetModel.setBulkMode(true);
         for (Szenario sourceSzen : sourceModel.getSzenarios()) {
             Szenario targetSzen = targetModel.createSzenario(sourceSzen.getTitle(), false, sourceSzen.getDescription(), sourceSzen.getHashString(), false);
             sourceSzenToTargetSzen.put(sourceSzen, targetSzen);
         }
-        targetModel.setBulkMode(false);
+        targetModel.setBulkMode(oldBulkMode);
     }
 
     /**

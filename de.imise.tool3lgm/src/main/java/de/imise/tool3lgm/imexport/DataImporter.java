@@ -51,8 +51,10 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
     public final boolean startImport(final ModelCategory modelCategory) {
         Class<? extends MetaModelDefinition> importMetaModelDefinitionClass = getImportMetaModelDefinitionClass();
         gdcoll = createModel(importMetaModelDefinitionClass, modelCategory);
-        gdcoll.setBulkMode(true);
-        return importData();
+        boolean oldBulkMode = gdcoll.setBulkMode(true);
+        boolean importData = importData();
+        gdcoll.setBulkMode(oldBulkMode);
+        return importData;
     }
 
     /**

@@ -174,8 +174,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     public static void clearUnfixableErrors(final GDCollection gdcoll) {
         ConsistencyChecker checker = new ConsistencyChecker(gdcoll, false);
         // dieses Löschen muss man nicht rückgängig machen können -> BulkMode einschalten
-        boolean oldBulkMode = checker.gdcoll.isBulkMode();
-        checker.gdcoll.setBulkMode(true);
+        boolean oldBulkMode = checker.gdcoll.setBulkMode(true);
         for (AbstractError err : checker.getAllInconsistencies()) {
             if (!checker.isSolutionExecuteable(err)) {
                 ModelElement errorElement = err.getModelElement();
