@@ -21,7 +21,6 @@ import javax.swing.JScrollPane;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ConnectPathDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -76,7 +75,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         table = new ConnectedElementsTable(dialog.getModelElement(), metaPaths, tableDefinition, editable, mouseListener, dialog.getTransactionID());
 
         //wenn in der columnsDefinion ein String als Resourcenschlüssel oder Tabellenname angegeben wurde, dann kommt hier irgendwas nicht leeres zurück
-        String tableTabName = Tool3lgmConstants.getResStringWithoutError(tableDefinition.getTableResKeyOrName());
+        String tableTabName = doc.getResStringWithoutError(tableDefinition.getTableResKeyOrName());
         if (!Strings.isNullOrEmpty(tableTabName)) { //Name dieses Panels und somit des Tabs ggf. ersetzen (super setzt den Namen des Endelementes der Pfade)
             setName(tableTabName);
         }
