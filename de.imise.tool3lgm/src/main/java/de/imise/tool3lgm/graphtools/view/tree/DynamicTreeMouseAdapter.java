@@ -63,7 +63,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
         }
         GraphDocument doc = tree.getGraphDocument();
         // Hyprlink öffnen
-        if ((e.getModifiers() & InputEvent.ALT_MASK) != 0) {
+        if ((e.getModifiersEx() & InputEvent.ALT_DOWN_MASK) != 0) {
             //Component source, int id, long when, int modifiers,
             //int keyCode, char keyChar, int keyLocation
             tree.dispatchEvent(new KeyEvent(tree, KeyEvent.KEY_RELEASED, 0l, 0, KeyEvent.VK_ALT, KeyEvent.CHAR_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD));
@@ -76,7 +76,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
         }
 
         // Teilobjkete zeigen oder verstecken
-        if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0) {
+        if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0) {
             doc.switchExpansionState(DynamicTree.PID);
             return;
         }
@@ -98,7 +98,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
 
     @Override
     public void mousePressed(final MouseEvent e) {
-        if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0) {
+        if ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
             contextGenerator.setControlled(true);
         }
         boolean right_button = false;
