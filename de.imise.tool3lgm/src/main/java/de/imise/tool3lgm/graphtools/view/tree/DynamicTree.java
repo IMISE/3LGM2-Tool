@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -37,7 +36,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -53,7 +51,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
 /**
  * @author N.N.
  */
-public final class DynamicTree extends JTree implements UserFieldListener, GraphDocumentOwner {
+public final class DynamicTree extends DynamicTreeMouseAdapterTarget implements UserFieldListener {
 
     /**
      * Node für die Fachliche Ebene
@@ -125,7 +123,6 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         //alle KeyStrokes im Baum hinzufügen, die systemweit gelten sollen. Da der Baum schon eine eigene InputMap und ActionMap hat,
         //werden die ShortCuts aus dem RootPane des Tools hier nicht auch beachtet und müssen explizit hinzugefügt werden
         KeyStrokes.registerPublicKeyStrokes(this);
-        DynamicTreeMouseAdapter.addAdapter(this);
         selectionListener = new DynamicTreeSelectionListener(this);
         transactionListener = new DynamicTreeLGMChangeListener(this);
         setCellRenderer(new TreeRenderer(doc));
@@ -252,6 +249,7 @@ public final class DynamicTree extends JTree implements UserFieldListener, Graph
         initLayer(physicalLayer, metaModel.getTreePhysicalLayerVisibleAbstractNodes(), metaModel.treePhysicalLayerNodes);
     }
 
+    @Override
     public boolean isLayerNode(final Object o) {
         return o == domainLayer || o == logicalLayer || o == physicalLayer;
     }

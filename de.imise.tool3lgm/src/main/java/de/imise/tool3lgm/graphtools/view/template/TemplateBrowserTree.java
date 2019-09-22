@@ -4,23 +4,26 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
 
-import javax.swing.JTree;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTreeMouseAdapter;
+import de.imise.tool3lgm.graphtools.view.tree.DynamicTreeMouseAdapterTarget;
+import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 
 /**
  * @author AXS (05.09.2019)
  */
-public class TemplateBrowserTree extends JTree implements PropertyChangeListener, AncestorListener {
+public class TemplateBrowserTree extends DynamicTreeMouseAdapterTarget implements PropertyChangeListener, AncestorListener {
 
     /**
      *
@@ -43,6 +46,18 @@ public class TemplateBrowserTree extends JTree implements PropertyChangeListener
         addAncestorListener(this);
         pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"), true);
         setModel(pathTreeModel);
+    }
+
+    @Override
+    public GraphDocument getGraphDocument() {
+        TreePath leadSelectionPath = selectionModel.getLeadSelectionPath();
+        Object lastPathComponent = leadSelectionPath.getLastPathComponent();
+        GraphDocument doc = null;
+        if (lastPathComponent instanceof ElementContainerTreeNode) {
+            ElementContainerTreeNode elementContainerNode = (ElementContainerTreeNode) lastPathComponent;
+            doc = elementContainerNode.getGraphDocument();
+        }
+        return doc;
     }
 
     @Override

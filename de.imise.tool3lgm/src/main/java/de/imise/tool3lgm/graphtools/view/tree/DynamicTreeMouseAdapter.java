@@ -30,13 +30,13 @@ import de.imise.util.swing.event.ExtendedAction;
 
 public class DynamicTreeMouseAdapter implements MouseListener {
 
-    private final DynamicTree tree;
+    private final DynamicTreeMouseAdapterTarget tree;
 
-    private DynamicTreeMouseAdapter(final DynamicTree tree) {
+    private DynamicTreeMouseAdapter(final DynamicTreeMouseAdapterTarget tree) {
         this.tree = tree;
     }
 
-    public static void addAdapter(final DynamicTree tree) {
+    public static void addAdapter(final DynamicTreeMouseAdapterTarget tree) {
         for (MouseListener listener : tree.getMouseListeners()) {
             if (listener instanceof DynamicTreeMouseAdapter) {
                 return;
@@ -62,6 +62,9 @@ public class DynamicTreeMouseAdapter implements MouseListener {
             left_button = true;
         }
         GraphDocument doc = tree.getGraphDocument();
+        if (doc == null) {
+            return;
+        }
         // Hyprlink öffnen
         if ((e.getModifiersEx() & InputEvent.ALT_DOWN_MASK) != 0) {
             //Component source, int id, long when, int modifiers,
@@ -150,9 +153,11 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                     if (selectedNode instanceof ElementClassTreeNode) { //Klassenknoten?
                         Class<? extends ModelElement> elementClass = ((ElementClassTreeNode) selectedNode).getUserObject();
                         GraphDocument doc = tree.getGraphDocument();
-                        MetaModel metaModel = doc.getMetaModel();
-                        if (metaModel.isEditable(elementClass)) {
-                            showNewInstanceContextMenu(elementClass.getSimpleName(), xin + 3, yin + 3);
+                        if (doc != null) {
+                            MetaModel metaModel = doc.getMetaModel();
+                            if (metaModel.isEditable(elementClass)) {
+                                showNewInstanceContextMenu(elementClass.getSimpleName(), xin + 3, yin + 3);
+                            }
                         }
                     }
                 }
