@@ -73,7 +73,11 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         setSelectionListenerActive(false);
         pathTreeModel.setTreeDefinition(templateTreeDefinition);
         setSelectionListenerActive(true);
-        expandRow(0);
+        try {
+            expandRow(0);
+            expandRow(1);
+        } catch (Exception e) {
+        }
         setRootVisible(false);
     }
 
