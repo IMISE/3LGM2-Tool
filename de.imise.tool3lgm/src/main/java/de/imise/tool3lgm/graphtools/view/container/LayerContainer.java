@@ -157,6 +157,11 @@ public class LayerContainer extends ElementContainer {
         tmpEdgeContainer = new ArrayList<>(100);
     }
 
+    @Override
+    protected boolean isFadedIn() {
+        return true; //gilt als immer sichtbar -> toString bekommt nicht das "(ausgeblendet)" vorangstellt
+    }
+
     /**
      * @return the paintState
      */

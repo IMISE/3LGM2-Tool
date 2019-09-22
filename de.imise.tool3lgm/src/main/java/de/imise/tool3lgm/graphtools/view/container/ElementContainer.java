@@ -380,7 +380,14 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      */
     @Override
     public String toString() {
-        return me.isPaintable() && isVisible() && doc instanceof Szenario ? me.toString() : getResString("ausgebl") + " " + me.toString();
+        return isFadedIn() ? me.toString() : getResString("ausgebl") + " " + me.toString();
+    }
+
+    /**
+     * @return <code>true</code> if this element is visible
+     */
+    protected boolean isFadedIn() {
+        return me.isPaintable() && isVisible() && doc instanceof Szenario;
     }
 
     /* -------- GraphElementLayout - Funktionen aus dem ModelElement -------------- */
