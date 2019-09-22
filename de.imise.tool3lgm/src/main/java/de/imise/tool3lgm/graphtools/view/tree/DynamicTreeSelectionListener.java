@@ -35,6 +35,9 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
             return;
         }
         GraphDocument doc = tree.getGraphDocument();
+        if (doc == null) {
+            return;
+        }
         //keine von sich selbst ausgelösten SelectionChangeEvents empfangen -> deaktivieren und zum Schnluss wieder anschalten
         tree.setTransactionListenerActive(false);
         doc.start_transaction(ModelBrowserTree.PID, false);
