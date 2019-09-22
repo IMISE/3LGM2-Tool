@@ -90,7 +90,7 @@ public class SimpleResourceHandler implements SimpleResourceSource {
         }
         resourceFileName = resourceFileName.replace('.', '/');
         try {
-            return ResourceBundle.getBundle(resourceFileName, Locale.getDefault(), ressourcePackageNameSource.getClassLoader());
+            return ResourceBundle.getBundle(resourceFileName, locale, ressourcePackageNameSource.getClassLoader());
         } catch (Exception e) {
             return null;
         }
@@ -114,6 +114,16 @@ public class SimpleResourceHandler implements SimpleResourceSource {
      */
     public boolean hasValidResourceBundle() {
         return resourceBundle != null;
+    }
+
+    /**
+     *
+     */
+    public void printBundle() {
+        for (String key : resourceBundle.keySet()) {
+            System.out.println(key + " -> " + resourceBundle.getString(key));
+        }
+        Sys.out1(resourceBundle);
     }
 
 }
