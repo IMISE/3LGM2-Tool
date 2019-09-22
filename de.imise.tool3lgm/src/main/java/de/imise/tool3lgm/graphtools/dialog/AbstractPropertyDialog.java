@@ -180,7 +180,9 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
 
     @Override
     public void windowActivated(final WindowEvent e) {
-        Static.setSelectedDoc(doc);
+        GDCollection gdcoll = doc.getCollection(); //doc ist immer das mainDoc
+        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+        Static.setSelectedDoc(selectedDoc);
     }
 
     @Override
