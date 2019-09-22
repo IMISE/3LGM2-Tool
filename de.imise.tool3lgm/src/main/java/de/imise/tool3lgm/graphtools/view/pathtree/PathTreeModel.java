@@ -40,10 +40,10 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     private final String emptyModelInfo;
 
     /**
-     * If <code>true</code> the clear name of the model elements will be displayed in ElementContainerTreeNodes.
-     * If <code>false</code> the toString() method (with all submodel information) will be displayed for ElementContainerTreeNodes.
+     * If <code>false</code> only the name of the model elements will be displayed in ElementContainerTreeNodes.
+     * If <code>true</code> the name with all submodel information will be displayed for ElementContainerTreeNodes.
      */
-    private final boolean setElementsClearName;
+    private final boolean showElementNamesWithSubmodels;
 
     /**
      *
@@ -61,26 +61,26 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     }
 
     /**
-     * @param setElementsClearName
-     *            If <code>true</code> the clear name of the model elements will be displayed in ElementContainerTreeNodes.
-     *            If <code>false</code> the toString() method (with all submodel information) will be displayed for ElementContainerTreeNodes.
+     * @param showElementNamesWithSubmodels
+     *            If <code>false</code> only the name of the model elements will be displayed in ElementContainerTreeNodes.
+     *            If <code>true</code> the name with all submodel information will be displayed for ElementContainerTreeNodes.
      */
-    public PathTreeModel(final boolean setElementClearName) {
-        this(null, setElementClearName);
+    public PathTreeModel(final boolean showElementNamesWithSubmodels) {
+        this(null, showElementNamesWithSubmodels);
     }
 
     /**
      * @param emptyModelInfo
      *            Info that is displayed if there is nothing else to display
-     * @param setElementsClearName
-     *            If <code>true</code> the clear name of the model elements will be displayed in ElementContainerTreeNodes.
-     *            If <code>false</code> the toString() method (with all submodel information) will be displayed for ElementContainerTreeNodes.
+     * @param showElementNamesWithSubmodels
+     *            If <code>false</code> only the name of the model elements will be displayed in ElementContainerTreeNodes.
+     *            If <code>true</code> the name with all submodel information will be displayed for ElementContainerTreeNodes.
      */
-    public PathTreeModel(final String emptyModelInfo, final boolean setElementsClearName) {
+    public PathTreeModel(final String emptyModelInfo, final boolean showElementNamesWithSubmodels) {
         super(new StringTreeNode("Root", true));
         root = (LGMTreeNode) super.root;
         this.emptyModelInfo = emptyModelInfo;
-        this.setElementsClearName = setElementsClearName;
+        this.showElementNamesWithSubmodels = showElementNamesWithSubmodels;
     }
 
     /**
@@ -182,10 +182,13 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     private void createNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent) {
         for (ElementContainer ec : elementContainers) {
             ElementContainerTreeNode pathStepNode = new ElementContainerTreeNode(ec, true, false);
-            if (setElementsClearName) {
+            if (!showElementNamesWithSubmodels) {
                 ModelElement me = ec.getElement();
-                String clearName = me.getClearName();
-                pathStepNode.setText(clearName);
+                String simpleName = me.toString();
+                String currentToStringName = pathStepNode.toString();
+                if (!simpleName.equals(currentToStringName)) { // nur setzen, wenn anders
+                    pathStepNode.setText(simpleName);
+                }
             }
             parent.add(pathStepNode);
             createdNodes.add(pathStepNode);
