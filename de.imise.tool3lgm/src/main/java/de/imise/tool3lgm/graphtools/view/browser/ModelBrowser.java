@@ -98,9 +98,10 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      */
     protected final void setCurrentDoc(final GraphDocument doc) {
         if (doc != null) {
-            SubModelsBrowser subModelsBrowser = getCollectionPane(doc.getCollection());
-            setSelectedComponent(subModelsBrowser);
+            GDCollection gdcoll = doc.getCollection();
+            SubModelsBrowser subModelsBrowser = getCollectionPane(gdcoll);
             if (subModelsBrowser != null) {
+                setSelectedComponent(subModelsBrowser);
                 subModelsBrowser.setCurrentDoc(doc);
             }
             updateActiveBrowserTab();
