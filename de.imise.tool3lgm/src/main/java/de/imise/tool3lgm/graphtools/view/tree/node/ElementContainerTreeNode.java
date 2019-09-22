@@ -1,12 +1,14 @@
 package de.imise.tool3lgm.graphtools.view.tree.node;
 
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 
 /**
  * @author AXS (8 Apr 2019)
  */
-public class ElementContainerTreeNode extends LGMTreeNode {
+public class ElementContainerTreeNode extends LGMTreeNode implements GraphDocumentOwner {
 
     /**
      * @param ec
@@ -28,6 +30,12 @@ public class ElementContainerTreeNode extends LGMTreeNode {
     @Override
     public void setUserObject(final Object userObject) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public GraphDocument getGraphDocument() {
+        ElementContainer ec = getUserObject();
+        return ec == null ? null : ec.getGraphDocument();
     }
 
 }
