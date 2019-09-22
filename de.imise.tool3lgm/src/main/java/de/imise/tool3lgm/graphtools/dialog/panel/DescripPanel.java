@@ -66,7 +66,7 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
 
         nameTextPane = new LimitedSizeScrollTextPane(4);
         MetaModel metaModel = dialog.getMetaModel();
-        nameTextPane.setEditable(!metaModel.isGenerateName(getModelElement().getClass()));
+        nameTextPane.setEditable(isEditable() && !metaModel.isGenerateName(getModelElement().getClass()));
         gbc.weightx = 1;
         add(this, nameTextPane, gbc, 1, gridy++, 1, 1);
         gbc.weightx = 0;
@@ -78,6 +78,7 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         gbc.weighty = 1;
         descriptionTextPane = new ExtendedTextPane();
         add(this, new JScrollPane(descriptionTextPane), gbc, 1, gridy++, 1, 1);
+        descriptionTextPane.setEditable(isEditable());
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = 0;
