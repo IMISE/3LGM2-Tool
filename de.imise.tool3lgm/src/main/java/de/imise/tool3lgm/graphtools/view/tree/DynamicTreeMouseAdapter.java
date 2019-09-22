@@ -30,13 +30,13 @@ import de.imise.util.swing.event.ExtendedAction;
 
 public class DynamicTreeMouseAdapter implements MouseListener {
 
-    private final DynamicTreeMouseAdapterTarget tree;
+    private final DynamicTree tree;
 
-    private DynamicTreeMouseAdapter(final DynamicTreeMouseAdapterTarget tree) {
+    private DynamicTreeMouseAdapter(final DynamicTree tree) {
         this.tree = tree;
     }
 
-    public static void addAdapter(final DynamicTreeMouseAdapterTarget tree) {
+    public static void addAdapter(final DynamicTree tree) {
         for (MouseListener listener : tree.getMouseListeners()) {
             if (listener instanceof DynamicTreeMouseAdapter) {
                 return;
@@ -80,7 +80,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
 
         // Teilobjkete zeigen oder verstecken
         if ((e.getModifiersEx() & InputEvent.SHIFT_DOWN_MASK) != 0) {
-            doc.switchExpansionState(DynamicTree.PID);
+            doc.switchExpansionState(ModelBrowserTree.PID);
             return;
         }
 
@@ -166,7 +166,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                     ElementContainer ec = selectedElementContainerTreeNode.getUserObject();
                     //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
                     //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
-                    ec.getGraphDocument().addToSelection(ec, DynamicTree.PID);
+                    ec.getGraphDocument().addToSelection(ec, ModelBrowserTree.PID);
                     JPopupMenu pm = contextGenerator.getNodeContextMenu(tree);
                     if (pm != null) {
                         pm.show(tree, xin + 3, yin + 3);

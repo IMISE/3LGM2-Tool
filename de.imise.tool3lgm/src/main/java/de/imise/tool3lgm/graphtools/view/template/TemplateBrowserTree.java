@@ -16,14 +16,13 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
-import de.imise.tool3lgm.graphtools.view.tree.DynamicTreeMouseAdapter;
-import de.imise.tool3lgm.graphtools.view.tree.DynamicTreeMouseAdapterTarget;
+import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 
 /**
  * @author AXS (05.09.2019)
  */
-public class TemplateBrowserTree extends DynamicTreeMouseAdapterTarget implements PropertyChangeListener, AncestorListener {
+public class TemplateBrowserTree extends DynamicTree implements PropertyChangeListener, AncestorListener {
 
     /**
      *
@@ -41,7 +40,6 @@ public class TemplateBrowserTree extends DynamicTreeMouseAdapterTarget implement
     public TemplateBrowserTree() {
         super((TreeModel) null);
         setRootVisible(false);
-        DynamicTreeMouseAdapter.addAdapter(this);
         setShowsRootHandles(true);
         addAncestorListener(this);
         pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"), true);

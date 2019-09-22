@@ -37,7 +37,7 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
         GraphDocument doc = tree.getGraphDocument();
         //keine von sich selbst ausgelösten SelectionChangeEvents empfangen -> deaktivieren und zum Schnluss wieder anschalten
         tree.setTransactionListenerActive(false);
-        doc.start_transaction(DynamicTree.PID, false);
+        doc.start_transaction(ModelBrowserTree.PID, false);
         doc.deselectAll(true);
         TreePath[] paths = tree.getSelectionPaths();
         LGMTreeNode selectedLayerNode = null;
@@ -49,7 +49,7 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
                 if (userObject != null && userObject instanceof NodeContainer) {
                     if (node.isSelectable()) {
                         NodeContainer knot = (NodeContainer) userObject;
-                        doc.addToSelection(knot, DynamicTree.PID);
+                        doc.addToSelection(knot, ModelBrowserTree.PID);
                     } else {
                         correctingSelectionCount++;
                         tree.removeSelectionPath(paths[i]);
@@ -60,9 +60,9 @@ public class DynamicTreeSelectionListener implements TreeSelectionListener {
             //vom letzten selektieren Node den Layer bestimmen
             selectedLayerNode = getLayerNode(node);
         }
-        //wenn das hier ein Layerknoten ist, wird im Tree der Layer gewechselt und es komtm true zurück
+        //wenn das hier ein Layerknoten ist, wird im Tree der Layer gewechselt und es kommt true zurück
         boolean layerChanged = tree.setActiveLayer(selectedLayerNode);
-        doc.finish_transaction(DynamicTree.PID, false);
+        doc.finish_transaction(ModelBrowserTree.PID, false);
         doc.distributeEvent(SELECTION_CHANGED);
         if (layerChanged) {
             doc.distributeEvent(ACTIVE_LAYER_CHANGED);

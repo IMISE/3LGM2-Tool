@@ -8,13 +8,13 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
-public class DynamicTreeLGMChangeListener implements LGMChangeListener {
+public class ModelBrowserTreeLGMChangeListener implements LGMChangeListener {
 
-    private final DynamicTree tree;
+    private final ModelBrowserTree tree;
 
     private boolean active = true;
 
-    public DynamicTreeLGMChangeListener(final DynamicTree tree) {
+    public ModelBrowserTreeLGMChangeListener(final ModelBrowserTree tree) {
         this.tree = tree;
         add();
     }

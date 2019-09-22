@@ -15,7 +15,7 @@ import javax.swing.JScrollPane;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
+import de.imise.tool3lgm.graphtools.view.tree.ModelBrowserTree;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
@@ -33,7 +33,7 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
     /**
      * Der Baum, in dem in diesem TeilomodellBrwoser alle Daten angezeigt werden. Er wird immer in den Tab im Vordergrund eingebaut.
      */
-    private final DynamicTree tree;
+    private final ModelBrowserTree tree;
 
     /**
      * Combobox, in der das aktuelle Teilmodell ausgewählt werden kann
@@ -50,7 +50,7 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
         submodelBox = addMouseAndFocusListener(new AlphabeticalComboBox());
         submodelBox.addItemListener(this);
         //ModelElements Tree
-        tree = addMouseAndFocusListener(new DynamicTree(gdcoll.getMainGraphDocument()));
+        tree = addMouseAndFocusListener(new ModelBrowserTree(gdcoll.getMainGraphDocument()));
         JScrollPane scrollPane = addMouseAndFocusListener(new JScrollPane(tree));
         addMouseAndFocusListener(scrollPane.getHorizontalScrollBar());
         addMouseAndFocusListener(scrollPane.getVerticalScrollBar());
