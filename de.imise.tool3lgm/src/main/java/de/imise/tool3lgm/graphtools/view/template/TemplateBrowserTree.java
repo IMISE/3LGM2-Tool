@@ -15,6 +15,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
+import de.imise.tool3lgm.graphtools.view.tree.DynamicTreeMouseAdapter;
 
 /**
  * @author AXS (05.09.2019)
@@ -37,6 +38,7 @@ public class TemplateBrowserTree extends JTree implements PropertyChangeListener
     public TemplateBrowserTree() {
         super((TreeModel) null);
         setRootVisible(false);
+        DynamicTreeMouseAdapter.addAdapter(this);
         setShowsRootHandles(true);
         addAncestorListener(this);
         pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"), true);

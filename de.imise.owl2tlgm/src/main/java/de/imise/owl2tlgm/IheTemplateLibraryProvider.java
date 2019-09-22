@@ -13,6 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverter;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibraryProvider;
+import de.imise.tool3lgm.graphtools.model.template.TemplateUsageDefinition;
 import de.imise.tool3lgm.graphtools.model.template.TemplateViewDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
@@ -21,7 +22,13 @@ import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInterface_IheTransaction_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransaction_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransaction_Edge;
+import de.imise.tool3lgm.metamodel.service.node.IheActor;
 import de.imise.tool3lgm.metamodel.service.node.IheDomain;
+import de.imise.tool3lgm.metamodel.service.node.IheIntegrationProfile;
+import de.imise.tool3lgm.metamodel.service.node.IheInvokingInterface;
+import de.imise.tool3lgm.metamodel.service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
 
 /**
@@ -30,6 +37,13 @@ import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
  * @author AXS (30.08.2019)
  */
 public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
+
+    /**
+     *
+     */
+    public IheTemplateLibraryProvider() {
+        super(TLGMServiceMetaModel.class);
+    }
 
     @Override
     public String getDisplayName() {
@@ -54,6 +68,21 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
                 return ImmutableList.of(submodelMetaPath);
             }
 
+        };
+    }
+
+    @Override
+    public TemplateUsageDefinition getUsageDefinition() {
+        return new TemplateUsageDefinition() {
+            @Override
+            public void init() {
+                addAppliableElementAndCopyDependencies(IheDomain.class, IheIntegrationProfile_IheDomain_Edge.class);
+                addAppliableElementAndCopyDependencies(IheIntegrationProfile.class, IheIntegrationProfile_IheActor_Edge.class);
+                addAppliableElementAndCopyDependencies(IheActor.class, IheActor_IheInterface_Edge.class);
+                addAppliableElementAndCopyDependencies(IheInvokingInterface.class, IheInvokingInterface_IheTransaction_Edge.class);
+                addAppliableElementAndCopyDependencies(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class);
+                addAppliableElements(IheTransaction.class);
+            }
         };
     }
 

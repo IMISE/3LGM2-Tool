@@ -47,6 +47,11 @@ public abstract class TemplateLibraryProvider extends MetaModelSpecificAdapter i
     public abstract TemplateViewDefinition getViewDefinition();
 
     /**
+     * @return the usage definion for this template
+     */
+    public abstract TemplateUsageDefinition getUsageDefinition();
+
+    /**
      * @param metaModelDefinitionClass
      * @return <code>true</code> if the given class is the same or a superclass of of
      *         the metamodel definition class of this server
