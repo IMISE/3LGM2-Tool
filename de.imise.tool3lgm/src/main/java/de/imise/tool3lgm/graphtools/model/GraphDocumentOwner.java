@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package de.imise.tool3lgm.graphtools.model;
 
@@ -10,9 +10,15 @@ public interface GraphDocumentOwner extends GDCollectionOwner {
 
     /**
      * Liefert das {@link GraphDocument}, das mit diesem Objekt assoziiert wird
-     * 
+     *
      * @return
      */
     public GraphDocument getGraphDocument();
+
+    @Override
+    public default GDCollection getCollection() {
+        GraphDocument doc = getGraphDocument();
+        return doc == null ? null : doc.getCollection();
+    }
 
 }
