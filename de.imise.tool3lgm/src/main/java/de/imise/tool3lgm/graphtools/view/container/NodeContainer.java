@@ -511,7 +511,8 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
 
     @Override
     public String toString() {
-        String nameWithSzens = me.getNameWithSzens();
+        String nameWithSzens = me.hasSzenarioContainer() ? me.getNameWithSzens() : me.toString();
+
         if (me.isPaintable() && !isVisible() && doc instanceof Szenario) {
             nameWithSzens = getResString("ausgebl") + " " + nameWithSzens;
         }

@@ -220,6 +220,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         return new HashSet<>(containerTable.keySet());
     }
 
+    public final boolean hasSzenarioContainer() {
+        return containerTable.size() > 1;
+    }
+
     /**
      * Liefert alle Container dieses Elementes
      *
