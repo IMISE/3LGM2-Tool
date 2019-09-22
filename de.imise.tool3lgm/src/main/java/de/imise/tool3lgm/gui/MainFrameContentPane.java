@@ -343,7 +343,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         Szenario szenario = (Szenario) frame.getGraphDocument();
         ViewParameter view = szenario.getViewParameter();
         InputGraphArea bgp = frame.getInputGraphArea();
-        bgp.setMultiView(view.multiView);
+        boolean multiView = view.multiView;
+        bgp.setMultiView(multiView);
         frame.getGraphDocument().getCollection().setActiveLayer(view.activeLayer);
         bgp.setMultiViewLayerAngle(view.layerAngle);
         bgp.setMultiViewLayerGap(view.layerGap);
