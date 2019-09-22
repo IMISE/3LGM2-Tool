@@ -12,12 +12,15 @@ import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
  */
 public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
 
+    private final DynamicTreeSelectionListener selectionListener;
+
     /**
      * @param newModel
      */
     public DynamicTree(final TreeModel newModel) {
         super(newModel);
         DynamicTreeMouseAdapter.addAdapter(this);
+        selectionListener = new DynamicTreeSelectionListener(this);
     }
 
     /**
@@ -27,6 +30,7 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
     public DynamicTree(final TreeNode root, final boolean asksAllowsChildren) {
         super(root, asksAllowsChildren);
         DynamicTreeMouseAdapter.addAdapter(this);
+        selectionListener = new DynamicTreeSelectionListener(this);
     }
 
     /**
@@ -35,6 +39,15 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
     public DynamicTree(final TreeNode root) {
         super(root);
         DynamicTreeMouseAdapter.addAdapter(this);
+        selectionListener = new DynamicTreeSelectionListener(this);
+    }
+
+    /**
+     * @param active
+     * @return
+     */
+    protected void setSelectionListenerActive(final boolean active) {
+        selectionListener.setActive(active);
     }
 
     /**

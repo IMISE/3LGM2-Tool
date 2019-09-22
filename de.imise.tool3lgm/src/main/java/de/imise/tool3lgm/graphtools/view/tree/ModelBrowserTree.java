@@ -88,8 +88,6 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      */
     private GraphDocument doc;
 
-    private final DynamicTreeSelectionListener selectionListener;
-
     private final ModelBrowserTreeLGMChangeListener transactionListener;
 
     /**
@@ -123,7 +121,6 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         //alle KeyStrokes im Baum hinzufügen, die systemweit gelten sollen. Da der Baum schon eine eigene InputMap und ActionMap hat,
         //werden die ShortCuts aus dem RootPane des Tools hier nicht auch beachtet und müssen explizit hinzugefügt werden
         KeyStrokes.registerPublicKeyStrokes(this);
-        selectionListener = new DynamicTreeSelectionListener(this);
         transactionListener = new ModelBrowserTreeLGMChangeListener(this);
         setCellRenderer(new TreeRenderer(doc));
         ((TreeRenderer) getCellRenderer()).setBackgroundNonSelectionColor(getBackground());
@@ -485,7 +482,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             return;
         }
         GraphDocument maindoc = doc.getCollection().getMainGraphDocument();
-        selectionListener.setActive(false);
+        setSelectionListenerActive(false);
         createTree();
         saveExpansionState();
         showPartOfHierarchy = OPTION_SHOW_PART_OF_HIERARCHY.is();
@@ -517,7 +514,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         }
         ((DefaultTreeModel) treeModel).reload();
         restoreExpansionState();
-        selectionListener.setActive(true);
+        setSelectionListenerActive(true);
         selectObjects();
     }
 
@@ -525,7 +522,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      * Selektiert im Baum alle Elemente, die im dazugehörigen {@link GraphDocument} selektiert sind.
      */
     public void selectObjects() {
-        selectionListener.setActive(false);
+        setSelectionListenerActive(false);
         TreePath[] path = new TreePath[doc.getSelectedRealElementContainerCount()];
         int m = 0;
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
@@ -544,7 +541,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         if (path.length > 0) {
             scrollPathToVisible(path[path.length - 1]);
         }
-        selectionListener.setActive(true);
+        setSelectionListenerActive(true);
     }
 
     /**

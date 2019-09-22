@@ -48,12 +48,14 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
 
     @Override
     public GraphDocument getGraphDocument() {
-        TreePath leadSelectionPath = selectionModel.getLeadSelectionPath();
-        Object lastPathComponent = leadSelectionPath.getLastPathComponent();
         GraphDocument doc = null;
-        if (lastPathComponent instanceof ElementContainerTreeNode) {
-            ElementContainerTreeNode elementContainerNode = (ElementContainerTreeNode) lastPathComponent;
-            doc = elementContainerNode.getGraphDocument();
+        TreePath leadSelectionPath = selectionModel.getLeadSelectionPath();
+        if (leadSelectionPath != null) {
+            Object lastPathComponent = leadSelectionPath.getLastPathComponent();
+            if (lastPathComponent instanceof ElementContainerTreeNode) {
+                ElementContainerTreeNode elementContainerNode = (ElementContainerTreeNode) lastPathComponent;
+                doc = elementContainerNode.getGraphDocument();
+            }
         }
         return doc;
     }
@@ -68,7 +70,9 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
         PathTreeDefinition templateTreeDefinition = templateLibrariesManager.getTemplateTreeDefintion(newMetaModelContext);
         setRootVisible(true);
+        setSelectionListenerActive(false);
         pathTreeModel.setTreeDefinition(templateTreeDefinition);
+        setSelectionListenerActive(true);
         expandRow(0);
         setRootVisible(false);
     }
