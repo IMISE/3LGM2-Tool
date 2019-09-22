@@ -480,7 +480,13 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("lastSelected=");
+        GraphDocument doc = lastSelected == null ? null : lastSelected.getGraphDocument();
+        GDCollection gdcoll = doc == null ? null : doc.getCollection();
+
+        String modelName = gdcoll == null ? "unknown" : gdcoll.getTitle() + " " + lastSelected.getGraphDocument().toString();
+        StringBuilder sb = new StringBuilder(modelName);
+        sb.append("\n");
+        sb.append("lastSelected=");
         sb.append(lastSelected == null ? "null" : lastSelected.toString());
         sb.append("\n");
         sb.append("Class=");
