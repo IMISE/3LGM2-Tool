@@ -605,7 +605,7 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         if (!metaModel.isVisible(metaPath)) {
             return;
         }
-        boolean editable = metaModel.isEditable(metaPath);
+        boolean editable = !isInfoDialog() && metaModel.isEditable(metaPath);
         ElementDialogPanel panel2Add = null;
         if (MetaModel.isComposition(edgeClass)) {
             panel2Add = new MutipleCompositionPanel(this, editable, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));

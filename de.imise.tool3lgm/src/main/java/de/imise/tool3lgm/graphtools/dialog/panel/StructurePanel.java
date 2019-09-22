@@ -93,7 +93,9 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.EAST;
-        add(this, viewButton, constraints, 0, 6, 1, 1);
+        if (isEditable()) {
+            add(this, viewButton, constraints, 0, 6, 1, 1);
+        }
 
         constraints.anchor = GridBagConstraints.WEST;
         add(this, lolabel, constraints, 0, 0, 1, 1);

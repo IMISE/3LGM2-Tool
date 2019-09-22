@@ -52,7 +52,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
         super.init();
         updateDescription();
         if (descriptionTextPane != null) {
-            descriptionTextPane.setEditable(connectedElement != null);
+            descriptionTextPane.setEditable(isEditable() && connectedElement != null);
         }
     }
 

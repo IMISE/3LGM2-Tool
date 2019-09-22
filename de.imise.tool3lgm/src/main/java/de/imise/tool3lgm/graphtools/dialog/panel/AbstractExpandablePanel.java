@@ -60,7 +60,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     }
 
     public final void showFullDialog(final boolean full) {
-        if (full) {
+        if (full && isEditable()) {
             showFullDialog();
         } else {
             showPartlyDialog();
@@ -104,7 +104,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
 
     /**
      * Legt ein Panel an, dass für jede übergebene Action, die nicht <code>null</code> ist, einen Button enthält. Die Buttons stehen übereinander.
-     * 
+     *
      * @param actions
      * @return
      */

@@ -68,10 +68,11 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
      * @param tableDefinition Spaltendefinition (die zu den Pfaden passen sollte)
      * @param simpleMetaPaths MetaPfade, die in der Tabelle dargestellt werden sollen
      */
-    private ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
+    private ConnectedElementsTablePanel(final ElementPropertyDialog dialog, boolean editable, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
         super(dialog, simpleMetaPaths[0]); // den muss es geben!
         metaPaths = new UnionMetaPath(simpleMetaPaths);
         this.tableDefinition = tableDefinition;
+        editable &= isEditable();
         table = new ConnectedElementsTable(dialog.getModelElement(), metaPaths, tableDefinition, editable, mouseListener, dialog.getTransactionID());
 
         //wenn in der columnsDefinion ein String als Resourcenschlüssel oder Tabellenname angegeben wurde, dann kommt hier irgendwas nicht leeres zurück

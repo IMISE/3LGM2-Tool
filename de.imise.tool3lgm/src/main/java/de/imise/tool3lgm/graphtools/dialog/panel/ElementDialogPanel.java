@@ -215,6 +215,13 @@ public abstract class ElementDialogPanel extends JPanel {
     }
 
     /**
+     * @return <code>true</code> if this panel can chage the model
+     */
+    public boolean isEditable() {
+        return !dialog.isInfoDialog();
+    }
+
+    /**
      *
      */
     public void clearHighlight() {

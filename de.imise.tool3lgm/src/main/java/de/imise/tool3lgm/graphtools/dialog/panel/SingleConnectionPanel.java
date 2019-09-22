@@ -85,10 +85,11 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      *            verbundene Element bzw. dessen Name ist immmer nicht änderbar.
      * @param simpleMetaPath
      */
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean editable, final SimpleMetaPath simpleMetaPath) {
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, boolean editable, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
         setLayout(new BorderLayout());
         update(); //connectedElement initial setzen!
+        editable &= isEditable();
         if (!editable || isLastPathElementNeededForExistence() && connectedElement != null) {
             connectedElementsBox = null;
             itemListener = null;
