@@ -7,8 +7,8 @@ import javax.annotation.Nonnull;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.util.ReflectionUtils;
 import de.imise.util.SimpleResourceHandler;
 
 /**
@@ -20,7 +20,7 @@ import de.imise.util.SimpleResourceHandler;
  *
  * @author AXS (8 May 2019)
  */
-public final class MetaModelContext extends SimpleResourceHandler {
+public final class MetaModelContext extends SimpleResourceHandler implements MetaModelSpecific {
 
     /** Klasse des Metamodells */
     private final Class<? extends MetaModelDefinition> metaModelDefinitionClass;
@@ -53,6 +53,7 @@ public final class MetaModelContext extends SimpleResourceHandler {
     /**
      * @return Klasse der MetaModell-Definition dieses Kontextes
      */
+    @Override
     public final Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
         return metaModelDefinitionClass;
     }
@@ -91,7 +92,7 @@ public final class MetaModelContext extends SimpleResourceHandler {
      * @return
      */
     @Override
-    public String getResString(final String key) {
+    public final String getResString(final String key) {
         //das hier darf auf keinen Fall mit try-catch komplett umrandet werden, da mehrere Funktionen auf die
         //MissingResocureException regaieren (z.B. die Funktionen zum heraussuchen der Kantennamen bei
         //Kanten mit doppelter Bedeutung
@@ -110,6 +111,7 @@ public final class MetaModelContext extends SimpleResourceHandler {
      *
      * @return
      */
+    @Override
     public ElementsNameBuilder getElementsNameBuilder() {
         if (elementsNameBuilder == null) {
             return new ElementsNameBuilder(this);
@@ -118,25 +120,12 @@ public final class MetaModelContext extends SimpleResourceHandler {
     }
 
     /**
-     * Liefert die ID der Metamodellklasse. Dies ist ein String aus dem SimpleClassName + "@" + serialVersionUID. Damit sollte die die
-     * Metamodellklasse immer eindeutig identifizierbar sein.
-     *
-     * @return
-     */
-    public final String getMetaModelID() {
-        String name = metaModelDefinitionClass.getSimpleName();
-        Long metaModelClassSerialVersionUID = ReflectionUtils.getField(metaModelDefinitionClass, "serialVersionUID", Long.TYPE);
-        String idString = metaModelClassSerialVersionUID == null ? "" : "@" + String.valueOf(metaModelClassSerialVersionUID); // ein @ kann nicht im Klassenname vorkommen -> Trenner zwischen Klassenname und UID
-        String classID = name + idString;
-        return classID;
-    }
-
-    /**
      * Liefert die tatsächliche Instanz des MetaModells. Wenn diese noch nicht initialisert ist, dann wird das hier getan. Das ResoruceBundle wird
      * ebenfalls dauerhaft gesetzt.
      *
      * @return
      */
+    @Override
     public MetaModel getMetaModel() {
         if (metaModel == null) {
             try {
@@ -147,6 +136,24 @@ public final class MetaModelContext extends SimpleResourceHandler {
             }
         }
         return metaModel;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isMetaModelInitialized() {
+        return metaModel != null;
+    }
+
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return this;
+    }
+
+    @Override
+    public String getResStringWithoutError(final String resKey) {
+        //muss sein, weil die super-Klasse und das Interface beide eine default-Implementieurn hiervon anbieten
+        return super.getResStringWithoutError(resKey);
     }
 
     /**

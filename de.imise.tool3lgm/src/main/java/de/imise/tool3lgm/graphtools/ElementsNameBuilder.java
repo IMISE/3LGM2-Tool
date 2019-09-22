@@ -15,6 +15,7 @@ import java.util.MissingResourceException;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -25,7 +26,7 @@ import de.imise.util.Alphabetical;
 /**
  * @author AXS (25.10.2018)
  */
-public class ElementsNameBuilder {
+public class ElementsNameBuilder extends MetaModelSpecificAdapter {
 
     public static final String STANDARD_DOUBLE_MEANING_EDGE_DELIMITER = " / ";
 
@@ -36,14 +37,11 @@ public class ElementsNameBuilder {
      */
     private static HashMap<String, String> elementClassSimpleNameToHashShortName = null;
 
-    /** Der Context mit dem Metamodel und den Resourcen, aus denen dieser NameBuilder die Elementnamen zieht */
-    private final MetaModelContext metaModelContext;
-
     /**
      * @param metaModelContext
      */
     public ElementsNameBuilder(final MetaModelContext metaModelContext) {
-        this.metaModelContext = metaModelContext;
+        super(metaModelContext);
     }
 
     /**
@@ -93,6 +91,7 @@ public class ElementsNameBuilder {
     private String getDisplayableName(Class<? extends ModelElement> elementClass, final boolean plural) {
         //wenn der Anzeigename gleich für eine allg. Klasse heruas gesucht werden soll, dann muss der Resourcenname genommen werden, sonst der SimpleClassName
         boolean dontReturnSimpleClassName = elementClass.getPackage() == ModelElement.class.getPackage();
+        MetaModelContext metaModelContext = getMetaModelContext();
         while (ModelElement.class.isAssignableFrom(elementClass) && elementClass.getPackage() != ModelElement.class.getPackage() || dontReturnSimpleClassName) {
             try {
                 String resKey = elementClass.getSimpleName();
@@ -407,6 +406,7 @@ public class ElementsNameBuilder {
         if (connectionState == ConnectionState.DOUBLE || connectionState == null) {
             directedName = getDirectedName(baseResKey, directionPostfix, "_f"); //hier braucht man immer beide Namen -> hole den Vorwärtsnamen
             if (directedName != null) {
+                MetaModelContext metaModelContext = getMetaModelContext();
                 String doubleMeaningEdgeDelimiter = connectionState == null ? metaModelContext.getResString("oder") : metaModelContext.getResString("und");
                 //wenn es einen Vorwärtsnamen gibt, dann muss auch ein Rückwärtsname angegeben sein!
                 return directedName + " " + doubleMeaningEdgeDelimiter + " " + getDirectedName(baseResKey, directionPostfix, "_b");
@@ -437,6 +437,7 @@ public class ElementsNameBuilder {
      */
     private final String getDirectedName(final String baseResKey, final String direction, final String connectionState) {
         try {
+            MetaModelContext metaModelContext = getMetaModelContext();
             if (Strings.isNullOrEmpty(connectionState)) {
                 return metaModelContext.getResString(baseResKey + direction);
             }

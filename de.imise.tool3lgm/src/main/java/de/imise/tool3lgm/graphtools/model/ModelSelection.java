@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
@@ -27,10 +28,7 @@ import de.imise.util.collections.CollectionUtils;
  * @author AXS
  *         created on 11.12.2006
  */
-public class ModelSelection implements Set<ElementContainer> {
-
-    /** MetaModel des Modells zu dem diese Selektion gehört */
-    private final MetaModel metaModel;
+public class ModelSelection extends MetaModelSpecificAdapter implements Set<ElementContainer> {
 
     /**
      * Speziellste Oberklasse der {@link ModelElement}s aller selektierbaren {@link NodeContainer}. Das
@@ -65,7 +63,7 @@ public class ModelSelection implements Set<ElementContainer> {
      * @param initialCapacity
      */
     public ModelSelection(final MetaModel metaModel, final int initialCapacity) {
-        this.metaModel = metaModel;
+        super(metaModel);
         commonRealElementsSuperClass = ReflectionUtils.getCommonSuperClass(metaModel.allNodesSet);
         selectedRealNodeContainer = new HashSet<>(initialCapacity);
         selectedBendpointContainer = new HashSet<>(initialCapacity);
@@ -585,6 +583,7 @@ public class ModelSelection implements Set<ElementContainer> {
      * @return
      */
     public boolean isSelectedOnlySlaveRealNodes() {
+        MetaModel metaModel = getMetaModel();
         for (ElementContainer ec : selectedRealNodeContainer) {
             if (!metaModel.isSlaveType(ec.getElement().getClass())) {
                 return false;

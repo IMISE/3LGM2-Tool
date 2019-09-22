@@ -72,7 +72,9 @@ import de.imise.util.collections.CollectionUtils;
  *
  * @author AXS (30 Apr 2019)
  */
-public final class MetaModel {
+public final class MetaModel implements MetaModelSpecific {
+
+    private final MetaModelContext metaModelContext;
 
     /**
      * Leeres Array als Standardrückgabetyp für zu überschreibende Funktionen.
@@ -90,9 +92,6 @@ public final class MetaModel {
 
     /** Alle Modellelementklassen, die instanziierbar sind und in jedem Metamodell automatisch enthalten sind */
     private static final Set<Class<? extends ModelElement>> META_MODEL_INDEPENDENT_MODEL_ELEMENT_TYPES = ImmutableSet.of(Bendpoint.class, Textfield.class);
-
-    /** Der Context, der dieses MetaModell erzeugt hat und hält. Er wird nur gebraucht, um an die Resourcen zu kommen. */
-    private final MetaModelContext metaModelContext;
 
     /**
      * Hilfsklasse zum Anlegen neuer Elemente, die sicher stellt, dass das richtige MetaModel für die Elemente gesetzt wird und dann nicht mehr von
@@ -398,67 +397,27 @@ public final class MetaModel {
     }
 
     /**
-     * Liefert aus dem ResourceBundle des Contextes den String mit dem übergeben Key. Kommt er darin nicht vor, wird im Bundle des Tools gesucht.
-     *
-     * @param key
-     * @return
-     * @see MetaModelContext#getResString(String)
-     */
-    public final String getResString(final String key) {
-        return metaModelContext.getResString(key);
-    }
-
-    /**
-     * Wenn der Key nicht in den Resoucen gefunden wird, kommt einfach der key selsbt zurück und es wird keine MissingResourceException
-     * ausgelöst.
-     *
-     * @param key
-     * @return
-     */
-    public final String getResStringWithoutError(final String key) {
-        try {
-            return getResString(key);
-        } catch (Exception e) {
-            return key;
-        }
-    }
-
-    /**
-     * Liefert den Handler, über die alle Knoten- und Kantenklassennamen generiert werden, also die Anzeigenamen in Ein- und Mehrzahl und bei den
-     * Kanten die gerichteten Namen.
-     *
-     * @return
-     * @see MetaModelContext#getElementsNameBuilder()
-     */
-    public ElementsNameBuilder getElementsNameBuilder() {
-        return metaModelContext.getElementsNameBuilder();
-    }
-
-    /**
-     * Liefert die ID der Metamodellklasse. Dies ist ein String aus dem SimpleClassName + "@" + serialVersionUID. Damit sollte die die
-     * Metamodellklasse immer eindeutig identifizierbar sein.
-     *
-     * @return
-     * @see de.imise.tool3lgm.MetaModelContext#getMetaModelID()
-     */
-    public final String getMetaModelID() {
-        return metaModelContext.getMetaModelID();
-    }
-
-    /**
-     * @return
-     */
-    public final MetaModelContext getMetaModelContext() {
-        return metaModelContext;
-    }
-
-    /**
      * Hanlder für das einfache und nicht redundante Anlegen von Elementar-Metapfaden für dieses MetaModel
      *
      * @return
      */
     public final ElementaryMetaPathHandler getElementaryMetaPathHandler() {
         return elementaryMetaPathHandler;
+    }
+
+    @Override
+    public MetaModel getMetaModel() {
+        return this;
+    }
+
+    @Override
+    public MetaModelContext getMetaModelContext() {
+        return metaModelContext;
+    }
+
+    @Override
+    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+        return metaModelContext.getMetaModelDefinitionClass();
     }
 
     /**
@@ -2073,6 +2032,7 @@ public final class MetaModel {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
+        MetaModelContext metaModelContext = getMetaModelContext();
         result = prime * result + (metaModelContext == null ? 0 : metaModelContext.hashCode());
         return result;
     }
@@ -2089,11 +2049,13 @@ public final class MetaModel {
             return false;
         }
         MetaModel other = (MetaModel) obj;
+        MetaModelContext metaModelContext = getMetaModelContext();
+        MetaModelContext otherMetaModelContext = other.getMetaModelContext();
         if (metaModelContext == null) {
-            if (other.metaModelContext != null) {
+            if (otherMetaModelContext != null) {
                 return false;
             }
-        } else if (!metaModelContext.equals(other.metaModelContext)) {
+        } else if (!metaModelContext.equals(otherMetaModelContext)) {
             return false;
         }
         return true;

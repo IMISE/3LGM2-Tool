@@ -2,7 +2,7 @@ package de.imise.tool3lgm;
 
 import static de.imise.tool3lgm.Tool3lgmModelType.ModelCategory.REGULAR;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 
 /**
  * Encapsulates all informations which states the absulute type of a model. This contains a {@link MetaModelContext} and a
@@ -10,7 +10,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
  *
  * @author AXS (26.08.2019)
  */
-public class Tool3lgmModelType {
+public class Tool3lgmModelType extends MetaModelSpecificAdapter {
 
     /**
      * Typen von Modellen unabhängig vom konkreten Metamodell.
@@ -30,9 +30,6 @@ public class Tool3lgmModelType {
         TEMPLATE,
     }
 
-    /** Metamodell dieses Modell-Typs */
-    private final MetaModelContext metaModelContext;
-
     /** Modell-Kategorie dieses Typs */
     private ModelCategory modelCategory;
 
@@ -41,22 +38,8 @@ public class Tool3lgmModelType {
      * @param modelCategory
      */
     public Tool3lgmModelType(final MetaModelContext metaModelContext, final Tool3lgmModelType.ModelCategory modelCategory) {
-        this.metaModelContext = metaModelContext;
+        super(metaModelContext);
         this.modelCategory = modelCategory != null ? modelCategory : REGULAR;
-    }
-
-    /**
-     * @return the metaModelContext
-     */
-    public MetaModelContext getMetaModelContext() {
-        return metaModelContext;
-    }
-
-    /**
-     * @return the metaModel of the metaModelContext
-     */
-    public MetaModel getMetaModel() {
-        return metaModelContext.getMetaModel();
     }
 
     /**

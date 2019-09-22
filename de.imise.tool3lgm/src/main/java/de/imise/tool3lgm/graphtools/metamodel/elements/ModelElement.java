@@ -25,6 +25,8 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -45,7 +47,7 @@ import de.imise.util.Alphabetical;
 import de.imise.util.HashStringGenerator;
 import de.imise.util.htmlxml.HTMLConverter;
 
-public abstract class ModelElement extends UserFieldTarget {
+public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific {
 
     /**
      * Die Ebene auf der sich dieses Element befindet
@@ -114,6 +116,7 @@ public abstract class ModelElement extends UserFieldTarget {
      * Erzeut ein neues Modellelement mit einem HashString.
      */
     public ModelElement() {
+        super();
         hashstring = getNewHashString(this);
     }
 
@@ -138,18 +141,14 @@ public abstract class ModelElement extends UserFieldTarget {
         }
     }
 
-    /** Liefert das MetaModel, aus dem dieses Element kommt */
+    @Override
     public MetaModel getMetaModel() {
         return metaModel;
     }
 
-    /**
-     * Liefert den Handler zum Erzeugen der der Metamdellnamen der Knoten- und Kantenklassen
-     *
-     * @return
-     */
-    public final ElementsNameBuilder getElementsNameBuilder() {
-        return metaModel.getElementsNameBuilder();
+    @Override
+    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+        return metaModel == null ? null : metaModel.getMetaModelDefinitionClass();
     }
 
     public void printContainer() {

@@ -4,7 +4,9 @@ import java.util.MissingResourceException;
 import java.util.Objects;
 
 import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.util.ReflectionUtils;
 
 /**
  * @author AXS (02.09.2019)
@@ -12,12 +14,17 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 public interface MetaModelSpecific {
 
     /**
+     * @return the class with the defintion for this metamodel
+     */
+    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass();
+
+    /**
      * @return the metamodel context
      */
-    //    public default MetaModelContext getMetaModelContext() {
-    //        return Tool3lgmMetaModelContext.DUMMY_META_MODEL_CONTEXT;
-    //    }
-    public MetaModelContext getMetaModelContext();
+    public default MetaModelContext getMetaModelContext() {
+        Class<? extends MetaModelDefinition> metaModelDefintionClass = getMetaModelDefinitionClass();
+        return Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(metaModelDefintionClass);
+    }
 
     /**
      * Returns the metamodel. If the context has not initialzed the metamodel,
@@ -29,6 +36,21 @@ public interface MetaModelSpecific {
         MetaModelContext metaModelContext = getMetaModelContext();
         MetaModel metaModel = metaModelContext.getMetaModel();
         return metaModel;
+    }
+
+    /**
+     * Liefert die ID der Metamodellklasse. Dies ist ein String aus dem SimpleClassName + "@" + serialVersionUID. Damit sollte die die
+     * Metamodellklasse immer eindeutig identifizierbar sein.
+     *
+     * @return
+     */
+    public default String getMetaModelID() {
+        Class<? extends MetaModelDefinition> metaModelDefinitionClass = getMetaModelDefinitionClass();
+        String name = metaModelDefinitionClass.getSimpleName();
+        Long metaModelClassSerialVersionUID = ReflectionUtils.getField(metaModelDefinitionClass, "serialVersionUID", Long.TYPE);
+        String idString = metaModelClassSerialVersionUID == null ? "" : "@" + String.valueOf(metaModelClassSerialVersionUID); // ein @ kann nicht im Klassenname vorkommen -> Trenner zwischen Klassenname und UID
+        String classID = name + idString;
+        return classID;
     }
 
     /**

@@ -36,13 +36,6 @@ public class UserFieldTarget implements Cloneable {
      */
     private static final Set<UserField> EMPTY_SET = new HashSet<>(0);
 
-    /**
-     *
-     */
-    public UserFieldTarget() {
-        super();
-    }
-
     @Override
     protected Object clone() {
         UserFieldTarget retVal;

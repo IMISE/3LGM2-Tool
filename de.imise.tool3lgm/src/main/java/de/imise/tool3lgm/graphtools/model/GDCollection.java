@@ -83,13 +83,12 @@ import javax.swing.JRadioButton;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.MetaModelContext;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
-import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
@@ -277,22 +276,14 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         return modelType;
     }
 
-    /**
-     * @return
-     *         the handler (initializer) for the metamodel of this model and the metamodel corresponding resource bundle
-     */
-    @Override
-    public MetaModelContext getMetaModelContext() {
-        return modelType.getMetaModelContext();
-    }
-
-    /**
-     * @return
-     *         the metamodel that is the basis for this model
-     */
     @Override
     public MetaModel getMetaModel() {
         return metaModel;
+    }
+
+    @Override
+    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+        return modelType == null ? null : modelType.getMetaModelDefinitionClass();
     }
 
     /**
@@ -307,35 +298,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public void setModelCategory(final Tool3lgmModelType.ModelCategory modelCategory) {
         modelType.setModelCategory(modelCategory);
-    }
-
-    /**
-     * Diese Funktion mach genau das umgekehrte wie die Funktion {@link Tool3lgmConstants#getResString(String)}. D.h. sie schaut zuerst in die
-     * Resourcen des eigenen Metamodells und wenn sie dort den key nicht gefunden hat, dann in die allgemeinen des Tools. Im Unterschied zu der
-     * Funktion aus den {@link Tool3lgmConstants} wird hier aber nicht in die Resourcen des aktuell selektierten Modells geschaut, sondern in die
-     * dieses Modells hier.
-     *
-     * @param key
-     * @return
-     * @see MetaModelContext#getResString(String)
-     */
-    @Override
-    public String getResString(final String key) {
-        MetaModelContext metaModelContext = getMetaModelContext();
-        return metaModelContext.getResString(key);
-    }
-
-    /**
-     * Liefert die Klasse, über die alle Knoten- und Kantenklassennamen generiert werden, also die Anzeigenamen in Ein- und Mehrzahl und bei den
-     * Kanten die gerichteten Namen.
-     *
-     * @return
-     * @see MetaModelContext#getElementsNameBuilder()
-     */
-    @Override
-    public ElementsNameBuilder getElementsNameBuilder() {
-        MetaModelContext metaModelContext = getMetaModelContext();
-        return metaModelContext.getElementsNameBuilder();
     }
 
     /**

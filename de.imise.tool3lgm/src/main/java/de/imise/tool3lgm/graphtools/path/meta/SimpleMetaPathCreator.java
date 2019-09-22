@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -15,7 +16,7 @@ import de.imise.util.ReflectionUtils;
 /**
  * @author AXS (5 Dec 2018)
  */
-public class SimpleMetaPathCreator {
+public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
 
     //    /**
     //     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} ausgehend von der Startklasse, die übergeben wurde. Die
@@ -32,14 +33,11 @@ public class SimpleMetaPathCreator {
     //    }
     //
 
-    /** MetaModel, in dem die Pfade angelegt werden */
-    private final MetaModel metaModel;
-
     /**
      * @param metaModel MetaModel, in dem die Pfade angelegt werden
      */
     public SimpleMetaPathCreator(final MetaModel metaModel) {
-        this.metaModel = metaModel;
+        super(metaModel);
     }
 
     /**
@@ -54,6 +52,7 @@ public class SimpleMetaPathCreator {
      */
     @SafeVarargs
     public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
+        MetaModel metaModel = getMetaModel();
         return createSimpleMetaPath(metaModel, startClass, endClass, associations);
     }
 
@@ -79,6 +78,7 @@ public class SimpleMetaPathCreator {
      * @param metaPaths
      */
     public SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final ElementaryMetaPath... metaPaths) {
+        MetaModel metaModel = getMetaModel();
         return createSimpleMetaPath(metaModel, startClass, endClass, metaPaths);
     }
 
@@ -99,6 +99,7 @@ public class SimpleMetaPathCreator {
      * @param metaPaths
      */
     public SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final ElementaryMetaPath... metaPaths) {
+        MetaModel metaModel = getMetaModel();
         return createSimpleMetaPath(metaModel, startClass, endClass, baseResKeyOrName, metaPaths);
     }
 
@@ -122,6 +123,7 @@ public class SimpleMetaPathCreator {
      * @param metaPaths
      */
     public SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final ElementaryMetaPath... metaPaths) {
+        MetaModel metaModel = getMetaModel();
         return createSimpleMetaPath(metaModel, startClass, endClass, metaPathStepWithPathName, metaPaths);
     }
 
@@ -153,6 +155,7 @@ public class SimpleMetaPathCreator {
      */
     @SafeVarargs
     public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) throws IllegalArgumentException {
+        MetaModel metaModel = getMetaModel();
         return createSimpleMetaPath(metaModel, startClass, endClass, baseResKeyOrName, associations);
     }
 
@@ -192,6 +195,7 @@ public class SimpleMetaPathCreator {
      */
     @SuppressWarnings("unchecked")
     public SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final int metaPathStepWithPathName, final Class<? extends Edge>... associations) throws IllegalArgumentException {
+        MetaModel metaModel = getMetaModel();
         return createSimpleMetaPath(metaModel, startClass, metaPathStepWithPathName, associations);
     }
 
@@ -233,6 +237,7 @@ public class SimpleMetaPathCreator {
     @SafeVarargs
     public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final Class<? extends Edge>... associations)
             throws IllegalArgumentException {
+        MetaModel metaModel = getMetaModel();
         return createSimpleMetaPath(metaModel, startClass, endClass, metaPathStepWithPathName, associations);
     }
 

@@ -49,7 +49,6 @@ import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -94,7 +93,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * Repräsentiert ein Teilmodell. Dieses Teilmodell kann das Hauptmodell sein (= spezielle Teilmodell das alle Elemente enthält, aber keine Grafik
  * besitzt) oder ein Szenario (= eine beliebige Elementauswahl aus allen Elementen mit einer grafischen Repräsentation)
  */
-public abstract class GraphDocument extends ElementSelectionContext implements SwingConstants, MetaModelSpecific {
+public abstract class GraphDocument extends ElementSelectionContext implements SwingConstants {
 
     /** Zeichen, das in Kommandos zusammengehörigen Text umschließt, damit er als zusammengehörig erkannt werden kann */
     public static final char GDCOMMAND_TEXT_SURROUNDER = '\'';
@@ -188,16 +187,13 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     protected InternalGraphFrame frame = null;
 
-    /** MetaModel dieses Modells */
-    protected final MetaModel metaModel;
-
     /**
      * @param _gdcoll
      */
     protected GraphDocument(@Nonnull final GDCollection _gdcoll) {
         super(_gdcoll.getMetaModel());
         gdcoll = _gdcoll;
-        metaModel = gdcoll.getMetaModel();
+        MetaModel metaModel = gdcoll.getMetaModel();
         hashString = "DOC" + "_" + new Date().getTime();
 
         analysisResult = new ArrayList<>();
@@ -650,6 +646,8 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         //		System.err.println(command + " " + Arrays.asList(argv));
         int argc = argv.length;
+        MetaModel metaModel = getMetaModel();
+
         switch (command) {
 
         case MODEL_ACTION_DELETE:
@@ -2380,6 +2378,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         addSimpleToSelection(lastSelected);
         //Knickpunkte aller Kanten dazuselektieren, bei denen beide Elemente selektiert sind
         container2Select.clear();
+        MetaModel metaModel = getMetaModel();
         for (ElementContainer ec : selectedContainer) {
             ModelElement me = ec.getElement();
             if (metaModel.isPaintable(me.getClass())) {
@@ -2907,6 +2906,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @return
      */
     public NodeContainer createNodeAndContainer(final String elementClassName, final int pid) {
+        MetaModel metaModel = getMetaModel();
         return createNodeAndContainer(metaModel.getClassForName(elementClassName), pid);
     }
 
@@ -3353,6 +3353,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         szen.start_transaction(pid);
 
+        MetaModel metaModel = getMetaModel();
         List<Edge> edges = masterElement.getEdgesWith(slaveElement, metaModel.getClassForName(edgeClassName).asSubclass(Edge.class));
         if (edges.size() == 0 || !(szen instanceof Szenario)) {
             finish_transaction(pid);
@@ -3567,6 +3568,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
 
             //Ebenfalls zu instanziierende Nebenpfade anlegen
+            MetaModel metaModel = getMetaModel();
             for (SimpleMetaPath metaPath : metaModel.getInstanciablePath(instanciationEdgeClass)) {
                 int path2CreateStartIndex = 0;
                 for (; path2CreateStartIndex < metaPath.getMetaPathCount(); path2CreateStartIndex++) {
@@ -4208,6 +4210,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         UserFieldDefinitions definitions = getUserFieldDefinitions();
         WeightReplacer replacer = definitions.getWeightReplacer();
         //wurde eine Kantenklasse übergeben?
+        MetaModel metaModel = getMetaModel();
         Class<? extends ModelElement> edgeElementClass = metaModel.getClassForName(userFieldHashToReplaceOrSimpleEdgeClassName);
         //falls ein null oder Leerwert als Ersetzung übergeben wurde, muss der hier in EMPTY_STRING ersetzt werden, damit die
         //Kommandos mit der richtigen Parameteranzahl geparst werden könnnen
@@ -4301,6 +4304,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public final void addContainerToAllSzenarios(final List<ElementContainer> elements, final int pid) {
         start_transaction(pid);
+        MetaModel metaModel = getMetaModel();
         for (Szenario szen : gdcoll.getSzenarios()) {
             if (szen == this) {
                 continue;
@@ -4469,6 +4473,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             return;
         }
         start_transaction(pid, log);
+        MetaModel metaModel = getMetaModel();
         for (Class<? extends ModelElement> c : metaModel.getCopyDependencies(kc.getNode().getClass())) {
             List<ElementContainer> dependentObjects = kc.getNode().getConnectedContainers(c, this);
             for (int j = 0; j < dependentObjects.size(); j++) {
@@ -4599,6 +4604,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         //		long start = System.currentTimeMillis();
 
         ModelCategory modelCategory = getModelCategory();
+        MetaModel metaModel = getMetaModel();
         GraphDocument document = metaModel.isUnique(clazz, modelCategory) ? getCollection().getMainGraphDocument() : this;
         List<ElementContainer> objects = new ArrayList<>();
         //Ebene der gesuchten Elementklasse bestimmen

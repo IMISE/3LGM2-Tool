@@ -20,6 +20,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -63,6 +64,7 @@ public class LGMGraphDocument extends GraphDocument {
             break;
 
         case MODEL_ACTION_HIDE_UNASSOCIATED: {
+            MetaModel metaModel = getMetaModel();
             Class<? extends ModelElement> elementClass = metaModel.getClassForName(argv[0]);
             Class<? extends Edge> egdeClass = metaModel.getClassForName(argv[1]).asSubclass(Edge.class);
             for (ElementContainer ec : getElementContainers(elementClass, true)) {
@@ -76,6 +78,7 @@ public class LGMGraphDocument extends GraphDocument {
             break;
         }
         case MODEL_ACTION_UNHIDE_ALL: {
+            MetaModel metaModel = getMetaModel();
             Class<? extends ModelElement> elementClass = metaModel.getClassForName(argv[0]);
             for (ElementContainer ec : getElementContainers(elementClass, true)) {
                 ec.setVisible(true);
@@ -628,6 +631,7 @@ public class LGMGraphDocument extends GraphDocument {
 
         me1.refreshText();
 
+        MetaModel metaModel = getMetaModel();
         for (Edge edge : me2.getEdges()) {
             Edge oldEdge;
             /* vorwaerts */

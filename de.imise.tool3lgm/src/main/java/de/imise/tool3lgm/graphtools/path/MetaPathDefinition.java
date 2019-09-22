@@ -14,6 +14,7 @@ import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -34,10 +35,7 @@ import de.imise.util.Alphabetical;
  * @author AXS
  * @create 13.10.2010
  */
-public class MetaPathDefinition {
-
-    /** Das MetaModel der für das diese Definition gilt */
-    protected final MetaModel metaModel;
+public class MetaPathDefinition extends MetaModelSpecificAdapter {
 
     /** Sammlung aller definierten Metapfade */
     private final Set<AbstractMetaPath> definedMetaPaths = new HashSet<>();
@@ -64,7 +62,7 @@ public class MetaPathDefinition {
      */
     @SafeVarargs
     public MetaPathDefinition(final MetaModel metaModel, final Class<? extends Edge>... edgeClasses) {
-        this.metaModel = metaModel;
+        super(metaModel);
         simpleMetaPathCreator = new SimpleMetaPathCreator(metaModel);
         Iterable<Class<? extends Edge>> edgeClassesIt = edgeClasses == null || edgeClasses.length == 0 ? metaModel.allEdgesSet : Arrays.asList(edgeClasses);
         ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
@@ -85,13 +83,6 @@ public class MetaPathDefinition {
      * Kann in Unterklassen zur Initialisierung überschrieben werden und wird im Konstruktor aufgerufen
      */
     protected void init() {
-    }
-
-    /**
-     * @return
-     */
-    public final MetaModel getMetaModel() {
-        return metaModel;
     }
 
     /**
@@ -176,7 +167,7 @@ public class MetaPathDefinition {
      */
     @SafeVarargs
     protected final SimpleMetaPath put(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) {
-        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, startClass, endClass, baseResKeyOrName, associations);
+        SimpleMetaPath simpleMetaPath = simpleMetaPathCreator.createSimpleMetaPath(startClass, endClass, baseResKeyOrName, associations);
         put(simpleMetaPath);
         return simpleMetaPath;
     }
@@ -226,6 +217,7 @@ public class MetaPathDefinition {
     private final Set<Class<? extends ModelElement>> getElementClassesInPaths(final boolean start) {
         Set<Class<? extends ModelElement>> pathsElementClassesSet = new HashSet<>();
         //alle Metapfade durchlaufen und alle neu gefundenen Startklassen zur Rückgabeliste hinzufügen
+        MetaModel metaModel = getMetaModel();
         for (AbstractMetaPath metaPath : definedMetaPaths) {
             ArrayList<Class<? extends ModelElement>> newElementClasses = new ArrayList<>();
             //Für alle Startklassen des aktuellen Metapfades

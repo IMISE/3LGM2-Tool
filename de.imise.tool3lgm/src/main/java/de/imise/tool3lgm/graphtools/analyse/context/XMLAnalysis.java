@@ -3,8 +3,6 @@
  */
 package de.imise.tool3lgm.graphtools.analyse.context;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -114,7 +112,7 @@ public final class XMLAnalysis extends AbstractAnalysis {
      * @param startClassName der neue Name des Startknotens.
      */
     private void addStartClass(final String startClassName) {
-        MetaModel metaModel = metaModelContext.getMetaModel();
+        MetaModel metaModel = getMetaModel();
         Class<? extends ModelElement> startClass = metaModel.getClassForName(startClassName);
         if (startClass != null) {
             startClasses.add(startClass);

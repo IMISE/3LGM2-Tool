@@ -253,6 +253,9 @@ public final class Tool3lgmMetaModelContext {
      * @return
      */
     public static final MetaModelContext getMetaModelContextForDefinitionClass(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        if (metaModelDefinitionClass == null) {
+            return DUMMY_META_MODEL_CONTEXT;
+        }
         for (MetaModelContext metaModelContext : ALL_METAMODEL_CONTEXTS) {
             if (metaModelContext.hasDefinitionClass(metaModelDefinitionClass)) {
                 return metaModelContext;

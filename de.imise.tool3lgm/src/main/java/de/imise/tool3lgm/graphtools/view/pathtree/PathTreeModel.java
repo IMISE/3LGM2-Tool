@@ -11,6 +11,7 @@ import org.apache.jena.ext.com.google.common.base.Strings;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -139,7 +140,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @param lastHierarchyNode
      */
     private void addBranchModelElementsPath(final SimpleMetaPath elementsPath, final LGMTreeNode lastHierarchyNode) {
-        MetaModelContext metaModelContext = elementsPath.getMetaModelContext();
+        MetaModelContext metaModelContext = getMetaModelContext();
         TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
         Collection<GDCollection> templates = templateLibrariesManager.getTemplates(metaModelContext);
         Class<? extends ModelElement> pathStepConnectionClass = elementsPath.getStartClass();
@@ -219,8 +220,8 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     }
 
     @Override
-    public MetaModelContext getMetaModelContext() {
-        return treeDefinition == null ? null : treeDefinition.getMetaModelContext();
+    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+        return treeDefinition == null ? null : treeDefinition.getMetaModelDefinitionClass();
     }
 
 }

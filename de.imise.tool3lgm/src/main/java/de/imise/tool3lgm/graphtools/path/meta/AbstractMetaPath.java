@@ -66,6 +66,9 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      */
     private boolean recursive;
 
+    /** the metamodel */
+    protected final MetaModel metaModel;
+
     /**
      * @param metaModel
      */
@@ -111,6 +114,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      */
     public AbstractMetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
         super(metaModel);
+        this.metaModel = metaModel;
         this.startElementClasses = CollectionUtils.ensureImmutable(startElementClasses);
         this.endElementClasses = CollectionUtils.ensureImmutable(endElementClasses);
         this.name = name;

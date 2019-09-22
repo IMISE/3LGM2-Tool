@@ -5,17 +5,16 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
-public abstract class AbstractAnalysis {
-
-    protected final MetaModelContext metaModelContext;
+public abstract class AbstractAnalysis extends MetaModelSpecificAdapter {
 
     /** der Name der Analyse. */
     protected String name;
@@ -24,10 +23,10 @@ public abstract class AbstractAnalysis {
     protected List<Class<? extends ModelElement>> startClasses = new ArrayList<>();
 
     /**
-     * @param metaModelContext
+     * @param metaModelSpecific
      */
-    protected AbstractAnalysis(final MetaModelContext metaModelContext) {
-        this.metaModelContext = metaModelContext;
+    protected AbstractAnalysis(final MetaModelSpecific metaModelSpecific) {
+        super(metaModelSpecific);
     }
 
     /**
@@ -67,7 +66,7 @@ public abstract class AbstractAnalysis {
             return "";
         }
         StringBuilder sb = new StringBuilder();
-        MetaModel metaModel = metaModelContext.getMetaModel();
+        MetaModel metaModel = getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (int i = 0; i < startClasses.size() - 1; i++) {
             sb.append(elementsNameBuilder.getDisplayableName(metaModel.getClassForName(startClasses.get(i).getName())));

@@ -295,7 +295,7 @@ public class AnalysesRepository {
                 }
                 if (line != null) {
                     raf.writeBytes("--multipart_3lgm_query_separator\nContent-Type: text/xml\n");
-                    raf.writeBytes("Model-Type: " + sp.metaModelContext.getMetaModelID() + "\n");
+                    raf.writeBytes("Model-Type: " + sp.getMetaModelID() + "\n");
                     raf.writeBytes("Content-ID: " + sp.getName() + "\n");
                     raf.writeBytes(line);
                     if (!line.endsWith("\n")) {

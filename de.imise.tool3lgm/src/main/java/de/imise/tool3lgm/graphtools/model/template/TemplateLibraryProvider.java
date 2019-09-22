@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.model.template;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.SimpleResourceHandler;
 import de.imise.util.SimpleResourceSource;
@@ -10,14 +11,15 @@ import de.imise.util.SimpleResourceSource;
  *
  * @author AXS (24.08.2019)
  */
-public abstract class TemplateLibraryProvider implements SimpleResourceSource {
+public abstract class TemplateLibraryProvider extends MetaModelSpecificAdapter implements SimpleResourceSource {
 
     private final SimpleResourceHandler resourceHandler;
 
     /**
      *
      */
-    public TemplateLibraryProvider() {
+    public TemplateLibraryProvider(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        super(metaModelDefinitionClass);
         resourceHandler = new SimpleResourceHandler(getClass());
     }
 
@@ -31,6 +33,7 @@ public abstract class TemplateLibraryProvider implements SimpleResourceSource {
     /**
      * @return the class of the MetaModelDefinition of the template and the target models
      */
+    @Override
     public abstract Class<? extends MetaModelDefinition> getMetaModelDefinitionClass();
 
     /**
@@ -54,7 +57,12 @@ public abstract class TemplateLibraryProvider implements SimpleResourceSource {
 
     @Override
     public String getResString(final String resKey) {
-        return resourceHandler.getResString(resKey);
+        try {
+            return resourceHandler.getResString(resKey);
+        } catch (Exception e) {
+            //ignore -> return super.getResString(String)
+        }
+        return super.getResString(resKey);
     }
 
 }

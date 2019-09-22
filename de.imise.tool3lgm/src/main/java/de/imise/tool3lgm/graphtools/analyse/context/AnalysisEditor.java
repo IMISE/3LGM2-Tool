@@ -371,7 +371,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
             PathStepComponent first = pathPanels.get(0);
             if (!(first.pathStepElementTypeList.isSelectionEmpty() && first.conditionElementTypeList.isSelectionEmpty())) {
                 try {
-                    XMLAnalysis.createAnalysis(doc.getCollection().getMetaModelContext(), getAnalysisString()).setAnalysisResult(doc);
+                    XMLAnalysis.createAnalysis(doc.getMetaModelContext(), getAnalysisString()).setAnalysisResult(doc);
                 } catch (SAXException e1) {
                     Log.log(Log.ERROR, "Can't execute analysis\n" + getAnalysisString());
                     // e1.printStackTrace();
