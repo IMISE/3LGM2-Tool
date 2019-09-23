@@ -49,6 +49,7 @@ public class TemplateLibrariesContext {
         PathTreeDefinition treeDefinition = new PathTreeDefinition(metaModelContext);
         treeDefinition.addBranches(treeBranchDefinitions);
         templateToTreeDefinition.put(template, treeDefinition);
+        metaModelContextsWithLoadedTemplates.add(metaModelContext);
     }
 
     /**
