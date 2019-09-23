@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,7 +8,6 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.util.collections.CollectionUtils;
 
 /**
  * Ein {@link SequenceMetaPath}, der immer nur aus einer einfachen Folge von Kanten bzw. {@link ElementaryMetaPath} besteht.
@@ -21,6 +21,13 @@ public class SimpleMetaPath extends SequenceMetaPath {
      * super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
      */
     private int metaPathStepWithPathName = -1;
+
+    /**
+     * @param metaPaths
+     */
+    public SimpleMetaPath(final List<ElementaryMetaPath> metaPaths) {
+        this(metaPaths.toArray(new ElementaryMetaPath[0]));
+    }
 
     /**
      * @param metaPaths
@@ -97,10 +104,10 @@ public class SimpleMetaPath extends SequenceMetaPath {
      * @return
      */
     private SimpleMetaPath createJoined(final List<ElementaryMetaPath> elementaryMetaPaths1, final List<ElementaryMetaPath> elementaryMetaPaths2) {
-        ElementaryMetaPath[] elementaryMetaPathsArray1 = elementaryMetaPaths1.toArray(new ElementaryMetaPath[0]);
-        ElementaryMetaPath[] elementaryMetaPathsArray2 = elementaryMetaPaths2.toArray(new ElementaryMetaPath[0]);
-        ElementaryMetaPath[] joinedelementaryMetaPathsArray = CollectionUtils.joinArrays(elementaryMetaPathsArray1, elementaryMetaPathsArray2);
-        return new SimpleMetaPath(joinedelementaryMetaPathsArray);
+        List<ElementaryMetaPath> allMetaPaths = new ArrayList<>(elementaryMetaPaths1.size() + elementaryMetaPaths2.size());
+        allMetaPaths.addAll(elementaryMetaPaths1);
+        allMetaPaths.addAll(elementaryMetaPaths2);
+        return new SimpleMetaPath(allMetaPaths);
     }
 
     /**
