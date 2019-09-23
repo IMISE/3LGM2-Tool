@@ -6,6 +6,7 @@ import javax.swing.tree.TreeNode;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.gui.menu.ContextGenerator;
 
 /**
  * @author AXS (22.09.2019)
@@ -41,6 +42,11 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
         DynamicTreeMouseAdapter.addAdapter(this);
         selectionListener = new DynamicTreeSelectionListener(this);
     }
+
+    /**
+     * @return the ContextGenerator for this tree
+     */
+    public abstract ContextGenerator getContextGenerator();
 
     /**
      * @param active

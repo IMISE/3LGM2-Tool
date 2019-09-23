@@ -47,6 +47,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
+import de.imise.tool3lgm.gui.menu.ContextGenerator;
 
 /**
  * @author N.N.
@@ -165,6 +166,11 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             transactionListener.add();
         }
         buildTree();
+    }
+
+    @Override
+    public ContextGenerator getContextGenerator() {
+        return Static.contextGenerator;
     }
 
     private void sortedByAssignable(final List<Class<? extends ModelElement>> classes) {

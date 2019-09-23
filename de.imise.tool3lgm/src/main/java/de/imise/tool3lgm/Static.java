@@ -36,6 +36,7 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.gui.menu.RegularContextGenerator;
+import de.imise.tool3lgm.gui.menu.TemplateContextGenerator;
 import de.imise.util.PluginUtils;
 import de.imise.util.Sys;
 import de.imise.util.swing.dialog.OutputDialog;
@@ -55,6 +56,9 @@ public class Static {
 
     /** Holds the current context and generates context menus */
     public static final RegularContextGenerator contextGenerator = new RegularContextGenerator();
+
+    /** Holds the current context and generates context menus for the template views */
+    public static final TemplateContextGenerator templateContextGenerator = new TemplateContextGenerator();
 
     /** Gibt die gerade laufende Instanz von 3lgm wieder */
     public static Tool3lgm getTool() {

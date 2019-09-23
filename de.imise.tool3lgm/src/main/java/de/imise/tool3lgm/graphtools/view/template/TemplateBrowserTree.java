@@ -18,6 +18,7 @@ import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.gui.menu.ContextGenerator;
 
 /**
  * @author AXS (05.09.2019)
@@ -58,6 +59,11 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
             }
         }
         return doc;
+    }
+
+    @Override
+    public ContextGenerator getContextGenerator() {
+        return Static.templateContextGenerator;
     }
 
     @Override

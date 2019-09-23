@@ -104,7 +104,6 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
@@ -114,7 +113,7 @@ import de.imise.util.swing.menu.MenuScroller;
 /**
  * @author N.N., Thomas, AXS
  */
-public class RegularContextGenerator implements PopupMenuListener, ActionListener {
+public class RegularContextGenerator extends ContextGenerator implements PopupMenuListener, ActionListener {
 
     /**
      * COMMENTME
@@ -184,11 +183,6 @@ public class RegularContextGenerator implements PopupMenuListener, ActionListene
     /**
      * COMMENTME
      */
-    private boolean controlled = false;
-
-    /**
-     * COMMENTME
-     */
     private JPopupMenu menu = null;
 
     /**
@@ -212,15 +206,7 @@ public class RegularContextGenerator implements PopupMenuListener, ActionListene
      * gesetzt werden.
      */
     public RegularContextGenerator() {
-        setControlled(false);
         init();
-    }
-
-    /**
-     * @param b
-     */
-    public final void setControlled(final boolean b) {
-        controlled = b;
     }
 
     /**
@@ -993,13 +979,10 @@ public class RegularContextGenerator implements PopupMenuListener, ActionListene
      * @param source
      * @return
      */
+    @Override
     public final JPopupMenu getNodeContextMenu(final Component source) {
         JPopupMenu menu = new JPopupMenu();
         GraphDocument doc = getDoc();
-        if (source instanceof TemplateBrowserTree) {
-            TemplateBrowserTree tree = (TemplateBrowserTree) source;
-            doc = tree.getGraphDocument();
-        }
         if (doc.isSelectedOnlyBendpoints()) {
             if (doc instanceof Szenario) {
                 menu.add(delete_selected_from_szenario);
@@ -1134,6 +1117,7 @@ public class RegularContextGenerator implements PopupMenuListener, ActionListene
     /**
      * @return
      */
+    @Override
     public final JPopupMenu getLayerContextMenu() {
         JPopupMenu menu = new JPopupMenu();
         menu.add(getCreateNewNodesMenu());
@@ -1310,6 +1294,7 @@ public class RegularContextGenerator implements PopupMenuListener, ActionListene
      */
     private void processMouseEventInternal(final boolean left_button, final boolean right_button, final Component gdl, final int xin, final int yin) {
         GraphDocument doc = getDoc();
+        boolean controlled = isControlled();
         if (resizing) {
             if (right_button) {
                 return;
@@ -2110,7 +2095,7 @@ public class RegularContextGenerator implements PopupMenuListener, ActionListene
     }
 
     @Override
-    public void actionPerformed(final ActionEvent e) {
+    public final void actionPerformed(final ActionEvent e) {
         GraphDocument doc = getDoc();
         doc.exec(e.getActionCommand(), STANDARD_PID);
     }

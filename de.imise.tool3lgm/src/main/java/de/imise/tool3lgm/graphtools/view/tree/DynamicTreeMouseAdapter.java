@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
-import static de.imise.tool3lgm.Static.contextGenerator;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
@@ -26,6 +25,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
+import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.util.swing.event.ExtendedAction;
 
 public class DynamicTreeMouseAdapter implements MouseListener {
@@ -102,6 +102,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
     @Override
     public void mousePressed(final MouseEvent e) {
         if ((e.getModifiersEx() & InputEvent.CTRL_DOWN_MASK) != 0) {
+            ContextGenerator contextGenerator = tree.getContextGenerator();
             contextGenerator.setControlled(true);
         }
         boolean right_button = false;
@@ -138,6 +139,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
             Object lastPathComponent = path.getLastPathComponent();
             if (tree.isLayerNode(lastPathComponent)) {
                 if (right_button) {
+                    ContextGenerator contextGenerator = tree.getContextGenerator();
                     JPopupMenu pm = contextGenerator.getLayerContextMenu();
                     if (pm != null) {
                         pm.show(tree, xin + 3, yin + 3);
@@ -167,6 +169,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                     //wenn das Element schon in der Selektion war, wird es nur an die hinterste Position in der Selektiion verschoben
                     //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
                     ec.getGraphDocument().addToSelection(ec, ModelBrowserTree.PID);
+                    ContextGenerator contextGenerator = tree.getContextGenerator();
                     JPopupMenu pm = contextGenerator.getNodeContextMenu(tree);
                     if (pm != null) {
                         pm.show(tree, xin + 3, yin + 3);
@@ -178,6 +181,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
 
     @Override
     public void mouseReleased(final MouseEvent e) {
+        ContextGenerator contextGenerator = tree.getContextGenerator();
         contextGenerator.setControlled(false);
     }
 
