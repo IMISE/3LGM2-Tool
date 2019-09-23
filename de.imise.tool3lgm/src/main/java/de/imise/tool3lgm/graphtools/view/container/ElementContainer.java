@@ -254,6 +254,14 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
+     * @param me
+     * @return
+     */
+    public boolean hasElement(final ModelElement me) {
+        return this.me == me;
+    }
+
+    /**
      * @param layout
      */
     public void set3LGMLayout(final GraphElementLayout layout) {

@@ -814,6 +814,33 @@ public class LayerContainer extends ElementContainer {
     }
 
     /**
+     * @param me
+     * @return
+     */
+    public boolean isMyElement(final ModelElement me) {
+        if (me instanceof Bendpoint) {
+            for (ElementContainer ec : bendpointContainers) {
+                if (ec.hasElement(me)) {
+                    return true;
+                }
+            }
+        } else if (me instanceof Node) {
+            for (ElementContainer ec : graphNodeContainers) {
+                if (ec.hasElement(me)) {
+                    return true;
+                }
+            }
+        } else if (me instanceof Edge) {
+            for (ElementContainer ec : edgeContainers) {
+                if (ec.hasElement(me)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * @return the showInterLayerConnections
      */
     public boolean isShowInterLayerConnections() {

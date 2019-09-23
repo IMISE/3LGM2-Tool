@@ -511,7 +511,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param mc
      * @return
      */
-    private boolean isMyElement(final ElementContainer mc) {
+    public boolean isMyElement(final ElementContainer mc) {
         return isMyElement(mc.getElement());
     }
 
@@ -520,7 +520,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @return
      */
     public boolean isMyElement(final ModelElement me) {
-        return me.getContainer(this) != null;
+        int layer = me.layerFor();
+        if (layer != ModelConstants.NO_LAYER) {
+            LayerContainer lc = this.layer[layer];
+            return lc.isMyElement(me);
+        }
+        for (LayerContainer lc : this.layer) {
+            if (lc.isMyElement(me)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

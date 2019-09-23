@@ -11,7 +11,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JOptionPane;
 
@@ -230,6 +229,33 @@ public class LGMGraphDocument extends GraphDocument {
         distributeEvent(DATA_CHANGED, STANDARD_PID);
     }
 
+    /**
+     * Liste aller Kanten, bei denen das das eine Endelement gerade kopiert werden soll und das
+     * andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt
+     *
+     * @param sourceElements
+     * @param targetDoc
+     */
+    private static final void addSplittedSourceEdgesToCopy(final List<ModelElement> sourceElements, final LGMGraphDocument targetDoc) {
+        LGMGraphDocument targetMainDoc = targetDoc.getCollection().getMainGraphDocument();
+        for (int i = 0; i < sourceElements.size(); i++) {
+            ModelElement me = sourceElements.get(i);
+            if (me instanceof Bendpoint) {
+                continue;
+            }
+            for (Edge edge : me.getEdges()) {
+                if (!sourceElements.contains(edge)) {
+                    ModelElement other = edge.getOther(me);
+                    String otherHash = other.getHashString();
+                    ModelElement destElement = targetMainDoc.findElementCoded(otherHash);
+                    if (destElement != null) {
+                        sourceElements.add(edge);
+                    }
+                }
+            }
+        }
+    }
+
     //	/**
     //	 *
     //	 * TODO:Bug beim Übenehmen von Elementen in ein anderes Modell
@@ -248,344 +274,184 @@ public class LGMGraphDocument extends GraphDocument {
     //	 *
     //	 * @param dest
     //	 * /
-    //	public void copySelectedToModel(LGMGraphDocument dest) {
-    //
-    //		GraphDocument mainDoc =  getCollection().getGraphDocument();
-    //		GDCollection destGDColl = dest.getCollection();
-    //		GraphDocument destMainDoc = destGDColl.getGraphDocument();
-    //
-    //
-    //		if (destGDColl.isChanged()) {
-    //			int value = JOptionPane.showConfirmDialog(null, getResString("join_speicherfrage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-    //			if (value == JOptionPane.YES_OPTION) {
-    //				try {
-    //					if (!destGDColl.saveToFile())
-    //						return;
-    //				} catch (IOException exp) {
-    //					Log.show(Log.FATAL, getResString("FehlerAllgemein"), exp);
-    //					return;
-    //				}
-    //			} else
-    //				return;
-    //		}
-    //
-    //		ArrayList<ModelElement> copyElements = new ArrayList<ModelElement>();
-    //		HashSet<UserField> userFields = new HashSet<UserField>();
-    //		gdcoll.resolveCopyDependencies(selectedContainer, copyElements, userFields);
-    //
-    //		//Liste aller Kanten, bei denen das das eine Endelement gerade kopiert werden soll und das
-    //		//andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt
-    //		ArrayList<ModelElement> splitEdges = new ArrayList<ModelElement>();
-    //
-    //		for (int i=0; i<copyElements.size(); i++) {
-    //			ModelElement me = copyElements.get(i);
-    //			if (me instanceof Knickpunkt)
-    //				continue;
-    //			for (Edge edge : me.getEdges()) {
-    //				if (copyElements.contains(edge))
-    //					continue;
-    //				ModelElement other = edge.getOther(me);
-    //				if (destMainDoc.findElementCoded(other.getHashString())!=null)
-    //					splitEdges.add(edge);
-    //			}
-    //		}
-    //
-    //		for (UserField uf : userFields){
-    //			if (uf != null)
-    //				destGDColl.getUserFieldDefinitions().add(uf);
-    //		}
-    //
-    //		ModelElement newE;
-    //
-    //		ArrayList<ElementContainer> tmpActive = new ArrayList<ElementContainer>(selectedContainer);
-    //		ArrayList<Edge> edges = new ArrayList<Edge>();
-    //		ArrayList<BendpointContainer> knickpunkte = new ArrayList<BendpointContainer>();
-    //
-    //		mainDoc.deselectAll(false);
-    //
-    //		int pid = TransactionManager.STANDARD_PID;
-    //		destMainDoc.start_transaction(pid);
-    //
-    //		try {
-    //			destMainDoc.deselectAll(true);
-    //			destGDColl.getIconTable().putAll(getCollection().getIconTable());
-    //
-    //			// lowest bit determin whether ask user about what to do, when hashcode already exists in dest (1 == do not ask / remember last decision)
-    //			// OverwriteDialog.OVERWRITE
-    //			// OverwriteDialog.JOIN
-    //			// OverwriteDialog.NOTHING
-    //			int overwriteJoinNothing = 0;
-    //			for (ModelElement insert : copyElements){
-    //				ElementContainer insertC = insert.getContainer(this);
-    //				if (insertC == null)
-    //					insertC = insert.getContainer(mainDoc);
-    //
-    //				//wenn bereits ein Element mit dem gleichen Hash-Wert im Zieldokument existiert
-    //				if ((newE = destMainDoc.findElementCoded(insert.getHashString())) != null) {
-    //					if ((overwriteJoinNothing & 1) == 0) {
-    //						select(insertC, pid);
-    //						distributeEvent(SELECTION_CHANGED, insertC, null, pid);
-    //						overwriteJoinNothing = OverwriteDialog.showDialog(Tool3lgm.tool, newE, insert);
-    //					}
-    //
-    //					if ((overwriteJoinNothing & OverwriteDialog.OVERWRITE) > 0) {
-    //
-    //					} else if ((overwriteJoinNothing & OverwriteDialog.JOIN) > 0) {
-    //						dest.joinElements(newE, insert, this, false);
-    //						if (newE instanceof Edge) {
-    //							((Edge)newE).reconnect(destGDColl);
-    //							((Edge)newE).refreshText();
-    //						}
-    //					} else if ((overwriteJoinNothing & OverwriteDialog.DONOTHING) > 0) {
-    //						continue;
-    //					}
-    //				//wenn der Hash des zu kopierenden Elementes noch nicht im Modell vorkommt
-    //				} else {
-    //					ElementContainer newC;
-    //					newC = insertC.clone(true, dest);
-    //					newE = newC.getElement();
-    //					newE.setHashString(insert.getHashString());
-    //					ElementContainer newMainC = newC.clone(false, destMainDoc);
-    //					newMainC.setVisible(true);
-    //					newMainC.setExpanded(true);
-    //					newMainC.setHighLight(false);
-    //					newMainC.refreshText();
-    //					destMainDoc.getLayer(newE.layerFor()).add(newMainC);
-    //					if (newE instanceof Edge)
-    //						edges.add((Edge)newE);
-    //					else if (newE instanceof Knickpunkt)
-    //						knickpunkte.add((BendpointContainer)newC);
-    //					else {
-    //						if (!newE.isUnique() && (dest instanceof Szenario)) {
-    //							newC.refreshText();
-    //							dest.getLayer(newE.layerFor()).add(newC);
-    //						}
-    //						destMainDoc.addToSelection(newMainC, pid);
-    //					}
-    //				}
-    //			}
-    //			for (Edge kante : edges){
-    //				if (!kante.reconnect(destGDColl))
-    //					destGDColl.deleteElement(kante, pid);
-    //				else {
-    //					EdgeContainer edgeCont = (EdgeContainer)kante.getContainer(destMainDoc);
-    //					destGDColl.addEdge(edgeCont, kante.layerFor(), pid);
-    //					if (!kante.isUnique() && (dest instanceof Szenario)) {
-    //						EdgeContainer newC = (EdgeContainer)kante.getContainer(dest);
-    //						if (newC == null) {
-    //							throw new Exception(getResString("fehler"));
-    //						}
-    //						ArrayList<BendpointContainer> kpList = newC.getBendpointContainerList();
-    //						for (int j = 0; j < kpList.size(); j++) {
-    //							dest.getLayer(kante.layerFor()).add((BendpointContainer)kpList.get(j));
-    //						}
-    //						newC.computeBorderPoints();
-    //					}
-    //					destMainDoc.addToSelection(kante.getContainer(destMainDoc), pid);
-    //				}
-    //			}
-    //			ArrayList<EdgeContainer> edgeConts = new ArrayList<EdgeContainer>();
-    //			while (!knickpunkte.isEmpty()) {
-    //				BendpointContainer kp = (BendpointContainer)knickpunkte.remove(0);
-    //				BendpointContainer oldKP = this.findBendpointContainerCoded(kp.getHashString());
-    //				EdgeContainer kC = dest.findEdgeContainerCoded(kp.getKnickpunktKnoten().getKantenHash());
-    //				EdgeContainer oldKC = oldKP.getKnickpunktKnoten().getOwner();
-    //				if (oldKC == null)
-    //					oldKC = this.findEdgeContainerCoded(kC.getHashString());
-    //				if (kC != null) {
-    //					if (! (edges.contains(kC)))
-    //						edgeConts.add(kC);
-    //					kp.getKnickpunktKnoten().setOwner(kC);
-    //					kC.setKnickpunkt(kp, oldKC.getIndexOfKnickpunkt(oldKP.getKnickpunktKnoten()));
-    //					dest.getLayer(kC.layerFor()).add(kp);
-    //				}
-    //			}
-    //			for (EdgeContainer kc : edgeConts)
-    //				kc.computeBorderPoints();
-    //
-    //			destMainDoc.finish_transaction(pid);
-    //		} catch (Exception ex) {
-    //			destMainDoc.undo(pid);
-    //			Log.show(Log.ERROR, getResString("FehlerKorrupt") + "\n" + destGDColl.getName(), ex);
-    //		}
-    //		destGDColl.setChanged(true);
-    //		start_transaction(TransactionManager.STANDARD_PID, false);
-    //		deselectAll (true);
-    //		for (int j = 0; j < tmpActive.size(); j++) {
-    //			addToSelection((ElementContainer)tmpActive.get(j), TransactionManager.STANDARD_PID);
-    //		}
-    //		finish_transaction(TransactionManager.STANDARD_PID, false);
-    //		distributeEvent(SELECTION_CHANGED);
-    //		dest.distributeEvent(DATA_CHANGED);
-    //	}
-
     /**
-     * @param dest
+     * @param targetDoc
      */
-    public void copySelectedToModel(final LGMGraphDocument dest) {
+    public static final void copySelectedToModel(final LGMGraphDocument sourceDoc, final LGMGraphDocument targetDoc) {
 
-        GraphDocument mainDoc = getCollection().getMainGraphDocument();
-        GDCollection destGDColl = dest.getCollection();
-        GraphDocument destMainDoc = destGDColl.getMainGraphDocument();
+        GDCollection sourceCollection = sourceDoc.getCollection();
+        GraphDocument sourceMainDoc = sourceCollection.getMainGraphDocument();
+        GDCollection targetCollection = targetDoc.getCollection();
+        GraphDocument targetMainDoc = targetCollection.getMainGraphDocument();
 
-        if (destGDColl.isChanged()) {
-            int value = JOptionPane.showConfirmDialog(null, getResString("join_speicherfrage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-            if (value == JOptionPane.YES_OPTION) {
-                if (!destGDColl.getFileHandler().saveToFile()) {
-                    return;
-                }
-            } else {
-                return;
-            }
-        }
+        //Keine Ahnung warum hier mal irgendwer ein Speichern erzwingen wollte!?
+        //        if (destGDColl.isChanged()) {
+        //            int value = JOptionPane.showConfirmDialog(null, getResString("join_speicherfrage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+        //            if (value == JOptionPane.YES_OPTION) {
+        //                if (!destGDColl.getFileHandler().saveToFile()) {
+        //                    return;
+        //                }
+        //            } else {
+        //                return;
+        //            }
+        //        }
 
-        List<ModelElement> copyElements = new ArrayList<>();
-        Set<UserField> userFields = new HashSet<>();
-        gdcoll.resolveCopyDependencies(getSortedSelection(), copyElements, userFields);
+        List<ModelElement> sourceElements = new ArrayList<>();
+        HashSet<UserField> sourceUserFields = new HashSet<>();
+        sourceCollection.resolveCopyDependencies(sourceDoc.selectedContainer, sourceElements, sourceUserFields);
+        //Liste aller Kanten, bei denen das das eine Endelement gerade kopiert werden soll und das
+        //andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt hinzufügen
+        addSplittedSourceEdgesToCopy(sourceElements, targetDoc);
 
-        for (UserField uf : userFields) {
+        for (UserField uf : sourceUserFields) {
             if (uf != null) {
-                destGDColl.getUserFieldDefinitions().add(uf);
+                targetCollection.getUserFieldDefinitions().add(uf); // es könnte sein, dass hier Mist passiert und UserFields immer wieder geaddet werden, wenn man ein Element übernimmt
             }
         }
 
-        ModelElement newE;
-
+        List<ElementContainer> tmpActive = new ArrayList<>(sourceDoc.selectedContainer);
         List<Edge> edges = new ArrayList<>();
-        List<BendpointContainer> knickpunkte = new ArrayList<>();
+        List<BendpointContainer> bendpoints = new ArrayList<>();
 
-        List<ElementContainer> tmpActive = new ArrayList<>(selectedContainer);
+        sourceMainDoc.deselectAll(false);
 
-        mainDoc.deselectAll(false);
-
-        destMainDoc.start_transaction(STANDARD_PID);
+        int pid = TransactionManager.STANDARD_PID;
+        targetMainDoc.start_transaction(pid);
 
         try {
-            destMainDoc.deselectAll(true);
-            destGDColl.getIconTable().putAll(getCollection().getIconTable());
+            targetMainDoc.deselectAll(true);
+
+            //Icons kopieren
+            GDCollectionIconTable sourceIconTable = sourceCollection.getIconTable();
+            GDCollectionIconTable targetIconTable = targetCollection.getIconTable();
+            targetIconTable.putAll(sourceIconTable); // Warum werden hier einfach alle Icons übernommen? Überprüfen!
 
             // lowest bit determin whether ask user about what to do, when hashcode already exists in dest (1 == do not ask / remember last decision)
             // OverwriteDialog.OVERWRITE
             // OverwriteDialog.JOIN
             // OverwriteDialog.NOTHING
-
             int overwriteJoinNothing = 0;
-            for (ModelElement insert : copyElements) {
-                ElementContainer insertC = insert.getContainer(this);
-                if (insertC == null) {
-                    insertC = insert.getContainer(mainDoc);
+            for (ModelElement sourceElement : sourceElements) {
+                ElementContainer sourceContainer = sourceElement.getContainer(sourceDoc);
+                if (sourceContainer == null) {
+                    sourceContainer = sourceElement.getContainer(sourceMainDoc);
                 }
 
-                if ((newE = destMainDoc.findElementCoded(insert.getHashString())) != null) {
+                String sourceHash = sourceElement.getHashString();
+                ModelElement targetElement = targetMainDoc.findElementCoded(sourceHash);
+                if (targetElement != null) {
                     if ((overwriteJoinNothing & 1) == 0) {
-                        select(insertC, STANDARD_PID);
-                        distributeEvent(SELECTION_CHANGED, insertC, STANDARD_PID);
-                        overwriteJoinNothing = OverwriteDialog.showDialog(Static.getMainFrame(), newE, insert);
+                        sourceDoc.select(sourceContainer, STANDARD_PID);
+                        sourceDoc.distributeEvent(SELECTION_CHANGED, sourceContainer, STANDARD_PID);
+                        overwriteJoinNothing = OverwriteDialog.showDialog(targetElement, sourceElement);
                     }
 
                     if ((overwriteJoinNothing & OverwriteDialog.OVERWRITE) > 0) {
 
                     } else if ((overwriteJoinNothing & OverwriteDialog.JOIN) > 0) {
-                        dest.joinElements(newE, insert, this, false);
-                        if (newE instanceof Edge) {
-                            ((Edge) newE).reconnect(destGDColl);
-                            ((Edge) newE).refreshText();
+                        targetDoc.joinElements(targetElement, sourceElement, sourceDoc, false);
+                        if (targetElement instanceof Edge) {
+                            ((Edge) targetElement).reconnect(targetCollection);
+                            ((Edge) targetElement).refreshText();
                         }
                     } else if ((overwriteJoinNothing & OverwriteDialog.DONOTHING) > 0) {
                         continue;
                     }
+                    //wenn der Hash des zu kopierenden Elementes noch nicht im Modell vorkommt
                 } else {
-                    ElementContainer newC;
-                    newC = insertC.clone(true, dest);
-                    if (newC != null) {
-                        newE = newC.getElement();
-                        newE.setHashString(insert.getHashString());
-                        ElementContainer newMainC = newC.clone(false, destMainDoc);
-                        if (newMainC != null) {
-                            newMainC.setVisible(true);
-                            newMainC.setExpanded(true);
-                            newMainC.setHighLight(false);
-                            newMainC.refreshText();
-                            int layerIndex = insertC.layerFor();
-                            LayerContainer layer = destMainDoc.getLayer(layerIndex);
-                            layer.add(newMainC);
-                            if (newE instanceof Edge) {
-                                edges.add((Edge) newE);
-                            } else if (newE instanceof Bendpoint) {
-                                knickpunkte.add((BendpointContainer) newC);
-                            } else {
-                                if (!newE.isUnique() && dest instanceof Szenario) {
-                                    newC.refreshText();
-                                    dest.getLayer(newE.layerFor()).add(newC);
-                                }
-                                destMainDoc.addToSelection(newMainC, STANDARD_PID);
-                            }
-                        }
+                    ElementContainer targetContainer = sourceContainer.clone(true, targetDoc);
+                    targetElement = targetContainer.getElement();
+                    targetElement.setHashString(sourceHash);
+                    ElementContainer targetMainContainer = targetContainer.clone(false, targetMainDoc);
+                    targetMainContainer.setVisible(true);
+                    targetMainContainer.setExpanded(true);
+                    targetMainContainer.setHighLight(false);
+                    targetMainContainer.refreshText();
+                    int layer = targetElement.layerFor();
+                    LayerContainer targetMainDocLayer = targetMainDoc.getLayer(layer);
+                    targetMainDocLayer.add(targetMainContainer);
+                    if (targetElement instanceof Edge) {
+                        edges.add((Edge) targetElement);
+                    } else if (targetElement instanceof Bendpoint) {
+                        bendpoints.add((BendpointContainer) targetContainer);
+                    } else if (!targetElement.isUnique() && targetDoc instanceof Szenario) {
+                        targetContainer.refreshText();
+                        LayerContainer targetDocLayer = targetDoc.getLayer(layer);
+                        targetDocLayer.add(targetContainer);
                     }
+                    targetMainDoc.addToSelection(targetMainContainer, pid);
                 }
             }
             for (Edge edge : edges) {
-                if (!edge.reconnect(destGDColl)) {
-                    destGDColl.deleteElement(edge, STANDARD_PID);
+                if (!edge.reconnect(targetCollection)) {
+                    targetCollection.deleteElement(edge, pid);
                 } else {
-                    int edgeLayer = edge.layerFor();
-                    destGDColl.addEdge((EdgeContainer) edge.getContainer(destMainDoc), STANDARD_PID);
-                    if (!edge.isUnique() && dest instanceof Szenario) {
-                        EdgeContainer newC = (EdgeContainer) edge.getContainer(dest);
+                    EdgeContainer edgeCont = (EdgeContainer) edge.getContainer(targetMainDoc);
+                    targetCollection.addEdge(edgeCont, pid);
+                    if (!edge.isUnique() && targetDoc instanceof Szenario) {
+                        EdgeContainer newC = (EdgeContainer) edge.getContainer(targetDoc);
                         if (newC == null) {
-                            throw new Exception(getResString("fehler"));
+                            throw new Exception(sourceDoc.getResString("fehler"));
                         }
-                        dest.getLayer(edgeLayer).add(newC);
-                        LayerContainer layerContainer = dest.getLayer(edgeLayer);
-                        for (BendpointContainer bendpointContainer : newC.iterateBendpointContainers()) {
-                            layerContainer.add(bendpointContainer);
+                        for (BendpointContainer bc : newC.iterateBendpointContainers()) {
+                            int layer = edge.layerFor();
+                            LayerContainer targetDocLayer = targetDoc.getLayer(layer);
+                            targetDocLayer.add(bc);
                         }
                         newC.computeBorderPoints();
                     }
-                    destMainDoc.addToSelection(edge.getContainer(destMainDoc), STANDARD_PID);
+                    ElementContainer edgeC = edge.getContainer(targetMainDoc);
+                    targetMainDoc.addToSelection(edgeC, pid);
                 }
             }
             List<EdgeContainer> edgeConts = new ArrayList<>();
-            while (!knickpunkte.isEmpty()) {
-                BendpointContainer kp = knickpunkte.remove(0);
-                BendpointContainer oldKP = findBendpointContainerCoded(kp.getHashString());
+            while (!bendpoints.isEmpty()) {
+                BendpointContainer kp = bendpoints.remove(0);
+                BendpointContainer oldKP = sourceDoc.findBendpointContainerCoded(kp.getHashString());
                 //der Container kann null sein, wenn die zu kopierende Kante auch noch mind. einen Knickpunkt in einem
                 //anderen Teilmodell hat, denn es werden beim resolven der CopyDependencies alle Knickpunkte der Kante aus
                 //allen Teilmodellen eingesammelt
                 if (oldKP == null) {
                     continue;
                 }
-                EdgeContainer kC = dest.findEdgeContainerCoded(kp.getBendpoint().getEdgeHash());
-                EdgeContainer oldKC = oldKP.getBendpoint().getOwner();
+                Bendpoint bendpoint = kp.getBendpoint();
+                String edgeHash = bendpoint.getEdgeHash();
+                EdgeContainer kC = targetDoc.findEdgeContainerCoded(edgeHash);
+
+                Bendpoint oldBendpoint = oldKP.getBendpoint();
+                EdgeContainer oldKC = oldBendpoint.getOwner();
                 if (oldKC == null) {
-                    oldKC = findEdgeContainerCoded(kC.getHashString());
+                    oldKC = sourceDoc.findEdgeContainerCoded(kC.getHashString());
                 }
                 if (kC != null) {
                     if (!edges.contains(kC.getElement())) {
                         edgeConts.add(kC);
                     }
-                    kp.getBendpoint().setOwner(kC);
-                    kC.setBendpointContainer(kp, oldKC.getIndexOfBendpoint(oldKP.getBendpoint()));
-                    dest.getLayer(kC.layerFor()).add(kp);
+                    bendpoint.setOwner(kC);
+                    int indexOfBendpoint = oldKC.getIndexOfBendpoint(oldBendpoint);
+                    kC.setBendpointContainer(kp, indexOfBendpoint);
+                    int layer = kC.layerFor();
+                    LayerContainer targetDocLayer = targetDoc.getLayer(layer);
+                    targetDocLayer.add(kp);
                 }
             }
-            for (EdgeContainer kc : edgeConts) {
-                kc.computeBorderPoints();
+            for (EdgeContainer edgeC : edgeConts) {
+                edgeC.computeBorderPoints();
             }
 
-            destMainDoc.finish_transaction(STANDARD_PID);
+            targetMainDoc.finish_transaction(pid);
         } catch (Exception ex) {
-            destMainDoc.undo(STANDARD_PID);
-            Log.show(Log.ERROR, getResString("FehlerKorrupt") + "\n" + destGDColl.getName(), ex);
+            targetMainDoc.undo(pid);
+            Log.show(Log.ERROR, sourceDoc.getResString("FehlerKorrupt") + "\n" + targetCollection.getName(), ex);
         }
-        start_transaction(STANDARD_PID, false);
-        deselectAll(true);
+        sourceDoc.start_transaction(TransactionManager.STANDARD_PID, false);
+        sourceDoc.deselectAll(true);
         for (int j = 0; j < tmpActive.size(); j++) {
-            addToSelection(tmpActive.get(j), STANDARD_PID);
+            sourceDoc.addToSelection(tmpActive.get(j), TransactionManager.STANDARD_PID);
         }
-        finish_transaction(STANDARD_PID, false);
-        distributeEvent(SELECTION_CHANGED);
-        dest.distributeEvent(DATA_CHANGED);
+        sourceDoc.finish_transaction(TransactionManager.STANDARD_PID, false);
+        sourceDoc.distributeEvent(SELECTION_CHANGED);
+        targetDoc.distributeEvent(DATA_CHANGED);
     }
 
     /**

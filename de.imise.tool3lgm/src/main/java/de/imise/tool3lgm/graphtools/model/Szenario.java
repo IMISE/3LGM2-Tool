@@ -57,18 +57,15 @@ public class Szenario extends LGMGraphDocument {
      * @return
      */
     public ElementContainer addContainerCopy(final ElementContainer ec) {
-        if (ec.getParent() == null) {
-            return null;
+        if (isMyElement(ec)) {
+            return ec;
         }
-
         ModelElement me = ec.getElement();
         Class<? extends ModelElement> meClass = me.getClass();
         ElementContainer retVal = me.getContainer(this);
-        if (retVal != null) {
-            return retVal;
+        if (retVal == null) {
+            retVal = ec.clone(false, this);
         }
-
-        retVal = ec.clone(false, this);
         if (retVal == null) {
             return null;
         }
@@ -80,12 +77,13 @@ public class Szenario extends LGMGraphDocument {
         }
 
         retVal.setParent(null);
-        int layernum = ((LayerContainer) ec.getParent()).getLayerNumber();
-        layer[layernum].add(retVal);
+        int layer = ec.layerFor();
+        LayerContainer lc = this.layer[layer];
+        lc.add(retVal);
         if (retVal instanceof EdgeContainer && me.isPaintable()) {
             for (BendpointContainer kpC : ((EdgeContainer) retVal).iterateBendpointContainers()) {
-                layer[layernum].add(kpC);
-                getCollection().addNodeToMainDoc(kpC, layernum);
+                lc.add(kpC);
+                getCollection().addNodeToMainDoc(kpC, layer);
             }
             ((EdgeContainer) retVal).computeBorderPoints();
         }
