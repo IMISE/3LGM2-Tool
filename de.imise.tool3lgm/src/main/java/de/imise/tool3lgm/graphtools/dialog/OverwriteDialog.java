@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.swing.component.text.ExtendedTextPane;
@@ -86,6 +87,15 @@ public class OverwriteDialog extends JDialog implements ActionListener {
      * COMMENTME
      */
     static Dimension dim = new Dimension(600, 300);
+
+    /**
+     * @param old
+     * @param insert
+     * @return
+     */
+    public static int showDialog(final ModelElement old, final ModelElement insert) {
+        return showDialog(Static.getMainFrame(), old, insert);
+    }
 
     /**
      * @param owner
