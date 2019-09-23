@@ -116,16 +116,14 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * Erzeut ein neues Modellelement mit einem HashString.
      */
     public ModelElement() {
-        super();
         hashstring = getNewHashString(this);
+        initContainerTable();
     }
 
-    private static void initContainerTable(final ModelElement me) {
-        if (me.containerTable == null) {
-            //bei allen Elementen, die sowieso nie mehr als 3 Container haben können (uniques und Knickpunkte) wird
-            //eine optimierte Map für die Container initialisiert
-            me.containerTable = new Flat3Map<>();
-        }
+    private void initContainerTable() {
+        //bei allen Elementen, die sowieso nie mehr als 3 Container haben können (uniques und Knickpunkte) wird
+        //eine optimierte Map für die Container initialisiert
+        containerTable = new Flat3Map<>();
     }
 
     /**
@@ -137,7 +135,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     final void setMetaModel(final MetaModel metaModel) {
         if (this.metaModel == null) {
             this.metaModel = metaModel;
-            initContainerTable(this);
         }
     }
 
@@ -158,9 +155,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     @Override
     public ModelElement clone() {
         ModelElement retVal = (ModelElement) super.clone();
-        gdcoll = null;
+        retVal.gdcoll = null;
         retVal.hashstring = getNewHashString(this);
-        initContainerTable(retVal);
+        retVal.initContainerTable();
         retVal.edges = null;
         return retVal;
     }
