@@ -28,6 +28,11 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
     /** Data model to store the loaded template libraries */
     private final TemplateLibrariesContext templateLibrariesContext = new TemplateLibrariesContext();
 
+    /**
+     *
+     */
+    private GraphDocument activeTemplate;
+
     public TemplateLibrariesManager() {
         UserProperties.addPropertyChangeListener(this);
         addAsToolChangeListener();
@@ -52,6 +57,20 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
     }
 
     /**
+     * @return the activeTemplate
+     */
+    public GraphDocument getActiveTemplate() {
+        return activeTemplate;
+    }
+
+    /**
+     * @param activeTemplate the activeTemplate to set
+     */
+    public void setActiveTemplate(final GraphDocument activeTemplate) {
+        this.activeTemplate = activeTemplate;
+    }
+
+    /**
      *
      */
     private void loadOrUnloadTemplates() {
@@ -61,6 +80,7 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
             MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
             if (Static.isDummyMetaModelContext(selectedMetaModelContext)) {
                 templateLibrariesContext.clear();
+                setActiveTemplate(null);
             } else if (!templateLibrariesContext.contains(selectedMetaModelContext)) { //templates already loaded?
                 Class<? extends MetaModelDefinition> metaModelDefinitionClass = selectedMetaModelContext.getMetaModelDefinitionClass();
                 List<TemplateLibraryProvider> templateLibraryServers = Static.loadPlugins(TemplateLibraryProvider.class);

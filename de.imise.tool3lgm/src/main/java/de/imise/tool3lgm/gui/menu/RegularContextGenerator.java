@@ -45,7 +45,6 @@ import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -59,7 +58,6 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -75,7 +73,6 @@ import javax.swing.event.PopupMenuListener;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.analyse.context.AbstractAnalysis;
@@ -113,7 +110,7 @@ import de.imise.util.swing.menu.MenuScroller;
 /**
  * @author N.N., Thomas, AXS
  */
-public class RegularContextGenerator extends ContextGenerator implements PopupMenuListener, ActionListener {
+public class RegularContextGenerator extends ContextGenerator implements PopupMenuListener {
 
     /**
      * COMMENTME
@@ -212,6 +209,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     /**
      * @return
      */
+    @Override
     public GraphDocument getDoc() {
         return Static.getSelectedDoc();
     }
@@ -278,79 +276,6 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         expand = getItem(MODEL_ACTION_SET_ELEMENT_EXPANSION_ON);
         collapse = getItem(MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF);
 
-    }
-
-    /**
-     * @param resKeyOrString
-     * @param command
-     * @param arguments
-     * @param icon
-     * @param enabled
-     * @param toolTip
-     * @return
-     */
-    private JMenuItem getItem(final String resKeyOrString, final GDCommands command, final String arguments, final ImageIcon icon, final boolean enabled, final String toolTip) {
-        String label = null;
-        label = Tool3lgmConstants.getResStringWithoutError(resKeyOrString);
-        JMenuItem item = new JMenuItem(label, icon);
-        item.addActionListener(this);
-        if (arguments == null) {
-            item.setActionCommand(command.toString());
-        } else {
-            item.setActionCommand(command + " " + arguments);
-        }
-        item.setEnabled(enabled);
-        item.setToolTipText(toolTip);
-        return item;
-    }
-
-    /**
-     * @param resKeyOrString
-     * @param command
-     * @param arguments
-     * @param icon
-     * @return
-     */
-    private JMenuItem getItem(final String resKeyOrString, final GDCommands command, final String arguments, final ImageIcon icon) {
-        return getItem(resKeyOrString, command, arguments, icon, true, null);
-    }
-
-    /**
-     * @param resKey
-     * @param command
-     * @param arguments
-     * @return
-     */
-    private JMenuItem getItem(final String resKey, final GDCommands command, final String arguments) {
-        return getItem(resKey, command, arguments, null);
-    }
-
-    /**
-     * @param resKey
-     * @param command
-     * @return
-     */
-    private JMenuItem getItem(final String resKey, final GDCommands command) {
-        return getItem(resKey, command, null);
-    }
-
-    /**
-     * @param command
-     * @return
-     */
-    private JMenuItem getItem(final GDCommands command) {
-        if (command.isModelOption()) {
-            return new JCheckBoxMenuItem(command.createAction());
-        }
-        return getItem(command.name(), command);
-    }
-
-    /**
-     * @param command
-     * @return
-     */
-    private JMenuItem getItem(final Action action) {
-        return new JMenuItem(action);
     }
 
     /**
@@ -460,12 +385,6 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             link_to_szenario_menu.add(item);
         }
         return link_to_szenario_menu;
-    }
-
-    private static void addMenuItem(final JPopupMenu menu, final JMenuItem item) {
-        menu.add(item);
-        Action action = item.getAction();
-        item.setEnabled(action == null || action.isEnabled());
     }
 
     /**
@@ -2092,12 +2011,6 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 }
             }
         };
-    }
-
-    @Override
-    public final void actionPerformed(final ActionEvent e) {
-        GraphDocument doc = getDoc();
-        doc.exec(e.getActionCommand(), STANDARD_PID);
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------

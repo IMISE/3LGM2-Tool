@@ -170,9 +170,13 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                     //und ist somit das Element, bezüglich dessen für andere selektierte Elemente das Kontextmenü angeboten wird
                     ec.getGraphDocument().addToSelection(ec, ModelBrowserTree.PID);
                     ContextGenerator contextGenerator = tree.getContextGenerator();
-                    JPopupMenu pm = contextGenerator.getNodeContextMenu(tree);
-                    if (pm != null) {
-                        pm.show(tree, xin + 3, yin + 3);
+                    TreePath clickedTreePath = tree.getPathForLocation(xin, yin);
+                    if (clickedTreePath != null) {
+                        tree.addSelectionPath(clickedTreePath); // das muss sein, damit der ContextGenerator der Templates das Doc ermitteln kann
+                        JPopupMenu pm = contextGenerator.getNodeContextMenu(tree);
+                        if (pm != null) {
+                            pm.show(tree, xin + 3, yin + 3);
+                        }
                     }
                 }
             }

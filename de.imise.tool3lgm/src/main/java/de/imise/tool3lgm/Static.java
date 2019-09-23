@@ -208,6 +208,16 @@ public class Static {
     }
 
     /**
+     * @param doc
+     */
+    public static final void setActiveTemplate(final GraphDocument doc) {
+        TemplateLibrariesManager templateLibrariesManager = getTemplateLibrariesManager();
+        if (templateLibrariesManager != null) {
+            templateLibrariesManager.setActiveTemplate(doc);
+        }
+    }
+
+    /**
      * Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus klickt, um an
      * der entsprechenden Stelle einen Dialog auf gehen zu lassen.
      */
