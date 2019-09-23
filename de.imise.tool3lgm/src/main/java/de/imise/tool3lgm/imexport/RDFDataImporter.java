@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -96,7 +97,15 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     Individual individual = ontModel.getIndividual(uri);
                     OntClass individualOntClass = individual.getOntClass();
                     if (individualOntClass.equals(ontClass)) {
-                        String name = ontNode.getLabel(null); //ontNode.getLocalName(); //label ist der Anzeigename und localName ist der techn. Bezeichner
+                        Locale locale = Locale.getDefault();
+                        String language = locale.getLanguage();
+                        String name = ontNode.getLabel(language); //ontNode.getLocalName(); //label ist der Anzeigename und localName ist der techn. Bezeichner
+                        if (Strings.isNullOrEmpty(name)) {
+                            name = ontNode.getLabel(null);
+                        }
+                        if (Strings.isNullOrEmpty(name)) {
+                            name = ontNode.getLocalName();
+                        }
                         RDFNode propertyValue = ontNode.getPropertyValue(descriptionProperty);
                         String description = propertyValue == null ? "" : propertyValue.toString();
                         String hashString = ontNode.getURI();
