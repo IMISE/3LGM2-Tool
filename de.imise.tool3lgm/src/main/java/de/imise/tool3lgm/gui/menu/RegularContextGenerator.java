@@ -104,6 +104,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
@@ -113,7 +114,7 @@ import de.imise.util.swing.menu.MenuScroller;
 /**
  * @author N.N., Thomas, AXS
  */
-public class ContextGenerator implements PopupMenuListener, ActionListener {
+public class RegularContextGenerator implements PopupMenuListener, ActionListener {
 
     /**
      * COMMENTME
@@ -210,7 +211,7 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
      * changeContext(GraphDocument) eines InternalFrames auf korrekte Werte
      * gesetzt werden.
      */
-    public ContextGenerator() {
+    public RegularContextGenerator() {
         setControlled(false);
         init();
     }
@@ -995,6 +996,10 @@ public class ContextGenerator implements PopupMenuListener, ActionListener {
     public final JPopupMenu getNodeContextMenu(final Component source) {
         JPopupMenu menu = new JPopupMenu();
         GraphDocument doc = getDoc();
+        if (source instanceof TemplateBrowserTree) {
+            TemplateBrowserTree tree = (TemplateBrowserTree) source;
+            doc = tree.getGraphDocument();
+        }
         if (doc.isSelectedOnlyBendpoints()) {
             if (doc instanceof Szenario) {
                 menu.add(delete_selected_from_szenario);

@@ -44,7 +44,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.gui.menu.ContextGenerator;
+import de.imise.tool3lgm.gui.menu.RegularContextGenerator;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -514,7 +514,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             } else {
                 // Jede einzelne der 3 Ebenen wird erstmal durchkaemmt.
                 ka = null;
-                final ContextGenerator contextGenerator = Static.contextGenerator;
+                final RegularContextGenerator contextGenerator = Static.contextGenerator;
                 // 1. Ob man in eine Hand eines Knotens getroffen hat
                 ka = chooseResizable(layer, x, y);
                 if (ka != null) {
@@ -609,7 +609,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         xin = e.getX();
         yin = e.getY();
         computeRealCoordinates(false);
-        final ContextGenerator contextGenerator = Static.contextGenerator;
+        final RegularContextGenerator contextGenerator = Static.contextGenerator;
         if (mouse_makes_edge && left_button) {
             for (int layerIndex = MAX_LAYER_INDEX; layerIndex >= MIN_LAYER_INDEX; layerIndex--) {
                 if (isInterLayer(layerIndex)) {
@@ -626,7 +626,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     Set<Class<? extends ModelElement>> selectedRealElementClasses = szenario.getSelectedRealElementClasses();
                     if (!selectedRealElementClasses.isEmpty()) {
                         Class<? extends ModelElement> otherSelectedClass = ReflectionUtils.getCommonSuperClass(selectedRealElementClasses).asSubclass(ModelElement.class);
-                        Class<? extends Edge> edgeClass = ContextGenerator.requestCurrentEdgeType(szenario.getMetaModel(), lastSelectedClass, otherSelectedClass);
+                        Class<? extends Edge> edgeClass = RegularContextGenerator.requestCurrentEdgeType(szenario.getMetaModel(), lastSelectedClass, otherSelectedClass);
                         if (edgeClass != null) {
                             szenario.linkSelected(edgeClass, BACKWARD, STANDARD_PID);
                         }
