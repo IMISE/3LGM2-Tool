@@ -72,6 +72,7 @@ import javax.swing.event.PopupMenuListener;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -2037,11 +2038,13 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @return
      */
     private JMenuItem getAddToModelMenu() {
-        if (Static.getCollectionCount() < 2) {
+        MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
+        List<GDCollection> collections = Static.getCollections(selectedMetaModelContext);
+        if (collections.size() < 2) {
             return null;
         }
         JMenu menu = new JMenu(getResString("inmodel"));
-        for (GDCollection gdcoll : Static.iterableCollections()) {
+        for (GDCollection gdcoll : collections) {
             GraphDocument doc = getDoc();
             if (gdcoll != doc.getCollection()) {
                 menu.add(getSubModelMenu(gdcoll));

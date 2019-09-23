@@ -170,6 +170,22 @@ public class Static {
     }
 
     /**
+     * @param metaModelContext
+     * @return all models with the given metamodel context
+     */
+    public static List<GDCollection> getCollections(final MetaModelContext metaModelContext) {
+        List<GDCollection> collections = new ArrayList<>();
+        if (tool != null) {
+            for (GDCollection gdcoll : tool.iterableCollections()) {
+                if (gdcoll.hasMetaModelContext(metaModelContext)) {
+                    collections.add(gdcoll);
+                }
+            }
+        }
+        return collections;
+    }
+
+    /**
      * return all InternalFrames at desktop
      *
      * @return AbstractInternalFrame[]
