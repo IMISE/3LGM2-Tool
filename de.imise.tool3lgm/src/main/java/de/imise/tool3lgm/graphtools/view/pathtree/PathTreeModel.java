@@ -92,6 +92,13 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     }
 
     /**
+     * @return
+     */
+    public PathTreeDefinition getPathTreeDefinition() {
+        return treeDefinition;
+    }
+
+    /**
      * @param parent
      * @param hierarchyDefinitionObject
      * @return

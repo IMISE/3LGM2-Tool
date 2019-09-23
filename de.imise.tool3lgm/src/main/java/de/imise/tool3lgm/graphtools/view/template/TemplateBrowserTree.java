@@ -75,16 +75,52 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         }
         TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
         PathTreeDefinition templateTreeDefinition = templateLibrariesManager.getTemplateTreeDefintion(newMetaModelContext);
+        PathTreeDefinition oldTreeDefinition = pathTreeModel.getPathTreeDefinition();
+        saveExpansionState(oldTreeDefinition);
         setRootVisible(true);
         setSelectionListenerActive(false);
         pathTreeModel.setTreeDefinition(templateTreeDefinition);
         setSelectionListenerActive(true);
+        setRootVisible(false);
+        restoreExpansionState(templateTreeDefinition);
+    }
+
+    //    /**
+    //     * Aus irgendeinem Grund expanded er den Baum nicht wieder - ARRRGGGHH!!
+    //     */
+    //    private final Map<PathTreeDefinition, Enumeration<TreePath>> treeDefintionToExpandedPaths = new HashMap<>();
+    //
+    //    private TreePath rootPath;
+    //
+    /**
+     * @param treeDefinition
+     */
+    private void saveExpansionState(final PathTreeDefinition treeDefinition) {
+        //        if (treeDefinition != null) {
+        //            if (rootPath == null) {
+        //                rootPath = getRootPath();
+        //            }
+        //            Enumeration<TreePath> expandedPaths = getExpandedDescendants(rootPath);
+        //            treeDefintionToExpandedPaths.put(treeDefinition, expandedPaths);
+        //        }
+    }
+
+    /**
+     * @param treeDefinition
+     */
+    private void restoreExpansionState(final PathTreeDefinition treeDefinition) {
+        //        if (treeDefinition != null) {
+        //            Enumeration<TreePath> expandedPaths = treeDefintionToExpandedPaths.get(treeDefinition);
+        //            if (expandedPaths != null) {
+        //                setExpandedPaths(expandedPaths);
+        //            } else {
         try {
             expandRow(0);
             expandRow(1);
         } catch (Exception e) {
         }
-        setRootVisible(false);
+        //            }
+        //        }
     }
 
     @Override
