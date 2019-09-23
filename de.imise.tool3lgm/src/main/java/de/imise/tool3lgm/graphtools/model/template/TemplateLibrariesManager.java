@@ -83,9 +83,9 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
                 setActiveTemplate(null);
             } else if (!templateLibrariesContext.contains(selectedMetaModelContext)) { //templates already loaded?
                 Class<? extends MetaModelDefinition> metaModelDefinitionClass = selectedMetaModelContext.getMetaModelDefinitionClass();
-                List<TemplateLibraryProvider> templateLibraryServers = Static.loadPlugins(TemplateLibraryProvider.class);
-                removeUnfittingTemplateLibraryServers(templateLibraryServers, metaModelDefinitionClass);
-                addTemplateLibraries(templateLibraryServers);
+                List<TemplateLibraryProvider> templateLibraryProviders = Static.loadPlugins(TemplateLibraryProvider.class);
+                removeUnfittingTemplateLibraryServers(templateLibraryProviders, metaModelDefinitionClass);
+                addTemplateLibraries(templateLibraryProviders);
 
             }
         }
@@ -97,23 +97,23 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
      * than the given class. Same means that the given metamodel definition class must be the
      * same class or a superclass.
      *
-     * @param templateLibraryServers
+     * @param templateLibraryProviders
      * @param metaModelDefinitionClass
      */
-    private void removeUnfittingTemplateLibraryServers(final List<TemplateLibraryProvider> templateLibraryServers, final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
-        for (int i = templateLibraryServers.size() - 1; i >= 0; i--) {
-            TemplateLibraryProvider templateLibraryServer = templateLibraryServers.get(i);
+    private void removeUnfittingTemplateLibraryServers(final List<TemplateLibraryProvider> templateLibraryProviders, final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        for (int i = templateLibraryProviders.size() - 1; i >= 0; i--) {
+            TemplateLibraryProvider templateLibraryServer = templateLibraryProviders.get(i);
             if (!templateLibraryServer.hasMetaModelDefinitionClass(metaModelDefinitionClass)) {
-                templateLibraryServers.remove(i);
+                templateLibraryProviders.remove(i);
             }
         }
     }
 
     /**
-     * @param templateLibraryServers
+     * @param templateLibraryProviders
      */
-    private void addTemplateLibraries(final Iterable<TemplateLibraryProvider> templateLibraryServers) {
-        for (TemplateLibraryProvider templateLibraryServer : templateLibraryServers) {
+    private void addTemplateLibraries(final Iterable<TemplateLibraryProvider> templateLibraryProviders) {
+        for (TemplateLibraryProvider templateLibraryServer : templateLibraryProviders) {
             GDCollection templateModel = templateLibraryServer.getTemplateLibrary();
             TemplateViewDefinition templateViewDefinition = templateLibraryServer.getViewDefinition();
             List<PathTreeBranchDefinition> treeBranchDefinition = templateViewDefinition.getTreeBranchDefinition();
