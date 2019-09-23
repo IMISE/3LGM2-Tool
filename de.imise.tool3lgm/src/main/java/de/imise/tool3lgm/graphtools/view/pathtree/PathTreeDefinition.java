@@ -12,6 +12,9 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
  */
 public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iterable<PathTreeBranchDefinition> {
 
+    /**
+     *
+     */
     private final List<PathTreeBranchDefinition> branches = new ArrayList<>();
 
     /**
@@ -49,6 +52,36 @@ public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iter
      */
     public boolean isEmpty() {
         return branches.isEmpty();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (branches == null ? 0 : branches.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        PathTreeDefinition other = (PathTreeDefinition) obj;
+        if (branches == null) {
+            if (other.branches != null) {
+                return false;
+            }
+        } else if (!branches.equals(other.branches)) {
+            return false;
+        }
+        return true;
     }
 
 }
