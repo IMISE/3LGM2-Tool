@@ -1,8 +1,12 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
+import java.util.Enumeration;
+
 import javax.swing.JTree;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
@@ -64,12 +68,42 @@ public abstract class DynamicTree extends JTree implements GraphDocumentOwner {
         return false;
     }
 
+    /**
+     * @param active
+     */
     void setTransactionListenerActive(final boolean active) {
 
     }
 
+    /**
+     * @param node
+     * @return
+     */
     public boolean setActiveLayer(final LGMTreeNode node) {
         return false;
+    }
+
+    /**
+     * @return
+     */
+    public TreePath getRootPath() {
+        DefaultTreeModel model = (DefaultTreeModel) getModel();
+        TreeNode root = (TreeNode) model.getRoot();
+        TreeNode[] pathToRoot = model.getPathToRoot(root);
+        TreePath rootPath = new TreePath(pathToRoot);
+        return rootPath;
+    }
+
+    /**
+     * @param expandedPaths
+     */
+    public final void setExpandedPaths(final Enumeration<TreePath> expandedPaths) {
+        if (expandedPaths != null) {
+            while (expandedPaths.hasMoreElements()) {
+                TreePath path = expandedPaths.nextElement();
+                expandPath(path);
+            }
+        }
     }
 
 }

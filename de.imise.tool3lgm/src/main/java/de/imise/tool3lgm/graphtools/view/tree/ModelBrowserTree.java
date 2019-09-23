@@ -118,7 +118,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         this.doc = doc;
         initTree();
         nodesToClear = elementClassToParentNode.values();
-        rootPath = new TreePath(((DefaultTreeModel) getModel()).getPathToRoot((LGMTreeNode) getModel().getRoot()));
+        rootPath = getRootPath();
         //alle KeyStrokes im Baum hinzufügen, die systemweit gelten sollen. Da der Baum schon eine eigene InputMap und ActionMap hat,
         //werden die ShortCuts aus dem RootPane des Tools hier nicht auch beachtet und müssen explizit hinzugefügt werden
         KeyStrokes.registerPublicKeyStrokes(this);
@@ -624,19 +624,14 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     //	----------------------------------------------------------------------------------------------------------------------------------
-    Enumeration<TreePath> expansionEnum = null;
+    Enumeration<TreePath> expandedPaths = null;
 
     private void saveExpansionState() {
-        expansionEnum = getExpandedDescendants(rootPath);
+        expandedPaths = getExpandedDescendants(rootPath);
     }
 
-    private void restoreExpansionState() {
-        if (expansionEnum != null) {
-            while (expansionEnum.hasMoreElements()) {
-                TreePath path = expansionEnum.nextElement();
-                expandPath(path);
-            }
-        }
+    public final void restoreExpansionState() {
+        setExpandedPaths(expandedPaths);
     }
 
     private boolean isShowUserDefinedPropertiesInModelBrowser() {
