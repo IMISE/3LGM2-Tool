@@ -52,6 +52,7 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
         boolean oldBulkMode = gdcoll.setBulkMode(true);
         boolean importData = importData();
         gdcoll.setBulkMode(oldBulkMode);
+        Tool3lgmMetaModelContext.removeAllImportMetaModels();
         return importData;
     }
 

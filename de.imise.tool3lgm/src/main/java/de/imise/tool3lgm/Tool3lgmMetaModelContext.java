@@ -271,10 +271,21 @@ public final class Tool3lgmMetaModelContext {
         }
         MetaModelContext metaModelContext = new MetaModelContext(metaModelDefinitionClass);
         //die Definition nur merken, wenn es keine ImportDefinition ist. Die ImportDefinitionen sind sehr einfach aufgebaut und können einfach immer wieder initialisiert werden
-        if (!ImportMetaModelDefinition.class.isAssignableFrom(metaModelDefinitionClass)) {
-            ALL_METAMODEL_CONTEXTS.add(metaModelContext);
-        }
+        ALL_METAMODEL_CONTEXTS.add(metaModelContext);
         return metaModelContext;
+    }
+
+    /**
+     * Löscht alle Import-Metamdodelle aus dem Kontext
+     */
+    public static final void removeAllImportMetaModels() {
+        for (int i = ALL_METAMODEL_CONTEXTS.size() - 1; i >= 0; i--) {
+            MetaModelContext metaModelContext = ALL_METAMODEL_CONTEXTS.get(i);
+            Class<? extends MetaModelDefinition> metaModelDefinitionClass = metaModelContext.getMetaModelDefinitionClass();
+            if (ImportMetaModelDefinition.class.isAssignableFrom(metaModelDefinitionClass)) {
+                ALL_METAMODEL_CONTEXTS.remove(i);
+            }
+        }
     }
 
 }
