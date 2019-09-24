@@ -70,7 +70,6 @@ public class IheRDFDataImporter extends RDFDataImporter {
      */
     public IheRDFDataImporter() {
         this(TEST_FILE);
-        init();
     }
 
     /**
