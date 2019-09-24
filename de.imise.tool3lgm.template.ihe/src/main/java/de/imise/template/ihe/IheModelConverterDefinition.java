@@ -15,18 +15,23 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMetaPathsCreationDefinition.NameSource;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.metamodel.service.TLGMServiceMetaModel;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheDomain_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.node.IheActor;
 import de.imise.tool3lgm.metamodel.service.node.IheDomain;
 import de.imise.tool3lgm.metamodel.service.node.IheIntegrationProfile;
+import de.imise.tool3lgm.metamodel.service.node.IheInterface;
 
 /**
  * @author AXS (10 Jun 2019)
@@ -69,6 +74,36 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
         TargetMetaPathsCreationDefinition def = new TargetMetaPathsCreationDefinition(actorTransactionActorMetaPath);
         def.addElementNameCreationPattern(1, NameSource.PATH_STEP_EDGE_NAME); //EndElement der 2.Kante im Pfad ( IheInvokingInterface_IheTransaction_Edge -> EndElement = Transaction) soll den Namen der Ursprungskante bekommen
         return ImmutableMap.of(IheTransaction_Edge.class, def);
+    }
+
+    @Override
+    public void transform(final GDCollection source, final GDCollection target) {
+        //das hier macht aus dem Namen "IHE Schnittstelle (bereistellend) 33" den Namen "ITI-43 Schnittstelle (bereitstellend)", je nachdem mit welcher Transaktion die Schnittstelle verbunden ist
+        LGMGraphDocument doc = target.getMainGraphDocument();
+        for (ModelElement me : doc.getModelItems(IheInterface.class, true)) {
+            StringBuilder sb = new StringBuilder();
+            for (ModelElement connected : me.getConnectedElements(IheInterface_IheTransaction_Edge.class)) {
+                String name = connected.getName();
+                if (name.startsWith("ITI-")) {
+                    int firstWhiteSpaceIndex = name.indexOf(' ');//ITI-XX vorne extrahieren
+                    if (firstWhiteSpaceIndex > 0) {
+                        name = name.substring(0, firstWhiteSpaceIndex);
+                    }
+                }
+                sb.append(name);
+                sb.append(" ");
+            }
+            String name = me.getName();
+            if (name.startsWith("IHE") && name.length() > 3) {//3 ist die Länge von IHE
+                int lastWhiteSpaceIndex = name.lastIndexOf(' '); //die durchnummerierte Zahl des generierten Namens hinten abschneiden
+                if (lastWhiteSpaceIndex > 3) {
+                    name = name.substring(3, lastWhiteSpaceIndex).trim();
+                }
+            }
+            sb.append(name);
+            name = sb.toString();
+            me.setName(name);
+        }
     }
 
 }
