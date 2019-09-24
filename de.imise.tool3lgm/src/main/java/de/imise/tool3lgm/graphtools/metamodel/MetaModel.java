@@ -576,13 +576,17 @@ public final class MetaModel implements MetaModelSpecific {
                 for (SimpleMetaPath metaPath : createableMetaPathsNonAbstract) {
                     Collection<Class<? extends ModelElement>> startClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
                     for (Class<? extends ModelElement> startClass : startClasses) {
-                        builder.put(startClass, metaPath);
+                        if (metaPath.isStartClass(startClass)) { //checken, falls RemovedEdges dabei sind
+                            builder.put(startClass, metaPath);
+                        }
                     }
                     //Gegenrichtung des Pfades für die Endklasse als Startklasse hinzufügen
                     metaPath = metaPath.getOtherDirection();
                     Collection<Class<? extends ModelElement>> endClasses = getInstanciableAssignableClasses(metaPath.getStartClass());
                     for (Class<? extends ModelElement> endClass : endClasses) {
-                        builder.put(endClass, metaPath);
+                        if (metaPath.isStartClass(endClass)) { //checken, falls RemovedEdges dabei sind
+                            builder.put(endClass, metaPath);
+                        }
                     }
                 }
             }
