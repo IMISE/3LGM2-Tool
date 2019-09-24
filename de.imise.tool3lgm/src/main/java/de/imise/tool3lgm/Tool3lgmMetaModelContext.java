@@ -176,7 +176,7 @@ public final class Tool3lgmMetaModelContext {
     public static final Tool3lgmModelType chooseModelType() {
         AlphabeticalComboBox chooseMetaModelComboBox = getChooseMetaModelComboBox();
         JCheckBox expertModeCreateAsTemplateCheckBox = OPTION_ENABLE_EXPERT_MODE.is() ? new JCheckBox(getResString("choose_meta_model_dialog_create_template_model"), false) : null;
-        JCheckBox showThisDialogAgainCheckBox = new JCheckBox(getResString("show_this_dialog_at_start"), OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.is());
+        JCheckBox showThisDialogAgainCheckBox = new JCheckBox(getResString("show_this_dialog_when_creating_new_model"), OPTION_SHOW_CHOOSE_METAMODEL_DIALOG.is());
         MultipleOptionPane optionPane = new MultipleOptionPane();
         if (expertModeCreateAsTemplateCheckBox == null) {
             Object msg[] = {
