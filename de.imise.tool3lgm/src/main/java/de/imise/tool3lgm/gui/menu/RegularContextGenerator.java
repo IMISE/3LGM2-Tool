@@ -2047,7 +2047,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         for (GDCollection gdcoll : collections) {
             GraphDocument doc = getDoc();
             if (gdcoll != doc.getCollection()) {
-                menu.add(getCopyToModelsMenu(gdcoll));
+                menu.add(getCopyToModelMenu(gdcoll));
             }
         }
         return menu;
