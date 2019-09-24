@@ -1959,37 +1959,33 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             for (NodeContainer nc : lc.getGraphNodeContainers()) {
                 Node node = nc.getNode();
                 for (GraphDocument doc : export) {
-                    if (doc.isMyElement(node)) {
-                        ElementContainer container = node.getContainer(doc);
-                        if (!elements.contains(node)) {
-                            elements.add(node);
-                            String iconName = ((NodeContainer) container).getIconString();
-                            if (iconName != null) {
-                                bitmaps.add(iconName);
-                            }
-                            resolveCopyDependencies(node, elements, userFields);
+                    ElementContainer container = node.getContainer(doc);
+                    if (container != null && !elements.contains(node)) {
+                        elements.add(node);
+                        String iconName = ((NodeContainer) container).getIconString();
+                        if (iconName != null) {
+                            bitmaps.add(iconName);
                         }
+                        resolveCopyDependencies(node, null, elements, userFields);
                     }
                 }
             }
             for (EdgeContainer ec : lc.getEdgeContainers()) {
                 Edge edge = ec.getEdge();
                 for (GraphDocument doc : export) {
-                    if (doc.isMyElement(edge)) {
-                        if (!elements.contains(edge)) {
-                            elements.add(edge);
-                            resolveCopyDependencies(edge, elements, userFields);
-                        }
+                    ElementContainer container = edge.getContainer(doc);
+                    if (container != null && !elements.contains(edge)) {
+                        elements.add(edge);
+                        resolveCopyDependencies(edge, null, elements, userFields);
                     }
                 }
             }
             for (BendpointContainer bc : lc.getBendpointContainers()) {
                 Bendpoint bendpoint = bc.getBendpoint();
                 for (GraphDocument doc : export) {
-                    if (doc.isMyElement(bendpoint)) {
-                        if (!elements.contains(bendpoint)) {
-                            elements.add(bendpoint);
-                        }
+                    ElementContainer container = bendpoint.getContainer(doc);
+                    if (container != null && !elements.contains(bendpoint)) {
+                        elements.add(bendpoint);
                     }
                 }
             }
@@ -2007,7 +2003,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             if (!result.contains(me)) {
                 if (!(me instanceof Bendpoint)) {
                     result.add(me);
-                    resolveCopyDependencies(me, result, userFields);
+                    resolveCopyDependencies(me, null, result, userFields);
                 }
             }
         }
@@ -2021,10 +2017,11 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     /**
      * @param me Element dessen abhängige Elemente gefunden werden sollen
+     * @p
      * @param elements
      * @param userFields
      */
-    private void resolveCopyDependencies(final ModelElement me, final List<ModelElement> elements, final Set<UserField> userFields) {
+    private void resolveCopyDependencies(final ModelElement me, final Class<? extends ModelElement> ignoreClass, final List<ModelElement> elements, final Set<UserField> userFields) {
         if (me instanceof Bendpoint) {
             return;
         }
@@ -2045,25 +2042,27 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             ModelElement start = edge.getStart();
             if (!elements.contains(start)) {
                 elements.add(start);
-                resolveCopyDependencies(start, elements, userFields);
+                resolveCopyDependencies(start, me.getClass(), elements, userFields);
             }
             ModelElement end = edge.getEnd();
             if (!elements.contains(end)) {
                 elements.add(end);
-                resolveCopyDependencies(end, elements, userFields);
+                resolveCopyDependencies(end, me.getClass(), elements, userFields);
             }
         }
         for (Class<? extends ModelElement> elementClass : metaModel.getCopyDependencies(me.getClass())) {
-            for (ElementContainer ec : me.getConnectedContainers(elementClass, doc)) {
-                ModelElement connected = ec.getElement();
-                if (!elements.contains(connected)) {
-                    elements.add(connected);
-                    resolveCopyDependencies(connected, elements, userFields);
-                }
-                for (Edge e : me.getEdgesWith(connected)) {
-                    if (!elements.contains(e)) {
-                        elements.add(e);
-                        resolveCopyDependencies(e, elements, userFields);
+            if (ignoreClass == null || !elementClass.isAssignableFrom(ignoreClass)) {
+                for (ElementContainer ec : me.getConnectedContainers(elementClass, doc)) {
+                    ModelElement connected = ec.getElement();
+                    if (!elements.contains(connected)) {
+                        elements.add(connected);
+                        resolveCopyDependencies(connected, me.getClass(), elements, userFields);
+                    }
+                    for (Edge e : me.getEdgesWith(connected)) {
+                        if (!elements.contains(e)) {
+                            elements.add(e);
+                            resolveCopyDependencies(e, me.getClass(), elements, userFields);
+                        }
                     }
                 }
             }
@@ -2074,7 +2073,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             for (Edge ka : me.getEdgesWith(m)) {
                 if (!elements.contains(ka)) {
                     elements.add(ka);
-                    resolveCopyDependencies(ka, elements, userFields);
+                    resolveCopyDependencies(ka, me.getClass(), elements, userFields);
                 }
             }
         }
