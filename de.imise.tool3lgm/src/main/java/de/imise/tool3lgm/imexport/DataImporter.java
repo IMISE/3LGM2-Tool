@@ -12,6 +12,7 @@ import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -25,7 +26,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
  *
  * @author AXS (7 Jun 2019)
  */
-public abstract class DataImporter<T> implements GDCollectionOwner {
+public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpecific {
 
     /**
      * Mappt von einem eine Knotenklassen-Instanz repräsentierenden Objekt auf den im 3LGM2-Import-Modell erzeugten korrespondierenden Knoten. Über
@@ -38,9 +39,6 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      * Das zu füllende Import-Modell
      */
     protected GDCollection gdcoll;
-
-    public DataImporter() {
-    }
 
     /**
      * Importiert alle Daten aus einer Datenquelle ins übergebene Modell.
@@ -68,6 +66,11 @@ public abstract class DataImporter<T> implements GDCollectionOwner {
      * @return Klasse des Metamodells, das dem Modell (der {@link GDCollection}) zugrunde liegt, in die importiert wird.
      */
     public abstract Class<? extends MetaModelDefinition> getImportMetaModelDefinitionClass();
+
+    @Override
+    public Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+        return getImportMetaModelDefinitionClass();
+    }
 
     /**
      * Initialisiert ein Modell ({@link GDCollection}) mit dem übergebenen Metamodel. Diese Funktion könnte woanders hin, wo evtl auch der

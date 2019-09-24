@@ -1,11 +1,17 @@
 package de.imise.tool3lgm.imexport;
 
+import static de.imise.tool3lgm.imexport.RDFDataImporter.NameCreationPatternStandardIndentifier.LABEL;
+import static de.imise.tool3lgm.imexport.RDFDataImporter.NameCreationPatternStandardIndentifier.LOCAL_NAME;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.apache.jena.ontology.AnnotationProperty;
@@ -45,9 +51,9 @@ import de.imise.util.StringUtils;
  */
 public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> implements DataPrinter {
 
-    public enum NameCreationPattern {
+    public static enum NameCreationPatternStandardIndentifier {
         LOCAL_NAME,
-        LABEL
+        LABEL,
     }
 
     /**
@@ -152,6 +158,85 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
+     * @param ontModel
+     * @param elementClassName
+     * @return
+     */
+    private List<Object> createRealPattern(final OntModel ontModel, final String elementClassName) {
+        MetaModel metaModel = getMetaModel();
+        Class<? extends ModelElement> elementClass = metaModel.getClassForName(elementClassName);
+        return createRealPattern(ontModel, elementClass);
+    }
+
+    /**
+     * @param ontModel
+     * @param elementClass
+     * @return
+     */
+    private List<Object> createRealPattern(final OntModel ontModel, final Class<? extends ModelElement> elementClass) {
+        final Object[] patternObjects = elementClassToNamePattern.get(elementClass);
+        if (patternObjects == null) {
+            return null;
+        }
+        List<Object> realPattern = new ArrayList<>();
+        for (Object patternObject : patternObjects) {
+            if (patternObject instanceof OntPropertyName) {
+                OntPropertyName ontPropertyName = (OntPropertyName) patternObject;
+                OntPropertyResolver ontPropertyResolver = new OntPropertyResolver(ontModel, ontPropertyName);
+                realPattern.add(ontPropertyResolver);
+            } else {
+                realPattern.add(patternObject);
+            }
+        }
+        return realPattern;
+    }
+
+    /**
+     * @param ontNode
+     * @return
+     */
+    private String getLabel(final OntResource ontNode) {
+        Locale locale = Locale.getDefault();
+        String language = locale.getLanguage();
+        String name = ontNode.getLabel(language); //ontNode.getLocalName(); //label ist der Anzeigename und localName ist der techn. Bezeichner
+        if (Strings.isNullOrEmpty(name)) {
+            name = ontNode.getLabel(null);
+        }
+        return name;
+    }
+
+    /**
+     * @param ontResource
+     * @param namePattern
+     * @return
+     */
+    private String getName(final OntResource ontResource, final List<Object> namePattern) {
+        if (namePattern == null || namePattern.isEmpty()) {
+            String name = getLabel(ontResource);
+            if (Strings.isNullOrEmpty(name)) {
+                name = ontResource.getLocalName();
+            }
+            return name;
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Object patternObject : namePattern) {
+            String append;
+            if (patternObject == LABEL) {
+                append = getLabel(ontResource);
+            } else if (patternObject == LOCAL_NAME) {
+                append = ontResource.getLocalName();
+            } else if (patternObject instanceof OntPropertyResolver) {
+                OntPropertyResolver propertyResolver = (OntPropertyResolver) patternObject;
+                append = propertyResolver.getValue(ontResource);
+            } else {
+                append = Objects.toString(patternObject);
+            }
+            sb.append(append);
+        }
+        return sb.toString();
+    }
+
+    /**
      * Fragt in der Ontologie alle Class-Knoten ab, deren Klasse denselben Namen hat, wie eine Klasse aus dem Metamodell des zu füllenden
      * 3LGM2-Modells und legt in diesem 3LGM2-Modell für jede Instanz des Class-Knotens im RDF-Quellmodell einen Knoten im 3LGM2-Zielmodell an.
      * Außerdem werden die Class-Knoten und der korrespondierende 3LGM2-Knoten in einer Map in DataImporter gespeichert.
@@ -170,6 +255,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                 Class<? extends ModelElement> lgmClass = metaModel.getClassForName(ontClassName);
                 Class<? extends Node> lgmNodeClass = lgmClass.asSubclass(Node.class);
                 print(ontClassName + " > " + lgmClass);
+                List<Object> namePattern = createRealPattern(ontModel, lgmClass);
                 int i = 1;
                 for (Iterator<? extends OntResource> ontNodes = ontClass.listInstances(true); ontNodes.hasNext();) {
                     //Wenn die Ontologie nicht ganz richtig modelliert ist, kann es vorkommen, dass ontClass.listInstances(true) auch
@@ -181,15 +267,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     Individual individual = ontModel.getIndividual(uri);
                     OntClass individualOntClass = individual.getOntClass();
                     if (individualOntClass.equals(ontClass)) {
-                        Locale locale = Locale.getDefault();
-                        String language = locale.getLanguage();
-                        String name = ontNode.getLabel(language); //ontNode.getLocalName(); //label ist der Anzeigename und localName ist der techn. Bezeichner
-                        if (Strings.isNullOrEmpty(name)) {
-                            name = ontNode.getLabel(null);
-                        }
-                        if (Strings.isNullOrEmpty(name)) {
-                            name = ontNode.getLocalName();
-                        }
+                        String name = getName(ontNode, namePattern);
                         String description = descriptionPropertyResolver.getValue(ontNode);
                         String hashString = ontNode.getURI();
                         hashString = HashStringGenerator.getHash(hashString); //TimeStamp und eine Nummer and die URI als Hash anhängen
@@ -201,6 +279,25 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                 }
             }
         }
+    }
+
+    //    private void property(final OntModel ontModel, final Property p) {
+    //        ontModel.listObjectProperties();
+    //        System.err.println(p);
+    //
+    //    }
+    //
+    //    private void statement(final Statement s) {
+    //        System.err.println(s);
+    //    }
+
+    private OntProperty getOntProperty(final Property property, final Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName) {
+        for (ObjectProperty objectProperty : importableObjectPropertiesToTargetEdgeClassName.keySet()) {
+            if (objectProperty.equals(property)) {
+                return objectProperty;
+            }
+        }
+        return null;
     }
 
     /**
@@ -221,6 +318,8 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
             //Predicate == importiertbare ObjectProperty?
             Property predicate = statement.getPredicate();
             String targetEdgeClassName = importableObjectPropertiesToTargetEdgeClassName.get(predicate);
+
+            List<Object> namePattern = createRealPattern(ontModel, targetEdgeClassName);
             if (targetEdgeClassName != null) {
                 //Subject == Knoten aus dem SourceModel?
                 Resource subjectResource = statement.getSubject();
@@ -233,10 +332,14 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                         //Predicate -> Edge
                         String predicateUri = predicate.getURI();
                         String edgeHash = HashStringGenerator.getHash(predicateUri);
-                        String predicateLocalName = predicate.getLocalName();
+                        OntProperty ontProperty = getOntProperty(predicate, importableObjectPropertiesToTargetEdgeClassName);
+                        String name = getName(ontProperty, namePattern);
+                        if (namePattern != null) {
+                            System.err.println();
+                        }
                         String description = descriptionPropertyResolver.getValue(predicate);
                         try {
-                            Edge lgmEdge = addEdge(targetEdgeClassName, predicateLocalName, edgeHash, startNode, endNode);
+                            Edge lgmEdge = addEdge(targetEdgeClassName, name, edgeHash, startNode, endNode);
                             lgmEdge.setDescription(description);
                             printe(i++ + "\t" + targetEdgeClassName + " (" + lgmEdge.getHashString() + ")" + " -> " + startNode + "  ->  " + endNode + " " + lgmEdge + " " + description);
                         } catch (Exception e) {
@@ -350,6 +453,21 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
             returnSet.add(simpleName);
         }
         return returnSet;
+    }
+
+    /**
+     *
+     */
+    private final Map<Class<? extends ModelElement>, Object[]> elementClassToNamePattern = new HashMap<>();
+
+    /**
+     * Fügt ein Pattern zur Erzeugung des Namens der Elemente aus der Importquelle hinzu.
+     *
+     * @param elementClass
+     * @param patternObjects
+     */
+    protected void addNamePattern(final Class<? extends ModelElement> elementClass, final Object... patternObjects) {
+        elementClassToNamePattern.put(elementClass, patternObjects);
     }
 
     /**

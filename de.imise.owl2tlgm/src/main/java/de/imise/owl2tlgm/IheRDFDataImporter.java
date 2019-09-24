@@ -1,5 +1,7 @@
 package de.imise.owl2tlgm;
 
+import static de.imise.tool3lgm.imexport.RDFDataImporter.NameCreationPatternStandardIndentifier.LABEL;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverter;
@@ -67,7 +69,8 @@ public class IheRDFDataImporter extends RDFDataImporter {
      *
      */
     public IheRDFDataImporter() {
-        super(TEST_FILE);
+        this(TEST_FILE);
+        init();
     }
 
     /**
@@ -75,6 +78,15 @@ public class IheRDFDataImporter extends RDFDataImporter {
      */
     public IheRDFDataImporter(final String urlString) {
         super(urlString);
+        init();
+    }
+
+    /**
+     *
+     */
+    private void init() {
+        //name von TransaktionsEdges soll OntProperty-Abkürzung (z.B. "ITI-8") + Leerzeichen + Label (z.B. "Patient Identity Feed") sein -> "ITI-8 Patient Identity Feed"
+        addNamePattern(IheImportMetaModelDefinition.IheTransaction_Edge.class, new OntPropertyName("abbreviation"), " ", LABEL);
     }
 
     @Override
