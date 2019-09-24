@@ -1,4 +1,4 @@
-package de.imise.owl2tlgm;
+package de.imise.template.ihe;
 
 import java.util.List;
 

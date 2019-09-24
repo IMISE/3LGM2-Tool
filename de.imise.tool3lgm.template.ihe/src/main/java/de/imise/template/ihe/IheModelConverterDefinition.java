@@ -1,15 +1,15 @@
-package de.imise.owl2tlgm;
+package de.imise.template.ihe;
 
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
-import de.imise.owl2tlgm.IheImportMetaModelDefinition.Actor;
-import de.imise.owl2tlgm.IheImportMetaModelDefinition.Domain;
-import de.imise.owl2tlgm.IheImportMetaModelDefinition.IheDomain_Edge;
-import de.imise.owl2tlgm.IheImportMetaModelDefinition.IheIntegrationProfile_Edge;
-import de.imise.owl2tlgm.IheImportMetaModelDefinition.IheTransaction_Edge;
-import de.imise.owl2tlgm.IheImportMetaModelDefinition.IntegrationProfile;
+import de.imise.template.ihe.IheImportMetaModelDefinition.Actor;
+import de.imise.template.ihe.IheImportMetaModelDefinition.Domain;
+import de.imise.template.ihe.IheImportMetaModelDefinition.IheDomain_Edge;
+import de.imise.template.ihe.IheImportMetaModelDefinition.IheIntegrationProfile_Edge;
+import de.imise.template.ihe.IheImportMetaModelDefinition.IheTransaction_Edge;
+import de.imise.template.ihe.IheImportMetaModelDefinition.IntegrationProfile;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition;
