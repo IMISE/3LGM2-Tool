@@ -334,9 +334,6 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                         String edgeHash = HashStringGenerator.getHash(predicateUri);
                         OntProperty ontProperty = getOntProperty(predicate, importableObjectPropertiesToTargetEdgeClassName);
                         String name = getName(ontProperty, namePattern);
-                        if (namePattern != null) {
-                            System.err.println();
-                        }
                         String description = descriptionPropertyResolver.getValue(predicate);
                         try {
                             Edge lgmEdge = addEdge(targetEdgeClassName, name, edgeHash, startNode, endNode);
