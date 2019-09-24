@@ -372,9 +372,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                     grabbedElementsRealRect = getIncludingRectangle(grabbedElementsRealRect, kc);
                 }
             }
-            if (grabbedElementsRasteredRect == null) {
-                grabbedElementsRasteredRect = new Rectangle(grabbedElementsRealRect);
-            }
+            grabbedElementsRasteredRect = new Rectangle(grabbedElementsRealRect);
             if (grabbedElementsFullRect == null) {
                 grabbedElementsFullRect = new Rectangle(grabbedElementsRealRect);
             } else {
