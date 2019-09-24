@@ -127,11 +127,12 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
     public void ancestorAdded(final AncestorEvent event) {
         templateLibrariesManager = Static.getTemplateLibrariesManager();
         templateLibrariesManager.addPropertyChangeListener(this);
+        propertyChange(null);
     }
 
     @Override
     public void ancestorRemoved(final AncestorEvent event) {
-        templateLibrariesManager.addPropertyChangeListener(this);
+        templateLibrariesManager.removePropertyChangeListener(this);
     }
 
     @Override
