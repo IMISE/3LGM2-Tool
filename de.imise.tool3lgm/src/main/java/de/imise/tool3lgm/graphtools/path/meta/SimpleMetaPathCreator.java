@@ -462,7 +462,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 for (Class<? extends ModelElement> startClass : instanciableAssignableStartClasses) {
                     for (Class<? extends ModelElement> endClass : instanciableAssignableEndClasses) {
                         ElementaryMetaPath newElementaryMetaPath = elementaryMetaPathHandler.getMetaPath(startClass, originalElementaryMetaPath, endClass);
-                        SimpleMetaPath newSimpleMetaPath = getPathStepReplacedMetaPath(elementaryMetaPaths, newElementaryMetaPath, currentPathStepIndex);
+                        SimpleMetaPath newSimpleMetaPath = getPathStepReplacedMetaPath(elementaryMetaPaths, newElementaryMetaPath, currentPathStepIndex, simpleMetaPath.getName());
                         //bei der ersten nicht-abstrakten Kantenklasse wird der neue MetaPfad in der Ergebnisliste einfach über den neuen geschrieben
                         if (replaceOriginalMetaPathInResultList) {
                             replaceOriginalMetaPathInResultList = false;
@@ -477,11 +477,11 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
         return simpleMetaPaths;
     }
 
-    private static SimpleMetaPath getPathStepReplacedMetaPath(final List<ElementaryMetaPath> elementaryMetaPaths, final ElementaryMetaPath elementaryMetaPath, final int pathStepIndex) {
+    private static SimpleMetaPath getPathStepReplacedMetaPath(final List<ElementaryMetaPath> elementaryMetaPaths, final ElementaryMetaPath elementaryMetaPath, final int pathStepIndex, final String baseResKeyOrName) {
         ElementaryMetaPath[] elementaryMetaPathArray = new ElementaryMetaPath[elementaryMetaPaths.size()];
         elementaryMetaPathArray = elementaryMetaPaths.toArray(elementaryMetaPathArray);
         elementaryMetaPathArray[pathStepIndex] = elementaryMetaPath;
-        return new SimpleMetaPath(elementaryMetaPathArray);
+        return new SimpleMetaPath(baseResKeyOrName, elementaryMetaPathArray);
     }
 
     /**
