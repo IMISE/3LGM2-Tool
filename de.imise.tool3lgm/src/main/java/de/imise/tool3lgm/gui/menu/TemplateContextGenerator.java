@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.gui.menu;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Component;
 
 import javax.swing.Action;
@@ -9,9 +11,9 @@ import javax.swing.JPopupMenu;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
@@ -62,8 +64,8 @@ public class TemplateContextGenerator extends ContextGenerator {
     }
 
     @Override
-    protected GraphDocument getDoc() {
-        return graphDocumentOwner != null ? graphDocumentOwner.getGraphDocument() : null;
+    protected LGMGraphDocument getDoc() {
+        return graphDocumentOwner != null ? (LGMGraphDocument) graphDocumentOwner.getGraphDocument() : null;
     }
 
     /**
@@ -79,6 +81,14 @@ public class TemplateContextGenerator extends ContextGenerator {
         };
     }
 
+    private final JMenuItem createCopyToModelItem() {
+        JMenuItem item = new JMenuItem(getResString("inmodel"));
+        LGMGraphDocument template = getDoc();
+        LGMGraphDocument selectedDoc = Static.getSelectedDoc();
+        item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(template, selectedDoc));
+        return item;
+    }
+
     /**
      * Kontextmenü eines Einzelknotens
      *
@@ -90,9 +100,10 @@ public class TemplateContextGenerator extends ContextGenerator {
         //      System.err.println("ContextGenerator.getSingleNodeContextMenu()");
         JPopupMenu menu = new JPopupMenu();
         ElementContainer ec = template.getLastSelected();
-        ModelElement me = ec.getElement();
+        //        ModelElement me = ec.getElement();
         if (!(ec instanceof BendpointContainer)) {
             addMenuItem(menu, properties);
+            addMenuItem(menu, createCopyToModelItem());
 
             //            Class<? extends ModelElement> meClass = me.getClass();
             //

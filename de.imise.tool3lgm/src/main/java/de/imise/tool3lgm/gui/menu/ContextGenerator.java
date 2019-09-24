@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.gui.menu;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Component;
@@ -9,12 +10,16 @@ import java.awt.event.ActionListener;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 
 /**
  * @author AXS (23.09.2019)
@@ -149,5 +154,23 @@ public abstract class ContextGenerator implements ActionListener {
      * @return
      */
     public abstract JPopupMenu getNodeContextMenu(final Component source);
+
+    /**
+     * @param gdcoll
+     * @return
+     */
+    protected final JMenuItem getCopyToModelMenu(final GDCollection gdcoll) {
+        JMenu menu = new JMenu(gdcoll.getName());
+        JMenuItem item = new JMenuItem(getResString("main_model"));
+        LGMGraphDocument doc = (LGMGraphDocument) getDoc();
+        item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(doc, gdcoll.getMainGraphDocument()));
+        menu.add(item);
+        for (final Szenario szen : gdcoll.getSzenarios()) {
+            item = new JMenuItem(szen.getTitle());
+            item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(doc, szen));
+            menu.add(item);
+        }
+        return menu;
+    }
 
 }

@@ -2037,7 +2037,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     /**
      * @return
      */
-    private JMenuItem getAddToModelMenu() {
+    protected JMenuItem getAddToModelMenu() {
         MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
         List<GDCollection> collections = Static.getCollections(selectedMetaModelContext);
         if (collections.size() < 2) {
@@ -2047,26 +2047,8 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         for (GDCollection gdcoll : collections) {
             GraphDocument doc = getDoc();
             if (gdcoll != doc.getCollection()) {
-                menu.add(getSubModelMenu(gdcoll));
+                menu.add(getCopyToModelsMenu(gdcoll));
             }
-        }
-        return menu;
-    }
-
-    /**
-     * @param gdcoll
-     * @return
-     */
-    private final JMenuItem getSubModelMenu(final GDCollection gdcoll) {
-        JMenu menu = new JMenu(gdcoll.getName());
-        JMenuItem item = new JMenuItem(getResString("main_model"));
-        LGMGraphDocument doc = (LGMGraphDocument) getDoc();
-        item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(doc, gdcoll.getMainGraphDocument()));
-        menu.add(item);
-        for (final Szenario szen : gdcoll.getSzenarios()) {
-            item = new JMenuItem(szen.getTitle());
-            item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(doc, szen));
-            menu.add(item);
         }
         return menu;
     }
