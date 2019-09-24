@@ -2061,11 +2061,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         JMenu menu = new JMenu(gdcoll.getName());
         JMenuItem item = new JMenuItem(getResString("main_model"));
         LGMGraphDocument doc = (LGMGraphDocument) getDoc();
-        item.addActionListener(e -> doc.copySelectedToModel(gdcoll.getMainGraphDocument()));
+        item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(doc, gdcoll.getMainGraphDocument()));
         menu.add(item);
         for (final Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getTitle());
-            item.addActionListener(e -> doc.copySelectedToModel(szen));
+            item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(doc, szen));
             menu.add(item);
         }
         return menu;
