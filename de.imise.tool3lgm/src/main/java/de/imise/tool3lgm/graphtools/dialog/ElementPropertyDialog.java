@@ -165,7 +165,15 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
      * @return <code>true</code> if this dialog only presents information but nothing is ediable/changeable:
      */
     public final boolean isInfoDialog() {
-        return gdcoll.getModelCategory() == ModelCategory.TEMPLATE;
+        if (Static.isExpertMode()) {
+            return false;
+        }
+        if (gdcoll.getModelCategory() == ModelCategory.TEMPLATE) {
+            return true;
+        }
+        Class<? extends ModelElement> dialogElementClass = modelElement.getClass();
+        MetaModel metaModel = getMetaModel();
+        return !metaModel.isEditable(dialogElementClass);
     }
 
     /**
