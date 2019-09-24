@@ -4586,6 +4586,48 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         return getElementContainers(clazz, true);
     }
 
+    /**
+     * Liefert alle ElementContainer von der Startart der Kante, bei denen diese Kantenart nicht zu den RemovedEdges gehärt.
+     *
+     * @param edgeClass
+     * @return
+     */
+    public final List<ElementContainer> getElementContainersOfStartClass(final Class<? extends Edge> edgeClass) {
+        return getElementContainersOfStartOrEndClass(edgeClass, true);
+    }
+
+    /**
+     * Liefert alle ElementContainer von der Endart der Kante, bei denen diese Kantenart nicht zu den RemovedEdges gehärt.
+     *
+     * @param edgeClass
+     * @return
+     */
+    public final List<ElementContainer> getElementContainersOfEndClass(final Class<? extends Edge> edgeClass) {
+        return getElementContainersOfStartOrEndClass(edgeClass, false);
+    }
+
+    /**
+     * Liefert alle ElementContainer von der Endart der Kante, bei denen diese Kantenart nicht zu den RemovedEdges gehärt.
+     *
+     * @param edgeClass
+     * @return
+     */
+    private final List<ElementContainer> getElementContainersOfStartOrEndClass(final Class<? extends Edge> edgeClass, final boolean startClass) {
+        MetaModel metaModel = getMetaModel();
+        Class<? extends ModelElement> elementClass = startClass ? Edge.getStartClass(edgeClass) : Edge.getEndClass(edgeClass);
+        List<ElementContainer> elementContainers = getElementContainers(elementClass, true);
+        for (int i = elementContainers.size() - 1; i >= 0; i--) {
+            ElementContainer ec = elementContainers.get(i);
+            ModelElement me = ec.getElement();
+            elementClass = me.getClass();
+            boolean isValidElementForEdge = startClass ? metaModel.isStartClass(edgeClass, elementClass) : metaModel.isEndClass(edgeClass, elementClass);
+            if (!isValidElementForEdge) {
+                elementContainers.remove(i);
+            }
+        }
+        return elementContainers;
+    }
+
     //    /**
     //     * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement von
     //     * der übergebenen Klasse ist.<br>

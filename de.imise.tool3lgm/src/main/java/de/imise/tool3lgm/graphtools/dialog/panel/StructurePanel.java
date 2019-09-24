@@ -176,7 +176,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
             rtree.saveExpansionAndSelection();
             rroot.removeAllChildren();
             rtree.reset();
-            List<ElementContainer> all = mainDoc.getElementContainers(searchElementClass);
+            List<ElementContainer> all = mainDoc.getElementContainersOfEndClass(edgeClass);
             all.remove(meContainer);
             for (ElementContainer ec : all) {
                 rtree.addObject(ec, rroot, childrenToExcludeFromRtree, false, false, true);
