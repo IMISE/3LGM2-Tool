@@ -200,6 +200,32 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     @Override
+    public boolean isStartClass(final Class<? extends ModelElement> elementClass) {
+        //wenn sich der ElementarPfad bilden lässt, dann darf die Kantenklasse bei der Startklasse nicht zu den removedEdges gehören
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        if (!elementaryMetaPaths.isEmpty()) {
+            ElementaryMetaPath firstElementaryMetaPath = elementaryMetaPaths.get(0);
+            if (!firstElementaryMetaPath.isStartClass(elementClass)) {
+                return false;
+            }
+        }
+        return super.isStartClass(elementClass);
+    }
+
+    @Override
+    public boolean isEndClass(final Class<? extends ModelElement> elementClass) {
+        //wenn sich der ElementarPfad bilden lässt, dann darf die Kantenklasse bei der Endklasse nicht zu den removedEdges gehören
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        if (!elementaryMetaPaths.isEmpty()) {
+            ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(elementaryMetaPaths.size() - 1);
+            if (!lastElementaryMetaPath.isEndClass(elementClass)) {
+                return false;
+            }
+        }
+        return super.isEndClass(elementClass);
+    }
+
+    @Override
     public final boolean isCreatable() {
         if (!isValid()) {
             return false;

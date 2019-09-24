@@ -422,9 +422,12 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 pathConnectableElements.setEnabled(!endElements.isEmpty());
                 menu.add(pathConnectableElements);
                 for (ModelElement endMe : endElements) {
-                    Action createPathAction = createPathAction(metaPath, endMe);
-                    JMenuItem createPathItem = getItem(createPathAction);
-                    pathConnectableElements.add(createPathItem);
+                    endClass = endMe.getClass();
+                    if (metaPath.isEndClass(endClass)) {
+                        Action createPathAction = createPathAction(metaPath, endMe);
+                        JMenuItem createPathItem = getItem(createPathAction);
+                        pathConnectableElements.add(createPathItem);
+                    }
                 }
             }
 
