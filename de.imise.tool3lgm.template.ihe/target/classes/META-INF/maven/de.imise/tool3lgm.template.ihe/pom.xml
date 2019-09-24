@@ -4,12 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>de.imise</groupId>
-	<artifactId>owl2tlgm</artifactId>
+	<artifactId>tool3lgm.template.ihe</artifactId>
 	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>owl2tlgm</name>
-	<url>http://maven.apache.org</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -117,4 +115,5 @@
 	</build>
 
 
+	<name>tool3lgm.template.ihe</name>
 </project>
