@@ -34,19 +34,8 @@ public class TemplateContextGenerator extends ContextGenerator {
     /**
      *
      */
-    private final Action ACTION_SHOW_TEMPLATE_ELEMENTS_PROPERTY_DIALOG = new SelectedElementsAction(ActionIdentifier.ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG, true) {
-        @Override
-        public void actionPerformed() {
-            GraphDocument activeTemplateDoc = getActiveDoc();
-            activeTemplateDoc.showPropertyDialog(false);
-        }
-    };
-
-    /**
-     *
-     */
     public TemplateContextGenerator() {
-        properties = getItem(ACTION_SHOW_TEMPLATE_ELEMENTS_PROPERTY_DIALOG);
+        properties = getItem(getShowElementPropertyDialogAction());
     }
 
     @Override
@@ -75,6 +64,19 @@ public class TemplateContextGenerator extends ContextGenerator {
     @Override
     protected GraphDocument getDoc() {
         return graphDocumentOwner != null ? graphDocumentOwner.getGraphDocument() : null;
+    }
+
+    /**
+     *
+     */
+    private final Action getShowElementPropertyDialogAction() {
+        return new SelectedElementsAction(ActionIdentifier.ACTION_SHOW_ELEMENTS_PROPERTY_DIALOG, true) {
+            @Override
+            public void actionPerformed() {
+                GraphDocument activeTemplateDoc = getActiveDoc();
+                activeTemplateDoc.showPropertyDialog(false);
+            }
+        };
     }
 
     /**
