@@ -45,6 +45,83 @@ import de.imise.util.StringUtils;
  */
 public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> implements DataPrinter {
 
+    public enum NameCreationPattern {
+        LOCAL_NAME,
+        LABEL
+    }
+
+    /**
+     * Hülle um einen String, damit dieser in Namenspattern als Name einer Objectproperty erkannt werden kann.
+     *
+     * @author AXS (24.09.2019)
+     */
+    public static class AnnotationPropertyName {
+
+        private final String propertyLocalName;
+
+        public AnnotationPropertyName(final String propertyLocalName) {
+            this.propertyLocalName = propertyLocalName;
+        }
+
+    }
+
+    private static final class AnnotationPropertyResolver {
+
+        private final OntModel ontModel;
+
+        private final AnnotationProperty property;
+
+        /**
+         * @param ontModel
+         */
+        public AnnotationPropertyResolver(final OntModel ontModel, final AnnotationPropertyName annotationPropertyName) {
+            this(ontModel, annotationPropertyName.propertyLocalName);
+        }
+
+        public AnnotationPropertyResolver(final OntModel ontModel, final String annotationPropertyLocalName) {
+            this.ontModel = ontModel;
+            property = getProperty(annotationPropertyLocalName);
+        }
+
+        /**
+         * Liefert die Property, die die Beschreibung enthält. Es kann sein, dass es Ontologien gibt,
+         * bei denen das hier nicht stimmt, weil {@link AnnotationProperty}s nicht in jeder OWL-Datei
+         * vorkommen oder die Description irgendwas anderes beschreibt.
+         *
+         * @param ontModel
+         * @return
+         */
+        private AnnotationProperty getProperty(final String propertyLocalName) {
+            for (ExtendedIterator<AnnotationProperty> listAnnotationProperties = ontModel.listAnnotationProperties(); listAnnotationProperties.hasNext();) {
+                AnnotationProperty annotationProperty = listAnnotationProperties.next();
+                if (propertyLocalName.equals(annotationProperty.getLocalName())) {
+                    return annotationProperty;
+                }
+            }
+            return null;
+        }
+
+        public String getValue(final OntResource ontNode) {
+            if (property == null) {
+                return "";
+            }
+            RDFNode propertyValue = ontNode.getPropertyValue(property);
+            String value = propertyValue == null ? "" : propertyValue.toString();
+            return value;
+        }
+
+        public String getValue(final Property predicate) {
+            if (property == null) {
+                return "";
+            }
+            Statement statement = predicate.getProperty(property);
+            RDFNode statementNode = statement == null ? null : statement.getObject();
+            String value = statementNode == null ? "" : statementNode.toString();
+            return value;
+        }
+
+    }
+
     /**
      * @param urlString
      */
@@ -62,8 +139,10 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     public boolean importData(final String urlString) {
         OntModel ontModel = ModelFactory.createOntologyModel();
         ontModel.read(urlString);
-        importNodes(ontModel);
-        importEdges(ontModel);
+        String descriptionPropertyName = getDescriptionPropertyName();
+        AnnotationPropertyResolver descriptionPropertyResolver = new AnnotationPropertyResolver(ontModel, descriptionPropertyName);
+        importNodes(ontModel, descriptionPropertyResolver);
+        importEdges(ontModel, descriptionPropertyResolver);
         return true;
     }
 
@@ -73,12 +152,12 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
      * Außerdem werden die Class-Knoten und der korrespondierende 3LGM2-Knoten in einer Map in DataImporter gespeichert.
      *
      * @param ontModel Quellmodell
+     * @param annotationPropertyResolver
      */
-    private void importNodes(final OntModel ontModel) {
+    private void importNodes(final OntModel ontModel, final AnnotationPropertyResolver descriptionPropertyResolver) {
         GDCollection gdcoll = getCollection();
         MetaModel metaModel = gdcoll.getMetaModel();
         Collection<String> classNames = getSimpleClassNames(metaModel.allNodesSet, "");
-        AnnotationProperty descriptionProperty = getDescriptionProperty(ontModel);
         for (Iterator<OntClass> ontClasses = ontModel.listNamedClasses(); ontClasses.hasNext();) {
             OntClass ontClass = ontClasses.next();
             String ontClassName = ontClass.getLocalName();
@@ -106,8 +185,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                         if (Strings.isNullOrEmpty(name)) {
                             name = ontNode.getLocalName();
                         }
-                        RDFNode propertyValue = ontNode.getPropertyValue(descriptionProperty);
-                        String description = propertyValue == null ? "" : propertyValue.toString();
+                        String description = descriptionPropertyResolver.getValue(ontNode);
                         String hashString = ontNode.getURI();
                         hashString = HashStringGenerator.getHash(hashString); //TimeStamp und eine Nummer and die URI als Hash anhängen
                         Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, hashString);
@@ -121,35 +199,17 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
-     * Liefert die Property, die die Beschreibung enthält. Es kann sein, dass es Ontologien gibt,
-     * bei denen das hier nicht stimmt, weil {@link AnnotationProperty}s nicht in jeder OWL-Datei
-     * vorkommen oder die Description irgendwas anderes beschreibt.
-     *
-     * @param ontModel
-     * @return
-     */
-    private AnnotationProperty getDescriptionProperty(final OntModel ontModel) {
-        for (ExtendedIterator<AnnotationProperty> listAnnotationProperties = ontModel.listAnnotationProperties(); listAnnotationProperties.hasNext();) {
-            AnnotationProperty annotationProperty = listAnnotationProperties.next();
-            if ("description".equals(annotationProperty.getLocalName())) {
-                return annotationProperty;
-            }
-        }
-        return null;
-    }
-
-    /**
      * Liefert alle Statements, die eine Kante repräsentieren, die ins Zielmodell übernommen werden muss.
      *
      * @param ontModel
+     * @param descriptionPropertyResolver
      * @return Map mit allen Statements, die eine zu importierende Kante repräsentieren als Key und dem Namen der daraus zu erzeugenden Kantenart im
      *         Zielmodell als value
      */
-    private void importEdges(final OntModel ontModel) {
+    private void importEdges(final OntModel ontModel, final AnnotationPropertyResolver descriptionPropertyResolver) {
         //ObjectProperty -> Kantenklassenname
         Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName = getImportableObjetctProperties(ontModel);
         int i = 1;
-        AnnotationProperty descriptionProperty = getDescriptionProperty(ontModel);
         for (StmtIterator statements = ontModel.listStatements(); statements.hasNext();) {
             //Statement
             Statement statement = statements.next();
@@ -169,9 +229,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                         String predicateUri = predicate.getURI();
                         String edgeHash = HashStringGenerator.getHash(predicateUri);
                         String predicateLocalName = predicate.getLocalName();
-                        Statement descriptionStatement = predicate.getProperty(descriptionProperty);
-                        RDFNode descriptionStatementNode = descriptionStatement == null ? null : descriptionStatement.getObject();
-                        String description = descriptionStatementNode == null ? "" : descriptionStatementNode.toString();
+                        String description = descriptionPropertyResolver.getValue(predicate);
                         try {
                             Edge lgmEdge = addEdge(targetEdgeClassName, predicateLocalName, edgeHash, startNode, endNode);
                             lgmEdge.setDescription(description);
@@ -288,5 +346,12 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
         }
         return returnSet;
     }
+
+    /**
+     * Liefert den localName der AnnotationProperty mit der Description
+     *
+     * @return
+     */
+    public abstract String getDescriptionPropertyName();
 
 }

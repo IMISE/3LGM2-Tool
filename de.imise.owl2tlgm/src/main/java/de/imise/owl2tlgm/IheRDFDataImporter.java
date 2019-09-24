@@ -82,4 +82,9 @@ public class IheRDFDataImporter extends RDFDataImporter {
         return TLGM_EDGE_CLASS_NAME_POSTFIX;
     }
 
+    @Override
+    public String getDescriptionPropertyName() {
+        return "description";
+    }
+
 }
