@@ -81,6 +81,14 @@ public final class Tool3lgmMetaModelContext {
         return RegularMetaModelDefinition.class.isAssignableFrom(metaModelDefinitionClass);
     }
 
+    private static Tool3lgmModelType getDefaultModelType() {
+        // es war gewünscht worden, dass beim initialen Start das originale Metamodell ausgewählt ist. showDialog ist initial false
+        MetaModelContext metaModelContext = REGULAR_METAMODEL_CONTEXTS.get(0);
+        ModelCategory modelCategory = ModelCategory.REGULAR;
+        Tool3lgmModelType modelType = new Tool3lgmModelType(metaModelContext, modelCategory);
+        return modelType;
+    }
+
     /**
      * Liefert einen MetaModelContext. Abhängig davon, ob in den UserProperties eingestellt ist, ob per Dialog nachgefragt werden soll oder nicht,
      * wird der in den den UserProperties gespeicherte einfach zurück gegeben oder per Dialog nachgefragt.
@@ -97,10 +105,7 @@ public final class Tool3lgmMetaModelContext {
             if (showDialog) {
                 modelType = chooseModelType();
             } else {
-                // es war gewünscht worden, dass beim initialen Start das originale Metamodell ausgewählt ist. showDialog ist initial false
-                MetaModelContext metaModelContext = REGULAR_METAMODEL_CONTEXTS.get(0);
-                ModelCategory modelCategory = ModelCategory.REGULAR;
-                modelType = new Tool3lgmModelType(metaModelContext, modelCategory);
+                modelType = getDefaultModelType();
             }
         }
         return modelType;
@@ -209,6 +214,9 @@ public final class Tool3lgmMetaModelContext {
         AlphabeticalComboBox comboBox = new AlphabeticalComboBox();
         MetaModelContext selectedOption = null;
         Tool3lgmModelType userpropertiesStoredModelType = getUserpropertiesStoredModelType();
+        if (userpropertiesStoredModelType == null) {
+            userpropertiesStoredModelType = getDefaultModelType();
+        }
         MetaModelContext lastMetaModelContext = userpropertiesStoredModelType.getMetaModelContext();
         for (MetaModelContext metaModelContext : REGULAR_METAMODEL_CONTEXTS) {
             comboBox.addItem(metaModelContext, metaModelContext.getMetaModelDisplayName());
