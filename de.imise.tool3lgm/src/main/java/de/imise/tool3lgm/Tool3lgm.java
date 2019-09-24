@@ -395,8 +395,10 @@ public class Tool3lgm {
             //das zu aktivierende Graphdocument und dessen Collection an die richtige Position bringen
             GDCollection gdcoll = doc.getCollection();
             //die Collection des übergebenne doc als letzte in die Collection-Liste bringen
-            collections.remove(gdcoll);
-            collections.add(gdcoll);
+            boolean removed = collections.remove(gdcoll); // nur wenn das Ding da drin war, kommt true zurück. Template-Modelle dürfen hier nicht gesetzt werden -> nur hinzufügen, wenn es auch vorher drin war
+            if (removed) {
+                collections.add(gdcoll);
+            }
             //das aktive doc in der Collection selbst setzen
             gdcoll.setActiveGraphDocument(doc);
         }
