@@ -11,7 +11,9 @@ import de.imise.template.ihe.IheImportMetaModelDefinition.IheIntegrationProfile_
 import de.imise.template.ihe.IheImportMetaModelDefinition.IheTransaction_Edge;
 import de.imise.template.ihe.IheImportMetaModelDefinition.IntegrationProfile;
 import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMetaPathsCreationDefinition.NameSource;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -65,7 +67,8 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
 
     @Override
     public Map<Class<? extends Edge>, TargetMetaPathsCreationDefinition> getSourceEdgeClassesToTargetMetaPaths() {
-        MetaModelContext serviceMetaModelContext = new MetaModelContext(getTargetMetaModelDefinitionClass());
+        Class<? extends MetaModelDefinition> targetMetaModelDefinitionClass = getTargetMetaModelDefinitionClass();
+        MetaModelContext serviceMetaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(targetMetaModelDefinitionClass);
         MetaModel serviceMetaModel = serviceMetaModelContext.getMetaModel();
 
         //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ruft auf ( <- ) IHE Transaction + IHE Transaction wird bereitsgestellt durch ( <- ) IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
