@@ -55,32 +55,32 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
      *
      * @author AXS (24.09.2019)
      */
-    public static class AnnotationPropertyName {
+    public static class OntPropertyName {
 
-        private final String propertyLocalName;
+        private final String propertyUriOrLocalName;
 
-        public AnnotationPropertyName(final String propertyLocalName) {
-            this.propertyLocalName = propertyLocalName;
+        public OntPropertyName(final String propertyUriOrLocalName) {
+            this.propertyUriOrLocalName = propertyUriOrLocalName;
         }
 
     }
 
-    private static final class AnnotationPropertyResolver {
+    private static final class OntPropertyResolver {
 
         private final OntModel ontModel;
 
-        private final AnnotationProperty property;
+        private final OntProperty property;
 
         /**
          * @param ontModel
          */
-        public AnnotationPropertyResolver(final OntModel ontModel, final AnnotationPropertyName annotationPropertyName) {
-            this(ontModel, annotationPropertyName.propertyLocalName);
+        public OntPropertyResolver(final OntModel ontModel, final OntPropertyName ontPropertyName) {
+            this(ontModel, ontPropertyName.propertyUriOrLocalName);
         }
 
-        public AnnotationPropertyResolver(final OntModel ontModel, final String annotationPropertyLocalName) {
+        public OntPropertyResolver(final OntModel ontModel, final String annotationPropertyUriOrLocalName) {
             this.ontModel = ontModel;
-            property = getProperty(annotationPropertyLocalName);
+            property = getProperty(annotationPropertyUriOrLocalName);
         }
 
         /**
@@ -88,14 +88,19 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
          * bei denen das hier nicht stimmt, weil {@link AnnotationProperty}s nicht in jeder OWL-Datei
          * vorkommen oder die Description irgendwas anderes beschreibt.
          *
-         * @param ontModel
+         * @param propertyUriOrLocalName
          * @return
          */
-        private AnnotationProperty getProperty(final String propertyLocalName) {
-            for (ExtendedIterator<AnnotationProperty> listAnnotationProperties = ontModel.listAnnotationProperties(); listAnnotationProperties.hasNext();) {
-                AnnotationProperty annotationProperty = listAnnotationProperties.next();
-                if (propertyLocalName.equals(annotationProperty.getLocalName())) {
-                    return annotationProperty;
+        private OntProperty getProperty(final String propertyUriOrLocalName) {
+            for (ExtendedIterator<OntProperty> listProperties = ontModel.listOntProperties(); listProperties.hasNext();) {
+                OntProperty property = listProperties.next();
+                String localOrUriName = property.getURI();
+                if (propertyUriOrLocalName.equals(localOrUriName)) {
+                    return property;
+                }
+                localOrUriName = property.getLocalName();
+                if (propertyUriOrLocalName.equals(localOrUriName)) {
+                    return property;
                 }
             }
             return null;
@@ -139,8 +144,8 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     public boolean importData(final String urlString) {
         OntModel ontModel = ModelFactory.createOntologyModel();
         ontModel.read(urlString);
-        String descriptionPropertyName = getDescriptionPropertyName();
-        AnnotationPropertyResolver descriptionPropertyResolver = new AnnotationPropertyResolver(ontModel, descriptionPropertyName);
+        String descriptionPropertyNameOrUri = getDescriptionPropertyUriOrLocalName();
+        OntPropertyResolver descriptionPropertyResolver = new OntPropertyResolver(ontModel, descriptionPropertyNameOrUri);
         importNodes(ontModel, descriptionPropertyResolver);
         importEdges(ontModel, descriptionPropertyResolver);
         return true;
@@ -154,7 +159,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
      * @param ontModel Quellmodell
      * @param annotationPropertyResolver
      */
-    private void importNodes(final OntModel ontModel, final AnnotationPropertyResolver descriptionPropertyResolver) {
+    private void importNodes(final OntModel ontModel, final OntPropertyResolver descriptionPropertyResolver) {
         GDCollection gdcoll = getCollection();
         MetaModel metaModel = gdcoll.getMetaModel();
         Collection<String> classNames = getSimpleClassNames(metaModel.allNodesSet, "");
@@ -206,7 +211,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
      * @return Map mit allen Statements, die eine zu importierende Kante repräsentieren als Key und dem Namen der daraus zu erzeugenden Kantenart im
      *         Zielmodell als value
      */
-    private void importEdges(final OntModel ontModel, final AnnotationPropertyResolver descriptionPropertyResolver) {
+    private void importEdges(final OntModel ontModel, final OntPropertyResolver descriptionPropertyResolver) {
         //ObjectProperty -> Kantenklassenname
         Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName = getImportableObjetctProperties(ontModel);
         int i = 1;
@@ -348,10 +353,10 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
-     * Liefert den localName der AnnotationProperty mit der Description
+     * Liefert den localName der OntProperty mit der Description oder dessen URI
      *
      * @return
      */
-    public abstract String getDescriptionPropertyName();
+    public abstract String getDescriptionPropertyUriOrLocalName();
 
 }

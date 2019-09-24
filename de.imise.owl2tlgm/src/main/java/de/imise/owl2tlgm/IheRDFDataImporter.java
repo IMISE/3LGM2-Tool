@@ -83,8 +83,7 @@ public class IheRDFDataImporter extends RDFDataImporter {
     }
 
     @Override
-    public String getDescriptionPropertyName() {
+    public String getDescriptionPropertyUriOrLocalName() {
         return "description";
     }
-
 }
