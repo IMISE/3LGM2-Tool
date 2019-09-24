@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections4.map.Flat3Map;
+import org.apache.jena.ext.com.google.common.base.Strings;
 
 import com.google.common.collect.ImmutableList;
 
@@ -2008,14 +2009,16 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (!name.trim().equals(other.name.trim())) {
             name = name.concat("\n-" + joined + "-\n" + other.name);
         }
+        String descrip = descr.trim();
         //es gibt keine Beschreibung bei this
-        if (descr.trim().equals("")) {
+        if (Strings.isNullOrEmpty(descrip)) {
             //egal, was in der Beschreibung für other steht -> setze sie bei this
             descr = other.descr;
             //es gibt eine Beschreibung bei this
         } else {
+            String otherDescrip = other.descr.trim();
             //wenn es auch eine Beschreibung für other gibt, die sich von der von this unterscheidet -> hänge sie zusammen
-            if (!other.descr.trim().equals("") || !descr.trim().equals(other.descr.trim())) {
+            if (!descrip.equals(otherDescrip) && !Strings.isNullOrEmpty(otherDescrip)) {
                 descr = descr.concat("\n-" + joined + "-\n" + other.descr);
             }
         }
