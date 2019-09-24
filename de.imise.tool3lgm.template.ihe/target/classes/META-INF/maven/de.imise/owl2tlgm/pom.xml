@@ -1,0 +1,120 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>de.imise</groupId>
+	<artifactId>owl2tlgm</artifactId>
+	<version>1.0.0</version>
+	<packaging>jar</packaging>
+
+	<name>owl2tlgm</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>de.imise</groupId>
+			<artifactId>tool3lgm</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>de.axs</groupId> -->
+		<!-- <artifactId>de-axs-utils</artifactId> -->
+		<!-- <version>1.0.0</version> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>de.imise</groupId>
+			<artifactId>tool3lgm.metamodel.service</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.google.guava</groupId> -->
+		<!-- <artifactId>guava</artifactId> -->
+		<!-- <version>27.1-jre</version> -->
+		<!-- </dependency> -->
+
+	</dependencies>
+
+
+	<build>
+		<plugins>
+
+			<!-- Am Ende das jar-File-Artefakt ins Tool in den Plugin-Ordner kopieren -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.1</version>
+				<executions>
+					<execution>
+						<id>copy-installed-development</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+									<type>${project.packaging}</type>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>../de.imise.tool3lgm/Plugins/</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-installed-deploy</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${project.version}</version>
+									<type>${project.packaging}</type>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>../de.imise.tool3lgm.deploy/Tool3lgm/Plugins</outputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+		<resources>
+			<resource>
+				<directory>src\main\resources</directory>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src\test\resources</directory>
+			</testResource>
+		</testResources>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.8</source>
+						<target>1.8</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+
+</project>
