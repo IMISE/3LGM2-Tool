@@ -364,6 +364,8 @@ public abstract class ModelConverterDefinition {
                 }
             }
             element2Rename.setName(newName.toString());
+            String description = nameSourceEdge.getDescription();
+            element2Rename.setDescription(description); //ACHTUNG: Das hier ist ne Krücke um mal schnell was für IHE zu sehen, da jetzt jedes Element, das Namensbestandteile bekommt, immer die Beschreibung des Elementes erhält
             return element2Rename;
         }
     }

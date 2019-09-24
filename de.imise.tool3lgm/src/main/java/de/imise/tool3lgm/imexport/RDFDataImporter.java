@@ -149,6 +149,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
         //ObjectProperty -> Kantenklassenname
         Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName = getImportableObjetctProperties(ontModel);
         int i = 1;
+        AnnotationProperty descriptionProperty = getDescriptionProperty(ontModel);
         for (StmtIterator statements = ontModel.listStatements(); statements.hasNext();) {
             //Statement
             Statement statement = statements.next();
@@ -168,9 +169,13 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                         String predicateUri = predicate.getURI();
                         String edgeHash = HashStringGenerator.getHash(predicateUri);
                         String predicateLocalName = predicate.getLocalName();
+                        Statement descriptionStatement = predicate.getProperty(descriptionProperty);
+                        RDFNode descriptionStatementNode = descriptionStatement == null ? null : descriptionStatement.getObject();
+                        String description = descriptionStatementNode == null ? "" : descriptionStatementNode.toString();
                         try {
                             Edge lgmEdge = addEdge(targetEdgeClassName, predicateLocalName, edgeHash, startNode, endNode);
-                            printe(i++ + "\t" + targetEdgeClassName + " (" + lgmEdge.getHashString() + ")" + " -> " + startNode + "  ->  " + endNode + " " + lgmEdge);
+                            lgmEdge.setDescription(description);
+                            printe(i++ + "\t" + targetEdgeClassName + " (" + lgmEdge.getHashString() + ")" + " -> " + startNode + "  ->  " + endNode + " " + lgmEdge + " " + description);
                         } catch (Exception e) {
                             // hier kann es zu java.lang.InstantiationExceptions kommen, wenn die EdgeClass abstract ist, weil nur für Unterklassen der ObjectProperty Edges angelegt werden sollen
                             printe("SKIPPED " + statement);
