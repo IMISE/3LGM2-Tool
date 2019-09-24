@@ -1,6 +1,9 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.IGNORE;
+import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.JOIN;
+import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.OVERWRITE;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -28,14 +31,24 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
  */
 public class OverwriteDialog extends JDialog implements ActionListener {
 
-    public static final int OVERWRITE = 1 << 2;
-    public static final int JOIN = 1 << 3;
-    public static final int DONOTHING = 1 << 4;
+    public enum OverwriteOption {
+        OVERWRITE, // das vorhandene Element wird ersetzt
+        JOIN, // das vorhandene und das neue Element werden zusammengeführt
+        IGNORE // das vorhandene Element bleibt unverändert
+    }
 
-    public static final int REMEMBER = 1;
+    public static class OverwriteQuestionAnswer {
+        public final OverwriteOption overwriteOption;
+        public final boolean applyToAll;
+
+        public OverwriteQuestionAnswer(final OverwriteOption overwriteOption, final boolean applyToAll) {
+            this.overwriteOption = overwriteOption;
+            this.applyToAll = applyToAll;
+        }
+    }
 
     private final JCheckBox rememberCheckBox;
-    private int exit_status = -1;
+    private OverwriteQuestionAnswer exit_status = null;
 
     private OverwriteDialog(final Frame owner, final ModelElement me1, final ModelElement me2) throws HeadlessException {
         super(owner);
@@ -50,11 +63,11 @@ public class OverwriteDialog extends JDialog implements ActionListener {
         JButton button;
         button = new JButton(getResString("overwriteDialog_join"));
         button.addActionListener(this);
-        button.setActionCommand("join");
+        button.setActionCommand(JOIN.name());
         panel.add(button);
         button = new JButton(getResString("overwriteDialog_ignore"));
         button.addActionListener(this);
-        button.setActionCommand("donothing");
+        button.setActionCommand(IGNORE.name());
         panel.add(button);
         getContentPane().add(panel, BorderLayout.SOUTH);
 
@@ -93,7 +106,7 @@ public class OverwriteDialog extends JDialog implements ActionListener {
      * @param insert
      * @return
      */
-    public static int showDialog(final ModelElement old, final ModelElement insert) {
+    public static OverwriteQuestionAnswer showDialog(final ModelElement old, final ModelElement insert) {
         return showDialog(Static.getMainFrame(), old, insert);
     }
 
@@ -103,27 +116,24 @@ public class OverwriteDialog extends JDialog implements ActionListener {
      * @param insert
      * @return
      */
-    public static int showDialog(final Frame owner, final ModelElement old, final ModelElement insert) {
+    public static OverwriteQuestionAnswer showDialog(final Frame owner, final ModelElement old, final ModelElement insert) {
         OverwriteDialog dialog = new OverwriteDialog(owner, old, insert);
-
         dialog.setVisible(true);
         dim = dialog.getPreferredSize();
-
-        return dialog.exit_status | (dialog.rememberCheckBox.isSelected() ? 1 : 0);
+        return dialog.exit_status;
     }
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        if (e.getActionCommand().equals("overwrite")) {
-            exit_status = OVERWRITE;
-        } else if (e.getActionCommand().equals("join")) {
-            exit_status = JOIN;
-        } else if (e.getActionCommand().equals("donothing")) {
-            exit_status = DONOTHING;
-        } else {
-            return;
+        OverwriteOption option = null;
+        if (e.getActionCommand().equals(OVERWRITE.name())) {
+            option = OVERWRITE;
+        } else if (e.getActionCommand().equals(JOIN.name())) {
+            option = JOIN;
+        } else if (e.getActionCommand().equals(IGNORE.name())) {
+            option = IGNORE;
         }
-
+        exit_status = new OverwriteQuestionAnswer(option, rememberCheckBox.isSelected());
         dispose();
     }
 }

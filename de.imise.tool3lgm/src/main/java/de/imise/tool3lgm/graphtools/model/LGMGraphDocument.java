@@ -1,6 +1,9 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
+import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.IGNORE;
+import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.JOIN;
+import static de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption.OVERWRITE;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.SELECTION_CHANGED;
@@ -16,9 +19,12 @@ import javax.swing.JOptionPane;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysis;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisDefinitions.SingleSimpleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog;
+import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteOption;
+import de.imise.tool3lgm.graphtools.dialog.OverwriteDialog.OverwriteQuestionAnswer;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -326,11 +332,10 @@ public class LGMGraphDocument extends GraphDocument {
             GDCollectionIconTable targetIconTable = targetCollection.getIconTable();
             targetIconTable.putAll(sourceIconTable); // Warum werden hier einfach alle Icons übernommen? Überprüfen!
 
-            // lowest bit determin whether ask user about what to do, when hashcode already exists in dest (1 == do not ask / remember last decision)
-            // OverwriteDialog.OVERWRITE
-            // OverwriteDialog.JOIN
-            // OverwriteDialog.NOTHING
-            int overwriteJoinNothing = 0;
+            ModelCategory sourceModelCategory = sourceCollection.getModelCategory();
+            OverwriteOption defaultOverwriteOption = sourceModelCategory == ModelCategory.TEMPLATE ? JOIN : null;
+            //bei Templates soll nicht nachgefragt (applyToAll == true) und immer gejoint werden
+            OverwriteDialog.OverwriteQuestionAnswer answer = new OverwriteQuestionAnswer(defaultOverwriteOption, defaultOverwriteOption != null);
             for (ModelElement sourceElement : sourceElements) {
                 ElementContainer sourceContainer = sourceElement.getContainer(sourceDoc);
                 if (sourceContainer == null) {
@@ -340,21 +345,21 @@ public class LGMGraphDocument extends GraphDocument {
                 String sourceHash = sourceElement.getHashString();
                 ModelElement targetElement = targetMainDoc.findElementCoded(sourceHash);
                 if (targetElement != null) {
-                    if ((overwriteJoinNothing & 1) == 0) {
+                    if (!answer.applyToAll) {
                         sourceDoc.select(sourceContainer, STANDARD_PID);
                         sourceDoc.distributeEvent(SELECTION_CHANGED, sourceContainer, STANDARD_PID);
-                        overwriteJoinNothing = OverwriteDialog.showDialog(targetElement, sourceElement);
+                        answer = OverwriteDialog.showDialog(targetElement, sourceElement);
                     }
 
-                    if ((overwriteJoinNothing & OverwriteDialog.OVERWRITE) > 0) {
-
-                    } else if ((overwriteJoinNothing & OverwriteDialog.JOIN) > 0) {
+                    if (answer.overwriteOption == OVERWRITE) {
+                        //hier müsste das alte evtl. noch gelöscht werden !?
+                    } else if (answer.overwriteOption == JOIN) {
                         targetDoc.joinElements(targetElement, sourceElement, sourceDoc, false);
                         if (targetElement instanceof Edge) {
                             ((Edge) targetElement).reconnect(targetCollection);
                             ((Edge) targetElement).refreshText();
                         }
-                    } else if ((overwriteJoinNothing & OverwriteDialog.DONOTHING) > 0) {
+                    } else if (answer.overwriteOption == IGNORE) {
                         continue;
                     }
                     //wenn der Hash des zu kopierenden Elementes noch nicht im Modell vorkommt
