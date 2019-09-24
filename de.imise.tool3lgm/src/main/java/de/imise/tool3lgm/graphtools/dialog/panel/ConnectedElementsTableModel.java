@@ -9,7 +9,6 @@ import javax.swing.table.DefaultTableModel;
 
 import com.google.common.base.Strings;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.ColumnType;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
@@ -85,7 +84,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
         for (SingleColumnDefinition columnDefinition : tableDefinition) {
             String colName = columnDefinition.getHeaderResKeyOrName();
             if (!Strings.isNullOrEmpty(colName)) {
-                colName = Tool3lgmConstants.getResStringWithoutError(colName); //wenn irgendwas als Spaltennanem von außen vorgegeben ist -> das setzten
+                colName = columnHeaderReferencePath.getResStringWithoutError(colName); //wenn irgendwas als Spaltennanem von außen vorgegeben ist -> das setzten
             } else {
                 ColumnType columnType = columnDefinition.getColumnType();
                 if (columnType == ColumnType.END_ELEMENT) {
