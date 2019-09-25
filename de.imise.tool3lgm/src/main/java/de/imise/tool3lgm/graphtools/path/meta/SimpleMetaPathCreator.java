@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
+import de.imise.util.Sys;
 
 /**
  * @author AXS (5 Dec 2018)
@@ -287,7 +288,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
         Class<? extends ModelElement> start = startClass;
         for (int i = 0; i < associations.length; i++) {
             Class<? extends Edge> edgeClass = associations[i];
-            Direction direction = getEdgeDirection(start, edgeClass, i == associations.length - 1 ? endClass : null); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
+            Direction direction = getEdgeDirection(metaModel, start, edgeClass, i == associations.length - 1 ? endClass : null); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
             //die Elementklasse passt nicht zur aktuellen Kante
             if (direction == null) {
                 //solange zur vorherigen Kante zurück gehen, bis man eine findet, die sowohl vorwärts als auch rückwärts passt und diese dann mit rückwärts probieren
@@ -301,7 +302,8 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 }
                 if (i < 0) {
                     //der Pfad ist fehlerhaft, d. h. trotz Zurücklaufen und Test mit der Gegenrichtung passen die Kanten nicht zueinander
-                    throw new IllegalArgumentException("EdgeClasses dosn't define a valid metapath");
+                    Sys.err1("EdgeClasses dosn't define a valid metapath");
+                    return null;
                 }
             }
             ElementaryMetaPath metaPath;
@@ -369,21 +371,28 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      * Ist sie die Endklasse, kommt Direction.BACKWARD zurück und wenn sie gar nicht passt, dann null. Es wird genau in dieser
      * Reihenfolge geprüft, also wenn die übergebene Klasse Start- und Endklasse der Kantenklasse ist, dann kommt Direction.FORWARD.
      *
+     * @param metaModel
      * @param startClass
      * @param edgeClass
      * @param endClass ist diese Klasse null, wird nur die startClass berücksichtigt
      * @return
      */
-    public static final Direction getEdgeDirection(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
-        Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
-        Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
+    public static final Direction getEdgeDirection(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
         Direction direction = null;
-        if (ReflectionUtils.isAssignable(edgeStartClass, startClass) && (endClass == null || ReflectionUtils.isAssignable(edgeEndClass, endClass))) {
+        if ((startClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) && (endClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass))) {
             direction = Direction.FORWARD;
-        } else if (ReflectionUtils.isAssignable(edgeEndClass, startClass) && (endClass == null || ReflectionUtils.isAssignable(edgeStartClass, endClass))) {
+        } else if ((startClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) && (endClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass))) {
             direction = Direction.BACKWARD;
         }
+        if (direction == null) {
+            Sys.err1(c(startClass) + " < " + c(edgeClass) + " > " + c(endClass));
+        }
+
         return direction;
+    }
+
+    private static String c(final Class<?> clazz) {
+        return clazz == null ? null : clazz.getSimpleName();
     }
 
     public static boolean isEdgeDirectionBackward(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {

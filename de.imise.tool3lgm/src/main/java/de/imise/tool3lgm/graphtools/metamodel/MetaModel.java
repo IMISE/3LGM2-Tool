@@ -1335,6 +1335,38 @@ public final class MetaModel implements MetaModelSpecific {
     }
 
     /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Startklasse der Edge oder eine Unterklasse oder eine Oberklasse davon ist
+     * und die Kantenklasse für diese Elementart nicht entfernt wurde.
+     *
+     * @param edgeClass
+     * @param elementClass
+     * @return
+     */
+    public final boolean isStartClassOrStartClassSuperclass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        if (isRemovedEdgeClassForStartClass(elementClass, edgeClass)) {
+            return false;
+        }
+        Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
+        return startClass.isAssignableFrom(elementClass) || elementClass.isAssignableFrom(startClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse die Endklasse der Edge oder eine Unterklasse oder eine Oberlasse davon ist
+     * und die Kantenklasse für diese Elementart nicht entfernt wurde.
+     *
+     * @param edgeClass
+     * @param elementClass
+     * @return
+     */
+    public final boolean isEndClassOrEndClassSuperclass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        if (isRemovedEdgeClassForEndClass(elementClass, edgeClass)) {
+            return false;
+        }
+        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+        return endClass.isAssignableFrom(elementClass) || elementClass.isAssignableFrom(endClass);
+    }
+
+    /**
      * Liefert <code>true</code>, wenn die übergebene Klasse die Start- oder Endklasse der Edge oder eine Ober- oder Unterklasse davon ist.
      *
      * @param edgeClass
