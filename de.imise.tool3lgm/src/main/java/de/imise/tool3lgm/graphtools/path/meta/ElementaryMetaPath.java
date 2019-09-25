@@ -410,7 +410,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     @Override
     protected String createName() {
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
-        return elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState);
+        String name = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState);
+        return name;
     }
 
     @Override

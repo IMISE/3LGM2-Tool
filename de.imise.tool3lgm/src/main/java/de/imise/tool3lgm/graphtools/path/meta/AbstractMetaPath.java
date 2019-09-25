@@ -442,7 +442,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
 
     @Override
     public final String toString() {
-        return getFullName();
+        return getName();
     }
 
     /**

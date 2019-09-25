@@ -207,12 +207,6 @@ public class SimpleMetaPath extends SequenceMetaPath {
         return sb.toString();
     }
 
-    @Override
-    public String createName() {
-        return super.createName();
-        //return getFullPathString();
-    }
-
     /**
      * @return getMetaPathCount()
      * @see #getMetaPathCount()

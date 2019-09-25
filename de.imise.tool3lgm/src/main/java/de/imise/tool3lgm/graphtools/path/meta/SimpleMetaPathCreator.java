@@ -462,7 +462,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 for (Class<? extends ModelElement> startClass : instanciableAssignableStartClasses) {
                     for (Class<? extends ModelElement> endClass : instanciableAssignableEndClasses) {
                         ElementaryMetaPath newElementaryMetaPath = elementaryMetaPathHandler.getMetaPath(startClass, originalElementaryMetaPath, endClass);
-                        SimpleMetaPath newSimpleMetaPath = getPathStepReplacedMetaPath(elementaryMetaPaths, newElementaryMetaPath, currentPathStepIndex, simpleMetaPath.getName());
+                        SimpleMetaPath newSimpleMetaPath = getPathStepReplacedMetaPath(elementaryMetaPaths, newElementaryMetaPath, currentPathStepIndex, simpleMetaPath.getName(), simpleMetaPath.getMetaPathStepWithPathName());
                         //bei der ersten nicht-abstrakten Kantenklasse wird der neue MetaPfad in der Ergebnisliste einfach über den neuen geschrieben
                         if (replaceOriginalMetaPathInResultList) {
                             replaceOriginalMetaPathInResultList = false;
@@ -477,11 +477,19 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
         return simpleMetaPaths;
     }
 
-    private static SimpleMetaPath getPathStepReplacedMetaPath(final List<ElementaryMetaPath> elementaryMetaPaths, final ElementaryMetaPath elementaryMetaPath, final int pathStepIndex, final String baseResKeyOrName) {
+    /**
+     * @param elementaryMetaPaths
+     * @param elementaryMetaPath
+     * @param pathStepIndex
+     * @param baseResKeyOrName
+     * @param metaPathStepWithPathName
+     * @return
+     */
+    private static SimpleMetaPath getPathStepReplacedMetaPath(final List<ElementaryMetaPath> elementaryMetaPaths, final ElementaryMetaPath elementaryMetaPath, final int pathStepIndex, final String baseResKeyOrName, final int metaPathStepWithPathName) {
         ElementaryMetaPath[] elementaryMetaPathArray = new ElementaryMetaPath[elementaryMetaPaths.size()];
         elementaryMetaPathArray = elementaryMetaPaths.toArray(elementaryMetaPathArray);
         elementaryMetaPathArray[pathStepIndex] = elementaryMetaPath;
-        return new SimpleMetaPath(baseResKeyOrName, elementaryMetaPathArray);
+        return metaPathStepWithPathName < 0 ? new SimpleMetaPath(baseResKeyOrName, elementaryMetaPathArray) : new SimpleMetaPath(metaPathStepWithPathName, elementaryMetaPathArray);
     }
 
     /**
