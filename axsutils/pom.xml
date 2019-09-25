@@ -85,4 +85,5 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<name>de-axs-utils</name>
 </project>
