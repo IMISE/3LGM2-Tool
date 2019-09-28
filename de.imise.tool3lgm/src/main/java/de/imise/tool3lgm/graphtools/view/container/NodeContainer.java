@@ -242,7 +242,8 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
         }
         ImageIcon icon = null;
         try {
-            icon = new ImageIcon(ImageTable.get(name));
+            byte[] imageData = ImageTable.get(name);
+            icon = new ImageIcon(imageData);
         } catch (Exception ex) {
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
             JOptionPane.showMessageDialog(null, getResString("icon_kaputt"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
