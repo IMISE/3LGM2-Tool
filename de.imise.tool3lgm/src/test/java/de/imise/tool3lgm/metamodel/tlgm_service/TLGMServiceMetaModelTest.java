@@ -20,8 +20,6 @@ import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import org.testng.annotations.Test;
-
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 
 public class TLGMServiceMetaModelTest {
@@ -41,7 +39,7 @@ public class TLGMServiceMetaModelTest {
         }
     }
 
-    @Test
+    //    @Test
     public void test() {
         //        File pluginDir = new File(Tool3lgmConstants.APPLICATION_DIR, "Plugins");
         //        System.err.println(pluginDir);
