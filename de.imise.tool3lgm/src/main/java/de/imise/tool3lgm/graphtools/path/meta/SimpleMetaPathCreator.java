@@ -41,6 +41,17 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
         super(metaModel);
     }
 
+    // braucht keine eigene equals() und hashCode(), weil es derselbe Builder wird, wenn die selbe MetaModelDefintion-Klasse zurgunde liegt
+    //    @Override
+    //    public int hashCode() {
+    //        return super.hashCode();
+    //    }
+    //
+    //    @Override
+    //    public boolean equals(final Object obj) {
+    //        return super.equals(obj);
+    //    }
+    //
     /**
      * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
      * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
