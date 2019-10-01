@@ -188,8 +188,11 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @param me
      * @return
      */
-    private static final String getNewHashString(final ModelElement me) {
-        return HashStringGenerator.getHash(ElementsNameBuilder.getShortName(me.getClass()));
+    private final String getNewHashString(final ModelElement me) {
+        ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        String elementClassShortName = elementsNameBuilder.getShortName(elementClass);
+        return HashStringGenerator.getHash(elementClassShortName);
     }
 
     /**
