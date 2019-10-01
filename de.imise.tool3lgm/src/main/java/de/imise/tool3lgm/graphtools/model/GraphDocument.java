@@ -209,6 +209,56 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
     // Verwaltung globaler Modelldaten --- Anfang ---
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (gdcoll == null ? 0 : gdcoll.hashCode());
+        result = prime * result + (hashString == null ? 0 : hashString.hashCode());
+        result = prime * result + Arrays.hashCode(layer);
+        result = prime * result + (title == null ? 0 : title.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        GraphDocument other = (GraphDocument) obj;
+        if (gdcoll == null) {
+            if (other.gdcoll != null) {
+                return false;
+            }
+        } else if (!gdcoll.equals(other.gdcoll)) {
+            return false;
+        }
+        if (hashString == null) {
+            if (other.hashString != null) {
+                return false;
+            }
+        } else if (!hashString.equals(other.hashString)) {
+            return false;
+        }
+        if (!Arrays.equals(layer, other.layer)) {
+            return false;
+        }
+        if (title == null) {
+            if (other.title != null) {
+                return false;
+            }
+        } else if (!title.equals(other.title)) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * @return the model category of the {@link GDCollection}
      */
