@@ -130,7 +130,6 @@ public final class MetaModelContext extends SimpleResourceHandler implements Met
         if (metaModel == null) {
             try {
                 metaModel = new MetaModel(this);
-                elementsNameBuilder = new ElementsNameBuilder(this);
             } catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
