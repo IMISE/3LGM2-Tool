@@ -26,7 +26,7 @@ import de.imise.util.Alphabetical;
 /**
  * @author AXS (25.10.2018)
  */
-public class ElementsNameBuilder extends MetaModelSpecificAdapter {
+public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
 
     public static final String STANDARD_DOUBLE_MEANING_EDGE_DELIMITER = " / ";
 
@@ -44,6 +44,17 @@ public class ElementsNameBuilder extends MetaModelSpecificAdapter {
         super(metaModelContext);
     }
 
+    // braucht keine eigene equals() und hashCode(), weil es derselbe Builder wird, wenn die selbe MetaModelDefintion-Klasse zurgunde liegt
+    //    @Override
+    //    public int hashCode() {
+    //        return super.hashCode();
+    //    }
+    //
+    //    @Override
+    //    public boolean equals(final Object obj) {
+    //        return super.equals(obj);
+    //    }
+    //
     /**
      * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
      *
@@ -593,7 +604,7 @@ public class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @param elementClass Elementklasse für die das Kürzel zurück gegeben werden soll.
      * @return String mit Namenskuerzel
      */
-    public static final String getShortName(final Class<? extends ModelElement> elementClass) {
+    public final String getShortName(final Class<? extends ModelElement> elementClass) {
         if (Edge.class.isAssignableFrom(elementClass)) {
             return ModelConstants.EDGE_SHORT_NAME;
         }
