@@ -337,8 +337,8 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @return
      */
     public boolean equals(final Object obj, final boolean ignoreName) {
-        if (this == obj) {
-            return true;
+        if (!super.equals(obj)) {
+            return false;
         }
         if (obj == null) {
             return false;
