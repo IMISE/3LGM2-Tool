@@ -85,6 +85,36 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     protected void init() {
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (definedMetaPaths == null ? 0 : definedMetaPaths.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        MetaPathDefinition other = (MetaPathDefinition) obj;
+        if (definedMetaPaths == null) {
+            if (other.definedMetaPaths != null) {
+                return false;
+            }
+        } else if (!definedMetaPaths.equals(other.definedMetaPaths)) {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * Liefert <code>Tool3lgmConstants.getResString(resKey)</code>. Dient nur zur Verkürzung des Codes.
      *
