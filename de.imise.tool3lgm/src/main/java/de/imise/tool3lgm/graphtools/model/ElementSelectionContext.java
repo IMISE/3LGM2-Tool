@@ -362,4 +362,34 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
         return selectedContainer.toString();
     }
 
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (selectedContainer == null ? 0 : selectedContainer.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        ElementSelectionContext other = (ElementSelectionContext) obj;
+        if (selectedContainer == null) {
+            if (other.selectedContainer != null) {
+                return false;
+            }
+        } else if (!selectedContainer.equals(other.selectedContainer)) {
+            return false;
+        }
+        return true;
+    }
+
 }
