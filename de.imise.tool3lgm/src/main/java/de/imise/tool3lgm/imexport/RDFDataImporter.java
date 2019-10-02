@@ -3,6 +3,9 @@ package de.imise.tool3lgm.imexport;
 import static de.imise.tool3lgm.imexport.RDFDataImporter.NameCreationPatternStandardIndentifier.LABEL;
 import static de.imise.tool3lgm.imexport.RDFDataImporter.NameCreationPatternStandardIndentifier.LOCAL_NAME;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -134,10 +137,18 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     }
 
     /**
-     * @param urlString
+     * @param file
+     * @throws MalformedURLException
      */
-    public RDFDataImporter(final String urlString) {
-        super(urlString);
+    public RDFDataImporter(final File file) throws MalformedURLException {
+        super(file);
+    }
+
+    /**
+     * @param url
+     */
+    public RDFDataImporter(final URL url) {
+        super(url);
     }
 
     /**
@@ -147,8 +158,9 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     public abstract String getEdgeClassNamePostfix();
 
     @Override
-    public boolean importData(final String urlString) {
+    public boolean importData(final URL url) {
         OntModel ontModel = ModelFactory.createOntologyModel();
+        String urlString = url.toString();
         ontModel.read(urlString);
         String descriptionPropertyNameOrUri = getDescriptionPropertyUriOrLocalName();
         OntPropertyResolver descriptionPropertyResolver = new OntPropertyResolver(ontModel, descriptionPropertyNameOrUri);
