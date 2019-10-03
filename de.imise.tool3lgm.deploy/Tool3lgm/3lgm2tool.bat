@@ -8,7 +8,8 @@ SET MEMORY=%MEMORY32%
 ::wmic os get osarchitecture -> if return String contains "64" -> Set Max Memory to 64-Bit
 wmic os get osarchitecture | FINDSTR /IL "64" > NUL
 IF %ERRORLEVEL% EQU 0 SET MEMORY=%MEMORY64%
-set PATH=%PATH%;.;lib
+set PATH=%PATH%;.;lib;Plugins
 @echo on
-java %MEMORY% -jar ./lib/tool3lgm.jar
+::java %MEMORY% -jar ./lib/tool3lgm.jar
+java %MEMORY% -classpath ".;./lib/*;./Plugins/*" -splash:splash.gif de.imise.tool3lgm.Tool3lgmMain
 pause
