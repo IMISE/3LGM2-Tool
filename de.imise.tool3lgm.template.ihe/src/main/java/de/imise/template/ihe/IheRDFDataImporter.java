@@ -2,6 +2,9 @@ package de.imise.template.ihe;
 
 import static de.imise.tool3lgm.imexport.RDFDataImporter.NameCreationPatternStandardIndentifier.LABEL;
 
+import java.io.File;
+import java.net.MalformedURLException;
+
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverter;
@@ -17,7 +20,7 @@ import de.imise.util.Sys;
  */
 public class IheRDFDataImporter extends RDFDataImporter {
 
-    public static final String TEST_FILE = "file://" + Tool3lgmConstants.TEMPLATE_DIR + "/IHE/iheDomain_Ontology_straight-forward_v2.rdf";
+    public static final File TEST_FILE = new File(Tool3lgmConstants.TEMPLATE_DIR, "/IHE/iheDomain_Ontology_straight-forward_v2.rdf");
 
     /**
      * Da ObjectProperties u.U. genauso heißen, wie Knoten-Klassen, sollte man mit diesem Namenszusatz bei 3LGM2-Kantenklassen für Eindeutigkeit
@@ -29,8 +32,9 @@ public class IheRDFDataImporter extends RDFDataImporter {
      * Nur für Testzwecke
      *
      * @param args
+     * @throws MalformedURLException
      */
-    public static void main(final String[] args) {
+    public static void main(final String[] args) throws MalformedURLException {
         IheRDFDataImporter importer = new IheRDFDataImporter(TEST_FILE);
 
         final int SINGLE_IMPORTS = 1; //300;
@@ -66,17 +70,18 @@ public class IheRDFDataImporter extends RDFDataImporter {
     }
 
     /**
-     *
+     * @throws MalformedURLException
      */
-    public IheRDFDataImporter() {
+    public IheRDFDataImporter() throws MalformedURLException {
         this(TEST_FILE);
     }
 
     /**
      * @param urlString
+     * @throws MalformedURLException
      */
-    public IheRDFDataImporter(final String urlString) {
-        super(urlString);
+    public IheRDFDataImporter(final File file) throws MalformedURLException {
+        super(file.toURI().toURL());
         init();
     }
 

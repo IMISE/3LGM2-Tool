@@ -71,6 +71,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener {
         KeyStrokes.registerPublicKeyStrokes(getRootPane());
         setJMenuBar(menuBar);
         addAsToolChangeListener();
+        updateTitle();
         setVisible(visible);
     }
 
