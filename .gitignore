@@ -1,11 +1,8 @@
 de.imise.tool3lgm/Tool3lgm_de.analysis
 de.imise.tool3lgm/Tool3lgm.analysis
 de.imise.tool3lgm/test-output/
-de.imise.metamodel.original/target
-de.imise.metamodel.service/target
+de.imise.tool3lgm/Plugins
+de.imise.tool3lgm/lib
+target
 Plugins
-de-axs-utils*.jar
-*tool3lgm*.jar
 de.imise.tool3lgm.deploy/Tool3lgm/lib
-de.imise.owl2tlgm/target
-target/
