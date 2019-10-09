@@ -95,4 +95,15 @@ public interface MetaModelSpecific {
         return Objects.equals(metaModelContext, thisMetaModelContext);
     }
 
+    /**
+     * @param metaModelDefinitionClass
+     * @return <code>true</code> if the given class is the same or a superclass of of
+     *         the metamodel definition class of this server
+     */
+    public default boolean hasMetaModelDefinitionClass(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        Class<? extends MetaModelDefinition> myMetaModelDefinitionClass = getMetaModelDefinitionClass();
+        boolean assignable = ReflectionUtils.isAssignable(myMetaModelDefinitionClass, metaModelDefinitionClass);
+        return assignable;
+    }
+
 }

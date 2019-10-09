@@ -31,12 +31,6 @@ public abstract class TemplateLibraryProvider extends MetaModelSpecificAdapter i
     }
 
     /**
-     * @return the class of the MetaModelDefinition of the template and the target models
-     */
-    @Override
-    public abstract Class<? extends MetaModelDefinition> getMetaModelDefinitionClass();
-
-    /**
      * @return the model that represents the template
      */
     public abstract GDCollection getTemplateLibrary();
@@ -50,15 +44,6 @@ public abstract class TemplateLibraryProvider extends MetaModelSpecificAdapter i
      * @return the usage definion for this template
      */
     public abstract TemplateUsageDefinition getUsageDefinition();
-
-    /**
-     * @param metaModelDefinitionClass
-     * @return <code>true</code> if the given class is the same or a superclass of of
-     *         the metamodel definition class of this server
-     */
-    public final boolean hasMetaModelDefinitionClass(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
-        return metaModelDefinitionClass.isAssignableFrom(getMetaModelDefinitionClass());
-    }
 
     @Override
     public String getResString(final String resKey) {

@@ -122,6 +122,11 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
     }
 
     @Override
+    public boolean hasMetaModelDefinitionClass(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
+        return MetaModelSpecific.super.hasMetaModelDefinitionClass(metaModelDefinitionClass);
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
