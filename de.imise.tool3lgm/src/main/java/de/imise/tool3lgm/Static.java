@@ -473,7 +473,9 @@ public class Static {
      * @return Instanzen der übergebenen Klasse aus dem übergebenen Verzeichnis
      */
     public static <T> List<T> loadPlugins(final Class<T> superClassOfResultClasses) {
-        return PluginUtils.loadInstances(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
+        List<T> instances = PluginUtils.loadInstances(Tool3lgmConstants.LIB_DIR, superClassOfResultClasses);
+        instances.addAll(PluginUtils.loadInstances(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses));
+        return instances;
     }
 
     /**
@@ -486,7 +488,23 @@ public class Static {
      * @return Instanz der übergebenen Klasse aus dem übergebenen Verzeichnis oder <code>null</code>, wenn keine Instanz gefunden wurde
      */
     public static <T> T loadPlugin(final Class<T> superClassOfResultClasses) {
-        return PluginUtils.loadInstance(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
+        T instance = PluginUtils.loadInstance(Tool3lgmConstants.LIB_DIR, superClassOfResultClasses);
+        if (instance == null) {
+            instance = PluginUtils.loadInstance(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
+        }
+        return instance;
+    }
+
+    /**
+     * Lädt alle Klassen der übergebenen Art aus dem übergebenen Verzeichis oder Jar-File. Ist es ein Verzeichnis, werden alle darin enthaltenen
+     * Jar-Files durchsucht, sonst nur das eine übergebene Jar-File. Ist es weder Verzeichnis noch Jar-File, kommt eine leere Liste zurück.
+     *
+     * @param superClassOfResultClasses
+     *            (Ober-)Klasse aller Ergebnisklassen
+     * @return
+     */
+    public static <T> List<Class<? extends T>> loadClasses(final Class<? extends T> superClassOfResultClasses) {
+        return PluginUtils.loadClasses(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
     }
 
 }

@@ -86,6 +86,9 @@ public abstract class Tool3lgmConstants {
     /** Plugin Verzeichnis (das hat die Sichtbarkeit package, weil das nur über {@link Static#loadPlugin(Class)} erreichbar sein soll. */
     static final File PLUGIN_DIR = new File(APPLICATION_DIR, "Plugins");
 
+    /** Plugin Verzeichnis (das hat die Sichtbarkeit package, weil das nur über {@link Static#loadPlugin(Class)} erreichbar sein soll. */
+    static final File LIB_DIR = new File(APPLICATION_DIR, "lib");
+
     /** Template-Verzeichnis */
     public static final File TEMPLATE_DIR = new File(APPLICATION_DIR, "Templates");
 

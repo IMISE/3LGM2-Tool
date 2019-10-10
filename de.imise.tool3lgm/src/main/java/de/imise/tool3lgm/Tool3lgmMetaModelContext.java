@@ -21,7 +21,6 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition.DefaultMetaMod
 import de.imise.tool3lgm.graphtools.metamodel.RegularMetaModelDefinition;
 import de.imise.tool3lgm.imexport.ImportMetaModelDefinition;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
-import de.imise.util.PluginUtils;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -117,7 +116,7 @@ public final class Tool3lgmMetaModelContext {
      * @return
      */
     public static final List<MetaModelContext> loadMetaModelContexts() {
-        List<Class<? extends MetaModelDefinition>> metaModelClasses = PluginUtils.loadClasses(Tool3lgmConstants.PLUGIN_DIR, MetaModelDefinition.class);
+        List<Class<? extends MetaModelDefinition>> metaModelClasses = Static.loadClasses(MetaModelDefinition.class);
         ReflectionUtils.retainSubClasses(metaModelClasses, RegularMetaModelDefinition.class);
         List<MetaModelContext> metaModelContexts = new ArrayList<>();
         for (int i = 0; i < metaModelClasses.size(); i++) {
