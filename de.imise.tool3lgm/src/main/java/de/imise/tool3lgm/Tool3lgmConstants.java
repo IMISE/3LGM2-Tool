@@ -64,7 +64,7 @@ public abstract class Tool3lgmConstants {
     public static final String CLIPBOARD_PATH = System.getProperty("user.home") + File.separator + ".3lgm_clipboard";
 
     /** Pfad zum Installationsverzeichnis der Anwendung */
-    public static final File APPLICATION_DIR = ApplicationManager.getApplicationDir();
+    public static final File APPLICATION_DIR = ApplicationManager.getApplicationDir("lib");
 
     public static final String RELATIVE_TOOL_JAR_PATH = "lib/tool3lgm.jar";
 
