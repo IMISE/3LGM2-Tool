@@ -153,10 +153,13 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<addClasspath>true</addClasspath>
+ 							<addClasspath>true</addClasspath>
 							<mainClass>de.imise.tool3lgm.Tool3lgmMain</mainClass>
 						</manifest>
 						<manifestEntries>
+<!--  							<Class-Path>here can only named jars placed or directories containing .class-files but not directories containing jar files</Class-Path> -->
+<!-- 							geht alles nicht wie es soll :( -->
+<!--   							<Class-Path>./Plugins/tool3lgm.metamodel.original-1.0.0.jar ./Plugins/tool3lgm.metamodel.service-1.0.0.jar ./Plugins/tool3lgm.template.ihe-1.0.0.jar</Class-Path>  -->
 							<SplashScreen-Image>splash.gif</SplashScreen-Image>
 						</manifestEntries>
 					</archive>
