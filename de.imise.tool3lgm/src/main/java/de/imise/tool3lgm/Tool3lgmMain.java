@@ -49,6 +49,22 @@ public class Tool3lgmMain {
      */
     public static void main(final String args[]) {
 
+        //Ausgabe des ClassPaths bzw. aller jar-URLs an die der Systemclassloader kommt. Das funktioniert nur bis Java8! Ab 9 ist der SystemClassLoader kein URLClassLoader mehr...
+        //        System.err.println("####################################################################################################");
+        //        ClassLoader cl = ClassLoader.getSystemClassLoader();
+        //        System.err.println(cl.getClass());
+        //
+        //        try {
+        //            URL[] urls = ((URLClassLoader) cl).getURLs();
+        //
+        //            for (URL url : urls) {
+        //                System.err.println(url.getFile());
+        //            }
+        //        } catch (Exception e) {
+        //            e.printStackTrace();
+        //        }
+        //        Sys.err1("####################################################################################################");
+
         //UserProperties initialisieren, damit die richige Locale gesetzt ist
         UserProperties.init();
 
