@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.SimplePath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
+import de.imise.util.ReflectionUtils;
 
 /**
  * Definition der Transformation eines (Meta-)Modells in ein anderes.<br>
@@ -110,7 +111,7 @@ public abstract class ModelConverterDefinition {
      *         <code>false</code>
      */
     public final boolean isSourceMetaModelDefinitionClass(final Class<?> clazz) {
-        return sourceMetaModelDefinitionClass.isAssignableFrom(clazz);
+        return ReflectionUtils.isAssignable(sourceMetaModelDefinitionClass, clazz);
     }
 
     /**
@@ -119,7 +120,7 @@ public abstract class ModelConverterDefinition {
      *         <code>false</code>
      */
     public final boolean isTargetMetaModelDefinitionClass(final Class<?> clazz) {
-        return targetMetaModelDefinitionClass.isAssignableFrom(clazz);
+        return ReflectionUtils.isAssignable(targetMetaModelDefinitionClass, clazz);
     }
 
     /**
