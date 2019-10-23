@@ -11,8 +11,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.util.swing.SwingUtils;
-import de.imise.util.swing.SwingUtils.MinSizedIconButton;
+import de.imise.util.swing.component.MinSizedIconButton;
 
 /**
  * Panel, bei dem man die rechte Seite auf und zuklappen kann. In der Regel sind dort links und rechts Bäume.
@@ -99,7 +98,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      * @return
      */
     private JButton createBetweenTreesButton(final Action a) {
-        return SwingUtils.MinSizedIconButton.createLimitedWidthButton(a, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH, MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT);
+        return MinSizedIconButton.createLimitedWidthButton(a, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH, MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT);
     }
 
     /**
