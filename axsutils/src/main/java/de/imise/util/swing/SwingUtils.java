@@ -8,15 +8,23 @@ import java.awt.GridBagConstraints;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import de.imise.util.StringUtils;
 
 /**
+ * Collection of static functions for Swing components
+ *
  * @author AXS (20 Mar 2019)
  */
 public class SwingUtils {
 
+    /**
+     * Sets all the given components to the same size. The size is given by the largest width and height of the given components.
+     *
+     * @param components
+     */
     public static final void setSamePreferredSize(final JComponent... components) {
         if (components == null || components.length == 0) {
             return;
@@ -33,9 +41,9 @@ public class SwingUtils {
     }
 
     /**
-     * Macht die Texte in beiden Labels gleich lang. Dabei werden die Fontmetrics abgefragt und an den kürzeren Text der beiden Labels so viele
-     * Leerzeichen angehängt, dass er nahezu gleich lang ist, wie der längere. In dieser Form passt das wahrscheinlich nur bei Labels mit der
-     * Ausrichtung WEST.
+     * Sets the length of the text of the given labels to the same length by adding whitespaces to the shorter one until it has as near as possible
+     * the same size as the greater one. The length is computed by the {@link FontMetrics}. This function possibly makes only sense in combination
+     * with labes with the alignment {@link SwingConstants#WEST}.
      *
      * @param label1
      * @param label2
@@ -61,6 +69,13 @@ public class SwingUtils {
         label1.setText(text1);
     }
 
+    /**
+     * Sets the length of the text of the given labels to the same length by adding whitespaces to the shorter labels until they have as near as
+     * possible the same size as the label with the largest text. The length is computed by the {@link FontMetrics}. This function possibly makes only
+     * sense in combination with labes with the alignment {@link SwingConstants#WEST}.
+     *
+     * @param labels
+     */
     public static void fillToSameLength(final JLabel... labels) {
         if (labels.length == 0) {
             return;
@@ -83,12 +98,23 @@ public class SwingUtils {
         }
     }
 
-    public static void add(final Container con, final Component c, final GridBagConstraints gbc, final int x, final int y, final int w, final int h) {
+    /**
+     * Convinience function to add a component to a container with specific {@link GridBagConstraints}.
+     *
+     * @param container the container which gets the component added
+     * @param component the component to add
+     * @param gbc the {@link GridBagConstraints} used to add the component to the container
+     * @param x the gridx value that will be set to the constarints before the add
+     * @param y the gridy value that will be set to the constarints before the add
+     * @param w the gridwidth value that will be set to the constarints before the add
+     * @param h the gridheight value that will be set to the constarints before the add
+     */
+    public static void add(final Container container, final Component component, final GridBagConstraints gbc, final int x, final int y, final int w, final int h) {
         gbc.gridx = x;
         gbc.gridy = y;
         gbc.gridwidth = w;
         gbc.gridheight = h;
-        con.add(c, gbc);
+        container.add(component, gbc);
     }
 
 }
