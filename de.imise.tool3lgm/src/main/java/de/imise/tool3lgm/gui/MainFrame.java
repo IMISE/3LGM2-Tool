@@ -4,10 +4,11 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseListener;
 
 import javax.help.CSH;
@@ -29,6 +30,7 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
+import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.util.robot.ScreenRobot;
 
 /**
@@ -37,7 +39,7 @@ import de.imise.util.robot.ScreenRobot;
  *
  * @author AXS (9 Aug 2019)
  */
-public class MainFrame extends JFrame implements Tool3lgmChangeListener {
+public class MainFrame extends JFrame implements Tool3lgmChangeListener, ComponentListener {
 
     /** Menü-Leiste des Tools */
     private final MenuBar menuBar;
@@ -51,11 +53,6 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener {
     public MainFrame(final boolean visible) {
         setIconImage(Tool3lgmConstants.getIcon("toolIcon.gif").getImage());
         setTitle(null);
-
-        //Rechteck, auf dem Screen bestimmen, Fenster maximal einnehmen können
-        Rectangle maxBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-        Dimension screenSize = new Dimension(maxBounds.width, maxBounds.height);
-        setSize(screenSize);
 
         contentPane = new MainFrameContentPane();
         getContentPane().add(contentPane);
@@ -72,12 +69,41 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener {
         setJMenuBar(menuBar);
         addAsToolChangeListener();
         updateTitle();
+        addComponentListener(this);
+        restorePositionAndSizeFromUserProperties();
         setVisible(visible);
     }
 
     @Override
     public void dispose() {
         Static.getTool().close();
+    }
+
+    /**
+     * Sets the corresponding UserPropertiy values for the screen index, the width and the height.
+     */
+    public void savePositionAndSizeInUserProperties() {
+        Rectangle bounds = getBounds();
+        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.set(bounds.x);
+        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.set(bounds.y);
+        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.set(bounds.width);
+        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT.set(bounds.height);
+    }
+
+    /**
+     * Restores the screen index, the width and the height from the corresponding UserPropertiy values.
+     */
+    private void restorePositionAndSizeFromUserProperties() {
+        int frameX = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.get();
+        int frameY = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.get();
+        int frameWidth = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.get();
+        int frameHeight = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT.get();
+        Rectangle screenBounds = getGraphicsConfiguration().getBounds();
+        if (frameWidth < 20 || frameHeight < 20) { //don't allow windows smaller 20 in one dimension
+            setBounds(screenBounds);
+        } else {
+            setBounds(frameX, frameY, frameWidth, frameHeight);
+        }
     }
 
     /**
@@ -246,6 +272,30 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener {
     public synchronized void removeMouseListener(final MouseListener l) {
         contentPane.removeMouseListener(l);
         super.removeMouseListener(l);
+    }
+
+    ///////////////////////
+    // ComponentListener //
+    ///////////////////////
+
+    @Override
+    public void componentResized(final ComponentEvent e) {
+        savePositionAndSizeInUserProperties();
+    }
+
+    @Override
+    public void componentMoved(final ComponentEvent e) {
+        savePositionAndSizeInUserProperties();
+    }
+
+    @Override
+    public void componentShown(final ComponentEvent e) {
+        //do nothing
+    }
+
+    @Override
+    public void componentHidden(final ComponentEvent e) {
+        //do nothing
     }
 
 }
