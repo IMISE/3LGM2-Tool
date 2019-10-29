@@ -40,7 +40,8 @@ public class BrowseUtils {
      */
     public static final void browse(final String urlOrPath) {
         try {
-            URI uri = new URI(urlOrPath);
+            String fullUri = urlOrPath.contains("://") ? urlOrPath : "https://" + urlOrPath; // if no protocel -> https
+            URI uri = new URI(fullUri);
             browse(uri);
         } catch (Exception e) {
             try {
