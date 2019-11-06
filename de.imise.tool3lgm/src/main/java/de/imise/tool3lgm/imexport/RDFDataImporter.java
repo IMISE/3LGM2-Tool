@@ -40,7 +40,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.DataPrinter;
-import de.imise.util.HashStringGenerator;
 import de.imise.util.StringUtils;
 
 /**
@@ -281,8 +280,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     if (individualOntClass.equals(ontClass)) {
                         String name = getName(ontNode, namePattern);
                         String description = descriptionPropertyResolver.getValue(ontNode);
-                        String hashString = ontNode.getURI();
-                        hashString = HashStringGenerator.getHash(hashString); //TimeStamp und eine Nummer and die URI als Hash anhängen
+                        String hashString = ontNode.getURI(); //originale URI übernehmen
                         Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, hashString);
                         printe(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
                     } else {
@@ -342,8 +340,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     Node endNode = getTargetNode(objectNode);
                     if (endNode != null) {
                         //Predicate -> Edge
-                        String predicateUri = predicate.getURI();
-                        String edgeHash = HashStringGenerator.getHash(predicateUri);
+                        String edgeHash = predicate.getURI(); //originale URI übernehmen
                         OntProperty ontProperty = getOntProperty(predicate, importableObjectPropertiesToTargetEdgeClassName);
                         String name = getName(ontProperty, namePattern);
                         String description = descriptionPropertyResolver.getValue(predicate);
