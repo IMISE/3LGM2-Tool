@@ -33,18 +33,15 @@ import de.imise.util.ReflectionUtils;
  * <li>
  * Einfaches direktes Mapping von Kantenklassen, wenn beide Knotenklassen, die diese Kante verbindet, direkt gemappt werden (z.B. die Kante
  * «IntegrationProfile enthält Actor» im Protegé-Import-Metamodel wird im 3LGM2-S(IHE)-Metamodell zu «IheIntegrationProfile enthält IheActor"),
- * d.h
- * hier stimmt sogar die Richtung der Kante und es muss nichts herumgedreht werden.
+ * d.h hier stimmt sogar die Richtung der Kante und es muss nichts herumgedreht werden.
  * </li>
  * <li>
  * Direktes Mapping von Kantenklassen, aber die Richtung der Kante muss gedreht werden.
  * </li>
  * <li>
  * Eine Kantenklasse im Source-Modell wird zu einem Pfad über mehrere Kanten im Target-Metamodell (z.B. die Kante “Actor stellt bereit
- * Transaction” im
- * Protegé-Import-Metamodel wird im 3LGM-S(IHE)-Metamodel zum Pfad über die Kanten «IheActor besitzt IheProvidingInterface" +
- * «IheProvidingInterface
- * stellt bereit IheTransaction").
+ * Transaction” im Protegé-Import-Metamodel wird im 3LGM-S(IHE)-Metamodel zum Pfad über die Kanten "IheActor besitzt IheProvidingInterface" +
+ * "IheProvidingInterface stellt bereit IheTransaction").
  * </li>
  * <li>
  * Der umgekehrte Fall von 3. = ein Pfad im Source-Metamodell wird zu einer Kante im Target-Metamodell (diesen Fall haben wir in unserer aktuellen
@@ -52,8 +49,7 @@ import de.imise.util.ReflectionUtils;
  * </li>
  * <li>
  * Ein Pfad im Source-Metamodell wird zu einem völlig anderen Pfad im TagetMetamodell. Das bedeutet, 2 Elementklassen, die sich direkt aufeinander
- * mappen ließen, sind in beiden Metamodellen über verschiedene, nicht direkt aufeinander abbildbare Kantenklassen und Zwischenelemente
- * miteinander
+ * mappen ließen, sind in beiden Metamodellen über verschiedene, nicht direkt aufeinander abbildbare Kantenklassen und Zwischenelemente miteinander
  * verbunden (auch dieser Fall ist hypothetisch, also habe ich dafür kein Beispiel aus unserer aktuellen Aufgabenstellung).
  * </li>
  * <li>
@@ -63,8 +59,7 @@ import de.imise.util.ReflectionUtils;
  * </ol>
  * Für die Punkte 1–6 kann man Maps angeben, die diese Transformationen definieren. Der Punkt 7 wird in einer zusätzlichen “Erledige den
  * Rest”-Funktion untergebracht, in der beliebiger Java-Code stehen kanm und in der man somit auch die Punkte 1–6 erledigen könnte, wenn man zu
- * bequem
- * ist, die Mappings für die Funktionen 1–6 explizit zu definieren.
+ * bequem ist, die Mappings für die Funktionen 1–6 explizit zu definieren.
  *
  * @author AXS (7 Jun 2019)
  */
