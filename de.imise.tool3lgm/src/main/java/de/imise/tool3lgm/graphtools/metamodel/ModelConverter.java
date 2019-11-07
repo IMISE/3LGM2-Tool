@@ -19,6 +19,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.SimplePath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -207,16 +208,76 @@ public class ModelConverter {
                 Edge sourceEdge = (Edge) sourceEdgeElement;
                 ModelElement sourceEdgeStartElement = sourceEdge.getStart();
                 ModelElement sourceEdgeEndElement = sourceEdge.getEnd();
-                String sourceStartElementHash = sourceEdgeStartElement.getHashString();
-                String sourceEndElementHash = sourceEdgeEndElement.getHashString();
-                ModelElement targetStartElement = targetMainDoc.findNodeCoded(sourceStartElementHash);
-                ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEndElementHash);
+                String sourceEdgeStartElementHash = sourceEdgeStartElement.getHashString();
+                String sourceEdgeEndElementHash = sourceEdgeEndElement.getHashString();
+                String sourceEdgeHash = sourceEdgeElement.getHashString();
+                //                System.err.println(sourceEdgeStartElement + " (" + sourceEdgeStartElement.getHashString() + ") " + sourceEdge.getClass().getSimpleName() + " (" + sourceEdge.getHashString() + ") " + " " + sourceEdgeEndElement + " ("
+                //                        + sourceEdgeEndElement.getHashString() + ") ");
+                ModelElement targetStartElement = targetMainDoc.findNodeCoded(sourceEdgeStartElementHash);
+                ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEdgeEndElementHash);
                 //lege den MetaPfad im Zielmodell an
                 SimplePath createdPath = targetMainDoc.createPath(targetStartElement, targetEndElement, targetMetaPath, STANDARD_PID);
+                //replace the generated 3LGM-hashStrings by derived hashStrings from the source edge
+                replaceGeneratedHashStrings(createdPath, sourceEdgeHash);
                 //nach der Definiton der Umbenennungen die Namen der Elemente in Abhängigkeit von der Source-Edge umbenennen
                 generatedRenamedElements = edgesMappingMetaPathsCreationDefinition.renameAndJoinEqualNamedElements(createdPath, sourceEdge, generatedRenamedElements);
             }
         }
+    }
+
+    /**
+     * Replaces the automatic generated hashStrings in a generated path by a given hashString. The element in the
+     * middle gets the original given hashString. All the others get the same with an unique number appended.
+     * This algorithm is deterministic, so converting the same model again will generate the same hashStrings.
+     * The hashStrings of the start- and endElement of the path will not be changed.
+     *
+     * @param path
+     * @param hashString the generated element in the middle of the path gets this hash
+     */
+    private void replaceGeneratedHashStrings(final SimplePath path, final String hashString) {
+        ModelElement middleElement = getMiddleElement(path);
+        middleElement.setHashString(hashString);
+        int pathLength = path.length();
+        int counter = 1;
+        for (int i = 0; i < pathLength; i++) {
+            ElementaryPath pathStep = path.getPathStep(i);
+            if (i > 0) { //startElement
+                ModelElement startElement = pathStep.getStartElement();
+                counter = setHashString(startElement, hashString, counter);
+            }
+            //edge
+            Edge edge = pathStep.getEdge();
+            counter = setHashString(edge, hashString, counter);
+            if (i < pathLength - 1) { // endElement
+                ModelElement endElement = pathStep.getEndElement();
+                counter = setHashString(endElement, hashString, counter);
+            }
+        }
+    }
+
+    /**
+     * @param me
+     * @param hashString
+     * @param counter
+     * @return
+     */
+    private int setHashString(final ModelElement me, final String hashString, final int counter) {
+        //ignore the element which already has the correct hashString
+        if (me.getHashString().equals(hashString)) {
+            return counter;
+        }
+        String fullHashString = hashString + "_" + counter;
+        me.setHashString(fullHashString);
+        return counter + 1;
+    }
+
+    private ModelElement getMiddleElement(final SimplePath path) {
+        int pathLength = path.length();
+        int middlePathStep = pathLength / 2;
+        ElementaryPath pathStep = path.getPathStep(middlePathStep);
+        //even path step count -> node in the middle; odd pathStepCount -> edge in the middle
+        ModelElement middleElement = pathLength % 2 == 0 ? pathStep.getStartElement() : pathStep.getEdge();
+        return middleElement;
     }
 
     private void convertMetaPathsMappingEdges() {
