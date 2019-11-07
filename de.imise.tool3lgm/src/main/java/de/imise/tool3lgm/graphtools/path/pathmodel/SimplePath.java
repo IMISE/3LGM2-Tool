@@ -127,4 +127,12 @@ public class SimplePath extends SequencePath {
         return simpleMetaPath;
     }
 
+    /**
+     * @param pathStepIndex
+     * @return the path step with the given index
+     */
+    public ElementaryPath getPathStep(final int pathStepIndex) {
+        return elementaryPaths.get(pathStepIndex);
+    }
+
 }
