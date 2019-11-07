@@ -241,10 +241,6 @@ public class ModelConverter {
         int counter = 1;
         for (int i = 0; i < pathLength; i++) {
             ElementaryPath pathStep = path.getPathStep(i);
-            if (i > 0) { //startElement
-                ModelElement startElement = pathStep.getStartElement();
-                counter = setHashString(startElement, hashString, counter);
-            }
             //edge
             Edge edge = pathStep.getEdge();
             counter = setHashString(edge, hashString, counter);
