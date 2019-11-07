@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.util.collections.CollectionUtils;
@@ -66,6 +67,13 @@ public class SequencePath extends AbstractPath {
      */
     public List<AbstractPath> getPaths() {
         return paths;
+    }
+
+    @Override
+    protected void replace(final ModelElement original, final ModelElement replacement) {
+        for (AbstractPath path : paths) {
+            path.replace(original, replacement);
+        }
     }
 
 }

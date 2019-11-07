@@ -47,10 +47,30 @@ public abstract class AbstractPath {
     }
 
     /**
+     * @param startElement the new startElement
+     * @return the old startElement
+     */
+    public final ModelElement setStartElement(final ModelElement startElement) {
+        ModelElement oldStartElement = this.startElement;
+        this.startElement = startElement;
+        return oldStartElement;
+    }
+
+    /**
      * @return the startElement
      */
     public final ModelElement getStartElement() {
         return startElement;
+    }
+
+    /**
+     * @param endElement the new endElement
+     * @return the old endElement
+     */
+    public final ModelElement setEndElement(final ModelElement endElement) {
+        ModelElement oldEndElement = this.endElement;
+        this.endElement = endElement;
+        return oldEndElement;
     }
 
     /**
@@ -118,4 +138,25 @@ public abstract class AbstractPath {
         return true;
     }
 
+    /**
+     * @param original
+     * @param replacement
+     * @return
+     */
+    public void replaceElement(final ModelElement original, final ModelElement replacement) {
+        if (startElement == original) {
+            setStartElement(replacement);
+        }
+        if (endElement == original) {
+            setEndElement(replacement);
+        }
+        replace(original, replacement);
+    }
+
+    /**
+     * @param original
+     * @param replacement
+     * @return
+     */
+    protected abstract void replace(final ModelElement original, final ModelElement replacement);
 }

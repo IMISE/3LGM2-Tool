@@ -11,7 +11,7 @@ import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 public final class ElementaryPath extends AbstractPath {
 
     /** Die Kante zwischen Start- und Endelement */
-    private final Edge edge;
+    private Edge edge;
 
     /**
      * @param metaPath
@@ -80,6 +80,13 @@ public final class ElementaryPath extends AbstractPath {
     @Override
     public final ElementaryMetaPath getMetaPath() {
         return (ElementaryMetaPath) super.getMetaPath();
+    }
+
+    @Override
+    protected void replace(final ModelElement original, final ModelElement replacement) {
+        if (edge == original) {
+            edge = (Edge) replacement; // must be castable!
+        }
     }
 
 }
