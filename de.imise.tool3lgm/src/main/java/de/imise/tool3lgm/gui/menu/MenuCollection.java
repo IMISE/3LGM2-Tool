@@ -93,7 +93,7 @@ public class MenuCollection {
 
     /** Das Optionen-Menu */
     public static final JMenu OPTIONS_MENU = createMenu("options", OptionsSubMenus.GENERAL_OPTIONS_MENU, OptionsSubMenus.BROWSER_OPTIONS_MENU, OptionsSubMenus.GRAPHICS_OPTIONS_MENU, new JSeparator(), OptionsActions.ACTION_PROPERTY_INT_RMI_PORT,
-            BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, OptionsSubMenus.LOCALE_MENU, UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
+            OptionsActions.ACTION_OPEN_CHOOSE_DEFAULT_METAMODEL_DIALOG, OptionsSubMenus.LOCALE_MENU, UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
 
     /** Das Extras-Menu */
     public static final JMenu EXTRAS_MENU = new DynamicMenu(getResString("extras"), ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG,

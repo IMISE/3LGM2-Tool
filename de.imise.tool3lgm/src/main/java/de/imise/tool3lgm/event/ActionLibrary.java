@@ -890,6 +890,14 @@ public class ActionLibrary {
 
         }
 
+        /** Zeigt die Programm-Info an */
+        public static final ExtendedAction ACTION_OPEN_CHOOSE_DEFAULT_METAMODEL_DIALOG = new StaticAction(ActionIdentifier.ACTION_OPEN_CHOOSE_DEFAULT_METAMODEL_DIALOG, PPP) {
+            @Override
+            public void actionPerformed() {
+                Tool3lgmMetaModelContext.chooseModelType();
+            }
+        };
+
         /** Öffnet ein Fenster zum Auswählen des RMI-Ports */
         public static final Action ACTION_PROPERTY_INT_RMI_PORT = new StaticAction(PROPERTY_INT_RMI_PORT, PPP) {
 
