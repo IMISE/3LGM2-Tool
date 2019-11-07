@@ -76,6 +76,13 @@ public class SequencePath extends AbstractPath {
         }
     }
 
+    /**
+     * @return number of paths in the path list
+     */
+    public final int length() {
+        return paths.size();
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
