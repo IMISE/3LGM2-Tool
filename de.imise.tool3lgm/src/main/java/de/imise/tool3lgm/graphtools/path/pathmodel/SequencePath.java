@@ -76,4 +76,16 @@ public class SequencePath extends AbstractPath {
         }
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < paths.size(); i++) {
+            sb.append(paths.get(i));
+            if (i < paths.size() - 1) {
+                sb.append(" <-> ");
+            }
+        }
+        return sb.toString();
+    }
+
 }
