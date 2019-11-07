@@ -1613,47 +1613,48 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     //#############################################################################################//
     /////////////////////////////////////////////////////////////////////////////////////////////////
     /**
-     * @param hashString1
-     * @param hashString2
+     * @param removeElementHashString
+     * @param remainElementHashString
      * @param source
      * @param pid
+     * @return the joined element (this is the element with remainElementHashString) or <code>null</code> if nothing was joined
      */
-    public boolean join(final String hashString1, final String hashString2, final GraphDocument source, final int pid) {
+    public ModelElement join(final String removeElementHashString, final String remainElementHashString, final GraphDocument source, final int pid) {
         Collection<String> elementHashes2ExcludeFromJoin = new ArrayList<>();
-        elementHashes2ExcludeFromJoin.add(hashString1);
-        elementHashes2ExcludeFromJoin.add(hashString2);
-        return joinRecursive(hashString1, hashString2, source, elementHashes2ExcludeFromJoin, pid);
+        elementHashes2ExcludeFromJoin.add(removeElementHashString);
+        elementHashes2ExcludeFromJoin.add(remainElementHashString);
+        return joinRecursive(removeElementHashString, remainElementHashString, source, elementHashes2ExcludeFromJoin, pid);
     }
 
     /**
-     * @param hashString1
-     * @param hashString2
+     * @param removeElementHashString
+     * @param remainElementHashString
      * @param source
      * @param elementHashes2ExcludeFromJoin
      * @param pid
-     * @return
+     * @return the joined element (this is the element with remainElementHashString) or <code>null</code> if nothing was joined
      */
-    private boolean joinRecursive(final String hashString1, final String hashString2, final GraphDocument source, final Collection<String> elementHashes2ExcludeFromJoin, final int pid) {
-        ModelElement modelElement1 = doc.findElementCoded(hashString1);
-        ModelElement modelElement2 = doc.findElementCoded(hashString2);
-        if (modelElement1 == null || modelElement2 == null || modelElement1 == modelElement2) {
-            return false;
+    private ModelElement joinRecursive(final String removeElementHashString, final String remainElementHashString, final GraphDocument source, final Collection<String> elementHashes2ExcludeFromJoin, final int pid) {
+        ModelElement removeElement = doc.findElementCoded(removeElementHashString);
+        ModelElement remainElement = doc.findElementCoded(remainElementHashString);
+        if (removeElement == null || remainElement == null || removeElement == remainElement) {
+            return null;
         }
         //prüfen, ob es sich um Node gleichen Typs handelt (nur diese können vereint werden)
-        if (!(modelElement1 instanceof Node && modelElement2 instanceof Node)) {
+        if (!(removeElement instanceof Node && remainElement instanceof Node)) {
             if (interactive_mode) {
                 JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             }
-            return false;
+            return null;
         }
-        Node node1 = (Node) modelElement1;
-        Node node2 = (Node) modelElement2;
-        Class<? extends ModelElement> nodeClass = node1.getClass();
-        if (nodeClass != node2.getClass()) {
+        Node removeNode = (Node) removeElement;
+        Node remainNode = (Node) remainElement;
+        Class<? extends ModelElement> nodeClass = removeNode.getClass();
+        if (nodeClass != remainNode.getClass()) {
             if (interactive_mode) {
                 JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             }
-            return false;
+            return null;
         }
         //Beginne umhängen der Kanten
         doc.start_transaction(pid);
@@ -1662,43 +1663,43 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         }
         //Namen und Beschreibung des zu löschenden Node an den verbleibenden anhängen
         //und ExtIDs und benutzerdef. Eigenschaftsfelder zusammenführen
-        node2.join(node1, false);
+        remainNode.join(removeNode, false);
         //knoten2.createNameWithSzens(doc);
 
-        for (Class<? extends Edge> edgeClass : metaModel.getSubordinatedJoinbleTypes(node2.getClass())) {
-            List<ModelElement> sjt1 = node1.getConnectedElements(edgeClass);
-            List<ModelElement> sjt2 = node2.getConnectedElements(edgeClass);
-            if (sjt1.size() == 1 && sjt2.size() == 1) {
-                ModelElement me1 = sjt1.get(0);
-                ModelElement me2 = sjt2.get(0);
-                String hash1 = me1.getHashString();
-                if (elementHashes2ExcludeFromJoin.contains(hash1)) {
+        for (Class<? extends Edge> edgeClass : metaModel.getSubordinatedJoinbleTypes(remainNode.getClass())) {
+            List<ModelElement> removeSubordinatedJoinables = removeNode.getConnectedElements(edgeClass);
+            List<ModelElement> remainSubordinatedJoinables = remainNode.getConnectedElements(edgeClass);
+            if (removeSubordinatedJoinables.size() == 1 && remainSubordinatedJoinables.size() == 1) {
+                ModelElement removeSub = removeSubordinatedJoinables.get(0);
+                ModelElement remainSub = remainSubordinatedJoinables.get(0);
+                String removeSubHash = removeSub.getHashString();
+                if (elementHashes2ExcludeFromJoin.contains(removeSubHash)) {
                     continue;
                 }
-                String hash2 = me2.getHashString();
-                if (elementHashes2ExcludeFromJoin.contains(hash2)) {
+                String remainSubHash = remainSub.getHashString();
+                if (elementHashes2ExcludeFromJoin.contains(remainSubHash)) {
                     continue;
                 }
-                elementHashes2ExcludeFromJoin.add(hash1);
-                elementHashes2ExcludeFromJoin.add(hash2);
-                joinRecursive(hash1, hash2, source, elementHashes2ExcludeFromJoin, pid);
+                elementHashes2ExcludeFromJoin.add(removeSubHash);
+                elementHashes2ExcludeFromJoin.add(remainSubHash);
+                joinRecursive(removeSubHash, remainSubHash, source, elementHashes2ExcludeFromJoin, pid);
             }
         }
         //Das hier ist Hardcore, weil hier das IterableObject zurück auf List gecastet wird-> eigentlich müsste sich Edge selbst irgenwie darum kümmern!
-        List<Edge> deleteNodeEdges = (List<Edge>) node1.getEdges();//ArrayList der Kanten des zu löschendn Knotens
-        List<Edge> remainNodeEdges = (List<Edge>) node2.getEdges();//ArrayList der Kanten des verbleibenden Knotens
+        List<Edge> deleteNodeEdges = (List<Edge>) removeNode.getEdges();//ArrayList der Kanten des zu löschendn Knotens
+        List<Edge> remainNodeEdges = (List<Edge>) remainNode.getEdges();//ArrayList der Kanten des verbleibenden Knotens
         //für jede Edge vom zu löschenden Node
         while (deleteNodeEdges.size() > 0) {
             Edge edge = deleteNodeEdges.get(0);
             ModelElement startElement = edge.getStart(); //Startknoten der zu übernehmenden Edge merken
             ModelElement endElement = edge.getEnd(); //Endknoten -"-
             //zu löschenden Node durch den verbleibenden ersetzen
-            if (startElement == node1) {
-                startElement = node2;
+            if (startElement == removeNode) {
+                startElement = remainNode;
                 endElement = edge.getEnd();
             } else {
                 startElement = edge.getStart();
-                endElement = node2;
+                endElement = remainNode;
             }
             boolean deleteEdge = false;
             if (startElement == endElement) {
@@ -1725,25 +1726,28 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 deleteElement(edge, doc, pid);
                 //              doc.removeEdge(kante, pid);//Edge einfach komplett löschen
             } else { //Edge muss umgehängt werden
-                node1.removeEdge(edge); //im zu löschenden Node die Edge entfernen
+                removeNode.removeEdge(edge); //im zu löschenden Node die Edge entfernen
                 edge.setNodes(startElement, endElement);//die Edge wirklich an knoten2 binden
             }
         }
         for (Szenario szen : szenarios) {
-            NodeContainer nc1 = (NodeContainer) node1.getContainer(szen);
-            NodeContainer nc2 = (NodeContainer) node2.getContainer(szen);
+            NodeContainer removeContainer = (NodeContainer) removeNode.getContainer(szen);
+            NodeContainer remainContainer = (NodeContainer) remainNode.getContainer(szen);
             // jetzt umhängen aller Container von knoten1 auf knoten2 in allen Teilmodellen
-            if (nc2 == null && nc1 != null) {
+            if (remainContainer == null && removeContainer != null) {
                 //              szen.removeKnotContainer((NodeContainer) knoten1.getContainer(szen), pid);
-                removeContainerFromSubmodel(node1.getContainer(szen), pid);
-                nc1.setElement(node2);
-                szen.getLayer(node2.layerFor()).add(nc1);
+                ElementContainer orgRemoveContainer = removeNode.getContainer(szen);
+                removeContainerFromSubmodel(orgRemoveContainer, pid);
+                removeContainer.setElement(remainNode);
+                int layer = remainNode.layerFor();
+                LayerContainer lc = szen.getLayer(layer);
+                lc.add(removeContainer);
             }
             NodeContainer nc = null;
-            if (nc2 != null) {
-                nc = nc2;
-            } else if (nc1 != null) {
-                nc = nc1;
+            if (remainContainer != null) {
+                nc = remainContainer;
+            } else if (removeContainer != null) {
+                nc = removeContainer;
             }
             if (nc != null) {
                 szen.createEdgeContainer(nc, szen, false, pid);
@@ -1754,7 +1758,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 szen.finish_transaction(TransactionManager.STANDARD_PID, false);
             }
         }
-        deleteElement(node1, doc, pid);
+        deleteElement(removeNode, doc, pid);
         //      doc.removeNode((NodeContainer)knoten1.getContainer(doc), pid); //alle Kanten umgehängt -> wegfallenden Node komplett löschen
         for (Szenario szen : szenarios) {
             szen.finish_transaction(pid, false);
@@ -1763,7 +1767,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         tman.clearTransactionQueue();
         doc.finish_transaction(pid);
         distribute(DATA_CHANGED, null, source, pid);
-        return true;
+        return remainNode;
     }
 
     public int getSzenarioCount() {

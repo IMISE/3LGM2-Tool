@@ -4570,29 +4570,31 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
-     * 2 Elemente vereinen,
+     * 2 Elemente vereinen, d.h alle Eigenschaften des einen werden an das andere übertragen und ersteres gelöscht.
      *
-     * @param hashString1
+     * @param removeElementHashString
      *            das abschliessend zu löschende Element
-     * @param hashString2
+     * @param remainElementHashString
      *            gibt das verbleibende Element an
      * @param pid
+     * @return the joined element (this is the element with remainElementHashString) or <code>null</code> if nothing was joined
      */
-    public final boolean joinElements(final String hashString1, final String hashString2, final int pid) {
-        if (!gdcoll.join(hashString1, hashString2, null, pid)) {
-            return false;
-        }
-        ElementContainer kc = findNodeContainerCoded(hashString2);
-        if (kc != null && kc instanceof NodeContainer) {
-            for (Edge edge : kc.getElement().getEdges()) {
-                EdgeContainer kac = (EdgeContainer) edge.getContainer(this);
-                if (kac == null) {
-                    continue;
+    public final ModelElement joinElements(final String removeElementHashString, final String remainElementHashString, final int pid) {
+        ModelElement joinedElement = gdcoll.join(removeElementHashString, remainElementHashString, null, pid);
+        if (joinedElement != null) {
+            String hash = joinedElement.getHashString();
+            ElementContainer kc = findNodeContainerCoded(hash);
+            if (kc != null && kc instanceof NodeContainer) {
+                for (Edge edge : kc.getElement().getEdges()) {
+                    EdgeContainer kac = (EdgeContainer) edge.getContainer(this);
+                    if (kac == null) {
+                        continue;
+                    }
+                    kac.computeBorderPoints();
                 }
-                kac.computeBorderPoints();
             }
         }
-        return true;
+        return joinedElement;
     }
 
     /**

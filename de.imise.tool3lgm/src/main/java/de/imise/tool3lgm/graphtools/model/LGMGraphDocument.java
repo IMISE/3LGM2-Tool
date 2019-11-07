@@ -491,11 +491,11 @@ public class LGMGraphDocument extends GraphDocument {
 
         ModelElement me3 = findElementCoded(me2.getHashString());
         if (me3 != null && me3 != me2) {
-            if (!me1.join(me2, false)) {
+            if (me1.join(me2, false) == null) {
                 return;
             }
         } else {
-            if (!me1.join(me2, true)) {
+            if (me1.join(me2, true) == null) {
                 return;
             }
         }

@@ -1998,10 +1998,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
 
     /**
      * join Element properties without connections this.hashstring = other.hashstring other will be not changed
+     *
+     * @return the joined Element or <code>null</code> if an error occurs;
      */
-    public boolean join(final ModelElement other, final boolean overwriteHashstring) {
+    public ModelElement join(final ModelElement other, final boolean overwriteHashstring) {
         if (other.getClass() != this.getClass() || this == other) {
-            return false;
+            return null;
         }
 
         if (overwriteHashstring) {
@@ -2048,7 +2050,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 }
             }
         }
-        return true;
+        return this;
     }
 
     /**

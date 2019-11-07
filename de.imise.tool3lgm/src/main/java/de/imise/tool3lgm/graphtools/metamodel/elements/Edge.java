@@ -527,13 +527,13 @@ public abstract class Edge extends ModelElement {
     }
 
     @Override
-    public final boolean join(final ModelElement other, final boolean overwriteHashstringAndExtIDs) {
-        if (super.join(other, overwriteHashstringAndExtIDs)) {
+    public final ModelElement join(final ModelElement other, final boolean overwriteHashstringAndExtIDs) {
+        ModelElement joinedEdge = super.join(other, overwriteHashstringAndExtIDs);
+        if (joinedEdge != null) {
             startElement = ((Edge) other).startElement;
             endElement = ((Edge) other).endElement;
-            return true;
         }
-        return false;
+        return joinedEdge;
     }
 
     @Override

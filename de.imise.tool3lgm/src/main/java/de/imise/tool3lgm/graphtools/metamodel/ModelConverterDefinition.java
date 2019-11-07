@@ -284,7 +284,7 @@ public abstract class ModelConverterDefinition {
          * @param nameSourceEdge
          * @return Set aller umbenannten Elemente
          */
-        public Set<ModelElement> renameAndJoinEqualNamedElements(final SimplePath simplePath, final Edge nameSourceEdge, final Set<ModelElement> alreadyRenamedElements) {
+        public final Set<ModelElement> renameAndJoinEqualNamedElements(final SimplePath simplePath, final Edge nameSourceEdge, final Set<ModelElement> alreadyRenamedElements) {
             Set<Integer> pathStepIndices = pathStepElementIndexToElementNameCreationPattern.keySet();
             for (int pathStepIndex : pathStepIndices) {
                 List<ElementaryPath> elementaryPaths = simplePath.getElementaryPaths();
@@ -292,36 +292,46 @@ public abstract class ModelConverterDefinition {
                 ModelElement pathStepEndElement = elementaryPath.getEndElement();
                 Object[] patternObjetcs = pathStepElementIndexToElementNameCreationPattern.get(pathStepIndex);
                 ModelElement renamedElement = renameElement(pathStepEndElement, nameSourceEdge, patternObjetcs);
-                addOrJoinRenamedElement(renamedElement, alreadyRenamedElements);
+                ModelElement addedOrJoinedElement = addOrJoinRenamedElement(renamedElement, alreadyRenamedElements);
+                //if joined with an existing element -> replace the renamed element in the path by the joined one
+                if (renamedElement != addedOrJoinedElement) {
+                    simplePath.replaceElement(addedOrJoinedElement, renamedElement);
+                }
             }
             return alreadyRenamedElements;
         }
 
-        private void addOrJoinRenamedElement(final ModelElement renamedElement, final Set<ModelElement> alreadyRenamedElements) {
+        /**
+         * @param renamedElement
+         * @param alreadyRenamedElements
+         * @return <code>true</code> if the given element was joined with an element in alreadyRenamedElements with the same name
+         */
+        private ModelElement addOrJoinRenamedElement(final ModelElement renamedElement, final Set<ModelElement> alreadyRenamedElements) {
             if (renamedElement == null) {
-                return;
+                return null;
             }
             String renamedName = renamedElement.getName();
             String renamedHash = renamedElement.getHashString();
             GDCollection gdcoll = renamedElement.getCollection();
             LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
             Class<? extends ModelElement> renamedElementClass = renamedElement.getClass();
-            boolean joined = false;
+            ModelElement resultElement = renamedElement;
             for (ModelElement me : alreadyRenamedElements) {
                 Class<? extends ModelElement> elementClass = me.getClass();
                 if (elementClass == renamedElementClass) {
                     String name = me.getName();
                     if (Objects.equals(name, renamedName)) {
-                        String hash = me.getHashString();
+                        String resultingJoinedElementHash = me.getHashString();
                         //System.err.println("JOINED ########## " + renamedElement);
-                        joined = gdcoll.join(hash, renamedHash, mainDoc, TransactionManager.STANDARD_PID);
+                        resultElement = gdcoll.join(renamedHash, resultingJoinedElementHash, mainDoc, TransactionManager.STANDARD_PID); //Element hash for the resulting element must be the second parameter!
                         break;
                     }
                 }
             }
-            if (!joined) {
+            if (resultElement == renamedElement) { //kein Join mit einem vorhandenen Element -> als original renamed Element merken
                 alreadyRenamedElements.add(renamedElement);
             }
+            return resultElement;
         }
 
         /**
