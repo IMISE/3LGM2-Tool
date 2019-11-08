@@ -197,7 +197,7 @@ public class FontChooser extends JDialog {
 
         p = new JPanel(new BorderLayout());
         p.setBorder(new TitledBorder(new EtchedBorder(), drh.getResString("preview")));
-        _preview = new JLabel("<html><body>" + previewText + "</html></body>", JLabel.CENTER);
+        _preview = new JLabel("<html><body>" + previewText + "</body></html>", JLabel.CENTER);
         _preview.setBackground(Color.WHITE);
         _preview.setForeground(Color.BLACK);
         _preview.setOpaque(true);
