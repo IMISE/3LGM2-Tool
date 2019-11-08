@@ -90,6 +90,7 @@ public class ProgressDialog extends JDialog {
         this.barWidth = barWidth;
         this.owner = owner;
         init(barHeight, showStatusLabel);
+        setLocationRelativeTo(owner); //must be as last command here, if the owner is not displayed on the first screen in a multi screen environment
     }
 
     /**
@@ -171,6 +172,7 @@ public class ProgressDialog extends JDialog {
         this.barWidth = barWidth;
         this.owner = owner;
         init(barHeight, showStatusLabel);
+        setLocationRelativeTo(owner); //must be as last command here, if the owner is not displayed on the first screen in a multi screen environment
     }
 
     /**
