@@ -1,9 +1,3 @@
-/*
- * Created on 11.09.2003
- *
- * To change this generated comment go to 
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 package de.imise.util.swing.dialog;
 
 import java.awt.BorderLayout;
@@ -25,320 +19,328 @@ import javax.swing.WindowConstants;
 
 /**
  * @author AXS
+ * @created 11.09.2003
  */
 public class ProgressDialog extends JDialog {
 
-	/**
-	 * COMMENTME
-	 */
-	private JLabel statusLabel;
+    /**
+     * COMMENTME
+     */
+    private JLabel statusLabel;
 
-	/**
-	 * COMMENTME
-	 */
-	private JPanel progressPanel = new JPanel();
+    /**
+     * COMMENTME
+     */
+    private final JPanel progressPanel = new JPanel();
 
-	/**
-	 * COMMENTME
-	 */
-	private int barWidth, barValue = 0, barHeight = 0;
+    /**
+     * COMMENTME
+     */
+    private final int barWidth;
 
-	/**
-	 * COMMENTME
-	 */
-	private ProgressThread pdthread;
+    private int barValue = 0;
 
-	/**
-	 * COMMENTME
-	 */
-	private Window owner;
+    private int barHeight = 0;
 
-	/**
-	 * COMMENTME
-	 */
-	private boolean run = true;
+    /**
+     * COMMENTME
+     */
+    private ProgressThread pdthread;
 
-	/**
-	 * COMMENTME
-	 */
-	private final static int BAR_WIDTH = 60;
+    /**
+     * COMMENTME
+     */
+    private final Window owner;
 
-	/**
-	 * COMMENTME
-	 */
-	private final static int BAR_HEIGHT = 17;
+    /**
+     * COMMENTME
+     */
+    private boolean run = true;
 
-	/**
-	 * Thread dessen Progress der Dialog anzeigt.<br>
-	 * Wenn der <code>null</code> bleibt, bezieht er sich auf den Haupt-Thread. Sonst schließt sich
-	 * der ProgressDialog, wenn der <code>observedThread</code> nicht mehr läuft.
-	 */
-	private Thread observedThread = null;
+    /**
+     * COMMENTME
+     */
+    private final static int BAR_WIDTH = 60;
 
-	////////////////////////////////////////
-	// Konstruktoren für Frames als Owner //
-	////////////////////////////////////////
+    /**
+     * COMMENTME
+     */
+    private final static int BAR_HEIGHT = 17;
 
-	/**
-	 * @param owner
-	 * @param title
-	 * @param showStatusLabel
-	 * @param barWidth
-	 * @param barHeight
-	 */
-	public ProgressDialog(Frame owner, String title, boolean showStatusLabel, int barWidth, int barHeight) {
-		super(owner, title, false);
-		this.barWidth = barWidth;
-		this.owner = owner;
-		init(barHeight, showStatusLabel);
-	}
+    /**
+     * Thread dessen Progress der Dialog anzeigt.<br>
+     * Wenn der <code>null</code> bleibt, bezieht er sich auf den Haupt-Thread. Sonst schließt sich
+     * der ProgressDialog, wenn der <code>observedThread</code> nicht mehr läuft.
+     */
+    private Thread observedThread = null;
 
-	/**
-	 * @param owner
-	 * @param title
-	 * @param showStatusLabel
-	 * @param barWidth
-	 * @param barHeight
-	 * @param observedThread
-	 */
-	public ProgressDialog(Frame owner, String title, boolean showStatusLabel, int barWidth, int barHeight, Thread observedThread) {
-		this(owner, title, showStatusLabel, barWidth, barHeight);
-		this.observedThread = observedThread;
-	}
+    ////////////////////////////////////////
+    // Konstruktoren für Frames als Owner //
+    ////////////////////////////////////////
 
-	/**
-	 * @param owner
-	 * @param title
-	 * @param showStatusLabel
-	 */
-	public ProgressDialog(Frame owner, String title, boolean showStatusLabel) {
-		this(owner, title, showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
-	}
+    /**
+     * @param owner
+     * @param title
+     * @param showStatusLabel
+     * @param barWidth
+     * @param barHeight
+     */
+    public ProgressDialog(final Frame owner, final String title, final boolean showStatusLabel, final int barWidth, final int barHeight) {
+        super(owner, title, false);
+        this.barWidth = barWidth;
+        this.owner = owner;
+        init(barHeight, showStatusLabel);
+    }
 
-	/**
-	 * @param owner
-	 * @param title
-	 * @param showStatusLabel
-	 * @param observedThread
-	 */
-	public ProgressDialog(Frame owner, String title, boolean showStatusLabel, Thread observedThread) {
-		this(owner, title, showStatusLabel, BAR_WIDTH, BAR_HEIGHT, observedThread);
-	}
+    /**
+     * @param owner
+     * @param title
+     * @param showStatusLabel
+     * @param barWidth
+     * @param barHeight
+     * @param observedThread
+     */
+    public ProgressDialog(final Frame owner, final String title, final boolean showStatusLabel, final int barWidth, final int barHeight, final Thread observedThread) {
+        this(owner, title, showStatusLabel, barWidth, barHeight);
+        this.observedThread = observedThread;
+    }
 
-	/**
-	 * @param owner
-	 * @param title
-	 * /
-	public ProgressDialog(Frame owner, String title) {
-		this(owner, title, true, BAR_WIDTH, BAR_HEIGHT);
-	}
+    /**
+     * @param owner
+     * @param title
+     * @param showStatusLabel
+     */
+    public ProgressDialog(final Frame owner, final String title, final boolean showStatusLabel) {
+        this(owner, title, showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
+    }
 
-	/**
-	 * @param owner
-	 */
-	public ProgressDialog(Frame owner) {
-		this(owner, true);
-	}
+    /**
+     * @param owner
+     * @param title
+     * @param showStatusLabel
+     * @param observedThread
+     */
+    public ProgressDialog(final Frame owner, final String title, final boolean showStatusLabel, final Thread observedThread) {
+        this(owner, title, showStatusLabel, BAR_WIDTH, BAR_HEIGHT, observedThread);
+    }
 
-	/**
-	 * @param owner
-	 * @param showStatusLabel
-	 */
-	public ProgressDialog(Frame owner, boolean showStatusLabel) {
-		this(owner, new DialogResourceHandler(ProgressDialog.class).getResString("pleaseWait"), showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
-	}
+    /**
+     * @param owner
+     * @param title
+     */
+    public ProgressDialog(final Frame owner, final String title) {
+        this(owner, title, true, BAR_WIDTH, BAR_HEIGHT);
+    }
 
-	/**
-	 * @param owner
-	 * @param showStatusLabel
-	 */
-	public ProgressDialog(Dialog owner, boolean showStatusLabel) {
-		this(owner, new DialogResourceHandler(ProgressDialog.class).getResString("pleaseWait"), showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
-	}
+    /**
+     * @param owner
+     */
+    public ProgressDialog(final Frame owner) {
+        this(owner, true);
+    }
 
-	/////////////////////////////////////////
-	// Konstruktoren für Dialoge als Owner //
-	/////////////////////////////////////////
+    /**
+     * @param owner
+     * @param showStatusLabel
+     */
+    public ProgressDialog(final Frame owner, final boolean showStatusLabel) {
+        this(owner, new DialogResourceHandler(ProgressDialog.class).getResString("pleaseWait"), showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
+    }
 
-	/**
-	 * 
-	 * @param owner
-	 * @param title
-	 * @param showStatusLabel
-	 * @param barWidth
-	 * @param barHeight
-	 */
-	public ProgressDialog(Dialog owner, String title, boolean showStatusLabel, int barWidth, int barHeight) {
-		super(owner, title, false);
-		this.barWidth = barWidth;
-		this.owner = owner;
-		init(barHeight, showStatusLabel);
-	}
+    /**
+     * @param owner
+     * @param showStatusLabel
+     */
+    public ProgressDialog(final Dialog owner, final boolean showStatusLabel) {
+        this(owner, new DialogResourceHandler(ProgressDialog.class).getResString("pleaseWait"), showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
+    }
 
-	/**
-	 * 
-	 * @param owner
-	 * @param title
-	 * @param showStatusLabel
-	 */
-	public ProgressDialog(Dialog owner, String title, boolean showStatusLabel) {
-		this(owner, title, showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
-	}
+    /////////////////////////////////////////
+    // Konstruktoren für Dialoge als Owner //
+    /////////////////////////////////////////
 
-	/**
-	 * 
-	 * @param owner
-	 * @param title
-	 */
-	public ProgressDialog(Dialog owner, String title) {
-		this(owner, title, true, BAR_WIDTH, BAR_HEIGHT);
-	}
+    /**
+     * @param owner
+     * @param title
+     * @param showStatusLabel
+     * @param barWidth
+     * @param barHeight
+     */
+    public ProgressDialog(final Dialog owner, final String title, final boolean showStatusLabel, final int barWidth, final int barHeight) {
+        super(owner, title, false);
+        this.barWidth = barWidth;
+        this.owner = owner;
+        init(barHeight, showStatusLabel);
+    }
 
-	/**
-	 * 
-	 * @param barHeight
-	 * @param showStatusLabel
-	 */
-	private void init(int barHeight, boolean showStatusLabel) {
-		if (this.barHeight <= 0 || barHeight > 0)
-			this.barHeight = barHeight;
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-		setResizable(false);
+    /**
+     * @param owner
+     * @param title
+     * @param showStatusLabel
+     */
+    public ProgressDialog(final Dialog owner, final String title, final boolean showStatusLabel) {
+        this(owner, title, showStatusLabel, BAR_WIDTH, BAR_HEIGHT);
+    }
 
-		getContentPane().setLayout(new BorderLayout());
-		
-		statusLabel = new JLabel();
-		if (showStatusLabel) {
-			statusLabel.setPreferredSize(new Dimension(getWidth(), 50));
-			getContentPane().add(statusLabel, BorderLayout.CENTER);
-		}
+    /**
+     * @param owner
+     * @param title
+     */
+    public ProgressDialog(final Dialog owner, final String title) {
+        this(owner, title, true, BAR_WIDTH, BAR_HEIGHT);
+    }
 
-		JPanel borderPanel = new JPanel();
-		borderPanel.setBorder(BorderFactory.createEtchedBorder());
+    /**
+     * @param barHeight
+     * @param showStatusLabel
+     */
+    private void init(final int barHeight, final boolean showStatusLabel) {
+        if (this.barHeight <= 0 || barHeight > 0) {
+            this.barHeight = barHeight;
+        }
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        setResizable(false);
 
-		borderPanel.setPreferredSize(new Dimension(this.getPreferredSize().width, barHeight));
-		progressPanel.setPreferredSize(new Dimension(borderPanel.getPreferredSize().width, barHeight + borderPanel.getBorder().getBorderInsets(borderPanel).left * 2));
+        getContentPane().setLayout(new BorderLayout());
 
-		borderPanel.setLayout(new BorderLayout());
-		borderPanel.add(progressPanel, BorderLayout.CENTER);
+        statusLabel = new JLabel();
+        if (showStatusLabel) {
+            statusLabel.setPreferredSize(new Dimension(getWidth(), 50));
+            getContentPane().add(statusLabel, BorderLayout.CENTER);
+        }
 
-		setCursor(new Cursor(Cursor.WAIT_CURSOR));
+        JPanel borderPanel = new JPanel();
+        borderPanel.setBorder(BorderFactory.createEtchedBorder());
 
-		getContentPane().add(borderPanel, BorderLayout.SOUTH);
+        borderPanel.setPreferredSize(new Dimension(getPreferredSize().width, barHeight));
+        progressPanel.setPreferredSize(new Dimension(borderPanel.getPreferredSize().width, barHeight + borderPanel.getBorder().getBorderInsets(borderPanel).left * 2));
 
-		Dimension frameSize;
-		if (showStatusLabel)
-			frameSize = new Dimension(300, owner.getInsets().top + barHeight + statusLabel.getPreferredSize().height);
-		else
-			frameSize = new Dimension(300, owner.getInsets().top + barHeight + borderPanel.getBorder().getBorderInsets(borderPanel).top * 2);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Dimension ownerSize = owner.getSize();
-		int x = owner.getLocation().x + (ownerSize.width - frameSize.width) / 2;
-		int y = owner.getLocation().y + (ownerSize.height - frameSize.height) / 2;
-		if (x < 0)
-			x = 0;
-		if (y < 0)
-			y = 0;
-		if (x + frameSize.width > screenSize.width)
-			x = screenSize.width - frameSize.width;
-		if (y + frameSize.height > screenSize.height)
-			y = screenSize.height - frameSize.height;
+        borderPanel.setLayout(new BorderLayout());
+        borderPanel.add(progressPanel, BorderLayout.CENTER);
 
-		setSize(frameSize);
-		setLocation(x, y);
+        setCursor(new Cursor(Cursor.WAIT_CURSOR));
 
-		pdthread = new ProgressThread(this);
-		setVisible(true);
-		pdthread.start();
-	}
+        getContentPane().add(borderPanel, BorderLayout.SOUTH);
 
-	/**
-	 * 
-	 * @param text
-	 */
-	public void setStatusLabelText(String text) {
-		statusLabel.setText(" " + text);
-		update(getGraphics());
-	}
+        Dimension frameSize;
+        if (showStatusLabel) {
+            frameSize = new Dimension(300, owner.getInsets().top + barHeight + statusLabel.getPreferredSize().height);
+        } else {
+            frameSize = new Dimension(300, owner.getInsets().top + barHeight + borderPanel.getBorder().getBorderInsets(borderPanel).top * 2);
+        }
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension ownerSize = owner.getSize();
+        int x = owner.getLocation().x + (ownerSize.width - frameSize.width) / 2;
+        int y = owner.getLocation().y + (ownerSize.height - frameSize.height) / 2;
+        if (x < 0) {
+            x = 0;
+        }
+        if (y < 0) {
+            y = 0;
+        }
+        if (x + frameSize.width > screenSize.width) {
+            x = screenSize.width - frameSize.width;
+        }
+        if (y + frameSize.height > screenSize.height) {
+            y = screenSize.height - frameSize.height;
+        }
 
-	/* (non-Javadoc)
-	 * @see java.awt.Window#dispose()
-	 */
-	@Override
-	public void dispose() {
-		run = false;
-		try {
-			pdthread.join();
-		} catch (InterruptedException ie) {
-		}
-		super.dispose();
-		owner.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-		try {
-			finalize();
-		} catch (Throwable t) {
-		}
-	}
+        setSize(frameSize);
+        setLocation(x, y);
 
-	/**
-	 * Wird vom Thread aufgerufen.<br>
-	 * Der Dialog darf hierbei nicht auf ein ableben des Threads warten.
-	 */
-	private void disposeInternal() {
-		super.dispose();
-	}
+        pdthread = new ProgressThread(this);
+        setVisible(true);
+        pdthread.start();
+    }
 
-	/**
-	 * @author AXS 
-	 * @created on 20.08.2007
-	 */
-	private class ProgressThread extends Thread {
+    /**
+     * @param text
+     */
+    public void setStatusLabelText(final String text) {
+        statusLabel.setText(" " + text);
+        update(getGraphics());
+    }
 
-		private ProgressDialog pd;
-		private Image barImage;
+    /*
+     * (non-Javadoc)
+     * @see java.awt.Window#dispose()
+     */
+    @Override
+    public void dispose() {
+        run = false;
+        try {
+            pdthread.join();
+        } catch (InterruptedException ie) {
+        }
+        super.dispose();
+        owner.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        try {
+            finalize();
+        } catch (Throwable t) {
+        }
+    }
 
-		private int STEPWIDTH = 6;
+    /**
+     * Wird vom Thread aufgerufen.<br>
+     * Der Dialog darf hierbei nicht auf ein ableben des Threads warten.
+     */
+    private void disposeInternal() {
+        super.dispose();
+    }
 
-		public ProgressThread(ProgressDialog pd) {
-			this.pd = pd;
-		}
+    /**
+     * @author AXS
+     * @created on 20.08.2007
+     */
+    private class ProgressThread extends Thread {
 
-		@Override
-		public void run() {
-			Graphics g;
-			barValue -= barWidth;
-			// setPriority(3); //testen, welcher Wert
+        private final ProgressDialog pd;
+        private Image barImage;
 
-			barImage = createImage(STEPWIDTH + barWidth, progressPanel.getSize().height);
-			g = barImage.getGraphics();
-			g.setColor(Color.BLUE);
-			g.fillRect(STEPWIDTH, 0, barWidth, progressPanel.getSize().height);
+        private final int STEPWIDTH = 6;
 
-			g = progressPanel.getGraphics();
+        public ProgressThread(final ProgressDialog pd) {
+            this.pd = pd;
+        }
 
-			Cursor ownerCursor = owner.getCursor();
-			owner.setCursor(new Cursor (Cursor.WAIT_CURSOR));
-			pd.setCursor(owner.getCursor());
+        @Override
+        public void run() {
+            Graphics g;
+            barValue -= barWidth;
+            // setPriority(3); //testen, welcher Wert
 
-			while (run) {
-				if (barValue >= progressPanel.getWidth())
-					barValue = 0 - barWidth;
-				else
-					barValue += STEPWIDTH;
-				try {
-					g.drawImage(barImage, barValue, 0, pd);
-				} catch (NullPointerException ne) {
-				}
-				try {
-					sleep(40);
-				} catch (InterruptedException ie) {
-				}
-				if (pd.observedThread != null && !pd.observedThread.isAlive()) {
-					run = false;
-					pd.disposeInternal();
-					owner.setCursor(ownerCursor);
-				}
-			}
-		}
-	}
+            barImage = createImage(STEPWIDTH + barWidth, progressPanel.getSize().height);
+            g = barImage.getGraphics();
+            g.setColor(Color.BLUE);
+            g.fillRect(STEPWIDTH, 0, barWidth, progressPanel.getSize().height);
+
+            g = progressPanel.getGraphics();
+
+            Cursor ownerCursor = owner.getCursor();
+            owner.setCursor(new Cursor(Cursor.WAIT_CURSOR));
+            pd.setCursor(owner.getCursor());
+
+            while (run) {
+                if (barValue >= progressPanel.getWidth()) {
+                    barValue = 0 - barWidth;
+                } else {
+                    barValue += STEPWIDTH;
+                }
+                try {
+                    g.drawImage(barImage, barValue, 0, pd);
+                } catch (NullPointerException ne) {
+                }
+                try {
+                    sleep(40);
+                } catch (InterruptedException ie) {
+                }
+                if (pd.observedThread != null && !pd.observedThread.isAlive()) {
+                    run = false;
+                    pd.disposeInternal();
+                    owner.setCursor(ownerCursor);
+                }
+            }
+        }
+    }
 
 }
