@@ -11,11 +11,11 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.gui.Tool3lgmMetaModelContextChooser;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
@@ -32,7 +32,7 @@ public class MetaModelExporter {
 
     public static void main(final String[] args) {
         UserProperties.init();
-        Tool3lgmModelType choosedModelType = Tool3lgmMetaModelContext.chooseModelType();
+        Tool3lgmModelType choosedModelType = new Tool3lgmMetaModelContextChooser().chooseModelType();
         new MetaModelExporter(choosedModelType.getMetaModel());
     }
 

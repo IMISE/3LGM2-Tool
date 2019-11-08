@@ -22,11 +22,11 @@ import de.imise.util.SimpleResourceHandler;
  */
 public final class MetaModelContext extends SimpleResourceHandler implements MetaModelSpecific {
 
+    /** Appendix of the resource key with the class name of the meta model and with the value of the description of this model type */
+    public static final String META_MODEL_DESCRIPTION_RESKEY_POSTFIX = "_description";
+
     /** Klasse des Metamodells */
     private final Class<? extends MetaModelDefinition> metaModelDefinitionClass;
-
-    /** Anzeigename des Metamodells */
-    public final String metaModelName;
 
     /** Das tatsächlich über die MetaModelDefintion initialiserte Metamodell */
     private MetaModel metaModel;
@@ -46,8 +46,6 @@ public final class MetaModelContext extends SimpleResourceHandler implements Met
     public MetaModelContext(@Nonnull final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         super(metaModelDefinitionClass, Tool3lgmConstants.METAMODEL_RESOURCE_BASE_NAME, UserProperties.getLocale());
         this.metaModelDefinitionClass = metaModelDefinitionClass;
-        String metaModelNameResKey = metaModelDefinitionClass.getSimpleName(); //immer der SimpleName der Klasse ist der Resourcenschlüssel zum Namen des Metamodells
-        metaModelName = getResStringWithoutError(metaModelNameResKey);
     }
 
     /**
@@ -74,7 +72,23 @@ public final class MetaModelContext extends SimpleResourceHandler implements Met
      * @return
      */
     public String getMetaModelDisplayName() {
+        String metaModelNameResKey = metaModelDefinitionClass.getSimpleName(); //immer der SimpleClassName ist der Resourcenschlüssel zum Namen des Metamodells
+        String metaModelName = getResStringWithoutError(metaModelNameResKey);
         return metaModelName;
+    }
+
+    /**
+     * Liefert die Beschreibung des Metamodells
+     *
+     * @return
+     */
+    public String getMetaModelDescription() {
+        String metaModelDescriptionResKey = metaModelDefinitionClass.getSimpleName() + META_MODEL_DESCRIPTION_RESKEY_POSTFIX; //immer der SimpleClassName + "_description" ist der Resourcenschlüssel zur Beschreibung des Metamodells
+        String metaModelDescription = getResStringWithoutError(metaModelDescriptionResKey);
+        if (metaModelDescription.equals(metaModelDescriptionResKey)) {
+            metaModelDescription = "";
+        }
+        return metaModelDescription;
     }
 
     @Override

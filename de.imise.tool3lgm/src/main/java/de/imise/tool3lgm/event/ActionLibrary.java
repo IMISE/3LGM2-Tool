@@ -81,6 +81,7 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.gui.Tool3lgmMetaModelContextChooser;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.imexport.DataImporter;
@@ -894,7 +895,7 @@ public class ActionLibrary {
         public static final ExtendedAction ACTION_OPEN_CHOOSE_DEFAULT_METAMODEL_DIALOG = new StaticAction(ActionIdentifier.ACTION_OPEN_CHOOSE_DEFAULT_METAMODEL_DIALOG, PPP) {
             @Override
             public void actionPerformed() {
-                Tool3lgmMetaModelContext.chooseModelType();
+                new Tool3lgmMetaModelContextChooser().chooseModelType();
             }
         };
 
