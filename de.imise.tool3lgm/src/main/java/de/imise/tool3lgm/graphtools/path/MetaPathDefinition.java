@@ -116,6 +116,36 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
+     * Convenience method for {@link SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, Class...)}
+     *
+     * @param startClass
+     * @param endClass
+     * @param associations
+     * @return
+     * @see SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, Class...)
+     */
+    @SafeVarargs
+    public final SimpleMetaPath smp(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
+        return simpleMetaPathCreator.createSimpleMetaPath(startClass, endClass, associations);
+    }
+
+    /**
+     * Convenience method for {@link SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, String, Class...)}
+     *
+     * @param startClass
+     * @param endClass
+     * @param baseResKeyOrName
+     * @param associations
+     * @return
+     * @throws IllegalArgumentException
+     * @see SimpleMetaPathCreator#createSimpleMetaPath(Class, Class, String, Class...)
+     */
+    @SafeVarargs
+    public final SimpleMetaPath smp(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations) throws IllegalArgumentException {
+        return simpleMetaPathCreator.createSimpleMetaPath(startClass, endClass, baseResKeyOrName, associations);
+    }
+
+    /**
      * Liefert <code>Tool3lgmConstants.getResString(resKey)</code>. Dient nur zur Verkürzung des Codes.
      *
      * @param resKey

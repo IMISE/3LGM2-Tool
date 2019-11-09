@@ -9,7 +9,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
@@ -28,6 +30,11 @@ import de.imise.tool3lgm.metamodel.service.node.IheActorInstance;
 import de.imise.tool3lgm.metamodel.service.node.SoftwareProduct;
 
 /**
+ * In this definition all pathes of the metamodel are defined. The {@link MetaModelDefinition}
+ * should/can not contain any metapath definitions because itself is needed to created any metapath.
+ * This definition here is loaded lazy by the {@link MetaPathDefinition} so the basic metamodel
+ * object exists while creating the metapaths.
+ *
  * @author AXS (27 May 2019)
  */
 public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
@@ -47,11 +54,11 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     public final Map<Class<? extends Edge>, SimpleMetaPath> getConditionPaths() {
         ImmutableMap.Builder<Class<? extends Edge>, SimpleMetaPath> builder = ImmutableMap.builder();
         //IheInvokingInterface_InvokingInterface_Edge
-        builder.put(IheInvokingInterface_InvokingInterface_Edge.class, simpleMetaPathCreator.createSimpleMetaPath(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class),
-                IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+        builder.put(IheInvokingInterface_InvokingInterface_Edge.class, smp(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class), IheActor_IheInterface_Edge.class,
+                IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
         //IheProvidingInterface_ProvidingInterface_Edge
-        builder.put(IheProvidingInterface_ProvidingInterface_Edge.class, simpleMetaPathCreator.createSimpleMetaPath(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class),
-                Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class), IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+        builder.put(IheProvidingInterface_ProvidingInterface_Edge.class, smp(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class), Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class), IheActor_IheInterface_Edge.class,
+                IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
         return builder.build();
     }
 
@@ -63,10 +70,8 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     public Multimap<Class<? extends InstanciationEdge>, SimpleMetaPath> getInstanciationEdgeToAdditionalInstanciationMetaPaths() {
         ImmutableListMultimap.Builder<Class<? extends InstanciationEdge>, SimpleMetaPath> builder = ImmutableListMultimap.builder();
         //IheActor_IheActorInstance_Edge
-        builder.put(IheActor_IheActorInstance_Edge.class,
-                simpleMetaPathCreator.createSimpleMetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_InvokingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
-        builder.put(IheActor_IheActorInstance_Edge.class,
-                simpleMetaPathCreator.createSimpleMetaPath(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+        builder.put(IheActor_IheActorInstance_Edge.class, smp(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_InvokingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+        builder.put(IheActor_IheActorInstance_Edge.class, smp(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
         return builder.build();
     }
     ///////////////////////////////////////////////////////////////////
@@ -75,7 +80,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
 
     @Override
     public Collection<SimpleMetaPath> getCreatablePaths() {
-        SimpleMetaPath path1 = simpleMetaPathCreator.createSimpleMetaPath(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
+        SimpleMetaPath path1 = smp(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         return ImmutableList.of(path1);
     }
 
@@ -85,8 +90,8 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
 
     @Override
     public Map<Class<? extends ModelElement>, AbstractMetaPath> getElementClassToNameExtensionPath() {
-        SimpleMetaPath applicationsSystemNameExtensionPath = simpleMetaPathCreator.createSimpleMetaPath(ApplicationSystem.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
-        SimpleMetaPath iheActorInstanceNameExtensionPath = simpleMetaPathCreator.createSimpleMetaPath(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class);
+        SimpleMetaPath applicationsSystemNameExtensionPath = smp(ApplicationSystem.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
+        SimpleMetaPath iheActorInstanceNameExtensionPath = smp(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class);
         return ImmutableMap.of(ApplicationSystem.class, applicationsSystemNameExtensionPath, IheActorInstance.class, iheActorInstanceNameExtensionPath);
     }
 

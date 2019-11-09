@@ -131,9 +131,9 @@ public abstract class MetaModelDefinition implements Serializable {
         return ExtrasActionsDefinition.class;
     }
 
-    ////////////
-    // Node //
-    ////////////
+    ///////////
+    // Nodes //
+    ///////////
 
     /** Alle Node der FE als Array */
     public abstract Class<? extends ModelElement>[] getAllDomainLayerNodes();
@@ -211,9 +211,9 @@ public abstract class MetaModelDefinition implements Serializable {
         return ImmutableSet.of();
     }
 
-    ////////////
-    // Kanten //
-    ////////////
+    ///////////
+    // Edges //
+    ///////////
 
     /** Alle Kanten als Array */
     public abstract Class<? extends Edge>[] getAllEdges();
@@ -262,18 +262,14 @@ public abstract class MetaModelDefinition implements Serializable {
     }
 
     /**
-     * Liefert die {@link #elementClassToRemovedEdgeClassesForStartClass}
-     *
-     * @return
+     * @return the {@link #elementClassToRemovedEdgeClassesForStartClass}
      */
     public final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClassesForStartClass() {
         return elementClassToRemovedEdgeClassesForStartClass;
     }
 
     /**
-     * Liefert die {@link #elementClassToRemovedEdgeClassesForEndClass}
-     *
-     * @return
+     * @return the {@link #elementClassToRemovedEdgeClassesForEndClass}
      */
     public final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClassesForEndClass() {
         return elementClassToRemovedEdgeClassesForEndClass;
