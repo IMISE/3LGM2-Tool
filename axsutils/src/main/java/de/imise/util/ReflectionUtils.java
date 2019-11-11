@@ -144,16 +144,10 @@ public class ReflectionUtils {
      * @param o2
      * @return
      */
-    public static final Class<?> getMostSpecialElementClass(final Object o1, final Object o2) {
-        Class<?> class1 = o1 instanceof Class<?> ? (Class<?>) o1 : o1.getClass();
-        Class<?> class2 = o2 instanceof Class<?> ? (Class<?>) o2 : o2.getClass();
-        if (class1.isAssignableFrom(class2)) {
-            return class2;
-        }
-        if (class2.isAssignableFrom(class1)) {
-            return class1;
-        }
-        return null;
+    public static final Class<?> getMostSpecialClass(final Object o1, final Object o2) {
+        Class<?> class1 = o1 == null ? null : o1 instanceof Class<?> ? (Class<?>) o1 : o1.getClass();
+        Class<?> class2 = o2 == null ? null : o2 instanceof Class<?> ? (Class<?>) o2 : o2.getClass();
+        return getMostSpecialClass(class1, class2);
     }
 
     /**
@@ -163,12 +157,14 @@ public class ReflectionUtils {
      * @param class2
      * @return
      */
-    public static final <T> Class<? extends T> getMostSpecialElementClass(final Class<? extends T> class1, final Class<? extends T> class2) {
+    public static final <T> Class<? extends T> getMostSpecialClass(final Class<? extends T> class1, final Class<? extends T> class2) {
+        if (class1 != null && class2 != null) {
         if (class1.isAssignableFrom(class2)) {
             return class2;
         }
         if (class2.isAssignableFrom(class1)) {
             return class1;
+        }
         }
         return null;
     }
