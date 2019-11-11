@@ -380,10 +380,19 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             if (direction == null) {
                 //solange zur vorherigen Kante zurück gehen, bis man eine findet, die sowohl vorwärts als auch rückwärts passt und diese dann mit rückwärts probieren
                 for (--i; i >= 0; i--) {
-                    if (metaPaths[i].hasDirectionForward()) { //das bedeutet, dass die aktuelle Kante in Vorwärsrichtung gelesen genommen wurde, was immer die zuerst gesuchte Richtung ist
-                        if (isEdgeDirectionBackward(metaModel, startClass, edgeClass)) { //falls die Kante auch rückwärts im Pfad sein kann
-                            direction = Direction.BACKWARD;
-                            break;
+                    if (tryForwardDirectionFirst) {
+                        if (metaPaths[i].hasDirectionForward()) { //das bedeutet, dass die aktuelle Kante in Vorwärsrichtung gelesen genommen wurde, was je nach Parameter tryForwardDirectionFirst immer die zuerst gesuchte Richtung ist
+                            if (metaModel.isEndClass(edgeClass, startClass)) { //falls die Kante auch rückwärts im Pfad sein kann, also die Startklasse des Pfades auch die Endklasse der Kante sein könnte und somit die Richtung BACKWARD sein könnte
+                                direction = Direction.BACKWARD;
+                                break;
+                            }
+                        }
+                    } else {
+                        if (!metaPaths[i].hasDirectionForward()) { //das bedeutet, dass die aktuelle Kante in Rückwärsrichtung gelesen genommen wurde, was je nach Parameter tryForwardDirectionFirst immer die zuerst gesuchte Richtung ist
+                            if (metaModel.isStartClass(edgeClass, startClass)) { //falls die Kante auch vorwärts im Pfad sein kann
+                                direction = Direction.FORWARD;
+                                break;
+                            }
                         }
                     }
                 }
@@ -517,16 +526,6 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      */
     private static String c(final Class<?> clazz) {
         return clazz == null ? null : clazz.getSimpleName();
-    }
-
-    /**
-     * @param metaModel
-     * @param startClass
-     * @param edgeClass
-     * @return
-     */
-    public static boolean isEdgeDirectionBackward(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {
-        return metaModel.isEndClass(edgeClass, startClass);
     }
 
     /**
