@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
+import static de.imise.util.ReflectionUtils.getMostSpecialClass;
+
 import java.lang.reflect.Modifier;
 import java.util.List;
 
@@ -155,6 +157,38 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     /**
+     * @param startClass
+     * @param edgeClass
+     * @param direction
+     * @param type
+     * @return
+     */
+    private static Class<? extends ModelElement> getStartClass(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Direction direction, final Type type) {
+        Class<? extends ModelElement> resultStartClass = startClass; //startClass bleibt erhalten, wenn keiner der folgenden type-Fälle eintritt
+        if (type == Type.ELEMENT_EDGE_ELEMENT || type == Type.END_WITH_EDGE) {
+            Class<? extends ModelElement> directedEdgeStartClass = getStartClass(edgeClass, direction);
+            resultStartClass = startClass == null ? directedEdgeStartClass : getMostSpecialClass(startClass, directedEdgeStartClass);
+        }
+        return resultStartClass;
+    }
+
+    /**
+     * @param endClass
+     * @param edgeClass
+     * @param direction
+     * @param type
+     * @return
+     */
+    private static Class<? extends ModelElement> getEndClass(final Class<? extends ModelElement> endClass, final Class<? extends Edge> edgeClass, final Direction direction, final Type type) {
+        Class<? extends ModelElement> resultEndClass = endClass; //endClass bleibt erhalten, wenn keiner der folgenden type-Fälle eintritt
+        if (type == Type.ELEMENT_EDGE_ELEMENT || type == Type.START_WITH_EDGE) {
+            Class<? extends ModelElement> directedEdgeEndClass = getEndClass(edgeClass, direction);
+            resultEndClass = endClass == null ? directedEdgeEndClass : getMostSpecialClass(endClass, directedEdgeEndClass);
+        }
+        return resultEndClass;
+    }
+
+    /**
      * @param metaModel
      * @param startClass
      * @param edgeClass
@@ -165,16 +199,9 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     private ElementaryMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final Direction direction, final ConnectionState connectionState,
             final Type type) {
-        super(metaModel, startClass == null ? getStartClass(edgeClass, direction) : startClass, endClass == null ? getEndClass(edgeClass, direction) : endClass);
-        Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
-        Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
-        if (direction == Direction.FORWARD) {
-            this.startClass = startClass != null && edgeStartClass.isAssignableFrom(startClass) ? startClass : edgeStartClass;
-            this.endClass = endClass != null && edgeEndClass.isAssignableFrom(endClass) ? endClass : edgeEndClass;
-        } else {
-            this.startClass = startClass != null && edgeEndClass.isAssignableFrom(startClass) ? startClass : edgeEndClass;
-            this.endClass = endClass != null && edgeStartClass.isAssignableFrom(endClass) ? endClass : edgeStartClass;
-        }
+        super(metaModel, getStartClass(startClass, edgeClass, direction, type), getEndClass(endClass, edgeClass, direction, type));
+        this.startClass = super.getStartClass();
+        this.endClass = super.getEndClass();
         this.edgeClass = edgeClass;
         this.direction = direction;
         this.connectionState = DoubleMeaningEdge.class.isAssignableFrom(edgeClass) ? connectionState : null; //nur bei DoubleMeaningEdges darf ein gültiger connectionState gesetzt werden, sonst muss er null sein!
