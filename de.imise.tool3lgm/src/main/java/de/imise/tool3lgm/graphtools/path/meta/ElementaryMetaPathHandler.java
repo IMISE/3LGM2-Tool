@@ -91,8 +91,8 @@ public final class ElementaryMetaPathHandler {
     public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final ElementaryMetaPath originalMetaPath, final Class<? extends ModelElement> endClass) {
         Class<? extends ModelElement> originalMetaPathStartClass = originalMetaPath.getStartClass();
         Class<? extends ModelElement> originalMetaPathEndClass = originalMetaPath.getEndClass();
-        Class<? extends ModelElement> realStartClass = startClass == null ? originalMetaPathEndClass : ReflectionUtils.getMostSpecialElementClass(startClass, originalMetaPathStartClass);
-        Class<? extends ModelElement> realEndClass = endClass == null ? null : ReflectionUtils.getMostSpecialElementClass(endClass, originalMetaPathEndClass);
+        Class<? extends ModelElement> realStartClass = startClass == null ? originalMetaPathEndClass : ReflectionUtils.getMostSpecialClass(startClass, originalMetaPathStartClass);
+        Class<? extends ModelElement> realEndClass = endClass == null ? null : ReflectionUtils.getMostSpecialClass(endClass, originalMetaPathEndClass);
         if (originalMetaPathStartClass == realStartClass && originalMetaPathEndClass == realEndClass) {
             return originalMetaPath;
         }

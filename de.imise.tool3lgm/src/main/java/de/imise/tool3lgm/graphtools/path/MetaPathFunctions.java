@@ -600,7 +600,7 @@ public class MetaPathFunctions {
         }
         Class<? extends ModelElement> lastEndClass = elementaryMetaPath1.getEndClass();
         Class<? extends ModelElement> nextStartClass = elementaryMetaPath2.getStartClass();
-        Class<? extends ModelElement> connectingClass = ReflectionUtils.getMostSpecialElementClass(lastEndClass, nextStartClass);
+        Class<? extends ModelElement> connectingClass = ReflectionUtils.getMostSpecialClass(lastEndClass, nextStartClass);
         return connectingClass;
     }
 
@@ -620,7 +620,7 @@ public class MetaPathFunctions {
             return endClass;
         }
         Class<? extends ModelElement> nextStartClass = ElementaryMetaPath.getStartClass(edgeClass2, direction2);
-        Class<? extends ModelElement> connectingClass = ReflectionUtils.getMostSpecialElementClass(endClass, nextStartClass);
+        Class<? extends ModelElement> connectingClass = ReflectionUtils.getMostSpecialClass(endClass, nextStartClass);
         return connectingClass;
     }
 
