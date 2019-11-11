@@ -81,7 +81,28 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      */
     @SafeVarargs
     public static final SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final Class<? extends Edge>... associations) {
-        return createSimpleMetaPath(metaModel, startClass, endClass, null, -1, associations);
+        return createSimpleMetaPath(metaModel, startClass, endClass, true, associations);
+    }
+
+    /**
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
+     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
+     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     *
+     * @param metaModel
+     * @param startClass
+     * @param endClass
+     * @param tryForwardDirectionFirst
+     *            This parameter is only relevant, if the metapath contains edge classes which fit the path in both directions, because the start
+     *            and end class of the edge are the same or assignable. If <code>true</code> (default) all ambigious edges will be interpreted in
+     *            forward direction. If <code>false</code> in backward direction.
+     * @param associations
+     * @return
+     */
+    @SafeVarargs
+    public static final SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final boolean tryForwardDirectionFirst,
+            final Class<? extends Edge>... associations) {
+        return createSimpleMetaPath(metaModel, startClass, endClass, null, -1, tryForwardDirectionFirst, associations);
     }
 
     /**
@@ -188,7 +209,31 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     @SafeVarargs
     public static final SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... associations)
             throws IllegalArgumentException {
-        return createSimpleMetaPath(metaModel, startClass, endClass, baseResKeyOrName, -1, associations);
+        return createSimpleMetaPath(metaModel, startClass, endClass, baseResKeyOrName, true, associations);
+    }
+
+    /**
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
+     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
+     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     *
+     * @param metaModel
+     * @param startClass
+     * @param endClass
+     * @param baseResKeyOrName
+     * @param tryForwardDirectionFirst
+     *            This parameter is only relevant, if the metapath contains edge classes which fit the path in both directions, because the start
+     *            and end class of the edge are the same or assignable. If <code>true</code> (default) all ambigious edges will be interpreted in
+     *            forward direction. If <code>false</code> in backward direction.
+     * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
+     *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @return
+     * @throws IllegalArgumentException
+     */
+    @SafeVarargs
+    public static final SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final boolean tryForwardDirectionFirst,
+            final Class<? extends Edge>... associations) throws IllegalArgumentException {
+        return createSimpleMetaPath(metaModel, startClass, endClass, baseResKeyOrName, -1, tryForwardDirectionFirst, associations);
     }
 
     /**
@@ -272,7 +317,34 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
     @SafeVarargs
     public static final SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName,
             final Class<? extends Edge>... associations) throws IllegalArgumentException {
-        return createSimpleMetaPath(metaModel, startClass, endClass, null, metaPathStepWithPathName, associations);
+        return createSimpleMetaPath(metaModel, startClass, endClass, metaPathStepWithPathName, true, associations);
+    }
+
+    /**
+     * Erzeugt aus den übergebenen Assoziationen einen {@link SequenceMetaPath} zwischen der Start- und Endklasse, die übergeben wurden. Die
+     * Richtungen werden aus diesen Start- und Endklassen abgeleitet. Wenn es nicht eindeutig ist, ob die Startklasse die Kante vorwärts oder
+     * rückwärts dreht, dann wird immer vorwärts angenommen.
+     *
+     * @param metaModel
+     * @param startClass
+     * @param endClass
+     * @param metaPathStepWithPathName
+     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
+     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param tryForwardDirectionFirst
+     *            This parameter is only relevant, if the metapath contains edge classes which fit the path in both directions, because the start
+     *            and end class of the edge are the same or assignable. If <code>true</code> (default) all ambigious edges will be interpreted in
+     *            forward direction. If <code>false</code> in backward direction.
+     * @param associations
+     *            Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei reine
+     *            Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
+     * @return
+     * @throws IllegalArgumentException
+     */
+    @SafeVarargs
+    public static final SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final boolean tryForwardDirectionFirst,
+            final Class<? extends Edge>... associations) throws IllegalArgumentException {
+        return createSimpleMetaPath(metaModel, startClass, endClass, null, metaPathStepWithPathName, tryForwardDirectionFirst, associations);
     }
 
     /**
@@ -287,6 +359,10 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      * @param metaPathStepWithPathName
      *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
      *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
+     * @param tryForwardDirectionFirst
+     *            This parameter is only relevant, if the metapath contains edge classes which fit the path in both directions, because the start
+     *            and end class of the edge are the same or assignable. If <code>true</code> (default) all ambigious edges will be interpreted in
+     *            forward direction. If <code>false</code> in backward direction.
      * @param associations Das ist eine Liste aus Element- und Kantenklassen. Diese Liste kann nur einen validen Pfad definieren, wenn niemals zwei
      *            reine Elementklassen (die also keine Kantenklassen sind) hintereinander stehen. Es steht immer eine Kantenklasse hinter einer
      * @return
@@ -294,12 +370,12 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      */
     @SafeVarargs
     private static final SimpleMetaPath createSimpleMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final int metaPathStepWithPathName,
-            final Class<? extends Edge>... associations) throws IllegalArgumentException {
+            final boolean tryForwardDirectionFirst, final Class<? extends Edge>... associations) throws IllegalArgumentException {
         ElementaryMetaPath[] metaPaths = new ElementaryMetaPath[associations.length];
         Class<? extends ModelElement> start = startClass;
         for (int i = 0; i < associations.length; i++) {
             Class<? extends Edge> edgeClass = associations[i];
-            Direction direction = getEdgeDirection(metaModel, start, edgeClass, i == associations.length - 1 ? endClass : null); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
+            Direction direction = getEdgeDirection(metaModel, start, edgeClass, i == associations.length - 1 ? endClass : null, tryForwardDirectionFirst); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
             //die Elementklasse passt nicht zur aktuellen Kante
             if (direction == null) {
                 //solange zur vorherigen Kante zurück gehen, bis man eine findet, die sowohl vorwärts als auch rückwärts passt und diese dann mit rückwärts probieren
@@ -386,26 +462,69 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      * @param startClass
      * @param edgeClass
      * @param endClass ist diese Klasse null, wird nur die startClass berücksichtigt
+     * @param tryForwardDirectionFirst
+     *            This parameter is only relevant, if the metapath contains edge classes which fit the path in both directions, because the start
+     *            and end class of the edge are the same or assignable. If <code>true</code> (default) all ambigious edges will be interpreted in
+     *            forward direction. If <code>false</code> in backward direction.
      * @return
      */
-    public static final Direction getEdgeDirection(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
+    public static final Direction getEdgeDirection(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final boolean tryForwardDirectionFirst) {
         Direction direction = null;
-        if ((startClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) && (endClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass))) {
-            direction = Direction.FORWARD;
-        } else if ((startClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) && (endClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass))) {
-            direction = Direction.BACKWARD;
+        if (tryForwardDirectionFirst) { // true -> erst in Vorwärts-Richtung prüfen
+            if (isForward(metaModel, startClass, edgeClass, endClass)) {
+                direction = Direction.FORWARD;
+            } else if (isBackward(metaModel, startClass, edgeClass, endClass)) {
+                direction = Direction.BACKWARD;
+            }
+        } else { // false -> erst in Rückwärts-Richtung prüfen
+            if (isBackward(metaModel, startClass, edgeClass, endClass)) {
+                direction = Direction.BACKWARD;
+            } else if (isForward(metaModel, startClass, edgeClass, endClass)) {
+                direction = Direction.FORWARD;
+            }
         }
         if (direction == null) {
             Sys.err1(c(startClass) + " < " + c(edgeClass) + " > " + c(endClass));
         }
-
         return direction;
     }
 
+    /**
+     * @param metaModel
+     * @param startClass
+     * @param edgeClass
+     * @param endClass
+     * @return
+     */
+    private static boolean isForward(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
+        return (startClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) && (endClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass));
+    }
+
+    /**
+     * @param metaModel
+     * @param startClass
+     * @param edgeClass
+     * @param endClass
+     * @return
+     */
+    private static boolean isBackward(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
+        return startClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass) && endClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass);
+    }
+
+    /**
+     * @param clazz
+     * @return
+     */
     private static String c(final Class<?> clazz) {
         return clazz == null ? null : clazz.getSimpleName();
     }
 
+    /**
+     * @param metaModel
+     * @param startClass
+     * @param edgeClass
+     * @return
+     */
     public static boolean isEdgeDirectionBackward(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {
         return metaModel.isEndClass(edgeClass, startClass);
     }
