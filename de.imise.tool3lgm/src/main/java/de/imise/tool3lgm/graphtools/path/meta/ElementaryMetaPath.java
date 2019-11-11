@@ -467,8 +467,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public static final ElementaryMetaPath getEdgeToStartElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getEdgeToStartElementMetaPath(metaModel, edgeClass, null);
+    public static final ElementaryMetaPath createEdgeToStartElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
+        return createEdgeToStartElementMetaPath(metaModel, edgeClass, null);
     }
 
     /**
@@ -477,7 +477,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public static final ElementaryMetaPath getEdgeToStartElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath createEdgeToStartElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, Edge.getStartClass(edgeClass), Direction.BACKWARD, connectionState, Type.START_WITH_EDGE);
     }
 
@@ -486,8 +486,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public static final ElementaryMetaPath getEdgeToEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getEdgeToEndElementMetaPath(metaModel, edgeClass, null);
+    public static final ElementaryMetaPath createEdgeToEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
+        return createEdgeToEndElementMetaPath(metaModel, edgeClass, null);
     }
 
     /**
@@ -496,7 +496,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public static final ElementaryMetaPath getEdgeToEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath createEdgeToEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, Edge.getStartClass(edgeClass), Direction.FORWARD, connectionState, Type.START_WITH_EDGE);
     }
 
@@ -505,8 +505,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public static final ElementaryMetaPath getEdgeToStartAndEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getEdgeToStartAndEndElementMetaPath(metaModel, edgeClass, null);
+    public static final ElementaryMetaPath createEdgeToStartAndEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
+        return createEdgeToStartAndEndElementMetaPath(metaModel, edgeClass, null);
     }
 
     /**
@@ -515,7 +515,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public static final ElementaryMetaPath getEdgeToStartAndEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath createEdgeToStartAndEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, Edge.getStartClass(edgeClass), null, connectionState, Type.START_WITH_EDGE);
     }
 
@@ -524,8 +524,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public static final ElementaryMetaPath getStartElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getStartElementToEdgeMetaPath(metaModel, edgeClass, null);
+    public static final ElementaryMetaPath createStartElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
+        return createStartElementToEdgeMetaPath(metaModel, edgeClass, null);
     }
 
     /**
@@ -534,7 +534,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public static final ElementaryMetaPath getStartElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath createStartElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(metaModel, Edge.getStartClass(edgeClass), edgeClass, edgeClass, Direction.FORWARD, connectionState, Type.END_WITH_EDGE);
     }
 
@@ -543,8 +543,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public static final ElementaryMetaPath getEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getEndElementToEdgeMetaPath(metaModel, edgeClass, null);
+    public static final ElementaryMetaPath createEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
+        return createEndElementToEdgeMetaPath(metaModel, edgeClass, null);
     }
 
     /**
@@ -553,7 +553,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public static final ElementaryMetaPath getEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath createEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(metaModel, Edge.getStartClass(edgeClass), edgeClass, edgeClass, Direction.BACKWARD, connectionState, Type.END_WITH_EDGE);
     }
 
@@ -562,8 +562,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param edgeClass
      * @return
      */
-    public static final ElementaryMetaPath getStartAndEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getStartAndEndElementToEdgeMetaPath(metaModel, edgeClass, null);
+    public static final ElementaryMetaPath createStartAndEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
+        return createStartAndEndElementToEdgeMetaPath(metaModel, edgeClass, null);
     }
 
     /**
@@ -572,7 +572,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @return
      */
-    public static final ElementaryMetaPath getStartAndEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
+    public static final ElementaryMetaPath createStartAndEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
         return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, ReflectionUtils.getCommonSuperClass(Edge.getStartClass(edgeClass), Edge.getEndClass(edgeClass)), null, connectionState, Type.END_WITH_EDGE);
     }
 
