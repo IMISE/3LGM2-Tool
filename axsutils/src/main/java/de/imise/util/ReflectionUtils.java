@@ -75,7 +75,7 @@ public class ReflectionUtils {
      * @return
      */
     public static final Class<?> getCommonSuperClass(final List<?> objectListOrClassList, final int startIndex, final int endIndex) {
-        if (objectListOrClassList == null || objectListOrClassList.size() == 0) {
+        if (objectListOrClassList == null || objectListOrClassList.isEmpty()) {
             return null;
         }
         if (startIndex < 0 || startIndex >= objectListOrClassList.size() || endIndex < 0 || endIndex >= objectListOrClassList.size() || endIndex < startIndex) {
@@ -95,7 +95,7 @@ public class ReflectionUtils {
      * @return
      */
     public static final Class<?> getCommonSuperClass(final Collection<?> objectListOrClassList) {
-        if (objectListOrClassList == null || objectListOrClassList.size() == 0) {
+        if (objectListOrClassList == null || objectListOrClassList.isEmpty()) {
             return null;
         }
         Class<?> returnClass = null;
