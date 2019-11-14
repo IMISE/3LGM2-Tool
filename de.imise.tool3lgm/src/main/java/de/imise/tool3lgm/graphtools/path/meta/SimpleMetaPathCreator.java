@@ -375,44 +375,27 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
         Class<? extends ModelElement> start = startClass;
         for (int i = 0; i < associations.length; i++) {
             Class<? extends Edge> edgeClass = associations[i];
-            Direction direction = getEdgeDirection(metaModel, start, edgeClass, i == associations.length - 1 ? endClass : null, tryForwardDirectionFirst); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
+            ElementaryMetaPath metaPath = createElementaryMetaPath(metaModel, start, edgeClass, i == associations.length - 1 ? endClass : null, tryForwardDirectionFirst); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
+            if (metaPath == null) {
+                metaPath = createElementaryMetaPath(metaModel, start, edgeClass, i == associations.length - 1 ? endClass : null, !tryForwardDirectionFirst); // bei der letzten Kante muss die Endklasse passen. Wenn bei einer Kante in der Mitte des Pfades die nächste Kante nicht passt, dann wird das unten druch Zurücklaufen erkannt
+            }
             //die Elementklasse passt nicht zur aktuellen Kante
-            if (direction == null) {
+            if (metaPath == null) {
                 //solange zur vorherigen Kante zurück gehen, bis man eine findet, die sowohl vorwärts als auch rückwärts passt und diese dann mit rückwärts probieren
                 for (--i; i >= 0; i--) {
-                    if (tryForwardDirectionFirst) {
-                        if (metaPaths[i].hasDirectionForward()) { //das bedeutet, dass die aktuelle Kante in Vorwärsrichtung gelesen genommen wurde, was je nach Parameter tryForwardDirectionFirst immer die zuerst gesuchte Richtung ist
-                            if (metaModel.isEndClass(edgeClass, startClass)) { //falls die Kante auch rückwärts im Pfad sein kann, also die Startklasse des Pfades auch die Endklasse der Kante sein könnte und somit die Richtung BACKWARD sein könnte
-                                direction = Direction.BACKWARD;
-                                break;
-                            }
-                        }
-                    } else {
-                        if (!metaPaths[i].hasDirectionForward()) { //das bedeutet, dass die aktuelle Kante in Rückwärsrichtung gelesen genommen wurde, was je nach Parameter tryForwardDirectionFirst immer die zuerst gesuchte Richtung ist
-                            if (metaModel.isStartClass(edgeClass, startClass)) { //falls die Kante auch vorwärts im Pfad sein kann
-                                direction = Direction.FORWARD;
-                                break;
-                            }
+                    boolean isForward = metaPaths[i].hasDirectionForward();
+                    if (tryForwardDirectionFirst && isForward || !tryForwardDirectionFirst && !isForward) {
+                        metaPath = createElementaryMetaPath(metaModel, start, edgeClass, i == associations.length - 1 ? endClass : null, !tryForwardDirectionFirst);
+                        if (metaPath != null) { //falls die Kante auch rückwärts im Pfad sein kann, also die Startklasse des Pfades auch die Endklasse der Kante sein könnte und somit die Richtung BACKWARD sein könnte
+                            break;
                         }
                     }
                 }
-                if (i < 0) {
-                    //der Pfad ist fehlerhaft, d. h. trotz Zurücklaufen und Test mit der Gegenrichtung passen die Kanten nicht zueinander
-                    Sys.err1("EdgeClasses dosn't define a valid metapath");
-                    return null;
-                }
             }
-            ElementaryMetaPath metaPath;
-            ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
-            if (metaPaths.length == 1) {
-                metaPath = elementaryMetaPathHandler.getMetaPath(start, edgeClass, direction, endClass);
-            } else if (i == 0) {
-                metaPath = elementaryMetaPathHandler.getMetaPath(start, edgeClass, direction);
-            } else if (i == metaPaths.length - 1 && endClass != null) {
-                metaPath = elementaryMetaPathHandler.getMetaPath(edgeClass, direction, endClass);
-            } else {
-                Class<? extends ModelElement> lastMetaPathEndClass = metaPaths[i - 1].getEndClass();
-                metaPath = elementaryMetaPathHandler.getMetaPath(lastMetaPathEndClass, edgeClass, direction);
+            if (i < 0) {
+                //der Pfad ist fehlerhaft, d. h. trotz Zurücklaufen und Test mit der Gegenrichtung passen die Kanten nicht zueinander
+                Sys.err1("EdgeClasses dosn't define a valid metapath");
+                return null;
             }
             metaPaths[i] = metaPath;
             start = metaPath.getEndClass();
@@ -477,25 +460,71 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      *            forward direction. If <code>false</code> in backward direction.
      * @return
      */
-    public static final Direction getEdgeDirection(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final boolean tryForwardDirectionFirst) {
-        Direction direction = null;
-        if (tryForwardDirectionFirst) { // true -> erst in Vorwärts-Richtung prüfen
+    private static ElementaryMetaPath createElementaryMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final boolean forward) {
+        //first test if the elements can be combined as an ELEMENT_EDGE_ELEMENT ElementaryMetaPath
+        Direction direction = getEdgeDirectionForELEMENT_EDGE_ELEMENT(metaModel, startClass, edgeClass, endClass, forward);
+        ElementaryMetaPath elementaryMetaPath;
+        if (direction != null) {
+            //die vom ElementaryMetaPathHandler angelegten Pfade haben immer den type ELEMENT_EDGE_ELEMENT
+            ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
+            elementaryMetaPath = elementaryMetaPathHandler.getMetaPath(startClass, edgeClass, direction, endClass);
+        } else {
+            //try now to constuct a START_WIT_EDGE or ENT_WITH_EDGE metapath
+            elementaryMetaPath = createTempateMetPath_START_WITH_EDGE_or_END_WITH_EDGE(metaModel, startClass, edgeClass, endClass, forward);
+        }
+        return elementaryMetaPath;
+    }
+
+    /**
+     * @param metaModel
+     * @param startClass
+     * @param edgeClass
+     * @param endClass
+     * @param forward
+     * @return
+     */
+    private static ElementaryMetaPath createTempateMetPath_START_WITH_EDGE_or_END_WITH_EDGE(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass,
+            final boolean forward) {
+        //path cannot be an ELEMENT_EDGE_ELEMENT ElementaryMetaPath -> test START_WITH_EDGE or END_WITH_EDGE
+        //one of the start and endClass must a regular start- or endClass of the edge and the other must be an assinable edge class to the edgeClass of the matpath
+        if (forward) {
+            if (startClass != null && edgeClass.isAssignableFrom(startClass)) { // START_WITH_EDGE
+                if (endClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass)) {
+                    return ElementaryMetaPath.createEdgeToEndElementMetaPath(metaModel, edgeClass, endClass); //FORWARD to edgeEndElement
+                } else if (metaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass)) {
+                    return ElementaryMetaPath.createEdgeToStartElementMetaPath(metaModel, edgeClass, endClass); //BACKWARD to edgeStartElement
+                }
+            }
+        } else {
+            if (endClass != null && edgeClass.isAssignableFrom(endClass)) { // END_WITH_EDGE
+                if (startClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) {
+                    return ElementaryMetaPath.createStartElementToEdgeMetaPath(metaModel, startClass, edgeClass);//FORWARD to edge
+                } else if (metaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) {
+                    return ElementaryMetaPath.createEndElementToEdgeMetaPath(metaModel, startClass, edgeClass);//BACKWARD to edge
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param metaModel
+     * @param startClass
+     * @param edgeClass
+     * @param endClass
+     * @param forward
+     */
+    private static Direction getEdgeDirectionForELEMENT_EDGE_ELEMENT(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final boolean forward) {
+        if (forward) {
             if (isForward(metaModel, startClass, edgeClass, endClass)) {
-                direction = Direction.FORWARD;
-            } else if (isBackward(metaModel, startClass, edgeClass, endClass)) {
-                direction = Direction.BACKWARD;
+                return Direction.FORWARD;
             }
-        } else { // false -> erst in Rückwärts-Richtung prüfen
+        } else {
             if (isBackward(metaModel, startClass, edgeClass, endClass)) {
-                direction = Direction.BACKWARD;
-            } else if (isForward(metaModel, startClass, edgeClass, endClass)) {
-                direction = Direction.FORWARD;
+                return Direction.BACKWARD;
             }
         }
-        if (direction == null) {
-            Sys.err1(c(startClass) + " < " + c(edgeClass) + " > " + c(endClass));
-        }
-        return direction;
+        return null;
     }
 
     /**
@@ -543,7 +572,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
         List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
         //jetzt für jeden Elementarpfadschritt des Ausgangspfades immer alle Pfade in die Ergebnisliste schreiben, die nur noch Elementarpfadschritte mit nocht-abstrakten Knotenklassen haben
         for (int i = 0; i < elementaryMetaPaths.size(); i++) {
-            replaceSimpleMetaPathsWithNonAbstractNodeClasses(simpleMetaPaths, i);
+            replaceSimpleMetaPathsWithNonAbstractPathStepConnectingClasses(simpleMetaPaths, i);
         }
         removeInvalidMetaPaths(simpleMetaPaths);
         //dann alle Varianten von abstracten Kanten in den Pfaden ersetzen
@@ -572,11 +601,11 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      * @param currentPathStepIndex
      * @return
      */
-    private static List<SimpleMetaPath> replaceSimpleMetaPathsWithNonAbstractNodeClasses(final List<SimpleMetaPath> simpleMetaPaths, final int currentPathStepIndex) {
+    private static List<SimpleMetaPath> replaceSimpleMetaPathsWithNonAbstractPathStepConnectingClasses(final List<SimpleMetaPath> simpleMetaPaths, final int currentPathStepIndex) {
         //bei jedem MetaPfad der Liste
         for (int p = 0; p < simpleMetaPaths.size(); p++) {
             SimpleMetaPath simpleMetaPath = simpleMetaPaths.get(p);
-            //alle nicht-abstrakten Knotenklassen der Start- und Endklasse ermitteln
+            //alle nicht-abstrakten Elementklassen der Start- und Endklasse ermitteln
             MetaModel metaModel = simpleMetaPath.getMetaModel();
 
             //Start- und Endklasse des aktuellen Pfadschrittes aus dem originalen MetaPfad ermitteln
