@@ -340,7 +340,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     Node endNode = getTargetNode(objectNode);
                     if (endNode != null) {
                         //Predicate -> Edge
-                        String edgeHash = predicate.getURI(); //originale URI übernehmen
+                        String edgeHash = "[" + subjectResource.getURI() + "; " + predicate.getURI() + "; " + statement.getResource().getURI(); //URI aus Subject, Predicate und Object übernehmen
                         OntProperty ontProperty = getOntProperty(predicate, importableObjectPropertiesToTargetEdgeClassName);
                         String name = getName(ontProperty, namePattern);
                         String description = descriptionPropertyResolver.getValue(predicate);
