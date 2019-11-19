@@ -2,7 +2,9 @@ package de.imise.template.ihe;
 
 import java.util.Map;
 
+import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
 
 import de.imise.template.ihe.IheImportMetaModelDefinition.Actor;
 import de.imise.template.ihe.IheImportMetaModelDefinition.Domain;
@@ -25,6 +27,7 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.metamodel.service.TLGMServiceMetaModel;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInterface_IheTransaction_Edge;
@@ -66,7 +69,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
     }
 
     @Override
-    public Map<Class<? extends Edge>, TargetMetaPathsCreationDefinition> getSourceEdgeClassesToTargetMetaPaths() {
+    public Multimap<Class<? extends Edge>, TargetMetaPathsCreationDefinition> getSourceEdgeClassesToTargetMetaPaths() {
         Class<? extends MetaModelDefinition> targetMetaModelDefinitionClass = getTargetMetaModelDefinitionClass();
         MetaModelContext serviceMetaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(targetMetaModelDefinitionClass);
         MetaModel serviceMetaModel = serviceMetaModelContext.getMetaModel();
@@ -74,9 +77,15 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
         //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ruft auf ( <- ) IHE Transaction + IHE Transaction wird bereitsgestellt durch ( <- ) IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
         SimpleMetaPath actorTransactionActorMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(serviceMetaModel, IheActor.class, IheActor.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class,
                 IheProvidingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
-        TargetMetaPathsCreationDefinition def = new TargetMetaPathsCreationDefinition(actorTransactionActorMetaPath);
-        def.addElementNameCreationPattern(1, NameSource.PATH_STEP_EDGE_NAME); //EndElement der 2.Kante im Pfad ( IheInvokingInterface_IheTransaction_Edge -> EndElement = Transaction) soll den Namen der Ursprungskante bekommen
-        return ImmutableMap.of(IheTransaction_Edge.class, def);
+        TargetMetaPathsCreationDefinition def1 = new TargetMetaPathsCreationDefinition(actorTransactionActorMetaPath);
+        def1.addElementNameCreationPattern(1, NameSource.PATH_STEP_EDGE_NAME); //EndElement der 2.Kante im Pfad ( IheInvokingInterface_IheTransaction_Edge -> EndElement = Transaction) soll den Namen der Ursprungskante bekommen
+
+        //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ist vrbunden mit IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
+        SimpleMetaPath actorCommunicationLinkActorMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(serviceMetaModel, IheActor.class, IheActor.class, IheActor_IheInterface_Edge.class, IheCommunicationLink_Edge.class, IheActor_IheInterface_Edge.class);
+        TargetMetaPathsCreationDefinition def2 = new TargetMetaPathsCreationDefinition(actorCommunicationLinkActorMetaPath);
+
+        //beide MetaPfade für die IheTransaction_Edge hinzufügen
+        return ImmutableListMultimap.of(IheTransaction_Edge.class, def1, IheTransaction_Edge.class, def2);
     }
 
     @Override

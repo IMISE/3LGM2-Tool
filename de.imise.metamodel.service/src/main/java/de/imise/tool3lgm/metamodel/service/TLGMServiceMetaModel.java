@@ -30,6 +30,7 @@ import de.imise.tool3lgm.metamodel.service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransaction_Edge;
@@ -216,6 +217,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
             IheInvokingInterface.class,
             IheProvidingInterface.class,
             //IHE-Assoziationsklassen
+            IheCommunicationLink_Edge.class,
     };
 
     /** Alle Node zw. LWE und PWE als Array */
@@ -314,6 +316,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 IheProvidingInterface_IheTransaction_Edge.class,
                 IheInvokingInterface_InvokingInterface_Edge.class,
                 IheProvidingInterface_ProvidingInterface_Edge.class,
+                IheCommunicationLink_Edge.class,
                 //LWE - PWE
                 ApplicationComponent_PhysicalDataProcessingComponent_Edge.class,
                 ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class,
