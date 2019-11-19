@@ -43,7 +43,7 @@ public class ModelConverterUtils {
         GDCollection gdcoll = middleElement.getCollection();
 
         int counter = joinElementIfEquals(gdcoll, middleElement, null, hashString, path, 0);
-        middleElement = getMiddleElement(path);
+        middleElement = getMiddleElement(path); // if joined -> middle element has changed
 
         int pathLength = path.length();
         for (int i = 0; i < pathLength; i++) {
@@ -125,51 +125,6 @@ public class ModelConverterUtils {
         }
         return null;
     }
-
-    /**
-     * Replaces the automatic generated hashStrings in a generated path by a given hashString. The element in the
-     * middle gets the original given hashString. All the others get the same with an unique number appended.
-     * This algorithm is deterministic, so converting the same model again will generate the same hashStrings.
-     * The hashStrings of the start- and endElement of the path will not be changed.
-     * If there is an Element with the same type and with the same hash id (ignoring the added number) than this
-     * element is created by the same edge and is the same element)
-     *
-     * @param path
-     * @param hashString the generated element in the middle of the path gets this hash
-     */
-    //    static void replaceGeneratedHashStringsAndJoinEqualsElements(final SimplePath path, final String hashString) {
-    //        ModelElement middleElement = getMiddleElement(path);
-    //        middleElement.setHashString(hashString);
-    //        int pathLength = path.length();
-    //        int counter = 1;
-    //        for (int i = 0; i < pathLength; i++) {
-    //            ElementaryPath pathStep = path.getPathStep(i);
-    //            //edge
-    //            Edge edge = pathStep.getEdge();
-    //            counter = setHashString(edge, hashString, counter);
-    //            if (i < pathLength - 1) { // endElement
-    //                ModelElement endElement = pathStep.getEndElement();
-    //                counter = setHashString(endElement, hashString, counter);
-    //            }
-    //        }
-    //    }
-
-    //    /**
-    //     * @param me
-    //     * @param hashString
-    //     * @param counter
-    //     * @return
-    //     */
-    //    private static int setHashString(final ModelElement me, final String hashString, final int counter) {
-    //        //ignore the element which already has the correct hashString
-    //        if (me.getHashString().equals(hashString)) {
-    //            return counter;
-    //        }
-    //        String fullHashString = hashString + "_" + counter;
-    //        me.setHashString(fullHashString);
-    //        return counter + 1;
-    //    }
-    //
 
     /**
      * @param gdcoll

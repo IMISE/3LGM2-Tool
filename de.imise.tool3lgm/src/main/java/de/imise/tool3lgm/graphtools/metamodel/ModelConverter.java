@@ -149,6 +149,9 @@ public class ModelConverter {
         }
     }
 
+    /**
+     * @param switchDirection
+     */
     private void convertDirectMappingEdges(final boolean switchDirection) {
         //Map der direkt aufeinander abbildbaren Kantenklassen holen
         Map<Class<? extends Edge>, Class<? extends Edge>> directMappingEdgeClasses = !switchDirection ? modelConverterDefinition.getSourceEdgeClassesToTargetEdgeClasses() : modelConverterDefinition.getSourceEdgeClassesToSwitchedTargetEdgeClasses();
@@ -187,8 +190,9 @@ public class ModelConverter {
         }
     }
 
-    private static int iii = 1;
-
+    /**
+     *
+     */
     private void convertEdgesMappingMetaPaths() {
         //Map der Kantenklassen, die auf Pfade gemappt werden holen
         Multimap<Class<? extends Edge>, TargetMetaPathsCreationDefinition> edgesMappingMetaPaths = modelConverterDefinition.getSourceEdgeClassesToTargetMetaPaths();
@@ -221,10 +225,6 @@ public class ModelConverter {
                     ModelElement targetStartElement = targetMainDoc.findNodeCoded(sourceEdgeStartElementHash);
                     ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEdgeEndElementHash);
                     //lege den MetaPfad im Zielmodell an
-                    System.err.println(targetMetaPath.length());
-                    if (iii++ == 13) {
-                        System.err.println();
-                    }
                     SimplePath createdPath = targetMainDoc.createPath(targetStartElement, targetEndElement, targetMetaPath, STANDARD_PID);
                     //replace the generated 3LGM-hashStrings by derived hashStrings from the source edge or join created elements if the same element (same type with same hash id prefix) already exists
                     ModelConverterUtils.replaceGeneratedHashStringsAndJoinEqualsElements(createdPath, sourceEdgeHash);
@@ -235,15 +235,24 @@ public class ModelConverter {
         }
     }
 
+    /**
+     *
+     */
     private void convertMetaPathsMappingEdges() {
         //TODO: implementieren
     }
 
+    /**
+     *
+     */
     private void convertMetaPathsMappingMetaPaths() {
         //TODO: implementieren
 
     }
 
+    /**
+     *
+     */
     private void transform() {
         modelConverterDefinition.transform(sourceModel, targetModel);
     }
