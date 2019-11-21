@@ -1718,9 +1718,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 connected = edge.getEnd() == this ? edge.getStart() : edge.getEnd();
             }
 
-            if (connected == null) {
+            if (connected == null || searchElementClass == null) { // searchElementClass can be null if the metamodel dosn't fit the analyis
                 continue;
             }
+
             if (!searchElementClass.isAssignableFrom(connected.getClass())) {
                 continue;
             }
