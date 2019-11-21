@@ -16,8 +16,10 @@ import javax.swing.border.Border;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.component.text.ExtendedTextPane;
@@ -83,6 +85,25 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = 0;
 
+        addEdgeStartEndPanel();
+    }
+
+    /**
+     *
+     */
+    private void addEdgeStartEndPanel() {
+        ModelElement me = getModelElement();
+        if (me instanceof Edge) {
+            Class<? extends ModelElement> meClass = me.getClass();
+            Class<? extends Edge> edgeClass = meClass.asSubclass(Edge.class);
+            MetaModel metaModel = getMetaModel();
+            ElementaryMetaPath edgeToStartElementMetaPath = ElementaryMetaPath.createEdgeToStartElementMetaPath(metaModel, edgeClass);
+            ElementaryMetaPath edgeToEndElementMetaPath = ElementaryMetaPath.createEdgeToEndElementMetaPath(metaModel, edgeClass);
+            SimpleMetaPath edgeToStartElementSimpleMetaPath = new SimpleMetaPath(edgeToStartElementMetaPath);
+            SimpleMetaPath edgeToEndElementSimpleMetaPath = new SimpleMetaPath(edgeToEndElementMetaPath);
+            addSingleConnectionPanel(false, false, edgeToStartElementSimpleMetaPath);
+            addSingleConnectionPanel(false, false, edgeToEndElementSimpleMetaPath);
+        }
     }
 
     /**
