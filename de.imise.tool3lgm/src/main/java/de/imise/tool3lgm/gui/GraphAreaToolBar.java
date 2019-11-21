@@ -36,11 +36,12 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
     /** irgendeine der grafisch darstellbaren Klassen, die man braucht, um einen Strich auf den Button der Kanten zu malen */
     private static Class<? extends Node> dummyEdgeButtonNodeClass;
 
+    private boolean multiView;
+
     /**
      * @param frame
      */
     public GraphAreaToolBar(final InternalGraphFrame frame) {
-        super();
         buttonSwitchMouseMode = ToolButton.createDisableMouseMakesElementsButton();
         MetaModel metaModel = frame.doc.getMetaModel();
         buttonCreateEdge = ToolButton.createEdgeButton(metaModel, dummyEdgeButtonNodeClass);
@@ -49,6 +50,8 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
         sliders = new GraphAreaOptionSliders(frame, 150, 30);
         setFrame(frame);
         CSH.setHelpIDString(this, "GRAPH_TOOLBAR_ansichtswerkzeuge");
+        InputGraphArea inputGraphArea = frame.getInputGraphArea();
+        multiView = !inputGraphArea.isMultiView();
     }
 
     //AXS 28.05.2019: als das Metamodell statisch war, wurde diese Map hier gefüllt. Sollte der Kontext-Switch zu langsam sein, kann man das wieder so oder so
@@ -106,8 +109,11 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
         }
         GDCollection gdcoll = frame.getCollection();
         int activeLayer = gdcoll.getActiveLayer();
-        if (currentLayer != activeLayer) {
+        InputGraphArea inputGraphArea = frame.getInputGraphArea();
+        boolean areaMultiView = inputGraphArea.isMultiView();
+        if (currentLayer != activeLayer || multiView != areaMultiView) {
             currentLayer = activeLayer;
+            multiView = areaMultiView;
             for (ToolButton button : buttonsCreateElement) {
                 buttonGroup.remove(button);
             }
@@ -147,6 +153,9 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
         }
     }
 
+    /**
+     *
+     */
     private void addSliders() {
         InputGraphArea area = frame.getInputGraphArea();
         addSlider(sliders.getSliderZoom());
