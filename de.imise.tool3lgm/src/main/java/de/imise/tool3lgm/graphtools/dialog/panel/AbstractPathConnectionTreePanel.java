@@ -48,19 +48,22 @@ public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnec
     protected Object getSelection(final MouseEvent e) {
         //find selection
         Object selection = null;
-        JTree tree = (JTree) e.getSource();
-        TreePath path = tree.getPathForLocation(e.getX(), e.getY());
-        if (path == null) {
-            return null;
+        Object source = e.getSource();
+        if (source instanceof JTree) { //can be an JLabel or JTree and a label has no selection
+            JTree tree = (JTree) e.getSource();
+            TreePath path = tree.getPathForLocation(e.getX(), e.getY());
+            if (path == null) {
+                return null;
+            }
+            //set selection in tree
+            tree.setSelectionPath(path);
+            LGMTreeNode node = (LGMTreeNode) path.getLastPathComponent();
+            if (node == null) {
+                return null;
+            }
+            //return selected object
+            selection = node.getUserObject();
         }
-        //set selection in tree
-        tree.setSelectionPath(path);
-        LGMTreeNode node = (LGMTreeNode) path.getLastPathComponent();
-        if (node == null) {
-            return null;
-        }
-        //return selected object
-        selection = node.getUserObject();
         return selection;
     }
 
