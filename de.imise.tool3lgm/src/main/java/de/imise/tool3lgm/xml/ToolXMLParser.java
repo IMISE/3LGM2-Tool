@@ -106,8 +106,10 @@ public class ToolXMLParser {
         parser.getXMLReader().setDTDHandler(new ToolDTDHandler());
 
         version = extractVersionAndMetaModel(parseStream);
-        Tool3lgmModelType modelType = new Tool3lgmModelType(version.metaModelContext, version.modelCategory);
-        gdcoll.setModelType(modelType);
+        if (!paste) {
+            Tool3lgmModelType modelType = new Tool3lgmModelType(version.metaModelContext, version.modelCategory);
+            gdcoll.setModelType(modelType);
+        }
 
         /* XML Version */
         if (version.xmlVersionIndex < 0) {
