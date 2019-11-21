@@ -334,7 +334,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
         } else {
             for (ModelElement me : startElements.get(0)) {
                 PathResultTreeNode node = new PathResultTreeNode(new ElementaryPath(null, me), PathResultTreeNode.NodeType.START_ELEMENT);
-                completePathLeafs.addAll(addPath(node, metaPath, false));
+                List<PathResultTreeNode> pathNodes = addPath(node, metaPath, false);
+                completePathLeafs.addAll(pathNodes);
                 if (node.getChildCount() > 0) {
                     root.add(node);
                 }
