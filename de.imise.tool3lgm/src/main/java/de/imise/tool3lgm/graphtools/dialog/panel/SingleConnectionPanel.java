@@ -147,7 +147,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             connectedElementsBox.addItemListener(itemListener);
         } else if (connectedElementName != null) { // beim ersten update() aus dem Konstruktor sind beide (Box und TextArea) null -> nicht einfach nur else hier sondern else-if
             if (connectedElement != null) {
-                oldname = connectedElement.getName();
+                oldname = connectedElement.getClearName();
                 connectedElementName.setText(oldname);
             } else {
                 connectedElementName.setText("");
