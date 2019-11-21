@@ -11,7 +11,6 @@ import com.google.common.collect.Multimap;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
