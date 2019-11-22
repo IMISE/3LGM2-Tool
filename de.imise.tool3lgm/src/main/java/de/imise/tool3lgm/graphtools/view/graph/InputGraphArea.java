@@ -21,6 +21,8 @@ import static java.awt.Cursor.DEFAULT_CURSOR;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -52,7 +54,7 @@ import de.imise.util.ReflectionUtils;
  *
  * @author N.N., AXS
  */
-public class InputGraphArea extends BasicGraphArea implements MouseListener, MouseMotionListener, MouseWheelListener {
+public class InputGraphArea extends BasicGraphArea implements MouseListener, MouseMotionListener, MouseWheelListener, ComponentListener {
 
     /**
      * Toleranz in Pixel, die im Abstand zwischen 2 Knickpunten in beiden Dimensionen unterschritten
@@ -171,6 +173,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             sized = false;
             setMouseClickCreatesNode(null);
             check_size();
+            addComponentListener(this);
         }
     }
 
@@ -1132,4 +1135,31 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     public void dispose() {
         getMainFrame().removeMouseListener(this);
     }
+
+    ///////////////////////
+    // ComponentListener //
+    ///////////////////////
+
+    @Override
+    public void componentResized(final ComponentEvent e) {
+        //Dieser Spass hier dient nur dazu, nach dem Öffnen einer Modelldatei nochmal ein
+        //neu Zeichnen auszulösen. Erst dadurch fällt der Swing-Bug mit der am Anfang nicht
+        //korrekt positionierten Schrift nicht mehr auf.
+        revalidate();
+        repaint();
+        removeComponentListener(this);
+    }
+
+    @Override
+    public void componentMoved(final ComponentEvent e) {
+    }
+
+    @Override
+    public void componentShown(final ComponentEvent e) {
+    }
+
+    @Override
+    public void componentHidden(final ComponentEvent e) {
+    }
+
 }

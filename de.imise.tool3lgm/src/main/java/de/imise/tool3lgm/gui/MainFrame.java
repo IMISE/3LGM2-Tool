@@ -3,9 +3,6 @@ package de.imise.tool3lgm.gui;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -31,7 +28,6 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
-import de.imise.util.robot.ScreenRobot;
 
 /**
  * Hauptfenster der Anwendung. Das hier ist alles aus Tool3lgm herausgelöst, das bis dahin das Hauptfenster war. Aber es hat noch eine Menge
@@ -140,24 +136,11 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
         Static.setProgressDialogStatusLabel("create_frame", gdcoll.getMainGraphDocument().getTitle());
         createGraphFrame(gdcoll.getMainGraphDocument());
 
-        AbstractInternalFrame lastFrame = null;
         for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
             Szenario szen = gdcoll.getSzenario(i);
             Static.setProgressDialogStatusLabel("create_frame", szen.getTitle());
-            lastFrame = createGraphFrame(szen);
+            createGraphFrame(szen);
         }
-        //Dieser Spass hier dient nur dazu, nach dem Öffnen einer Modelldatei nochmal ein
-        //neu Zeichnen auszulösen, was nur mit einem Klick in den Frame zuverlässig passiert
-        //Erst dadurch fällt der Swing-Bug mit der am Anfang nicht korrekt positionierten
-        //Schrift nicht mehr auf.
-        Point location = MouseInfo.getPointerInfo().getLocation();
-        if (lastFrame != null && lastFrame.isVisible()) {
-            Point locationOnScreen = lastFrame.getLocationOnScreen();
-            Dimension size = lastFrame.getSize();
-            ScreenRobot.setMouse(locationOnScreen.x + size.width / 2, locationOnScreen.y + size.height / 2);
-            ScreenRobot.click();
-        }
-        ScreenRobot.setMouse(location);
     }
 
     /**
