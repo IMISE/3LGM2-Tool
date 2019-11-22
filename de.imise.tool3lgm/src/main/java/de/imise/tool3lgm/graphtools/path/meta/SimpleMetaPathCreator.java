@@ -554,8 +554,8 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                         //Start- und Endklasse des neuen Pfadschrittes ist die speziellere der jeweilgen Klassen vom Original-MetaPafd und der nicht-abstrakten Kantenklasse
                         Class<? extends ModelElement> pathStepStartClass = readEdgeForward ? Edge.getStartClass(edgeType) : Edge.getEndClass(edgeType);
                         Class<? extends ModelElement> pathStepEndClass = readEdgeForward ? Edge.getEndClass(edgeType) : Edge.getStartClass(edgeType);
-                        pathStepStartClass = ReflectionUtils.getMostSpecialElementClass(pathStepConnectingStartClass, pathStepStartClass);
-                        pathStepEndClass = ReflectionUtils.getMostSpecialElementClass(pathStepConnectingEndClass, pathStepEndClass);
+                        pathStepStartClass = ReflectionUtils.getMostSpecialClass(pathStepConnectingStartClass, pathStepStartClass);
+                        pathStepEndClass = ReflectionUtils.getMostSpecialClass(pathStepConnectingEndClass, pathStepEndClass);
                         ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
                         //jetzt den neuen Elementarpfadschritt mit den speziellen Start- und Endklasse in derselben Richtung, in der die nicht abstrakte Kantenklasse gilt, anlegen
                         elementaryMetaPathArray[currentPathStepIndex] = elementaryMetaPathHandler.getMetaPath(pathStepStartClass, edgeType, elementaryMetaPathDirection, pathStepEndClass);

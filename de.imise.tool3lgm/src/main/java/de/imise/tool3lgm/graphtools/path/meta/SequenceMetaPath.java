@@ -337,7 +337,7 @@ public class SequenceMetaPath extends ListMetaPath {
         Set<Class<? extends ModelElement>> pathStepClasses = new HashSet<>();
         for (Class<? extends ModelElement> endClass : endClasses) {
             for (Class<? extends ModelElement> startClass : nextStartClasses) {
-                Class<? extends ModelElement> pathStepClass = ReflectionUtils.getMostSpecialElementClass(endClass, startClass);
+                Class<? extends ModelElement> pathStepClass = ReflectionUtils.getMostSpecialClass(endClass, startClass);
                 //null tritt ein, wenn die Elemente der aufeinanderfolgenden Elementarpfade nicht zusammenpassen
                 if (pathStepClass != null) {
                     //das hier checkt auch bei ElementaryMetaPaths, ob die Kante für die pathStepClass zu den removedEdgeClasses gehört
