@@ -99,10 +99,10 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JButton addButton = new JButton(getCreateNewElementAction());
-        JButton removeButton = new JButton(getDisconnectAction());
-
         if (editable) {
+            JButton addButton = new JButton(getCreateNewElementAction());
+            JButton removeButton = new JButton(getDisconnectAction());
+
             constraints.anchor = GridBagConstraints.CENTER;
             buttonpanel = new JPanel();
             buttonpanel.setLayout(new GridLayout(1, 2));

@@ -161,6 +161,19 @@ public class ConnectedElementsTableDefinition implements Iterable<SingleColumnDe
     }
 
     /**
+     * Fügt eine Spalte zur Definition hinzu, die den Namen der Kante des Elementarpfades anzeigt.
+     *
+     * @param index
+     *            Index des Elementarpfades im Pfad
+     * @param width
+     *            preferredWidth der Spalte (muss man auch im Verhältnis zu den anderen Spalten und deren preferredWidth sehen). Kann man setzten,
+     *            wenn einge Spalten breiter als andere sein sollen. Default ist, dass alle gleich breit sind.
+     */
+    public void addColumnPathStepEdge(final int index, final int width) {
+        addColumn(ColumnType.PATH_STEP_EDGE, index, null, width);
+    }
+
+    /**
      * Fügt eine Spalte zur Definition hinzu, die den Namen des Endelementes des Elementarpfades anzeigt.
      *
      * @param index
