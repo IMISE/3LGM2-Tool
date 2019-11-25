@@ -1,8 +1,10 @@
 package de.imise.tool3lgm.metamodel.service.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
 
 /**
  * @author AXS (26.12.2017)
@@ -13,6 +15,15 @@ public abstract class CommunicationInterface extends Node {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripSingleConnectionPanel(true, ApplicationComponent_CommunicationInterface_Edge.class);
+
+        ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
+        tableDefinition.addColumnPathStepEdge(0, 300);
+        tableDefinition.addColumnPathStepName(0, 150);
+        tableDefinition.addColumnPathStepEnd(0, 300);
+        //        tableDefinition.addColumnPathStepName(1, 150);
+        //        tableDefinition.addColumnEndElement(300);
+        dialog.addTablePanel(tableDefinition, 0, CommunicationLink_Edge.class/* , ApplicationComponent_CommunicationInterface_Edge.class */);
+
         return dialog;
     }
 
