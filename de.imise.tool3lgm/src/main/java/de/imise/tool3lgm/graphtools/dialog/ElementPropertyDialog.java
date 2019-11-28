@@ -460,14 +460,15 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         return DEFAULT_SIZE;
     }
 
-    ///////////////////////////////////////
-    // DescriptionPanel -> add SubPanels //
-    ///////////////////////////////////////
-
     @SafeVarargs
     public final SimpleMetaPath createSimpleMetaPath(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        return getModelElement().createSimpleMetaPath(searchElementClass, edgeClasses);
+        ModelElement me = getModelElement();
+        return me.createSimpleMetaPath(searchElementClass, edgeClasses);
     }
+
+    //////////////////////////////////
+    // TabbedPanel -> add SubPanels //
+    //////////////////////////////////
 
     @Override
     protected void addTab(final String title, final Icon icon, final Component component) {
@@ -488,7 +489,8 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     public final void addTabbedPanel(final String nameResKey) {
         lastCreatedTabbedPanel = new TabbedPanel(this);
-        lastCreatedTabbedPanel.setName(Tool3lgmConstants.getResStringWithoutError(nameResKey));
+        String tabTitle = Tool3lgmConstants.getResStringWithoutError(nameResKey);
+        lastCreatedTabbedPanel.setName(tabTitle);
         addTab(lastCreatedTabbedPanel);
     }
 
@@ -502,9 +504,15 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         if (edgeClasses.length == 1) {
             addEdgePanel(searchElementClass, edgeClasses[0], true);
         } else {
-            lastCreatedTabbedPanel.addTab(new PathConnectionPanel(this, true, createSimpleMetaPath(searchElementClass, edgeClasses)));
+            SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
+            PathConnectionPanel panel = new PathConnectionPanel(this, true, metaPath);
+            lastCreatedTabbedPanel.addTab(panel);
         }
     }
+
+    //////////////////////////////////////////////////////
+    // DescripPanel ( = General-Panel) -> add SubPanels //
+    //////////////////////////////////////////////////////
 
     @SafeVarargs
     public final void addDescripDescriptedPanel(final Class<? extends Edge>... edgeClasses) {
@@ -562,6 +570,10 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         }
     }
 
+    /////////////////////
+    // DescriptedPanel //
+    /////////////////////
+
     @SafeVarargs
     public final void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addTab(new DescriptedSingleConnectionPanel(this, createSimpleMetaPath(null, edgeClasses)));
@@ -584,7 +596,8 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     @SafeVarargs
     public final void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        addTab(new PathConnectionPanel(this, labelLastEdgeName, true, createSimpleMetaPath(searchElementClass, edgeClasses)));
+        SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
+        addTab(new PathConnectionPanel(this, labelLastEdgeName, true, metaPath));
     }
 
     @SafeVarargs
@@ -594,12 +607,15 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     @SafeVarargs
     public final void addPathConnectionLeafPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        addTab(new PathConnectionLeafPanel(this, labelLastEdgeName, true, createSimpleMetaPath(null, edgeClasses)));
+        SimpleMetaPath metaPath = createSimpleMetaPath(null, edgeClasses);
+        addTab(new PathConnectionLeafPanel(this, labelLastEdgeName, true, metaPath));
     }
 
     @SafeVarargs
     public final void addPathConnectionInfoPanel(final Class<? extends Edge>... edgeClasses) {
-        addTab(new PathConnectionPanel(this, false, createSimpleMetaPath(null, edgeClasses)));
+        SimpleMetaPath metaPath = createSimpleMetaPath(null, edgeClasses);
+        PathConnectionPanel panel = new PathConnectionPanel(this, false, metaPath);
+        addTab(panel);
     }
 
     public void addEdgePanel(final Class<? extends Edge> edgeClass) {
@@ -629,7 +645,8 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         }
         ElementDialogPanel panel2Add = null;
         if (MetaModel.isComposition(edgeClass)) {
-            panel2Add = new MutipleCompositionPanel(this, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
+            Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);
+            panel2Add = new MutipleCompositionPanel(this, searchElementClass, compositionEdgeClass);
         } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
             panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
