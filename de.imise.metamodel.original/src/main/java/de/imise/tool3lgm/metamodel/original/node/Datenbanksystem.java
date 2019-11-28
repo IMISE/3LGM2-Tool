@@ -11,7 +11,7 @@ public final class Datenbanksystem extends LogischerSpeicher {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(true, RawbDbsVerbindung.class);
+        dialog.addDescripPanel(true, RawbDbsVerbindung.class);
         dialog.addDescripPanel(DbsDbvsVerbindung.class);
         dialog.addPathConnectionPanel(DbsDatVerbindung.class);
         dialog.addPathConnectionPanel(true, ObjLogspVerbindung.class);
