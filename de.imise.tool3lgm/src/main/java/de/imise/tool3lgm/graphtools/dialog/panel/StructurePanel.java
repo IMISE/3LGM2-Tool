@@ -93,7 +93,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.anchor = GridBagConstraints.EAST;
-        if (isEditable()) {
+        boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
+        if (editable) {
             add(this, viewButton, constraints, 0, 6, 1, 1);
         }
 

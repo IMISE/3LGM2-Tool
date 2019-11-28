@@ -59,7 +59,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     }
 
     public final void showFullDialog(final boolean full) {
-        if (full && isEditable()) {
+        if (full && !dialog.isInfoDialog()) {
             showFullDialog();
         } else {
             showPartlyDialog();

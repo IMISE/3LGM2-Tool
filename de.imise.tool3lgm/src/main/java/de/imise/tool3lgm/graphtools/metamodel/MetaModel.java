@@ -2,7 +2,6 @@ package de.imise.tool3lgm.graphtools.metamodel;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.STANDARD_ERROR_INT_VALUE;
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Modifier;
@@ -735,7 +734,7 @@ public final class MetaModel implements MetaModelSpecific {
      */
     public final boolean isHiddenClass(final Class<? extends ModelElement> elementClass) {
         //im ExperMode ist nichts versteckt
-        if (OPTION_ENABLE_EXPERT_MODE.is()) {
+        if (Static.isExpertMode()) {
             return false;
         }
         Set<Class<? extends ModelElement>> onlyExpertModeVisibleNodes = getOnlyExpertModeVisibleNodes();
@@ -753,14 +752,28 @@ public final class MetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Liefert <code>true</code>, wenn alle übergebenen Klasse aktuell editierbar ist. Das ist sie, wenn sich der Baukasten im ExpertMode befindet
-     * oder wenn er sich nicht im ExpertMode befindet und die Klasse keine Klasse aus den {@link #getOnlyExpertModeEditableNodes()} ist.
+     * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell editierbar ist. Das ist sie,
+     * wenn sich der Baukasten im ExpertMode befindet oder wenn er sich nicht im ExpertMode befindet
+     * und die Klasse keine Klasse aus den {@link #getOnlyExpertModeEditableNodes()} ist.
      *
-     * @param elementClass
+     * @param elementClasses
      * @return
      */
     @SafeVarargs
     public final boolean isEditable(final Class<? extends ModelElement>... elementClasses) {
+        List<Class<? extends ModelElement>> elementClassesList = Arrays.asList(elementClasses);
+        return isEditable(elementClassesList);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell editierbar ist. Das ist sie,
+     * wenn sich der Baukasten im ExpertMode befindet oder wenn er sich nicht im ExpertMode befindet
+     * und die Klasse keine Klasse aus den {@link #getOnlyExpertModeEditableNodes()} ist.
+     *
+     * @param elementClasses
+     * @return
+     */
+    public final boolean isEditable(final Iterable<Class<? extends ModelElement>> elementClasses) {
         if (!Static.isExpertMode()) {
             for (Class<? extends ModelElement> elementClass : elementClasses) {
                 if (onlyExpertModeEditableNodes.contains(elementClass)) {
@@ -772,29 +785,82 @@ public final class MetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Prüft, ob Verbindungen über diesen Pfad im nicht-ExperMode geändert werden dürfen. Das dürfen sie, wenn keine Kante des Pfades ausschließlich
-     * Elemente verbindet, die nur im ExpertMode geändert werden dürfen.
+     * Prüft, ob die ein Element der übergebenen Art erzeugt werden kann, ohne gegen die Konsistenzregeln zu verstoßen,
+     * wenn gleichzeitig die übergebenen Kanten hin zu diesem Element angelegt werden. Die Kanten und deren Richtung
+     * stecken in den Elementarmetapfaden.
      *
-     * @param metaPath
-     * @return
+     * @param elementClass
+     * @return <code>true</code> wenn ein Element der angegebene Art ohne Konsistenzverletzung angelegt werden kann, sonst
+     *         <code>false</code>
      */
-    public final boolean isEditable(final SimpleMetaPath... simpleMetaPaths) {
-        if (!Static.isExpertMode()) {
-            for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
-                List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
-                for (ElementaryMetaPath elementaryMetaPath : elementaryMetaPaths) {
-                    //bei wenigstens einer Kante im Pfad sind Start- und Endklasse nur im ExpertMode editierbar
-                    if (!isEditable(elementaryMetaPath.getStartClass(), elementaryMetaPath.getEndClass())) {
+    public boolean isCreatable(final Class<? extends ModelElement> elementClass) {
+        return isCreatable(elementClass, null, null);
+    }
+
+    /**
+     * Prüft, ob die ein Element der übergebenen Art erzeugt werden kann, ohne gegen die Konsistenzregeln zu verstoßen,
+     * wenn gleichzeitig die übergebenen Kanten hin zu diesem Element angelegt werden. Die Kanten und deren Richtung
+     * stecken in den Elementarmetapfaden.
+     *
+     * @param elementClass
+     * @param toElement
+     * @param fromElement
+     * @return <code>true</code> wenn ein Element der angegebene Art ohne Konsistenzverletzung angelegt werden kann, sonst
+     *         <code>false</code>
+     */
+    public boolean isCreatable(final Class<? extends ModelElement> elementClass, final ElementaryMetaPath toElement, final ElementaryMetaPath fromElement) {
+        if (!isEditable(elementClass)) {
+            return false;
+        }
+        if (Modifier.isAbstract(elementClass.getModifiers())) {
+            return false;
+        }
+        Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass);
+        for (Class<? extends Edge> edgeType : edgeTypes) {
+            if (isStartClass(edgeType, elementClass)) {
+                if (getMinForwardCardinality(edgeType) > 0) {
+                    boolean neededEdgeWillBeCreated = metaPathsContainEdge(edgeType, Direction.BACKWARD, toElement, fromElement);
+                    if (!neededEdgeWillBeCreated) {
                         return false;
                     }
-                    //die Kante ist eine InstanciantionEdge, die von der Insstanz auf das Klassenelement (Template) zeigt
-                    if (InstanciationEdge.class.isAssignableFrom(elementaryMetaPath.getEdgeClass()) && InstanciationEdge.INSTANCE_TO_MASTER_DIRECTION.equals(elementaryMetaPath.getDirection())) {
+                }
+            }
+            if (isEndClass(edgeType, elementClass)) {
+                if (getMinBackwardCardinality(edgeType) > 0) {
+                    boolean neededEdgeWillBeCreated = metaPathsContainEdge(edgeType, Direction.FORWARD, toElement, fromElement);
+                    if (!neededEdgeWillBeCreated) {
                         return false;
                     }
                 }
             }
         }
         return true;
+    }
+
+    /**
+     * Prüft, ob die übergebene Kantenklasse in der angegebenen Richtung in den übergebenen Elemetarpfaden steckt. Die Kantenklasse
+     * wird hier auf Indetität geprüft und nicht auf Zuweisungskompatibilität.
+     *
+     * @param edgeClass
+     * @param directionToElement
+     * @param toElement
+     * @param fromElement
+     * @return <code>true</code>, wenn die Kantenklasse mit Richtung in den Elementarpfaden vokommt, sonst <code>false</code>
+     */
+    private boolean metaPathsContainEdge(final Class<? extends Edge> edgeClass, final Direction directionToElement, final ElementaryMetaPath toElement, final ElementaryMetaPath fromElement) {
+        ElementaryMetaPath[] createdElemebtaryMetaPathsToElement = {
+                toElement, fromElement == null ? null : fromElement.getOtherDirection()
+        };
+        for (ElementaryMetaPath createdMetaPathFromElement : createdElemebtaryMetaPathsToElement) {
+            if (createdMetaPathFromElement != null) { // null abfangen, da es beim ersten und letzten Element in einem SequenceMetaPath nur einen Pfad gibt
+                if (createdMetaPathFromElement.getEdgeClass() == edgeClass) {
+                    if (createdMetaPathFromElement.getDirection() == directionToElement) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**

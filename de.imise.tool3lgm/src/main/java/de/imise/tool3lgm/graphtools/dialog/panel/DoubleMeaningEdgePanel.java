@@ -62,9 +62,10 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
     private LGMAction luaddAction;
     private LGMAction luremoveAction;
 
-    public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final boolean editable, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+    public DoubleMeaningEdgePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         super(dialog, searchElementClass, edgeClass);
 
+        boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(false);
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();

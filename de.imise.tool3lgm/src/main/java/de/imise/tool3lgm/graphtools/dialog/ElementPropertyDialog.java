@@ -529,8 +529,8 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
         MetaModel metaModel = modelElement.getMetaModel();
-        if (metaModel.isVisible(simpleMetaPath) || Static.isExpertMode()) {
-            descripPanel.addSingleConnectionPanel(labelLastEdgeName, metaModel.isEditable(simpleMetaPath), simpleMetaPath);
+        if (metaModel.isVisible(simpleMetaPath)) {
+            descripPanel.addSingleConnectionPanel(labelLastEdgeName, simpleMetaPath);
         }
     }
 
@@ -618,16 +618,16 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         if (!metaModel.isVisible(metaPath)) {
             return;
         }
-        boolean editable = !isInfoDialog() && metaModel.isEditable(metaPath);
         ElementDialogPanel panel2Add = null;
         if (MetaModel.isComposition(edgeClass)) {
-            panel2Add = new MutipleCompositionPanel(this, editable, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
+            panel2Add = new MutipleCompositionPanel(this, searchElementClass, edgeClass.asSubclass(CompositionEdge.class));
         } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
-            panel2Add = new DoubleMeaningEdgePanel(this, editable, searchElementClass, edgeClass);
+            panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
         } else if (Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && metaModel.isDirectedEdge(edgeClass)) {
-            panel2Add = new DoubleMeaningEdgePanel(this, editable, searchElementClass, edgeClass);
+            panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
         } else {
+            boolean editable = !isInfoDialog() && metaPath.isCreatable(true);
             panel2Add = new PathConnectionPanel(this, editable, metaPath);
         }
         if (add2SubTab) {
@@ -651,20 +651,19 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     private final void addTablePanelInternal(final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
         boolean editable = true;
         Set<SimpleMetaPath> allDifferentSimpleMetaPaths = new HashSet<>();
-        MetaModel metaModel = modelElement.getMetaModel();
         for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
             Collection<SimpleMetaPath> simpleMetaPathsNonAbstract = SimpleMetaPathCreator.getSimpleMetaPathsNonAbstract(simpleMetaPath);
             allDifferentSimpleMetaPaths.addAll(simpleMetaPathsNonAbstract);
             if (editable) {
                 for (SimpleMetaPath nonAbstractSimpleMetaPaths : simpleMetaPathsNonAbstract) {
-                    if (!metaModel.isEditable(nonAbstractSimpleMetaPaths)) {
+                    if (!nonAbstractSimpleMetaPaths.isCreatable(true)) {
                         editable = false;
                         break;
                     }
                 }
             }
         }
-        addTab(new ConnectedElementsTablePanel(this, editable, tableDefinition, allDifferentSimpleMetaPaths));
+        addTab(new ConnectedElementsTablePanel(this, tableDefinition, allDifferentSimpleMetaPaths));
     }
 
     @Override

@@ -54,25 +54,23 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
 
     /**
      * @param dialog
-     * @param editable wenn <code>true</code>, dann kann man Elemente hinzufügen oder löschen und vorhandene ändern
      * @param tableDefinition Spaltendefinition (die zu den Pfaden passen sollte)
      * @param simpleMetaPath MetaPfade, der in der Tabelle dargestellt werden soll
      */
-    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, final boolean editable, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final Collection<SimpleMetaPath> simpleMetaPaths) {
-        this(dialog, editable, tableDefinition, toArray(simpleMetaPaths));
+    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final Collection<SimpleMetaPath> simpleMetaPaths) {
+        this(dialog, tableDefinition, toArray(simpleMetaPaths));
     }
 
     /**
      * @param dialog
-     * @param editable wenn <code>true</code>, dann kann man Elemente hinzufügen oder löschen und vorhandene ändern
      * @param tableDefinition Spaltendefinition (die zu den Pfaden passen sollte)
      * @param simpleMetaPaths MetaPfade, die in der Tabelle dargestellt werden sollen
      */
-    private ConnectedElementsTablePanel(final ElementPropertyDialog dialog, boolean editable, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
+    private ConnectedElementsTablePanel(final ElementPropertyDialog dialog, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
         super(dialog, simpleMetaPaths[0]); // den muss es geben!
         metaPaths = new UnionMetaPath(simpleMetaPaths);
         this.tableDefinition = tableDefinition;
-        editable &= isEditable();
+        boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true);
         table = new ConnectedElementsTable(dialog.getModelElement(), metaPaths, tableDefinition, editable, mouseListener, dialog.getTransactionID());
 
         //wenn in der columnsDefinion ein String als Resourcenschlüssel oder Tabellenname angegeben wurde, dann kommt hier irgendwas nicht leeres zurück

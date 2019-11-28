@@ -63,10 +63,19 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         // Bezeichung und Eingabefeld
         JLabel label2 = new JLabel(getResString("bez"));
         add(this, label2, gbc, 0, gridy, 1, 1);
-
+        boolean isEditableDialog = !dialog.isInfoDialog();
         nameTextPane = new LimitedSizeScrollTextPane(4);
-        MetaModel metaModel = dialog.getMetaModel();
-        nameTextPane.setEditable(isEditable() && !metaModel.isGenerateName(getModelElement().getClass()));
+
+        //Name editable?
+        boolean editableName = isEditableDialog;
+        if (editableName) {
+            MetaModel metaModel = dialog.getMetaModel();
+            ModelElement me = getModelElement();
+            Class<? extends ModelElement> elementClass = me.getClass();
+            editableName = !metaModel.isGenerateName(elementClass);
+        }
+        nameTextPane.setEditable(isEditableDialog);
+
         gbc.weightx = 1;
         add(this, nameTextPane, gbc, 1, gridy++, 1, 1);
         gbc.weightx = 0;
@@ -78,7 +87,7 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         gbc.weighty = 1;
         descriptionTextPane = new ExtendedTextPane();
         add(this, new JScrollPane(descriptionTextPane), gbc, 1, gridy++, 1, 1);
-        descriptionTextPane.setEditable(isEditable());
+        descriptionTextPane.setEditable(isEditableDialog);
 
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = 0;
@@ -124,8 +133,8 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         addSubPanel(new DescriptedSingleConnectionPanel(dialog, labelLastEdgeName, simpleMetaPath));
     }
 
-    public final void addSingleConnectionPanel(final boolean labelLastEdgeName, final boolean editable, final SimpleMetaPath simpleMetaPath) {
-        addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, editable, simpleMetaPath));
+    public final void addSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+        addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, simpleMetaPath));
     }
 
     public final void addListPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {

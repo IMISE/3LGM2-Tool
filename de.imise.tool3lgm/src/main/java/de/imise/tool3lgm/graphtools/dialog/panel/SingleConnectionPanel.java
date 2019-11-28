@@ -74,22 +74,20 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      * @param edgeClasses
      */
     public SingleConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, true, simpleMetaPath);
+        this(dialog, false, simpleMetaPath);
     }
 
     /**
      * @param dialog
      * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
      *            letzten Edge aus den edgeClasses geschrieben.
-     * @param editable bezieht sich nur auf die Möglichkeit, die Verbindung zum dargestellten Element zu lösen oder ein anderes anzuhängen. Das
-     *            verbundene Element bzw. dessen Name ist immmer nicht änderbar.
      * @param simpleMetaPath
      */
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, boolean editable, final SimpleMetaPath simpleMetaPath) {
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
         setLayout(new BorderLayout());
         update(); //connectedElement initial setzen!
-        editable &= isEditable();
+        boolean editable = !dialog.isInfoDialog() && simpleMetaPath.isCreatable(false); // für editable reicht es, wenn der Pfad zw. bestehenden Elementen entfernt oder angehängt werden kann. Das zu verbindende Element muss nicht neu erzeugt werden können
         if (!editable || isLastPathElementNeededForExistence() && connectedElement != null) {
             connectedElementsBox = null;
             itemListener = null;
@@ -109,7 +107,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             addMouseActions(connectedElementsBox);
             add(connectedElementsBox, BorderLayout.CENTER);
         }
-        createNew = isCreatableMetaPath() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getElementNameBuilder().getDisplayableName(searchElementClass)) : null;
+        createNew = simpleMetaPath.isCreatable(true) ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getElementNameBuilder().getDisplayableName(searchElementClass)) : null;
     }
 
     @Override
@@ -160,13 +158,6 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      */
     public ModelElement getConnectedElement() {
         return connectedElement;
-    }
-
-    /**
-     * @return
-     */
-    private boolean isCreatableMetaPath() {
-        return metaPath != null && metaPath.isCreatable();
     }
 
     @Override

@@ -75,7 +75,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
             nodeToParentModelElement.clear();
         }
         if (!leafNodes.isEmpty()) {
-            if (metaPath.isCreatable()) { //wen der anlegbar ist, dann werden die Blätter sooft angezeigt, wie Pfade existeren (also Elemente evtl. auch doppelt)
+            if (metaPath.isCreatable(false)) { //wen der anlegbar ist, dann werden die Blätter sooft angezeigt, wie Pfade existeren (also Elemente evtl. auch doppelt)
                 //vor dem Umhängen der Blätter an den root für jedes Blatt das echte Vorgängerelement auf dem Pfad merken
                 for (LGMTreeNode leaf : leafNodes) {
                     LGMTreeNode leafParent = (LGMTreeNode) leaf.getParent();
@@ -145,11 +145,14 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
         createPath(element2Connect);
     }
 
+    /**
+     * @param endElement
+     */
     public void createPath(final ModelElement endElement) {
-        if (!metaPath.isCreatable()) {
+        if (!metaPath.isCreatable(endElement != null)) {
             return;
         }
-        doc.createPath(dialog.getModelElement(), null, metaPath, true, dialog.getTransactionID());
+        doc.createPath(dialog.getModelElement(), endElement, metaPath, true, dialog.getTransactionID());
     }
 
 }

@@ -58,12 +58,13 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
 
     /**
      * @param dialog
-     * @param editable
      * @param searchElementClass
      * @param edgeClass
      */
-    public MutipleCompositionPanel(final ElementPropertyDialog dialog, boolean editable, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
+    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
         super(dialog, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
+
+        boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true); // element to connect can be created new in this panel
 
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
@@ -85,7 +86,6 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
 
         JScrollPane sp = new JScrollPane(tree);
 
-        editable &= isEditable();
         if (editable) {
             constraints.anchor = GridBagConstraints.CENTER;
             buttonpanel = new JPanel();
