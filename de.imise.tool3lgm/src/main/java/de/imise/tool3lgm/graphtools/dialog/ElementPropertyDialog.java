@@ -508,55 +508,92 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     @SafeVarargs
     public final void addDescripSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
-        addDescripSingleConnectionPanel(null, edgeClasses);
+        addDescripPanel(null, edgeClasses);
     }
 
     @SafeVarargs
     public final void addDescripSingleConnectionPanel(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        addDescripSingleConnectionPanel(false, searchElementClass, edgeClasses);
+        addDescripPanel(closing, searchElementClass, edgeClasses);
     }
 
     @SafeVarargs
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        addDescripSingleConnectionPanel(labelLastEdgeName, null, edgeClasses);
+        addDescripPanel(labelLastEdgeName, edgeClasses);
     }
 
     @SafeVarargs
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, @Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        SimpleMetaPath simpleMetaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
-        addDescripSingleConnectionPanel(labelLastEdgeName, simpleMetaPath);
+        addDescripPanel(labelLastEdgeName, searchElementClass, edgeClasses);
     }
 
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        MetaModel metaModel = modelElement.getMetaModel();
-        if (metaModel.isVisible(simpleMetaPath)) {
-            descripPanel.addSingleConnectionPanel(labelLastEdgeName, simpleMetaPath);
-        }
+        addDescripPanel(labelLastEdgeName, false, simpleMetaPath);
     }
 
     @SafeVarargs
     public final void addDescripDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
-        addDescripDescriptedSingleConnectionPanel(false, edgeClasses);
+        addDescripPanel(false, true, null, edgeClasses);
     }
 
     @SafeVarargs
     public final void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        addDescripDescriptedSingleConnectionPanel(labelLastEdgeName, null, edgeClasses);
+        addDescripPanel(labelLastEdgeName, true, null, edgeClasses);
     }
 
     @SafeVarargs
     public final void addDescripDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        descripPanel.addDescriptedSingleConnectionPanel(labelLastEdgeName, createSimpleMetaPath(searchElementClass, edgeClasses));
+        addDescripPanel(labelLastEdgeName, true, searchElementClass, edgeClasses);
     }
 
     @SafeVarargs
     public final void addDescripListPanel(final Class<? extends Edge>... edgeClasses) {
-        descripPanel.addListPanel(false, createSimpleMetaPath(null, edgeClasses));
+        addDescripPanel(edgeClasses);
     }
 
     @SafeVarargs
     public final void addDescripListPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        descripPanel.addListPanel(labelLastEdgeName, createSimpleMetaPath(null, edgeClasses));
+        addDescripPanel(labelLastEdgeName, edgeClasses);
+    }
+
+    @SafeVarargs
+    public final void addDescripPanel(final Class<? extends Edge>... edgeClasses) {
+        addDescripPanel(null, edgeClasses);
+    }
+
+    @SafeVarargs
+    public final void addDescripPanel(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+        addDescripPanel(false, searchElementClass, edgeClasses);
+    }
+
+    @SafeVarargs
+    public final void addDescripPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
+        addDescripPanel(labelLastEdgeName, null, edgeClasses);
+    }
+
+    @SafeVarargs
+    public final void addDescripPanel(final boolean labelLastEdgeName, @Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+        addDescripPanel(labelLastEdgeName, false, searchElementClass, edgeClasses);
+    }
+
+    @SafeVarargs
+    public final void addDescripPanel(final boolean labelLastEdgeName, final boolean showDescription, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+        SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
+        addDescripPanel(labelLastEdgeName, showDescription, metaPath);
+    }
+
+    public final void addDescripPanel(final boolean labelLastEdgeName, final boolean showDescription, final SimpleMetaPath metaPath) {
+        MetaModel metaModel = modelElement.getMetaModel();
+        if (metaModel.isVisible(metaPath)) {
+            if (metaPath.isSingleConnection()) {
+                if (showDescription) {
+                    descripPanel.addDescriptedSingleConnectionPanel(labelLastEdgeName, metaPath);
+                } else {
+                    descripPanel.addSingleConnectionPanel(labelLastEdgeName, metaPath);
+                }
+            } else {
+                descripPanel.addListPanel(labelLastEdgeName, metaPath);
+            }
+        }
     }
 
     @SafeVarargs
