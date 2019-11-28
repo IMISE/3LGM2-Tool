@@ -609,6 +609,12 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
 
     private void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final boolean add2SubTab) {
         SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClass);
+        //Wenn sich ein Pfad für diese Elementart nicht anlegen lässt -> Panel nicht adden. Das ist der Fall, wenn Kanten einer Oberklasse
+        //für eine Unterklasse nicht mehr gelten (z.B. Service-Metamodell: ApplicationSystem -> ApplicationSystem_IheActorInstance_Edge soll
+        //für IheActorInstances nicht angezeigt werden, da IheActorInstances keine IheActorInstances untergordnet werden können.
+        if (metaPath == null) {
+            return;
+        }
         MetaModel metaModel = modelElement.getMetaModel();
         Class<? extends ModelElement> meClass = modelElement.getClass();
         if (!metaModel.isStartOrEndClass(edgeClass, meClass)) { //checken, wenn das Panel aus einer Oberklasse kommt, ob diese Kante in der Unterklasse überhaupt noch vorkommt (siehe removed edges in Metamodel)

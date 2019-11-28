@@ -12,7 +12,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
-import de.imise.util.Sys;
 
 /**
  * @author AXS (5 Dec 2018)
@@ -313,7 +312,8 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 }
                 if (i < 0) {
                     //der Pfad ist fehlerhaft, d. h. trotz Zurücklaufen und Test mit der Gegenrichtung passen die Kanten nicht zueinander
-                    Sys.err1("EdgeClasses dosn't define a valid metapath");
+                    //das kann gewollt sein, deswegen gibt es hier keine zwingende Fehlerausgabe
+                    //Sys.err1("EdgeClasses dosn't define a valid metapath");
                     return null;
                 }
             }
@@ -395,9 +395,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
         } else if ((startClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) && (endClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass))) {
             direction = Direction.BACKWARD;
         }
-        if (direction == null) {
-            Sys.err1(c(startClass) + " < " + c(edgeClass) + " > " + c(endClass));
-        }
+        //        if (direction == null) {
+        //            Sys.err(c(startClass) + " < " + c(edgeClass) + " > " + c(endClass));
+        //        }
 
         return direction;
     }

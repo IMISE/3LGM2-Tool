@@ -13,7 +13,9 @@ public class ApplicationSystem extends ApplicationComponent {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addEdgePanel(ApplicationSystem_SoftwareProduct_Edge.class);
-        dialog.addEdgePanel(ApplicationSystem_IheActorInstance_Edge.class);
+        //Den folgenden Pfad unbedingt mit Startelementklasse angeben, damit der Pfad bei der Unterklasse
+        //IheActorInstance nicht angelegt werden kann und das Panel, so wie es richtig ist, nicht geaddet wird.
+        dialog.addEdgePanel(IheActorInstance.class, ApplicationSystem_IheActorInstance_Edge.class);
         return dialog;
     }
 
