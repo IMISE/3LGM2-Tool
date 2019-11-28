@@ -110,8 +110,8 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
             ElementaryMetaPath edgeToEndElementMetaPath = ElementaryMetaPath.createEdgeToEndElementMetaPath(metaModel, edgeClass);
             SimpleMetaPath edgeToStartElementSimpleMetaPath = new SimpleMetaPath(edgeToStartElementMetaPath);
             SimpleMetaPath edgeToEndElementSimpleMetaPath = new SimpleMetaPath(edgeToEndElementMetaPath);
-            addSingleConnectionPanel(false, false, edgeToStartElementSimpleMetaPath);
-            addSingleConnectionPanel(false, false, edgeToEndElementSimpleMetaPath);
+            addSingleConnectionPanel(false, edgeToStartElementSimpleMetaPath);
+            addSingleConnectionPanel(false, edgeToEndElementSimpleMetaPath);
         }
     }
 
