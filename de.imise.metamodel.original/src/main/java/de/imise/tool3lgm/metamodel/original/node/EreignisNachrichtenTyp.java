@@ -11,7 +11,7 @@ public final class EreignisNachrichtenTyp extends EtntEtdtKombination {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripDescriptedSingleConnectionPanel(EtntNatVerbindung.class);
+        dialog.addDescripDescriptedPanel(EtntNatVerbindung.class);
         return dialog;
     }
 
