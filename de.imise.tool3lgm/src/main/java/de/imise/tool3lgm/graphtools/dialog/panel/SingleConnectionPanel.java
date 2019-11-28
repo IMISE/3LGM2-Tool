@@ -107,7 +107,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             addMouseActions(connectedElementsBox);
             add(connectedElementsBox, BorderLayout.CENTER);
         }
-        createNew = simpleMetaPath.isCreatable(true) ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getElementNameBuilder().getDisplayableName(searchElementClass)) : null;
+        createNew = editable && simpleMetaPath.isCreatable(true) ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getElementNameBuilder().getDisplayableName(searchElementClass)) : null;
     }
 
     @Override
