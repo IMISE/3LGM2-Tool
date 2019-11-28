@@ -48,25 +48,23 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
     }
 
     @Override
-    protected final void init() {
-        super.init();
-        updateDescription();
+    public void update() {
+        super.update();
+        boolean editable = !dialog.isInfoDialog() && connectedElement != null;
         if (descriptionTextPane != null) {
-            boolean editable = !dialog.isInfoDialog() && connectedElement != null;
             descriptionTextPane.setEditable(editable);
+            updateDescription();
         }
     }
 
     private void updateDescription() {
-        if (descriptionTextPane != null) {
-            if (connectedElement != null) {
-                olddescrip = connectedElement.getDescription();
-                descriptionTextPane.setText(olddescrip);
-            } else {
-                descriptionTextPane.setText("");
-            }
-            descriptionTextPane.setCaretPosition(0);
+        if (connectedElement != null) {
+            olddescrip = connectedElement.getDescription();
+            descriptionTextPane.setText(olddescrip);
+        } else {
+            descriptionTextPane.setText("");
         }
+        descriptionTextPane.setCaretPosition(0);
     }
 
     @Override
