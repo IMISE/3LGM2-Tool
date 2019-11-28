@@ -13,8 +13,8 @@ public class PhysischerDVBaustein extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(PdvbStoVerbindung.class);
-        dialog.addDescripSingleConnectionPanel(PdvbBtypVerbindung.class);
+        dialog.addDescripPanel(PdvbStoVerbindung.class);
+        dialog.addDescripPanel(PdvbBtypVerbindung.class);
         dialog.addPathConnectionPanel(PdvbSubnVerbindung.class);
         dialog.addPathConnectionInfoPanel(PdvbPdvbkVerbindung.class, PdvbkAwbVerbindung.class);
         return dialog;

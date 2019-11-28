@@ -507,16 +507,6 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
     }
 
     @SafeVarargs
-    public final void addDescripSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
-        addDescripPanel(null, edgeClasses);
-    }
-
-    @SafeVarargs
-    public final void addDescripSingleConnectionPanel(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        addDescripPanel(closing, searchElementClass, edgeClasses);
-    }
-
-    @SafeVarargs
     public final void addDescripSingleConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         addDescripPanel(labelLastEdgeName, edgeClasses);
     }

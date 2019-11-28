@@ -17,8 +17,8 @@ public class PhysicalDataProcessingComponent extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(PhysicalDataProcessingComponent_Location_Edge.class);
-        dialog.addDescripSingleConnectionPanel(PhysicalDataProcessingComponent_DeviceClass_Edge.class);
+        dialog.addDescripPanel(PhysicalDataProcessingComponent_Location_Edge.class);
+        dialog.addDescripPanel(PhysicalDataProcessingComponent_DeviceClass_Edge.class);
         dialog.addEdgePanel(DataTransmissionLink_Edge.class);
         dialog.addEdgePanel(PhysicalDataProcessingComponentVirtualises_Edge.class);
         dialog.addEdgePanel(ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class);

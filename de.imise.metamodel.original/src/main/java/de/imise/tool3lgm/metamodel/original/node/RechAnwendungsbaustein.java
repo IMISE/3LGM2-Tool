@@ -16,8 +16,8 @@ public final class RechAnwendungsbaustein extends Anwendungsbaustein {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(RawbDbsVerbindung.class);
-        dialog.addDescripSingleConnectionPanel(RawbAwpVerbindung.class, AwpSwpVerbindung.class);
+        dialog.addDescripPanel(RawbDbsVerbindung.class);
+        dialog.addDescripPanel(RawbAwpVerbindung.class, AwpSwpVerbindung.class);
         dialog.addEdgePanel(Bausteinschnittstelle.class, AwbKommssVerbindung.class);
         dialog.addEdgePanel(Benutzungsschnittstelle.class, AwbKommssVerbindung.class);
         dialog.addDescriptedSingleConnectionPanel(RawbAwpVerbindung.class);

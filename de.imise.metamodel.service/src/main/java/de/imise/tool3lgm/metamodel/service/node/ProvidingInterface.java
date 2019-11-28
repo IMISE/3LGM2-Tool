@@ -14,7 +14,7 @@ public final class ProvidingInterface extends CommunicationInterface {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripSingleConnectionPanel(true, IheProvidingInterface_ProvidingInterface_Edge.class);
-        dialog.addDescripSingleConnectionPanel(IheProvidingInterface_ProvidingInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
+        dialog.addDescripPanel(IheProvidingInterface_ProvidingInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
         dialog.addEdgePanel(Service_ProvidingInterface_Edge.class);
         return dialog;
     }

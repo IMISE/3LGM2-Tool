@@ -13,8 +13,8 @@ public class IheActorInstance extends ApplicationSystem {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(ApplicationSystem_IheActorInstance_Edge.class);
-        dialog.addDescripSingleConnectionPanel(IheActor_IheActorInstance_Edge.class);
+        dialog.addDescripPanel(ApplicationSystem_IheActorInstance_Edge.class);
+        dialog.addDescripPanel(IheActor_IheActorInstance_Edge.class);
 
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
         tableDefinition.addColumnEndElement(300);
