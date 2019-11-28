@@ -5,6 +5,7 @@
  */
 package de.imise.util.swing.component;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.KeyListener;
@@ -198,6 +199,14 @@ public class LimitedSizeScrollTextPane extends JScrollPane {
     public synchronized void addMouseListener(final MouseListener l) {
         super.addMouseListener(l);
         textPane.addMouseListener(l);
+    }
+
+    @Override
+    public void setBackground(final Color bg) {
+        super.setBackground(bg);
+        if (textPane != null) {
+            textPane.setBackground(bg);
+        }
     }
 
 }
