@@ -171,6 +171,8 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                         value = currentPathNode.getStartElement();
                     } else if (columnType == ColumnType.PATH_STEP_END) {
                         value = currentPathNode.getEndElement();
+                    } else if (columnType == ColumnType.PATH_STEP_EDGE) {
+                        value = currentPathNode.getEdge();
                     } else if (columnType == ColumnType.PATH_STEP_NAME || columnType == ColumnType.PATH_STEP_BACKWARD_NAME) {
                         Edge edge = currentPathNode.getEdge();
                         ElementaryMetaPath metaPath = currentPathNode.getMetaPath();

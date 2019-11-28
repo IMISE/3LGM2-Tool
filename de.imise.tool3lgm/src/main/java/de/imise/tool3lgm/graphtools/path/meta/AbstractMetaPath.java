@@ -450,34 +450,13 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * einfache Assoziationsfolge ohne parallele Pfade oder Verweigungen zu Assoziationsklassen dazwischen handelt und alle
      * Zwischenelementklassen nicht abstrakt sind.
      *
-     * @return
+     * @param checkCreateEndElement
+     *            wenn <code>true</code>, dann wird auch geprüft, ob das EndElement angelegt werden kann, wenn der Pfad angelegt
+     *            wird, ohne die Konsistenz zu verletzten (also nicht abstract und durch den Pfad entstehen für alle Elemente
+     *            alle anderen Elemente, die sie für ihre Existenz brauchen).
+     * @return <code>true</code> wenn dieser Pfad anlegbar ist
      */
-    public abstract boolean isCreatable();
-
-    /**
-     * Liefert <code>true</code>, wenn der Pfad zwischen Elementen der Start- und Zielklasse den prinzipiell angelegt werden kann.
-     * Das ist der Fall, wenn es sich um eine einfache Assoziationsfolge ohne parallele Pfade oder Verweigungen zu Assoziationsklassen
-     * dazwischen handelt und alle Zwischenelementklassen und Zwischenkantenklassen nicht abstrakt sind. Außerdem müssen die Start-
-     * und Zielklasse jeweils die Start- bzw. Zielklasse des Pfades oder eine Unterklasse davon sein.
-     *
-     * @param startClass
-     *            zu testenden Startklasse des Metapfades
-     * @param endClass
-     *            zu testenden Endklasse des Metapfades
-     * @return
-     *         Liefert <code>true</code>, wenn der Pfad zwischen Elementen der Start- und Zielklasse den prinzipiell angelegt werden kann.
-     *         Das ist der Fall, wenn es sich um eine einfache Assoziationsfolge ohne parallele Pfade oder Verweigungen zu Assoziationsklassen
-     *         dazwischen handelt und alle Zwischenelementklassen und Zwischenkantenklassen nicht abstrakt sind. Außerdem müssen die Start-
-     *         und Zielklasse jeweils die Start- bzw. Zielklasse des Pfades oder eine Unterklasse davon sein.
-     * @param startClass
-     *            zu testenden Startklasse des Metapfades
-     * @param endClass
-     *            zu testenden Endklasse des Metapfades
-     * @return
-     */
-    public final boolean isCreatable(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass) {
-        return isStartClass(startClass) && isEndClass(endClass) && isCreatable();
-    }
+    public abstract boolean isCreatable(boolean checkCreateEndElement);
 
     /**
      * Liefert <code>true</code>, wenn der Pfad eine einfache Assoziationsfolge ist (also bei {@link #getElementaryMetaPaths()} nicht

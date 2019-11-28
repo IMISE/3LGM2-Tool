@@ -204,7 +204,7 @@ public class MetaPathFunctions {
      * @return
      */
     private static final boolean isCreatable(final ModelElement modelElement, final ElementaryMetaPath metaPath, final boolean modelElementAsStartElement) {
-        if (!metaPath.isCreatable()) {
+        if (!metaPath.isCreatable(true)) {
             return false;
         }
         if (modelElementAsStartElement) {
@@ -242,7 +242,7 @@ public class MetaPathFunctions {
      * @return
      */
     public static final boolean isCreatable(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean checkConsistency) {
-        if (!metaPath.isCreatable()) {
+        if (!metaPath.isCreatable(false)) {
             return false;
         }
         if (metaPath instanceof ElementaryMetaPath) {
@@ -444,9 +444,8 @@ public class MetaPathFunctions {
     }
 
     /**
-     * Achtung: Die Funktion geht davon aus, dass die aufrufende Funktion bereits eine Transaction gestartet hat. Hier wird keine Transaction
-     * gestartet
-     * oder beendet.
+     * Achtung: Die Funktion geht davon aus, dass die aufrufende Funktion bereits eine Transaction gestartet hat.
+     * Hier wird keine Transaction gestartet oder beendet.
      *
      * @param startElement
      * @param endElement

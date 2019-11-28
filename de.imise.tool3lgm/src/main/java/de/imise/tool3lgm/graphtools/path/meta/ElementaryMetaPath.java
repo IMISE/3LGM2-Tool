@@ -14,6 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.PropertyTransferEdge;
 import de.imise.util.ReflectionUtils;
@@ -482,7 +483,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public final boolean isCreatable() {
+    public final boolean isCreatable(final boolean checkEndCreateElement) {
         //Nur ElementarMetaPfade, die eine Kante zwischen 2 Knoten repräsentieren, wobei die Kantenklasse nicht abstract sein darf, sind anlegtbar. Alle
         //anderen nicht. Die Elementklassen können abstract sein. Ob sie anlegbar sind, ist hier (bei einem einzelnen Elementarpfad) egal, da es nur um
         //die Anlegbarkeit der Kante geht.
@@ -497,6 +498,16 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         }
         if (metaModel.getConditionPath(edgeClass) != null) {
             return false;
+        }
+        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
+            if (InstanciationEdge.INSTANCE_TO_MASTER_DIRECTION.equals(direction)) {
+                return false;
+            }
+        }
+        if (checkEndCreateElement) {
+            if (!metaModel.isCreatable(endClass, this, null)) {
+                return false;
+            }
         }
         return true;
     }
@@ -515,12 +526,12 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public List<AbstractMetaPath> getMetaPaths() {
+    public final List<AbstractMetaPath> getMetaPaths() {
         return (List<AbstractMetaPath>) (List<?>) getElementaryMetaPaths();
     }
 
     @Override
-    public boolean containsPropertyTransferEdge() {
+    public final boolean containsPropertyTransferEdge() {
         Class<? extends Edge> edgeClass = getEdgeClass();
         return edgeClass != null && PropertyTransferEdge.class.isAssignableFrom(getEdgeClass());
     }

@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -11,6 +12,8 @@ import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
+
+import javax.swing.UIManager;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -74,26 +77,24 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      * @param edgeClasses
      */
     public SingleConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, true, simpleMetaPath);
+        this(dialog, false, simpleMetaPath);
     }
 
     /**
      * @param dialog
      * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
      *            letzten Edge aus den edgeClasses geschrieben.
-     * @param editable bezieht sich nur auf die Möglichkeit, die Verbindung zum dargestellten Element zu lösen oder ein anderes anzuhängen. Das
-     *            verbundene Element bzw. dessen Name ist immmer nicht änderbar.
      * @param simpleMetaPath
      */
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, boolean editable, final SimpleMetaPath simpleMetaPath) {
+    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
         setLayout(new BorderLayout());
         update(); //connectedElement initial setzen!
-        editable &= isEditable();
+        boolean editable = !dialog.isInfoDialog() && simpleMetaPath.isCreatable(false); // für editable reicht es, wenn der Pfad zw. bestehenden Elementen entfernt oder angehängt werden kann. Das zu verbindende Element muss nicht neu erzeugt werden können
         if (!editable || isLastPathElementNeededForExistence() && connectedElement != null) {
             connectedElementsBox = null;
             itemListener = null;
-            connectedElementName = new LimitedSizeScrollTextPane(4, false); //wenn man hier true übergibt, kann man den Namen des verbundenen Elementes ändern. Aber dann funktuionieren die Maus-Actions nicht mehr, weil dann die Komponente eigene Mausaktionen für den Text macht
+            connectedElementName = new LimitedSizeScrollTextPane(4, false); //wenn man hier true übergibt, kann man den Namen des verbundenen Elementes ändern. Aber dann funktionieren die Maus-Actions nicht mehr, weil dann die Komponente eigene Mausaktionen für den Text macht
             connectedElementViewComponent = connectedElementName;
             //Doppelklick-Action und Kontextmenü anghängen
             addMouseActions(connectedElementName);
@@ -109,7 +110,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             addMouseActions(connectedElementsBox);
             add(connectedElementsBox, BorderLayout.CENTER);
         }
-        createNew = isCreatableMetaPath() ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getElementNameBuilder().getDisplayableName(searchElementClass)) : null;
+        createNew = editable && simpleMetaPath.isCreatable(true) ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getElementNameBuilder().getDisplayableName(searchElementClass)) : null;
     }
 
     @Override
@@ -119,6 +120,8 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         connectedElement = connectedContainer == null ? null : connectedContainer.getElement();
 
         if (connectedElementsBox != null) {
+            Color enabledColor = UIManager.getColor("TextField.background");
+            connectedElementsBox.setBackground(enabledColor); //Combobox should have the same background color like Textfields
             boolean isLastPathElementDependent = isLastPathElementDependent();
             connectedElementsBox.removeItemListener(itemListener);
             connectedElementsBox.removeAllItems();
@@ -146,6 +149,8 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             connectedElementsBox.setSelectedItem(connectedContainer);
             connectedElementsBox.addItemListener(itemListener);
         } else if (connectedElementName != null) { // beim ersten update() aus dem Konstruktor sind beide (Box und TextArea) null -> nicht einfach nur else hier sondern else-if
+            Color disabledColor = UIManager.getColor("Label.background");
+            connectedElementName.setBackground(disabledColor);
             if (connectedElement != null) {
                 oldname = connectedElement.getClearName();
                 connectedElementName.setText(oldname);
@@ -160,13 +165,6 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      */
     public ModelElement getConnectedElement() {
         return connectedElement;
-    }
-
-    /**
-     * @return
-     */
-    private boolean isCreatableMetaPath() {
-        return metaPath != null && metaPath.isCreatable();
     }
 
     @Override

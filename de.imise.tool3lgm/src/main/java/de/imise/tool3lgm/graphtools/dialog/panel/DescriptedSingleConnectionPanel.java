@@ -44,7 +44,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      * @param simpleMetaPath
      */
     public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, labelLastEdgeName, true, simpleMetaPath);
+        super(dialog, labelLastEdgeName, simpleMetaPath);
     }
 
     @Override
@@ -52,7 +52,8 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
         super.init();
         updateDescription();
         if (descriptionTextPane != null) {
-            descriptionTextPane.setEditable(isEditable() && connectedElement != null);
+            boolean editable = !dialog.isInfoDialog() && connectedElement != null;
+            descriptionTextPane.setEditable(editable);
         }
     }
 

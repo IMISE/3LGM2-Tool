@@ -8,7 +8,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -226,7 +225,7 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     @Override
-    public final boolean isCreatable() {
+    public final boolean isCreatable(final boolean checkCreateEndElement) {
         if (!isValid()) {
             return false;
         }
@@ -234,18 +233,31 @@ public class SequenceMetaPath extends ListMetaPath {
         if (elementaryMetaPaths.isEmpty()) {
             return false;
         }
+        Class<? extends ModelElement> startClass = getStartClass();
+        Class<? extends ModelElement> endClass = getEndClass();
+        if (!metaModel.isEditable(startClass, endClass)) {
+            return false;
+        }
         // prüfen, ob die Zwischenelemente angelegt werden können
-        for (int i = 0; i < elementaryMetaPaths.size() - 1; i++) {
+        int maxElementaryMetaPathsIndex = elementaryMetaPaths.size() - 1;
+        for (int i = 0; i < maxElementaryMetaPathsIndex; i++) {
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
             //nur Elementarpfade mit einer Kante dazwischen sind anlegbar, wenn die Kantenklasse nicht abstract ist
-            if (!elementaryMetaPaths.get(i).isCreatable()) {
+            if (!elementaryMetaPath.isCreatable(false)) {
                 return false;
             }
-            Class<? extends ModelElement> connectingClass = getPathStepElementClass(i + 1);
-            if (MetaModel.isAbstract(connectingClass)) {
+            ElementaryMetaPath nextElementaryMetaPath = elementaryMetaPaths.get(i + 1);
+            Class<? extends ModelElement> pathStepElementClass = getPathStepElementClass(i);
+            if (!metaModel.isCreatable(pathStepElementClass, elementaryMetaPath, nextElementaryMetaPath)) {
                 return false;
             }
         }
-        return true;
+        //jetzt den letzten holen ElementaryMetaPath und je nach Parameter checkCreateEndElement prüfen
+        ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(maxElementaryMetaPathsIndex);
+        if (checkCreateEndElement) {
+            return metaModel.isCreatable(endClass, lastElementaryMetaPath, null);
+        }
+        return lastElementaryMetaPath.isCreatable(false);
     }
 
     @Override
