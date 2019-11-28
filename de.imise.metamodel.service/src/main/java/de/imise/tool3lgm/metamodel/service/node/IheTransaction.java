@@ -18,8 +18,8 @@ public class IheTransaction extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripListPanel(IheInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
-        dialog.addDescripListPanel(IheInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
+        dialog.addDescripPanel(IheInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
+        dialog.addDescripPanel(IheInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
 
         dialog.addTabbedPanel(IheInterface.class);
         dialog.addTabbedPanelPathConnectionPanel(IheInvokingInterface.class, IheInvokingInterface_IheTransaction_Edge.class);
