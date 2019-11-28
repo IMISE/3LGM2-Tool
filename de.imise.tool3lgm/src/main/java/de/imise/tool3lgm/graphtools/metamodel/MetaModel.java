@@ -851,10 +851,11 @@ public final class MetaModel implements MetaModelSpecific {
         ElementaryMetaPath[] createdElemebtaryMetaPathsToElement = {
                 toElement, fromElement == null ? null : fromElement.getOtherDirection()
         };
-        for (ElementaryMetaPath createdMetaPathFromElement : createdElemebtaryMetaPathsToElement) {
-            if (createdMetaPathFromElement != null) { // null abfangen, da es beim ersten und letzten Element in einem SequenceMetaPath nur einen Pfad gibt
-                if (createdMetaPathFromElement.getEdgeClass() == edgeClass) {
-                    if (createdMetaPathFromElement.getDirection() == directionToElement) {
+        for (ElementaryMetaPath createdMetaPathToElement : createdElemebtaryMetaPathsToElement) {
+            if (createdMetaPathToElement != null) { // null abfangen, da es beim ersten und letzten Element in einem SequenceMetaPath nur einen Pfad gibt
+                Class<? extends Edge> createdMetaPathToElementEdgeClass = createdMetaPathToElement.getEdgeClass();
+                if (edgeClass.isAssignableFrom(createdMetaPathToElementEdgeClass)) {
+                    if (createdMetaPathToElement.getDirection() == directionToElement) {
                         return true;
                     }
                 }
