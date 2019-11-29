@@ -579,6 +579,10 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         addTab(new DescriptedSingleConnectionPanel(this, createSimpleMetaPath(null, edgeClasses)));
     }
 
+    ///////////////
+    // PathPanel //
+    ///////////////
+
     @SafeVarargs
     public final void addPathConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addPathConnectionPanel(false, edgeClasses);
@@ -600,6 +604,10 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         addTab(new PathConnectionPanel(this, labelLastEdgeName, true, metaPath));
     }
 
+    ///////////////////
+    // PathLeafPanel //
+    ///////////////////
+
     @SafeVarargs
     public final void addPathConnectionLeafPanel(final Class<? extends Edge>... edgeClasses) {
         addPathConnectionLeafPanel(false, edgeClasses);
@@ -617,6 +625,10 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
         PathConnectionPanel panel = new PathConnectionPanel(this, false, metaPath);
         addTab(panel);
     }
+
+    ///////////////
+    // EdgePanel //
+    ///////////////
 
     public void addEdgePanel(final Class<? extends Edge> edgeClass) {
         addEdgePanel(null, edgeClass);
