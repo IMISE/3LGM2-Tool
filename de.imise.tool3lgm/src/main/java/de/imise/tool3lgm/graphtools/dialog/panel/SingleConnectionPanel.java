@@ -91,7 +91,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         setLayout(new BorderLayout());
         update(); //connectedElement initial setzen!
         boolean editable = !dialog.isInfoDialog() && simpleMetaPath.isCreatable(false); // für editable reicht es, wenn der Pfad zw. bestehenden Elementen entfernt oder angehängt werden kann. Das zu verbindende Element muss nicht neu erzeugt werden können
-        if (!editable || isLastPathElementNeededForExistence() && connectedElement != null) {
+        if (!editable || metaPath.isLastPathElementNeededForExistence() && connectedElement != null) {
             connectedElementsBox = null;
             itemListener = null;
             connectedElementName = new LimitedSizeScrollTextPane(4, false); //wenn man hier true übergibt, kann man den Namen des verbundenen Elementes ändern. Aber dann funktionieren die Maus-Actions nicht mehr, weil dann die Komponente eigene Mausaktionen für den Text macht
@@ -122,10 +122,10 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         if (connectedElementsBox != null) {
             Color enabledColor = UIManager.getColor("TextField.background");
             connectedElementsBox.setBackground(enabledColor); //Combobox should have the same background color like Textfields
-            boolean isLastPathElementDependent = isLastPathElementDependent();
+            boolean isLastPathElementDependent = metaPath.isLastPathElementDependent();
             connectedElementsBox.removeItemListener(itemListener);
             connectedElementsBox.removeAllItems();
-            if (!isLastPathElementNeededForExistence()) {//Abhängen nur anbieten, wenn dadurch das vorletzte Element im Pfad nicht inkonsistent wird
+            if (!metaPath.isLastPathElementNeededForExistence()) {//Abhängen nur anbieten, wenn dadurch das vorletzte Element im Pfad nicht inkonsistent wird
                 connectedElementsBox.addItem(" ");
             }
             //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle bzw. alle, die über den ConditionPath verbunden sind

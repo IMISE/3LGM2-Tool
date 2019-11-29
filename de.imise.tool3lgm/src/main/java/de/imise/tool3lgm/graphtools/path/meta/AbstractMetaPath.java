@@ -9,8 +9,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
@@ -474,6 +477,45 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
+     * Liefert <code>true</code>, wenn das letzte Element des Pfades nur existieren kann, wenn es mit einem
+     * auf dem Pfad davor liegenden Element verbunden ist. Das wird gebraucht, um zu entscheiden, ob ein neu
+     * angelegtes EndElement des Pfades immer sofort verbunden werden muss.
+     *
+     * @return
+     */
+    public final boolean isLastPathElementDependent() {
+        ElementaryMetaPath lastElementaryMetaPathInPath = getLastElementaryMetaPath();
+        if (lastElementaryMetaPathInPath == null) {
+            return false;
+        }
+        EdgeCardinality backwardCardinality = lastElementaryMetaPathInPath.getBackwardCardinality();
+        int minCardinality = backwardCardinality.min();
+        return minCardinality > 0;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn das Element des Panels/Dialoges nur existieren kann, wenn es eine Verbindung über die letzte Edge des Pfades
+     * hat . Das wird gebarucht, um zu entscheiden, ob man anbieten kann, diese Verbindung zu lösen oder nicht. Wenn der Pfad keine einfache Liste von
+     * Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
+     *
+     * @return
+     */
+    public final boolean isLastPathElementNeededForExistence() {
+        ElementaryMetaPath lastElementaryMetaPath = getLastElementaryMetaPath();
+        if (lastElementaryMetaPath == null) {
+            return false;
+        }
+        //Verbindungen, die durch InstanciationEgdes bestehen, kann man nicht einfach lösen/ändern und gelten als existenznotwendig
+        Class<? extends Edge> edgeClass = lastElementaryMetaPath.getEdgeClass();
+        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
+            return true;
+        }
+        EdgeCardinality forwardCardinality = lastElementaryMetaPath.getForwardCardinality();
+        int minCardinality = forwardCardinality.min();
+        return minCardinality > 0;
+    }
+
+    /**
      * Liefert den MetaPfad der die Gegenricthung beschreibt oder <code>null</code>, wenn es einen solchen nicht gibt.
      *
      * @return the otherDirectionPath
@@ -484,13 +526,26 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
 
     /**
      * Liefert eine Folge von Elementarpfaden, wenn sich dieser Pfad so bilden lässt, ansonsten kommt eine leere Liste zurück. Alle parallelen Pfade
-     * geben hier leere Liste zurück. {@link SequenceMetaPath} geben nur leine leere Liste zurück, wenn sie im innersten ein einzelner Pfad sind ohne
+     * geben hier leere Liste zurück. {@link SequenceMetaPath} geben nur keine leere Liste zurück, wenn sie im innersten ein einzelner Pfad sind ohne
      * parallele oder rekursive Pfade sind.
      *
      * @return
      */
     public List<ElementaryMetaPath> getElementaryMetaPaths() {
         return EMPTY_ELEMENTARY_PATH_LIST;
+    }
+
+    /**
+     * @return den letzten ElementaryMetaPath aus {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen solchen Elementarpfad enthält.
+     */
+    public ElementaryMetaPath getLastElementaryMetaPath() {
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
+        if (elementaryMetaPaths.isEmpty()) {
+            return null;
+        }
+        ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(elementaryMetaPaths.size() - 1);
+        return lastElementaryMetaPath;
     }
 
     /**

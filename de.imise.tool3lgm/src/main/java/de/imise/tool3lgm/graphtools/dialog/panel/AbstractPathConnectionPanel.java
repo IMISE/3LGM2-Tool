@@ -23,11 +23,9 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -197,47 +195,6 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      */
     public final JLabel getWestLabel() {
         return westLabel;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn das letzte Element des Pfades nur existieren kann, wenn es mit einem
-     * auf dem Pfad davor liegenden Element verbunden ist. Das wird gebraucht, um zu entscheiden, ob ein neu
-     * angelegtes EndElement des Pfades immer sofort verbunden werden muss.
-     *
-     * @return
-     */
-    protected boolean isLastPathElementDependent() {
-        ElementaryMetaPath lastElementaryMetaPathInPath = getElementaryMetaPathInPath(-1);
-        if (lastElementaryMetaPathInPath == null) {
-            return false;
-        }
-        EdgeCardinality backwardCardinality = lastElementaryMetaPathInPath.getBackwardCardinality();
-        int minCardinality = backwardCardinality.min();
-        return minCardinality > 0;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn das Element des Panels/Dialoges nur existieren kann, wenn es eine Verbindung über die letzte Edge des Pfades
-     * hat . Das wird gebarucht, um zu entscheiden, ob man anbieten kann, diese Verbindung zu lösen oder nicht. Wenn der Pfad keine einfache Liste von
-     * Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
-     *
-     * @return
-     */
-    protected boolean isLastPathElementNeededForExistence() {
-        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
-        if (elementaryMetaPaths.isEmpty()) {
-            return true;
-        }
-        ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(elementaryMetaPaths.size() - 1);
-        //Verbindungen, die durch InstanciationEgdes bestehen, kann man nicht einfach lösen/ändern und gelten als existenznotwendig
-        Class<? extends Edge> edgeClass = lastElementaryMetaPath.getEdgeClass();
-        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
-            return true;
-        }
-        EdgeCardinality forwardCardinality = lastElementaryMetaPath.getForwardCardinality();
-        int minCardinality = forwardCardinality.min();
-        return minCardinality > 0;
     }
 
     /**
