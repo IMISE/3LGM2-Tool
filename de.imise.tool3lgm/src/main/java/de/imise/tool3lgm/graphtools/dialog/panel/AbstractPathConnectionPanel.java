@@ -103,7 +103,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
         westLabel = new JLabel();
         //bei allen SingleConnectionPanels kann das Westlabel auch die MouseActions bekommen, so dass man auf dem Label an das verknüpfte Element kommt
-        if (isSingleConnectionPath()) {
+        if (simpleMetaPath.isSingleConnection()) {
             addMouseActions(westLabel);
         }
         String westLabelText;
@@ -238,23 +238,6 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         EdgeCardinality forwardCardinality = lastElementaryMetaPath.getForwardCardinality();
         int minCardinality = forwardCardinality.min();
         return minCardinality > 0;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenm der Pfad maximal ein Element als Ergebnis liefert, also das StartElement maximal ein Mal mit dem EndElement
-     * verbunden sein darf.
-     * Diese Funktion (genau wie die anderen isLastPathElementDependent(), isLastPathElementNeededForExistence() und isConnectionPointUnique()) könnte
-     * man auch direkt in die Pfade schreiben (falls sie noch woanders gebraucht werden))
-     *
-     * @return
-     */
-    protected boolean isSingleConnectionPath() {
-        ElementaryMetaPath lastElementaryMetaPathInPath = getElementaryMetaPathInPath(-1);
-        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass mehrere Verbindungen mgl. sind
-        if (lastElementaryMetaPathInPath == null) {
-            return false;
-        }
-        return lastElementaryMetaPathInPath.getForwardCardinality().max() == 1;
     }
 
     /**

@@ -469,6 +469,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
                 return false;
             }
         }
+        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass mehrere Verbindungen mgl. sind
         return !elementaryMetaPaths.isEmpty();
     }
 
