@@ -47,12 +47,12 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog implements ActionListener, LGMChangeListenerSimple {
 
     /**
-     * COMMENTME
+     * ModelElement its properties are displayed or changable in this dialog.
      */
     protected final ModelElement modelElement;
 
     /**
-     * COMMENTME
+     * Panel with the type, name, id and ceration date of the dialogs element.
      */
     private final ElementDialogHeaderPanel headerPanel;
 
@@ -185,6 +185,10 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         return true;
     }
 
+    /**
+     * Adds the panel 'Structure' to the dialog, which shows the part-of-hierarchy of the element
+     * of the dialog, if this element has a {@link HasPartEdge}.
+     */
     private void addPartOfStructurePanel() {
         List<Class<? extends HasPartEdge>> realPartOfs = getRecursiveHasPartEdges();
         if (realPartOfs.size() == 1) {
@@ -237,8 +241,24 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     }
 
     /**
-    *
-    */
+     *
+     */
+    public void update() {
+        if (closing) {
+            return;
+        }
+        headerPanel.update();
+        for (int i = 0; i < getTabCount(); i++) {
+            Component c = getTabComponentAt(i);
+            if (c instanceof ElementDialogPanel) {
+                ((ElementDialogPanel) c).update();
+            }
+        }
+    }
+
+    /**
+     *
+     */
     private void commit() {
         //alle Panels committen
         for (int m = 0; m < getTabCount(); m++) {
@@ -343,29 +363,11 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     // ####################################################################################
 
     /**
-    *
-    */
+     *
+     */
     private void dialogPositionOrSizeChanged() {
         lastWidth = getWidth();
         lastHeight = getHeight();
-    }
-
-    /**
-    *
-    */
-    public void update() {
-
-        if (closing) {
-            return;
-        }
-
-        headerPanel.update();
-        for (int i = 0; i < getTabCount(); i++) {
-            Component c = getTabComponentAt(i);
-            if (c instanceof ElementDialogPanel) {
-                ((ElementDialogPanel) c).update();
-            }
-        }
     }
 
     /**
