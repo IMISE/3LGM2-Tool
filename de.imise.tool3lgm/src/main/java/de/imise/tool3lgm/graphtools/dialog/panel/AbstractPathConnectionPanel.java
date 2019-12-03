@@ -20,7 +20,7 @@ import javax.swing.JTable;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -64,7 +64,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param dialog
      * @param simpleMetaPath
      */
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
         this(dialog, false, simpleMetaPath);
     }
 
@@ -76,7 +76,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            Elementart der Name der letzten Edge selbst ans Label geschrieben.
      * @param simpleMetaPath
      */
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
         this(dialog, -1, labelEdgeName, simpleMetaPath);
     }
 
@@ -92,7 +92,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            festgelegt.
      * @param simpleMetaPath
      */
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog);
         metaPath = simpleMetaPath;
         searchElementClass = getInitialSearchElementClass(metaPath);

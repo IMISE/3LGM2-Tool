@@ -6,7 +6,7 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
@@ -21,15 +21,15 @@ import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
  */
 public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnectionPanel {
 
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
         super(dialog, simpleMetaPath);
     }
 
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelEdgeName, simpleMetaPath);
     }
 
-    public AbstractPathConnectionTreePanel(final ElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog, searchEdgeIndex, labelEdgeName, simpleMetaPath);
     }
 

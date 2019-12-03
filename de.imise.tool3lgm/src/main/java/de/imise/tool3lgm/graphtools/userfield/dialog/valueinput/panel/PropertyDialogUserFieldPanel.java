@@ -48,7 +48,7 @@ import javax.swing.text.JTextComponent;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -81,7 +81,7 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
     /**
      * @param pd
      */
-    public PropertyDialogUserFieldPanel(final ElementPropertyDialog pd) {
+    public PropertyDialogUserFieldPanel(final AbstractElementPropertyDialog pd) {
         super(pd);
         create();
     }

@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.border.Border;
 
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -44,15 +45,15 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
     /** Beschreibung des ModelElements beim letzten Update des Dialoges */
     private String lastDescription = null;
     /**
-     * Bleibt <code>true</code>, wenn keine Unterklasse von {@link ElementPropertyDialog} das Panel erweitert hat, sondern er im Ausgangszustand (Name
-     * + Beschreibung) geblieben ist.
+     * Bleibt <code>true</code>, wenn keine Unterklasse von {@link AbstractElementPropertyDialog} das Panel erweitert hat, sondern er im
+     * Ausgangszustand (Name + Beschreibung) geblieben ist.
      */
     private boolean isUnchangedDefaultPanel = true;
 
     /**
      * @param dialog
      */
-    public DescripPanel(final ElementPropertyDialog dialog) {
+    public DescripPanel(final AbstractElementPropertyDialog dialog) {
         super(dialog);
 
         setLayout(new GridBagLayout());

@@ -15,7 +15,7 @@ import java.util.List;
 
 import javax.swing.UIManager;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMItemListener;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -76,7 +76,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      * @param dialog
      * @param edgeClasses
      */
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
         this(dialog, false, simpleMetaPath);
     }
 
@@ -86,7 +86,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      *            letzten Edge aus den edgeClasses geschrieben.
      * @param simpleMetaPath
      */
-    public SingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
         setLayout(new BorderLayout());
         update(); //connectedElement initial setzen!
@@ -201,7 +201,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                     return;
                 }
                 GraphDocument mainDoc = panel.getGraphDocument();
-                ElementPropertyDialog dialog = panel.getDialog();
+                AbstractElementPropertyDialog dialog = panel.getDialog();
                 ModelElement modelElement = panel.getModelElement();
 
                 ItemEvent e = (ItemEvent) eo;

@@ -8,7 +8,7 @@ import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -38,7 +38,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param searchElementClass
      * @param edgeClass
      */
-    public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+    public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         this(dialog, false, searchElementClass, edgeClass);
     }
 
@@ -50,7 +50,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param searchElementClass
      * @param edgeClass
      */
-    public AbstractPathOfOneEdgePanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+    public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         super(dialog, labelEdgeName, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
         this.edgeClass = edgeClass;
         edgeIsForward = getLastDirectionInPath() == FORWARD;

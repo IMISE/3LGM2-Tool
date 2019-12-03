@@ -24,7 +24,7 @@ import javax.swing.tree.TreeSelectionModel;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
@@ -81,27 +81,27 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     private final LGMAction newElementAction;
 
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
         this(dialog, showRightTree, -1, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean showRightTree, final int maxLines, final SimpleMetaPath simpleMetaPath) {
         this(dialog, false, showRightTree, maxLines, false, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
         this(dialog, showRightTree, -1, false, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean showRightTree, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean showRightTree, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
         this(dialog, false, showRightTree, maxLines, renderLeftTreeAsList, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
         this(dialog, false, showRightTree, -1, renderLeftTreeAsList, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
         this.showRightTree = showRightTree;
         setPreferredSize(new Dimension(550, 350));

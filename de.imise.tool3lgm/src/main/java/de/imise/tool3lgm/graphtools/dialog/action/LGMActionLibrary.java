@@ -11,6 +11,7 @@ import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
@@ -61,7 +62,7 @@ public class LGMActionLibrary {
 
                 TreePath[] paths = tree.getSelectionPaths();
                 GraphDocument doc = panel.getGraphDocument();
-                ElementPropertyDialog dialog = panel.getDialog();
+                AbstractElementPropertyDialog dialog = panel.getDialog();
                 int pid = dialog.getTransactionID();
                 if (paths != null) {
                     panel.removeHighLights();
@@ -128,7 +129,7 @@ public class LGMActionLibrary {
     public static final LGMAction getWindowClosedAction(final ElementDialogPanel edp) {
 
         final ElementDialogPanel panel = edp;
-        final ElementPropertyDialog dialog = panel.getDialog();
+        final AbstractElementPropertyDialog dialog = panel.getDialog();
 
         return new LGMAction() {
             @Override
