@@ -473,8 +473,7 @@ public class Static {
      * @return Instanzen der übergebenen Klasse aus dem übergebenen Verzeichnis
      */
     public static <T> List<T> loadPlugins(final Class<T> superClassOfResultClasses) {
-        List<T> instances = PluginUtils.loadInstances(Tool3lgmConstants.LIB_DIR, superClassOfResultClasses);
-        instances.addAll(PluginUtils.loadInstances(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses));
+        List<T> instances = PluginUtils.loadInstances(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
         return instances;
     }
 
@@ -488,10 +487,7 @@ public class Static {
      * @return Instanz der übergebenen Klasse aus dem übergebenen Verzeichnis oder <code>null</code>, wenn keine Instanz gefunden wurde
      */
     public static <T> T loadPlugin(final Class<T> superClassOfResultClasses) {
-        T instance = PluginUtils.loadInstance(Tool3lgmConstants.LIB_DIR, superClassOfResultClasses);
-        if (instance == null) {
-            instance = PluginUtils.loadInstance(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
-        }
+        T instance = PluginUtils.loadInstance(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
         return instance;
     }
 
