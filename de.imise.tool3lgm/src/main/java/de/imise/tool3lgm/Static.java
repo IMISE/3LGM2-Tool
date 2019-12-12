@@ -8,7 +8,6 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 
 import java.awt.Component;
-import java.awt.Point;
 import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 import java.util.List;
@@ -216,6 +215,8 @@ public class Static {
         return f != null && f instanceof MatrixViewInternalFrame && f.isVisible();
     }
 
+    // template library manager
+
     /**
      * @return the template library manager
      */
@@ -231,33 +232,6 @@ public class Static {
         if (templateLibrariesManager != null) {
             templateLibrariesManager.setActiveTemplate(doc);
         }
-    }
-
-    /**
-     * Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus klickt, um an
-     * der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     */
-    private static Point lastActionPosition = null;
-
-    /**
-     * Liefert die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
-     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     *
-     * @return
-     */
-    public static final Point getLastActionPosition() {
-        return lastActionPosition;
-    }
-
-    /**
-     * Setzt die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
-     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     *
-     * @param x
-     * @param y
-     */
-    public static final void setLastActionPosition(final int x, final int y) {
-        lastActionPosition = new Point(x, y);
     }
 
     /** Gibt zurück, ob der ExpertMode aktiv ist */

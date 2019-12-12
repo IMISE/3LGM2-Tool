@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.model;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
-import static de.imise.tool3lgm.Static.getLastActionPosition;
 import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.isExtension;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER;
@@ -62,7 +61,6 @@ import static javax.swing.JOptionPane.DEFAULT_OPTION;
 import static javax.swing.JOptionPane.INFORMATION_MESSAGE;
 import static javax.swing.JOptionPane.PLAIN_MESSAGE;
 
-import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -580,12 +578,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         ModelElement me = ec.getElement();
         while (true) {
             NameAndColorInputDialog d = new NameAndColorInputDialog(getMainFrame());
-            Point dialogPosition = getLastActionPosition();
-            if (dialogPosition == null) {
-                dialogPosition = new Point(100, 100);
-            }
             boolean showColorChooser = metaModel.hasSortedEdgeClassesToPaintable(me.getClass());
-            d.showDialog(getResString("name_eing"), me.toString(), dialogPosition.x, dialogPosition.y, showColorChooser);
+            d.showDialogOnMousePointer(getResString("name_eing"), me.toString(), showColorChooser);
             String inputString = d.getInputString();
             if (inputString == null) {
                 return false;
