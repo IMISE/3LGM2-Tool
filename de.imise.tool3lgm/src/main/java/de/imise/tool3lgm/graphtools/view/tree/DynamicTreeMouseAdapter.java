@@ -157,7 +157,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
                         GraphDocument doc = tree.getGraphDocument();
                         if (doc != null) {
                             MetaModel metaModel = doc.getMetaModel();
-                            if (metaModel.isEditable(elementClass)) {
+                            if (metaModel.isCreatable(elementClass)) {
                                 showNewInstanceContextMenu(elementClass.getSimpleName(), xin + 3, yin + 3);
                             }
                         }
