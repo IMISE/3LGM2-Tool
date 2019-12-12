@@ -3,6 +3,8 @@ package de.imise.util.swing.dialog;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -142,13 +144,14 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
      *
      * @param title
      * @param defaultString
+     * @param centerOnMousePointer if <code>true</code> x and y will be ignored
      * @param x
      * @param y
      * @param width
      * @param height
      * @param showColorChooser
      */
-    public void showDialog(final String title, final String defaultString, final int x, final int y, final int width, final int height, final boolean showColorChooser) {
+    private void showDialog(final String title, final String defaultString, final boolean centerOnMousePointer, final int x, final int y, final int width, final int height, final boolean showColorChooser) {
         setTitle(title);
 
         inputArea.setText(defaultString);
@@ -168,17 +171,68 @@ public class NameAndColorInputDialog extends JDialog implements ActionListener {
             }
             setSize(width, height);
         }
+        if (centerOnMousePointer) {
+            Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+            Dimension size = getSize();
+            mouseLocation.x = mouseLocation.x - size.width / 2;
+            mouseLocation.y = mouseLocation.y - size.height / 2;
+            setLocation(mouseLocation);
+        } else {
+            if (getOwner() != null) {
+                setLocationRelativeTo(getOwner());
+            }
 
-        if (getOwner() != null) {
-            setLocationRelativeTo(getOwner());
-        }
-        if (x != INVALID_POSITION) {
-            setLocation(x, getLocation().y);
-        }
-        if (y != INVALID_POSITION) {
-            setLocation(getLocation().x, y);
+            if (x != INVALID_POSITION) {
+                int yOld = getLocation().y;
+                setLocation(x, yOld);
+            }
+            if (y != INVALID_POSITION) {
+                int xOld = getLocation().x;
+                setLocation(xOld, y);
+            }
         }
         setVisible(true);
+    }
+
+    /**
+     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurück.
+     *
+     * @param title
+     * @param defaultString
+     * @param showColorChooser
+     */
+    public void showDialogOnMousePointer(final String title, final String defaultString, final boolean showColorChooser) {
+        showDialogOnMousePointer(title, defaultString, DEFAULT_WIDTH, DEFAULT_HEIGHT, showColorChooser);
+    }
+
+    /**
+     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurück.
+     *
+     * @param title
+     * @param defaultString
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param showColorChooser
+     */
+    public void showDialogOnMousePointer(final String title, final String defaultString, final int width, final int height, final boolean showColorChooser) {
+        showDialog(title, defaultString, true, -1, -1, width, height, showColorChooser);
+    }
+
+    /**
+     * Zeigt einen Eingabedialog an und liefert eine <code>ArrayList</code> mit den eingegebenen Werten zurück.
+     *
+     * @param title
+     * @param defaultString
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param showColorChooser
+     */
+    public void showDialog(final String title, final String defaultString, final int x, final int y, final int width, final int height, final boolean showColorChooser) {
+        showDialog(title, defaultString, false, x, y, width, height, showColorChooser);
     }
 
     /**
