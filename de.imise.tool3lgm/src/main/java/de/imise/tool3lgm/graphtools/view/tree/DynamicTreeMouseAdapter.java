@@ -195,16 +195,15 @@ public class DynamicTreeMouseAdapter implements MouseListener {
      */
     private final JPopupMenu showNewInstanceContextMenu(final String str, final int x, final int y) {
         JPopupMenu menu = new JPopupMenu();
+
         ExtendedAction action = GDCommands.MODEL_ACTION_CREATE_NODE.createAction();
         String actionCommand = action.getActionCommand();
         actionCommand += " " + str;
         action.setActionCommand(actionCommand);
+        JMenuItem createNodeItem = new JMenuItem(action);
+        menu.add(createNodeItem);
 
-        menu.add(new JMenuItem(action));
-
-        Static.setLastActionPosition(x + tree.getX(), y + tree.getY());
         menu.show(tree, x, y);
-
         return menu;
     }
 
