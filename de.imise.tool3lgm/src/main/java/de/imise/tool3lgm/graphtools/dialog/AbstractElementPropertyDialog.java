@@ -8,7 +8,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -428,10 +427,13 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
                     i = -1;
                 }
             }
-            if (Toolkit.getDefaultToolkit().getScreenSize().width - xx < 150 || Toolkit.getDefaultToolkit().getScreenSize().height - yy < 150) {
-                xx = mainFrame.getX() + 100;
-                yy = mainFrame.getY() + 100;
-            }
+            //das hier hatte sicher mal eine Bedeutung, aber auf einem Multi-Monitor-System, bei dem das Tool auf dem zweiten
+            //Screen gezeigt wird, verhindert es dass mehrere Dialoge versetzt angezeigt werden, da diese untere und nun
+            //auskommentierte Bedingung immer eintrifft und alles auf derselbe Stelle landet
+            //            if (Toolkit.getDefaultToolkit().getScreenSize().width - xx < 150 || Toolkit.getDefaultToolkit().getScreenSize().height - yy < 150) {
+            //                xx = mainFrame.getX() + 100;
+            //                yy = mainFrame.getY() + 100;
+            //            }
         }
 
         setLocation(xx, yy);
