@@ -8,7 +8,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -249,10 +248,6 @@ public class ElementPropertyDialog extends AbstractTabbedPropertyDialog implemen
                     yy += 20;
                     i = -1;
                 }
-            }
-            if (Toolkit.getDefaultToolkit().getScreenSize().width - xx < 150 || Toolkit.getDefaultToolkit().getScreenSize().height - yy < 150) {
-                xx = mainFrame.getX() + 100;
-                yy = mainFrame.getY() + 100;
             }
         }
 
