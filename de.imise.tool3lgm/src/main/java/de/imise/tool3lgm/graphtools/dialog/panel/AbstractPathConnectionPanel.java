@@ -249,13 +249,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         int edgeSearchStopIndex = elements2Connect != null ? elementaryMetaPathCount - 1 : elementaryMetaPathCount;
         for (int i = startEdgeIndex; i < edgeSearchStopIndex; i++) {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
-            Class<? extends Edge> edgeClass2Create = elementaryMetaPath.getEdgeClass();
-            Direction edgeClass2CreateDirection = elementaryMetaPath.getDirection();
-            elementaryMetaPath = i + 1 < elementaryMetaPathCount ? elementaryMetaPaths.get(i + 1) : null;
-            Class<? extends Edge> nextEdgeClass2Create = elementaryMetaPath != null ? elementaryMetaPath.getEdgeClass() : null;
-            //wenn es noch eine nächte Edge gibt, dann gibt es auch noch eine nächste direction. Wenn nicht wird einfach FORWARD übergeben, weil das egal ist
-            Direction nextEdgeClass2CreateDirection = elementaryMetaPath != null ? elementaryMetaPath.getDirection() : FORWARD;
-            targetElement = MetaPathFunctions.createNodeWithContainerAndDependents(selDoc, targetElement, edgeClass2Create, edgeClass2CreateDirection, nextEdgeClass2Create, nextEdgeClass2CreateDirection, pid);
+            ElementaryMetaPath nextElementaryMetaPath = i + 1 < elementaryMetaPathCount ? elementaryMetaPaths.get(i + 1) : null;
+            targetElement = MetaPathFunctions.createNodeWithContainerAndDependents(selDoc, startElement, elementaryMetaPath, nextElementaryMetaPath, pid);
         }
         //wenn gültige elments2Connect übergeben wurde, dann müssen sie an das vorletzte Pfadelement angehängt werden
         if (edgeSearchStopIndex < elementaryMetaPathCount) {
