@@ -585,20 +585,20 @@ public class MetaPathFunctions {
      * Liefert die speziellere der Endklasse des ersten Pfades und der Startklasse des zweiten Pfades. Ist der zweite Pfad <code>null</code>, kommt
      * die Endklasse des ersten zurück.
      *
-     * @param elementaryMetaPath1
-     * @param elementaryMetaPath2
+     * @param elementaryMetaPathToConnectingClass
+     * @param elementaryMetaPathFromConnectionClass
      * @return
      */
-    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final ElementaryMetaPath elementaryMetaPath1, final ElementaryMetaPath elementaryMetaPath2) {
+    public static final Class<? extends ModelElement> getElementaryPathsConnectingClass(final ElementaryMetaPath elementaryMetaPathToConnectingClass, final ElementaryMetaPath elementaryMetaPathFromConnectionClass) {
         //ACHTUNG: diese Funktion nicht einfach durch die andere mit den EdgeClasses laufen lassen, da die Start- und Endklasse der ElementaryMetaPaths was anderes sein können, als die Start- bzw. die Endklasse der enthaltenen Kantenklasse
-        if (elementaryMetaPath1 == null) { //tritt auf, wenn es um den ersten Pfaschritt geht, also den Anfang des Pfades
-            return elementaryMetaPath2.getStartClass();
+        if (elementaryMetaPathToConnectingClass == null) { //tritt auf, wenn es um den ersten Pfaschritt geht, also den Anfang des Pfades
+            return elementaryMetaPathFromConnectionClass.getStartClass();
         }
-        if (elementaryMetaPath2 == null) { //tritt auf, wenn es um den letzten Pfadschritt geht, also das Ende des Pfades
-            return elementaryMetaPath1.getEndClass();
+        if (elementaryMetaPathFromConnectionClass == null) { //tritt auf, wenn es um den letzten Pfadschritt geht, also das Ende des Pfades
+            return elementaryMetaPathToConnectingClass.getEndClass();
         }
-        Class<? extends ModelElement> lastEndClass = elementaryMetaPath1.getEndClass();
-        Class<? extends ModelElement> nextStartClass = elementaryMetaPath2.getStartClass();
+        Class<? extends ModelElement> lastEndClass = elementaryMetaPathToConnectingClass.getEndClass();
+        Class<? extends ModelElement> nextStartClass = elementaryMetaPathFromConnectionClass.getStartClass();
         Class<? extends ModelElement> connectingClass = ReflectionUtils.getMostSpecialClass(lastEndClass, nextStartClass);
         return connectingClass;
     }
