@@ -21,7 +21,7 @@ public final class RechAnwendungsbaustein extends Anwendungsbaustein {
         dialog.addEdgePanel(Bausteinschnittstelle.class, AwbKommssVerbindung.class);
         dialog.addEdgePanel(Benutzungsschnittstelle.class, AwbKommssVerbindung.class);
         dialog.addDescriptedSingleConnectionPanel(RawbAwpVerbindung.class);
-        dialog.addPathConnectionInfoPanel(AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
+        dialog.addPathConnectionPanel(AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
         dialog.addPathConnectionPanel(PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class);
         return dialog;
     }

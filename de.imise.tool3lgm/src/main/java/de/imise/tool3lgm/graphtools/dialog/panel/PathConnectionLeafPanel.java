@@ -35,20 +35,20 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
      */
     private Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, showRightTree, simpleMetaPath);
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, labelLastEdgeName, showRightTree, simpleMetaPath);
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, labelLastEdgeName, -1, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final boolean showRightTree, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, showRightTree, maxLines, simpleMetaPath);
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, maxLines, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, labelLastEdgeName, showRightTree, maxLines, true, simpleMetaPath);
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, labelLastEdgeName, maxLines, false, simpleMetaPath);
     }
 
     @Override

@@ -11,7 +11,7 @@ public final class Ereignistyp extends Node {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addPathConnectionPanel(EtAufVerbindung.class);
-        dialog.addPathConnectionInfoPanel(EtntEtVerbindung.class);
+        dialog.addPathConnectionPanel(EtntEtVerbindung.class);
         return dialog;
     }
 

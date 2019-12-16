@@ -11,7 +11,7 @@ public final class ABKonfiguration extends Node {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addPathConnectionPanel(AwbAwbkVerbindung.class);
-        dialog.addPathConnectionInfoPanel(AwbkAufOrgVerbindung.class);
+        dialog.addPathConnectionPanel(AwbkAufOrgVerbindung.class);
         return dialog;
     }
 

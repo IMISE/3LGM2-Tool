@@ -96,7 +96,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     @SafeVarargs
     public final void addTabbedPanelPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         if (edgeClasses.length == 1) {
-            addEdgePanel(searchElementClass, edgeClasses[0], true);
+            addEdgePanel(true, searchElementClass, edgeClasses[0]);
         } else {
             SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
             PathConnectionPanel panel = new PathConnectionPanel(this, true, metaPath);
@@ -177,9 +177,22 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     // PathPanel //
     ///////////////
 
+    public final void addEdgePanel(final Class<? extends Edge> edgeClass) {
+        addEdgePanel(false, null, edgeClass);
+    }
+
+    @SafeVarargs
+    public final void addPanel(final Class<? extends Edge>... edgeClasses) {
+        addPathConnectionPanel(false, edgeClasses);
+    }
+
+    public void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        addEdgePanel(false, searchElementClass, edgeClass);
+    }
+
     @SafeVarargs
     public final void addPathConnectionPanel(final Class<? extends Edge>... edgeClasses) {
-        addPathConnectionPanel(false, edgeClasses);
+        addPathConnectionPanel(null, edgeClasses);
     }
 
     @SafeVarargs
@@ -195,7 +208,22 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     @SafeVarargs
     public final void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
-        addTab(new PathConnectionPanel(this, labelLastEdgeName, true, metaPath));
+        MetaModel metaModel = modelElement.getMetaModel();
+        if (metaModel.isVisible(metaPath)) {
+            boolean singleConnection = metaPath.isSingleConnection();
+            //            System.err.print(metaPath.getEndClass().getSimpleName() + ": ");
+            boolean editable = metaPath.isCreatable(false);
+            //            System.err.print(editable + " -> ");
+            editable &= !metaPath.isFirstPathElementDependent();
+            //            System.err.print(editable + " -> ");
+            editable &= !metaPath.isLastPathElementDependent();
+            //            System.err.println(editable);
+            if (editable || !singleConnection) {
+                addTab(new PathConnectionPanel(this, labelLastEdgeName, false, metaPath));
+            } else {
+                addDescriptedSingleConnectionPanel(edgeClasses);
+            }
+        }
     }
 
     ///////////////////
@@ -210,29 +238,24 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     @SafeVarargs
     public final void addPathConnectionLeafPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
         SimpleMetaPath metaPath = createSimpleMetaPath(null, edgeClasses);
-        addTab(new PathConnectionLeafPanel(this, labelLastEdgeName, true, metaPath));
+        addTab(new PathConnectionLeafPanel(this, labelLastEdgeName, metaPath));
     }
 
-    @SafeVarargs
-    public final void addPathConnectionInfoPanel(final Class<? extends Edge>... edgeClasses) {
-        SimpleMetaPath metaPath = createSimpleMetaPath(null, edgeClasses);
-        PathConnectionPanel panel = new PathConnectionPanel(this, false, metaPath);
-        addTab(panel);
-    }
-
+    //    @SafeVarargs
+    //    private final void addPathConnectionInfoPanel(final Class<? extends Edge>... edgeClasses) {
+    //        SimpleMetaPath metaPath = createSimpleMetaPath(null, edgeClasses);
+    //        System.err.println(metaPath.getAllMetaPathsName());
+    //        System.err.println("\t" + metaPath.isCreatable(false) + "\t" + metaPath.isCreatable(true) + "\t" + metaPath.isLastPathElementDependent() + "\t" + metaPath.isLastPathElementNeededForExistence() + "\t" + metaPath.isSingleConnection());
+    //        System.err.println();
+    //        PathConnectionPanel panel = new PathConnectionPanel(this, false, metaPath);
+    //        addTab(panel);
+    //    }
+    //
     ///////////////
     // EdgePanel //
     ///////////////
 
-    public void addEdgePanel(final Class<? extends Edge> edgeClass) {
-        addEdgePanel(null, edgeClass);
-    }
-
-    public void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        addEdgePanel(searchElementClass, edgeClass, false);
-    }
-
-    private void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final boolean add2SubTab) {
+    private void addEdgePanel(final boolean add2SubTab, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClass);
         //Wenn sich ein Pfad für diese Elementart nicht anlegen lässt -> Panel nicht adden. Das ist der Fall, wenn Kanten einer Oberklasse
         //für eine Unterklasse nicht mehr gelten (z.B. Service-Metamodell: ApplicationSystem -> ApplicationSystem_IheActorInstance_Edge soll

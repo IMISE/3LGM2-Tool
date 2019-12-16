@@ -488,6 +488,28 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
+     * Liefert <code>true</code>, wenn das erste Element des Pfades nur existieren kann, wenn es mit einem
+     * auf dem Pfad dahinter liegenden Element verbunden ist. Das wird gebraucht, um zu entscheiden, ob ein neu
+     * angelegtes EndElement des Pfades immer sofort verbunden werden muss.
+     *
+     * @return
+     */
+    public final boolean isFirstPathElementDependent() {
+        ElementaryMetaPath firstElementaryMetaPathInPath = getFirstElementaryMetaPath();
+        if (firstElementaryMetaPathInPath == null) {
+            return false;
+        }
+        //Verbindungen, die durch InstanciationEgdes bestehen, kann man nicht einfach lösen/ändern und gelten als existenznotwendig
+        Class<? extends Edge> edgeClass = firstElementaryMetaPathInPath.getEdgeClass();
+        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
+            return true;
+        }
+        EdgeCardinality forwardCardinality = firstElementaryMetaPathInPath.getForwardCardinality();
+        int minCardinality = forwardCardinality.min();
+        return minCardinality > 0;
+    }
+
+    /**
      * Liefert <code>true</code>, wenn das letzte Element des Pfades nur existieren kann, wenn es mit einem
      * auf dem Pfad davor liegenden Element verbunden ist. Das wird gebraucht, um zu entscheiden, ob ein neu
      * angelegtes EndElement des Pfades immer sofort verbunden werden muss.
@@ -499,30 +521,13 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
         if (lastElementaryMetaPathInPath == null) {
             return false;
         }
-        EdgeCardinality backwardCardinality = lastElementaryMetaPathInPath.getBackwardCardinality();
-        int minCardinality = backwardCardinality.min();
-        return minCardinality > 0;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn das Element des Panels/Dialoges nur existieren kann, wenn es eine Verbindung über die letzte Edge des Pfades
-     * hat . Das wird gebarucht, um zu entscheiden, ob man anbieten kann, diese Verbindung zu lösen oder nicht. Wenn der Pfad keine einfache Liste von
-     * Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
-     *
-     * @return
-     */
-    public final boolean isLastPathElementNeededForExistence() {
-        ElementaryMetaPath lastElementaryMetaPath = getLastElementaryMetaPath();
-        if (lastElementaryMetaPath == null) {
-            return false;
-        }
         //Verbindungen, die durch InstanciationEgdes bestehen, kann man nicht einfach lösen/ändern und gelten als existenznotwendig
-        Class<? extends Edge> edgeClass = lastElementaryMetaPath.getEdgeClass();
+        Class<? extends Edge> edgeClass = lastElementaryMetaPathInPath.getEdgeClass();
         if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
             return true;
         }
-        EdgeCardinality forwardCardinality = lastElementaryMetaPath.getForwardCardinality();
-        int minCardinality = forwardCardinality.min();
+        EdgeCardinality backwardCardinality = lastElementaryMetaPathInPath.getBackwardCardinality();
+        int minCardinality = backwardCardinality.min();
         return minCardinality > 0;
     }
 

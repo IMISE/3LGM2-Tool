@@ -80,29 +80,29 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     private final LGMAction newElementAction;
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, showRightTree, -1, simpleMetaPath);
+    public PathConnectionPanel(final int i, final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, -1, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean showRightTree, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, showRightTree, maxLines, false, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, maxLines, false, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, showRightTree, -1, false, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, -1, false, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean showRightTree, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, showRightTree, maxLines, renderLeftTreeAsList, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, maxLines, renderLeftTreeAsList, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, showRightTree, -1, renderLeftTreeAsList, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, false, -1, renderLeftTreeAsList, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean showRightTree, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
-        this.showRightTree = showRightTree;
+        showRightTree = isEditable();
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
@@ -163,7 +163,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             //Buttons & Actions erstellen, Actions setzen
             addAction = getConnectAction();
             removeAction = getDisconnectAction();
-            newElementAction = getNewConnectedElementAction();
+            boolean supportNewElementAction = metaPath.isCreatable(true);
+            newElementAction = supportNewElementAction ? getNewConnectedElementAction() : null;
 
             buttonpanel = createBetweenTreesButtonPanel(addAction, removeAction, newElementAction);
 
@@ -221,6 +222,15 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         }
         revalidate();
         repaint();
+    }
+
+    /**
+     * @return <code>true</code> if the panel's path
+     */
+    protected boolean isEditable() {
+        return metaPath.isCreatable(false);// && metaPath.isRemoveable(true);//isRemoveable(...) prüft, ob sich das Element des Dialoges in Luft auflöst, wenn man die
+        //MinCardinality unterschreitet. Das soll hier aber explizit zugelassen werden!
+
     }
 
     @Override

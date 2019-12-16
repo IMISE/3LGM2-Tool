@@ -16,7 +16,7 @@ public class PhysischerDVBaustein extends Node {
         dialog.addDescripPanel(PdvbStoVerbindung.class);
         dialog.addDescripPanel(PdvbBtypVerbindung.class);
         dialog.addPathConnectionPanel(PdvbSubnVerbindung.class);
-        dialog.addPathConnectionInfoPanel(PdvbPdvbkVerbindung.class, PdvbkAwbVerbindung.class);
+        dialog.addPathConnectionLeafPanel(PdvbPdvbkVerbindung.class, PdvbkAwbVerbindung.class);
         return dialog;
     }
 
