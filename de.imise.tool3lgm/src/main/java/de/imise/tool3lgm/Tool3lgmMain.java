@@ -165,6 +165,7 @@ public class Tool3lgmMain {
 
             // Wenn der RMI-Service erfolgreich gestartet werden konnte, wird <code>bound</code> true
             boolean bound = false;
+            boolean connectionRefused = false;
 
             Remote remote = null;
 
@@ -192,8 +193,8 @@ public class Tool3lgmMain {
                 } catch (Exception innerEx) {
                 }
                 // Wenn der RMI-Service noch nicht läuft, wird hier weiter gemacht.
-                if (remote == null || !(remote instanceof Tool3lgmServer)) {
-
+                if (remote == null || !(remote instanceof Tool3lgmServer) || connectionRefused) {
+                    connectionRefused = false;
                     // Wenn der Baukasten schon läuft, wird kein neuer instanziiert, sonst schon.
                     if (Static.tool == null) {
                         //Static.tool wird im Constructor gesetzt
@@ -254,29 +255,39 @@ public class Tool3lgmMain {
                     // e.printStackTrace();
 
                 } else {
-                    // Wenn schon eine Instanz des Tools läuft, wird hier hergesprungen.
-                    // <code>bound</code> muss auf true gesetzt werden, dmit die Schleife beendet werden kann.
-                    bound = true;
+                    try {
+                        remote = Naming.lookup("//127.0.0.1:" + regPort + "/Tool3lgmServer");
+                        if (remote == null) {
+                            Log.show(Log.FATAL, "RMI registration failed", new Exception("RMI registration failed"));
+                            return false;
+                        }
+                        // Wenn der RMI-Service erfolgreich auf dem regPort lauscht, wird hier weiter gemacht.
+                        // Der RMI-Server steht für RMI-Aufrufe bereit.
+
+                        Tool3lgmServer tool3lgmServer = (Tool3lgmServer) remote;
+                        if (args.length != 0) {
+                            String[] params = new String[args.length - 1];
+                            for (int i = 0; i < params.length; i++) {
+                                params[i] = args[i + 1];
+                            }
+                            //hier kann eine unten mit connectionRefuses = true abgefangene ConnectionException auftreten, wenn
+                            //bereits eine Tool-Instanz anderer Art läuft. Dann geht processCommand schief. Z.B. wenn man das Tool
+                            //über unterschiedliche JREs startet, was außerhalb der Entwicklungsumgebeung wahrscheinlich nicht vorkommt.
+                            //Aber dort erleichtert es den gleichzeitigen Test mit verschiedenen Java-Versionen.
+                            tool3lgmServer.processCommand(args[0], params);
+                        }
+                        // Wenn schon eine Instanz des Tools läuft, die man über processCommand(...) ansprechen kann, wird
+                        //hier hergesprungen. bound muss auf true gesetzt werden, dmit die Schleife beendet werden kann.
+                        bound = true;
+                    } catch (Exception e) {
+                        // das hier
+                        connectionRefused = true;
+                    }
+
                 }
 
             }
 
-            remote = Naming.lookup("//127.0.0.1:" + regPort + "/Tool3lgmServer");
-            if (remote == null) {
-                Log.show(Log.FATAL, "RMI registration failed", new Exception("RMI registration failed"));
-                return false;
-            }
-            // Wenn der RMI-Service erfolgreich auf dem regPort lauscht, wird hier weiter gemacht.
-            // Der RMI-Server steht für RMI-Aufrufe bereit.
-
-            Tool3lgmServer tool3lgmServer = (Tool3lgmServer) remote;
-            if (args.length != 0) {
-                String[] params = new String[args.length - 1];
-                for (int i = 0; i < params.length; i++) {
-                    params[i] = args[i + 1];
-                }
-                tool3lgmServer.processCommand(args[0], params);
-            }
         } catch (Exception ex) {
             System.err.println(ex);
             Log.show(Log.FATAL, "RMI registration failed", ex);
