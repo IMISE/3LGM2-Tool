@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.util.swing.component.MinSizedIconButton;
@@ -45,7 +45,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     /** Abstand zwischen den Buttons zwischen den Bäumen */
     private static final int ADD_REMOVE_NEW_BUTTON_VGAP = 3;
 
-    public AbstractExpandablePanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public AbstractExpandablePanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
     }
 

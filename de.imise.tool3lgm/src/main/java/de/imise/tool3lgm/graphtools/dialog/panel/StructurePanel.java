@@ -19,7 +19,7 @@ import javax.swing.JScrollPane;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -58,7 +58,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
      * @param dialog
      * @param hasPartEdgeClass
      */
-    public StructurePanel(final ElementPropertyDialog dialog, final Class<? extends HasPartEdge> hasPartEdgeClass) {
+    public StructurePanel(final AbstractElementPropertyDialog dialog, final Class<? extends HasPartEdge> hasPartEdgeClass) {
         super(dialog, true, Edge.getEndClass(hasPartEdgeClass), hasPartEdgeClass);
         internalInit();
     }

@@ -8,6 +8,7 @@ import java.util.EventObject;
 
 import javax.swing.JTree;
 
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
@@ -32,7 +33,7 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
      *
      * @param dialog
      */
-    public LGMDragNDropPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public LGMDragNDropPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
     }
 

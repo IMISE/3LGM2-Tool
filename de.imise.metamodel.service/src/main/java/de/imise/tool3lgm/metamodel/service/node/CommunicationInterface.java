@@ -14,7 +14,7 @@ public abstract class CommunicationInterface extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(true, ApplicationComponent_CommunicationInterface_Edge.class);
+        dialog.addDescripPanel(true, ApplicationComponent_CommunicationInterface_Edge.class);
 
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
         tableDefinition.addColumnPathStepEdge(0, 300);

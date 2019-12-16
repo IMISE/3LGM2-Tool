@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 public abstract class ConnectedElementsPanel extends ElementDialogPanel {
@@ -10,19 +10,19 @@ public abstract class ConnectedElementsPanel extends ElementDialogPanel {
      */
     protected Class<? extends ModelElement> searchElementClass;
 
-    public ConnectedElementsPanel(final ElementPropertyDialog dialog) {
+    public ConnectedElementsPanel(final AbstractElementPropertyDialog dialog) {
         this(dialog, null, null);
     }
 
-    public ConnectedElementsPanel(final ElementPropertyDialog dialog, final String name) {
+    public ConnectedElementsPanel(final AbstractElementPropertyDialog dialog, final String name) {
         this(dialog, name, null);
     }
 
-    public ConnectedElementsPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass) {
+    public ConnectedElementsPanel(final AbstractElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass) {
         this(dialog, null, searchElementClass);
     }
 
-    public ConnectedElementsPanel(final ElementPropertyDialog dialog, final String name, final Class<? extends ModelElement> searchElementClass) {
+    public ConnectedElementsPanel(final AbstractElementPropertyDialog dialog, final String name, final Class<? extends ModelElement> searchElementClass) {
         super(dialog, name);
         this.searchElementClass = searchElementClass;
     }

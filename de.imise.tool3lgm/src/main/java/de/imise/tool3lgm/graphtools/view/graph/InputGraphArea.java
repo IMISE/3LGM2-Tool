@@ -508,7 +508,6 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             } else if (mouse_makes_node != null && left_button) {
                 if (isInPage(x, y)) {
                     if (szenario.getMetaModel().layerFor(mouse_makes_node) == layerIndex) {
-                        Static.setLastActionPosition(xin + getX(), yin + getY());
                         szenario.createNodeAndContainer(mouse_makes_node, STANDARD_PID);
                         revalidate();
                         repaint();

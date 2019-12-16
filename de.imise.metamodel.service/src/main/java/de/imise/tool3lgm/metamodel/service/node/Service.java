@@ -16,7 +16,7 @@ public final class Service extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(Service_ServiceClass_Edge.class);
+        dialog.addDescripPanel(Service_ServiceClass_Edge.class);
         dialog.addEdgePanel(ServiceUses_Edge.class);
         dialog.addEdgePanel(Service_ObjectType_Edge.class);
         dialog.addTabbedPanel(CommunicationInterface.class);

@@ -11,7 +11,7 @@ public class Objekttyp extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(true, ObjLogspVerbindung.class);
+        dialog.addDescripPanel(true, ObjLogspVerbindung.class);
         dialog.addEdgePanel(AufObjVerbindung.class);
         dialog.addTabbedPanel(Repraesentationsform.class);
         dialog.addTabbedPanelPathConnectionPanel(Nachrichtentyp.class, ObjReprVerbindung.class);

@@ -10,7 +10,7 @@ public class Datensatztyp extends Repraesentationsform {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addPathConnectionPanel(ObjReprVerbindung.class);
-        dialog.addPathConnectionInfoPanel(DbsDatVerbindung.class);
+        dialog.addPathConnectionPanel(DbsDatVerbindung.class);
         return dialog;
     }
 

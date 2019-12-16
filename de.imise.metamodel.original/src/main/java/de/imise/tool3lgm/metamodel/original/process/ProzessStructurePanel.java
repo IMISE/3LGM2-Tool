@@ -27,6 +27,7 @@ import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -1091,7 +1092,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ElementDialogPanel pane = edp;
         final LGMTreeNode lroot = (LGMTreeNode) tree.getModel().getRoot();
         if (edp instanceof ProzessStructurePanel) {
-            ElementPropertyDialog dialog = pane.getDialog();
+            AbstractElementPropertyDialog dialog = pane.getDialog();
             LGMGraphDocument doc = dialog.getGraphDocument();
             return new LGMAction(doc.getResString("PROCESS_PANEL_VERIFY")) {
 
@@ -1124,7 +1125,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     private static final LGMAction getFehlerAction(final ElementDialogPanel edp) throws ActionNotDefinedForClassException {
         final ElementDialogPanel pane = edp;
         if (edp instanceof ProzessStructurePanel) {
-            ElementPropertyDialog dialog = pane.getDialog();
+            AbstractElementPropertyDialog dialog = pane.getDialog();
             LGMGraphDocument doc = dialog.getGraphDocument();
             return new LGMAction(doc.getResString("PROCESS_PANEL_ERROR")) {
                 @Override
@@ -1223,7 +1224,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     private final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree) {
 
         final GDCollection gdcoll = getGraphDocument().getCollection();
-        final ElementPropertyDialog dialog = getDialog();
+        final AbstractElementPropertyDialog dialog = getDialog();
         final ModelElement modelElement = getModelElement();
 
         return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
@@ -1290,7 +1291,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ProzessStructurePanel panel = this;
         final GraphDocument doc = getGraphDocument();
         final ModelElement modelElement = getModelElement();
-        final ElementPropertyDialog dialog = getDialog();
+        final AbstractElementPropertyDialog dialog = getDialog();
 
         return new LGMAction("", Tool3lgmConstants.getIcon("hoch2.gif")) {
 
@@ -1368,7 +1369,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final LGMTreeNode lroot = (LGMTreeNode) lmodel.getRoot();
         final GraphDocument doc = getGraphDocument();
         final ModelElement modelElement = getModelElement();
-        final ElementPropertyDialog dialog = getDialog();
+        final AbstractElementPropertyDialog dialog = getDialog();
 
         return new LGMAction("", Tool3lgmConstants.getIcon("runter2.gif")) {
 

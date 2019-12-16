@@ -16,7 +16,7 @@ public class IheIntegrationProfile extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(IheIntegrationProfile_IheDomain_Edge.class);
+        dialog.addDescripPanel(IheIntegrationProfile_IheDomain_Edge.class);
         dialog.addEdgePanel(IheIntegrationProfile_IheActor_Edge.class);
 
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();

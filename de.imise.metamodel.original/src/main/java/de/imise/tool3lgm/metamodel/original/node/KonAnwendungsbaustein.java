@@ -15,11 +15,11 @@ public final class KonAnwendungsbaustein extends Anwendungsbaustein {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(KawbDoksVerbindung.class);
+        dialog.addDescripPanel(KawbDoksVerbindung.class);
         dialog.addEdgePanel(Bausteinschnittstelle.class, AwbKommssVerbindung.class);
         dialog.addEdgePanel(Benutzungsschnittstelle.class, AwbKommssVerbindung.class);
         dialog.addDescriptedSingleConnectionPanel(KawbOrgpVerbindung.class);
-        dialog.addPathConnectionInfoPanel(AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
+        dialog.addPathConnectionPanel(AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
         dialog.addPathConnectionPanel(PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class);
         return dialog;
     }

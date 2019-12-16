@@ -261,6 +261,19 @@ public class SequenceMetaPath extends ListMetaPath {
     }
 
     @Override
+    public boolean isRemoveable(final boolean checkEndElement) {
+        if (isFirstPathElementDependent()) {
+            return false;
+        }
+        if (checkEndElement) {
+            if (isLastPathElementDependent()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public final List<ElementaryMetaPath> getElementaryMetaPaths() {
         if (elementaryMetaPaths == null) {
             ImmutableList.Builder<ElementaryMetaPath> simpleMetaPathBuilder = ImmutableList.builder();

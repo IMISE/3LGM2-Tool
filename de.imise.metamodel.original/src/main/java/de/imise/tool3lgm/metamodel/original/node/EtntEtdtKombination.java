@@ -54,8 +54,8 @@ public abstract class EtntEtdtKombination extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripDescriptedSingleConnectionPanel(EtntEtVerbindung.class);
-        dialog.addPathConnectionPanel(EtntKommstVerbindung.class);
+        dialog.addDescripDescriptedPanel(EtntEtVerbindung.class);
+        dialog.addDescriptedSingleConnectionPanel(EtntKommstVerbindung.class);
         return dialog;
     }
 

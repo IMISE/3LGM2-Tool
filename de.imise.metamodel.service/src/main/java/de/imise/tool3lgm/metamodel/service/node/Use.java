@@ -19,8 +19,8 @@ public class Use extends Node {
     @Override
     protected ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(Function_Use_Edge.class);
-        dialog.addDescripSingleConnectionPanel(OrganisationalUnit_Use_Edge.class);
+        dialog.addDescripPanel(Function_Use_Edge.class);
+        dialog.addDescripPanel(OrganisationalUnit_Use_Edge.class);
         dialog.addEdgePanel(SupportLink_Edge.class);
         return dialog;
     }

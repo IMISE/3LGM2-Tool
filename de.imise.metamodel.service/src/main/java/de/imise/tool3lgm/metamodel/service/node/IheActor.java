@@ -17,8 +17,8 @@ public class IheActor extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(IheIntegrationProfile_IheActor_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
-        dialog.addDescripSingleConnectionPanel(IheIntegrationProfile_IheActor_Edge.class);
+        dialog.addDescripPanel(IheIntegrationProfile_IheActor_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
+        dialog.addDescripPanel(IheIntegrationProfile_IheActor_Edge.class);
         dialog.addEdgePanel(IheActor_IheActorInstance_Edge.class);
         //dieses tabbedPane wird nur im ExpertMode angezeigt! Und damit auch die darin enthaltenen Interface-Panels
         dialog.addTabbedPanel(IheInterface.class);

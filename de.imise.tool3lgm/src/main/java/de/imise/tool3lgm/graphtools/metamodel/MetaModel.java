@@ -815,19 +815,13 @@ public final class MetaModel implements MetaModelSpecific {
         if (Modifier.isAbstract(elementClass.getModifiers())) {
             return false;
         }
+        //Compostions Slaves can not be created without a master
         Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass);
         for (Class<? extends Edge> edgeType : edgeTypes) {
-            if (isStartClass(edgeType, elementClass)) {
-                if (getMinForwardCardinality(edgeType) > 0) {
-                    boolean neededEdgeWillBeCreated = metaPathsContainEdge(edgeType, Direction.BACKWARD, toElement, fromElement);
-                    if (!neededEdgeWillBeCreated) {
-                        return false;
-                    }
-                }
-            }
-            if (isEndClass(edgeType, elementClass)) {
-                if (getMinBackwardCardinality(edgeType) > 0) {
-                    boolean neededEdgeWillBeCreated = metaPathsContainEdge(edgeType, Direction.FORWARD, toElement, fromElement);
+            if (isComposition(edgeType)) {
+                Class<? extends CompositionEdge> compostionClass = edgeType.asSubclass(CompositionEdge.class);
+                if (isSlaveType(compostionClass, elementClass)) {
+                    boolean neededEdgeWillBeCreated = metaPathsContainEdge(edgeType, CompositionEdge.MASTER_TO_SLAVE_DIRECTION, toElement, fromElement);
                     if (!neededEdgeWillBeCreated) {
                         return false;
                     }
@@ -839,7 +833,7 @@ public final class MetaModel implements MetaModelSpecific {
 
     /**
      * Prüft, ob die übergebene Kantenklasse in der angegebenen Richtung in den übergebenen Elemetarpfaden steckt. Die Kantenklasse
-     * wird hier auf Indetität geprüft und nicht auf Zuweisungskompatibilität.
+     * wird hier auf Identität geprüft und nicht auf Zuweisungskompatibilität.
      *
      * @param edgeClass
      * @param directionToElement
@@ -851,10 +845,11 @@ public final class MetaModel implements MetaModelSpecific {
         ElementaryMetaPath[] createdElemebtaryMetaPathsToElement = {
                 toElement, fromElement == null ? null : fromElement.getOtherDirection()
         };
-        for (ElementaryMetaPath createdMetaPathFromElement : createdElemebtaryMetaPathsToElement) {
-            if (createdMetaPathFromElement != null) { // null abfangen, da es beim ersten und letzten Element in einem SequenceMetaPath nur einen Pfad gibt
-                if (createdMetaPathFromElement.getEdgeClass() == edgeClass) {
-                    if (createdMetaPathFromElement.getDirection() == directionToElement) {
+        for (ElementaryMetaPath createdMetaPathToElement : createdElemebtaryMetaPathsToElement) {
+            if (createdMetaPathToElement != null) { // null abfangen, da es beim ersten und letzten Element in einem SequenceMetaPath nur einen Pfad gibt
+                Class<? extends Edge> createdMetaPathToElementEdgeClass = createdMetaPathToElement.getEdgeClass();
+                if (edgeClass.isAssignableFrom(createdMetaPathToElementEdgeClass)) {
+                    if (createdMetaPathToElement.getDirection() == directionToElement) {
                         return true;
                     }
                 }

@@ -56,6 +56,11 @@ public abstract class ParallelMetaPath extends ListMetaPath {
     }
 
     @Override
+    public boolean isRemoveable(final boolean checkEndElement) {
+        return false;
+    }
+
+    @Override
     public boolean isDirected() {
         for (AbstractMetaPath metaPath : metaPaths) {
             if (!metaPath.isDirected()) {

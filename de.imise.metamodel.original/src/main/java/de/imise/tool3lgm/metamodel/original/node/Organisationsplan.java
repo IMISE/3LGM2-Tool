@@ -9,7 +9,7 @@ public final class Organisationsplan extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(KawbOrgpVerbindung.class);
+        dialog.addDescripPanel(KawbOrgpVerbindung.class);
         return dialog;
     }
 

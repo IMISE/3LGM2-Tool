@@ -10,8 +10,8 @@ public final class Anwendungsprogramm extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addPathConnectionPanel(AwpSwpVerbindung.class);
-        dialog.addPathConnectionInfoPanel(RawbAwpVerbindung.class);
+        dialog.addDescripDescriptedPanel(AwpSwpVerbindung.class);
+        dialog.addPathConnectionPanel(RawbAwpVerbindung.class);
         return dialog;
     }
 

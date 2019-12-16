@@ -20,14 +20,12 @@ import javax.swing.JTable;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
-import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -66,7 +64,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param dialog
      * @param simpleMetaPath
      */
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
         this(dialog, false, simpleMetaPath);
     }
 
@@ -78,7 +76,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            Elementart der Name der letzten Edge selbst ans Label geschrieben.
      * @param simpleMetaPath
      */
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
         this(dialog, -1, labelEdgeName, simpleMetaPath);
     }
 
@@ -94,7 +92,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            festgelegt.
      * @param simpleMetaPath
      */
-    public AbstractPathConnectionPanel(final ElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog);
         metaPath = simpleMetaPath;
         searchElementClass = getInitialSearchElementClass(metaPath);
@@ -103,7 +101,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
         westLabel = new JLabel();
         //bei allen SingleConnectionPanels kann das Westlabel auch die MouseActions bekommen, so dass man auf dem Label an das verknüpfte Element kommt
-        if (isSingleConnectionPath()) {
+        if (simpleMetaPath.isSingleConnection()) {
             addMouseActions(westLabel);
         }
         String westLabelText;
@@ -200,64 +198,6 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Liefert <code>true</code>, wenn das letzte Element des Pfades nur existieren kann, wenn es mit einem
-     * auf dem Pfad davor liegenden Element verbunden ist. Das wird gebraucht, um zu entscheiden, ob ein neu
-     * angelegtes EndElement des Pfades immer sofort verbunden werden muss.
-     *
-     * @return
-     */
-    protected boolean isLastPathElementDependent() {
-        ElementaryMetaPath lastElementaryMetaPathInPath = getElementaryMetaPathInPath(-1);
-        if (lastElementaryMetaPathInPath == null) {
-            return false;
-        }
-        EdgeCardinality backwardCardinality = lastElementaryMetaPathInPath.getBackwardCardinality();
-        int minCardinality = backwardCardinality.min();
-        return minCardinality > 0;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn das Element des Panels/Dialoges nur existieren kann, wenn es eine Verbindung über die letzte Edge des Pfades
-     * hat . Das wird gebarucht, um zu entscheiden, ob man anbieten kann, diese Verbindung zu lösen oder nicht. Wenn der Pfad keine einfache Liste von
-     * Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
-     *
-     * @return
-     */
-    protected boolean isLastPathElementNeededForExistence() {
-        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
-        if (elementaryMetaPaths.isEmpty()) {
-            return true;
-        }
-        ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(elementaryMetaPaths.size() - 1);
-        //Verbindungen, die durch InstanciationEgdes bestehen, kann man nicht einfach lösen/ändern und gelten als existenznotwendig
-        Class<? extends Edge> edgeClass = lastElementaryMetaPath.getEdgeClass();
-        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
-            return true;
-        }
-        EdgeCardinality forwardCardinality = lastElementaryMetaPath.getForwardCardinality();
-        int minCardinality = forwardCardinality.min();
-        return minCardinality > 0;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenm der Pfad maximal ein Element als Ergebnis liefert, also das StartElement maximal ein Mal mit dem EndElement
-     * verbunden sein darf.
-     * Diese Funktion (genau wie die anderen isLastPathElementDependent(), isLastPathElementNeededForExistence() und isConnectionPointUnique()) könnte
-     * man auch direkt in die Pfade schreiben (falls sie noch woanders gebraucht werden))
-     *
-     * @return
-     */
-    protected boolean isSingleConnectionPath() {
-        ElementaryMetaPath lastElementaryMetaPathInPath = getElementaryMetaPathInPath(-1);
-        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass mehrere Verbindungen mgl. sind
-        if (lastElementaryMetaPathInPath == null) {
-            return false;
-        }
-        return lastElementaryMetaPathInPath.getForwardCardinality().max() == 1;
-    }
-
-    /**
      * Liefert <code>true</code>, wenn der durch die Kanten vorgegebene Pfad eindeitig festlegt, wo zu verbindende Elemente verknüpft werden.
      * Sobald in einem Pfad der Länge > 1 (also mind. aus 2 Kanten) eines der mittleren Elemente mehrfach mit dem Ausgangselement verbunden
      * sein kann, ist nicht mehr eindeutig, wo die Endelemente angehängt werden sollen.
@@ -309,13 +249,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         int edgeSearchStopIndex = elements2Connect != null ? elementaryMetaPathCount - 1 : elementaryMetaPathCount;
         for (int i = startEdgeIndex; i < edgeSearchStopIndex; i++) {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
-            Class<? extends Edge> edgeClass2Create = elementaryMetaPath.getEdgeClass();
-            Direction edgeClass2CreateDirection = elementaryMetaPath.getDirection();
-            elementaryMetaPath = i + 1 < elementaryMetaPathCount ? elementaryMetaPaths.get(i + 1) : null;
-            Class<? extends Edge> nextEdgeClass2Create = elementaryMetaPath != null ? elementaryMetaPath.getEdgeClass() : null;
-            //wenn es noch eine nächte Edge gibt, dann gibt es auch noch eine nächste direction. Wenn nicht wird einfach FORWARD übergeben, weil das egal ist
-            Direction nextEdgeClass2CreateDirection = elementaryMetaPath != null ? elementaryMetaPath.getDirection() : FORWARD;
-            targetElement = MetaPathFunctions.createNodeWithContainerAndDependents(selDoc, targetElement, edgeClass2Create, edgeClass2CreateDirection, nextEdgeClass2Create, nextEdgeClass2CreateDirection, pid);
+            ElementaryMetaPath nextElementaryMetaPath = i + 1 < elementaryMetaPathCount ? elementaryMetaPaths.get(i + 1) : null;
+            targetElement = MetaPathFunctions.createNodeWithContainerAndDependents(selDoc, startElement, elementaryMetaPath, nextElementaryMetaPath, pid);
         }
         //wenn gültige elments2Connect übergeben wurde, dann müssen sie an das vorletzte Pfadelement angehängt werden
         if (edgeSearchStopIndex < elementaryMetaPathCount) {

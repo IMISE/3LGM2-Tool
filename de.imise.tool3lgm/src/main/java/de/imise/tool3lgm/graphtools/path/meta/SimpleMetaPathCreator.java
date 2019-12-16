@@ -12,7 +12,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.ReflectionUtils;
-import de.imise.util.Sys;
 
 /**
  * @author AXS (5 Dec 2018)
@@ -391,11 +390,12 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                         }
                     }
                 }
-            }
-            if (i < 0) {
-                //der Pfad ist fehlerhaft, d. h. trotz Zurücklaufen und Test mit der Gegenrichtung passen die Kanten nicht zueinander
-                Sys.err1("EdgeClasses dosn't define a valid metapath");
-                return null;
+                if (i < 0) {
+                    //der Pfad ist fehlerhaft, d. h. trotz Zurücklaufen und Test mit der Gegenrichtung passen die Kanten nicht zueinander
+                    //das kann gewollt sein, deswegen gibt es hier keine zwingende Fehlerausgabe
+                    //Sys.err1("EdgeClasses dosn't define a valid metapath");
+                    return null;
+                }
             }
             metaPaths[i] = metaPath;
             start = metaPath.getEndClass();

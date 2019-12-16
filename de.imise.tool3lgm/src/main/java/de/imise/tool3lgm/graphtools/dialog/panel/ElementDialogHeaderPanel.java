@@ -11,7 +11,7 @@ import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -39,7 +39,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
 
     private JLabel subModelLabelLabel;
 
-    public ElementDialogHeaderPanel(final ElementPropertyDialog dialog) {
+    public ElementDialogHeaderPanel(final AbstractElementPropertyDialog dialog) {
         super(dialog);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

@@ -15,10 +15,10 @@ public abstract class IheInterface extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripSingleConnectionPanel(true, IheActor_IheInterface_Edge.class);
-        dialog.addDescripSingleConnectionPanel(false, IheInterface_IheTransaction_Edge.class);
-        dialog.addDescripSingleConnectionPanel(IheActor_IheInterface_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
-        dialog.addDescripSingleConnectionPanel(IheActor_IheInterface_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
+        dialog.addDescripPanel(true, IheActor_IheInterface_Edge.class);
+        dialog.addDescripPanel(false, IheInterface_IheTransaction_Edge.class);
+        dialog.addDescripPanel(IheActor_IheInterface_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
+        dialog.addDescripPanel(IheActor_IheInterface_Edge.class, IheIntegrationProfile_IheActor_Edge.class);
         return dialog;
     }
 

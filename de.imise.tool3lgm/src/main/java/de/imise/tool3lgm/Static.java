@@ -8,7 +8,6 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 
 import java.awt.Component;
-import java.awt.Point;
 import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
 import java.util.List;
@@ -216,6 +215,8 @@ public class Static {
         return f != null && f instanceof MatrixViewInternalFrame && f.isVisible();
     }
 
+    // template library manager
+
     /**
      * @return the template library manager
      */
@@ -231,33 +232,6 @@ public class Static {
         if (templateLibrariesManager != null) {
             templateLibrariesManager.setActiveTemplate(doc);
         }
-    }
-
-    /**
-     * Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus klickt, um an
-     * der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     */
-    private static Point lastActionPosition = null;
-
-    /**
-     * Liefert die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
-     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     *
-     * @return
-     */
-    public static final Point getLastActionPosition() {
-        return lastActionPosition;
-    }
-
-    /**
-     * Setzt die Postion, an der etwas passiert ist. Diese Position wird z. B. gesetzt, wenn der Benutzer irgendwohin mit der Maus
-     * klickt, um an der entsprechenden Stelle einen Dialog auf gehen zu lassen.
-     *
-     * @param x
-     * @param y
-     */
-    public static final void setLastActionPosition(final int x, final int y) {
-        lastActionPosition = new Point(x, y);
     }
 
     /** Gibt zurück, ob der ExpertMode aktiv ist */
@@ -473,8 +447,7 @@ public class Static {
      * @return Instanzen der übergebenen Klasse aus dem übergebenen Verzeichnis
      */
     public static <T> List<T> loadPlugins(final Class<T> superClassOfResultClasses) {
-        List<T> instances = PluginUtils.loadInstances(Tool3lgmConstants.LIB_DIR, superClassOfResultClasses);
-        instances.addAll(PluginUtils.loadInstances(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses));
+        List<T> instances = PluginUtils.loadInstances(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
         return instances;
     }
 
@@ -488,10 +461,7 @@ public class Static {
      * @return Instanz der übergebenen Klasse aus dem übergebenen Verzeichnis oder <code>null</code>, wenn keine Instanz gefunden wurde
      */
     public static <T> T loadPlugin(final Class<T> superClassOfResultClasses) {
-        T instance = PluginUtils.loadInstance(Tool3lgmConstants.LIB_DIR, superClassOfResultClasses);
-        if (instance == null) {
-            instance = PluginUtils.loadInstance(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
-        }
+        T instance = PluginUtils.loadInstance(Tool3lgmConstants.PLUGIN_DIR, superClassOfResultClasses);
         return instance;
     }
 

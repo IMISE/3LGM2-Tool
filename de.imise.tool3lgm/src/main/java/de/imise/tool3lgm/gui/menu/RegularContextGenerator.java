@@ -1204,7 +1204,6 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     public void processMouseEvent(final boolean left_button, final boolean right_button, final Component gdl, final int xin, final int yin) {
         // System.err.println("ContextGenerator.processMouseEvent " + xin + " " + yin + " " + gdl.getX() + " " + gdl.getY());
-        Static.setLastActionPosition(xin + gdl.getX(), yin + gdl.getY());
         processMouseEventInternal(left_button, right_button, gdl, xin, yin);
     }
 

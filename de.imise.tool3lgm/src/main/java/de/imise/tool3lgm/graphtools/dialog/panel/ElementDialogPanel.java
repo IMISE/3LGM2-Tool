@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMComponentListener;
@@ -47,7 +47,7 @@ public abstract class ElementDialogPanel extends JPanel {
     protected GraphDocument mainDoc;
 
     /** Der Dialog in dem sich dieses Panel befindet */
-    protected final ElementPropertyDialog dialog;
+    protected final AbstractElementPropertyDialog dialog;
 
     /** Der ElementsNameBuilder des zugehörigen Metamodells */
     protected final ElementsNameBuilder elementsNameBuilder;
@@ -106,7 +106,7 @@ public abstract class ElementDialogPanel extends JPanel {
      *
      * @param dialog Dialog, der dieses Panel enthält
      */
-    public ElementDialogPanel(final ElementPropertyDialog dialog) {
+    public ElementDialogPanel(final AbstractElementPropertyDialog dialog) {
         this(dialog, (String) null);
     }
 
@@ -114,7 +114,7 @@ public abstract class ElementDialogPanel extends JPanel {
      * @param dialog Dialog, der dieses Panel enthält
      * @param name
      */
-    public ElementDialogPanel(final ElementPropertyDialog dialog, final String name) {
+    public ElementDialogPanel(final AbstractElementPropertyDialog dialog, final String name) {
         super();
         this.dialog = dialog;
         setName(name);
@@ -235,7 +235,7 @@ public abstract class ElementDialogPanel extends JPanel {
     /**
      * @return dialog
      */
-    public final ElementPropertyDialog getDialog() {
+    public final AbstractElementPropertyDialog getDialog() {
         return dialog;
     }
 

@@ -10,7 +10,7 @@ import java.awt.GridBagLayout;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.util.swing.component.text.ExtendedTextPane;
@@ -33,7 +33,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      * @param dialog
      * @param simpleMetaPath
      */
-    public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+    public DescriptedSingleConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
         this(dialog, false, simpleMetaPath);
     }
 
@@ -43,30 +43,28 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      *            letzten Edge aus den edgeClasses geschrieben.
      * @param simpleMetaPath
      */
-    public DescriptedSingleConnectionPanel(final ElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public DescriptedSingleConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, simpleMetaPath);
     }
 
     @Override
-    protected final void init() {
-        super.init();
-        updateDescription();
+    public void update() {
+        super.update();
+        boolean editable = !dialog.isInfoDialog() && connectedElement != null;
         if (descriptionTextPane != null) {
-            boolean editable = !dialog.isInfoDialog() && connectedElement != null;
             descriptionTextPane.setEditable(editable);
+            updateDescription();
         }
     }
 
     private void updateDescription() {
-        if (descriptionTextPane != null) {
-            if (connectedElement != null) {
-                olddescrip = connectedElement.getDescription();
-                descriptionTextPane.setText(olddescrip);
-            } else {
-                descriptionTextPane.setText("");
-            }
-            descriptionTextPane.setCaretPosition(0);
+        if (connectedElement != null) {
+            olddescrip = connectedElement.getDescription();
+            descriptionTextPane.setText(olddescrip);
+        } else {
+            descriptionTextPane.setText("");
         }
+        descriptionTextPane.setCaretPosition(0);
     }
 
     @Override
@@ -85,6 +83,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
 
     public int addMe(final Container parent, final GridBagConstraints gbc, final int gridy) {
         int newGridy = gridy;
+        gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.NONE;
         add(parent, westLabel, gbc, 0, newGridy, 1, 1);
         gbc.fill = GridBagConstraints.HORIZONTAL;
