@@ -8,6 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
@@ -421,12 +422,14 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         } else {
             for (int i = 0; i < ElemenPropertyDialogsContext.getDialogCount(); i++) {
                 ElementPropertyDialog pd = ElemenPropertyDialogsContext.getDialog(i);
-                if (pd.getLocation().x == xx && pd.getLocation().y == yy) {
+                Point location = pd.getLocation();
+                if (location.x == xx && location.y == yy) {
                     xx += 20;
                     yy += 20;
                     i = -1;
                 }
             }
+            setLocation(xx, yy);
             //das hier hatte sicher mal eine Bedeutung, aber auf einem Multi-Monitor-System, bei dem das Tool auf dem zweiten
             //Screen gezeigt wird, verhindert es dass mehrere Dialoge versetzt angezeigt werden, da diese untere und nun
             //auskommentierte Bedingung immer eintrifft und alles auf derselbe Stelle landet
@@ -435,7 +438,6 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
             //                yy = mainFrame.getY() + 100;
             //            }
         }
-
         setLocation(xx, yy);
         setSize(lastWidth, lastHeight);
     }
