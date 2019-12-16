@@ -83,6 +83,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
 
     public int addMe(final Container parent, final GridBagConstraints gbc, final int gridy) {
         int newGridy = gridy;
+        gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.NONE;
         add(parent, westLabel, gbc, 0, newGridy, 1, 1);
         gbc.fill = GridBagConstraints.HORIZONTAL;
