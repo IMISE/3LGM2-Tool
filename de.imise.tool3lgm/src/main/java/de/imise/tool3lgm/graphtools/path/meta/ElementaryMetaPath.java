@@ -446,6 +446,19 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     @Override
+    public boolean isRemoveable(final boolean checkEndElement) {
+        if (isFirstPathElementDependent()) {
+            return false;
+        }
+        if (checkEndElement) {
+            if (isLastPathElementDependent()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public boolean isDirected() {
         return directed;
     }

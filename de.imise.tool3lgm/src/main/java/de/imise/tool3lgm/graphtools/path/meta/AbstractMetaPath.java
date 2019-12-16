@@ -462,6 +462,17 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
     public abstract boolean isCreatable(boolean checkCreateEndElement);
 
     /**
+     * Prüft, ob der Pfad ausgehend von der Startelementart entfernt werden kann, ohne dass das Startelement dadurch inkonsistent
+     * wird und ebenfalls gelöscht werden würde, wenn man den Pfad entfernt.
+     *
+     * @param checkEndElement wenn <code>true</code>, wird genauso für das Endelement geprüft, ob es inkonsistent und damit gelöscht
+     *            werden würde, wenn man den Pfad zwischen ihm und einem Startelement entfernt.
+     * @return <code>true</code> wenn sich der Pfad entfernen lässt, ohne dass das Startelement oder bei <code>checkEndElement == true</code>
+     *         auch das Endelement nicht inkonsistent und damit gelöscht werden, sonst <code>false</code>.
+     */
+    public abstract boolean isRemoveable(boolean checkEndElement);
+
+    /**
      * Liefert <code>true</code>, wenn der Pfad eine einfache Assoziationsfolge ist (also bei {@link #getElementaryMetaPaths()} nicht
      * <code>null</code> zurück gibt und jeder Einzelpfad die maximale Endkardinalität von 1 hat.
      */
@@ -533,6 +544,19 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      */
     public List<ElementaryMetaPath> getElementaryMetaPaths() {
         return EMPTY_ELEMENTARY_PATH_LIST;
+    }
+
+    /**
+     * @return den ersten ElementaryMetaPath aus {@link #getElementaryMetaPaths()}, wenn die Liste mind. einen solchen Elementarpfad enthält.
+     */
+    public ElementaryMetaPath getFirstElementaryMetaPath() {
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
+        if (elementaryMetaPaths.isEmpty()) {
+            return null;
+        }
+        ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(0);
+        return lastElementaryMetaPath;
     }
 
     /**
