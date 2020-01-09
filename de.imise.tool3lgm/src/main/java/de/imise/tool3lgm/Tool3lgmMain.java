@@ -9,6 +9,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DebugGraphics;
 import javax.swing.JOptionPane;
@@ -75,24 +77,19 @@ public class Tool3lgmMain {
 
         // Erkennbare Argumente
         boolean visible = true;
+        List<String> arguments = new ArrayList<>();
         for (String arg : args) {
-            //			String[] a = StringUtils.tokenize(arg, " ", false);
-            String[] a = arg.split(" ");
-            if (a.length != 2) {
-                continue;
-            }
-            String paramterName = a[0];
-            String paramterValue = a[1];
-            if (paramterName.equalsIgnoreCase("visible")) {
-                visible = Boolean.valueOf(paramterValue).booleanValue();
+            if (arg.equalsIgnoreCase("-i")) { // -i = invisible
+                visible = false;
+            } else {
+                arguments.add(arg);
             }
         }
-
         setDebugGraphicsOption(false, false, false, 0);
 
         setLookAndFeel();
 
-        activateRMI(args, visible);
+        activateRMI(arguments, visible);
     }
 
     private static final void setUIDefaults() {
@@ -143,7 +140,7 @@ public class Tool3lgmMain {
      * @param args
      * @return true, wenn der Baukasten erfolgreich den RMI starten konnte. Wenn Fehler aufgetreten sind, false.
      */
-    private static boolean activateRMI(final String args[], final boolean visible) {
+    private static boolean activateRMI(final List<String> args, final boolean visible) {
 
         // Der port, auf dem die RMI-Registry lauschen soll
         int regPort = Registry.REGISTRY_PORT;
@@ -269,16 +266,19 @@ public class Tool3lgmMain {
                     // Der RMI-Server steht für RMI-Aufrufe bereit.
 
                     Tool3lgmServer tool3lgmServer = (Tool3lgmServer) remote;
-                    if (args.length != 0) {
-                        String[] params = new String[args.length - 1];
+                    if (!args.isEmpty()) {
+                        String[] params = new String[args.size() - 1];
                         for (int i = 0; i < params.length; i++) {
-                            params[i] = args[i + 1];
+                            params[i] = args.get(i + 1);
                         }
+                        //das ist entweder ein Dateiname oder ein Kommando. Wenn es ein Dateiname ist,
+                        //dann weiß der Server, dass es das Kommando OPEN sein sollte.
+                        String firstArgument = args.get(0);
                         //hier kann eine unten mit connectionRefuses = true abgefangene ConnectionException auftreten, wenn
                         //bereits eine Tool-Instanz anderer Art läuft. Dann geht processCommand schief. Z.B. wenn man das Tool
                         //über unterschiedliche JREs startet, was außerhalb der Entwicklungsumgebeung wahrscheinlich nicht vorkommt.
                         //Aber dort erleichtert es den gleichzeitigen Test mit verschiedenen Java-Versionen.
-                        tool3lgmServer.processCommand(args[0], params);
+                        tool3lgmServer.processCommand(firstArgument, params);
                     }
                 } catch (Exception e) {
                     // das hier
