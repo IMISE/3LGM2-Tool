@@ -1,0 +1,21 @@
+DIESE ANLEITUNG IST VERALTET. SIE IST NUR NOCH VORHANDEN, WEIl DER TEXT UNTER 1.) EIN PAAR NÜTZLICHE HINWEISE ENTHÄLT
+
+1.) bat2exe: ACHTUNG: die Bat darf am Ende kein PAUSE haben !
+	Dieser Schritt muss immer dann gemacht werden, wenn sich etwas an der Projektstruktur ändert. Also weitere Jar-Files hinzukommen oder umbeannt wurden.
+	
+	ACHTUNG: Es muss die Bat_To_Exe_Converter.exe aus dem 32-Bit Verzeichnis gestartet werden, da nur diese sowohl unter 32 als auch 64 Bit läuft!
+	
+	Die umzuwandelnde Batch-Datei geht davon aus, dass es einen Registry Eintrag gibt unter HKLM\SOFTWARE\3LGM2Tool mit dem Namen 'rootdir', der das 
+	Installationsverzeichnis enthält. Dieser Schlüssel sollte durch das Installationsprogramm geschrieben werden, also durch die von Inno-Setup erstellte Exe-Datei.
+	Dieser Aufwand muss nur betrieben werden, damit das Tool korrekt startet, wenn man eine Modell-Datei doppelklickt, die sich nicht im Installationsverzeichnis
+	befindet. Dann sucht die Batch-Datei (die zur Exe gemacht wird) erstmal in der Registry nach dem Pfad und wechselt dann das Arbeitsverzeichnis dahin. Dann wird
+	das Tool gestartet und die Modell-Datei als Parameter übergeben. Damit dieser Fall funktioniert, muss der Benutzer bei der Installation diesen Schlüssel schreiben dürfen.
+
+	Ansonsten, wenn der Schlüssel (warum auch immer) nicht existiert, dann sollte das Tool über das direkte starten der Exe-Datei trotzdem starten, da dann der
+	Verzeichniswechsel einfach nicht gemacht wird und die relativen Pfade zum starten des Tools aber stimmen.
+
+2.) InnoScriptStudio (InnoSetup)
+	Das Script öffnen. Anzugeben sind eientlich nur die Verzeichnisse und die Start-Datei sowie die RegistryEinträge mit den Datei-Verknüpfungen 3lgm und z3lgm
+	sowie der Key 'rootdir' (siehe Schritt 1.)
+	
+3.) http://stackoverflow.com/questions/283480/how-to-build-native-mac-os-x-installer-on-a-non-mac-platform
