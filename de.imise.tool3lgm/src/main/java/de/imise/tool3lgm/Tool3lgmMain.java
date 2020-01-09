@@ -77,10 +77,13 @@ public class Tool3lgmMain {
 
         // Erkennbare Argumente
         boolean visible = true;
+        boolean newInstance = false;
         List<String> arguments = new ArrayList<>();
         for (String arg : args) {
             if (arg.equalsIgnoreCase("-i")) { // -i = invisible
                 visible = false;
+            } else if (arg.equalsIgnoreCase("-n")) { // -n = always new instance
+                newInstance = true;
             } else {
                 arguments.add(arg);
             }
@@ -89,7 +92,7 @@ public class Tool3lgmMain {
 
         setLookAndFeel();
 
-        activateRMI(arguments, visible);
+        activateRMI(arguments, visible, newInstance);
     }
 
     private static final void setUIDefaults() {
@@ -138,9 +141,11 @@ public class Tool3lgmMain {
      * Wenn der Baukasten mit RMI gestartet werden soll, wird <code>activateRMI</code> ausgeführt.
      *
      * @param args
-     * @return true, wenn der Baukasten erfolgreich den RMI starten konnte. Wenn Fehler aufgetreten sind, false.
+     * @param visible
+     * @param newInstance
+     * @return <code>true</code>, wenn der Baukasten erfolgreich den RMI starten konnte. Wenn Fehler aufgetreten sind <code>false</code>.
      */
-    private static boolean activateRMI(final List<String> args, final boolean visible) {
+    private static boolean activateRMI(final List<String> args, final boolean visible, final boolean newInstance) {
 
         // Der port, auf dem die RMI-Registry lauschen soll
         int regPort = Registry.REGISTRY_PORT;
@@ -184,10 +189,12 @@ public class Tool3lgmMain {
                     } catch (Exception e) {
                     }
                 }
-                try {
-                    //TODO:############# auf jeden Fall wieder reinnehmen!!!
-                    remote = Naming.lookup("//127.0.0.1:" + regPort + "/Tool3lgmServer");
-                } catch (Exception innerEx) {
+                if (!newInstance) {
+                    try {
+                        //TODO:############# auf jeden Fall wieder reinnehmen!!!
+                        remote = Naming.lookup("//127.0.0.1:" + regPort + "/Tool3lgmServer");
+                    } catch (Exception innerEx) {
+                    }
                 }
                 // Wenn der RMI-Service noch nicht läuft, wird hier weiter gemacht.
                 if (remote == null || !(remote instanceof Tool3lgmServer) || connectionRefused) {
