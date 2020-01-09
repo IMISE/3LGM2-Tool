@@ -16,7 +16,7 @@
 # Max Memory for 32-Bit Systems
 MEMORY32="-Xmx512m -Xss20m"
 # Max Memory for 64-Bit Systems
-MEMORY64="-Xmx1024m -Xss64m"
+MEMORY64="-Xmx768m -Xss32m"
 # Set Default Memory to 32-Bit
 MEMORY=$MEMORY32
 

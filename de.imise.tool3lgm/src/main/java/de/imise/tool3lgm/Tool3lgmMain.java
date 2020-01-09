@@ -9,6 +9,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.DebugGraphics;
 import javax.swing.JOptionPane;
@@ -75,24 +77,22 @@ public class Tool3lgmMain {
 
         // Erkennbare Argumente
         boolean visible = true;
+        boolean newInstance = false;
+        List<String> arguments = new ArrayList<>();
         for (String arg : args) {
-            //			String[] a = StringUtils.tokenize(arg, " ", false);
-            String[] a = arg.split(" ");
-            if (a.length != 2) {
-                continue;
-            }
-            String paramterName = a[0];
-            String paramterValue = a[1];
-            if (paramterName.equalsIgnoreCase("visible")) {
-                visible = Boolean.valueOf(paramterValue).booleanValue();
+            if (arg.equalsIgnoreCase("-i")) { // -i = invisible
+                visible = false;
+            } else if (arg.equalsIgnoreCase("-n")) { // -n = always new instance
+                newInstance = true;
+            } else {
+                arguments.add(arg);
             }
         }
-
         setDebugGraphicsOption(false, false, false, 0);
 
         setLookAndFeel();
 
-        activateRMI(args, visible);
+        activateRMI(arguments, visible, newInstance);
     }
 
     private static final void setUIDefaults() {
@@ -141,9 +141,11 @@ public class Tool3lgmMain {
      * Wenn der Baukasten mit RMI gestartet werden soll, wird <code>activateRMI</code> ausgeführt.
      *
      * @param args
-     * @return true, wenn der Baukasten erfolgreich den RMI starten konnte. Wenn Fehler aufgetreten sind, false.
+     * @param visible
+     * @param newInstance
+     * @return <code>true</code>, wenn der Baukasten erfolgreich den RMI starten konnte. Wenn Fehler aufgetreten sind <code>false</code>.
      */
-    private static boolean activateRMI(final String args[], final boolean visible) {
+    private static boolean activateRMI(final List<String> args, final boolean visible, final boolean newInstance) {
 
         // Der port, auf dem die RMI-Registry lauschen soll
         int regPort = Registry.REGISTRY_PORT;
@@ -165,6 +167,7 @@ public class Tool3lgmMain {
 
             // Wenn der RMI-Service erfolgreich gestartet werden konnte, wird <code>bound</code> true
             boolean bound = false;
+            boolean connectionRefused = false;
 
             Remote remote = null;
 
@@ -172,7 +175,7 @@ public class Tool3lgmMain {
             boolean showErrorDialog = true;
 
             // Es wird solange versucht den RMI-Service zu starten, bis ein freier Port gefunden wurde oder der User einen freien eingegeben hat.
-            while (!bound) {
+            while (!bound && !connectionRefused) {
 
                 try {
                     registry.list();
@@ -186,14 +189,16 @@ public class Tool3lgmMain {
                     } catch (Exception e) {
                     }
                 }
-                try {
-                    //TODO:############# auf jeden Fall wieder reinnehmen!!!
-                    remote = Naming.lookup("//127.0.0.1:" + regPort + "/Tool3lgmServer");
-                } catch (Exception innerEx) {
+                if (!newInstance) {
+                    try {
+                        //TODO:############# auf jeden Fall wieder reinnehmen!!!
+                        remote = Naming.lookup("//127.0.0.1:" + regPort + "/Tool3lgmServer");
+                    } catch (Exception innerEx) {
+                    }
                 }
                 // Wenn der RMI-Service noch nicht läuft, wird hier weiter gemacht.
-                if (remote == null || !(remote instanceof Tool3lgmServer)) {
-
+                if (remote == null || !(remote instanceof Tool3lgmServer) || connectionRefused) {
+                    connectionRefused = false;
                     // Wenn der Baukasten schon läuft, wird kein neuer instanziiert, sonst schon.
                     if (Static.tool == null) {
                         //Static.tool wird im Constructor gesetzt
@@ -254,29 +259,40 @@ public class Tool3lgmMain {
                     // e.printStackTrace();
 
                 } else {
-                    // Wenn schon eine Instanz des Tools läuft, wird hier hergesprungen.
-                    // <code>bound</code> muss auf true gesetzt werden, dmit die Schleife beendet werden kann.
+                    // Wenn schon eine Instanz des Tools läuft, die man über processCommand(...) ansprechen kann, wird
+                    //hier hergesprungen. bound muss auf true gesetzt werden, dmit die Schleife beendet werden kann.
                     bound = true;
                 }
+                try {
+                    remote = Naming.lookup("//127.0.0.1:" + regPort + "/Tool3lgmServer");
+                    if (remote == null) {
+                        Log.show(Log.FATAL, "RMI registration failed", new Exception("RMI registration failed"));
+                        return false;
+                    }
+                    // Wenn der RMI-Service erfolgreich auf dem regPort lauscht, wird hier weiter gemacht.
+                    // Der RMI-Server steht für RMI-Aufrufe bereit.
 
-            }
-
-            remote = Naming.lookup("//127.0.0.1:" + regPort + "/Tool3lgmServer");
-            if (remote == null) {
-                Log.show(Log.FATAL, "RMI registration failed", new Exception("RMI registration failed"));
-                return false;
-            }
-            // Wenn der RMI-Service erfolgreich auf dem regPort lauscht, wird hier weiter gemacht.
-            // Der RMI-Server steht für RMI-Aufrufe bereit.
-
-            Tool3lgmServer tool3lgmServer = (Tool3lgmServer) remote;
-            if (args.length != 0) {
-                String[] params = new String[args.length - 1];
-                for (int i = 0; i < params.length; i++) {
-                    params[i] = args[i + 1];
+                    Tool3lgmServer tool3lgmServer = (Tool3lgmServer) remote;
+                    if (!args.isEmpty()) {
+                        String[] params = new String[args.size() - 1];
+                        for (int i = 0; i < params.length; i++) {
+                            params[i] = args.get(i + 1);
+                        }
+                        //das ist entweder ein Dateiname oder ein Kommando. Wenn es ein Dateiname ist,
+                        //dann weiß der Server, dass es das Kommando OPEN sein sollte.
+                        String firstArgument = args.get(0);
+                        //hier kann eine unten mit connectionRefuses = true abgefangene ConnectionException auftreten, wenn
+                        //bereits eine Tool-Instanz anderer Art läuft. Dann geht processCommand schief. Z.B. wenn man das Tool
+                        //über unterschiedliche JREs startet, was außerhalb der Entwicklungsumgebeung wahrscheinlich nicht vorkommt.
+                        //Aber dort erleichtert es den gleichzeitigen Test mit verschiedenen Java-Versionen.
+                        tool3lgmServer.processCommand(firstArgument, params);
+                    }
+                } catch (Exception e) {
+                    // das hier
+                    connectionRefused = true;
                 }
-                tool3lgmServer.processCommand(args[0], params);
             }
+
         } catch (Exception ex) {
             System.err.println(ex);
             Log.show(Log.FATAL, "RMI registration failed", ex);
