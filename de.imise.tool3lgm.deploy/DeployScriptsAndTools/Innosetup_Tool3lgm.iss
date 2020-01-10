@@ -22,9 +22,9 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\3LGM2-Tool
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-OutputDir=D:\Eigene Projekte\Bitbucket\IMISE\tool-3lgm2_2\de.imise.tool3lgm.deploy\DeployResults
+OutputDir=C:\3lgm-deploy\tool-3lgm2\de.imise.tool3lgm.deploy\DeployResults
 OutputBaseFilename=setup3lgm_V4.0.1_(dev)
-SetupIconFile=D:\Eigene Projekte\Bitbucket\IMISE\tool-3lgm2_2\de.imise.tool3lgm.deploy\DeployScriptsAndTools\Icons\toolIcon_gross.ico
+SetupIconFile=C:\3lgm-deploy\tool-3lgm2\de.imise.tool3lgm.deploy\DeployScriptsAndTools\Icons\toolIcon_gross.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -37,8 +37,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked; OnlyBelowVersion: 0,6.1
 
 [Files]
-Source: "D:\Eigene Projekte\Bitbucket\IMISE\tool-3lgm2_2\de.imise.tool3lgm.deploy\Tool3lgm\3lgm2tool.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\Eigene Projekte\Bitbucket\IMISE\tool-3lgm2_2\de.imise.tool3lgm.deploy\Tool3lgm\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "C:\3lgm-deploy\tool-3lgm2\de.imise.tool3lgm.deploy\Tool3lgm\3lgm2tool.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\3lgm-deploy\tool-3lgm2\de.imise.tool3lgm.deploy\Tool3lgm\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

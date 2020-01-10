@@ -20,7 +20,7 @@ CD /D %SCRIPT_LOCATION%
 ::Zielverzeichnis, in dem die Deploy-Artefakte (exe, zip und tar.gz) landen
 SET "DEPLOY_DESTINATION_DIR=..\DeployResults"
 ::Pfad zum externen axsutils-Projekt
-SET "AXSUTILS_PROJECT_DIR=..\..\..\axsutils_2\axsutils"
+SET "AXSUTILS_PROJECT_DIR=..\..\..\axsutils\axsutils"
 ::Pfad zum Tool3lgm-Projekt
 SET "TOOL3LGM_PROJECT_DIR=..\..\de.imise.tool3lgm"
 ::Pfad zum Original-Metamodell-Plugin
