@@ -18,7 +18,6 @@ import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_HasPartEdge
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_SupportLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
@@ -40,7 +39,6 @@ import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_ProvidingI
 import de.imise.tool3lgm.metamodel.service.edge.Location_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.ObjectType_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_HasPartEdge;
-import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_SupportLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.PhysicalDataProcessingComponentVirtualises_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.PhysicalDataProcessingComponent_DeviceClass_Edge;
@@ -288,9 +286,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 OrganisationalUnit_Use_Edge.class,
                 Process_Function_Edge.class,
                 //FE - LWE
-                ApplicationComponent_SupportLink_Edge.class,
                 Function_SoftwareProduct_Edge.class,
-                OrganisationalUnit_SupportLink_Edge.class,
                 Service_Function_Edge.class,
                 Service_ObjectType_Edge.class,
                 StorageLink_Edge.class,
