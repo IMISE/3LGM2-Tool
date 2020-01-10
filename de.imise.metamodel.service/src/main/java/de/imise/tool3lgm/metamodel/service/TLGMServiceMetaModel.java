@@ -13,7 +13,6 @@ import de.imise.tool3lgm.graphtools.metamodel.RegularMetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationInterface_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
@@ -294,7 +293,6 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 //LWE
                 ApplicationComponent_HasPartEdge.class,
                 ApplicationComponent_CommunicationInterface_Edge.class,
-                ApplicationComponent_CommunicationLink_Edge.class,
                 ApplicationSystem_SoftwareProduct_Edge.class,
                 CommunicationLink_Edge.class,
                 Service_CommunicationLink_Edge.class,

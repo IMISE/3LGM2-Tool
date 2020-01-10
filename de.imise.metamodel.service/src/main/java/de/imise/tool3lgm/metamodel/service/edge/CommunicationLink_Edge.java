@@ -30,8 +30,6 @@ public final class CommunicationLink_Edge extends BooleanAttributeEdge {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addEdgePanel(Service_CommunicationLink_Edge.class);
-        //        dialog.addEdgePanel(ApplicationComponent_CommunicationLink_Edge.class);
-
         return dialog;
     }
 
