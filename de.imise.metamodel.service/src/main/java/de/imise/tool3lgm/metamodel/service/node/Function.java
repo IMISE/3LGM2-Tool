@@ -6,7 +6,7 @@ import de.imise.tool3lgm.metamodel.service.edge.Function_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.SupportLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 
 public final class Function extends Node {
 
@@ -22,7 +22,7 @@ public final class Function extends Node {
         dialog.addEdgePanel(Function_SoftwareProduct_Edge.class);
 
         //hier sollte es wieder das PathConnectionPanel und nicht das Leaf-Panel sein, weil man hier die Nutzungen sehen muss, um mehrere Anwendungssysteme ranzuhängen
-        dialog.addPathConnectionPanel(Function_Use_Edge.class, SupportLink_Edge.class);
+        dialog.addPathConnectionPanel(Function_Use_Edge.class, ApplicationComponent_Use_Edge.class);
 
         return dialog;
     }

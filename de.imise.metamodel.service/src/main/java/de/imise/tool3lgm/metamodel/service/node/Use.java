@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.SupportLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.util.StringUtils;
 
 /**
@@ -21,7 +21,7 @@ public class Use extends Node {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripPanel(Function_Use_Edge.class);
         dialog.addDescripPanel(OrganisationalUnit_Use_Edge.class);
-        dialog.addEdgePanel(SupportLink_Edge.class);
+        dialog.addEdgePanel(ApplicationComponent_Use_Edge.class);
         return dialog;
     }
 

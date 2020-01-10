@@ -18,6 +18,7 @@ import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_HasPartEdge
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
@@ -53,7 +54,6 @@ import de.imise.tool3lgm.metamodel.service.edge.Service_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ServiceClass_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.StorageLink_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.SupportLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.TransmissionMedium_DataTransmissionLink_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
@@ -185,7 +185,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
     /** Alle Node zw. FE und LWE als Array */
     private final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = {
             //auch die Assoziationsklasse hier eintagen
-            SupportLink_Edge.class, StorageLink_Edge.class,
+            StorageLink_Edge.class,
     };
 
     /** Alle Node der LWE als Array */
@@ -290,7 +290,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 Service_Function_Edge.class,
                 Service_ObjectType_Edge.class,
                 StorageLink_Edge.class,
-                SupportLink_Edge.class,
+                ApplicationComponent_Use_Edge.class,
                 //LWE
                 ApplicationComponent_HasPartEdge.class,
                 ApplicationComponent_CommunicationInterface_Edge.class,

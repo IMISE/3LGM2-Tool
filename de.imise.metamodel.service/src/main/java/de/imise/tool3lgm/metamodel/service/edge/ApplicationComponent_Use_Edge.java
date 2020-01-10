@@ -11,7 +11,7 @@ import de.imise.tool3lgm.metamodel.service.node.Use;
 /**
  * @author AXS (31.12.2017)
  */
-public final class SupportLink_Edge extends SimpleEdge {
+public final class ApplicationComponent_Use_Edge extends SimpleEdge {
 
     public static final Class<? extends ModelElement> STCL = ApplicationComponent.class;
 

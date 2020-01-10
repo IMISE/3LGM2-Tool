@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.SHAPE;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.SupportLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.service.node.CommunicationInterface;
@@ -67,7 +67,7 @@ public class TLGMServiceGraphViewDefinion extends GraphViewDefinition {
         SimpleMetaPath[] configurationPaths = {
                 //Testpfad über alle Ebenen hinweg
                 //new MetaPath(Aufgabe.class, PhysischerDVBaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class),
-                SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Function.class, ApplicationComponent.class, Function_Use_Edge.class, SupportLink_Edge.class),
+                SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Function.class, ApplicationComponent.class, Function_Use_Edge.class, ApplicationComponent_Use_Edge.class),
                 SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ApplicationComponent.class, PhysicalDataProcessingComponent.class, ApplicationComponent_PhysicalDataProcessingComponent_Edge.class),
         };
         return configurationPaths;
