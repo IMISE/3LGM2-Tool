@@ -36,6 +36,7 @@ import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransact
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_InvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_ProvidingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheTransaction_IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Location_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.ObjectType_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_HasPartEdge;
@@ -311,6 +312,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 IheInvokingInterface_InvokingInterface_Edge.class,
                 IheProvidingInterface_ProvidingInterface_Edge.class,
                 IheCommunicationLink_Edge.class,
+                IheTransaction_IheCommunicationLink_Edge.class,
                 //LWE - PWE
                 ApplicationComponent_PhysicalDataProcessingComponent_Edge.class,
                 ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class,
