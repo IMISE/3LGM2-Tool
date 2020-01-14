@@ -556,7 +556,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         //NamedObjectContainer um die Items
         NamedObjectContainer<JMenuItem> connectableContainer = new NamedObjectContainer<>(connectableItem, label);
         NamedObjectContainer<JMenuItem> disconnectableContainer = new NamedObjectContainer<>(disconnectableItem, label);
-        //zu den übergebenen Ergebnislsietn hinzufügen
+        //zu den übergebenen Ergebnislisten hinzufügen
         connectableItems.add(connectableContainer);
         disconnectableItems.add(disconnectableContainer);
     }
@@ -1565,7 +1565,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param yin
      */
     private void right_node_none(final Component gdl, final int xin, final int yin) {
-        System.err.println("right_node_none");
+        //System.err.println("right_node_none");
         GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
         menu = getNodeContextMenu(gdl);
@@ -1578,7 +1578,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param yin
      */
     private void right_node_nodes(final Component gdl, final int xin, final int yin) {
-        System.err.println("right_node_nodes");
+        //System.err.println("right_node_nodes");
         GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
         menu = getNodeContextMenu(gdl);
@@ -1591,7 +1591,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param yin
      */
     private void right_node_edges(final Component gdl, final int xin, final int yin) {
-        System.err.println("right_node_edges");
+        //System.err.println("right_node_edges");
         GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
         menu = getMultiContextMenu();
@@ -1604,7 +1604,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param yin
      */
     private void right_node_multi(final Component gdl, final int xin, final int yin) {
-        System.err.println("right_node_multi");
+        //System.err.println("right_node_multi");
         GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
         menu = getMultiNodeContextMenu(gdl);
