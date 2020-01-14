@@ -912,9 +912,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         }
         menu.add(delete_selected);
 
-        return getMultiNodeContextMenu(addToModelMenu);
-
-        //return menu;
+        return menu;
     }
 
     /**
