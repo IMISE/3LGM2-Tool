@@ -582,25 +582,27 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                         //////////////
                         //   Edges  //
                         //////////////
-                        for (Direction direction : Direction.values()) { //beide Richtungen testen
+                        for (Direction edgeDirection : Direction.values()) { //beide Richtungen testen
                             boolean addLinkMenuEntry = false;
-                            if (direction == Direction.FORWARD) {
-                                if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
+
+                            //prüfen, ob die Kante in der aktuellen Richtung hinzugefügt werden soll
+                            if (metaModel.isConnecting(edgeClass, lastSelectedClass, me2Class, edgeDirection)) {
+                                if (edgeDirection == Direction.FORWARD) {
                                     addLinkMenuEntry = true;
-                                }
-                            } else {
-                                if (metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
+                                } else {
                                     // Doppeldeutige Kanten mit identischer Start- und Endklasse brauchen nur 1x angeboten werden -> Rückrichtung nur, wenn die Klassen verschieden sind
                                     if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                                         if (Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass)) {
                                             addLinkMenuEntry = true;
                                         }
-                                        //alle anderen ungerichteten Kanten (Kanten zwischen denselben Elementen auch nur 2x hinzufügen, wenn sie in beide Richtungen unterschiedliche Bedeutungen haben
+                                        //bei alle anderen Kanten die Rückwärtsrichtung nur hinzufügen, wenn sie in beide Richtungen unterschiedliche Bedeutungen hat,
+                                        //also verscheidene Elemente verbindet oder die gleichen verbindet aber beide Richtungen unterschiedlich heißen
                                     } else if (metaModel.isDirectedEdge(edgeClass)) {
                                         addLinkMenuEntry = true;
                                     }
                                 }
                             }
+
                             //wenn die Kante in der aktuellen Richtung hinzugefügt werden soll
                             if (addLinkMenuEntry) {
                                 ConnectionState[] connectionStates;
@@ -632,7 +634,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                             connectable = true;
                                         } else {
                                             if (MetaModel.isHasPartEdge(edgeClass)) {
-                                                if (direction == HasPartEdge.PARENT_TO_PART_DIRECTION) {
+                                                if (edgeDirection == HasPartEdge.PARENT_TO_PART_DIRECTION) {
                                                     disconnectable = lastSelected.isDirectParentOf(me2);
                                                 } else {
                                                     disconnectable = lastSelected.isDirectPartOf(me2);
@@ -647,12 +649,12 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                     }
                                     String edgeClassName = edgeClass.getSimpleName();
                                     ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
-                                    String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                    String toolTip = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, true, true);
+                                    String label = elementsNameBuilder.getMetaAssociationName(edgeClass, edgeDirection, connectionState, false, true);
+                                    String toolTip = elementsNameBuilder.getMetaAssociationName(edgeClass, edgeDirection, connectionState, true, true);
                                     //Menuitems
                                     //das muss sein, weil man sich nicht darauf verlassen sollte, dass die ConnectionStates und Directions dieselben Strings haben.
                                     //In den UndoRedo-Kommandos werden aber Directions gebraucht, die sich in diesem Fall aber aus den ConnectionStates ergeben -> sauber überführen
-                                    Direction linkDirection = connectionState == ConnectionState.FORWARD ? Direction.FORWARD : connectionState == ConnectionState.BACKWARD ? Direction.BACKWARD : direction;
+                                    Direction linkDirection = connectionState == ConnectionState.FORWARD ? Direction.FORWARD : connectionState == ConnectionState.BACKWARD ? Direction.BACKWARD : edgeDirection;
                                     JMenuItem connectableItem = getItem(label, MODEL_ACTION_LINK, edgeClassName + " " + linkDirection, link_icon, connectable, toolTip);
                                     JMenuItem disconnectableItem = getItem(label, MODEL_ACTION_UNLINK, edgeClassName + " " + linkDirection, unlink_icon, disconnectable, toolTip);
                                     //NamedObjectContainer um die Items
