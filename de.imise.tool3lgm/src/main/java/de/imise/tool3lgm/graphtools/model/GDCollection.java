@@ -95,11 +95,14 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -1208,6 +1211,69 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 ModelElement skC = createNodeAndContainer(subType.asSubclass(Node.class), name, "", null, pid).getElement();
                 link(subTypeEdgeClass, me, skC, pid);
                 connectedSubTypes.add(skC);
+            }
+        }
+    }
+
+    /**
+     * Updates all {@link InferenceEdge}s. Missing wil be created and superflous will be reomoved.
+     *
+     * @param pid
+     */
+    public void updateInferenceEdges(final int pid) {
+        removeInferenceEdges(pid); //first remove, so there must not be checked all potential new created inferenceEgdes if they are superflous
+        createInferenceEdges(pid);
+    }
+
+    /**
+     * Removes all superflous {@link InferenceEdge}s.
+     *
+     * @param pid
+     */
+    private void removeInferenceEdges(final int pid) {
+        Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
+        for (Class<? extends InferenceEdge> inferenceEdgeClass : inferenceEdgeClasses) {
+            if (Edge.class.isAssignableFrom(inferenceEdgeClass)) {
+                Class<? extends Edge> edgeClass = inferenceEdgeClass.asSubclass(Edge.class);
+                AbstractMetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+                Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
+                Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
+                List<ModelElement> modelItems = doc.getModelItems(edgeClass);
+                for (ModelElement edgeItem : modelItems) {
+                    Edge edge = (Edge) edgeItem;
+                    ModelElement edgeStart = edge.getStart();
+                    ModelElement edgeEnd = edge.getEnd();
+                    boolean readEdgeForward = conditionMetaPath.isStartClass(edgeStartClass) && conditionMetaPath.isEndClass(edgeEndClass);
+                    boolean remove = !MetaPathFunctions.isDirectConnected(readEdgeForward ? edgeStart : edgeEnd, readEdgeForward ? edgeEnd : edgeStart, conditionMetaPath);
+                    if (remove) {
+                        unlink(edgeStart, edgeEnd, edgeClass, pid);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Creates all missing {@link InferenceEdge}s.
+     *
+     * @param pid
+     */
+    private void createInferenceEdges(final int pid) {
+        Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
+        for (Class<? extends InferenceEdge> inferenceEdgeClass : inferenceEdgeClasses) {
+            AbstractMetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+            Set<Class<? extends ModelElement>> startClasses = conditionMetaPath.getStartClasses();
+            List<ModelElement> pathStartElements = getModelItems(this, startClasses);
+            if (Edge.class.isAssignableFrom(inferenceEdgeClass)) {
+                Class<? extends Edge> edgeClass = inferenceEdgeClass.asSubclass(Edge.class);
+                for (ModelElement me : pathStartElements) {
+                    Collection<ModelElement> pathConnectedElements = MetaPathFunctions.getConnectedElements(me, conditionMetaPath);
+                    for (ModelElement pathConnected : pathConnectedElements) {
+                        //Edge link =
+                        link(edgeClass, me, pathConnected, pid);
+                        //Sys.err(link + " " + link != null ? link.getClass().getSimpleName() : "");
+                    }
+                }
             }
         }
     }

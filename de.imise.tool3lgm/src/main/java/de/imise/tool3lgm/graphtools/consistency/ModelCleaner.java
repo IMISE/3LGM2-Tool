@@ -324,6 +324,9 @@ public class ModelCleaner {
             }
         }
 
+        //Alle InferenceEdges erzeugen, die fehlen
+        gdcoll.updateInferenceEdges(STANDARD_PID);
+
         // Sicher stellen, dass bei allen berichtigten Kanten und Knickpunkten die Container richtig
         // positioniert sind also einfach nochmal pauschal alle Kanten-Container initialisieren (das
         // wird und muss bereits einmal nach dem Beenden des Einlesens im ToolContentHandler getan werden)
