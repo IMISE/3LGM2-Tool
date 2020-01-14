@@ -84,7 +84,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -619,40 +618,10 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                         if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
                             continue;
                         }
-                        /////////////////////
-                        //   HasPartEdge   //
-                        /////////////////////
-                        if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
-                            for (Direction direction : Direction.values()) { //beide Richtungen testen
-                                if (metaModel.isConnecting(edgeClass, lastSelectedClass, me2Class, direction)) {
-                                    String label = getConnectionDisplayName(edgeClass, direction, false);
-                                    String toolTip = getConnectionDisplayName(edgeClass, direction, true);
-                                    boolean connectable = false;
-                                    boolean disconnectable = false;
-                                    for (ModelElement me2 : selectedElements) {
-                                        if (lastSelected == me2) {
-                                            continue;
-                                        }
-                                        ModelElement parent = direction == FORWARD ? lastSelected : me2;
-                                        ModelElement part = direction == FORWARD ? me2 : lastSelected;
-
-                                        if (!parent.isPartOf(part) && !parent.isDirectParentOf(part)) {
-                                            connectable = true;
-                                        }
-                                        if (parent.isDirectParentOf(part)) {
-                                            disconnectable = true;
-                                        }
-                                        if (connectable && disconnectable) {
-                                            break;
-                                        }
-                                    }
-                                    addItems(connectableItems, disconnectableItems, label, edgeClass, direction, connectable, disconnectable, toolTip);
-                                }
-                            }
-                            ///////////////////////////
-                            //   DoubleMeaningEdge  //
-                            ///////////////////////////
-                        } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+                        ///////////////////////////
+                        //   DoubleMeaningEdge  //
+                        ///////////////////////////
+                        if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
                             for (Direction direction : Direction.values()) { //beide Richtungen testen
                                 boolean addLinkMenuEntry = direction == Direction.FORWARD && metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class);
                                 // Doppeldeutige Kanten mit identischer Start- und Endklasse brauchen nur 1x angeboten werden -> Rückrichtung nur, wenn die Klassen verschieden sind
@@ -686,9 +655,9 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                     }
                                 }
                             }
-                            ////////////////////////////////////////////////////////////////////////////////////
-                            //   Egdes that connect same element types with differen names in every direction //
-                            ////////////////////////////////////////////////////////////////////////////////////
+                            /////////////////////////////////////////////////////////////////////////////////////
+                            //   Egdes that connect same element types with different names in every direction //
+                            /////////////////////////////////////////////////////////////////////////////////////
                             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
                         } else if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && metaModel.isDirectedEdge(edgeClass)) {
                             String labelForward = getConnectionDisplayName(edgeClass, FORWARD, false);
