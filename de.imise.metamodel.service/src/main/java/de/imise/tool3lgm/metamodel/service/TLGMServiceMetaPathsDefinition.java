@@ -11,21 +11,40 @@ import com.google.common.collect.Multimap;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduct_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_InvokingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_ProvidingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheTransaction_IheCommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.Service_CommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.Service_InvokingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.service.node.IheActor;
 import de.imise.tool3lgm.metamodel.service.node.IheActorInstance;
+import de.imise.tool3lgm.metamodel.service.node.IheInvokingInterface;
+import de.imise.tool3lgm.metamodel.service.node.IheProvidingInterface;
+import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
+import de.imise.tool3lgm.metamodel.service.node.InvokingInterface;
+import de.imise.tool3lgm.metamodel.service.node.ProvidingInterface;
+import de.imise.tool3lgm.metamodel.service.node.Service;
 import de.imise.tool3lgm.metamodel.service.node.SoftwareProduct;
 
 /**
@@ -92,6 +111,47 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         SimpleMetaPath applicationsSystemNameExtensionPath = smp(ApplicationSystem.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
         SimpleMetaPath iheActorInstanceNameExtensionPath = smp(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class);
         return ImmutableMap.of(ApplicationSystem.class, applicationsSystemNameExtensionPath, IheActorInstance.class, iheActorInstanceNameExtensionPath);
+    }
+
+    ////////////////////
+    // InferenceEgdes //
+    ////////////////////
+
+    /**
+     * @return
+     */
+    @Override
+    public final Map<Class<? extends InferenceEdge>, AbstractMetaPath> getInferenceEdgeToConditionPath() {
+        //        SimpleMetaPath service_CommunicationLink_InferenceMetaPath_part1 = simpleMetaPathCreator.createSimpleMetaPath(CommunicationLink_Edge.class, Service.class, Service_ProvidingInterface_Edge.class);
+        //        SimpleMetaPath service_CommunicationLink_InferenceMetaPath_part2 = simpleMetaPathCreator.createSimpleMetaPath(CommunicationLink_Edge.class, Service.class, Service_InvokingInterface_Edge.class);
+        MetaModel metaModel = getMetaModel();
+        ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
+
+        //Path: CommunicationLink_Edge -> CommunicationLink_Edge-StartElement = InvokingInterface ->  Service_InvokingInterface_Edge -> Service
+        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath1_pathStep1 = ElementaryMetaPath.createEdgeToStartElementMetaPath(metaModel, CommunicationLink_Edge.class, InvokingInterface.class);
+        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath1_pathStep2 = elementaryMetaPathHandler.getMetaPath(InvokingInterface.class, Service_InvokingInterface_Edge.class, Direction.BACKWARD, Service.class);
+        SimpleMetaPath service_CommunicationLink_InferenceMetaPath1 = new SimpleMetaPath(service_CommunicationLink_InferenceMetaPath1_pathStep1, service_CommunicationLink_InferenceMetaPath1_pathStep2);
+
+        //Path: CommunicationLink_Edge -> CommunicationLink_Edge-EndElement = ProvidingInterface ->  Service_InvokingInterface_Edge -> Service
+        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath2_pathStep1 = ElementaryMetaPath.createEdgeToEndElementMetaPath(metaModel, CommunicationLink_Edge.class, ProvidingInterface.class);
+        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath2_pathStep2 = elementaryMetaPathHandler.getMetaPath(InvokingInterface.class, Service_ProvidingInterface_Edge.class, Direction.BACKWARD, Service.class);
+        SimpleMetaPath service_CommunicationLink_InferenceMetaPath2 = new SimpleMetaPath(service_CommunicationLink_InferenceMetaPath2_pathStep1, service_CommunicationLink_InferenceMetaPath2_pathStep2);
+
+        AbstractMetaPath service_CommunicationLink_InferenceMetaPath = new SectionMetaPath(service_CommunicationLink_InferenceMetaPath1, service_CommunicationLink_InferenceMetaPath2);
+
+        //Path: IheCommunicationLink_Edge -> IheCommunicationLink_Edge-StartElement = IheInvokingInterface ->  IheTransaction_IheInvokingInterface_Edge -> IheTransaction
+        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep1 = ElementaryMetaPath.createEdgeToStartElementMetaPath(metaModel, IheCommunicationLink_Edge.class, IheInvokingInterface.class);
+        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep2 = elementaryMetaPathHandler.getMetaPath(IheInvokingInterface.class, IheInvokingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
+        SimpleMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath1 = new SimpleMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep1, iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep2);
+
+        //Path: IheCommunicationLink_Edge -> IheCommunicationLink_Edge-EndElement = IheProvidingInterface ->  IheTransaction_IheProvidingInterface_Edge -> IheTransaction
+        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep1 = ElementaryMetaPath.createEdgeToEndElementMetaPath(metaModel, IheCommunicationLink_Edge.class, IheProvidingInterface.class);
+        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep2 = elementaryMetaPathHandler.getMetaPath(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
+        SimpleMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2 = new SimpleMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep1, iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep2);
+
+        AbstractMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath1, iheTransaction_IheCommunicationLink_InferenceMetaPath2);
+
+        return ImmutableMap.of(Service_CommunicationLink_Edge.class, service_CommunicationLink_InferenceMetaPath, IheTransaction_IheCommunicationLink_Edge.class, iheTransaction_IheCommunicationLink_InferenceMetaPath);
     }
 
 }

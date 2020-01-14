@@ -37,6 +37,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerNode;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -273,6 +274,11 @@ public final class MetaModel implements MetaModelSpecific {
      */
     private final Map<Class<? extends ModelElement>, AbstractMetaPath> elementClassToNameExtensionPath;
 
+    /**
+     * Mappt von einer InferenceEdge-Klasse auf den MetaPath, aus dem diese Inference-Kante abgeleitet wird.
+     */
+    private final Map<Class<? extends InferenceEdge>, AbstractMetaPath> inferenceEdgeToConditionPath;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -393,6 +399,8 @@ public final class MetaModel implements MetaModelSpecific {
         elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatablePaths()));
         elementClassToNameExtensionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionPath());
         elementClassesWithNameExtensions = CollectionUtils.ensureImmutable(elementClassToNameExtensionPath.keySet());
+
+        inferenceEdgeToConditionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionPath());
     }
 
     /**
@@ -1976,6 +1984,28 @@ public final class MetaModel implements MetaModelSpecific {
             elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
         }
         return false;
+    }
+
+    /**
+     * @return Collection alle InferenceEdges dieses Metamodells (also aller Kanten, die
+     *         sich aus einem anderen MetaPfad ergeben.
+     */
+    public Collection<Class<? extends InferenceEdge>> getInferenceEdgeClasses() {
+        return inferenceEdgeToConditionPath.keySet();
+    }
+
+    /**
+     * @return Collection aller Bedingungspfade für Ableitungskanten (InferenceEdges)
+     */
+    public Collection<AbstractMetaPath> getInferenceEdgeConditionMetaPaths() {
+        return inferenceEdgeToConditionPath.values();
+    }
+
+    /**
+     * @return Bedingungspfad für eine Ableitungskante (InferenceEdge)
+     */
+    public AbstractMetaPath getInferenceEdgeConditionMetaPath(final Class<? extends InferenceEdge> inferenceEdgeClass) {
+        return inferenceEdgeToConditionPath.get(inferenceEdgeClass);
     }
 
     /**

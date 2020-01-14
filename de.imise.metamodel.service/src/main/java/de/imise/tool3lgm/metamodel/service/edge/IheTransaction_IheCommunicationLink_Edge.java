@@ -6,19 +6,19 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
-import de.imise.tool3lgm.metamodel.service.node.Service;
+import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
 
 /**
- * @author AXS (12.01.2017)
+ * @author AXS (14.11.2019)
  */
-public final class Service_CommunicationLink_Edge extends SimpleEdge implements InferenceEdge {
+public final class IheTransaction_IheCommunicationLink_Edge extends SimpleEdge implements InferenceEdge {
 
-    public static final Class<? extends ModelElement> STCL = Service.class;
+    public static final Class<? extends ModelElement> STCL = IheTransaction.class;
 
     public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
     public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> ETCL = CommunicationLink_Edge.class;
+    public static final Class<? extends ModelElement> ETCL = IheCommunicationLink_Edge.class;
 
 }
