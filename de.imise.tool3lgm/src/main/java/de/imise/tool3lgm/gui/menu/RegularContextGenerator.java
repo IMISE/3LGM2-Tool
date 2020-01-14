@@ -4,10 +4,6 @@ import static de.imise.tool3lgm.Static.getPreSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Tool3lgmConstants.getIcon;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
@@ -84,6 +80,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -546,43 +544,6 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         return menu;
     }
 
-    private void addItems(final List<NamedObjectContainer<JMenuItem>> connectableItems, final List<NamedObjectContainer<JMenuItem>> disconnectableItems, final String label, final Class<? extends Edge> edgeClass, final Direction direction,
-            final boolean connectable, final boolean disconnectable, final String toolTip) {
-        String edgeClassName = edgeClass.getSimpleName();
-        //Menuitems
-        JMenuItem connectableItem = getItem(label, MODEL_ACTION_LINK, edgeClassName + " " + direction, link_icon, connectable, toolTip);
-        JMenuItem disconnectableItem = getItem(label, MODEL_ACTION_UNLINK, edgeClassName + " " + direction, unlink_icon, disconnectable, toolTip);
-        //NamedObjectContainer um die Items
-        NamedObjectContainer<JMenuItem> connectableContainer = new NamedObjectContainer<>(connectableItem, label);
-        NamedObjectContainer<JMenuItem> disconnectableContainer = new NamedObjectContainer<>(disconnectableItem, label);
-        //zu den übergebenen Ergebnislisten hinzufügen
-        connectableItems.add(connectableContainer);
-        disconnectableItems.add(disconnectableContainer);
-    }
-
-    /**
-     * @param edgeClass
-     * @param direction
-     * @param full
-     * @return
-     */
-    private String getConnectionDisplayName(final Class<? extends Edge> edgeClass, final Direction direction, final boolean full) {
-        return getConnectionDisplayName(edgeClass, direction, ConnectionState.DOUBLE, full);
-    }
-
-    /**
-     * @param edgeClass
-     * @param direction
-     * @param connectionState
-     * @param full
-     * @return
-     */
-    private String getConnectionDisplayName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean full) {
-        GraphDocument doc = getDoc();
-        ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
-        return elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, full, true);
-    }
-
     /**
      * @param contextSource
      * @return
@@ -615,109 +576,93 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                         ///////////////////////////////////////////////////////////////
                         //   Edges to Ignore ( InstanciationEdge & InferenceEdge )   //
                         ///////////////////////////////////////////////////////////////
-                        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
+                        if (InstanciationEdge.class.isAssignableFrom(edgeClass) || InferenceEdge.class.isAssignableFrom(edgeClass)) {
                             continue;
                         }
-                        ///////////////////////////
-                        //   DoubleMeaningEdge  //
-                        ///////////////////////////
-                        if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
-                            for (Direction direction : Direction.values()) { //beide Richtungen testen
-                                boolean addLinkMenuEntry = direction == Direction.FORWARD && metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class);
-                                // Doppeldeutige Kanten mit identischer Start- und Endklasse brauchen nur 1x angeboten werden -> Rückrichtung nur, wenn die Klassen verschieden sind
-                                addLinkMenuEntry |= direction == Direction.BACKWARD && metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && getStartClass(edgeClass) != getEndClass(edgeClass);
-                                if (addLinkMenuEntry) {
-                                    ConnectionState[] connectionStates = {
-                                            ConnectionState.FORWARD, ConnectionState.BACKWARD
-                                    };
-                                    for (ConnectionState connectionState : connectionStates) { //beide ConnectionStates testen
-                                        String label = getConnectionDisplayName(edgeClass, direction, connectionState, false);
-                                        String toolTip = getConnectionDisplayName(edgeClass, direction, connectionState, true);
-                                        boolean connectable = false;
-                                        boolean disconnectable = false;
-                                        for (ModelElement me2 : selectedElements) {
-                                            if (lastSelected == me2) {
-                                                continue;
-                                            }
-                                            if (connectionState == ConnectionState.FORWARD && !lastSelected.isConnectedTo(me2, edgeClass) || connectionState == ConnectionState.BACKWARD && !lastSelected.isConnectedFrom(me2, edgeClass)) {
-                                                connectable = true;
-                                            } else {
-                                                disconnectable = true;
-                                            }
-                                            if (connectable && disconnectable) {
-                                                break;
-                                            }
+                        //////////////
+                        //   Edges  //
+                        //////////////
+                        for (Direction direction : Direction.values()) { //beide Richtungen testen
+                            boolean addLinkMenuEntry = false;
+                            if (direction == Direction.FORWARD) {
+                                if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
+                                    addLinkMenuEntry = true;
+                                }
+                            } else {
+                                if (metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
+                                    // Doppeldeutige Kanten mit identischer Start- und Endklasse brauchen nur 1x angeboten werden -> Rückrichtung nur, wenn die Klassen verschieden sind
+                                    if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+                                        if (Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass)) {
+                                            addLinkMenuEntry = true;
                                         }
-                                        //das muss sein, weil man sich nicht darauf verlassen sollte, dass die ConnectionStates und Directions dieselben Strings haben.
-                                        //In den UndoRedo-Kommandos werden aber Directions gebraucht, die sich in diesem Fall aber aus den ConnectionStates ergeben -> sauber überführen
-                                        Direction linkDirection = connectionState == ConnectionState.BACKWARD ? BACKWARD : FORWARD;
-                                        addItems(connectableItems, disconnectableItems, label, edgeClass, linkDirection, connectable, disconnectable, toolTip);
+                                        //alle anderen ungerichteten Kanten (Kanten zwischen denselben Elementen auch nur 2x hinzufügen, wenn sie in beide Richtungen unterschiedliche Bedeutungen haben
+                                    } else if (metaModel.isDirectedEdge(edgeClass)) {
+                                        addLinkMenuEntry = true;
                                     }
                                 }
                             }
-                            /////////////////////////////////////////////////////////////////////////////////////
-                            //   Egdes that connect same element types with different names in every direction //
-                            /////////////////////////////////////////////////////////////////////////////////////
-                            //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
-                        } else if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && metaModel.isDirectedEdge(edgeClass)) {
-                            String labelForward = getConnectionDisplayName(edgeClass, FORWARD, false);
-                            String toolTipForward = getConnectionDisplayName(edgeClass, FORWARD, true);
-                            String labelBackward = getConnectionDisplayName(edgeClass, BACKWARD, false);
-                            String toolTipBackward = getConnectionDisplayName(edgeClass, BACKWARD, true);
-                            boolean connectableForward = false;
-                            boolean disconnectableForward = false;
-                            boolean connectableBackward = false;
-                            boolean disconnectableBackward = false;
-                            for (ModelElement me2 : selectedElements) {
-                                if (lastSelected == me2) {
-                                    continue;
-                                }
-                                if (!lastSelected.isConnectedTo(me2, edgeClass)) {
-                                    connectableForward = true;
+                            //wenn die Kante in der aktuellen Richtung hinzugefügt werden soll
+                            if (addLinkMenuEntry) {
+                                ConnectionState[] connectionStates;
+                                //bei Kanten mit doppelter Bedeutung auch jeden ConnectionState hinzufügen (also 2 EInträge pro Kante generieren)
+                                if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+                                    connectionStates = new ConnectionState[2];
+                                    connectionStates[0] = ConnectionState.FORWARD;
+                                    connectionStates[1] = ConnectionState.BACKWARD;
+                                    //bei allen anderen Kanten nur den 'egal'-COnnectionState nehmen
                                 } else {
-                                    disconnectableForward = true;
+                                    connectionStates = new ConnectionState[1];
+                                    connectionStates[0] = ConnectionState.DOUBLE;
                                 }
-                                if (!lastSelected.isConnectedFrom(me2, edgeClass)) {
-                                    connectableBackward = true;
-                                } else {
-                                    disconnectableBackward = true;
-                                }
-                                if (connectableForward && disconnectableForward && connectableBackward && disconnectableBackward) {
-                                    break;
+                                for (ConnectionState connectionState : connectionStates) { //die bzw. den jeweiligen ConnectionStates testen
+                                    boolean connectable = false;
+                                    boolean disconnectable = false;
+                                    //jedes selektierte Element testen
+                                    for (ModelElement me2 : selectedElements) {
+                                        if (lastSelected == me2) {
+                                            continue;
+                                        }
+                                        boolean setConnectableTrue = false;
+                                        setConnectableTrue |= connectionState == ConnectionState.FORWARD && !lastSelected.isConnectedTo(me2, edgeClass);
+                                        setConnectableTrue |= connectionState == ConnectionState.BACKWARD && !lastSelected.isConnectedFrom(me2, edgeClass);
+                                        if (!setConnectableTrue && connectionState == ConnectionState.DOUBLE) {
+                                            setConnectableTrue |= !lastSelected.isConnectedWith(me2, edgeClass);
+                                        }
+                                        if (setConnectableTrue) {
+                                            connectable = true;
+                                        } else {
+                                            if (MetaModel.isHasPartEdge(edgeClass)) {
+                                                if (direction == HasPartEdge.PARENT_TO_PART_DIRECTION) {
+                                                    disconnectable = lastSelected.isDirectParentOf(me2);
+                                                } else {
+                                                    disconnectable = lastSelected.isDirectPartOf(me2);
+                                                }
+                                            } else {
+                                                disconnectable = true;
+                                            }
+                                        }
+                                        if (connectable && disconnectable) {
+                                            break;
+                                        }
+                                    }
+                                    String edgeClassName = edgeClass.getSimpleName();
+                                    ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
+                                    String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
+                                    String toolTip = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, true, true);
+                                    //Menuitems
+                                    //das muss sein, weil man sich nicht darauf verlassen sollte, dass die ConnectionStates und Directions dieselben Strings haben.
+                                    //In den UndoRedo-Kommandos werden aber Directions gebraucht, die sich in diesem Fall aber aus den ConnectionStates ergeben -> sauber überführen
+                                    Direction linkDirection = connectionState == ConnectionState.FORWARD ? Direction.FORWARD : connectionState == ConnectionState.BACKWARD ? Direction.BACKWARD : direction;
+                                    JMenuItem connectableItem = getItem(label, MODEL_ACTION_LINK, edgeClassName + " " + linkDirection, link_icon, connectable, toolTip);
+                                    JMenuItem disconnectableItem = getItem(label, MODEL_ACTION_UNLINK, edgeClassName + " " + linkDirection, unlink_icon, disconnectable, toolTip);
+                                    //NamedObjectContainer um die Items
+                                    NamedObjectContainer<JMenuItem> connectableContainer = new NamedObjectContainer<>(connectableItem, label);
+                                    NamedObjectContainer<JMenuItem> disconnectableContainer = new NamedObjectContainer<>(disconnectableItem, label);
+                                    //zu den übergebenen Ergebnislisten hinzufügen
+                                    connectableItems.add(connectableContainer);
+                                    disconnectableItems.add(disconnectableContainer);
                                 }
                             }
-                            addItems(connectableItems, disconnectableItems, labelForward, edgeClass, FORWARD, connectableForward, disconnectableForward, toolTipForward);
-                            addItems(connectableItems, disconnectableItems, labelBackward, edgeClass, BACKWARD, connectableBackward, disconnectableBackward, toolTipBackward);
-                            /////////////////////////
-                            //   All other Edges   //
-                            /////////////////////////
-                        } else /* if (Edge.isConnecting(edgeClass, lastSelectedClass, me2Class)) */ {
-                            Direction direction;
-                            String label;
-                            String toolTip;
-                            direction = metaModel.isStartClass(edgeClass, lastSelectedClass) ? FORWARD : BACKWARD;
-                            label = getConnectionDisplayName(edgeClass, direction, false);
-                            toolTip = getConnectionDisplayName(edgeClass, direction, false);
-                            boolean connectable = false;
-                            boolean disconnectable = false;
-                            for (ModelElement selected : selectedElements) {
-                                if (lastSelected == selected) {
-                                    continue;
-                                }
-                                Class<? extends ModelElement> selectedClass = selected.getClass();
-                                if (!metaModel.isConnecting(edgeClass, lastSelectedClass, selectedClass, direction)) {
-                                    continue;
-                                }
-                                if (!lastSelected.isConnectedWith(selected, edgeClass)) {
-                                    connectable = true;
-                                } else {
-                                    disconnectable = true;
-                                }
-                                if (connectable && disconnectable) {
-                                    break;
-                                }
-                            }
-                            addItems(connectableItems, disconnectableItems, label, edgeClass, direction, connectable, disconnectable, toolTip);
                         }
                         ///////////////////
                         //   MetaPaths   //
