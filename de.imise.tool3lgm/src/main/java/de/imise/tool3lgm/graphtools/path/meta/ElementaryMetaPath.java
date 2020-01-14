@@ -538,6 +538,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         return elementaryMetaPaths;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public final List<AbstractMetaPath> getMetaPaths() {
         return (List<AbstractMetaPath>) (List<?>) getElementaryMetaPaths();
