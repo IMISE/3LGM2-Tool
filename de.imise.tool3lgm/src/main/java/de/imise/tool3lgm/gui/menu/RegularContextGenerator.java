@@ -562,6 +562,29 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     }
 
     /**
+     * @param edgeClass
+     * @param direction
+     * @param full
+     * @return
+     */
+    private String getConnectionDisplayName(final Class<? extends Edge> edgeClass, final Direction direction, final boolean full) {
+        return getConnectionDisplayName(edgeClass, direction, ConnectionState.DOUBLE, full);
+    }
+
+    /**
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @param full
+     * @return
+     */
+    private String getConnectionDisplayName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final boolean full) {
+        GraphDocument doc = getDoc();
+        ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
+        return elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, full, true);
+    }
+
+    /**
      * @param contextSource
      * @return
      */
@@ -593,9 +616,9 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassOrMetaPath).asSubclass(Edge.class);
                         //Hat-Teil-Kante
                         if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
-                            if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-                                String label = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
-                                String toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+                            if (metaModel.isConnecting(edgeClass, lastSelectedClass, me2Class, FORWARD)) {
+                                String label = getConnectionDisplayName(edgeClass, FORWARD, false);
+                                String toolTip = getConnectionDisplayName(edgeClass, FORWARD, true);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -614,9 +637,9 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                 }
                                 addItems(connectableItems, disconnectableItems, label, edgeClass, FORWARD, connectable, disconnectable, toolTip);
                             }
-                            if (metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
-                                String label = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
-                                String toolTip = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
+                            if (metaModel.isConnecting(edgeClass, lastSelectedClass, me2Class, BACKWARD)) {
+                                String label = getConnectionDisplayName(edgeClass, BACKWARD, false);
+                                String toolTip = getConnectionDisplayName(edgeClass, BACKWARD, true);
                                 boolean connectable = false;
                                 boolean disconnectable = false;
                                 for (ModelElement me2 : selectedElements) {
@@ -646,8 +669,8 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                             ConnectionState.FORWARD, ConnectionState.BACKWARD
                                     };
                                     for (ConnectionState connectionState : connectionStates) { //beide ConnectionStates testen
-                                        String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                        String toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
+                                        String label = getConnectionDisplayName(edgeClass, direction, connectionState, false);
+                                        String toolTip = getConnectionDisplayName(edgeClass, direction, connectionState, true);
                                         boolean connectable = false;
                                         boolean disconnectable = false;
                                         for (ModelElement me2 : selectedElements) {
@@ -672,10 +695,10 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                             }
                             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
                         } else if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && metaModel.isDirectedEdge(edgeClass)) {
-                            String labelForward = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
-                            String toolTipForward = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
-                            String labelBackward = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
-                            String toolTipBackward = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
+                            String labelForward = getConnectionDisplayName(edgeClass, FORWARD, false);
+                            String toolTipForward = getConnectionDisplayName(edgeClass, FORWARD, true);
+                            String labelBackward = getConnectionDisplayName(edgeClass, BACKWARD, false);
+                            String toolTipBackward = getConnectionDisplayName(edgeClass, BACKWARD, true);
                             boolean connectableForward = false;
                             boolean disconnectableForward = false;
                             boolean connectableBackward = false;
@@ -707,15 +730,9 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                             Direction direction;
                             String label;
                             String toolTip;
-                            if (metaModel.isStartClass(edgeClass, lastSelectedClass)) {
-                                direction = FORWARD;
-                                label = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
-                                toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
-                            } else {
-                                direction = BACKWARD;
-                                label = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
-                                toolTip = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
-                            }
+                            direction = metaModel.isStartClass(edgeClass, lastSelectedClass) ? FORWARD : BACKWARD;
+                            label = getConnectionDisplayName(edgeClass, direction, false);
+                            toolTip = getConnectionDisplayName(edgeClass, direction, false);
                             boolean connectable = false;
                             boolean disconnectable = false;
                             for (ModelElement selected : selectedElements) {
@@ -723,10 +740,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                     continue;
                                 }
                                 Class<? extends ModelElement> selectedClass = selected.getClass();
-                                if (direction == FORWARD && !metaModel.isConnectingForward(edgeClass, lastSelectedClass, selectedClass)) {
-                                    continue;
-                                }
-                                if (direction == BACKWARD && !metaModel.isConnectingForward(edgeClass, selectedClass, lastSelectedClass)) {
+                                if (!metaModel.isConnecting(edgeClass, lastSelectedClass, selectedClass, direction)) {
                                     continue;
                                 }
                                 if (!lastSelected.isConnectedWith(selected, edgeClass)) {
