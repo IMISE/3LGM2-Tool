@@ -625,8 +625,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                             }
                             //Kante mit Doppelter Bedeutung
                         } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
-                            if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-                                Direction direction = Direction.FORWARD;
+                            for (Direction direction : Direction.values()) {
+                                boolean addLinkMenuEntry = direction == Direction.FORWARD && metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class);
+                                // Doppeldeutige Kanten mit identischer Start- und Endklasse brauchen nur 1x angeboten werden -> Rückrichtung nur, wenn die Klassen verschieden sind
+                                addLinkMenuEntry |= direction == Direction.BACKWARD && metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && getStartClass(edgeClass) != getEndClass(edgeClass);
+                                if (addLinkMenuEntry) {
                                 ConnectionState connectionState = ConnectionState.FORWARD;
                                 String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
                                 String toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
@@ -669,52 +672,6 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                 connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectable, toolTip), label));
                                 disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectable, toolTip), label));
                             }
-                            // Doppeldeutige Kanten mit identischer Start- und
-                            // Endklasse brauchen nur 1x angeboten werden
-                            if (metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && getStartClass(edgeClass) != getEndClass(edgeClass)) {
-                                Direction direction = Direction.BACKWARD;
-                                ConnectionState connectionState = ConnectionState.FORWARD;
-                                String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                String toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
-                                boolean connectable = false;
-                                boolean disconnectable = false;
-                                for (ModelElement me2 : selectedElements) {
-                                    if (lastSelected == me2) {
-                                        continue;
-                                    }
-                                    if (!lastSelected.isConnectedTo(me2, edgeClass)) {
-                                        connectable = true;
-                                    } else {
-                                        disconnectable = true;
-                                    }
-                                    if (connectable && disconnectable) {
-                                        break;
-                                    }
-                                }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
-
-                                connectionState = ConnectionState.BACKWARD;
-                                label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
-                                connectable = false;
-                                disconnectable = false;
-                                for (ModelElement me2 : selectedElements) {
-                                    if (lastSelected == me2) {
-                                        continue;
-                                    }
-                                    if (!lastSelected.isConnectedFrom(me2, edgeClass)) {
-                                        connectable = true;
-                                    } else {
-                                        disconnectable = true;
-                                    }
-                                    if (connectable && disconnectable) {
-                                        break;
-                                    }
-                                }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectable, toolTip), label));
-
                             }
                             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
                         } else if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && metaModel.isDirectedEdge(edgeClass)) {
