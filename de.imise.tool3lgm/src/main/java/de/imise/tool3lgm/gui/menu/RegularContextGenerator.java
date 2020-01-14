@@ -547,6 +547,20 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         return menu;
     }
 
+    private void addItems(final List<NamedObjectContainer<JMenuItem>> connectableItems, final List<NamedObjectContainer<JMenuItem>> disconnectableItems, final String label, final Class<? extends Edge> edgeClass, final Direction direction,
+            final boolean connectable, final boolean disconnectable, final String toolTip) {
+        String edgeClassName = edgeClass.getSimpleName();
+        //Menuitems
+        JMenuItem connectableItem = getItem(label, MODEL_ACTION_LINK, edgeClassName + " " + direction, link_icon, connectable, toolTip);
+        JMenuItem disconnectableItem = getItem(label, MODEL_ACTION_UNLINK, edgeClassName + " " + direction, unlink_icon, disconnectable, toolTip);
+        //NamedObjectContainer um die Items
+        NamedObjectContainer<JMenuItem> connectableContainer = new NamedObjectContainer<>(connectableItem, label);
+        NamedObjectContainer<JMenuItem> disconnectableContainer = new NamedObjectContainer<>(disconnectableItem, label);
+        //zu den übergebenen Ergebnislsietn hinzufügen
+        connectableItems.add(connectableContainer);
+        disconnectableItems.add(disconnectableContainer);
+    }
+
     /**
      * @param contextSource
      * @return
@@ -598,8 +612,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                         break;
                                     }
                                 }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
+                                addItems(connectableItems, disconnectableItems, label, edgeClass, FORWARD, connectable, disconnectable, toolTip);
                             }
                             if (metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
                                 String label = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
@@ -620,8 +633,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                         break;
                                     }
                                 }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectable, toolTip), label));
+                                addItems(connectableItems, disconnectableItems, label, edgeClass, BACKWARD, connectable, disconnectable, toolTip);
                             }
                             //Kante mit Doppelter Bedeutung
                         } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
@@ -654,8 +666,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                         //das muss sein, weil man sich nicht darauf verlassen sollte, dass die ConnectionStates und Directions dieselben Strings haben.
                                         //In den UndoRedo-Kommandos werden aber Directions gebraucht, die sich in diesem Fall aber aus den ConnectionStates ergeben -> sauber überführen
                                         Direction linkDirection = connectionState == ConnectionState.BACKWARD ? BACKWARD : FORWARD;
-                                        connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + linkDirection, link_icon, connectable, toolTip), label));
-                                        disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + linkDirection, unlink_icon, disconnectable, toolTip), label));
+                                        addItems(connectableItems, disconnectableItems, label, edgeClass, linkDirection, connectable, disconnectable, toolTip);
                                     }
                                 }
                             }
@@ -687,10 +698,8 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(labelForward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectableForward, toolTipForward), labelForward));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(labelForward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectableForward, toolTipForward), labelForward));
-                            connectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectableBackward, toolTipBackward), labelBackward));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectableBackward, toolTipBackward), labelBackward));
+                            addItems(connectableItems, disconnectableItems, labelForward, edgeClass, FORWARD, connectableForward, disconnectableForward, toolTipForward);
+                            addItems(connectableItems, disconnectableItems, labelBackward, edgeClass, BACKWARD, connectableBackward, disconnectableBackward, toolTipBackward);
 
                         } else if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
                             //diese Kanten sind bei Mehrfachauswahl zu ignorieren!
@@ -729,8 +738,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                     break;
                                 }
                             }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + direction, link_icon, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + direction, unlink_icon, disconnectable, toolTip), label));
+                            addItems(connectableItems, disconnectableItems, label, edgeClass, direction, connectable, disconnectable, toolTip);
                         }
                     } else {
                         SimpleMetaPath metaPath = (SimpleMetaPath) edgeClassOrMetaPath;
