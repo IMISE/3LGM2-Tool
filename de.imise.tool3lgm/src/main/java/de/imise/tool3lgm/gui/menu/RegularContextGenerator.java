@@ -633,6 +633,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                                         if (setConnectableTrue) {
                                             connectable = true;
                                         } else {
+                                            //bei PartOfEdges darf immer nur einer der beiden disconnect-Einträge aktiv sein
                                             if (MetaModel.isHasPartEdge(edgeClass)) {
                                                 if (edgeDirection == HasPartEdge.PARENT_TO_PART_DIRECTION) {
                                                     disconnectable = lastSelected.isDirectParentOf(me2);
