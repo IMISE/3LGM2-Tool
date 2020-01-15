@@ -1269,9 +1269,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 for (ModelElement me : pathStartElements) {
                     Collection<ModelElement> pathConnectedElements = MetaPathFunctions.getConnectedElements(me, conditionMetaPath);
                     for (ModelElement pathConnected : pathConnectedElements) {
-                        //Edge link =
+                        //Edge link = 
                         link(edgeClass, me, pathConnected, pid);
-                        //Sys.err(link + " " + link != null ? link.getClass().getSimpleName() : "");
+                        //Sys.err1(link + " " + edgeClass.getSimpleName());
                     }
                 }
             }
