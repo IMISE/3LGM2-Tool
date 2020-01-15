@@ -1117,6 +1117,22 @@ public final class MetaModel implements MetaModelSpecific {
     }
 
     /**
+     * Liefert alle nichtabstrakten, zu den übergebenen Klassen zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in
+     * den Rückgabewerten enthalten, wenn sie nichtabstract ist.
+     *
+     * @param elementClass
+     * @return
+     */
+    public final Collection<Class<? extends ModelElement>> getInstanciableAssignableClasses(final Collection<Class<? extends ModelElement>> elementClasses) {
+        Set<Class<? extends ModelElement>> returnElements = new HashSet<>();
+        for (Class<? extends ModelElement> elementClass : elementClasses) {
+            Collection<Class<? extends ModelElement>> instanciableAssignableClasses = getInstanciableAssignableClasses(elementClass);
+            returnElements.addAll(instanciableAssignableClasses);
+        }
+        return returnElements;
+    }
+
+    /**
      * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
      * Rückgabewerten enthalten, wenn sie nichtabstract ist.
      *
