@@ -1447,6 +1447,26 @@ public final class MetaModel implements MetaModelSpecific {
     }
 
     /**
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten miteinander verbindet. Je nach
+     * Richtung vorwärst (FORWARD), rückwärts (BACKWARD) oder irgendwie (null)
+     *
+     * @param edgeClass
+     * @param elementClass1
+     * @param elementClass2
+     * @param direction
+     * @return
+     */
+    public final boolean isConnecting(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2, final Direction direction) {
+        if (direction == Direction.FORWARD) {
+            return isConnectingForward(edgeClass, elementClass1, elementClass2);
+        }
+        if (direction == Direction.BACKWARD) {
+            return isConnectingForward(edgeClass, elementClass2, elementClass1);
+        }
+        return isConnecting(edgeClass, elementClass1, elementClass2);
+    }
+
+    /**
      * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten miteinander verbindet.
      *
      * @param edgeClass
