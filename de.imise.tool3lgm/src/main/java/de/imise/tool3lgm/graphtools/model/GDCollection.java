@@ -1923,6 +1923,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             for (Szenario szen : szenarios) {
                 szen.updateSimpleRedundancyAnalysis();
             }
+            setBulkMode(true);
+            updateInferenceEdges(pid);
+            setBulkMode(false);
         }
         setChanged(true);
     }
