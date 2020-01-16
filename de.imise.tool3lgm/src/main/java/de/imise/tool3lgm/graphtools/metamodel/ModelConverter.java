@@ -73,6 +73,7 @@ public class ModelConverter {
         GDCollection targetModel = new GDCollection(targetModelType);
         targetModel.setBulkMode(true);
         convert(modelConverterDefinition, sourceModel, targetModel);
+        targetModel.updateInferenceEdges(STANDARD_PID);
         targetModel.setBulkMode(false);
         return targetModel;
     }
