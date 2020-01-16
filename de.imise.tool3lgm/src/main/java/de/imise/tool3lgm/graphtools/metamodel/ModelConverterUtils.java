@@ -8,6 +8,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMet
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMetaPathsCreationDefinition.NameSource;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -68,7 +69,7 @@ public class ModelConverterUtils {
      * @return
      */
     private static int joinElementIfEquals(final GDCollection gdcoll, final ModelElement me, final ModelElement ignoreElement, final String hashString, final SimplePath path, int counter) {
-        if (me != ignoreElement) {
+        if (me != ignoreElement && me instanceof Node) {
             //gibt es bereits ein Element wie das middleElement, das denselben HastString-Prefix hat (dieses Element ist aus derselben Kante entstanden)
             ModelElement equalElement = getEqualElement(me, hashString);
             if (equalElement != null) {
