@@ -189,7 +189,7 @@ public abstract class ModelConverterDefinition {
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
-    public Multimap<Class<? extends Edge>, TargetMetaPathsCreationDefinition> getSourceEdgeClassesToTargetMetaPaths() {
+    public Multimap<Class<? extends Edge>, TargetPathsCreationDefinition> getSourceEdgeClassesToTargetMetaPaths() {
         return ArrayListMultimap.create();
     }
 
@@ -230,7 +230,7 @@ public abstract class ModelConverterDefinition {
      *
      * @author AXS (12 Jun 2019)
      */
-    public static class TargetMetaPathsCreationDefinition implements Iterable<Integer> {
+    public static class TargetPathsCreationDefinition implements Iterable<Integer> {
 
         public enum NameSource {
             /** Name des Startelementes der Kante */
@@ -253,7 +253,7 @@ public abstract class ModelConverterDefinition {
         /**
          * @param simpleMetaPath2Create
          */
-        public TargetMetaPathsCreationDefinition(final SimpleMetaPath simpleMetaPath2Create) {
+        public TargetPathsCreationDefinition(final SimpleMetaPath simpleMetaPath2Create) {
             this.simpleMetaPath2Create = simpleMetaPath2Create;
         }
 

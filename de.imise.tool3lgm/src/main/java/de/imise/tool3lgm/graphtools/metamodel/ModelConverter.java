@@ -14,7 +14,7 @@ import com.google.common.collect.Multimap;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMetaPathsCreationDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetPathsCreationDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -196,7 +196,7 @@ public class ModelConverter {
      */
     private void convertEdgesMappingMetaPaths() {
         //Map der Kantenklassen, die auf Pfade gemappt werden holen
-        Multimap<Class<? extends Edge>, TargetMetaPathsCreationDefinition> edgesMappingMetaPaths = modelConverterDefinition.getSourceEdgeClassesToTargetMetaPaths();
+        Multimap<Class<? extends Edge>, TargetPathsCreationDefinition> edgesMappingMetaPaths = modelConverterDefinition.getSourceEdgeClassesToTargetMetaPaths();
         //Set aller Kantenklassen holen, die in die Metapfade umgewandelt werden sollen
         Set<Class<? extends Edge>> sourceEdgeClasses = edgesMappingMetaPaths.keySet();
         //Hauptdokument des umzuwandelnden Modells (Ausgangsmodell)
@@ -208,8 +208,8 @@ public class ModelConverter {
             //hole aus dem Ausgangsmodell alle Kanten der umzuwandelnden Art
             List<ModelElement> sourceEdges = sourceMainDoc.getModelItems(sourceEdgeClass, true);
             //hole den MetaPfad der im Zielmodell für die Kante angelegt werden soll
-            Collection<TargetMetaPathsCreationDefinition> edgesMappingMetaPathsCreationDefinitions = edgesMappingMetaPaths.get(sourceEdgeClass);
-            for (TargetMetaPathsCreationDefinition edgesMappingMetaPathsCreationDefinition : edgesMappingMetaPathsCreationDefinitions) {
+            Collection<TargetPathsCreationDefinition> edgesMappingMetaPathsCreationDefinitions = edgesMappingMetaPaths.get(sourceEdgeClass);
+            for (TargetPathsCreationDefinition edgesMappingMetaPathsCreationDefinition : edgesMappingMetaPathsCreationDefinitions) {
                 SimpleMetaPath targetMetaPath = edgesMappingMetaPathsCreationDefinition.getSimpleMetaPath2Create();
                 //Set, in das alle Pfadzwischenelemente kommen, die umbenannt wurden. Diese werden pauschal als identisch betrachtet, wenn sie denselben Namen haben. Diese Elemente werden dann zusammengeführt.
                 Set<ModelElement> generatedRenamedElements = new HashSet<>();

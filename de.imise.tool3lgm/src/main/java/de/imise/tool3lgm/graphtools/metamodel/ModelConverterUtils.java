@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMetaPathsCreationDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMetaPathsCreationDefinition.NameSource;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetPathsCreationDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetPathsCreationDefinition.NameSource;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -173,7 +173,7 @@ public class ModelConverterUtils {
      * @param nameSourceEdge
      * @return Set aller umbenannten Elemente
      */
-    public static final Set<ModelElement> renameAndJoinEqualNamedElements(final TargetMetaPathsCreationDefinition targetMetaPathsCreationDefinition, final SimplePath simplePath, final Edge nameSourceEdge, final Set<ModelElement> alreadyRenamedElements) {
+    public static final Set<ModelElement> renameAndJoinEqualNamedElements(final TargetPathsCreationDefinition targetMetaPathsCreationDefinition, final SimplePath simplePath, final Edge nameSourceEdge, final Set<ModelElement> alreadyRenamedElements) {
         for (int pathStepIndex : targetMetaPathsCreationDefinition) {
             List<ElementaryPath> elementaryPaths = simplePath.getElementaryPaths();
             ElementaryPath elementaryPath = elementaryPaths.get(pathStepIndex);

@@ -14,7 +14,7 @@ import de.imise.template.ihe.IheImportMetaModelDefinition.IheIntegrationProfile_
 import de.imise.template.ihe.IheImportMetaModelDefinition.IheTransaction_Edge;
 import de.imise.template.ihe.IheImportMetaModelDefinition.IntegrationProfile;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMetaPathsCreationDefinition.NameSource;
+import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetPathsCreationDefinition.NameSource;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -78,7 +78,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
     }
 
     @Override
-    public Multimap<Class<? extends Edge>, TargetMetaPathsCreationDefinition> getSourceEdgeClassesToTargetMetaPaths() {
+    public Multimap<Class<? extends Edge>, TargetPathsCreationDefinition> getSourceEdgeClassesToTargetMetaPaths() {
 
         //Das hier auskommentierte wäre die Pfad-Definition zum Anlegen sowohl des Pfades über die Schnittstellen und Transaktionen als auch
         //über die Schnittstellen mit einer Kommnuikationsbeziehung. Das Funktioniert aber erst, wenn man nicht nur SimpleMetaPaths als Paths
@@ -98,7 +98,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
         //        SequenceMetaPath actor_to_Actor_MetaPath = new SequenceMetaPath(actor_to_InvokingInterface_MetaPath, invokingInterface_to_ProvidingInterface_MetaPath, providingInterface_to_Actor_MetaPath);
 
         SimpleMetaPath actor_Transaction_Actor_MetaPath = get_Actor_Transaction_Actor_MetaPath();
-        TargetMetaPathsCreationDefinition def1 = new TargetMetaPathsCreationDefinition(actor_Transaction_Actor_MetaPath);
+        TargetPathsCreationDefinition def1 = new TargetPathsCreationDefinition(actor_Transaction_Actor_MetaPath);
         def1.addElementNameCreationPattern(1, NameSource.PATH_STEP_EDGE_NAME); //EndElement der 2.Kante im Pfad ( IheInvokingInterface_IheTransaction_Edge -> EndElement = Transaction) soll den Namen der Ursprungskante bekommen
 
         //        //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ist vrbunden mit IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
