@@ -1,5 +1,6 @@
 package de.imise.template.ihe;
 
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableListMultimap;
@@ -12,20 +13,22 @@ import de.imise.template.ihe.IheImportMetaModelDefinition.IheDomain_Edge;
 import de.imise.template.ihe.IheImportMetaModelDefinition.IheIntegrationProfile_Edge;
 import de.imise.template.ihe.IheImportMetaModelDefinition.IheTransaction_Edge;
 import de.imise.template.ihe.IheImportMetaModelDefinition.IntegrationProfile;
-import de.imise.tool3lgm.MetaModelContext;
-import de.imise.tool3lgm.Tool3lgmMetaModelContext;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetMetaPathsCreationDefinition.NameSource;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
+import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode;
+import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.metamodel.service.TLGMServiceMetaModel;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInterface_IheTransaction_Edge;
@@ -67,11 +70,15 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
     }
 
     @SuppressWarnings("unchecked")
+    private SimpleMetaPath get_Actor_Transaction_Actor_MetaPath() {
+        //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ruft auf ( <- ) IHE Transaction + IHE Transaction wird bereitsgestellt durch ( <- ) IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
+        SimpleMetaPath actorTransactionActorMetaPath = targetMetaPath(IheActor.class, IheActor.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class, IheProvidingInterface_IheTransaction_Edge.class,
+                IheActor_IheInterface_Edge.class);
+        return actorTransactionActorMetaPath;
+    }
+
     @Override
     public Multimap<Class<? extends Edge>, TargetMetaPathsCreationDefinition> getSourceEdgeClassesToTargetMetaPaths() {
-        Class<? extends MetaModelDefinition> targetMetaModelDefinitionClass = getTargetMetaModelDefinitionClass();
-        MetaModelContext serviceMetaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(targetMetaModelDefinitionClass);
-        MetaModel serviceMetaModel = serviceMetaModelContext.getMetaModel();
 
         //Das hier auskommentierte wäre die Pfad-Definition zum Anlegen sowohl des Pfades über die Schnittstellen und Transaktionen als auch
         //über die Schnittstellen mit einer Kommnuikationsbeziehung. Das Funktioniert aber erst, wenn man nicht nur SimpleMetaPaths als Paths
@@ -90,10 +97,8 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
         //        //Full: Start + Middle + End
         //        SequenceMetaPath actor_to_Actor_MetaPath = new SequenceMetaPath(actor_to_InvokingInterface_MetaPath, invokingInterface_to_ProvidingInterface_MetaPath, providingInterface_to_Actor_MetaPath);
 
-        //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ruft auf ( <- ) IHE Transaction + IHE Transaction wird bereitsgestellt durch ( <- ) IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
-        SimpleMetaPath actorTransactionActorMetaPath = targetMetaPath(IheActor.class, IheActor.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class, IheProvidingInterface_IheTransaction_Edge.class,
-                IheActor_IheInterface_Edge.class);
-        TargetMetaPathsCreationDefinition def1 = new TargetMetaPathsCreationDefinition(actorTransactionActorMetaPath);
+        SimpleMetaPath actor_Transaction_Actor_MetaPath = get_Actor_Transaction_Actor_MetaPath();
+        TargetMetaPathsCreationDefinition def1 = new TargetMetaPathsCreationDefinition(actor_Transaction_Actor_MetaPath);
         def1.addElementNameCreationPattern(1, NameSource.PATH_STEP_EDGE_NAME); //EndElement der 2.Kante im Pfad ( IheInvokingInterface_IheTransaction_Edge -> EndElement = Transaction) soll den Namen der Ursprungskante bekommen
 
         //        //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ist vrbunden mit IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
@@ -114,7 +119,47 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
 
     @Override
     public void transform(final GDCollection source, final GDCollection target) {
-        //das hier macht aus dem Namen "IHE Schnittstelle (bereistellend) 33" den Namen "ITI-43 Schnittstelle (bereitstellend)", je nachdem mit welcher Transaktion die Schnittstelle verbunden ist
+        createCommunicationLinks(target); //Kommunikationsbeziehungen zw. Schnittstellen erzeugen, die über eine Transaktion verbunden sind
+        renameCommunicationInterfacesWithTransactionNames(source, target); //Schnittstellen mit dem Namen der Transaktion versehen
+    }
+
+    /**
+     * Diese Funktion erzeugt zwischen allen Schnittstellen, die über eine Transaktion miteinander verbunden sind, auch eine
+     * IheCommunicationLink_Edge.
+     * Das hier könnte man sich sparen, wenn man parallele Pfade auch aus einem parallelen MetaPfad erzeugen könnte (und nicht
+     * nur SimplePaths aus SimpleMetaPaths wie bisher). Das ganze ist schon angedacht, aber noch nicht umgesetzt (siehe
+     * getSourceEdgeClassesToTargetMetaPaths(). Das hier ist der Quick-And-Dirty-Workaround.
+     *
+     * @param target
+     */
+    private void createCommunicationLinks(final GDCollection target) {
+        SimpleMetaPath actor_Transaction_Actor_MetaPath = get_Actor_Transaction_Actor_MetaPath();
+        Class<? extends ModelElement> startClass = actor_Transaction_Actor_MetaPath.getStartClass();
+        GraphDocument doc = target.getMainGraphDocument();
+        List<ModelElement> actors = doc.getModelItems(startClass);
+        PathResultTreeModel resultTree = MetaPathFunctions.getResultTree(actors, actor_Transaction_Actor_MetaPath);
+        PathResultTreeNode root = resultTree.getRoot();
+        for (PathResultTreeNode actorNodes : root.getChildren()) {
+            for (PathResultTreeNode invokingInterfaceNodes : actorNodes.getChildren()) {
+                ModelElement invokingInterface = invokingInterfaceNodes.getEndElement();
+                for (PathResultTreeNode transactionNodes : invokingInterfaceNodes.getChildren()) {
+                    for (PathResultTreeNode providingInterfaceNodes : transactionNodes.getChildren()) {
+                        ModelElement providingInterface = providingInterfaceNodes.getEndElement();
+                        target.link(IheCommunicationLink_Edge.class, invokingInterface, providingInterface, TransactionManager.STANDARD_PID);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Das hier macht aus dem Namen "IHE Schnittstelle (bereistellend) 33" den Namen "ITI-43 Schnittstelle (bereitstellend)",
+     * je nachdem mit welcher Transaktion die Schnittstelle verbunden ist.
+     *
+     * @param source
+     * @param target
+     */
+    private void renameCommunicationInterfacesWithTransactionNames(final GDCollection source, final GDCollection target) {
         LGMGraphDocument doc = target.getMainGraphDocument();
         for (ModelElement me : doc.getModelItems(IheInterface.class, true)) {
             StringBuilder sb = new StringBuilder();
