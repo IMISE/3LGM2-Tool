@@ -444,6 +444,8 @@ public class MetaPathFunctions {
     }
 
     /**
+     * Das hier ist nur noch drin, weil es auch irgendwas schlaues gemacht hat. Abaer alle anderen Stellen nutzen die
+     * {@link GraphDocument#createPath(ModelElement, ModelElement, de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath, int)}
      * Achtung: Die Funktion geht davon aus, dass die aufrufende Funktion bereits eine Transaction gestartet hat.
      * Hier wird keine Transaction gestartet oder beendet.
      *
