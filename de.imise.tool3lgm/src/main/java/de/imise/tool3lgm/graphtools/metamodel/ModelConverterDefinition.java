@@ -13,10 +13,12 @@ import com.google.common.collect.Multimap;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -142,6 +144,12 @@ public abstract class ModelConverterDefinition {
             targetMetaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(targetMetaModelDefinitionClass);
         }
         return targetMetaModelContext;
+    }
+
+    public SimpleMetaPath targetMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends ModelElement> endClass, @SuppressWarnings("unchecked") final Class<? extends Edge>... associations) {
+        MetaModelContext targetMetaModelContext = getTargetMetaModelContext();
+        MetaModel targetMetaModel = targetMetaModelContext.getMetaModel();
+        return SimpleMetaPathCreator.createSimpleMetaPath(targetMetaModel, startClass, endClass, associations);
     }
 
     /**
