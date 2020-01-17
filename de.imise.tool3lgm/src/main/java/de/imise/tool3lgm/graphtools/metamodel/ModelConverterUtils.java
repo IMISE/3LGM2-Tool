@@ -84,6 +84,9 @@ public class ModelConverterUtils {
                 me.setDescription(resultingDescription);
 
                 LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+
+                //Achtung: Das Join haut nicht richtig hin! daher muss es im Moment umgenagen werden, indem man dafür sorgt, dass es nichts zu joinen gibt und
+                //den 2.Pfad, der entstehen soll, auf andere Weise anlegt
                 equalElement = gdcoll.join(elementHash, resultingJoinedElementHash, mainDoc, TransactionManager.STANDARD_PID); //Element hash for the resulting element must be the second parameter!
                 //if joined with an existing element -> replace the renamed element in the path by the joined one
                 path.replaceElement(me, equalElement);

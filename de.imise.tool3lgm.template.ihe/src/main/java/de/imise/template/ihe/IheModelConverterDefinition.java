@@ -24,10 +24,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.metamodel.service.TLGMServiceMetaModel;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInterface_IheTransaction_Edge;
@@ -68,24 +66,50 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
         return ImmutableMap.of(IheIntegrationProfile_Edge.class, IheIntegrationProfile_IheActor_Edge.class, IheDomain_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public Multimap<Class<? extends Edge>, TargetMetaPathsCreationDefinition> getSourceEdgeClassesToTargetMetaPaths() {
         Class<? extends MetaModelDefinition> targetMetaModelDefinitionClass = getTargetMetaModelDefinitionClass();
         MetaModelContext serviceMetaModelContext = Tool3lgmMetaModelContext.getMetaModelContextForDefinitionClass(targetMetaModelDefinitionClass);
         MetaModel serviceMetaModel = serviceMetaModelContext.getMetaModel();
 
+        //Das hier auskommentierte wäre die Pfad-Definition zum Anlegen sowohl des Pfades über die Schnittstellen und Transaktionen als auch
+        //über die Schnittstellen mit einer Kommnuikationsbeziehung. Das Funktioniert aber erst, wenn man nicht nur SimpleMetaPaths als Paths
+        //anlegen kann sondern auch die anderen (ListMetaPaths)
+        //
+        //        //Start: IheActor  > IheInvokingInterface
+        //        SimpleMetaPath actor_to_InvokingInterface_MetaPath = targetMetaPath(IheActor.class, IheInvokingInterface.class, IheActor_IheInterface_Edge.class);
+        //        //Middle Part 1: IheInvokingInterface > IheTransaction > IheProvidingInterface
+        //        SimpleMetaPath invokingInterface_Transaction_ProvidingInterface_MetaPath = targetMetaPath(IheInvokingInterface.class, IheProvidingInterface.class, IheInvokingInterface_IheTransaction_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
+        //        //Middle Part 2: IheInvokingInterface > IheCommunicationLink > IheProvidingInterface
+        //        SimpleMetaPath invokingInterface_CommunicationLink_ProvidingInterface_MetaPath = targetMetaPath(IheInvokingInterface.class, IheProvidingInterface.class, IheCommunicationLink_Edge.class);
+        //        //Middle: Part 1 + Part 2
+        //        UnionMetaPath invokingInterface_to_ProvidingInterface_MetaPath = new UnionMetaPath(invokingInterface_Transaction_ProvidingInterface_MetaPath, invokingInterface_CommunicationLink_ProvidingInterface_MetaPath);
+        //        //End: IheProvidingInterface > IheActor
+        //        SimpleMetaPath providingInterface_to_Actor_MetaPath = targetMetaPath(IheProvidingInterface.class, IheActor.class, IheActor_IheInterface_Edge.class);
+        //        //Full: Start + Middle + End
+        //        SequenceMetaPath actor_to_Actor_MetaPath = new SequenceMetaPath(actor_to_InvokingInterface_MetaPath, invokingInterface_to_ProvidingInterface_MetaPath, providingInterface_to_Actor_MetaPath);
+
         //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ruft auf ( <- ) IHE Transaction + IHE Transaction wird bereitsgestellt durch ( <- ) IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
-        SimpleMetaPath actorTransactionActorMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(serviceMetaModel, IheActor.class, IheActor.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class,
-                IheProvidingInterface_IheTransaction_Edge.class, IheActor_IheInterface_Edge.class);
+        SimpleMetaPath actorTransactionActorMetaPath = targetMetaPath(IheActor.class, IheActor.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class, IheProvidingInterface_IheTransaction_Edge.class,
+                IheActor_IheInterface_Edge.class);
         TargetMetaPathsCreationDefinition def1 = new TargetMetaPathsCreationDefinition(actorTransactionActorMetaPath);
         def1.addElementNameCreationPattern(1, NameSource.PATH_STEP_EDGE_NAME); //EndElement der 2.Kante im Pfad ( IheInvokingInterface_IheTransaction_Edge -> EndElement = Transaction) soll den Namen der Ursprungskante bekommen
 
-        //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ist vrbunden mit IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
-        SimpleMetaPath actorCommunicationLinkActorMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(serviceMetaModel, IheActor.class, IheActor.class, IheActor_IheInterface_Edge.class, IheCommunicationLink_Edge.class, IheActor_IheInterface_Edge.class);
-        TargetMetaPathsCreationDefinition def2 = new TargetMetaPathsCreationDefinition(actorCommunicationLinkActorMetaPath);
-
+        //        //IHE Actor besitzt IHE Schnittstelle + IHE Schnittstelle (aufrufend) ist vrbunden mit IHE Schnittstelle (bereitstellend) + IHE Schnittstelle gehört zu IHE Actor
+        //        SimpleMetaPath actorCommunicationLinkActorMetaPath = targetMetaPath(IheActor.class, IheActor.class, IheActor_IheInterface_Edge.class, IheCommunicationLink_Edge.class, IheActor_IheInterface_Edge.class);
+        //        TargetMetaPathsCreationDefinition def2 = new TargetMetaPathsCreationDefinition(actorCommunicationLinkActorMetaPath);
+        //
         //beide MetaPfade für die IheTransaction_Edge hinzufügen
-        return ImmutableListMultimap.of(IheTransaction_Edge.class, def1, IheTransaction_Edge.class, def2);
+        //       return ImmutableListMultimap.of(IheTransaction_Edge.class, def1, IheTransaction_Edge.class, def2);
+        //Das funktioniert nicht:
+        //Problem ist das Joinen um Verlauf der Hintereinanderusführung des Anlegens der beiden Pfade. Das müsste komplett bereitigt werden
+        //und dadruch ersetzt werden, dass man die Pfade, die aus derselben Kante entstehen sollen, gleich das im Moment nicht umgesetzte
+        //Anlegen von Pararllelen Pfaden erzeugt.
+        //Lösung hier (bzw. Workaround): Einfach die IheCommunicationLink_Edge zwischen allen Schnittstellen anlegen, die über Transaktionen
+        //verbunden sind. Das sollte in diesem Fall hinhauen.
+
+        return ImmutableListMultimap.of(IheTransaction_Edge.class, def1);
     }
 
     @Override
