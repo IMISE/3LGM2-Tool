@@ -119,6 +119,7 @@ import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.util.StringUtils;
+import de.imise.util.Sys;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
@@ -1254,6 +1255,11 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
+     * Kann man anschlaten, wenn man sehen möchte, was die Funktion {@link #createInferenceEdges(int)} macht.
+     */
+    private static final boolean LOG_CREATE_INFERENCE_EDGES = false;
+
+    /**
      * Creates all missing {@link InferenceEdge}s.
      *
      * @param pid
@@ -1269,9 +1275,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 for (ModelElement me : pathStartElements) {
                     Collection<ModelElement> pathConnectedElements = MetaPathFunctions.getConnectedElements(me, conditionMetaPath);
                     for (ModelElement pathConnected : pathConnectedElements) {
-                        //Edge link = 
-                        link(edgeClass, me, pathConnected, pid);
-                        //Sys.err1(link + " " + edgeClass.getSimpleName());
+                        Edge link = link(edgeClass, me, pathConnected, pid);
+                        if (LOG_CREATE_INFERENCE_EDGES) {
+                            Sys.err1(this + " " + link + " " + edgeClass.getSimpleName());
+                        }
                     }
                 }
             }
