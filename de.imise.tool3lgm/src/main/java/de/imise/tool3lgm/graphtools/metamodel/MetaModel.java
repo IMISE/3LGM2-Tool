@@ -1384,7 +1384,7 @@ public final class MetaModel implements MetaModelSpecific {
      * @return
      */
     public boolean isInstanciationMaster(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
-        return isInstaciation(edgeClass) && isStartClass(edgeClass, elementClass);
+        return isInstanciation(edgeClass) && isStartClass(edgeClass, elementClass);
     }
 
     /**
@@ -1842,7 +1842,7 @@ public final class MetaModel implements MetaModelSpecific {
      * @param edgeClass
      * @return
      */
-    public static final boolean isInstaciation(final Class<? extends Edge> edgeClass) {
+    public static final boolean isInstanciation(final Class<? extends Edge> edgeClass) {
         return InstanciationEdge.class.isAssignableFrom(edgeClass);
     }
 

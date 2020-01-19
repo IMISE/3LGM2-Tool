@@ -649,7 +649,7 @@ public class MetaPathFunctions {
      * @return
      */
     private static final boolean isInstanciationFromMasterToInstance(final Class<? extends Edge> edgeClass, final Direction direction) {
-        boolean isEdgeMasterToInstanceInstanciation = MetaModel.isInstaciation(edgeClass);
+        boolean isEdgeMasterToInstanceInstanciation = MetaModel.isInstanciation(edgeClass);
         if (!isEdgeMasterToInstanceInstanciation) {
             return false;
         }
