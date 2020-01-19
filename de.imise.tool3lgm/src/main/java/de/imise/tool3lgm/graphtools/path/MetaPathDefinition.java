@@ -326,7 +326,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert für die übergebene Kantenklasse den MetaPfad, über den die verbindbaren Elemente ebenfalls bereits verbunden sein müssen.
+     * Mappt von einer Kantenklasse auf den MetaPfad, über den verbindbare Elemente ebenfalls bereits verbunden sein müssen.
      * Dieser Mechanismus ist dafür gedacht, verbindbare Elemente einzuschränken auf bestimmte Elemente.
      *
      * @return
