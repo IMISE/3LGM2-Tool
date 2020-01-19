@@ -1803,6 +1803,23 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
+     * Gibt eine Liste aller Verbindungen der angegebenen Art zurück.<br>
+     * Die übergebene Klasse muss gleich der zurückzugebenen Kantenklassen oder eine Oberklasse davon sein.
+     *
+     * @param edgeClass Klasse der zu suchenden Kanten
+     * @return
+     */
+    public final <T extends Edge> List<T> getTypedEdges(final Class<T> edgeClass) {
+        List<T> returnList = new ArrayList<>(getEdgesCount());
+        for (Edge edge : getEdges()) {
+            if (edgeHasClass(edge, edgeClass)) {
+                returnList.add((T) edge);
+            }
+        }
+        return returnList;
+    }
+
+    /**
      * Counts the edges
      *
      * @param edgeClass Type of edges to count
