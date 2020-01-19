@@ -96,6 +96,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.Connect
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -1522,6 +1523,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             doc.undo(pid);
             return null;
         }
+        //wenn eine InstanciationEdge angelegt wurde, dann prüfen, ob dadurch eine neue Kante
+        //zwischen dem InstanzElement und einem anderen InstanzElement abgeleitet werden muss
+        if (edge instanceof InstanciationEdge) {
+            updateInstanciationInstanceEdgesBetweenInstances((InstanciationEdge) edge, pid);
+        }
+        //bei jeder Kante eventuell ableitbare InstanciationEdges ergänzen
+        updateInstanciationEdgesForAssociationClasses(edge, pid);
         doc.finish_transaction(pid);
         doc.distributeEvent(DATA_CHANGED, pid);
         return edge;
@@ -1670,6 +1678,172 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         doc.distributeEvent(DATA_CHANGED, pid);
     }
 
+    /**
+     * Voraussetzung: Im Metamodell gibt es 2 Knotenklassen A und B die über eine Kantenklasse K verbunden
+     * sind. Dasselbe gibt es nochmal, also die Knotenklassen AA und BB mit der Kantenklasse KK dazwischen.
+     * Die Knotenklasse A hat eine InstanciationEdge zur Knotenklasse AA, die Knotenklasse B eine
+     * {@link InstanciationEdge} zur Knotenklasse BB und die Kantenklasse K eine InstanciationEdge zur
+     * Kantenklasse KK. A, B und K sind die Master der jeweiligen InstanciationEdge und AA, BB und KK die
+     * jeweiligen Instanzen dieser InstanciationEdge, also die aus dem Master jeweils abgeleitete Klasse.<br>
+     * <br>
+     * Ziel: Erzeuge die Kante zwischen Elementen der Art AA und BB, wenn 2 Elemente der Art A und B über
+     * die InstanciationEdge in die Elemente der Art AA und BB abgeleitet wurden. Da zwischen den Elementen
+     * der Art A und B eine Kante der Art K besteht, so wird diese in dieser Funktion automatisch zur Kante
+     * der Art KK abgeleitet zwischen den Elementen der Art AA und BB abgeleitet.
+     *
+     * @param instanciationEdge
+     *            Neue Kante zu einem Instanz-Knoten, für den geprüft wird, ob eine neue Kante zwischen ihm und
+     *            einem anderen Instanz-Knoten gezogen werden muss. Bei dem anderen Knoten gibt es schon eine
+     *            solche {@link InstanciationEdge} ähnlich wie die übergebene. Aber erst mit der übergebenen
+     *            Kante sind alle Voraussetzungen erfüllt, um die Kante zwischen den Knoten abzuleiten
+     * @param pid
+     */
+    private void updateInstanciationInstanceEdgesBetweenInstances(final InstanciationEdge instanciationEdge, final int pid) {
+        //instanciationEdge = IheProvidingInterface_ProvidingInterface_Edge
+        //instanceElement = ProvidingInterface
+        ModelElement instanceElement = instanciationEdge.getInstanceElement();
+        if (!(instanceElement instanceof Node)) {
+            return;
+        }
+        //masterElement = IheProvidingInterface
+        ModelElement masterElement = instanciationEdge.getMasterElement();
+        if (!(masterElement instanceof Node)) {
+            return;
+        }
+        //instanceElementClass = ProvidingInterface.class
+        Class<? extends ModelElement> instanceElementClass = instanceElement.getClass();
+
+        //edgeBetweenMasterElements = IheCommunicationLink
+        for (Edge edgeBetweenMasterElements : masterElement.getEdges()) {
+            if (edgeBetweenMasterElements == instanciationEdge) {
+                continue;
+            }
+            //edgeTypeBetweenMasterElements = IheCommunicationLink.class
+            Class<? extends Edge> edgeTypeBetweenMasterElements = edgeBetweenMasterElements.getClass();
+            //instanciationEdgeTypeOfEdgeTypeBetweenMasterElements = IheCommunicationLink_CommunicationLink_Edge
+            for (Class<InstanciationEdge> instanciationEdgeTypeOfEdgeTypeBetweenMasterElements : metaModel.getInstanciationEdgeTypesAsMaster(edgeTypeBetweenMasterElements)) {
+                //edgeTypeBetweenInstancesAsElementClass = CommunicationLink_Edge
+                Class<? extends ModelElement> edgeTypeBetweenInstancesAsElementClass = InstanciationEdge.getInstanciationInstance(instanciationEdgeTypeOfEdgeTypeBetweenMasterElements);
+                if (!Edge.class.isAssignableFrom(edgeTypeBetweenInstancesAsElementClass)) {
+                    continue;
+                }
+                //edgeTypeBetweenInstances = CommunicationLink_Edge.class
+                Class<? extends Edge> edgeTypeBetweenInstances = edgeTypeBetweenInstancesAsElementClass.asSubclass(Edge.class);
+                //otherInstanceElementClass = InvokingInterface.class
+                Class<? extends ModelElement> otherInstanceElementClass = metaModel.getOther(edgeTypeBetweenInstances, instanceElementClass);
+                if (otherInstanceElementClass == null) {
+                    continue;
+                }
+                //otherMasterElement = IheInvokingInterface
+                ModelElement otherMasterElement = edgeBetweenMasterElements.getOther(masterElement);
+                //edgeOfOtherMasterElement = IheInvokingInterface_InvokingInterface_Edge
+                for (Edge edgeOfOtherMasterElement : otherMasterElement.getTypedEdges(InstanciationEdge.class)) {
+                    if (edgeOfOtherMasterElement == edgeBetweenMasterElements) {
+                        continue;
+                    }
+                    //instanciationEdgeOfOtherMasterElement = IheInvokingInterface_InvokingInterface_Edge
+                    InstanciationEdge instanciationEdgeOfOtherMasterElement = (InstanciationEdge) edgeOfOtherMasterElement;
+                    //otherInstanceElement = InvokingInterface
+                    ModelElement otherInstanceElement = instanciationEdgeOfOtherMasterElement.getInstanceElement();
+                    if (otherInstanceElement == otherMasterElement) {
+                        continue;
+                    }
+                    //otherInstanceClass = InvokingInterface.class
+                    Class<? extends ModelElement> otherInstanceClass = otherInstanceElement.getClass();
+                    if (otherInstanceElementClass.isAssignableFrom(otherInstanceClass)) {
+                        link(edgeTypeBetweenInstances, instanceElement, otherInstanceElement, pid);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Voraussetzung: Es gibt 2 Knotenklassen A und B die über eine Kantenklasse K verbunden sind. Dasselbe
+     * gibt es nochmal, also die Knotenklassen AA und BB mit der Kantenklasse KK dazwischen. Die Knotenklasse
+     * A hat eine InstanciationEdge zur Knotenklasse AA, die Knotenklasse B eine InstanciationEdge zur
+     * Knotenklasse BB und die Kantenklasse K eine InstanciationEdge zur Kantenklasse KK. A, B und K sind
+     * die Master der jeweiligen InstanciationEdge und AA, BB und KK die jeweiligen Instanzen dieser
+     * InstanciationEdge, also die aus dem Master jeweils abgeleitete Klasse.<br>
+     * <br>
+     * Ziel: Erzeuge die InstanciationEdge zw. 2 Kantenelementen, wenn alle anderen Knoten- und Kantenelemente
+     * dieses Graph-Ausschnittes bereits vorhanden sind. D.h. es gibt zwei Knoten von der Art A und B die als
+     * Master jeweils über eine InstanciationEdge mit Instanz-Elementen der Art AA und BB verbunden sind und
+     * sowohl zwischen den Elementen der Art A und B als auch zwischen denen der Art AA und BB die jeweilige
+     * Kante besteht.
+     *
+     * @param edge
+     */
+    private void updateInstanciationEdgesForAssociationClasses(final Edge edge, final int pid) {
+        //Klasse der übergebenen Kante (CommunicationLink_Edge)
+        Class<? extends Edge> edgeClass = edge.getClass();
+        //Startklasse der übergebenen Kante (InvokingInterface)
+        Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
+        //Endklasse der übergebenen Kante (ProvidingInterface)
+        Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
+
+        //für alle InstanciationEdge-Kanten der EdgeClass, bei denen diese EdgeClass die Instanz und nicht der Master ist (IheCommunicationLink_CommunicationLink_Edge)
+        for (Class<? extends InstanciationEdge> instanciationEdgeClassToMaster : metaModel.getInstanciationEdgeTypesAsSlave(edgeClass)) {
+            //hole den Master dieser InstanciationEdges (IheCommunicationLink_Edge)
+            Class<? extends ModelElement> instanciationEdgeMasterClass = InstanciationEdge.getInstanciationMaster(instanciationEdgeClassToMaster);
+
+            //wenn das auch eine Kante ist (was es im Metamodell sinnvollerweise sein sollte, da man eine Kante nur zu einer Kante 'inszanziieren' kann), dann...
+            if (Edge.class.isAssignableFrom(instanciationEdgeMasterClass)) {
+                //diese auf Kante casten
+                Class<? extends Edge> instanciationEdgeMasterEdgeClass = instanciationEdgeMasterClass.asSubclass(Edge.class);
+                //Startklasse dieser Kante holen (IheInvokingInterface)
+                Class<? extends ModelElement> instanciationEdgeMasterEdgeClassStartClass = Edge.getStartClass(instanciationEdgeMasterEdgeClass);
+
+                //für alle InstanciationEdge-Kanten von dieser Startklasse, bei denen diese Startklasse der Master ist
+                for (Class<? extends InstanciationEdge> instanciationEdgeOfMaster1 : metaModel.getInstanciationEdgeTypesAsMaster(instanciationEdgeMasterEdgeClassStartClass)) {
+                    //prüfe, ob der Slave bzw. die Instanz dieser InstanciationEdge-Klasse auch Start- oder End der übergebenen Ausgangskantenart ist
+                    Class<? extends ModelElement> instanciationInstance1 = InstanciationEdge.getInstanciationInstance(instanciationEdgeOfMaster1);
+                    boolean isStartClass1 = instanciationInstance1.isAssignableFrom(edgeStartClass);
+                    boolean isEndClass1 = instanciationInstance1.isAssignableFrom(edgeEndClass);
+
+                    //wenn diese Startklasse der Master
+                    if (isStartClass1 || isEndClass1) {
+                        //Endklasse der Kante holen (IheProvidingInterface)
+                        Class<? extends ModelElement> instanciationEdgeMasterEdgeClassEndClass = Edge.getEndClass(instanciationEdgeMasterEdgeClass);
+
+                        //für alle InstanciationEdge-Kanten von dieser Startklasse, bei denen diese Startklasse der Master ist
+                        for (Class<? extends InstanciationEdge> instanciationEdgeOfMaster2 : metaModel.getInstanciationEdgeTypesAsMaster(instanciationEdgeMasterEdgeClassEndClass)) {
+                            //prüfe, ob der Slave bzw. die Instanz dieser InstanciationEdge-Klasse auch Ende der übergebenen Ausgangskante ist
+                            Class<? extends ModelElement> instanciationInstance2 = InstanciationEdge.getInstanciationInstance(instanciationEdgeOfMaster2);
+
+                            boolean isStartClass2 = instanciationInstance2.isAssignableFrom(edgeStartClass);
+                            boolean isEndClass2 = instanciationInstance2.isAssignableFrom(edgeEndClass);
+
+                            //Im Metamodell sind beide Elemente der übergebenen Edge-Klasse auch über InstanciatonEdges verbunden
+                            //-> nun prüfen, ob diese MetaPfade als Pfade bei der übergebenen Kante auch vorhanden sind
+                            if (isStartClass1 && isEndClass2 || isStartClass2 && isEndClass1) {
+                                Class<? extends InstanciationEdge> edgeStartInstanciationEdge = isStartClass1 ? instanciationEdgeOfMaster1 : instanciationEdgeOfMaster2;
+                                Class<? extends InstanciationEdge> edgeEndInstanciationEdge = isEndClass1 ? instanciationEdgeOfMaster1 : instanciationEdgeOfMaster2;
+
+                                ModelElement edgeStart = edge.getStart();
+                                List<ModelElement> edgeStartMasters = edgeStart.getConnectedElements(ModelElement.class, edgeStartInstanciationEdge, InstanciationEdge.INSTANCE_TO_MASTER_DIRECTION);
+                                ModelElement edgeEnd = edge.getEnd();
+                                List<ModelElement> edgeEndMasters = edgeEnd.getConnectedElements(ModelElement.class, edgeEndInstanciationEdge, InstanciationEdge.INSTANCE_TO_MASTER_DIRECTION);
+                                for (ModelElement edgeStartMaster : edgeStartMasters) {
+                                    for (ModelElement edgeEndMaster : edgeEndMasters) {
+                                        List<Edge> masterEdgesToLink = edgeStartMaster.getEdgesWith(edgeEndMaster, instanciationEdgeMasterEdgeClass);
+                                        for (Edge masterEdgeToLink : masterEdgesToLink) {
+                                            @SuppressWarnings("unused")
+                                            Edge link = link(instanciationEdgeClassToMaster, edge, masterEdgeToLink, pid);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
     private void updateElementNames() {
         List<ModelElement> modelItemsWithNameExtensions = getModelItems(this, metaModel.getElementClassesWithNameExtensionPath());
         for (ModelElement me : modelItemsWithNameExtensions) {
