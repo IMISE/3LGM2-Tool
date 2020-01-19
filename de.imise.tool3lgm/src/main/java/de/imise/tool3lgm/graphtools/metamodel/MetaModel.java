@@ -1259,6 +1259,80 @@ public final class MetaModel implements MetaModelSpecific {
         return returnClasses;
     }
 
+    /**
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
+     * und bei der die Elementklasse das Super-Element ist.
+     *
+     * @param elementClass
+     * @return
+     */
+    public List<Class<InstanciationEdge>> getInstanciationEdgeTypesAsMaster(final Class<? extends ModelElement> elementClass) {
+        return getSubordinationEdgeTypesAsMaster(elementClass, InstanciationEdge.class);
+    }
+
+    /**
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
+     * und bei der die Elementklasse jedas Sub-Element ist.
+     *
+     * @param elementClass
+     * @return
+     */
+    public List<Class<InstanciationEdge>> getInstanciationEdgeTypesAsSlave(final Class<? extends ModelElement> elementClass) {
+        return getSubordinationEdgeTypesAsSlave(elementClass, InstanciationEdge.class);
+    }
+
+    /**
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
+     * und bei der die Elementklasse das Super-Element ist.
+     *
+     * @param <T>
+     * @param elementClass
+     * @param subordinationEdgeClass
+     * @return
+     */
+    private <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypesAsMaster(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass) {
+        return getSubordinationEdgeTypes(elementClass, subordinationEdgeClass, true);
+    }
+
+    /**
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
+     * und bei der die Elementklasse jedas Sub-Element ist.
+     *
+     * @param <T>
+     * @param elementClass
+     * @param subordinationEdgeClass
+     * @return
+     */
+    private <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypesAsSlave(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass) {
+        return getSubordinationEdgeTypes(elementClass, subordinationEdgeClass, false);
+    }
+
+    /**
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
+     * und bei der die Elementklasse je nach übergebenem boolean Parameter entweder das Sub- (false) oder das
+     * Super-Element (true) ist.
+     *
+     * @param <T>
+     * @param elementClass
+     * @param subordinationEdgeClass
+     * @param superElement
+     * @return
+     */
+    private <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypes(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass, final boolean superElement) {
+        Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass);
+        List<Class<T>> returnList = new ArrayList<>();
+        for (Class<? extends Edge> edgeType : edgeTypes) {
+            if (subordinationEdgeClass.isAssignableFrom(edgeType)) {
+                returnList.add((Class<T>) edgeType);
+            }
+        }
+        return returnList;
+    }
+
+    /**
+     * @param layer
+     * @return
+     */
     public final Iterable<Class<? extends ModelElement>> getCreatableLayerNodes(final int layer) {
         if (layer == ModelConstants.DOMAIN_LAYER) {
             return creatableDomainLayerNodes;
@@ -1385,6 +1459,18 @@ public final class MetaModel implements MetaModelSpecific {
      */
     public boolean isInstanciationMaster(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         return isInstanciation(edgeClass) && isStartClass(edgeClass, elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn es sich bei der übergebenen Kantenklasse um eine {@link InstanciationEdge} handelt und die übergebene
+     * Elementklasse davon das EndElement - also die Instanz ist und nicht das instanziierbare Element.
+     *
+     * @param edgeClass
+     * @param elementClass
+     * @return
+     */
+    public boolean isInstanciationInstance(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        return isInstanciation(edgeClass) && isEndClass(edgeClass, elementClass);
     }
 
     /**
