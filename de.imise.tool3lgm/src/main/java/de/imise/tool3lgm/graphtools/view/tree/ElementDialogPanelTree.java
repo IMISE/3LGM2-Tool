@@ -35,56 +35,55 @@ public class ElementDialogPanelTree extends CorrectSelectionTree {
         elementsAdded.clear();
     }
 
-    public LGMTreeNode addObject(final ElementContainer objekt, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
-        return addObject(objekt, parent, excludeChildren, force, true, childrenAreSelectable);
+    public LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean childrenAreSelectable) {
+        return addObject(ec, parent, excludeChildren, force, true, childrenAreSelectable);
     }
 
-    public LGMTreeNode addObject(final ElementContainer objekt, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
-        if (objekt instanceof NodeContainer) {
-            NodeContainer kc = (NodeContainer) objekt;
-            if (checkAlreadyAdded && elementsAdded.contains(kc)) {
-                return null;
-            }
-            boolean showPartOfHierarchy = OPTION_SHOW_PART_OF_HIERARCHY.is();
-            if (showPartOfHierarchy && !force && !kc.getElement().getParentElements().isEmpty()) {
-                return null;
-            }
-            LGMTreeNode elementNode = new ElementContainerTreeNode(kc, false, true);
-            if (excludeChildren != null && excludeChildren.contains(kc)) {
-                elementNode.setSelectable(false);
-            }
-
-            parent.add(elementNode);
-            elementsAdded.add(kc);
-            if (showPartOfHierarchy) {
-                addChildren(elementNode, excludeChildren, checkAlreadyAdded, childrenAreSelectable);
-            }
-
-            //this.setExpandedState(new TreePath(elementNode.getPath()), false);
-            return elementNode;
+    public LGMTreeNode addObject(final ElementContainer ec, final LGMTreeNode parent, final Collection<ElementContainer> excludeChildren, final boolean force, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
+        if (checkAlreadyAdded && elementsAdded.contains(ec)) {
+            return null;
         }
-        return null;
+        boolean showPartOfHierarchy = OPTION_SHOW_PART_OF_HIERARCHY.is();
+        if (showPartOfHierarchy && !force && !ec.getElement().getParentElements().isEmpty()) {
+            return null;
+        }
+        LGMTreeNode elementNode = new ElementContainerTreeNode(ec, false, true);
+        if (excludeChildren != null && excludeChildren.contains(ec)) {
+            elementNode.setSelectable(false);
+        }
+
+        parent.add(elementNode);
+        elementsAdded.add(ec);
+        if (showPartOfHierarchy) {
+            addChildren(elementNode, excludeChildren, checkAlreadyAdded, childrenAreSelectable);
+        }
+
+        //this.setExpandedState(new TreePath(elementNode.getPath()), false);
+        return elementNode;
     }
 
     private void addChildren(final LGMTreeNode elementNode, final Collection<ElementContainer> excludeChildren, final boolean checkAlreadyAdded, final boolean childrenAreSelectable) {
-        NodeContainer kc = (NodeContainer) elementNode.getUserObject();
+        Object elementNodeUserObject = elementNode.getUserObject();
+        if (elementNodeUserObject instanceof NodeContainer) { //only Nodes can have parts
+            NodeContainer kc = (NodeContainer) elementNodeUserObject;
 
-        List<ElementContainer> all = kc.getNode().getDirectPartContainers(doc);
-        for (int i = 0; i < all.size(); i++) {
-            NodeContainer pc = (NodeContainer) all.get(i);
+            List<ElementContainer> all = kc.getNode().getDirectPartContainers(doc);
+            for (int i = 0; i < all.size(); i++) {
+                NodeContainer pc = (NodeContainer) all.get(i);
 
-            if (pc == null || checkAlreadyAdded && elementsAdded.contains(pc)) {
-                continue;
+                if (pc == null || checkAlreadyAdded && elementsAdded.contains(pc)) {
+                    continue;
+                }
+
+                LGMTreeNode childNode = new ElementContainerTreeNode(pc, false, true);
+                childNode.setSelectable(childrenAreSelectable);
+                if (excludeChildren != null && excludeChildren.contains(pc)) {
+                    childNode.setSelectable(false);
+                }
+                elementNode.add(childNode);
+                elementsAdded.add(pc);
+                addChildren(childNode, excludeChildren, checkAlreadyAdded, childrenAreSelectable);
             }
-
-            LGMTreeNode childNode = new ElementContainerTreeNode(pc, false, true);
-            childNode.setSelectable(childrenAreSelectable);
-            if (excludeChildren != null && excludeChildren.contains(pc)) {
-                childNode.setSelectable(false);
-            }
-            elementNode.add(childNode);
-            elementsAdded.add(pc);
-            addChildren(childNode, excludeChildren, checkAlreadyAdded, childrenAreSelectable);
         }
     }
 
