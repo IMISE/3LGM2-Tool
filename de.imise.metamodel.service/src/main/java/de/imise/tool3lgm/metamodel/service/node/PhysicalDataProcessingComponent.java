@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.metamodel.service.node;
 
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_ELEMENT_NAME;
+
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
@@ -19,8 +21,8 @@ public class PhysicalDataProcessingComponent extends Node {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addDescripPanel(PhysicalDataProcessingComponent_Location_Edge.class);
         dialog.addDescripPanel(PhysicalDataProcessingComponent_DeviceClass_Edge.class);
-        dialog.addEdgePanel(DataTransmissionLink_Edge.class);
-        dialog.addEdgePanel(PhysicalDataProcessingComponentVirtualises_Edge.class);
+        dialog.addEdgePanel(LABEL_LAST_EDGE_ELEMENT_NAME, DataTransmissionLink_Edge.class);
+        dialog.addEdgePanel(LABEL_LAST_EDGE_ELEMENT_NAME, PhysicalDataProcessingComponentVirtualises_Edge.class);
         dialog.addEdgePanel(ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class);
         dialog.addEdgePanel(ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class);
         return dialog;
