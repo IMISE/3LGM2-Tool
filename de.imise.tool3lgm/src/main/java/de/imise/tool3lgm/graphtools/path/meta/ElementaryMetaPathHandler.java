@@ -9,6 +9,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.Connect
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath.Type;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -250,5 +251,105 @@ public final class ElementaryMetaPathHandler {
     //    public static final ElementaryMetaPath _eBD(final Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass) {
     //        return getMetaPath(doubleMeaningEdgeClass, Direction.BACKWARD, ConnectionState.DOUBLE);
     //    }
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Factory-Funktionen zum Erzeugen von ElemenatrMetaPfaden, die von Kanten zu einem ihrer Enden laufen //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // Edge to End (Direction = BACKWARD) = START_WITH_EDGE: edgeClass -> edgeClass -> BACKWARD -> startClass
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getEdgeToStartElementMetaPath(final Class<? extends Edge> edgeClass) {
+        return getEdgeToStartElementMetaPath(edgeClass, Edge.getStartClass(edgeClass));
+    }
+
+    /**
+     * @param edgeClass
+     * @param edgeStartClassAsPathEndClass
+     * @return
+     */
+    public final ElementaryMetaPath getEdgeToStartElementMetaPath(final Class<? extends Edge> edgeClass, Class<? extends ModelElement> edgeStartClassAsPathEndClass) {
+        if (edgeStartClassAsPathEndClass == null) {
+            edgeStartClassAsPathEndClass = Edge.getStartClass(edgeClass);
+        } else {
+            edgeStartClassAsPathEndClass = ReflectionUtils.getMostSpecialClass(edgeStartClassAsPathEndClass, Edge.getStartClass(edgeClass));
+        }
+        return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, edgeStartClassAsPathEndClass, Direction.BACKWARD, null, Type.START_WITH_EDGE);
+    }
+
+    // Edge to End (Direction = FORWARD) = START_WITH_EDGE: edgeClass -> edgeClass -> FORWARD -> endClass
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getEdgeToEndElementMetaPath(final Class<? extends Edge> edgeClass) {
+        return getEdgeToEndElementMetaPath(edgeClass, null);
+    }
+
+    /**
+     * @param edgeClass
+     * @param edgeEndClassAsPathEndClass
+     * @return
+     */
+    public final ElementaryMetaPath getEdgeToEndElementMetaPath(final Class<? extends Edge> edgeClass, Class<? extends ModelElement> edgeEndClassAsPathEndClass) {
+        if (edgeEndClassAsPathEndClass == null) {
+            edgeEndClassAsPathEndClass = Edge.getEndClass(edgeClass);
+        } else {
+            edgeEndClassAsPathEndClass = ReflectionUtils.getMostSpecialClass(edgeEndClassAsPathEndClass, Edge.getEndClass(edgeClass));
+        }
+        return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, edgeEndClassAsPathEndClass, Direction.FORWARD, null, Type.START_WITH_EDGE);
+    }
+
+    // Start to Edge (Direction = FORWARD) = END_WITH_EDGE: startClass -> edgeClass -> FORWARD -> edgeClass
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getStartElementToEdgeMetaPath(final Class<? extends Edge> edgeClass) {
+        return getStartElementToEdgeMetaPath(null, edgeClass);
+    }
+
+    /**
+     * @param edgeStartClassAsPathStartClass
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getStartElementToEdgeMetaPath(Class<? extends ModelElement> edgeStartClassAsPathStartClass, final Class<? extends Edge> edgeClass) {
+        if (edgeStartClassAsPathStartClass == null) {
+            edgeStartClassAsPathStartClass = Edge.getStartClass(edgeClass);
+        } else {
+            edgeStartClassAsPathStartClass = ReflectionUtils.getMostSpecialClass(edgeStartClassAsPathStartClass, Edge.getStartClass(edgeClass));
+        }
+        return new ElementaryMetaPath(metaModel, edgeStartClassAsPathStartClass, edgeClass, edgeClass, Direction.FORWARD, null, Type.END_WITH_EDGE);
+    }
+
+    // End to Edge (Direction = BACKWARD) = END_WITH_EDGE: endClass -> edgeClass -> BACKWARD -> edgeClass
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getEndElementToEdgeMetaPath(final Class<? extends Edge> edgeClass) {
+        return getEndElementToEdgeMetaPath(edgeClass, null);
+    }
+
+    /**
+     * @param edgeEndClassAsPathStartClass
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getEndElementToEdgeMetaPath(Class<? extends ModelElement> edgeEndClassAsPathStartClass, final Class<? extends Edge> edgeClass) {
+        if (edgeEndClassAsPathStartClass == null) {
+            edgeEndClassAsPathStartClass = Edge.getEndClass(edgeClass);
+        } else {
+            edgeEndClassAsPathStartClass = ReflectionUtils.getMostSpecialClass(edgeEndClassAsPathStartClass, Edge.getEndClass(edgeClass));
+        }
+        return new ElementaryMetaPath(metaModel, edgeEndClassAsPathStartClass, edgeClass, edgeClass, Direction.BACKWARD, null, Type.END_WITH_EDGE);
+    }
 
 }

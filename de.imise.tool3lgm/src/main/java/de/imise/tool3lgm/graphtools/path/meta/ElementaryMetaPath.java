@@ -199,7 +199,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @param type
      */
-    private ElementaryMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final Direction direction, final ConnectionState connectionState,
+    ElementaryMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final Direction direction, final ConnectionState connectionState,
             final Type type) {
         super(metaModel, getStartClass(startClass, edgeClass, direction, type), getEndClass(endClass, edgeClass, direction, type));
         this.startClass = super.getStartClass();
@@ -552,114 +552,6 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     public final boolean containsPropertyTransferEdge() {
         Class<? extends Edge> edgeClass = getEdgeClass();
         return edgeClass != null && PropertyTransferEdge.class.isAssignableFrom(getEdgeClass());
-    }
-
-    ////////////////////////
-    // Factory-Funktionen //
-    ////////////////////////
-
-    // Edge to End (Direction = BACKWARD) = START_WITH_EDGE: edgeClass -> edgeClass -> BACKWARD -> startClass
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath createEdgeToStartElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return createEdgeToStartElementMetaPath(metaModel, edgeClass, Edge.getStartClass(edgeClass));
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @param edgeStartClassAsPathEndClass
-     * @return
-     */
-    public static final ElementaryMetaPath createEdgeToStartElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, Class<? extends ModelElement> edgeStartClassAsPathEndClass) {
-        if (edgeStartClassAsPathEndClass == null) {
-            edgeStartClassAsPathEndClass = Edge.getStartClass(edgeClass);
-        } else {
-            edgeStartClassAsPathEndClass = ReflectionUtils.getMostSpecialClass(edgeStartClassAsPathEndClass, Edge.getStartClass(edgeClass));
-        }
-        return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, edgeStartClassAsPathEndClass, Direction.BACKWARD, null, Type.START_WITH_EDGE);
-    }
-
-    // Edge to End (Direction = FORWARD) = START_WITH_EDGE: edgeClass -> edgeClass -> FORWARD -> endClass
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath createEdgeToEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return createEdgeToEndElementMetaPath(metaModel, edgeClass, null);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @param edgeEndClassAsPathEndClass
-     * @return
-     */
-    public static final ElementaryMetaPath createEdgeToEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, Class<? extends ModelElement> edgeEndClassAsPathEndClass) {
-        if (edgeEndClassAsPathEndClass == null) {
-            edgeEndClassAsPathEndClass = Edge.getEndClass(edgeClass);
-        } else {
-            edgeEndClassAsPathEndClass = ReflectionUtils.getMostSpecialClass(edgeEndClassAsPathEndClass, Edge.getEndClass(edgeClass));
-        }
-        return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, edgeEndClassAsPathEndClass, Direction.FORWARD, null, Type.START_WITH_EDGE);
-    }
-
-    // Start to Edge (Direction = FORWARD) = END_WITH_EDGE: startClass -> edgeClass -> FORWARD -> edgeClass
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath createStartElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return createStartElementToEdgeMetaPath(metaModel, null, edgeClass);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeStartClassAsPathStartClass
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath createStartElementToEdgeMetaPath(final MetaModel metaModel, Class<? extends ModelElement> edgeStartClassAsPathStartClass, final Class<? extends Edge> edgeClass) {
-        if (edgeStartClassAsPathStartClass == null) {
-            edgeStartClassAsPathStartClass = Edge.getStartClass(edgeClass);
-        } else {
-            edgeStartClassAsPathStartClass = ReflectionUtils.getMostSpecialClass(edgeStartClassAsPathStartClass, Edge.getStartClass(edgeClass));
-        }
-        return new ElementaryMetaPath(metaModel, edgeStartClassAsPathStartClass, edgeClass, edgeClass, Direction.FORWARD, null, Type.END_WITH_EDGE);
-    }
-
-    // End to Edge (Direction = BACKWARD) = END_WITH_EDGE: endClass -> edgeClass -> BACKWARD -> edgeClass
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath createEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return createEndElementToEdgeMetaPath(metaModel, edgeClass, null);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeEndClassAsPathStartClass
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath createEndElementToEdgeMetaPath(final MetaModel metaModel, Class<? extends ModelElement> edgeEndClassAsPathStartClass, final Class<? extends Edge> edgeClass) {
-        if (edgeEndClassAsPathStartClass == null) {
-            edgeEndClassAsPathStartClass = Edge.getEndClass(edgeClass);
-        } else {
-            edgeEndClassAsPathStartClass = ReflectionUtils.getMostSpecialClass(edgeEndClassAsPathStartClass, Edge.getEndClass(edgeClass));
-        }
-        return new ElementaryMetaPath(metaModel, edgeEndClassAsPathStartClass, edgeClass, edgeClass, Direction.BACKWARD, null, Type.END_WITH_EDGE);
     }
 
     /**

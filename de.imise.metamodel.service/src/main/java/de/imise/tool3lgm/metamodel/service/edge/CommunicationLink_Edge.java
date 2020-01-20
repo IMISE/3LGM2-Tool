@@ -53,13 +53,13 @@ public final class CommunicationLink_Edge extends BooleanAttributeEdge {
         //IheActorInsances können überhaupt Transaktionen verknüpft sein
 
         MetaModel metaModel = getMetaModel();
-        ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
+        ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
         //this = CommunicationLink_Edge -> StartElement = InvokingInterface
-        ElementaryMetaPath communicationLink_StartElement_InvokingInterface = ElementaryMetaPath.createEdgeToStartElementMetaPath(metaModel, CommunicationLink_Edge.class);
+        ElementaryMetaPath communicationLink_StartElement_InvokingInterface = emph.getEdgeToStartElementMetaPath(CommunicationLink_Edge.class);
         //this = CommunicationLink_Edge -> EndElement = ProvidingInterface
-        ElementaryMetaPath communicationLink_EndElement_ProvidingInterface = ElementaryMetaPath.createEdgeToEndElementMetaPath(metaModel, CommunicationLink_Edge.class);
+        ElementaryMetaPath communicationLink_EndElement_ProvidingInterface = emph.getEdgeToEndElementMetaPath(CommunicationLink_Edge.class);
         //CommunicationInterface -> IheActorInstance
-        ElementaryMetaPath communicationInterface_IheActorInstance = elementaryMetaPathHandler.getMetaPath(CommunicationInterface.class, ApplicationComponent_CommunicationInterface_Edge.class, Direction.BACKWARD, IheActorInstance.class);
+        ElementaryMetaPath communicationInterface_IheActorInstance = emph.getMetaPath(CommunicationInterface.class, ApplicationComponent_CommunicationInterface_Edge.class, Direction.BACKWARD, IheActorInstance.class);
         //Gesamtpfad 1: this = CommunicationLink_Edge -> StartElement = InvokingInterface -> IheActorInstance
         SimpleMetaPath communicationLink_InvokingInterface_IheActorInstance = new SimpleMetaPath(communicationLink_StartElement_InvokingInterface, communicationInterface_IheActorInstance);
         //Gesamtpfad 2: this = CommunicationLink_Edge -> EndElement = ProvidingInterface -> IheActorInstance

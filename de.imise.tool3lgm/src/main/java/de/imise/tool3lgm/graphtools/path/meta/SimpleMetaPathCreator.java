@@ -487,14 +487,15 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             final boolean forward) {
         //path cannot be an ELEMENT_EDGE_ELEMENT ElementaryMetaPath -> test START_WITH_EDGE or END_WITH_EDGE
         //one of the start and endClass must a regular start- or endClass of the edge and the other must be an assinable edge class to the edgeClass of the matpath
+        ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
         if (forward) {
             if (startClass != null) {
                 Class<? extends ModelElement> commonSuperStartAndEdgeClass = ReflectionUtils.getMostSpecialClass(startClass, edgeClass);
                 if (commonSuperStartAndEdgeClass != null) { // START_WITH_EDGE
                     if (endClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass)) {
-                        return ElementaryMetaPath.createEdgeToEndElementMetaPath(metaModel, edgeClass, endClass); //FORWARD to edgeEndElement
+                        return emph.getEdgeToEndElementMetaPath(edgeClass, endClass); //FORWARD to edgeEndElement
                     } else if (metaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass)) {
-                        return ElementaryMetaPath.createEdgeToStartElementMetaPath(metaModel, edgeClass, endClass); //BACKWARD to edgeStartElement
+                        return emph.getEdgeToStartElementMetaPath(edgeClass, endClass); //BACKWARD to edgeStartElement
                     }
                 }
             }
@@ -503,9 +504,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 Class<? extends ModelElement> commonSuperEndAndEdgeClass = ReflectionUtils.getMostSpecialClass(endClass, edgeClass);
                 if (commonSuperEndAndEdgeClass != null) { // END_WITH_EDGE
                     if (startClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) {
-                        return ElementaryMetaPath.createStartElementToEdgeMetaPath(metaModel, startClass, edgeClass);//FORWARD to edge
+                        return emph.getStartElementToEdgeMetaPath(startClass, edgeClass);//FORWARD to edge
                     } else if (metaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) {
-                        return ElementaryMetaPath.createEndElementToEdgeMetaPath(metaModel, startClass, edgeClass);//BACKWARD to edge
+                        return emph.getEndElementToEdgeMetaPath(startClass, edgeClass);//BACKWARD to edge
                     }
                 }
             }

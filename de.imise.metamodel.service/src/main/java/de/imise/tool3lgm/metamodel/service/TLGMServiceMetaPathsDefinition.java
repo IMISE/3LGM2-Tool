@@ -125,28 +125,28 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         //        SimpleMetaPath service_CommunicationLink_InferenceMetaPath_part1 = simpleMetaPathCreator.createSimpleMetaPath(CommunicationLink_Edge.class, Service.class, Service_ProvidingInterface_Edge.class);
         //        SimpleMetaPath service_CommunicationLink_InferenceMetaPath_part2 = simpleMetaPathCreator.createSimpleMetaPath(CommunicationLink_Edge.class, Service.class, Service_InvokingInterface_Edge.class);
         MetaModel metaModel = getMetaModel();
-        ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
+        ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
 
         //Path: CommunicationLink_Edge -> CommunicationLink_Edge-StartElement = InvokingInterface ->  Service_InvokingInterface_Edge -> Service
-        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath1_pathStep1 = ElementaryMetaPath.createEdgeToStartElementMetaPath(metaModel, CommunicationLink_Edge.class, InvokingInterface.class);
-        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath1_pathStep2 = elementaryMetaPathHandler.getMetaPath(InvokingInterface.class, Service_InvokingInterface_Edge.class, Direction.BACKWARD, Service.class);
+        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath1_pathStep1 = emph.getEdgeToStartElementMetaPath(CommunicationLink_Edge.class, InvokingInterface.class);
+        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath1_pathStep2 = emph.getMetaPath(InvokingInterface.class, Service_InvokingInterface_Edge.class, Direction.BACKWARD, Service.class);
         SimpleMetaPath service_CommunicationLink_InferenceMetaPath1 = new SimpleMetaPath(service_CommunicationLink_InferenceMetaPath1_pathStep1, service_CommunicationLink_InferenceMetaPath1_pathStep2);
 
         //Path: CommunicationLink_Edge -> CommunicationLink_Edge-EndElement = ProvidingInterface ->  Service_InvokingInterface_Edge -> Service
-        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath2_pathStep1 = ElementaryMetaPath.createEdgeToEndElementMetaPath(metaModel, CommunicationLink_Edge.class, ProvidingInterface.class);
-        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath2_pathStep2 = elementaryMetaPathHandler.getMetaPath(InvokingInterface.class, Service_ProvidingInterface_Edge.class, Direction.BACKWARD, Service.class);
+        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath2_pathStep1 = emph.getEdgeToEndElementMetaPath(CommunicationLink_Edge.class, ProvidingInterface.class);
+        ElementaryMetaPath service_CommunicationLink_InferenceMetaPath2_pathStep2 = emph.getMetaPath(InvokingInterface.class, Service_ProvidingInterface_Edge.class, Direction.BACKWARD, Service.class);
         SimpleMetaPath service_CommunicationLink_InferenceMetaPath2 = new SimpleMetaPath(service_CommunicationLink_InferenceMetaPath2_pathStep1, service_CommunicationLink_InferenceMetaPath2_pathStep2);
 
         AbstractMetaPath service_CommunicationLink_InferenceMetaPath = new SectionMetaPath(service_CommunicationLink_InferenceMetaPath1, service_CommunicationLink_InferenceMetaPath2);
 
         //Path: IheCommunicationLink_Edge -> IheCommunicationLink_Edge-StartElement = IheInvokingInterface ->  IheTransaction_IheInvokingInterface_Edge -> IheTransaction
-        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep1 = ElementaryMetaPath.createEdgeToStartElementMetaPath(metaModel, IheCommunicationLink_Edge.class, IheInvokingInterface.class);
-        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep2 = elementaryMetaPathHandler.getMetaPath(IheInvokingInterface.class, IheInvokingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
+        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep1 = emph.getEdgeToStartElementMetaPath(IheCommunicationLink_Edge.class, IheInvokingInterface.class);
+        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep2 = emph.getMetaPath(IheInvokingInterface.class, IheInvokingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
         SimpleMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath1 = new SimpleMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep1, iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep2);
 
         //Path: IheCommunicationLink_Edge -> IheCommunicationLink_Edge-EndElement = IheProvidingInterface ->  IheTransaction_IheProvidingInterface_Edge -> IheTransaction
-        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep1 = ElementaryMetaPath.createEdgeToEndElementMetaPath(metaModel, IheCommunicationLink_Edge.class, IheProvidingInterface.class);
-        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep2 = elementaryMetaPathHandler.getMetaPath(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
+        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep1 = emph.getEdgeToEndElementMetaPath(IheCommunicationLink_Edge.class, IheProvidingInterface.class);
+        ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep2 = emph.getMetaPath(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
         SimpleMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2 = new SimpleMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep1, iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep2);
 
         AbstractMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath1, iheTransaction_IheCommunicationLink_InferenceMetaPath2);
