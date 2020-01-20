@@ -185,6 +185,10 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
         addEdgePanel(false, null, edgeClass);
     }
 
+    public final void addEdgePanel(final PanelLabelOption panelLabelOption, final Class<? extends Edge> edgeClass) {
+        addEdgePanel(panelLabelOption, false, null, edgeClass);
+    }
+
     @SafeVarargs
     public final void addPanel(final Class<? extends Edge>... edgeClasses) {
         addPathConnectionPanel(LABEL_END_ELEMENT_TYPE, edgeClasses);
@@ -260,6 +264,10 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     ///////////////
 
     private void addEdgePanel(final boolean add2SubTab, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        addEdgePanel(LABEL_END_ELEMENT_TYPE, add2SubTab, searchElementClass, edgeClass);
+    }
+
+    private void addEdgePanel(final PanelLabelOption panelLabelOption, final boolean add2SubTab, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClass);
         //Wenn sich ein Pfad für diese Elementart nicht anlegen lässt -> Panel nicht adden. Das ist der Fall, wenn Kanten einer Oberklasse
         //für eine Unterklasse nicht mehr gelten (z.B. Service-Metamodell: ApplicationSystem -> ApplicationSystem_IheActorInstance_Edge soll
@@ -279,14 +287,14 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
         ElementDialogPanel panel2Add = null;
         if (MetaModel.isComposition(edgeClass)) {
             Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);
-            panel2Add = new MutipleCompositionPanel(this, searchElementClass, compositionEdgeClass);
+            panel2Add = new MutipleCompositionPanel(this, panelLabelOption, searchElementClass, compositionEdgeClass);
         } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
-            panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
+            panel2Add = new DoubleMeaningEdgePanel(this, panelLabelOption, searchElementClass, edgeClass);
             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
         } else if (Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && metaModel.isDirectedEdge(edgeClass)) {
-            panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
+            panel2Add = new DoubleMeaningEdgePanel(this, panelLabelOption, searchElementClass, edgeClass);
         } else {
-            panel2Add = new PathConnectionPanel(this, metaPath);
+            panel2Add = new PathConnectionPanel(this, panelLabelOption, metaPath);
         }
         if (add2SubTab) {
             lastCreatedTabbedPanel.addTab(panel2Add);
