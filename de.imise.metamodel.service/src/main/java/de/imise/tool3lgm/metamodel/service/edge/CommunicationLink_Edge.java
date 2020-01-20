@@ -39,15 +39,16 @@ public final class CommunicationLink_Edge extends BooleanAttributeEdge {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        if (showTransactionTab()) {
-            dialog.addPathConnectionLeafPanel(IheCommunicationLink_CommunicationLink_Edge.class, IheTransaction_IheCommunicationLink_Edge.class);
+        if (showTransactions()) {
+            //da es fast niemals mehr als 1 bis 2 Tansaktionen sind, die man nicht ändern kann, reicht hier eine Liste auf dem DescripPanel
+            dialog.addDescripPanel(IheCommunicationLink_CommunicationLink_Edge.class, IheTransaction_IheCommunicationLink_Edge.class);
         }
 
         dialog.addEdgePanel(Service_CommunicationLink_Edge.class);
         return dialog;
     }
 
-    private boolean showTransactionTab() {
+    private boolean showTransactions() {
         //das Transaktions-Panel nur anzeigen, wenn diese Kommunikationsbeziehung Schnittstellen verbindet,
         //die zu IheActorInstances gehören und nicht nur zu normalen Anwendungssystemen, denn nur bei
         //IheActorInsances können überhaupt Transaktionen verknüpft sein
