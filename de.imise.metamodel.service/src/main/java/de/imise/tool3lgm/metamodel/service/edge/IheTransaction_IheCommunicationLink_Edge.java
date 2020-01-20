@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.metamodel.service.edge;
 
+import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_ONE;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
@@ -15,7 +16,7 @@ public final class IheTransaction_IheCommunicationLink_Edge extends SimpleEdge i
 
     public static final Class<? extends ModelElement> STCL = IheTransaction.class;
 
-    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
+    public static final EdgeCardinality SCARD = ZERO_ONE;
 
     public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
