@@ -5,6 +5,7 @@ import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.TreePath;
 
 import com.google.common.collect.ImmutableList;
@@ -49,6 +50,9 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final int maxLines, final SimpleMetaPath simpleMetaPath) {
         super(dialog, labelLastEdgeName, maxLines, false, simpleMetaPath);
+        //die Treenodes nicht einrücken, da ja nur eine Liste dargestellt werden soll
+        BasicTreeUI basicTreeUI = (BasicTreeUI) ltree.getUI();
+        basicTreeUI.setRightChildIndent(0);
     }
 
     @Override
