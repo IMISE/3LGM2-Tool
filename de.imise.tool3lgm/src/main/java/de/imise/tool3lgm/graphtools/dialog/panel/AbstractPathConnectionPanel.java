@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Static.contextGenerator;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
@@ -46,6 +48,20 @@ import de.imise.util.StringUtils;
  */
 public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel {
 
+    /**
+     * Options which Label should be presented for a panel.
+     *
+     * @author AXS (20.01.2020)
+     */
+    public static enum PanelLabelOption {
+        /** Indicator to label the panel with the end element type name from the resources. */
+        LABEL_END_ELEMENT_TYPE,
+        /** Indicator to label the panel with last edge element type name from the resources. */
+        LABEL_LAST_EDGE_ELEMENT_NAME,
+        /** Indicator to label the panel with directed name of the connection from the resources. */
+        LABEL_LAST_EDGE_CONNECTION_NAME,
+    }
+
     /** Der MetaPfad zu anderen Elementen */
     protected SimpleMetaPath metaPath;
 
@@ -65,19 +81,24 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param simpleMetaPath
      */
     public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, simpleMetaPath);
+        this(dialog, LABEL_END_ELEMENT_TYPE, simpleMetaPath);
     }
 
     /**
      * Panel für eine einfache Assoziation. Gelabelt wird das verbundene Element der letzten Edge oder die letzte Edge selbst.
      *
      * @param dialog
-     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der über die letzte Edge im Pfad verbundenen
-     *            Elementart der Name der letzten Edge selbst ans Label geschrieben.
+     * @param panelLabelOption Das Label kann folgende Werte annehmen:
+     *            <ul>
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der letzten Kante des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der letzten Kante des
+     *            MetaPfades</li>
+     *            </ul>
      * @param simpleMetaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, -1, labelEdgeName, simpleMetaPath);
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, -1, panelLabelOption, simpleMetaPath);
     }
 
     /**
@@ -87,12 +108,21 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param labelEdgeIndex Index der Edge, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
      *            wird. Es wird immer die Endklasse des Pfades bis zur Edge mit dem jeweiligen Index ans Label geschrieben. Wird ein Wert < 0
      *            übergeben, dann wird dieser Wert von der Anzahl der Kanten im Gesamtpfad abgezogen, um auf den tatsächlichen Index zu kommen.
+     * @param panelLabelOption Das Label kann folgende Werte annehmen:
+     *            <ul>
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der Kante mit dem Index labelEdgeIndex
+     *            im MetaPfad</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der Kante mit dem Index
+     *            labelEdgeIndex
+     *            im MetaPfad</li>
+     *            </ul>
      * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
      *            der Name der Edge selbst ans Label geschrieben. Welche Edge im Pfad das ist, wird durch labelEdgeIndex
      *            festgelegt.
      * @param simpleMetaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final int labelEdgeIndex, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
         super(dialog);
         metaPath = simpleMetaPath;
         searchElementClass = getInitialSearchElementClass(metaPath);
@@ -105,10 +135,13 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             addMouseActions(westLabel);
         }
         String westLabelText;
-        if (labelEdgeName) {
+        if (panelLabelOption == LABEL_LAST_EDGE_CONNECTION_NAME) {
             Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
             Direction directionInPath = getDirectionInPath(labelEdgeIndex);
             westLabelText = elementsNameBuilder.getMetaAssociationName(edgeClass, directionInPath);
+        } else if (panelLabelOption == PanelLabelOption.LABEL_LAST_EDGE_ELEMENT_NAME) {
+            Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
+            westLabelText = elementsNameBuilder.getDisplayableName(!metaPath.isSingleConnection(), edgeClass);
         } else {
             Class<? extends ModelElement> labelPathStepEndClass = MetaPathFunctions.getElementaryPathsConnectingClass(metaPath, labelEdgeIndex);
             //zur Beschriftung des Labels wird immer die speziellere Klasse genommen aus Endklasse des Pfades und searchElementClass. Weil immer nur davon können die verbundenen Elemente sein.

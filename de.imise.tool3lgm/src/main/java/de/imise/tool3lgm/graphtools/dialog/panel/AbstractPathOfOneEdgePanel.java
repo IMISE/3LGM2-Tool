@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.util.EventObject;
@@ -39,7 +40,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param edgeClass
      */
     public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        this(dialog, false, searchElementClass, edgeClass);
+        this(dialog, LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClass);
     }
 
     /**
@@ -50,8 +51,8 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param searchElementClass
      * @param edgeClass
      */
-    public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        super(dialog, labelEdgeName, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
+    public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        super(dialog, panelLabelOption, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
         this.edgeClass = edgeClass;
         edgeIsForward = getLastDirectionInPath() == FORWARD;
     }

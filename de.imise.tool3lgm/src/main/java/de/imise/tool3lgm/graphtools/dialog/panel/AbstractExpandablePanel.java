@@ -45,8 +45,13 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     /** Abstand zwischen den Buttons zwischen den Bäumen */
     private static final int ADD_REMOVE_NEW_BUTTON_VGAP = 3;
 
-    public AbstractExpandablePanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, labelLastEdgeName, simpleMetaPath);
+    /**
+     * @param dialog
+     * @param panelLabelOption
+     * @param simpleMetaPath
+     */
+    public AbstractExpandablePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, panelLabelOption, simpleMetaPath);
     }
 
     @Override

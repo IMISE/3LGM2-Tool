@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+
 import java.util.Collection;
 import java.util.EventObject;
 import java.util.HashMap;
@@ -37,19 +39,19 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
     private Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, simpleMetaPath);
+        this(dialog, LABEL_END_ELEMENT_TYPE, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, labelLastEdgeName, -1, simpleMetaPath);
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, panelLabelOption, -1, simpleMetaPath);
     }
 
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, maxLines, simpleMetaPath);
+        this(dialog, LABEL_END_ELEMENT_TYPE, maxLines, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, labelLastEdgeName, maxLines, false, simpleMetaPath);
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, panelLabelOption, maxLines, false, simpleMetaPath);
         //die Treenodes nicht einrücken, da ja nur eine Liste dargestellt werden soll
         BasicTreeUI basicTreeUI = (BasicTreeUI) ltree.getUI();
         basicTreeUI.setRightChildIndent(0);

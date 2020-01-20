@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -16,6 +17,7 @@ import javax.swing.border.Border;
 
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -113,8 +115,8 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
             ElementaryMetaPath edgeToEndElementMetaPath = emph.getEdgeToEndElementMetaPath(edgeClass);
             SimpleMetaPath edgeToStartElementSimpleMetaPath = new SimpleMetaPath(edgeToStartElementMetaPath);
             SimpleMetaPath edgeToEndElementSimpleMetaPath = new SimpleMetaPath(edgeToEndElementMetaPath);
-            addSingleConnectionPanel(false, edgeToStartElementSimpleMetaPath);
-            addSingleConnectionPanel(false, edgeToEndElementSimpleMetaPath);
+            addSingleConnectionPanel(LABEL_END_ELEMENT_TYPE, edgeToStartElementSimpleMetaPath);
+            addSingleConnectionPanel(LABEL_END_ELEMENT_TYPE, edgeToEndElementSimpleMetaPath);
         }
     }
 
@@ -150,19 +152,19 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
     }
 
     public final void addDescriptedSingleConnectionPanel(final SimpleMetaPath simpleMetaPath) {
-        addDescriptedSingleConnectionPanel(false, simpleMetaPath);
+        addDescriptedSingleConnectionPanel(LABEL_END_ELEMENT_TYPE, simpleMetaPath);
     }
 
-    public final void addDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        addSubPanel(new DescriptedSingleConnectionPanel(dialog, labelLastEdgeName, simpleMetaPath));
+    public final void addDescriptedSingleConnectionPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        addSubPanel(new DescriptedSingleConnectionPanel(dialog, panelLabelOption, simpleMetaPath));
     }
 
-    public final void addSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, simpleMetaPath));
+    public final void addSingleConnectionPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        addSubPanel(new SingleConnectionPanel(dialog, panelLabelOption, simpleMetaPath));
     }
 
-    public final void addListPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        addSubPanel(new PathConnectionLeafPanel(dialog, labelLastEdgeName, 4, simpleMetaPath));
+    public final void addListPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        addSubPanel(new PathConnectionLeafPanel(dialog, panelLabelOption, 4, simpleMetaPath));
     }
 
     private final void addSubPanel(final AbstractPathConnectionPanel panel) {

@@ -141,7 +141,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      * @param doubleMeaningEdgeClass
      */
     public ProzessStructurePanel(final ElementPropertyDialog dialog, final Class<? extends MultipleEdge> multipleConnectionEgdeClass, final Class<? extends Edge> doubleMeaningEdgeClass) {
-        super(dialog, true, createSimpleMetaPath(dialog, multipleConnectionEgdeClass, doubleMeaningEdgeClass));
+        super(dialog, PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME, createSimpleMetaPath(dialog, multipleConnectionEgdeClass, doubleMeaningEdgeClass));
         this.doubleMeaningEdgeClass = doubleMeaningEdgeClass;
 
         // Panel für die Buttons zur Aenderung der Aufgabenreihenfolge anlegen
