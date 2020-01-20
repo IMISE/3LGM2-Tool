@@ -149,8 +149,9 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             connectedElementsBox.setSelectedItem(connectedContainer);
             connectedElementsBox.addItemListener(itemListener);
         } else if (connectedElementName != null) { // beim ersten update() aus dem Konstruktor sind beide (Box und TextArea) null -> nicht einfach nur else hier sondern else-if
-            Color disabledColor = UIManager.getColor("Label.background");
-            connectedElementName.setBackground(disabledColor);
+            //wir hatten mal ausprobiert, den Hintergund bei nicht änderbaren Elementen auszugrauen -> gefiel mir aber nicht (AXS)
+            //            Color disabledColor = UIManager.getColor("Label.background");
+            //            connectedElementName.setBackground(disabledColor);
             if (connectedElement != null) {
                 oldname = connectedElement.getClearName();
                 connectedElementName.setText(oldname);
