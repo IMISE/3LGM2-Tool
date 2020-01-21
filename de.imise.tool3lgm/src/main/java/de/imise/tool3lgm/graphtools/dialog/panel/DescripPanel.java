@@ -24,7 +24,7 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
  * @author N.N., AXS (4/2017)
  * @create Long time ago
  */
-public final class DescripPanel extends MultiPanelPanel /* implements DocumentListener */ {
+public final class DescripPanel extends MultiPanelElementDialogPanel /* implements DocumentListener */ {
 
     /** This TextPane shows the editable name of the modelElement of the dialog */
     private final LimitedSizeScrollTextPane nameTextPane;

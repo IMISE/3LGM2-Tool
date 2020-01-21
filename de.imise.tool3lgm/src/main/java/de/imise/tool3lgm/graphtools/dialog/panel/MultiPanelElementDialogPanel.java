@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPa
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -22,7 +24,7 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
  *
  * @author AXS (21.01.2020)
  */
-public class MultiPanelPanel extends ElementDialogPanel {
+public class MultiPanelElementDialogPanel extends ElementDialogPanel {
 
     /** Added sub panels in the order in which they were added */
     private final List<AbstractPathConnectionPanel> panels = new ArrayList<>();
@@ -42,7 +44,7 @@ public class MultiPanelPanel extends ElementDialogPanel {
     /**
      * @param dialog
      */
-    public MultiPanelPanel(final AbstractElementPropertyDialog dialog) {
+    public MultiPanelElementDialogPanel(final AbstractElementPropertyDialog dialog) {
         this(dialog, (String) null);
     }
 
@@ -50,9 +52,10 @@ public class MultiPanelPanel extends ElementDialogPanel {
      * @param dialog
      * @param name
      */
-    public MultiPanelPanel(final AbstractElementPropertyDialog dialog, final String name) {
+    public MultiPanelElementDialogPanel(final AbstractElementPropertyDialog dialog, final String name) {
         super(dialog, name);
         setLayout(new GridBagLayout());
+        gbc.fill = GridBagConstraints.BOTH;
     }
 
     public final void addDescriptedSingleConnectionPanel(final SimpleMetaPath simpleMetaPath) {
@@ -60,18 +63,18 @@ public class MultiPanelPanel extends ElementDialogPanel {
     }
 
     public final void addDescriptedSingleConnectionPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        addSubPanel(new DescriptedSingleConnectionPanel(dialog, panelLabelOption, simpleMetaPath));
+        addPanel(new DescriptedSingleConnectionPanel(dialog, panelLabelOption, simpleMetaPath));
     }
 
     public final void addSingleConnectionPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        addSubPanel(new SingleConnectionPanel(dialog, panelLabelOption, simpleMetaPath));
+        addPanel(new SingleConnectionPanel(dialog, panelLabelOption, simpleMetaPath));
     }
 
     public final void addListPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        addSubPanel(new PathConnectionLeafPanel(dialog, panelLabelOption, 4, simpleMetaPath));
+        addPanel(new PathConnectionLeafPanel(dialog, panelLabelOption, 4, simpleMetaPath));
     }
 
-    private final void addSubPanel(final AbstractPathConnectionPanel panel) {
+    public final void addPanel(final AbstractPathConnectionPanel panel) {
         panels.add(panel);
         if (panel instanceof DescriptedSingleConnectionPanel) {
             addSeparator();
@@ -81,15 +84,30 @@ public class MultiPanelPanel extends ElementDialogPanel {
             westLabel.setBorder(topBorder);
             descriptedPanel.setBorder(topBorder);
             gridy = descriptedPanel.addMe(this, gbc, gridy);
+        } else if (panel instanceof MutipleCompositionPanel) {
+            gbc.insets = new Insets(5, 0, 0, 0);
+            gbc.anchor = GridBagConstraints.CENTER;
+            gbc.weighty = 1;
+            gbc.weightx = 1;
+            TitledBorder panelBorder = BorderFactory.createTitledBorder(panel.getName());
+            panel.setBorder(panelBorder);
+            add(this, panel, gbc, 0, gridy++, 1, 1);
         } else {
+            gbc.weighty = 1;
+            gbc.weightx = 0;
+            gbc.fill = GridBagConstraints.BOTH;
             add(this, panel.getWestLabel(), gbc, 0, gridy, 1, 1);
+            gbc.weightx = 1;
             add(this, panel, gbc, 1, gridy++, 1, 1);
         }
         isUnchangedDefaultPanel = false;
     }
 
     public final void addSeparator() {
+        Insets oldInsets = gbc.insets;
+        gbc.insets = new Insets(10, 0, 10, 0);
         add(this, new JSeparator(), gbc, 0, gridy++, 2, 1);
+        gbc.insets = oldInsets;
         isUnchangedDefaultPanel = false;
     }
 
