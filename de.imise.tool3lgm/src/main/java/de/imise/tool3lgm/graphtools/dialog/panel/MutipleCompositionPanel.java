@@ -13,7 +13,6 @@ import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -81,7 +80,6 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JLabel label = new JLabel(getResString("verb"));
         root = new StringTreeNode(getResString("verb"));
         model = new DefaultTreeModel(root);
         tree = new JTree(model);
@@ -106,13 +104,11 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
             add(this, buttonpanel, constraints, 0, 2, 3, 1);
         }
 
-        constraints.anchor = GridBagConstraints.WEST;
-        add(this, label, constraints, 0, 0, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
         constraints.weighty = 100;
-        add(this, sp, constraints, 0, 1, 3, 1);
+        add(this, sp, constraints, 0, 0, 1, 1);
 
         update();
     }
