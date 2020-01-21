@@ -77,6 +77,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
         super.addTab(title, icon, component);
     }
 
+    /** Das zuletzt über die Funktion {@link ElementPropertyDialog#addTabbedPanel(Class)} hinzugefügte TabbedPanel */
     private TabbedPanel lastCreatedTabbedPanel;
 
     public final void addTabbedPanel(final Class<? extends ModelElement> elementClass) {
