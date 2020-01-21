@@ -507,10 +507,12 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      */
     private final void addEdgePanel(final PanelLabelOption panelLabelOption, final boolean add2SubTab, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         AbstractPathConnectionPanel panel2Add = getAddableEdgePanel(panelLabelOption, searchElementClass, edgeClass);
-        if (add2SubTab) {
-            lastAddedTabbedPanel.addTab(panel2Add);
-        } else {
-            addTab(panel2Add);
+        if (panel2Add != null) {
+            if (add2SubTab) {
+                lastAddedTabbedPanel.addTab(panel2Add);
+            } else {
+                addTab(panel2Add);
+            }
         }
     }
 
