@@ -1,8 +1,12 @@
 package de.imise.tool3lgm.metamodel.service.node;
 
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
+
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
@@ -20,6 +24,9 @@ public abstract class ApplicationComponent extends Node {
         dialog.addMultiPanel(CommunicationInterface.class);
         dialog.addMultiPanelEdgePanel(InvokingInterface.class, ApplicationComponent_CommunicationInterface_Edge.class);
         dialog.addMultiPanelEdgePanel(ProvidingInterface.class, ApplicationComponent_CommunicationInterface_Edge.class);
+        dialog.addMultiPanel(PhysicalDataProcessingComponent.class);
+        dialog.addMultiPanelEdgePanel(LABEL_LAST_EDGE_CONNECTION_NAME, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class);
+        dialog.addMultiPanelEdgePanel(LABEL_LAST_EDGE_CONNECTION_NAME, ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge.class);
         return dialog;
     }
 

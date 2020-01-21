@@ -235,11 +235,26 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     }
 
     /**
+     * @param edgeClass
+     */
+    public final void addMultiPanelEdgePanel(final Class<? extends Edge> edgeClass) {
+        addMultiPanelEdgePanel((Class<? extends ModelElement>) null, edgeClass);
+    }
+
+    /**
      * @param searchElementClass
      * @param edgeClass
      */
     public final void addMultiPanelEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        addLastPanelEdgePanel(LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClass);
+        addMultiPanelEdgePanel(LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClass);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param edgeClass
+     */
+    public final void addMultiPanelEdgePanel(final PanelLabelOption panelLabelOption, final Class<? extends Edge> edgeClass) {
+        addMultiPanelEdgePanel(LABEL_END_ELEMENT_TYPE, null, edgeClass);
     }
 
     /**
@@ -247,7 +262,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param searchElementClass
      * @param edgeClass
      */
-    public final void addLastPanelEdgePanel(final PanelLabelOption panelLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+    public final void addMultiPanelEdgePanel(final PanelLabelOption panelLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         AbstractPathConnectionPanel addableEdgePanel = getAddableEdgePanel(panelLabelOption, searchElementClass, edgeClass);
         lastAddedMultiPanel.addPanel(addableEdgePanel);
     }

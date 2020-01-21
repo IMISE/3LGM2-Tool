@@ -93,12 +93,21 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel {
             panel.setBorder(panelBorder);
             add(this, panel, gbc, 0, gridy++, 1, 1);
         } else {
+            gbc.insets = new Insets(5, 0, 0, 0);
+            gbc.anchor = GridBagConstraints.CENTER;
             gbc.weighty = 1;
-            gbc.weightx = 0;
-            gbc.fill = GridBagConstraints.BOTH;
-            add(this, panel.getWestLabel(), gbc, 0, gridy, 1, 1);
             gbc.weightx = 1;
-            add(this, panel, gbc, 1, gridy++, 1, 1);
+            add(this, panel, gbc, 0, gridy++, 1, 1);
+
+            //Das hier auskommentierte ist im Grunde das, was das DescripPanel auch macht - also
+            //das WestLabel nach links und den Rest der Breite für die Anzeigekomponente. Falls
+            //man es irgedwann mal für weitere Panels braucht - hier ist es :)
+            //            gbc.weighty = 1;
+            //            gbc.weightx = 0;
+            //            gbc.fill = GridBagConstraints.BOTH;
+            //            add(this, panel.getWestLabel(), gbc, 0, gridy, 1, 1);
+            //            gbc.weightx = 1;
+            //            add(this, panel, gbc, 1, gridy++, 1, 1);
         }
         isUnchangedDefaultPanel = false;
     }
