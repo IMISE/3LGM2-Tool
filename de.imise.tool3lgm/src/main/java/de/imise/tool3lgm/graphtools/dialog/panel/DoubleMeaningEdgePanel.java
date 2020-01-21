@@ -189,6 +189,13 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         boolean searchParents = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is();
 
         ModelElement modelElement = getModelElement();
+
+        ElementContainer elementContainer = modelElement.getContainer(mainDoc);
+        //egal welche Kante: es ist (im Moment) nicht erlaubt, sich selbst zu verbinden
+        //-> eigenen Container niemals anbieten (was nur bei Kanten zw. derselben Elementklasse einen Effekt hat)
+        childrenToExcludeFromRotree.add(elementContainer);
+        childrenToExcludeFromRutree.add(elementContainer);
+
         for (ElementContainer ec : modelElement.getConnectedContainers(searchElementClass, mainDoc, edgeClass, BACKWARD)) {
             lotree.addObject(ec, loroot, null, true, false, false);
             childrenToExcludeFromRotree.add(ec);
