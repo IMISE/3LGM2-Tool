@@ -549,6 +549,11 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     @Override
+    public int getMetaPathCount() {
+        return 1;
+    }
+
+    @Override
     public final boolean containsPropertyTransferEdge() {
         Class<? extends Edge> edgeClass = getEdgeClass();
         return edgeClass != null && PropertyTransferEdge.class.isAssignableFrom(getEdgeClass());

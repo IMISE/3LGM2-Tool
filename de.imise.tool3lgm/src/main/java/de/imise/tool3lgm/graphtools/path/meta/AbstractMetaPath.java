@@ -578,11 +578,15 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert eine Liste aller {@link AbstractMetaPath}, die dieser MetaPfad enthält.
-     *
-     * @return
+     * @return Liste aller {@link AbstractMetaPath}, die dieser MetaPfad enthält.
      */
     public abstract List<AbstractMetaPath> getMetaPaths();
+
+    /**
+     * @return the number of contained metapaths
+     */
+    public abstract int getMetaPathCount();
+
     /**
      * Liefert <code>false</code>, wenn der Pfad in beide Richtungen dasselbe bedeutet. Dafür muss
      * er dieselben Elementarten miteinander verbinden und denselben Namen in beiden Richtungen
