@@ -17,9 +17,9 @@ public abstract class ApplicationComponent extends Node {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addPathConnectionPanel(ApplicationComponent_Use_Edge.class, Function_Use_Edge.class);
         dialog.addPathConnectionPanel(ApplicationComponent_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
-        dialog.addTabbedPanel(CommunicationInterface.class);
-        dialog.addTabbedPanelPathConnectionPanel(InvokingInterface.class, ApplicationComponent_CommunicationInterface_Edge.class);
-        dialog.addTabbedPanelPathConnectionPanel(ProvidingInterface.class, ApplicationComponent_CommunicationInterface_Edge.class);
+        dialog.addMultiPanel(CommunicationInterface.class);
+        dialog.addMultiPanelEdgePanel(InvokingInterface.class, ApplicationComponent_CommunicationInterface_Edge.class);
+        dialog.addMultiPanelEdgePanel(ProvidingInterface.class, ApplicationComponent_CommunicationInterface_Edge.class);
         return dialog;
     }
 
