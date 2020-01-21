@@ -125,6 +125,9 @@ public abstract class ElementDialogPanel extends JPanel {
         init();
     }
 
+    /**
+     *
+     */
     protected void init() {
         setBorder(BorderFactory.createEmptyBorder(1, 1, 0, 0));
         highlight = new ArrayList<>();
@@ -143,14 +146,29 @@ public abstract class ElementDialogPanel extends JPanel {
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     *
+     */
     public abstract void update();
 
+    /**
+     *
+     */
     public void commit() {
     }
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
     // ----------------------------------------------------------------------------------------------------------------------------------
+    /**
+     * @param con
+     * @param c
+     * @param gbc
+     * @param x
+     * @param y
+     * @param w
+     * @param h
+     */
     protected final void add(final Container con, final Component c, final GridBagConstraints gbc, final int x, final int y, final int w, final int h) {
         //der Static import funktioniert nicht mit der add-Funktion, weil das mit den add-Funktionen aus Container kollidiert
         SwingUtils.add(con, c, gbc, x, y, w, h);
@@ -158,6 +176,9 @@ public abstract class ElementDialogPanel extends JPanel {
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     * @param tree
+     */
     protected void expandTree(final JTree tree) {
         for (int n = 0; n < tree.getRowCount(); n++) {
             tree.expandRow(n);
@@ -166,11 +187,17 @@ public abstract class ElementDialogPanel extends JPanel {
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
+    /**
+     *
+     */
     public void removeHighLightsAndSpecialInfos() {
         removeHighLights();
         removeSpecialInfos();
     }
 
+    /**
+     *
+     */
     public void removeHighLights() {
         for (int b = 0; b < highlight.size(); b++) {
             ElementContainer ec = highlight.get(b);
@@ -181,6 +208,9 @@ public abstract class ElementDialogPanel extends JPanel {
         highlight.clear();
     }
 
+    /**
+     *
+     */
     public void removeSpecialInfos() {
         for (int i = 0; i < specialInfoOwner.size(); i++) {
             // TODO:AXS: das hier geht für LGMProcessSteps jetzt auf jeden Fall schief, weil sie
@@ -228,6 +258,9 @@ public abstract class ElementDialogPanel extends JPanel {
         highlight.add(ec);
     }
 
+    /**
+     * @param list
+     */
     public void setHighlightVector(final List<ElementContainer> list) {
         highlight = list;
     }
@@ -253,18 +286,30 @@ public abstract class ElementDialogPanel extends JPanel {
         return lastSelEvent;
     }
 
-    public void setLastSelEvent(final EventObject eo) {
-        lastSelEvent = eo;
+    /**
+     * @param eventObject
+     */
+    public void setLastSelEvent(final EventObject eventObject) {
+        lastSelEvent = eventObject;
     }
 
+    /**
+     * @param correctedCount
+     */
     public void setCorrectingSelectionCount(final int correctedCount) {
         correctingSelectionCount = correctedCount;
     }
 
+    /**
+     *
+     */
     public void increaseCorrectingSelectionCount() {
         correctingSelectionCount++;
     }
 
+    /**
+     *
+     */
     public void decreaseCorrectingSelectionCount() {
         correctingSelectionCount--;
     }
@@ -276,6 +321,9 @@ public abstract class ElementDialogPanel extends JPanel {
         return dialog.getModelElement();
     }
 
+    /**
+     * @return
+     */
     public final MetaModel getMetaModel() {
         return mainDoc.getMetaModel();
     }
