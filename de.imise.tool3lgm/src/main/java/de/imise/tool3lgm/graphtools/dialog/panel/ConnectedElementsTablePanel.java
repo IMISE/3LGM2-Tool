@@ -40,9 +40,6 @@ import de.imise.util.collections.CollectionUtils;
  */
 public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
 
-    /** Die MetaPfade zu anderen Elementen in einem UnionMetaPath */
-    protected final UnionMetaPath metaPaths;
-
     /** Die eigentliche Tabelle */
     private final ConnectedElementsTable table;
 
@@ -67,11 +64,11 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
      * @param simpleMetaPaths MetaPfade, die in der Tabelle dargestellt werden sollen
      */
     private ConnectedElementsTablePanel(final ElementPropertyDialog dialog, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
-        super(dialog, simpleMetaPaths[0]); // den muss es geben!
-        metaPaths = new UnionMetaPath(simpleMetaPaths);
+        super(dialog, new UnionMetaPath(simpleMetaPaths)); // den muss es geben!
+
         this.tableDefinition = tableDefinition;
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true);
-        table = new ConnectedElementsTable(dialog.getModelElement(), metaPaths, tableDefinition, editable, mouseListener, dialog.getTransactionID());
+        table = new ConnectedElementsTable(dialog.getModelElement(), metaPath, tableDefinition, editable, mouseListener, dialog.getTransactionID());
 
         //wenn in der columnsDefinion ein String als Resourcenschlüssel oder Tabellenname angegeben wurde, dann kommt hier irgendwas nicht leeres zurück
         String tableTabName = doc.getResStringWithoutError(tableDefinition.getTableResKeyOrName());
@@ -128,7 +125,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         return new LGMAction(getResString("addButtonText")) {
             @Override
             public void execute(final EventObject eo) {
-                ConnectPathDialog connectPathDialog = new ConnectPathDialog(doc, metaPaths);
+                ConnectPathDialog connectPathDialog = new ConnectPathDialog(doc, metaPath);
                 boolean ok = connectPathDialog.createDialog(dialogParent);
                 while (ok && !connectPathDialog.hasValidSelection()) {
                     ok = connectPathDialog.createDialog(dialogParent);

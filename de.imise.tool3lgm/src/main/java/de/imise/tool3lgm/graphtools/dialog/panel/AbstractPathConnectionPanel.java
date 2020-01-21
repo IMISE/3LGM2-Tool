@@ -96,7 +96,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /** Der MetaPfad zu anderen Elementen */
-    protected SimpleMetaPath metaPath;
+    protected AbstractMetaPath metaPath;
 
     /** Label vor dem verbundenen Element mit der Art des Elementes */
     protected final JLabel westLabel;
@@ -111,10 +111,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
      *
      * @param dialog
-     * @param simpleMetaPath
+     * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, LABEL_END_ELEMENT_TYPE, simpleMetaPath);
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+        this(dialog, LABEL_END_ELEMENT_TYPE, metaPath);
     }
 
     /**
@@ -128,10 +128,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der letzten Kante des
      *            MetaPfades</li>
      *            </ul>
-     * @param simpleMetaPath
+     * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, -1, panelLabelOption, simpleMetaPath);
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final AbstractMetaPath metaPath) {
+        this(dialog, -1, panelLabelOption, metaPath);
     }
 
     /**
@@ -153,20 +153,33 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
      *            der Name der Edge selbst ans Label geschrieben. Welche Edge im Pfad das ist, wird durch labelEdgeIndex
      *            festgelegt.
-     * @param simpleMetaPath
+     * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final int labelEdgeIndex, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final int labelEdgeIndex, final PanelLabelOption panelLabelOption, final AbstractMetaPath metaPath) {
         super(dialog);
-        metaPath = simpleMetaPath;
+        this.metaPath = metaPath;
         searchElementClass = getInitialSearchElementClass(metaPath);
         isConnectionPointUnique = isConnectionPointUnique();
 
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
         westLabel = new JLabel();
         //bei allen SingleConnectionPanels kann das Westlabel auch die MouseActions bekommen, so dass man auf dem Label an das verknüpfte Element kommt
-        if (simpleMetaPath.isSingleConnection()) {
+        if (metaPath.isSingleConnection()) {
             addMouseActions(westLabel);
         }
+        String westLabelText = getNameAndWestLabelText(labelEdgeIndex, panelLabelOption);
+        westLabel.setText(westLabelText);
+        setName(westLabelText);
+    }
+
+    /**
+     * Erstellt den Namen des Panels, der auch der String des westLabels wird.
+     *
+     * @param labelEdgeIndex
+     * @param panelLabelOption
+     * @return
+     */
+    protected String getNameAndWestLabelText(final int labelEdgeIndex, final PanelLabelOption panelLabelOption) {
         String westLabelText;
         if (panelLabelOption == LABEL_LAST_EDGE_CONNECTION_NAME) {
             Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
@@ -197,10 +210,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             }
             westLabelText = elementsNameBuilder.getDisplayableName(plural, nameSourceClass);
         }
-
         westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Den ersten Buchstaben des Labels immer groß schreiben
-        westLabel.setText(westLabelText);
-        setName(westLabelText);
+        return westLabelText;
     }
 
     /**

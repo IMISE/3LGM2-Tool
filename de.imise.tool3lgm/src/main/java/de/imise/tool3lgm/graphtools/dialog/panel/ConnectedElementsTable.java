@@ -24,6 +24,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinitio
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode;
@@ -75,7 +76,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
      * @param pid
      *            Transaction-ID mit der Änderungen vorgenommen werden. Das sollte wohl immer die des beinhaltenden ElementPorpertyDialogs sein
      */
-    ConnectedElementsTable(final ModelElement modelElement, final UnionMetaPath metaPath, final ConnectedElementsTableDefinition tableDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
+    ConnectedElementsTable(final ModelElement modelElement, final AbstractMetaPath metaPath, final ConnectedElementsTableDefinition tableDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
         super(new ConnectedElementsTableModel(modelElement, metaPath, tableDefinition));
         this.tableDefinition = tableDefinition;
         this.editable = editable;

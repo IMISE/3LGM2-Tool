@@ -10,6 +10,8 @@ import java.util.Map;
 import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.TreePath;
 
+import org.apache.commons.lang3.NotImplementedException;
+
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -158,7 +160,11 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
         if (!metaPath.isCreatable(endElement != null)) {
             return;
         }
-        doc.createPath(dialog.getModelElement(), endElement, metaPath, true, dialog.getTransactionID());
+        if (metaPath instanceof SimpleMetaPath) {
+            doc.createPath(dialog.getModelElement(), endElement, (SimpleMetaPath) metaPath, true, dialog.getTransactionID());
+        } else {
+            throw new NotImplementedException("Creation of complex metapaths is not implemented");
+        }
     }
 
 }
