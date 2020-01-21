@@ -75,6 +75,12 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel {
     }
 
     public final void addPanel(final AbstractPathConnectionPanel panel) {
+        //muss sein, weil ElementPropertyDialog#getAddableEdgePanel(...) null-Panels
+        //erzeugt, wenn die Kante oder der Pfad nur im Expert-Model sichtbar ist und
+        //dieser gerade aus ist
+        if (panel == null) {
+            return;
+        }
         panels.add(panel);
         if (panel instanceof DescriptedSingleConnectionPanel) {
             addSeparator();
