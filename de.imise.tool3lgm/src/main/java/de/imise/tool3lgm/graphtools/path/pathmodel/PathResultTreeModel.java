@@ -333,7 +333,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
             //eine einelementige Startelementliste wurde übergeben
         } else {
             for (ModelElement me : startElements.get(0)) {
-                PathResultTreeNode node = new PathResultTreeNode(new ElementaryPath(null, me), PathResultTreeNode.NodeType.START_ELEMENT);
+                ElementaryPath elementaryPath = new ElementaryPath(null, me);
+                PathResultTreeNode node = new PathResultTreeNode(elementaryPath, PathResultTreeNode.NodeType.START_ELEMENT);
                 List<PathResultTreeNode> pathNodes = addPath(node, metaPath, false);
                 completePathLeafs.addAll(pathNodes);
                 if (node.getChildCount() > 0) {
@@ -443,21 +444,27 @@ public class PathResultTreeModel extends DefaultTreeModel {
         for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
             if (firstMetaPath == null) {
                 firstMetaPath = subMetaPath;
-                resultNodes.addAll(addPath(startNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true));
+                List<PathResultTreeNode> pathResultTreeNodes = addPath(startNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true);
+                resultNodes.addAll(pathResultTreeNodes);
             } else {
-                nextPathResultNodes.addAll(addPath(startNodeClone, subMetaPath, isSubStep));
+                List<PathResultTreeNode> pathResultTreeNodes = addPath(startNodeClone, subMetaPath, isSubStep);
+                nextPathResultNodes.addAll(pathResultTreeNodes);
             }
         }
         //Set aller Elemente, die Ergebiselemente des Pfades sein können
         Set<ModelElement> possiblePathEndElements = new HashSet<>();
-        for (PathResultTreeNode resultNode : resultNodes) {
-            possiblePathEndElements.add(resultNode.getEndElement());
+        for (PathResultTreeNode resultNode : nextPathResultNodes) {
+            ModelElement endElement = resultNode.getEndElement();
+            possiblePathEndElements.add(endElement);
         }
 
-        //alle Zweige löschen, bei denen das EndElement nicht in beiden Listen vorkommt
-        for (PathResultTreeNode resultNode : resultNodes) {
-            if (!possiblePathEndElements.contains(resultNode.getEndElement())) {
+        //alle Zweige im Baum löschen, bei denen das EndElement nicht in beiden Listen vorkommt und auch von hinten aus der Gesamtliste löschen
+        for (int i = resultNodes.size() - 1; i >= 0; i--) {
+            PathResultTreeNode resultNode = resultNodes.get(i);
+            ModelElement endElement = resultNode.getEndElement();
+            if (!possiblePathEndElements.contains(endElement)) {
                 deleteBranch(resultNode);
+                resultNodes.remove(resultNode);
             }
         }
 
