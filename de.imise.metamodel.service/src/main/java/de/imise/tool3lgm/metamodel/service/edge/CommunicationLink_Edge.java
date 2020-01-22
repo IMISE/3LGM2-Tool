@@ -5,6 +5,7 @@ import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMI
 import java.util.Collection;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.BooleanAttributeEdge;
@@ -45,6 +46,13 @@ public final class CommunicationLink_Edge extends BooleanAttributeEdge {
         }
 
         dialog.addEdgePanel(Service_CommunicationLink_Edge.class);
+
+        ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
+        tableDefinition.addColumnPathStepEnd(0, 300);
+        tableDefinition.addColumnPathStepName(1, "HEADER_ACCESS_TYPE", 300);
+        tableDefinition.addColumnEndElement(300);
+        dialog.addTablePanel(tableDefinition, 0, Service_CommunicationLink_Edge.class, Service_ObjectType_Edge.class);
+
         return dialog;
     }
 
