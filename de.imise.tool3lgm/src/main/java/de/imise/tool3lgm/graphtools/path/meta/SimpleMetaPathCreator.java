@@ -8,6 +8,8 @@ import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -585,6 +587,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
         //dann alle Varianten von abstracten Kanten in den Pfaden ersetzen
         for (int i = 0; i < elementaryMetaPaths.size(); i++) {
             replaceSimpleMetaPathsWithNonAbstractEdgeClasses(simpleMetaPaths, i);
+            replaceSimpleMetaPathsWithDoubleMeaningEdgesBothConnectionStates(simpleMetaPaths, i);
         }
         removeInvalidMetaPaths(simpleMetaPaths);
         return simpleMetaPaths;
@@ -731,6 +734,61 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
                 //Kantenklasse, die sich mit vielen der bis dahin entstandenen SimpleMetaPaths nicht mehr zu einem sinnvollen MetaPfad zusammenfügen lassen -> die Pfade löschen
                 if (replaceOriginalMetaPathInResultList) {
                     simpleMetaPaths.remove(p--);
+                }
+            }
+        }
+        return simpleMetaPaths;
+    }
+
+    /**
+     * Es werden DoubleMeaningEdges mit der dem <code>connectionState == null</code> in die einzelnen States
+     * {@link ConnectionState#FORWARD} und {@link ConnectionState#BACKWARD} zerlegt.
+     *
+     * @param simpleMetaPaths
+     * @param currentPathStepIndex
+     * @return Liste mit {@link SimpleMetaPath}, bei denen alle {@link DoubleMeaningEdge}s mit dem {@link ConnectionState}
+     *         <code>null</code> jeweils durch 3 Pfade mit den 3 echten ConnectionStates ersetzt wurden.
+     */
+    private static List<SimpleMetaPath> replaceSimpleMetaPathsWithDoubleMeaningEdgesBothConnectionStates(final List<SimpleMetaPath> simpleMetaPaths, final int currentPathStepIndex) {
+        //bei jedem MetaPfad der Liste
+        for (int p = 0; p < simpleMetaPaths.size(); p++) {
+            SimpleMetaPath simpleMetaPath = simpleMetaPaths.get(p);
+            List<ElementaryMetaPath> elementaryMetaPaths = simpleMetaPath.getElementaryMetaPaths();
+            //hole die Kantenklasse des aktuellen Pfadschrittes
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(currentPathStepIndex);
+            Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+
+            //wenn die Kantenklasse des Pfadschrittes eine DoubleMeaningEdge ist
+            if (MetaModel.isDoubleMeaningEdge(edgeClass) && elementaryMetaPath.getConnectionState() == null) {
+                //Der erste neue SimpleMetaPath, bei dem der aktuelle Elementarpfadschritt durch einen mit nicht-abstrakter Kantenklasse ersetzt wurde, muss in der Ergenisliste den Original-MetaPfad ersetzen.
+                //All anderen danach werden dahinter eingefügt und der Index des aktuellen Elementarpfadschrittes erhöht.
+                boolean replaceOriginalMetaPathInResultList = true;
+                MetaModel metaModel = simpleMetaPath.getMetaModel();
+                ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
+                Class<? extends ModelElement> startClass = elementaryMetaPath.getStartClass();
+                Class<? extends ModelElement> endClass = elementaryMetaPath.getEndClass();
+                Direction direction = elementaryMetaPath.getDirection();
+                Class<? extends DoubleMeaningEdge> doubleMeaningEdgeClass = edgeClass.asSubclass(DoubleMeaningEdge.class);
+                ConnectionState[] connectionStates = { //nicht Double, weil sonst in den Tabellen die in beiden Richtungen verbundenen 3 mal (für jeden State 1 mal) auftauchen
+                        ConnectionState.FORWARD, ConnectionState.BACKWARD
+                };
+                //für jeden ConnectionState
+                for (ConnectionState connectionState : connectionStates) {
+                    //Erzeuge ein neues Array aus Elementarpfaden, bei dem der aktuelle ConnectionState null immer durch einen richtigen ConnectionState ersetzt wird
+                    ElementaryMetaPath[] elementaryMetaPathArray = new ElementaryMetaPath[elementaryMetaPaths.size()];
+                    elementaryMetaPathArray = elementaryMetaPaths.toArray(elementaryMetaPathArray);
+                    //jetzt den neuen Elementarpfadschritt mit den speziellen Start- und Endklasse in derselben Richtung, in der die nicht abstrakte Kantenklasse gilt, anlegen
+                    elementaryMetaPathArray[currentPathStepIndex] = elementaryMetaPathHandler.getMetaPath(startClass, doubleMeaningEdgeClass, direction, connectionState, endClass);
+                    //den neuen SimpleMetaPfad mit der nicht-abstrakten Kantenklasse analog zum original anlegen (also mit den Index der Kante, die den Namen festlegt übernehmen)
+                    int metaPathStepWithPathName = simpleMetaPath.getMetaPathStepWithPathName();
+                    SimpleMetaPath newSimpleMetaPath = new SimpleMetaPath(metaPathStepWithPathName, elementaryMetaPathArray);
+                    //bei der ersten nicht-abstrakten Kantenklasse wird der neue MetaPfad in der Ergebnisliste einfach über den neuen geschrieben
+                    if (replaceOriginalMetaPathInResultList) {
+                        replaceOriginalMetaPathInResultList = false;
+                        simpleMetaPaths.set(p, newSimpleMetaPath); //den originalen MetaPfad durch den ersten neuen ersetzen
+                    } else {
+                        simpleMetaPaths.add(++p, newSimpleMetaPath); //den neuen MetaPfad einfügen und Index des aktuellen MetaPfades in der Gesamtliste hochsetzen
+                    }
                 }
             }
         }
