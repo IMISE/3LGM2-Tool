@@ -404,7 +404,7 @@ public final class MetaModel implements MetaModelSpecific {
     }
 
     /**
-     * Hanlder für das einfache und nicht redundante Anlegen von Elementar-Metapfaden für dieses MetaModel
+     * Handler für das einfache und nicht redundante Anlegen von Elementar-Metapfaden für dieses MetaModel
      *
      * @return
      */
