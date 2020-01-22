@@ -159,6 +159,20 @@ public final class ElementaryMetaPathHandler {
     }
 
     /**
+     * @param startClass
+     * @param edgeClass
+     * @param direction
+     * @param connectionState
+     * @param endClass
+     * @return
+     */
+    public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends DoubleMeaningEdge> edgeClass, final Direction direction, final ConnectionState connectionState,
+            final Class<? extends ModelElement> endClass) {
+        ElementaryMetaPath metaPath = getMetaPath(edgeClass, direction, connectionState);
+        return getMetaPath(startClass, metaPath, endClass);
+    }
+
+    /**
      * @param edgeClass
      * @return
      */
