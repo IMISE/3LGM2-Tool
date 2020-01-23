@@ -555,7 +555,8 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
                 }
             }
         }
-        addTab(new ConnectedElementsTablePanel(this, tableDefinition, allDifferentSimpleMetaPaths));
+        ConnectedElementsTablePanel connectedElementsTablePanel = new ConnectedElementsTablePanel(this, tableDefinition, allDifferentSimpleMetaPaths);
+        addTab(connectedElementsTablePanel);
     }
 
     @Override
