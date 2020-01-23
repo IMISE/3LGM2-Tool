@@ -408,6 +408,7 @@ public final class MetaModel implements MetaModelSpecific {
      *
      * @return
      */
+    @Override
     public final ElementaryMetaPathHandler getElementaryMetaPathHandler() {
         return elementaryMetaPathHandler;
     }
@@ -1140,10 +1141,31 @@ public final class MetaModel implements MetaModelSpecific {
      * @return
      */
     public final Collection<Class<? extends ModelElement>> getInstanciableAssignableClasses(final Class<? extends ModelElement> elementClass) {
+        return getInstanciableAssignableClasses(elementClass, false);
+    }
+
+    /**
+     * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
+     * Rückgabewerten enthalten, wenn sie nichtabstract ist.
+     *
+     * @param elementClass
+     * @param withoutSubClassesOfInstanciableClasses
+     *            If <code>true</code> only instanciable superclasses are contained. If <code>false</code> all instaciable
+     *            classes (including subclasses of already contained other instanciable classes are contained.
+     * @return
+     */
+    public final Collection<Class<? extends ModelElement>> getInstanciableAssignableClasses(final Class<? extends ModelElement> elementClass, final boolean withoutSubClassesOfInstanciableClasses) {
         if (elementClassToNonAbstractAssignableElementClasses.containsKey(elementClass)) {
             Collection<Class<? extends ModelElement>> classes = elementClassToNonAbstractAssignableElementClasses.get(elementClass);
-            if (classes.size() == 1 && classes.iterator().next() == null) {
+            if (classes.size() == 0 && classes.iterator().next() == null) {
                 return EMPTY_ELEMENT_CLASS_COLLECTION;
+            }
+            //remove subclasses if needed
+            if (withoutSubClassesOfInstanciableClasses) {
+                List<Class<? extends ModelElement>> classesList = new ArrayList<>(classes);
+                ReflectionUtils.removeSubClasses(classesList);
+                classes = classesList;
+
             }
             return classes;
         }
@@ -1155,7 +1177,7 @@ public final class MetaModel implements MetaModelSpecific {
         if (!elementClassToNonAbstractAssignableElementClasses.containsKey(elementClass)) {
             elementClassToNonAbstractAssignableElementClasses.put(elementClass, null);
         }
-        return getInstanciableAssignableClasses(elementClass);
+        return getInstanciableAssignableClasses(elementClass, withoutSubClassesOfInstanciableClasses);
     }
 
     /**
