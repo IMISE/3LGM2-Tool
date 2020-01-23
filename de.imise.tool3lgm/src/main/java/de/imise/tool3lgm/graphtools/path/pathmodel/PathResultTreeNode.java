@@ -187,4 +187,39 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
         return true;
     }
 
+    @Override
+    public PathResultTreeNode getParent() {
+        return (PathResultTreeNode) super.getParent();
+    }
+
+    /**
+     * Checks if the tree path represented by the other node up to root is contained
+     * completely in the tree path of this node.
+     *
+     * @param other
+     * @return <code>true</code> if tree path of the other node up to root is contained
+     *         completly in the tree path of this node, otherwise <code>false</code>
+     */
+    public final boolean containsPath(final PathResultTreeNode other) {
+        int thisPathLength = getLevel();
+        int otherPathLength = other.getLevel();
+        if (thisPathLength < otherPathLength) {
+            return false;
+        }
+        PathResultTreeNode currentPathNodeOfThis = this;
+        PathResultTreeNode currentPathNodeOfOther = other;
+        while (thisPathLength > otherPathLength) {
+            currentPathNodeOfThis = currentPathNodeOfThis.getParent();
+            thisPathLength--;
+        }
+        for (int i = thisPathLength; i >= 0; i--) {
+            if (!currentPathNodeOfThis.equals(currentPathNodeOfOther)) {
+                return false;
+            }
+            currentPathNodeOfThis = currentPathNodeOfThis.getParent();
+            currentPathNodeOfOther = currentPathNodeOfOther.getParent();
+        }
+        return true;
+    }
+
 }

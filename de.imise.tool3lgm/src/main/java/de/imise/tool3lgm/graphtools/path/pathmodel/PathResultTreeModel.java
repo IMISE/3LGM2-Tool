@@ -574,10 +574,10 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param node
      */
     private void deleteBranch(PathResultTreeNode node) {
-        PathResultTreeNode parent = (PathResultTreeNode) node.getParent();
+        PathResultTreeNode parent = node.getParent();
         while (parent != null && parent.getChildCount() == 1) {
             node = parent;
-            parent = (PathResultTreeNode) node.getParent();
+            parent = node.getParent();
         }
         if (parent != null) {
             node.removeFromParent();
