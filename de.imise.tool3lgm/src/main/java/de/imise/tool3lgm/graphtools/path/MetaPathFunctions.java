@@ -70,6 +70,19 @@ public class MetaPathFunctions {
     }
 
     /**
+     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade ausgehend vom
+     * übergebenen Element aufspannt
+     *
+     * @param startElement
+     * @param metaPath
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public static final PathResultTreeModel getResultTree(final ModelElement startElement, final AbstractMetaPath metaPath, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(metaPath, startElement, keepIncompleteBranches);
+    }
+
+    /**
      * @param startElements
      * @param metaPath
      * @return
@@ -81,10 +94,30 @@ public class MetaPathFunctions {
     /**
      * @param startElements
      * @param metaPath
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public static final PathResultTreeModel getResultTree(final Collection<ModelElement> startElements, final AbstractMetaPath metaPath, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(metaPath, startElements, keepIncompleteBranches);
+    }
+
+    /**
+     * @param startElements
+     * @param metaPath
      * @return
      */
     public static final PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements, final AbstractMetaPath metaPath) {
         return new PathResultTreeModel(metaPath, startElements);
+    }
+
+    /**
+     * @param startElements
+     * @param metaPath
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public static final PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements, final AbstractMetaPath metaPath, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(metaPath, startElements, keepIncompleteBranches);
     }
 
     /**
