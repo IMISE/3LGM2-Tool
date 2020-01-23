@@ -622,8 +622,12 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             Class<? extends ModelElement> pathStepConnectingStartClass = currentPathStepIndex == 0 ? simpleMetaPath.getStartClass() : simpleMetaPath.getPathStepElementClass(currentPathStepIndex - 1);
             Class<? extends ModelElement> pathStepConnectingEndClass = simpleMetaPath.getPathStepElementClass(currentPathStepIndex);
 
-            Collection<Class<? extends ModelElement>> instanciableAssignableStartClasses = metaModel.getInstanciableAssignableClasses(pathStepConnectingStartClass);
-            Collection<Class<? extends ModelElement>> instanciableAssignableEndClasses = metaModel.getInstanciableAssignableClasses(pathStepConnectingEndClass);
+            //Expand the start & end class only to all of its instanciable subclasses, if they are abstract. If they are not abstract
+            //and they have subclasses, you must define the path for the subclasses by it's own or (if this functionality is needed)
+            //this function here needs an boolean parameter which indicates if the classes should be also expanded to their subclasses.
+            //Until now they will not be expanded if they are not abstract (= the last parameter is true)
+            Collection<Class<? extends ModelElement>> instanciableAssignableStartClasses = metaModel.getInstanciableAssignableClasses(pathStepConnectingStartClass, true);
+            Collection<Class<? extends ModelElement>> instanciableAssignableEndClasses = metaModel.getInstanciableAssignableClasses(pathStepConnectingEndClass, true);
 
             int startClassesCount = instanciableAssignableStartClasses.size();
             int endClassesCount = instanciableAssignableEndClasses.size();
