@@ -1,1 +1,1 @@
-pipeline {	agent {docker {image: 'maven: 3.6.3'} } // change		tools {		jdk "jdk-1.8.101" // change	}		stages {		stage('AXSUTILS') {			steps {				sh 'cd mvn build'			}		}	}}
+pipeline {	agent {docker {image: 'maven: 3.6.3'} }		tools {		jdk "jdk-1.8"	}		stages {		stage('AXSUTILS') {			steps {				sh 'mvn -B clean install'			}		}	}}
