@@ -384,12 +384,36 @@ public class PathResultTreeModel extends DefaultTreeModel {
                 PathResultTreeNode node = new PathResultTreeNode(elementaryPath, PathResultTreeNode.NodeType.START_ELEMENT);
                 List<PathResultTreeNode> pathNodes = addPath(node, metaPath, false);
                 addCompleteLeafs(pathNodes);
+                if (!keepMultipleEqualsBranches) {
+                    removeIncompleteBranchesContainedInCompleteBranches();
+                }
                 if (node.getChildCount() > 0) {
                     root.add(node);
                 }
             }
         }
         super.reload(root);
+    }
+
+    /**
+     * Removes all incomplete branches which are contained in a complete branch. Such branches are created
+     * by UnionMetaPaths (and maybe other parallel MetaPaths) where at least two parallel metaPaths are
+     * partly equals and for one of the metaPaths you can find a complete path and for another you can only
+     * find an incomplete path for the equals part of the first metaPath. These incomplete and so on multiple
+     * paths are removed here.
+     * It is not possible to check this already during the pathTree creation.
+     */
+    private void removeIncompleteBranchesContainedInCompleteBranches() {
+        for (int i = incompletePathLeafs.size() - 1; i >= 0; i--) {
+            PathResultTreeNode incompletePathNode = incompletePathLeafs.get(i);
+            for (PathResultTreeNode completePathNode : completePathLeafs) {
+                if (completePathNode.containsPath(incompletePathNode)) {
+                    deleteBranch(incompletePathNode);
+                    incompletePathLeafs.remove(i);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -545,7 +569,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @return
      */
     private void addCompleteLeaf(final PathResultTreeNode leafNode) {
-        addLeaf(leafNode, completePathLeafs, keepMultipleEqualsBranches);
+        addLeaf(leafNode, completePathLeafs);
     }
 
     /**
@@ -553,19 +577,35 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @return
      */
     private void addIncompleteLeaf(final PathResultTreeNode leafNode) {
-        addLeaf(leafNode, incompletePathLeafs, keepMultipleEqualsBranches);
+        addLeaf(leafNode, incompletePathLeafs);
     }
 
     /**
      * @param leafNode
      * @param resultList
-     * @param addMultiple
      * @return
      */
-    private void addLeaf(final PathResultTreeNode leafNode, final List<PathResultTreeNode> resultList, final boolean addMultiple) {
-        if (addMultiple || !resultList.contains(leafNode)) {
+    private void addLeaf(final PathResultTreeNode leafNode, final List<PathResultTreeNode> resultList) {
+        if (keepMultipleEqualsBranches || !listContainsNodeEqualsTo(leafNode, resultList)) {
             resultList.add(leafNode);
         }
+    }
+
+    /**
+     * Compares the {@link PathResultTreeNode} with the other ones in the list with the
+     * {@link PathResultTreeNode#equalsTo(Object)} method.
+     *
+     * @param node
+     * @param nodeList
+     * @return
+     */
+    private boolean listContainsNodeEqualsTo(final PathResultTreeNode node, final List<PathResultTreeNode> nodeList) {
+        for (PathResultTreeNode nodeFromList : nodeList) {
+            if (node.equalsTo(nodeFromList)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

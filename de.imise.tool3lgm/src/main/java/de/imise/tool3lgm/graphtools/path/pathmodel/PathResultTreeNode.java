@@ -158,16 +158,17 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
         }
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (type == null ? 0 : type.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
+    /**
+     * 2 Knoten sind gleich, wenn sie das gleiche userObject haben.<br>
+     * Das hier überschreibt absichtlich nicht die equals(), weil dann sonst in der
+     * Funktion {@link DefaultMutableTreeNode#removeFromParent()} das zu löschende
+     * Kind ungünstigerweise über equals rausgesucht wird und dann eventuell der
+     * falsche Knoten gelöscht wird.
+     *
+     * @param obj
+     * @return
+     */
+    public boolean equalsTo(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -193,6 +194,20 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
     }
 
     /**
+     * @return the path to the root as array of {@link PathResultTreeNode}
+     */
+    public PathResultTreeNode[] getPathToRoot() {
+        int level = getLevel();
+        PathResultTreeNode[] path = new PathResultTreeNode[level];
+        PathResultTreeNode levelNode = this;
+        for (--level; level >= 0; level--) {
+            path[level] = levelNode;
+            levelNode = levelNode.getParent();
+        }
+        return path;
+    }
+
+    /**
      * Checks if the tree path represented by the other node up to root is contained
      * completely in the tree path of this node.
      *
@@ -213,7 +228,7 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
             thisPathLength--;
         }
         for (int i = thisPathLength; i >= 0; i--) {
-            if (!currentPathNodeOfThis.equals(currentPathNodeOfOther)) {
+            if (!currentPathNodeOfThis.equalsTo(currentPathNodeOfOther)) {
                 return false;
             }
             currentPathNodeOfThis = currentPathNodeOfThis.getParent();
