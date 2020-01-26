@@ -19,10 +19,10 @@ public final class Service extends Node {
         dialog.addDescripPanel(Service_ServiceClass_Edge.class);
         dialog.addEdgePanel(ServiceUses_Edge.class);
         dialog.addEdgePanel(Service_ObjectType_Edge.class);
-        dialog.addTabbedPanel(CommunicationInterface.class);
-        dialog.addTabbedPanelPathConnectionPanel(Service_InvokingInterface_Edge.class);
-        dialog.addTabbedPanelPathConnectionPanel(Service_ProvidingInterface_Edge.class);
-        dialog.addEdgePanel(Service_ObjectType_Edge.class);
+        dialog.addMultiPanel(CommunicationInterface.class);
+        dialog.addMultiPanelEdgePanel(Service_InvokingInterface_Edge.class);
+        dialog.addMultiPanelEdgePanel(Service_ProvidingInterface_Edge.class);
+
         // das auskommentierte ist als Marker bzw. evtl. TODO drin geblieben. Siehe Kommentare unten:
 
         //        ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
