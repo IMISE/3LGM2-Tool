@@ -103,6 +103,9 @@ public class ConnectedElementsTableDefinition implements Iterable<SingleColumnDe
             return columnType;
         }
 
+        /**
+         * @return the index of the path step this column definition is referencing
+         */
         public int getPathStepIndex() {
             return pathStepIndex;
         }

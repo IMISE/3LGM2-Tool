@@ -140,56 +140,56 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
 
     private void setData() {
         List<PathResultTreeNode> completePathLeafs = currentPathResultTreeModel.getCompletePathLeafs();
-        setRowCount(completePathLeafs.size());
-
+        List<PathResultTreeNode> incompletePathLeafs = currentPathResultTreeModel.getIncompletePathLeafs();
+        setRowCount(completePathLeafs.size() + incompletePathLeafs.size());
         int row = 0;
-        for (PathResultTreeNode resultNode : completePathLeafs) {
-            int col = 0;
-            for (SingleColumnDefinition singleColumnDefinition : tableDefinition) {
-                ColumnType columnType = singleColumnDefinition.getColumnType();
-                Object value = null;
-                if (columnType == ColumnType.END_ELEMENT) {
-                    value = resultNode.getEndElement();
-                } else {
-                    PathResultTreeNode currentPathNode = resultNode;
-                    int level = currentPathNode.getLevel();
-                    int optionalEdgeInPathIndex = singleColumnDefinition.getPathStepIndex();
-                    while (level > 0) {
-                        if (level - optionalEdgeInPathIndex == PathResultTreeModel.FIRST_PATH_STEP_NODE_LEVEL) {
-                            break;
+        for (int i = 0; i < 2; i++) {
+            List<PathResultTreeNode> currentPathLeafs = i == 0 ? completePathLeafs : incompletePathLeafs;
+            for (PathResultTreeNode resultNode : currentPathLeafs) {
+                int col = 0;
+                PathResultTreeNode[] pathToRoot = resultNode.getPathToRoot();
+                for (SingleColumnDefinition singleColumnDefinition : tableDefinition) {
+                    ColumnType columnType = singleColumnDefinition.getColumnType();
+                    Object value = null;
+                    int pathStepIndex = singleColumnDefinition.getPathStepIndex() + 1; // + 1 weil im pathToRoot der Rootknoten mit enthalten ist, der in der ColumnDefnition nicht mitgezählt wird
+                    if (pathToRoot.length > pathStepIndex) {
+                        PathResultTreeNode currentPathNode = pathToRoot[pathStepIndex];
+                        if (columnType == ColumnType.END_ELEMENT && i == 0) { // nur wenn wir in der Liste mit den vollständigen Pfaden sind, ist das das richtige Endelement
+                            value = resultNode.getEndElement();
+                        } else {
+                            if (columnType == ColumnType.OPTIONAL) {
+                                Edge edge = currentPathNode.getEdge();
+                                if (edge instanceof OptionalEdge) {
+                                    value = new NamedObjectContainer<>(edge, ((OptionalEdge) edge).getOptionDisplayName(), true); //true, damit der Editor der Tabllenzelle den richtigen String auswählt, wenn er gestartet wird
+                                }
+                            } else if (columnType == ColumnType.PATH_STEP_START) {
+                                value = currentPathNode.getStartElement();
+                            } else if (columnType == ColumnType.PATH_STEP_END) {
+                                value = currentPathNode.getEndElement();
+                            } else if (columnType == ColumnType.PATH_STEP_EDGE) {
+                                value = currentPathNode.getEdge();
+                            } else if (columnType == ColumnType.PATH_STEP_NAME || columnType == ColumnType.PATH_STEP_BACKWARD_NAME) {
+                                Edge edge = currentPathNode.getEdge();
+                                if (edge != null) {
+                                    ElementaryMetaPath metaPath = currentPathNode.getMetaPath();
+                                    Class<? extends Edge> edgeClass = edge.getClass();
+                                    //der Metapfad kann auf einer abstrakten Oberklasse der konkreten Kante definiert sein. Ist das der Fall, muss der Name aber von der konkreten Kantenklasse abgeleitet werden!
+                                    if (edgeClass != metaPath.getEdgeClass()) {
+                                        MetaModel metaModel = metaPath.getMetaModel();
+                                        ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
+                                        metaPath = elementaryMetaPathHandler.getMetaPath(metaPath.getStartClass(), edgeClass, metaPath.getDirection(), metaPath.getEndClass());
+                                    }
+                                    String name = columnType == ColumnType.PATH_STEP_NAME ? metaPath.getName() : metaPath.getOtherDirection().getName();
+                                    value = new NamedObjectContainer<>(edge, name);
+                                }
+                            }
                         }
-                        currentPathNode = (PathResultTreeNode) currentPathNode.getParent();
-                        level = currentPathNode.getLevel();
                     }
-                    if (columnType == ColumnType.OPTIONAL) {
-                        Edge edge = currentPathNode.getEdge();
-                        if (edge instanceof OptionalEdge) {
-                            value = new NamedObjectContainer<>(edge, ((OptionalEdge) edge).getOptionDisplayName(), true); //true, damit der Editor der Tabllenzelle den richtigen String auswählt, wenn er gestartet wird
-                        }
-                    } else if (columnType == ColumnType.PATH_STEP_START) {
-                        value = currentPathNode.getStartElement();
-                    } else if (columnType == ColumnType.PATH_STEP_END) {
-                        value = currentPathNode.getEndElement();
-                    } else if (columnType == ColumnType.PATH_STEP_EDGE) {
-                        value = currentPathNode.getEdge();
-                    } else if (columnType == ColumnType.PATH_STEP_NAME || columnType == ColumnType.PATH_STEP_BACKWARD_NAME) {
-                        Edge edge = currentPathNode.getEdge();
-                        ElementaryMetaPath metaPath = currentPathNode.getMetaPath();
-                        Class<? extends Edge> edgeClass = edge.getClass();
-                        //der Metapfad kann auf einer abstrakten Oberklasse der konkreten Kante definiert sein. Ist das der Fall, muss der Name aber von der konkreten Kantenklasse abgeleitet werden!
-                        if (edgeClass != metaPath.getEdgeClass()) {
-                            MetaModel metaModel = metaPath.getMetaModel();
-                            ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
-                            metaPath = elementaryMetaPathHandler.getMetaPath(metaPath.getStartClass(), edgeClass, metaPath.getDirection(), metaPath.getEndClass());
-                        }
-                        String name = columnType == ColumnType.PATH_STEP_NAME ? metaPath.getName() : metaPath.getOtherDirection().getName();
-                        value = new NamedObjectContainer<>(edge, name);
-                    }
+                    setValueAt(value, row, col++);
                 }
-                setValueAt(value, row, col++);
+                //letzte Spalte ist hidden und enthält den resultNode, damit man die Quelle der Zeile kennt (braucht man zum Löschen)
+                setValueAt(resultNode, row++, col);
             }
-            //letzte Spalte ist hidden und enthält den resultNode, damit man die Quelle der Zeile kennt (braucht man zum Löschen)
-            setValueAt(resultNode, row++, col);
         }
     }
 
@@ -210,7 +210,8 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
     }
 
     public void update() {
-        currentPathResultTreeModel = MetaPathFunctions.getResultTree(modelElement, metaPath);
+        //get resultTree with incomplete paths
+        currentPathResultTreeModel = MetaPathFunctions.getResultTree(modelElement, metaPath, true);
         setData();
     }
 
