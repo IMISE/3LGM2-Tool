@@ -176,7 +176,7 @@ public class ReflectionUtils {
      * @param classList
      * @return
      */
-    public static final void removeSubClasses(final List<Class<?>> classList) {
+    public static final <T> void removeSubClasses(final List<Class<? extends T>> classList) {
         for (int i = 0; i < classList.size(); i++) {
             Class<?> c1 = classList.get(i);
             for (int j = i + 1; j < classList.size(); j++) {
