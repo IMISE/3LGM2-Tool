@@ -10,6 +10,7 @@ import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDat
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.StorageLink_Edge;
 
 /**
  * @author AXS (26.12.2017)
@@ -21,6 +22,7 @@ public abstract class ApplicationComponent extends Node {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addPathConnectionPanel(ApplicationComponent_Use_Edge.class, Function_Use_Edge.class);
         dialog.addPathConnectionPanel(ApplicationComponent_Use_Edge.class, OrganisationalUnit_Use_Edge.class);
+        dialog.addEdgePanel(StorageLink_Edge.class);
         dialog.addMultiPanel(CommunicationInterface.class);
         dialog.addMultiPanelEdgePanel(InvokingInterface.class, ApplicationComponent_CommunicationInterface_Edge.class);
         dialog.addMultiPanelEdgePanel(ProvidingInterface.class, ApplicationComponent_CommunicationInterface_Edge.class);
