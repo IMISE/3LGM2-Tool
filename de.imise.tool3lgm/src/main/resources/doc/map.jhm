@@ -119,8 +119,8 @@
 	<mapID target="ACTION_GRAPH_SHOW_THREE_LAYER_PERSPECTIVE" url="baukasten/uebersicht.html#multiview"/>
 	<mapID target="ACTION_GRAPH_SHOW_SINGLE_LAYER_PERSPECTIVE" url="baukasten/uebersicht.html#multiview"/>
 	<mapID target="ACTION_ACTIVATE_DOMAIN_LAYER" url="baukasten/uebersicht.html#fachlich"/>
-	<mapID target="ACTION_ACTIVATE_LOGICAL_TOOL_LAYER" url="baukasten/uebersicht.html#logisch"/>
-	<mapID target="ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER" url="baukasten/uebersicht.html#physisch"/>
+	<mapID target="ACTION_ACTIVATE_LOGICAL_LAYER" url="baukasten/uebersicht.html#logisch"/>
+	<mapID target="ACTION_ACTIVATE_PHYSICAL_LAYER" url="baukasten/uebersicht.html#physisch"/>
 	<mapID target="ACTION_NEW_MODEL" url="baukasten/uebersicht.html#neuesModell"/>
 	<mapID target="ACTION_OPEN_MODEL" url="baukasten/uebersicht.html#oeffnen"/>
 	<mapID target="ACTION_SAVE_MODEL" url="baukasten/uebersicht.html#speichern"/>

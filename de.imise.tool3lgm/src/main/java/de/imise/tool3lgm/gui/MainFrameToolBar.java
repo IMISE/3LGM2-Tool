@@ -46,8 +46,8 @@ public class MainFrameToolBar extends UnfloatableToolBar implements ActionListen
         JButton switchView = new ToolbarButton(ActionLibrary.ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE);
 
         JButton fach = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER);
-        JButton log = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER);
-        JButton phy = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER);
+        JButton log = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_LOGICAL_LAYER);
+        JButton phy = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_PHYSICAL_LAYER);
 
         JButton neu = new ToolbarButton(ActionLibrary.FileActions.ACTION_NEW_MODEL);
         JButton open = new ToolbarButton(ActionLibrary.FileActions.ACTION_OPEN_MODEL);

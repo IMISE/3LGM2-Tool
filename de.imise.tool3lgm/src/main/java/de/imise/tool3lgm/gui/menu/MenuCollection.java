@@ -63,7 +63,7 @@ public class MenuCollection {
 
     /** Das Ansicht-Menu */
     public static final JMenu VIEW_MENU = createMenu("viewMenu", ViewSubMenus.TOOLBAR_MENU, BooleanProperty.OPTION_SHOW_MODEL_BROWSER, BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER, new JSeparator(),
-            ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE, ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER,
+            ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE, ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_LAYER,
             ViewActions.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, new JSeparator(), ViewActions.ACTION_OPEN_MATRIX_VIEW);
 
     /** Das Einfügen-Menu */
