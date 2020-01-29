@@ -60,7 +60,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     private final Container matrixFrameToolbarParent = workarea;
 
     /** Aktualisiert die Toolbar je nach Kontext des aktiven Frames */
-    private final GraphAreaToolbarManager toolbarManager = new GraphAreaToolbarManager(graphFrameToolbarParent, matrixFrameToolbarParent);
+    private final InternalFrameToolbarManager internalFrameToolbarManager = new InternalFrameToolbarManager(graphFrameToolbarParent, matrixFrameToolbarParent);
 
     /** splitted pane with modelBrowserPanel on the left and desktop on the right */
     private final JSplitPane leftSplitPane;
@@ -159,7 +159,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         } else if (OPTION_SHOW_MODEL_BROWSER.isChanged(evt)) {
             checkModelBrowserVisibility();
         } else if (OPTION_SHOW_PAINTING_TOOLBAR.isChanged(evt)) {
-            toolbarManager.setToolBarVisibility();
+            internalFrameToolbarManager.setToolBarVisibility();
         } else if (OPTION_SHOW_STANDARD_TOOLBAR.isChanged(evt)) {
             setShowStandardToolbar();
         } else if (OPTION_ENABLE_EXPERT_MODE.isChanged(evt)) {
@@ -303,7 +303,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
             return false;
         }
         int nextMatrixViewTitleIndex = getNextMatrixViewTitleIndex(doc);
-        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, toolbarManager, nextMatrixViewTitleIndex);
+        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, internalFrameToolbarManager, nextMatrixViewTitleIndex);
         matrixView.setBounds(desktop.getBounds());
         desktop.add(matrixView);
         matrixView.addInternalFrameListener(this);
@@ -546,7 +546,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         if (frames.length == 0) {
             activeFrame = null;
         }
-        toolbarManager.updateToolBar();
+        internalFrameToolbarManager.updateToolBar();
     }
 
     @Override
@@ -565,8 +565,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     public void internalFrameActivated(final InternalFrameEvent e) {
         activeFrame = (AbstractInternalFrame) e.getInternalFrame();
         GraphDocument doc = activeFrame.getGraphDocument();
-        doc.addClosedTransactionsListener(toolbarManager);
-        toolbarManager.updateToolBar();
+        doc.addClosedTransactionsListener(internalFrameToolbarManager);
+        internalFrameToolbarManager.updateToolBar();
         //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
         //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
         setCurrentDoc(doc, activeFrame instanceof InternalGraphFrame);
@@ -584,9 +584,9 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     @Override
     public void internalFrameDeactivated(final InternalFrameEvent e) {
         GraphDocument doc = activeFrame.getGraphDocument();
-        doc.removeClosedTransactionsListener(toolbarManager);
+        doc.removeClosedTransactionsListener(internalFrameToolbarManager);
         activeFrame = null;
-        toolbarManager.updateToolBar();
+        internalFrameToolbarManager.updateToolBar();
         mainFrameToolbar.update();
     }
 

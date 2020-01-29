@@ -22,7 +22,7 @@ import de.imise.util.swing.component.UnfloatableToolBar;
  *
  * @author AXS (8 Aug 2017)
  */
-public class GraphAreaToolbarManager implements LGMChangeListenerSimple, BasicGraphAreaChangeListener {
+public class InternalFrameToolbarManager implements LGMChangeListenerSimple, BasicGraphAreaChangeListener {
 
     /** toolbar with tools for active layer and sliders for zoom, angel and distance (Graph) or MetaPathSelector (Matrix) */
     private UnfloatableToolBar currentToolBar;
@@ -40,7 +40,7 @@ public class GraphAreaToolbarManager implements LGMChangeListenerSimple, BasicGr
      * @param graphFrameToolbarParent
      * @param matrixFrameToolbarParent
      */
-    public GraphAreaToolbarManager(final Container graphFrameToolbarParent, final Container matrixFrameToolbarParent) {
+    public InternalFrameToolbarManager(final Container graphFrameToolbarParent, final Container matrixFrameToolbarParent) {
         this.graphFrameToolbarParent = graphFrameToolbarParent;
         this.matrixFrameToolbarParent = matrixFrameToolbarParent;
     }
