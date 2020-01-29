@@ -210,7 +210,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     public void model_change_model_closed(final GraphDocument source) {
         GDCollection gdcoll = source.getCollection();
         contentPane.closeAllFramesAndTabs(gdcoll);
-        contentPane.selectLastFrame();
+        LastAndNextViewManager.selectLastFrame();
     }
 
     @Override

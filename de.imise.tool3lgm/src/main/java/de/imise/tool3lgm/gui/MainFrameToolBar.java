@@ -3,12 +3,8 @@ package de.imise.tool3lgm.gui;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.help.CSH;
 import javax.swing.AbstractButton;
@@ -19,28 +15,19 @@ import javax.swing.ToolTipManager;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.action.StaticAction;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
-public class MainFrameToolBar extends UnfloatableToolBar implements ActionListener, MouseListener, LGMChangeListenerSimple, Tool3lgmChangeListener {
+public class MainFrameToolBar extends UnfloatableToolBar implements MouseListener, LGMChangeListenerSimple, Tool3lgmChangeListener {
 
     private GraphDocument doc = null;
 
-    private int windowIndex = -1;
-
-    private final JButton forward, backward, undo, redo;
-
-    /** List of all InternalFrames in the order they were active */
-    private final List<AbstractInternalFrame> windowList = new ArrayList<>();
-
-    private boolean operatingWindowList = false;
+    private final JButton undo, redo;
 
     public MainFrameToolBar() {
         JButton switchView = new ToolbarButton(ActionLibrary.ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE);
@@ -58,17 +45,8 @@ public class MainFrameToolBar extends UnfloatableToolBar implements ActionListen
         redo = new ToolbarButton(ActionLibrary.EditActions.ACTION_REDO);
         redo.addMouseListener(this);
 
-        backward = new JButton(Tool3lgmConstants.getIcon("arrow_left.gif"));
-        backward.setToolTipText(Tool3lgmConstants.getResString("vf"));
-        backward.setActionCommand("backward");
-        backward.addActionListener(this);
-        backward.setEnabled(false);
-
-        forward = new JButton(Tool3lgmConstants.getIcon("arrow_right.gif"));
-        forward.setToolTipText(Tool3lgmConstants.getResString("nf"));
-        forward.setActionCommand("forward");
-        forward.addActionListener(this);
-        forward.setEnabled(false);
+        JButton backward = new ToolbarButton(LastAndNextViewManager.ACTION_GOTO_PREVIOUS_VIEW);
+        JButton forward = new ToolbarButton(LastAndNextViewManager.ACTION_GOTO_NEXT_VIEW);
 
         CSH.setHelpIDString(this, "standardsymbolleiste");
 
@@ -131,125 +109,6 @@ public class MainFrameToolBar extends UnfloatableToolBar implements ActionListen
     @Override
     public void changed() {
         update();
-    }
-
-    @Override
-    public void actionPerformed(final ActionEvent e) {
-        String s = e.getActionCommand();
-        if (s.equals("forward")) {
-            operatingWindowList = true;
-            AbstractInternalFrame f = getNextWindow();
-            if (f != null) {
-                try {
-                    f.setSelected(true);
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
-                }
-            }
-            operatingWindowList = false;
-            return;
-        }
-        if (s.equals("backward")) {
-            operatingWindowList = true;
-            AbstractInternalFrame f = getPreviousWindow();
-            if (f != null) {
-                try {
-                    f.setSelected(true);
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
-                }
-            }
-            operatingWindowList = false;
-            return;
-        }
-    }
-
-    public void addWindow(final AbstractInternalFrame frame) {
-        if (operatingWindowList) {
-            return;
-        }
-        if (frame == null) {
-            return;
-        }
-        if (windowIndex < 0 || windowList.get(windowIndex) != frame) {
-            for (int i = windowList.size() - 1; i > windowIndex; i--) {
-                windowList.remove(i);
-            }
-            windowIndex++;
-            if (windowIndex >= windowList.size()) {
-                windowList.add(frame);
-            } else {
-                windowList.add(windowIndex, frame);
-            }
-        }
-        if (windowIndex > 0) {
-            backward.setEnabled(true);
-        }
-        if (windowIndex >= windowList.size()) {
-            forward.setEnabled(false);
-        }
-    }
-
-    public void removeWindow(final AbstractInternalFrame frame) {
-        if (operatingWindowList) {
-            return;
-        }
-        int index = windowList.indexOf(frame);
-        while (index >= 0) {
-            windowList.remove(index);
-            if (windowIndex >= index) {
-                windowIndex--;
-            }
-            index = windowList.indexOf(frame);
-        }
-        if (windowIndex < -1) {
-            windowIndex = -1;
-        }
-        if (windowIndex >= windowList.size()) {
-            windowIndex = windowList.size() - 1;
-        }
-
-        if (windowIndex <= 0) {
-            backward.setEnabled(false);
-        }
-        if (windowIndex >= windowList.size() - 1) {
-            forward.setEnabled(false);
-        }
-    }
-
-    public AbstractInternalFrame getNextWindow() {
-        if (windowIndex < 0 || windowIndex >= windowList.size() - 1) {
-            return null;
-        }
-        AbstractInternalFrame retVal = windowList.get(windowIndex + 1);
-        if (windowIndex < windowList.size() - 1) {
-            windowIndex++;
-        }
-        if (windowIndex >= windowList.size() - 1) {
-            forward.setEnabled(false);
-        }
-        if (windowIndex >= 0) {
-            backward.setEnabled(true);
-        }
-        return retVal;
-    }
-
-    public AbstractInternalFrame getPreviousWindow() {
-        if (windowIndex <= 0 || windowIndex > windowList.size()) {
-            return null;
-        }
-        AbstractInternalFrame retVal = windowList.get(windowIndex - 1);
-        if (windowIndex >= 0) {
-            windowIndex--;
-        }
-
-        if (windowIndex <= 0) {
-            backward.setEnabled(false);
-        }
-        if (windowIndex < windowList.size()) {
-            forward.setEnabled(true);
-        }
-        return retVal;
     }
 
     @Override

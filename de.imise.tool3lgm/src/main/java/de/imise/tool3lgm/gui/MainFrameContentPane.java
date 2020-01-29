@@ -17,7 +17,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.PropertyVetoException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -451,7 +450,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     public final void closeFrame(final GraphDocument szen) {
         AbstractInternalFrame frame = findFirstInternalFrame(szen);
         while (frame != null) {
-            mainFrameToolbar.removeWindow(frame);
+            LastAndNextViewManager.removeWindow(frame);
             frame.dispose();
             frame = findFirstInternalFrame(szen);
         }
@@ -466,22 +465,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         closeFrame(gdcoll.getMainGraphDocument());
         for (Szenario szen : gdcoll.getSzenarios()) {
             closeFrame(szen);
-        }
-    }
-
-    /**
-     *
-     */
-    public void selectLastFrame() {
-        AbstractInternalFrame lastFrame = mainFrameToolbar.getNextWindow();
-        if (lastFrame == null) {
-            lastFrame = mainFrameToolbar.getPreviousWindow();
-        }
-        if (lastFrame != null) {
-            try {
-                lastFrame.setSelected(true);
-            } catch (PropertyVetoException ex) {
-            }
         }
     }
 
@@ -559,11 +542,11 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         JInternalFrame[] frames = desktop.getAllFrames();
         AbstractInternalFrame frame = (AbstractInternalFrame) e.getSource();
         workarea.revalidate();
-        mainFrameToolbar.removeWindow(frame);
+        LastAndNextViewManager.removeWindow(frame);
         if (frames.length == 0) {
             activeFrame = null;
-            toolbarManager.updateToolBar();
         }
+        toolbarManager.updateToolBar();
     }
 
     @Override
@@ -594,7 +577,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         }
         workarea.revalidate();
         workarea.repaint();
-        mainFrameToolbar.addWindow(activeFrame);
+        LastAndNextViewManager.addWindow(activeFrame);
+        mainFrameToolbar.update();
     }
 
     @Override
@@ -603,6 +587,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         doc.removeClosedTransactionsListener(toolbarManager);
         activeFrame = null;
         toolbarManager.updateToolBar();
+        mainFrameToolbar.update();
     }
 
     //////////////////////////////////////////////
