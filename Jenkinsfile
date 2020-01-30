@@ -9,6 +9,7 @@ pipeline {
     stage('IMPORT AXSUTILS') {
       steps {
         step {
+          echo '####### copying artifact from last stable build of axsutils #######'
           copyArtifacts(projectName: 'axsutils');
         }
       }
@@ -18,18 +19,19 @@ pipeline {
       steps {
         step {
           echo '####### Compiling metamodel.original #######'
+          mvn -B -U -X -f de.imise.metamodel.original/pom.xml -Dmaven.test.skip clean install
         }
         step {
           echo '####### Compiling metamodel.service #######'
-        }
-        step {
-          echo '####### Compiling tool3lgm.deploy #######'
+          mvn -B -U -X -f de.imise.metamodel.service/pom.xml -Dmaven.test.skip clean install
         }
         step {
           echo '####### Compiling tool3lgm.template.ihe #######'
+          mvn -B -U -X -f de.imise.tool3lgm.template.ihe/pom.xml -Dmaven.test.skip clean install
         }
         step {
           echo '####### Compiling tool3lgm #######'
+          mvn -B -U -X -f de.imise.tool3lgm/pom.xml -Dmaven.test.skip clean install
         }
       }
     }
@@ -41,9 +43,6 @@ pipeline {
         }
         step {
           echo '####### Testing metamodel.service #######'
-        }
-        step {
-          echo '####### Testing tool3lgm.deploy #######'
         }
         step {
           echo '####### Testing tool3lgm.template.ihe #######'
