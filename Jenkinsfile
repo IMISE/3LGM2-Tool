@@ -11,7 +11,7 @@ pipeline {
           echo '####### copying artifact from last stable build of axsutils #######'
         }
         step {
-          copyArtifacts(projectName: 'axsutils')
+          copyArtifacts projectName: 'axsutils'
         }
       }
     }
