@@ -5,18 +5,16 @@ pipeline {
     maven "Maven-3.6.3"
   }
   stages {
-
     stage('IMPORT AXSUTILS') {
       steps {
         script {
           echo '####### copying artifact from last stable build of axsutils #######'
         }
         step {
-          copyArtifacts(projectName: 'axsutils');
+          copyArtifacts(projectName: 'axsutils')
         }
       }
     }
-
     stage('BUILD') {
       steps {
         step {
@@ -37,7 +35,6 @@ pipeline {
         }
       }
     }
-
     stage('TEST') {
       steps {
         step {
