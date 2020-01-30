@@ -8,8 +8,10 @@ pipeline {
 
     stage('IMPORT AXSUTILS') {
       steps {
-        step {
+        script {
           echo '####### copying artifact from last stable build of axsutils #######'
+        }
+        step {
           copyArtifacts(projectName: 'axsutils');
         }
       }
@@ -18,7 +20,7 @@ pipeline {
     stage('BUILD') {
       steps {
         step {
-          echo '####### Compiling metamodel.original #######'
+          sh 'echo "####### Compiling metamodel.original #######"'
           sh 'mvn -B -U -X -f de.imise.metamodel.original/pom.xml -Dmaven.test.skip clean install'
         }
         step {
