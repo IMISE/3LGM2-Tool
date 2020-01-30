@@ -8,7 +8,7 @@ pipeline {
     stage('IMPORT AXSUTILS') {
       steps {
         copyArtifacts filter: 'axsutils.jar', fingerprintArtifacts: true, projectName: 'axsutils',
-        selector: specific('1.0.0') dir: './axsutils'
+        selector: specific('1.0.0') dir './axsutils'
       }
     }
     stage('BUILD') {
