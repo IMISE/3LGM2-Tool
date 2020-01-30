@@ -9,19 +9,23 @@ import java.awt.event.MouseListener;
 import javax.help.CSH;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.ToolTipManager;
+import javax.swing.border.Border;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.action.StaticAction;
+import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.util.swing.component.UnfloatableToolBar;
+import de.imise.util.swing.event.ActionSource;
 
 public class MainFrameToolBar extends UnfloatableToolBar implements MouseListener, LGMChangeListenerSimple, Tool3lgmChangeListener {
 
@@ -69,6 +73,19 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         addSeparator();
         add(backward);
         add(forward);
+        addSeparator();
+
+        ActionSource[] alignmentActions = {
+                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM,
+        };
+        for (ActionSource actionSource : alignmentActions) {
+            add(new ToolbarButton(actionSource));
+        }
 
         addAsToolChangeListener();
 
@@ -170,6 +187,12 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
             setText(null);
             //Diesen value muss es bei diesen Actions immer geben
             CSH.setHelpIDString(this, a.getValue(StaticAction.IDENTIFIER_KEY).toString());
+            Border border = BorderFactory.createEtchedBorder();
+            setBorder(border);
+        }
+
+        public ToolbarButton(final ActionSource actionSource) {
+            this(actionSource.createAction());
         }
 
         @Override
