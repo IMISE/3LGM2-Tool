@@ -7,12 +7,8 @@ pipeline {
   stages {
     stage('IMPORT AXSUTILS') {
       steps {
-        script {
-          echo '####### copying artifact from last stable build of axsutils #######'
-        }
-        step {
-          copyArtifacts projectName: 'axsutils'
-        }
+        copyArtifacts filter: 'axsutils.jar', fingerprintArtifacts: true, projectName: 'axsutils',
+        selector: specific('1.0.0') dir: './axsutils'
       }
     }
     stage('BUILD') {
