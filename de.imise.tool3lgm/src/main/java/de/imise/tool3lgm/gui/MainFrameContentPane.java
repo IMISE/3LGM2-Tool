@@ -55,8 +55,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     private final MainFrameToolBar mainFrameToolbar = new MainFrameToolBar();
 
     /** parent der Toolbar Workarea == unten, mainFrameToolbar = oben in der Haupt-Toolbar */
-    //private final Container graphFrameToolbarParent = worarea; // auch unten wie beim MatrixView
-    private final Container graphFrameToolbarParent = mainFrameToolbar; //oben in der HauptToolbar
+    private final Container graphFrameToolbarParent = workarea; // auch unten wie beim MatrixView
+    //private final Container graphFrameToolbarParent = mainFrameToolbar; //oben in der HauptToolbar
     private final Container matrixFrameToolbarParent = workarea;
 
     /** Aktualisiert die Toolbar je nach Kontext des aktiven Frames */
