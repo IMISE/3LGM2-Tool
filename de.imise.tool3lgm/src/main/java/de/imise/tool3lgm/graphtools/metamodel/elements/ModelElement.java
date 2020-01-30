@@ -489,11 +489,22 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         }
     }
 
+    /**
+     *
+     */
     private void updateHTMLName() {
         AbstractMetaPath nameExtension = getNameExtensionPath();
         updateHTMLNameSuffixBuffer(nameExtension);
         textBuf.setLength(0);
-        textBuf.append("<HTML><CENTER>");
+        //das leidige Ausrichten-Problem. Wenn der Text automatisch umgebrochen wird, dann wird
+        //das Links-Rechts-Text-Alignment des Labels ignoriert und der Text immer nach rechts
+        //gesetzt. Nur wenn man die Umbrüche händisch setzt, stimmt es wieder. Damit auch beim
+        //automatischen Umbrechen der Text in den Elementen nicht immer rechts steht, wird er
+        //hier explizit auf Center gesetzt.
+        String centerTagStart = !(this instanceof Textfield) ? "<CENTER>" : "";
+        String centerTagEnd = !centerTagStart.isEmpty() ? "</CENTER>" : "";
+        textBuf.append("<HTML>");
+        textBuf.append(centerTagStart);
         if (isHyperlink()) {
             textBuf.append("<U>");
         }
@@ -518,7 +529,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 textBuf.append("</span>");
             }
         }
-        textBuf.append("</CENTER></HTML>");
+        textBuf.append(centerTagEnd);
+        textBuf.append("</HTML>");
         htmlName = textBuf.toString();
     }
 
