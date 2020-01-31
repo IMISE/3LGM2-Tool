@@ -71,8 +71,8 @@ pipeline {
           archiveArtifacts artifacts: '**', fingerprint: true
         }
 
-        sh 'apt-get install zip'
-        sh 'zip -r tool3lgm.zip de.imise.tool3lgm.deploy/Tool3lgm' 
+        sh 'sudo apt-get install zip'
+        sh 'zip -r tool3lgm.zip de.imise.tool3lgm.deploy/Tool3lgm'
 
       }
     }
