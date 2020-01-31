@@ -66,25 +66,10 @@ pipeline {
         echo '##      Executing Archiving    ##'
         echo '#################################'
 
-        dir('de.imise.metamodel.original/target') {
+        dir('de.imise.tool3lgm.deploy/Tool3lgm') {
           sh 'ls -lisa'
-          archiveArtifacts artifacts: '*.jar', fingerprint: true
+          archiveArtifacts artifacts: '**', fingerprint: true
         }
-        dir('de.imise.metamodel.service/target') {
-          sh 'ls -lisa'
-          archiveArtifacts artifacts: '*.jar', fingerprint: true
-        }
-        dir('de.imise.tool3lgm/target') {
-          sh 'ls -lisa'
-          archiveArtifacts artifacts: '*.jar', fingerprint: true
-        }
-        dir('de.imise.tool3lgm.template.ihe/target') {
-          sh 'ls -lisa'
-          archiveArtifacts artifacts: '*.jar', fingerprint: true
-        }
-
-        zip zipFile: '3lgm2.zip', archive: false, dir: 'de.imise.tool3lgm.deploy/Tool3lgm'
-        archiveArtifacts artifacts: '3lgm2.zip', fingerprint: true
       }
     }
   }
