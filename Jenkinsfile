@@ -8,8 +8,6 @@ pipeline {
     stage('Build') {
       steps {
           echo 'Building..'
-          sh 'cd axsutils/target/'
-          sh 'ls -lisa'
           copyArtifacts filter: 'axsutils/target/de-axs-utils-1.0.0.jar',
             fingerprintArtifacts: true, projectName: 'AXSUtils/deploy',
             selector: lastSuccessful(), target: '/'
