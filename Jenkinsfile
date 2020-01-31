@@ -9,7 +9,7 @@ pipeline {
       steps {
           echo 'Building..'
           copyArtifacts filter: 'target/de-axs-utils.1.0.0.jar',
-            fingerprintArtifacts: true, projectName: 'AXSUtils',
+            fingerprintArtifacts: true, projectName: 'AXSUtils/deploy',
             selector: lastSuccessful(), target: '/'
       }
     }
