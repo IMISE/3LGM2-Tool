@@ -11,7 +11,6 @@ pipeline {
             projectName: 'AXSUtils',
             filter: 'target/de-axs-utils-1.0.0.jar']);
         }
-      }
     }
     stage('BUILD') {
       steps {
