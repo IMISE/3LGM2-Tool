@@ -6,10 +6,11 @@ pipeline {
   }
   stages {
     stage('IMPORT AXSUTILS') {
-    node {
-      step([$class: 'CopyArtifact',
-        projectName: 'AXSUtils',
-        filter: 'target/de-axs-utils-1.0.0.jar']);
+      node {
+        step([$class: 'CopyArtifact',
+          projectName: 'AXSUtils',
+          filter: 'target/de-axs-utils-1.0.0.jar']);
+      }
     }
     stage('BUILD') {
       steps {
