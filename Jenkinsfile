@@ -83,7 +83,7 @@ pipeline {
           archiveArtifacts artifacts: '*.jar', fingerprint: true
         }
 
-        
+        zip archive: true, dir: 'de.imise.tool3lgm.deploy/tool3lgm', glob: '', zipFile: '3lgm2.zip'
       }
     }
   }
