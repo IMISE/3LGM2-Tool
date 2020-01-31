@@ -19,15 +19,15 @@ pipeline {
           sh 'mvn -B -U -X -f de.imise.metamodel.original/pom.xml -Dmaven.test.skip clean install'
         }
         step {
-          echo '####### Compiling metamodel.service #######'
+          sh 'echo "####### Compiling metamodel.service #######"'
           sh 'mvn -B -U -X -f de.imise.metamodel.service/pom.xml -Dmaven.test.skip clean install'
         }
         step {
-          echo '####### Compiling tool3lgm.template.ihe #######'
+          sh 'echo "####### Compiling tool3lgm.template.ihe #######"'
           sh 'mvn -B -U -X -f de.imise.tool3lgm.template.ihe/pom.xml -Dmaven.test.skip clean install'
         }
         step {
-          echo '####### Compiling tool3lgm #######'
+          sh 'echo "####### Compiling tool3lgm #######"'
           sh 'mvn -B -U -X -f de.imise.tool3lgm/pom.xml -Dmaven.test.skip clean install'
         }
       }
@@ -35,16 +35,16 @@ pipeline {
     stage('TEST') {
       steps {
         step {
-          echo '####### Testing metamodel.original #######'
+          sh 'echo "####### Testing metamodel.original #######"'
         }
         step {
-          echo '####### Testing metamodel.service #######'
+          sh 'echo "####### Testing metamodel.service #######"'
         }
         step {
-          echo '####### Testing tool3lgm.template.ihe #######'
+          sh 'echo "####### Testing tool3lgm.template.ihe #######"'
         }
         step {
-          echo '####### Testing tool3lgm #######'
+          sh 'echo "####### Testing tool3lgm #######"'
         }
       }
     }
