@@ -35,18 +35,8 @@ pipeline {
     stage('TEST') {
       steps {
         step {
-          sh 'echo "####### Testing metamodel.original #######"'
-        }
-        step {
-          sh 'echo "####### Testing metamodel.service #######"'
-        }
-        step {
-          sh 'echo "####### Testing tool3lgm.template.ihe #######"'
-        }
-        step {
-          sh 'echo "####### Testing tool3lgm #######"'
+          sh 'echo "Hello There"'
         }
       }
-    }
   }
 }
