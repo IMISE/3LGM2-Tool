@@ -28,6 +28,9 @@ pipeline {
         echo '##       Executing Build       ##'
         echo '#################################'
 
+        echo '####### building tool3lgm #######'
+        sh 'mvn -B -U -X -f de.imise.tool3lgm/pom.xml -Dmaven.test.skip clean install'
+
         echo '####### building metamodel.original #######'
         sh 'mvn -B -U -X -f de.imise.metamodel.original/pom.xml -Dmaven.test.skip clean install'
 
@@ -36,9 +39,6 @@ pipeline {
 
         echo '####### building template.ihe #######'
         sh 'mvn -B -U -X -f de.imise.tool3lgm.template.ihe/pom.xml -Dmaven.test.skip clean install'
-
-        echo '####### building tool3lgm #######'
-        sh 'mvn -B -U -X -f de.imise.tool3lgm/pom.xml -Dmaven.test.skip clean install'
       }
     }
     stage('Test') {
@@ -46,6 +46,9 @@ pipeline {
         echo '#################################'
         echo '##       Executing Tests       ##'
         echo '#################################'
+
+        echo '####### Testing tool3lgm #######'
+        sh 'mvn -f de.imise.tool3lgm/pom.xml test'
 
         echo '####### Testing metamodel.original #######'
         sh 'mvn -f de.imise.metamodel.original/pom.xml test'
@@ -55,9 +58,6 @@ pipeline {
 
         echo '####### Testing template.ihe #######'
         sh 'mvn -f de.imise.tool3lgm.template.ihe/pom.xml test'
-
-        echo '####### Testing tool3lgm #######'
-        sh 'mvn -f de.imise.tool3lgm/pom.xml test'
       }
     }
     stage('Archiving') {
