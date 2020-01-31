@@ -7,7 +7,8 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-          echo 'Building..'
+          echo 'Getting axs-utils.jar'
+          copyArtifacts(filter:'*', projectName: 'axsutils/deploy', selector: lastSuccessful())
       }
     }
     stage('Test') {
