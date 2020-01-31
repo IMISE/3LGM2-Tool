@@ -38,5 +38,6 @@ pipeline {
           sh 'echo "Hello There"'
         }
       }
+    }
   }
 }
