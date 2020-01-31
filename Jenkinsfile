@@ -82,6 +82,8 @@ pipeline {
           sh 'ls -lisa'
           archiveArtifacts artifacts: '*.jar', fingerprint: true
         }
+
+        
       }
     }
   }
