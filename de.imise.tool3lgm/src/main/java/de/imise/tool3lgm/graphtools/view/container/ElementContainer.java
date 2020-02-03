@@ -2,6 +2,8 @@ package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_FONT;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_HALIGN;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_VALIGN;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -26,6 +28,8 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HorizontalAlignment;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.VerticalAlignment;
 import de.imise.tool3lgm.graphtools.view.graph.SpecialInfoLabel;
 
 public abstract class ElementContainer extends JLabel implements Cloneable {
@@ -82,6 +86,11 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     protected Color lastColor = null;
 
     /**
+     * HTML name of the element with the text alignment information especially for this container.
+     */
+    private transient String htmlName;
+
+    /**
      *
      */
     public ElementContainer() {
@@ -90,7 +99,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         setHorizontalAlignment(CENTER);
         setVerticalAlignment(CENTER);
         setHorizontalTextPosition(CENTER);
-        setVerticalTextPosition(BOTTOM);
+        setVerticalTextPosition(CENTER);
     }
 
     /**
@@ -626,21 +635,33 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     /**
      * @return
      */
-    public final int getValign() {
+    public final VerticalAlignment getValign() {
         if (layout != null) {
             return layout.valign;
         }
-        return CENTER;
+        return STANDARD_VALIGN;
     }
 
     /**
      * @return
      */
-    public final int getHalign() {
+    public final HorizontalAlignment getHalign() {
         if (layout != null) {
             return layout.halign;
         }
-        return CENTER;
+        return STANDARD_HALIGN;
+    }
+
+    /**
+     * @return <code>true</code> if the {@link #getHalign()} return the default value
+     *         ({@link GraphElementLayout#STANDARD_HALIGN})
+     * @see GraphElementLayout#isDefaultHalign()
+     */
+    public boolean isDefaultHalign() {
+        if (layout == null) {
+            return true;
+        }
+        return layout.isDefaultHalign();
     }
 
     /**
@@ -682,24 +703,37 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         } else if (text != null && getWidth() < 35 && getHeight() < 30) {
             //System.err.println("Element zu klein \"" + text + "\" " + me.getClass().getSimpleName() + " " + me + " " + doc);
         }
-
         super.setText(text);
+
+        //        if (!doc.getCollection().isBulkMode()) {
+        //            Tool3lgm tool = Static.getTool();
+        //            if (tool != null) {
+        //                tool.refreshSelectedFrame();
+        //            }
+        //        }
+
     }
-
-    /**
-     * COMMENTME
-     */
-    static StringBuilder suffixBuf = new StringBuilder("");
-
-    /**
-     * COMMENTME
-     */
-    static StringBuilder textBuf = new StringBuilder("");
 
     /**
      *
      */
     public abstract void refreshText();
+
+    /**
+     * @param htmlName
+     */
+    public void setHTMLName(final String htmlName) {
+        this.htmlName = htmlName;
+        refreshText();
+        //Sys.err1(htmlName);
+    }
+
+    /**
+     * @return the htmlName
+     */
+    public String getHTMLName() {
+        return htmlName;
+    }
 
     /**
      * @param initialContainer

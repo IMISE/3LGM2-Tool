@@ -38,7 +38,6 @@ import javax.annotation.Nonnull;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
@@ -80,6 +79,8 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HorizontalAlignment;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.VerticalAlignment;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -93,7 +94,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * Repräsentiert ein Teilmodell. Dieses Teilmodell kann das Hauptmodell sein (= spezielle Teilmodell das alle Elemente enthält, aber keine Grafik
  * besitzt) oder ein Szenario (= eine beliebige Elementauswahl aus allen Elementen mit einer grafischen Repräsentation)
  */
-public abstract class GraphDocument extends ElementSelectionContext implements SwingConstants {
+public abstract class GraphDocument extends ElementSelectionContext {
 
     /** Zeichen, das in Kommandos zusammengehörigen Text umschließt, damit er als zusammengehörig erkannt werden kann */
     public static final char GDCOMMAND_TEXT_SURROUNDER = '\'';
@@ -264,6 +265,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public ModelCategory getModelCategory() {
         return gdcoll.getModelCategory();
+    }
+
+    /**
+     * @return <code>true</code> if this Graphdocument is the main GraphDocument of the model, otherwise <code>false</code>
+     */
+    public final boolean isMainGraphDocument() {
+        LGMGraphDocument mainGraphDocument = gdcoll.getMainGraphDocument();
+        return mainGraphDocument == this;
     }
 
     /**
@@ -1069,68 +1078,54 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             break;
 
         case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP:
-            label_valign(TOP, pid);
+            label_valign(VerticalAlignment.TOP, pid);
             break;
 
         case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER:
-            label_valign(CENTER, pid);
+            label_valign(VerticalAlignment.CENTER, pid);
             break;
 
         case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM:
-            label_valign(BOTTOM, pid);
+            label_valign(VerticalAlignment.BOTTOM, pid);
             break;
 
         case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT:
-            label_halign(LEFT, pid);
+            label_halign(HorizontalAlignment.LEFT, pid);
             break;
 
         case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER:
-            label_halign(CENTER, pid);
+            label_halign(HorizontalAlignment.CENTER, pid);
             break;
 
         case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT:
-            label_halign(RIGHT, pid);
+            label_halign(HorizontalAlignment.RIGHT, pid);
             break;
 
         case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN:
             if (argc == 1) {
-                try {
-                    label_valign(Integer.parseInt(argv[0]), pid);
-                } catch (Exception e) {
-                    Log(e);
-                }
+                VerticalAlignment valign = VerticalAlignment.valueOf(argv[0]);
+                label_valign(valign, pid);
             }
             if (argc == 3) {
-                try {
-                    //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
-                    GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
-                    ElementContainer ec = szen.findContainerCoded(argv[1]);
-                    int mode = Integer.parseInt(argv[2]);
-                    szen.label_valign(mode, ec, pid);
-                } catch (Exception e) {
-                    Log(e);
-                }
+                //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
+                GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
+                ElementContainer ec = szen.findContainerCoded(argv[1]);
+                VerticalAlignment valign = VerticalAlignment.valueOf(argv[2]);
+                szen.label_valign(valign, ec, pid);
             }
             break;
 
         case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN:
             if (argc == 1) {
-                try {
-                    label_halign(Integer.parseInt(argv[0]), pid);
-                } catch (Exception e) {
-                    Log(e);
-                }
+                HorizontalAlignment halign = HorizontalAlignment.valueOf(argv[0]);
+                label_halign(halign, pid);
             }
             if (argc == 3) {
-                try {
-                    //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
-                    GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
-                    ElementContainer ec = szen.findContainerCoded(argv[1]);
-                    int mode = Integer.parseInt(argv[2]);
-                    szen.label_halign(mode, ec, pid);
-                } catch (Exception e) {
-                    Log(e);
-                }
+                //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
+                GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
+                ElementContainer ec = szen.findContainerCoded(argv[1]);
+                HorizontalAlignment halign = HorizontalAlignment.valueOf(argv[2]);
+                szen.label_halign(halign, ec, pid);
             }
             break;
 
@@ -4098,7 +4093,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param mode
      * @param pid
      */
-    public final void label_valign(final int mode, final int pid) {
+    public final void label_valign(final VerticalAlignment mode, final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
             label_valign(mode, ec, pid);
@@ -4112,7 +4107,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param kc
      * @param pid
      */
-    private final void label_valign(final int mode, final ElementContainer kc, final int pid) {
+    private final void label_valign(final VerticalAlignment mode, final ElementContainer kc, final int pid) {
         if (kc == null) {
             return;
         }
@@ -4132,7 +4127,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param mode
      * @param pid
      */
-    public final void label_halign(final int mode, final int pid) {
+    public final void label_halign(final HorizontalAlignment mode, final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
             label_halign(mode, ec, pid);
@@ -4146,7 +4141,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param kc
      * @param pid
      */
-    private final void label_halign(final int mode, final ElementContainer kc, final int pid) {
+    private final void label_halign(final HorizontalAlignment mode, final ElementContainer kc, final int pid) {
         if (kc == null) {
             return;
         }
@@ -4157,7 +4152,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         start_transaction(pid);
         addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN + " " + kc.get3LGMLayout().halign, pid);
         addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN + " " + mode, pid);
-        kc.get3LGMLayout().halign = mode;
+        GraphElementLayout layout = kc.get3LGMLayout();
+        layout.halign = mode;
+        ModelElement me = kc.getElement();
+        me.updateHTMLName(kc);
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, kc, pid);
     }

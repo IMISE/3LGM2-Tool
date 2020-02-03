@@ -96,11 +96,13 @@ public final class NodeRenderer {
             form = doc.getMapping().getStandardForm(kc);
         }
 
-        if (kc.getVerticalAlignment() != kc.getValign()) {
-            kc.setVerticalAlignment(kc.getValign());
+        int valignSwingConstant = kc.getValign().getSwingConstant();
+        if (kc.getVerticalAlignment() != valignSwingConstant) {
+            kc.setVerticalAlignment(valignSwingConstant);
         }
-        if (kc.getHorizontalAlignment() != kc.getHalign()) {
-            kc.setHorizontalAlignment(kc.getHalign());
+        int halignSwingConstant = kc.getHalign().getSwingConstant();
+        if (kc.getHorizontalAlignment() != halignSwingConstant) {
+            kc.setHorizontalAlignment(halignSwingConstant);
         }
 
         Stroke str = gc.getStroke();

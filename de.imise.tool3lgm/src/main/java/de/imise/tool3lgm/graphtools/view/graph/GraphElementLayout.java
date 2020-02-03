@@ -156,13 +156,114 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
             Font.ITALIC
     };
 
+    /**
+     * @author AXS (30.01.2020)
+     */
+    public static enum HorizontalAlignment {
+        LEFT {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.LEFT;
+            }
+
+        },
+        CENTER {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.CENTER;
+            }
+
+        },
+        RIGHT {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.RIGHT;
+            }
+        },
+        JUSTIFY {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.CENTER;
+            }
+        };
+
+        /**
+         * @return
+         */
+        public abstract int getSwingConstant();
+
+        /**
+         * @return
+         */
+        public final String getHTMLAlign() {
+            return name();
+        }
+
+        /**
+         * @param swingConstantValue
+         * @return
+         */
+        public static HorizontalAlignment getValueForSwingConstant(final int swingConstantValue) {
+            if (swingConstantValue == LEFT.getSwingConstant()) {
+                return LEFT;
+            }
+            if (swingConstantValue == RIGHT.getSwingConstant()) {
+                return RIGHT;
+            }
+            return CENTER;
+        }
+    }
+
+    /**
+     * @author AXS (30.01.2020)
+     */
+    public static enum VerticalAlignment {
+        TOP {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.TOP;
+            }
+        },
+        CENTER {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.CENTER;
+            }
+        },
+        BOTTOM {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.BOTTOM;
+            }
+        };
+
+        /**
+         * @return
+         */
+        public abstract int getSwingConstant();
+
+        /**
+         * @param swingConstantValue
+         * @return
+         */
+        public static VerticalAlignment getValueForSwingConstant(final int swingConstantValue) {
+            if (swingConstantValue == TOP.getSwingConstant()) {
+                return TOP;
+            }
+            if (swingConstantValue == BOTTOM.getSwingConstant()) {
+                return BOTTOM;
+            }
+            return CENTER;
+        }
+    }
+
     public static final GraphElementLayout.SHAPE STANDARD_FORM = SHAPE.rechteck;
     public static final int STANDARD_WIDTH = 90;
     public static final int STANDARD_HEIGHT = 50;
     public static final int STANDARD_LINE_THICKNESS = 1;
     public static final int STANDARD_LINE_STYLE = 0;
-    public static final int STANDARD_VALIGN = CENTER;
-    public static final int STANDARD_HALIGN = CENTER;
+    public static final VerticalAlignment STANDARD_VALIGN = VerticalAlignment.CENTER;
+    public static final HorizontalAlignment STANDARD_HALIGN = HorizontalAlignment.CENTER;
     //	public static final Color  STANDARD_TRACE_COLOR = Color.BLACK;
     public static final Color STANDARD_BORDER_COLOR = Color.BLACK;
     public static final Color STANDARD_NODE_COLOR = COLORS[RED];
@@ -186,8 +287,8 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         //TODO: den Standard-Linestyle aus den Containern hier her verlegen
         //		STANDARD_ELEMENT_LAYOUT.line_style =
         STANDARD_ELEMENT_LAYOUT.form = STANDARD_FORM;
-        STANDARD_ELEMENT_LAYOUT.halign = STANDARD_VALIGN;
-        STANDARD_ELEMENT_LAYOUT.valign = STANDARD_HALIGN;
+        STANDARD_ELEMENT_LAYOUT.halign = STANDARD_HALIGN;
+        STANDARD_ELEMENT_LAYOUT.valign = STANDARD_VALIGN;
         STANDARD_ELEMENT_LAYOUT.width = STANDARD_WIDTH;
 
     }
@@ -243,10 +344,10 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public int line_style;
 
     /** vertikale Ausrichtung des Labeltextes */
-    public int valign;
+    public VerticalAlignment valign;
 
     /** horizontale Ausrichtung des Labeltextes */
-    public int halign;
+    public HorizontalAlignment halign;
 
     /**
      *
@@ -299,6 +400,13 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         tmp.valign = valign;
         tmp.halign = halign;
         return tmp;
+    }
+
+    /**
+     * @return <code>true</code> if the <code>halign</code> has the default value
+     */
+    public boolean isDefaultHalign() {
+        return halign == STANDARD_HALIGN;
     }
 
 }

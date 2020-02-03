@@ -506,7 +506,8 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
         if (hideText()) {
             setText(null);
         } else {
-            setText(me.getHTMLName());
+            String htmlName = getHTMLName();
+            setText(htmlName);
         }
     }
 

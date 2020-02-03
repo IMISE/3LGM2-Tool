@@ -577,10 +577,10 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeElement("icon", layout.icon);
         }
         //        if (layout.valign != STANDARD_VALIGN) {
-        writeElement("valign", layout.valign);
+        writeElement("valign", layout.valign.name());
         //        }
         //        if (layout.halign != STANDARD_HALIGN) {
-        writeElement("halign", layout.halign);
+        writeElement("halign", layout.halign.name());
         //        }
         writeEndElement(); //</layout> oder </nelayout>
     }

@@ -33,6 +33,8 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HorizontalAlignment;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.VerticalAlignment;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -517,16 +519,28 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 if (layout == null) {
                     return;
                 }
-                if (layout != null) {
-                    layout.valign = Integer.parseInt(elementValue.toString());
+                String elementValueString = elementValue.toString();
+                //alte Dateien -> SwingContstants
+                try {
+                    int swingConstantValue = Integer.parseInt(elementValueString);
+                    VerticalAlignment valign = VerticalAlignment.getValueForSwingConstant(swingConstantValue);
+                    layout.valign = valign;
+                } catch (Exception ex) {
+                    // ignore -> default alignment
                 }
 
             } else if (qName.equals("halign")) {
                 if (layout == null) {
                     return;
                 }
-                if (layout != null) {
-                    layout.halign = Integer.parseInt(elementValue.toString());
+                String elementValueString = elementValue.toString();
+                //alte Dateien -> SwingContstants
+                try {
+                    int swingConstantValue = Integer.parseInt(elementValueString);
+                    HorizontalAlignment halign = HorizontalAlignment.getValueForSwingConstant(swingConstantValue);
+                    layout.halign = halign;
+                } catch (Exception ex) {
+                    // ignore -> default alignment
                 }
 
             } else if (qName.equals("layout")) {

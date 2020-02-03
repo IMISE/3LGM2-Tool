@@ -9,6 +9,8 @@ import org.xml.sax.SAXException;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HorizontalAlignment;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.VerticalAlignment;
 
 /**
  * @author thomas
@@ -64,12 +66,28 @@ public class ToolContentHandlerV1_2 extends ToolContentHandlerV1_1 {
 
         if (qName.equals("valign")) {
             if (layout != null) {
-                layout.valign = Integer.parseInt(elementValue.toString());
+                String elementValueString = elementValue.toString();
+                //alte Dateien -> SwingContstants
+                try {
+                    int swingConstantValue = Integer.parseInt(elementValueString);
+                    VerticalAlignment valign = VerticalAlignment.getValueForSwingConstant(swingConstantValue);
+                    layout.valign = valign;
+                } catch (Exception ex) {
+                    // ignore -> default alignment
+                }
             }
 
         } else if (qName.equals("halign")) {
+            String elementValueString = elementValue.toString();
             if (layout != null) {
-                layout.halign = Integer.parseInt(elementValue.toString());
+                //alte Dateien -> SwingContstants
+                try {
+                    int swingConstantValue = Integer.parseInt(elementValueString);
+                    HorizontalAlignment halign = HorizontalAlignment.getValueForSwingConstant(swingConstantValue);
+                    layout.halign = halign;
+                } catch (Exception ex) {
+                    // ignore -> default alignment
+                }
             }
 
         } else {
