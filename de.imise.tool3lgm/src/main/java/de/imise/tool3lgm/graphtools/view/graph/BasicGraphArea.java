@@ -179,8 +179,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      */
     public final void setSzenario(final Szenario szen) {
         szenario = szen;
-        revalidate();
-        repaint();
+        revalidateRepaint();
     }
 
     /**
@@ -215,8 +214,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         } else {
             storeSettings();
         }
-        revalidate();
-        repaint();
+        revalidateRepaint();
         fireLayerViewChanged();
     }
 
@@ -242,8 +240,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      */
     private final void setPageSize(final int width, final int height) {
         if (width == layerWidth && height == layerHeight) {
-            revalidate();
-            repaint();
+            revalidateRepaint();
             return;
         }
         layerHeight = height;
