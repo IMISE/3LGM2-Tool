@@ -394,7 +394,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     private JPopupMenu getSingleNodeContextMenu(final Component contextSource, final ElementContainer ec) {
         //		System.err.println("ContextGenerator.getSingleNodeContextMenu()");
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         this.ec = ec;
         ModelElement me = ec.getElement();
         if (!(ec instanceof BendpointContainer)) {
@@ -550,7 +550,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     private JPopupMenu getMultiNodeContextMenu(final Component contextSource) {
 
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
 
         GraphDocument doc = getDoc();
         boolean knickpunkte = doc.isSelectedOnlyBendpoints();
@@ -766,7 +766,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * Kontextmenü im Searchdialog
      */
     public JPopupMenu getSearchDialogContextMenu() {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         GraphDocument doc = getDoc();
         if (doc.isSingleSelection()) {
             addMenuItem(menu, properties);
@@ -785,7 +785,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     @Override
     public final JPopupMenu getNodeContextMenu(final Component source) {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         GraphDocument doc = getDoc();
         if (doc.isSelectedOnlyBendpoints()) {
             if (doc instanceof Szenario) {
@@ -806,7 +806,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     private final JPopupMenu getSingleEdgeContextMenu() {
         //		System.err.println("ContextGenerator.getSingleEdgeContextMenu()");
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         GraphDocument doc = getDoc();
         if (doc.isSingleSelection() && doc.getLastSelected() instanceof EdgeContainer) {
             addMenuItem(menu, properties);
@@ -828,7 +828,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @return
      */
     private final JPopupMenu getMultiEdgeContextMenu() {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         if (menu.getComponentCount() > 0) {
             menu.addSeparator();
         }
@@ -860,7 +860,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @return
      */
     private final JPopupMenu getMultiContextMenu() {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         if (menu.getComponentCount() > 0) {
             menu.addSeparator();
         }
@@ -923,7 +923,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     @Override
     public final JPopupMenu getLayerContextMenu() {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         menu.add(getCreateNewNodesMenu());
         menu.add(new_text);
         menu.addSeparator();
@@ -1780,7 +1780,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @return
      */
     public JPopupMenu getDialogSelectionContextMenu(final boolean propertiesOnly) {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         addMenuItem(menu, properties);
         if (!propertiesOnly) {
             menu.addSeparator();
@@ -1806,7 +1806,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @return
      */
     public JPopupMenu getDialogSelectionContextMenu(final ElementContainer ec) {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         GraphDocument doc = ec.getGraphDocument();
         doc.addSimpleToSelection(ec);
         addMenuItem(menu, properties);
@@ -1900,8 +1900,10 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
 
     //--------------------------------------------------------------------------------------------------------------------------------
     // PopupMenuListener-Funktionen
+
     @Override
     public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
+        //do nothing
     }
 
     @Override
@@ -1914,6 +1916,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
 
     @Override
     public void popupMenuCanceled(final PopupMenuEvent e) {
+        //do nothing
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------
