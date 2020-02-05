@@ -1056,9 +1056,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 optionsSupport.setOption(MODEL_OPTION_GDOC_VERIFICATION_MODE, Boolean.parseBoolean(argv[0]));
             }
             break;
-        case MODEL_OPTION_GDCOLL_INTERACTIVE_MODE:
-            boolean isInteractiveMode = argc == 0 ? !gdcoll.isInteractiveMode() : Boolean.parseBoolean(argv[0]);
-            gdcoll.setInteractiveMode(isInteractiveMode);
+        case MODEL_OPTION_GDCOLL_AUTOMATIC_MODE:
+            boolean isInteractiveMode = argc == 0 ? !gdcoll.isAutomaticMode() : Boolean.parseBoolean(argv[0]);
+            gdcoll.setAutomaticMode(isInteractiveMode);
             break;
         case MODEL_ACTION_INSERT_BENDING_POINT:
             //[0] = SzenHash, [1] = HashString der Edge, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
@@ -1882,7 +1882,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void changeColor(final int pid) {
-        if (!gdcoll.isInteractiveMode()) {
+        if (gdcoll.isAutomaticMode()) {
             return;
         }
         Color oldcol = null;
@@ -1949,7 +1949,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void changeLayerColor(final int pid) {
-        if (!gdcoll.isInteractiveMode()) {
+        if (gdcoll.isAutomaticMode()) {
             return;
         }
         Color oldcol = null;
@@ -1980,7 +1980,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (layer_idx < 0 || layer_idx > 4) {
             return;
         }
-        if (!gdcoll.isInteractiveMode()) {
+        if (gdcoll.isAutomaticMode()) {
             return;
         }
         Color col = JColorChooser.showDialog(null, getResString("farbe_ausw"), layer[layer_idx].getColor());
@@ -3694,9 +3694,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
         }
         if (!createSubPath && endElement == null) {
             Class<? extends ModelElement> pathEndClass = metaPath.getPathStepElementClass(lastPathStepIndex);
-            boolean oldInteractiveMode = gdcoll.setInteractiveMode(askNameForNewEndElement);
+            boolean oldAutomaticMode = gdcoll.setAutomaticMode(!askNameForNewEndElement);
             NodeContainer pathEndElementContainer = createNodeAndContainer(pathEndClass, pid);
-            gdcoll.setInteractiveMode(oldInteractiveMode);
+            gdcoll.setAutomaticMode(oldAutomaticMode);
             if (pathEndElementContainer != null) { // kann passieren, wenn der Benutzer abbrechen im Namensdialog drückt
                 createPath(startElement, pathEndElementContainer.getElement(), metaPath, pid);
             }
@@ -3718,19 +3718,19 @@ public abstract class GraphDocument extends ElementSelectionContext {
                     //diese Kante vorwärts im Pfad liegt (also vom zu instanzieerenden Element auf das Instanz-Element zeigt), dann wird diese auch
                     //selbst über den Instanziierungsmechanismus initialisiert
                 } else if (InstanciationEdge.class.isAssignableFrom(edgeClass) && elementaryMetaPath.hasDirectionForward()) {
-                    boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
+                    boolean oldAutomaticMode = gdcoll.setAutomaticMode(true);
                     NodeContainer createdInstanceContainer = createInstance(this, edgeClass.asSubclass(InstanciationEdge.class), pathStepStartElement, pid);
                     ModelElement createdInstance = createdInstanceContainer.getElement();
                     Edge createdInstanceEdge = pathStepStartElement.getEdgeTo(createdInstance, edgeClass);
                     createdEdges.add(createdInstanceEdge);
-                    gdcoll.setInteractiveMode(oldInteractiveMode);
+                    gdcoll.setAutomaticMode(oldAutomaticMode);
                     pathStepEndElement = createdInstance;
                     alreadyLinked = true;
                 } else { // nächstes Pfadschrittelement anlegen
                     Class<? extends ModelElement> pathStepEndClass = metaPath.getPathStepElementClass(i);
-                    boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
+                    boolean oldAutomaticMode = gdcoll.setAutomaticMode(true);
                     NodeContainer pathStepEndElementContainer = createNodeAndContainer(pathStepEndClass, pid);
-                    gdcoll.setInteractiveMode(oldInteractiveMode);
+                    gdcoll.setAutomaticMode(oldAutomaticMode);
                     pathStepEndElement = pathStepEndElementContainer.getElement();
                 }
                 if (!alreadyLinked) {

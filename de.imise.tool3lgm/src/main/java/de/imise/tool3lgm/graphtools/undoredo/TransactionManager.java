@@ -410,8 +410,7 @@ public class TransactionManager {
         gdcoll.setBulkMode(true);
 
         is_doing = true;
-        boolean flag = gdcoll.isInteractiveMode();
-        gdcoll.setInteractiveMode(false);
+        boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
 
         doc.deselectAll(true);
         for (int k = 0; k < trans_q[j].getPostSelectionSize(); k++) {
@@ -448,7 +447,7 @@ public class TransactionManager {
         }
         cur_pos--;
 
-        doc.getCollection().setInteractiveMode(flag);
+        doc.getCollection().setAutomaticMode(lastAutomaticMode);
         if (doc.isVerificationMode()) {
             printQueue(10);
         }
@@ -480,8 +479,8 @@ public class TransactionManager {
         cur_pos++;
         int j = getTransactionIndexForPID(pid, false);
         GraphDocument doc = trans_q[j].getGraphDocument();
-        boolean flag = doc.getCollection().isInteractiveMode();
-        doc.getCollection().setInteractiveMode(false);
+        GDCollection gdcoll = doc.getCollection();
+        boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
         doc.deselectAll(true);
         for (int k = 0; k < trans_q[j].getPreSelectionSize(); k++) {
             doc.addToSelection(trans_q[j].getPreSelectionItem(k), pid);
@@ -495,7 +494,7 @@ public class TransactionManager {
         for (int j2 = 0; j2 < trans_q[j].getPostSelectionSize(); j2++) {
             doc.addToSelection(trans_q[j].getPostSelectionItem(j2), pid);
         }
-        doc.getCollection().setInteractiveMode(flag);
+        gdcoll.setAutomaticMode(lastAutomaticMode);
         is_doing = false;
         if (doc.isVerificationMode()) {
             printQueue(10);

@@ -251,7 +251,7 @@ public class Tool3lgm {
         //sollen die UNDO-REDO-Kommandos wieder geloggt werden.
         boolean openModel = openModel(gdcoll);
         gdcoll.setBulkMode(false);
-        gdcoll.setInteractiveMode(true);
+        gdcoll.setAutomaticMode(false);
         return openModel;
     }
 

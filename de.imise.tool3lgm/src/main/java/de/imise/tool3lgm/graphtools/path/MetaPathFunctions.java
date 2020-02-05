@@ -759,13 +759,13 @@ public class MetaPathFunctions {
         //bei denen der Namen normalerweise nicht generiert wird
         boolean lastEdge = edgeClassFromNewElement == null;
         //bei der letzten Edge sollte man bei neuen Elementen nach dem Namen fragen
-        boolean newInteractiveMode = lastEdge;
+        boolean newAutomaticMode = !lastEdge;
         //Ausnahme für Mac-Java-Bug: wenn Dialoge auf dem MAC aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
         //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach nicht angezeigt und der Name generiert.
         if (Static.isDragNDropOnMac()) {
-            newInteractiveMode = false;
+            newAutomaticMode = true;
         }
-        boolean lastInteractiveMode = gdcoll.setInteractiveMode(newInteractiveMode);
+        boolean lastAutomaticMode = gdcoll.setAutomaticMode(newAutomaticMode);
 
         //abstracte Elemente können nicht angelegt werden! hier wird nicht auf null gecheckt, weil man diese Funktion nur mit SimpleMetaPaths aufrufen sollte, die creatable sind!
         if (MetaModel.isAbstract(newElementClass)) {
@@ -871,7 +871,7 @@ public class MetaPathFunctions {
             }
 
         }
-        gdcoll.setInteractiveMode(lastInteractiveMode);
+        gdcoll.setAutomaticMode(lastAutomaticMode);
         return createdDependent;
     }
 

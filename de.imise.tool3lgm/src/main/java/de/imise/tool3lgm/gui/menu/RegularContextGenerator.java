@@ -31,7 +31,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAY
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDCOLL_INTERACTIVE_MODE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDCOLL_AUTOMATIC_MODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER;
@@ -230,7 +230,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         join_selected = getItem(MODEL_ACTION_JOIN_SELECTED);
 
         JMenuItem verify = getItem(MODEL_OPTION_GDOC_VERIFICATION_MODE);
-        JMenuItem interactive = getItem(MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
+        JMenuItem interactive = getItem(MODEL_OPTION_GDCOLL_AUTOMATIC_MODE);
         JMenuItem expertMode = UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE.createAction().createMenuItem();
 
         command_line = getItem(MODEL_ACTION_COMMAND_LINE);
@@ -1890,9 +1890,9 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                         continue;
                     }
                     GDCollection gdcoll = doc.getCollection();
-                    boolean lastInteractiveMode = gdcoll.setInteractiveMode(false);
+                    boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
                     doc.createPath(lastSelected, me, path2create, STANDARD_PID);
-                    gdcoll.setInteractiveMode(lastInteractiveMode);
+                    gdcoll.setAutomaticMode(lastAutomaticMode);
                 }
             }
         };

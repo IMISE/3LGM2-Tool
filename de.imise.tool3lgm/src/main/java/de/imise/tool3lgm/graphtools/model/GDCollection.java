@@ -224,20 +224,22 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private final GDCollectionIconTable iconTable = new GDCollectionIconTable();
 
     /**
-     * Wenn <code>true</code>, werden keine Ereignisse gefeuert und keine Undo-/Redo-Commands aufgezeichnet.
+     * Wenn <code>true</code>, werden keine Undo-/Redo-Commands aufgezeichnet. Dieser Modus ist beim Einlesen
+     * bzw. vor dem kompletten init eines Modells aktiv und immer dann, wenn UNDO oder REDO ausgeführt wird, da
+     * währenddessen die Kommandos nicht noch einmal aufgezeichnet werden müssen.
      * <code>false</code> ist der Default. Nach dem Init muss dieser auf <code>true</code> gesetzt werden,
-     * damit die Kommandos geloggt werden.
-     * ACHTUNG: Der Kommentar ist wahrscheinlich nicht ganz richtig. Es werden wohl nicht keine Ereignisse
-     * gefeuert sondern nur nicht alle.
+     * damit die dann Kommandos geloggt werden.
      */
     private boolean bulk_mode = true;
 
     /**
-     * <code>false</code> means the model is in 'automatic mode'. In this mode the user will not be asked
+     * <code>true</code> means the model is in 'automatic mode'. In this mode the user will not be asked
      * for any descision or some model change events are not disributed.
-     * If <code>true</code> the user can be asked and all model change events are disributed.
+     * If <code>false</code> the user can be asked and all model change events are disributed.
+     * Thsi mode is active, e.g. if elements should be generated without aksing the user for the name of
+     * the element. This elements get standard names.
      */
-    private boolean interactive_mode = false;
+    private boolean automatic_mode = true;
 
     /**
      * Wird <code>true</code> sobald der bulk_mode das erste Mal auf <code>false</code> gesetzt wurde.
@@ -360,16 +362,18 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * @param bm
+     * @param bulk_mode
      * @return the previous bulk mode
      */
-    public boolean setBulkMode(final boolean bm) {
-        if (!initialized && bm) {
+    public boolean setBulkMode(final boolean bulk_mode) {
+        //Sys.err("bulk_mode: " + this.bulk_mode + " -> " + bulk_mode);
+        //das erste Setzten des bulk_mode auf false beendet die Initialisierung
+        if (!initialized && !bulk_mode) {
             initialized = true;
         }
-        boolean oldBulkMode = bulk_mode;
-        bulk_mode = bm;
-        return oldBulkMode;
+        boolean oldMode = this.bulk_mode;
+        this.bulk_mode = bulk_mode;
+        return oldMode;
     }
 
     /**
@@ -380,20 +384,21 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * @param flag
-     * @return previous interactive mode
+     * @param automatic_mode
+     * @return previous automatic mode
      */
-    public boolean setInteractiveMode(final boolean flag) {
-        boolean oldMode = interactive_mode;
-        interactive_mode = flag;
+    public boolean setAutomaticMode(final boolean automatic_mode) {
+        //Sys.err("automatic_mode: " + this.automatic_mode + " -> " + automatic_mode);
+        boolean oldMode = this.automatic_mode;
+        this.automatic_mode = automatic_mode;
         return oldMode;
     }
 
     /**
      * @return
      */
-    public boolean isInteractiveMode() {
-        return interactive_mode;
+    public boolean isAutomaticMode() {
+        return automatic_mode;
     }
 
     /**
@@ -1246,7 +1251,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         } else {
             String newName = nameIsEmpty ? doc.getNextNewName(me.getClass()) : name.substring(1);
             me.setName(newName, false);
-            if (isInteractiveMode() && !metaModel.isGenerateName(me.getClass())) {
+            if (!isAutomaticMode() && !metaModel.isGenerateName(me.getClass())) {
                 if (!askNameAndColor(nc)) {
                     return null;
                 }
@@ -1273,10 +1278,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             doc.undo(pid);
             return null;
         }
-        boolean old_mode = isInteractiveMode();
-        setInteractiveMode(false);
+        boolean oldAutomaticMode = setAutomaticMode(true);
         createInitialSubtypes(me, pid);
-        setInteractiveMode(old_mode);
+        setAutomaticMode(oldAutomaticMode);
         doc.finish_transaction(pid);
         doc.distributeEvent(DATA_CHANGED, pid);
         return nc;
@@ -1980,7 +1984,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         }
         //prüfen, ob es sich um Node gleichen Typs handelt (nur diese können vereint werden)
         if (!(removeElement instanceof Node && remainElement instanceof Node)) {
-            if (interactive_mode) {
+            if (!automatic_mode) {
                 JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             }
             return null;
@@ -1989,7 +1993,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         Node remainNode = (Node) remainElement;
         Class<? extends ModelElement> nodeClass = removeNode.getClass();
         if (nodeClass != remainNode.getClass()) {
-            if (interactive_mode) {
+            if (!automatic_mode) {
                 JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             }
             return null;

@@ -122,7 +122,7 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_COMMAND_LINE,
     MODEL_ACTION_PRINT_QUEUE,
     MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY,
-    MODEL_OPTION_GDCOLL_INTERACTIVE_MODE,
+    MODEL_OPTION_GDCOLL_AUTOMATIC_MODE,
     MODEL_OPTION_GDOC_VERIFICATION_MODE;
 
     //Ungültige Werte für alle Kommandos
@@ -207,7 +207,7 @@ public enum GDCommands implements ActionSource {
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_DELETE_SUBMODEL);
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SUBMODEL);
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDOC_VERIFICATION_MODE);
-        ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
+        ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDCOLL_AUTOMATIC_MODE);
         ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL);
         ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL);
         ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS);
