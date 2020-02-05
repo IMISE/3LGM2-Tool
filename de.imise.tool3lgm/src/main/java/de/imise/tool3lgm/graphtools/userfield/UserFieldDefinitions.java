@@ -942,12 +942,17 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
         return partValueSumSinglePartResults;
     }
 
+    /**
+     * @return
+     */
     public Set<Class<? extends UserFieldTarget>> getUserFieldTargets() {
         return classToUserFieldListMap.keySet();
     }
 
-    @Override
-    public String toString() {
+    /**
+     * @return
+     */
+    public String getDebugString() {
         StringBuilder sb = new StringBuilder();
         for (Class<?> keyClass : getClassToUserFieldKeys()) {
             sb.append(keyClass.getSimpleName());
