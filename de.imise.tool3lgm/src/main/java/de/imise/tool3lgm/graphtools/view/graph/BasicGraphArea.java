@@ -545,8 +545,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
         middleX = -c.left;
         middleY = -c.top;
-        revalidate();
-        repaint();
+        revalidateRepaint();
     }
 
     // --- GraphElementLayout-Verwaltung --- Ende ---
