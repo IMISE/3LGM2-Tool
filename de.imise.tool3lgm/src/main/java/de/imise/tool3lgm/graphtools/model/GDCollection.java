@@ -2155,6 +2155,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param c
      */
     private void setChanged(final boolean c) {
+        //Sys.err("changed: " + changed + " -> " + c);
         changed = c;
         lastModificationTime = System.currentTimeMillis();
     }
@@ -2207,7 +2208,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             updateInferenceEdges(pid);
             setBulkMode(false);
         }
-        setChanged(true);
+        if (changeType != LGMChangeType.SELECTED_SZENARIO_CHANGED) {
+            setChanged(true);
+        }
     }
 
     /**
