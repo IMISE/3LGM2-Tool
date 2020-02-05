@@ -256,6 +256,11 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         setModelType(modelType);
     }
 
+    @Override
+    public String toString() {
+        return name;
+    }
+
     /**
      * Sets the {@link MetaModelContext} for this model.
      *
