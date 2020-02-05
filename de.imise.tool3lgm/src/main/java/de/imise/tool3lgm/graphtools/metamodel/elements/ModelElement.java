@@ -433,7 +433,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         updateNameWithSzens();
 
         //Node der Layer neu sortieren
-        if (sort && this instanceof Node) {
+        //Hier nicht direkt auf 'this instanceof Node' testen, sondern über das MetaModel.isNodeTYpe() gehen,
+        //weil ModelElement die Unterlasse Node nicht kennen sollte.
+        //Eventuell wird das in Zukunft auch eine andere Bedingung wie metaModel.hasVisibleName(me) oder so etwas,
+        //was auch Kanten mit einschließen würde, falls deren Namen auch mal eine Rolle spielen sollten
+        boolean isNodeType = MetaModel.isNodeType(getClass());
+        if (sort && isNodeType) {
             for (ElementContainer ec : containerTable.values()) {
                 NodeContainer kc = (NodeContainer) ec;
                 LayerContainer lc = kc.getMyLayerContainer();
@@ -442,12 +447,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 }
             }
         }
-        if (!isPaintable()) {
-            return;
-        }
-        updateHTMLName(null);
-        for (ElementContainer ec : containerTable.values()) {
-            ec.refreshText();
+        //HTML-Anzeigename für die Grafik -> im Moment nur für Knotencontainer
+        if (isNodeType && isPaintable()) {
+            updateHTMLName(null);
         }
     }
 
