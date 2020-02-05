@@ -247,7 +247,12 @@ public class Tool3lgm {
             }
         }
         UserProperties.setWorkingDirectory(file);
-        return openModel(gdcoll);
+        //jede neue GDCollection wird mit bulk_mode true initialisiert, aber ab jetzt
+        //sollen die UNDO-REDO-Kommandos wieder geloggt werden.
+        boolean openModel = openModel(gdcoll);
+        gdcoll.setBulkMode(false);
+        gdcoll.setInteractiveMode(true);
+        return openModel;
     }
 
     /**

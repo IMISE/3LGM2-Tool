@@ -179,8 +179,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private final List<LGMChangeListener> allListener = new ArrayList<>();
 
     /**
-     * Alle {@link LGMChangeListener}, die nur benachrichtigt werden, wenn sie keine Transaktion geöffnet ist bzw. die nur auf Transaktionen
-     * reagieren, die abgeschlossen sind.Das ist der Fall, wenn das Change-Ereignis nicht durch eine geöffneten Dialog kommt.
+     * Alle {@link LGMChangeListener}, die nur benachrichtigt werden, wenn keine Transaktion geöffnet ist bzw. die nur auf Transaktionen
+     * reagieren, die abgeschlossen sind. Das ist der Fall, wenn das Change-Ereignis nicht durch eine geöffneten Dialog kommt.
      */
     private final List<LGMChangeListener> closedListener = new ArrayList<>();
 
@@ -225,8 +225,24 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
     /**
      * Wenn <code>true</code>, werden keine Ereignisse gefeuert und keine Undo-/Redo-Commands aufgezeichnet.
+     * <code>false</code> ist der Default. Nach dem Init muss dieser auf <code>true</code> gesetzt werden,
+     * damit die Kommandos geloggt werden.
+     * ACHTUNG: Der Kommentar ist wahrscheinlich nicht ganz richtig. Es werden wohl nicht keine Ereignisse
+     * gefeuert sondern nur nicht alle.
      */
-    private boolean bulk_mode = false;
+    private boolean bulk_mode = true;
+
+    /**
+     * <code>false</code> means the model is in 'automatic mode'. In this mode the user will not be asked
+     * for any descision or some model change events are not disributed.
+     * If <code>true</code> the user can be asked and all model change events are disributed.
+     */
+    private boolean interactive_mode = false;
+
+    /**
+     * Wird <code>true</code> sobald der bulk_mode das erste Mal auf <code>false</code> gesetzt wurde.
+     */
+    private boolean initialized = false;
 
     /**
      * Dieser Counter berechnet die Verschiebung, mit der die Elemente bei einem Paste in die Grafik kopiert werden.
@@ -344,11 +360,85 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
+     * @param bm
+     * @return the previous bulk mode
+     */
+    public boolean setBulkMode(final boolean bm) {
+        if (!initialized && bm) {
+            initialized = true;
+        }
+        boolean oldBulkMode = bulk_mode;
+        bulk_mode = bm;
+        return oldBulkMode;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isBulkMode() {
+        return bulk_mode;
+    }
+
+    /**
+     * @param flag
+     * @return previous interactive mode
+     */
+    public boolean setInteractiveMode(final boolean flag) {
+        boolean oldMode = interactive_mode;
+        interactive_mode = flag;
+        return oldMode;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isInteractiveMode() {
+        return interactive_mode;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isInitialzed() {
+        return initialized;
+    }
+
+    /**
+     * @return
+     */
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+        distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainGraphDocument(), STANDARD_PID);
+    }
+
+    /**
+     * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne die Dateiendung
+     */
+    public String getTitle() {
+        int lastPointIndex = name.lastIndexOf('.');
+        String title = name;
+        if (lastPointIndex > 0 && lastPointIndex < title.length() - 1) {
+            String extension = title.substring(lastPointIndex + 1);
+            if (isExtension(extension)) {
+                title = title.substring(0, lastPointIndex);
+            }
+        }
+        return title;
+    }
+
+    /**
      * @param gdl
      */
     public final void addAllTransactionsListener(final LGMChangeListener gdl) {
-        //        System.err.println("addAllTransactionsListener " + this);
-        //        Sys.err(gdl.getClass().getSimpleName());
+        //System.err.println("addAllTransactionsListener " + this);
+        //        Sys.errn(3, allListener.size() + " " + gdl);
+        //        if (allListener.contains(gdl)) {
+        //            Sys.err1(gdl);
+        //        }
         allListener.add(gdl);
     }
 
@@ -357,7 +447,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public final void removeAllTransactionsListener(final LGMChangeListener gdl) {
         //        System.err.println("removeAllTransactionsListener " + this);
-        //        Sys.err(gdl.getClass().getSimpleName());
+        //        Sys.errn(3, allListener.size() + " " + gdl);
         allListener.remove(gdl);
     }
 
@@ -2128,72 +2218,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public GDCollectionIconTable getIconTable() {
         return iconTable;
-    }
-
-    /**
-     * @param bm
-     * @return the previous bulk mode
-     */
-    public boolean setBulkMode(final boolean bm) {
-        boolean oldBulkMode = bulk_mode;
-        bulk_mode = bm;
-        return oldBulkMode;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isBulkMode() {
-        return bulk_mode;
-    }
-
-    /**
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-        distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainGraphDocument(), STANDARD_PID);
-    }
-
-    /**
-     * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne die Dateiendung
-     */
-    public String getTitle() {
-        int lastPointIndex = name.lastIndexOf('.');
-        String title = name;
-        if (lastPointIndex > 0 && lastPointIndex < title.length() - 1) {
-            String extension = title.substring(lastPointIndex + 1);
-            if (isExtension(extension)) {
-                title = title.substring(0, lastPointIndex);
-            }
-        }
-        return title;
-    }
-
-    /**
-     * COMMENTME
-     */
-    private boolean interactive_mode = true;
-
-    /**
-     * @param flag
-     * @return previous interactive mode
-     */
-    public boolean setInteractiveMode(final boolean flag) {
-        boolean oldMode = interactive_mode;
-        interactive_mode = flag;
-        return oldMode;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isInteractiveMode() {
-        return interactive_mode;
     }
 
     /**

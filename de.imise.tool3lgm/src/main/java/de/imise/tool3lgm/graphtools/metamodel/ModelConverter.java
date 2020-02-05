@@ -71,7 +71,6 @@ public class ModelConverter {
         ModelCategory modelCategory = sourceModelType.getModelCategory();
         Tool3lgmModelType targetModelType = new Tool3lgmModelType(targetMetaModelContext, modelCategory); //das hier muss nicht immer richtig sein, aber beim Umstellen auf die ModelTypes statt nur MetaModelContexts war es erstmal richtig und zu aufwendig den TargetModelType auch noch parametrierbar zu machen. Daher werden hier jetzt erstmal nur gelcihartige Modelle ineinander umgewandelt.
         GDCollection targetModel = new GDCollection(targetModelType);
-        targetModel.setBulkMode(true);
         convert(modelConverterDefinition, sourceModel, targetModel);
         targetModel.updateInferenceEdges(STANDARD_PID);
         targetModel.setBulkMode(false);

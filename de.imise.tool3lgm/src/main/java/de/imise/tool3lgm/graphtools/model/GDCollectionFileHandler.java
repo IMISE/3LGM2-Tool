@@ -236,7 +236,6 @@ public class GDCollectionFileHandler {
         } else {
             randomAccessFile = this.randomAccessFile;
         }
-        gdcoll.setBulkMode(true);
         boolean readingSuccessful = false;
         try {
             randomAccessFile.seek(0);
@@ -266,7 +265,6 @@ public class GDCollectionFileHandler {
                 throw new IOException("Could not read file...");
             }
         } catch (Exception e) {
-            gdcoll.setBulkMode(false);
             if (file != null) {
                 randomAccessFile.close();
             }
@@ -276,7 +274,6 @@ public class GDCollectionFileHandler {
         if (file != null) {
             randomAccessFile.close();
         }
-        gdcoll.setBulkMode(false);
         Static.getTool().setCursor(Tool3lgmConstants.getNormalCursor());
         return readingSuccessful;
 
