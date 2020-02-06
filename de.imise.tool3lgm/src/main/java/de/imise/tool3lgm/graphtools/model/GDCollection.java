@@ -626,7 +626,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      *
      * @param doc
      */
-    public void setActiveGraphDocument(final GraphDocument doc) {
+    public void setSelectedDoc(final GraphDocument doc) {
         activeGraphDocumentsList.remove(doc);
         activeGraphDocumentsList.add((LGMGraphDocument) doc);
         distribute(LGMChangeType.SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
@@ -646,7 +646,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             for (Szenario szen : szenarios) {
                 ViewParameter viewParameter = szen.getViewParameter();
                 if (viewParameter != null && viewParameter.selected) {
-                    setActiveGraphDocument(szen);
+                    setSelectedDoc(szen);
                     break;
                 }
             }

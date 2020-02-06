@@ -405,7 +405,7 @@ public class Tool3lgm {
                 collections.add(gdcoll);
             }
             //das aktive doc in der Collection selbst setzen
-            gdcoll.setActiveGraphDocument(doc);
+            gdcoll.setSelectedDoc(doc);
         }
     }
 

@@ -204,6 +204,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     public void model_change_model_opened(final GraphDocument source) {
         GDCollection gdcoll = source.getCollection();
         addCollection(gdcoll);
+        gdcoll.setSelectedDoc(gdcoll.getSelectedDoc());
     }
 
     @Override
