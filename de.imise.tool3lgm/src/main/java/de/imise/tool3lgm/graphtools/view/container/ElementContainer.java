@@ -99,7 +99,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         setHorizontalAlignment(CENTER);
         setVerticalAlignment(CENTER);
         setHorizontalTextPosition(CENTER);
-        setVerticalTextPosition(CENTER);
+        setVerticalTextPosition(BOTTOM);
     }
 
     /**
