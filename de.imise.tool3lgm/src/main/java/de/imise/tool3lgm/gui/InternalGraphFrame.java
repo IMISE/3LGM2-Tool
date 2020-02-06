@@ -38,6 +38,14 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     private final JButton but;
 
     /**
+     * Wird <code>true</code>, wenn sich in der Grafik etwas geändert hat. Statt den Frame dann
+     * gleich und damit bei jeder kleinen Änderung zu refreshen und ein flackern zu erzeugen, wird
+     * gewartet, bis alle Änderungen vorgenommen wurde. Dann muss das Ereignis actionFinished()
+     * ausgelöst werden, damit dieses refresh tatsächlich stattfindet.
+     */
+    private boolean refreshFrame = false;
+
+    /**
      * @param pane
      * @param inputGraphArea
      * @param doc
@@ -129,8 +137,17 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     }
 
     @Override
-    public void elementGraphicsChanged(final ElementContainer element) {
-        area.revalidateRepaint(element);
+    public void elementGraphicsChanged(final ElementContainer source) {
+        //die Änderung nur regsitrieren, wenn das Ereignis tatsächlich für ein Element
+        //des von diesem Frame dargestellten Teilmodells ausgelöst wurde
+        if (source != null) {
+            GraphDocument doc = source.getGraphDocument();
+            if (doc == this.doc) {
+                //Nichts machen außer sich zu merken, dass ein refresh durchgeführt werden sollte.
+                //Dieser wird dann tatsächlich durch actionFinished() ausgeführt
+                refreshFrame = true;
+            }
+        }
     }
 
     @Override
@@ -161,6 +178,24 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     @Override
     public void userFieldValueChanged(final UserFieldTarget userFieldTarget) {
         area.revalidateRepaint();
+    }
+
+    @Override
+    public void actionFinished(final GraphDocument source) {
+        if (refreshFrame) {
+            //ACHTUNG: der doppelte Aufruf hier ist kein Fehler sondern behebt den
+            //Bug, dass der Text von Elementen mit geändertem Alignment beim ersten
+            //Refresh falsch (unten) ausgerichtet wird und erst beim 2. Refresh richtig.
+            //Das ist ziemlich sicher ein SWING-BUG!
+            //Dieses Refresh ist aber sehr teuer -> Flackern -> in Zukunft das Zeichnen
+            //doppelt puffern.
+            area.refresh();
+            area.refresh();
+            //das revalidateRepaint() muss auch unbedingt nochmal sein, weil sonst (wenn
+            //der Layer transparent ist) Schnriftartefakte auf dem Layer verbleiben.
+            area.revalidateRepaint();
+            refreshFrame = false;
+        }
     }
 
     /**

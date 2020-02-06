@@ -129,6 +129,13 @@ public class ModelBrowserTreeLGMChangeListener implements LGMChangeListener {
         }
     }
 
+    @Override
+    public void actionFinished(final GraphDocument source) {
+        if (active) {
+            //      System.out.println("actionFinished");
+        }
+    }
+
     public void remove() {
         GraphDocument doc = tree.getGraphDocument();
         GDCollection gdcoll = doc.getCollection();

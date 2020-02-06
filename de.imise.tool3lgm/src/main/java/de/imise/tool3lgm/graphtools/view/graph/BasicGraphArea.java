@@ -683,6 +683,18 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         repaint();
     }
 
+    /**
+     * Repaints the component. This call can be used as workaround fro the problem
+     * with the model elements in the grapf frame where the HTML content is placed
+     * alsways at the bottom after the very first paint and placed correct (center)
+     * if the graphics is updated Ue.g by clicking in the area) or now by colling
+     * this function here.
+     */
+    public void refresh() {
+        Graphics g = getGraphics();
+        update(g);
+    }
+
     // --- ChangeListener --- Anfang ---
 
     public void addChangeListener(final BasicGraphAreaChangeListener listener) {

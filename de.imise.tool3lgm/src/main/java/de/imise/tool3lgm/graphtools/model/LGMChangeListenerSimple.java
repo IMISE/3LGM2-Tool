@@ -95,6 +95,17 @@ public interface LGMChangeListenerSimple extends LGMChangeListener {
         changed(source);
     }
 
+    @Override
+    default void actionFinished(final GraphDocument source) {
+        //hier sollte man einfach nichts machen (im default), weil alle Listener,
+        //die dieses Ereignis abfangen hier nur eines oder mehrere der andren
+        //Ereignisse nachholen sollten, wenn diese nicht bei jedem Einzelereignis
+        //stattfinden sollten. So wird über dieses Ereignis verhindert, dass
+        //beim Ausrichten des Textes von mehreren Elementen gleichzeitig der
+        //InternalGraphFrame bei jedem Element ein 2 faches update des gesamenten
+        //Frames vornimmt. Statt dessen wird da nur am Ende ein einziges Mal getan.
+    }
+
     public default void changed() {
     }
 
