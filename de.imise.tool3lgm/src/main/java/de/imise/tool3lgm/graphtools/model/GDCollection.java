@@ -632,7 +632,20 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         distribute(LGMChangeType.SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
     }
 
-    private boolean selectedDocInitialized = false;
+    /**
+     * Nachdem alle Szenarios eingelesen wurden, mus man einmal diese Funktion hier aufrufen,
+     * damit das richtige Graphdocument selektiert ist. Nur wenn dieses Modell über ein File
+     * eingelesen wurde, haben die Teilmodelle auch ViewParameter.
+     */
+    public void initSelectedDocByViewParameterFromFile() {
+        for (Szenario szen : szenarios) {
+            ViewParameter viewParameter = szen.getViewParameter();
+            if (viewParameter != null && viewParameter.selected) {
+                setSelectedDoc(szen);
+                break;
+            }
+        }
+    }
 
     /**
      * Gibt das aktuell selektierte <code>GraphDocument</code> zurück.
@@ -640,17 +653,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public LGMGraphDocument getSelectedDoc() {
         if (activeGraphDocumentsList.size() < 1) {
             return null;
-        }
-        //bei der allerersten Abfrage sollte das aktive GraphDocument aus den eingelesenen ViewParametern kommen
-        if (!selectedDocInitialized) {
-            for (Szenario szen : szenarios) {
-                ViewParameter viewParameter = szen.getViewParameter();
-                if (viewParameter != null && viewParameter.selected) {
-                    setSelectedDoc(szen);
-                    break;
-                }
-            }
-            selectedDocInitialized = true;
         }
         return activeGraphDocumentsList.get(activeGraphDocumentsList.size() - 1);
     }

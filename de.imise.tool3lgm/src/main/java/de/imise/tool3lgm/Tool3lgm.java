@@ -268,10 +268,9 @@ public class Tool3lgm {
         Static.setProgressDialogStatusLabel("finish_progress");
         collections.add(gdcoll);
         distribute(MODEL_CHANGE_MODEL_OPENED, gdcoll);
-        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
         ConsistencyChecker.clearUnfixableErrors(gdcoll);
-        setSelectedDoc(selectedDoc);
+        gdcoll.initSelectedDocByViewParameterFromFile();
         gdcoll.setUnchanged();
         System.gc();
         Static.closeProgressDialog();
