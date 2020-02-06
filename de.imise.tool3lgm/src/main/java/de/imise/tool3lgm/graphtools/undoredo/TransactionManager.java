@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.undoredo;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -19,7 +19,7 @@ public class TransactionManager {
     /**
      * Liste aller <code>TransactionListener</code>
      */
-    private final List<TransactionListener> listenerList = new ArrayList<>(3);
+    private final Set<TransactionListener> transactionListeners = new HashSet<>(3);
 
     /**
      * Liste aller durchgeführten Transaktionen, die sich auch rückgängig machen lassen sollen.
@@ -134,8 +134,8 @@ public class TransactionManager {
             System.out.println("log :  " + undoCommand);
             System.out.println("ulog:  " + redoCommand);
         }
-        for (int i = 0; i < listenerList.size(); i++) {
-            listenerList.get(i).transactionStarted();
+        for (TransactionListener listener : transactionListeners) {
+            listener.transactionStarted();
         }
     }
 
@@ -280,10 +280,9 @@ public class TransactionManager {
         if (doc.isVerificationMode()) {
             printQueue(10);
         }
-        for (int i = 0; i < listenerList.size(); i++) {
-            listenerList.get(i).transactionStopped();
+        for (TransactionListener listener : transactionListeners) {
+            listener.transactionStopped();
         }
-
     }
 
     /**
@@ -550,14 +549,14 @@ public class TransactionManager {
      * @param listener
      */
     public void addTransActionListener(final TransactionListener listener) {
-        listenerList.add(listener);
+        transactionListeners.add(listener);
     }
 
     /**
      * @param listener
      */
     public void removeTransActionListener(final TransactionListener listener) {
-        listenerList.remove(listener);
+        transactionListeners.remove(listener);
     }
 
     /**
