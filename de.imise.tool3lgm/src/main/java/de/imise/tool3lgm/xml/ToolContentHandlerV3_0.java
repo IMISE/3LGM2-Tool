@@ -737,7 +737,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
                 String elementValueString = elementValue.toString();
                 try {
-                    layout.valign = VerticalAlignment.valueOf(qName);
+                    layout.valign = VerticalAlignment.valueOf(elementValueString);
                 } catch (Exception e) { //alte Dateien -> SwingContstants
                     try {
                         int swingConstantValue = Integer.parseInt(elementValueString);
@@ -754,7 +754,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
                 String elementValueString = elementValue.toString();
                 try {
-                    layout.halign = HorizontalAlignment.valueOf(qName);
+                    layout.halign = HorizontalAlignment.valueOf(elementValueString);
                 } catch (Exception e) { //alte Dateien -> SwingContstants
                     try {
                         int swingConstantValue = Integer.parseInt(elementValueString);
