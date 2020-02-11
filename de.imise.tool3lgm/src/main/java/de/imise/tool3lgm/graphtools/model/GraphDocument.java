@@ -1135,6 +1135,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
         case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT:
             setTextAlignmentHTML(TextAlignmentHTML.RIGHT, pid);
             break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY:
+            setTextAlignmentHTML(TextAlignmentHTML.JUSTIFY, pid);
+            break;
 
         case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML:
             if (argc == 1) {

@@ -69,7 +69,7 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT,
     MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER,
     MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT,
-    //MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY, // noch nicht implementiert (Icons, Actions,...)
+    MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY, //Blocksatz
     MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
 
     MODEL_ACTION_SET_ELEMENT_EXPANSION_ON,
@@ -205,6 +205,7 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY);
         ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT);
