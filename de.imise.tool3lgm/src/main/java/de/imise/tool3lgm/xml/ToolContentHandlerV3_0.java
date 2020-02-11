@@ -40,8 +40,9 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HorizontalAlignment;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.VerticalAlignment;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -731,38 +732,49 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
                 layout.line_thickness = Integer.parseInt(elementValue.toString());
 
-            } else if (qName.equals("valign")) {
-                if (layout == null) {
-                    return;
-                }
-                String elementValueString = elementValue.toString();
-                try {
-                    layout.valign = VerticalAlignment.valueOf(elementValueString);
-                } catch (Exception e) { //alte Dateien -> SwingContstants
-                    try {
-                        int swingConstantValue = Integer.parseInt(elementValueString);
-                        VerticalAlignment valign = VerticalAlignment.getValueForSwingConstant(swingConstantValue);
-                        layout.valign = valign;
-                    } catch (Exception ex) {
-                        // ignore -> default alignment
-                    }
-                }
-
             } else if (qName.equals("halign")) {
                 if (layout == null) {
                     return;
                 }
                 String elementValueString = elementValue.toString();
                 try {
-                    layout.halign = HorizontalAlignment.valueOf(elementValueString);
+                    layout.textPositionHorizontal = TextPositionHorizontal.valueOf(elementValueString);
                 } catch (Exception e) { //alte Dateien -> SwingContstants
                     try {
                         int swingConstantValue = Integer.parseInt(elementValueString);
-                        HorizontalAlignment halign = HorizontalAlignment.getValueForSwingConstant(swingConstantValue);
-                        layout.halign = halign;
+                        TextPositionHorizontal textPositionHorizontal = TextPositionHorizontal.getValueForSwingConstant(swingConstantValue);
+                        layout.textPositionHorizontal = textPositionHorizontal;
                     } catch (Exception ex) {
                         // ignore -> default alignment
                     }
+                }
+
+            } else if (qName.equals("valign")) {
+                if (layout == null) {
+                    return;
+                }
+                String elementValueString = elementValue.toString();
+                try {
+                    layout.textPositionVertical = TextPositionVertical.valueOf(elementValueString);
+                } catch (Exception e) { //alte Dateien -> SwingContstants
+                    try {
+                        int swingConstantValue = Integer.parseInt(elementValueString);
+                        TextPositionVertical textPositionVertical = TextPositionVertical.getValueForSwingConstant(swingConstantValue);
+                        layout.textPositionVertical = textPositionVertical;
+                    } catch (Exception ex) {
+                        // ignore -> default alignment
+                    }
+                }
+
+            } else if (qName.equals("htmlalign")) {
+                if (layout == null) {
+                    return;
+                }
+                String elementValueString = elementValue.toString();
+                try {
+                    layout.textAlignmentHTML = TextAlignmentHTML.valueOf(elementValueString);
+                } catch (Exception e) { //alte Dateien haben diesen Eintrag nicht (ab "3.8", //"<!--Tool3lgmFile version='3.7'-->", //12 -> ab Tool-Version 4.1.0)
+                    // ignore -> default alignment
                 }
 
             } else if (qName.equals("layout")) {
@@ -782,7 +794,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 classType = null;
 
             } else if (qName.equals("icon")) {
-                layout.icon = elementValue.toString();
+                layout.setIcon(elementValue.toString());
                 if (container != null) {
                     containerWithIcon.add((NodeContainer) container);
                 }

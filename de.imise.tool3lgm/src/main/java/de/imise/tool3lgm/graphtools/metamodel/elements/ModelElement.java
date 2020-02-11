@@ -44,7 +44,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HorizontalAlignment;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.util.Alphabetical;
 import de.imise.util.HashStringGenerator;
 import de.imise.util.htmlxml.HTMLConverter;
@@ -523,7 +523,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         for (ElementContainer ec : targetContainers) {
             GraphDocument doc = ec.getGraphDocument();
             if (!doc.isMainGraphDocument()) {
-                if (ec.isDefaultHalign()) {
+                if (ec.isDefaultTextAlignmentHTML()) {
                     if (htmlName == null) {
                         htmlName = generateHTMLName(ec, defaultElementsLayout, nameExtendsionClassLayout);
                     }
@@ -543,9 +543,9 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     private String generateHTMLName(final ElementContainer ec, final ElementsLayoutDefinition defaultElementsLayout, final GraphElementLayout nameExtendsionClassLayout) {
-        HorizontalAlignment halign = ec.getHalign();
+        TextAlignmentHTML textAlignmentHTML = ec.getTextAlignmentHTML();
         textBuf.append("<HTML><P align=\"");
-        textBuf.append(halign);
+        textBuf.append(textAlignmentHTML.name());
         textBuf.append("\">");
         if (isHyperlink()) {
             textBuf.append("<U>");

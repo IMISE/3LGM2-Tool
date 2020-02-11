@@ -33,8 +33,8 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HorizontalAlignment;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.VerticalAlignment;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -523,8 +523,8 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 //alte Dateien -> SwingContstants
                 try {
                     int swingConstantValue = Integer.parseInt(elementValueString);
-                    VerticalAlignment valign = VerticalAlignment.getValueForSwingConstant(swingConstantValue);
-                    layout.valign = valign;
+                    TextPositionVertical textPositionVertical = TextPositionVertical.getValueForSwingConstant(swingConstantValue);
+                    layout.textPositionVertical = textPositionVertical;
                 } catch (Exception ex) {
                     // ignore -> default alignment
                 }
@@ -537,8 +537,8 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 //alte Dateien -> SwingContstants
                 try {
                     int swingConstantValue = Integer.parseInt(elementValueString);
-                    HorizontalAlignment halign = HorizontalAlignment.getValueForSwingConstant(swingConstantValue);
-                    layout.halign = halign;
+                    TextPositionHorizontal textPositionHorizontal = TextPositionHorizontal.getValueForSwingConstant(swingConstantValue);
+                    layout.textPositionHorizontal = textPositionHorizontal;
                 } catch (Exception ex) {
                     // ignore -> default alignment
                 }
@@ -552,7 +552,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 classType = null;
 
             } else if (qName.equals("icon")) {
-                layout.icon = elementValue.toString();
+                layout.setIcon(elementValue.toString());
                 containerWithIcon.add((NodeContainer) container);
 
             } else if (qName.equals("layer")) {

@@ -76,12 +76,15 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         addSeparator();
 
         ActionSource[] alignmentActions = {
-                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT,
-                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER,
-                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT,
-                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP,
-                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER,
-                GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER,
+                GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM,
         };
         for (ActionSource actionSource : alignmentActions) {
             add(new ToolbarButton(actionSource));

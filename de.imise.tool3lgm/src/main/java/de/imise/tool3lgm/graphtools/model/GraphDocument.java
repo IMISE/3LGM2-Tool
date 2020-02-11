@@ -80,8 +80,9 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HorizontalAlignment;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.VerticalAlignment;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -1078,55 +1079,74 @@ public abstract class GraphDocument extends ElementSelectionContext {
             align(command, pid);
             break;
 
-        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP:
-            label_valign(VerticalAlignment.TOP, pid);
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT:
+            setTextPositionHorizontal(TextPositionHorizontal.LEFT, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER:
+            setTextPositionHorizontal(TextPositionHorizontal.CENTER, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT:
+            setTextPositionHorizontal(TextPositionHorizontal.RIGHT, pid);
             break;
 
-        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER:
-            label_valign(VerticalAlignment.CENTER, pid);
-            break;
-
-        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM:
-            label_valign(VerticalAlignment.BOTTOM, pid);
-            break;
-
-        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT:
-            label_halign(HorizontalAlignment.LEFT, pid);
-            break;
-
-        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER:
-            label_halign(HorizontalAlignment.CENTER, pid);
-            break;
-
-        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT:
-            label_halign(HorizontalAlignment.RIGHT, pid);
-            break;
-
-        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN:
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL:
             if (argc == 1) {
-                VerticalAlignment valign = VerticalAlignment.valueOf(argv[0]);
-                label_valign(valign, pid);
+                TextPositionHorizontal textPositionHorizontal = TextPositionHorizontal.valueOf(argv[0]);
+                setTextPositionHorizontal(textPositionHorizontal, pid);
             }
             if (argc == 3) {
                 //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
                 GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
                 ElementContainer ec = szen.findContainerCoded(argv[1]);
-                VerticalAlignment valign = VerticalAlignment.valueOf(argv[2]);
-                szen.label_valign(valign, ec, pid);
+                TextPositionHorizontal textPositionHorizontal = TextPositionHorizontal.valueOf(argv[2]);
+                szen.setTextPositionHorizontal(textPositionHorizontal, ec, pid);
             }
             break;
 
-        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN:
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP:
+            setTextPositionVertical(TextPositionVertical.TOP, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER:
+            setTextPositionVertical(TextPositionVertical.CENTER, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM:
+            setTextPositionVertical(TextPositionVertical.BOTTOM, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL:
             if (argc == 1) {
-                HorizontalAlignment halign = HorizontalAlignment.valueOf(argv[0]);
-                label_halign(halign, pid);
+                TextPositionVertical textPositionVertical = TextPositionVertical.valueOf(argv[0]);
+                setTextPositionVertical(textPositionVertical, pid);
             }
             if (argc == 3) {
                 //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
                 GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
                 ElementContainer ec = szen.findContainerCoded(argv[1]);
-                HorizontalAlignment halign = HorizontalAlignment.valueOf(argv[2]);
-                szen.label_halign(halign, ec, pid);
+                TextPositionVertical textPositionVertical = TextPositionVertical.valueOf(argv[2]);
+                szen.setTextPositionVertical(textPositionVertical, ec, pid);
+            }
+            break;
+
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT:
+            setTextAlignmentHTML(TextAlignmentHTML.LEFT, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER:
+            setTextAlignmentHTML(TextAlignmentHTML.CENTER, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT:
+            setTextAlignmentHTML(TextAlignmentHTML.RIGHT, pid);
+            break;
+
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML:
+            if (argc == 1) {
+                TextAlignmentHTML textAlignmentHTML = TextAlignmentHTML.valueOf(argv[0]);
+                setTextAlignmentHTML(textAlignmentHTML, pid);
+            }
+            if (argc == 3) {
+                //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
+                GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
+                ElementContainer ec = szen.findContainerCoded(argv[1]);
+                TextAlignmentHTML textAlignmentHTML = TextAlignmentHTML.valueOf(argv[2]);
+                szen.setTextAlignmentHTML(textAlignmentHTML, ec, pid);
             }
             break;
 
@@ -4091,74 +4111,123 @@ public abstract class GraphDocument extends ElementSelectionContext {
     }
 
     /**
-     * @param mode
+     * Sets the vertical text position of the label for all selected nodes graph.
+     *
+     * @param mode {@link TextPositionVertical#TOP}, {@link TextPositionVertical#CENTER} or {@link TextPositionVertical#BOTTOM}
      * @param pid
      */
-    public final void label_valign(final VerticalAlignment mode, final int pid) {
+    public final void setTextPositionVertical(final TextPositionVertical mode, final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
-            label_valign(mode, ec, pid);
+            setTextPositionVertical(mode, ec, pid);
         }
         finish_transaction(pid);
         distributeEvent(ACTION_FINISHED, pid);
     }
 
     /**
+     * Sets the vertical text position of the label for the ElemntContainer.
+     *
      * @param mode
-     * @param kc
+     * @param ec
      * @param pid
      */
-    private final void label_valign(final VerticalAlignment mode, final ElementContainer kc, final int pid) {
-        if (kc == null) {
+    private final void setTextPositionVertical(final TextPositionVertical mode, final ElementContainer ec, final int pid) {
+        if (ec == null) {
             return;
         }
-        if (kc.get3LGMLayout() == null) {
+        if (ec.get3LGMLayout() == null) {
             return;
         }
 
         start_transaction(pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN + " " + kc.get3LGMLayout().valign, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN + " " + mode, pid);
-        kc.get3LGMLayout().valign = mode;
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + ec.get3LGMLayout().textPositionVertical, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + mode, pid);
+        ec.get3LGMLayout().textPositionVertical = mode;
         finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, kc, pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
 
     /**
+     * Sets the horizontal text position of the label for all selected nodes graph.
+     *
      * @param mode
      * @param pid
      */
-    public final void label_halign(final HorizontalAlignment mode, final int pid) {
+    public final void setTextPositionHorizontal(final TextPositionHorizontal mode, final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
-            label_halign(mode, ec, pid);
+            setTextPositionHorizontal(mode, ec, pid);
         }
         finish_transaction(pid);
         distributeEvent(ACTION_FINISHED, pid);
     }
 
     /**
+     * Sets the vertical text position of the label for the ElemntContainer.
+     *
      * @param mode
-     * @param kc
+     * @param ec
      * @param pid
      */
-    private final void label_halign(final HorizontalAlignment mode, final ElementContainer kc, final int pid) {
-        if (kc == null) {
+    private final void setTextPositionHorizontal(final TextPositionHorizontal mode, final ElementContainer ec, final int pid) {
+        if (ec == null) {
             return;
         }
-        if (kc.get3LGMLayout() == null) {
+        if (ec.get3LGMLayout() == null) {
             return;
         }
 
         start_transaction(pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN + " " + kc.get3LGMLayout().halign, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN + " " + mode, pid);
-        GraphElementLayout layout = kc.get3LGMLayout();
-        layout.halign = mode;
-        ModelElement me = kc.getElement();
-        me.updateHTMLName(kc);
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + ec.get3LGMLayout().textPositionHorizontal, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + mode, pid);
+        GraphElementLayout layout = ec.get3LGMLayout();
+        layout.textPositionHorizontal = mode;
+        ModelElement me = ec.getElement();
+        me.updateHTMLName(ec);
         finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, kc, pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
+    }
+
+    /**
+     * Sets the HTML text alignment of the label for all selected nodes graph.
+     *
+     * @param mode
+     * @param pid
+     */
+    public final void setTextAlignmentHTML(final TextAlignmentHTML mode, final int pid) {
+        start_transaction(pid);
+        for (ElementContainer ec : selectedContainer) {
+            setTextAlignmentHTML(mode, ec, pid);
+        }
+        finish_transaction(pid);
+        distributeEvent(ACTION_FINISHED, pid);
+    }
+
+    /**
+     * Sets the vertical text position of the label for the ElemntContainer.
+     *
+     * @param mode
+     * @param ec
+     * @param pid
+     */
+    private final void setTextAlignmentHTML(final TextAlignmentHTML mode, final ElementContainer ec, final int pid) {
+        if (ec == null) {
+            return;
+        }
+        if (ec.get3LGMLayout() == null) {
+            return;
+        }
+
+        start_transaction(pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + ec.get3LGMLayout().textAlignmentHTML, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + mode, pid);
+        GraphElementLayout layout = ec.get3LGMLayout();
+        layout.textAlignmentHTML = mode;
+        ModelElement me = ec.getElement();
+        me.updateHTMLName(ec);
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
 
     /**

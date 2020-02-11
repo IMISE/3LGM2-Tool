@@ -2,8 +2,9 @@ package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_FONT;
-import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_HALIGN;
-import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_VALIGN;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_TEXT_ALIGNMENT_HTML;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_TEXT_POSITION_HORIZONTAL;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_TEXT_POSITION_VERTICAL;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -28,8 +29,9 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HorizontalAlignment;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.VerticalAlignment;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.graphtools.view.graph.SpecialInfoLabel;
 
 public abstract class ElementContainer extends JLabel implements Cloneable {
@@ -635,33 +637,41 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     /**
      * @return
      */
-    public final VerticalAlignment getValign() {
+    public final TextPositionHorizontal getTextPositionHorizontal() {
         if (layout != null) {
-            return layout.valign;
+            return layout.textPositionHorizontal;
         }
-        return STANDARD_VALIGN;
+        return STANDARD_TEXT_POSITION_HORIZONTAL;
     }
 
     /**
      * @return
      */
-    public final HorizontalAlignment getHalign() {
+    public final TextPositionVertical getTextPositionVertical() {
         if (layout != null) {
-            return layout.halign;
+            return layout.textPositionVertical;
         }
-        return STANDARD_HALIGN;
+        return STANDARD_TEXT_POSITION_VERTICAL;
     }
 
     /**
-     * @return <code>true</code> if the {@link #getHalign()} return the default value
-     *         ({@link GraphElementLayout#STANDARD_HALIGN})
-     * @see GraphElementLayout#isDefaultHalign()
+     * @return
      */
-    public boolean isDefaultHalign() {
+    public final TextAlignmentHTML getTextAlignmentHTML() {
+        if (layout != null) {
+            return layout.textAlignmentHTML;
+        }
+        return STANDARD_TEXT_ALIGNMENT_HTML;
+    }
+
+    /**
+     * @return <code>true</code> if this container has the default ahtml text aligmment
+     */
+    public boolean isDefaultTextAlignmentHTML() {
         if (layout == null) {
             return true;
         }
-        return layout.isDefaultHalign();
+        return layout.isDefaultTextAlignmentHTML();
     }
 
     /**

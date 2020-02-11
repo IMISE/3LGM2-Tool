@@ -26,8 +26,8 @@ import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.HorizontalAlignment;
-import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.VerticalAlignment;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.image.ImageTools;
 
@@ -206,7 +206,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     // bottom, rigt -------> b, right
 
     private String getAlignment(final NodeContainer nc) {
-        HorizontalAlignment halignEnum = nc.getHalign();
+        TextPositionHorizontal halignEnum = nc.getTextPositionHorizontal();
         int halign = halignEnum.getSwingConstant();
         if (halign == SwingConstants.LEFT) {
             return "left";
@@ -218,7 +218,7 @@ public class YEdGraphmlWriter extends GraphmlWriter {
     }
 
     private String getModelPosition(final NodeContainer nc) {
-        VerticalAlignment valignEnum = nc.getValign();
+        TextPositionVertical valignEnum = nc.getTextPositionVertical();
         int valign = valignEnum.getSwingConstant();
         if (valign == SwingConstants.TOP) {
             return "t";

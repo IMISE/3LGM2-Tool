@@ -88,21 +88,39 @@ public final class NodeRenderer {
         int yp = y + height_half;
 
         ImageIcon img = (ImageIcon) kc.getIcon();
+        int textPositionHorizontalSwingConstant = kc.getTextPositionHorizontal().getSwingConstant();
+        int textPositionVerticalSwingConstant = kc.getTextPositionVertical().getSwingConstant();
+        int horizontalAlignment;
+        int verticalAlignment;
+        int horizontalTextPostion;
+        int verticalTextPostion;
         if (img != null) {
+            horizontalAlignment = JLabel.CENTER;
+            verticalAlignment = JLabel.CENTER;
+            horizontalTextPostion = textPositionHorizontalSwingConstant;
+            verticalTextPostion = textPositionVerticalSwingConstant;
+        } else {
+            horizontalAlignment = textPositionHorizontalSwingConstant;
+            verticalAlignment = textPositionVerticalSwingConstant;
+            horizontalTextPostion = JLabel.CENTER;
+            verticalTextPostion = JLabel.CENTER;
+        }
+        if (kc.getHorizontalAlignment() != horizontalAlignment) {
+            kc.setHorizontalAlignment(horizontalAlignment);
+        }
+        if (kc.getVerticalAlignment() != verticalAlignment) {
+            kc.setVerticalAlignment(verticalAlignment);
+        }
+        if (kc.getHorizontalTextPosition() != horizontalTextPostion) {
+            kc.setHorizontalTextPosition(horizontalTextPostion);
+        }
+        if (kc.getVerticalTextPosition() != verticalTextPostion) {
+            kc.setVerticalTextPosition(verticalTextPostion);
         }
 
         GraphElementLayout.SHAPE form = kc.getForm();
         if (form == null) {
             form = doc.getMapping().getStandardForm(kc);
-        }
-
-        int valignSwingConstant = kc.getValign().getSwingConstant();
-        if (kc.getVerticalAlignment() != valignSwingConstant) {
-            kc.setVerticalAlignment(valignSwingConstant);
-        }
-        int halignSwingConstant = kc.getHalign().getSwingConstant();
-        if (kc.getHorizontalAlignment() != halignSwingConstant) {
-            kc.setHorizontalAlignment(halignSwingConstant);
         }
 
         Stroke str = gc.getStroke();

@@ -236,7 +236,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             return;
         }
         if (name == null || name.trim().equals("") || name.equals("none") || name.equals("null")) {
-            layout.icon = null;
+            layout.setIcon(null);
             super.setIcon(null);
             return;
         }
@@ -248,11 +248,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
             JOptionPane.showMessageDialog(null, getResString("icon_kaputt"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
         }
-        if (icon != null) {
-            layout.icon = name;
-        } else {
-            layout.icon = null;
-        }
+        layout.setIcon(icon != null ? name : null);
         super.setIcon(icon);
     }
 
@@ -260,7 +256,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      * @return
      */
     public String getIconString() {
-        return layout == null ? null : layout.icon;
+        return layout == null ? null : layout.getIcon();
     }
 
     /**
@@ -358,7 +354,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             return;
         }
         super.set3LGMLayout(l);
-        setIcon(l.icon, doc.getCollection().getIconTable());
+        setIcon(l.getIcon(), doc.getCollection().getIconTable());
     }
 
     /**
@@ -429,7 +425,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      */
     public void setIcon() {
         if (layout != null) {
-            setIcon(layout.icon, doc.getCollection().getIconTable());
+            setIcon(layout.getIcon(), doc.getCollection().getIconTable());
         }
     }
 
