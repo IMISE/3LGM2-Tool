@@ -460,7 +460,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                 writeElement("y", viewPosition.y);
                 InputGraphArea inputGraphArea = frame.getInputGraphArea();
                 writeElement("zoom", inputGraphArea.getZoom());
-                writeElement("degree", inputGraphArea.getLayerAngle());
+                writeElement("degree", inputGraphArea.getMultiViewLayerAngle());
                 writeElement("shift", inputGraphArea.getMultiViewLayerGap());
                 writeElement("pageSizeFactor", szen.getPageSizeFactor());
                 writeElement("activeLayer", gdcoll.getActiveLayer());
