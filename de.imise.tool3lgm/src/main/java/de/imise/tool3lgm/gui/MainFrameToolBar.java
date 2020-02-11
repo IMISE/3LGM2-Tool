@@ -9,11 +9,10 @@ import java.awt.event.MouseListener;
 import javax.help.CSH;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.ToolTipManager;
-import javax.swing.border.Border;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
@@ -26,6 +25,7 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.util.swing.component.UnfloatableToolBar;
 import de.imise.util.swing.event.ActionSource;
+import de.imise.util.swing.event.ExtendedAction;
 
 public class MainFrameToolBar extends UnfloatableToolBar implements MouseListener, LGMChangeListenerSimple, Tool3lgmChangeListener {
 
@@ -96,7 +96,7 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
                 addSeparator();
             }
             for (ActionSource actionSource : alignmentActions) {
-                add(new ToolbarButton(actionSource));
+                add(new ToolbarButton(actionSource, true));
             }
         }
         addAsToolChangeListener();
@@ -194,13 +194,25 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
 
     private final class ToolbarButton extends JButton {
 
-        public ToolbarButton(final Action a) {
+        public ToolbarButton(final Action a, final boolean setSmallIcon) {
             super(a);
             setText(null);
             //Diesen value muss es bei diesen Actions immer geben
             CSH.setHelpIDString(this, a.getValue(StaticAction.IDENTIFIER_KEY).toString());
-            Border border = BorderFactory.createEtchedBorder();
-            setBorder(border);
+            //ModelActions (Text Alignment + Postion) bekommen kleinere Buttons
+            if (setSmallIcon && a instanceof ExtendedAction) {
+                ExtendedAction ea = (ExtendedAction) a;
+                Icon smallIcon = ea.getSmallIcon();
+                setIcon(smallIcon);
+            }
+        }
+
+        public ToolbarButton(final Action a) {
+            this(a, false);
+        }
+
+        public ToolbarButton(final ActionSource actionSource, final boolean smallIcon) {
+            this(actionSource.createAction(), smallIcon);
         }
 
         public ToolbarButton(final ActionSource actionSource) {
