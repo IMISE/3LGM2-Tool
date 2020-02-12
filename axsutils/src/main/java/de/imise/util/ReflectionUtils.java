@@ -158,6 +158,9 @@ public class ReflectionUtils {
      * @return
      */
     public static final <T> Class<? extends T> getMostSpecialClass(final Class<? extends T> class1, final Class<? extends T> class2) {
+        if (class1 == class2) {
+            return class1;
+        }
         if (class1 != null && class2 != null) {
         if (class1.isAssignableFrom(class2)) {
             return class2;
