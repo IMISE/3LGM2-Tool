@@ -4138,14 +4138,21 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (ec == null) {
             return;
         }
-        if (ec.get3LGMLayout() == null) {
+        GraphElementLayout layout = ec.get3LGMLayout();
+        if (layout == null) {
             return;
         }
-
+        GraphDocument szen = ec.getGraphDocument();
+        if (!(szen instanceof Szenario)) {
+            return;
+        }
         start_transaction(pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + ec.get3LGMLayout().textPositionVertical, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + mode, pid);
-        ec.get3LGMLayout().textPositionVertical = mode;
+        String szenHash = szen.getHashString();
+        String elementHash = ec.getHashString();
+        TextPositionVertical textPositionVertical = layout.textPositionVertical;
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + szenHash + " " + elementHash + " " + textPositionVertical, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + szenHash + " " + elementHash + " " + mode, pid);
+        layout.textPositionVertical = mode;
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
@@ -4176,21 +4183,24 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (ec == null) {
             return;
         }
-        if (ec.get3LGMLayout() == null) {
+        GraphElementLayout layout = ec.get3LGMLayout();
+        if (layout == null) {
             return;
         }
-
+        GraphDocument szen = ec.getGraphDocument();
+        if (!(szen instanceof Szenario)) {
+            return;
+        }
         start_transaction(pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + ec.get3LGMLayout().textPositionHorizontal, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + mode, pid);
-        GraphElementLayout layout = ec.get3LGMLayout();
+        String szenHash = szen.getHashString();
+        String elementHash = ec.getHashString();
+        TextPositionHorizontal textPositionHorizontal = layout.textPositionHorizontal;
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + szenHash + " " + elementHash + " " + textPositionHorizontal, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + szenHash + " " + elementHash + " " + mode, pid);
         layout.textPositionHorizontal = mode;
-        ModelElement me = ec.getElement();
-        me.updateHTMLName(ec);
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
-
     /**
      * Sets the HTML text alignment of the label for all selected nodes graph.
      *
@@ -4217,14 +4227,20 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (ec == null) {
             return;
         }
-        if (ec.get3LGMLayout() == null) {
+        GraphElementLayout layout = ec.get3LGMLayout();
+        if (layout == null) {
             return;
         }
-
+        GraphDocument szen = ec.getGraphDocument();
+        if (!(szen instanceof Szenario)) {
+            return;
+        }
         start_transaction(pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + ec.get3LGMLayout().textAlignmentHTML, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + mode, pid);
-        GraphElementLayout layout = ec.get3LGMLayout();
+        String szenHash = szen.getHashString();
+        String elementHash = ec.getHashString();
+        TextAlignmentHTML textAlignmentHTML = layout.textAlignmentHTML;
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + szenHash + " " + elementHash + " " + textAlignmentHTML, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + szenHash + " " + elementHash + " " + mode, pid);
         layout.textAlignmentHTML = mode;
         ModelElement me = ec.getElement();
         me.updateHTMLName(ec);
