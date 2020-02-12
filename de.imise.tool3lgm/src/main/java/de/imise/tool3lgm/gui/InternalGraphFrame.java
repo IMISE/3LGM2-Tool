@@ -183,16 +183,8 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     @Override
     public void actionFinished(final GraphDocument source) {
         if (refreshFrame) {
-            //ACHTUNG: der doppelte Aufruf hier ist kein Fehler sondern behebt den
-            //Bug, dass der Text von Elementen mit geändertem Alignment beim ersten
-            //Refresh falsch (unten) ausgerichtet wird und erst beim 2. Refresh richtig.
-            //Das ist ziemlich sicher ein SWING-BUG!
-            //Dieses Refresh ist aber sehr teuer -> Flackern -> in Zukunft das Zeichnen
-            //doppelt puffern.
-            area.refresh();
-            area.refresh();
-            //das revalidateRepaint() muss auch unbedingt nochmal sein, weil sonst (wenn
-            //der Layer transparent ist) Schnriftartefakte auf dem Layer verbleiben.
+            //really repaint the frame after finishing a lot of actions
+            //that would have repainted the frame a lot of time
             area.revalidateRepaint();
             refreshFrame = false;
         }

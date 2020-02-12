@@ -21,7 +21,6 @@ import javax.swing.JSeparator;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.image.ComponentAsImageExportHandler.ZoomableComponent;
@@ -664,35 +663,11 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     /**
-     * @param element
-     */
-    public void revalidateRepaint(final ElementContainer element) {
-        if (element != null && element.getParent() != null) {
-            element.getParent().validate();
-            element.getParent().repaint();
-        } else {
-            revalidateRepaint();
-        }
-    }
-
-    /**
      *
      */
     public void revalidateRepaint() {
         revalidate();
         repaint();
-    }
-
-    /**
-     * Repaints the component. This call can be used as workaround fro the problem
-     * with the model elements in the grapf frame where the HTML content is placed
-     * alsways at the bottom after the very first paint and placed correct (center)
-     * if the graphics is updated Ue.g by clicking in the area) or now by colling
-     * this function here.
-     */
-    public void refresh() {
-        Graphics g = getGraphics();
-        update(g);
     }
 
     // --- ChangeListener --- Anfang ---

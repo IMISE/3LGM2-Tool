@@ -154,8 +154,6 @@ public class Tool3lgm {
             Static.showProgressDialog(true);
             Static.setProgressDialogTitle(getResString("load_model") + " " + file.getName());
             Static.setProgressDialogStatusLabel("read_progress");
-            //das hier mal prüfen, was passiert, wenn man das nicht macht und ob es vllt. die Lösung auch für andere Probleme ist
-            mainFrame.update(mainFrame.getGraphics());
             boolean retVal = fileHandler.loadFromRAF();
             return retVal ? gdcoll : null;
         } catch (Exception e) {

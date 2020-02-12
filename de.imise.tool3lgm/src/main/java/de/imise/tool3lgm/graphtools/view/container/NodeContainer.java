@@ -26,6 +26,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.swing.NoopGraphics;
 
 /**
  * @author N.N.
@@ -393,11 +394,26 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     }
 
     /**
-     * Verannlasst das Zeichen des Containers über die übergeordnete Implementierung.
+     * This {@link Graphics} object comes from StackOverflow. It doesn't paint anything.
+     * Painting to this non painting graphics just before painting to the correct graphics
+     * object repairs the HTML SWING-BUG that after the first paint the alignment of the
+     * HTML-labels are always bottom, if they must be wrapped automatically to multiple.
+     * This bug seems to be created by wrong font metrics in the very first paint of such
+     * a wrapped HTML string.
+     * 
+     * @see https://stackoverflow.com/questions/16227877/how-to-update-a-jcomponent-with-html-without-flickering
+     */
+    private static final Graphics NOOP_GRAPHICS = NoopGraphics.createNoopGraphics();
+
+    /**
+     * Paints the label.
      *
      * @param g
      */
     public final void paintSuperComponent(final Graphics g) {
+        //first 'paint' wihtout really painting to correct the alignment of wrapped HTML lines
+        //this painting to NOOP_GRAPHICS is a lot faster than painting to g
+        super.paintComponent(NOOP_GRAPHICS);
         super.paintComponent(g);
     }
 
