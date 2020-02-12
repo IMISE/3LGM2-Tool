@@ -105,12 +105,6 @@ public interface LGMChangeListener {
                 gdl.szenarioRemoved(source);
             }
         },
-        ACTION_FINISHED {
-            @Override
-            protected void deliverEvent(final LGMChangeListener gdl, final GraphDocument source, final ElementContainer last_elem) {
-                gdl.actionFinished(source);
-            }
-        }
 
         ;
 
@@ -230,14 +224,6 @@ public interface LGMChangeListener {
      * entfernt wurde.
      */
     public void szenarioRemoved(GraphDocument source);
-
-    /**
-     * Wird bei einigen Aktionen am Ende ausgelöst und darauf sollte mit evtl.
-     * notwendigen Abschlussaufräumen oder einem Grafik-Refresh reagiert werden.
-     *
-     * @param source
-     */
-    public void actionFinished(GraphDocument source);
 
     /**
      * @param listeners

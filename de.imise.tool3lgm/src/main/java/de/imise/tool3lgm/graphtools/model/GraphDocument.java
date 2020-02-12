@@ -11,7 +11,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SWAP_EDGE_POSITIONS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
-import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ACTION_FINISHED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ACTIVE_LAYER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ELEMENT_GRAPHICS_CHANGED;
@@ -4125,7 +4124,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             setTextPositionVertical(mode, ec, pid);
         }
         finish_transaction(pid);
-        distributeEvent(ACTION_FINISHED, pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
     }
 
     /**
@@ -4163,7 +4162,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             setTextPositionHorizontal(mode, ec, pid);
         }
         finish_transaction(pid);
-        distributeEvent(ACTION_FINISHED, pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
     }
 
     /**
@@ -4204,7 +4203,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             setTextAlignmentHTML(mode, ec, pid);
         }
         finish_transaction(pid);
-        distributeEvent(ACTION_FINISHED, pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
     }
 
     /**

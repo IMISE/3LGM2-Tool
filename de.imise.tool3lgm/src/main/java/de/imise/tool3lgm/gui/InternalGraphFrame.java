@@ -38,14 +38,6 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     private final JButton but;
 
     /**
-     * Wird <code>true</code>, wenn sich in der Grafik etwas geändert hat. Statt den Frame dann
-     * gleich und damit bei jeder kleinen Änderung zu refreshen und ein flackern zu erzeugen, wird
-     * gewartet, bis alle Änderungen vorgenommen wurde. Dann muss das Ereignis actionFinished()
-     * ausgelöst werden, damit dieses refresh tatsächlich stattfindet.
-     */
-    private boolean refreshFrame = false;
-
-    /**
      * @param pane
      * @param inputGraphArea
      * @param doc
@@ -138,16 +130,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
 
     @Override
     public void elementGraphicsChanged(final ElementContainer source) {
-        //die Änderung nur regsitrieren, wenn das Ereignis tatsächlich für ein Element
-        //des von diesem Frame dargestellten Teilmodells ausgelöst wurde
-        if (source != null) {
-            GraphDocument doc = source.getGraphDocument();
-            if (doc == this.doc) {
-                //Nichts machen außer sich zu merken, dass ein refresh durchgeführt werden sollte.
-                //Dieser wird dann tatsächlich durch actionFinished() ausgeführt
-                refreshFrame = true;
-            }
-        }
+        area.revalidateRepaint();
     }
 
     @Override
@@ -178,16 +161,6 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     @Override
     public void userFieldValueChanged(final UserFieldTarget userFieldTarget) {
         area.revalidateRepaint();
-    }
-
-    @Override
-    public void actionFinished(final GraphDocument source) {
-        if (refreshFrame) {
-            //really repaint the frame after finishing a lot of actions
-            //that would have repainted the frame a lot of time
-            area.revalidateRepaint();
-            refreshFrame = false;
-        }
     }
 
     /**
