@@ -2932,9 +2932,10 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     private List<ElementContainer> getSelectionInGraphOrder() {
         List<ElementContainer> returnList = new ArrayList<>(selectedContainer.size());
-        for (ElementContainer ec : getElementContainers(Node.class)) {
-            if (selectedContainer.contains(ec)) {
-                returnList.add(ec);
+        List<ElementContainer> nodeContainers = getElementContainers(Node.class, true, false);
+        for (ElementContainer nc : nodeContainers) {
+            if (selectedContainer.contains(nc)) {
+                returnList.add(nc);
             }
         }
         for (ElementContainer ec : selectedContainer) {
@@ -4763,7 +4764,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     private final List<ElementContainer> getElementContainersOfStartOrEndClass(final Class<? extends Edge> edgeClass, final boolean startClass) {
         MetaModel metaModel = getMetaModel();
         Class<? extends ModelElement> elementClass = startClass ? Edge.getStartClass(edgeClass) : Edge.getEndClass(edgeClass);
-        List<ElementContainer> elementContainers = getElementContainers(elementClass, true);
+        List<ElementContainer> elementContainers = getElementContainers(elementClass, true, true);
         for (int i = elementContainers.size() - 1; i >= 0; i--) {
             ElementContainer ec = elementContainers.get(i);
             ModelElement me = ec.getElement();
@@ -4776,30 +4777,30 @@ public abstract class GraphDocument extends ElementSelectionContext {
         return elementContainers;
     }
 
-    //    /**
-    //     * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement von
-    //     * der übergebenen Klasse ist.<br>
-    //     * Unterklassen werden nicht beachtet.
-    //     *
-    //     * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
-    //     * @param includeSubClasses wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
-    //     * @return Liste mit ElementContainer oder <code>null</code>
-    //     */
-    //    public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
-    //        return getElementContainer(clazz, includeSubClasses, false);
-    //    }
+    /**
+     * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement von
+     * der übergebenen Klasse ist.
+     *
+     * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
+     * @param includeSubClasses wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
+     * @return Liste mit ElementContainer deren ModelElement con der übergebenen Art ist (immer alphabetisch sortiert)
+     */
+    public final List<ElementContainer> getElementContainers(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
+        return getElementContainers(clazz, includeSubClasses, true);
+    }
 
     /**
      * Gibt alle eine nach der <code>toString()</code>-Methode der ElementContainer
      * sortierte Liste von ElementContainern zurück, deren gekapseltes Modellelement
      * von der übergebenen Klasse ist.<br>
      *
-     * @param clazz
-     * @param includeSubClasseswenn <code>true</code> wird ist die Rückgabeliste alphabetisch
+     * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
+     * @param includeSubClasses wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
+     * @param alphabetical wenn <code>true</code> wird ist die Rückgabeliste alphabetisch
      *            sortiert (das betrifft nur die KnotenContainer, aber nicht die KantenContainer)
      * @return
      */
-    public final List<ElementContainer> getElementContainers(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
+    public final List<ElementContainer> getElementContainers(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean alphabetical) {
 
         //		long start = System.currentTimeMillis();
 
@@ -4825,13 +4826,17 @@ public abstract class GraphDocument extends ElementSelectionContext {
             //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
             List<Iterable<? extends ElementContainer>> layerElements = new ArrayList<>();
             //Knickpunkte
+            Iterable<? extends ElementContainer> containers = null;
             if (clazz == Bendpoint.class) {
-                layerElements.add(lc.getBendpointContainers());
+                containers = lc.getBendpointContainers();
             } else if (MetaModel.isNodeType(clazz)) {
-                layerElements.add(lc.getNodeContainersAlphabetical());
+                containers = alphabetical ? lc.getNodeContainersAlphabetical() : lc.getGraphNodeContainers();
                 //Kanten
             } else if (MetaModel.isEdgeType(clazz)) {
-                layerElements.add(lc.getEdgeContainers());
+                containers = lc.getEdgeContainers();
+            }
+            if (containers != null) {
+                layerElements.add(containers);
             }
 
             //wenn alle Elemente gesucht werden sollen
@@ -4863,7 +4868,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
 
         //wenn alphabetisch sortiert werden soll und andere Elemente als die bereits in der aplhabetisch sortierten
         //Knotenliste enthaltenen zur Rückgabeliste hinzugefügt wurden
-        if (clazz == Bendpoint.class || !MetaModel.isNodeType(clazz)) {
+        if (alphabetical && (clazz == Bendpoint.class || !MetaModel.isNodeType(clazz))) {
             //aplhabetisch sortieren
             Alphabetical.sort(objects);
         }
