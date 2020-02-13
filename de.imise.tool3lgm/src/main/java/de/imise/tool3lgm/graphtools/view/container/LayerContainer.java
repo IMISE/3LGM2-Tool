@@ -237,7 +237,7 @@ public class LayerContainer extends ElementContainer {
         if (!(ec instanceof NodeContainer)) {
             return;
         }
-        if (position < 0 || position > graphNodeContainers.size()) {
+        if (position < 0 || position >= graphNodeContainers.size()) {
             return;
         }
         int index = indexOf(ec);
