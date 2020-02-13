@@ -156,8 +156,8 @@ public class MenuCollection {
                 "layerTransparencyMenu", GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE, GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF, GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL));
 
         /** Das Level-Menu */
-        public static final JMenu ELEMENT_LEVEL_MENU = createMenu(// Elementreihenfolge
-                "levelMenu", GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
+        public static final JMenu ELEMENT_ORDER_MENU = createMenu(// Elementreihenfolge
+                "elementOrderMenu", GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
 
         /** Das Elemente-Ausrichtung-Menu */
         public static final JMenu ELEMENT_ALIGNMENT_MENU = createMenu( // Elemente ausrichten
@@ -292,7 +292,7 @@ public class MenuCollection {
         private final JMenu elementLayoutMenu = LayoutSubMenus.ELEMENT_LAYOUT_MENU;
 
         /** Das Level-Menu */
-        private final JMenu elementLevelMenu = LayoutSubMenus.ELEMENT_LEVEL_MENU;
+        private final JMenu elementLevelMenu = LayoutSubMenus.ELEMENT_ORDER_MENU;
 
         /** Das Elemente Ausrichtungs Menu */
         private final JMenu elementAlignmentMenu = LayoutSubMenus.ELEMENT_ALIGNMENT_MENU;

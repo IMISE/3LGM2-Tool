@@ -206,7 +206,7 @@ public class TemplateContextGenerator extends ContextGenerator {
             //                    }
             //                    menu.addSeparator();
             //                    menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LAYOUT_MENU);
-            //                    menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LEVEL_MENU);
+            //                    menu.add(MenuCollection.LayoutSubMenus.ELEMENT_ORDER_MENU);
             //                    menu.add(getLayerMenu());
             //                }
             //            }
