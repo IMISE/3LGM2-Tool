@@ -4113,6 +4113,51 @@ public abstract class GraphDocument extends ElementSelectionContext {
     }
 
     /**
+     * Sets the horizontal text position of the label for all selected nodes graph.
+     *
+     * @param mode
+     * @param pid
+     */
+    public final void setTextPositionHorizontal(final TextPositionHorizontal mode, final int pid) {
+        start_transaction(pid);
+        for (ElementContainer ec : selectedContainer) {
+            setTextPositionHorizontal(mode, ec, pid);
+        }
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+    }
+
+    /**
+     * Sets the vertical text position of the label for the ElemntContainer.
+     *
+     * @param mode
+     * @param ec
+     * @param pid
+     */
+    private final void setTextPositionHorizontal(final TextPositionHorizontal mode, final ElementContainer ec, final int pid) {
+        if (ec == null) {
+            return;
+        }
+        GraphElementLayout layout = ec.get3LGMLayout();
+        if (layout == null) {
+            return;
+        }
+        GraphDocument szen = ec.getGraphDocument();
+        if (!(szen instanceof Szenario)) {
+            return;
+        }
+        start_transaction(pid);
+        String szenHash = szen.getHashString();
+        String elementHash = ec.getHashString();
+        TextPositionHorizontal textPositionHorizontal = layout.textPositionHorizontal;
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + szenHash + " " + elementHash + " " + textPositionHorizontal, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + szenHash + " " + elementHash + " " + mode, pid);
+        layout.textPositionHorizontal = mode;
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
+    }
+
+    /**
      * Sets the vertical text position of the label for all selected nodes graph.
      *
      * @param mode {@link TextPositionVertical#TOP}, {@link TextPositionVertical#CENTER} or {@link TextPositionVertical#BOTTOM}
@@ -4157,50 +4202,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
 
-    /**
-     * Sets the horizontal text position of the label for all selected nodes graph.
-     *
-     * @param mode
-     * @param pid
-     */
-    public final void setTextPositionHorizontal(final TextPositionHorizontal mode, final int pid) {
-        start_transaction(pid);
-        for (ElementContainer ec : selectedContainer) {
-            setTextPositionHorizontal(mode, ec, pid);
-        }
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
-    }
-
-    /**
-     * Sets the vertical text position of the label for the ElemntContainer.
-     *
-     * @param mode
-     * @param ec
-     * @param pid
-     */
-    private final void setTextPositionHorizontal(final TextPositionHorizontal mode, final ElementContainer ec, final int pid) {
-        if (ec == null) {
-            return;
-        }
-        GraphElementLayout layout = ec.get3LGMLayout();
-        if (layout == null) {
-            return;
-        }
-        GraphDocument szen = ec.getGraphDocument();
-        if (!(szen instanceof Szenario)) {
-            return;
-        }
-        start_transaction(pid);
-        String szenHash = szen.getHashString();
-        String elementHash = ec.getHashString();
-        TextPositionHorizontal textPositionHorizontal = layout.textPositionHorizontal;
-        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + szenHash + " " + elementHash + " " + textPositionHorizontal, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + szenHash + " " + elementHash + " " + mode, pid);
-        layout.textPositionHorizontal = mode;
-        finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
-    }
     /**
      * Sets the HTML text alignment of the label for all selected nodes graph.
      *
