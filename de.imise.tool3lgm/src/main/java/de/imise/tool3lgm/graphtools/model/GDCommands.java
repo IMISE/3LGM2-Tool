@@ -193,27 +193,27 @@ public enum GDCommands implements ActionSource {
         ActionSource.putInteractive(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ICON);//dialog set icon
         ActionSource.putInteractive(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_FONT); //dialog set font
         ActionSource.putInteractive(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_COLOR); //dialog set color
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
         ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_SUBMODEL); //diaalog submodel name
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_DELETE_SUBMODEL); //dialog really delete
         ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SUBMODEL); //dialog submodel name
