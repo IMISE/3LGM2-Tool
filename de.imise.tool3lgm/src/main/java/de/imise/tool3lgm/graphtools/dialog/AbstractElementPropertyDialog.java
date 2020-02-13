@@ -6,6 +6,7 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -92,7 +93,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     public AbstractElementPropertyDialog(final ModelElement modelElement, final GDCollection gdcoll) {
         super(gdcoll);
         setTitle(getResString("eigensch_dial"));
-        getContentPane().setLayout(new BorderLayout());
+        Container contentPane = getContentPane();
+        contentPane.setLayout(new BorderLayout());
         this.modelElement = modelElement;
 
         JComponent tabComponent = getTabComponent();
@@ -133,9 +135,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
 
         buttonpanel.add(bp, BorderLayout.EAST);
 
-        getContentPane().add(up, BorderLayout.NORTH);
-        getContentPane().add(tabComponent, BorderLayout.CENTER);
-        getContentPane().add(buttonpanel, BorderLayout.SOUTH);
+        contentPane.add(up, BorderLayout.NORTH);
+        contentPane.add(tabComponent, BorderLayout.CENTER);
+        contentPane.add(buttonpanel, BorderLayout.SOUTH);
 
         addSizeOrPositionChangedListener();
         setSizeAndLocation();
