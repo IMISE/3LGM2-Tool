@@ -4142,6 +4142,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (layout == null) {
             return;
         }
+        if (layout.textPositionHorizontal == mode) {
+            return;
+        }
         GraphDocument szen = ec.getGraphDocument();
         if (!(szen instanceof Szenario)) {
             return;
@@ -4187,6 +4190,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (layout == null) {
             return;
         }
+        if (layout.textPositionVertical == mode) {
+            return;
+        }
         GraphDocument szen = ec.getGraphDocument();
         if (!(szen instanceof Szenario)) {
             return;
@@ -4230,6 +4236,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
         }
         GraphElementLayout layout = ec.get3LGMLayout();
         if (layout == null) {
+            return;
+        }
+        if (layout.textAlignmentHTML == mode) {
             return;
         }
         GraphDocument szen = ec.getGraphDocument();
