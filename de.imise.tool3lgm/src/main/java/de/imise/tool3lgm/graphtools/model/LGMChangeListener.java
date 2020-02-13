@@ -140,6 +140,8 @@ public interface LGMChangeListener {
         protected void deliverEvent(final List<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem, final boolean deliverStatic) {
             //das hier muss sein, weil es vorkommen kann, dass sich bei deliverEvent(l, source, last_elem); der aktuelle Listener aus der Listener-Liste löscht
             //eine andere Variante wäre, die Liste vorher zu clonen und auf dem Clone zu iterieren
+            //            Sys.err1(
+            //                    "\n##################################################################################################################################################################################################################################################################\n##################################################################################################################################################################################################################################################################");
             LGMChangeListener lastListener = null;
             for (int i = 0; i < listeners.size();) {
                 LGMChangeListener l = listeners.get(i);
@@ -148,6 +150,7 @@ public interface LGMChangeListener {
                     continue;
                 }
                 lastListener = l;
+                //Sys.err(name() + " " + l.getClass() + "\n" + l);
                 deliverEvent(l, source, last_elem);
             }
             //Das hier stellt die Verbindung zwischen dem globalen Listener des Tools und dem für ein GraphDocument bzw. einer GDCollection her

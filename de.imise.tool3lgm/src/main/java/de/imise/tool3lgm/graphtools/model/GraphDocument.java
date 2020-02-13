@@ -1462,6 +1462,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param log
      */
     public void start_transaction(final int pid, final boolean log) {
+        //Sys.err("start " + gdcoll.isBulkMode() + " " + pid + " " + log);
         if (gdcoll.isBulkMode()) {
             return;
         }
@@ -1493,6 +1494,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 }
             }
         }
+        //Sys.err("start " + " " + pid + " " + log);
     }
 
     /**
@@ -1513,6 +1515,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param log
      */
     public void finish_transaction(final int pid, final boolean log) {
+        //Sys.err("finish " + gdcoll.isBulkMode() + " " + pid + " " + log);
         if (gdcoll.isBulkMode()) {
             return;
         }
@@ -1541,6 +1544,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             }
             getCollection().getTman().finishTransaction(pid);
         }
+        //Sys.err("finish " + pid + "  " + log);
     }
 
     /**
