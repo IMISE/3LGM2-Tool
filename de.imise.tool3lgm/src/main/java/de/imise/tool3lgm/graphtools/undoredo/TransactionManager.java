@@ -391,7 +391,7 @@ public class TransactionManager {
             return true;
         }
         if (!isUndoAvailable()) {
-            return true;
+            return false;
         }
 
         int j = cur_pos;
