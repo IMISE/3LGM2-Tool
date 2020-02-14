@@ -235,7 +235,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      */
     public void showDialog() {
         if (opening) {
-            doc.start_transaction(getTransactionID());
+            doc.start_transaction(transactionID);
             doc.addAllTransactionsListener(this);
             opening = false;
         }
@@ -297,20 +297,26 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
                 selectedElementDialogPanel.update();
             }
         }
-        doc.finish_transaction(getTransactionID());
-        doc.distributeEvent(DATA_CHANGED, getTransactionID());
+        doc.finish_transaction(transactionID);
+        doc.distributeEvent(DATA_CHANGED, transactionID);
         doc.start_transaction(createNewTransactionID());
     }
 
+    /**
+     *
+     */
     public void cancel() {
-        doc.finish_transaction(getTransactionID());
-        doc.undo(getTransactionID());
+        doc.finish_transaction(transactionID);
+        doc.undo(transactionID);
         close();
     }
 
+    /**
+     *
+     */
     private void close() {
         ElemenPropertyDialogsContext.removeDialog(modelElement);
-        doc.finish_transaction(getTransactionID());
+        doc.finish_transaction(transactionID);
         doc.removeAllTransactionsListener(this);
         dispose();
     }
@@ -327,8 +333,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         } else if (e.getSource() == applyButton) {
             commit(true);
         }
-        doc.select(modelElement.getContainer(doc), getTransactionID());
-        doc.distributeEvent(SELECTION_CHANGED, getTransactionID());
+        doc.select(modelElement.getContainer(doc), transactionID);
+        doc.distributeEvent(SELECTION_CHANGED, transactionID);
     }
 
     @Override
@@ -391,6 +397,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         return DEFAULT_SIZE;
     }
 
+    /**
+     *
+     */
     private void addSizeOrPositionChangedListener() {
         addComponentListener(new ComponentListener() {
             @Override
@@ -413,6 +422,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         });
     }
 
+    /**
+     *
+     */
     private void setSizeAndLocation() {
         pack();
         JFrame mainFrame = Static.getMainFrame();
