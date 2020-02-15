@@ -63,6 +63,9 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         showAllAction = getShowAction(this, true);
     }
 
+    /**
+     * @param full
+     */
     public final void showFullDialog(final boolean full) {
         if (full && !dialog.isInfoDialog()) {
             showFullDialog();
@@ -73,13 +76,27 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         update();
     }
 
+    /**
+     * @return
+     */
     protected final boolean isRightSideVisible() {
         return viewButton.getAction() == showPartlyAction;
     }
 
+    /**
+     *
+     */
     protected abstract void showFullDialog();
 
+    /**
+     *
+     */
     protected abstract void showPartlyDialog();
+
+    @Override
+    public JButton getPanelButton() {
+        return viewButton;
+    }
 
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die das gesamte oder nur einen Teils des Panels anzeigt.

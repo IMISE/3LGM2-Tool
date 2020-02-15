@@ -20,8 +20,11 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
@@ -44,7 +47,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 /**
  * @author AXS (02.12.2019)
  */
-public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog implements ActionListener, LGMChangeListenerSimple {
+public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog implements ActionListener, LGMChangeListenerSimple, ChangeListener {
 
     /**
      * ModelElement its properties are displayed or changable in this dialog.
@@ -66,6 +69,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      */
     static int lastHeight = -1;
 
+    /**
+     *
+     */
     private static final Dimension DEFAULT_SIZE = new Dimension(600, 500);
 
     /**
@@ -86,11 +92,27 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     private final PropertyDialogUserFieldPanel propertyDialogUserFieldPanel;
 
     /**
+     * Panel in the south with the panel for the buttons OK, Take over and Cancel in the
+     * EAST and an additional button that is given by the curren displayed panel in the WEST.
+     */
+    private final JPanel southButtonsPanel = new JPanel();
+
+    /**
+     * One additional button of the currently displayed panel to add to the button panel
+     * with the OK, Cancel, TakeOver buttons.
+     */
+    private JButton panelButton = null;
+
+    /**
      * @param modelElement
      * @param gdcoll
      */
     public AbstractElementPropertyDialog(final ModelElement modelElement, final GDCollection gdcoll) {
         super(gdcoll);
+        //add changeListener for tab changes to updates the displayed panel depending buttons
+        //must be added before adding the tabs to get the very first tab change event
+        tabbedPane.addChangeListener(this);
+
         setTitle(getResString("eigensch_dial"));
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
@@ -115,35 +137,35 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
             propertyDialogUserFieldPanel = null;
         }
 
-        JPanel buttonpanel = new JPanel();
-        buttonpanel.setLayout(new BorderLayout());
+        JPanel standardButtonsPanel = new JPanel();
+        southButtonsPanel.setLayout(new BorderLayout());
 
-        JPanel bp = new JPanel();
         okButton.addActionListener(this);
-        bp.add(okButton);
+        standardButtonsPanel.add(okButton);
         if (!isInfoDialog()) {
             applyButton.addActionListener(this);
-            bp.add(applyButton);
+            standardButtonsPanel.add(applyButton);
             cancelButton.addActionListener(this);
-            bp.add(cancelButton);
+            standardButtonsPanel.add(cancelButton);
         }
         if (helpButton != null) {
-            bp.add(helpButton);
+            standardButtonsPanel.add(helpButton);
         }
 
-        buttonpanel.add(bp, BorderLayout.EAST);
+        southButtonsPanel.add(standardButtonsPanel, BorderLayout.EAST);
 
         contentPane.add(up, BorderLayout.NORTH);
         contentPane.add(tabbedPane, BorderLayout.CENTER);
-        contentPane.add(buttonpanel, BorderLayout.SOUTH);
+        contentPane.add(southButtonsPanel, BorderLayout.SOUTH);
 
         addSizeOrPositionChangedListener();
         setSizeAndLocation();
         opening = true;
+
     }
 
     /**
-     * @return
+     * @return the ModelElement this dialog is shown for
      */
     public final ModelElement getModelElement() {
         return modelElement;
@@ -367,6 +389,33 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
 
     // Size and Location Begin
     // ####################################################################################
+
+    @Override
+    public final void stateChanged(final ChangeEvent e) {
+        //if the final must be removed because subclasses will overwite it - so don't forget
+        //to call this super implementation!
+
+        //tab changed
+        if (e.getSource() == tabbedPane) {
+            Component selectedTabComponent = tabbedPane.getSelectedComponent();
+            if (panelButton != null) {
+                southButtonsPanel.remove(panelButton);
+                panelButton = null;
+                //das revalidateRepaint muss sein, sonst bleibt der Button des letzten Panels
+                //immer angezeigt, auch wenn er gar nicht mehr da ist
+                southButtonsPanel.revalidate();
+                southButtonsPanel.repaint();
+            }
+            if (selectedTabComponent instanceof ElementDialogPanel) {
+                ElementDialogPanel elementDialogPanel = (ElementDialogPanel) selectedTabComponent;
+                JButton currentPanelButton = elementDialogPanel.getPanelButton();
+                if (currentPanelButton != null) {
+                    panelButton = currentPanelButton;
+                    southButtonsPanel.add(panelButton, BorderLayout.WEST);
+                }
+            }
+        }
+    }
 
     /**
      *

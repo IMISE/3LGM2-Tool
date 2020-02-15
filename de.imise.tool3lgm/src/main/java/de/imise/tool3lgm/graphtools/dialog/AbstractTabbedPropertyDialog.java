@@ -6,7 +6,6 @@ import java.awt.Frame;
 import java.util.List;
 
 import javax.swing.Icon;
-import javax.swing.JComponent;
 import javax.swing.JTabbedPane;
 
 import com.google.common.collect.ImmutableList;

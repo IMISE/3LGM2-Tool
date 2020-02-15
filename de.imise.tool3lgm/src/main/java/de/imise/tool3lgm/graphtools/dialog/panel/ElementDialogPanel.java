@@ -12,6 +12,7 @@ import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTree;
 
@@ -172,6 +173,13 @@ public abstract class ElementDialogPanel extends JPanel {
     protected final void add(final Container con, final Component c, final GridBagConstraints gbc, final int x, final int y, final int w, final int h) {
         //der Static import funktioniert nicht mit der add-Funktion, weil das mit den add-Funktionen aus Container kollidiert
         SwingUtils.add(con, c, gbc, x, y, w, h);
+    }
+
+    /**
+     * @return a button that the dialog will show beside the OK,Cancel, TakeOver buttons
+     */
+    public JButton getPanelButton() {
+        return null;//Subclasses that will show e.g. a view button beside the OK,Cancel, TakeOver buttons can return the button here
     }
 
     // ----------------------------------------------------------------------------------------------------------------------------------
