@@ -6,7 +6,6 @@ import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.Icon;
-import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 import javax.swing.event.AncestorEvent;
@@ -24,9 +23,6 @@ import de.imise.util.pair.Pair;
  * @author fstephan, AXS
  */
 public abstract class ExtendedAction extends AbstractAction {
-
-    /** Source für das Ausführen der Aktion über ein neu generiertes {@link ActionEvent} */
-    private static JButton button = new JButton();
 
     /**
      * Konstruktor
@@ -256,7 +252,7 @@ public abstract class ExtendedAction extends AbstractAction {
      * @param keysAndValues
      *            - erstes Item: key - zweites Item: value
      */
-    public void putValues(final Pair<String, Object>... keysAndValues) {
+    public void putValues(@SuppressWarnings("unchecked") final Pair<String, Object>... keysAndValues) {
         for (Pair<String, Object> keyAndValue : keysAndValues) {
             putValue(keyAndValue);
         }
@@ -303,7 +299,7 @@ public abstract class ExtendedAction extends AbstractAction {
 
     /** Führt die Aktion aus */
     public final void perform() {
-        actionPerformed(new ActionEvent(button, ActionEvent.ACTION_PERFORMED, getText()));
+        actionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, getText()));
     }
 
     @Override
