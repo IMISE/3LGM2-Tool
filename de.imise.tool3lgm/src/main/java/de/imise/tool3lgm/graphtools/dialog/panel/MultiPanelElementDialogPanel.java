@@ -163,7 +163,12 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
         return isUnchangedDefaultPanel;
     }
 
+    /**
+     * @param panelButton
+     */
     private void addPanelButton(final JButton panelButton) {
+        //first button is the only that will be displayed. If this button
+        //is clicked, the action listener clicks all the other buttons.
         panelButtons.add(panelButton);
         if (panelButtons.size() == 1) {
             this.panelButton = panelButton;

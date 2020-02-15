@@ -401,8 +401,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
             if (panelButton != null) {
                 southButtonsPanel.remove(panelButton);
                 panelButton = null;
-                //das revalidateRepaint muss sein, sonst bleibt der Button des letzten Panels
-                //immer angezeigt, auch wenn er gar nicht mehr da ist
+                //revalidateRepaint is needed to really remove the button of the last panel
                 southButtonsPanel.revalidate();
                 southButtonsPanel.repaint();
             }
