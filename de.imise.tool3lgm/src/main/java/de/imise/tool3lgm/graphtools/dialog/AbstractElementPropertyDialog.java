@@ -395,7 +395,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         //if the final must be removed because subclasses will overwite it - so don't forget
         //to call this super implementation!
 
-        //tab changed
+        //tab changed -> change the view collapse/expand button in the west of the south panel
         if (e.getSource() == tabbedPane) {
             Component selectedTabComponent = tabbedPane.getSelectedComponent();
             if (panelButton != null) {

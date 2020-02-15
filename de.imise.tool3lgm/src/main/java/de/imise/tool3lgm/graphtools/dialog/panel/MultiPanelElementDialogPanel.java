@@ -2,13 +2,17 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 
+import java.awt.Container;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
 import javax.swing.border.Border;
@@ -24,7 +28,7 @@ import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
  *
  * @author AXS (21.01.2020)
  */
-public class MultiPanelElementDialogPanel extends ElementDialogPanel {
+public class MultiPanelElementDialogPanel extends ElementDialogPanel implements ActionListener {
 
     /** Added sub panels in the order in which they were added */
     private final List<AbstractPathConnectionPanel> panels = new ArrayList<>();
@@ -40,6 +44,15 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel {
      * Ausgangszustand (Name + Beschreibung) geblieben ist.
      */
     protected boolean isUnchangedDefaultPanel = true;
+
+    /** Liste mit allen Buttons, die die geaddeten Panels jeweils über ihre {@link #getPanelButton()} Methode zurück liefern. */
+    private final List<JButton> panelButtons = new ArrayList<>();
+
+    /**
+     * The button this panel accumulates of the {@link #getPanelButton()} result buttons of the
+     * panels in this multi panel.
+     */
+    private JButton panelButton;
 
     /**
      * @param dialog
@@ -112,6 +125,11 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel {
             gbc.weightx = 1;
             add(this, panel, gbc, 1, gridy++, 1, 1);
         }
+        JButton panelButton = panel.getPanelButton();
+        if (panelButton != null) {
+            addPanelButton(panelButton);
+        }
+
         isUnchangedDefaultPanel = false;
     }
 
@@ -143,6 +161,33 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel {
      */
     public final boolean isUnchangedDefaultPanel() {
         return isUnchangedDefaultPanel;
+    }
+
+    private void addPanelButton(final JButton panelButton) {
+        panelButtons.add(panelButton);
+        if (panelButtons.size() == 1) {
+            this.panelButton = panelButton;
+            panelButton.addActionListener(this);
+        } else {
+            Container buttonParent = panelButton.getParent();
+            buttonParent.remove(panelButton);
+        }
+
+    }
+
+    @Override
+    public JButton getPanelButton() {
+        return panelButton;
+    }
+
+    @Override
+    public final void actionPerformed(final ActionEvent e) {
+        if (e.getSource() == panelButton) {
+            for (int i = 1; i < panelButtons.size(); i++) {
+                JButton hiddenPanelButton = panelButtons.get(i);
+                hiddenPanelButton.doClick();
+            }
+        }
     }
 
 }
