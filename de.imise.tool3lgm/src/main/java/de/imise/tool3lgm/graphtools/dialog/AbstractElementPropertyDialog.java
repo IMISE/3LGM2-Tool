@@ -20,7 +20,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -97,8 +96,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         contentPane.setLayout(new BorderLayout());
         this.modelElement = modelElement;
 
-        JComponent tabComponent = getTabComponent();
-        tabComponent.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        tabbedPane.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
         JPanel up = new JPanel(new GridLayout(1, 1));
         headerPanel = new ElementDialogHeaderPanel(this);
@@ -136,7 +134,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         buttonpanel.add(bp, BorderLayout.EAST);
 
         contentPane.add(up, BorderLayout.NORTH);
-        contentPane.add(tabComponent, BorderLayout.CENTER);
+        contentPane.add(tabbedPane, BorderLayout.CENTER);
         contentPane.add(buttonpanel, BorderLayout.SOUTH);
 
         addSizeOrPositionChangedListener();

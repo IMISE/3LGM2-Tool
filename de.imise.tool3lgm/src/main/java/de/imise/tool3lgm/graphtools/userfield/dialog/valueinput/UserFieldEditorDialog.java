@@ -197,7 +197,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         constraints.fill = GridBagConstraints.BOTH;
 
         // HauptPanel an den Dialog anfügen
-        add(getTabComponent(), constraints);
+        add(tabbedPane, constraints);
 
         // Anfügen von Übernehmen-,OK- und CancelButton an das controlPanel
         initControlPanel();

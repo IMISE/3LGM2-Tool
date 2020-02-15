@@ -21,7 +21,7 @@ import de.imise.util.swing.component.TabbedPane;
 public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialog {
 
     /** TabbedPane in das alle Panels kommen */
-    private final TabbedPane tabbedPane;
+    protected final TabbedPane tabbedPane;
 
     /**
      * @param gdcoll
@@ -57,13 +57,6 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      */
     protected void addTab(final Component component) {
         addTab(component.getName(), component);
-    }
-
-    /**
-     * @return the contained tabbed pane
-     */
-    protected JComponent getTabComponent() {
-        return tabbedPane;
     }
 
     /**
