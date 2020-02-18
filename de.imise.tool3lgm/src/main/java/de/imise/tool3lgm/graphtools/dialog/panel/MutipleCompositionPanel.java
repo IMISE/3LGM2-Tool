@@ -20,7 +20,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -168,7 +167,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
      * sollte an die "removeButtons" der Panels angefügt werden.
      */
     public final LGMAction getDisconnectAction() {
-        LGMAction returnAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+        LGMAction returnAction = new LGMAction(getResString("delete")) {
             @Override
             public void execute(final EventObject e) {
                 TreePath[] selpaths = tree.getSelectionPaths();
@@ -186,9 +185,6 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 }
             }
         };
-        returnAction.putValue("Name", getResString("delete"));
-        returnAction.putValue("SmallIcon", null);
-
         return returnAction;
     }
 

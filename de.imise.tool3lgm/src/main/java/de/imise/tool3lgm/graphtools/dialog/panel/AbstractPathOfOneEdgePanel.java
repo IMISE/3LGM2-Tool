@@ -8,8 +8,8 @@ import java.util.EventObject;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -70,7 +70,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
         final GraphDocument doc = getGraphDocument();
         final GDCollection gdcoll = doc.getCollection();
         final int pid = getTransactionID();
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_CONNECT_ELEMENT) {
             @Override
             public void execute(final EventObject e) {
                 TreePath[] selpaths = srcTree.getSelectionPaths();
@@ -100,7 +100,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
         final GraphDocument doc = getGraphDocument();
         final GDCollection gdcoll = doc.getCollection();
         final int pid = getTransactionID();
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_DISCONNECT_ELEMENT) {
             @Override
             public void execute(final EventObject e) {
                 TreePath[] selpaths = srcTree.getSelectionPaths();

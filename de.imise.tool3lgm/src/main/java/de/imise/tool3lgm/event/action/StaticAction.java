@@ -20,6 +20,7 @@ import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
+import de.imise.util.swing.event.ActionSource;
 import de.imise.util.swing.event.ExtendedAction;
 
 /**
@@ -119,19 +120,33 @@ public abstract class StaticAction extends ExtendedAction {
      */
     public StaticAction(final Object identifier, final String arguments, final String text, final String textSuffix) {
         //wenn darunter das try-catch schief geht, dann ist der Text = dem übergebenen identifier.toString()
-        super((text == null ? identifier.toString() : text) + (textSuffix != null ? textSuffix : ""));
+        super((text == null ? identifier == null ? "" : identifier.toString() : text) + (textSuffix != null ? textSuffix : ""));
         putValue(IDENTIFIER_KEY, identifier);
 
         String command = setActionCommand(identifier, arguments);
-        setText(identifier, command, text, textSuffix);
-        setIcons(command);
+        boolean iconExists = setIcons(identifier);
+        setText(identifier, command, text, textSuffix, iconExists);
         setToolTip(command);
     }
 
+    /**
+     * @param identifier
+     * @return
+     */
     private static String getIdentifierName(final Object identifier) {
+        //das hier muss sein, weil z.B. die GDCommands toString() überschreiben und dort normalerweise nur
+        //den String des Indexes (ordinal()) liefern und nicht den Enum-Namem
+        if (identifier == null) {
+            return "";
+        }
         return identifier instanceof Enum<?> ? ((Enum<?>) identifier).name() : identifier.toString();
     }
 
+    /**
+     * @param identifier
+     * @param arguments
+     * @return
+     */
     private String setActionCommand(final Object identifier, final String arguments) {
         //GDCommands überschreiben die toString() so, dass sie ordinal()
         //zurück liefern (damit die UNDO-REDO-Commands nicht so lang werden).
@@ -146,16 +161,29 @@ public abstract class StaticAction extends ExtendedAction {
         return command;
     }
 
+    /**
+     * @return
+     */
     public Object getIdentifier() {
         return getValue(IDENTIFIER_KEY);
     }
 
+    /**
+     * @return
+     */
     public String getArguments() {
         Object argument = getValue(ARGUMENT_KEY);
         return argument == null ? null : argument.toString();
     }
 
-    private void setText(final Object identifier, final String command, final String text, final String textSuffix) {
+    /**
+     * @param identifier
+     * @param command
+     * @param text
+     * @param textSuffix
+     * @param iconExists
+     */
+    private void setText(final Object identifier, final String command, final String text, final String textSuffix, final boolean iconExists) {
         //Text auf RessourcenString lesen, wenn keiner übergeben wurde und eine Ressource existiert (wenn keine da ist, bleibts
         //bei dem, was im super-Constructor gesetzt wurde)
         if (text == null) {
@@ -167,31 +195,43 @@ public abstract class StaticAction extends ExtendedAction {
                     String simpleIdentifierClassName = ((Class<?>) identifier).getSimpleName();
                     actionText = getResString(simpleIdentifierClassName);
                 } catch (Exception ex) {
-                    actionText = command;
+                    actionText = iconExists ? "" : command;
                 }
             }
             setText(actionText + (textSuffix != null ? textSuffix : ""));
         }
     }
 
-    private void setIcons(final String command) {
+    /**
+     * @param identifier
+     */
+    private boolean setIcons(final Object identifier) {
+        Object iconIdentifier = identifier instanceof ActionSource ? ((ActionSource) identifier).getIconIdentifier() : identifier;
+        String iconBaseName = getIdentifierName(iconIdentifier);
         //LargeIcon laden (wenn vorhanden)
-        String iconName = StaticAction.ICON_LARGE_PREFIX + command + ".gif";
+        String iconName = StaticAction.ICON_LARGE_PREFIX + iconBaseName + ".gif";
+        Icon icon = loadIcon(iconName);
+        setLargeIcon(icon);
+        boolean iconExists = icon != null;
+        //SmallIcon laden (wenn vorhanden)
+        iconName = StaticAction.ICON_SMALL_PREFIX + iconBaseName + ".gif";
+        icon = loadIcon(iconName);
+        setSmallIcon(icon);
+        iconExists |= icon != null;
+        return iconExists;
+    }
+
+    /**
+     * @param iconName
+     * @return
+     */
+    private Icon loadIcon(final String iconName) {
         //erst localized suchen
         Icon icon = Tool3lgmConstants.getLocalizedIcon(iconName);
-        if (icon != null) {
-            setLargeIcon(icon);
-        } else {
-            setLargeIcon(Tool3lgmConstants.getIcon(iconName));
+        if (icon == null) {
+            icon = Tool3lgmConstants.getIcon(iconName);
         }
-        //SmallIcon laden (wenn vorhanden)
-        iconName = StaticAction.ICON_SMALL_PREFIX + command + ".gif";
-        icon = Tool3lgmConstants.getLocalizedIcon(iconName);
-        if (icon != null) {
-            setSmallIcon(icon);
-        } else {
-            setSmallIcon(Tool3lgmConstants.getIcon(iconName));
-        }
+        return icon;
     }
 
     /**
@@ -206,6 +246,9 @@ public abstract class StaticAction extends ExtendedAction {
         setText(text);
     }
 
+    /**
+     * @param command
+     */
     private void setToolTip(final String command) {
         //ToolTip laden (wenn vorhanden)
         try {
@@ -221,7 +264,7 @@ public abstract class StaticAction extends ExtendedAction {
     }
 
     @Override
-    public final void actionPerformed(final ActionEvent e) {
+    public void actionPerformed(final ActionEvent e) {
         if (!isEnabled()) {
             return;
         }

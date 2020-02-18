@@ -7,8 +7,8 @@ import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.util.swing.component.MinSizedIconButton;
@@ -104,7 +104,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      * @param panel
      */
     public static final LGMAction getShowAction(final AbstractExpandablePanel panel, final boolean full) {
-        return new LGMAction("", Tool3lgmConstants.getIcon(full ? "zu.gif" : "auf.gif")) {
+        return new LGMAction(full ? DialogActionCommands.ACTION_DIALOG_RIGHT_SIDE_SHOW : DialogActionCommands.ACTION_DIALOG_RIGHT_SIDE_HIDE) {
             @Override
             public void execute(final EventObject e) {
                 panel.showFullDialog(full);

@@ -14,8 +14,8 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -126,7 +126,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     @Override
     protected LGMAction getDisconnectAction() {
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_DISCONNECT_ELEMENT) {
             @Override
             public void execute(final EventObject eo) {
                 int selrows = ltree.getSelectionCount();

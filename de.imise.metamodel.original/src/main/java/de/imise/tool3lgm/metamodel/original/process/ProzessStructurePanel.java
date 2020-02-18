@@ -26,8 +26,8 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -1152,7 +1152,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final GDCollection gdcoll = doc.getCollection();
         final ModelElement modelElement = getModelElement();
 
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_CONNECT_ELEMENT) {
 
             @Override
             public void execute(final EventObject eo) {
@@ -1227,7 +1227,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final AbstractElementPropertyDialog dialog = getDialog();
         final ModelElement modelElement = getModelElement();
 
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_DISCONNECT_ELEMENT) {
 
             @Override
             public void execute(final EventObject e) {
@@ -1293,7 +1293,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ModelElement modelElement = getModelElement();
         final AbstractElementPropertyDialog dialog = getDialog();
 
-        return new LGMAction("", Tool3lgmConstants.getIcon("hoch2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_MOVE_CONNECTION_STEP_UP) {
 
             @Override
             public void execute(final EventObject eo) {
@@ -1371,7 +1371,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final ModelElement modelElement = getModelElement();
         final AbstractElementPropertyDialog dialog = getDialog();
 
-        return new LGMAction("", Tool3lgmConstants.getIcon("runter2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_MOVE_CONNECTION_STEP_DOWN) {
 
             @Override
             public void execute(final EventObject eo) {

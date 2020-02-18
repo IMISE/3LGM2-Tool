@@ -23,8 +23,8 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
@@ -428,7 +428,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      * @return
      */
     protected LGMAction getConnectAction() {
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_CONNECT_ELEMENT) {
 
             @Override
             public void execute(final EventObject eo) {
@@ -480,7 +480,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      */
     protected LGMAction getDisconnectAction() {
         final PathConnectionPanel panel = this;
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_DISCONNECT_ELEMENT) {
 
             @Override
             public void execute(final EventObject eo) {
@@ -578,7 +578,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (metaModel.isSlaveType(searchElementClass)) {
             return null;
         }
-        return new LGMAction("", Tool3lgmConstants.getIcon("ICON_LARGE_ACTION_DIALOG_NEW_ELEMENT.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_NEW_ELEMENT) {
             @Override
             public void execute(final EventObject eo) {
                 //wenn eindutig fest steht, an welchen Node ein neues Element gehängt werden sollte, dann wird
