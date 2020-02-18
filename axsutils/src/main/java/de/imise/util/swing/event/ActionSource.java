@@ -97,8 +97,14 @@ public interface ActionSource {
         return ACTION_CLASS.get(this);
     }
 
+    /**
+     *
+     */
     public static final Set<ActionSource> INTERACTIVE_ACTIONS = new HashSet<>();
 
+    /**
+     * @param interactiveActionSources
+     */
     public static void setInteractive(final ActionSource... interactiveActionSources) {
         INTERACTIVE_ACTIONS.addAll(Arrays.asList(interactiveActionSources));
     }
@@ -113,8 +119,10 @@ public interface ActionSource {
         return INTERACTIVE_ACTIONS.contains(this);
     }
 
-    public default boolean isSelected() {
-        return false;
+    /**
+     * @return the Object to identify the icon in the resources
+     */
+    public default Object getIconIdentifier() {
+        return this;
     }
-
 }
