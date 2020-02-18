@@ -40,7 +40,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     private static final int MIN_ADD_REMOVE_NEW_BUTTON_WIDTH = 30;
 
     /** Mimimale Höhe der Buttons zwischen den Bäumen */
-    private static final int MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT = 50;
+    private static final int MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT = 45;
 
     /** Abstand zwischen den Buttons zwischen den Bäumen */
     private static final int ADD_REMOVE_NEW_BUTTON_VGAP = 3;
@@ -59,7 +59,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         super.init();
         // Aktionen für den button setzen
         showPartlyAction = getShowAction(this, false);
-        viewButton = MinSizedIconButton.createLimitedWidthAndHeigthButton(null);
+        viewButton = MinSizedIconButton.createLimitedHeightButton(showPartlyAction, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH);
         showAllAction = getShowAction(this, true);
     }
 
@@ -120,7 +120,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      * @return
      */
     private JButton createBetweenTreesButton(final Action a) {
-        return MinSizedIconButton.createLimitedWidthButton(a, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH, MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT);
+        return MinSizedIconButton.createLimitedWidthAndHeightButton(a, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH, MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT);
     }
 
     /**
@@ -136,7 +136,8 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         buttonpanel.setLayout(gridLayout);
         for (Action a : actions) {
             if (a != null) {
-                buttonpanel.add(createBetweenTreesButton(a));
+                JButton button = createBetweenTreesButton(a);
+                buttonpanel.add(button);
             }
         }
         return buttonpanel;
