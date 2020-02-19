@@ -48,7 +48,7 @@ public abstract class Tool3lgmConstants {
 
     /** String with the version-identifier for Tool3lgm */
     // TODO _____###### ständig aktualisieren!
-    public static final String TOOL_VERSION = "4.1.0 (dev)";
+    public static final String TOOL_VERSION = "4.2.0 (dev)";
     public static final String Branch = ""; //"origin/SplitMetaModelAndTemplates";
 
     /**
