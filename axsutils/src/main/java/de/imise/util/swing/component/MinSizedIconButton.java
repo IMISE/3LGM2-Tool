@@ -51,7 +51,7 @@ public class MinSizedIconButton extends JButton {
      * @return
      */
     public static JButton createLimitedHeightButton(final Action a, final int minWitdh) {
-        return new MinSizedIconButton(a, -1, minWitdh);
+        return new MinSizedIconButton(a, minWitdh, -1);
     }
 
     /**
@@ -68,7 +68,7 @@ public class MinSizedIconButton extends JButton {
      *            minimale Höhe des Buttons (wenn das Icon nicht höher ist)
      * @return
      */
-    public static JButton createLimitedWidthButton(final Action a, final int minWidth, final int minHeight) {
+    public static JButton createLimitedWidthAndHeightButton(final Action a, final int minWidth, final int minHeight) {
         return new MinSizedIconButton(a, minWidth, minHeight);
     }
 
