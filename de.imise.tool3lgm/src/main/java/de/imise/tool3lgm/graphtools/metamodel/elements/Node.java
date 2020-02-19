@@ -13,10 +13,14 @@ public abstract class Node extends ModelElement {
 
     @Override
     public ElementContainer createContainer(final GraphDocument doc) {
+        ElementContainer ec;
         if (getMetaModel().hasInterLayerStartClass(this)) {
-            return new InterLayerConnectedNodeContainer(this, doc);
+            ec = new InterLayerConnectedNodeContainer(this, doc);
+        } else {
+            ec = new NodeContainer(this, doc);
         }
-        return new NodeContainer(this, doc);
+        updateHTMLName(ec);
+        return ec;
     }
 
 }

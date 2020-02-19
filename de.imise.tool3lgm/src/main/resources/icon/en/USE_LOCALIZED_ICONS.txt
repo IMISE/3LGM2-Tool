@@ -1,0 +1,7 @@
+To use localized Icons for StaticActions you have to put an Icon with the name
+
+ICON_LARGE_$actionIdentifierName$.gif
+
+in the folder icon/de and icon/en.
+
+StaticAction.java searches first the localized folders and then the general icon folder for the icon of the action.

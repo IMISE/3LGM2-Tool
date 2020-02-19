@@ -38,4 +38,14 @@ public class UnionMetaPath extends ParallelMetaPath {
         return false;
     }
 
+    @Override
+    public boolean isCreatable(final boolean checkCreateEndElement) {
+        for (AbstractMetaPath metaPath : getMetaPaths()) {
+            if (!metaPath.isCreatable(checkCreateEndElement)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

@@ -47,7 +47,7 @@ public class TemplateContextGenerator extends ContextGenerator {
 
     @Override
     public JPopupMenu getNodeContextMenu(final Component source) {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         if (source instanceof TemplateBrowserTree) {
             graphDocumentOwner = (TemplateBrowserTree) source;
             GraphDocument template = graphDocumentOwner.getGraphDocument();
@@ -98,7 +98,7 @@ public class TemplateContextGenerator extends ContextGenerator {
      */
     private JPopupMenu getSingleNodeContextMenu(final Component contextSource, final GraphDocument template) {
         //      System.err.println("ContextGenerator.getSingleNodeContextMenu()");
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         ElementContainer ec = template.getLastSelected();
         //        ModelElement me = ec.getElement();
         if (!(ec instanceof BendpointContainer)) {
@@ -206,7 +206,7 @@ public class TemplateContextGenerator extends ContextGenerator {
             //                    }
             //                    menu.addSeparator();
             //                    menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LAYOUT_MENU);
-            //                    menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LEVEL_MENU);
+            //                    menu.add(MenuCollection.LayoutSubMenus.ELEMENT_ORDER_MENU);
             //                    menu.add(getLayerMenu());
             //                }
             //            }

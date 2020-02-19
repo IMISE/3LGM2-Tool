@@ -7,8 +7,8 @@ import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.util.swing.component.MinSizedIconButton;
@@ -40,13 +40,18 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     private static final int MIN_ADD_REMOVE_NEW_BUTTON_WIDTH = 30;
 
     /** Mimimale Höhe der Buttons zwischen den Bäumen */
-    private static final int MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT = 50;
+    private static final int MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT = 45;
 
     /** Abstand zwischen den Buttons zwischen den Bäumen */
     private static final int ADD_REMOVE_NEW_BUTTON_VGAP = 3;
 
-    public AbstractExpandablePanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, labelLastEdgeName, simpleMetaPath);
+    /**
+     * @param dialog
+     * @param panelLabelOption
+     * @param simpleMetaPath
+     */
+    public AbstractExpandablePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, panelLabelOption, simpleMetaPath);
     }
 
     @Override
@@ -54,10 +59,13 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         super.init();
         // Aktionen für den button setzen
         showPartlyAction = getShowAction(this, false);
-        viewButton = MinSizedIconButton.createLimitedWidthAndHeigthButton(null);
+        viewButton = MinSizedIconButton.createLimitedHeightButton(showPartlyAction, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH);
         showAllAction = getShowAction(this, true);
     }
 
+    /**
+     * @param full
+     */
     public final void showFullDialog(final boolean full) {
         if (full && !dialog.isInfoDialog()) {
             showFullDialog();
@@ -68,13 +76,27 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         update();
     }
 
+    /**
+     * @return
+     */
     protected final boolean isRightSideVisible() {
         return viewButton.getAction() == showPartlyAction;
     }
 
+    /**
+     *
+     */
     protected abstract void showFullDialog();
 
+    /**
+     *
+     */
     protected abstract void showPartlyDialog();
+
+    @Override
+    public JButton getPanelButton() {
+        return viewButton;
+    }
 
     /**
      * Methode liefert eine <code>LGMAction</code> zurück, die das gesamte oder nur einen Teils des Panels anzeigt.
@@ -82,7 +104,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      * @param panel
      */
     public static final LGMAction getShowAction(final AbstractExpandablePanel panel, final boolean full) {
-        return new LGMAction("", Tool3lgmConstants.getIcon(full ? "zu.gif" : "auf.gif")) {
+        return new LGMAction(full ? DialogActionCommands.ACTION_DIALOG_RIGHT_SIDE_SHOW : DialogActionCommands.ACTION_DIALOG_RIGHT_SIDE_HIDE) {
             @Override
             public void execute(final EventObject e) {
                 panel.showFullDialog(full);
@@ -98,7 +120,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      * @return
      */
     private JButton createBetweenTreesButton(final Action a) {
-        return MinSizedIconButton.createLimitedWidthButton(a, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH, MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT);
+        return MinSizedIconButton.createLimitedWidthAndHeightButton(a, MIN_ADD_REMOVE_NEW_BUTTON_WIDTH, MIN_ADD_REMOVE_NEW_BUTTON_HEIGHT);
     }
 
     /**
@@ -114,7 +136,8 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         buttonpanel.setLayout(gridLayout);
         for (Action a : actions) {
             if (a != null) {
-                buttonpanel.add(createBetweenTreesButton(a));
+                JButton button = createBetweenTreesButton(a);
+                buttonpanel.add(button);
             }
         }
         return buttonpanel;

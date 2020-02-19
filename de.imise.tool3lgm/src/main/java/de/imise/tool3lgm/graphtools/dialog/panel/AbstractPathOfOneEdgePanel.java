@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
 import java.util.EventObject;
@@ -7,8 +8,8 @@ import java.util.EventObject;
 import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
@@ -39,7 +40,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param edgeClass
      */
     public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        this(dialog, false, searchElementClass, edgeClass);
+        this(dialog, LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClass);
     }
 
     /**
@@ -50,8 +51,8 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param searchElementClass
      * @param edgeClass
      */
-    public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final boolean labelEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        super(dialog, labelEdgeName, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
+    public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        super(dialog, panelLabelOption, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
         this.edgeClass = edgeClass;
         edgeIsForward = getLastDirectionInPath() == FORWARD;
     }
@@ -69,7 +70,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
         final GraphDocument doc = getGraphDocument();
         final GDCollection gdcoll = doc.getCollection();
         final int pid = getTransactionID();
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_CONNECT_ELEMENT) {
             @Override
             public void execute(final EventObject e) {
                 TreePath[] selpaths = srcTree.getSelectionPaths();
@@ -99,7 +100,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
         final GraphDocument doc = getGraphDocument();
         final GDCollection gdcoll = doc.getCollection();
         final int pid = getTransactionID();
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_DISCONNECT_ELEMENT) {
             @Override
             public void execute(final EventObject e) {
                 TreePath[] selpaths = srcTree.getSelectionPaths();

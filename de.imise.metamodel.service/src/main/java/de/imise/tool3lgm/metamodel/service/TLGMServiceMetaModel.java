@@ -13,12 +13,11 @@ import de.imise.tool3lgm.graphtools.metamodel.RegularMetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationInterface_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_SupportLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
@@ -30,16 +29,18 @@ import de.imise.tool3lgm.metamodel.service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_CommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheDomain_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_InvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_ProvidingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheTransaction_IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Location_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.ObjectType_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_HasPartEdge;
-import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_SupportLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.PhysicalDataProcessingComponentVirtualises_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.PhysicalDataProcessingComponent_DeviceClass_Edge;
@@ -54,7 +55,6 @@ import de.imise.tool3lgm.metamodel.service.edge.Service_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_ServiceClass_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.StorageLink_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.SupportLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.TransmissionMedium_DataTransmissionLink_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationComponent;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
@@ -186,7 +186,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
     /** Alle Node zw. FE und LWE als Array */
     private final Class[] ALL_INTER_DOMAIN_LOGICAL_LAYER_NODES = {
             //auch die Assoziationsklasse hier eintagen
-            SupportLink_Edge.class, StorageLink_Edge.class,
+            StorageLink_Edge.class,
     };
 
     /** Alle Node der LWE als Array */
@@ -216,6 +216,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
             IheInvokingInterface.class,
             IheProvidingInterface.class,
             //IHE-Assoziationsklassen
+            IheCommunicationLink_Edge.class,
     };
 
     /** Alle Node zw. LWE und PWE als Array */
@@ -286,17 +287,14 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 OrganisationalUnit_Use_Edge.class,
                 Process_Function_Edge.class,
                 //FE - LWE
-                ApplicationComponent_SupportLink_Edge.class,
                 Function_SoftwareProduct_Edge.class,
-                OrganisationalUnit_SupportLink_Edge.class,
                 Service_Function_Edge.class,
                 Service_ObjectType_Edge.class,
                 StorageLink_Edge.class,
-                SupportLink_Edge.class,
+                ApplicationComponent_Use_Edge.class,
                 //LWE
                 ApplicationComponent_HasPartEdge.class,
                 ApplicationComponent_CommunicationInterface_Edge.class,
-                ApplicationComponent_CommunicationLink_Edge.class,
                 ApplicationSystem_SoftwareProduct_Edge.class,
                 CommunicationLink_Edge.class,
                 Service_CommunicationLink_Edge.class,
@@ -308,12 +306,15 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 IheActor_IheActorInstance_Edge.class,
                 IheActor_IheInterface_Edge.class,
                 ApplicationSystem_IheActorInstance_Edge.class,
+                IheCommunicationLink_CommunicationLink_Edge.class,
                 IheIntegrationProfile_IheDomain_Edge.class,
                 IheIntegrationProfile_IheActor_Edge.class,
                 IheInvokingInterface_IheTransaction_Edge.class,
                 IheProvidingInterface_IheTransaction_Edge.class,
                 IheInvokingInterface_InvokingInterface_Edge.class,
                 IheProvidingInterface_ProvidingInterface_Edge.class,
+                IheCommunicationLink_Edge.class,
+                IheTransaction_IheCommunicationLink_Edge.class,
                 //LWE - PWE
                 ApplicationComponent_PhysicalDataProcessingComponent_Edge.class,
                 ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class,

@@ -4,6 +4,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
@@ -59,7 +60,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
      * @param hasPartEdgeClass
      */
     public StructurePanel(final AbstractElementPropertyDialog dialog, final Class<? extends HasPartEdge> hasPartEdgeClass) {
-        super(dialog, true, Edge.getEndClass(hasPartEdgeClass), hasPartEdgeClass);
+        super(dialog, LABEL_LAST_EDGE_CONNECTION_NAME, Edge.getEndClass(hasPartEdgeClass), hasPartEdgeClass);
         internalInit();
     }
 

@@ -6,6 +6,7 @@ import java.util.Objects;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -60,6 +61,17 @@ public interface MetaModelSpecific {
         MetaModelContext metaModelContext = getMetaModelContext();
         ElementsNameBuilder elementsNameBuilder = metaModelContext.getElementsNameBuilder();
         return elementsNameBuilder;
+    }
+
+    /**
+     * Handler für das einfache und nicht redundante Anlegen von Elementar-Metapfaden für dieses MetaModel
+     *
+     * @return
+     */
+    public default ElementaryMetaPathHandler getElementaryMetaPathHandler() {
+        MetaModelContext metaModelContext = getMetaModelContext();
+        ElementaryMetaPathHandler elementaryMetaPathHandler = metaModelContext.getElementaryMetaPathHandler();
+        return elementaryMetaPathHandler;
     }
 
     /**

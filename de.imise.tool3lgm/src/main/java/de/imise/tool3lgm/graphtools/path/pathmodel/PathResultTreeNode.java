@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
 
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -66,7 +67,6 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
     /**
      * @return
      */
-    @SuppressWarnings("unchecked")
     public Iterable<PathResultTreeNode> getChildren() {
         return children == null ? EMPTY_CHILDREN : getChildrenCopy();
     }
@@ -156,6 +156,85 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
             PathResultTreeNode node = (PathResultTreeNode) childrenIt.next();
             nodes.add(node);
         }
+    }
+
+    /**
+     * 2 Knoten sind gleich, wenn sie das gleiche userObject haben.<br>
+     * Das hier überschreibt absichtlich nicht die equals(), weil dann sonst in der
+     * Funktion {@link DefaultMutableTreeNode#removeFromParent()} das zu löschende
+     * Kind ungünstigerweise über equals rausgesucht wird und dann eventuell der
+     * falsche Knoten gelöscht wird.
+     *
+     * @param obj
+     * @return
+     */
+    public boolean equalsTo(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        PathResultTreeNode other = (PathResultTreeNode) obj;
+        if (type != other.type) {
+            return false;
+        }
+        if (!Objects.equals(userObject, other.userObject)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public PathResultTreeNode getParent() {
+        return (PathResultTreeNode) super.getParent();
+    }
+
+    /**
+     * @return the path to the root as array of {@link PathResultTreeNode}
+     */
+    public PathResultTreeNode[] getPathToRoot() {
+        int level = getLevel();
+        PathResultTreeNode[] path = new PathResultTreeNode[level];
+        PathResultTreeNode levelNode = this;
+        for (--level; level >= 0; level--) {
+            path[level] = levelNode;
+            levelNode = levelNode.getParent();
+        }
+        return path;
+    }
+
+    /**
+     * Checks if the tree path represented by the other node up to root is contained
+     * completely in the tree path of this node.
+     *
+     * @param other
+     * @return <code>true</code> if tree path of the other node up to root is contained
+     *         completly in the tree path of this node, otherwise <code>false</code>
+     */
+    public final boolean containsPath(final PathResultTreeNode other) {
+        int thisPathLength = getLevel();
+        int otherPathLength = other.getLevel();
+        if (thisPathLength < otherPathLength) {
+            return false;
+        }
+        PathResultTreeNode currentPathNodeOfThis = this;
+        PathResultTreeNode currentPathNodeOfOther = other;
+        while (thisPathLength > otherPathLength) {
+            currentPathNodeOfThis = currentPathNodeOfThis.getParent();
+            thisPathLength--;
+        }
+        for (int i = thisPathLength; i >= 0; i--) {
+            if (!currentPathNodeOfThis.equalsTo(currentPathNodeOfOther)) {
+                return false;
+            }
+            currentPathNodeOfThis = currentPathNodeOfThis.getParent();
+            currentPathNodeOfOther = currentPathNodeOfOther.getParent();
+        }
+        return true;
     }
 
 }

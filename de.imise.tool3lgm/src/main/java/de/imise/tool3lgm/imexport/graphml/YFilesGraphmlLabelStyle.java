@@ -7,6 +7,8 @@ import javax.swing.SwingConstants;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 
 public class YFilesGraphmlLabelStyle {
 
@@ -46,8 +48,12 @@ public class YFilesGraphmlLabelStyle {
         labelLayout = nc.getIconString() == null ? "{x:Static y:InteriorStretchLabelModel.Center}" : "{x:Static y:ExteriorLabelModel.South}";
         if (!nc.hideText()) {
             mainLabelStyle = null;
-            valign = getSwingConstantsAsGraphMLString(nc.getValign());
-            halign = getSwingConstantsAsGraphMLString(nc.getHalign());
+            TextPositionVertical valignEnum = nc.getTextPositionVertical();
+            int valignSwingConstant = valignEnum.getSwingConstant();
+            valign = getSwingConstantsAsGraphMLString(valignSwingConstant);
+            TextPositionHorizontal halignEnum = nc.getTextPositionHorizontal();
+            int halignSwingConstant = halignEnum.getSwingConstant();
+            halign = getSwingConstantsAsGraphMLString(halignSwingConstant);
             wrapping = "WORD";
             textSize = null;
             Font font = nc.getFont();

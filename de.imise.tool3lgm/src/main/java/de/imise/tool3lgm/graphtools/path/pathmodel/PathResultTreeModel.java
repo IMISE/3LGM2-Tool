@@ -81,6 +81,12 @@ public class PathResultTreeModel extends DefaultTreeModel {
     private boolean keepIncompleteBranches = false;
 
     /**
+     * Wenn <code>true</code> werden alle Branches im Baum gelassen die gefunden werden (auch doppelte),
+     * bei <code>false</code> werden gleiche entfernt
+     */
+    private boolean keepMultipleEqualsBranches = false;
+
+    /**
      * Auf level 0 ist der Root und auf der 1 kommmen alle StartElement-Nodes
      */
     public static final int START_ELEMENTS_NODE_LEVEL = 1;
@@ -136,10 +142,31 @@ public class PathResultTreeModel extends DefaultTreeModel {
 
     /**
      * @param metaPath
+     * @param keepIncompleteBranches
+     * @param keepMultipleEqualsBranches
+     */
+    public PathResultTreeModel(final AbstractMetaPath metaPath, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
+        this(metaPath);
+        this.keepIncompleteBranches = keepIncompleteBranches;
+        this.keepMultipleEqualsBranches = keepMultipleEqualsBranches;
+    }
+
+    /**
+     * @param metaPath
      * @param startElement
      * @param keepIncompleteBranches
      */
     public PathResultTreeModel(final AbstractMetaPath metaPath, final ModelElement startElement, final boolean keepIncompleteBranches) {
+        this(metaPath, startElement, keepIncompleteBranches, false);
+    }
+
+    /**
+     * @param metaPath
+     * @param startElement
+     * @param keepIncompleteBranches
+     * @param keepMultipleEqualsBranches
+     */
+    public PathResultTreeModel(final AbstractMetaPath metaPath, final ModelElement startElement, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
         this(metaPath, keepIncompleteBranches);
         setStartElements(startElement);
     }
@@ -150,7 +177,17 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param keepIncompleteBranches
      */
     public PathResultTreeModel(final AbstractMetaPath metaPath, final Collection<ModelElement> startElements, final boolean keepIncompleteBranches) {
-        this(metaPath, keepIncompleteBranches);
+        this(metaPath, startElements, keepIncompleteBranches, false);
+    }
+
+    /**
+     * @param metaPath
+     * @param startElements
+     * @param keepIncompleteBranches
+     * @param keepMultipleEqualsBranches
+     */
+    public PathResultTreeModel(final AbstractMetaPath metaPath, final Collection<ModelElement> startElements, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
+        this(metaPath, keepIncompleteBranches, keepMultipleEqualsBranches);
         setStartElements(startElements);
     }
 
@@ -160,7 +197,17 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param keepIncompleteBranches
      */
     public PathResultTreeModel(final AbstractMetaPath metaPath, final List<Collection<ModelElement>> startElementSets, final boolean keepIncompleteBranches) {
-        this(metaPath, keepIncompleteBranches);
+        this(metaPath, startElementSets, keepIncompleteBranches, false);
+    }
+
+    /**
+     * @param metaPath
+     * @param startElementSets
+     * @param keepIncompleteBranches
+     * @param keepMultipleEqualsBranches
+     */
+    public PathResultTreeModel(final AbstractMetaPath metaPath, final List<Collection<ModelElement>> startElementSets, final boolean keepIncompleteBranches, final boolean keepMultipleEqualsBranches) {
+        this(metaPath, keepIncompleteBranches, keepMultipleEqualsBranches);
         setStartElementSets(startElementSets);
     }
 
@@ -333,14 +380,40 @@ public class PathResultTreeModel extends DefaultTreeModel {
             //eine einelementige Startelementliste wurde übergeben
         } else {
             for (ModelElement me : startElements.get(0)) {
-                PathResultTreeNode node = new PathResultTreeNode(new ElementaryPath(null, me), PathResultTreeNode.NodeType.START_ELEMENT);
-                completePathLeafs.addAll(addPath(node, metaPath, false));
+                ElementaryPath elementaryPath = new ElementaryPath(null, me);
+                PathResultTreeNode node = new PathResultTreeNode(elementaryPath, PathResultTreeNode.NodeType.START_ELEMENT);
+                List<PathResultTreeNode> pathNodes = addPath(node, metaPath, false);
+                addCompleteLeafs(pathNodes);
+                if (!keepMultipleEqualsBranches) {
+                    removeIncompleteBranchesContainedInCompleteBranches();
+                }
                 if (node.getChildCount() > 0) {
                     root.add(node);
                 }
             }
         }
         super.reload(root);
+    }
+
+    /**
+     * Removes all incomplete branches which are contained in a complete branch. Such branches are created
+     * by UnionMetaPaths (and maybe other parallel MetaPaths) where at least two parallel metaPaths are
+     * partly equals and for one of the metaPaths you can find a complete path and for another you can only
+     * find an incomplete path for the equals part of the first metaPath. These incomplete and so on multiple
+     * paths are removed here.
+     * It is not possible to check this already during the pathTree creation.
+     */
+    private void removeIncompleteBranchesContainedInCompleteBranches() {
+        for (int i = incompletePathLeafs.size() - 1; i >= 0; i--) {
+            PathResultTreeNode incompletePathNode = incompletePathLeafs.get(i);
+            for (PathResultTreeNode completePathNode : completePathLeafs) {
+                if (completePathNode.containsPath(incompletePathNode)) {
+                    deleteBranch(incompletePathNode);
+                    incompletePathLeafs.remove(i);
+                    break;
+                }
+            }
+        }
     }
 
     /**
@@ -398,15 +471,15 @@ public class PathResultTreeModel extends DefaultTreeModel {
             for (PathResultTreeNode actStartNode : actStartNodes) {
                 List<PathResultTreeNode> subMetaPathEndNodes = null;
                 subMetaPathEndNodes = addPath(actStartNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true);
-                if (!keepIncompleteBranches) {
-                    if (subMetaPathEndNodes == null || subMetaPathEndNodes.size() == 0) {
+                if (subMetaPathEndNodes == null || subMetaPathEndNodes.size() == 0) {
+                    if (!keepIncompleteBranches) {
                         deleteBranch(actStartNode);
-                        continue;
+                    } else {
+                        addIncompleteLeaf(actStartNode);
                     }
                 } else {
-                    incompletePathLeafs.add(actStartNode);
+                    resultNodes.addAll(subMetaPathEndNodes);
                 }
-                resultNodes.addAll(subMetaPathEndNodes);
             }
         }
         return resultNodes;
@@ -421,7 +494,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
     private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final UnionMetaPath metaPath, final boolean isSubStep) {
         List<PathResultTreeNode> resultNodes = new ArrayList<>();
         for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
-            resultNodes.addAll(addPath(startNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true));
+            List<PathResultTreeNode> pathResultTreeNodes = addPath(startNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true);
+            resultNodes.addAll(pathResultTreeNodes);
         }
         return resultNodes;
     }
@@ -442,21 +516,27 @@ public class PathResultTreeModel extends DefaultTreeModel {
         for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
             if (firstMetaPath == null) {
                 firstMetaPath = subMetaPath;
-                resultNodes.addAll(addPath(startNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true));
+                List<PathResultTreeNode> pathResultTreeNodes = addPath(startNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true);
+                resultNodes.addAll(pathResultTreeNodes);
             } else {
-                nextPathResultNodes.addAll(addPath(startNodeClone, subMetaPath, isSubStep));
+                List<PathResultTreeNode> pathResultTreeNodes = addPath(startNodeClone, subMetaPath, isSubStep);
+                nextPathResultNodes.addAll(pathResultTreeNodes);
             }
         }
         //Set aller Elemente, die Ergebiselemente des Pfades sein können
         Set<ModelElement> possiblePathEndElements = new HashSet<>();
-        for (PathResultTreeNode resultNode : resultNodes) {
-            possiblePathEndElements.add(resultNode.getEndElement());
+        for (PathResultTreeNode resultNode : nextPathResultNodes) {
+            ModelElement endElement = resultNode.getEndElement();
+            possiblePathEndElements.add(endElement);
         }
 
-        //alle Zweige löschen, bei denen das EndElement nicht in beiden Listen vorkommt
-        for (PathResultTreeNode resultNode : resultNodes) {
-            if (!possiblePathEndElements.contains(resultNode.getEndElement())) {
+        //alle Zweige im Baum löschen, bei denen das EndElement nicht in beiden Listen vorkommt und auch von hinten aus der Gesamtliste löschen
+        for (int i = resultNodes.size() - 1; i >= 0; i--) {
+            PathResultTreeNode resultNode = resultNodes.get(i);
+            ModelElement endElement = resultNode.getEndElement();
+            if (!possiblePathEndElements.contains(endElement)) {
                 deleteBranch(resultNode);
+                resultNodes.remove(resultNode);
             }
         }
 
@@ -475,15 +555,69 @@ public class PathResultTreeModel extends DefaultTreeModel {
     }
 
     /**
+     * @param leafNode
+     * @return
+     */
+    private void addCompleteLeafs(final Collection<PathResultTreeNode> leafNodes) {
+        for (PathResultTreeNode leafNode : leafNodes) {
+            addCompleteLeaf(leafNode);
+        }
+    }
+
+    /**
+     * @param leafNode
+     * @return
+     */
+    private void addCompleteLeaf(final PathResultTreeNode leafNode) {
+        addLeaf(leafNode, completePathLeafs);
+    }
+
+    /**
+     * @param leafNode
+     * @return
+     */
+    private void addIncompleteLeaf(final PathResultTreeNode leafNode) {
+        addLeaf(leafNode, incompletePathLeafs);
+    }
+
+    /**
+     * @param leafNode
+     * @param resultList
+     * @return
+     */
+    private void addLeaf(final PathResultTreeNode leafNode, final List<PathResultTreeNode> resultList) {
+        if (keepMultipleEqualsBranches || !listContainsNodeEqualsTo(leafNode, resultList)) {
+            resultList.add(leafNode);
+        }
+    }
+
+    /**
+     * Compares the {@link PathResultTreeNode} with the other ones in the list with the
+     * {@link PathResultTreeNode#equalsTo(Object)} method.
+     *
+     * @param node
+     * @param nodeList
+     * @return
+     */
+    private boolean listContainsNodeEqualsTo(final PathResultTreeNode node, final List<PathResultTreeNode> nodeList) {
+        for (PathResultTreeNode nodeFromList : nodeList) {
+            if (node.equalsTo(nodeFromList)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Löscht den übergebenen Knoten und alle darüber die nur 1 Kind (den jeweils zu löschenden Knoten) haben.
      *
      * @param node
      */
     private void deleteBranch(PathResultTreeNode node) {
-        PathResultTreeNode parent = (PathResultTreeNode) node.getParent();
+        PathResultTreeNode parent = node.getParent();
         while (parent != null && parent.getChildCount() == 1) {
             node = parent;
-            parent = (PathResultTreeNode) node.getParent();
+            parent = node.getParent();
         }
         if (parent != null) {
             node.removeFromParent();

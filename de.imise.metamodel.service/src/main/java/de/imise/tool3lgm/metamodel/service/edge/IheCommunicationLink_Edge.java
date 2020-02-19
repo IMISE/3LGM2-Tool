@@ -6,27 +6,26 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
-import de.imise.tool3lgm.metamodel.service.node.ApplicationComponent;
-import de.imise.tool3lgm.metamodel.service.node.Use;
+import de.imise.tool3lgm.metamodel.service.node.IheInvokingInterface;
+import de.imise.tool3lgm.metamodel.service.node.IheProvidingInterface;
 
 /**
- * @author AXS (31.12.2017)
+ * @author AXS (14.11.2019)
  */
-public final class SupportLink_Edge extends SimpleEdge {
+public final class IheCommunicationLink_Edge extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> STCL = ApplicationComponent.class;
+    public static final Class<? extends ModelElement> STCL = IheInvokingInterface.class;
 
     public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
     public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> ETCL = Use.class;
+    public static final Class<? extends ModelElement> ETCL = IheProvidingInterface.class;
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addEdgePanel(OrganisationalUnit_SupportLink_Edge.class);
-        dialog.addEdgePanel(ApplicationComponent_SupportLink_Edge.class);
+        dialog.addEdgePanel(IheTransaction_IheCommunicationLink_Edge.class);
         return dialog;
     }
 

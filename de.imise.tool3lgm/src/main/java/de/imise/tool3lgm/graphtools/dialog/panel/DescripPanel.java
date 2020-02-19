@@ -1,24 +1,21 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.border.Border;
 
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.component.text.ExtendedTextPane;
@@ -27,36 +24,25 @@ import de.imise.util.swing.component.text.ExtendedTextPane;
  * @author N.N., AXS (4/2017)
  * @create Long time ago
  */
-public class DescripPanel extends ElementDialogPanel /* implements DocumentListener */ {
+public final class DescripPanel extends MultiPanelElementDialogPanel /* implements DocumentListener */ {
 
-    private final ExtendedTextPane descriptionTextPane;
-
+    /** This TextPane shows the editable name of the modelElement of the dialog */
     private final LimitedSizeScrollTextPane nameTextPane;
 
-    private final List<ElementDialogPanel> panels = new ArrayList<>();
-
-    private final GridBagConstraints gbc = new GridBagConstraints();
-
-    private int gridy = 0;
+    /** This TextPane shows the editable name of the modelElement of the dialog */
+    private final ExtendedTextPane descriptionTextPane;
 
     /** Name des ModelElements beim letzten Update des Dialoges */
     private String lastName = null;
 
     /** Beschreibung des ModelElements beim letzten Update des Dialoges */
     private String lastDescription = null;
-    /**
-     * Bleibt <code>true</code>, wenn keine Unterklasse von {@link AbstractElementPropertyDialog} das Panel erweitert hat, sondern er im
-     * Ausgangszustand (Name + Beschreibung) geblieben ist.
-     */
-    private boolean isUnchangedDefaultPanel = true;
 
     /**
      * @param dialog
      */
     public DescripPanel(final AbstractElementPropertyDialog dialog) {
         super(dialog);
-
-        setLayout(new GridBagLayout());
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new Insets(1, 0, 1, 3);
@@ -93,14 +79,26 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weighty = 0;
 
+        addEdgeStartEndPanel();
     }
 
     /**
-     * @return <code>true</code>, wenn keine Unterklasse von {@link ElementPropertyDialog} das Panel erweitert hat, sondern er im Ausgangszustand
-     *         (Name + Beschreibung) geblieben ist.
+     *
      */
-    public boolean isUnchangedDefaultPanel() {
-        return isUnchangedDefaultPanel;
+    private void addEdgeStartEndPanel() {
+        ModelElement me = getModelElement();
+        if (me instanceof Edge) {
+            Class<? extends ModelElement> meClass = me.getClass();
+            Class<? extends Edge> edgeClass = meClass.asSubclass(Edge.class);
+            MetaModel metaModel = getMetaModel();
+            ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
+            ElementaryMetaPath edgeToStartElementMetaPath = emph.getEdgeToStartElementMetaPath(edgeClass);
+            ElementaryMetaPath edgeToEndElementMetaPath = emph.getEdgeToEndElementMetaPath(edgeClass);
+            SimpleMetaPath edgeToStartElementSimpleMetaPath = new SimpleMetaPath(edgeToStartElementMetaPath);
+            SimpleMetaPath edgeToEndElementSimpleMetaPath = new SimpleMetaPath(edgeToEndElementMetaPath);
+            addSingleConnectionPanel(LABEL_END_ELEMENT_TYPE, edgeToStartElementSimpleMetaPath);
+            addSingleConnectionPanel(LABEL_END_ELEMENT_TYPE, edgeToEndElementSimpleMetaPath);
+        }
     }
 
     @Override
@@ -121,47 +119,7 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
             descriptionTextPane.setText(description);
             descriptionTextPane.setCaretPosition(0);
         }
-        for (int m = 0; m < panels.size(); m++) {
-            panels.get(m).update();
-        }
-    }
-
-    public final void addDescriptedSingleConnectionPanel(final SimpleMetaPath simpleMetaPath) {
-        addDescriptedSingleConnectionPanel(false, simpleMetaPath);
-    }
-
-    public final void addDescriptedSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        addSubPanel(new DescriptedSingleConnectionPanel(dialog, labelLastEdgeName, simpleMetaPath));
-    }
-
-    public final void addSingleConnectionPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        addSubPanel(new SingleConnectionPanel(dialog, labelLastEdgeName, simpleMetaPath));
-    }
-
-    public final void addListPanel(final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        addSubPanel(new PathConnectionLeafPanel(dialog, labelLastEdgeName, 4, simpleMetaPath));
-    }
-
-    private final void addSubPanel(final AbstractPathConnectionPanel panel) {
-        panels.add(panel);
-        if (panel instanceof DescriptedSingleConnectionPanel) {
-            addSeparator();
-            JLabel westLabel = panel.getWestLabel();
-            DescriptedSingleConnectionPanel descriptedPanel = (DescriptedSingleConnectionPanel) panel;
-            Border topBorder = BorderFactory.createEmptyBorder(3, 0, 0, 0);
-            westLabel.setBorder(topBorder);
-            descriptedPanel.setBorder(topBorder);
-            gridy = descriptedPanel.addMe(this, gbc, gridy);
-        } else {
-            add(this, panel.getWestLabel(), gbc, 0, gridy, 1, 1);
-            add(this, panel, gbc, 1, gridy++, 1, 1);
-        }
-        isUnchangedDefaultPanel = false;
-    }
-
-    public final void addSeparator() {
-        add(this, new JSeparator(), gbc, 0, gridy++, 2, 1);
-        isUnchangedDefaultPanel = false;
+        super.update();
     }
 
     @Override
@@ -185,9 +143,7 @@ public class DescripPanel extends ElementDialogPanel /* implements DocumentListe
             doc.setDescription(me, GraphDocument.getParseSaveString(newDescrip), dialog.getTransactionID());
         }
         me.refreshText();
-        for (int m = 0; m < panels.size(); m++) {
-            panels.get(m).commit();
-        }
+        super.commit();
     }
 
 }

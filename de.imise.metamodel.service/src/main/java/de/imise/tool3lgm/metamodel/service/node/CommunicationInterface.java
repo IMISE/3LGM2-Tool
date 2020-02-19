@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.metamodel.service.node;
 
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
+
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -14,7 +16,7 @@ public abstract class CommunicationInterface extends Node {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripPanel(true, ApplicationComponent_CommunicationInterface_Edge.class);
+        dialog.addDescripPanel(LABEL_LAST_EDGE_CONNECTION_NAME, ApplicationComponent_CommunicationInterface_Edge.class);
 
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
         tableDefinition.addColumnPathStepEdge(0, 300);

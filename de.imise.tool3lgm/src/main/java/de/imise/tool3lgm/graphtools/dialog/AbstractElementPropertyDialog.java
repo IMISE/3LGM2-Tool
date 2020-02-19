@@ -6,6 +6,7 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -19,9 +20,11 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
@@ -44,7 +47,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 /**
  * @author AXS (02.12.2019)
  */
-public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog implements ActionListener, LGMChangeListenerSimple {
+public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog implements ActionListener, LGMChangeListenerSimple, ChangeListener {
 
     /**
      * ModelElement its properties are displayed or changable in this dialog.
@@ -66,6 +69,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      */
     static int lastHeight = -1;
 
+    /**
+     *
+     */
     private static final Dimension DEFAULT_SIZE = new Dimension(600, 500);
 
     /**
@@ -86,17 +92,33 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     private final PropertyDialogUserFieldPanel propertyDialogUserFieldPanel;
 
     /**
+     * Panel in the south with the panel for the buttons OK, Take over and Cancel in the
+     * EAST and an additional button that is given by the curren displayed panel in the WEST.
+     */
+    private final JPanel southButtonsPanel = new JPanel();
+
+    /**
+     * One additional button of the currently displayed panel to add to the button panel
+     * with the OK, Cancel, TakeOver buttons.
+     */
+    private JButton panelButton = null;
+
+    /**
      * @param modelElement
      * @param gdcoll
      */
     public AbstractElementPropertyDialog(final ModelElement modelElement, final GDCollection gdcoll) {
         super(gdcoll);
+        //add changeListener for tab changes to updates the displayed panel depending buttons
+        //must be added before adding the tabs to get the very first tab change event
+        tabbedPane.addChangeListener(this);
+
         setTitle(getResString("eigensch_dial"));
-        getContentPane().setLayout(new BorderLayout());
+        Container contentPane = getContentPane();
+        contentPane.setLayout(new BorderLayout());
         this.modelElement = modelElement;
 
-        JComponent tabComponent = getTabComponent();
-        tabComponent.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
+        tabbedPane.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
         JPanel up = new JPanel(new GridLayout(1, 1));
         headerPanel = new ElementDialogHeaderPanel(this);
@@ -115,35 +137,35 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
             propertyDialogUserFieldPanel = null;
         }
 
-        JPanel buttonpanel = new JPanel();
-        buttonpanel.setLayout(new BorderLayout());
+        JPanel standardButtonsPanel = new JPanel();
+        southButtonsPanel.setLayout(new BorderLayout());
 
-        JPanel bp = new JPanel();
         okButton.addActionListener(this);
-        bp.add(okButton);
+        standardButtonsPanel.add(okButton);
         if (!isInfoDialog()) {
             applyButton.addActionListener(this);
-            bp.add(applyButton);
+            standardButtonsPanel.add(applyButton);
             cancelButton.addActionListener(this);
-            bp.add(cancelButton);
+            standardButtonsPanel.add(cancelButton);
         }
         if (helpButton != null) {
-            bp.add(helpButton);
+            standardButtonsPanel.add(helpButton);
         }
 
-        buttonpanel.add(bp, BorderLayout.EAST);
+        southButtonsPanel.add(standardButtonsPanel, BorderLayout.EAST);
 
-        getContentPane().add(up, BorderLayout.NORTH);
-        getContentPane().add(tabComponent, BorderLayout.CENTER);
-        getContentPane().add(buttonpanel, BorderLayout.SOUTH);
+        contentPane.add(up, BorderLayout.NORTH);
+        contentPane.add(tabbedPane, BorderLayout.CENTER);
+        contentPane.add(southButtonsPanel, BorderLayout.SOUTH);
 
         addSizeOrPositionChangedListener();
         setSizeAndLocation();
         opening = true;
+
     }
 
     /**
-     * @return
+     * @return the ModelElement this dialog is shown for
      */
     public final ModelElement getModelElement() {
         return modelElement;
@@ -233,7 +255,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      */
     public void showDialog() {
         if (opening) {
-            doc.start_transaction(getTransactionID());
+            doc.start_transaction(transactionID);
             doc.addAllTransactionsListener(this);
             opening = false;
         }
@@ -295,20 +317,26 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
                 selectedElementDialogPanel.update();
             }
         }
-        doc.finish_transaction(getTransactionID());
-        doc.distributeEvent(DATA_CHANGED, getTransactionID());
+        doc.finish_transaction(transactionID);
+        doc.distributeEvent(DATA_CHANGED, transactionID);
         doc.start_transaction(createNewTransactionID());
     }
 
+    /**
+     *
+     */
     public void cancel() {
-        doc.finish_transaction(getTransactionID());
-        doc.undo(getTransactionID());
+        doc.finish_transaction(transactionID);
+        doc.undo(transactionID);
         close();
     }
 
+    /**
+     *
+     */
     private void close() {
         ElemenPropertyDialogsContext.removeDialog(modelElement);
-        doc.finish_transaction(getTransactionID());
+        doc.finish_transaction(transactionID);
         doc.removeAllTransactionsListener(this);
         dispose();
     }
@@ -325,8 +353,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         } else if (e.getSource() == applyButton) {
             commit(true);
         }
-        doc.select(modelElement.getContainer(doc), getTransactionID());
-        doc.distributeEvent(SELECTION_CHANGED, getTransactionID());
+        doc.select(modelElement.getContainer(doc), transactionID);
+        doc.distributeEvent(SELECTION_CHANGED, transactionID);
     }
 
     @Override
@@ -362,6 +390,32 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     // Size and Location Begin
     // ####################################################################################
 
+    @Override
+    public final void stateChanged(final ChangeEvent e) {
+        //if the final must be removed because subclasses will overwite it - so don't forget
+        //to call this super implementation!
+
+        //tab changed -> change the view collapse/expand button in the west of the south panel
+        if (e.getSource() == tabbedPane) {
+            Component selectedTabComponent = tabbedPane.getSelectedComponent();
+            if (panelButton != null) {
+                southButtonsPanel.remove(panelButton);
+                panelButton = null;
+                //revalidateRepaint is needed to really remove the button of the last panel
+                southButtonsPanel.revalidate();
+                southButtonsPanel.repaint();
+            }
+            if (selectedTabComponent instanceof ElementDialogPanel) {
+                ElementDialogPanel elementDialogPanel = (ElementDialogPanel) selectedTabComponent;
+                JButton currentPanelButton = elementDialogPanel.getPanelButton();
+                if (currentPanelButton != null) {
+                    panelButton = currentPanelButton;
+                    southButtonsPanel.add(panelButton, BorderLayout.WEST);
+                }
+            }
+        }
+    }
+
     /**
      *
      */
@@ -389,6 +443,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         return DEFAULT_SIZE;
     }
 
+    /**
+     *
+     */
     private void addSizeOrPositionChangedListener() {
         addComponentListener(new ComponentListener() {
             @Override
@@ -411,6 +468,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         });
     }
 
+    /**
+     *
+     */
     private void setSizeAndLocation() {
         pack();
         JFrame mainFrame = Static.getMainFrame();

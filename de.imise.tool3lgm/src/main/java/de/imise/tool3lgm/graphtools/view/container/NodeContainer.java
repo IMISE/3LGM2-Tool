@@ -26,6 +26,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.swing.NoopGraphics;
 
 /**
  * @author N.N.
@@ -236,7 +237,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             return;
         }
         if (name == null || name.trim().equals("") || name.equals("none") || name.equals("null")) {
-            layout.icon = null;
+            layout.setIcon(null);
             super.setIcon(null);
             return;
         }
@@ -248,11 +249,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
             JOptionPane.showMessageDialog(null, getResString("icon_kaputt"), getResString("fehler"), JOptionPane.ERROR_MESSAGE);
         }
-        if (icon != null) {
-            layout.icon = name;
-        } else {
-            layout.icon = null;
-        }
+        layout.setIcon(icon != null ? name : null);
         super.setIcon(icon);
     }
 
@@ -260,7 +257,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      * @return
      */
     public String getIconString() {
-        return layout == null ? null : layout.icon;
+        return layout == null ? null : layout.getIcon();
     }
 
     /**
@@ -358,7 +355,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             return;
         }
         super.set3LGMLayout(l);
-        setIcon(l.icon, doc.getCollection().getIconTable());
+        setIcon(l.getIcon(), doc.getCollection().getIconTable());
     }
 
     /**
@@ -397,11 +394,26 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     }
 
     /**
-     * Verannlasst das Zeichen des Containers über die übergeordnete Implementierung.
+     * This {@link Graphics} object comes from StackOverflow. It doesn't paint anything.
+     * Painting to this non painting graphics just before painting to the correct graphics
+     * object repairs the HTML SWING-BUG that after the first paint the alignment of the
+     * HTML-labels are always bottom, if they must be wrapped automatically to multiple.
+     * This bug seems to be created by wrong font metrics in the very first paint of such
+     * a wrapped HTML string.
+     * 
+     * @see https://stackoverflow.com/questions/16227877/how-to-update-a-jcomponent-with-html-without-flickering
+     */
+    private static final Graphics NOOP_GRAPHICS = NoopGraphics.createNoopGraphics();
+
+    /**
+     * Paints the label.
      *
      * @param g
      */
     public final void paintSuperComponent(final Graphics g) {
+        //first 'paint' wihtout really painting to correct the alignment of wrapped HTML lines
+        //this painting to NOOP_GRAPHICS is a lot faster than painting to g
+        super.paintComponent(NOOP_GRAPHICS);
         super.paintComponent(g);
     }
 
@@ -429,7 +441,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      */
     public void setIcon() {
         if (layout != null) {
-            setIcon(layout.icon, doc.getCollection().getIconTable());
+            setIcon(layout.getIcon(), doc.getCollection().getIconTable());
         }
     }
 
@@ -506,7 +518,8 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
         if (hideText()) {
             setText(null);
         } else {
-            setText(me.getHTMLName());
+            String htmlName = getHTMLName();
+            setText(htmlName);
         }
     }
 

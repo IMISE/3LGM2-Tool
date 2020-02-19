@@ -25,10 +25,10 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_CREATE_INSTANCIATION, //Das hier ist eine Kombination aus MODEL_ACTION_CREATE_NODE und MODEL_ACTION_ADDICT. Hat einen ResourceKey, weil die Actions nach dem Element benannt sind, das man unterordnet
     MODEL_ACTION_ADDICT, //das ist eine interne ModelAction, d.h. sie wird nicht direkt vom Benutzer ausgelöst sondern nur über eine andere ModelAction
     MODEL_ACTION_SWAP_EDGE_POSITIONS,
-
+    //9
     MODEL_ACTION_SET_ELEMENT_NAME,
     MODEL_ACTION_SET_ELEMENT_DESCRIPTION,
-
+    //11
     MODEL_ACTION_SET_ELEMENT_SHAPE, //dieses Kommando wird nicht beachtet. Das ist auch in Ordnung, weil man den Shape für einzelne Elemente nicht ändern können sollte. Wir sind kein freies Modellierungstool :)
     MODEL_ACTION_SET_ELEMENT_POSITION,
     MODEL_ACTION_SET_ELEMENT_FONT,
@@ -45,7 +45,7 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT,
     MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON,
     MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF,
-
+    //27
     MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER,
     MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT,
     MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT,
@@ -55,19 +55,26 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH,
     MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH,
     MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH,
-
-    MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER,
-    MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP,
-    MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM,
-    MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER,
-    MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT,
-    MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT,
-    MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
-    MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
-
+    //36
+    MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT,
+    MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER,
+    MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT,
+    MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
+    //40
+    MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP,
+    MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER,
+    MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM,
+    MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
+    //44
+    MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT,
+    MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER,
+    MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT,
+    MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY, //Blocksatz
+    MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
+    //49
     MODEL_ACTION_SET_ELEMENT_EXPANSION_ON,
     MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF,
-
+    //51
     MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON,
     MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF,
     MODEL_ACTION_SET_LAYER_COLOR,
@@ -77,54 +84,54 @@ public enum GDCommands implements ActionSource {
     MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL,
     MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY,
     MODEL_ACTION_SET_LAYER_SIZE_FACTOR,
-
+    //60
     MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP,
     MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN,
     MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION,
     MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION,
     MODEL_ACTION_MOVE_ORDER, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
-
+    //65
     MODEL_ACTION_INSERT_BENDING_POINT,
-
+    //66
     MODEL_ACTION_SET_USER_FIELD_VALUE,
     MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT,
     MODEL_ACTION_SET_ELEMENT_OPTIONAL,
-
+    //69
     MODEL_ACTION_CREATE_SUBMODEL,
     MODEL_ACTION_DELETE_SUBMODEL,
     MODEL_ACTION_RENAME_SUBMODEL,
-
+    //72
     MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL, //internal model action -> braucht keinen ResKey, da nur bei Undo-Redo gebraucht
     MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL,
     MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL,
     MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS,
-
+    //76
     MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL,
     MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL,
     MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL,
     MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL,
     MODEL_ACTION_SELECT_LINKED_SUBMODEL,
-
+    //81
     MODEL_ACTION_JOIN_SELECTED,
-
+    //82
     MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON,
     MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF,
-
+    //84
     //Die Kommandos ab hier werden in LGMGraphDocument ausgewertet
     MODEL_ACTION_COPY,
     MODEL_ACTION_CUT,
     MODEL_ACTION_PASTE,
-
+    //87
     MODEL_ACTION_HIDE_UNASSOCIATED,
     MODEL_ACTION_UNHIDE_ALL,
-
+    //89
     //spezielle Kommandos
     MODEL_ACTION_COMMAND_LINE,
     MODEL_ACTION_PRINT_QUEUE,
     MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY,
-    MODEL_OPTION_GDCOLL_INTERACTIVE_MODE,
+    MODEL_OPTION_GDCOLL_AUTOMATIC_MODE,
     MODEL_OPTION_GDOC_VERIFICATION_MODE;
-
+    //94
     //Ungültige Werte für alle Kommandos
     public static final int INVALID_POSITION_X = -1;
     public static final int INVALID_POSITION_Y = -1;
@@ -166,10 +173,10 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(SelectionAction.class, MODEL_ACTION_CUT);
         ActionSource.put(GraphDocumentAction.class, MODEL_ACTION_PASTE);
         ActionSource.put(SelectionAction.class, MODEL_ACTION_DELETE_FROM_MODEL);
-        ActionSource.putInteractive(SelectionAction.class, MODEL_ACTION_DELETE); //Dialog mit Frage, ob im Teilmodell oder Modell gelöscht werden soll
+        ActionSource.putInteractive(SelectionAction.class, MODEL_ACTION_DELETE); //dialog delete form submodel or from model
         ActionSource.put(SubmodelSelectionAction.class, MODEL_ACTION_DELETE_FROM_SUBMODEL);
         ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY);
-        ActionSource.putInteractive(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_COLOR); // Dialog mit Farbwauswahl
+        ActionSource.putInteractive(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_COLOR); //dialog set color
         ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
         ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
         ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
@@ -182,32 +189,36 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH);
         ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH);
         ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH);
-        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ICON_NONE);
-        ActionSource.putInteractive(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ICON);
-        ActionSource.putInteractive(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_FONT);
-        ActionSource.putInteractive(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_COLOR);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN);
-        ActionSource.put(GraphSelectedRealNodeAction.class, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
-        ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_SUBMODEL);
-        ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_DELETE_SUBMODEL);
-        ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SUBMODEL);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ICON_NONE);
+        ActionSource.putInteractive(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ICON);//dialog set icon
+        ActionSource.putInteractive(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_FONT); //dialog set font
+        ActionSource.putInteractive(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_COLOR); //dialog set color
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN);
+        ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
+        ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_SUBMODEL); //diaalog submodel name
+        ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_DELETE_SUBMODEL); //dialog really delete
+        ActionSource.putInteractive(SubmodelAction.class, MODEL_ACTION_RENAME_SUBMODEL); //dialog submodel name
         ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDOC_VERIFICATION_MODE);
-        ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
+        ActionSource.put(ModelOptionAction.class, MODEL_OPTION_GDCOLL_AUTOMATIC_MODE);
         ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL);
         ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL);
         ActionSource.put(SelectedRealNodeAction.class, MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS);

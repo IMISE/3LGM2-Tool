@@ -156,13 +156,159 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
             Font.ITALIC
     };
 
+    /**
+     * @author AXS (30.01.2020)
+     */
+    public static enum TextAlignmentHTML {
+        LEFT {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.LEFT;
+            }
+
+        },
+        CENTER {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.CENTER;
+            }
+
+        },
+        RIGHT {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.RIGHT;
+            }
+        },
+        JUSTIFY {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.CENTER;
+            }
+        };
+
+        /**
+         * @return
+         */
+        public abstract int getSwingConstant();
+
+        /**
+         * @return
+         */
+        public final String getHTMLAlign() {
+            return name();
+        }
+
+        /**
+         * @param swingConstantValue
+         * @return
+         */
+        public static TextAlignmentHTML getValueForSwingConstant(final int swingConstantValue) {
+            if (swingConstantValue == LEFT.getSwingConstant()) {
+                return LEFT;
+            }
+            if (swingConstantValue == RIGHT.getSwingConstant()) {
+                return RIGHT;
+            }
+            return CENTER;
+        }
+    }
+
+    /**
+     * @author AXS (30.01.2020)
+     */
+    public static enum TextPositionHorizontal {
+        LEFT {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.LEFT;
+            }
+        },
+        CENTER {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.CENTER;
+            }
+        },
+        RIGHT {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.RIGHT;
+            }
+        };
+
+        /**
+         * @return
+         */
+        public abstract int getSwingConstant();
+
+        /**
+         * @param swingConstantValue
+         * @return
+         */
+        public static TextPositionHorizontal getValueForSwingConstant(final int swingConstantValue) {
+            if (swingConstantValue == LEFT.getSwingConstant()) {
+                return LEFT;
+            }
+            if (swingConstantValue == RIGHT.getSwingConstant()) {
+                return RIGHT;
+            }
+            return CENTER;
+        }
+    }
+
+    /**
+     * @author AXS (30.01.2020)
+     */
+    public static enum TextPositionVertical {
+        TOP {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.TOP;
+            }
+        },
+        CENTER {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.CENTER;
+            }
+        },
+        BOTTOM {
+            @Override
+            public int getSwingConstant() {
+                return SwingConstants.BOTTOM;
+            }
+        };
+
+        /**
+         * @return
+         */
+        public abstract int getSwingConstant();
+
+        /**
+         * @param swingConstantValue
+         * @return
+         */
+        public static TextPositionVertical getValueForSwingConstant(final int swingConstantValue) {
+            if (swingConstantValue == TOP.getSwingConstant()) {
+                return TOP;
+            }
+            if (swingConstantValue == BOTTOM.getSwingConstant()) {
+                return BOTTOM;
+            }
+            return CENTER;
+        }
+    }
+
     public static final GraphElementLayout.SHAPE STANDARD_FORM = SHAPE.rechteck;
     public static final int STANDARD_WIDTH = 90;
     public static final int STANDARD_HEIGHT = 50;
     public static final int STANDARD_LINE_THICKNESS = 1;
     public static final int STANDARD_LINE_STYLE = 0;
-    public static final int STANDARD_VALIGN = CENTER;
-    public static final int STANDARD_HALIGN = CENTER;
+    public static final TextAlignmentHTML STANDARD_TEXT_ALIGNMENT_HTML = TextAlignmentHTML.CENTER;
+    public static final TextPositionVertical STANDARD_TEXT_POSITION_VERTICAL = TextPositionVertical.CENTER;
+    public static final TextPositionVertical STANDARD_TEXT_POSITION_VERTICAL_WITH_ICON = TextPositionVertical.BOTTOM;
+    public static final TextPositionHorizontal STANDARD_TEXT_POSITION_HORIZONTAL = TextPositionHorizontal.CENTER;
     //	public static final Color  STANDARD_TRACE_COLOR = Color.BLACK;
     public static final Color STANDARD_BORDER_COLOR = Color.BLACK;
     public static final Color STANDARD_NODE_COLOR = COLORS[RED];
@@ -186,8 +332,9 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         //TODO: den Standard-Linestyle aus den Containern hier her verlegen
         //		STANDARD_ELEMENT_LAYOUT.line_style =
         STANDARD_ELEMENT_LAYOUT.form = STANDARD_FORM;
-        STANDARD_ELEMENT_LAYOUT.halign = STANDARD_VALIGN;
-        STANDARD_ELEMENT_LAYOUT.valign = STANDARD_HALIGN;
+        STANDARD_ELEMENT_LAYOUT.textPositionHorizontal = STANDARD_TEXT_POSITION_HORIZONTAL;
+        STANDARD_ELEMENT_LAYOUT.textPositionVertical = STANDARD_TEXT_POSITION_VERTICAL;
+        STANDARD_ELEMENT_LAYOUT.textAlignmentHTML = STANDARD_TEXT_ALIGNMENT_HTML;
         STANDARD_ELEMENT_LAYOUT.width = STANDARD_WIDTH;
 
     }
@@ -237,16 +384,27 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     public int height;
 
     /** Hash-Key des Icons */
-    public String icon;
+    private String icon;
 
     /** Stil des Rahmens bei Node oder der Linie bei Kanten */
     public int line_style;
 
-    /** vertikale Ausrichtung des Labeltextes */
-    public int valign;
+    /**
+     * Horizontale Position des Labeltextes. Gibt es kein Icon, dann bezieht sich diese
+     * Position auf das gesamte Label. Mit Icon bezieht sie sich auf das Icon.
+     */
+    public TextPositionHorizontal textPositionHorizontal;
 
-    /** horizontale Ausrichtung des Labeltextes */
-    public int halign;
+    /**
+     * Vertikale Position des Labeltextes. Gibt es kein Icon, dann bezieht sich diese
+     * Position auf das gesamte Label. Mit Icon bezieht sie sich auf das Icon.
+     */
+    public TextPositionVertical textPositionVertical;
+
+    /**
+     * Ausrichtung des HTML-Textes des Labels.
+     */
+    public TextAlignmentHTML textAlignmentHTML;
 
     /**
      *
@@ -271,8 +429,11 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         font = null;
         form = null;
         line_style = STANDARD_LINE_STYLE;
-        valign = STANDARD_VALIGN;
-        halign = STANDARD_HALIGN;
+
+        //null bei den folgenden Werten gibt an, dass es nicht explizit gesetzt wurde
+        textPositionVertical = STANDARD_TEXT_POSITION_VERTICAL;
+        textPositionHorizontal = STANDARD_TEXT_POSITION_HORIZONTAL;
+        textAlignmentHTML = STANDARD_TEXT_ALIGNMENT_HTML;
     }
 
     @Override
@@ -296,9 +457,39 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
         tmp.height = height;
         tmp.icon = icon == null ? null : new String(icon);
         tmp.line_style = line_style;
-        tmp.valign = valign;
-        tmp.halign = halign;
+        tmp.textPositionVertical = textPositionVertical;
+        tmp.textPositionHorizontal = textPositionHorizontal;
+        tmp.textAlignmentHTML = textAlignmentHTML;
         return tmp;
+    }
+
+    /**
+     * @return the icon
+     */
+    public String getIcon() {
+        return icon;
+    }
+
+    /**
+     * @param icon the icon to set
+     */
+    public void setIcon(final String icon) {
+        if (this.icon == icon) {
+            return;
+        }
+        if (icon == null) {
+            textPositionVertical = TextPositionVertical.CENTER;
+        } else {
+            textPositionVertical = TextPositionVertical.BOTTOM;
+        }
+        this.icon = icon;
+    }
+
+    /**
+     * @return <code>true</code> if the <code>textAlignmentHTML</code> has the default value
+     */
+    public boolean isDefaultTextAlignmentHTML() {
+        return textAlignmentHTML == STANDARD_TEXT_ALIGNMENT_HTML;
     }
 
 }

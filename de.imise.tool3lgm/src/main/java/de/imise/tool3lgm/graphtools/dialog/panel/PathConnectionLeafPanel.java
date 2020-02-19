@@ -1,16 +1,21 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+
 import java.util.Collection;
 import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.plaf.basic.BasicTreeUI;
 import javax.swing.tree.TreePath;
+
+import org.apache.commons.lang3.NotImplementedException;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -36,19 +41,22 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
     private Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, simpleMetaPath);
+        this(dialog, LABEL_END_ELEMENT_TYPE, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, labelLastEdgeName, -1, simpleMetaPath);
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, panelLabelOption, -1, simpleMetaPath);
     }
 
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, maxLines, simpleMetaPath);
+        this(dialog, LABEL_END_ELEMENT_TYPE, maxLines, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, labelLastEdgeName, maxLines, false, simpleMetaPath);
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, panelLabelOption, maxLines, false, simpleMetaPath);
+        //die Treenodes nicht einrücken, da ja nur eine Liste dargestellt werden soll
+        BasicTreeUI basicTreeUI = (BasicTreeUI) ltree.getUI();
+        basicTreeUI.setRightChildIndent(0);
     }
 
     @Override
@@ -118,7 +126,7 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     @Override
     protected LGMAction getDisconnectAction() {
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_DISCONNECT_ELEMENT) {
             @Override
             public void execute(final EventObject eo) {
                 int selrows = ltree.getSelectionCount();
@@ -152,7 +160,11 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
         if (!metaPath.isCreatable(endElement != null)) {
             return;
         }
-        doc.createPath(dialog.getModelElement(), endElement, metaPath, true, dialog.getTransactionID());
+        if (metaPath instanceof SimpleMetaPath) {
+            doc.createPath(dialog.getModelElement(), endElement, (SimpleMetaPath) metaPath, true, dialog.getTransactionID());
+        } else {
+            throw new NotImplementedException("Creation of complex metapaths is not implemented");
+        }
     }
 
 }

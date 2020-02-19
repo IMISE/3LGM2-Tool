@@ -6,7 +6,7 @@ import java.awt.Frame;
 import java.util.List;
 
 import javax.swing.Icon;
-import javax.swing.JComponent;
+import javax.swing.JTabbedPane;
 
 import com.google.common.collect.ImmutableList;
 
@@ -14,24 +14,38 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.swing.component.TabbedPane;
 
+/**
+ * @author AXS (15.02.2018)
+ */
 public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialog {
 
     /** TabbedPane in das alle Panels kommen */
-    private final TabbedPane tab;
+    protected final TabbedPane tabbedPane;
 
+    /**
+     * @param gdcoll
+     */
     public AbstractTabbedPropertyDialog(final GDCollection gdcoll) {
         super(gdcoll);
-        tab = new TabbedPane();
+        tabbedPane = new TabbedPane();
     }
 
+    /**
+     * @param owner
+     * @param gdcoll
+     */
     public AbstractTabbedPropertyDialog(final Frame owner, final GDCollection gdcoll) {
         super(owner, gdcoll);
-        tab = new TabbedPane();
+        tabbedPane = new TabbedPane();
     }
 
+    /**
+     * @param owner
+     * @param gdcoll
+     */
     public AbstractTabbedPropertyDialog(final Dialog owner, final GDCollection gdcoll) {
         super(owner, gdcoll);
-        tab = new TabbedPane();
+        tabbedPane = new TabbedPane();
     }
 
     /**
@@ -42,10 +56,6 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      */
     protected void addTab(final Component component) {
         addTab(component.getName(), component);
-    }
-
-    protected JComponent getTabComponent() {
-        return tab;
     }
 
     /**
@@ -66,32 +76,54 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      * @param component
      */
     protected void addTab(final String title, final Icon icon, final Component component) {
-        tab.addTab(title, icon, component);
+        tabbedPane.addTab(title, icon, component);
     }
 
     /**
-     * Entfernt den Tab mit dem übergebenen Index
-     * 
-     * @param tabIndex
+     * Removes the tab with the given index.
+     *
+     * @param tabIndex index of the tab to remove
      */
     protected void removeTab(final int tabIndex) {
-        tab.remove(tabIndex);
+        tabbedPane.remove(tabIndex);
     }
 
+    /**
+     * Sets the icon of the last tab in the contained tabbed pane.
+     *
+     * @param icon new icon of the last tab
+     */
     public void setLastTabIcon(final Icon icon) {
-        setTabIcon(tab.getTabCount() - 1, icon);
+        setTabIcon(tabbedPane.getTabCount() - 1, icon);
     }
 
+    /**
+     * Sets the title of the last tab in the contained tabbed pane.
+     *
+     * @param title new title of the last tab
+     */
     public void setLastTabTitle(final String title) {
-        setTabTitle(tab.getTabCount() - 1, title);
+        setTabTitle(tabbedPane.getTabCount() - 1, title);
     }
 
+    /**
+     * Delegates {@link JTabbedPane#setIAt(int, Icon)} of the contained tabbed pane.
+     *
+     * @param tabIndex
+     * @param icon
+     */
     public void setTabIcon(final int tabIndex, final Icon icon) {
-        tab.setIconAt(tabIndex, icon);
+        tabbedPane.setIconAt(tabIndex, icon);
     }
 
+    /**
+     * Delegates {@link JTabbedPane#setTitleAt(int, String)} of the contained tabbed pane.
+     *
+     * @param tabIndex
+     * @param title
+     */
     public void setTabTitle(final int tabIndex, final String title) {
-        tab.setTitleAt(tabIndex, title);
+        tabbedPane.setTitleAt(tabIndex, title);
     }
 
     /**
@@ -107,21 +139,24 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      *         geracht werden konnte
      */
     public int selectTab(final String title, final Class<? extends Component> tabComponentClass) {
-        for (int i = 0; i < tab.getComponentCount(); i++) {
-            Component comp = tab.getComponent(i);
-            if (title != null && !tab.getTitleAt(i).equals(title)) {
+        for (int i = 0; i < tabbedPane.getComponentCount(); i++) {
+            Component comp = tabbedPane.getComponent(i);
+            if (title != null && !tabbedPane.getTitleAt(i).equals(title)) {
                 continue;
             }
             if (!tabComponentClass.isAssignableFrom(comp.getClass())) {
                 continue;
             }
-            tab.setSelectedIndex(i);
+            tabbedPane.setSelectedIndex(i);
             return i;
         }
         return -1;
     }
 
     /**
+     * Selects the first tab of the contained tabbed pane where the component of this tab is
+     * an instance of the given class.
+     *
      * @param tabComponentClass
      * @return
      * @see #selectTab(String, Class)
@@ -130,27 +165,40 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
         return selectTab(null, tabComponentClass);
     }
 
+    /**
+     * @return the {@link ElementDialogPanel} in the active tab of the contained tabbed pane
+     */
     public ElementDialogPanel getSelectedElementDialogPanel() {
-        Component selectedComponent = tab.getSelectedComponent();
+        Component selectedComponent = tabbedPane.getSelectedComponent();
         return selectedComponent instanceof ElementDialogPanel ? (ElementDialogPanel) selectedComponent : null;
     }
 
+    /**
+     * @return a list of all tab names in the order of the tabs added to the contained tabbed pane
+     */
     public List<String> getTabNames() {
         ImmutableList.Builder<String> tabNames = ImmutableList.builder();
-        for (int i = 0; i < tab.getTabCount(); i++) {
-            String title = tab.getTitleAt(i);
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+            String title = tabbedPane.getTitleAt(i);
             tabNames.add(title);
 
         }
         return tabNames.build();
     }
 
+    /**
+     * @return delegates {@link JTabbedPane#getTabCount()} of the contained tabbed pane
+     */
     protected int getTabCount() {
-        return tab.getTabCount();
+        return tabbedPane.getTabCount();
     }
 
+    /**
+     * @param index
+     * @return delegates {@link JTabbedPane#getTabComponentAt(int)} of the contained tabbed pane
+     */
     protected Component getTabComponentAt(final int index) {
-        return tab.getComponentAt(index);
+        return tabbedPane.getComponentAt(index);
     }
 
 }

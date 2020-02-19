@@ -38,7 +38,6 @@ import javax.annotation.Nonnull;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.SwingConstants;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
@@ -80,6 +79,9 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -93,7 +95,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * Repräsentiert ein Teilmodell. Dieses Teilmodell kann das Hauptmodell sein (= spezielle Teilmodell das alle Elemente enthält, aber keine Grafik
  * besitzt) oder ein Szenario (= eine beliebige Elementauswahl aus allen Elementen mit einer grafischen Repräsentation)
  */
-public abstract class GraphDocument extends ElementSelectionContext implements SwingConstants {
+public abstract class GraphDocument extends ElementSelectionContext {
 
     /** Zeichen, das in Kommandos zusammengehörigen Text umschließt, damit er als zusammengehörig erkannt werden kann */
     public static final char GDCOMMAND_TEXT_SURROUNDER = '\'';
@@ -264,6 +266,14 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     public ModelCategory getModelCategory() {
         return gdcoll.getModelCategory();
+    }
+
+    /**
+     * @return <code>true</code> if this Graphdocument is the main GraphDocument of the model, otherwise <code>false</code>
+     */
+    public final boolean isMainGraphDocument() {
+        LGMGraphDocument mainGraphDocument = gdcoll.getMainGraphDocument();
+        return mainGraphDocument == this;
     }
 
     /**
@@ -1047,9 +1057,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 optionsSupport.setOption(MODEL_OPTION_GDOC_VERIFICATION_MODE, Boolean.parseBoolean(argv[0]));
             }
             break;
-        case MODEL_OPTION_GDCOLL_INTERACTIVE_MODE:
-            boolean isInteractiveMode = argc == 0 ? !gdcoll.isInteractiveMode() : Boolean.parseBoolean(argv[0]);
-            gdcoll.setInteractiveMode(isInteractiveMode);
+        case MODEL_OPTION_GDCOLL_AUTOMATIC_MODE:
+            boolean isInteractiveMode = argc == 0 ? !gdcoll.isAutomaticMode() : Boolean.parseBoolean(argv[0]);
+            gdcoll.setAutomaticMode(isInteractiveMode);
             break;
         case MODEL_ACTION_INSERT_BENDING_POINT:
             //[0] = SzenHash, [1] = HashString der Edge, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
@@ -1068,69 +1078,77 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             align(command, pid);
             break;
 
-        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP:
-            label_valign(TOP, pid);
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT:
+            setTextPositionHorizontal(TextPositionHorizontal.LEFT, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER:
+            setTextPositionHorizontal(TextPositionHorizontal.CENTER, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT:
+            setTextPositionHorizontal(TextPositionHorizontal.RIGHT, pid);
             break;
 
-        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER:
-            label_valign(CENTER, pid);
-            break;
-
-        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM:
-            label_valign(BOTTOM, pid);
-            break;
-
-        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT:
-            label_halign(LEFT, pid);
-            break;
-
-        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER:
-            label_halign(CENTER, pid);
-            break;
-
-        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT:
-            label_halign(RIGHT, pid);
-            break;
-
-        case MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN:
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL:
             if (argc == 1) {
-                try {
-                    label_valign(Integer.parseInt(argv[0]), pid);
-                } catch (Exception e) {
-                    Log(e);
-                }
+                TextPositionHorizontal textPositionHorizontal = TextPositionHorizontal.valueOf(argv[0]);
+                setTextPositionHorizontal(textPositionHorizontal, pid);
             }
             if (argc == 3) {
-                try {
-                    //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
-                    GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
-                    ElementContainer ec = szen.findContainerCoded(argv[1]);
-                    int mode = Integer.parseInt(argv[2]);
-                    szen.label_valign(mode, ec, pid);
-                } catch (Exception e) {
-                    Log(e);
-                }
+                //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
+                GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
+                ElementContainer ec = szen.findContainerCoded(argv[1]);
+                TextPositionHorizontal textPositionHorizontal = TextPositionHorizontal.valueOf(argv[2]);
+                szen.setTextPositionHorizontal(textPositionHorizontal, ec, pid);
             }
             break;
 
-        case MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN:
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP:
+            setTextPositionVertical(TextPositionVertical.TOP, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER:
+            setTextPositionVertical(TextPositionVertical.CENTER, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM:
+            setTextPositionVertical(TextPositionVertical.BOTTOM, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL:
             if (argc == 1) {
-                try {
-                    label_halign(Integer.parseInt(argv[0]), pid);
-                } catch (Exception e) {
-                    Log(e);
-                }
+                TextPositionVertical textPositionVertical = TextPositionVertical.valueOf(argv[0]);
+                setTextPositionVertical(textPositionVertical, pid);
             }
             if (argc == 3) {
-                try {
-                    //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
-                    GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
-                    ElementContainer ec = szen.findContainerCoded(argv[1]);
-                    int mode = Integer.parseInt(argv[2]);
-                    szen.label_halign(mode, ec, pid);
-                } catch (Exception e) {
-                    Log(e);
-                }
+                //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
+                GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
+                ElementContainer ec = szen.findContainerCoded(argv[1]);
+                TextPositionVertical textPositionVertical = TextPositionVertical.valueOf(argv[2]);
+                szen.setTextPositionVertical(textPositionVertical, ec, pid);
+            }
+            break;
+
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT:
+            setTextAlignmentHTML(TextAlignmentHTML.LEFT, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER:
+            setTextAlignmentHTML(TextAlignmentHTML.CENTER, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT:
+            setTextAlignmentHTML(TextAlignmentHTML.RIGHT, pid);
+            break;
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY:
+            setTextAlignmentHTML(TextAlignmentHTML.JUSTIFY, pid);
+            break;
+
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML:
+            if (argc == 1) {
+                TextAlignmentHTML textAlignmentHTML = TextAlignmentHTML.valueOf(argv[0]);
+                setTextAlignmentHTML(textAlignmentHTML, pid);
+            }
+            if (argc == 3) {
+                //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
+                GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
+                ElementContainer ec = szen.findContainerCoded(argv[1]);
+                TextAlignmentHTML textAlignmentHTML = TextAlignmentHTML.valueOf(argv[2]);
+                szen.setTextAlignmentHTML(textAlignmentHTML, ec, pid);
             }
             break;
 
@@ -1444,6 +1462,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param log
      */
     public void start_transaction(final int pid, final boolean log) {
+        //Sys.err("start " + gdcoll.isBulkMode() + " " + pid + " " + log);
         if (gdcoll.isBulkMode()) {
             return;
         }
@@ -1475,6 +1494,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                 }
             }
         }
+        //Sys.err("start " + " " + pid + " " + log);
     }
 
     /**
@@ -1495,6 +1515,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param log
      */
     public void finish_transaction(final int pid, final boolean log) {
+        //Sys.err("finish " + gdcoll.isBulkMode() + " " + pid + " " + log);
         if (gdcoll.isBulkMode()) {
             return;
         }
@@ -1523,6 +1544,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             }
             getCollection().getTman().finishTransaction(pid);
         }
+        //Sys.err("finish " + pid + "  " + log);
     }
 
     /**
@@ -1887,7 +1909,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void changeColor(final int pid) {
-        if (!gdcoll.isInteractiveMode()) {
+        if (gdcoll.isAutomaticMode()) {
             return;
         }
         Color oldcol = null;
@@ -1954,7 +1976,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      * @param pid
      */
     public final void changeLayerColor(final int pid) {
-        if (!gdcoll.isInteractiveMode()) {
+        if (gdcoll.isAutomaticMode()) {
             return;
         }
         Color oldcol = null;
@@ -1985,7 +2007,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         if (layer_idx < 0 || layer_idx > 4) {
             return;
         }
-        if (!gdcoll.isInteractiveMode()) {
+        if (gdcoll.isAutomaticMode()) {
             return;
         }
         Color col = JColorChooser.showDialog(null, getResString("farbe_ausw"), layer[layer_idx].getColor());
@@ -2914,9 +2936,10 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
      */
     private List<ElementContainer> getSelectionInGraphOrder() {
         List<ElementContainer> returnList = new ArrayList<>(selectedContainer.size());
-        for (ElementContainer ec : getElementContainers(Node.class)) {
-            if (selectedContainer.contains(ec)) {
-                returnList.add(ec);
+        List<ElementContainer> nodeContainers = getElementContainers(Node.class, true, false);
+        for (ElementContainer nc : nodeContainers) {
+            if (selectedContainer.contains(nc)) {
+                returnList.add(nc);
             }
         }
         for (ElementContainer ec : selectedContainer) {
@@ -3699,9 +3722,9 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         }
         if (!createSubPath && endElement == null) {
             Class<? extends ModelElement> pathEndClass = metaPath.getPathStepElementClass(lastPathStepIndex);
-            boolean oldInteractiveMode = gdcoll.setInteractiveMode(askNameForNewEndElement);
+            boolean oldAutomaticMode = gdcoll.setAutomaticMode(!askNameForNewEndElement);
             NodeContainer pathEndElementContainer = createNodeAndContainer(pathEndClass, pid);
-            gdcoll.setInteractiveMode(oldInteractiveMode);
+            gdcoll.setAutomaticMode(oldAutomaticMode);
             if (pathEndElementContainer != null) { // kann passieren, wenn der Benutzer abbrechen im Namensdialog drückt
                 createPath(startElement, pathEndElementContainer.getElement(), metaPath, pid);
             }
@@ -3723,19 +3746,19 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
                     //diese Kante vorwärts im Pfad liegt (also vom zu instanzieerenden Element auf das Instanz-Element zeigt), dann wird diese auch
                     //selbst über den Instanziierungsmechanismus initialisiert
                 } else if (InstanciationEdge.class.isAssignableFrom(edgeClass) && elementaryMetaPath.hasDirectionForward()) {
-                    boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
+                    boolean oldAutomaticMode = gdcoll.setAutomaticMode(true);
                     NodeContainer createdInstanceContainer = createInstance(this, edgeClass.asSubclass(InstanciationEdge.class), pathStepStartElement, pid);
                     ModelElement createdInstance = createdInstanceContainer.getElement();
                     Edge createdInstanceEdge = pathStepStartElement.getEdgeTo(createdInstance, edgeClass);
                     createdEdges.add(createdInstanceEdge);
-                    gdcoll.setInteractiveMode(oldInteractiveMode);
+                    gdcoll.setAutomaticMode(oldAutomaticMode);
                     pathStepEndElement = createdInstance;
                     alreadyLinked = true;
                 } else { // nächstes Pfadschrittelement anlegen
                     Class<? extends ModelElement> pathStepEndClass = metaPath.getPathStepElementClass(i);
-                    boolean oldInteractiveMode = gdcoll.setInteractiveMode(false);
+                    boolean oldAutomaticMode = gdcoll.setAutomaticMode(true);
                     NodeContainer pathStepEndElementContainer = createNodeAndContainer(pathStepEndClass, pid);
-                    gdcoll.setInteractiveMode(oldInteractiveMode);
+                    gdcoll.setAutomaticMode(oldAutomaticMode);
                     pathStepEndElement = pathStepEndElementContainer.getElement();
                 }
                 if (!alreadyLinked) {
@@ -4095,71 +4118,149 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     }
 
     /**
+     * Sets the horizontal text position of the label for all selected nodes graph.
+     *
      * @param mode
      * @param pid
      */
-    public final void label_valign(final int mode, final int pid) {
+    public final void setTextPositionHorizontal(final TextPositionHorizontal mode, final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
-            label_valign(mode, ec, pid);
+            setTextPositionHorizontal(mode, ec, pid);
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
     }
 
     /**
+     * Sets the vertical text position of the label for the ElemntContainer.
+     *
      * @param mode
-     * @param kc
+     * @param ec
      * @param pid
      */
-    private final void label_valign(final int mode, final ElementContainer kc, final int pid) {
-        if (kc == null) {
+    private final void setTextPositionHorizontal(final TextPositionHorizontal mode, final ElementContainer ec, final int pid) {
+        if (ec == null) {
             return;
         }
-        if (kc.get3LGMLayout() == null) {
+        GraphElementLayout layout = ec.get3LGMLayout();
+        if (layout == null) {
             return;
         }
-
+        if (layout.textPositionHorizontal == mode) {
+            return;
+        }
+        GraphDocument szen = ec.getGraphDocument();
+        if (!(szen instanceof Szenario)) {
+            return;
+        }
         start_transaction(pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN + " " + kc.get3LGMLayout().valign, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN + " " + mode, pid);
-        kc.get3LGMLayout().valign = mode;
+        String szenHash = szen.getHashString();
+        String elementHash = ec.getHashString();
+        TextPositionHorizontal textPositionHorizontal = layout.textPositionHorizontal;
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + szenHash + " " + elementHash + " " + textPositionHorizontal, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + szenHash + " " + elementHash + " " + mode, pid);
+        layout.textPositionHorizontal = mode;
         finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, kc, pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
 
     /**
-     * @param mode
+     * Sets the vertical text position of the label for all selected nodes graph.
+     *
+     * @param mode {@link TextPositionVertical#TOP}, {@link TextPositionVertical#CENTER} or {@link TextPositionVertical#BOTTOM}
      * @param pid
      */
-    public final void label_halign(final int mode, final int pid) {
+    public final void setTextPositionVertical(final TextPositionVertical mode, final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
-            label_halign(mode, ec, pid);
+            setTextPositionVertical(mode, ec, pid);
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
     }
 
     /**
+     * Sets the vertical text position of the label for the ElemntContainer.
+     *
      * @param mode
-     * @param kc
+     * @param ec
      * @param pid
      */
-    private final void label_halign(final int mode, final ElementContainer kc, final int pid) {
-        if (kc == null) {
+    private final void setTextPositionVertical(final TextPositionVertical mode, final ElementContainer ec, final int pid) {
+        if (ec == null) {
             return;
         }
-        if (kc.get3LGMLayout() == null) {
+        GraphElementLayout layout = ec.get3LGMLayout();
+        if (layout == null) {
             return;
         }
-
+        if (layout.textPositionVertical == mode) {
+            return;
+        }
+        GraphDocument szen = ec.getGraphDocument();
+        if (!(szen instanceof Szenario)) {
+            return;
+        }
         start_transaction(pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN + " " + kc.get3LGMLayout().halign, pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN + " " + mode, pid);
-        kc.get3LGMLayout().halign = mode;
+        String szenHash = szen.getHashString();
+        String elementHash = ec.getHashString();
+        TextPositionVertical textPositionVertical = layout.textPositionVertical;
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + szenHash + " " + elementHash + " " + textPositionVertical, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + szenHash + " " + elementHash + " " + mode, pid);
+        layout.textPositionVertical = mode;
         finish_transaction(pid);
-        distributeEvent(ELEMENT_GRAPHICS_CHANGED, kc, pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
+    }
+
+    /**
+     * Sets the HTML text alignment of the label for all selected nodes graph.
+     *
+     * @param mode
+     * @param pid
+     */
+    public final void setTextAlignmentHTML(final TextAlignmentHTML mode, final int pid) {
+        start_transaction(pid);
+        for (ElementContainer ec : selectedContainer) {
+            setTextAlignmentHTML(mode, ec, pid);
+        }
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
+    }
+
+    /**
+     * Sets the vertical text position of the label for the ElemntContainer.
+     *
+     * @param mode
+     * @param ec
+     * @param pid
+     */
+    private final void setTextAlignmentHTML(final TextAlignmentHTML mode, final ElementContainer ec, final int pid) {
+        if (ec == null) {
+            return;
+        }
+        GraphElementLayout layout = ec.get3LGMLayout();
+        if (layout == null) {
+            return;
+        }
+        if (layout.textAlignmentHTML == mode) {
+            return;
+        }
+        GraphDocument szen = ec.getGraphDocument();
+        if (!(szen instanceof Szenario)) {
+            return;
+        }
+        start_transaction(pid);
+        String szenHash = szen.getHashString();
+        String elementHash = ec.getHashString();
+        TextAlignmentHTML textAlignmentHTML = layout.textAlignmentHTML;
+        addUndoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + szenHash + " " + elementHash + " " + textAlignmentHTML, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + szenHash + " " + elementHash + " " + mode, pid);
+        layout.textAlignmentHTML = mode;
+        ModelElement me = ec.getElement();
+        me.updateHTMLName(ec);
+        finish_transaction(pid);
+        distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
 
     /**
@@ -4667,7 +4768,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
     private final List<ElementContainer> getElementContainersOfStartOrEndClass(final Class<? extends Edge> edgeClass, final boolean startClass) {
         MetaModel metaModel = getMetaModel();
         Class<? extends ModelElement> elementClass = startClass ? Edge.getStartClass(edgeClass) : Edge.getEndClass(edgeClass);
-        List<ElementContainer> elementContainers = getElementContainers(elementClass, true);
+        List<ElementContainer> elementContainers = getElementContainers(elementClass, true, true);
         for (int i = elementContainers.size() - 1; i >= 0; i--) {
             ElementContainer ec = elementContainers.get(i);
             ModelElement me = ec.getElement();
@@ -4680,30 +4781,30 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
         return elementContainers;
     }
 
-    //    /**
-    //     * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement von
-    //     * der übergebenen Klasse ist.<br>
-    //     * Unterklassen werden nicht beachtet.
-    //     *
-    //     * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
-    //     * @param includeSubClasses wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
-    //     * @return Liste mit ElementContainer oder <code>null</code>
-    //     */
-    //    public final List<ElementContainer> getElementContainer(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
-    //        return getElementContainer(clazz, includeSubClasses, false);
-    //    }
+    /**
+     * Gibt alle ElementContainer zurück, deren gekapseltes Modellelement von
+     * der übergebenen Klasse ist.
+     *
+     * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
+     * @param includeSubClasses wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
+     * @return Liste mit ElementContainer deren ModelElement con der übergebenen Art ist (immer alphabetisch sortiert)
+     */
+    public final List<ElementContainer> getElementContainers(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
+        return getElementContainers(clazz, includeSubClasses, true);
+    }
 
     /**
      * Gibt alle eine nach der <code>toString()</code>-Methode der ElementContainer
      * sortierte Liste von ElementContainern zurück, deren gekapseltes Modellelement
      * von der übergebenen Klasse ist.<br>
      *
-     * @param clazz
-     * @param includeSubClasseswenn <code>true</code> wird ist die Rückgabeliste alphabetisch
+     * @param clazz Klasse, die der ModelElement-Klasse der Container entspricht
+     * @param includeSubClasses wenn <code>true</code>, werden auch Container mit Elementen von Unterklasse zurück gegeben
+     * @param alphabetical wenn <code>true</code> wird ist die Rückgabeliste alphabetisch
      *            sortiert (das betrifft nur die KnotenContainer, aber nicht die KantenContainer)
      * @return
      */
-    public final List<ElementContainer> getElementContainers(final Class<? extends ModelElement> clazz, final boolean includeSubClasses) {
+    public final List<ElementContainer> getElementContainers(final Class<? extends ModelElement> clazz, final boolean includeSubClasses, final boolean alphabetical) {
 
         //		long start = System.currentTimeMillis();
 
@@ -4729,13 +4830,17 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
             //Liste mit allen Containerlisten der Ebene, die durchsucht werden müssen
             List<Iterable<? extends ElementContainer>> layerElements = new ArrayList<>();
             //Knickpunkte
+            Iterable<? extends ElementContainer> containers = null;
             if (clazz == Bendpoint.class) {
-                layerElements.add(lc.getBendpointContainers());
+                containers = lc.getBendpointContainers();
             } else if (MetaModel.isNodeType(clazz)) {
-                layerElements.add(lc.getNodeContainersAlphabetical());
+                containers = alphabetical ? lc.getNodeContainersAlphabetical() : lc.getGraphNodeContainers();
                 //Kanten
             } else if (MetaModel.isEdgeType(clazz)) {
-                layerElements.add(lc.getEdgeContainers());
+                containers = lc.getEdgeContainers();
+            }
+            if (containers != null) {
+                layerElements.add(containers);
             }
 
             //wenn alle Elemente gesucht werden sollen
@@ -4767,7 +4872,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements S
 
         //wenn alphabetisch sortiert werden soll und andere Elemente als die bereits in der aplhabetisch sortierten
         //Knotenliste enthaltenen zur Rückgabeliste hinzugefügt wurden
-        if (clazz == Bendpoint.class || !MetaModel.isNodeType(clazz)) {
+        if (alphabetical && (clazz == Bendpoint.class || !MetaModel.isNodeType(clazz))) {
             //aplhabetisch sortieren
             Alphabetical.sort(objects);
         }

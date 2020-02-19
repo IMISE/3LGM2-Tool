@@ -11,12 +11,46 @@ import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FOR
  *
  * @author AXS (25.09.2018)
  */
-public abstract class InstanciationEdge extends Edge {
+public abstract class InstanciationEdge extends SubordinationEdge {
 
     /** Richtung, in der die Kante vom Oberelement auf das Unterelement zeigt */
     public static final Direction MASTER_TO_INSTANCE_DIRECTION = FORWARD;
 
     /** Richtung, in der die Kante vom Unterelement auf das Oberelement zeigt */
     public static final Direction INSTANCE_TO_MASTER_DIRECTION = BACKWARD;
+
+    /**
+     * Liefert die Master-Elementklasse, dieser Instanziierungskante
+     *
+     * @param instancieationEdgeClass
+     * @return
+     */
+    public static Class<? extends ModelElement> getInstanciationMaster(final Class<? extends InstanciationEdge> instancieationEdgeClass) {
+        return getStartClass(instancieationEdgeClass);
+    }
+
+    /**
+     * Liefert die Istnanz-Elementklasse, dieser Instanziierungskante
+     *
+     * @param instancieationEdgeClass
+     * @return
+     */
+    public static Class<? extends ModelElement> getInstanciationInstance(final Class<? extends InstanciationEdge> instancieationEdgeClass) {
+        return getEndClass(instancieationEdgeClass);
+    }
+
+    /**
+     * @return
+     */
+    public ModelElement getMasterElement() {
+        return getSuperElement();
+    }
+
+    /**
+     * @return
+     */
+    public ModelElement getInstanceElement() {
+        return getSubElement();
+    }
 
 }

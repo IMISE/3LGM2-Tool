@@ -18,6 +18,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
@@ -325,7 +326,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert für die übergebene Kantenklasse den MetaPfad, über den die verbindbaren Elemente ebenfalls bereits verbunden sein müssen.
+     * Mappt von einer Kantenklasse auf den MetaPfad, über den verbindbare Elemente ebenfalls bereits verbunden sein müssen.
      * Dieser Mechanismus ist dafür gedacht, verbindbare Elemente einzuschränken auf bestimmte Elemente.
      *
      * @return
@@ -362,6 +363,18 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * @return
      */
     public Map<Class<? extends ModelElement>, AbstractMetaPath> getElementClassToNameExtensionPath() {
+        return ImmutableMap.of();
+    }
+
+    /**
+     * Maps from an {@link InferenceEdge} class to the MetaPath that must be existing to create such an inference edge.
+     * The pathes must be defined between the same element types that the edge class connects. The direction will be
+     * tested, that means the path can be defined from the start element of the {@link InferenceEdge} to the end of this
+     * egde or in the other direction.
+     *
+     * @return
+     */
+    public Map<Class<? extends InferenceEdge>, AbstractMetaPath> getInferenceEdgeToConditionPath() {
         return ImmutableMap.of();
     }
 

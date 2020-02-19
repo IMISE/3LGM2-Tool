@@ -4,10 +4,6 @@ import static de.imise.tool3lgm.Static.getPreSelectedGDCollection;
 import static de.imise.tool3lgm.Static.getSelectedGDCollection;
 import static de.imise.tool3lgm.Tool3lgmConstants.getIcon;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getEndClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.getStartClass;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
-import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
@@ -35,7 +31,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAY
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDCOLL_INTERACTIVE_MODE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDCOLL_AUTOMATIC_MODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_OPTION_GDOC_VERIFICATION_MODE;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER;
@@ -85,6 +81,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.Connect
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -233,7 +230,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         join_selected = getItem(MODEL_ACTION_JOIN_SELECTED);
 
         JMenuItem verify = getItem(MODEL_OPTION_GDOC_VERIFICATION_MODE);
-        JMenuItem interactive = getItem(MODEL_OPTION_GDCOLL_INTERACTIVE_MODE);
+        JMenuItem interactive = getItem(MODEL_OPTION_GDCOLL_AUTOMATIC_MODE);
         JMenuItem expertMode = UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE.createAction().createMenuItem();
 
         command_line = getItem(MODEL_ACTION_COMMAND_LINE);
@@ -397,7 +394,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     private JPopupMenu getSingleNodeContextMenu(final Component contextSource, final ElementContainer ec) {
         //		System.err.println("ContextGenerator.getSingleNodeContextMenu()");
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         this.ec = ec;
         ModelElement me = ec.getElement();
         if (!(ec instanceof BendpointContainer)) {
@@ -508,7 +505,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                     }
                     menu.addSeparator();
                     menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LAYOUT_MENU);
-                    menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LEVEL_MENU);
+                    menu.add(MenuCollection.LayoutSubMenus.ELEMENT_ORDER_MENU);
                     menu.add(getLayerMenu());
                 }
             }
@@ -553,7 +550,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     private JPopupMenu getMultiNodeContextMenu(final Component contextSource) {
 
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
 
         GraphDocument doc = getDoc();
         boolean knickpunkte = doc.isSelectedOnlyBendpoints();
@@ -568,7 +565,6 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             List<NamedObjectContainer<JMenuItem>> disconnectableItems = new ArrayList<>();
 
             MetaModel metaModel = doc.getMetaModel();
-            ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
 
             for (Class<? extends ModelElement> me2Class : doc.getSelectedRealElementClasses()) {
                 List<Object> edgesAndPaths = new ArrayList<>();
@@ -577,218 +573,103 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 for (Object edgeClassOrMetaPath : edgesAndPaths) {
                     if (edgeClassOrMetaPath instanceof Class) {
                         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassOrMetaPath).asSubclass(Edge.class);
-                        //Hat-Teil-Kante
-                        if (HasPartEdge.class.isAssignableFrom(edgeClass)) {
-                            if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-                                String label = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
-                                String toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
-                                boolean connectable = false;
-                                boolean disconnectable = false;
-                                for (ModelElement me2 : selectedElements) {
-                                    if (lastSelected == me2) {
-                                        continue;
-                                    }
-                                    if (!lastSelected.isPartOf(me2) && !lastSelected.isDirectParentOf(me2)) {
-                                        connectable = true;
-                                    }
-                                    if (lastSelected.isDirectParentOf(me2)) {
-                                        disconnectable = true;
-                                    }
-                                    if (connectable && disconnectable) {
-                                        break;
-                                    }
-                                }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
-                            }
-                            if (metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass)) {
-                                String label = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
-                                String toolTip = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
-                                boolean connectable = false;
-                                boolean disconnectable = false;
-                                for (ModelElement me2 : selectedElements) {
-                                    if (lastSelected == me2) {
-                                        continue;
-                                    }
-                                    if (!me2.isPartOf(lastSelected) && !me2.isDirectParentOf(lastSelected)) {
-                                        connectable = true;
-                                    }
-                                    if (me2.isDirectParentOf(lastSelected)) {
-                                        disconnectable = true;
-                                    }
-                                    if (connectable && disconnectable) {
-                                        break;
-                                    }
-                                }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectable, toolTip), label));
-                            }
-                            //Kante mit Doppelter Bedeutung
-                        } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
-                            if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class)) {
-                                Direction direction = Direction.FORWARD;
-                                ConnectionState connectionState = ConnectionState.FORWARD;
-                                String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                String toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
-                                boolean connectable = false;
-                                boolean disconnectable = false;
-                                for (ModelElement me2 : selectedElements) {
-                                    if (lastSelected == me2) {
-                                        continue;
-                                    }
-                                    if (!lastSelected.isConnectedTo(me2, edgeClass)) {
-                                        connectable = true;
-                                    } else {
-                                        disconnectable = true;
-                                    }
-                                    if (connectable && disconnectable) {
-                                        break;
-                                    }
-                                }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
-
-                                connectionState = ConnectionState.BACKWARD;
-                                label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
-                                connectable = false;
-                                disconnectable = false;
-                                for (ModelElement me2 : selectedElements) {
-                                    if (lastSelected == me2) {
-                                        continue;
-                                    }
-                                    if (!lastSelected.isConnectedFrom(me2, edgeClass)) {
-                                        connectable = true;
-                                    } else {
-                                        disconnectable = true;
-                                    }
-                                    if (connectable && disconnectable) {
-                                        break;
-                                    }
-                                }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectable, toolTip), label));
-                            }
-                            // Doppeldeutige Kanten mit identischer Start- und
-                            // Endklasse brauchen nur 1x angeboten werden
-                            if (metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && getStartClass(edgeClass) != getEndClass(edgeClass)) {
-                                Direction direction = Direction.BACKWARD;
-                                ConnectionState connectionState = ConnectionState.FORWARD;
-                                String label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                String toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
-                                boolean connectable = false;
-                                boolean disconnectable = false;
-                                for (ModelElement me2 : selectedElements) {
-                                    if (lastSelected == me2) {
-                                        continue;
-                                    }
-                                    if (!lastSelected.isConnectedTo(me2, edgeClass)) {
-                                        connectable = true;
-                                    } else {
-                                        disconnectable = true;
-                                    }
-                                    if (connectable && disconnectable) {
-                                        break;
-                                    }
-                                }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectable, toolTip), label));
-
-                                connectionState = ConnectionState.BACKWARD;
-                                label = elementsNameBuilder.getMetaAssociationName(edgeClass, direction, connectionState, false, true);
-                                toolTip = elementsNameBuilder.getFullMetaAssociationName(edgeClass, direction, connectionState);
-                                connectable = false;
-                                disconnectable = false;
-                                for (ModelElement me2 : selectedElements) {
-                                    if (lastSelected == me2) {
-                                        continue;
-                                    }
-                                    if (!lastSelected.isConnectedFrom(me2, edgeClass)) {
-                                        connectable = true;
-                                    } else {
-                                        disconnectable = true;
-                                    }
-                                    if (connectable && disconnectable) {
-                                        break;
-                                    }
-                                }
-                                connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectable, toolTip), label));
-                                disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectable, toolTip), label));
-
-                            }
-                            //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
-                        } else if (metaModel.isConnectingForward(edgeClass, lastSelectedClass, me2Class) && metaModel.isConnectingForward(edgeClass, me2Class, lastSelectedClass) && metaModel.isDirectedEdge(edgeClass)) {
-                            String labelForward = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
-                            String toolTipForward = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
-                            String labelBackward = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
-                            String toolTipBackward = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
-                            boolean connectableForward = false;
-                            boolean disconnectableForward = false;
-                            boolean connectableBackward = false;
-                            boolean disconnectableBackward = false;
-                            for (ModelElement me2 : selectedElements) {
-                                if (lastSelected == me2) {
-                                    continue;
-                                }
-                                if (!lastSelected.isConnectedTo(me2, edgeClass)) {
-                                    connectableForward = true;
-                                } else {
-                                    disconnectableForward = true;
-                                }
-                                if (!lastSelected.isConnectedFrom(me2, edgeClass)) {
-                                    connectableBackward = true;
-                                } else {
-                                    disconnectableBackward = true;
-                                }
-                                if (connectableForward && disconnectableForward && connectableBackward && disconnectableBackward) {
-                                    break;
-                                }
-                            }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(labelForward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + FORWARD, link_icon, connectableForward, toolTipForward), labelForward));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(labelForward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + FORWARD, unlink_icon, disconnectableForward, toolTipForward), labelForward));
-                            connectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + BACKWARD, link_icon, connectableBackward, toolTipBackward), labelBackward));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(labelBackward, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + BACKWARD, unlink_icon, disconnectableBackward, toolTipBackward), labelBackward));
-
-                        } else if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
-                            //diese Kanten sind bei Mehrfachauswahl zu ignorieren!
-                        } else /* if (Edge.isConnecting(edgeClass, lastSelectedClass, me2Class)) */ {
-                            Direction direction;
-                            String label;
-                            String toolTip;
-                            if (metaModel.isStartClass(edgeClass, lastSelectedClass)) {
-                                direction = FORWARD;
-                                label = elementsNameBuilder.getForwardMetaAssociationName(edgeClass, false, true);
-                                toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
-                            } else {
-                                direction = BACKWARD;
-                                label = elementsNameBuilder.getBackwardMetaAssociationName(edgeClass, false, true);
-                                toolTip = elementsNameBuilder.getFullBackwardMetaAssociationName(edgeClass);
-                            }
-                            boolean connectable = false;
-                            boolean disconnectable = false;
-                            for (ModelElement selected : selectedElements) {
-                                if (lastSelected == selected) {
-                                    continue;
-                                }
-                                Class<? extends ModelElement> selectedClass = selected.getClass();
-                                if (direction == FORWARD && !metaModel.isConnectingForward(edgeClass, lastSelectedClass, selectedClass)) {
-                                    continue;
-                                }
-                                if (direction == BACKWARD && !metaModel.isConnectingForward(edgeClass, selectedClass, lastSelectedClass)) {
-                                    continue;
-                                }
-                                if (!lastSelected.isConnectedWith(selected, edgeClass)) {
-                                    connectable = true;
-                                } else {
-                                    disconnectable = true;
-                                }
-                                if (connectable && disconnectable) {
-                                    break;
-                                }
-                            }
-                            connectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_LINK, edgeClass.getSimpleName() + " " + direction, link_icon, connectable, toolTip), label));
-                            disconnectableItems.add(new NamedObjectContainer<>(getItem(label, MODEL_ACTION_UNLINK, edgeClass.getSimpleName() + " " + direction, unlink_icon, disconnectable, toolTip), label));
+                        ///////////////////////////////////////////////////////////////
+                        //   Edges to Ignore ( InstanciationEdge & InferenceEdge )   //
+                        ///////////////////////////////////////////////////////////////
+                        if (InstanciationEdge.class.isAssignableFrom(edgeClass) || InferenceEdge.class.isAssignableFrom(edgeClass)) {
+                            continue;
                         }
+                        //////////////
+                        //   Edges  //
+                        //////////////
+                        for (Direction edgeDirection : Direction.values()) { //beide Richtungen testen
+                            boolean addLinkMenuEntry = false;
+
+                            //prüfen, ob die Kante in der aktuellen Richtung hinzugefügt werden soll
+                            if (metaModel.isConnecting(edgeClass, lastSelectedClass, me2Class, edgeDirection)) {
+                                if (edgeDirection == Direction.FORWARD) {
+                                    addLinkMenuEntry = true;
+                                } else {
+                                    // Doppeldeutige Kanten mit identischer Start- und Endklasse brauchen nur 1x angeboten werden -> Rückrichtung nur, wenn die Klassen verschieden sind
+                                    if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+                                        if (Edge.getStartClass(edgeClass) != Edge.getEndClass(edgeClass)) {
+                                            addLinkMenuEntry = true;
+                                        }
+                                        //bei alle anderen Kanten die Rückwärtsrichtung nur hinzufügen, wenn sie in beide Richtungen unterschiedliche Bedeutungen hat,
+                                        //also verscheidene Elemente verbindet oder die gleichen verbindet aber beide Richtungen unterschiedlich heißen
+                                    } else if (metaModel.isDirectedEdge(edgeClass)) {
+                                        addLinkMenuEntry = true;
+                                    }
+                                }
+                            }
+
+                            //wenn die Kante in der aktuellen Richtung hinzugefügt werden soll
+                            if (addLinkMenuEntry) {
+                                ConnectionState[] connectionStates;
+                                //bei Kanten mit doppelter Bedeutung auch jeden ConnectionState hinzufügen (also 2 EInträge pro Kante generieren)
+                                if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+                                    connectionStates = new ConnectionState[2];
+                                    connectionStates[0] = ConnectionState.FORWARD;
+                                    connectionStates[1] = ConnectionState.BACKWARD;
+                                    //bei allen anderen Kanten nur den 'egal'-COnnectionState nehmen
+                                } else {
+                                    connectionStates = new ConnectionState[1];
+                                    connectionStates[0] = ConnectionState.DOUBLE;
+                                }
+                                for (ConnectionState connectionState : connectionStates) { //die bzw. den jeweiligen ConnectionStates testen
+                                    boolean connectable = false;
+                                    boolean disconnectable = false;
+                                    //jedes selektierte Element testen
+                                    for (ModelElement me2 : selectedElements) {
+                                        if (lastSelected == me2) {
+                                            continue;
+                                        }
+                                        boolean setConnectableTrue = false;
+                                        setConnectableTrue |= connectionState == ConnectionState.FORWARD && !lastSelected.isConnectedTo(me2, edgeClass);
+                                        setConnectableTrue |= connectionState == ConnectionState.BACKWARD && !lastSelected.isConnectedFrom(me2, edgeClass);
+                                        if (!setConnectableTrue && connectionState == ConnectionState.DOUBLE) {
+                                            setConnectableTrue |= !lastSelected.isConnectedWith(me2, edgeClass);
+                                        }
+                                        if (setConnectableTrue) {
+                                            connectable = true;
+                                        } else {
+                                            //bei PartOfEdges darf immer nur einer der beiden disconnect-Einträge aktiv sein
+                                            if (MetaModel.isHasPartEdge(edgeClass)) {
+                                                if (edgeDirection == HasPartEdge.PARENT_TO_PART_DIRECTION) {
+                                                    disconnectable = lastSelected.isDirectParentOf(me2);
+                                                } else {
+                                                    disconnectable = lastSelected.isDirectPartOf(me2);
+                                                }
+                                            } else {
+                                                disconnectable = true;
+                                            }
+                                        }
+                                        if (connectable && disconnectable) {
+                                            break;
+                                        }
+                                    }
+                                    String edgeClassName = edgeClass.getSimpleName();
+                                    ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
+                                    String label = elementsNameBuilder.getMetaAssociationName(edgeClass, edgeDirection, connectionState, false, true);
+                                    String toolTip = elementsNameBuilder.getMetaAssociationName(edgeClass, edgeDirection, connectionState, true, true);
+                                    //Menuitems
+                                    //das muss sein, weil man sich nicht darauf verlassen sollte, dass die ConnectionStates und Directions dieselben Strings haben.
+                                    //In den UndoRedo-Kommandos werden aber Directions gebraucht, die sich in diesem Fall aber aus den ConnectionStates ergeben -> sauber überführen
+                                    Direction linkDirection = connectionState == ConnectionState.FORWARD ? Direction.FORWARD : connectionState == ConnectionState.BACKWARD ? Direction.BACKWARD : edgeDirection;
+                                    JMenuItem connectableItem = getItem(label, MODEL_ACTION_LINK, edgeClassName + " " + linkDirection, link_icon, connectable, toolTip);
+                                    JMenuItem disconnectableItem = getItem(label, MODEL_ACTION_UNLINK, edgeClassName + " " + linkDirection, unlink_icon, disconnectable, toolTip);
+                                    //NamedObjectContainer um die Items
+                                    NamedObjectContainer<JMenuItem> connectableContainer = new NamedObjectContainer<>(connectableItem, label);
+                                    NamedObjectContainer<JMenuItem> disconnectableContainer = new NamedObjectContainer<>(disconnectableItem, label);
+                                    //zu den übergebenen Ergebnislisten hinzufügen
+                                    connectableItems.add(connectableContainer);
+                                    disconnectableItems.add(disconnectableContainer);
+                                }
+                            }
+                        }
+                        ///////////////////
+                        //   MetaPaths   //
+                        ///////////////////
                     } else {
                         SimpleMetaPath metaPath = (SimpleMetaPath) edgeClassOrMetaPath;
                         Action createPathAction = createPathAction(metaPath);
@@ -855,7 +736,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 }
                 menu.addSeparator();
                 menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LAYOUT_MENU);
-                menu.add(MenuCollection.LayoutSubMenus.ELEMENT_LEVEL_MENU);
+                menu.add(MenuCollection.LayoutSubMenus.ELEMENT_ORDER_MENU);
                 menu.add(MenuCollection.LayoutSubMenus.ELEMENT_ALIGNMENT_MENU);
             }
 
@@ -885,7 +766,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * Kontextmenü im Searchdialog
      */
     public JPopupMenu getSearchDialogContextMenu() {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         GraphDocument doc = getDoc();
         if (doc.isSingleSelection()) {
             addMenuItem(menu, properties);
@@ -904,7 +785,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     @Override
     public final JPopupMenu getNodeContextMenu(final Component source) {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         GraphDocument doc = getDoc();
         if (doc.isSelectedOnlyBendpoints()) {
             if (doc instanceof Szenario) {
@@ -925,7 +806,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     private final JPopupMenu getSingleEdgeContextMenu() {
         //		System.err.println("ContextGenerator.getSingleEdgeContextMenu()");
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         GraphDocument doc = getDoc();
         if (doc.isSingleSelection() && doc.getLastSelected() instanceof EdgeContainer) {
             addMenuItem(menu, properties);
@@ -947,7 +828,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @return
      */
     private final JPopupMenu getMultiEdgeContextMenu() {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         if (menu.getComponentCount() > 0) {
             menu.addSeparator();
         }
@@ -979,7 +860,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @return
      */
     private final JPopupMenu getMultiContextMenu() {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         if (menu.getComponentCount() > 0) {
             menu.addSeparator();
         }
@@ -1042,7 +923,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     @Override
     public final JPopupMenu getLayerContextMenu() {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         menu.add(getCreateNewNodesMenu());
         menu.add(new_text);
         menu.addSeparator();
@@ -1612,6 +1493,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param yin
      */
     private void right_node_none(final Component gdl, final int xin, final int yin) {
+        //System.err.println("right_node_none");
         GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
         menu = getNodeContextMenu(gdl);
@@ -1624,6 +1506,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param yin
      */
     private void right_node_nodes(final Component gdl, final int xin, final int yin) {
+        //System.err.println("right_node_nodes");
         GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
         menu = getNodeContextMenu(gdl);
@@ -1636,6 +1519,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param yin
      */
     private void right_node_edges(final Component gdl, final int xin, final int yin) {
+        //System.err.println("right_node_edges");
         GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
         menu = getMultiContextMenu();
@@ -1648,11 +1532,9 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param yin
      */
     private void right_node_multi(final Component gdl, final int xin, final int yin) {
+        //System.err.println("right_node_multi");
         GraphDocument doc = getDoc();
         doc.addToSelection(ec, 0);
-        //Wenn mind. 2 Node selektiert sind und das Kontextmenü auf einem Node aufgerufen wurde,
-        //kann man auch das Knotenkontextmenü anbieten
-        //		menu = getMultiContextMenu();
         menu = getMultiNodeContextMenu(gdl);
         menu.show(gdl, xin, yin);
     }
@@ -1898,7 +1780,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @return
      */
     public JPopupMenu getDialogSelectionContextMenu(final boolean propertiesOnly) {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         addMenuItem(menu, properties);
         if (!propertiesOnly) {
             menu.addSeparator();
@@ -1924,7 +1806,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @return
      */
     public JPopupMenu getDialogSelectionContextMenu(final ElementContainer ec) {
-        JPopupMenu menu = new JPopupMenu();
+        JPopupMenu menu = createUpdatingPopupMenu();
         GraphDocument doc = ec.getGraphDocument();
         doc.addSimpleToSelection(ec);
         addMenuItem(menu, properties);
@@ -2008,9 +1890,9 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                         continue;
                     }
                     GDCollection gdcoll = doc.getCollection();
-                    boolean lastInteractiveMode = gdcoll.setInteractiveMode(false);
+                    boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
                     doc.createPath(lastSelected, me, path2create, STANDARD_PID);
-                    gdcoll.setInteractiveMode(lastInteractiveMode);
+                    gdcoll.setAutomaticMode(lastAutomaticMode);
                 }
             }
         };
@@ -2018,8 +1900,10 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
 
     //--------------------------------------------------------------------------------------------------------------------------------
     // PopupMenuListener-Funktionen
+
     @Override
     public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
+        //do nothing
     }
 
     @Override
@@ -2032,6 +1916,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
 
     @Override
     public void popupMenuCanceled(final PopupMenuEvent e) {
+        //do nothing
     }
 
     //--------------------------------------------------------------------------------------------------------------------------------

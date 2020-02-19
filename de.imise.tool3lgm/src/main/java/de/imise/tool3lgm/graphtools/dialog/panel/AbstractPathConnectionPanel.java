@@ -1,6 +1,13 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Static.contextGenerator;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE_PLURAL;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE_SINGULAR;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_ELEMENT_NAME;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_ELEMENT_NAME_PLURAL;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_ELEMENT_NAME_SINGULAR;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
@@ -46,8 +53,50 @@ import de.imise.util.StringUtils;
  */
 public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel {
 
+    /**
+     * Options which Label should be presented for a panel.
+     *
+     * @author AXS (20.01.2020)
+     */
+    public static enum PanelLabelOption {
+        /**
+         * Indicator to label the panel with the end element type name from the resources.
+         * If the meta path is a single connection meta path, the singular will be shown
+         * as label. If not the plural.
+         */
+        LABEL_END_ELEMENT_TYPE,
+        /**
+         * Indicator to label the panel with the end element type name from the resources
+         * in singular.
+         */
+        LABEL_END_ELEMENT_TYPE_SINGULAR,
+        /**
+         * Indicator to label the panel with the end element type name from the resources
+         * in plural.
+         */
+        LABEL_END_ELEMENT_TYPE_PLURAL,
+        /**
+         * Indicator to label the panel with last edge element type name from the resources.
+         * If the meta path is a single connection meta path, the singular will be shown
+         * as label. If not the plural.
+         */
+        LABEL_LAST_EDGE_ELEMENT_NAME,
+        /**
+         * Indicator to label the panel with last edge element type name from the resources
+         * in singular.
+         */
+        LABEL_LAST_EDGE_ELEMENT_NAME_SINGULAR,
+        /**
+         * Indicator to label the panel with last edge element type name from the resources
+         * in plural.
+         */
+        LABEL_LAST_EDGE_ELEMENT_NAME_PLURAL,
+        /** Indicator to label the panel with directed name of the connection from the resources. */
+        LABEL_LAST_EDGE_CONNECTION_NAME,
+    }
+
     /** Der MetaPfad zu anderen Elementen */
-    protected SimpleMetaPath metaPath;
+    protected AbstractMetaPath metaPath;
 
     /** Label vor dem verbundenen Element mit der Art des Elementes */
     protected final JLabel westLabel;
@@ -62,22 +111,27 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
      *
      * @param dialog
-     * @param simpleMetaPath
+     * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, simpleMetaPath);
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+        this(dialog, LABEL_END_ELEMENT_TYPE, metaPath);
     }
 
     /**
      * Panel für eine einfache Assoziation. Gelabelt wird das verbundene Element der letzten Edge oder die letzte Edge selbst.
      *
      * @param dialog
-     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der über die letzte Edge im Pfad verbundenen
-     *            Elementart der Name der letzten Edge selbst ans Label geschrieben.
-     * @param simpleMetaPath
+     * @param panelLabelOption Das Label kann folgende Werte annehmen:
+     *            <ul>
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der letzten Kante des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der letzten Kante des
+     *            MetaPfades</li>
+     *            </ul>
+     * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, -1, labelEdgeName, simpleMetaPath);
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final AbstractMetaPath metaPath) {
+        this(dialog, -1, panelLabelOption, metaPath);
     }
 
     /**
@@ -87,39 +141,77 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param labelEdgeIndex Index der Edge, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
      *            wird. Es wird immer die Endklasse des Pfades bis zur Edge mit dem jeweiligen Index ans Label geschrieben. Wird ein Wert < 0
      *            übergeben, dann wird dieser Wert von der Anzahl der Kanten im Gesamtpfad abgezogen, um auf den tatsächlichen Index zu kommen.
+     * @param panelLabelOption Das Label kann folgende Werte annehmen:
+     *            <ul>
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der Kante mit dem Index labelEdgeIndex
+     *            im MetaPfad</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der Kante mit dem Index
+     *            labelEdgeIndex
+     *            im MetaPfad</li>
+     *            </ul>
      * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
      *            der Name der Edge selbst ans Label geschrieben. Welche Edge im Pfad das ist, wird durch labelEdgeIndex
      *            festgelegt.
-     * @param simpleMetaPath
+     * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final int labelEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final int labelEdgeIndex, final PanelLabelOption panelLabelOption, final AbstractMetaPath metaPath) {
         super(dialog);
-        metaPath = simpleMetaPath;
+        this.metaPath = metaPath;
         searchElementClass = getInitialSearchElementClass(metaPath);
         isConnectionPointUnique = isConnectionPointUnique();
 
         // Das WestLabel auf jeden Fall initialisieren, denn es kann von anderen Panels dann hinzugefügt werden
         westLabel = new JLabel();
         //bei allen SingleConnectionPanels kann das Westlabel auch die MouseActions bekommen, so dass man auf dem Label an das verknüpfte Element kommt
-        if (simpleMetaPath.isSingleConnection()) {
+        if (metaPath.isSingleConnection()) {
             addMouseActions(westLabel);
         }
+        String westLabelText = getNameAndWestLabelText(labelEdgeIndex, panelLabelOption);
+        westLabel.setText(westLabelText);
+        setName(westLabelText);
+    }
+
+    /**
+     * Erstellt den Namen des Panels, der auch der String des westLabels wird.
+     *
+     * @param labelEdgeIndex
+     * @param panelLabelOption
+     * @return
+     */
+    protected String getNameAndWestLabelText(final int labelEdgeIndex, final PanelLabelOption panelLabelOption) {
         String westLabelText;
-        if (labelEdgeName) {
+        if (panelLabelOption == LABEL_LAST_EDGE_CONNECTION_NAME) {
             Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
             Direction directionInPath = getDirectionInPath(labelEdgeIndex);
             westLabelText = elementsNameBuilder.getMetaAssociationName(edgeClass, directionInPath);
+
         } else {
-            Class<? extends ModelElement> labelPathStepEndClass = MetaPathFunctions.getElementaryPathsConnectingClass(metaPath, labelEdgeIndex);
-            //zur Beschriftung des Labels wird immer die speziellere Klasse genommen aus Endklasse des Pfades und searchElementClass. Weil immer nur davon können die verbundenen Elemente sein.
-            if (labelPathStepEndClass == null || labelPathStepEndClass.isAssignableFrom(searchElementClass)) {
-                labelPathStepEndClass = searchElementClass;
+            //Name of the class to display (end node or edge of metapath step)
+            Class<? extends ModelElement> nameSourceClass;
+            if (panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME || panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME_SINGULAR || panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME_PLURAL) {
+                nameSourceClass = getEdgeClassInPath(labelEdgeIndex);
+            } else {
+                nameSourceClass = MetaPathFunctions.getElementaryPathsConnectingClass(metaPath, labelEdgeIndex);
+                //zur Beschriftung des Labels wird immer die speziellere Klasse genommen aus Endklasse des Pfades und searchElementClass. Weil immer nur davon können die verbundenen Elemente sein.
+                if (nameSourceClass == null || nameSourceClass.isAssignableFrom(searchElementClass)) {
+                    nameSourceClass = searchElementClass;
+                }
             }
-            westLabelText = elementsNameBuilder.getDisplayableName(!metaPath.isSingleConnection(), labelPathStepEndClass);
+
+            // display plural name?
+            boolean plural;
+            if (panelLabelOption == LABEL_END_ELEMENT_TYPE_SINGULAR || panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME_SINGULAR) {
+                plural = false;
+            } else if (panelLabelOption == LABEL_END_ELEMENT_TYPE_PLURAL || panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME_PLURAL) {
+                plural = true;
+            } else {
+                plural = !metaPath.isSingleConnection();
+            }
+            westLabelText = elementsNameBuilder.getDisplayableName(plural, nameSourceClass);
         }
         westLabelText = StringUtils.capitalizeFirstChar(westLabelText); // Den ersten Buchstaben des Labels immer groß schreiben
-        westLabel.setText(westLabelText);
-        setName(westLabelText);
+        return westLabelText;
     }
 
     /**

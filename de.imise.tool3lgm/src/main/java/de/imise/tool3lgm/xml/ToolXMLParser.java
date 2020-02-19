@@ -76,6 +76,7 @@ public class ToolXMLParser {
             "3.5", //"<!--Tool3lgmFile version='3.5'-->", //9
             "3.6", //"<!--Tool3lgmFile version='3.6'-->", //10
             "3.7", //"<!--Tool3lgmFile version='3.7'-->", //11 -> nach Tool-Version 3.4.0.2 (Beta)
+            "3.8", //"<!--Tool3lgmFile version='3.7'-->", //12 -> ab Tool-Version 4.1.0
     };
 
     /**
@@ -158,6 +159,7 @@ public class ToolXMLParser {
             //Modelldateien nicht lesen, weil Elementklassen umbenannt wurden (was aber den Parser
             //nicht kümmert)
         case 11: //Version 3.7 -> OptionalEdge.isOptional() wird gespeichert
+        case 12: //Version 3.8 -> valign + halign über GraphElementLayout enums und nicht mehr über SwingConstants ints
             parser.getXMLReader().setContentHandler(new ToolContentHandlerV3_1(collection, paste));
             break;
 

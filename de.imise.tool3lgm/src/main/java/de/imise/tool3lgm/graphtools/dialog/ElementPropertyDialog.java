@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
+
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -12,11 +15,13 @@ import javax.swing.Icon;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTablePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescriptedSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.MultiPanelElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.MutipleCompositionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
@@ -60,9 +65,9 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
         }
     }
 
-    //////////////////////////////////
-    // TabbedPanel -> add SubPanels //
-    //////////////////////////////////
+    //////////////////////////////
+    // this -> add Panel as Tab //
+    //////////////////////////////
 
     @Override
     protected void addTab(final String title, final Icon icon, final Component component) {
@@ -73,94 +78,241 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
         super.addTab(title, icon, component);
     }
 
-    private TabbedPanel lastCreatedTabbedPanel;
+    //////////////////////////////////////////////////////
+    // DescripPanel ( = General-Panel) -> add SubPanels //
+    //////////////////////////////////////////////////////
 
+    /**
+     * @param edgeClasses
+     */
+    @SafeVarargs
+    public final void addDescripDescriptedPanel(final Class<? extends Edge>... edgeClasses) {
+        addDescripDescriptedPanel(PanelLabelOption.LABEL_END_ELEMENT_TYPE, edgeClasses);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param edgeClasses
+     */
+    @SafeVarargs
+    public final void addDescripDescriptedPanel(final PanelLabelOption panelLabelOption, final Class<? extends Edge>... edgeClasses) {
+        addDescripDescriptedPanel(panelLabelOption, null, edgeClasses);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param searchElementClass
+     * @param edgeClasses
+     */
+    @SafeVarargs
+    public final void addDescripDescriptedPanel(final PanelLabelOption panelLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+        addDescripPanel(panelLabelOption, true, searchElementClass, edgeClasses);
+    }
+
+    /**
+     * @param edgeClasses
+     */
+    @SafeVarargs
+    public final void addDescripPanel(final Class<? extends Edge>... edgeClasses) {
+        addDescripPanel((Class<? extends ModelElement>) null, edgeClasses);
+    }
+
+    /**
+     * @param searchElementClass
+     * @param edgeClasses
+     */
+    @SafeVarargs
+    public final void addDescripPanel(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+        addDescripPanel(LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClasses);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param edgeClasses
+     */
+    @SafeVarargs
+    public final void addDescripPanel(final PanelLabelOption panelLabelOption, final Class<? extends Edge>... edgeClasses) {
+        addDescripPanel(panelLabelOption, null, edgeClasses);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param searchElementClass
+     * @param edgeClasses
+     */
+    @SafeVarargs
+    public final void addDescripPanel(final PanelLabelOption panelLabelOption, @Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+        addDescripPanel(panelLabelOption, false, searchElementClass, edgeClasses);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param showDescription
+     * @param searchElementClass
+     * @param edgeClasses
+     */
+    @SafeVarargs
+    public final void addDescripPanel(final PanelLabelOption panelLabelOption, final boolean showDescription, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+        SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
+        addDescripPanel(panelLabelOption, showDescription, metaPath);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param showDescription
+     * @param metaPath
+     */
+    public final void addDescripPanel(final PanelLabelOption panelLabelOption, final boolean showDescription, final SimpleMetaPath metaPath) {
+        MetaModel metaModel = modelElement.getMetaModel();
+        if (metaModel.isVisible(metaPath)) {
+            if (metaPath.isSingleConnection()) {
+                if (showDescription) {
+                    descripPanel.addDescriptedSingleConnectionPanel(panelLabelOption, metaPath);
+                } else {
+                    descripPanel.addSingleConnectionPanel(panelLabelOption, metaPath);
+                }
+            } else {
+                descripPanel.addListPanel(panelLabelOption, metaPath);
+            }
+        }
+    }
+
+    //////////////////////////////////////
+    // MultiPanel -> add SubPanels //
+    //////////////////////////////////////
+
+    /** The last added Panel that is an subclass of {@link MultiPanelElementDialogPanel} (except the general) */
+    private MultiPanelElementDialogPanel lastAddedMultiPanel;
+
+    /**
+     * @param elementClass
+     */
+    public final void addMultiPanel(final Class<? extends ModelElement> elementClass) {
+        ElementsNameBuilder elementsNameBuilder = modelElement.getElementsNameBuilder();
+        String displayablePluralName = elementsNameBuilder.getDisplayablePluralName(elementClass);
+        addMultiPanel(displayablePluralName);
+    }
+
+    /**
+     * @param nameResKey
+     */
+    public final void addMultiPanel(final String nameResKey) {
+        lastAddedMultiPanel = new MultiPanelElementDialogPanel(this);
+        String tabTitle = Tool3lgmConstants.getResStringWithoutError(nameResKey);
+        lastAddedMultiPanel.setName(tabTitle);
+        addTab(lastAddedMultiPanel);
+    }
+
+    /**
+     * @param simpleMetaPath
+     */
+    public final void addMultiPanelDescriptedSingleConnectionPanel(final SimpleMetaPath simpleMetaPath) {
+        lastAddedMultiPanel.addDescriptedSingleConnectionPanel(simpleMetaPath);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param simpleMetaPath
+     */
+    public final void addMultiPanelDescriptedSingleConnectionPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        lastAddedMultiPanel.addDescriptedSingleConnectionPanel(panelLabelOption, simpleMetaPath);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param simpleMetaPath
+     */
+    public final void addMultiPanelSingleConnectionPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        lastAddedMultiPanel.addSingleConnectionPanel(panelLabelOption, simpleMetaPath);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param simpleMetaPath
+     */
+    public final void addMultiPanelListPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        lastAddedMultiPanel.addListPanel(panelLabelOption, simpleMetaPath);
+    }
+
+    /**
+     * @param edgeClass
+     */
+    public final void addMultiPanelEdgePanel(final Class<? extends Edge> edgeClass) {
+        addMultiPanelEdgePanel((Class<? extends ModelElement>) null, edgeClass);
+    }
+
+    /**
+     * @param searchElementClass
+     * @param edgeClass
+     */
+    public final void addMultiPanelEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        addMultiPanelEdgePanel(LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClass);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param edgeClass
+     */
+    public final void addMultiPanelEdgePanel(final PanelLabelOption panelLabelOption, final Class<? extends Edge> edgeClass) {
+        addMultiPanelEdgePanel(LABEL_END_ELEMENT_TYPE, null, edgeClass);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param searchElementClass
+     * @param edgeClass
+     */
+    public final void addMultiPanelEdgePanel(final PanelLabelOption panelLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        AbstractPathConnectionPanel addableEdgePanel = getAddableEdgePanel(panelLabelOption, searchElementClass, edgeClass);
+        lastAddedMultiPanel.addPanel(addableEdgePanel);
+    }
+
+    //////////////////////////////////
+    // TabbedPanel -> add SubPanels //
+    //////////////////////////////////
+
+    /** Das zuletzt über die Funktion {@link ElementPropertyDialog#addTabbedPanel(Class)} hinzugefügte TabbedPanel */
+    private TabbedPanel lastAddedTabbedPanel;
+
+    /**
+     * @param elementClass
+     */
     public final void addTabbedPanel(final Class<? extends ModelElement> elementClass) {
         ElementsNameBuilder elementsNameBuilder = modelElement.getElementsNameBuilder();
         String displayablePluralName = elementsNameBuilder.getDisplayablePluralName(elementClass);
         addTabbedPanel(displayablePluralName);
     }
 
+    /**
+     * @param nameResKey
+     */
     public final void addTabbedPanel(final String nameResKey) {
-        lastCreatedTabbedPanel = new TabbedPanel(this);
+        lastAddedTabbedPanel = new TabbedPanel(this);
         String tabTitle = Tool3lgmConstants.getResStringWithoutError(nameResKey);
-        lastCreatedTabbedPanel.setName(tabTitle);
-        addTab(lastCreatedTabbedPanel);
+        lastAddedTabbedPanel.setName(tabTitle);
+        addTab(lastAddedTabbedPanel);
     }
 
+    /**
+     * @param edgeClasses
+     */
     @SafeVarargs
     public final void addTabbedPanelPathConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addTabbedPanelPathConnectionPanel(null, edgeClasses);
     }
 
+    /**
+     * @param searchElementClass
+     * @param edgeClasses
+     */
     @SafeVarargs
     public final void addTabbedPanelPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         if (edgeClasses.length == 1) {
             addEdgePanel(true, searchElementClass, edgeClasses[0]);
         } else {
             SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
-            PathConnectionPanel panel = new PathConnectionPanel(this, true, metaPath);
-            lastCreatedTabbedPanel.addTab(panel);
-        }
-    }
-
-    //////////////////////////////////////////////////////
-    // DescripPanel ( = General-Panel) -> add SubPanels //
-    //////////////////////////////////////////////////////
-
-    @SafeVarargs
-    public final void addDescripDescriptedPanel(final Class<? extends Edge>... edgeClasses) {
-        addDescripDescriptedPanel(false, edgeClasses);
-    }
-
-    @SafeVarargs
-    public final void addDescripDescriptedPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        addDescripDescriptedPanel(labelLastEdgeName, null, edgeClasses);
-    }
-
-    @SafeVarargs
-    public final void addDescripDescriptedPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        addDescripPanel(labelLastEdgeName, true, searchElementClass, edgeClasses);
-    }
-
-    @SafeVarargs
-    public final void addDescripPanel(final Class<? extends Edge>... edgeClasses) {
-        addDescripPanel(null, edgeClasses);
-    }
-
-    @SafeVarargs
-    public final void addDescripPanel(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        addDescripPanel(false, searchElementClass, edgeClasses);
-    }
-
-    @SafeVarargs
-    public final void addDescripPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        addDescripPanel(labelLastEdgeName, null, edgeClasses);
-    }
-
-    @SafeVarargs
-    public final void addDescripPanel(final boolean labelLastEdgeName, @Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        addDescripPanel(labelLastEdgeName, false, searchElementClass, edgeClasses);
-    }
-
-    @SafeVarargs
-    public final void addDescripPanel(final boolean labelLastEdgeName, final boolean showDescription, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
-        addDescripPanel(labelLastEdgeName, showDescription, metaPath);
-    }
-
-    public final void addDescripPanel(final boolean labelLastEdgeName, final boolean showDescription, final SimpleMetaPath metaPath) {
-        MetaModel metaModel = modelElement.getMetaModel();
-        if (metaModel.isVisible(metaPath)) {
-            if (metaPath.isSingleConnection()) {
-                if (showDescription) {
-                    descripPanel.addDescriptedSingleConnectionPanel(labelLastEdgeName, metaPath);
-                } else {
-                    descripPanel.addSingleConnectionPanel(labelLastEdgeName, metaPath);
-                }
-            } else {
-                descripPanel.addListPanel(labelLastEdgeName, metaPath);
-            }
+            PathConnectionPanel panel = new PathConnectionPanel(this, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath);
+            lastAddedTabbedPanel.addTab(panel);
         }
     }
 
@@ -168,6 +320,9 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     // DescriptedPanel //
     /////////////////////
 
+    /**
+     * @param edgeClasses
+     */
     @SafeVarargs
     public final void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
         addTab(new DescriptedSingleConnectionPanel(this, createSimpleMetaPath(null, edgeClasses)));
@@ -177,36 +332,70 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     // PathPanel //
     ///////////////
 
+    /**
+     * @param edgeClass
+     */
     public final void addEdgePanel(final Class<? extends Edge> edgeClass) {
         addEdgePanel(false, null, edgeClass);
     }
 
-    @SafeVarargs
-    public final void addPanel(final Class<? extends Edge>... edgeClasses) {
-        addPathConnectionPanel(false, edgeClasses);
+    /**
+     * @param panelLabelOption
+     * @param edgeClass
+     */
+    public final void addEdgePanel(final PanelLabelOption panelLabelOption, final Class<? extends Edge> edgeClass) {
+        addEdgePanel(panelLabelOption, false, null, edgeClass);
     }
 
+    /**
+     * @param edgeClasses
+     */
+    @SafeVarargs
+    public final void addPanel(final Class<? extends Edge>... edgeClasses) {
+        addPathConnectionPanel(LABEL_END_ELEMENT_TYPE, edgeClasses);
+    }
+
+    /**
+     * @param searchElementClass
+     * @param edgeClass
+     */
     public void addEdgePanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         addEdgePanel(false, searchElementClass, edgeClass);
     }
 
+    /**
+     * @param edgeClasses
+     */
     @SafeVarargs
     public final void addPathConnectionPanel(final Class<? extends Edge>... edgeClasses) {
-        addPathConnectionPanel(null, edgeClasses);
+        addPathConnectionPanel((Class<? extends ModelElement>) null, edgeClasses);
     }
 
+    /**
+     * @param searchElementClass
+     * @param edgeClasses
+     */
     @SafeVarargs
     public final void addPathConnectionPanel(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        addPathConnectionPanel(false, searchElementClass, edgeClasses);
+        addPathConnectionPanel(LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClasses);
     }
 
+    /**
+     * @param panelLabelOption
+     * @param edgeClasses
+     */
     @SafeVarargs
-    public final void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
-        addPathConnectionPanel(labelLastEdgeName, null, edgeClasses);
+    public final void addPathConnectionPanel(final PanelLabelOption panelLabelOption, final Class<? extends Edge>... edgeClasses) {
+        addPathConnectionPanel(panelLabelOption, null, edgeClasses);
     }
 
+    /**
+     * @param panelLabelOption
+     * @param searchElementClass
+     * @param edgeClasses
+     */
     @SafeVarargs
-    public final void addPathConnectionPanel(final boolean labelLastEdgeName, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
+    public final void addPathConnectionPanel(final PanelLabelOption panelLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
         MetaModel metaModel = modelElement.getMetaModel();
         if (metaModel.isVisible(metaPath)) {
@@ -219,7 +408,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
             editable &= !metaPath.isLastPathElementDependent();
             //            System.err.println(editable);
             if (editable || !singleConnection) {
-                addTab(new PathConnectionPanel(this, labelLastEdgeName, false, metaPath));
+                addTab(new PathConnectionPanel(this, panelLabelOption, false, metaPath));
             } else {
                 addDescriptedSingleConnectionPanel(edgeClasses);
             }
@@ -230,15 +419,22 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     // PathLeafPanel //
     ///////////////////
 
+    /**
+     * @param edgeClasses
+     */
     @SafeVarargs
     public final void addPathConnectionLeafPanel(final Class<? extends Edge>... edgeClasses) {
-        addPathConnectionLeafPanel(false, edgeClasses);
+        addPathConnectionLeafPanel(LABEL_END_ELEMENT_TYPE, edgeClasses);
     }
 
+    /**
+     * @param panelLabelOption
+     * @param edgeClasses
+     */
     @SafeVarargs
-    public final void addPathConnectionLeafPanel(final boolean labelLastEdgeName, final Class<? extends Edge>... edgeClasses) {
+    public final void addPathConnectionLeafPanel(final PanelLabelOption panelLabelOption, final Class<? extends Edge>... edgeClasses) {
         SimpleMetaPath metaPath = createSimpleMetaPath(null, edgeClasses);
-        addTab(new PathConnectionLeafPanel(this, labelLastEdgeName, metaPath));
+        addTab(new PathConnectionLeafPanel(this, panelLabelOption, metaPath));
     }
 
     //    @SafeVarargs
@@ -255,53 +451,94 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     // EdgePanel //
     ///////////////
 
+    /**
+     * @param add2SubTab
+     * @param searchElementClass
+     * @param edgeClass
+     */
     private void addEdgePanel(final boolean add2SubTab, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        addEdgePanel(LABEL_END_ELEMENT_TYPE, add2SubTab, searchElementClass, edgeClass);
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param add2SubTab
+     * @param searchElementClass
+     * @param edgeClass
+     * @return
+     */
+    private final AbstractPathConnectionPanel getAddableEdgePanel(final PanelLabelOption panelLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
         SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClass);
         //Wenn sich ein Pfad für diese Elementart nicht anlegen lässt -> Panel nicht adden. Das ist der Fall, wenn Kanten einer Oberklasse
         //für eine Unterklasse nicht mehr gelten (z.B. Service-Metamodell: ApplicationSystem -> ApplicationSystem_IheActorInstance_Edge soll
         //für IheActorInstances nicht angezeigt werden, da IheActorInstances keine IheActorInstances untergordnet werden können.
         if (metaPath == null) {
-            return;
+            return null;
         }
         MetaModel metaModel = modelElement.getMetaModel();
         Class<? extends ModelElement> meClass = modelElement.getClass();
         if (!metaModel.isStartOrEndClass(edgeClass, meClass)) { //checken, wenn das Panel aus einer Oberklasse kommt, ob diese Kante in der Unterklasse überhaupt noch vorkommt (siehe removed edges in Metamodel)
             //System.err.println(searchElementClass.getSimpleName() + " removed " + edgeClass.getSimpleName() or invalid path definition);
-            return;
+            return null;
         }
         if (!metaModel.isVisible(metaPath)) {
-            return;
+            return null;
         }
-        ElementDialogPanel panel2Add = null;
+        AbstractPathConnectionPanel panel2Add = null;
         if (MetaModel.isComposition(edgeClass)) {
             Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);
-            panel2Add = new MutipleCompositionPanel(this, searchElementClass, compositionEdgeClass);
+            panel2Add = new MutipleCompositionPanel(this, panelLabelOption, searchElementClass, compositionEdgeClass);
         } else if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
-            panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
+            panel2Add = new DoubleMeaningEdgePanel(this, panelLabelOption, searchElementClass, edgeClass);
             //Kanten die nicht doppeltdeutig sind, aber dieselben Elementarten verbinden und in beide Richtungen unterschiedlich heißen, müssen auch in beiden Richtungen angeboten werden
         } else if (Edge.getStartClass(edgeClass) == Edge.getEndClass(edgeClass) && metaModel.isDirectedEdge(edgeClass)) {
-            panel2Add = new DoubleMeaningEdgePanel(this, searchElementClass, edgeClass);
+            panel2Add = new DoubleMeaningEdgePanel(this, panelLabelOption, searchElementClass, edgeClass);
         } else {
-            boolean editable = !isInfoDialog() && metaPath.isCreatable(true);
-            panel2Add = new PathConnectionPanel(this, editable, metaPath);
+            panel2Add = new PathConnectionPanel(this, panelLabelOption, metaPath);
         }
-        if (add2SubTab) {
-            lastCreatedTabbedPanel.addTab(panel2Add);
-        } else {
-            addTab(panel2Add);
+        return panel2Add;
+    }
+
+    /**
+     * @param panelLabelOption
+     * @param add2SubTab
+     * @param searchElementClass
+     * @param edgeClass
+     */
+    private final void addEdgePanel(final PanelLabelOption panelLabelOption, final boolean add2SubTab, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
+        AbstractPathConnectionPanel panel2Add = getAddableEdgePanel(panelLabelOption, searchElementClass, edgeClass);
+        if (panel2Add != null) {
+            if (add2SubTab) {
+                lastAddedTabbedPanel.addTab(panel2Add);
+            } else {
+                addTab(panel2Add);
+            }
         }
     }
 
+    /**
+     * @param tableDefinition
+     * @param metaPathStepWithPathName
+     * @param edgeClasses
+     */
     @SafeVarargs
     public final void addTablePanel(final ConnectedElementsTableDefinition tableDefinition, final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
         SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(doc.getMetaModel(), modelElement.getClass(), metaPathStepWithPathName, edgeClasses);
         addTablePanel(tableDefinition, simpleMetaPath);
     }
 
+    /**
+     * @param tableDefinition
+     * @param simpleMetaPath
+     */
     public final void addTablePanel(final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath simpleMetaPath) {
         addTablePanelInternal(tableDefinition, simpleMetaPath);
     }
 
+    /**
+     * @param tableDefinition
+     * @param simpleMetaPaths
+     */
     @SafeVarargs
     private final void addTablePanelInternal(final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
         boolean editable = true;
@@ -318,7 +555,8 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
                 }
             }
         }
-        addTab(new ConnectedElementsTablePanel(this, tableDefinition, allDifferentSimpleMetaPaths));
+        ConnectedElementsTablePanel connectedElementsTablePanel = new ConnectedElementsTablePanel(this, tableDefinition, allDifferentSimpleMetaPaths);
+        addTab(connectedElementsTablePanel);
     }
 
     @Override
@@ -327,6 +565,9 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
         super.windowActivated(e);
     }
 
+    /**
+     *
+     */
     private void removeEmptyTabs() {
         for (int i = getTabCount() - 1; i >= 0; i--) {
             Component comp = getTabComponentAt(i);
@@ -336,6 +577,10 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
         }
     }
 
+    /**
+     * @param comp
+     * @return
+     */
     private boolean isEmptyTabbedPanel(Component comp) {
         if (comp instanceof TabbedPanel) {
             TabbedPanel tabbedPanel = (TabbedPanel) comp;

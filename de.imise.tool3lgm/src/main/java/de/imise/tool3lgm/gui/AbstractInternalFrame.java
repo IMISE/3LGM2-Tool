@@ -111,4 +111,9 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
         super.dispose();
     }
 
+    @Override
+    public String toString() {
+        return getClass().getName() + " " + doc;
+    }
+
 }

@@ -37,6 +37,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerNode;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -273,6 +274,11 @@ public final class MetaModel implements MetaModelSpecific {
      */
     private final Map<Class<? extends ModelElement>, AbstractMetaPath> elementClassToNameExtensionPath;
 
+    /**
+     * Mappt von einer InferenceEdge-Klasse auf den MetaPath, aus dem diese Inference-Kante abgeleitet wird.
+     */
+    private final Map<Class<? extends InferenceEdge>, AbstractMetaPath> inferenceEdgeToConditionPath;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -393,13 +399,16 @@ public final class MetaModel implements MetaModelSpecific {
         elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatablePaths()));
         elementClassToNameExtensionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionPath());
         elementClassesWithNameExtensions = CollectionUtils.ensureImmutable(elementClassToNameExtensionPath.keySet());
+
+        inferenceEdgeToConditionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionPath());
     }
 
     /**
-     * Hanlder für das einfache und nicht redundante Anlegen von Elementar-Metapfaden für dieses MetaModel
+     * Handler für das einfache und nicht redundante Anlegen von Elementar-Metapfaden für dieses MetaModel
      *
      * @return
      */
+    @Override
     public final ElementaryMetaPathHandler getElementaryMetaPathHandler() {
         return elementaryMetaPathHandler;
     }
@@ -1109,6 +1118,22 @@ public final class MetaModel implements MetaModelSpecific {
     }
 
     /**
+     * Liefert alle nichtabstrakten, zu den übergebenen Klassen zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in
+     * den Rückgabewerten enthalten, wenn sie nichtabstract ist.
+     *
+     * @param elementClass
+     * @return
+     */
+    public final Collection<Class<? extends ModelElement>> getInstanciableAssignableClasses(final Collection<Class<? extends ModelElement>> elementClasses) {
+        Set<Class<? extends ModelElement>> returnElements = new HashSet<>();
+        for (Class<? extends ModelElement> elementClass : elementClasses) {
+            Collection<Class<? extends ModelElement>> instanciableAssignableClasses = getInstanciableAssignableClasses(elementClass);
+            returnElements.addAll(instanciableAssignableClasses);
+        }
+        return returnElements;
+    }
+
+    /**
      * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
      * Rückgabewerten enthalten, wenn sie nichtabstract ist.
      *
@@ -1116,10 +1141,31 @@ public final class MetaModel implements MetaModelSpecific {
      * @return
      */
     public final Collection<Class<? extends ModelElement>> getInstanciableAssignableClasses(final Class<? extends ModelElement> elementClass) {
+        return getInstanciableAssignableClasses(elementClass, false);
+    }
+
+    /**
+     * Liefert alle nichtabstrakten, zur übergebenen Klasse zuweisungskompatiblen Element- oder Kantenklassen. Die übergebene Klasse selbst ist in den
+     * Rückgabewerten enthalten, wenn sie nichtabstract ist.
+     *
+     * @param elementClass
+     * @param withoutSubClassesOfInstanciableClasses
+     *            If <code>true</code> only instanciable superclasses are contained. If <code>false</code> all instaciable
+     *            classes (including subclasses of already contained other instanciable classes are contained.
+     * @return
+     */
+    public final Collection<Class<? extends ModelElement>> getInstanciableAssignableClasses(final Class<? extends ModelElement> elementClass, final boolean withoutSubClassesOfInstanciableClasses) {
         if (elementClassToNonAbstractAssignableElementClasses.containsKey(elementClass)) {
             Collection<Class<? extends ModelElement>> classes = elementClassToNonAbstractAssignableElementClasses.get(elementClass);
-            if (classes.size() == 1 && classes.iterator().next() == null) {
+            if (classes.size() == 0 && classes.iterator().next() == null) {
                 return EMPTY_ELEMENT_CLASS_COLLECTION;
+            }
+            //remove subclasses if needed
+            if (withoutSubClassesOfInstanciableClasses) {
+                List<Class<? extends ModelElement>> classesList = new ArrayList<>(classes);
+                ReflectionUtils.removeSubClasses(classesList);
+                classes = classesList;
+
             }
             return classes;
         }
@@ -1131,7 +1177,7 @@ public final class MetaModel implements MetaModelSpecific {
         if (!elementClassToNonAbstractAssignableElementClasses.containsKey(elementClass)) {
             elementClassToNonAbstractAssignableElementClasses.put(elementClass, null);
         }
-        return getInstanciableAssignableClasses(elementClass);
+        return getInstanciableAssignableClasses(elementClass, withoutSubClassesOfInstanciableClasses);
     }
 
     /**
@@ -1235,6 +1281,80 @@ public final class MetaModel implements MetaModelSpecific {
         return returnClasses;
     }
 
+    /**
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
+     * und bei der die Elementklasse das Super-Element ist.
+     *
+     * @param elementClass
+     * @return
+     */
+    public List<Class<InstanciationEdge>> getInstanciationEdgeTypesAsMaster(final Class<? extends ModelElement> elementClass) {
+        return getSubordinationEdgeTypesAsMaster(elementClass, InstanciationEdge.class);
+    }
+
+    /**
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
+     * und bei der die Elementklasse jedas Sub-Element ist.
+     *
+     * @param elementClass
+     * @return
+     */
+    public List<Class<InstanciationEdge>> getInstanciationEdgeTypesAsSlave(final Class<? extends ModelElement> elementClass) {
+        return getSubordinationEdgeTypesAsSlave(elementClass, InstanciationEdge.class);
+    }
+
+    /**
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
+     * und bei der die Elementklasse das Super-Element ist.
+     *
+     * @param <T>
+     * @param elementClass
+     * @param subordinationEdgeClass
+     * @return
+     */
+    private <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypesAsMaster(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass) {
+        return getSubordinationEdgeTypes(elementClass, subordinationEdgeClass, true);
+    }
+
+    /**
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
+     * und bei der die Elementklasse jedas Sub-Element ist.
+     *
+     * @param <T>
+     * @param elementClass
+     * @param subordinationEdgeClass
+     * @return
+     */
+    private <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypesAsSlave(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass) {
+        return getSubordinationEdgeTypes(elementClass, subordinationEdgeClass, false);
+    }
+
+    /**
+     * Liefert für eine Elementklasse alle Kantenklassen, die eine Unterklasse von {@link SubordinationEdge} sind
+     * und bei der die Elementklasse je nach übergebenem boolean Parameter entweder das Sub- (false) oder das
+     * Super-Element (true) ist.
+     *
+     * @param <T>
+     * @param elementClass
+     * @param subordinationEdgeClass
+     * @param superElement
+     * @return
+     */
+    private <T extends SubordinationEdge> List<Class<T>> getSubordinationEdgeTypes(final Class<? extends ModelElement> elementClass, final Class<T> subordinationEdgeClass, final boolean superElement) {
+        Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass);
+        List<Class<T>> returnList = new ArrayList<>();
+        for (Class<? extends Edge> edgeType : edgeTypes) {
+            if (subordinationEdgeClass.isAssignableFrom(edgeType)) {
+                returnList.add((Class<T>) edgeType);
+            }
+        }
+        return returnList;
+    }
+
+    /**
+     * @param layer
+     * @return
+     */
     public final Iterable<Class<? extends ModelElement>> getCreatableLayerNodes(final int layer) {
         if (layer == ModelConstants.DOMAIN_LAYER) {
             return creatableDomainLayerNodes;
@@ -1360,7 +1480,19 @@ public final class MetaModel implements MetaModelSpecific {
      * @return
      */
     public boolean isInstanciationMaster(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
-        return isInstaciation(edgeClass) && isStartClass(edgeClass, elementClass);
+        return isInstanciation(edgeClass) && isStartClass(edgeClass, elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn es sich bei der übergebenen Kantenklasse um eine {@link InstanciationEdge} handelt und die übergebene
+     * Elementklasse davon das EndElement - also die Instanz ist und nicht das instanziierbare Element.
+     *
+     * @param edgeClass
+     * @param elementClass
+     * @return
+     */
+    public boolean isInstanciationInstance(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        return isInstanciation(edgeClass) && isEndClass(edgeClass, elementClass);
     }
 
     /**
@@ -1436,6 +1568,26 @@ public final class MetaModel implements MetaModelSpecific {
      */
     public final boolean isStartOrEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
         return isStartClass(edgeClass, elementClass) || isEndClass(edgeClass, elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Kantenklasse Elemente der angegebenen Arten miteinander verbindet. Je nach
+     * Richtung vorwärst (FORWARD), rückwärts (BACKWARD) oder irgendwie (null)
+     *
+     * @param edgeClass
+     * @param elementClass1
+     * @param elementClass2
+     * @param direction
+     * @return
+     */
+    public final boolean isConnecting(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass1, final Class<? extends ModelElement> elementClass2, final Direction direction) {
+        if (direction == Direction.FORWARD) {
+            return isConnectingForward(edgeClass, elementClass1, elementClass2);
+        }
+        if (direction == Direction.BACKWARD) {
+            return isConnectingForward(edgeClass, elementClass2, elementClass1);
+        }
+        return isConnecting(edgeClass, elementClass1, elementClass2);
     }
 
     /**
@@ -1798,7 +1950,7 @@ public final class MetaModel implements MetaModelSpecific {
      * @param edgeClass
      * @return
      */
-    public static final boolean isInstaciation(final Class<? extends Edge> edgeClass) {
+    public static final boolean isInstanciation(final Class<? extends Edge> edgeClass) {
         return InstanciationEdge.class.isAssignableFrom(edgeClass);
     }
 
@@ -1976,6 +2128,28 @@ public final class MetaModel implements MetaModelSpecific {
             elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
         }
         return false;
+    }
+
+    /**
+     * @return Collection alle InferenceEdges dieses Metamodells (also aller Kanten, die
+     *         sich aus einem anderen MetaPfad ergeben.
+     */
+    public Collection<Class<? extends InferenceEdge>> getInferenceEdgeClasses() {
+        return inferenceEdgeToConditionPath.keySet();
+    }
+
+    /**
+     * @return Collection aller Bedingungspfade für Ableitungskanten (InferenceEdges)
+     */
+    public Collection<AbstractMetaPath> getInferenceEdgeConditionMetaPaths() {
+        return inferenceEdgeToConditionPath.values();
+    }
+
+    /**
+     * @return Bedingungspfad für eine Ableitungskante (InferenceEdge)
+     */
+    public AbstractMetaPath getInferenceEdgeConditionMetaPath(final Class<? extends InferenceEdge> inferenceEdgeClass) {
+        return inferenceEdgeToConditionPath.get(inferenceEdgeClass);
     }
 
     /**

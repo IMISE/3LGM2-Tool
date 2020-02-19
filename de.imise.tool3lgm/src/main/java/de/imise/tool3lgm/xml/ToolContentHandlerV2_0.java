@@ -33,6 +33,8 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -517,16 +519,28 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 if (layout == null) {
                     return;
                 }
-                if (layout != null) {
-                    layout.valign = Integer.parseInt(elementValue.toString());
+                String elementValueString = elementValue.toString();
+                //alte Dateien -> SwingContstants
+                try {
+                    int swingConstantValue = Integer.parseInt(elementValueString);
+                    TextPositionVertical textPositionVertical = TextPositionVertical.getValueForSwingConstant(swingConstantValue);
+                    layout.textPositionVertical = textPositionVertical;
+                } catch (Exception ex) {
+                    // ignore -> default alignment
                 }
 
             } else if (qName.equals("halign")) {
                 if (layout == null) {
                     return;
                 }
-                if (layout != null) {
-                    layout.halign = Integer.parseInt(elementValue.toString());
+                String elementValueString = elementValue.toString();
+                //alte Dateien -> SwingContstants
+                try {
+                    int swingConstantValue = Integer.parseInt(elementValueString);
+                    TextPositionHorizontal textPositionHorizontal = TextPositionHorizontal.getValueForSwingConstant(swingConstantValue);
+                    layout.textPositionHorizontal = textPositionHorizontal;
+                } catch (Exception ex) {
+                    // ignore -> default alignment
                 }
 
             } else if (qName.equals("layout")) {
@@ -538,7 +552,7 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
                 classType = null;
 
             } else if (qName.equals("icon")) {
-                layout.icon = elementValue.toString();
+                layout.setIcon(elementValue.toString());
                 containerWithIcon.add((NodeContainer) container);
 
             } else if (qName.equals("layer")) {

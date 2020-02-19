@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.graphtools.undoredo;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -19,7 +19,7 @@ public class TransactionManager {
     /**
      * Liste aller <code>TransactionListener</code>
      */
-    private final List<TransactionListener> listenerList = new ArrayList<>(3);
+    private final Set<TransactionListener> transactionListeners = new HashSet<>(3);
 
     /**
      * Liste aller durchgeführten Transaktionen, die sich auch rückgängig machen lassen sollen.
@@ -134,8 +134,8 @@ public class TransactionManager {
             System.out.println("log :  " + undoCommand);
             System.out.println("ulog:  " + redoCommand);
         }
-        for (int i = 0; i < listenerList.size(); i++) {
-            listenerList.get(i).transactionStarted();
+        for (TransactionListener listener : transactionListeners) {
+            listener.transactionStarted();
         }
     }
 
@@ -280,10 +280,9 @@ public class TransactionManager {
         if (doc.isVerificationMode()) {
             printQueue(10);
         }
-        for (int i = 0; i < listenerList.size(); i++) {
-            listenerList.get(i).transactionStopped();
+        for (TransactionListener listener : transactionListeners) {
+            listener.transactionStopped();
         }
-
     }
 
     /**
@@ -392,7 +391,7 @@ public class TransactionManager {
             return true;
         }
         if (!isUndoAvailable()) {
-            return true;
+            return false;
         }
 
         int j = cur_pos;
@@ -410,8 +409,7 @@ public class TransactionManager {
         gdcoll.setBulkMode(true);
 
         is_doing = true;
-        boolean flag = gdcoll.isInteractiveMode();
-        gdcoll.setInteractiveMode(false);
+        boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
 
         doc.deselectAll(true);
         for (int k = 0; k < trans_q[j].getPostSelectionSize(); k++) {
@@ -448,7 +446,7 @@ public class TransactionManager {
         }
         cur_pos--;
 
-        doc.getCollection().setInteractiveMode(flag);
+        doc.getCollection().setAutomaticMode(lastAutomaticMode);
         if (doc.isVerificationMode()) {
             printQueue(10);
         }
@@ -480,8 +478,8 @@ public class TransactionManager {
         cur_pos++;
         int j = getTransactionIndexForPID(pid, false);
         GraphDocument doc = trans_q[j].getGraphDocument();
-        boolean flag = doc.getCollection().isInteractiveMode();
-        doc.getCollection().setInteractiveMode(false);
+        GDCollection gdcoll = doc.getCollection();
+        boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
         doc.deselectAll(true);
         for (int k = 0; k < trans_q[j].getPreSelectionSize(); k++) {
             doc.addToSelection(trans_q[j].getPreSelectionItem(k), pid);
@@ -495,7 +493,7 @@ public class TransactionManager {
         for (int j2 = 0; j2 < trans_q[j].getPostSelectionSize(); j2++) {
             doc.addToSelection(trans_q[j].getPostSelectionItem(j2), pid);
         }
-        doc.getCollection().setInteractiveMode(flag);
+        gdcoll.setAutomaticMode(lastAutomaticMode);
         is_doing = false;
         if (doc.isVerificationMode()) {
             printQueue(10);
@@ -551,14 +549,14 @@ public class TransactionManager {
      * @param listener
      */
     public void addTransActionListener(final TransactionListener listener) {
-        listenerList.add(listener);
+        transactionListeners.add(listener);
     }
 
     /**
      * @param listener
      */
     public void removeTransActionListener(final TransactionListener listener) {
-        listenerList.remove(listener);
+        transactionListeners.remove(listener);
     }
 
     /**

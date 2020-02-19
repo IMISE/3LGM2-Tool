@@ -21,7 +21,7 @@ import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
-import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
+import de.imise.tool3lgm.gui.InternalFrameToolbarManager;
 
 /**
  * Klasse zur Darstellung von Verbindungen zwischen Objekten in einer Tabelle
@@ -31,7 +31,7 @@ import de.imise.tool3lgm.gui.GraphAreaToolbarManager;
 public class MatrixViewInternalFrame extends AbstractInternalFrame implements MouseMotionListener, MouseListener {
 
     /** Liefert die aktuelle Toolbar */
-    private final GraphAreaToolbarManager toolbarManager;
+    private final InternalFrameToolbarManager toolbarManager;
 
     /** Panel für die Zeilenbeschriftungen (Elementnamen) */
     private final RowPanel rowHeaderPanel;
@@ -63,7 +63,7 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
      * @param titleIndex Zähler, der an den Titel des Fensters angehängt wird. Man kann beliebig viele Matrixfenster für dasselbe Teilmodell öffnen.
      *            Der Title soll unterscheidbar sein und das wird er durch diese Nummer.
      */
-    public MatrixViewInternalFrame(final GraphDocument doc, final GraphAreaToolbarManager toolbarManager, final int titleIndex) {
+    public MatrixViewInternalFrame(final GraphDocument doc, final InternalFrameToolbarManager toolbarManager, final int titleIndex) {
         super(doc, "");
         this.toolbarManager = toolbarManager;
         this.titleIndex = titleIndex;

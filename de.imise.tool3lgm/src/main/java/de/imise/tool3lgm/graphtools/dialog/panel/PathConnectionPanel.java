@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
 
@@ -22,8 +23,8 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.google.common.collect.ImmutableList;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
@@ -80,28 +81,28 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     private final LGMAction newElementAction;
 
-    public PathConnectionPanel(final int i, final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
         this(dialog, -1, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, maxLines, false, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, panelLabelOption, false, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, -1, false, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, LABEL_END_ELEMENT_TYPE, maxLines, false, simpleMetaPath);
     }
 
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, maxLines, renderLeftTreeAsList, simpleMetaPath);
+        this(dialog, LABEL_END_ELEMENT_TYPE, maxLines, renderLeftTreeAsList, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, -1, renderLeftTreeAsList, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, panelLabelOption, -1, renderLeftTreeAsList, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, labelLastEdgeName, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, panelLabelOption, simpleMetaPath);
         showRightTree = isEditable();
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();
@@ -109,7 +110,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         GridBagConstraints constraints = new GridBagConstraints();
 
         //wenn das Panel nicht in der Höhe eingeschränkt werden soll, dann steht es allein auf dem Panel und bekommt als Westabel = Label über dem linken Baum den Elementarpfadnamen oder "verbunden"
-        //wenn das Panel in der Höhe eingeschränkt werden soll, bleibt das Westpanel auf dem Wert von super = Name des Endelementes des Pfades oder des letzten Elementarpfadschrittes (wenn labelLastEdgeName == true)
+        //wenn das Panel in der Höhe eingeschränkt werden soll, bleibt das Westpanel auf dem Wert von super = Name des Endelementes des Pfades oder des letzten Elementarpfadschrittes
         if (maxLines < 0) {
             List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
             //wenn der Pfad aus mehr als einer Edge besteht, dann soll über dem linken Baum einfach "verbunden" stehen, sonst der Elementarpfadname
@@ -188,10 +189,19 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         showFullDialog(true);
     }
 
+    /**
+     * @param c
+     * @param gbc
+     */
     public void addUnderLeftTree(final Component c, final GridBagConstraints gbc) {
         add(this, c, gbc, 0, 5, 1, 1);
     }
 
+    /**
+     * @param c
+     * @param gbc
+     * @param gridwidth
+     */
     public void addSouth(final Component c, final GridBagConstraints gbc, final int gridwidth) {
         add(this, c, gbc, 0, 6, gridwidth, 1);
     }
@@ -418,7 +428,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      * @return
      */
     protected LGMAction getConnectAction() {
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_left2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_CONNECT_ELEMENT) {
 
             @Override
             public void execute(final EventObject eo) {
@@ -470,7 +480,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      */
     protected LGMAction getDisconnectAction() {
         final PathConnectionPanel panel = this;
-        return new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_DISCONNECT_ELEMENT) {
 
             @Override
             public void execute(final EventObject eo) {
@@ -568,7 +578,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (metaModel.isSlaveType(searchElementClass)) {
             return null;
         }
-        return new LGMAction("", Tool3lgmConstants.getIcon("ICON_LARGE_ACTION_DIALOG_NEW_ELEMENT.gif")) {
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_NEW_ELEMENT) {
             @Override
             public void execute(final EventObject eo) {
                 //wenn eindutig fest steht, an welchen Node ein neues Element gehängt werden sollte, dann wird

@@ -140,6 +140,8 @@ public interface LGMChangeListener {
         protected void deliverEvent(final List<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem, final boolean deliverStatic) {
             //das hier muss sein, weil es vorkommen kann, dass sich bei deliverEvent(l, source, last_elem); der aktuelle Listener aus der Listener-Liste löscht
             //eine andere Variante wäre, die Liste vorher zu clonen und auf dem Clone zu iterieren
+            //            Sys.err1(
+            //                    "\n##################################################################################################################################################################################################################################################################\n##################################################################################################################################################################################################################################################################");
             LGMChangeListener lastListener = null;
             for (int i = 0; i < listeners.size();) {
                 LGMChangeListener l = listeners.get(i);
@@ -148,11 +150,15 @@ public interface LGMChangeListener {
                     continue;
                 }
                 lastListener = l;
+                //Sys.err(name() + " " + l.getClass() + "\n" + l);
                 deliverEvent(l, source, last_elem);
             }
-            //Das hier stellt die Verbindung zwischen dem globalen Listener des Tools und dem für ein GraphDocument bzw. eine GDCollection.
+            //Das hier stellt die Verbindung zwischen dem globalen Listener des Tools und dem für ein GraphDocument bzw. einer GDCollection her
             //Diese beiden Ereignisse werden von beiden Listenern weiter geleitet.
-            if (deliverStatic) {
+            //der source null check ist notwendig, weil sonst beim Öffnen eines Modells diese Ereignisse hier fliegen und damit
+            //die Frames doppelt angelegt werden. Das Fällt zunächst gar nicht auf, da diese unnötigen Frames immer verborgen bleiben.
+            //Sie sind aber Listener, elegen Speicher und werden geupdated.
+            if (deliverStatic && source != null) {
                 if (this == SZENARIO_ADDED) {
                     Static.distribute(MODEL_CHANGE_SZENARIO_ADDED, source);
                 } else if (this == SZENARIO_REMOVED) {
@@ -162,7 +168,6 @@ public interface LGMChangeListener {
                 }
             }
         }
-
     }
 
     /** Hier die generelle Nachricht - alle sollten sich komplett erneuern */

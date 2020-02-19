@@ -146,4 +146,9 @@ public class ModelBrowserTreeLGMChangeListener implements LGMChangeListener {
         this.active = active;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getName() + " " + tree.getGraphDocument();
+    }
+
 }

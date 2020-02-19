@@ -44,6 +44,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.util.Alphabetical;
 import de.imise.util.HashStringGenerator;
 import de.imise.util.htmlxml.HTMLConverter;
@@ -388,11 +389,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         return nameWithSzens;
     }
 
-    /** Gibt den Namen des Objektes im HTML-Formatzurueck */
-    public String getHTMLName() {
-        return htmlName;
-    }
-
     /**
      * Setzt den Namen des Objektes und sortiert die Liste der {@link NodeContainer} im LayerContainer
      *
@@ -437,7 +433,12 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         updateNameWithSzens();
 
         //Node der Layer neu sortieren
-        if (sort && this instanceof Node) {
+        //Hier nicht direkt auf 'this instanceof Node' testen, sondern über das MetaModel.isNodeTYpe() gehen,
+        //weil ModelElement die Unterlasse Node nicht kennen sollte.
+        //Eventuell wird das in Zukunft auch eine andere Bedingung wie metaModel.hasVisibleName(me) oder so etwas,
+        //was auch Kanten mit einschließen würde, falls deren Namen auch mal eine Rolle spielen sollten
+        boolean isNodeType = MetaModel.isNodeType(getClass());
+        if (sort && isNodeType) {
             for (ElementContainer ec : containerTable.values()) {
                 NodeContainer kc = (NodeContainer) ec;
                 LayerContainer lc = kc.getMyLayerContainer();
@@ -446,21 +447,24 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 }
             }
         }
-        if (!isPaintable()) {
-            return;
-        }
-        updateHTMLName();
-        for (ElementContainer ec : containerTable.values()) {
-            ec.refreshText();
+        //HTML-Anzeigename für die Grafik -> im Moment nur für Knotencontainer
+        if (isNodeType && isPaintable()) {
+            updateHTMLName(null);
         }
     }
 
+    /**
+     * @return
+     */
     public String getNameExtension() {
         AbstractMetaPath nameExtensionPath = getNameExtensionPath();
         updateHTMLNameSuffixBuffer(nameExtensionPath);
         return suffixBuf.toString();
     }
 
+    /**
+     * @param nameExtension
+     */
     private void updateHTMLNameSuffixBuffer(final AbstractMetaPath nameExtension) {
         suffixBuf.setLength(0);
         if (nameExtension != null) {
@@ -489,11 +493,60 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         }
     }
 
-    private void updateHTMLName() {
-        AbstractMetaPath nameExtension = getNameExtensionPath();
-        updateHTMLNameSuffixBuffer(nameExtension);
+    /**
+     * @param targetContainer
+     *            the single target container to update or <code>null</code> to
+     *            update all containers
+     */
+    public void updateHTMLName(final ElementContainer targetContainer) {
+        ElementsLayoutDefinition defaultElementsLayout = null;
+        GraphElementLayout nameExtendsionClassLayout = null;
+        Iterable<ElementContainer> targetContainers;
+        if (targetContainer == null) {
+            AbstractMetaPath nameExtension = getNameExtensionPath();
+            updateHTMLNameSuffixBuffer(nameExtension);
+            Class<? extends ModelElement> nameExtendsionClass;
+            GraphViewDefinition graphViewDefinition;
+            if (suffixBuf.length() > 0) {
+                nameExtendsionClass = nameExtension.getEndClass();
+                graphViewDefinition = metaModel.getGraphViewDefinition();
+                defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+                nameExtendsionClassLayout = defaultElementsLayout.getStandardElementLayout(nameExtendsionClass);
+            }
+            targetContainers = getElementContainers();
+        } else {
+            targetContainers = ImmutableList.of(targetContainer);
+        }
+
+        htmlName = null;
         textBuf.setLength(0);
-        textBuf.append("<HTML><CENTER>");
+        for (ElementContainer ec : targetContainers) {
+            GraphDocument doc = ec.getGraphDocument();
+            if (!doc.isMainGraphDocument()) {
+                if (ec.isDefaultTextAlignmentHTML()) {
+                    if (htmlName == null) {
+                        htmlName = generateHTMLName(ec, defaultElementsLayout, nameExtendsionClassLayout);
+                    }
+                    ec.setHTMLName(htmlName);
+                } else {
+                    String notDefaultAlignmentHTMLName = generateHTMLName(ec, defaultElementsLayout, nameExtendsionClassLayout);
+                    ec.setHTMLName(notDefaultAlignmentHTMLName);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param ec
+     * @param defaultElementsLayout
+     * @param nameExtendsionClassLayout
+     * @return
+     */
+    private String generateHTMLName(final ElementContainer ec, final ElementsLayoutDefinition defaultElementsLayout, final GraphElementLayout nameExtendsionClassLayout) {
+        TextAlignmentHTML textAlignmentHTML = ec.getTextAlignmentHTML();
+        textBuf.append("<HTML><P align=\"");
+        textBuf.append(textAlignmentHTML.name());
+        textBuf.append("\">");
         if (isHyperlink()) {
             textBuf.append("<U>");
         }
@@ -503,10 +556,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         }
         textBuf.append(suffixBuf.length() > 0 ? "<BR>" : "");
         if (suffixBuf.length() > 0) {
-            GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
-            ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
-            Class<? extends ModelElement> nameExtendsionClass = nameExtension.getEndClass();
-            GraphElementLayout nameExtendsionClassLayout = defaultElementsLayout.getStandardElementLayout(nameExtendsionClass);
             Color bg_color = nameExtendsionClassLayout == null || nameExtendsionClassLayout == defaultElementsLayout.getStandardElementLayout() ? null : nameExtendsionClassLayout.bg_color;
             if (bg_color != null) {
                 textBuf.append("<span style=\"background-color: #");
@@ -518,8 +567,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 textBuf.append("</span>");
             }
         }
-        textBuf.append("</CENTER></HTML>");
-        htmlName = textBuf.toString();
+        textBuf.append("</P></HTML>");
+        return textBuf.toString();
     }
 
     /**
@@ -1803,6 +1852,23 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
+     * Gibt eine Liste aller Verbindungen der angegebenen Art zurück.<br>
+     * Die übergebene Klasse muss gleich der zurückzugebenen Kantenklassen oder eine Oberklasse davon sein.
+     *
+     * @param edgeClass Klasse der zu suchenden Kanten
+     * @return
+     */
+    public final <T extends Edge> List<T> getTypedEdges(final Class<T> edgeClass) {
+        List<T> returnList = new ArrayList<>(getEdgesCount());
+        for (Edge edge : getEdges()) {
+            if (edgeHasClass(edge, edgeClass)) {
+                returnList.add((T) edge);
+            }
+        }
+        return returnList;
+    }
+
+    /**
      * Counts the edges
      *
      * @param edgeClass Type of edges to count
@@ -2029,7 +2095,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             }
         }
 
-        htmlName = HTMLConverter.getDecimalEncodedHTMLString(name);
+        updateHTMLName(null);
         refreshText();
 
         //UserFields zusammenführen. Bei allen UserFields, bei denen nur ein Element einen Wert hat oder sich die Werte nicht

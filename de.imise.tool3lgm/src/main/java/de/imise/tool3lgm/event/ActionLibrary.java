@@ -978,7 +978,7 @@ public class ActionLibrary {
         };
 
         /** Zeigt die Logische Werzeugebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
-        public static final Action ACTION_ACTIVATE_LOGICAL_TOOL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER) {
+        public static final Action ACTION_ACTIVATE_LOGICAL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_LOGICAL_LAYER) {
             @Override
             protected void actionPerformed() {
                 getSelectedGDCollection().setActiveLayer(ModelConstants.LOGICAL_LAYER);
@@ -992,7 +992,7 @@ public class ActionLibrary {
         };
 
         /** Zeigt die physische Werkzeugebene an, falls die Ein-Ebenen-Ansicht aktiviert ist */
-        public static final Action ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER) {
+        public static final Action ACTION_ACTIVATE_PHYSICAL_LAYER = new GraphDocumentAction(ActionIdentifier.ACTION_ACTIVATE_PHYSICAL_LAYER) {
             @Override
             protected void actionPerformed() {
                 getSelectedGDCollection().setActiveLayer(ModelConstants.PHYSICAL_LAYER);

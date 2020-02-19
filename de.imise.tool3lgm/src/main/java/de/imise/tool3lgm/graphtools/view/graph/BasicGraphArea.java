@@ -21,7 +21,6 @@ import javax.swing.JSeparator;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.image.ComponentAsImageExportHandler.ZoomableComponent;
@@ -179,8 +178,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      */
     public final void setSzenario(final Szenario szen) {
         szenario = szen;
-        revalidate();
-        repaint();
+        revalidateRepaint();
     }
 
     /**
@@ -215,8 +213,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         } else {
             storeSettings();
         }
-        revalidate();
-        repaint();
+        revalidateRepaint();
         fireLayerViewChanged();
     }
 
@@ -242,8 +239,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      */
     private final void setPageSize(final int width, final int height) {
         if (width == layerWidth && height == layerHeight) {
-            revalidate();
-            repaint();
+            revalidateRepaint();
             return;
         }
         layerHeight = height;
@@ -548,8 +544,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
 
         middleX = -c.left;
         middleY = -c.top;
-        revalidate();
-        repaint();
+        revalidateRepaint();
     }
 
     // --- GraphElementLayout-Verwaltung --- Ende ---
@@ -665,18 +660,6 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     public void layoutChanged() {
         setPageSize(szenario.getPageWidth(), szenario.getPageHeight());
         firePageSizeChangedChanged();
-    }
-
-    /**
-     * @param element
-     */
-    public void revalidateRepaint(final ElementContainer element) {
-        if (element != null && element.getParent() != null) {
-            element.getParent().validate();
-            element.getParent().repaint();
-        } else {
-            revalidateRepaint();
-        }
     }
 
     /**

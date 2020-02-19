@@ -6,6 +6,9 @@ import static de.imise.tool3lgm.Tool3lgmConstants.FileFilterType.LGM3_UNZIPPED;
 import static de.imise.tool3lgm.Tool3lgmConstants.FileFilterType.LGM3_ZIP;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_LINE_STYLE;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_LINE_THICKNESS;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_TEXT_ALIGNMENT_HTML;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_TEXT_POSITION_HORIZONTAL;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_TEXT_POSITION_VERTICAL;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -457,7 +460,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                 writeElement("y", viewPosition.y);
                 InputGraphArea inputGraphArea = frame.getInputGraphArea();
                 writeElement("zoom", inputGraphArea.getZoom());
-                writeElement("degree", inputGraphArea.getLayerAngle());
+                writeElement("degree", inputGraphArea.getMultiViewLayerAngle());
                 writeElement("shift", inputGraphArea.getMultiViewLayerGap());
                 writeElement("pageSizeFactor", szen.getPageSizeFactor());
                 writeElement("activeLayer", gdcoll.getActiveLayer());
@@ -572,16 +575,20 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         if (layout.height != -1) {
             writeElement("height", layout.height);
         }
-        if (layout.icon != null) {
-            usedIconHashes.add(layout.icon);
-            writeElement("icon", layout.icon);
+        String icon = layout.getIcon();
+        if (icon != null) {
+            usedIconHashes.add(icon);
+            writeElement("icon", icon);
         }
-        //        if (layout.valign != STANDARD_VALIGN) {
-        writeElement("valign", layout.valign);
-        //        }
-        //        if (layout.halign != STANDARD_HALIGN) {
-        writeElement("halign", layout.halign);
-        //        }
+        if (layout.textPositionHorizontal != STANDARD_TEXT_POSITION_HORIZONTAL) {
+            writeElement("halign", layout.textPositionHorizontal.name());
+        }
+        if (layout.textPositionVertical != STANDARD_TEXT_POSITION_VERTICAL) {
+            writeElement("valign", layout.textPositionVertical.name());
+        }
+        if (layout.textAlignmentHTML != STANDARD_TEXT_ALIGNMENT_HTML) {
+            writeElement("htmlalign", layout.textAlignmentHTML.name());
+        }
         writeEndElement(); //</layout> oder </nelayout>
     }
 

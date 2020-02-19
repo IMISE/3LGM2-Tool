@@ -6,11 +6,12 @@ import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationComponent;
+import de.imise.tool3lgm.metamodel.service.node.Use;
 
 /**
  * @author AXS (31.12.2017)
  */
-public final class ApplicationComponent_SupportLink_Edge extends SimpleEdge {
+public final class ApplicationComponent_Use_Edge extends SimpleEdge {
 
     public static final Class<? extends ModelElement> STCL = ApplicationComponent.class;
 
@@ -18,6 +19,6 @@ public final class ApplicationComponent_SupportLink_Edge extends SimpleEdge {
 
     public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> ETCL = SupportLink_Edge.class;
+    public static final Class<? extends ModelElement> ETCL = Use.class;
 
 }

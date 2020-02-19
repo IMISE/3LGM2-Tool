@@ -3,51 +3,42 @@ package de.imise.tool3lgm.gui;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.help.CSH;
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.ToolTipManager;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.ActionLibrary;
 import de.imise.tool3lgm.event.action.StaticAction;
+import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.log.Log;
 import de.imise.util.swing.component.UnfloatableToolBar;
+import de.imise.util.swing.event.ActionSource;
+import de.imise.util.swing.event.ExtendedAction;
 
-public class MainFrameToolBar extends UnfloatableToolBar implements ActionListener, MouseListener, LGMChangeListenerSimple, Tool3lgmChangeListener {
+public class MainFrameToolBar extends UnfloatableToolBar implements MouseListener, LGMChangeListenerSimple, Tool3lgmChangeListener {
 
     private GraphDocument doc = null;
 
-    private int windowIndex = -1;
-
-    private final JButton forward, backward, undo, redo;
-
-    /** List of all InternalFrames in the order they were active */
-    private final List<AbstractInternalFrame> windowList = new ArrayList<>();
-
-    private boolean operatingWindowList = false;
+    private final JButton undo, redo;
 
     public MainFrameToolBar() {
         JButton switchView = new ToolbarButton(ActionLibrary.ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE);
 
         JButton fach = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER);
-        JButton log = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER);
-        JButton phy = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER);
+        JButton log = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_LOGICAL_LAYER);
+        JButton phy = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_PHYSICAL_LAYER);
 
         JButton neu = new ToolbarButton(ActionLibrary.FileActions.ACTION_NEW_MODEL);
         JButton open = new ToolbarButton(ActionLibrary.FileActions.ACTION_OPEN_MODEL);
@@ -58,17 +49,8 @@ public class MainFrameToolBar extends UnfloatableToolBar implements ActionListen
         redo = new ToolbarButton(ActionLibrary.EditActions.ACTION_REDO);
         redo.addMouseListener(this);
 
-        backward = new JButton(Tool3lgmConstants.getIcon("arrow_left.gif"));
-        backward.setToolTipText(Tool3lgmConstants.getResString("vf"));
-        backward.setActionCommand("backward");
-        backward.addActionListener(this);
-        backward.setEnabled(false);
-
-        forward = new JButton(Tool3lgmConstants.getIcon("arrow_right.gif"));
-        forward.setToolTipText(Tool3lgmConstants.getResString("nf"));
-        forward.setActionCommand("forward");
-        forward.addActionListener(this);
-        forward.setEnabled(false);
+        JButton backward = new ToolbarButton(LastAndNextViewManager.ACTION_GOTO_PREVIOUS_VIEW);
+        JButton forward = new ToolbarButton(LastAndNextViewManager.ACTION_GOTO_NEXT_VIEW);
 
         CSH.setHelpIDString(this, "standardsymbolleiste");
 
@@ -91,7 +73,38 @@ public class MainFrameToolBar extends UnfloatableToolBar implements ActionListen
         addSeparator();
         add(backward);
         add(forward);
+        addSeparator();
 
+        ActionSource[][] textAlignmentAndPositionActions = {
+                {
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT, // left aligned
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER, //center aligned
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT, //right aligned
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY, //justified
+                }, {
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT, //position left
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER, //position center
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT, //position right
+                }, {
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP, //position top
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER, //position center
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM, //position bottom
+                }, {
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, //position top
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, //position one up
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, //position one down
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION, //position last
+                }
+        };
+        int i = 0;
+        for (ActionSource[] alignmentActions : textAlignmentAndPositionActions) {
+            if (i++ > 0) {
+                addSeparator();
+            }
+            for (ActionSource actionSource : alignmentActions) {
+                add(new ToolbarButton(actionSource, true));
+            }
+        }
         addAsToolChangeListener();
 
     }
@@ -131,125 +144,6 @@ public class MainFrameToolBar extends UnfloatableToolBar implements ActionListen
     @Override
     public void changed() {
         update();
-    }
-
-    @Override
-    public void actionPerformed(final ActionEvent e) {
-        String s = e.getActionCommand();
-        if (s.equals("forward")) {
-            operatingWindowList = true;
-            AbstractInternalFrame f = getNextWindow();
-            if (f != null) {
-                try {
-                    f.setSelected(true);
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
-                }
-            }
-            operatingWindowList = false;
-            return;
-        }
-        if (s.equals("backward")) {
-            operatingWindowList = true;
-            AbstractInternalFrame f = getPreviousWindow();
-            if (f != null) {
-                try {
-                    f.setSelected(true);
-                } catch (Exception ex) {
-                    Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
-                }
-            }
-            operatingWindowList = false;
-            return;
-        }
-    }
-
-    public void addWindow(final AbstractInternalFrame frame) {
-        if (operatingWindowList) {
-            return;
-        }
-        if (frame == null) {
-            return;
-        }
-        if (windowIndex < 0 || windowList.get(windowIndex) != frame) {
-            for (int i = windowList.size() - 1; i > windowIndex; i--) {
-                windowList.remove(i);
-            }
-            windowIndex++;
-            if (windowIndex >= windowList.size()) {
-                windowList.add(frame);
-            } else {
-                windowList.add(windowIndex, frame);
-            }
-        }
-        if (windowIndex > 0) {
-            backward.setEnabled(true);
-        }
-        if (windowIndex >= windowList.size()) {
-            forward.setEnabled(false);
-        }
-    }
-
-    public void removeWindow(final AbstractInternalFrame frame) {
-        if (operatingWindowList) {
-            return;
-        }
-        int index = windowList.indexOf(frame);
-        while (index >= 0) {
-            windowList.remove(index);
-            if (windowIndex >= index) {
-                windowIndex--;
-            }
-            index = windowList.indexOf(frame);
-        }
-        if (windowIndex < -1) {
-            windowIndex = -1;
-        }
-        if (windowIndex >= windowList.size()) {
-            windowIndex = windowList.size() - 1;
-        }
-
-        if (windowIndex <= 0) {
-            backward.setEnabled(false);
-        }
-        if (windowIndex >= windowList.size() - 1) {
-            forward.setEnabled(false);
-        }
-    }
-
-    public AbstractInternalFrame getNextWindow() {
-        if (windowIndex < 0 || windowIndex >= windowList.size() - 1) {
-            return null;
-        }
-        AbstractInternalFrame retVal = windowList.get(windowIndex + 1);
-        if (windowIndex < windowList.size() - 1) {
-            windowIndex++;
-        }
-        if (windowIndex >= windowList.size() - 1) {
-            forward.setEnabled(false);
-        }
-        if (windowIndex >= 0) {
-            backward.setEnabled(true);
-        }
-        return retVal;
-    }
-
-    public AbstractInternalFrame getPreviousWindow() {
-        if (windowIndex <= 0 || windowIndex > windowList.size()) {
-            return null;
-        }
-        AbstractInternalFrame retVal = windowList.get(windowIndex - 1);
-        if (windowIndex >= 0) {
-            windowIndex--;
-        }
-
-        if (windowIndex <= 0) {
-            backward.setEnabled(false);
-        }
-        if (windowIndex < windowList.size()) {
-            forward.setEnabled(true);
-        }
-        return retVal;
     }
 
     @Override
@@ -306,11 +200,29 @@ public class MainFrameToolBar extends UnfloatableToolBar implements ActionListen
 
     private final class ToolbarButton extends JButton {
 
-        public ToolbarButton(final Action a) {
+        public ToolbarButton(final Action a, final boolean setSmallIcon) {
             super(a);
             setText(null);
             //Diesen value muss es bei diesen Actions immer geben
             CSH.setHelpIDString(this, a.getValue(StaticAction.IDENTIFIER_KEY).toString());
+            //ModelActions (Text Alignment + Postion) bekommen kleinere Buttons
+            if (setSmallIcon && a instanceof ExtendedAction) {
+                ExtendedAction ea = (ExtendedAction) a;
+                Icon smallIcon = ea.getSmallIcon();
+                setIcon(smallIcon);
+            }
+        }
+
+        public ToolbarButton(final Action a) {
+            this(a, false);
+        }
+
+        public ToolbarButton(final ActionSource actionSource, final boolean smallIcon) {
+            this(actionSource.createAction(), smallIcon);
+        }
+
+        public ToolbarButton(final ActionSource actionSource) {
+            this(actionSource.createAction());
         }
 
         @Override

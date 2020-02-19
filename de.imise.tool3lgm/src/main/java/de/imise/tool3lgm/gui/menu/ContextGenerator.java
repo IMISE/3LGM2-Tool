@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,6 +14,8 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -20,6 +23,7 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.util.swing.event.ExtendedAction;
 
 /**
  * @author AXS (23.09.2019)
@@ -50,6 +54,44 @@ public abstract class ContextGenerator implements ActionListener {
      */
     public final boolean isControlled() {
         return controlled;
+    }
+
+    /**
+     * @return PopupMenu that will update the enabled states before become visible
+     */
+    public final JPopupMenu createUpdatingPopupMenu() {
+        return createUpdatingPopupMenu(null);
+    }
+
+    /**
+     * @param label
+     * @return PopupMenu that will update the enabled states before become visible
+     */
+    public final JPopupMenu createUpdatingPopupMenu(final String label) {
+        JPopupMenu menu = new JPopupMenu(label);
+        menu.addPopupMenuListener(new PopupMenuListener() {
+
+            @Override
+            public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
+                //update the enabled states of the items
+                Object source = e.getSource();
+                if (source instanceof Container) {
+                    Container menu = (Container) e.getSource();
+                    checkEnabled(menu);
+                }
+            }
+
+            @Override
+            public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
+                //nothing to do
+            }
+
+            @Override
+            public void popupMenuCanceled(final PopupMenuEvent e) {
+                //nothing to do
+            }
+        });
+        return menu;
     }
 
     /**
@@ -112,7 +154,9 @@ public abstract class ContextGenerator implements ActionListener {
      */
     protected final JMenuItem getItem(final GDCommands command) {
         if (command.isModelOption()) {
-            return new JCheckBoxMenuItem(command.createAction());
+            ExtendedAction action = command.createAction();
+            //            System.err.println(command.name() + " " + action.getClass() + " " + action.isEnabled());
+            return new JCheckBoxMenuItem(action);
         }
         return getItem(command.name(), command);
     }
@@ -171,6 +215,38 @@ public abstract class ContextGenerator implements ActionListener {
             menu.add(item);
         }
         return menu;
+    }
+
+    /**
+     * @param c
+     */
+    public static void checkEnabled(final Component c) {
+        Component[] components;
+        if (c instanceof JMenu) {
+            components = ((JMenu) c).getMenuComponents();
+        } else if (c instanceof JPopupMenu) {
+            components = ((JPopupMenu) c).getComponents();
+        } else if (c instanceof JMenuItem) {
+            components = new Component[1];
+            components[0] = c;
+        } else {
+            components = new Component[0];
+        }
+
+        for (Component comp : components) {
+            if (comp instanceof JMenu) { // muss man vor JMenuItem testen, weil JMenu auch ein JMenuItem ist
+                checkEnabled(comp);
+            } else if (comp instanceof JMenuItem) {
+                JMenuItem item = (JMenuItem) comp;
+                Action action = item.getAction();
+                if (action != null) {
+                    boolean enabled = action.isEnabled();
+                    item.setEnabled(enabled);
+                }
+            } else { //JPopupMenu und alles andere
+                checkEnabled(comp);
+            }
+        }
     }
 
 }

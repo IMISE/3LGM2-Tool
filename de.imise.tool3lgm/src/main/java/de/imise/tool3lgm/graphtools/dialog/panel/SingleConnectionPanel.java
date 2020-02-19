@@ -77,17 +77,22 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      * @param edgeClasses
      */
     public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, false, simpleMetaPath);
+        this(dialog, PanelLabelOption.LABEL_END_ELEMENT_TYPE, simpleMetaPath);
     }
 
     /**
      * @param dialog
-     * @param labelLastEdgeName wenn <code>true</code> dann wird ans WestLabel statt des Namens der searchElementClass der Name der
-     *            letzten Edge aus den edgeClasses geschrieben.
+     * @param panelLabelOption Das Label kann folgende Werte annehmen:
+     *            <ul>
+     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der letzten Kante des MetaPfades</li>
+     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der letzten Kante des
+     *            MetaPfades</li>
+     *            </ul>
      * @param simpleMetaPath
      */
-    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final boolean labelLastEdgeName, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, labelLastEdgeName, simpleMetaPath);
+    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, panelLabelOption, simpleMetaPath);
         setLayout(new BorderLayout());
         update(); //connectedElement initial setzen!
         boolean editable = !dialog.isInfoDialog() && simpleMetaPath.isCreatable(false); // für editable reicht es, wenn der Pfad zw. bestehenden Elementen entfernt oder angehängt werden kann. Das zu verbindende Element muss nicht neu erzeugt werden können
@@ -149,8 +154,9 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             connectedElementsBox.setSelectedItem(connectedContainer);
             connectedElementsBox.addItemListener(itemListener);
         } else if (connectedElementName != null) { // beim ersten update() aus dem Konstruktor sind beide (Box und TextArea) null -> nicht einfach nur else hier sondern else-if
-            Color disabledColor = UIManager.getColor("Label.background");
-            connectedElementName.setBackground(disabledColor);
+            //wir hatten mal ausprobiert, den Hintergund bei nicht änderbaren Elementen auszugrauen -> gefiel mir aber nicht (AXS)
+            //            Color disabledColor = UIManager.getColor("Label.background");
+            //            connectedElementName.setBackground(disabledColor);
             if (connectedElement != null) {
                 oldname = connectedElement.getClearName();
                 connectedElementName.setText(oldname);

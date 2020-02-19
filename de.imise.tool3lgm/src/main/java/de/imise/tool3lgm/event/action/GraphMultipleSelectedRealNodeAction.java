@@ -34,7 +34,7 @@ public class GraphMultipleSelectedRealNodeAction extends GraphFrameAction {
                 }
             }
         }
-        return true;
+        return false;
     }
 
 }

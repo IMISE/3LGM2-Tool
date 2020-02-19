@@ -25,12 +25,12 @@ public abstract class AbstractPathConnectionTreePanel extends AbstractPathConnec
         super(dialog, simpleMetaPath);
     }
 
-    public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, labelEdgeName, simpleMetaPath);
+    public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, panelLabelOption, simpleMetaPath);
     }
 
-    public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final int searchEdgeIndex, final boolean labelEdgeName, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, searchEdgeIndex, labelEdgeName, simpleMetaPath);
+    public AbstractPathConnectionTreePanel(final AbstractElementPropertyDialog dialog, final int searchEdgeIndex, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, searchEdgeIndex, panelLabelOption, simpleMetaPath);
     }
 
     protected void addListener(final JTree tree) {

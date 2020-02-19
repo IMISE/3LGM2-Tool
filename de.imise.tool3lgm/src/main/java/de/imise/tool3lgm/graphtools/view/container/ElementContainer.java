@@ -2,6 +2,9 @@ package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_FONT;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_TEXT_ALIGNMENT_HTML;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_TEXT_POSITION_HORIZONTAL;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_TEXT_POSITION_VERTICAL;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -26,6 +29,9 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.graphtools.view.graph.SpecialInfoLabel;
 
 public abstract class ElementContainer extends JLabel implements Cloneable {
@@ -80,6 +86,11 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
      * COMMENTME
      */
     protected Color lastColor = null;
+
+    /**
+     * HTML name of the element with the text alignment information especially for this container.
+     */
+    private transient String htmlName;
 
     /**
      *
@@ -626,21 +637,41 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     /**
      * @return
      */
-    public final int getValign() {
+    public final TextPositionHorizontal getTextPositionHorizontal() {
         if (layout != null) {
-            return layout.valign;
+            return layout.textPositionHorizontal;
         }
-        return CENTER;
+        return STANDARD_TEXT_POSITION_HORIZONTAL;
     }
 
     /**
      * @return
      */
-    public final int getHalign() {
+    public final TextPositionVertical getTextPositionVertical() {
         if (layout != null) {
-            return layout.halign;
+            return layout.textPositionVertical;
         }
-        return CENTER;
+        return STANDARD_TEXT_POSITION_VERTICAL;
+    }
+
+    /**
+     * @return
+     */
+    public final TextAlignmentHTML getTextAlignmentHTML() {
+        if (layout != null) {
+            return layout.textAlignmentHTML;
+        }
+        return STANDARD_TEXT_ALIGNMENT_HTML;
+    }
+
+    /**
+     * @return <code>true</code> if this container has the default ahtml text aligmment
+     */
+    public boolean isDefaultTextAlignmentHTML() {
+        if (layout == null) {
+            return true;
+        }
+        return layout.isDefaultTextAlignmentHTML();
     }
 
     /**
@@ -682,24 +713,37 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         } else if (text != null && getWidth() < 35 && getHeight() < 30) {
             //System.err.println("Element zu klein \"" + text + "\" " + me.getClass().getSimpleName() + " " + me + " " + doc);
         }
-
         super.setText(text);
+
+        //        if (!doc.getCollection().isBulkMode()) {
+        //            Tool3lgm tool = Static.getTool();
+        //            if (tool != null) {
+        //                tool.refreshSelectedFrame();
+        //            }
+        //        }
+
     }
-
-    /**
-     * COMMENTME
-     */
-    static StringBuilder suffixBuf = new StringBuilder("");
-
-    /**
-     * COMMENTME
-     */
-    static StringBuilder textBuf = new StringBuilder("");
 
     /**
      *
      */
     public abstract void refreshText();
+
+    /**
+     * @param htmlName
+     */
+    public void setHTMLName(final String htmlName) {
+        this.htmlName = htmlName;
+        refreshText();
+        //Sys.err1(htmlName);
+    }
+
+    /**
+     * @return the htmlName
+     */
+    public String getHTMLName() {
+        return htmlName;
+    }
 
     /**
      * @param initialContainer

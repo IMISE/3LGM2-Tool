@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.MASTER_TO_SLAVE_DIRECTION;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
@@ -12,7 +13,6 @@ import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -20,7 +20,6 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -62,7 +61,17 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
      * @param edgeClass
      */
     public MutipleCompositionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
-        super(dialog, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
+        this(dialog, LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClass);
+    }
+
+    /**
+     * @param dialog
+     * @param panelLabelOption
+     * @param searchElementClass
+     * @param edgeClass
+     */
+    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
+        super(dialog, panelLabelOption, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
 
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true) && !metaPath.isFirstPathElementDependent(); // element to connect can be created new in this panel
 
@@ -70,7 +79,6 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
 
-        JLabel label = new JLabel(getResString("verb"));
         root = new StringTreeNode(getResString("verb"));
         model = new DefaultTreeModel(root);
         tree = new JTree(model);
@@ -95,13 +103,11 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
             add(this, buttonpanel, constraints, 0, 2, 3, 1);
         }
 
-        constraints.anchor = GridBagConstraints.WEST;
-        add(this, label, constraints, 0, 0, 1, 1);
         constraints.anchor = GridBagConstraints.CENTER;
         constraints.fill = GridBagConstraints.BOTH;
         constraints.weightx = 100;
         constraints.weighty = 100;
-        add(this, sp, constraints, 0, 1, 3, 1);
+        add(this, sp, constraints, 0, 0, 1, 1);
 
         update();
     }
@@ -161,7 +167,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
      * sollte an die "removeButtons" der Panels angefügt werden.
      */
     public final LGMAction getDisconnectAction() {
-        LGMAction returnAction = new LGMAction("", Tool3lgmConstants.getIcon("arrow_right2.gif")) {
+        LGMAction returnAction = new LGMAction(getResString("delete")) {
             @Override
             public void execute(final EventObject e) {
                 TreePath[] selpaths = tree.getSelectionPaths();
@@ -179,9 +185,6 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                 }
             }
         };
-        returnAction.putValue("Name", getResString("delete"));
-        returnAction.putValue("SmallIcon", null);
-
         return returnAction;
     }
 

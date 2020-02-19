@@ -71,6 +71,7 @@ public final class ElementaryPath extends AbstractPath {
             if (other.edge != null) {
                 return false;
             }
+            //da Edge keine eigene euals() aber eine equalsTo() hat sollte man eigentlich wahrscheinlich diese nehmen!?
         } else if (!edge.equals(other.edge)) {
             return false;
         }
@@ -92,7 +93,8 @@ public final class ElementaryPath extends AbstractPath {
     @Override
     public String toString() {
         //        return startElement + " (" + startElement.getHashString() + ") " + metaPath.getName() + " (" + edge.getHashString() + ") " + " " + endElement + " (" + endElement.getHashString() + ") ";
-        return startElement + " " + metaPath.getName() + " " + endElement;
+        String metaPathName = metaPath == null ? null : metaPath.getName();
+        return startElement + " " + metaPathName + " " + endElement;
     }
 
 }

@@ -18,7 +18,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
@@ -50,10 +49,10 @@ public class ConnectPathDialog implements ActionListener {
      * @param unionMetaPath UnionMetaPath der nur aus SimpleMetaPaths bestehen sollte
      * @return
      */
-    private static final SimpleMetaPath[] getSimpleMetaPathArray(final UnionMetaPath unionMetaPath) {
+    private static final SimpleMetaPath[] getSimpleMetaPathArray(final AbstractMetaPath unionMetaPath) {
         SimpleMetaPath[] simpleMetaPaths = new SimpleMetaPath[unionMetaPath.getMetaPathCount()];
         int index = 0;
-        for (AbstractMetaPath metaPath : unionMetaPath.iterableMetaPaths()) {
+        for (AbstractMetaPath metaPath : unionMetaPath.getMetaPaths()) {
             simpleMetaPaths[index++] = metaPath instanceof SimpleMetaPath ? (SimpleMetaPath) metaPath : null;
         }
         return simpleMetaPaths;
@@ -64,7 +63,7 @@ public class ConnectPathDialog implements ActionListener {
      * @param simpleMetaPathsInUnionMetaPath
      *            UnionMetaPath der nur aus SimpleMetaPaths bestehen sollte
      */
-    public ConnectPathDialog(final GraphDocument doc, final UnionMetaPath simpleMetaPathsInUnionMetaPath) {
+    public ConnectPathDialog(final GraphDocument doc, final AbstractMetaPath simpleMetaPathsInUnionMetaPath) {
         this(doc, getSimpleMetaPathArray(simpleMetaPathsInUnionMetaPath));
     }
 

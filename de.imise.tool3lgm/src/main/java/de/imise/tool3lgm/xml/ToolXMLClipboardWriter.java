@@ -94,8 +94,11 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
             }
             writeElementContainer(ec);
             GraphElementLayout layout = ec.get3LGMLayout();
-            if (layout != null && layout.icon != null) {
-                icons.add(layout.icon);
+            if (layout != null) {
+                String icon = layout.getIcon();
+                if (icon != null) {
+                    icons.add(icon);
+                }
             }
         }
         if (lastLayer >= 0) {

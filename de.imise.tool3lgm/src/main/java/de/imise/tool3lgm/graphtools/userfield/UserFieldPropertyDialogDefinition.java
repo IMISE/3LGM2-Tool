@@ -44,16 +44,14 @@ public class UserFieldPropertyDialogDefinition {
     }
 
     private List<String> getStandardTabNames(final Class<? extends ModelElement> elementClass) {
-        boolean interactiveMode = gdcoll.isInteractiveMode();
-        boolean bulkMode = gdcoll.isBulkMode();
-        gdcoll.setBulkMode(true);
-        gdcoll.setInteractiveMode(false);
+        boolean lastBulkMode = gdcoll.setBulkMode(true);
+        boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
         NodeContainer nc = gdcoll.getMainGraphDocument().createNodeAndContainer(elementClass, TransactionManager.STANDARD_PID);
         ModelElement me = nc.getElement();
         ElementPropertyDialog propertyDialogTemplate = me.getPropertyDialog();
         gdcoll.delete(me);
-        gdcoll.setBulkMode(bulkMode);
-        gdcoll.setInteractiveMode(interactiveMode);
+        gdcoll.setBulkMode(lastBulkMode);
+        gdcoll.setAutomaticMode(lastAutomaticMode);
         List<String> tabNames = propertyDialogTemplate.getTabNames();
         return tabNames;
     }

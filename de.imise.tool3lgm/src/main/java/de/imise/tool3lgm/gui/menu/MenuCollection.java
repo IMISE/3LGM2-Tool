@@ -63,7 +63,7 @@ public class MenuCollection {
 
     /** Das Ansicht-Menu */
     public static final JMenu VIEW_MENU = createMenu("viewMenu", ViewSubMenus.TOOLBAR_MENU, BooleanProperty.OPTION_SHOW_MODEL_BROWSER, BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER, new JSeparator(),
-            ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE, ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_TOOL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_TOOL_LAYER,
+            ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE, ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_LAYER,
             ViewActions.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, new JSeparator(), ViewActions.ACTION_OPEN_MATRIX_VIEW);
 
     /** Das Einfügen-Menu */
@@ -144,18 +144,20 @@ public class MenuCollection {
                         "elementSetToStandardMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR, GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY,
                         GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT),
                 new JSeparator(), createMenu( // Icon-Menu
-                        "icon", GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE, GDCommands.MODEL_ACTION_SET_ELEMENT_ICON),
+                        "icon", GDCommands.MODEL_ACTION_SET_ELEMENT_ICON, GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE),
                 new JSeparator(), createMenu( // Textausrichtungs-Menu (horizontal)
-                        "textAlignmentMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_LEFT, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_CENTER, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN_RIGHT, new JSeparator(),
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_TOP, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_CENTER, GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN_BOTTOM));
+                        "textAlignmentMenu", GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT,
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY, new JSeparator(), GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER,
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT, new JSeparator(), GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP, GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER,
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM));
 
         /** Das Ebenen-Layout-Menu */
         public static final JMenu LAYER_LAYOUT_MENU = createMenu("layerLayoutMenu", GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY, GDCommands.MODEL_ACTION_SET_LAYER_COLOR, createMenu( // Transparenz-Menu
                 "layerTransparencyMenu", GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE, GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF, GDCommands.MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL));
 
         /** Das Level-Menu */
-        public static final JMenu ELEMENT_LEVEL_MENU = createMenu(// Elementreihenfolge
-                "levelMenu", GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
+        public static final JMenu ELEMENT_ORDER_MENU = createMenu(// Elementreihenfolge
+                "elementOrderMenu", GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION);
 
         /** Das Elemente-Ausrichtung-Menu */
         public static final JMenu ELEMENT_ALIGNMENT_MENU = createMenu( // Elemente ausrichten
@@ -290,7 +292,7 @@ public class MenuCollection {
         private final JMenu elementLayoutMenu = LayoutSubMenus.ELEMENT_LAYOUT_MENU;
 
         /** Das Level-Menu */
-        private final JMenu elementLevelMenu = LayoutSubMenus.ELEMENT_LEVEL_MENU;
+        private final JMenu elementLevelMenu = LayoutSubMenus.ELEMENT_ORDER_MENU;
 
         /** Das Elemente Ausrichtungs Menu */
         private final JMenu elementAlignmentMenu = LayoutSubMenus.ELEMENT_ALIGNMENT_MENU;

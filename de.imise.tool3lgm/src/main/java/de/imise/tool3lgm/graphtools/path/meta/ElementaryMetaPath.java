@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.path.meta;
 
+import static de.imise.util.ReflectionUtils.getMostSpecialClass;
+
 import java.lang.reflect.Modifier;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.PropertyTransferEdge;
@@ -156,6 +159,38 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     /**
+     * @param startClass
+     * @param edgeClass
+     * @param direction
+     * @param type
+     * @return
+     */
+    private static Class<? extends ModelElement> getStartClass(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Direction direction, final Type type) {
+        Class<? extends ModelElement> resultStartClass = startClass; //startClass bleibt erhalten, wenn keiner der folgenden type-Fälle eintritt
+        if (type == Type.ELEMENT_EDGE_ELEMENT || type == Type.END_WITH_EDGE) {
+            Class<? extends ModelElement> directedEdgeStartClass = getStartClass(edgeClass, direction);
+            resultStartClass = startClass == null ? directedEdgeStartClass : getMostSpecialClass(startClass, directedEdgeStartClass);
+        }
+        return resultStartClass;
+    }
+
+    /**
+     * @param endClass
+     * @param edgeClass
+     * @param direction
+     * @param type
+     * @return
+     */
+    private static Class<? extends ModelElement> getEndClass(final Class<? extends ModelElement> endClass, final Class<? extends Edge> edgeClass, final Direction direction, final Type type) {
+        Class<? extends ModelElement> resultEndClass = endClass; //endClass bleibt erhalten, wenn keiner der folgenden type-Fälle eintritt
+        if (type == Type.ELEMENT_EDGE_ELEMENT || type == Type.START_WITH_EDGE) {
+            Class<? extends ModelElement> directedEdgeEndClass = getEndClass(edgeClass, direction);
+            resultEndClass = endClass == null ? directedEdgeEndClass : getMostSpecialClass(endClass, directedEdgeEndClass);
+        }
+        return resultEndClass;
+    }
+
+    /**
      * @param metaModel
      * @param startClass
      * @param edgeClass
@@ -164,18 +199,11 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      * @param connectionState
      * @param type
      */
-    private ElementaryMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final Direction direction, final ConnectionState connectionState,
+    ElementaryMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass, final Direction direction, final ConnectionState connectionState,
             final Type type) {
-        super(metaModel, startClass == null ? getStartClass(edgeClass, direction) : startClass, endClass == null ? getEndClass(edgeClass, direction) : endClass);
-        Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
-        Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
-        if (direction == Direction.FORWARD) {
-            this.startClass = startClass != null && edgeStartClass.isAssignableFrom(startClass) ? startClass : edgeStartClass;
-            this.endClass = endClass != null && edgeEndClass.isAssignableFrom(endClass) ? endClass : edgeEndClass;
-        } else {
-            this.startClass = startClass != null && edgeEndClass.isAssignableFrom(startClass) ? startClass : edgeEndClass;
-            this.endClass = endClass != null && edgeStartClass.isAssignableFrom(endClass) ? endClass : edgeStartClass;
-        }
+        super(metaModel, getStartClass(startClass, edgeClass, direction, type), getEndClass(endClass, edgeClass, direction, type));
+        this.startClass = super.getStartClass();
+        this.endClass = super.getEndClass();
         this.edgeClass = edgeClass;
         this.direction = direction;
         this.connectionState = DoubleMeaningEdge.class.isAssignableFrom(edgeClass) ? connectionState : null; //nur bei DoubleMeaningEdges darf ein gültiger connectionState gesetzt werden, sonst muss er null sein!
@@ -258,10 +286,15 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     @Override
     public final boolean isStartClass(final Class<? extends ModelElement> elementClass) {
-        boolean isStartClass = direction == Direction.FORWARD ? metaModel.isStartClass(edgeClass, elementClass) : metaModel.isEndClass(edgeClass, elementClass);
+        boolean isStartClass = false;
+        if (type == Type.ELEMENT_EDGE_ELEMENT || type == Type.END_WITH_EDGE) {
+            isStartClass = direction == Direction.FORWARD ? metaModel.isStartClass(edgeClass, elementClass) : metaModel.isEndClass(edgeClass, elementClass);
+        } else if (type == Type.START_WITH_EDGE) {
+            isStartClass = ReflectionUtils.isAssignable(edgeClass, elementClass);
+        }
         if (isStartClass) {
             Class<? extends ModelElement> startClass = getStartClass();
-            isStartClass = startClass.isAssignableFrom(elementClass);
+            isStartClass = ReflectionUtils.isAssignable(startClass, elementClass);
         }
         return isStartClass;
     }
@@ -275,10 +308,15 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     @Override
     public final boolean isEndClass(final Class<? extends ModelElement> elementClass) {
-        boolean isEndClass = direction == Direction.FORWARD ? metaModel.isEndClass(edgeClass, elementClass) : metaModel.isStartClass(edgeClass, elementClass);
+        boolean isEndClass = false;
+        if (type == Type.ELEMENT_EDGE_ELEMENT || type == Type.START_WITH_EDGE) {
+            isEndClass = direction == Direction.FORWARD ? metaModel.isEndClass(edgeClass, elementClass) : metaModel.isStartClass(edgeClass, elementClass);
+        } else if (type == Type.END_WITH_EDGE) {
+            isEndClass = ReflectionUtils.isAssignable(edgeClass, elementClass);
+        }
         if (isEndClass) {
             Class<? extends ModelElement> endClass = getEndClass();
-            isEndClass = endClass.isAssignableFrom(elementClass);
+            isEndClass = ReflectionUtils.isAssignable(endClass, elementClass);
         }
         return isEndClass;
     }
@@ -388,18 +426,48 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
                 invalidReason = InvalidReason.INVALID_END_CLASS;
             } else if (direction != null && edgeClass == null) {
                 invalidReason = InvalidReason.INVALID_DIRECTION;
-            } else if (type != Type.SINGLE_ELEMENT) {
+            } else if (type == Type.ELEMENT_EDGE_ELEMENT) {
                 if (direction == Direction.FORWARD) {
                     if (!metaModel.isStartClass(edgeClass, startClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_STARTCLASS_AND_METAPATH_STARTCLASS;
                     } else if (!metaModel.isEndClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_ENDCLASS_AND_METAPATH_ENDCLASS;
                     }
-                } else {
+                } else { //direction == Direction.BACKWARD
                     if (!metaModel.isStartClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_STARTCLASS_AND_METAPATH_ENDCLASS;
                     } else if (!metaModel.isEndClass(edgeClass, startClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_ENDCLASS_AND_METAPATH_STARTCLASS;
+                    }
+                }
+            } else if (type == Type.START_WITH_EDGE) {
+                if (startClass != edgeClass) {
+                    invalidReason = InvalidReason.INVALID_START_CLASS;
+                } else if (endClass == edgeClass) {
+                    invalidReason = InvalidReason.INVALID_END_CLASS;
+                }
+                if (direction == Direction.FORWARD) {
+                    if (!metaModel.isEndClass(edgeClass, endClass)) {
+                        invalidReason = InvalidReason.INVALID_END_CLASS;
+                    }
+                } else { //direction == Direction.BACKWARD
+                    if (!metaModel.isStartClass(edgeClass, endClass)) {
+                        invalidReason = InvalidReason.INVALID_END_CLASS;
+                    }
+                }
+            } else if (type == Type.END_WITH_EDGE) {
+                if (endClass != edgeClass) {
+                    invalidReason = InvalidReason.INVALID_END_CLASS;
+                } else if (startClass == edgeClass) {
+                    invalidReason = InvalidReason.INVALID_START_CLASS;
+                }
+                if (direction == Direction.FORWARD) {
+                    if (!metaModel.isStartClass(edgeClass, startClass)) {
+                        invalidReason = InvalidReason.INVALID_START_CLASS;
+                    }
+                } else { //direction == Direction.BACKWARD
+                    if (!metaModel.isEndClass(edgeClass, startClass)) {
+                        invalidReason = InvalidReason.INVALID_START_CLASS;
                     }
                 }
             }
@@ -437,6 +505,9 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
                 return false;
             }
         }
+        if (InferenceEdge.class.isAssignableFrom(edgeClass)) {
+            return false;
+        }
         if (checkEndCreateElement) {
             if (!metaModel.isCreatable(endClass, this, null)) {
                 return false;
@@ -471,9 +542,15 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         return elementaryMetaPaths;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public final List<AbstractMetaPath> getMetaPaths() {
         return (List<AbstractMetaPath>) (List<?>) getElementaryMetaPaths();
+    }
+
+    @Override
+    public int getMetaPathCount() {
+        return 1;
     }
 
     @Override
@@ -482,128 +559,16 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         return edgeClass != null && PropertyTransferEdge.class.isAssignableFrom(getEdgeClass());
     }
 
-    ////////////////////////
-    // Factory-Funktionen //
-    ////////////////////////
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath getEdgeToStartElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getEdgeToStartElementMetaPath(metaModel, edgeClass, null);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @param connectionState
-     * @return
-     */
-    public static final ElementaryMetaPath getEdgeToStartElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
-        return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, Edge.getStartClass(edgeClass), Direction.BACKWARD, connectionState, Type.START_WITH_EDGE);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath getEdgeToEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getEdgeToEndElementMetaPath(metaModel, edgeClass, null);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @param connectionState
-     * @return
-     */
-    public static final ElementaryMetaPath getEdgeToEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
-        return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, Edge.getStartClass(edgeClass), Direction.FORWARD, connectionState, Type.START_WITH_EDGE);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath getEdgeToStartAndEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getEdgeToStartAndEndElementMetaPath(metaModel, edgeClass, null);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @param connectionState
-     * @return
-     */
-    public static final ElementaryMetaPath getEdgeToStartAndEndElementMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
-        return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, Edge.getStartClass(edgeClass), null, connectionState, Type.START_WITH_EDGE);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath getStartElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getStartElementToEdgeMetaPath(metaModel, edgeClass, null);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @param connectionState
-     * @return
-     */
-    public static final ElementaryMetaPath getStartElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
-        return new ElementaryMetaPath(metaModel, Edge.getStartClass(edgeClass), edgeClass, edgeClass, Direction.FORWARD, connectionState, Type.END_WITH_EDGE);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath getEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getEndElementToEdgeMetaPath(metaModel, edgeClass, null);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @param connectionState
-     * @return
-     */
-    public static final ElementaryMetaPath getEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
-        return new ElementaryMetaPath(metaModel, Edge.getStartClass(edgeClass), edgeClass, edgeClass, Direction.BACKWARD, connectionState, Type.END_WITH_EDGE);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @return
-     */
-    public static final ElementaryMetaPath getStartAndEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass) {
-        return getStartAndEndElementToEdgeMetaPath(metaModel, edgeClass, null);
-    }
-
-    /**
-     * @param metaModel
-     * @param edgeClass
-     * @param connectionState
-     * @return
-     */
-    public static final ElementaryMetaPath getStartAndEndElementToEdgeMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final ConnectionState connectionState) {
-        return new ElementaryMetaPath(metaModel, edgeClass, edgeClass, ReflectionUtils.getCommonSuperClass(Edge.getStartClass(edgeClass), Edge.getEndClass(edgeClass)), null, connectionState, Type.END_WITH_EDGE);
-    }
-
     /**
      * @return Cardinality des Pfades in Vorwärtsrichtung, also vom Start- zum EndElement.
      */
     public EdgeCardinality getForwardCardinality() {
+        if (type == Type.START_WITH_EDGE || type == Type.END_WITH_EDGE) {
+            return EdgeCardinality.ONE_ONE;
+        }
+        if (type == Type.SINGLE_ELEMENT) {
+            return EdgeCardinality.ZERO_UNLIMITED;
+        }
         //Wird die Kante in Vorwärtsrichtung gelesen, dann ist es auch die Vorwärtskardinalität der Kante, sonst die Rückwärtskardinalität
         return direction == Direction.BACKWARD ? metaModel.getBackwardCardinality(edgeClass) : metaModel.getForwardCardinality(edgeClass);
     }

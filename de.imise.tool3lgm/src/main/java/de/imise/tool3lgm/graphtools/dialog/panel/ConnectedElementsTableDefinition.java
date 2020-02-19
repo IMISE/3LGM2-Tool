@@ -103,6 +103,9 @@ public class ConnectedElementsTableDefinition implements Iterable<SingleColumnDe
             return columnType;
         }
 
+        /**
+         * @return the index of the path step this column definition is referencing
+         */
         public int getPathStepIndex() {
             return pathStepIndex;
         }
@@ -238,8 +241,8 @@ public class ConnectedElementsTableDefinition implements Iterable<SingleColumnDe
      * @param index
      *            Index des Elementarpfades im Pfad
      * @param headerResKeyOrName
-     *            Resorucenkey des anzuzeigenden Spaltenkopfes dieser Spalte. Wird <code>null</code> übergeben, ist das dassseleb wie bei
-     *            {@link #addColumnPathBackwardStepName(int, int)}
+     *            Resorucenkey des anzuzeigenden Spaltenkopfes dieser Spalte. Wird <code>null</code> übergeben, ist das dassselbe wie bei
+     *            {@link #addColumnPathBackwardStepName(int, int)}.
      * @param width
      *            preferredWidth der Spalte (muss man auch im Verhältnis zu den anderen Spalten und deren preferredWidth sehen). Kann man setzten,
      *            wenn einge Spalten breiter als andere sein sollen. Default ist, dass alle gleich breit sind.

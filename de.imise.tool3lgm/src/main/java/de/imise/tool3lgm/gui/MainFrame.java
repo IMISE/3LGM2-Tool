@@ -210,7 +210,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     public void model_change_model_closed(final GraphDocument source) {
         GDCollection gdcoll = source.getCollection();
         contentPane.closeAllFramesAndTabs(gdcoll);
-        contentPane.selectLastFrame();
+        LastAndNextViewManager.selectLastFrame();
     }
 
     @Override
@@ -226,13 +226,15 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
 
     @Override
     public void model_change_szenario_added(final GraphDocument source) {
-        try {
+        GDCollection gdcoll = source.getCollection();
+        //das hier darf erst auf die MODEL_ACTIONS reagieren, wenn es nicht das initiale erstellen
+        //eines Teilmodells ist, sonst wird im Hintergrund für jedes Teilmodell 2 Frames angelegt,
+        //wobei der hier angelegte im Hintergund rumliegt, nie angezeigt wird, aber Resourcen
+        //verbraucht = sinnlos ist.
+        //Bei neuen Modellen werden GraphFrames in der Funktion addCollection(GDCollection)
+        //hinzugefügt.
+        if (gdcoll.isInitialzed()) {
             contentPane.createGraphFrame(source);
-        } catch (Exception e) {
-            //dieses try-catch muss sein, weil beim Anlegen eines neuen Modells immer auch ein Szenario
-            //geaddet wird, für dessen Collection es aber noch keinen ModelBrowser gibt, so dass es nicht
-            //geht. Bei neuen Modellen werden GraphFrames in der Funktion addCollection(GDCollection)
-            //hinzugefügt.
         }
     }
 

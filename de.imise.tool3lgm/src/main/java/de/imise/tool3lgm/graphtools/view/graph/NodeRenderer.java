@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.FAT_STROKE;
+import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.NE_STROKE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN;
 
@@ -45,12 +47,6 @@ public final class NodeRenderer {
     /** Farbe mit der die Umrandungen von Analysergebnissen dargestellt werden */
     public static Color analysisColor = null;
 
-    protected static Stroke fatStroke = new BasicStroke(7);
-    protected static Stroke meduimStroke = new BasicStroke(4);
-    protected static Stroke neStroke = new BasicStroke(4, BasicStroke.JOIN_BEVEL, BasicStroke.CAP_BUTT, 1, new float[] {
-            10
-    }, 10);
-
     protected static int[] xs = new int[8];
     protected static int[] ys = new int[8];
     protected static int npoints = 0;
@@ -92,7 +88,34 @@ public final class NodeRenderer {
         int yp = y + height_half;
 
         ImageIcon img = (ImageIcon) kc.getIcon();
+        int textPositionHorizontalSwingConstant = kc.getTextPositionHorizontal().getSwingConstant();
+        int textPositionVerticalSwingConstant = kc.getTextPositionVertical().getSwingConstant();
+        int horizontalAlignment;
+        int verticalAlignment;
+        int horizontalTextPostion;
+        int verticalTextPostion;
         if (img != null) {
+            horizontalAlignment = JLabel.CENTER;
+            verticalAlignment = JLabel.CENTER;
+            horizontalTextPostion = textPositionHorizontalSwingConstant;
+            verticalTextPostion = textPositionVerticalSwingConstant;
+        } else {
+            horizontalAlignment = textPositionHorizontalSwingConstant;
+            verticalAlignment = textPositionVerticalSwingConstant;
+            horizontalTextPostion = JLabel.CENTER;
+            verticalTextPostion = JLabel.CENTER;
+        }
+        if (kc.getHorizontalAlignment() != horizontalAlignment) {
+            kc.setHorizontalAlignment(horizontalAlignment);
+        }
+        if (kc.getVerticalAlignment() != verticalAlignment) {
+            kc.setVerticalAlignment(verticalAlignment);
+        }
+        if (kc.getHorizontalTextPosition() != horizontalTextPostion) {
+            kc.setHorizontalTextPosition(horizontalTextPostion);
+        }
+        if (kc.getVerticalTextPosition() != verticalTextPostion) {
+            kc.setVerticalTextPosition(verticalTextPostion);
         }
 
         GraphElementLayout.SHAPE form = kc.getForm();
@@ -100,20 +123,13 @@ public final class NodeRenderer {
             form = doc.getMapping().getStandardForm(kc);
         }
 
-        if (kc.getVerticalAlignment() != kc.getValign()) {
-            kc.setVerticalAlignment(kc.getValign());
-        }
-        if (kc.getHorizontalAlignment() != kc.getHalign()) {
-            kc.setHorizontalAlignment(kc.getHalign());
-        }
-
         Stroke str = gc.getStroke();
         if (TRANSIENT_OPTION_SHOW_EXPANSION_SIGN.is() && !kc.isExpanded()) {
-            gc.setStroke(neStroke);
+            gc.setStroke(NE_STROKE);
         }
         boolean isResult = doc.isAnalysisResult(kc);
         if (isResult || kc.isHighLight()) {
-            gc.setStroke(fatStroke);
+            gc.setStroke(FAT_STROKE);
         }
 
         if (kc.getElement() instanceof Textfield && img == null && (kc.get3LGMLayout() == null || kc.get3LGMLayout().bg_color == null)) {

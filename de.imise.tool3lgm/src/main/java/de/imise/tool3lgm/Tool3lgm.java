@@ -154,8 +154,6 @@ public class Tool3lgm {
             Static.showProgressDialog(true);
             Static.setProgressDialogTitle(getResString("load_model") + " " + file.getName());
             Static.setProgressDialogStatusLabel("read_progress");
-            //das hier mal prüfen, was passiert, wenn man das nicht macht und ob es vllt. die Lösung auch für andere Probleme ist
-            mainFrame.update(mainFrame.getGraphics());
             boolean retVal = fileHandler.loadFromRAF();
             return retVal ? gdcoll : null;
         } catch (Exception e) {
@@ -247,7 +245,12 @@ public class Tool3lgm {
             }
         }
         UserProperties.setWorkingDirectory(file);
-        return openModel(gdcoll);
+        //jede neue GDCollection wird mit bulk_mode true initialisiert, aber ab jetzt
+        //sollen die UNDO-REDO-Kommandos wieder geloggt werden.
+        boolean openModel = openModel(gdcoll);
+        gdcoll.setBulkMode(false);
+        gdcoll.setAutomaticMode(false);
+        return openModel;
     }
 
     /**
@@ -263,10 +266,9 @@ public class Tool3lgm {
         Static.setProgressDialogStatusLabel("finish_progress");
         collections.add(gdcoll);
         distribute(MODEL_CHANGE_MODEL_OPENED, gdcoll);
-        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
         ConsistencyChecker.clearUnfixableErrors(gdcoll);
-        setSelectedDoc(selectedDoc);
+        gdcoll.initSelectedDocByViewParameterFromFile();
         gdcoll.setUnchanged();
         System.gc();
         Static.closeProgressDialog();
@@ -400,7 +402,7 @@ public class Tool3lgm {
                 collections.add(gdcoll);
             }
             //das aktive doc in der Collection selbst setzen
-            gdcoll.setActiveGraphDocument(doc);
+            gdcoll.setSelectedDoc(doc);
         }
     }
 

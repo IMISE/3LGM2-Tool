@@ -153,7 +153,11 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
             colors.add(retVal);
         }
 
-        for (Object tn : children) {
+        //ACHTUNG: nicht auf eine Iterable-For-Schleife umstellen, weil es sonst in 1 von 10
+        //Fällen beim Start aus den AWT-Klassen heraus eine java.util.ConcurrentModificationException
+        //gibt!
+        for (int i = 0; i < children.size(); i++) {
+            Object tn = children.get(i);
             LGMTreeNode child = (LGMTreeNode) tn;
             Color c = child.isLeaf() ? child.getForegroundColor() : child.getSignalColor();
             if (!c.equals(Color.black) && !colors.contains(c)) {

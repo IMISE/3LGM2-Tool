@@ -70,6 +70,19 @@ public class MetaPathFunctions {
     }
 
     /**
+     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade ausgehend vom
+     * übergebenen Element aufspannt
+     *
+     * @param startElement
+     * @param metaPath
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public static final PathResultTreeModel getResultTree(final ModelElement startElement, final AbstractMetaPath metaPath, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(metaPath, startElement, keepIncompleteBranches);
+    }
+
+    /**
      * @param startElements
      * @param metaPath
      * @return
@@ -81,10 +94,30 @@ public class MetaPathFunctions {
     /**
      * @param startElements
      * @param metaPath
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public static final PathResultTreeModel getResultTree(final Collection<ModelElement> startElements, final AbstractMetaPath metaPath, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(metaPath, startElements, keepIncompleteBranches);
+    }
+
+    /**
+     * @param startElements
+     * @param metaPath
      * @return
      */
     public static final PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements, final AbstractMetaPath metaPath) {
         return new PathResultTreeModel(metaPath, startElements);
+    }
+
+    /**
+     * @param startElements
+     * @param metaPath
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public static final PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements, final AbstractMetaPath metaPath, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(metaPath, startElements, keepIncompleteBranches);
     }
 
     /**
@@ -444,6 +477,8 @@ public class MetaPathFunctions {
     }
 
     /**
+     * Das hier ist nur noch drin, weil es auch irgendwas schlaues gemacht hat. Abaer alle anderen Stellen nutzen die
+     * {@link GraphDocument#createPath(ModelElement, ModelElement, de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath, int)}
      * Achtung: Die Funktion geht davon aus, dass die aufrufende Funktion bereits eine Transaction gestartet hat.
      * Hier wird keine Transaction gestartet oder beendet.
      *
@@ -647,7 +682,7 @@ public class MetaPathFunctions {
      * @return
      */
     private static final boolean isInstanciationFromMasterToInstance(final Class<? extends Edge> edgeClass, final Direction direction) {
-        boolean isEdgeMasterToInstanceInstanciation = MetaModel.isInstaciation(edgeClass);
+        boolean isEdgeMasterToInstanceInstanciation = MetaModel.isInstanciation(edgeClass);
         if (!isEdgeMasterToInstanceInstanciation) {
             return false;
         }
@@ -724,13 +759,13 @@ public class MetaPathFunctions {
         //bei denen der Namen normalerweise nicht generiert wird
         boolean lastEdge = edgeClassFromNewElement == null;
         //bei der letzten Edge sollte man bei neuen Elementen nach dem Namen fragen
-        boolean newInteractiveMode = lastEdge;
+        boolean newAutomaticMode = !lastEdge;
         //Ausnahme für Mac-Java-Bug: wenn Dialoge auf dem MAC aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
         //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach nicht angezeigt und der Name generiert.
         if (Static.isDragNDropOnMac()) {
-            newInteractiveMode = false;
+            newAutomaticMode = true;
         }
-        boolean lastInteractiveMode = gdcoll.setInteractiveMode(newInteractiveMode);
+        boolean lastAutomaticMode = gdcoll.setAutomaticMode(newAutomaticMode);
 
         //abstracte Elemente können nicht angelegt werden! hier wird nicht auf null gecheckt, weil man diese Funktion nur mit SimpleMetaPaths aufrufen sollte, die creatable sind!
         if (MetaModel.isAbstract(newElementClass)) {
@@ -836,7 +871,7 @@ public class MetaPathFunctions {
             }
 
         }
-        gdcoll.setInteractiveMode(lastInteractiveMode);
+        gdcoll.setAutomaticMode(lastAutomaticMode);
         return createdDependent;
     }
 

@@ -32,10 +32,11 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELE
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_FONT;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_ICON;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_POSITION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_SHAPE;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_ALPHA;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
@@ -95,11 +96,15 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -116,6 +121,7 @@ import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.util.StringUtils;
+import de.imise.util.Sys;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
@@ -174,8 +180,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private final List<LGMChangeListener> allListener = new ArrayList<>();
 
     /**
-     * Alle {@link LGMChangeListener}, die nur benachrichtigt werden, wenn sie keine Transaktion geöffnet ist bzw. die nur auf Transaktionen
-     * reagieren, die abgeschlossen sind.Das ist der Fall, wenn das Change-Ereignis nicht durch eine geöffneten Dialog kommt.
+     * Alle {@link LGMChangeListener}, die nur benachrichtigt werden, wenn keine Transaktion geöffnet ist bzw. die nur auf Transaktionen
+     * reagieren, die abgeschlossen sind. Das ist der Fall, wenn das Change-Ereignis nicht durch eine geöffneten Dialog kommt.
      */
     private final List<LGMChangeListener> closedListener = new ArrayList<>();
 
@@ -219,9 +225,27 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private final GDCollectionIconTable iconTable = new GDCollectionIconTable();
 
     /**
-     * Wenn <code>true</code>, werden keine Ereignisse gefeuert und keine Undo-/Redo-Commands aufgezeichnet.
+     * Wenn <code>true</code>, werden keine Undo-/Redo-Commands aufgezeichnet. Dieser Modus ist beim Einlesen
+     * bzw. vor dem kompletten init eines Modells aktiv und immer dann, wenn UNDO oder REDO ausgeführt wird, da
+     * währenddessen die Kommandos nicht noch einmal aufgezeichnet werden müssen.
+     * <code>false</code> ist der Default. Nach dem Init muss dieser auf <code>true</code> gesetzt werden,
+     * damit die dann Kommandos geloggt werden.
      */
-    private boolean bulk_mode = false;
+    private boolean bulk_mode = true;
+
+    /**
+     * <code>true</code> means the model is in 'automatic mode'. In this mode the user will not be asked
+     * for any descision or some model change events are not disributed.
+     * If <code>false</code> the user can be asked and all model change events are disributed.
+     * Thsi mode is active, e.g. if elements should be generated without aksing the user for the name of
+     * the element. This elements get standard names.
+     */
+    private boolean automatic_mode = true;
+
+    /**
+     * Wird <code>true</code> sobald der bulk_mode das erste Mal auf <code>false</code> gesetzt wurde.
+     */
+    private boolean initialized = false;
 
     /**
      * Dieser Counter berechnet die Verschiebung, mit der die Elemente bei einem Paste in die Grafik kopiert werden.
@@ -249,6 +273,11 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public GDCollection(@Nonnull final Tool3lgmModelType modelType) {
         this();
         setModelType(modelType);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     /**
@@ -334,11 +363,88 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
+     * @param bulk_mode
+     * @return the previous bulk mode
+     */
+    public boolean setBulkMode(final boolean bulk_mode) {
+        //Sys.err("bulk_mode: " + this.bulk_mode + " -> " + bulk_mode);
+        //das erste Setzten des bulk_mode auf false beendet die Initialisierung
+        if (!initialized && !bulk_mode) {
+            initialized = true;
+        }
+        boolean oldMode = this.bulk_mode;
+        this.bulk_mode = bulk_mode;
+        return oldMode;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isBulkMode() {
+        return bulk_mode;
+    }
+
+    /**
+     * @param automatic_mode
+     * @return previous automatic mode
+     */
+    public boolean setAutomaticMode(final boolean automatic_mode) {
+        //Sys.err("automatic_mode: " + this.automatic_mode + " -> " + automatic_mode);
+        boolean oldMode = this.automatic_mode;
+        this.automatic_mode = automatic_mode;
+        return oldMode;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isAutomaticMode() {
+        return automatic_mode;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isInitialzed() {
+        return initialized;
+    }
+
+    /**
+     * @return
+     */
+    public String getName() {
+        return name;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+        distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainGraphDocument(), STANDARD_PID);
+    }
+
+    /**
+     * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne die Dateiendung
+     */
+    public String getTitle() {
+        int lastPointIndex = name.lastIndexOf('.');
+        String title = name;
+        if (lastPointIndex > 0 && lastPointIndex < title.length() - 1) {
+            String extension = title.substring(lastPointIndex + 1);
+            if (isExtension(extension)) {
+                title = title.substring(0, lastPointIndex);
+            }
+        }
+        return title;
+    }
+
+    /**
      * @param gdl
      */
     public final void addAllTransactionsListener(final LGMChangeListener gdl) {
-        //        System.err.println("addAllTransactionsListener " + this);
-        //        Sys.err(gdl.getClass().getSimpleName());
+        //System.err.println("addAllTransactionsListener " + this);
+        //        Sys.errn(3, allListener.size() + " " + gdl);
+        //        if (allListener.contains(gdl)) {
+        //            Sys.err1(gdl);
+        //        }
         allListener.add(gdl);
     }
 
@@ -347,7 +453,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public final void removeAllTransactionsListener(final LGMChangeListener gdl) {
         //        System.err.println("removeAllTransactionsListener " + this);
-        //        Sys.err(gdl.getClass().getSimpleName());
+        //        Sys.errn(3, allListener.size() + " " + gdl);
         allListener.remove(gdl);
     }
 
@@ -521,13 +627,26 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      *
      * @param doc
      */
-    public void setActiveGraphDocument(final GraphDocument doc) {
+    public void setSelectedDoc(final GraphDocument doc) {
         activeGraphDocumentsList.remove(doc);
         activeGraphDocumentsList.add((LGMGraphDocument) doc);
         distribute(LGMChangeType.SELECTED_SZENARIO_CHANGED, null, doc, STANDARD_PID);
     }
 
-    private boolean selectedDocInitialized = false;
+    /**
+     * Nachdem alle Szenarios eingelesen wurden, mus man einmal diese Funktion hier aufrufen,
+     * damit das richtige Graphdocument selektiert ist. Nur wenn dieses Modell über ein File
+     * eingelesen wurde, haben die Teilmodelle auch ViewParameter.
+     */
+    public void initSelectedDocByViewParameterFromFile() {
+        for (Szenario szen : szenarios) {
+            ViewParameter viewParameter = szen.getViewParameter();
+            if (viewParameter != null && viewParameter.selected) {
+                setSelectedDoc(szen);
+                break;
+            }
+        }
+    }
 
     /**
      * Gibt das aktuell selektierte <code>GraphDocument</code> zurück.
@@ -535,17 +654,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public LGMGraphDocument getSelectedDoc() {
         if (activeGraphDocumentsList.size() < 1) {
             return null;
-        }
-        //bei der allerersten Abfrage sollte das aktive GraphDocument aus den eingelesenen ViewParametern kommen
-        if (!selectedDocInitialized) {
-            for (Szenario szen : szenarios) {
-                ViewParameter viewParameter = szen.getViewParameter();
-                if (viewParameter != null && viewParameter.selected) {
-                    setActiveGraphDocument(szen);
-                    break;
-                }
-            }
-            selectedDocInitialized = true;
         }
         return activeGraphDocumentsList.get(activeGraphDocumentsList.size() - 1);
     }
@@ -634,11 +742,14 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             if (!kc.isVisible()) {
                 ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF + " " + ecDocHash + " " + ecHash, pid);
             }
-            if (ec.getValign() != STANDARD_ELEMENT_LAYOUT.valign) {
-                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_LABEL_VALIGN + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().valign, pid);
+            if (ec.getTextPositionHorizontal() != STANDARD_ELEMENT_LAYOUT.textPositionHorizontal) {
+                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().textPositionHorizontal, pid);
             }
-            if (ec.getHalign() != STANDARD_ELEMENT_LAYOUT.halign) {
-                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_LABEL_HALIGN + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().halign, pid);
+            if (ec.getTextPositionVertical() != STANDARD_ELEMENT_LAYOUT.textPositionVertical) {
+                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().textPositionVertical, pid);
+            }
+            if (ec.getTextAlignmentHTML() != STANDARD_ELEMENT_LAYOUT.textAlignmentHTML) {
+                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().textAlignmentHTML, pid);
             }
         }
     }
@@ -1146,7 +1257,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         } else {
             String newName = nameIsEmpty ? doc.getNextNewName(me.getClass()) : name.substring(1);
             me.setName(newName, false);
-            if (isInteractiveMode() && !metaModel.isGenerateName(me.getClass())) {
+            if (!isAutomaticMode() && !metaModel.isGenerateName(me.getClass())) {
                 if (!askNameAndColor(nc)) {
                     return null;
                 }
@@ -1173,10 +1284,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             doc.undo(pid);
             return null;
         }
-        boolean old_mode = isInteractiveMode();
-        setInteractiveMode(false);
+        boolean oldAutomaticMode = setAutomaticMode(true);
         createInitialSubtypes(me, pid);
-        setInteractiveMode(old_mode);
+        setAutomaticMode(oldAutomaticMode);
         doc.finish_transaction(pid);
         doc.distributeEvent(DATA_CHANGED, pid);
         return nc;
@@ -1208,6 +1318,75 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 ModelElement skC = createNodeAndContainer(subType.asSubclass(Node.class), name, "", null, pid).getElement();
                 link(subTypeEdgeClass, me, skC, pid);
                 connectedSubTypes.add(skC);
+            }
+        }
+    }
+
+    /**
+     * Updates all {@link InferenceEdge}s. Missing wil be created and superflous will be reomoved.
+     *
+     * @param pid
+     */
+    public void updateInferenceEdges(final int pid) {
+        removeInferenceEdges(pid); //first remove, so there must not be checked all potential new created inferenceEgdes if they are superflous
+        createInferenceEdges(pid);
+    }
+
+    /**
+     * Removes all superflous {@link InferenceEdge}s.
+     *
+     * @param pid
+     */
+    private void removeInferenceEdges(final int pid) {
+        Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
+        for (Class<? extends InferenceEdge> inferenceEdgeClass : inferenceEdgeClasses) {
+            if (Edge.class.isAssignableFrom(inferenceEdgeClass)) {
+                Class<? extends Edge> edgeClass = inferenceEdgeClass.asSubclass(Edge.class);
+                AbstractMetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+                Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
+                Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
+                List<ModelElement> modelItems = doc.getModelItems(edgeClass);
+                for (ModelElement edgeItem : modelItems) {
+                    Edge edge = (Edge) edgeItem;
+                    ModelElement edgeStart = edge.getStart();
+                    ModelElement edgeEnd = edge.getEnd();
+                    boolean readEdgeForward = conditionMetaPath.isStartClass(edgeStartClass) && conditionMetaPath.isEndClass(edgeEndClass);
+                    boolean remove = !MetaPathFunctions.isDirectConnected(readEdgeForward ? edgeStart : edgeEnd, readEdgeForward ? edgeEnd : edgeStart, conditionMetaPath);
+                    if (remove) {
+                        unlink(edgeStart, edgeEnd, edgeClass, pid);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Kann man anschlaten, wenn man sehen möchte, was die Funktion {@link #createInferenceEdges(int)} macht.
+     */
+    private static final boolean LOG_CREATE_INFERENCE_EDGES = false;
+
+    /**
+     * Creates all missing {@link InferenceEdge}s.
+     *
+     * @param pid
+     */
+    private void createInferenceEdges(final int pid) {
+        Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
+        for (Class<? extends InferenceEdge> inferenceEdgeClass : inferenceEdgeClasses) {
+            AbstractMetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+            Set<Class<? extends ModelElement>> startClasses = conditionMetaPath.getStartClasses();
+            List<ModelElement> pathStartElements = getModelItems(this, startClasses);
+            if (Edge.class.isAssignableFrom(inferenceEdgeClass)) {
+                Class<? extends Edge> edgeClass = inferenceEdgeClass.asSubclass(Edge.class);
+                for (ModelElement me : pathStartElements) {
+                    Collection<ModelElement> pathConnectedElements = MetaPathFunctions.getConnectedElements(me, conditionMetaPath);
+                    for (ModelElement pathConnected : pathConnectedElements) {
+                        Edge link = link(edgeClass, me, pathConnected, pid);
+                        if (LOG_CREATE_INFERENCE_EDGES) {
+                            Sys.err1(this + " " + link + " " + edgeClass.getSimpleName());
+                        }
+                    }
+                }
             }
         }
     }
@@ -1382,11 +1561,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             }
             edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
             //wenn es schon eine Kante in der Gegenrichtung gibt und diese Kante eine Kante mit doppelter Bedeutung ist -> dann Richtung auf DOUBLE setzen
-            if (MetaModel.isDoubleMeaningEdge(edgeClass) && edge != null) {
+            boolean doubleMeaningEdge = MetaModel.isDoubleMeaningEdge(edgeClass);
+            if (doubleMeaningEdge && edge != null) {
                 ((DoubleMeaningEdge) edge).setConnectionState(DOUBLE);
-            } else {
+            } else if (edge == null) {
                 edge = metaModel.createElement(edgeClass);
                 if (edge == null) {
+                    doc.finish_transaction(pid);
                     return null;
                 }
                 if (!Strings.isNullOrEmpty(edgeHash)) {
@@ -1399,7 +1580,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     endElement = dummy;
                     connectionState = BACKWARD;
                 }
-                if (MetaModel.isDoubleMeaningEdge(edgeClass)) {
+                if (doubleMeaningEdge) {
                     ((DoubleMeaningEdge) edge).setConnectionState(connectionState);
                 }
                 edge.setNodesAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
@@ -1447,6 +1628,14 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             doc.undo(pid);
             return null;
         }
+        //wenn eine InstanciationEdge angelegt wurde, dann prüfen, ob dadurch eine neue Kante
+        //zwischen dem InstanzElement und einem anderen InstanzElement abgeleitet werden muss
+        //Unlink prüfen, ob die Kanten da entfernt werden müssen!
+        if (edge instanceof InstanciationEdge) {
+            updateInstanciationInstanceEdgesBetweenInstances((InstanciationEdge) edge, pid);
+        }
+        //bei jeder Kante eventuell ableitbare InstanciationEdges ergänzen
+        updateInstanciationEdgesForAssociationClasses(edge, pid);
         doc.finish_transaction(pid);
         doc.distributeEvent(DATA_CHANGED, pid);
         return edge;
@@ -1595,6 +1784,172 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         doc.distributeEvent(DATA_CHANGED, pid);
     }
 
+    /**
+     * Voraussetzung: Im Metamodell gibt es 2 Knotenklassen A und B die über eine Kantenklasse K verbunden
+     * sind. Dasselbe gibt es nochmal, also die Knotenklassen AA und BB mit der Kantenklasse KK dazwischen.
+     * Die Knotenklasse A hat eine InstanciationEdge zur Knotenklasse AA, die Knotenklasse B eine
+     * {@link InstanciationEdge} zur Knotenklasse BB und die Kantenklasse K eine InstanciationEdge zur
+     * Kantenklasse KK. A, B und K sind die Master der jeweiligen InstanciationEdge und AA, BB und KK die
+     * jeweiligen Instanzen dieser InstanciationEdge, also die aus dem Master jeweils abgeleitete Klasse.<br>
+     * <br>
+     * Ziel: Erzeuge die Kante zwischen Elementen der Art AA und BB, wenn 2 Elemente der Art A und B über
+     * die InstanciationEdge in die Elemente der Art AA und BB abgeleitet wurden. Da zwischen den Elementen
+     * der Art A und B eine Kante der Art K besteht, so wird diese in dieser Funktion automatisch zur Kante
+     * der Art KK abgeleitet zwischen den Elementen der Art AA und BB abgeleitet.
+     *
+     * @param instanciationEdge
+     *            Neue Kante zu einem Instanz-Knoten, für den geprüft wird, ob eine neue Kante zwischen ihm und
+     *            einem anderen Instanz-Knoten gezogen werden muss. Bei dem anderen Knoten gibt es schon eine
+     *            solche {@link InstanciationEdge} ähnlich wie die übergebene. Aber erst mit der übergebenen
+     *            Kante sind alle Voraussetzungen erfüllt, um die Kante zwischen den Knoten abzuleiten
+     * @param pid
+     */
+    private void updateInstanciationInstanceEdgesBetweenInstances(final InstanciationEdge instanciationEdge, final int pid) {
+        //instanciationEdge = IheProvidingInterface_ProvidingInterface_Edge
+        //instanceElement = ProvidingInterface
+        ModelElement instanceElement = instanciationEdge.getInstanceElement();
+        if (!(instanceElement instanceof Node)) {
+            return;
+        }
+        //masterElement = IheProvidingInterface
+        ModelElement masterElement = instanciationEdge.getMasterElement();
+        if (!(masterElement instanceof Node)) {
+            return;
+        }
+        //instanceElementClass = ProvidingInterface.class
+        Class<? extends ModelElement> instanceElementClass = instanceElement.getClass();
+
+        //edgeBetweenMasterElements = IheCommunicationLink
+        for (Edge edgeBetweenMasterElements : masterElement.getEdges()) {
+            if (edgeBetweenMasterElements == instanciationEdge) {
+                continue;
+            }
+            //edgeTypeBetweenMasterElements = IheCommunicationLink.class
+            Class<? extends Edge> edgeTypeBetweenMasterElements = edgeBetweenMasterElements.getClass();
+            //instanciationEdgeTypeOfEdgeTypeBetweenMasterElements = IheCommunicationLink_CommunicationLink_Edge
+            for (Class<InstanciationEdge> instanciationEdgeTypeOfEdgeTypeBetweenMasterElements : metaModel.getInstanciationEdgeTypesAsMaster(edgeTypeBetweenMasterElements)) {
+                //edgeTypeBetweenInstancesAsElementClass = CommunicationLink_Edge
+                Class<? extends ModelElement> edgeTypeBetweenInstancesAsElementClass = InstanciationEdge.getInstanciationInstance(instanciationEdgeTypeOfEdgeTypeBetweenMasterElements);
+                if (!Edge.class.isAssignableFrom(edgeTypeBetweenInstancesAsElementClass)) {
+                    continue;
+                }
+                //edgeTypeBetweenInstances = CommunicationLink_Edge.class
+                Class<? extends Edge> edgeTypeBetweenInstances = edgeTypeBetweenInstancesAsElementClass.asSubclass(Edge.class);
+                //otherInstanceElementClass = InvokingInterface.class
+                Class<? extends ModelElement> otherInstanceElementClass = metaModel.getOther(edgeTypeBetweenInstances, instanceElementClass);
+                if (otherInstanceElementClass == null) {
+                    continue;
+                }
+                //otherMasterElement = IheInvokingInterface
+                ModelElement otherMasterElement = edgeBetweenMasterElements.getOther(masterElement);
+                //edgeOfOtherMasterElement = IheInvokingInterface_InvokingInterface_Edge
+                for (Edge edgeOfOtherMasterElement : otherMasterElement.getTypedEdges(InstanciationEdge.class)) {
+                    if (edgeOfOtherMasterElement == edgeBetweenMasterElements) {
+                        continue;
+                    }
+                    //instanciationEdgeOfOtherMasterElement = IheInvokingInterface_InvokingInterface_Edge
+                    InstanciationEdge instanciationEdgeOfOtherMasterElement = (InstanciationEdge) edgeOfOtherMasterElement;
+                    //otherInstanceElement = InvokingInterface
+                    ModelElement otherInstanceElement = instanciationEdgeOfOtherMasterElement.getInstanceElement();
+                    if (otherInstanceElement == otherMasterElement) {
+                        continue;
+                    }
+                    //otherInstanceClass = InvokingInterface.class
+                    Class<? extends ModelElement> otherInstanceClass = otherInstanceElement.getClass();
+                    if (otherInstanceElementClass.isAssignableFrom(otherInstanceClass)) {
+                        link(edgeTypeBetweenInstances, instanceElement, otherInstanceElement, pid);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Voraussetzung: Es gibt 2 Knotenklassen A und B die über eine Kantenklasse K verbunden sind. Dasselbe
+     * gibt es nochmal, also die Knotenklassen AA und BB mit der Kantenklasse KK dazwischen. Die Knotenklasse
+     * A hat eine InstanciationEdge zur Knotenklasse AA, die Knotenklasse B eine InstanciationEdge zur
+     * Knotenklasse BB und die Kantenklasse K eine InstanciationEdge zur Kantenklasse KK. A, B und K sind
+     * die Master der jeweiligen InstanciationEdge und AA, BB und KK die jeweiligen Instanzen dieser
+     * InstanciationEdge, also die aus dem Master jeweils abgeleitete Klasse.<br>
+     * <br>
+     * Ziel: Erzeuge die InstanciationEdge zw. 2 Kantenelementen, wenn alle anderen Knoten- und Kantenelemente
+     * dieses Graph-Ausschnittes bereits vorhanden sind. D.h. es gibt zwei Knoten von der Art A und B die als
+     * Master jeweils über eine InstanciationEdge mit Instanz-Elementen der Art AA und BB verbunden sind und
+     * sowohl zwischen den Elementen der Art A und B als auch zwischen denen der Art AA und BB die jeweilige
+     * Kante besteht.
+     *
+     * @param edge
+     */
+    private void updateInstanciationEdgesForAssociationClasses(final Edge edge, final int pid) {
+        //Klasse der übergebenen Kante (CommunicationLink_Edge)
+        Class<? extends Edge> edgeClass = edge.getClass();
+        //Startklasse der übergebenen Kante (InvokingInterface)
+        Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
+        //Endklasse der übergebenen Kante (ProvidingInterface)
+        Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
+
+        //für alle InstanciationEdge-Kanten der EdgeClass, bei denen diese EdgeClass die Instanz und nicht der Master ist (IheCommunicationLink_CommunicationLink_Edge)
+        for (Class<? extends InstanciationEdge> instanciationEdgeClassToMaster : metaModel.getInstanciationEdgeTypesAsSlave(edgeClass)) {
+            //hole den Master dieser InstanciationEdges (IheCommunicationLink_Edge)
+            Class<? extends ModelElement> instanciationEdgeMasterClass = InstanciationEdge.getInstanciationMaster(instanciationEdgeClassToMaster);
+
+            //wenn das auch eine Kante ist (was es im Metamodell sinnvollerweise sein sollte, da man eine Kante nur zu einer Kante 'inszanziieren' kann), dann...
+            if (Edge.class.isAssignableFrom(instanciationEdgeMasterClass)) {
+                //diese auf Kante casten
+                Class<? extends Edge> instanciationEdgeMasterEdgeClass = instanciationEdgeMasterClass.asSubclass(Edge.class);
+                //Startklasse dieser Kante holen (IheInvokingInterface)
+                Class<? extends ModelElement> instanciationEdgeMasterEdgeClassStartClass = Edge.getStartClass(instanciationEdgeMasterEdgeClass);
+
+                //für alle InstanciationEdge-Kanten von dieser Startklasse, bei denen diese Startklasse der Master ist
+                for (Class<? extends InstanciationEdge> instanciationEdgeOfMaster1 : metaModel.getInstanciationEdgeTypesAsMaster(instanciationEdgeMasterEdgeClassStartClass)) {
+                    //prüfe, ob der Slave bzw. die Instanz dieser InstanciationEdge-Klasse auch Start- oder End der übergebenen Ausgangskantenart ist
+                    Class<? extends ModelElement> instanciationInstance1 = InstanciationEdge.getInstanciationInstance(instanciationEdgeOfMaster1);
+                    boolean isStartClass1 = instanciationInstance1.isAssignableFrom(edgeStartClass);
+                    boolean isEndClass1 = instanciationInstance1.isAssignableFrom(edgeEndClass);
+
+                    //wenn diese Startklasse der Master
+                    if (isStartClass1 || isEndClass1) {
+                        //Endklasse der Kante holen (IheProvidingInterface)
+                        Class<? extends ModelElement> instanciationEdgeMasterEdgeClassEndClass = Edge.getEndClass(instanciationEdgeMasterEdgeClass);
+
+                        //für alle InstanciationEdge-Kanten von dieser Startklasse, bei denen diese Startklasse der Master ist
+                        for (Class<? extends InstanciationEdge> instanciationEdgeOfMaster2 : metaModel.getInstanciationEdgeTypesAsMaster(instanciationEdgeMasterEdgeClassEndClass)) {
+                            //prüfe, ob der Slave bzw. die Instanz dieser InstanciationEdge-Klasse auch Ende der übergebenen Ausgangskante ist
+                            Class<? extends ModelElement> instanciationInstance2 = InstanciationEdge.getInstanciationInstance(instanciationEdgeOfMaster2);
+
+                            boolean isStartClass2 = instanciationInstance2.isAssignableFrom(edgeStartClass);
+                            boolean isEndClass2 = instanciationInstance2.isAssignableFrom(edgeEndClass);
+
+                            //Im Metamodell sind beide Elemente der übergebenen Edge-Klasse auch über InstanciatonEdges verbunden
+                            //-> nun prüfen, ob diese MetaPfade als Pfade bei der übergebenen Kante auch vorhanden sind
+                            if (isStartClass1 && isEndClass2 || isStartClass2 && isEndClass1) {
+                                Class<? extends InstanciationEdge> edgeStartInstanciationEdge = isStartClass1 ? instanciationEdgeOfMaster1 : instanciationEdgeOfMaster2;
+                                Class<? extends InstanciationEdge> edgeEndInstanciationEdge = isEndClass1 ? instanciationEdgeOfMaster1 : instanciationEdgeOfMaster2;
+
+                                ModelElement edgeStart = edge.getStart();
+                                List<ModelElement> edgeStartMasters = edgeStart.getConnectedElements(ModelElement.class, edgeStartInstanciationEdge, InstanciationEdge.INSTANCE_TO_MASTER_DIRECTION);
+                                ModelElement edgeEnd = edge.getEnd();
+                                List<ModelElement> edgeEndMasters = edgeEnd.getConnectedElements(ModelElement.class, edgeEndInstanciationEdge, InstanciationEdge.INSTANCE_TO_MASTER_DIRECTION);
+                                for (ModelElement edgeStartMaster : edgeStartMasters) {
+                                    for (ModelElement edgeEndMaster : edgeEndMasters) {
+                                        List<Edge> masterEdgesToLink = edgeStartMaster.getEdgesWith(edgeEndMaster, instanciationEdgeMasterEdgeClass);
+                                        for (Edge masterEdgeToLink : masterEdgesToLink) {
+                                            @SuppressWarnings("unused")
+                                            Edge link = link(instanciationEdgeClassToMaster, edge, masterEdgeToLink, pid);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
     private void updateElementNames() {
         List<ModelElement> modelItemsWithNameExtensions = getModelItems(this, metaModel.getElementClassesWithNameExtensionPath());
         for (ModelElement me : modelItemsWithNameExtensions) {
@@ -1636,7 +1991,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         }
         //prüfen, ob es sich um Node gleichen Typs handelt (nur diese können vereint werden)
         if (!(removeElement instanceof Node && remainElement instanceof Node)) {
-            if (interactive_mode) {
+            if (!automatic_mode) {
                 JOptionPane.showMessageDialog(getMainFrame(), getResString("nur_knoten_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             }
             return null;
@@ -1645,7 +2000,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         Node remainNode = (Node) remainElement;
         Class<? extends ModelElement> nodeClass = removeNode.getClass();
         if (nodeClass != remainNode.getClass()) {
-            if (interactive_mode) {
+            if (!automatic_mode) {
                 JOptionPane.showMessageDialog(null, getResString("nur_gleiche_sel"), getResString("tool3lgm"), INFORMATION_MESSAGE);
             }
             return null;
@@ -1807,6 +2162,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param c
      */
     private void setChanged(final boolean c) {
+        //Sys.err("changed: " + changed + " -> " + c);
         changed = c;
         lastModificationTime = System.currentTimeMillis();
     }
@@ -1855,8 +2211,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             for (Szenario szen : szenarios) {
                 szen.updateSimpleRedundancyAnalysis();
             }
+            setBulkMode(true);
+            updateInferenceEdges(pid);
+            setBulkMode(false);
         }
-        setChanged(true);
+        if (changeType != LGMChangeType.SELECTED_SZENARIO_CHANGED) {
+            setChanged(true);
+        }
     }
 
     /**
@@ -1871,72 +2232,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public GDCollectionIconTable getIconTable() {
         return iconTable;
-    }
-
-    /**
-     * @param bm
-     * @return the previous bulk mode
-     */
-    public boolean setBulkMode(final boolean bm) {
-        boolean oldBulkMode = bulk_mode;
-        bulk_mode = bm;
-        return oldBulkMode;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isBulkMode() {
-        return bulk_mode;
-    }
-
-    /**
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-
-    public void setName(final String name) {
-        this.name = name;
-        distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainGraphDocument(), STANDARD_PID);
-    }
-
-    /**
-     * @return setzt den Title auf dasselbe wie {@link #getName()}, aber ohne die Dateiendung
-     */
-    public String getTitle() {
-        int lastPointIndex = name.lastIndexOf('.');
-        String title = name;
-        if (lastPointIndex > 0 && lastPointIndex < title.length() - 1) {
-            String extension = title.substring(lastPointIndex + 1);
-            if (isExtension(extension)) {
-                title = title.substring(0, lastPointIndex);
-            }
-        }
-        return title;
-    }
-
-    /**
-     * COMMENTME
-     */
-    private boolean interactive_mode = true;
-
-    /**
-     * @param flag
-     * @return previous interactive mode
-     */
-    public boolean setInteractiveMode(final boolean flag) {
-        boolean oldMode = interactive_mode;
-        interactive_mode = flag;
-        return oldMode;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isInteractiveMode() {
-        return interactive_mode;
     }
 
     /**

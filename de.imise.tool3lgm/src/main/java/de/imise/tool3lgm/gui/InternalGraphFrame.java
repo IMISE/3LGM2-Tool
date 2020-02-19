@@ -129,8 +129,8 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     }
 
     @Override
-    public void elementGraphicsChanged(final ElementContainer element) {
-        area.revalidateRepaint(element);
+    public void elementGraphicsChanged(final ElementContainer source) {
+        area.revalidateRepaint();
     }
 
     @Override
@@ -183,6 +183,36 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
         elementGraphicsChanged(thisEc);
         revalidate();
         repaint();
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (doc == null ? 0 : doc.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        InternalGraphFrame other = (InternalGraphFrame) obj;
+        if (doc == null) {
+            if (other.doc != null) {
+                return false;
+            }
+        } else if (!doc.equals(other.doc)) {
+            return false;
+        }
+        return true;
     }
 
 }
