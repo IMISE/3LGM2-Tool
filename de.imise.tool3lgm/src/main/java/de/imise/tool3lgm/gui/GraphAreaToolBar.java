@@ -67,9 +67,6 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
     //                        int layer = selectedMetaModel.layerFor(elementClass);
     //                        Class<? extends Node> nodeClass = elementClass.asSubclass(Node.class);
     //                        layerGraphElementClasses.put(layer, nodeClass);
-    //                        if (dummyEdgeButtonNodeClass == null) {
-    //                            dummyEdgeButtonNodeClass = nodeClass;
-    //                        }
     //                    }
     //                }
     //            }
@@ -134,20 +131,9 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
             add(buttonCreateEdge);
             addSeparator();
             addSliders();
+            buttonSwitchMouseMode.doClick();
             revalidate();
             repaint();
-
-            InputGraphArea area = frame.getInputGraphArea();
-            Class<? extends Node> mouseMakesNodeClass = area.getMouseMakesNodeClass();
-            boolean mouseMakesEdge = area.isMouseMakesEdge();
-            if (mouseMakesNodeClass != null) {
-                buttonSwitchMouseMode.setSelected(mouseMakesNodeClass == null && !mouseMakesEdge);
-                buttonCreateEdge.setSelected(mouseMakesEdge);
-                for (ToolButton createNodeButton : buttonsCreateElement) {
-                    createNodeButton.setEnabled(createNodeButton.hasNodeClass(mouseMakesNodeClass));
-                }
-            }
-            buttonSwitchMouseMode.setSelected(true);
         }
     }
 
