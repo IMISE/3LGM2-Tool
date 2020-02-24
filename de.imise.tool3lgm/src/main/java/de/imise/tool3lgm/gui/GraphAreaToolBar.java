@@ -9,6 +9,7 @@ import javax.swing.ButtonGroup;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.GraphAreaOptionSliders.SliderWithTextField;
@@ -34,7 +35,7 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
     //    private static final Multimap<Integer, Class<? extends Node>> layerGraphElementClasses = getLayerGraphElementClasses();
 
     /** irgendeine der grafisch darstellbaren Klassen, die man braucht, um einen Strich auf den Button der Kanten zu malen */
-    private static Class<? extends Node> dummyEdgeButtonNodeClass;
+    private static final Class<? extends Node> dummyEdgeButtonNodeClass = Textfield.class;
 
     private boolean multiView;
 
@@ -86,9 +87,6 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
                         if (layerIndex == metaModel.layerFor(elementClass)) { //layer muss stimmen
                             Class<? extends Node> nodeClass = elementClass.asSubclass(Node.class);
                             paintableNodeClasses.add(nodeClass);
-                            if (dummyEdgeButtonNodeClass == null) {
-                                dummyEdgeButtonNodeClass = nodeClass;
-                            }
                         }
                     }
                 }
