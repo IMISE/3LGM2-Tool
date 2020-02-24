@@ -3317,7 +3317,11 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (master.countConnections(edgeClass) >= metaModel.getMaxMasterToSlaveCardinality(edgeClass)) {
             return null;
         }
-        String name = slaveName == null || slaveName.trim().equals("") ? doc.getNextNewName(master.getClearName() + "_", slaveClass) : slaveName;
+        String name = slaveName;
+        if (slaveName == null || slaveName.trim().equals("")) {
+            String masterName = master.getClearName();
+            name = doc.getNextNewName(masterName + "_", slaveClass);
+        }
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
         NodeContainer slaveContainer = mainDoc.createNodeAndContainer(slaveClass, name, GDCommands.INVALID_DESCRIPTION, slaveHashString, pid);
         if (slaveContainer == null) {

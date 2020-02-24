@@ -316,6 +316,17 @@ public final class MetaModel implements MetaModelSpecific {
     /** Alle Elementklassen, deren Name generiert und nicht vom Nutzer eingegeben wird */
     private final Set<Class<? extends ModelElement>> generateNameClasses;
 
+    /**
+     * Mappt von einer Kantenklasse auf den Pfad zu den Elementen, deren Name initial für eine neue Kante der
+     * übergebenen Klasse übernommen werden soll. Sind es mehrere, werden sie durch Komma getrennt. Ist es
+     * keines, bleibt der Standardname von {@link GraphDocument#getNextNewName(Class)} erhalten.
+     * Damit kann man z.B. einer neuen Ihe-Kommunikationsbeziehung statt 'IHE Kommunikationsbeziehung 10'
+     * den Namen der über die beiden Schnittstellen verbundenen Transaktion geben.<br>
+     * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt des Festlegens des Namens der Knoten
+     * noch mit gar nichts verbunden ist.
+     */
+    private final Map<Class<? extends Edge>, AbstractMetaPath> edgeClassToInitialCreatedNameSourcePath;
+
     //////////////////////////
     // Weitere Definitionen //
     //////////////////////////
@@ -399,6 +410,7 @@ public final class MetaModel implements MetaModelSpecific {
         elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatablePaths()));
         elementClassToNameExtensionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionPath());
         elementClassesWithNameExtensions = CollectionUtils.ensureImmutable(elementClassToNameExtensionPath.keySet());
+        edgeClassToInitialCreatedNameSourcePath = CollectionUtils.ensureImmutable(metaPathsDefinition.getEdgeClassToInitialCreatedNameSourcePath());
 
         inferenceEdgeToConditionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionPath());
     }
@@ -2128,6 +2140,17 @@ public final class MetaModel implements MetaModelSpecific {
             elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
         }
         return false;
+    }
+
+    /**
+     * Liefert für eine Kantenart den Pfad zu verbundenen Elementen, deren Name beim Anlegen einer neuen
+     * Kante der übergebnen Art für die neue Kante übernommen werde soll.
+     *
+     * @param elementClass
+     * @return
+     */
+    public final AbstractMetaPath getInitialCreatedNameSourcePath(final Class<? extends Edge> edgeClass) {
+        return edgeClassToInitialCreatedNameSourcePath.get(edgeClass);
     }
 
     /**

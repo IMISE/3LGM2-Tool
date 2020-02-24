@@ -113,6 +113,47 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         return ImmutableMap.of(ApplicationSystem.class, applicationsSystemNameExtensionPath, IheActorInstance.class, iheActorInstanceNameExtensionPath);
     }
 
+    @Override
+    public Map<Class<? extends Edge>, AbstractMetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
+        MetaModel metaModel = getMetaModel();
+        ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
+
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // IheCommunicationLink_Edge -> bekommt Name der Transaktion, die über ihre Schnittstellen verbunden ist //
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Path: IheCommunicationLink_Edge -> IheCommunicationLink_Edge-StartElement = IheInvokingInterface ->  IheTransaction_IheInvokingInterface_Edge -> IheTransaction
+        ElementaryMetaPath iheCommunicationLink_nameMetaPath1_pathStep1 = emph.getEdgeToStartElementMetaPath(IheCommunicationLink_Edge.class, IheInvokingInterface.class);
+        ElementaryMetaPath iheCommunicationLink_nameMetaPath1_pathStep2 = emph.getMetaPath(IheInvokingInterface.class, IheInvokingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
+        SimpleMetaPath iheCommunicationLink_nameMetaPath1 = new SimpleMetaPath(iheCommunicationLink_nameMetaPath1_pathStep1, iheCommunicationLink_nameMetaPath1_pathStep2);
+
+        //Path: IheCommunicationLink_Edge -> IheCommunicationLink_Edge-EndElement = IheProvidingInterface ->  IheTransaction_IheProvidingInterface_Edge -> IheTransaction
+        ElementaryMetaPath iheCommunicationLink_nameMetaPath2_pathStep1 = emph.getEdgeToEndElementMetaPath(IheCommunicationLink_Edge.class, IheProvidingInterface.class);
+        ElementaryMetaPath iheCommunicationLink_nameMetaPath2_pathStep2 = emph.getMetaPath(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
+        SimpleMetaPath iheCommunicationLink_nameMetaPath2 = new SimpleMetaPath(iheCommunicationLink_nameMetaPath2_pathStep1, iheCommunicationLink_nameMetaPath2_pathStep2);
+
+        AbstractMetaPath iheCommunicationLink_nameMetaPath = new SectionMetaPath(iheCommunicationLink_nameMetaPath1, iheCommunicationLink_nameMetaPath2);
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // CommunicationLink_Edge -> bekommt Name der Transaktion, die über ihre Schnittstellen verbunden ist //
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //Path: CommunicationLink_Edge -> CommunicationLink_Edge-StartElement = InvokingInterface ->  IheInvokingInterface_InvokingInterface_Edge -> IheInvokingInterface -> IheTransaction_IheInvokingInterface_Edge -> IheTransaction
+        ElementaryMetaPath communicationLink_nameMetaPath1_pathStep1 = emph.getEdgeToStartElementMetaPath(CommunicationLink_Edge.class, InvokingInterface.class);
+        ElementaryMetaPath communicationLink_nameMetaPath1_pathStep2 = emph.getMetaPath(InvokingInterface.class, IheInvokingInterface_InvokingInterface_Edge.class, Direction.BACKWARD, IheInvokingInterface.class);
+        ElementaryMetaPath communicationLink_nameMetaPath1_pathStep3 = emph.getMetaPath(IheInvokingInterface.class, IheInvokingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
+        SimpleMetaPath communicationLink_nameMetaPath1 = new SimpleMetaPath(communicationLink_nameMetaPath1_pathStep1, communicationLink_nameMetaPath1_pathStep2, communicationLink_nameMetaPath1_pathStep3);
+
+        //Path: CommunicationLink_Edge -> CommunicationLink_Edge-EndElement = ProvidingInterface ->  IheProvidingInterface_ProvidingInterface_Edge -> IheProvidingInterface -> IheTransaction_IheProvidingInterface_Edge -> IheTransaction
+        ElementaryMetaPath communicationLink_nameMetaPath2_pathStep1 = emph.getEdgeToEndElementMetaPath(CommunicationLink_Edge.class, ProvidingInterface.class);
+        ElementaryMetaPath communicationLink_nameMetaPath2_pathStep2 = emph.getMetaPath(ProvidingInterface.class, IheProvidingInterface_ProvidingInterface_Edge.class, Direction.BACKWARD, IheProvidingInterface.class);
+        ElementaryMetaPath communicationLink_nameMetaPath2_pathStep3 = emph.getMetaPath(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
+        SimpleMetaPath communicationLink_nameMetaPath2 = new SimpleMetaPath(communicationLink_nameMetaPath2_pathStep1, communicationLink_nameMetaPath2_pathStep2, communicationLink_nameMetaPath2_pathStep3);
+
+        AbstractMetaPath communicationLink_nameMetaPath = new SectionMetaPath(communicationLink_nameMetaPath1, communicationLink_nameMetaPath2);
+        return ImmutableMap.of(IheCommunicationLink_Edge.class, iheCommunicationLink_nameMetaPath, CommunicationLink_Edge.class, communicationLink_nameMetaPath);
+    }
+
     ////////////////////
     // InferenceEgdes //
     ////////////////////

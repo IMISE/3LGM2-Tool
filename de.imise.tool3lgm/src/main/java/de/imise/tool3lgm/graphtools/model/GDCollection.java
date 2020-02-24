@@ -1586,7 +1586,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 edge.setNodesAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
                 if (edge.getStart() != null && edge.getEnd() != null) {
                     kac = new EdgeContainer(edge, doc);
-                    edge.setName(doc.getNextNewName(edge.getClass()), false);
+                    String name = getNewEdgeName(edge);
+                    edge.setName(name, false);
                     addEdge(kac, pid);
                 } else {
                     if (edge.getStart() == null && edge.getEnd() != null) {
@@ -1639,6 +1640,29 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         doc.finish_transaction(pid);
         doc.distributeEvent(DATA_CHANGED, pid);
         return edge;
+    }
+
+    /**
+     * @param edge
+     * @return
+     */
+    private String getNewEdgeName(final Edge edge) {
+        String name = null;
+        Class<? extends Edge> edgeClass = edge.getClass();
+        AbstractMetaPath initialCreatedNameSourcePath = metaModel.getInitialCreatedNameSourcePath(edgeClass);
+        if (initialCreatedNameSourcePath != null) {
+            if (edgeClass.getSimpleName().startsWith("CommunicationLink_Edge")) {
+                System.currentTimeMillis();
+            }
+            Collection<ModelElement> nameSources = MetaPathFunctions.getConnectedElements(edge, initialCreatedNameSourcePath);
+            if (!nameSources.isEmpty()) {
+                name = StringUtils.createCollectionString(nameSources, ", ");
+            }
+        }
+        if (name == null) {
+            name = doc.getNextNewName(edgeClass);
+        }
+        return name;
     }
 
     /**

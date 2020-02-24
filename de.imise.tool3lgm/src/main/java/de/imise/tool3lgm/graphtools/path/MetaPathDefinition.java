@@ -21,6 +21,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
@@ -363,6 +364,19 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * @return
      */
     public Map<Class<? extends ModelElement>, AbstractMetaPath> getElementClassToNameExtensionPath() {
+        return ImmutableMap.of();
+    }
+
+    /**
+     * Liefert eine Map, die von einer Kantenklasse auf den Pfad zu den Elementen mappt, deren Name initial
+     * für eine neue Kante der übergebenen Klasse übernommen werden soll. Sind es mehrere, werden sie durch Komma
+     * getrennt. Ist es keines, bleibt der Standardname von {@link GraphDocument#getNextNewName(Class)} erhalten.
+     * Damit kann man z.B. einer neuen Ihe-Kommunikationsbeziehung statt 'IHE Kommunikationsbeziehung 10'
+     * den Namen der über die beiden Schnittstellen verbundenen Transaktion geben.<br>
+     * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt des Festlegens des Namens der Knoten
+     * noch mit gar nichts verbunden ist.
+     */
+    public Map<Class<? extends Edge>, AbstractMetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
         return ImmutableMap.of();
     }
 
