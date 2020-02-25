@@ -75,36 +75,29 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
         add(forward);
         addSeparator();
 
-        ActionSource[][] alignmentAndPositionActions = {
+        ActionSource[][] textAlignmentAndPositionActions = {
                 {
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT, //text left aligned
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER, //text center aligned
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT, //text right aligned
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY, //text justified
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT, // left aligned
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER, //center aligned
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT, //right aligned
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY, //justified
                 }, {
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT, //text position left
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER, //text position center
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT, //text position right
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT, //position left
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER, //position center
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT, //position right
                 }, {
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP, //text position top
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER, //text position center
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM, //text position bottom
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP, //position top
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER, //position center
+                        GDCommands.MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM, //position bottom
                 }, {
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, //text position top
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, //text position one up
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, //text position one down
-                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION, //text position last
-                }, {
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_LEFT, //element position left
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_CENTER, //element psoition center
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_HORIZONTAL_RIGHT, //element position right
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_TOP, //element position top
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_CENTER, //element position center
-                        GDCommands.MODEL_ACTION_SET_ELEMENT_ALIGNMENT_VERTICAL_BOTTOM, //element position bottom
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION, //position top
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP, //position one up
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN, //position one down
+                        GDCommands.MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION, //position last
                 }
         };
         int i = 0;
-        for (ActionSource[] alignmentActions : alignmentAndPositionActions) {
+        for (ActionSource[] alignmentActions : textAlignmentAndPositionActions) {
             if (i++ > 0) {
                 addSeparator();
             }

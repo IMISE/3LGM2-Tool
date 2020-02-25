@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.FAT_STROKE;
-import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.MEDUIM_STROKE;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.NE_STROKE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN;
@@ -162,8 +161,6 @@ public final class NodeRenderer {
         boolean isResult = doc.isAnalysisResult(kc);
         if (isResult || kc.isHighLight()) {
             gc.setStroke(FAT_STROKE);
-        } else if (doc.getLastSelected() == kc) {
-            gc.setStroke(MEDUIM_STROKE);
         }
 
         if (kc.getElement() instanceof Textfield && img == null && (kc.get3LGMLayout() == null || kc.get3LGMLayout().bg_color == null)) {
@@ -380,7 +377,7 @@ public final class NodeRenderer {
         JLabel label = kc.getNorthLabel();
 
         if (label != null) {
-            //			System.out.println(northLabel.getText() + "\nnorthLabel.height="+northLabel.getPreferredSize().height + " northLabel.width="+northLabel.getPreferredSize().width);
+            //          System.out.println(northLabel.getText() + "\nnorthLabel.height="+northLabel.getPreferredSize().height + " northLabel.width="+northLabel.getPreferredSize().width);
             int dy = ym - label.getPreferredSize().height - 1;
             g.translate(xm, dy);
             label.paint(g);
@@ -573,13 +570,13 @@ public final class NodeRenderer {
         return lastResizeCursor; // Wenn es gar nicht anders geklappt hat
     }
 
-    //	private static final int INVALID_ADAPTED_BORDER_POSITION_VALUE = Integer.MAX_VALUE;
+    //  private static final int INVALID_ADAPTED_BORDER_POSITION_VALUE = Integer.MAX_VALUE;
     //
-    //	private int adaptedBorderPositionX = INVALID_ADAPTED_BORDER_POSITION_VALUE;
-    //	private int adaptedBorderPositionY = INVALID_ADAPTED_BORDER_POSITION_VALUE;
+    //  private int adaptedBorderPositionX = INVALID_ADAPTED_BORDER_POSITION_VALUE;
+    //  private int adaptedBorderPositionY = INVALID_ADAPTED_BORDER_POSITION_VALUE;
     //
-    //	private D
+    //  private D
     //
-    //	public ResizeBox
+    //  public ResizeBox
 
 }
