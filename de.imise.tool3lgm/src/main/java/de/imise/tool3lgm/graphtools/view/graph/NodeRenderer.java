@@ -25,6 +25,8 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
+import de.imise.util.swing.component.HtmlLabelFunctions;
+import de.imise.util.swing.component.HtmlLabelFunctions.HtmlLabelDimension;
 
 /**
  * Die Klasse zeichnet grafische Elemente Funktionen bereit, um für Punkte zu entscheiden, ob er sich
@@ -57,11 +59,40 @@ public final class NodeRenderer {
     //Funktionen zum Rendern eines Knotens //
     /////////////////////////////////////////
 
+    /**
+     * Sets the size of the given {@link NodeContainer} that it fits the text in the container.
+     * This happens only, if the container has an layout with the inital size (default size).
+     * The resulting width is the maximum of the default width/height and the width/height that
+     * is needed to enclose the text.
+     *
+     * @param kc
+     */
+    private static void resize(final NodeContainer kc) {
+        GraphElementLayout layout = kc.get3LGMLayout();
+        if (layout != null) {
+            if (kc.hasDefaultSize()) {
+                Font font = kc.getFont();
+                String text = kc.getText();
+                HtmlLabelDimension htmlLabelDimension = HtmlLabelFunctions.getHtmlLabelDimension(font, text, layout.width);
+                if (htmlLabelDimension.minWidth > layout.width) {
+                    kc.setSize(htmlLabelDimension.minWidth, layout.height);
+                }
+                htmlLabelDimension = HtmlLabelFunctions.getHtmlLabelDimension(font, text, layout.width);
+                if (htmlLabelDimension.preferredHeight > layout.height) {
+                    kc.setSize(layout.width, htmlLabelDimension.preferredHeight);
+                }
+                //                System.err.println(layout.width + " " + layout.height);
+                //                Sys.err1(HtmlLabelFunctions.getHtmlLabelDimension(kc.getFont(), kc.getText(), kc.get3LGMLayout().width));
+            }
+        }
+    }
+
     public static final void render(final Graphics g, final NodeContainer kc, final GraphDocument doc) {
         if (!kc.getElement().isPaintable() || !kc.isVisible()) {
             return;
         }
-
+        //resize the initial container to enclose the html text
+        resize(kc);
         Graphics2D gc = (Graphics2D) g;
 
         PaintState paintState = PaintState.REGULAR;

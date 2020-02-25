@@ -459,6 +459,13 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
+     * @return
+     */
+    public boolean hasDefaultSize() {
+        return layout == null || layout.width == GraphElementLayout.STANDARD_WIDTH && layout.height == GraphElementLayout.STANDARD_HEIGHT;
+    }
+
+    /**
      *
      */
     public final void resetLayout() {
