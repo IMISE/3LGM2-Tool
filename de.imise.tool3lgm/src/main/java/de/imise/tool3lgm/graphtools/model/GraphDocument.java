@@ -2367,8 +2367,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (!isMultipleNodeSelection()) {
             return false;
         }
-        ElementContainer lastSelected = getLastSelected();
-        return lastSelected instanceof NodeContainer && lastSelected.getElement().isPaintable();
+        ElementContainer lastSelected = getLastSelectedGraphVisibleNodeOrBendpoint();
+        return lastSelected.getElement().isPaintable();
     }
 
     /**
@@ -2380,7 +2380,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return;
         }
         start_transaction(pid);
-        NodeContainer lastSelected = (NodeContainer) getLastSelected();
+        NodeContainer lastSelected = getLastSelectedGraphVisibleNodeOrBendpoint();
         for (ElementContainer ec : selectedContainer) {
             if (!(ec instanceof NodeContainer)) {
                 continue;
