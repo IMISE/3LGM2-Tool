@@ -48,6 +48,9 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     /** Zuletzt selektiertes Element */
     private ElementContainer lastSelected = null;
 
+    /** Last selected node or bendpoint in the graph */
+    private NodeContainer lastSelectedGraphVisibleNodeOrBendpoint;
+
     /**
      * Enthält die speziellste gemeinsame Unterklasse von {@link ModelElement} aus allen Elementen
      * der selektierten {@link NodeContainer} aus <code>selectedRealNodeContainer</code>.<br>
@@ -100,6 +103,13 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
+     * @return the last in the graph selected node or bendpoint container
+     */
+    public NodeContainer getLastSelectedGraphVisibleNodeOrBendpoint() {
+        return lastSelectedGraphVisibleNodeOrBendpoint;
+    }
+
+    /**
      * Einheitliche Schnittstelle zum internen setzen von {@link #lastSelected}.
      * Dient nur der Möglichkeit hier mal auszugeben, welches Element das ist.
      *
@@ -113,6 +123,15 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
          * }
          */
         this.lastSelected = lastSelected;
+        if (lastSelected == null) {
+            lastSelectedGraphVisibleNodeOrBendpoint = null;
+        } else if (lastSelected instanceof NodeContainer) {
+            //that's the same condition as in GraphMultipleSelectedRealNodeAction
+            if (lastSelected.getElement().isPaintable() && lastSelected.isVisible()) {
+                lastSelectedGraphVisibleNodeOrBendpoint = (NodeContainer) lastSelected;
+            }
+        }
+        //Sys.err1(lastSelected + " | " + lastSelectedGraphVisibleNodeOrBendpoint);
     }
 
     /**

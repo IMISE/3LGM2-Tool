@@ -106,10 +106,17 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * @return
+     * @return the last selected element contianer in the whole model (node, edge or bendpoint)
      */
     public final ElementContainer getLastSelected() {
         return selectedContainer.getLastSelected();
+    }
+
+    /**
+     * @return the last in the graph selected node or bendpoint container
+     */
+    public NodeContainer getLastSelectedGraphVisibleNodeOrBendpoint() {
+        return selectedContainer.getLastSelectedGraphVisibleNodeOrBendpoint();
     }
 
     /**
