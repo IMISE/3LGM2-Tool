@@ -20,6 +20,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -89,7 +90,8 @@ public final class NodeRenderer {
     }
 
     public static final void render(final Graphics g, final NodeContainer kc, final GraphDocument doc) {
-        if (!kc.getElement().isPaintable() || !kc.isVisible()) {
+        ModelElement me = kc.getElement();
+        if (!me.isPaintable() || !kc.isVisible()) {
             return;
         }
         //resize the initial container to enclose the html text
@@ -166,7 +168,7 @@ public final class NodeRenderer {
             gc.setStroke(MEDUIM_STROKE);
         }
 
-        if (kc.getElement() instanceof Textfield && img == null && (kc.get3LGMLayout() == null || kc.get3LGMLayout().bg_color == null)) {
+        if (me instanceof Textfield && img == null && (kc.get3LGMLayout() == null || kc.get3LGMLayout().bg_color == null)) {
             g.translate(xm, ym);
             kc.paintSuperComponent(g);
             g.translate(-xm, -ym);
@@ -318,7 +320,16 @@ public final class NodeRenderer {
 
             //scharzes Rechteck um das Element zeichnen
             g.setColor(Color.black);
+            if (me instanceof Textfield) {
+                NodeContainer lastSelectedGraphVisibleNodeOrBendpoint = doc.getLastSelectedGraphVisibleNodeOrBendpoint();
+                if (lastSelectedGraphVisibleNodeOrBendpoint == kc) {
+                    gc.setStroke(MEDUIM_STROKE);
+                }
+            }
             g.drawRect(xm, ym, width, height);
+
+            //Stroke wieder zurück setzen, falls das zuletzt selktierte ein Textfeld war
+            gc.setStroke(str);
 
             //8 schwarze Rechtecke zeichen, auf die die Pfeile gemalt werden
             g.fillRect(xm - HALF_RESIZE_BOX_WIDTH, ym - HALF_RESIZE_BOX_WIDTH, RESIZE_BOX_WIDTH, RESIZE_BOX_WIDTH);
