@@ -5,7 +5,9 @@ package de.imise.tool3lgm.graphtools.view.container;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Stroke;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -48,9 +50,17 @@ public class BendpointContainer extends NodeContainer {
             int height_half = height / 2;
             int xm = x - width_half;
             int ym = y - height_half;
-
             g.setColor(Color.black);
-            g.drawRect(xm, ym, width, height);
+            if (doc.getLastSelectedGraphVisibleNodeOrBendpoint() == this) {
+                Graphics2D gc = (Graphics2D) g;
+                Stroke stroke = gc.getStroke();
+                gc.setStroke(GraphElementLayout.MEDUIM_STROKE);
+                g.drawRect(xm, ym, width, height);
+                gc.setStroke(stroke);
+            } else {
+                g.drawRect(xm, ym, width, height);
+
+            }
             //g.fillRect(xm, ym, width, height);
         }
     }
