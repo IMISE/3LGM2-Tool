@@ -2771,15 +2771,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
 
         start_transaction(PID, false);
         deselectAll(true);
-        //alle Node im angegebenen Bereich selektieren
-        for (NodeContainer kn : layer[gdcoll.getActiveLayer()].getGraphNodeContainers()) {
-            if (!kn.getElement().isPaintable()) {
-                continue;
-            }
-            if (kn.getX() < right_x && kn.getX() > left_x && kn.getY() < right_y && kn.getY() > left_y && !kn.isSelected()) {
-                addToSelection(kn, PID);
-            }
-        }
         //alle Kanten im angegebenen Bereich selektieren
         for (EdgeContainer ka : layer[gdcoll.getActiveLayer()].getEdgeContainers()) {
             ElementContainer start = ka.getEdge().getStart().getContainer(this);
@@ -2801,7 +2792,15 @@ public abstract class GraphDocument extends ElementSelectionContext {
                     }
                 }
             }
-
+        }
+        //alle Node im angegebenen Bereich selektieren
+        for (NodeContainer kn : layer[gdcoll.getActiveLayer()].getGraphNodeContainers()) {
+            if (!kn.getElement().isPaintable()) {
+                continue;
+            }
+            if (kn.getX() < right_x && kn.getX() > left_x && kn.getY() < right_y && kn.getY() > left_y && !kn.isSelected()) {
+                addToSelection(kn, PID);
+            }
         }
         finish_transaction(PID, false);
         distributeEvent(SELECTION_CHANGED, PID);
