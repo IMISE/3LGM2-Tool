@@ -852,7 +852,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         xin = e.getX();
         yin = e.getY();
         computeRealCoordinates(false);
-        int ebene = szenario.getCollection().getActiveLayer();
+        GDCollection gdcoll = szenario.getCollection();
+        int ebene = gdcoll.getActiveLayer();
         if (mouse_selection) {
             right_sel_x = xreal[ebene];
             right_sel_y = yreal[ebene];
@@ -1094,7 +1095,10 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 //die Edge getroffen wurde (also grabbed==true ist), aber die Koordinaten bei mouseDragged() beim ersten Drag-Schritt ausßerhalb
                 //des Kantenbereichs liegen und der Index des neuen Knickpunktes nicht korrekt bestimmt werden kann.
                 //Da die Einfügeposition anhand der Koodinaten betimmt wird, wird -1 übergeben.
-                ka = szenario.getCollection().insertBendingPoint(szenario.getHashString(), ka.getElement().getHashString(), INVALID_HASH_STRING, lastXreal[ebene], lastYreal[ebene], INVALID_BENDPOINT_INDEX, STANDARD_PID);
+                String szenHash = szenario.getHashString();
+                ModelElement egde = ka.getElement();
+                String edgeHash = egde.getHashString();
+                ka = gdcoll.insertBendingPoint(szenHash, edgeHash, INVALID_HASH_STRING, lastXreal[ebene], lastYreal[ebene], INVALID_BENDPOINT_INDEX, STANDARD_PID);
                 szenario.select(ka, STANDARD_PID);
                 findIncludingRectangles();
             }
