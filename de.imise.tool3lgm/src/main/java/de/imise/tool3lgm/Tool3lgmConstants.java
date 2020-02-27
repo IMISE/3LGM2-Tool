@@ -36,19 +36,19 @@ public abstract class Tool3lgmConstants {
      * {@link Tool3lgmConstants#FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehängt.
      */
     public static enum FileFilterType {
-        LGM3,
-        LGM3_ZIP,
-        LGM3_UNZIPPED,
-        USERFIELD,
-        LIC,
-        XSL,
-        CSV,
-        JAR
+    LGM3,
+    LGM3_ZIP,
+    LGM3_UNZIPPED,
+    USERFIELD,
+    LIC,
+    XSL,
+    CSV,
+    JAR
     }
 
     /** String with the version-identifier for Tool3lgm */
     // TODO _____###### ständig aktualisieren!
-    public static final String TOOL_VERSION = "4.1.0 (dev)";
+    public static final String TOOL_VERSION = "4.1.1 (dev)";
     public static final String Branch = ""; //"origin/SplitMetaModelAndTemplates";
 
     /**
@@ -210,9 +210,9 @@ public abstract class Tool3lgmConstants {
      * @return
      */
     public static boolean isExtension(final String extension) {
-        for (FileFilterType extensionType : FileFilterType.values()) {
-            FileNameExtensionFilter filter = getFileNameExtensionFilter(extensionType);
-            String[] extensions = filter.getExtensions();
+        for (final FileFilterType extensionType : FileFilterType.values()) {
+            final FileNameExtensionFilter filter = getFileNameExtensionFilter(extensionType);
+            final String[] extensions = filter.getExtensions();
             if (CollectionUtils.arrayContains(extensions, extension)) {
                 return true;
             }
@@ -244,7 +244,7 @@ public abstract class Tool3lgmConstants {
      * @see #getFileNameExtensionFilter(FileFilterType)
      */
     public static final FileNameExtensionFilter[] getFileNameExtensionFilters(final FileFilterType... fileFilterType) {
-        FileNameExtensionFilter[] returnFilters = new FileNameExtensionFilter[fileFilterType.length];
+        final FileNameExtensionFilter[] returnFilters = new FileNameExtensionFilter[fileFilterType.length];
         for (int i = 0; i < fileFilterType.length; i++) {
             returnFilters[i] = getFileNameExtensionFilter(fileFilterType[i]);
         }
@@ -279,7 +279,7 @@ public abstract class Tool3lgmConstants {
         try {
             retVal = getImageIcon(RESOURCE_LOCALIZED_ICON_PATH + name);
             // wenn für die Locale aus der Userproperties-Datei das gesucht lokalisierte Bild nicht vorkommt
-        } catch (Exception e) {
+        } catch (final Exception e) {
             // Standardressourcen sind englisch
             retVal = getImageIcon(RESOURCE_ICON_DIR_NAME + "/en/");
         }
@@ -294,7 +294,7 @@ public abstract class Tool3lgmConstants {
      * @return
      */
     public static ImageIcon getImageIcon(final String dir) {
-        URL url = ClassLoader.getSystemClassLoader().getResource(dir);
+        final URL url = ClassLoader.getSystemClassLoader().getResource(dir);
         ImageIcon icon;
         if (url != null) {
             icon = new ImageIcon(url);
@@ -362,7 +362,7 @@ public abstract class Tool3lgmConstants {
     public static String getReplacedString(final String org, final String... replacements) {
         String s = org;
         for (int i = 0; i < replacements.length; i++) {
-            String currentReplacementMarker = "{" + i + "}";
+            final String currentReplacementMarker = "{" + i + "}";
             s = s.replace(currentReplacementMarker, replacements[i]);
         }
         return s;
@@ -378,7 +378,7 @@ public abstract class Tool3lgmConstants {
     public static final String getResStringWithoutError(final String key) {
         try {
             return getResString(key);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return key;
         }
     }
