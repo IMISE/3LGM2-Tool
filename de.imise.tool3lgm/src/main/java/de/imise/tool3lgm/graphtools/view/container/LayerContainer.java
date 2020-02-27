@@ -14,6 +14,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -71,6 +72,11 @@ public class LayerContainer extends ElementContainer {
      *
      */
     private List<EdgeContainer> tmpEdgeContainer;
+
+    /**
+     * Stores during paint all nodes which are already painted (no bendpoints)
+     */
+    private final HashSet<ModelElement> paintedNodes = new HashSet<>();
 
     //Strings, die oben und unten geschrieben werden (z.B. an Aufgaben und Objekttypen Redundanzfaktoren...)
     private KeyObjectStringMap additionalTextAbove, additionalTextDown;
@@ -467,47 +473,56 @@ public class LayerContainer extends ElementContainer {
     protected void paintChildren(final Graphics g) {
         //		synchronized (getTreeLock()) {
         tmpEdgeContainer.clear();
-        for (NodeContainer ec : graphNodeContainers) {
+        paintedNodes.clear();
+        boolean isPaintEdgesOnlyForSelectedElements = OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS.is();
+        for (NodeContainer nc : graphNodeContainers) {
             //hier wird bei jedem Element nochmal geprüft, ob es in die Ebene passt. Wenn nicht, wird die
             //Ebenengröße hochgesetzt und das Zeichen neu angestoßen
-            if (!doc.pageHasSize(ec)) {
+            if (!doc.pageHasSize(nc)) {
                 doc.setPageSizeFactor(-1.0);
                 return;
             }
-            ec.paint(g);
-        }
-        boolean isPaintEdgesOnlyForSelectedElements = OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS.is();
-        for (EdgeContainer ec : edgeContainers) {
-            boolean paintEdge = false;
-            if (isPaintEdgesOnlyForSelectedElements) {
-                Edge edge = (Edge) ec.getElement();
-                ModelElement start = edge.getStart();
-                ElementContainer startContainer = start.getContainer(doc);
-                if (doc.isSelected(startContainer)) {
-                    paintEdge = true;
-                } else {
-                    ModelElement end = edge.getEnd();
-                    ElementContainer endContainer = end.getContainer(doc);
-                    if (doc.isSelected(endContainer)) {
+            ModelElement node = nc.getElement();
+            for (Edge edge : node.getEdges()) {
+                ElementContainer ec = edge.getContainer(doc);
+                if (ec == null) {
+                    continue;
+                }
+                paintedNodes.add(node);
+                ModelElement other = edge.getOther(node);
+                if (paintedNodes.contains(other)) {
+                    boolean paintEdge = false;
+                    if (isPaintEdgesOnlyForSelectedElements) {
+                        ModelElement start = edge.getStart();
+                        ElementContainer startContainer = start.getContainer(doc);
+                        if (doc.isSelected(startContainer)) {
+                            paintEdge = true;
+                        } else {
+                            ModelElement end = edge.getEnd();
+                            ElementContainer endContainer = end.getContainer(doc);
+                            if (doc.isSelected(endContainer)) {
+                                paintEdge = true;
+                            }
+                        }
+                    } else {
                         paintEdge = true;
                     }
-                }
-            } else {
-                paintEdge = true;
-            }
-            if (paintEdge) {
-                ec.paint(g);
-                for (BendpointContainer bc : ec.iterateBendpointContainers()) {
-                    //hier wird bei jedem Knickpunkt nochmal geprüft, ob er in die Ebene passt. Wenn nicht, wird die
-                    //Ebenengröße hochgesetzt und das Zeichen neu angestoßen
-                    if (!doc.pageHasSize(bc)) {
-                        doc.setPageSizeFactor(-1.0);
-                        return;
+                    if (paintEdge) {
+                        ec.paint(g);
+                        EdgeContainer edgeC = (EdgeContainer) ec;
+                        for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
+                            //hier wird bei jedem Knickpunkt nochmal geprüft, ob er in die Ebene passt. Wenn nicht, wird die
+                            //Ebenengröße hochgesetzt und das Zeichen neu angestoßen
+                            if (!doc.pageHasSize(bc)) {
+                                doc.setPageSizeFactor(-1.0);
+                                return;
+                            }
+                            bc.paint(g);
+                        }
                     }
-                    bc.paint(g);
                 }
             }
-
+            nc.paint(g);
         }
         if (!isPaintEdgesOnlyForSelectedElements) {
             paintingSurrogates = true;
