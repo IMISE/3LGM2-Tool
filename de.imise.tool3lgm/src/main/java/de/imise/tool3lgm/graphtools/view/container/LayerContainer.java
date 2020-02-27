@@ -478,33 +478,38 @@ public class LayerContainer extends ElementContainer {
         }
         boolean isPaintEdgesOnlyForSelectedElements = OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS.is();
         for (EdgeContainer ec : edgeContainers) {
+            boolean paintEdge = false;
             if (isPaintEdgesOnlyForSelectedElements) {
                 Edge edge = (Edge) ec.getElement();
                 ModelElement start = edge.getStart();
                 ElementContainer startContainer = start.getContainer(doc);
                 if (doc.isSelected(startContainer)) {
-                    ec.paint(g);
+                    paintEdge = true;
                 } else {
                     ModelElement end = edge.getEnd();
                     ElementContainer endContainer = end.getContainer(doc);
                     if (doc.isSelected(endContainer)) {
-                        ec.paint(g);
+                        paintEdge = true;
                     }
                 }
             } else {
-                ec.paint(g);
+                paintEdge = true;
             }
+            if (paintEdge) {
+                ec.paint(g);
+                for (BendpointContainer bc : ec.iterateBendpointContainers()) {
+                    //hier wird bei jedem Knickpunkt nochmal geprüft, ob er in die Ebene passt. Wenn nicht, wird die
+                    //Ebenengröße hochgesetzt und das Zeichen neu angestoßen
+                    if (!doc.pageHasSize(bc)) {
+                        doc.setPageSizeFactor(-1.0);
+                        return;
+                    }
+                    bc.paint(g);
+                }
+            }
+
         }
         if (!isPaintEdgesOnlyForSelectedElements) {
-            for (BendpointContainer ec : bendpointContainers) {
-                //hier wird bei jedem Knickpunkt nochmal geprüft, ob er in die Ebene passt. Wenn nicht, wird die
-                //Ebenengröße hochgesetzt und das Zeichen neu angestoßen
-                if (!doc.pageHasSize(ec)) {
-                    doc.setPageSizeFactor(-1.0);
-                    return;
-                }
-                ec.paint(g);
-            }
             paintingSurrogates = true;
             for (EdgeContainer ec : tmpEdgeContainer) {
                 ec.paint(g);
