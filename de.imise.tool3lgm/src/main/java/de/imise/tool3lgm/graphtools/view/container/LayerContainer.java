@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.view.container;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_RASTER;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RASTER_WIDTH;
+import static de.imise.util.GraphicsFunctions.drawRect;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -11,7 +12,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.util.ArrayList;
 import java.util.List;
@@ -507,31 +507,20 @@ public class LayerContainer extends ElementContainer {
             paintingSurrogates = false;
         }
         if (doc.isVerificationMode()) {
-            Rectangle r = InputGraphArea.grabbedElementsFullRect;
-            if (r != null) {
-                g.setColor(Color.red);
-                g.drawLine(r.x, r.y, r.x, r.height);
-                g.drawLine(r.x, r.height, r.width, r.height);
-                g.drawLine(r.width, r.height, r.width, r.y);
-                g.drawLine(r.width, r.y, r.x, r.y);
-            }
-            r = InputGraphArea.grabbedElementsRasteredRect;
-            if (r != null) {
-                g.setColor(Color.green);
-                g.drawLine(r.x, r.y, r.x, r.height);
-                g.drawLine(r.x, r.height, r.width, r.height);
-                g.drawLine(r.width, r.height, r.width, r.y);
-                g.drawLine(r.width, r.y, r.x, r.y);
-            }
-            r = InputGraphArea.grabbedElementsRealRect;
-            if (r != null) {
-                g.setColor(Color.blue);
-                g.drawLine(r.x, r.y, r.x, r.height);
-                g.drawLine(r.x, r.height, r.width, r.height);
-                g.drawLine(r.width, r.height, r.width, r.y);
-                g.drawLine(r.width, r.y, r.x, r.y);
-            }
+            paintDebugRectangles(g);
         }
+    }
+
+    /**
+     * Paint the {@link InputGraphArea#grabbedElementsFullRect}, {@link InputGraphArea#grabbedElementsRasteredRect}
+     * and he {@link InputGraphArea#grabbedElementsRealRect} to the layer.
+     *
+     * @param g
+     */
+    private void paintDebugRectangles(final Graphics g) {
+        drawRect(g, InputGraphArea.grabbedElementsFullRect, Color.red);
+        drawRect(g, InputGraphArea.grabbedElementsRasteredRect, Color.green);
+        drawRect(g, InputGraphArea.grabbedElementsRealRect, Color.blue);
     }
 
     @Override
