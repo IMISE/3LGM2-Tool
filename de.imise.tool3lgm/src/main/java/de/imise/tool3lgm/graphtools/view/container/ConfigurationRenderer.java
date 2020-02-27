@@ -116,7 +116,7 @@ public class ConfigurationRenderer {
                             continue;
                         }
                         if (configurationStartIsAnalysisResult && doc.isAnalysisResult(connectedEc)) {
-                            g.setColor(Color.green);
+                            g.setColor(Color.black);
                             gc.setStroke(MEDUIM_STROKE);
                             g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() - x_shift, kc2.getY() - y_shift);
                             gc.setStroke(s);
