@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
@@ -26,7 +25,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
-import de.imise.tool3lgm.log.Log;
 
 /**
  * @author N.N
@@ -184,6 +182,35 @@ public class EdgeContainer extends ElementContainer {
         return endy;
     }
 
+    /**
+     * @return
+     */
+    public ElementContainer getStartElementContainer() {
+        return getStartOrEndContainer(true);
+    }
+
+    /**
+     * @return
+     */
+    public ElementContainer getEndElementContainer() {
+        return getStartOrEndContainer(false);
+    }
+
+    /**
+     * @param start
+     * @return
+     */
+    private final ElementContainer getStartOrEndContainer(final boolean start) {
+        Edge edge = getEdge();
+        if (edge != null) {
+            ModelElement me = start ? edge.getStart() : edge.getEnd();
+            if (me != null) {
+                return me.getContainer(doc);
+            }
+        }
+        return null;
+    }
+
     // Komplett aus Edge
     /**
      *
@@ -197,24 +224,10 @@ public class EdgeContainer extends ElementContainer {
         //		 getEdge().getContainerTable().values()) { EdgeContainer ec = (EdgeContainer) c; System.err.println(ec.getGraphDocument() + " " + ec.getHashString() + " " + ec.knickpunkte + " " +
         //		 ec.getEdge() + " " + ModelConstants.getFullBackwardMetaAssociationName(ec.getEdge().getClass()) + " " + ec.hashCode()); }
 
-        ElementContainer kc1 = null;
-        ElementContainer kc2 = null;
-        try {
-            Edge k;
-            if ((k = getEdge()) != null) {
-                ModelElement startElement = k.getStart();
-                if (startElement != null) {
-                    kc1 = startElement.getContainer(doc);
-                }
-                ModelElement endElement = k.getEnd();
-                if (endElement != null) {
-                    kc2 = endElement.getContainer(doc);
-                }
-            }
-        } catch (NullPointerException e) {
-            Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
-        }
-        if (kc1 == null || kc2 == null) {
+        ElementContainer ec1 = getStartElementContainer();
+        ElementContainer ec2 = getEndElementContainer();
+
+        if (ec1 == null || ec2 == null) {
             return;
         }
 
@@ -230,8 +243,8 @@ public class EdgeContainer extends ElementContainer {
 
         if (!bendpoints.isEmpty()) {
             int i = bendpoints.size() - 1;
-            int left_x = kc1.getX();
-            int left_y = kc1.getY();
+            int left_x = ec1.getX();
+            int left_y = ec1.getY();
             BendpointContainer bendpointContainer = bendpoints.get(0);
             int right_x = bendpointContainer.getX();
             int right_y = bendpointContainer.getY();
@@ -241,7 +254,7 @@ public class EdgeContainer extends ElementContainer {
             while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
                 middle_x = (left_x + right_x) / 2;
                 middle_y = (left_y + right_y) / 2;
-                if (NodeRenderer.isInside(kc1, middle_x, middle_y)) {
+                if (NodeRenderer.isInside(ec1, middle_x, middle_y)) {
                     left_x = middle_x;
                     left_y = middle_y;
                 } else {
@@ -252,8 +265,8 @@ public class EdgeContainer extends ElementContainer {
             startx = middle_x;
             starty = middle_y;
 
-            left_x = kc2.getX();
-            left_y = kc2.getY();
+            left_x = ec2.getX();
+            left_y = ec2.getY();
             right_x = bendpoints.get(i).getX();
             right_y = bendpoints.get(i).getY();
 
@@ -263,7 +276,7 @@ public class EdgeContainer extends ElementContainer {
             while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
                 middle_x = (left_x + right_x) / 2;
                 middle_y = (left_y + right_y) / 2;
-                if (NodeRenderer.isInside(kc2, middle_x, middle_y)) {
+                if (NodeRenderer.isInside(ec2, middle_x, middle_y)) {
                     left_x = middle_x;
                     left_y = middle_y;
                 } else {
@@ -274,17 +287,17 @@ public class EdgeContainer extends ElementContainer {
             endx = middle_x;
             endy = middle_y;
         } else {
-            int left_x = kc1.getX();
-            int left_y = kc1.getY();
-            int right_x = kc2.getX();
-            int right_y = kc2.getY();
+            int left_x = ec1.getX();
+            int left_y = ec1.getY();
+            int right_x = ec2.getX();
+            int right_y = ec2.getY();
 
             int middle_x = left_x, middle_y = left_y;
 
             while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
                 middle_x = (left_x + right_x) / 2;
                 middle_y = (left_y + right_y) / 2;
-                if (NodeRenderer.isInside(kc1, middle_x, middle_y)) {
+                if (NodeRenderer.isInside(ec1, middle_x, middle_y)) {
                     left_x = middle_x;
                     left_y = middle_y;
                 } else {
@@ -295,15 +308,15 @@ public class EdgeContainer extends ElementContainer {
             startx = middle_x;
             starty = middle_y;
 
-            left_x = kc2.getX();
-            left_y = kc2.getY();
-            right_x = kc1.getX();
-            right_y = kc1.getY();
+            left_x = ec2.getX();
+            left_y = ec2.getY();
+            right_x = ec1.getX();
+            right_y = ec1.getY();
 
             while (Math.abs(left_x - right_x) > 1 || Math.abs(left_y - right_y) > 1) {
                 middle_x = (left_x + right_x) / 2;
                 middle_y = (left_y + right_y) / 2;
-                if (NodeRenderer.isInside(kc2, middle_x, middle_y)) {
+                if (NodeRenderer.isInside(ec2, middle_x, middle_y)) {
                     left_x = middle_x;
                     left_y = middle_y;
                 } else {
@@ -332,7 +345,7 @@ public class EdgeContainer extends ElementContainer {
             rad1 = rad2;
         }
 
-        if (NodeRenderer.isInside(kc1, endx, endy) || NodeRenderer.isInside(kc2, startx, starty)) {
+        if (NodeRenderer.isInside(ec1, endx, endy) || NodeRenderer.isInside(ec2, startx, starty)) {
             over_lapping = true;
         } else {
             over_lapping = false;
