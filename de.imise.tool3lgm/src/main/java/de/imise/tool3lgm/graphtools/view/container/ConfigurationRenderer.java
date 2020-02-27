@@ -20,20 +20,32 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 
 public class ConfigurationRenderer {
 
+    /**
+     * {@link GraphElementLayout#STANDARD_COLORS} defines a list of colors. This colors
+     * will be used to paint the different configuratons. If there are more configurations
+     * in the graph than colors, the counter starts at 0 again.
+     */
     public static int colorCounter = 0;
 
+    /**
+     * Singleton private static final instance of this class
+     */
     private static final ConfigurationRenderer renderer = new ConfigurationRenderer();
 
+    /**
+     * Renders the configuration from the <code>configurationStart</code> to all of its ends.
+     *
+     * @param g the target graphics objetct where the rendering is done
+     * @param configurationStart the container whose configurations should be rendered
+     * @param doc the submodel in which the configurations should be shown
+     */
     public static final void render(final Graphics g, final InterLayerConnectedNodeContainer configurationStart, final GraphDocument doc) {
-        renderer.renderInternal(g, configurationStart, doc);
-    }
-
-    private void renderInternal(final Graphics g, final InterLayerConnectedNodeContainer configurationStart, final GraphDocument doc) {
         boolean configurationStartIsAnalysisResult = doc.isAnalysisResult(configurationStart);
         if (!configurationStart.isShowInterLayerConnections()) {
             if (!configurationStartIsAnalysisResult) {
@@ -122,4 +134,5 @@ public class ConfigurationRenderer {
             }
         }
     }
+
 }
