@@ -22,9 +22,7 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
     /** Gibt wieder, ob die Interebenenbeziehungen angezeigt werden sollen, oder nicht. */
     private boolean showInterLayerConnections = false;
 
-    /** Gibt wieder, ob die Interebenenbeziehungen gehighlighted werden sollen, oder nicht. */
-    private boolean highlightInterLayerConnections = false;
-
+    /** The color of interlayer connections of this container are painted in the graph. */
     private Color interLayerConnectionColor = null;
 
     /**
@@ -96,14 +94,6 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
         showInterLayerConnections = show;
     }
 
-    public boolean isHighlightInterLayerConnections() {
-        return highlightInterLayerConnections;
-    }
-
-    public void setHighlightInterLayerConnections(final boolean highlightInterLayerConnections) {
-        this.highlightInterLayerConnections = highlightInterLayerConnections;
-    }
-
     @Override
     protected void paintComponent(final Graphics g) {
         if (showInterLayerConnections) {
@@ -112,10 +102,18 @@ public final class InterLayerConnectedNodeContainer extends NodeContainer {
         super.paintComponent(g);
     }
 
+    /**
+     * @return the color of interlayer connections of this container are painted in the graph.
+     */
     public Color getInterLayerConnectionColor() {
         return interLayerConnectionColor;
     }
 
+    /**
+     * Set the color of interlayer connections of this container are painted in the graph.
+     *
+     * @param interLayerConnectionColor
+     */
     public void setInterLayerConnectionColor(final Color interLayerConnectionColor) {
         this.interLayerConnectionColor = interLayerConnectionColor;
     }

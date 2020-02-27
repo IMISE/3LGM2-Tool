@@ -34,11 +34,12 @@ public class ConfigurationRenderer {
     }
 
     private void renderInternal(final Graphics g, final InterLayerConnectedNodeContainer configurationStart, final GraphDocument doc) {
-        //        if (!isVisible() && !isHighLight()) {
-        if (!configurationStart.isShowInterLayerConnections() && !configurationStart.isHighlightInterLayerConnections()) {
-            return;
+        boolean configurationStartIsAnalysisResult = doc.isAnalysisResult(configurationStart);
+        if (!configurationStart.isShowInterLayerConnections()) {
+            if (!configurationStartIsAnalysisResult) {
+                return;
+            }
         }
-
         InternalGraphFrame frame = doc.getFrame();
         InputGraphArea inputGraphArea = frame.getInputGraphArea();
         boolean multiView = inputGraphArea.isMultiView();
@@ -67,17 +68,10 @@ public class ConfigurationRenderer {
             }
             g.setColor(elem_col);
 
-            //            NodeContainer kc1 = (NodeContainer) c1C.get(b);
             InterLayerConnectedNodeContainer kc1 = (InterLayerConnectedNodeContainer) configurationStartContainer.get(b);
             if (!kc1.isVisible()) {
                 continue;
             }
-            //            if (isSelected()) { //das hier war die Konfiguration, die selected war -> erstmal testweise durch highlight ersetzen
-            //            if (kc1.isHighlightInterLayerConnections()) {
-            //                g.setColor(Color.red);
-            //                g.fillRect(kc1.getX() - 10, kc1.getY() - 10, 20, 20);
-            //                g.setColor(elem_col);
-            //            }
             if (multiView) {
                 Graphics2D gc = (Graphics2D) g;
                 Stroke s = gc.getStroke();
@@ -114,25 +108,18 @@ public class ConfigurationRenderer {
                         if (!kc2.isVisible()) {
                             continue;
                         }
-                        if (configurationStart.isHighlightInterLayerConnections()) {
+                        if (configurationStartIsAnalysisResult && doc.isAnalysisResult(connectedEc)) {
                             g.setColor(Color.green);
                             gc.setStroke(MEDUIM_STROKE);
-                            g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() + x_shift, kc2.getY() + y_shift);
+                            g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() - x_shift, kc2.getY() - y_shift);
                             gc.setStroke(s);
                             g.setColor(elem_col);
+                        } else {
+                            g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() - x_shift, kc2.getY() - y_shift);
                         }
-
-                        g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() - x_shift, kc2.getY() - y_shift);
-                        //                        g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() + (int) x_shift, kc2.getY() + (int) y_shift);
-                        //                        if (isSelected()) {
-                        //                            g.setColor(Color.red);
-                        //                            g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() + (int) x_shift, kc2.getY() + (int) y_shift);
-                        //                            g.setColor(elem_col);
-                        //                        }
                     }
                 }
             }
-            //            }
         }
     }
 }
