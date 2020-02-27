@@ -34,11 +34,6 @@ public class ConfigurationRenderer {
     public static int colorCounter = 0;
 
     /**
-     * Singleton private static final instance of this class
-     */
-    private static final ConfigurationRenderer renderer = new ConfigurationRenderer();
-
-    /**
      * Renders the configuration from the <code>configurationStart</code> to all of its ends.
      *
      * @param g the target graphics objetct where the rendering is done
