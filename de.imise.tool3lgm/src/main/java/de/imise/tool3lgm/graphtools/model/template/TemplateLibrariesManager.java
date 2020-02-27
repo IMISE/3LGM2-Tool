@@ -33,6 +33,9 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
      */
     private GraphDocument activeTemplate;
 
+    /**
+     *
+     */
     public TemplateLibrariesManager() {
         UserProperties.addPropertyChangeListener(this);
         addAsToolChangeListener();
@@ -44,6 +47,11 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
         if (OPTION_SHOW_TEMPLATE_BROWSER.isChanged(evt)) {
             loadOrUnloadTemplates();
         }
+    }
+
+    @Override
+    public void model_change_model_opened(final GraphDocument source) {
+        loadOrUnloadTemplates();
     }
 
     @Override
