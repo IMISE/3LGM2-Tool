@@ -1,4 +1,6 @@
 @echo off
+::change to script directory
+PushD "%~dp0"
 ::Max Memory for 32-Bit Systems
 SET MEMORY32=-Xmx512m -Xss20m 
 ::Max Memory for 64-Bit Systems
@@ -13,3 +15,5 @@ set PATH=%PATH%;.;lib;Plugins
 ::java %MEMORY% -jar ./lib/tool3lgm.jar
 java %MEMORY% -classpath ".;./lib/*;./Plugins/*" -splash:splash.gif de.imise.tool3lgm.Tool3lgmMain
 pause
+::change to last directory before changing to script directory 
+PopD
