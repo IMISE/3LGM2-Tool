@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
-import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.FAT_STROKE;
-import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.NE_STROKE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_SHOW_EXPANSION_SIGN;
 
@@ -125,11 +123,11 @@ public final class NodeRenderer {
 
         Stroke str = gc.getStroke();
         if (TRANSIENT_OPTION_SHOW_EXPANSION_SIGN.is() && !kc.isExpanded()) {
-            gc.setStroke(NE_STROKE);
+            gc.setStroke(GraphElementLayout.NOT_EXPANDED_BORDER_STROKE);
         }
         boolean isResult = doc.isAnalysisResult(kc);
         if (isResult || kc.isHighLight()) {
-            gc.setStroke(FAT_STROKE);
+            gc.setStroke(GraphElementLayout.FAT_STROKE);
         }
 
         if (kc.getElement() instanceof Textfield && img == null && (kc.get3LGMLayout() == null || kc.get3LGMLayout().bg_color == null)) {

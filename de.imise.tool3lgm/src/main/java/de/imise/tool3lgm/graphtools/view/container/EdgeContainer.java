@@ -4,9 +4,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.DOUBLE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState.FORWARD;
-import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.FAT_STROKE;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -35,18 +33,6 @@ import de.imise.tool3lgm.log.Log;
  * @create Long time ago
  */
 public class EdgeContainer extends ElementContainer {
-
-    /**
-     * COMMENTME
-     */
-    final static float dash1[] = {
-            10.0f
-    };
-
-    /**
-     * COMMENTME
-     */
-    final static BasicStroke dashedStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10.0f, dash1, 0.0f);
 
     /**
      * COMMENTME
@@ -647,12 +633,12 @@ public class EdgeContainer extends ElementContainer {
             boolean fatFrame = false;
             if (isResult || isHighLight) {
                 fatFrame = true;
-                gc.setStroke(FAT_STROKE);
+                gc.setStroke(GraphElementLayout.FAT_STROKE);
             }
 
             if (!paintingSurrogates && isDashed()) {
                 Stroke str = gc.getStroke();
-                gc.setStroke(dashedStroke);
+                gc.setStroke(GraphElementLayout.HAS_PART_EDGES_STROKE);
                 g.drawLine(startx, starty, endx, endy);
                 gc.setStroke(str);
             } else {

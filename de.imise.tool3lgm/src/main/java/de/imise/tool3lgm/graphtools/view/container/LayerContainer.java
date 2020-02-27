@@ -40,16 +40,6 @@ public class LayerContainer extends ElementContainer {
     /**
      *
      */
-    private static BasicStroke stroke_thick = new BasicStroke((float) 3.0);
-
-    /**
-     *
-     */
-    private static BasicStroke stroke_thin = new BasicStroke((float) 1.0);
-
-    /**
-     *
-     */
     private int layerNumber = -1;
 
     /**
@@ -373,15 +363,15 @@ public class LayerContainer extends ElementContainer {
             g.drawRect(-page_width / 2, -page_height / 2, page_width, page_height);
 
             Graphics2D gc = (Graphics2D) g;
+            Stroke currentStroke = gc.getStroke();
 
             if (this == doc.getActiveLayer() && paintState == PaintState.REGULAR) {
-                gc.setStroke(stroke_thick);
+                gc.setStroke(GraphElementLayout.LAYER_STROKE_SELECTED);
                 g.drawRect(-page_width / 2 + 1, -page_height / 2 + 1, page_width - 2, page_height - 2);
-                gc.setStroke(stroke_thin);
+                gc.setStroke(currentStroke);
             }
 
             if (OPTION_SHOW_RASTER.is() && paintState != PaintState.WEBEXPORT) {
-                Stroke stk = gc.getStroke();
                 g.setColor(Color.darkGray);
                 int maxX = page_width / 2 + 1;
                 int maxY = page_height / 2 + 1;
@@ -423,7 +413,7 @@ public class LayerContainer extends ElementContainer {
                 //					g.drawLine(-maxX, -y, maxX, -y);
                 //				}
 
-                gc.setStroke(stk);
+                gc.setStroke(currentStroke);
             }
             //			malt ein großes Kreuz in den Mittelpunkt der Zeichenfläche
             //			int kreiz = 100;

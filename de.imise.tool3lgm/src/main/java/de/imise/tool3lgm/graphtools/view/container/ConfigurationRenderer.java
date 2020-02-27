@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
-import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.MEDUIM_STROKE;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_COLORS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ASSIGN_CONFIGURATION_COLORS;
 
@@ -117,7 +116,7 @@ public class ConfigurationRenderer {
                         }
                         if (configurationStartIsAnalysisResult && doc.isAnalysisResult(connectedEc)) {
                             g.setColor(Color.black);
-                            gc.setStroke(MEDUIM_STROKE);
+                            gc.setStroke(GraphElementLayout.MEDUIM_STROKE);
                             g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() - x_shift, kc2.getY() - y_shift);
                             gc.setStroke(s);
                             g.setColor(elem_col);
