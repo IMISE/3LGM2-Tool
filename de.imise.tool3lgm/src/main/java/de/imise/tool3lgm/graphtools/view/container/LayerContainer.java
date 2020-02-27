@@ -363,64 +363,20 @@ public class LayerContainer extends ElementContainer {
             g.drawRect(-page_width / 2, -page_height / 2, page_width, page_height);
 
             Graphics2D gc = (Graphics2D) g;
-            Stroke currentStroke = gc.getStroke();
 
             if (this == doc.getActiveLayer() && paintState == PaintState.REGULAR) {
+                Stroke currentStroke = gc.getStroke();
                 gc.setStroke(GraphElementLayout.LAYER_STROKE_SELECTED);
                 g.drawRect(-page_width / 2 + 1, -page_height / 2 + 1, page_width - 2, page_height - 2);
                 gc.setStroke(currentStroke);
             }
 
             if (OPTION_SHOW_RASTER.is() && paintState != PaintState.WEBEXPORT) {
-                g.setColor(Color.darkGray);
-                int maxX = page_width / 2 + 1;
-                int maxY = page_height / 2 + 1;
-                int rasterWidth = PROPERTY_INT_RASTER_WIDTH.get();
-
-                //				malt das Raster mit durchgezogenen Linien -> kann man für Kontrollzwecke wieder einblenden
-                //				g.setColor(Color.lightGray);
-                //				for (int x=0; x<maxX; x+=rasterWidth){
-                //					g.drawLine(x, -maxY, x, maxY);
-                //					g.drawLine(-x, -maxY, -x, maxY);
-                //				}
-                //				for (int y=0; y<maxY; y+=rasterWidth){
-                //					g.drawLine(-maxX, y, maxX, y);
-                //					g.drawLine(-maxX, -y, maxX, -y);
-                //				}
-
-                //kann man auch höher setzen
-                float dashWidth = 1.0f;
-                float dash[] = {
-                        dashWidth, rasterWidth - dashWidth
-                };
-                Stroke rasterStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 0.0f, dash, 0.0f);
-                int diff = (int) dashWidth / 2;
-
-                int div = maxY / rasterWidth;
-                maxY = div * rasterWidth + diff;
-                gc.setStroke(rasterStroke);
-                for (int x = 0; x < maxX; x += rasterWidth) {
-                    g.drawLine(x, -maxY, x, maxY);
-                    g.drawLine(-x, -maxY, -x, maxY);
-                }
-                //	Dies hier würde die Linien auch aus x-Richtung ziehen, was aber noch nicht ganz stimmt (leicht versetzt)
-                //
-                //				div = maxX/rasterWidth;
-                //				maxX = div*rasterWidth+diff;
-                //				gc.setStroke(rasterStroke);
-                //				for (int y=0; y<maxY; y+=rasterWidth){
-                //					g.drawLine(-maxX, y, maxX, y);
-                //					g.drawLine(-maxX, -y, maxX, -y);
-                //				}
-
-                gc.setStroke(currentStroke);
+                paintRaster(gc, page_width, page_height);
             }
-            //			malt ein großes Kreuz in den Mittelpunkt der Zeichenfläche
-            //			int kreiz = 100;
-            //			g.drawLine(-kreiz, -kreiz, kreiz, kreiz);
-            //			g.drawLine(kreiz, -kreiz, -kreiz, kreiz);
+            //paintCrossInTeMiddle(g);
 
-            //Diese Fallunterschieidung ist nur, um in dieser zeitkritischen Funktion nicht Zuweisungen doppelt zu machen
+            //Diese Fallunterscheidung ist nur, um in dieser zeitkritischen Funktion nicht Zuweisungen doppelt zu machen
             if (additionalTextAbove != null && additionalTextDown != null) {
                 g.setColor(Color.black);
                 Font font = getFont();
@@ -446,6 +402,65 @@ public class LayerContainer extends ElementContainer {
                 g.drawString(s, -getFontMetrics(font).stringWidth(s) / 2, page_height / 2 + font.getSize() + 5);
             }
         }
+    }
+
+    private void paintRaster(final Graphics2D gc, final int page_width, final int page_height) {
+        gc.setColor(Color.darkGray);
+        int maxX = page_width / 2 + 1;
+        int maxY = page_height / 2 + 1;
+        int rasterWidth = PROPERTY_INT_RASTER_WIDTH.get();
+
+        //              malt das Raster mit durchgezogenen Linien -> kann man für Kontrollzwecke wieder einblenden
+        //              g.setColor(Color.lightGray);
+        //              for (int x=0; x<maxX; x+=rasterWidth){
+        //                  g.drawLine(x, -maxY, x, maxY);
+        //                  g.drawLine(-x, -maxY, -x, maxY);
+        //              }
+        //              for (int y=0; y<maxY; y+=rasterWidth){
+        //                  g.drawLine(-maxX, y, maxX, y);
+        //                  g.drawLine(-maxX, -y, maxX, -y);
+        //              }
+
+        Stroke currentStroke = gc.getStroke();
+        //kann man auch höher setzen
+        float dashWidth = 1.0f;
+        float dash[] = {
+                dashWidth, rasterWidth - dashWidth
+        };
+        Stroke rasterStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 0.0f, dash, 0.0f);
+        int diff = (int) dashWidth / 2;
+
+        int div = maxY / rasterWidth;
+        maxY = div * rasterWidth + diff;
+        gc.setStroke(rasterStroke);
+        for (int x = 0; x < maxX; x += rasterWidth) {
+            gc.drawLine(x, -maxY, x, maxY);
+            gc.drawLine(-x, -maxY, -x, maxY);
+        }
+        //  Dies hier würde die Linien auch aus x-Richtung ziehen, was aber noch nicht ganz stimmt (leicht versetzt)
+        //
+        //              div = maxX/rasterWidth;
+        //              maxX = div*rasterWidth+diff;
+        //              gc.setStroke(rasterStroke);
+        //              for (int y=0; y<maxY; y+=rasterWidth){
+        //                  g.drawLine(-maxX, y, maxX, y);
+        //                  g.drawLine(-maxX, -y, maxX, -y);
+        //              }
+
+        gc.setStroke(currentStroke);
+    }
+
+    /**
+     * Ist oben auskommentiert und daher ungenutzt, da man es nur zum Debug braucht
+     *
+     * @param g
+     */
+    @SuppressWarnings("unused")
+    private void paintCrossInTeMiddle(final Graphics g) {
+        //malt ein großes Kreuz in den Mittelpunkt der Zeichenfläche
+        int crossSize = 100;
+        g.drawLine(-crossSize, -crossSize, crossSize, crossSize);
+        g.drawLine(crossSize, -crossSize, -crossSize, crossSize);
     }
 
     @Override
