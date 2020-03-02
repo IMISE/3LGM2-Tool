@@ -15,8 +15,10 @@ public final class ProvidingInterface extends CommunicationInterface {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripPanel(LABEL_LAST_EDGE_CONNECTION_NAME, IheProvidingInterface_ProvidingInterface_Edge.class);
-        dialog.addDescripPanel(IheProvidingInterface_ProvidingInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
+        if (!getConnectedElements(IheActorInstance.class).isEmpty()) {
+            dialog.addDescripPanel(LABEL_LAST_EDGE_CONNECTION_NAME, IheProvidingInterface_ProvidingInterface_Edge.class);
+            dialog.addDescripPanel(IheProvidingInterface_ProvidingInterface_Edge.class, IheProvidingInterface_IheTransaction_Edge.class);
+        }
         dialog.addEdgePanel(Service_ProvidingInterface_Edge.class);
         return dialog;
     }
