@@ -41,6 +41,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.DataPrinter;
 import de.imise.util.StringUtils;
+import de.imise.util.Sys;
 
 /**
  * Allgemeiner Importer für OWL RDF-Dateien. Der Importer fragt das OWL-Model nach genau den Knoten- und Kantenklassen bzw. deren Instanzen im
@@ -269,22 +270,27 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                 List<Object> namePattern = createRealPattern(ontModel, lgmClass);
                 int i = 1;
                 for (Iterator<? extends OntResource> ontNodes = ontClass.listInstances(true); ontNodes.hasNext();) {
-                    //Wenn die Ontologie nicht ganz richtig modelliert ist, kann es vorkommen, dass ontClass.listInstances(true) auch
-                    //Instanzen anderer als der eigentlichen Zielklasse zurück liefert.
-                    //Das lässt sich durch das nun folgende beheben, indem man aus dem Model über dei URI die Individuals holt und
-                    //von denen die Klasse vergleicht. Das hier behebt aber nur die Symptome. Die Ursache ist ein Fehler in der Ontologie!
                     OntResource ontNode = ontNodes.next();
                     String uri = ontNode.getURI();
                     Individual individual = ontModel.getIndividual(uri);
                     OntClass individualOntClass = individual.getOntClass();
-                    if (individualOntClass.equals(ontClass)) {
-                        String name = getName(ontNode, namePattern);
-                        String description = descriptionPropertyResolver.getValue(ontNode);
-                        String hashString = ontNode.getURI(); //originale URI übernehmen
-                        Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, hashString);
-                        printe(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
-                    } else {
-                        printe("ERROR: " + individualOntClass + "  !=  " + ontClass + "      ------>      " + individual);
+                    String name = getName(ontNode, namePattern);
+                    String description = descriptionPropertyResolver.getValue(ontNode);
+                    String hashString = ontNode.getURI(); //originale URI übernehmen
+                    Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, hashString);
+                    printe(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
+                    //Wenn die Ontologie nicht ganz richtig modelliert ist(oder irgendwas andere nicht stimmt), kann es vorkommen,
+                    //dass ontClass.listInstances(true) auch Instanzen anderer als der eigentlichen Zielklasse zurück liefert.
+                    //Oder es kann vorkommen, dass Individuen bei getOntClass() nicht die Klasse zurück liefern, die sie müssten
+                    //(z.B. NamedIndividual statt der Unterklasse Actor), obwohl sie als Element der Unterklasse aufgelistet werden.
+                    //Wemm das auftritt, dann wird hier auf jeden Fall eine Warnung ausgegeben.
+                    if (!individualOntClass.equals(ontClass)) {
+                        String message = "WARNING: Individial returns wrong class " + individual + "   --->   " + individualOntClass + "  !=  " + ontClass;
+                        if (isDebug()) {
+                            printe(message);
+                        } else {
+                            Sys.err1(message);
+                        }
                     }
                 }
             }
