@@ -1559,12 +1559,16 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     return edge;
                 }
             }
-            edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
             //wenn es schon eine Kante in der Gegenrichtung gibt und diese Kante eine Kante mit doppelter Bedeutung ist -> dann Richtung auf DOUBLE setzen
             boolean doubleMeaningEdge = MetaModel.isDoubleMeaningEdge(edgeClass);
-            if (doubleMeaningEdge && edge != null) {
+            if (doubleMeaningEdge) { //wenn es bei Kanten mit doppelter Bedeutung schon die Gegenrichtung gibt -> setzte auch die Hinrichtung
+                edge = startElement.getEdgeFrom(endElement, edgeClass, startElementEdgeIndex);
+            }
+            if (edge != null) { //die Kante kann hier nur nicht null sein, wenn die obige Bedingung mit der Kante mit doppelter Bedeutung zutraf
+                //bei doubleMeaningEdges jetzt auch die Gegenrichtung setzten
                 ((DoubleMeaningEdge) edge).setConnectionState(DOUBLE);
-            } else if (edge == null) {
+                //bei allen anderen Kanten oder wenn es eine Kante mit doppelter Bedeutung war, bei der die Gegenrichtung nohc nicht ex. -> neue Kante anlegen
+            } else {
                 edge = metaModel.createElement(edgeClass);
                 if (edge == null) {
                     doc.finish_transaction(pid);
