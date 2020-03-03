@@ -5,18 +5,18 @@ import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPa
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.metamodel.service.edge.PartableApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_IheActorInstanceInterface_Edge;
 
 /**
  * @author AXS (26.12.2017)
  */
-public abstract class CommunicationInterface extends Node {
+public abstract class IheActorInstanceInterface extends Node {
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addDescripPanel(LABEL_LAST_EDGE_CONNECTION_NAME, PartableApplicationComponent_CommunicationInterface_Edge.class);
+        dialog.addDescripPanel(LABEL_LAST_EDGE_CONNECTION_NAME, IheActorInstance_IheActorInstanceInterface_Edge.class);
 
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
         tableDefinition.addColumnPathStepEdge(0, 300);

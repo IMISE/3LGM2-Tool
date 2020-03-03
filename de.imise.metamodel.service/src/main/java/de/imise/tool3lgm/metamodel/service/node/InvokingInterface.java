@@ -4,7 +4,7 @@ import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPa
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransaction_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_InvokingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheActorInstanceInvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_InvokingInterface_Edge;
 
 /**
@@ -16,8 +16,8 @@ public final class InvokingInterface extends CommunicationInterface {
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         if (!getConnectedElements(IheActorInstance.class).isEmpty()) {
-            dialog.addDescripPanel(LABEL_LAST_EDGE_CONNECTION_NAME, IheInvokingInterface_InvokingInterface_Edge.class);
-            dialog.addDescripPanel(IheInvokingInterface_InvokingInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
+            dialog.addDescripPanel(LABEL_LAST_EDGE_CONNECTION_NAME, IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class);
+            dialog.addDescripPanel(IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class, IheInvokingInterface_IheTransaction_Edge.class);
         }
         dialog.addEdgePanel(Service_InvokingInterface_Edge.class);
         return dialog;

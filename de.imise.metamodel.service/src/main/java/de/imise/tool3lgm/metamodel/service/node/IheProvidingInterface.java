@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.metamodel.service.node;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_ProvidingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheActorInstanceProvidingInterface_Edge;
 
 /**
  * @author AXS (24.04.2018)
@@ -11,7 +11,7 @@ public class IheProvidingInterface extends IheInterface {
     @Override
     public ElementPropertyDialog createPropertyDialog() {
         ElementPropertyDialog dialog = super.createPropertyDialog();
-        dialog.addEdgePanel(IheProvidingInterface_ProvidingInterface_Edge.class);
+        dialog.addEdgePanel(IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class);
         return dialog;
     }
 }
