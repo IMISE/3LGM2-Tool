@@ -1655,9 +1655,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         Class<? extends Edge> edgeClass = edge.getClass();
         AbstractMetaPath initialCreatedNameSourcePath = metaModel.getInitialCreatedNameSourcePath(edgeClass);
         if (initialCreatedNameSourcePath != null) {
-            if (edgeClass.getSimpleName().startsWith("CommunicationLink_Edge")) {
-                System.currentTimeMillis();
-            }
             Collection<ModelElement> nameSources = MetaPathFunctions.getConnectedElements(edge, initialCreatedNameSourcePath);
             if (!nameSources.isEmpty()) {
                 name = StringUtils.createCollectionString(nameSources, ", ");
