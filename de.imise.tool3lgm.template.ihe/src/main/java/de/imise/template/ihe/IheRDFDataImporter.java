@@ -60,11 +60,6 @@ public class IheRDFDataImporter extends RDFDataImporter {
     }
 
     @Override
-    public boolean isDebug() {
-        return false;
-    }
-
-    @Override
     public Class<? extends ImportMetaModelDefinition> getImportMetaModelDefinitionClass() {
         return IheImportMetaModelDefinition.class;
     }

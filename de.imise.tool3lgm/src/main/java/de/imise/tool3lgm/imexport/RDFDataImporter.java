@@ -34,6 +34,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 
 import com.google.common.base.Strings;
 
+import de.imise.tool3lgm.Tool3lgmMain;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -55,9 +56,17 @@ import de.imise.util.collections.ExtendedMap;
  */
 public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> implements DataPrinter {
 
+    /** If <code>true</code> the importer will log the progress. */
+    private final boolean logDebug = Tool3lgmMain.hasStartParameter("-log_rdf", "-log_all");
+
     public static enum NameCreationPatternStandardIndentifier {
         LOCAL_NAME,
         LABEL,
+    }
+
+    @Override
+    public boolean isDebug() {
+        return logDebug;
     }
 
     /**
