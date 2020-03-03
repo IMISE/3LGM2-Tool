@@ -102,6 +102,13 @@ public final class DescripPanel extends MultiPanelElementDialogPanel /* implemen
     }
 
     @Override
+    public void addLGMDragNDropPanel(final LGMDragNDropPanel panel) {
+        //on the description panel all LGMDragNDropPanel should be shown without the
+        //right side -> show it as an ordinary was label panel
+        super.addWestLabelPanel(panel);
+    }
+
+    @Override
     public void update() {
         ModelElement me = getModelElement();
         //nur den Namen und die Beschreibung updaten, wenn sie anders sind als das, was im Textfeld steht

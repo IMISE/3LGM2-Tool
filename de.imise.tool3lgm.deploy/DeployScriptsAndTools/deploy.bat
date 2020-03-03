@@ -21,6 +21,8 @@ CD /D %SCRIPT_LOCATION%
 SET "DEPLOY_DESTINATION_DIR=..\DeployResults"
 ::Pfad zum externen axsutils-Projekt
 SET "AXSUTILS_PROJECT_DIR=..\..\..\axsutils\axsutils"
+::Pfad zum meta-model-3lgm2 Repository
+SET "METAMODEL3LGM2_DIR=..\..\..\meta-model-3lgm2"
 ::Pfad zum Tool3lgm-Projekt
 SET "TOOL3LGM_PROJECT_DIR=..\..\de.imise.tool3lgm"
 ::Pfad zum Original-Metamodell-Plugin
@@ -137,7 +139,7 @@ FOR /f "tokens=* usebackq" %%a IN (`FINDSTR /C:"%JAVA_FILE_WITH_TOOL_VERSION_LIN
     SET z=!z:"=?!
     FOR /f "tokens=1-3 delims=?" %%a IN ("!z!") DO SET lgmVersion=%%b
 )
-::3LGM-Verson ausgeben
+::3LGM-Version ausgeben
 ECHO Current version %lgmVersion%
 
 ::voller Name der von Innosetup erzeugten Exe-Installationsdatei mit Version und Untertrichen statt Leerzeichen
@@ -207,6 +209,14 @@ CD /D %SCRIPT_LOCATION%
 CD /D %IHE_TEMPLATE_PROJECT_DIR%
 CALL mvn -B clean install
 CD /D %SCRIPT_LOCATION%
+
+::IHE Domain Ontology pull
+::ToDo: Repo pullen
+::CD /D %METAMODEL3LGM2_DIR%
+::git pull
+::CD /D %SCRIPT_LOCATION%
+::IHE Domain Ontology aus git Repository aktualisieren (kopieren)
+COPY /Y %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\
 
 ::Jetzt im zu deployenden Tool die exe-Datei zum Starten des Tools aus der bat-Datei neu erzeugen.
 ::Vorher alte exe löschen (eigentlich gibt es eine Option, so dass Bat_To_Exe_Converter.exe eine

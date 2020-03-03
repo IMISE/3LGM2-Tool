@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.view.container;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_RASTER;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RASTER_WIDTH;
+import static de.imise.util.GraphicsFunctions.drawRect;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -11,9 +12,9 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
@@ -36,16 +37,6 @@ import de.imise.util.collections.CollectionUtils;
  * @author Thomas (15.06.2003), AXS
  */
 public class LayerContainer extends ElementContainer {
-
-    /**
-     *
-     */
-    private static BasicStroke stroke_thick = new BasicStroke((float) 3.0);
-
-    /**
-     *
-     */
-    private static BasicStroke stroke_thin = new BasicStroke((float) 1.0);
 
     /**
      *
@@ -81,6 +72,11 @@ public class LayerContainer extends ElementContainer {
      *
      */
     private List<EdgeContainer> tmpEdgeContainer;
+
+    /**
+     * Stores during paint all nodes which are already painted (no bendpoints)
+     */
+    private final HashSet<ModelElement> paintedNodes = new HashSet<>();
 
     //Strings, die oben und unten geschrieben werden (z.B. an Aufgaben und Objekttypen Redundanzfaktoren...)
     private KeyObjectStringMap additionalTextAbove, additionalTextDown;
@@ -375,62 +371,18 @@ public class LayerContainer extends ElementContainer {
             Graphics2D gc = (Graphics2D) g;
 
             if (this == doc.getActiveLayer() && paintState == PaintState.REGULAR) {
-                gc.setStroke(stroke_thick);
+                Stroke currentStroke = gc.getStroke();
+                gc.setStroke(GraphElementLayout.LAYER_STROKE_SELECTED);
                 g.drawRect(-page_width / 2 + 1, -page_height / 2 + 1, page_width - 2, page_height - 2);
-                gc.setStroke(stroke_thin);
+                gc.setStroke(currentStroke);
             }
 
             if (OPTION_SHOW_RASTER.is() && paintState != PaintState.WEBEXPORT) {
-                Stroke stk = gc.getStroke();
-                g.setColor(Color.darkGray);
-                int maxX = page_width / 2 + 1;
-                int maxY = page_height / 2 + 1;
-                int rasterWidth = PROPERTY_INT_RASTER_WIDTH.get();
-
-                //				malt das Raster mit durchgezogenen Linien -> kann man für Kontrollzwecke wieder einblenden
-                //				g.setColor(Color.lightGray);
-                //				for (int x=0; x<maxX; x+=rasterWidth){
-                //					g.drawLine(x, -maxY, x, maxY);
-                //					g.drawLine(-x, -maxY, -x, maxY);
-                //				}
-                //				for (int y=0; y<maxY; y+=rasterWidth){
-                //					g.drawLine(-maxX, y, maxX, y);
-                //					g.drawLine(-maxX, -y, maxX, -y);
-                //				}
-
-                //kann man auch höher setzen
-                float dashWidth = 1.0f;
-                float dash[] = {
-                        dashWidth, rasterWidth - dashWidth
-                };
-                Stroke rasterStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 0.0f, dash, 0.0f);
-                int diff = (int) dashWidth / 2;
-
-                int div = maxY / rasterWidth;
-                maxY = div * rasterWidth + diff;
-                gc.setStroke(rasterStroke);
-                for (int x = 0; x < maxX; x += rasterWidth) {
-                    g.drawLine(x, -maxY, x, maxY);
-                    g.drawLine(-x, -maxY, -x, maxY);
-                }
-                //	Dies hier würde die Linien auch aus x-Richtung ziehen, was aber noch nicht ganz stimmt (leicht versetzt)
-                //
-                //				div = maxX/rasterWidth;
-                //				maxX = div*rasterWidth+diff;
-                //				gc.setStroke(rasterStroke);
-                //				for (int y=0; y<maxY; y+=rasterWidth){
-                //					g.drawLine(-maxX, y, maxX, y);
-                //					g.drawLine(-maxX, -y, maxX, -y);
-                //				}
-
-                gc.setStroke(stk);
+                paintRaster(gc, page_width, page_height);
             }
-            //			malt ein großes Kreuz in den Mittelpunkt der Zeichenfläche
-            //			int kreiz = 100;
-            //			g.drawLine(-kreiz, -kreiz, kreiz, kreiz);
-            //			g.drawLine(kreiz, -kreiz, -kreiz, kreiz);
+            //paintCrossInTeMiddle(g);
 
-            //Diese Fallunterschieidung ist nur, um in dieser zeitkritischen Funktion nicht Zuweisungen doppelt zu machen
+            //Diese Fallunterscheidung ist nur, um in dieser zeitkritischen Funktion nicht Zuweisungen doppelt zu machen
             if (additionalTextAbove != null && additionalTextDown != null) {
                 g.setColor(Color.black);
                 Font font = getFont();
@@ -458,48 +410,121 @@ public class LayerContainer extends ElementContainer {
         }
     }
 
+    private void paintRaster(final Graphics2D gc, final int page_width, final int page_height) {
+        gc.setColor(Color.darkGray);
+        int maxX = page_width / 2 + 1;
+        int maxY = page_height / 2 + 1;
+        int rasterWidth = PROPERTY_INT_RASTER_WIDTH.get();
+
+        //              malt das Raster mit durchgezogenen Linien -> kann man für Kontrollzwecke wieder einblenden
+        //              g.setColor(Color.lightGray);
+        //              for (int x=0; x<maxX; x+=rasterWidth){
+        //                  g.drawLine(x, -maxY, x, maxY);
+        //                  g.drawLine(-x, -maxY, -x, maxY);
+        //              }
+        //              for (int y=0; y<maxY; y+=rasterWidth){
+        //                  g.drawLine(-maxX, y, maxX, y);
+        //                  g.drawLine(-maxX, -y, maxX, -y);
+        //              }
+
+        Stroke currentStroke = gc.getStroke();
+        //kann man auch höher setzen
+        float dashWidth = 1.0f;
+        float dash[] = {
+                dashWidth, rasterWidth - dashWidth
+        };
+        Stroke rasterStroke = new BasicStroke(1.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 0.0f, dash, 0.0f);
+        int diff = (int) dashWidth / 2;
+
+        int div = maxY / rasterWidth;
+        maxY = div * rasterWidth + diff;
+        gc.setStroke(rasterStroke);
+        for (int x = 0; x < maxX; x += rasterWidth) {
+            gc.drawLine(x, -maxY, x, maxY);
+            gc.drawLine(-x, -maxY, -x, maxY);
+        }
+        //  Dies hier würde die Linien auch aus x-Richtung ziehen, was aber noch nicht ganz stimmt (leicht versetzt)
+        //
+        //              div = maxX/rasterWidth;
+        //              maxX = div*rasterWidth+diff;
+        //              gc.setStroke(rasterStroke);
+        //              for (int y=0; y<maxY; y+=rasterWidth){
+        //                  g.drawLine(-maxX, y, maxX, y);
+        //                  g.drawLine(-maxX, -y, maxX, -y);
+        //              }
+
+        gc.setStroke(currentStroke);
+    }
+
+    /**
+     * Ist oben auskommentiert und daher ungenutzt, da man es nur zum Debug braucht
+     *
+     * @param g
+     */
+    @SuppressWarnings("unused")
+    private void paintCrossInTeMiddle(final Graphics g) {
+        //malt ein großes Kreuz in den Mittelpunkt der Zeichenfläche
+        int crossSize = 100;
+        g.drawLine(-crossSize, -crossSize, crossSize, crossSize);
+        g.drawLine(crossSize, -crossSize, -crossSize, crossSize);
+    }
+
     @Override
     protected void paintChildren(final Graphics g) {
         //		synchronized (getTreeLock()) {
         tmpEdgeContainer.clear();
-        for (NodeContainer ec : graphNodeContainers) {
+        paintedNodes.clear();
+        boolean isPaintEdgesOnlyForSelectedElements = OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS.is();
+        for (NodeContainer nc : graphNodeContainers) {
             //hier wird bei jedem Element nochmal geprüft, ob es in die Ebene passt. Wenn nicht, wird die
             //Ebenengröße hochgesetzt und das Zeichen neu angestoßen
-            if (!doc.pageHasSize(ec)) {
+            if (!doc.pageHasSize(nc)) {
                 doc.setPageSizeFactor(-1.0);
                 return;
             }
-            ec.paint(g);
-        }
-        boolean isPaintEdgesOnlyForSelectedElements = OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS.is();
-        for (EdgeContainer ec : edgeContainers) {
-            if (isPaintEdgesOnlyForSelectedElements) {
-                Edge edge = (Edge) ec.getElement();
-                ModelElement start = edge.getStart();
-                ElementContainer startContainer = start.getContainer(doc);
-                if (doc.isSelected(startContainer)) {
-                    ec.paint(g);
-                } else {
-                    ModelElement end = edge.getEnd();
-                    ElementContainer endContainer = end.getContainer(doc);
-                    if (doc.isSelected(endContainer)) {
+            ModelElement node = nc.getElement();
+            for (Edge edge : node.getEdges()) {
+                ElementContainer ec = edge.getContainer(doc);
+                if (ec == null) {
+                    continue;
+                }
+                paintedNodes.add(node);
+                ModelElement other = edge.getOther(node);
+                if (paintedNodes.contains(other)) {
+                    boolean paintEdge = false;
+                    if (isPaintEdgesOnlyForSelectedElements) {
+                        ModelElement start = edge.getStart();
+                        ElementContainer startContainer = start.getContainer(doc);
+                        if (doc.isSelected(startContainer)) {
+                            paintEdge = true;
+                        } else {
+                            ModelElement end = edge.getEnd();
+                            ElementContainer endContainer = end.getContainer(doc);
+                            if (doc.isSelected(endContainer)) {
+                                paintEdge = true;
+                            }
+                        }
+                    } else {
+                        paintEdge = true;
+                    }
+                    if (paintEdge) {
                         ec.paint(g);
+                        EdgeContainer edgeC = (EdgeContainer) ec;
+                        for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
+                            //hier wird bei jedem Knickpunkt nochmal geprüft, ob er in die Ebene passt. Wenn nicht, wird die
+                            //Ebenengröße hochgesetzt und das Zeichen neu angestoßen
+                            if (!doc.pageHasSize(bc)) {
+                                doc.setPageSizeFactor(-1.0);
+                                return;
+                            }
+                            bc.paint(g);
+                        }
                     }
                 }
-            } else {
-                ec.paint(g);
             }
+            nc.paint(g);
         }
         if (!isPaintEdgesOnlyForSelectedElements) {
-            for (BendpointContainer ec : bendpointContainers) {
-                //hier wird bei jedem Knickpunkt nochmal geprüft, ob er in die Ebene passt. Wenn nicht, wird die
-                //Ebenengröße hochgesetzt und das Zeichen neu angestoßen
-                if (!doc.pageHasSize(ec)) {
-                    doc.setPageSizeFactor(-1.0);
-                    return;
-                }
-                ec.paint(g);
-            }
             paintingSurrogates = true;
             for (EdgeContainer ec : tmpEdgeContainer) {
                 ec.paint(g);
@@ -507,31 +532,20 @@ public class LayerContainer extends ElementContainer {
             paintingSurrogates = false;
         }
         if (doc.isVerificationMode()) {
-            Rectangle r = InputGraphArea.grabbedElementsFullRect;
-            if (r != null) {
-                g.setColor(Color.red);
-                g.drawLine(r.x, r.y, r.x, r.height);
-                g.drawLine(r.x, r.height, r.width, r.height);
-                g.drawLine(r.width, r.height, r.width, r.y);
-                g.drawLine(r.width, r.y, r.x, r.y);
-            }
-            r = InputGraphArea.grabbedElementsRasteredRect;
-            if (r != null) {
-                g.setColor(Color.green);
-                g.drawLine(r.x, r.y, r.x, r.height);
-                g.drawLine(r.x, r.height, r.width, r.height);
-                g.drawLine(r.width, r.height, r.width, r.y);
-                g.drawLine(r.width, r.y, r.x, r.y);
-            }
-            r = InputGraphArea.grabbedElementsRealRect;
-            if (r != null) {
-                g.setColor(Color.blue);
-                g.drawLine(r.x, r.y, r.x, r.height);
-                g.drawLine(r.x, r.height, r.width, r.height);
-                g.drawLine(r.width, r.height, r.width, r.y);
-                g.drawLine(r.width, r.y, r.x, r.y);
-            }
+            paintDebugRectangles(g);
         }
+    }
+
+    /**
+     * Paint the {@link InputGraphArea#grabbedElementsFullRect}, {@link InputGraphArea#grabbedElementsRasteredRect}
+     * and he {@link InputGraphArea#grabbedElementsRealRect} to the layer.
+     *
+     * @param g
+     */
+    private void paintDebugRectangles(final Graphics g) {
+        drawRect(g, InputGraphArea.grabbedElementsFullRect, Color.red);
+        drawRect(g, InputGraphArea.grabbedElementsRasteredRect, Color.green);
+        drawRect(g, InputGraphArea.grabbedElementsRealRect, Color.blue);
     }
 
     @Override

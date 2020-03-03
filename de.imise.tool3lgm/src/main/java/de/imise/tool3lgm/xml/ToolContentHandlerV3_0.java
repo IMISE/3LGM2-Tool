@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.SwingConstants;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.Locator;
@@ -756,16 +758,23 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 String elementValueString = elementValue.toString();
                 try {
                     layout.textPositionVertical = TextPositionVertical.valueOf(elementValueString);
-                } catch (Exception e) { //alte Dateien -> SwingContstants
+                } catch (Exception e) { //alte Dateien (< 3.8)-> SwingContstants, also int-Werte
                     try {
                         int swingConstantValue = Integer.parseInt(elementValueString);
-                        TextPositionVertical textPositionVertical = TextPositionVertical.getValueForSwingConstant(swingConstantValue);
-                        layout.textPositionVertical = textPositionVertical;
+                        //bei alten Dateien, bei denen ein Icon für den Container gesetzt ist (das <icon>-Tag
+                        //wird vor dem <valign>-Tag eingelesen) und das valign auf CENTER stand, wurde aber
+                        //trotzdem auf BOTTOM gerendert. Damit das erhalten bleibt, wird das BOTTOM, das beim
+                        //Einlesen des <icon>-Tags gesetzt wurde, nur durch ein anderes valign ersetzt, wenn
+                        //wenn es mit Icon nicht auf dem Default CENTER stand.
+                        String icon = layout.getIcon();
+                        if (icon == null || swingConstantValue != SwingConstants.CENTER) {
+                            TextPositionVertical textPositionVertical = TextPositionVertical.getValueForSwingConstant(swingConstantValue);
+                            layout.textPositionVertical = textPositionVertical;
+                        }
                     } catch (Exception ex) {
                         // ignore -> default alignment
                     }
                 }
-
             } else if (qName.equals("htmlalign")) {
                 if (layout == null) {
                     return;
@@ -795,10 +804,16 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
 
             } else if (qName.equals("icon")) {
                 layout.setIcon(elementValue.toString());
+                //in alten Dateien (< 3.8) ist das valign mit ints codiert und bei Elementen mit Icon zwar
+                //0, was eigentlich CENTER bedeutet, aber bei Icons auf BOTTOM uminterpretiert wurde ->
+                //das Icon wird hier vor dem valign eingelesen und wenn es ein Icon hat, dann erstmal
+                //auf BOTTOM setzen, damit es als neues Modell auch wieder funktionier. Bei neuen Modellen
+                //wird dieses dann aber falsche valign wieder durch das richtige im Tag <valign> ersetzt.
+                //Bei alten Modellen bleibt das BOTTOM aber bestehen (siehe oben bei valign)
+                layout.textPositionVertical = GraphElementLayout.STANDARD_TEXT_POSITION_VERTICAL_WITH_ICON;
                 if (container != null) {
                     containerWithIcon.add((NodeContainer) container);
                 }
-
             } else if (qName.equals("layer")) {
                 layer = null;
 

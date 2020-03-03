@@ -517,6 +517,8 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * <code>searchElementClass</code>. Besteht, der Pfad des Panels aber nur aus einer einzigen Kante und diese hat zusätzlich einen
      * ConditionPath (also einen Pfad, über den das startElement außerdem noch mit den Zielelementen verbunden sein muss), dann
      * werden nur diese Zielelemente als zum Verbinden verfügbare Elemente zurück gegeben, die auch über diesen ConditonPath verbunden sind.
+     * <br>
+     * Außerdem wird geprüft, ob für ein verbindbares Element die Kante gar nicht mehr gelten soll.
      *
      * @return
      */
@@ -541,8 +543,25 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                     available.add(conditionElement.getContainer(mainDoc));
                 }
             }
-        }
-        if (available == null) {
+            if (available == null) {
+                available = mainDoc.getElementContainers(searchElementClass, true);
+            }
+            //alle available entfernen, für die die Kante nicht mehr gelten soll
+            for (int i = available.size() - 1; i >= 0; i--) {
+                ElementContainer ec = available.get(i);
+                ModelElement availableMe = ec.getElement();
+                Class<? extends ModelElement> elementClass = availableMe.getClass();
+                boolean remove = false;
+                if (elementaryMetaPath.getDirection() == FORWARD) {
+                    remove = !metaModel.isEndClass(edgeClass, elementClass);
+                } else { // if (elementaryMetaPath.getDirection() == BACKWARD) {
+                    remove = !metaModel.isStartClass(edgeClass, elementClass);
+                }
+                if (remove) {
+                    available.remove(i);
+                }
+            }
+        } else {
             available = mainDoc.getElementContainers(searchElementClass, true);
         }
         return available;

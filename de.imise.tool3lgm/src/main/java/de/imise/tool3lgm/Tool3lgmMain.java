@@ -10,6 +10,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.DebugGraphics;
@@ -32,6 +33,35 @@ public class Tool3lgmMain {
     private static int debugGraphicsOption = DebugGraphics.NONE_OPTION;
 
     /**
+     * Stores all start parameters (=args[] of the main method)
+     */
+    private static String[] allStartParameters;
+
+    /**
+     * @param parameter an object its toString() method returns a potential parameter
+     * @return <code>true</code> if one of the given parameters was a startParameter
+     */
+    public static boolean hasStartParameter(final Object... parameter) {
+        List<String> startParameters = getStartParameters();
+        for (Object o : parameter) {
+            String p = String.valueOf(o);
+            for (String s : startParameters) {
+                if (s.equalsIgnoreCase(p)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return all start parameters
+     */
+    public static List<String> getStartParameters() {
+        return Arrays.asList(allStartParameters);
+    }
+
+    /**
      * Main-Routine
      *
      * @param args
@@ -50,6 +80,8 @@ public class Tool3lgmMain {
      *            </table>
      */
     public static void main(final String args[]) {
+
+        allStartParameters = args;
 
         //Ausgabe des ClassPaths bzw. aller jar-URLs an die der Systemclassloader kommt. Das funktioniert nur bis Java8! Ab 9 ist der SystemClassLoader kein URLClassLoader mehr...
         //        System.err.println("####################################################################################################");

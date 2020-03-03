@@ -62,9 +62,21 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     protected Container containerParent;
 
     /**
-     * COMMENTME
+     * The current layout of the container. This variable stores the active layout.
+     * It can only be the {@link ElementContainer#expandedLayout} oder
+     * {@link ElementContainer#nonExpandedLayout}.
      */
-    protected GraphElementLayout layout = null, expandedLayout = null, nonExpandedLayout = null;
+    protected GraphElementLayout layout = null;
+
+    /**
+     * The layout of this container if it is expanded.
+     */
+    protected GraphElementLayout expandedLayout = null;
+
+    /**
+     * The layout of this container if it is collapsed.
+     */
+    protected GraphElementLayout nonExpandedLayout = null;
 
     /**
      * gibt an, ob dieses Element durch das Aufklappen seines (ggf. existierenden)

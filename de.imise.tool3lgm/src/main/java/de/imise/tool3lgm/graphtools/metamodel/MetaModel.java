@@ -836,19 +836,19 @@ public final class MetaModel implements MetaModelSpecific {
         if (Modifier.isAbstract(elementClass.getModifiers())) {
             return false;
         }
-        //Compostions Slaves can not be created without a master
         Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass);
         for (Class<? extends Edge> edgeType : edgeTypes) {
-            if (isComposition(edgeType)) {
-                Class<? extends CompositionEdge> compostionClass = edgeType.asSubclass(CompositionEdge.class);
-                if (isSlaveType(compostionClass, elementClass)) {
-                    boolean neededEdgeWillBeCreated = metaPathsContainEdge(edgeType, CompositionEdge.MASTER_TO_SLAVE_DIRECTION, toElement, fromElement);
+            //Compostions slaves and instanciation claves with min 1 cardinality to master can not be created without a master
+            if (isSubordinationSlaveType(edgeType, elementClass)) {
+                if (getMinBackwardCardinality(edgeType) > 0) {
+                    boolean neededEdgeWillBeCreated = metaPathsContainEdge(edgeType, SubordinationEdge.SUPER_TO_SUB_DIRECTION, toElement, fromElement);
                     if (!neededEdgeWillBeCreated) {
                         return false;
                     }
                 }
             }
         }
+        //Instanciation targets can only be cerated via instanciation
         return true;
     }
 
@@ -1484,6 +1484,50 @@ public final class MetaModel implements MetaModelSpecific {
     }
 
     /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Slave-Klasse der übergebenen Kompositionsklasse ist.
+     *
+     * @param compositionClass
+     * @param elementClass
+     * @return
+     */
+    public final boolean isSubordinationSlaveType(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        return isSubordination(edgeClass) && isEndClass(edgeClass, elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Master-Klasse der übergebenen Kompositionsklasse ist.
+     *
+     * @param compositionClass
+     * @param elementClass
+     * @return
+     */
+    public final boolean isSubordinationMasterType(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        return isSubordination(edgeClass) && isStartClass(edgeClass, elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Slave-Klasse der übergebenen Kompositionsklasse ist.
+     *
+     * @param compositionClass
+     * @param elementClass
+     * @return
+     */
+    public final boolean isCompositionSlaveType(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        return isComposition(edgeClass) && isEndClass(edgeClass, elementClass);
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Master-Klasse der übergebenen Kompositionsklasse ist.
+     *
+     * @param compositionClass
+     * @param elementClass
+     * @return
+     */
+    public final boolean isCompositionMasterType(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
+        return isComposition(edgeClass) && isStartClass(edgeClass, elementClass);
+    }
+
+    /**
      * Liefert <code>true</code>, wenn es sich bei der übergebenen Kantenklasse um eine {@link InstanciationEdge} handelt und die übergebene
      * Elementklasse davon das StartElement - also das instanziierbare Element ist und nicht die Instanz.
      *
@@ -1646,28 +1690,6 @@ public final class MetaModel implements MetaModelSpecific {
         return null;
     }
 
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Slave-Klasse der übergebenen Kompositionsklasse ist.
-     *
-     * @param compositionClass
-     * @param elementClass
-     * @return
-     */
-    public final boolean isSlaveType(final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> elementClass) {
-        return isEndClass(compositionClass, elementClass);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse eine Master-Klasse der übergebenen Kompositionsklasse ist.
-     *
-     * @param compositionClass
-     * @param elementClass
-     * @return
-     */
-    public final boolean isMasterType(final Class<? extends CompositionEdge> compositionClass, final Class<? extends ModelElement> elementClass) {
-        return isStartClass(compositionClass, elementClass);
-    }
-
     ////////////////////
     // Kardinalitäten //
     ////////////////////
@@ -1775,32 +1797,8 @@ public final class MetaModel implements MetaModelSpecific {
      * @param edgeClass
      * @return
      */
-    public final int getMinMasterToSlaveCardinality(final Class<? extends CompositionEdge> edgeClass) {
-        return getMinForwardCardinality(edgeClass);
-    }
-
-    /**
-     * @param edgeClass
-     * @return
-     */
     public final int getMaxMasterToSlaveCardinality(final Class<? extends CompositionEdge> edgeClass) {
         return getMaxForwardCardinality(edgeClass);
-    }
-
-    /**
-     * @param edgeClass
-     * @return
-     */
-    public final int getMinSlaveToMasterCardinality(final Class<? extends CompositionEdge> edgeClass) {
-        return getMinBackwardCardinality(edgeClass);
-    }
-
-    /**
-     * @param edgeClass
-     * @return
-     */
-    public final int getMaxSlaveToMasterCardinality(final Class<? extends CompositionEdge> edgeClass) {
-        return getMaxBackwardCardinality(edgeClass);
     }
 
     /////////////////////////////////
@@ -1948,6 +1946,14 @@ public final class MetaModel implements MetaModelSpecific {
     public final int layerFor(final Class<? extends ModelElement> elementClass) {
         Integer layer = elementClassToLayer.get(elementClass);
         return layer == null ? ModelConstants.NO_LAYER : layer.intValue();
+    }
+
+    /**
+     * @param edgeClass
+     * @return
+     */
+    public static final boolean isSubordination(final Class<? extends Edge> edgeClass) {
+        return SubordinationEdge.class.isAssignableFrom(edgeClass);
     }
 
     /**

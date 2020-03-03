@@ -31,19 +31,31 @@ public class GraphElementLayout implements SwingConstants, Cloneable {
     /**
      * COMMENTME
      */
-    public static final Stroke FAT_STROKE = new BasicStroke(7);
-
-    /**
-     * COMMENTME
-     */
     public static final Stroke MEDUIM_STROKE = new BasicStroke(4);
 
     /**
      * COMMENTME
      */
-    public static final Stroke NE_STROKE = new BasicStroke(4, BasicStroke.JOIN_BEVEL, BasicStroke.CAP_BUTT, 1, new float[] {
+    public static final Stroke FAT_STROKE = new BasicStroke(7);
+
+    /**
+     * The Stroke of the border of not selected layers
+     */
+    public static final Stroke LAYER_STROKE_SELECTED = new BasicStroke(3);
+
+    /**
+     * Stroke for the border of collapsed elements in the graph
+     */
+    public static final Stroke NOT_EXPANDED_BORDER_STROKE = new BasicStroke(4f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 1f, new float[] {
             10
-    }, 10);
+    }, 10f);
+
+    /**
+     * Stroke for {@link HasPartEdges} in the graph
+     */
+    public static final Stroke HAS_PART_EDGES_STROKE = new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 1f, new float[] {
+            10
+    }, 0f);
 
     /**
      * Alle Standardformen. Die String-Repräsentation steht als Schlüssel auch in den

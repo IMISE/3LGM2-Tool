@@ -34,6 +34,7 @@ import org.apache.jena.util.iterator.ExtendedIterator;
 
 import com.google.common.base.Strings;
 
+import de.imise.tool3lgm.Tool3lgmMain;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -41,6 +42,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.DataPrinter;
 import de.imise.util.StringUtils;
+import de.imise.util.Sys;
+import de.imise.util.collections.ExtendedMap;
 
 /**
  * Allgemeiner Importer für OWL RDF-Dateien. Der Importer fragt das OWL-Model nach genau den Knoten- und Kantenklassen bzw. deren Instanzen im
@@ -53,9 +56,17 @@ import de.imise.util.StringUtils;
  */
 public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> implements DataPrinter {
 
+    /** If <code>true</code> the importer will log the progress. */
+    private final boolean logDebug = Tool3lgmMain.hasStartParameter("-log_rdf", "-log_all");
+
     public static enum NameCreationPatternStandardIndentifier {
         LOCAL_NAME,
         LABEL,
+    }
+
+    @Override
+    public boolean isDebug() {
+        return logDebug;
     }
 
     /**
@@ -269,22 +280,27 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                 List<Object> namePattern = createRealPattern(ontModel, lgmClass);
                 int i = 1;
                 for (Iterator<? extends OntResource> ontNodes = ontClass.listInstances(true); ontNodes.hasNext();) {
-                    //Wenn die Ontologie nicht ganz richtig modelliert ist, kann es vorkommen, dass ontClass.listInstances(true) auch
-                    //Instanzen anderer als der eigentlichen Zielklasse zurück liefert.
-                    //Das lässt sich durch das nun folgende beheben, indem man aus dem Model über dei URI die Individuals holt und
-                    //von denen die Klasse vergleicht. Das hier behebt aber nur die Symptome. Die Ursache ist ein Fehler in der Ontologie!
                     OntResource ontNode = ontNodes.next();
                     String uri = ontNode.getURI();
                     Individual individual = ontModel.getIndividual(uri);
                     OntClass individualOntClass = individual.getOntClass();
-                    if (individualOntClass.equals(ontClass)) {
-                        String name = getName(ontNode, namePattern);
-                        String description = descriptionPropertyResolver.getValue(ontNode);
-                        String hashString = ontNode.getURI(); //originale URI übernehmen
-                        Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, hashString);
-                        printe(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
-                    } else {
-                        printe("ERROR: " + individualOntClass + "  !=  " + ontClass + "      ------>      " + individual);
+                    String name = getName(ontNode, namePattern);
+                    String description = descriptionPropertyResolver.getValue(ontNode);
+                    String hashString = ontNode.getURI(); //originale URI übernehmen
+                    Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, hashString);
+                    printe(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
+                    //Wenn die Ontologie nicht ganz richtig modelliert ist(oder irgendwas andere nicht stimmt), kann es vorkommen,
+                    //dass ontClass.listInstances(true) auch Instanzen anderer als der eigentlichen Zielklasse zurück liefert.
+                    //Oder es kann vorkommen, dass Individuen bei getOntClass() nicht die Klasse zurück liefern, die sie müssten
+                    //(z.B. NamedIndividual statt der Unterklasse Actor), obwohl sie als Element der Unterklasse aufgelistet werden.
+                    //Wemm das auftritt, dann wird hier auf jeden Fall eine Warnung ausgegeben.
+                    if (!individualOntClass.equals(ontClass)) {
+                        String message = "WARNING: Individial returns wrong class " + individual + "   --->   " + individualOntClass + "  !=  " + ontClass;
+                        if (isDebug()) {
+                            printe(message);
+                        } else {
+                            Sys.err1(message);
+                        }
                     }
                 }
             }
@@ -321,15 +337,15 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     private void importEdges(final OntModel ontModel, final OntPropertyResolver descriptionPropertyResolver) {
         //ObjectProperty -> Kantenklassenname
         Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName = getImportableObjetctProperties(ontModel);
+        printe(importableObjectPropertiesToTargetEdgeClassName);
         int i = 1;
+        print("Statements");
         for (StmtIterator statements = ontModel.listStatements(); statements.hasNext();) {
             //Statement
             Statement statement = statements.next();
             //Predicate == importiertbare ObjectProperty?
             Property predicate = statement.getPredicate();
             String targetEdgeClassName = importableObjectPropertiesToTargetEdgeClassName.get(predicate);
-
-            List<Object> namePattern = createRealPattern(ontModel, targetEdgeClassName);
             if (targetEdgeClassName != null) {
                 //Subject == Knoten aus dem SourceModel?
                 Resource subjectResource = statement.getSubject();
@@ -340,14 +356,20 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     Node endNode = getTargetNode(objectNode);
                     if (endNode != null) {
                         //Predicate -> Edge
-                        String edgeHash = "[" + subjectResource.getURI() + "; " + predicate.getURI() + "; " + statement.getResource().getURI(); //URI aus Subject, Predicate und Object übernehmen
+                        String edgeHash = "[" + subjectResource.getURI() + "; " + predicate.getURI() + "; " + statement.getResource().getURI() + "]"; //URI aus Subject, Predicate und Object übernehmen
                         OntProperty ontProperty = getOntProperty(predicate, importableObjectPropertiesToTargetEdgeClassName);
+                        List<Object> namePattern = createRealPattern(ontModel, targetEdgeClassName);
                         String name = getName(ontProperty, namePattern);
                         String description = descriptionPropertyResolver.getValue(predicate);
                         try {
                             Edge lgmEdge = addEdge(targetEdgeClassName, name, edgeHash, startNode, endNode);
                             lgmEdge.setDescription(description);
-                            printe(i++ + "\t" + targetEdgeClassName + " (" + lgmEdge.getHashString() + ")" + " -> " + startNode + "  ->  " + endNode + " " + lgmEdge + " " + description);
+                            String resultEdgeHash = lgmEdge.getHashString();
+                            printe(i++ + "\t" + targetEdgeClassName + " (" + resultEdgeHash + ")" + " | Edge: StartNode=" + startNode + "  ->  EndNode=" + endNode + "  | EdgeName=" + lgmEdge + " | EdgeDescription=" + description);
+                            if (!edgeHash.equals(resultEdgeHash)) {
+                                printe("\tWARNING: Another edge hides this edge (statement predicate). Maybe you forgot to mark the edge class " + targetEdgeClassName + " as de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge?");
+                                printe("\t" + edgeHash + "  IS HIDDEN BY  " + resultEdgeHash);
+                            }
                         } catch (Exception e) {
                             // hier kann es zu java.lang.InstantiationExceptions kommen, wenn die EdgeClass abstract ist, weil nur für Unterklassen der ObjectProperty Edges angelegt werden sollen
                             printe("SKIPPED " + statement);
@@ -366,7 +388,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
      *         dem ImportMetamodell ableiten lässt, auf den Namen dieser Kantenklasse aus dem ImportMetaModell
      */
     private Map<ObjectProperty, String> getImportableObjetctProperties(final OntModel ontModel) {
-        Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName = new HashMap<>();
+        Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName = new ExtendedMap<>();
         MetaModel metaModel = gdcoll.getMetaModel();
         //gültige ObjectProperty-Klassennamen
         Collection<String> objectPropertyNames = getSimpleClassNames(metaModel.allEdgesSet, getEdgeClassNamePostfix());

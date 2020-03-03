@@ -96,41 +96,58 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
         }
         panels.add(panel);
         if (panel instanceof DescriptedSingleConnectionPanel) {
-            addSeparator();
-            JLabel westLabel = panel.getWestLabel();
-            DescriptedSingleConnectionPanel descriptedPanel = (DescriptedSingleConnectionPanel) panel;
-            Border topBorder = BorderFactory.createEmptyBorder(3, 0, 0, 0);
-            westLabel.setBorder(topBorder);
-            descriptedPanel.setBorder(topBorder);
-            gridy = descriptedPanel.addMe(this, gbc, gridy);
+            addDescriptedSingleConnectionPanel((DescriptedSingleConnectionPanel) panel);
         } else if (panel instanceof MutipleCompositionPanel) {
-            gbc.insets = new Insets(5, 0, 0, 0);
-            gbc.anchor = GridBagConstraints.CENTER;
-            gbc.weighty = 1;
-            gbc.weightx = 1;
-            TitledBorder panelBorder = BorderFactory.createTitledBorder(panel.getName());
-            panel.setBorder(panelBorder);
-            add(this, panel, gbc, 0, gridy++, 1, 1);
+            addMutipleCompositionPanel((MutipleCompositionPanel) panel);
         } else if (panel instanceof LGMDragNDropPanel) {
-            gbc.insets = new Insets(5, 0, 0, 0);
-            gbc.anchor = GridBagConstraints.CENTER;
-            gbc.weighty = 1;
-            gbc.weightx = 1;
-            add(this, panel, gbc, 0, gridy++, 2, 1); //2 breit, falls man das mal auf einem DescripPanel hinzufügen möchte (bsiher nicht ausprobiert)
+            addLGMDragNDropPanel((LGMDragNDropPanel) panel);
         } else {
-            gbc.weighty = 0;
-            gbc.weightx = 0;
-            gbc.fill = GridBagConstraints.BOTH;
-            add(this, panel.getWestLabel(), gbc, 0, gridy, 1, 1);
-            gbc.weightx = 1;
-            add(this, panel, gbc, 1, gridy++, 1, 1);
+            addWestLabelPanel(panel);
         }
+        //nur LGMDragNDropPanels, die editierbar sind, haben eine rechte Seite und diesen Button
         JButton panelButton = panel.getPanelButton();
         if (panelButton != null) {
             addPanelButton(panelButton);
         }
 
         isUnchangedDefaultPanel = false;
+    }
+
+    public void addDescriptedSingleConnectionPanel(final DescriptedSingleConnectionPanel panel) {
+        addSeparator();
+        JLabel westLabel = panel.getWestLabel();
+        Border topBorder = BorderFactory.createEmptyBorder(3, 0, 0, 0);
+        westLabel.setBorder(topBorder);
+        panel.setBorder(topBorder);
+        gridy = panel.addMe(this, gbc, gridy);
+    }
+
+    public void addMutipleCompositionPanel(final MutipleCompositionPanel panel) {
+        gbc.insets = new Insets(5, 0, 0, 0);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.weighty = 1;
+        gbc.weightx = 1;
+        TitledBorder panelBorder = BorderFactory.createTitledBorder(panel.getName());
+        panel.setBorder(panelBorder);
+        add(this, panel, gbc, 0, gridy++, 1, 1);
+    }
+
+    public void addLGMDragNDropPanel(final LGMDragNDropPanel panel) {
+        gbc.insets = new Insets(5, 0, 0, 0);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.weighty = 1;
+        gbc.weightx = 1;
+        add(this, panel, gbc, 0, gridy++, 2, 1); //2 breit, falls man das mal auf einem DescripPanel hinzufügen möchte (bsiher nicht ausprobiert)
+    }
+
+    public void addWestLabelPanel(final AbstractPathConnectionPanel panel) {
+        gbc.weighty = 0;
+        gbc.weightx = 0;
+        gbc.fill = GridBagConstraints.BOTH;
+        JLabel westLabel = panel.getWestLabel();
+        add(this, westLabel, gbc, 0, gridy, 1, 1);
+        gbc.weightx = 1;
+        add(this, panel, gbc, 1, gridy++, 1, 1);
     }
 
     public final void addSeparator() {
@@ -175,7 +192,9 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
             panelButton.addActionListener(this);
         } else {
             Container buttonParent = panelButton.getParent();
-            buttonParent.remove(panelButton);
+            if (buttonParent != null) {
+                buttonParent.remove(panelButton);
+            }
         }
 
     }
