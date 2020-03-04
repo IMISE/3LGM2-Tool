@@ -18,6 +18,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -105,7 +106,13 @@ public abstract class ContextGenerator implements ActionListener {
      */
     protected final JMenuItem getItem(final String resKeyOrString, final GDCommands command, final String arguments, final ImageIcon icon, final boolean enabled, final String toolTip) {
         String label = null;
-        label = Tool3lgmConstants.getResStringWithoutError(resKeyOrString);
+        GraphDocument doc = getDoc();
+        if (doc != null) {
+            ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
+            label = elementsNameBuilder.getResStringWithoutError(resKeyOrString);
+        } else {
+            label = Tool3lgmConstants.getResStringWithoutError(resKeyOrString);
+        }
         JMenuItem item = new JMenuItem(label, icon);
         item.addActionListener(this);
         if (arguments == null) {
