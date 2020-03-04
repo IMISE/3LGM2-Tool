@@ -5,7 +5,7 @@ import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPa
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheActorInstanceCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_IheActorInstanceInterface_Edge;
 
 /**
@@ -24,7 +24,8 @@ public abstract class IheActorInstanceInterface extends Node {
         tableDefinition.addColumnPathStepEnd(0, 300);
         //        tableDefinition.addColumnPathStepName(1, 150);
         //        tableDefinition.addColumnEndElement(300);
-        dialog.addTablePanel(tableDefinition, 0, CommunicationLink_Edge.class/* , ApplicationComponent_CommunicationInterface_Edge.class */);
+        dialog.addTablePanel(tableDefinition, 0,
+                IheActorInstanceCommunicationLink_Edge.class/* , IheActorInstance_IheActorInstanceInterface_Edge.class */);
 
         return dialog;
     }

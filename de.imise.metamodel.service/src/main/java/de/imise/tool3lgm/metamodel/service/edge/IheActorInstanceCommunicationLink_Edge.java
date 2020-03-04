@@ -6,21 +6,21 @@ import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.SimpleEdge;
-import de.imise.tool3lgm.metamodel.service.node.InvokingInterface;
-import de.imise.tool3lgm.metamodel.service.node.ProvidingInterface;
+import de.imise.tool3lgm.metamodel.service.node.IheActorInstanceInvokingInterface;
+import de.imise.tool3lgm.metamodel.service.node.IheActorInstanceProvidingInterface;
 
 /**
  * @author AXS (11.01.2017)
  */
 public final class IheActorInstanceCommunicationLink_Edge extends SimpleEdge {
 
-    public static final Class<? extends ModelElement> STCL = InvokingInterface.class;
+    public static final Class<? extends ModelElement> STCL = IheActorInstanceInvokingInterface.class;
 
     public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
     public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
-    public static final Class<? extends ModelElement> ETCL = ProvidingInterface.class;
+    public static final Class<? extends ModelElement> ETCL = IheActorInstanceProvidingInterface.class;
 
     @Override
     public ElementPropertyDialog createPropertyDialog() {
