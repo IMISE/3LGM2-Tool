@@ -8,7 +8,6 @@ import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_SoftwareProduct
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInterface_IheActorInstanceInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInterface_IheTransaction_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.PartableApplicationComponent_CommunicationInterface_Edge;
 
 public class IheActorInstance extends ApplicationComponent {
 
@@ -26,7 +25,7 @@ public class IheActorInstance extends ApplicationComponent {
         ConnectedElementsTableDefinition tableDefinition = new ConnectedElementsTableDefinition();
         tableDefinition.addColumnEndElement(300);
         tableDefinition.addColumnPathStepName(2, "HEADER_CONNECTION_TYPE", 150);
-        dialog.addTablePanel(tableDefinition, 2, PartableApplicationComponent_CommunicationInterface_Edge.class, IheInterface_IheActorInstanceInterface_Edge.class, IheInterface_IheTransaction_Edge.class);
+        dialog.addTablePanel(tableDefinition, 2, IheActorInstance_IheActorInstanceInterface_Edge.class, IheInterface_IheActorInstanceInterface_Edge.class, IheInterface_IheTransaction_Edge.class);
 
         return dialog;
     }
