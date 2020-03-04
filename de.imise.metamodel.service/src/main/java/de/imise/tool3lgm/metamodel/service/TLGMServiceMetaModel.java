@@ -379,13 +379,6 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
         return IMPORTABLE_NODES;
     }
 
-    @Override
-    protected void addRemovedEdgeClasses() {
-        //ActorInstances sind Unterklassen von ApplicationComponent, man soll sie aber nicht mehr in Unterklassen zerlegen können und sie sollen nicht wieder selbst mit IheActorInstances versehen werden können
-        addRemovedEdgeClassesForStartAndEndClass(IheActorInstance.class, PartableApplicationComponent_HasPartEdge.class);//darf kein Teilelement sein und selbst nicht in Teile zerlegbar sein
-        addRemovedEdgeClassesForStartClass(IheActorInstance.class, ApplicationSystem_IheActorInstance_Edge.class);//darf kein Teilelement sein und selbst nicht in Teile zerlegbar sein
-    }
-
     private final Set<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = ImmutableSet.<Class<? extends ModelElement>> of(Use.class);
 
     @Override

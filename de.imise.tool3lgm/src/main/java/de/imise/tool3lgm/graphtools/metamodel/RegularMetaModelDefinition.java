@@ -3,8 +3,6 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.Multimap;
-
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
@@ -138,20 +136,6 @@ public interface RegularMetaModelDefinition {
 
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     public Set<Class<? extends ModelElement>> getImportableNodes();
-
-    /**
-     * Liefert die {@link #elementClassToRemovedEdgeClassesForStartClass}
-     *
-     * @return
-     */
-    public Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClassesForStartClass();
-
-    /**
-     * Liefert die {@link #elementClassToRemovedEdgeClassesForEndClass}
-     *
-     * @return
-     */
-    public Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClassesForEndClass();
 
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//
