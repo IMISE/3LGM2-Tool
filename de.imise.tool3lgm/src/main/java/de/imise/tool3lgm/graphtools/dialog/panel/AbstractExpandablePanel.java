@@ -47,11 +47,12 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
 
     /**
      * @param dialog
-     * @param panelLabelOption
+     * @param titleLabelOption
+     * @param westLabelOption
      * @param simpleMetaPath
      */
-    public AbstractExpandablePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, panelLabelOption, simpleMetaPath);
+    public AbstractExpandablePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, titleLabelOption, westLabelOption, simpleMetaPath);
     }
 
     @Override

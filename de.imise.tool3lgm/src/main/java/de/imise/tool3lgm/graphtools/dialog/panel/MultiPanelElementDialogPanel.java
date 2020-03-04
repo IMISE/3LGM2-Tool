@@ -83,8 +83,8 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
         addPanel(new SingleConnectionPanel(dialog, panelLabelOption, simpleMetaPath));
     }
 
-    public final void addListPanel(final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        addPanel(new PathConnectionLeafPanel(dialog, panelLabelOption, 4, simpleMetaPath));
+    public final void addListPanel(final PanelLabelOption westLabelOption, final SimpleMetaPath simpleMetaPath) {
+        addPanel(new PathConnectionLeafPanel(dialog, westLabelOption, westLabelOption, 4, simpleMetaPath));//die titleLabelOption ist egal -> auch einfach die westLabelOption übergeben
     }
 
     public final void addPanel(final AbstractPathConnectionPanel panel) {

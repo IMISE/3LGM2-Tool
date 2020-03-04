@@ -60,7 +60,7 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
      * @param hasPartEdgeClass
      */
     public StructurePanel(final AbstractElementPropertyDialog dialog, final Class<? extends HasPartEdge> hasPartEdgeClass) {
-        super(dialog, LABEL_LAST_EDGE_CONNECTION_NAME, Edge.getEndClass(hasPartEdgeClass), hasPartEdgeClass);
+        super(dialog, LABEL_LAST_EDGE_CONNECTION_NAME, LABEL_LAST_EDGE_CONNECTION_NAME, Edge.getEndClass(hasPartEdgeClass), hasPartEdgeClass); //die beiden LabelOptions sind egal
         internalInit();
     }
 

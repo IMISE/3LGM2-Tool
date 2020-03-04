@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge.MASTER_TO_SLAVE_DIRECTION;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
@@ -57,21 +56,14 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
 
     /**
      * @param dialog
+     * @param titleLabelOption
+     * @param westLabelOption
      * @param searchElementClass
      * @param edgeClass
      */
-    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
-        this(dialog, LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClass);
-    }
-
-    /**
-     * @param dialog
-     * @param panelLabelOption
-     * @param searchElementClass
-     * @param edgeClass
-     */
-    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends CompositionEdge> edgeClass) {
-        super(dialog, panelLabelOption, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
+    public MutipleCompositionPanel(final ElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final Class<? extends ModelElement> searchElementClass,
+            final Class<? extends CompositionEdge> edgeClass) {
+        super(dialog, titleLabelOption, westLabelOption, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
 
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true) && !metaPath.isFirstPathElementDependent(); // element to connect can be created new in this panel
 
