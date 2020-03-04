@@ -523,8 +523,13 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      */
     @SafeVarargs
     public final void addTablePanel(final ConnectedElementsTableDefinition tableDefinition, final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
-        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(doc.getMetaModel(), modelElement.getClass(), metaPathStepWithPathName, edgeClasses);
-        addTablePanel(tableDefinition, simpleMetaPath);
+        try {
+            SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(doc.getMetaModel(), modelElement.getClass(), metaPathStepWithPathName, edgeClasses);
+            addTablePanel(tableDefinition, simpleMetaPath);
+        } catch (Exception e) {
+            //if in the createSimpleMetaPath(...) an error occurs then the tool should not crash
+            e.printStackTrace();
+        }
     }
 
     /**
