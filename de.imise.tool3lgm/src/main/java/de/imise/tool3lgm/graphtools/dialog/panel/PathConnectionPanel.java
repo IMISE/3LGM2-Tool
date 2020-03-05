@@ -104,6 +104,9 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
         super(dialog, titleLabelOption, westLabelOption, simpleMetaPath);
         showRightTree = isEditable();
+        if (!showRightTree) {
+            setUnexpandable();
+        }
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);

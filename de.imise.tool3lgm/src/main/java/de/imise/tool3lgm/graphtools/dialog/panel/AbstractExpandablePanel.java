@@ -73,7 +73,9 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
         } else {
             showPartlyDialog();
         }
-        viewButton.setAction(full ? showPartlyAction : showAllAction);
+        if (viewButton != null) {
+            viewButton.setAction(full ? showPartlyAction : showAllAction);
+        }
         update();
     }
 
@@ -81,7 +83,7 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      * @return
      */
     protected final boolean isRightSideVisible() {
-        return viewButton.getAction() == showPartlyAction;
+        return viewButton != null && viewButton.getAction() == showPartlyAction;
     }
 
     /**
@@ -97,6 +99,13 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
     @Override
     public JButton getPanelButton() {
         return viewButton;
+    }
+
+    /**
+     * Sets the state, that the panel cannot be expaded by setting the viewButton to <code>null</code>
+     */
+    protected void setUnexpandable() {
+        viewButton = null;
     }
 
     /**
