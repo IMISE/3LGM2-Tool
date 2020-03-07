@@ -91,7 +91,7 @@ public class ChangeLineHandler {
     }
 
     /**
-     * Extrahiert den Versions-String zwischen den doppelten Anführugszeichen
+     * Extrahiert den Versions-String zwischen den doppelten AnfÃ¼hrugszeichen
      *
      * @param originalVersionString
      * @return

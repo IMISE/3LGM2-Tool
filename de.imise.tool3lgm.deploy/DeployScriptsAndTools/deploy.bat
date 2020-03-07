@@ -2,8 +2,8 @@
 
 SET "INITIAL_DIR=%CD%"
 
-::mit der Variable %~dp0 kann man den Pfad der aktuell ausgeführten Batchdatei ermitteln.
-::Dabei steht %0 für die Datei selbst, d steht für Laufwerk (drive) und p für den Dateipfad.
+::mit der Variable %~dp0 kann man den Pfad der aktuell ausgefÃ¼hrten Batchdatei ermitteln.
+::Dabei steht %0 fÃ¼r die Datei selbst, d steht fÃ¼r Laufwerk (drive) und p fÃ¼r den Dateipfad.
 ::#########!!!######### Alle relativen Pfade gehen von diesem Pfad aus #########!!!#########
 SET "SCRIPT_LOCATION=%~dp0"
 CD /D %SCRIPT_LOCATION%
@@ -12,7 +12,7 @@ CD /D %SCRIPT_LOCATION%
 ::###                                                                                  ###
 ::###              A N P A S S E N   A U F   D E R   Z I E L M A S C H I N E           ###
 ::###                                                                                  ###
-::###                      Diese Pfade wenn nötig anpassen                             ###
+::###                      Diese Pfade wenn nÃ¶tig anpassen                             ###
 ::###                                                                                  ###
 ::###           jeweils absolut angeben oder relativ zur %SCRIPT_LOCATION%             ###
 ::###                                                                                  ###
@@ -37,8 +37,8 @@ SET "IHE_TEMPLATE_PROJECT_DIR=..\..\de.imise.tool3lgm.template.ihe"
 ::###                                                                                  ###
 ::###   Die folgenden Ordner und Pfade sind auch alle relativ zur %SCRIPT_LOCATION%    ###
 ::###                                                                                  ###
-::###   Sie müssen aber nur angepasst werden, wenn die Struktur oder Abläufe           ###
-::###               innerhalb des Deploy-Projektes geändert wird.                      ###
+::###   Sie mÃ¼ssen aber nur angepasst werden, wenn die Struktur oder AblÃ¤ufe           ###
+::###               innerhalb des Deploy-Projektes geÃ¤ndert wird.                      ###
 ::###                                                                                  ###
 ::########################################################################################
 ::Pfad zu Inno Setup
@@ -46,12 +46,13 @@ SET "INNOSETUP_PROGRAM_DIR=Inno Setup 5"
 ::Pfad zur 7zip-Exe
 SET "SEVENZIP_PROGRAM_FILE=7zip\7z.exe"
 ::Pfad zum Bat To Exe Converter
-SET "BAT_TO_EXE_CONVERTER_PROGRAM_DIR=Bat_To_Exe_Converter\Windows (32 bit)"
+::SET "BAT_TO_EXE_CONVERTER_PROGRAM_DIR=Bat_To_Exe_Converter\Windows (32 bit)"
+SET "BAT_TO_EXE_CONVERTER_PROGRAM_DIR=Bat_To_Exe_Converter_v3.0.10"
 
 
-::Basisname der von Innosetup erzeugten Exe-Installationsdatei. Diese wird noch um die Version ergänzt
+::Basisname der von Innosetup erzeugten Exe-Installationsdatei. Diese wird noch um die Version ergÃ¤nzt
 SET "WINDOWS_INSTALLER_EXE_BASE_NAME=setup3lgm_V" 
-::Basisname der zip und tar.gz-Dateien, die am Ende enstehen. Diese wird noch um die Version ergänzt
+::Basisname der zip und tar.gz-Dateien, die am Ende enstehen. Diese wird noch um die Version ergÃ¤nzt
 SET "ZIP_AND_TARGZ_RESULT_BASE_NAME=Tool3lgm_V" 
 
 
@@ -66,13 +67,15 @@ SET "DEPLOY_PROJECT_TOOL3LGM_START_BAT=%DEPLOY_PROJECT_TOOL3LGM_DIR%\3lgm2tool.b
 ::einfacher Name der und voller Name zur Exe-Datei zum Starten des Tools im Ordner mit dem zu
 ::deployenden Tool (diese wird aus der Batch-Datei erzeugt)
 SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE_FILENAME=3lgm2tool.exe"
+SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64_FILENAME=3lgm2tool_x64.exe"
 ::Pfad dieser Exe
 SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE=%DEPLOY_PROJECT_TOOL3LGM_DIR%\%DEPLOY_PROJECT_TOOL3LGM_START_EXE_FILENAME%"
+SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64=%DEPLOY_PROJECT_TOOL3LGM_DIR%\%DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64_FILENAME%"
 ::voller Name der Icon-Datei, mit der die Exe und der Innosetup-Installer versehen wird
 SET "DEPLOY_TOOL3LGM_ICON=..\DeployScriptsAndTools\Icons\toolIcon_gross.ico"
 
 ::Tool3LGMConstants.java gibt die Version vor. Das ist die Stelle, die vorher im Code angepasst
-::werden muss. Die Zeile mit diesem String wird über BATCH-Kommandos ausgelesen.
+::werden muss. Die Zeile mit diesem String wird Ã¼ber BATCH-Kommandos ausgelesen.
 SET "JAVA_FILE_WITH_TOOL_VERSION=%TOOL3LGM_PROJECT_DIR%\src\main\java\de\imise\tool3lgm\Tool3lgmConstants.java"
 SET "JAVA_FILE_WITH_TOOL_VERSION_LINE=public static final String TOOL_VERSION = " 
 
@@ -81,7 +84,7 @@ SET "JAVA_FILE_WITH_TOOL_VERSION_LINE=public static final String TOOL_VERSION = 
 ::Pfad zur Innosetup-Scriptdatei zum Erzeugen des Windows-Installers des Tools
 SET "ISS_FILE=%cd%\Innosetup_Tool3lgm.iss"
 ::jeweils Anfang ("_SRT") und Ende ("_END") der Zeilen in der Innosetup-Scriptdatei, die vor dem Generieren des
-::Installers aktualisert werden müssen
+::Installers aktualisert werden mÃ¼ssen
 ::Zeile mit der Tool-Version, die auch der Installer kennen muss
 SET "ISS_FILE_LINE_VERSION_SRT=#define MyAppVersion \""
 SET "ISS_FILE_LINE_VERSION_END=\""
@@ -107,11 +110,14 @@ SET "ISS_FILE_LINE_FILEALL_END=\"; DestDir: \"{app}\"; Flags: ignoreversion recu
 ::update version in pom.xml of the tool
 ::Zeile mit der Version in der pom.xml des Tools wird ebenfalls vor dem Compilieren geupdatet. Damit das klappt
 ::muss die pom.xml-Datei auf jeden Fall formatiert sein (bzw. vor dem <version>-Tag muss ein Tab stehen!)
+::Hinweis: auch spitze Klammern mÃ¼sses gequotet werden: "^<"
 SET "POM_FILE=%TOOL3LGM_PROJECT_DIR%\pom.xml"
-SET "POM_FILE_LINE_SRT=\\t<version>"
-SET "POM_FILE_LINE_END=</version>"
+SET "POM_FILE_LINE_SRT=  ^<version^>"
+::"Tab"-Version. Sicherheitshalber sollten keine "Tab"s verwendet werden. In der POM-Datei wurden alle Tabs durch "  " (2 Leerzeichen) ersetzt.
+::SET "POM_FILE_LINE_SRT=	^<version^>"
+SET "POM_FILE_LINE_END=^</version^>"
 
-::Pfad zu den Java/Deploy-Tools. Diese sind extra für dieses Projekt geschrieben und befinden sich ebenfalls in
+::Pfad zu den Java/Deploy-Tools. Diese sind extra fÃ¼r dieses Projekt geschrieben und befinden sich ebenfalls in
 ::diesem Deply-Projekt. Sie bieten im Grunde 2 Funktionen:
 :: (1.) Austausch von Zeilen in einer Datei mit einem bestimmten Anfang und Ende
 :: (2.) Auskommentieren und Wiederreinnehmen von PAUSE-Anweisungen in Batch-Dateien
@@ -120,10 +126,10 @@ SET "DEPLOY_TOOLS_PROJECT_DIR=DeployTools\de.axs.deploytools"
 CD /D %DEPLOY_TOOLS_PROJECT_DIR%
 CALL mvn -B clean install
 ::suche die jar-Datei der Deploy-Tools im target-Ordner des deploy-tools-Projektes. Falls mal jemand die Version
-::der Deploy-Tools in deren pom.xml ändert, dann heißt die generierte jar-Datei anders. Indem man sie hier
+::der Deploy-Tools in deren pom.xml Ã¤ndert, dann heiÃŸt die generierte jar-Datei anders. Indem man sie hier
 ::automatisch heraussucht, funktioniert das hier dann trotzdem noch.
 FOR %%F IN (target\*.jar) DO (
- set DEPLOY_TOOLS_JAR=%DEPLOY_TOOLS_PROJECT_DIR%\%%F
+ set "DEPLOY_TOOLS_JAR=%DEPLOY_TOOLS_PROJECT_DIR%^\%%F"
  goto deploy_tools_jar_found
 )
 :deploy_tools_jar_found
@@ -146,7 +152,7 @@ ECHO Current version %lgmVersion%
 SET "WINDOWS_INSTALLER_EXE_BASE_NAME=%WINDOWS_INSTALLER_EXE_BASE_NAME%%lgmVersion%" 
 SET WINDOWS_INSTALLER_EXE_BASE_NAME=!WINDOWS_INSTALLER_EXE_BASE_NAME: =_!
 
-::Abkürzung für den Aufruf des Java-ChangeLineHandlers aus den Java-Deploy-Tools
+::AbkÃ¼rzung fÃ¼r den Aufruf des Java-ChangeLineHandlers aus den Java-Deploy-Tools
 ::Syntax: START %CLH% FILE_NAME LINE_START_STRING LINE_END_STRING REPLACE_STRING
 ::Er ersetzt in allen Zeilen (i.d.R. genau eine) einer Datei, die mit einem bestimmten String beginnen und enden,
 ::den Mittelteil.
@@ -155,7 +161,13 @@ SET WINDOWS_INSTALLER_EXE_BASE_NAME=!WINDOWS_INSTALLER_EXE_BASE_NAME: =_!
 SET "CLH=/wait javaw -classpath ^"%DEPLOY_TOOLS_JAR%^" de.axs.deploytools.ChangeLineHandler"
 
 ::Version in die pom.xml-Datei schreiben
+::Debug:
+::  ECHO %CLH% 
+::  ECHO "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
+::  START javaw -classpath "%DEPLOY_TOOLS_JAR%" de.axs.deploytools.ChangeLineHandler "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
 START %CLH% "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
+::Debug:
+::  EXIT /B
 ::Version in die ISS-Datei schreiben
 START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_VERSION_SRT%" "%ISS_FILE_LINE_VERSION_END%" "%lgmVersion%"
 ::ExeName in die ISS-Datei schreiben
@@ -176,13 +188,13 @@ CALL :NORMALIZEPATH "%DEPLOY_PROJECT_TOOL3LGM_DIR%"
 START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEALL_SRT%" "%ISS_FILE_LINE_FILEALL_END%" "%ABSOLUTEPATH%\*"
 
 ::Jetzt alle Teilprojekte per Maven bauen. Die pom.xml des tool3lgm-Projektes kopiert am Ende die
-::axutils.jar und die tool3lgm.jar sowie alle anderen benötigten Bibliotheken ins lib-Verzeichnis
+::axutils.jar und die tool3lgm.jar sowie alle anderen benÃ¶tigten Bibliotheken ins lib-Verzeichnis
 ::des zu deployenden Tools im %DEPLOY_PROJECT_TOOL3LGM_DIR%.
 ::Die Plugin-Projekte kopieren jeweils ihr jar-Artefakt auch innerhalb der pom.xml in das
 ::Plugins-Verzeichnis des zu deployenden Tools.
 
 ::Da die Pfade immer relativ zur %SCRIPT_LOCATION% sind, muss am Ende immer zur %SCRIPT_LOCATION%
-::zurück gewechselt werden. Das ist auf jeden Fall einfacher, als erst nochmal die ganzen Pfade
+::zurÃ¼ck gewechselt werden. Das ist auf jeden Fall einfacher, als erst nochmal die ganzen Pfade
 ::absolut zu machen.
 
 ::create axsutils per Maven
@@ -216,19 +228,27 @@ CD /D %SCRIPT_LOCATION%
 ::git pull
 ::CD /D %SCRIPT_LOCATION%
 ::IHE Domain Ontology aus git Repository aktualisieren (kopieren)
+ECHO "### Copy IHE Domain Ontology %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf -> %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\"
 COPY /Y %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\
 
 ::Jetzt im zu deployenden Tool die exe-Datei zum Starten des Tools aus der bat-Datei neu erzeugen.
-::Vorher alte exe löschen (eigentlich gibt es eine Option, so dass Bat_To_Exe_Converter.exe eine
-::vorhandene Datei überschreibt, aber das funktioniert nicht!)
-DEL %DEPLOY_PROJECT_TOOL3LGM_START_EXE% /s /q
+::Vorher alte exe lÃ¶schen (eigentlich gibt es eine Option, so dass Bat_To_Exe_Converter.exe eine
+::vorhandene Datei Ã¼berschreibt, aber das funktioniert nicht!)
+::DEL %DEPLOY_PROJECT_TOOL3LGM_START_EXE% /s /q
+::DEL %DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64% /s /q
 ::tool3lgm2.exe neu bauen aus der aktuellen tool3lgm2.bat. Aber ohne das PAUSE am Ende, da die exe
 ::sonst nie beendet wird. Das macht der BatchPauseEnabledSwitch aus den Java-Deploy-Tools.
 SET "BATCH_PAUSE_ENABLED_SWITCH=/wait javaw -classpath ^"%DEPLOY_TOOLS_JAR%^" de.axs.deploytools.BatchPauseEnabledSwitch"
-::Das Minus (-) vor dem Dateinamen ist der Marker für das disablen von PAUSE.
+::Das Minus (-) vor dem Dateinamen ist der Marker fÃ¼r das disablen von PAUSE.
 START %BATCH_PAUSE_ENABLED_SWITCH% "-%DEPLOY_PROJECT_TOOL3LGM_START_BAT%"
 ::Siehe https://documentation.help/bat-to-exe-converter/de.html#cmd
-CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_DIR%\Bat_To_Exe_Converter.exe" -bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" -save "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%" -icon "%DEPLOY_TOOL3LGM_ICON%" -invisible
+ECHO "### Execute Bat_To_Exe_Converter"
+::v1.7:
+::  CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_DIR%\Bat_To_Exe_Converter.exe" -bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" -save "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%" -icon "%DEPLOY_TOOL3LGM_ICON%" -invisible
+::v3.0.10 (32 Bit):
+CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_DIR%\Bat_To_Exe_Converter.exe" /bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" /exe "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%" /overwrite /icon "%DEPLOY_TOOL3LGM_ICON%" /invisble /overide /attributes /display /fileversion "1.0.0.0" /productversion "%lgmVersion%" /productname "3lgm2-tool"
+::v3.0.10 (64 Bit):
+CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_DIR%\Bat_To_Exe_Converter_(x64).exe" /bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" /exe "%DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64%" /overwrite /icon "%DEPLOY_TOOL3LGM_ICON%" /invisble /x64 /overide /attributes /display /fileversion "1.0.0.0" /productversion "%lgmVersion%" /productname "3lgm2-tool"
 ::Das PAUSE wieder aktivieren. Plus (+) als Marker vor dem Dateinamen
 START %BATCH_PAUSE_ENABLED_SWITCH% "+%DEPLOY_PROJECT_TOOL3LGM_START_BAT%"
 
@@ -246,7 +266,7 @@ ECHO %ZIP_AND_TARGZ_RESULT_BASE_NAME%
 :: ZIP the deploy Files with 7zip
 FOR /d %%X IN ("%DEPLOY_PROJECT_TOOL3LGM_DIR%") DO "%SEVENZIP_PROGRAM_FILE%" a "%DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.zip" "%%X\"
 
-::mit 7zip auch die tar.gz erstellen. In dieser sind dann alle Dateien mit dem Linux-Attribut "ausführbar" (Group + User) versehen
+::mit 7zip auch die tar.gz erstellen. In dieser sind dann alle Dateien mit dem Linux-Attribut "ausfÃ¼hrbar" (Group + User) versehen
 "%SEVENZIP_PROGRAM_FILE%" a -ttar "%DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.tar" "%DEPLOY_PROJECT_TOOL3LGM_DIR%"
 "%SEVENZIP_PROGRAM_FILE%" a -tgzip "%DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.tar.gz" "%DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.tar"
 DEL %DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.tar
