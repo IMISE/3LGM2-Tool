@@ -836,6 +836,15 @@ public final class MetaModel implements MetaModelSpecific {
     }
 
     /**
+     * @param inferenceEdgeClass
+     * @return
+     */
+    public boolean isInferenceCreateable(final Class<? extends InferenceEdge> inferenceEdgeClass) {
+        AbstractMetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+        return inferenceEdgeConditionMetaPath.isCreatable(false);
+    }
+
+    /**
      * Prüft, ob die übergebene Kantenklasse in der angegebenen Richtung in den übergebenen Elemetarpfaden steckt. Die Kantenklasse
      * wird hier auf Identität geprüft und nicht auf Zuweisungskompatibilität.
      *
