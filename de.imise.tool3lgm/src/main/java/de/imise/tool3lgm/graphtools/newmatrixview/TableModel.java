@@ -14,6 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions.PathConnectionState;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.log.Log;
@@ -224,9 +225,10 @@ public class TableModel implements Iterable<TableCell> {
                         boolean containsPartOf = metaPath.containsPropertyTransferEdge();
                         boolean connected = false;
                         if (containsPartOf) {
-                            connected = MetaPathFunctions.getConnectionState(rowHeader.get(i), colHeader.get(j), metaPath, false, false) != null;
+                            connected = MetaPathFunctions.getPathConnectionState(rowHeader.get(i), colHeader.get(j), metaPath, false, false) != PathConnectionState.NOT_CONNECTED;
                         } else {
-                            connected = MetaPathFunctions.getConnectionState(rowHeader.get(i), colHeader.get(j), metaPath, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) != null;
+                            connected = MetaPathFunctions.getPathConnectionState(rowHeader.get(i), colHeader.get(j), metaPath, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(),
+                                    OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) != PathConnectionState.NOT_CONNECTED;
                         }
                         if (connected) {
                             connectionBitPattern += 1 << k;

@@ -36,6 +36,7 @@ public class MetaPathFunctions {
     /**
      * Status der möglichen Verbindungen über einen MetaPfad zwischen 2 Elementen.
      * <ul>
+     * <li><code>NOT_CONNECTED</code>: Die Elemente sind nicht verbunden.</li>
      * <li><code>SELF</code>: Das Element hat selbst die Verbindung zu mind. einem EndElement</li>
      * <li><code>PARENT</code>: Ein Parent des Elements hat die Verbindung zu mind. einem EndElement</li>
      * <li><code>PART</code>: Ein Part des Elements hat die Verbindung zu mind. einem EndElement</li>
@@ -48,6 +49,7 @@ public class MetaPathFunctions {
      * </ul>
      */
     public static enum PathConnectionState {
+        NOT_CONNECTED,
         SELF,
         PARENT,
         PART,
@@ -375,8 +377,8 @@ public class MetaPathFunctions {
      * @param metaPath
      * @return
      */
-    public static final PathConnectionState getConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
-        return getConnectionState(startElement, endElement, metaPath, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is());
+    public static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
+        return getPathConnectionState(startElement, endElement, metaPath, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is());
     }
 
     /**
@@ -387,11 +389,10 @@ public class MetaPathFunctions {
      * @param searchParts
      * @return
      */
-    public static final PathConnectionState getConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean searchParents, final boolean searchParts) {
+    public static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean searchParents, final boolean searchParts) {
         List<ModelElement> startElements = null;
         startElements = new ArrayList<>(1);
         startElements.add(startElement);
-
         List<ModelElement> endElements = null;
         if (searchParts && searchParents) {
             endElements = endElement.getPartAndParentElements();
@@ -437,7 +438,7 @@ public class MetaPathFunctions {
         if (part) {
             return PathConnectionState.PART;
         }
-        return null;
+        return PathConnectionState.NOT_CONNECTED;
     }
 
     /**
@@ -447,7 +448,7 @@ public class MetaPathFunctions {
      * @return
      */
     public static final boolean isConnected(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
-        return getConnectionState(startElement, endElement, metaPath) != null;
+        return getPathConnectionState(startElement, endElement, metaPath) != PathConnectionState.NOT_CONNECTED;
     }
 
     /**
@@ -457,7 +458,7 @@ public class MetaPathFunctions {
      * @return
      */
     public static final boolean isDirectConnected(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
-        return getConnectionState(startElement, endElement, metaPath, false, false) != null;
+        return getPathConnectionState(startElement, endElement, metaPath, false, false) != PathConnectionState.NOT_CONNECTED;
     }
 
     /**
