@@ -220,7 +220,8 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * Liefert <code>true</code>, wenn die übergebene Elementklasse genau die Endklasse dieses MetaPfades ist.
+     * Liefert <code>true</code>, wenn die übergebene startClass Startklasse und die übergeben endCLass Endklasse
+     * dieses MetaPfades sein kann.
      *
      * @param startClass
      *            Elementklasse, die als Startklasse der Kantenklasse geprüft werden soll
