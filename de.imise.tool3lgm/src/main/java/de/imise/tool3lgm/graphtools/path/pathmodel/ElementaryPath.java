@@ -1,8 +1,10 @@
 package de.imise.tool3lgm.graphtools.path.pathmodel;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath.Type;
 
 /**
  * @author AXS
@@ -43,7 +45,108 @@ public final class ElementaryPath extends AbstractPath {
 
     @Override
     public boolean isValid() {
-        // TODO Auto-generated method stub
+        //das ganze hier könnte man bei Bedarf analog zum public InvalidityCheckResult getInvalidityCheckResult() bei den MetaPfaden machen
+        if (metaPath == null || !(metaPath instanceof ElementaryMetaPath)) {
+            return false;
+        }
+        ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) metaPath;
+        Type type = elementaryMetaPath.getType();
+        if (!metaPath.isValid()) {
+            return false;
+        }
+        if (startElement == null) {
+            return false;
+        }
+        if (endElement == null) {
+            return false;
+        }
+        Class<? extends ModelElement> startClass = elementaryMetaPath.getStartClass();
+        Class<? extends ModelElement> startElementClass = startElement.getClass();
+        if (!startClass.isAssignableFrom(startElementClass)) {
+            return false;
+        }
+        Class<? extends ModelElement> endClass = elementaryMetaPath.getEndClass();
+        Class<? extends ModelElement> endElementClass = endElement.getClass();
+        if (!endClass.isAssignableFrom(endElementClass)) {
+            return false;
+        }
+        Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+        Class<? extends Edge> edgeElementClass = edge.getClass();
+        if (edge != null && !edgeClass.isAssignableFrom(edgeElementClass)) {
+            return false;
+        }
+        if (type == Type.SINGLE_ELEMENT) {
+            if (startElement != endElement) {
+                return false;
+            }
+            if (edge != null) {
+                return false;
+            }
+        } else {
+            if (edge == null) {
+                return false;
+            }
+            Direction direction = elementaryMetaPath.getDirection();
+            if (type == Type.START_WITH_EDGE) {
+                if (startElement != edge) {
+                    return false;
+                }
+                if (direction == Direction.FORWARD) {
+                    ModelElement edgeEnd = edge.getEnd();
+                    if (edgeEnd != endElement) {
+                        return false;
+                    }
+                } else if (direction == Direction.BACKWARD) {
+                    ModelElement edgeStart = edge.getStart();
+                    if (edgeStart != endElement) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else if (type == Type.END_WITH_EDGE) {
+                if (endElement != edge) {
+                    return false;
+                }
+                if (direction == Direction.FORWARD) {
+                    ModelElement edgeStart = edge.getStart();
+                    if (edgeStart != startElement) {
+                        return false;
+                    }
+                } else if (direction == Direction.BACKWARD) {
+                    ModelElement edgeEnd = edge.getEnd();
+                    if (edgeEnd != startElement) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else if (type == Type.ELEMENT_EDGE_ELEMENT) {
+                ModelElement edgeStart = edge.getStart();
+                ModelElement edgeEnd = edge.getEnd();
+                if (direction == Direction.FORWARD) {
+                    if (startElement != edgeStart) {
+                        return false;
+                    }
+                    if (endElement != edgeEnd) {
+                        return false;
+                    }
+                } else if (direction == Direction.BACKWARD) {
+                    if (startElement != edgeEnd) {
+                        return false;
+                    }
+                    if (endElement != edgeStart) {
+                        return false;
+                    }
+                } else {
+                    if (startElement != edgeStart && endElement != edgeEnd || startElement != edgeEnd && endElement != edgeStart) {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
+            }
+        }
         return true;
     }
 
