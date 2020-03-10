@@ -81,7 +81,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.Connect
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -573,10 +572,10 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 for (Object edgeClassOrMetaPath : edgesAndPaths) {
                     if (edgeClassOrMetaPath instanceof Class) {
                         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassOrMetaPath).asSubclass(Edge.class);
-                        ///////////////////////////////////////////////////////////////
-                        //   Edges to Ignore ( InstanciationEdge & InferenceEdge )   //
-                        ///////////////////////////////////////////////////////////////
-                        if (InstanciationEdge.class.isAssignableFrom(edgeClass) || InferenceEdge.class.isAssignableFrom(edgeClass)) {
+                        /////////////////////////////////////////////
+                        //   Edges to Ignore ( InstanciationEdge)  //
+                        /////////////////////////////////////////////
+                        if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
                             continue;
                         }
                         //////////////
