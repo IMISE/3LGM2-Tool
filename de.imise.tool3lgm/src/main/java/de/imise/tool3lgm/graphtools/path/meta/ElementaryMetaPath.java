@@ -14,7 +14,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
-import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.PropertyTransferEdge;
@@ -504,9 +503,6 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
             if (InstanciationEdge.INSTANCE_TO_MASTER_DIRECTION.equals(direction)) {
                 return false;
             }
-        }
-        if (InferenceEdge.class.isAssignableFrom(edgeClass)) {
-            return false;
         }
         if (checkEndCreateElement) {
             if (!metaModel.isCreatable(endClass, this, null)) {
