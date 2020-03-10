@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath.Type;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
@@ -242,8 +243,17 @@ public class SequenceMetaPath extends ListMetaPath {
         int maxElementaryMetaPathsIndex = elementaryMetaPaths.size() - 1;
         for (int i = 0; i < maxElementaryMetaPathsIndex; i++) {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
-            //nur Elementarpfade mit einer Kante dazwischen sind anlegbar, wenn die Kantenklasse nicht abstract ist
-            if (!elementaryMetaPath.isCreatable(false)) {
+            Type type = elementaryMetaPath.getType();
+            if (i == 0 && type == Type.END_WITH_EDGE || type == Type.START_WITH_EDGE) {
+                //das muss ja schon da sein, weil es vom StartElement ausgeht -> also anlegbar
+                continue;
+            } else if (i == maxElementaryMetaPathsIndex && !checkCreateEndElement && (type == Type.END_WITH_EDGE || type == Type.START_WITH_EDGE)) {
+                //wenn das endElement nicht angelegt werden soll und der letzte Elementarpfad vom Start- oder EndElement
+                //einer Kante auf diese Kante geht, dann müssen ja auch das Start- und EndElement dieser Kante bereits
+                //existieren und dieser Schritt braucht nicht grüft werden
+                continue;
+                //nur Elementarpfade mit einer Kante dazwischen sind anlegbar, wenn die Kantenklasse nicht abstract ist
+            } else if (!elementaryMetaPath.isCreatable(false)) {
                 return false;
             }
             ElementaryMetaPath nextElementaryMetaPath = elementaryMetaPaths.get(i + 1);
