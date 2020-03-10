@@ -46,7 +46,7 @@ public class ModelConverterUtils {
         int counter = joinElementIfEquals(gdcoll, middleElement, null, hashString, path, 0);
         middleElement = getMiddleElement(path); // if joined -> middle element has changed
 
-        int pathLength = path.length();
+        int pathLength = path.size();
         for (int i = 0; i < pathLength; i++) {
             ElementaryPath pathStep = path.getPathStep(i);
             //edge
@@ -152,7 +152,7 @@ public class ModelConverterUtils {
      * @return
      */
     private static ModelElement getMiddleElement(final SimplePath path) {
-        int pathLength = path.length();
+        int pathLength = path.size();
         int middlePathStep = pathLength / 2;
         ElementaryPath pathStep = path.getPathStep(middlePathStep);
         //even path step count -> node in the middle; odd pathStepCount -> edge in the middle

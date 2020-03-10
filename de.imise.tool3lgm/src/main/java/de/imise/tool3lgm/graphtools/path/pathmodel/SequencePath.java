@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.path.pathmodel;
 
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -9,7 +7,6 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.util.collections.CollectionUtils;
 
 /**
  * Ein SequencePath ist ein Pfad der selbst wieder Pfade enthält
@@ -17,18 +14,14 @@ import de.imise.util.collections.CollectionUtils;
  * @author AXS
  * @create 08.02.2011
  */
-public class SequencePath extends AbstractPath implements Iterable<AbstractPath> {
-
-    /** Ein SequencePath enthält eine Liste anderer Pfade */
-    private final List<AbstractPath> paths;
+public class SequencePath extends ListPath {
 
     /**
      * @param metaPath
      * @param paths
      */
     public SequencePath(final AbstractMetaPath metaPath, final List<AbstractPath> paths) {
-        super(metaPath, paths != null && paths.size() > 0 ? paths.get(0).getStartElement() : null, paths != null && paths.size() > 0 ? paths.get(paths.size() - 1).getEndElement() : null);
-        this.paths = CollectionUtils.ensureImmutable(paths);
+        super(metaPath, paths != null && paths.size() > 0 ? paths.get(0).getStartElement() : null, paths != null && paths.size() > 0 ? paths.get(paths.size() - 1).getEndElement() : null, paths);
     }
 
     /**
@@ -36,8 +29,7 @@ public class SequencePath extends AbstractPath implements Iterable<AbstractPath>
      * @param paths
      */
     public SequencePath(final AbstractMetaPath metaPath, final AbstractPath... paths) {
-        super(metaPath, paths.length > 0 ? paths[0].getStartElement() : null, paths.length > 0 ? paths[paths.length - 1].getEndElement() : null);
-        this.paths = CollectionUtils.ensureImmutable(Arrays.asList(paths));
+        super(metaPath, paths.length > 0 ? paths[0].getStartElement() : null, paths.length > 0 ? paths[paths.length - 1].getEndElement() : null, paths);
     }
 
     /**
@@ -45,29 +37,16 @@ public class SequencePath extends AbstractPath implements Iterable<AbstractPath>
      * @param paths
      */
     public SequencePath(final SimpleMetaPath metaPath, final List<ElementaryPath> paths) {
-        super(metaPath, paths != null && paths.size() > 0 ? paths.get(0).getStartElement() : null, paths != null && paths.size() > 0 ? paths.get(paths.size() - 1).getEndElement() : null);
-        this.paths = createPathsList(paths);
-    }
-
-    private static final List<AbstractPath> createPathsList(final List<ElementaryPath> paths) {
-        ImmutableList.Builder<AbstractPath> pathsBuilder = ImmutableList.builder();
-        for (ElementaryPath elementaryMetaPath : paths) {
-            pathsBuilder.add(elementaryMetaPath);
-        }
-        return pathsBuilder.build();
+        super(metaPath, paths != null && paths.size() > 0 ? paths.get(0).getStartElement() : null, paths != null && paths.size() > 0 ? paths.get(paths.size() - 1).getEndElement() : null, createPathsList(paths));
     }
 
     @Override
     public final boolean isValid() {
-        if (paths == null) {
-            return false;
-        }
-        int pathCount = paths.size();
-        if (pathCount == 0) {
+        if (!super.isValid()) {
             return false;
         }
         //startElement fits first path startElement?
-        AbstractPath firstPath = paths.get(0);
+        AbstractPath firstPath = get(0);
         if (firstPath == null) {
             return false;
         }
@@ -79,8 +58,9 @@ public class SequencePath extends AbstractPath implements Iterable<AbstractPath>
         if (startElement != firstPathStartElement) {
             return false;
         }
+        int pathCount = size();
         //endElement fits last path endElement?
-        AbstractPath lastPath = paths.get(pathCount - 1);
+        AbstractPath lastPath = get(pathCount - 1);
         if (lastPath == null) {
             return false;
         }
@@ -93,7 +73,7 @@ public class SequencePath extends AbstractPath implements Iterable<AbstractPath>
         }
         //
         for (int i = 1; i < pathCount; i++) {
-            AbstractPath innerPath = paths.get(i);
+            AbstractPath innerPath = get(i);
             if (innerPath == null) {
                 return false;
             }
@@ -101,7 +81,7 @@ public class SequencePath extends AbstractPath implements Iterable<AbstractPath>
             if (i < pathCount - 1 && !innerPath.isValid()) {
                 return false;
             }
-            AbstractPath previousInnerPath = paths.get(i - 1);
+            AbstractPath previousInnerPath = get(i - 1);
             ModelElement innerPathStartElement = innerPath.getStartElement();
             ModelElement previousPathEndElement = previousInnerPath.endElement;
             if (innerPathStartElement != previousPathEndElement) {
@@ -112,41 +92,29 @@ public class SequencePath extends AbstractPath implements Iterable<AbstractPath>
     }
 
     /**
-     * @return the paths
+     * @param paths
+     * @return
      */
-    public List<AbstractPath> getPaths() {
-        return paths;
-    }
-
-    @Override
-    protected void replace(final ModelElement original, final ModelElement replacement) {
-        for (AbstractPath path : paths) {
-            path.replace(original, replacement);
+    private static final List<AbstractPath> createPathsList(final List<ElementaryPath> paths) {
+        ImmutableList.Builder<AbstractPath> pathsBuilder = ImmutableList.builder();
+        for (ElementaryPath elementaryMetaPath : paths) {
+            pathsBuilder.add(elementaryMetaPath);
         }
-    }
-
-    /**
-     * @return number of paths in the path list
-     */
-    public final int length() {
-        return paths.size();
+        return pathsBuilder.build();
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < paths.size(); i++) {
-            sb.append(paths.get(i));
-            if (i < paths.size() - 1) {
+        int pathCount = size();
+        for (int i = 0; i < pathCount; i++) {
+            AbstractPath path = get(i);
+            sb.append(path);
+            if (i < pathCount - 1) {
                 sb.append(" <-> ");
             }
         }
         return sb.toString();
-    }
-
-    @Override
-    public Iterator<AbstractPath> iterator() {
-        return paths.iterator();
     }
 
 }
