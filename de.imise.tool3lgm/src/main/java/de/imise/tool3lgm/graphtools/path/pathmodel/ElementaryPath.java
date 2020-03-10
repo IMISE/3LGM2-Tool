@@ -37,6 +37,30 @@ public final class ElementaryPath extends AbstractPath {
     }
 
     /**
+     * @param startsWithEdgeMetaPath
+     * @param edge
+     * @throws ClassCastException if the {@link ModelElement} is not an {@link Edge}
+     * @return
+     */
+    public static ElementaryPath createStartsWithEdgePath(final ElementaryMetaPath startsWithEdgeMetaPath, final Edge edge) {
+        Direction direction = startsWithEdgeMetaPath.getDirection();
+        ModelElement endElement = direction == Direction.BACKWARD ? edge.getStart() : edge.getEnd();
+        return new ElementaryPath(startsWithEdgeMetaPath, edge, endElement, edge);
+    }
+
+    /**
+     * @param startWithEdgeMetaPath
+     * @param edge
+     * @throws ClassCastException if the {@link ModelElement} is not an {@link Edge}
+     * @return
+     */
+    public static ElementaryPath createEndsWithEdgePath(final ElementaryMetaPath endsWithEdgeMetaPath, final Edge edge) {
+        Direction direction = endsWithEdgeMetaPath.getDirection();
+        ModelElement startElement = direction == Direction.BACKWARD ? edge.getEnd() : edge.getStart();
+        return new ElementaryPath(endsWithEdgeMetaPath, startElement, edge, edge);
+    }
+
+    /**
      * @return the edge
      */
     public final Edge getEdge() {
