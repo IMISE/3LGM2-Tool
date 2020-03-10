@@ -69,6 +69,7 @@ import de.imise.tool3lgm.graphtools.path.meta.ParallelMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.AbstractPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
+import de.imise.tool3lgm.graphtools.path.pathmodel.ParallelPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.SimplePath;
 import de.imise.tool3lgm.graphtools.undoredo.CommandParser;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -3708,10 +3709,12 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return createSimplePath(startElement, endElement, (SimpleMetaPath) metaPath, askNameForNewEndElement, pid);
         } else if (metaPath instanceof ParallelMetaPath) {
             ParallelMetaPath parallelMetaPath = (ParallelMetaPath) metaPath;
-            AbstractPath returnPath = null;
+            List<AbstractPath> paths = new ArrayList<>();
             for (AbstractMetaPath internalMetaPath : parallelMetaPath.iterableMetaPaths()) {
-                returnPath = createPath(startElement, endElement, internalMetaPath, pid);
+                AbstractPath subPath = createPath(startElement, endElement, internalMetaPath, pid);
+                paths.add(subPath);
             }
+            ParallelPath returnPath = new ParallelPath(parallelMetaPath, startElement, endElement, paths);
             return returnPath;
         }
         return null;
