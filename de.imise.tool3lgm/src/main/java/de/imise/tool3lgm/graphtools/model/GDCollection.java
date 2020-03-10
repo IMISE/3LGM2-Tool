@@ -105,6 +105,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.pathmodel.AbstractPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -121,7 +122,6 @@ import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.util.StringUtils;
-import de.imise.util.Sys;
 import de.imise.util.collections.AlphabeticalSet;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
@@ -1328,6 +1328,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public void updateInferenceEdges(final int pid) {
+        //TODO: Das hier kann Probleme bereiten, weil alle InferenceEdges bei diesem Vorgang ausgetauscht werden (also auch neue IDs bekommen!)
         removeInferenceEdges(pid); //first remove, so there must not be checked all potential new created inferenceEgdes if they are superflous
         createInferenceEdges(pid);
     }
@@ -1381,10 +1382,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 for (ModelElement me : pathStartElements) {
                     Collection<ModelElement> pathConnectedElements = MetaPathFunctions.getConnectedElements(me, conditionMetaPath);
                     for (ModelElement pathConnected : pathConnectedElements) {
-                        Edge link = link(edgeClass, me, pathConnected, pid);
-                        if (LOG_CREATE_INFERENCE_EDGES) {
-                            Sys.err1(this + " " + link + " " + edgeClass.getSimpleName());
-                        }
+                        link(edgeClass, me, pathConnected, pid);
                     }
                 }
             }
@@ -1475,7 +1473,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @return
      */
     public Edge link(final Class<? extends Edge> edgeClass, final ModelElement k1, final ModelElement k2, final int pid) {
-        return link(edgeClass, INVALID_HASH_STRING, k1, k2, pid);
+        return link(edgeClass, k1, k2, true, pid);
     }
 
     /**
@@ -1486,11 +1484,25 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      * @return
      */
-    public Edge link(final Class<? extends Edge> edgeClass, final String edgeHash, final ModelElement k1, final ModelElement k2, final int pid) {
+    public Edge link(final Class<? extends Edge> edgeClass, final ModelElement k1, final ModelElement k2, final boolean linkInferenceEdgesDirect, final int pid) {
+        return link(edgeClass, INVALID_HASH_STRING, k1, k2, linkInferenceEdgesDirect, pid);
+    }
+
+    /**
+     * @param edgeClass
+     * @param edgeHash
+     * @param k1
+     * @param k2
+     * @param linkInferenceEdgesDirect
+     * @param pid
+     * @return
+     */
+    public Edge link(final Class<? extends Edge> edgeClass, final String edgeHash, final ModelElement k1, final ModelElement k2, final boolean linkInferenceEdgesDirect, final int pid) {
         if (edgeClass == null) {
-            return link(INVALID_EDGE_CLASS_NAME, edgeHash, k1, k2, INVALID_EDGE_INDEX, INVALID_EDGE_INDEX, true, pid);
+            return link(INVALID_EDGE_CLASS_NAME, edgeHash, k1, k2, INVALID_EDGE_INDEX, INVALID_EDGE_INDEX, true, linkInferenceEdgesDirect, pid);
         }
-        return link(edgeClass.getSimpleName(), edgeHash, k1, k2, INVALID_EDGE_INDEX, INVALID_EDGE_INDEX, true, pid);
+        String simpleEdgeClassName = edgeClass.getSimpleName();
+        return link(simpleEdgeClassName, edgeHash, k1, k2, INVALID_EDGE_INDEX, INVALID_EDGE_INDEX, true, linkInferenceEdgesDirect, pid);
     }
 
     /**
@@ -1533,8 +1545,46 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @return
      *         die neu angelegte Edge zwischen den beiden Elementen oder die Edge, die bereits existierte
      */
-    public Edge link(final String edgeClassName, final String edgeHash, ModelElement startElement, ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency, final int pid) {
-        //		System.err.println("GDCollection.link() " + me1 + "\t" + me2);
+    public Edge link(final String edgeClassName, final String edgeHash, final ModelElement startElement, final ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency, final int pid) {
+        return link(edgeClassName, edgeHash, startElement, endElement, startElementEdgeIndex, endElementEdgeIndex, ensureConsistency, true, pid);
+    }
+
+    /**
+     * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge zwischen ihnen existiert. Die Verbindung
+     * entsteht immer in Vorwärtsrichtung von Element <code>me1</code> zu Element <code>me2</code><br>
+     *
+     * @param edgeClassName
+     *            Klassenname der kante, die angelegt werden soll. Ist nur relevant, wenn es mehrere Kantenarten zwischen den Elementen geben kann.
+     * @param edgeHash
+     *            Wird ein Wert ungleich <code>null</code> übergeben, wird dieser als HasWert der neuen Edge gesetzt
+     * @param startElement
+     *            Startknoten der Edge
+     * @param endElement
+     *            Endknoten der Edge
+     * @param edgeIndex
+     * @param startElementEdgeIndex
+     *            Position, an der die Edge beim Startelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
+     *            übergeben werden.
+     * @param endElementEdgeIndex
+     *            Position, an der die Edge beim Endelement in die Kantenliste eingefügt werden soll. Bei ungeordneten Listen sollte hier -1
+     *            übergeben werden.
+     * @param ensureConsistency
+     *            wenn <code>true</code> wird für die verbundenen Elemente geprüft, ob die Kardinalität mit der neuen Edge
+     *            überschritten wird. Wenn ja, werden überzählige Verbindungen gelöscht
+     * @param linkInferenceEdgesDirect
+     *            wenn <code>true</code> werden InferenceEdges durch diese Funktion direkt angelegt. Bei <code>false</code> werden zuerst ihre
+     *            Bedingspfade generiert und erst dann (in einem weiteren Durchlauf der Funktion) die InferenceEdge selbst.
+     * @param pid
+     *            Transaktions-ID mit der die Änderungen am Model durchgeführt werden
+     * @return
+     *         die neu angelegte Edge zwischen den beiden Elementen oder die Edge, die bereits existierte
+     */
+    private Edge link(final String edgeClassName, final String edgeHash, ModelElement startElement, ModelElement endElement, final int startElementEdgeIndex, final int endElementEdgeIndex, final boolean ensureConsistency,
+            final boolean linkInferenceEdgesDirect, final int pid) {
+
+        //        Sys.err("edgeClassName=" + edgeClassName + " edgeHash=" + edgeHash + " startElement=" + startElement + " endElement=" + endElement + " startElementEdgeIndex=" + startElementEdgeIndex + " endElementEdgeIndex=" + endElementEdgeIndex
+        //                + " ensureConsistency=" + ensureConsistency + " linkInferenceEdgesDirect=" + linkInferenceEdgesDirect + " pid=" + pid);
+
         if (startElement == null || endElement == null || startElement == endElement) {
             return null;
         }
@@ -1569,6 +1619,33 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 ((DoubleMeaningEdge) edge).setConnectionState(DOUBLE);
                 //bei allen anderen Kanten oder wenn es eine Kante mit doppelter Bedeutung war, bei der die Gegenrichtung nohc nicht ex. -> neue Kante anlegen
             } else {
+                //wenn eine Ableitungskante angelegt werden soll
+                if (InferenceEdge.class.isAssignableFrom(edgeClass) && !linkInferenceEdgesDirect) {
+                    //hole die Bedingungspfade
+                    Class<? extends InferenceEdge> inferenceEdgeClass = edgeClass.asSubclass(InferenceEdge.class);
+                    AbstractMetaPath inferenceEdgeConditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+                    //es kann sein, dass die Bedingungspfade genau andersrum als die Kante (also mit verdrehtem Start- und Endelement) definiert sind
+                    ModelElement inferenceEdgeConditionPathStartElement = startElement;
+                    ModelElement inferenceEdgeConditionPathEndElement = endElement;
+                    Class<? extends ModelElement> startClass = startElement.getClass();
+                    Class<? extends ModelElement> endClass = startElement.getClass();
+                    if (!inferenceEdgeConditionMetaPath.isStartAndEndClass(startClass, endClass)) {
+                        inferenceEdgeConditionPathStartElement = endElement;
+                        inferenceEdgeConditionPathEndElement = startElement;
+                    }
+                    if (!MetaPathFunctions.isConnected(inferenceEdgeConditionPathStartElement, inferenceEdgeConditionPathEndElement, inferenceEdgeConditionMetaPath)) {
+                        if (!inferenceEdgeConditionMetaPath.isCreatable(false)) {
+                            doc.finish_transaction(pid);
+                            return null;
+                        }
+                        boolean oldBulkMode = setBulkMode(true);
+                        AbstractPath createdPath = doc.createPath(inferenceEdgeConditionPathStartElement, inferenceEdgeConditionPathEndElement, inferenceEdgeConditionMetaPath, pid);
+                        setBulkMode(oldBulkMode);
+                        if (createdPath == null) {
+                            doc.finish_transaction(pid);
+                            return null;
+                        }
+                    }
                 edge = metaModel.createElement(edgeClass);
                 if (edge == null) {
                     doc.finish_transaction(pid);
