@@ -62,4 +62,10 @@ public class DifferenceMetaPath extends ParallelMetaPath {
         AbstractMetaPath firstMetaPath = metaPaths.get(0);
         return firstMetaPath.isRecursive();
     }
+
+    @Override
+    public boolean isCreatable(final boolean checkCreateEndElement) {
+        return false;
+    }
+
 }

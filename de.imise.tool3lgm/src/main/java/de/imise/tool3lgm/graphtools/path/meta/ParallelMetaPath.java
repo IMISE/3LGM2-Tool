@@ -51,11 +51,6 @@ public abstract class ParallelMetaPath extends ListMetaPath {
     }
 
     @Override
-    public boolean isCreatable(final boolean checkCreateEndElement) {
-        return false;
-    }
-
-    @Override
     public boolean isRemoveable(final boolean checkEndElement) {
         return false;
     }

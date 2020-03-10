@@ -38,4 +38,14 @@ public class SectionMetaPath extends ParallelMetaPath {
         return true;
     }
 
+    @Override
+    public boolean isCreatable(final boolean checkCreateEndElement) {
+        for (AbstractMetaPath metaPath : getMetaPaths()) {
+            if (!metaPath.isCreatable(checkCreateEndElement)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
