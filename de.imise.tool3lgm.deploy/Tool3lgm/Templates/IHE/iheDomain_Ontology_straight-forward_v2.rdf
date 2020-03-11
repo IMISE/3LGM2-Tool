@@ -128,6 +128,7 @@
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheTransaction"/>
+        <rdfs:label>ITI Transactions</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -400,6 +401,7 @@
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#lab">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheTransaction"/>
+        <rdfs:label>LAB Transactions</rdfs:label>
     </owl:ObjectProperty>
     
 

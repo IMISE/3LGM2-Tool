@@ -65,13 +65,13 @@ public class FileVersionHandler {
     }
 
     private void renameAndMoveFile() {
-        //aktuelleVersion aus der übergebenen VersionSourceDatei holen
+        //aktuelleVersion aus der Ã¼bergebenen VersionSourceDatei holen
         String version = getActualVersion();
         //originalen Dateinamen zerlegen
         int cutPoint = originalFileName.lastIndexOf(fileNameEnding);
         String fileNameStart = originalFileName.substring(0, cutPoint);
         String fileNameEnd = originalFileName.substring(cutPoint);
-        //Version einfügen
+        //Version einfÃ¼gen
         String newFileName = fileNameStart + "_V" + version + fileNameEnd;
         //Datei umbenennen
         File newFile = new File(newFileName);
