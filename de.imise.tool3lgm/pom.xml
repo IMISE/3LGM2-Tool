@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.imise</groupId>
   <artifactId>tool3lgm</artifactId>
-  <version>4.1.1 (dev)</version>
+  <version>1.0</version>
   <packaging>jar</packaging>
   <dependencies>
     <dependency>
