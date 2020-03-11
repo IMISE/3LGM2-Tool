@@ -1328,7 +1328,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public void updateInferenceEdges(final int pid) {
-        //TODO: Das hier kann Probleme bereiten, weil alle InferenceEdges bei diesem Vorgang ausgetauscht werden (also auch neue IDs bekommen!)
         removeInferenceEdges(pid); //first remove, so there must not be checked all potential new created inferenceEgdes if they are superflous
         createInferenceEdges(pid);
     }
@@ -1339,20 +1338,33 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     private void removeInferenceEdges(final int pid) {
+        //get all InferenceEdge classes
         Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
+        //for every InferenceEdge class
         for (Class<? extends InferenceEdge> inferenceEdgeClass : inferenceEdgeClasses) {
+            //InferenceEdge is an interface -> check if this class is really an Edge
             if (Edge.class.isAssignableFrom(inferenceEdgeClass)) {
+                //get the InferenceEdge class as Edge class
                 Class<? extends Edge> edgeClass = inferenceEdgeClass.asSubclass(Edge.class);
+                //get the condition metapath of this InferenceEdge
                 AbstractMetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+                //get the start and end element class of this InferencenEdge class
                 Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
                 Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
+                //get all instances of this InferenceEdge class
                 List<ModelElement> modelItems = doc.getModelItems(edgeClass);
+                //for every instance of this InferenceEdge class
                 for (ModelElement edgeItem : modelItems) {
+                    //get the InferenceEdge as Edge
                     Edge edge = (Edge) edgeItem;
+                    //get the start and end element of this edge
                     ModelElement edgeStart = edge.getStart();
                     ModelElement edgeEnd = edge.getEnd();
-                    boolean readEdgeForward = conditionMetaPath.isStartClass(edgeStartClass) && conditionMetaPath.isEndClass(edgeEndClass);
+                    //is the condition metapath defined in the same direction like the edge?
+                    boolean readEdgeForward = conditionMetaPath.isStartAndEndClass(edgeStartClass, edgeEndClass);
+                    //is the condition for this InferenceEdge still fulfilled?
                     boolean remove = !MetaPathFunctions.isDirectConnected(readEdgeForward ? edgeStart : edgeEnd, readEdgeForward ? edgeEnd : edgeStart, conditionMetaPath);
+                    //if not -> remove the InferenceEdge
                     if (remove) {
                         unlink(edgeStart, edgeEnd, edgeClass, pid);
                     }
@@ -1372,17 +1384,31 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     private void createInferenceEdges(final int pid) {
+        //get all InferenceEdge classes
         Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
+        //for every InferenceEdge class
         for (Class<? extends InferenceEdge> inferenceEdgeClass : inferenceEdgeClasses) {
-            AbstractMetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
-            Set<Class<? extends ModelElement>> startClasses = conditionMetaPath.getStartClasses();
-            List<ModelElement> pathStartElements = getModelItems(this, startClasses);
+            //InferenceEdge is an interface -> check if this class is really an Edge
             if (Edge.class.isAssignableFrom(inferenceEdgeClass)) {
+                //get the InferenceEdge class as Edge class
                 Class<? extends Edge> edgeClass = inferenceEdgeClass.asSubclass(Edge.class);
-                for (ModelElement me : pathStartElements) {
-                    Collection<ModelElement> pathConnectedElements = MetaPathFunctions.getConnectedElements(me, conditionMetaPath);
-                    for (ModelElement pathConnected : pathConnectedElements) {
-                        link(edgeClass, me, pathConnected, pid);
+                //get the condition metapath of this InferenceEdge
+                AbstractMetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+                //get all startClasses of the condition metapath
+                Set<Class<? extends ModelElement>> startClasses = conditionMetaPath.getStartClasses();
+                //get all model elements of this startclasses
+                List<ModelElement> pathStartElements = getModelItems(this, startClasses);
+                //for every of this model elements
+                for (ModelElement pathStartElement : pathStartElements) {
+                    //get all elements which are conected over the path with the pathStartElement
+                    Collection<ModelElement> pathEndElements = MetaPathFunctions.getConnectedElements(pathStartElement, conditionMetaPath);
+                    //for every of this connected elements
+                    for (ModelElement pathEndElement : pathEndElements) {
+                        //if the resulting InferenceEdge dosn't exists -> create the link
+                        List<Edge> edgesWith = pathStartElement.getEdgesWith(pathEndElement, edgeClass);
+                        if (edgesWith.isEmpty()) {
+                            link(edgeClass, pathStartElement, pathEndElement, pid);
+                        }
                     }
                 }
             }
@@ -1646,6 +1672,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                             return null;
                         }
                     }
+                    //                        //jetzt den Link()-Aufruf, aber mit direkten Anlegen der InferenceEdges
+                    //                        edge = link(edgeClassName, edgeHash, startElement, endElement, startElementEdgeIndex, endElementEdgeIndex, ensureConsistency, true, pid);
+                    //                        doc.finish_transaction(pid);
+                    //                        doc.distributeEvent(DATA_CHANGED, pid);
+                    //                        return edge;
+                }
                 edge = metaModel.createElement(edgeClass);
                 if (edge == null) {
                     doc.finish_transaction(pid);
