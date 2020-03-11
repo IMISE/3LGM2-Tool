@@ -21,17 +21,17 @@ import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_IheActorInstanceInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheActorInstanceInvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransaction_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_InvokingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheActorInstanceProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransaction_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_ProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheTransaction_IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Service_InvokingInterface_Edge;
@@ -72,11 +72,11 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     public final Map<Class<? extends Edge>, SimpleMetaPath> getConditionPaths() {
         ImmutableMap.Builder<Class<? extends Edge>, SimpleMetaPath> builder = ImmutableMap.builder();
         //IheInvokingInterface_InvokingInterface_Edge
-        builder.put(IheInvokingInterface_InvokingInterface_Edge.class, smp(Edge.getStartClass(IheInvokingInterface_InvokingInterface_Edge.class), Edge.getEndClass(IheInvokingInterface_InvokingInterface_Edge.class), IheActor_IheInterface_Edge.class,
-                IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+        builder.put(IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class, smp(Edge.getStartClass(IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class),
+                Edge.getEndClass(IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class), IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, IheActorInstance_IheActorInstanceInterface_Edge.class));
         //IheProvidingInterface_ProvidingInterface_Edge
-        builder.put(IheProvidingInterface_ProvidingInterface_Edge.class, smp(Edge.getStartClass(IheProvidingInterface_ProvidingInterface_Edge.class), Edge.getEndClass(IheProvidingInterface_ProvidingInterface_Edge.class), IheActor_IheInterface_Edge.class,
-                IheActor_IheActorInstance_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+        builder.put(IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class, smp(Edge.getStartClass(IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class),
+                Edge.getEndClass(IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class), IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, IheActorInstance_IheActorInstanceInterface_Edge.class));
         return builder.build();
     }
 
@@ -88,8 +88,10 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     public Multimap<Class<? extends InstanciationEdge>, SimpleMetaPath> getInstanciationEdgeToAdditionalInstanciationMetaPaths() {
         ImmutableListMultimap.Builder<Class<? extends InstanciationEdge>, SimpleMetaPath> builder = ImmutableListMultimap.builder();
         //IheActor_IheActorInstance_Edge
-        builder.put(IheActor_IheActorInstance_Edge.class, smp(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_InvokingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
-        builder.put(IheActor_IheActorInstance_Edge.class, smp(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_ProvidingInterface_Edge.class, ApplicationComponent_CommunicationInterface_Edge.class));
+        builder.put(IheActor_IheActorInstance_Edge.class,
+                smp(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class, IheActorInstance_IheActorInstanceInterface_Edge.class));
+        builder.put(IheActor_IheActorInstance_Edge.class,
+                smp(IheActor.class, IheActorInstance.class, IheActor_IheInterface_Edge.class, IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class, IheActorInstance_IheActorInstanceInterface_Edge.class));
         return builder.build();
     }
     ///////////////////////////////////////////////////////////////////
@@ -140,13 +142,13 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
 
         //Path: CommunicationLink_Edge -> CommunicationLink_Edge-StartElement = InvokingInterface ->  IheInvokingInterface_InvokingInterface_Edge -> IheInvokingInterface -> IheTransaction_IheInvokingInterface_Edge -> IheTransaction
         ElementaryMetaPath communicationLink_nameMetaPath1_pathStep1 = emph.getEdgeToStartElementMetaPath(CommunicationLink_Edge.class, InvokingInterface.class);
-        ElementaryMetaPath communicationLink_nameMetaPath1_pathStep2 = emph.getMetaPath(InvokingInterface.class, IheInvokingInterface_InvokingInterface_Edge.class, Direction.BACKWARD, IheInvokingInterface.class);
+        ElementaryMetaPath communicationLink_nameMetaPath1_pathStep2 = emph.getMetaPath(InvokingInterface.class, IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class, Direction.BACKWARD, IheInvokingInterface.class);
         ElementaryMetaPath communicationLink_nameMetaPath1_pathStep3 = emph.getMetaPath(IheInvokingInterface.class, IheInvokingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
         SimpleMetaPath communicationLink_nameMetaPath1 = new SimpleMetaPath(communicationLink_nameMetaPath1_pathStep1, communicationLink_nameMetaPath1_pathStep2, communicationLink_nameMetaPath1_pathStep3);
 
         //Path: CommunicationLink_Edge -> CommunicationLink_Edge-EndElement = ProvidingInterface ->  IheProvidingInterface_ProvidingInterface_Edge -> IheProvidingInterface -> IheTransaction_IheProvidingInterface_Edge -> IheTransaction
         ElementaryMetaPath communicationLink_nameMetaPath2_pathStep1 = emph.getEdgeToEndElementMetaPath(CommunicationLink_Edge.class, ProvidingInterface.class);
-        ElementaryMetaPath communicationLink_nameMetaPath2_pathStep2 = emph.getMetaPath(ProvidingInterface.class, IheProvidingInterface_ProvidingInterface_Edge.class, Direction.BACKWARD, IheProvidingInterface.class);
+        ElementaryMetaPath communicationLink_nameMetaPath2_pathStep2 = emph.getMetaPath(ProvidingInterface.class, IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class, Direction.BACKWARD, IheProvidingInterface.class);
         ElementaryMetaPath communicationLink_nameMetaPath2_pathStep3 = emph.getMetaPath(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
         SimpleMetaPath communicationLink_nameMetaPath2 = new SimpleMetaPath(communicationLink_nameMetaPath2_pathStep1, communicationLink_nameMetaPath2_pathStep2, communicationLink_nameMetaPath2_pathStep3);
 

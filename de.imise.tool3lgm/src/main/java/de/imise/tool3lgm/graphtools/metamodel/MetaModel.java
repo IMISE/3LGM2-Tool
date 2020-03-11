@@ -222,19 +222,6 @@ public final class MetaModel implements MetaModelSpecific {
     private final Table<Class<? extends ModelElement>, Class<? extends ModelElement>, Class<? extends Edge>[]> elementClassesToEdgeClasses = HashBasedTable.create();
 
     /**
-     * Mappt von einer Elementklasse auf alle Kantenklassen, die eine ab dieser Klasse nicht mehr für diese Elementart gelten sollen. Damit können
-     * ererbte Kanten abgeschaltet werden. Z.B. wenn man eine Unterklasse einer bestehenden Metamodellklasse definiert, die aber nicht mehr wie die
-     * Oberklasse in Teilelemente zerlegt werden könen soll, dann muss man hier die Unterklasse und die 'abzuschaltende' HatTeil-Kante angeben.
-     * Es müssen alle konkreten Element-Klassen angegeben werden, für die eine konkrete Kantenklasse nicht gelten soll. D.h. die Klassen hier werden
-     * auf Identität geprüft und nicht auf Unterklassen.
-     * Die Richtung ist wichtig, weil man nur so ausdrücken kann, dass z.B. eine Element zwar Teil eines Oberelementes von einer Oberklasse sein kann,
-     * aber selbst nicht mehr in Teile zerlegt werden darf. Das gilt auch für andere als HasPart-Kantenarten, die zwischen einer Elementart und einer
-     * Unterklasse bestehen, bei der die Kante für die Unterklasse nicht mehr gelten soll.
-     */
-    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClassesForStartClass;
-    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClassesForEndClass;
-
-    /**
      * Mappt vom Klassennamen auf die Klasse. Es ist immer der SimpleName und der FullName der Klasse in der Map. Dies ist der Cache für die Funktion
      * {@link #getClassForName(String)}
      */
@@ -381,8 +368,6 @@ public final class MetaModel implements MetaModelSpecific {
         treeLogicalLayerVisibleAbstractNodes = metaModelDefinition.getTreeLogicalLayerVisibleAbstractNodes();
         treePhysicalLayerVisibleAbstractNodes = metaModelDefinition.getTreePhysicalLayerVisibleAbstractNodes();
         oldToNewClassName = CollectionUtils.ensureImmutable(metaModelDefinition.getOldToNewClassNameMap());
-        elementClassToRemovedEdgeClassesForStartClass = CollectionUtils.ensureImmutable(metaModelDefinition.getElementClassToRemovedEdgeClassesForStartClass());
-        elementClassToRemovedEdgeClassesForEndClass = CollectionUtils.ensureImmutable(metaModelDefinition.getElementClassToRemovedEdgeClassesForEndClass());
         elementClassToSortedEdges = getElementClassToSortedEdges(); //muss nach den elementClassToRemovedEdgeClasses... und vor elementClassesWithSortedEdgesToPaintable, da für dessen init notwendig!
         elementClassesWithSortedEdgesToPaintable = CollectionUtils.ensureImmutable(getElementClassesWithSortedEdgeClassesToPaintable()); //muss vor elementClassesWithLayout, da für dessen init notwendig!
         elementClassesWithLayout = CollectionUtils.ensureImmutable(getElementClassesWithLayout());
@@ -651,10 +636,8 @@ public final class MetaModel implements MetaModelSpecific {
                     Class<? extends HasPartEdge> hasPartEdgeClass = c.asSubclass(HasPartEdge.class);
                     boolean isHasPartOrPartOfClass = direction == HasPartEdge.PARENT_TO_PART_DIRECTION;
                     isHasPartOrPartOfClass = isHasPartOrPartOfClass ? HasPartEdge.isParentClass(hasPartEdgeClass, elementClass) : HasPartEdge.isPartClass(hasPartEdgeClass, elementClass);
-                    if (!isRemovedEdgeClass(elementClass, hasPartEdgeClass, direction == Direction.FORWARD)) {
-                        elementClassesWithPartEdges.add(elementClass);
-                        break;
-                    }
+                    elementClassesWithPartEdges.add(elementClass);
+                    break;
                 }
             }
         }
@@ -897,59 +880,6 @@ public final class MetaModel implements MetaModelSpecific {
             }
         }
         return true;
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse für die übergebene Elementklasse in Vorwärtsrichtung nicht mehr gelten soll.
-     *
-     * @param elementClass
-     * @param edgeClass
-     * @return
-     */
-    private boolean isRemovedEdgeClassForStartClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return isRemovedEdgeClass(elementClass, edgeClass, true);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse für die übergebene Elementklasse in Rückwärtsrichtung nicht mehr gelten soll.
-     *
-     * @param elementClass
-     * @param edgeClass
-     * @return
-     */
-    private boolean isRemovedEdgeClassForEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return isRemovedEdgeClass(elementClass, edgeClass, false);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse für die übergebene Elementklasse in Vorwärts- und Rückwärtsrichtung nicht mehr
-     * gelten soll.
-     *
-     * @param elementClass
-     * @param edgeClass
-     * @return
-     */
-    private boolean isRemovedEdgeClassForStartAndEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass) {
-        return isRemovedEdgeClass(elementClass, edgeClass, true) && isRemovedEdgeClass(elementClass, edgeClass, false);
-    }
-
-    /**
-     * Liefert <code>true</code>, wenn die übergebene Kantenklasse für die übergebene Elementklasse als nicht mehr gültig definiert wurde.
-     *
-     * @param elementClass
-     * @param edgeClass
-     * @param asStartClass
-     * @return
-     */
-    private boolean isRemovedEdgeClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge> edgeClass, final boolean asStartClass) {
-        Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClasses = asStartClass ? elementClassToRemovedEdgeClassesForStartClass : elementClassToRemovedEdgeClassesForEndClass;
-        Collection<Class<? extends Edge>> removedEdgeClasses = elementClassToRemovedEdgeClasses.get(elementClass);
-        if (removedEdgeClasses != null) {
-            if (removedEdgeClasses.contains(edgeClass)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     ///////////////////////////////////
@@ -1207,9 +1137,7 @@ public final class MetaModel implements MetaModelSpecific {
         List<Class<? extends Edge>> elementClassEdgeClasses = new ArrayList<>();
         for (Class<? extends Edge> edgeClass : allEdgesSet) {
             if (isStartOrEndClass(edgeClass, elementClass)) {
-                if (!isRemovedEdgeClassForStartAndEndClass(elementClass, edgeClass)) {
-                    elementClassEdgeClasses.add(edgeClass);
-                }
+                elementClassEdgeClasses.add(edgeClass);
             }
         }
         int size = elementClassEdgeClasses.size();
@@ -1272,10 +1200,8 @@ public final class MetaModel implements MetaModelSpecific {
         Class<? extends Edge>[] edgeTypes = getEdgeTypes(elementClass1);
         for (Class<? extends Edge> edgeClass : edgeTypes) {
             if (isConnecting(edgeClass, elementClass1, elementClass2)) {
-                if (!isRemovedEdgeClassForStartAndEndClass(elementClass2, edgeClass)) { // !isRemovedEdgeClass(elementClass1, edgeClass) wird schon in getEdgeTypes(elementClass1) geprüft
-                    if (edgeSuperClass.isAssignableFrom(edgeClass)) {
-                        resultEdgeClasses.add(edgeClass);
-                    }
+                if (edgeSuperClass.isAssignableFrom(edgeClass)) {
+                    resultEdgeClasses.add(edgeClass);
                 }
             }
         }
@@ -1560,9 +1486,6 @@ public final class MetaModel implements MetaModelSpecific {
      * @return
      */
     public final boolean isStartClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
-        if (isRemovedEdgeClassForStartClass(elementClass, edgeClass)) {
-            return false;
-        }
         Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
         return startClass.isAssignableFrom(elementClass);
     }
@@ -1576,9 +1499,6 @@ public final class MetaModel implements MetaModelSpecific {
      * @return
      */
     public final boolean isEndClass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
-        if (isRemovedEdgeClassForEndClass(elementClass, edgeClass)) {
-            return false;
-        }
         Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
         return endClass.isAssignableFrom(elementClass);
     }
@@ -1592,9 +1512,6 @@ public final class MetaModel implements MetaModelSpecific {
      * @return
      */
     public final boolean isStartClassOrStartClassSuperclass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
-        if (isRemovedEdgeClassForStartClass(elementClass, edgeClass)) {
-            return false;
-        }
         Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
         return startClass.isAssignableFrom(elementClass) || elementClass.isAssignableFrom(startClass);
     }
@@ -1608,9 +1525,6 @@ public final class MetaModel implements MetaModelSpecific {
      * @return
      */
     public final boolean isEndClassOrEndClassSuperclass(final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> elementClass) {
-        if (isRemovedEdgeClassForEndClass(elementClass, edgeClass)) {
-            return false;
-        }
         Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
         return endClass.isAssignableFrom(elementClass) || elementClass.isAssignableFrom(endClass);
     }

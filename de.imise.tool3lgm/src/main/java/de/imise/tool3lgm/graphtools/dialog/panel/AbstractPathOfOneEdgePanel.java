@@ -40,19 +40,21 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param edgeClass
      */
     public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        this(dialog, LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClass);
+        this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, searchElementClass, edgeClass);
     }
 
     /**
      * Panel für eine einfache Assoziation
      *
      * @param dialog
-     * @param labelEdgeName
+     * @param titleLabelOption
+     * @param westLabelOption
      * @param searchElementClass
      * @param edgeClass
      */
-    public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass) {
-        super(dialog, panelLabelOption, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
+    public AbstractPathOfOneEdgePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final Class<? extends ModelElement> searchElementClass,
+            final Class<? extends Edge> edgeClass) {
+        super(dialog, titleLabelOption, westLabelOption, dialog.createSimpleMetaPath(searchElementClass, edgeClass));
         this.edgeClass = edgeClass;
         edgeIsForward = getLastDirectionInPath() == FORWARD;
     }

@@ -1,14 +1,11 @@
 package de.imise.tool3lgm.graphtools.metamodel;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition.DefaultGraphViewDefinitionAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -27,7 +24,6 @@ public abstract class MetaModelDefinition implements Serializable {
 
     public MetaModelDefinition() {
         putOldToNewClassNames();
-        addRemovedEdgeClasses();
     }
 
     /**
@@ -224,56 +220,6 @@ public abstract class MetaModelDefinition implements Serializable {
 
     /** Alle Klassen, die man über den Datenimport einlesen kann */
     public abstract Set<Class<? extends ModelElement>> getImportableNodes();
-
-    /**
-     * Mappt von einer Elementklasse auf alle Kantenklassen, die eine ab dieser Klasse nicht mehr für diese Elementart gelten sollen. Damit können
-     * ererbte Kanten abgeschaltet werden. Z.B. wenn man eine Unterklasse einer bestehenden Metamodellklasse definiert, die aber nicht mehr wie die
-     * Oberklasse in Teilelemente zerlegt werden könen soll, dann muss man hier die Unterklasse und die 'abzuschaltende' HatTeil-Kante angeben.
-     * Es müssen alle konkreten Element-Klassen angegeben werden, für die eine konkrete Kantenklasse nicht gelten soll. D.h. die Klassen hier werden
-     * auf Identität geprüft und nicht auf Unterklassen.
-     * Die Richtung ist wichtig, weil man nur so ausdrücken kann, dass z.B. eine Element zwar Teil eines Oberelementes von einer Oberklasse sein kann,
-     * aber selbst nicht mehr in Teile zerlegt werden darf. Das gilt auch für andere als HasPart-Kantenarten, die zwischen einer Elementart und einer
-     * Unterklasse bestehen, bei der die Kante für die Unterklasse nicht mehr gelten soll.
-     */
-    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClassesForStartClass = ArrayListMultimap.create();
-    private final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> elementClassToRemovedEdgeClassesForEndClass = ArrayListMultimap.create();
-
-    @SafeVarargs
-    protected final void addRemovedEdgeClassesForStartClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge>... edgeClasses) {
-        elementClassToRemovedEdgeClassesForStartClass.putAll(elementClass, Arrays.asList(edgeClasses));
-    }
-
-    @SafeVarargs
-    protected final void addRemovedEdgeClassesForEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge>... edgeClasses) {
-        elementClassToRemovedEdgeClassesForEndClass.putAll(elementClass, Arrays.asList(edgeClasses));
-    }
-
-    @SafeVarargs
-    protected final void addRemovedEdgeClassesForStartAndEndClass(final Class<? extends ModelElement> elementClass, final Class<? extends Edge>... edgeClasses) {
-        addRemovedEdgeClassesForStartClass(elementClass, edgeClasses);
-        addRemovedEdgeClassesForEndClass(elementClass, edgeClasses);
-    }
-
-    /**
-     * Diese Funktion können Unterklassen überschreiben und darin dann {@link #addRemovedEdgeClasses(Class, Class...)} aufrufen.
-     */
-    protected void addRemovedEdgeClasses() {
-
-    }
-
-    /**
-     * @return the {@link #elementClassToRemovedEdgeClassesForStartClass}
-     */
-    public final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClassesForStartClass() {
-        return elementClassToRemovedEdgeClassesForStartClass;
-    }
-
-    /**
-     * @return the {@link #elementClassToRemovedEdgeClassesForEndClass}
-     */
-    public final Multimap<Class<? extends ModelElement>, Class<? extends Edge>> getElementClassToRemovedEdgeClassesForEndClass() {
-        return elementClassToRemovedEdgeClassesForEndClass;
-    }
 
     ///////////////////////////////////////////////////////////////////
     // Maps von Elementklassen auf Sets von Elementklassen (und mehr)//

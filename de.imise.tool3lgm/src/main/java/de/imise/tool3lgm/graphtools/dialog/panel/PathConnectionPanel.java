@@ -85,39 +85,32 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         this(dialog, -1, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, panelLabelOption, false, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, titleLabelOption, westLabelOption, false, simpleMetaPath);
     }
 
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, LABEL_END_ELEMENT_TYPE, maxLines, false, simpleMetaPath);
+        this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, false, simpleMetaPath);
     }
 
     public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, LABEL_END_ELEMENT_TYPE, maxLines, renderLeftTreeAsList, simpleMetaPath);
+        this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, renderLeftTreeAsList, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, panelLabelOption, -1, renderLeftTreeAsList, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, titleLabelOption, westLabelOption, -1, renderLeftTreeAsList, simpleMetaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, panelLabelOption, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, titleLabelOption, westLabelOption, simpleMetaPath);
         showRightTree = isEditable();
+        if (!showRightTree) {
+            setUnexpandable();
+        }
         setPreferredSize(new Dimension(550, 350));
         GridBagLayout gbl = new GridBagLayout();
         setLayout(gbl);
         GridBagConstraints constraints = new GridBagConstraints();
-
-        //wenn das Panel nicht in der Höhe eingeschränkt werden soll, dann steht es allein auf dem Panel und bekommt als Westabel = Label über dem linken Baum den Elementarpfadnamen oder "verbunden"
-        //wenn das Panel in der Höhe eingeschränkt werden soll, bleibt das Westpanel auf dem Wert von super = Name des Endelementes des Pfades oder des letzten Elementarpfadschrittes
-        if (maxLines < 0) {
-            List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-            //wenn der Pfad aus mehr als einer Edge besteht, dann soll über dem linken Baum einfach "verbunden" stehen, sonst der Elementarpfadname
-            String ltreeLabelString = elementaryMetaPaths.size() == 1 ? getElementaryMetaPathInPath(0).getName() : getResString("verb");
-            ltreeLabelString = StringUtils.capitalizeFirstChar(ltreeLabelString);
-            westLabel.setText(ltreeLabelString);
-        }
 
         JLabel ltreeLabel = westLabel;
         ModelElement me = getModelElement();

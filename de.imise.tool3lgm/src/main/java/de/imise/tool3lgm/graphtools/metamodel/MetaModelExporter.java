@@ -39,7 +39,12 @@ public class MetaModelExporter {
     public MetaModelExporter(final MetaModel metaModel) {
         this.metaModel = metaModel;
         elementsNameBuilder = metaModel.getElementsNameBuilder();
-        printMetaModel();
+        try {
+            printMetaModel();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.exit(0);
     }
 
     public void printMetaModel() {
@@ -47,12 +52,12 @@ public class MetaModelExporter {
 
         System.out.println("###  ALL NODES (compact)");
         for (NamedObjectContainer<List<Class<?>>> o : elementsHierarchies) {
-            System.out.println(o + getDisplayableName(o));
+            System.out.println(o);
         }
         System.out.println();
 
         System.out.println("###  ALL NODES (tree)");
-        printHierarchyTree(elementsHierarchies);
+        printHierarchyTree(elementsHierarchies, false);
         System.out.println();
 
         System.out.println("### All Nodes (full) ######");
@@ -63,22 +68,29 @@ public class MetaModelExporter {
 
         System.out.println("###  ALL EDGES (compact)");
         for (NamedObjectContainer<List<Class<?>>> o : edgesHierarchies) {
-            System.out.println(o + getDisplayableName(o));
+            System.out.println(o);
         }
         System.out.println();
 
         System.out.println("###  ALL EDGES (tree)");
-        printHierarchyTree(edgesHierarchies);
+        printHierarchyTree(edgesHierarchies, false);
         System.out.println();
 
         System.out.println("### All EDGES (full) ######");
         printElementsWithEdges(metaModel, edgesHierarchies);
         System.out.println();
 
-    }
+        System.out.println("RESOURCES");
+        System.out.println();
 
-    private String getDisplayableName(final NamedObjectContainer<List<Class<?>>> noc) {
-        return getDisplayableName(noc, 0);
+        System.out.println("###  ALL NODES (tree)");
+        printHierarchyTree(elementsHierarchies, true);
+        System.out.println();
+
+        System.out.println("###  ALL EDGES (tree with resources)");
+        printHierarchyTree(edgesHierarchies, true);
+        System.out.println();
+
     }
 
     private String getDisplayableName(final NamedObjectContainer<List<Class<?>>> noc, final int classIndex) {
@@ -86,11 +98,25 @@ public class MetaModelExporter {
         Class<? extends ModelElement> elementClass = elementClassList.get(classIndex).asSubclass(ModelElement.class);
         StringBuilder sb = new StringBuilder();
         String displayableName = elementsNameBuilder.getDisplayableName(elementClass);
+        String displayablePluralName = elementsNameBuilder.getDisplayablePluralName(elementClass);
+        boolean isEdge = Edge.class.isAssignableFrom(elementClass);
+        boolean isAssociationClass = isEdge && metaModel.hasEdgeType(elementClass, Edge.class); //Assoziationsklassen sollen auch als Knoten zählen
         String elementClassName = elementClass.getSimpleName();
-        if (!elementClassName.equals(displayableName)) {
-            sb.append(" (");
-            sb.append(displayableName);
-            sb.append(")");
+        sb.append("(");
+        sb.append(displayableName);
+        sb.append(" | ");
+        sb.append(displayablePluralName);
+        if (isEdge) {
+            String edgeForwardName = isEdge ? elementsNameBuilder.getForwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : null;
+            String edgeBackwardName = isEdge ? elementsNameBuilder.getBackwardMetaAssociationName(elementClass.asSubclass(Edge.class)) : null;
+            sb.append(" | ");
+            sb.append(edgeForwardName);
+            sb.append(" | ");
+            sb.append(edgeBackwardName);
+        }
+        sb.append(")");
+        if ((!isEdge || isAssociationClass) && (displayableName.equals(elementClassName) || displayablePluralName.equals(elementClassName))) {
+            sb.append("   ######################  MISSING RESOURCE ??? ###################");
         }
         return sb.toString();
     }
@@ -98,14 +124,14 @@ public class MetaModelExporter {
     private <T extends ModelElement> List<NamedObjectContainer<List<Class<?>>>> getElementsHierarchies(final Collection<Class<? extends T>> classes) {
         List<NamedObjectContainer<List<Class<?>>>> elementHierarchies = new ArrayList<>();
         for (Class<? extends T> elementClass : classes) {
-            NamedObjectContainer<List<Class<?>>> noc = getSingleElementHierarchy(elementClass, false);
+            NamedObjectContainer<List<Class<?>>> noc = getSingleElementHierarchy(elementClass);
             elementHierarchies.add(noc);
         }
         Alphabetical.sort(elementHierarchies);
         return elementHierarchies;
     }
 
-    private void printHierarchyTree(final List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies) {
+    private void printHierarchyTree(final List<NamedObjectContainer<List<Class<?>>>> elementsHierarchies, final boolean appendResources) {
         List<Class<?>> lastElementHierarchy = new ArrayList<>();
         for (NamedObjectContainer<List<Class<?>>> noc : elementsHierarchies) {
             List<Class<?>> elementHierarchy = noc.getObject();
@@ -118,7 +144,12 @@ public class MetaModelExporter {
                     if (Modifier.isAbstract(currentClass.getModifiers())) {
                         System.out.print("abstract ");
                     }
-                    System.out.println(currentClass.getSimpleName() + getDisplayableName(noc, i));
+                    StringBuilder sb = new StringBuilder(currentClass.getSimpleName());
+                    if (appendResources) {
+                        sb.append("\t");
+                        sb.append(getDisplayableName(noc, i));
+                    }
+                    System.out.println(sb);
                 }
             }
             lastElementHierarchy = elementHierarchy;
@@ -174,7 +205,7 @@ public class MetaModelExporter {
         return getStartClass(edgeClass) == elementClass || getEndClass(edgeClass) == elementClass;
     }
 
-    private NamedObjectContainer<List<Class<?>>> getSingleElementHierarchy(final Class<? extends ModelElement> elementClass, final boolean appendDisplayableName) {
+    private NamedObjectContainer<List<Class<?>>> getSingleElementHierarchy(final Class<? extends ModelElement> elementClass) {
         List<Class<?>> classAndSuperClasses = getSuperClasses(elementClass, ModelElement.class);
         StringBuilder sb = new StringBuilder();
         for (int i = classAndSuperClasses.size() - 1; i >= 0; i--) {
@@ -186,11 +217,6 @@ public class MetaModelExporter {
             if (i > 0) {
                 sb.append(HIERARCHY_DELIMITER);
             }
-        }
-        if (appendDisplayableName) {
-            sb.append(" (");
-            sb.append(elementsNameBuilder.getDisplayableName(elementClass));
-            sb.append(")");
         }
         NamedObjectContainer<List<Class<?>>> noc = new NamedObjectContainer<>(classAndSuperClasses, sb.toString());
         return noc;

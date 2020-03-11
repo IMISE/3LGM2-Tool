@@ -92,7 +92,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      * @param simpleMetaPath
      */
     public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, panelLabelOption, simpleMetaPath);
+        super(dialog, panelLabelOption, panelLabelOption, simpleMetaPath);
         setLayout(new BorderLayout());
         update(); //connectedElement initial setzen!
         boolean editable = !dialog.isInfoDialog() && simpleMetaPath.isCreatable(false); // für editable reicht es, wenn der Pfad zw. bestehenden Elementen entfernt oder angehängt werden kann. Das zu verbindende Element muss nicht neu erzeugt werden können

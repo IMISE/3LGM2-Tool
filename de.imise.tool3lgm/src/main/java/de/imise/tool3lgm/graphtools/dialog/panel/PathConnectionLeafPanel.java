@@ -41,19 +41,19 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
     private Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, LABEL_END_ELEMENT_TYPE, simpleMetaPath);
+        this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, panelLabelOption, -1, simpleMetaPath);
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final SimpleMetaPath simpleMetaPath) {
+        this(dialog, titleLabelOption, westLabelOption, -1, simpleMetaPath);
     }
 
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, LABEL_END_ELEMENT_TYPE, maxLines, simpleMetaPath);
+        this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, simpleMetaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, panelLabelOption, maxLines, false, simpleMetaPath);
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, titleLabelOption, westLabelOption, maxLines, false, simpleMetaPath);
         //die Treenodes nicht einrücken, da ja nur eine Liste dargestellt werden soll
         BasicTreeUI basicTreeUI = (BasicTreeUI) ltree.getUI();
         basicTreeUI.setRightChildIndent(0);

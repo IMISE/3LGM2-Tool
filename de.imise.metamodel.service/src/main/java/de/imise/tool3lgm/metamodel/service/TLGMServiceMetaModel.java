@@ -12,8 +12,6 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.RegularMetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_CommunicationInterface_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationComponent_PhysicalDataProcessingComponent_RequiresForStorage_Edge;
@@ -27,21 +25,26 @@ import de.imise.tool3lgm.metamodel.service.edge.Function_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_ObjectType_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Function_Use_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheActorInstanceCommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_IheActorInstanceInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_IheActorInstanceCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheDomain_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheActorInstanceInvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransaction_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_InvokingInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheActorInstanceProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheTransaction_Edge;
-import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_ProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheTransaction_IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.Location_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.ObjectType_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.OrganisationalUnit_Use_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.PartableApplicationComponent_CommunicationInterface_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.PartableApplicationComponent_HasPartEdge;
 import de.imise.tool3lgm.metamodel.service.edge.PhysicalDataProcessingComponentVirtualises_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.PhysicalDataProcessingComponent_DeviceClass_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.PhysicalDataProcessingComponent_HasPartEdge;
@@ -63,6 +66,9 @@ import de.imise.tool3lgm.metamodel.service.node.DeviceClass;
 import de.imise.tool3lgm.metamodel.service.node.Function;
 import de.imise.tool3lgm.metamodel.service.node.IheActor;
 import de.imise.tool3lgm.metamodel.service.node.IheActorInstance;
+import de.imise.tool3lgm.metamodel.service.node.IheActorInstanceInterface;
+import de.imise.tool3lgm.metamodel.service.node.IheActorInstanceInvokingInterface;
+import de.imise.tool3lgm.metamodel.service.node.IheActorInstanceProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheDomain;
 import de.imise.tool3lgm.metamodel.service.node.IheIntegrationProfile;
 import de.imise.tool3lgm.metamodel.service.node.IheInterface;
@@ -201,6 +207,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
 
             //auch die Assoziationsklasse hier eintagen
             CommunicationLink_Edge.class,
+            DataTransmissionLink_Edge.class,
 
             //abstracte Node müssen hier auch eingetragen werden
             ApplicationComponent.class,
@@ -215,8 +222,13 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
             IheInterface.class,
             IheInvokingInterface.class,
             IheProvidingInterface.class,
+            IheActorInstanceInterface.class,
+            IheActorInstanceInvokingInterface.class,
+            IheActorInstanceProvidingInterface.class,
+
             //IHE-Assoziationsklassen
             IheCommunicationLink_Edge.class,
+            IheActorInstanceCommunicationLink_Edge.class,
     };
 
     /** Alle Node zw. LWE und PWE als Array */
@@ -293,8 +305,8 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 StorageLink_Edge.class,
                 ApplicationComponent_Use_Edge.class,
                 //LWE
-                ApplicationComponent_HasPartEdge.class,
-                ApplicationComponent_CommunicationInterface_Edge.class,
+                PartableApplicationComponent_HasPartEdge.class,
+                PartableApplicationComponent_CommunicationInterface_Edge.class,
                 ApplicationSystem_SoftwareProduct_Edge.class,
                 CommunicationLink_Edge.class,
                 Service_CommunicationLink_Edge.class,
@@ -306,15 +318,19 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 IheActor_IheActorInstance_Edge.class,
                 IheActor_IheInterface_Edge.class,
                 ApplicationSystem_IheActorInstance_Edge.class,
-                IheCommunicationLink_CommunicationLink_Edge.class,
+                IheCommunicationLink_IheActorInstanceCommunicationLink_Edge.class,
                 IheIntegrationProfile_IheDomain_Edge.class,
                 IheIntegrationProfile_IheActor_Edge.class,
                 IheInvokingInterface_IheTransaction_Edge.class,
                 IheProvidingInterface_IheTransaction_Edge.class,
-                IheInvokingInterface_InvokingInterface_Edge.class,
-                IheProvidingInterface_ProvidingInterface_Edge.class,
+                IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class,
+                IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class,
                 IheCommunicationLink_Edge.class,
                 IheTransaction_IheCommunicationLink_Edge.class,
+                IheActorInstance_IheActorInstanceInterface_Edge.class,
+                IheActorInstanceCommunicationLink_Edge.class,
+                IheActorInstance_SoftwareProduct_Edge.class,
+
                 //LWE - PWE
                 ApplicationComponent_PhysicalDataProcessingComponent_Edge.class,
                 ApplicationComponent_PhysicalDataProcessingComponent_RequiresForFunctionality_Edge.class,
@@ -361,13 +377,6 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
     @Override
     public final Set<Class<? extends ModelElement>> getImportableNodes() {
         return IMPORTABLE_NODES;
-    }
-
-    @Override
-    protected void addRemovedEdgeClasses() {
-        //ActorInstances sind Unterklassen von ApplicationComponent, man soll sie aber nicht mehr in Unterklassen zerlegen können und sie sollen nicht wieder selbst mit IheActorInstances versehen werden können
-        addRemovedEdgeClassesForStartAndEndClass(IheActorInstance.class, ApplicationComponent_HasPartEdge.class);//darf kein Teilelement sein und selbst nicht in Teile zerlegbar sein
-        addRemovedEdgeClassesForStartClass(IheActorInstance.class, ApplicationSystem_IheActorInstance_Edge.class);//darf kein Teilelement sein und selbst nicht in Teile zerlegbar sein
     }
 
     private final Set<Class<? extends ModelElement>> GENERATE_NAME_CLASSES = ImmutableSet.<Class<? extends ModelElement>> of(Use.class);

@@ -16,7 +16,7 @@ public final class Datenbanksystem extends LogischerSpeicher {
         dialog.addDescripPanel(LABEL_LAST_EDGE_CONNECTION_NAME, RawbDbsVerbindung.class);
         dialog.addDescripPanel(DbsDbvsVerbindung.class);
         dialog.addPathConnectionPanel(DbsDatVerbindung.class);
-        dialog.addPathConnectionPanel(LABEL_LAST_EDGE_CONNECTION_NAME, ObjLogspVerbindung.class);
+        dialog.addPathConnectionPanel(ObjLogspVerbindung.class);
         return dialog;
     }
 

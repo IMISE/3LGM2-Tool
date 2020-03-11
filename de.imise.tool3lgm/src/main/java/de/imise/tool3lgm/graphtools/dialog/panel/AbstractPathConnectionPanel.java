@@ -114,24 +114,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param metaPath
      */
     public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
-        this(dialog, LABEL_END_ELEMENT_TYPE, metaPath);
-    }
-
-    /**
-     * Panel für eine einfache Assoziation. Gelabelt wird das verbundene Element der letzten Edge oder die letzte Edge selbst.
-     *
-     * @param dialog
-     * @param panelLabelOption Das Label kann folgende Werte annehmen:
-     *            <ul>
-     *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
-     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der letzten Kante des MetaPfades</li>
-     *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der letzten Kante des
-     *            MetaPfades</li>
-     *            </ul>
-     * @param metaPath
-     */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final AbstractMetaPath metaPath) {
-        this(dialog, -1, panelLabelOption, metaPath);
+        this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath);
     }
 
     /**
@@ -141,7 +124,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param labelEdgeIndex Index der Edge, die vorgibt, was als searchElementClass angesehen werden soll, also was ans Label geschrieben
      *            wird. Es wird immer die Endklasse des Pfades bis zur Edge mit dem jeweiligen Index ans Label geschrieben. Wird ein Wert < 0
      *            übergeben, dann wird dieser Wert von der Anzahl der Kanten im Gesamtpfad abgezogen, um auf den tatsächlichen Index zu kommen.
-     * @param panelLabelOption Das Label kann folgende Werte annehmen:
+     * @param titleLabelOption Das Label kann folgende Werte annehmen:
      *            <ul>
      *            <li>{@link PanelLabelOption#LABEL_END_ELEMENT_TYPE} = Anzeigename der EndElement-Art des MetaPfades</li>
      *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_ELEMENT_NAME} = Anzeigename der Element-Art der Kante mit dem Index labelEdgeIndex
@@ -150,12 +133,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            labelEdgeIndex
      *            im MetaPfad</li>
      *            </ul>
-     * @param labelEdgeName wenn <code>true</code> dann wird ans Labels statt des Namens der verbundenen Elementart,
-     *            der Name der Edge selbst ans Label geschrieben. Welche Edge im Pfad das ist, wird durch labelEdgeIndex
-     *            festgelegt.
+     * @param westLabelOption analog titleLabelOption
      * @param metaPath
      */
-    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final int labelEdgeIndex, final PanelLabelOption panelLabelOption, final AbstractMetaPath metaPath) {
+    public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath) {
         super(dialog);
         this.metaPath = metaPath;
         searchElementClass = getInitialSearchElementClass(metaPath);
@@ -167,9 +148,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         if (metaPath.isSingleConnection()) {
             addMouseActions(westLabel);
         }
-        String westLabelText = getNameAndWestLabelText(labelEdgeIndex, panelLabelOption);
+        String title = getTextByPanelLabelOption(titleLabelOption);
+        setName(title);
+        String westLabelText = getTextByPanelLabelOption(westLabelOption);
         westLabel.setText(westLabelText);
-        setName(westLabelText);
     }
 
     /**
@@ -179,13 +161,17 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param panelLabelOption
      * @return
      */
-    protected String getNameAndWestLabelText(final int labelEdgeIndex, final PanelLabelOption panelLabelOption) {
+    private String getTextByPanelLabelOption(final PanelLabelOption panelLabelOption) {
         String westLabelText;
+        int labelEdgeIndex = getEdgesInPathCount() - 1;
         if (panelLabelOption == LABEL_LAST_EDGE_CONNECTION_NAME) {
-            Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
-            Direction directionInPath = getDirectionInPath(labelEdgeIndex);
-            westLabelText = elementsNameBuilder.getMetaAssociationName(edgeClass, directionInPath);
-
+            if (labelEdgeIndex == 0) {
+                Class<? extends Edge> edgeClass = getEdgeClassInPath(labelEdgeIndex);
+                Direction directionInPath = getDirectionInPath(labelEdgeIndex);
+                westLabelText = elementsNameBuilder.getMetaAssociationName(edgeClass, directionInPath);
+            } else {//der Pfad besteht nicht aus einer einfachen Elementarpfadliste
+                westLabelText = Tool3lgmConstants.getResString("verb");
+            }
         } else {
             //Name of the class to display (end node or edge of metapath step)
             Class<? extends ModelElement> nameSourceClass;
@@ -242,8 +228,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
-     * Gibt einen Elementarpfad anhand eines übergebenen Index zurück. Ist der Index >= 0, dann wird genau der Index zurück gegeben. Ist der Index <
-     * 0, dann wird der übergebene Index von der Länge der Geamtliste der Elementarfade abgezogen. Möchte man also den letzten Elementarpfad haben,
+     * Gibt einen Elementarpfad anhand eines übergebenen Index zurück. Ist der Index >= 0, dann wird genau der Index zurück gegeben. Ist der Index
+     * <
+     * 0, dann wird der übergebene Index von der Länge der Geamtliste der Elementarfade abgezogen. Möchte man also den letzten Elementarpfad
+     * haben,
      * muss man -1 übergeben, für den vorletzten -2 usw.
      *
      * @param index
