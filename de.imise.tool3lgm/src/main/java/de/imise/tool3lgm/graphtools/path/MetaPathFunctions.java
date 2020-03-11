@@ -21,7 +21,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
-import de.imise.tool3lgm.graphtools.path.pathmodel.ElementaryPath;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -475,101 +474,6 @@ public class MetaPathFunctions {
             }
         }
         return false;
-    }
-
-    /**
-     * Das hier ist nur noch drin, weil es auch irgendwas schlaues gemacht hat. Abaer alle anderen Stellen nutzen die
-     * {@link GraphDocument#createPath(ModelElement, ModelElement, de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath, int)}
-     * Achtung: Die Funktion geht davon aus, dass die aufrufende Funktion bereits eine Transaction gestartet hat.
-     * Hier wird keine Transaction gestartet oder beendet.
-     *
-     * @param startElement
-     * @param endElement
-     * @param metaPath
-     * @param doc
-     * @return
-     */
-    public static final ElementaryPath[] _createPath(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final GraphDocument doc, final int pid) {
-        //Achtung: der Pfad wird auch angelegt, wenn dadurch die Cardinalität von einigen Elementen verletzt wird! (das macht das false)
-        if (!isCreatable(startElement, endElement, metaPath, false)) {
-            return null;
-        }
-        GDCollection gdcoll = doc.getCollection();
-        ElementaryPath[] returnPath = null;
-        //Elementarpfad anlegen
-        if (metaPath instanceof ElementaryMetaPath) {
-            ElementaryMetaPath elemMetaPath = (ElementaryMetaPath) metaPath;
-            Edge edge = null;
-            if (elemMetaPath.getDirection() == Direction.FORWARD) {
-                edge = gdcoll.link(elemMetaPath.getEdgeClass(), startElement, endElement, pid);
-            } else {
-                edge = gdcoll.link(elemMetaPath.getEdgeClass(), endElement, startElement, pid);
-            }
-            if (edge == null) {
-                return null;
-            }
-            returnPath = new ElementaryPath[1];
-            returnPath[0] = new ElementaryPath(elemMetaPath, startElement, endElement, edge);
-
-            //Sequencepfad anlegen
-        } else if (metaPath instanceof SequenceMetaPath) {
-            //die Elementarmetapfade vom Metapfad holen
-            List<ElementaryMetaPath> simpleMetaPath = metaPath.getElementaryMetaPaths();
-            //wenn isCreateble() oben true liefert, sollte es diese Metapfadfolge eigentlich immer geben
-            if (simpleMetaPath.isEmpty()) {
-                return null;
-            }
-            int pathLength = simpleMetaPath.size();
-            if (pathLength == 1) {
-                return _createPath(startElement, endElement, simpleMetaPath.get(0), doc, pid);
-            }
-            //StartElement des ersten Pfades ist das übergebene StartElement
-            ModelElement currentStartElement = startElement;
-            //Liste aller tatsächlich angelegten Pfade
-            returnPath = new ElementaryPath[pathLength];
-            //alle MetaPfade durchlaufen und anlegen
-            for (int i = 0; i < pathLength; i++) {
-                ModelElement currentEndElement = null; //Endelement, das außer für die letzte Edge immer neu angelet werden muss
-                Edge edge = null; //neu angelegte Edge
-                ElementaryMetaPath elementaryMetaPath = simpleMetaPath.get(i);
-                //wenn das noch nicht der letzte MetaPfad in der Liste ist
-                if (i + 1 < pathLength) {
-                    //neues Element für das EndElement des Pfades anlegen
-                    NodeContainer nc = doc.createNodeAndContainer(elementaryMetaPath.getEndClass(), pid);
-                    if (nc == null) {
-                        break;
-                    }
-                    currentEndElement = nc.getElement();
-                    //beim letzten Metapfad ist das übergebene EndElement und kein neues das EndElement des Pfades
-                } else {
-                    currentEndElement = endElement;
-                }
-                //je nach Richtung des MetaPfades in der Collection die Edge anlegen
-                if (elementaryMetaPath.getDirection() == Direction.FORWARD) {
-                    edge = gdcoll.link(elementaryMetaPath.getEdgeClass(), currentStartElement, currentEndElement, pid);
-                } else {
-                    edge = gdcoll.link(elementaryMetaPath.getEdgeClass(), currentEndElement, currentStartElement, pid);
-                }
-                if (edge == null) {
-                    break;
-                }
-                returnPath[i] = new ElementaryPath(elementaryMetaPath, currentStartElement, currentEndElement, edge);
-                currentStartElement = currentEndElement;
-            }
-            //wenn nicht alle Verbindungen bis zur letzten angelegt wurden, dann alle angelegten zurückrollen
-            if (returnPath[returnPath.length - 1] == null) {
-                //einfach alle neuen Zwischenelemente löschen
-                for (int i = 0; i < returnPath.length; i++) {
-                    //beim ersten nicht mehr angelegten Pfad kann man abbrechen
-                    if (returnPath[i] == null) {
-                        break;
-                    }
-                    gdcoll.deleteElement(returnPath[i].getEndElement(), doc, pid);
-                }
-                returnPath = null;
-            }
-        }
-        return returnPath;
     }
 
     /**
