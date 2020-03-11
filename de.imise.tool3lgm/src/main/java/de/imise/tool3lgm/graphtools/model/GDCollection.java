@@ -1756,15 +1756,15 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         Class<? extends InferenceEdge> inferenceEdgeClass = potencialInferenceEdgeClass.asSubclass(InferenceEdge.class);
         AbstractMetaPath inferenceEdgeConditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
         //es kann sein, dass die Bedingungspfade genau andersrum als die Kante (also mit verdrehtem Start- und Endelement) definiert sind
-        ModelElement inferenceEdgeConditionPathStartElement = me1;
-        ModelElement inferenceEdgeConditionPathEndElement = me2;
+        ModelElement inferenceEdgeConditionMetaPathStartElement = me1;
+        ModelElement inferenceEdgeConditionMetaPathEndElement = me2;
         Class<? extends ModelElement> startClass = me1.getClass();
         Class<? extends ModelElement> endClass = me1.getClass();
         if (!inferenceEdgeConditionMetaPath.isStartAndEndClass(startClass, endClass)) {
-            inferenceEdgeConditionPathStartElement = me2;
-            inferenceEdgeConditionPathEndElement = me1;
+            inferenceEdgeConditionMetaPathStartElement = me2;
+            inferenceEdgeConditionMetaPathEndElement = me1;
         }
-        Triple<ModelElement, ModelElement, AbstractMetaPath> returnTriple = new Triple<>(inferenceEdgeConditionPathStartElement, inferenceEdgeConditionPathEndElement, inferenceEdgeConditionMetaPath);
+        Triple<ModelElement, ModelElement, AbstractMetaPath> returnTriple = new Triple<>(inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement, inferenceEdgeConditionMetaPath);
         return returnTriple;
     }
 

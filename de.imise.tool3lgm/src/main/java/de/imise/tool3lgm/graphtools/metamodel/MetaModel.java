@@ -264,7 +264,7 @@ public final class MetaModel implements MetaModelSpecific {
     /**
      * Mappt von einer InferenceEdge-Klasse auf den MetaPath, aus dem diese Inference-Kante abgeleitet wird.
      */
-    private final Map<Class<? extends InferenceEdge>, AbstractMetaPath> inferenceEdgeToConditionPath;
+    private final Map<Class<? extends InferenceEdge>, AbstractMetaPath> inferenceEdgeClassToConditionMetaPath;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException //
@@ -390,14 +390,14 @@ public final class MetaModel implements MetaModelSpecific {
         extrasActionsDefinition = getInstance(metaModelDefinition.getExtrasActionsDefinitionClass());
         // Die MetaPathsDefinition und die darauffolgend zu initialisierenden Maps
         metaPathsDefinition = getInstance(metaModelDefinition.getMetaPathsDefinitionClass());
-        edgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getConditionPaths());
+        edgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getConditionMetaPaths());
         instanciationEdgeToAdditionalInstanciationMetaPaths = CollectionUtils.ensureImmutable(getInstanciationEdgeToAdditionalInstanciationNonAbstractMetaPaths(metaPathsDefinition.getInstanciationEdgeToAdditionalInstanciationMetaPaths()));
         elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatablePaths()));
         elementClassToNameExtensionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionPath());
         elementClassesWithNameExtensions = CollectionUtils.ensureImmutable(elementClassToNameExtensionPath.keySet());
         edgeClassToInitialCreatedNameSourcePath = CollectionUtils.ensureImmutable(metaPathsDefinition.getEdgeClassToInitialCreatedNameSourcePath());
 
-        inferenceEdgeToConditionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionPath());
+        inferenceEdgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionMetaPath());
     }
 
     /**
@@ -1020,7 +1020,7 @@ public final class MetaModel implements MetaModelSpecific {
      * @param edgeClass
      * @return
      */
-    public SimpleMetaPath getConditionPath(final Class<? extends Edge> edgeClass) {
+    public SimpleMetaPath getConditionMetaPath(final Class<? extends Edge> edgeClass) {
         return edgeClassToConditionMetaPath.get(edgeClass);
     }
 
@@ -2087,21 +2087,21 @@ public final class MetaModel implements MetaModelSpecific {
      *         sich aus einem anderen MetaPfad ergeben.
      */
     public Collection<Class<? extends InferenceEdge>> getInferenceEdgeClasses() {
-        return inferenceEdgeToConditionPath.keySet();
+        return inferenceEdgeClassToConditionMetaPath.keySet();
     }
 
     /**
      * @return Collection aller Bedingungspfade für Ableitungskanten (InferenceEdges)
      */
     public Collection<AbstractMetaPath> getInferenceEdgeConditionMetaPaths() {
-        return inferenceEdgeToConditionPath.values();
+        return inferenceEdgeClassToConditionMetaPath.values();
     }
 
     /**
      * @return Bedingungspfad für eine Ableitungskante (InferenceEdge)
      */
     public AbstractMetaPath getInferenceEdgeConditionMetaPath(final Class<? extends InferenceEdge> inferenceEdgeClass) {
-        return inferenceEdgeToConditionPath.get(inferenceEdgeClass);
+        return inferenceEdgeClassToConditionMetaPath.get(inferenceEdgeClass);
     }
 
     /**

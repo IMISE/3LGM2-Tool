@@ -64,12 +64,12 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         super(metaModel);
     }
 
-    ///////////////////////////////////////////////////////////////////////
-    // Bedingungspfade für Kanten (siehe Beschreibung getConditionPath() //
-    ///////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    // Bedingungspfade für Kanten (siehe Beschreibung getConditionMetaPath() //
+    ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public final Map<Class<? extends Edge>, SimpleMetaPath> getConditionPaths() {
+    public final Map<Class<? extends Edge>, SimpleMetaPath> getConditionMetaPaths() {
         ImmutableMap.Builder<Class<? extends Edge>, SimpleMetaPath> builder = ImmutableMap.builder();
         //IheInvokingInterface_InvokingInterface_Edge
         builder.put(IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class, smp(Edge.getStartClass(IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class),
@@ -164,7 +164,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
      * @return
      */
     @Override
-    public final Map<Class<? extends InferenceEdge>, AbstractMetaPath> getInferenceEdgeToConditionPath() {
+    public final Map<Class<? extends InferenceEdge>, AbstractMetaPath> getInferenceEdgeToConditionMetaPath() {
         //        SimpleMetaPath service_CommunicationLink_InferenceMetaPath_part1 = simpleMetaPathCreator.createSimpleMetaPath(CommunicationLink_Edge.class, Service.class, Service_ProvidingInterface_Edge.class);
         //        SimpleMetaPath service_CommunicationLink_InferenceMetaPath_part2 = simpleMetaPathCreator.createSimpleMetaPath(CommunicationLink_Edge.class, Service.class, Service_InvokingInterface_Edge.class);
         MetaModel metaModel = getMetaModel();

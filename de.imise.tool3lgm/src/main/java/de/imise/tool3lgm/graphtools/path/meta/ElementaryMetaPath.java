@@ -496,7 +496,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         if (Modifier.isAbstract(edgeClass.getModifiers())) {
             return false;
         }
-        if (metaModel.getConditionPath(edgeClass) != null) {
+        if (metaModel.getConditionMetaPath(edgeClass) != null) {
             return false;
         }
         if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {

@@ -133,7 +133,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             if (metaPath.isRemoveable(true)) {//Abhängen nur anbieten, wenn dadurch das Element selbst und das letzte Element im Pfad nicht inkonsistent wird
                 connectedElementsBox.addItem(" ");
             }
-            //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle bzw. alle, die über den ConditionPath verbunden sind
+            //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle bzw. alle, die über den ConditionMetaPath verbunden sind
             Collection<ElementContainer> available = isLastPathElementDependent && !allConnectedContainers.isEmpty() ? allConnectedContainers : getAvailableConnectables();
 
             //neues Element anlegen und verknüpfen soll nur gezeigt werden, wenn der Pfad an sich anlegbar ist. Ist die searchElementClass

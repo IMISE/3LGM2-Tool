@@ -503,7 +503,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     /**
      * Liefert eine Liste aller Elementcontainer, die zum Verbinden zur Verfügung stehen. In der Regel sind das alle Elemente der
      * <code>searchElementClass</code>. Besteht, der Pfad des Panels aber nur aus einer einzigen Kante und diese hat zusätzlich einen
-     * ConditionPath (also einen Pfad, über den das startElement außerdem noch mit den Zielelementen verbunden sein muss), dann
+     * ConditionMetaPath (also einen Pfad, über den das startElement außerdem noch mit den Zielelementen verbunden sein muss), dann
      * werden nur diese Zielelemente als zum Verbinden verfügbare Elemente zurück gegeben, die auch über diesen ConditonPath verbunden sind.
      * <br>
      * Außerdem wird geprüft, ob für ein verbindbares Element die Kante gar nicht mehr gelten soll.
@@ -519,13 +519,13 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
             ModelElement me = getModelElement();
             MetaModel metaModel = me.getMetaModel();
-            SimpleMetaPath conditionPath = metaModel.getConditionPath(edgeClass);
-            //für diese eine Kante ist ein ConditionPath angegeben
-            if (conditionPath != null) {
+            SimpleMetaPath conditionMetaPath = metaModel.getConditionMetaPath(edgeClass);
+            //für diese eine Kante ist ein ConditionMetaPath angegeben
+            if (conditionMetaPath != null) {
                 if (elementaryMetaPath.getDirection() == BACKWARD) {
-                    conditionPath = conditionPath.getOtherDirection();
+                    conditionMetaPath = conditionMetaPath.getOtherDirection();
                 }
-                Collection<ModelElement> conditionElements = MetaPathFunctions.getConnectedElements(me, conditionPath);
+                Collection<ModelElement> conditionElements = MetaPathFunctions.getConnectedElements(me, conditionMetaPath);
                 available = new ArrayList<>(conditionElements.size());
                 for (ModelElement conditionElement : conditionElements) {
                     available.add(conditionElement.getContainer(mainDoc));

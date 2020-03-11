@@ -332,7 +332,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @return
      */
-    public Map<Class<? extends Edge>, SimpleMetaPath> getConditionPaths() {
+    public Map<Class<? extends Edge>, SimpleMetaPath> getConditionMetaPaths() {
         return ImmutableMap.of();
     }
 
@@ -388,7 +388,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *
      * @return
      */
-    public Map<Class<? extends InferenceEdge>, AbstractMetaPath> getInferenceEdgeToConditionPath() {
+    public Map<Class<? extends InferenceEdge>, AbstractMetaPath> getInferenceEdgeToConditionMetaPath() {
         return ImmutableMap.of();
     }
 
