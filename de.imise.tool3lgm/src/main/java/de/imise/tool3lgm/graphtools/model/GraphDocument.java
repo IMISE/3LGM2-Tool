@@ -20,6 +20,8 @@ import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.USER_FIELD_VALUE_CHANGED;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_GRAPH_MOVE_SUBELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_REMOVE_WARNING;
+import static de.imise.util.htmlxml.ParseSaveStringHandler.getDecodedParseSaveString;
+import static de.imise.util.htmlxml.ParseSaveStringHandler.getParseSaveString;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -102,9 +104,6 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * besitzt) oder ein Szenario (= eine beliebige Elementauswahl aus allen Elementen mit einer grafischen Repräsentation)
  */
 public abstract class GraphDocument extends ElementSelectionContext {
-
-    /** Zeichen, das in Kommandos zusammengehörigen Text umschließt, damit er als zusammengehörig erkannt werden kann */
-    public static final char GDCOMMAND_TEXT_SURROUNDER = '\'';
 
     public static final char GENERATED_NAME_PREFIX = 27; //ESCAPE
 
@@ -1653,7 +1652,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT + " " + szenHash + " " + ec.getHashString(), "", pid);
 
         if (ec.getFontName() != null) {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_FONT + " " + szenHash + " " + ec.getHashString(), GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_FONT + " " + szenHash + " " + ec.getHashString(), getParseSaveString(ec.getFontName()) + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
             ec.setFont(null);
         }
         finish_transaction(pid);
@@ -2189,8 +2188,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
         String szenHash = ecDoc.hashString;
 
         String commandPrefix = GDCommands.MODEL_ACTION_SET_ELEMENT_FONT + " " + szenHash + " " + ec.getHashString();
-        String undoCommandArguments = ec.hasStandardFont() ? "" : GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle();
-        String redoCommandArguments = ec.isStandardFont(font) ? "" : GDCOMMAND_TEXT_SURROUNDER + font.getName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + font.getSize() + " " + font.getStyle();
+        String undoCommandArguments = ec.hasStandardFont() ? "" : getParseSaveString(ec.getFontName()) + " " + ec.getFontSize() + " " + ec.getFontStyle();
+        String redoCommandArguments = ec.isStandardFont(font) ? "" : getParseSaveString(font.getName()) + " " + font.getSize() + " " + font.getStyle();
         addUndoCommandIfNotExist(commandPrefix, undoCommandArguments, pid);
         addRedoCommandOrReplace(commandPrefix, redoCommandArguments, pid);
 
@@ -5216,54 +5215,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     public InternalGraphFrame getFrame() {
         return frame;
-    }
-
-    /**
-     * Liefert den übergeben String eingerahmt in einfache Anführungszeichen ('') sowie
-     * kodierten Backslashes. Dies ist der Elementname, der in alle Undo-Redo-Kommandos
-     * benutzt werden sollte.
-     *
-     * @param s
-     * @return
-     */
-    public static String getParseSaveString(final String s, final boolean trim) {
-        if (s == null) {
-            StringBuilder sb = new StringBuilder(2);
-            sb.append(GDCOMMAND_TEXT_SURROUNDER);
-            sb.append(GDCOMMAND_TEXT_SURROUNDER);
-            return sb.toString();
-        }
-        String ss = trim ? s.trim() : s;
-        return GDCOMMAND_TEXT_SURROUNDER + ss.replace("\r", "").replace('\n', '\u001e').replace(GDCOMMAND_TEXT_SURROUNDER, '´').replaceAll("\\\\", "\\\\\\\\") + GDCOMMAND_TEXT_SURROUNDER;
-    }
-
-    /**
-     * Liefert den übergeben String eingerahmt in einfache Anführungszeichen ('') sowie
-     * kodierten Backslashes. Dies ist der Elementname, der in alle Undo-Redo-Kommandos
-     * benutzt werden sollte.
-     *
-     * @param s
-     * @return
-     */
-    public static String getParseSaveString(final String s) {
-        return getParseSaveString(s, false);
-    }
-
-    /**
-     * Liefert einen übergebenen String, in dem die Transformationen der Zeilenumbrüche durch die Funktion <code>getParseSaveString(String s)</code>
-     * wieder rückgängig gemacht werden.
-     *
-     * @param s
-     * @return
-     */
-    public static String getDecodedParseSaveString(String s) {
-        if (s == null || s.length() == 0) {
-            return "";
-        }
-        if (s.charAt(0) == GDCOMMAND_TEXT_SURROUNDER && s.charAt(s.length() - 1) == GDCOMMAND_TEXT_SURROUNDER) {
-            s = s.substring(1, s.length() - 1);
-        }
-        return s.replace('\u001e', '\n');
     }
 
 }

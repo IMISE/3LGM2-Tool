@@ -13,10 +13,10 @@ import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.util.htmlxml.ParseSaveStringHandler;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
@@ -147,7 +147,7 @@ public final class DescripPanel extends MultiPanelElementDialogPanel /* implemen
         String newDescrip = descriptionTextPane.getText();
         String descrip = me.getDescription();
         if (newDescrip != null && !newDescrip.equals(descrip)) {
-            doc.setDescription(me, GraphDocument.getParseSaveString(newDescrip), dialog.getTransactionID());
+            doc.setDescription(me, ParseSaveStringHandler.getParseSaveString(newDescrip), dialog.getTransactionID());
         }
         me.refreshText();
         super.commit();

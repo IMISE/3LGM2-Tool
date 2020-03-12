@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.metamodel.original.action;
 
+import static de.imise.util.htmlxml.ParseSaveStringHandler.getParseSaveString;
+
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -121,11 +123,11 @@ public class ExportPdvb4AwbPlugin {
             Alphabetical.sort(pdvbList);
 
             //erste Zeile jeweils den Namen des AWB, den ersten Pdvb (wenn vorhanden) und die Anzahl der vebundenen Pdvb
-            entryBuilder.append(GraphDocument.getParseSaveString(applicationSystem.getClearName(), true));
+            entryBuilder.append(getParseSaveString(applicationSystem.getClearName(), true));
             entryBuilder.append("\t");
-            entryBuilder.append(GraphDocument.getParseSaveString(pdvbList.size() > 0 ? pdvbList.get(0).getClearName() : "", true));
+            entryBuilder.append(getParseSaveString(pdvbList.size() > 0 ? pdvbList.get(0).getClearName() : "", true));
             entryBuilder.append("\t");
-            entryBuilder.append(GraphDocument.getParseSaveString(new Integer(pdvbList.size()).toString()));
+            entryBuilder.append(getParseSaveString(new Integer(pdvbList.size()).toString()));
             entryBuilder.append("\t");
             appendNewLine(entryBuilder);
             if (pdvbList.size() > 0) {
@@ -133,11 +135,11 @@ public class ExportPdvb4AwbPlugin {
             }
             //alle anderen Spalten nur den aktuellen Pdvb eintragen
             for (ModelElement pdvb : pdvbList) {
-                entryBuilder.append(GraphDocument.getParseSaveString(""));
+                entryBuilder.append(getParseSaveString(""));
                 entryBuilder.append("\t");
-                entryBuilder.append(GraphDocument.getParseSaveString(pdvb.getClearName(), true));
+                entryBuilder.append(getParseSaveString(pdvb.getClearName(), true));
                 entryBuilder.append("\t");
-                entryBuilder.append(GraphDocument.getParseSaveString(""));
+                entryBuilder.append(getParseSaveString(""));
                 entryBuilder.append("\t");
                 appendNewLine(entryBuilder);
             }
