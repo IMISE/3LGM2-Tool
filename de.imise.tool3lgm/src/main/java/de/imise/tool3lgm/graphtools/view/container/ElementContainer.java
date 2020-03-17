@@ -421,6 +421,21 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
         return me.isPaintable() && isVisible() && doc instanceof Szenario;
     }
 
+    /**
+     * @return
+     */
+    public boolean isPaintable() {
+        return me.isPaintable();
+    }
+
+    /**
+     * @param ec
+     * @return
+     */
+    public static boolean isPaintable(final ElementContainer ec) {
+        return ec != null && ec.isPaintable();
+    }
+
     /* -------- GraphElementLayout - Funktionen aus dem ModelElement -------------- */
 
     /**
