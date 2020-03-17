@@ -1712,7 +1712,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param mc
      * @param pid
      */
-    protected final void normalizeElement(final ElementContainer mc, final int pid) {
+    private final void normalizeElement(final ElementContainer mc, final int pid) {
         start_transaction(pid);
         normalizeFontElement(mc, pid);
         normalizeTransparencyElement(mc, pid);
@@ -1724,7 +1724,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param ec
      * @param pid
      */
-    protected final void normalizeFontElement(final ElementContainer ec, final int pid) {
+    private final void normalizeFontElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
         GraphDocument doc = ec.getGraphDocument();
         String szenHash = doc.getHashString();
@@ -1750,7 +1750,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param elementHash
      * @param pid
      */
-    public final void normalizeFontElement(final String szenHash, final String elementHash, final int pid) {
+    private final void normalizeFontElement(final String szenHash, final String elementHash, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
             ElementContainer ec = szen.findContainerCoded(elementHash);
@@ -1762,7 +1762,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param ec
      * @param pid
      */
-    protected final void normalizeColorElement(final ElementContainer ec, final int pid) {
+    private final void normalizeColorElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
         GraphDocument doc = ec.getGraphDocument();
         String szenHash = doc.getHashString();
@@ -1784,7 +1784,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param elementHash
      * @param pid
      */
-    protected final void normalizeColorElement(final String szenHash, final String elementHash, final int pid) {
+    private final void normalizeColorElement(final String szenHash, final String elementHash, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
             ElementContainer ec = szen.findContainerCoded(elementHash);
@@ -1798,7 +1798,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param ec
      * @param pid
      */
-    protected final void normalizeTransparencyElement(final ElementContainer ec, final int pid) {
+    private final void normalizeTransparencyElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
         GraphDocument doc = ec.getGraphDocument();
         String szenHash = doc.hashString;
@@ -1817,7 +1817,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param elementHash
      * @param pid
      */
-    protected final void normalizeTransparencyElement(final String szenHash, final String elementHash, final int pid) {
+    private final void normalizeTransparencyElement(final String szenHash, final String elementHash, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
             ElementContainer ec = szen.findContainerCoded(elementHash);
@@ -1828,7 +1828,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     /**
      * @param pid
      */
-    public final void normalizeSelected(final int pid) {
+    private final void normalizeSelected(final int pid) {
         if (selectedContainer.isEmpty()) {
             return;
         }
@@ -1844,7 +1844,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     /**
      * @param pid
      */
-    public final void normalizeFontSelected(final int pid) {
+    private final void normalizeFontSelected(final int pid) {
         if (selectedContainer.isEmpty()) {
             return;
         }
@@ -1859,7 +1859,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     /**
      * @param pid
      */
-    public final void normalizeColorSelected(final int pid) {
+    private final void normalizeColorSelected(final int pid) {
         if (selectedContainer.isEmpty()) {
             return;
         }
@@ -1875,7 +1875,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     /**
      * @param pid
      */
-    public final void normalizeTransparencySelected(final int pid) {
+    private final void normalizeTransparencySelected(final int pid) {
         if (selectedContainer.isEmpty()) {
             return;
         }
@@ -1895,7 +1895,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param iconKey
      * @param pid
      */
-    public final void setIcon(final String szenHash, final String hashCode, final String iconKey, final int pid) {
+    private final void setIcon(final String szenHash, final String hashCode, final String iconKey, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
             return;
@@ -1928,7 +1928,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     /**
      * @param pid
      */
-    public final void chooseIcon(final int pid) {
+    private final void chooseIcon(final int pid) {
         MainFrame mainFrame = getMainFrame();
         File iconPath = UserProperties.getIconPath();
         File iconFile = ImageChooser.getImageFile(mainFrame, iconPath);
@@ -1941,7 +1941,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param iconKey
      * @param pid
      */
-    public final void setIcon(final String iconKey, final int pid) {
+    private final void setIcon(final String iconKey, final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
             ModelElement me = ec.getElement();
@@ -1955,7 +1955,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     /**
      * @param iconFile
      */
-    public final void setIcon(final File iconFile, final int pid) {
+    private final void setIcon(final File iconFile, final int pid) {
         GDCollectionIconTable iconTable = gdcoll.getIconTable();
         String iconKey = iconTable.loadIcon(iconFile);
         if (iconKey == null) {
@@ -1968,7 +1968,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param hashString
      * @param pid
      */
-    public final void unsetIcon(final String szenHash, final String hashString, final int pid) {
+    private final void unsetIcon(final String szenHash, final String hashString, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
             return;
@@ -1994,7 +1994,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     /**
      * @param pid
      */
-    public final void unsetIcon(final int pid) {
+    private final void unsetIcon(final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
             String elementHash = ec.getHashString();
@@ -2010,7 +2010,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param color
      * @param pid
      */
-    public final void changeColor(final String docHash, final String hashCode, final Color color, final int pid) {
+    private final void changeColor(final String docHash, final String hashCode, final Color color, final int pid) {
         GraphDocument doc = gdcoll.getGraphDocumentCoded(docHash);
         if (doc == null) {
             return;
@@ -2025,7 +2025,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      *
      * @param pid
      */
-    public final void changeColor(final int pid) {
+    private final void changeColor(final int pid) {
         if (gdcoll.isAutomaticMode()) {
             return;
         }
@@ -2087,7 +2087,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param col
      * @param pid
      */
-    public final void changeLayerColor(final Color color, final int pid) {
+    private final void changeLayerColor(final Color color, final int pid) {
         LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
         String szenHash = selectedDoc.getHashString();
         int activeLayer = gdcoll.getActiveLayer();
@@ -2097,15 +2097,16 @@ public abstract class GraphDocument extends ElementSelectionContext {
     /**
      * @param pid
      */
-    public final void changeLayerColor(final int pid) {
+    private final void changeLayerColor(final int pid) {
         if (gdcoll.isAutomaticMode()) {
             return;
         }
         Color oldcol = null;
         for (int c = 1; c <= 3; c++) {
-            Color tmpcol = layer[c].getColor();
+            LayerContainer lc = layer[c];
+            Color tmpcol = lc.getColor();
             if (tmpcol == null) {
-                tmpcol = mapping.getStandardBackGroundColor(layer[c]);
+                tmpcol = mapping.getStandardBackGroundColor(lc);
             }
             if (oldcol == null) {
                 oldcol = tmpcol;
@@ -2127,7 +2128,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param layer_idx
      * @param pid
      */
-    public final void changeLayerColor(final String szenHash, final int layer_idx, final int pid) {
+    private final void changeLayerColor(final String szenHash, final int layer_idx, final int pid) {
         if (layer_idx < 0 || layer_idx > 4) {
             return;
         }
@@ -2149,7 +2150,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param color
      * @param pid
      */
-    public final void changeLayerColor(final String szenHash, final int layer_idx, final Color color, final int pid) {
+    private final void changeLayerColor(final String szenHash, final int layer_idx, final Color color, final int pid) {
         if (layer_idx < 0 || layer_idx > 4) {
             return;
         }
@@ -2179,7 +2180,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param alphaMode
      * @param pid
      */
-    public final void changeAlpha(int alphaMode, final int pid) {
+    private final void changeAlpha(int alphaMode, final int pid) {
         if (alphaMode < 0) {
             alphaMode = GraphElementLayout.TRANSPARENCY_FULL;
         } else if (alphaMode > 255) {
@@ -2198,7 +2199,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param alphaMode
      * @param pid
      */
-    public void changeAlpha(final String szenHash, final String hashCode, final int alphaMode, final int pid) {
+    private void changeAlpha(final String szenHash, final String hashCode, final int alphaMode, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
             ElementContainer ec = szen.findContainerCoded(hashCode);
@@ -2247,7 +2248,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param alphaMode
      * @param pid
      */
-    public final void changeLayerAlpha(final String szenHash, final int layer_idx, int alphaMode, final int pid) {
+    private final void changeLayerAlpha(final String szenHash, final int layer_idx, int alphaMode, final int pid) {
         if (layer_idx < 0 || layer_idx > 4) {
             return;
         }
@@ -2275,7 +2276,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param alphaMode
      * @param pid
      */
-    public final void changeLayerAlpha(final int alphaMode, final int pid) {
+    private final void changeLayerAlpha(final int alphaMode, final int pid) {
         LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
         String szenHash = selectedDoc.getHashString();
         int activeLayer = gdcoll.getActiveLayer();
@@ -2286,7 +2287,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param layer_idx
      * @param pid
      */
-    public final void normalizeLayer(final String szenHash, final int layer_idx, final int pid) {
+    private final void normalizeLayer(final String szenHash, final int layer_idx, final int pid) {
         if (layer_idx < 0 || layer_idx > 4) {
             return;
         }
@@ -2318,7 +2319,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param font
      * @param pid
      */
-    public final void changeFont(final ElementContainer ec, final Font font, final int pid) {
+    private final void changeFont(final ElementContainer ec, final Font font, final int pid) {
         if (ec == null) {
             return;
         }
@@ -2352,7 +2353,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param szenHash
      * @param hashCode
      */
-    public final void changeFont(final String szenHash, final String hashCode, final int pid) {
+    private final void changeFont(final String szenHash, final String hashCode, final int pid) {
         changeFont(szenHash, hashCode, "", 0, 0, pid);
     }
 
@@ -2363,7 +2364,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param style
      * @param pid
      */
-    public final void changeFont(final String szenHash, final String hashCode, final String name, final int size, final int style, final int pid) {
+    private final void changeFont(final String szenHash, final String hashCode, final String name, final int size, final int style, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
             return;
@@ -2381,7 +2382,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param font
      * @param pid
      */
-    public final void changeFont(Font font, final int pid) {
+    private final void changeFont(Font font, final int pid) {
         if (selectedContainer.isEmpty()) {
             return;
         }
