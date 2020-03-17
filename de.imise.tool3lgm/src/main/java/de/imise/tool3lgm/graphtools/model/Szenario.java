@@ -120,7 +120,7 @@ public class Szenario extends LGMGraphDocument {
                 addElementToSzenario(getHashString(), (NodeContainer) slaveCont, TransactionManager.STANDARD_PID);
                 //wenn der Container aus dem Hauptdokument übernommen wurde -> initiale Grafik setzen
                 if (sourceDoc == getCollection().getMainGraphDocument()) {
-                    addict(hashString, edge.getClass().getName(), edge.getHashString(), master, slave, TransactionManager.STANDARD_PID);
+                    addict(hashString, edge.getClass().getName(), master, slave, TransactionManager.STANDARD_PID);
                 }
             }
         }

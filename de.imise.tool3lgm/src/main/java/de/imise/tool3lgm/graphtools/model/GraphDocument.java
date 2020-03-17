@@ -825,7 +825,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             break;
         }
         case MODEL_ACTION_ADDICT: {
-            addict(argv[0], argv[1], argv[2], argv[3], argv[4], pid);
+            addict(argv[0], argv[1], argv[2], argv[3], pid);
             break;
         }
         case MODEL_ACTION_CREATE_ADDICTED: {
@@ -3607,35 +3607,33 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     public final Edge addict(final String szenHash, final ModelElement me1, final ModelElement me2, final Class<? extends CompositionEdge> edgeClass, final int pid) {
         String simpleEdgeClassName = edgeClass.getSimpleName();
-        return addict(szenHash, simpleEdgeClassName, null, me1, me2, pid);
+        return addict(szenHash, simpleEdgeClassName, me1, me2, pid);
     }
 
     /**
      * @param szenHash
      * @param edgeClassName
-     * @param edgeHash
      * @param nodehash1
      * @param nodehash2
      * @param pid
      * @return
      */
-    public final Edge addict(final String szenHash, final String edgeClassName, final String edgeHash, final String nodehash1, final String nodehash2, final int pid) {
+    public final Edge addict(final String szenHash, final String edgeClassName, final String nodehash1, final String nodehash2, final int pid) {
         ModelElement me1 = findElementCoded(nodehash1);
         ModelElement me2 = findElementCoded(nodehash2);
-        return addict(szenHash, edgeClassName, edgeHash, me1, me2, pid);
+        return addict(szenHash, edgeClassName, me1, me2, pid);
     }
 
     /**
      * @param szenHash
      * @param edgeClassName
-     * @param edgeHash
      * @param masterElement
      * @param slaveElement
      * @param edgeClass
      * @param pid
      * @return
      */
-    protected final Edge addict(final String szenHash, final String edgeClassName, final String ___edgeHashSinnlos___removeMe, final ModelElement masterElement, final ModelElement slaveElement, final int pid) {
+    protected final Edge addict(final String szenHash, final String edgeClassName, final ModelElement masterElement, final ModelElement slaveElement, final int pid) {
         if (masterElement == null || slaveElement == null) {
             return null;
         }
@@ -3670,7 +3668,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             int slaveY = slaveContainer.getY();
             int slaveWidth = slaveContainer.getWidth();
             int slaveHeight = slaveContainer.getHeight();
-            addRedoCommand(MODEL_ACTION_ADDICT + " " + szenHash + " " + edgeClassName + " " + edgeHash + " " + masterHash + " " + slaveHash, pid);
+            addRedoCommand(MODEL_ACTION_ADDICT + " " + szenHash + " " + edgeClassName + " " + masterHash + " " + slaveHash, pid);
             addUndoCommand(MODEL_ACTION_SET_ELEMENT_POSITION + " " + szenHash + " " + slaveHash + " " + slaveX + " " + slaveY + " " + slaveWidth + " " + slaveHeight, pid);
             slaveContainer.setCoordinates(pos.width, pos.height, slaveWidth, slaveHeight);
 
