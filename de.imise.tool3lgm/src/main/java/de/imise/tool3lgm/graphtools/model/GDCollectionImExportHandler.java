@@ -193,7 +193,7 @@ public final class GDCollectionImExportHandler {
                 }
 
                 for (BendpointContainer importKC : importLayerContainer.getBendpointContainers()) {
-                    ModelElement element = mainDoc.findKnickpunktCoded(importKC.getElement().getHashString());
+                    ModelElement element = mainDoc.findBendpointCoded(importKC.getElement().getHashString());
                     EdgeContainer kc = newSzenario.findEdgeContainerCoded(((Bendpoint) element).getEdgeHash());
                     if (kc == null) {
                         continue;

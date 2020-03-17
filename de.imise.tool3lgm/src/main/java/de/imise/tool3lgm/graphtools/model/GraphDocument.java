@@ -2391,7 +2391,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         addRedoCommandOrReplace(commandPrefix, redoCommandArguments, pid);
         nc.setCoordinates(x, y, width, height);
 
-        //wenn NodeContainer verschoben werden (keine KnickpinktContainer)
+        //wenn NodeContainer verschoben werden (keine BendpointContainer)
         if (!(nc instanceof BendpointContainer)) {
             //bei allen Kanten dieser Node
             for (Edge edge : me.getEdges()) {
@@ -3328,7 +3328,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return null;
         }
 
-        ModelElement me = findKnickpunktCoded(hashString);
+        ModelElement me = findBendpointCoded(hashString);
         if (me == null) {
             return null;
         }
@@ -3406,7 +3406,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (me != null) {
             return me;
         }
-        me = findKnickpunktCoded(hashString);
+        me = findBendpointCoded(hashString);
         findBendpointContainerCoded(hashString);
         return me;
     }
@@ -3459,10 +3459,10 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param hashString
      * @return
      */
-    public Bendpoint findKnickpunktCoded(final String hashString) {
+    public Bendpoint findBendpointCoded(final String hashString) {
         GraphDocument mainDoc = gdcoll.getMainGraphDocument();
         if (mainDoc != this) {
-            return mainDoc.findKnickpunktCoded(hashString);
+            return mainDoc.findBendpointCoded(hashString);
         }
         if (hashString != null) {
             for (LayerContainer lc : layer) {
