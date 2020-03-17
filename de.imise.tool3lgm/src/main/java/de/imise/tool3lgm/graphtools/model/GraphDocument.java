@@ -627,9 +627,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param command
      * @param ucommand
      * @param pid
-     * @param log
      */
-    private final void exec(final String command, final String ucommand, final int pid, final boolean log) {
+    private final void exec(final String command, final String ucommand, final int pid) {
         if (isVerificationMode()) {
             System.out.println("Kommando: " + command + "\n" + ucommand + "\n\n");
         }
@@ -643,7 +642,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             String message = getResStringWithoutError(GDCommands.MODEL_ACTION_COMMAND_LINE.name());
             String answer = (String) JOptionPane.showInputDialog(getMainFrame(), message, title, JOptionPane.QUESTION_MESSAGE, null, null, null);
             if (answer != null && !answer.equals("") && !answer.equals("COMMAND_LINE")) {
-                exec(answer, "", pid, log);
+                exec(answer, "", pid);
             }
         } else if (command.equals(GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY.toString())) {
             //	Testausgabe aller Elemente im Modell (kann für Prüfzwecke wieder aktiviert werden
@@ -659,10 +658,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
             //			for (Error err : new ConsistencyChecker(gdcoll).getInconsistencies())
             //				System.err.println(err.getMessage());
         } else {
-            if (log) {
-                addRedoCommand(command, pid);
-                addUndoCommand(ucommand, pid);
-            }
             exec_command(command, pid);
         }
     }
@@ -674,7 +669,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void exec(final String command, final int pid) {
-        exec(command, "", pid, false);
+        exec(command, "", pid);
     }
 
     /**
