@@ -2084,65 +2084,24 @@ public abstract class GraphDocument extends ElementSelectionContext {
     }
 
     /**
-     * @param col
-     * @param pid
-     */
-    private final void changeLayerColor(final Color color, final int pid) {
-        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
-        String szenHash = selectedDoc.getHashString();
-        int activeLayer = gdcoll.getActiveLayer();
-        changeLayerColor(szenHash, activeLayer, color, pid);
-    }
-
-    /**
      * @param pid
      */
     private final void changeLayerColor(final int pid) {
         if (gdcoll.isAutomaticMode()) {
             return;
         }
-        Color oldcol = null;
-        for (int c = 1; c <= 3; c++) {
-            LayerContainer lc = layer[c];
-            Color tmpcol = lc.getColor();
-            if (tmpcol == null) {
-                tmpcol = mapping.getStandardBackGroundColor(lc);
-            }
-            if (oldcol == null) {
-                oldcol = tmpcol;
-            } else if (!tmpcol.equals(oldcol)) {
-                oldcol = null;
-                break;
-            }
-        }
+        int activeLayer = gdcoll.getActiveLayer();
+        LayerContainer lc = layer[activeLayer];
+        Color oldcol = lc.getColor();
         MainFrame mainFrame = getMainFrame();
         String title = getResString("farbe_ausw");
         Color col = JColorChooser.showDialog(mainFrame, title, oldcol);
         if (col == null) {
             return;
         }
-        changeLayerColor(col, pid);
-    }
-
-    /**
-     * @param layer_idx
-     * @param pid
-     */
-    private final void changeLayerColor(final String szenHash, final int layer_idx, final int pid) {
-        if (layer_idx < 0 || layer_idx > 4) {
-            return;
-        }
-        if (gdcoll.isAutomaticMode()) {
-            return;
-        }
-        MainFrame mainFrame = getMainFrame();
-        String title = getResString("farbe_ausw");
-        Color color = layer[layer_idx].getColor();
-        color = JColorChooser.showDialog(mainFrame, title, color);
-        if (color == null) {
-            return;
-        }
-        changeLayerColor(szenHash, layer_idx, color, pid);
+        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+        String szenHash = selectedDoc.getHashString();
+        changeLayerColor(szenHash, activeLayer, col, pid);
     }
 
     /**
@@ -2169,7 +2128,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         rgb = undoColor == null ? null : undoColor.getRGB();
         addUndoCommandIfNotExist(command, rgb, pid);
         //do
-        szen.layer[layer_idx].setColor(color);
+        lc.setColor(color);
         szen.finish_transaction(pid);
         szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, lc, pid);
     }
