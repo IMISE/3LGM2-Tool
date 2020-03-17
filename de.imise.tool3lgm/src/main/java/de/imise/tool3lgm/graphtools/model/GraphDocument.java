@@ -1484,7 +1484,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
             //wenn undo und redo mit den Komandoindizes statt den vollständigen Namen geloggt werden
             //versuche den Index zu parsen und das Kommando
             int commandIndex = Integer.parseInt(commandName);
-            command = GDCommands.values()[commandIndex];
+            GDCommands[] gdCommans = GDCommands.getValues();
+            command = gdCommans[commandIndex];
         } catch (Exception e) {
             //wenn lesbar geloggt werden soll -> einfach den Kommandonamen nehmen
             command = GDCommands.valueOf(commandName);

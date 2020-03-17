@@ -167,6 +167,17 @@ public enum GDCommands implements ActionSource {
         return isModelOption(this);
     }
 
+    private static final GDCommands[] VALUES = values();
+
+    /**
+     * @return always the same instance of the values of this enum and
+     *         not every time a new array like the original values()
+     *         function
+     */
+    public static GDCommands[] getValues() {
+        return VALUES;
+    }
+
     static {
         ActionSource.putInteractive(GraphDocumentAction.class, MODEL_ACTION_CREATE_NODE);
         ActionSource.put(SelectionAction.class, MODEL_ACTION_COPY);
