@@ -2110,7 +2110,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     private final void changeLayerColor(final String szenHash, final int layer_idx, final Color color, final int pid) {
-        if (layer_idx < 0 || layer_idx > 4) {
+        if (layer_idx < MIN_LAYER_INDEX || layer_idx > MAX_LAYER_INDEX) {
             return;
         }
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
@@ -2172,7 +2172,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     private void changeAlpha(final ElementContainer ec, int alpha, final int pid) {
-        if (ec.layerFor() < 0) {
+        if (ec.layerFor() < MIN_LAYER_INDEX) {
             return;
         }
         if (alpha < 0) {
@@ -2208,7 +2208,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     private final void changeLayerAlpha(final String szenHash, final int layer_idx, int alphaMode, final int pid) {
-        if (layer_idx < 0 || layer_idx > 4) {
+        if (layer_idx < MIN_LAYER_INDEX || layer_idx > MAX_LAYER_INDEX) {
             return;
         }
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
@@ -2247,7 +2247,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     private final void normalizeLayer(final String szenHash, final int layer_idx, final int pid) {
-        if (layer_idx < 0 || layer_idx > 4) {
+        if (layer_idx < MIN_LAYER_INDEX || layer_idx > MAX_LAYER_INDEX) {
             return;
         }
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
