@@ -36,17 +36,21 @@ import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.swing.JColorChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
+import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
+import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
@@ -88,12 +92,15 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
+import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.OptionsSupport;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.htmlxml.ParseSaveStringHandler;
 import de.imise.util.swing.dialog.ImageChooser;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
@@ -202,14 +209,19 @@ public abstract class GraphDocument extends ElementSelectionContext {
         super(_gdcoll.getMetaModel());
         gdcoll = _gdcoll;
         MetaModel metaModel = gdcoll.getMetaModel();
-        hashString = "DOC" + "_" + new Date().getTime();
+        Date dateNow = new Date();
+        long timeNow = dateNow.getTime();
+        hashString = "DOC" + "_" + timeNow;
 
         analysisResult = new ArrayList<>();
-        mapping = new ElementsLayoutDefinition(metaModel.getGraphViewDefinition().getDefaultElementsLayout());
+        GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
+        ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
+        mapping = new ElementsLayoutDefinition(defaultElementsLayout);
 
         layer = new LayerContainer[LAYER_COUNT];
         for (int c = 0; c < layer.length; c++) {
-            layer[c] = new LayerContainer(new LayerNode(metaModel, c), this, c);
+            LayerNode layerNode = new LayerNode(metaModel, c);
+            layer[c] = new LayerContainer(layerNode, this, c);
             layer[c].setColor(Color.white);
         }
         setPageSizeFactor(1.0);
@@ -299,8 +311,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param newPageSizeFactor
      */
     public void setPageSizeFactor(final double newPageSizeFactor) {
-        //der erste Parameter ist völlig egal, da er nur bei UndoRedo loggen gebraucht wird
-        setPageSizeFactor(newPageSizeFactor, newPageSizeFactor, false, TransactionManager.STANDARD_PID);
+        setPageSizeFactor(newPageSizeFactor, false, TransactionManager.STANDARD_PID);
     }
 
     /**
@@ -308,7 +319,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param logUndoRedo
      * @param pid
      */
-    private void setPageSizeFactor(final double oldPageSizeFactor, double newPageSizeFactor, final boolean logUndoRedo, final int pid) {
+    private void setPageSizeFactor(double newPageSizeFactor, final boolean logUndoRedo, final int pid) {
+        final double oldPageSizeFactor = getPageSizeFactor();
         double minPageSizeFactor = getMinimalPageSizeFactor();
         if (minPageSizeFactor > newPageSizeFactor) {
             newPageSizeFactor = minPageSizeFactor;
@@ -341,10 +353,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public boolean pageHasSize(final Component c) {
         double neededPageSizeFactor = getMinimalPageSizeFactor(c);
         //System.err.println("pageSizeFactor=" + getPageSizeFactor() + "   neededPageSizeFactor=" + neededPageSizeFactor);
-        if (neededPageSizeFactor > getPageSizeFactor()) {
-            return false;
-        }
-        return true;
+        double pageSizeFactor = getPageSizeFactor();
+        return neededPageSizeFactor <= pageSizeFactor;
     }
 
     /**
@@ -380,8 +390,12 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     private double getMinimalPageSizeFactor(final Component c) {
-        double neededPageSizeFactorX = getMinimalPageSizeFactor(c.getX(), c.getWidth(), INITIAL_PAGE_WIDTH);
-        double neededPageSizeFactorY = getMinimalPageSizeFactor(c.getY(), c.getHeight(), INITIAL_PAGE_HEIGHT);
+        int x = c.getX();
+        int y = c.getY();
+        int width = c.getWidth();
+        int height = c.getHeight();
+        double neededPageSizeFactorX = getMinimalPageSizeFactor(x, width, INITIAL_PAGE_WIDTH);
+        double neededPageSizeFactorY = getMinimalPageSizeFactor(y, height, INITIAL_PAGE_HEIGHT);
         return neededPageSizeFactorX > neededPageSizeFactorY ? neededPageSizeFactorX : neededPageSizeFactorY;
     }
 
@@ -394,7 +408,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
         double minPageSizeFactor = 1.0;
         for (int l : ModelConstants.VISIBLE_LAYERS) {
             LayerContainer lc = layer[l];
-            Iterable<NodeContainer> visibleElements = CollectionUtils.getCommonIterable(lc.getGraphNodeContainers(), lc.getBendpointContainers());
+            Iterable<NodeContainer> graphNodeContainers = lc.getGraphNodeContainers();
+            Iterable<BendpointContainer> bendpointContainers = lc.getBendpointContainers();
+            Iterable<NodeContainer> visibleElements = CollectionUtils.getCommonIterable(graphNodeContainers, bendpointContainers);
             for (ElementContainer c : visibleElements) {
                 double neededPageSizeFactor = getMinimalPageSizeFactor(c);
                 if (neededPageSizeFactor > minPageSizeFactor) {
@@ -523,7 +539,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     private void addRedoCommandOrReplace(final String commandPrefix, final Object commandArguments, final int pid) {
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
-            String arguments = commandArguments.toString();
+            String arguments = String.valueOf(commandArguments);
             transactionManager.addOrReplaceRedoCommand(commandPrefix, arguments, pid);
         }
     }
@@ -540,8 +556,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     private void addUndoCommandIfNotExist(final String commandPrefix, final Object commandArguments, final int pid) {
         if (!gdcoll.isBulkMode()) {
             TransactionManager transactionManager = gdcoll.getTman();
-            String arguments = commandArguments.toString();
-            transactionManager.addUndoCommandIfNotExist(commandPrefix, arguments.toString(), pid);
+            String arguments = String.valueOf(commandArguments);
+            transactionManager.addUndoCommandIfNotExist(commandPrefix, arguments, pid);
         }
     }
 
@@ -574,11 +590,12 @@ public abstract class GraphDocument extends ElementSelectionContext {
     }
 
     /**
-     * @param mc
+     * @param ec
      * @return
      */
-    public boolean isMyElement(final ElementContainer mc) {
-        return isMyElement(mc.getElement());
+    public boolean isMyElement(final ElementContainer ec) {
+        ModelElement me = ec.getElement();
+        return isMyElement(me);
     }
 
     /**
@@ -616,10 +633,11 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (isVerificationMode()) {
             System.out.println("Kommando: " + command + "\n" + ucommand + "\n\n");
         }
-
         if (command == null) {
         } else if (command.equals(GDCommands.MODEL_ACTION_PRINT_QUEUE.toString())) {
-            getCollection().getTman().printQueue(10);
+            GDCollection gdcoll = getCollection();
+            TransactionManager transactionManager = gdcoll.getTman();
+            transactionManager.printQueue(10);
         } else if (command.startsWith(GDCommands.MODEL_ACTION_COMMAND_LINE.toString())) {
             String title = getResStringWithoutError("tool3lgm");
             String message = getResStringWithoutError(GDCommands.MODEL_ACTION_COMMAND_LINE.name());
@@ -628,14 +646,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 exec(answer, "", pid, log);
             }
         } else if (command.equals(GDCommands.MODEL_ACTION_INTERNAL_CHECK_CONSISTENCY.toString())) {
-            //            GraphDocument doc = gdcoll.getMainGraphDocument();
-            //            List<ModelElement> elements = doc.getModelItems(Aufgabe.class, false);
-            //            for (ModelElement me : elements) {
-            //                if (me.toString().equals("Dokumentation des Informationssystems")) {
-            //                    System.err.println(me.getParentConnectedContainer(AufOrgKombination.class, doc));
-            //                }
-            //            }
-
             //	Testausgabe aller Elemente im Modell (kann für Prüfzwecke wieder aktiviert werden
             //			for (Class<? extends ModelElement> meClass : ModelConstants.ALL_NODES){
             //				GraphDocument doc = gdcoll.getGraphDocument();
@@ -648,7 +658,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
 
             //			for (Error err : new ConsistencyChecker(gdcoll).getInconsistencies())
             //				System.err.println(err.getMessage());
-
         } else {
             if (log) {
                 addRedoCommand(command, pid);
@@ -687,12 +696,17 @@ public abstract class GraphDocument extends ElementSelectionContext {
         // - das Element ist ein untergeordnetes Element, aber sein übergeordnetes ist auch in dem Teilmodell
         else if (this == gdcoll.getMainGraphDocument() || isSelectedOnlyUnique() || isSelectedOnlySlaveRealNodes()) {
             if (OPTION_SHOW_REMOVE_WARNING.is()) {
-                Boolean answer = MultipleOptionPane.showSingleCheckboxDialog(Static.getMainFrame(), getResString("attention"), getResString("remove_element_warning"), getResString("dont_ask_again"), false);
+                MainFrame mainFrame = Static.getMainFrame();
+                String dialogTitle = getResString("attention");
+                String dialogMessage = getResString("remove_element_warning");
+                String dontAskAgainQuestion = getResString("dont_ask_again");
+                Boolean answer = MultipleOptionPane.showSingleCheckboxDialog(mainFrame, dialogTitle, dialogMessage, dontAskAgainQuestion, false);
                 //es wurde nicht Abbrechen sonder Ok gedrückt
                 if (answer != null) {
                     dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_MODEL, argv, pid);
                     if (!answer) { // die Checkbox ist nicht selektiert -> Globale Option "Warnmeldung vor dem Löschen" soll true sein
-                        OPTION_SHOW_REMOVE_WARNING.createAction().perform();
+                        UserPropertyBooleanChangeAction action = OPTION_SHOW_REMOVE_WARNING.createAction();
+                        action.perform();
                     }
                 }
             } else {
@@ -704,7 +718,10 @@ public abstract class GraphDocument extends ElementSelectionContext {
             Object[] buttons = new Object[] {
                     getResString("submodel"), getResString("whole_model"), getResString("cancel")
             };
-            int value = JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("loeschfrage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
+            MainFrame mainFrame = Static.getMainFrame();
+            String dialogMessage = getResString("loeschfrage");
+            String dialogTitle = getResString("tool3lgm");
+            int value = JOptionPane.showOptionDialog(mainFrame, dialogMessage, dialogTitle, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, buttons, buttons[2]);
             if (value == JOptionPane.YES_OPTION) {
                 dispatch_command(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL, argv, pid);
             } else if (value == JOptionPane.NO_OPTION) {
@@ -719,7 +736,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     protected void dispatch_command(final GDCommands command, final String[] argv, final int pid) {
-
         //		System.err.println(command + " " + Arrays.asList(argv));
         int argc = argv.length;
         MetaModel metaModel = getMetaModel();
@@ -731,13 +747,13 @@ public abstract class GraphDocument extends ElementSelectionContext {
             break;
 
         case MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON:
-        case MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF:
+        case MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF: {
             //argv[0] = szenHash (optional)
             //argv[1..n] = elementHashes (optional)
             setVisible(command == MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON, argv, pid);
             break;
-
-        case MODEL_ACTION_CREATE_NODE:
+        }
+        case MODEL_ACTION_CREATE_NODE: {
             String classname = argv[0];
             String name = GDCommands.INVALID_NAME;
             String description = GDCommands.INVALID_DESCRIPTION;
@@ -749,10 +765,11 @@ public abstract class GraphDocument extends ElementSelectionContext {
             } catch (Exception e) {
                 //Die Argumente 1-3 sind optional; deshalb keine Fehlermeldung, wenn das Parsen fehlschlägt
             }
-            createNodeAndContainer(metaModel.getClassForName(classname), name, description, hashcode, pid);
+            Class<? extends ModelElement> elementClass = metaModel.getClassForName(classname);
+            createNodeAndContainer(elementClass, name, description, hashcode, pid);
             break;
-
-        case MODEL_ACTION_DELETE_FROM_MODEL:
+        }
+        case MODEL_ACTION_DELETE_FROM_MODEL: {
             switch (argc) {
             case 0:
                 gdcoll.deleteElements(getSelectedElements(), this, pid);
@@ -762,16 +779,20 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 break;
             }
             break;
-
-        case MODEL_ACTION_LINK:
+        }
+        case MODEL_ACTION_LINK: {
             switch (argc) {
             case 2:
                 Direction direction = Enum.valueOf(Direction.class, argv[1]);
-                linkSelected(metaModel.getClassForName(argv[0]).asSubclass(Edge.class), direction, pid);
+                Class<? extends ModelElement> elementClass = metaModel.getClassForName(argv[0]);
+                Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
+                linkSelected(edgeClass, direction, pid);
                 break;
             case 6:
                 //Parameter: link(String edgeClassName, String edgeHash, ModelElement k1, ModelElement k2, int edgeIndex, int pid) {
-                /* Edge edge = */gdcoll.link(argv[0], argv[1], argv[2], argv[3], Integer.parseInt(argv[4]), Integer.parseInt(argv[5]), pid);
+                int startElementEdgeIndex = Integer.parseInt(argv[4]);
+                int endElementEdgeIndex = Integer.parseInt(argv[5]);
+                /* Edge edge = */gdcoll.link(argv[0], argv[1], argv[2], argv[3], startElementEdgeIndex, endElementEdgeIndex, pid);
                 //						System.err.println("<Etxrabllatt>");
                 //						System.err.println(edge.getStart() + " (" + edge.getStart().getHashString() + ") " + edge.getEnd() + " (" + edge.getEnd().getHashString() + ")");
                 //						System.err.println("</Etxrabllatt>");
@@ -780,120 +801,123 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 break;
             }
             break;
-
-        case MODEL_ACTION_UNLINK:
-            int position = -1;
-            Class<? extends Edge> edgeClass = null;
+        }
+        case MODEL_ACTION_UNLINK: {
             switch (argc) {
             case 2:
                 Direction direction = Enum.valueOf(Direction.class, argv[1]);
-                unlinkSelected(metaModel.getClassForName(argv[0]).asSubclass(Edge.class), direction, pid);
+                Class<? extends ModelElement> elementClass = metaModel.getClassForName(argv[0]);
+                Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
+                unlinkSelected(edgeClass, direction, pid);
                 break;
             case 4:
-                edgeClass = metaModel.getClassForName(argv[2]).asSubclass(Edge.class);
-                position = Integer.parseInt(argv[3]);
+                elementClass = metaModel.getClassForName(argv[2]);
+                edgeClass = elementClass.asSubclass(Edge.class);
+                int position = Integer.parseInt(argv[3]);
                 gdcoll.unlink(argv[0], argv[1], edgeClass, position, pid);
                 break;
             default:
                 break;
             }
             break;
-
-        case MODEL_ACTION_SWAP_EDGE_POSITIONS:
+        }
+        case MODEL_ACTION_SWAP_EDGE_POSITIONS: {
             switch (argc) {
             case 3:
                 swapEdgePositions(argv[0], argv[1], argv[2], pid);
                 break;
             }
             break;
-
-        case MODEL_ACTION_ADDICT:
-            position = -1;
+        }
+        case MODEL_ACTION_ADDICT: {
+            int position = -1;
             try {
                 position = Integer.parseInt(argv[5]);
             } catch (Exception e) {
-                Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
+                Log(e);
             }
             addict(argv[0], argv[1], argv[2], argv[3], argv[4], position, pid);
             break;
-
-        case MODEL_ACTION_CREATE_ADDICTED:
-            GraphDocument doc = getCollection().getGraphDocumentCoded(argv[0]);
+        }
+        case MODEL_ACTION_CREATE_ADDICTED: {
+            GraphDocument doc = gdcoll.getGraphDocumentCoded(argv[0]);
             ModelElement master = doc.findElementCoded(argv[1]);
-            edgeClass = metaModel.getClassForName(argv[2]).asSubclass(Edge.class);
-            Class<? extends ModelElement> slaveClass = metaModel.getClassForName(argv[3]);
-            createAddicted(doc, master, edgeClass.asSubclass(CompositionEdge.class), slaveClass, pid);
-            break;
 
-        case MODEL_ACTION_CREATE_INSTANCIATION:
-            Class<? extends InstanciationEdge> instanciationClass = metaModel.getClassForName(argv[0]).asSubclass(InstanciationEdge.class);
-            doc = null;
-            master = null;
+            Class<? extends ModelElement> elementClass = metaModel.getClassForName(argv[2]);
+            Class<? extends CompositionEdge> compositionEdgeClass = elementClass.asSubclass(CompositionEdge.class);
+            Class<? extends ModelElement> slaveClass = metaModel.getClassForName(argv[3]);
+            createAddicted(doc, master, compositionEdgeClass, slaveClass, pid);
+            break;
+        }
+        case MODEL_ACTION_CREATE_INSTANCIATION: {
+            Class<? extends ModelElement> elementClass = metaModel.getClassForName(argv[0]);
+            Class<? extends InstanciationEdge> instanciationEdgeClass = elementClass.asSubclass(InstanciationEdge.class);
+            GraphDocument doc = null;
+            ModelElement master = null;
             try {
-                doc = getCollection().getGraphDocumentCoded(argv[1]);
+                doc = gdcoll.getGraphDocumentCoded(argv[1]);
                 master = doc.findElementCoded(argv[2]);
             } catch (Exception e) {
-                //die letzten beiden sind optional. Wird ein doc angegeben, dann wird in dem gesucht, sonst im gerade aktiven doc. Wird ein Hash für das Ausgangselement der Kante angegeben, dann wird nur das genommen, sonst die Selektion.
+                //die letzten beiden sind optional. Wird ein doc angegeben, dann wird in dem gesucht,
+                //sonst im gerade aktiven doc. Wird ein Hash für das Ausgangselement der Kante
+                //angegeben, dann wird nur das genommen, sonst die Selektion.
             }
-            createInstance(doc, instanciationClass, master, pid);
+            createInstance(doc, instanciationEdgeClass, master, pid);
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_COLOR:
+        }
+        case MODEL_ACTION_SET_ELEMENT_COLOR: {
             switch (argc) {
             case 0:
                 changeColor(pid);
                 break;
             case 3:
-                Color c = null;
-                if (!argv[2].equals("null")) {
-                    try {
-                        c = new Color(Integer.parseInt(argv[2]));
-                    } catch (Exception e) {
-                        Log(e);
-                    }
+                try {
+                    int colorValue = Integer.parseInt(argv[2]);
+                    Color color = new Color(colorValue);
+                    changeColor(argv[0], argv[1], color, pid);
+                } catch (Exception e) {
+                    Log(e);
                 }
-                changeColor(argv[0], argv[1], c, pid);
                 break;
             default:
                 break;
             }
             break;
-
-        case MODEL_ACTION_SET_LAYER_COLOR:
-            int layer_idx = -1;
+        }
+        case MODEL_ACTION_SET_LAYER_COLOR: {
             switch (argc) {
             case 0:
                 changeLayerColor(pid);
                 break;
             case 3:
-                Color c = null;
                 try {
-                    layer_idx = Integer.parseInt(argv[1]);
-                    if (!argv[2].equals("null")) {
-                        c = new Color(Integer.parseInt(argv[2]));
-                    }
+                    int layer_idx = Integer.parseInt(argv[1]);
+                    int colorValue = Integer.parseInt(argv[2]);
+                    Color color = new Color(colorValue);
+                    changeLayerColor(argv[0], layer_idx, color, pid);
                 } catch (Exception e) {
                     Log(e);
                 }
-                changeLayerColor(argv[0], layer_idx, c, pid);
                 break;
             default:
                 break;
             }
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_ALPHA:
+        }
+        case MODEL_ACTION_SET_ELEMENT_ALPHA: {
             switch (argc) {
             case 1:
                 try {
-                    changeAlpha(Integer.parseInt(argv[0]), pid);
+                    int alpha = Integer.parseInt(argv[0]);
+                    changeAlpha(alpha, pid);
                 } catch (Exception e) {
                     Log(e);
                 }
                 break;
             case 3:
                 try {
-                    changeAlpha(argv[0], argv[1], Integer.parseInt(argv[2]), pid);
+                    int alpha = Integer.parseInt(argv[2]);
+                    changeAlpha(argv[0], argv[1], alpha, pid);
                 } catch (Exception e) {
                     Log(e);
                 }
@@ -902,133 +926,148 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 break;
             }
             break;
-        case MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_FULL: {
             changeAlpha(GraphElementLayout.TRANSPARENCY_FULL, pid);
             break;
-        case MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_HALF: {
             changeAlpha(GraphElementLayout.TRANSPARENCY_HALF, pid);
             break;
-        case MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TRANSPARENCY_NONE: {
             changeAlpha(GraphElementLayout.TRANSPARENCY_NONE, pid);
             break;
-
-        case MODEL_ACTION_SET_LAYER_ALPHA:
+        }
+        case MODEL_ACTION_SET_LAYER_ALPHA: {
             switch (argc) {
             case 1:
                 try {
-                    changeLayerAlpha(Integer.parseInt(argv[0]), pid);
+                    int layerAlpha = Integer.parseInt(argv[0]);
+                    changeLayerAlpha(layerAlpha, pid);
                 } catch (Exception e) {
                     Log(e);
                 }
                 break;
             case 3:
                 try {
-                    changeLayerAlpha(argv[0], Integer.parseInt(argv[1]), Integer.parseInt(argv[2]), pid);
+                    int layer = Integer.parseInt(argv[1]);
+                    int alpha = Integer.parseInt(argv[2]);
+                    changeLayerAlpha(argv[0], layer, alpha, pid);
                 } catch (Exception e) {
                     Log(e);
                 }
                 break;
             }
             break;
-
-        case MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL:
+        }
+        case MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL: {
             changeLayerAlpha(GraphElementLayout.TRANSPARENCY_FULL, pid);
             break;
-        case MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF:
+        }
+        case MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF: {
             changeLayerAlpha(GraphElementLayout.TRANSPARENCY_HALF, pid);
             break;
-        case MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE:
+        }
+        case MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE: {
             changeLayerAlpha(GraphElementLayout.TRANSPARENCY_NONE, pid);
             break;
-
-        case MODEL_ACTION_SET_LAYER_SIZE_FACTOR:
+        }
+        case MODEL_ACTION_SET_LAYER_SIZE_FACTOR: {
             try {
                 GraphDocument szen = gdcoll.getGraphDocumentCoded(argv[0]);
-                szen.setPageSizeFactor(Double.parseDouble(argv[1]), Double.parseDouble(argv[1]), true, TransactionManager.STANDARD_PID);
+                double pageSizeFactor = Double.parseDouble(argv[1]);
+                szen.setPageSizeFactor(pageSizeFactor, true, TransactionManager.STANDARD_PID);
             } catch (Exception e) {
                 Log(e);
             }
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT:
+        }
+        case MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT: {
             if (argc == 0) {
                 normalizeFontSelected(pid);
             } else if (argc == 2) {
                 normalizeFontElement(argv[0], argv[1], pid);
             }
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR:
+        }
+        case MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR: {
             if (argc == 0) {
                 normalizeColorSelected(pid);
             } else if (argc == 2) {
                 normalizeColorElement(argv[0], argv[1], pid);
             }
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY:
+        }
+        case MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY: {
             if (argc == 0) {
                 normalizeTransparencySelected(pid);
             } else if (argc == 2) {
                 normalizeTransparencyElement(argv[0], argv[1], pid);
             }
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT:
+        }
+        case MODEL_ACTION_SET_ELEMENT_DEFAULT_FULL_LAYOUT: {
             if (argc == 0) {
                 normalizeSelected(pid);
             }
             break;
-
-        case MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY:
+        }
+        case MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY: {
             if (argc == 0) {
-                normalizeLayer(gdcoll.getSelectedDoc().hashString, gdcoll.getActiveLayer(), pid);
+                LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+                int activeLayer = gdcoll.getActiveLayer();
+                normalizeLayer(selectedDoc.hashString, activeLayer, pid);
             }
             if (argc == 2) {
                 try {
-                    normalizeLayer(argv[0], Integer.parseInt(argv[1]), pid);
+                    int layer = Integer.parseInt(argv[1]);
+                    normalizeLayer(argv[0], layer, pid);
                 } catch (Exception e) {
                     Log(e);
                 }
             }
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_NAME:
+        }
+        case MODEL_ACTION_SET_ELEMENT_NAME: {
             switch (argc) {
             case 2:
                 //[0] = elementHash, [1] = newName
-                setName(findElementCoded(argv[0]), argv[1], pid);
+                ModelElement me = findElementCoded(argv[0]);
+                setName(me, argv[1], pid);
                 break;
             default:
                 break;
             }
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_DESCRIPTION:
+        }
+        case MODEL_ACTION_SET_ELEMENT_DESCRIPTION: {
             //[1] = ElementHashString, [2] = Beschreibung
-            setDescription(findElementCoded(argv[0]), argv[1], pid);
+            ModelElement me = findElementCoded(argv[0]);
+            setDescription(me, argv[1], pid);
             break;
-
-        case MODEL_ACTION_SET_USER_FIELD_VALUE:
+        }
+        case MODEL_ACTION_SET_USER_FIELD_VALUE: {
             if (argc == 3) {
                 setUserFieldValue(argv[0], argv[1], argv[2], pid);
             }
             break;
-
-        case MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT:
+        }
+        case MODEL_ACTION_SET_USER_FIELD_WEIGHT_REPLACEMENT: {
             if (argc == 3) {
                 setUserFieldWeightReplacement(argv[0], argv[1], argv[2], pid);
             }
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_OPTIONAL:
+        }
+        case MODEL_ACTION_SET_ELEMENT_OPTIONAL: {
             if (argc == 2) {
-                ModelElement element = getCollection().getMainGraphDocument().findElementCoded(argv[0]);
+                LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+                Edge edge = mainDoc.findEdgeCoded(argv[0]);
                 boolean bool = Boolean.parseBoolean(argv[1]);
-                setOptional((Edge) element, bool, pid);
+                setOptional(edge, bool, pid);
             }
-
-        case MODEL_ACTION_SET_ELEMENT_POSITION:
+        }
+        case MODEL_ACTION_SET_ELEMENT_POSITION: {
             if (argc == 6) {
                 try {
                     String szenHash = argv[0];
@@ -1040,14 +1079,12 @@ public abstract class GraphDocument extends ElementSelectionContext {
                     moveNodeContainer(gdcoll, szenHash, hashCode, x, y, width, height, pid);
                 } catch (Exception e) {
                     Log(e);
-                    break;
                 }
-                break;
             }
             break;
-
+        }
         case MODEL_ACTION_SET_ELEMENT_EXPANSION_ON:
-        case MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF:
+        case MODEL_ACTION_SET_ELEMENT_EXPANSION_OFF: {
             boolean expand = command == GDCommands.MODEL_ACTION_SET_ELEMENT_EXPANSION_ON;
             if (argc == 2) {
                 setExpanded(expand, gdcoll, argv[0], argv[1], !expand, pid);
@@ -1055,23 +1092,29 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 setExpanded(expand, pid);
             }
             break;
-
-        case MODEL_OPTION_GDOC_VERIFICATION_MODE:
+        }
+        case MODEL_OPTION_GDOC_VERIFICATION_MODE: {
             if (argc == 0) {
                 optionsSupport.switchOption(MODEL_OPTION_GDOC_VERIFICATION_MODE);
             } else {
-                optionsSupport.setOption(MODEL_OPTION_GDOC_VERIFICATION_MODE, Boolean.parseBoolean(argv[0]));
+                boolean verify = Boolean.parseBoolean(argv[0]);
+                optionsSupport.setOption(MODEL_OPTION_GDOC_VERIFICATION_MODE, verify);
             }
             break;
-        case MODEL_OPTION_GDCOLL_AUTOMATIC_MODE:
+        }
+        case MODEL_OPTION_GDCOLL_AUTOMATIC_MODE: {
             boolean isInteractiveMode = argc == 0 ? !gdcoll.isAutomaticMode() : Boolean.parseBoolean(argv[0]);
             gdcoll.setAutomaticMode(isInteractiveMode);
             break;
-        case MODEL_ACTION_INSERT_BENDING_POINT:
+        }
+        case MODEL_ACTION_INSERT_BENDING_POINT: {
             //[0] = SzenHash, [1] = HashString der Edge, [2] = HashString des Knickpunktes, [3] = X-Position, [4] = Y-Position, [5] = Index des Knickpuntes auf der Edge,
-            gdcoll.insertBendingPoint(argv[0], argv[1], argv[2], Integer.parseInt(argv[3]), Integer.parseInt(argv[4]), Integer.parseInt(argv[5]), pid);
+            int x = Integer.parseInt(argv[3]);
+            int y = Integer.parseInt(argv[4]);
+            int bendpointIndexOnEdge = Integer.parseInt(argv[5]);
+            gdcoll.insertBendingPoint(argv[0], argv[1], argv[2], x, y, bendpointIndexOnEdge, pid);
             break;
-
+        }
         case MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_CENTER:
         case MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_LEFT:
         case MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_RIGHT:
@@ -1080,125 +1123,134 @@ public abstract class GraphDocument extends ElementSelectionContext {
         case MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_TOP:
         case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH:
         case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH:
-        case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH:
+        case MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH: {
             align(command, pid);
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_LEFT: {
             setTextPositionHorizontal(TextPositionHorizontal.LEFT, pid);
             break;
-        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_CENTER: {
             setTextPositionHorizontal(TextPositionHorizontal.CENTER, pid);
             break;
-        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL_RIGHT: {
             setTextPositionHorizontal(TextPositionHorizontal.RIGHT, pid);
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL: {
             if (argc == 1) {
                 TextPositionHorizontal textPositionHorizontal = TextPositionHorizontal.valueOf(argv[0]);
                 setTextPositionHorizontal(textPositionHorizontal, pid);
             }
             if (argc == 3) {
                 //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
-                GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
+                GraphDocument szen = gdcoll.getGraphDocumentCoded(argv[0]);
                 ElementContainer ec = szen.findContainerCoded(argv[1]);
                 TextPositionHorizontal textPositionHorizontal = TextPositionHorizontal.valueOf(argv[2]);
                 szen.setTextPositionHorizontal(textPositionHorizontal, ec, pid);
             }
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_TOP: {
             setTextPositionVertical(TextPositionVertical.TOP, pid);
             break;
-        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_CENTER: {
             setTextPositionVertical(TextPositionVertical.CENTER, pid);
             break;
-        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL_BOTTOM: {
             setTextPositionVertical(TextPositionVertical.BOTTOM, pid);
             break;
-        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL: {
             if (argc == 1) {
                 TextPositionVertical textPositionVertical = TextPositionVertical.valueOf(argv[0]);
                 setTextPositionVertical(textPositionVertical, pid);
             }
             if (argc == 3) {
                 //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
-                GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
+                GraphDocument szen = gdcoll.getGraphDocumentCoded(argv[0]);
                 ElementContainer ec = szen.findContainerCoded(argv[1]);
                 TextPositionVertical textPositionVertical = TextPositionVertical.valueOf(argv[2]);
                 szen.setTextPositionVertical(textPositionVertical, ec, pid);
             }
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_LEFT: {
             setTextAlignmentHTML(TextAlignmentHTML.LEFT, pid);
             break;
-        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_CENTER: {
             setTextAlignmentHTML(TextAlignmentHTML.CENTER, pid);
             break;
-        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_RIGHT: {
             setTextAlignmentHTML(TextAlignmentHTML.RIGHT, pid);
             break;
-        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML_JUSTIFY: {
             setTextAlignmentHTML(TextAlignmentHTML.JUSTIFY, pid);
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML:
+        }
+        case MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML: {
             if (argc == 1) {
                 TextAlignmentHTML textAlignmentHTML = TextAlignmentHTML.valueOf(argv[0]);
                 setTextAlignmentHTML(textAlignmentHTML, pid);
             }
             if (argc == 3) {
                 //[0] = SzenHash, [1] = HashString der Containers, [2] = align mode
-                GraphDocument szen = getCollection().getGraphDocumentCoded(argv[0]);
+                GraphDocument szen = gdcoll.getGraphDocumentCoded(argv[0]);
                 ElementContainer ec = szen.findContainerCoded(argv[1]);
                 TextAlignmentHTML textAlignmentHTML = TextAlignmentHTML.valueOf(argv[2]);
                 szen.setTextAlignmentHTML(textAlignmentHTML, ec, pid);
             }
             break;
-
-        case MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION:
+        }
+        case MODEL_ACTION_MOVE_ORDER_TO_FIRST_POSITION: {
             if (argc == 0) {
                 z_move_up(pid);
             } else {
                 z_move_up(argv[0], argv[1], pid);
             }
             break;
-
-        case MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION:
+        }
+        case MODEL_ACTION_MOVE_ORDER_TO_LAST_POSITION: {
             if (argc == 0) {
                 z_move_down(pid);
             } else {
                 z_move_down(argv[0], argv[1], pid);
             }
             break;
-
-        case MODEL_ACTION_MOVE_ORDER:
+        }
+        case MODEL_ACTION_MOVE_ORDER: {
             try {
-                z_move(argv[0], argv[1], Integer.parseInt(argv[2]), pid);
+                int newElementIndexInGraphOrder = Integer.parseInt(argv[2]);
+                z_move(argv[0], argv[1], newElementIndexInGraphOrder, pid);
             } catch (Exception e) {
-                Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
+                Log(e);
             }
             break;
-
-        case MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP:
+        }
+        case MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP: {
             if (argc == 0) {
                 z_step_up(pid);
             } else {
                 z_step_up(argv[0], argv[1], pid);
             }
             break;
-
-        case MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN:
+        }
+        case MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN: {
             if (argc == 0) {
                 z_step_down(pid);
             } else {
                 z_step_down(argv[0], argv[1], pid);
             }
             break;
-
-        case MODEL_ACTION_SET_ELEMENT_ICON:
+        }
+        case MODEL_ACTION_SET_ELEMENT_ICON: {
             switch (argc) {
             case 0:
                 chooseIcon(pid);
@@ -1213,7 +1265,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 break;
             }
             break;
-
+        }
         case MODEL_ACTION_SET_ELEMENT_ICON_NONE:
             switch (argc) {
             case 0:
@@ -1227,8 +1279,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
             }
             break;
 
-        case MODEL_ACTION_SET_ELEMENT_FONT:
-            name = "";
+        case MODEL_ACTION_SET_ELEMENT_FONT: {
+            String name = "";
             switch (argc) {
             case 0:
                 changeFont(null, pid);
@@ -1249,7 +1301,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 changeFont(argv[0], argv[1], name, size, style, pid);
             }
             break;
-
+        }
         case MODEL_ACTION_CREATE_SUBMODEL:
             Szenario szen;
             if (argc == 0) {
@@ -1288,7 +1340,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             gdcoll.renameSzenario(szenHash, newName, pid);
             break;
         }
-        case MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL:
+        case MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL: {
             //argv[0] = Ziel-Szenario-Hash
             //argv[1] = Element-Hash
             if (argc == 2) {
@@ -1300,58 +1352,64 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 addElementToSzenario(argv[0], argv[1], argv[2], pid);
             }
             break;
-
-        case MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL:
+        }
+        case MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL: {
             if (argc != 1) {
                 return;
             }
             //Selection clonen, weil sie sich während der Ausführung ändert!
-            addElementsToSzenario(argv[0], getSelectionInGraphOrder(), pid);
+            List<ElementContainer> selectionInGraphOrder = getSelectionInGraphOrder();
+            addElementsToSzenario(argv[0], selectionInGraphOrder, pid);
             break;
-
-        case MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL:
+        }
+        case MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL: {
             //Selection clonen, weil sie sich während der Ausführung ändert!
-            addContainerToNewSzenario(getSelectionInGraphOrder(), pid);
+            List<ElementContainer> selectionInGraphOrder = getSelectionInGraphOrder();
+            addContainerToNewSzenario(selectionInGraphOrder, pid);
             break;
-
-        case MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS:
+        }
+        case MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS: {
             //Selection clonen, weil sie sich während der Ausführung ändert!
             addContainerToAllSzenarios(getSelectionInGraphOrder(), pid);
             break;
-
-        case MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL:
+        }
+        case MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL: {
             if (argc < 2) {
                 return;
             }
             linkElementToSzenario(argv[0], argv[1], pid);
             break;
-
-        case MODEL_ACTION_SELECT_LINKED_SUBMODEL:
-            Static.getTool().changeToLinked(this);
+        }
+        case MODEL_ACTION_SELECT_LINKED_SUBMODEL: {
+            Tool3lgm tool = Static.getTool();
+            tool.changeToLinked(this);
             break;
-
-        case MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL:
+        }
+        case MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL: {
             if (argc < 1) {
                 return;
             }
             switch (argc) {
             case 1:
-                linkElementsToSzenario(argv[0], new ArrayList<>(selectedContainer), pid);
+                ArrayList<ElementContainer> selectionClone = new ArrayList<>(selectedContainer);
+                linkElementsToSzenario(argv[0], selectionClone, pid);
                 break;
             default:
                 linkElementToSzenario(argv[0], argv[1], pid);
             }
             break;
-
-        case MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL:
-            linkElementsToSzenario(null, new ArrayList<>(selectedContainer), pid);
+        }
+        case MODEL_ACTION_UNLINK_SELECTED_TO_SUBMODEL: {
+            ArrayList<ElementContainer> selectionClone = new ArrayList<>(selectedContainer);
+            linkElementsToSzenario(null, selectionClone, pid);
             break;
-
-        case MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL:
-            linkElementsToNewSzenario(new ArrayList<>(selectedContainer), pid);
+        }
+        case MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL: {
+            ArrayList<ElementContainer> selectionClone = new ArrayList<>(selectedContainer);
+            linkElementsToNewSzenario(selectionClone, pid);
             break;
-
-        case MODEL_ACTION_DELETE_FROM_SUBMODEL:
+        }
+        case MODEL_ACTION_DELETE_FROM_SUBMODEL: {
             switch (argc) {
             case 0:
                 if (!(this instanceof Szenario)) {
@@ -1374,26 +1432,30 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 break;
             }
             break;
-
-        case MODEL_ACTION_JOIN_SELECTED:
+        }
+        case MODEL_ACTION_JOIN_SELECTED: {
             joinSelected(pid);
             break;
-
+        }
         case MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON:
-        case MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF:
-            layer[gdcoll.getActiveLayer()].setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
+        case MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_OFF: {
+            int activeLayer = gdcoll.getActiveLayer();
+            layer[activeLayer].setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SET_LAYER_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
             distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
+        }
         case MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON:
-        case MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF:
+        case MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_OFF: {
             for (ElementContainer ec : selectedContainer) {
-                if (metaModel.hasInterLayerStartClass(ec.getElement())) {
-                    ((InterLayerConnectedNodeContainer) ec).setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
+                ModelElement me = ec.getElement();
+                if (metaModel.hasInterLayerStartClass(me)) {
+                    InterLayerConnectedNodeContainer interLayerEc = (InterLayerConnectedNodeContainer) ec;
+                    interLayerEc.setShowInterLayerConnections(command == GDCommands.MODEL_ACTION_SET_ELEMENT_INTERLAYER_CONNECTIONS_VISIBILITY_ON);
                 }
             }
             distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
             break;
-
+        }
         default:
             break;
         }
@@ -1413,11 +1475,17 @@ public abstract class GraphDocument extends ElementSelectionContext {
             String[] argv = args.toArray(new String[0]);
             dispatch_command(command, argv, pid);
         } catch (Exception e) {
-            Log(e);
-            JOptionPane.showMessageDialog(null, e.getClass().getName() + ": " + e.getMessage(), getResString("tool3lgm"), JOptionPane.INFORMATION_MESSAGE);
+            Class<? extends Exception> errorClass = e.getClass();
+            String errorClassName = errorClass.getName();
+            String errorMessage = errorClassName + ": " + e.getMessage();
+            Log(e, errorMessage);
         }
     }
 
+    /**
+     * @param commandName
+     * @return
+     */
     private static GDCommands getCommand(final String commandName) {
         //je nach globaler Option können die geloggten Kommandos den Namen des GDCommands oder den Index in der Liste aller GDCommands
         //aber wenn die Option auf false steht, dann sind die UNOD-Kommandos als Zahl kodiert, alle anderen sind aber noch lesbar, daher
@@ -1426,7 +1494,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
         try {
             //wenn undo und redo mit den Komandoindizes statt den vollständigen Namen geloggt werden
             //versuche den Index zu parsen und das Kommando
-            command = GDCommands.values()[new Integer(commandName).intValue()];
+            int commandIndex = Integer.parseInt(commandName);
+            command = GDCommands.values()[commandIndex];
         } catch (Exception e) {
             //wenn lesbar geloggt werden soll -> einfach den Kommandonamen nehmen
             command = GDCommands.valueOf(commandName);
@@ -1434,8 +1503,21 @@ public abstract class GraphDocument extends ElementSelectionContext {
         return command;
     }
 
+    /**
+     * @param e
+     */
     private void Log(final Exception e) {
-        Log.show(Log.ERROR, getResString("FehlerAllgemein"), e);
+        Log(e, null);
+    }
+
+    /**
+     * @param e
+     * @param message
+     */
+    private void Log(final Exception e, final String message) {
+        String fullMessage = getResString("FehlerAllgemein");
+        fullMessage = Strings.isNullOrEmpty(message) ? fullMessage : fullMessage + " \n" + message;
+        Log.show(Log.ERROR, fullMessage, e);
     }
 
     /**
@@ -1473,7 +1555,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return;
         }
         if (log) {
-            gdcoll.getTman().startTransaction("", "", pid, this);
+            TransactionManager transactionManager = gdcoll.getTman();
+            transactionManager.startTransaction("", "", pid, this);
         }
         Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
         Integer pidInteger = new Integer(pid);
@@ -1496,7 +1579,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
             if (!(transStackInt > 1)) {
                 //				System.err.println("start_transaction " + iii++ + " + " + pid + ": "+ transStackInt + " " + this);
                 for (ElementContainer ec : selectedContainer) {
-                    getCollection().getTman().addPreSelectionItem(ec.getHashString(), pid);
+                    TransactionManager transactionManager = gdcoll.getTman();
+                    String hash = ec.getHashString();
+                    transactionManager.addPreSelectionItem(hash, pid);
                 }
             }
         }
@@ -1542,13 +1627,15 @@ public abstract class GraphDocument extends ElementSelectionContext {
         lastTransStackInt = tst == null ? 0 : tst;
         if (log) {
             //			System.err.println("### " + (iii++) + " " + pid);
+            TransactionManager transactionManager = gdcoll.getTman();
             if (transStackInt == 0) {
                 //				System.err.println("finish_transaction " + iii++ + " - " + pid + ": "+ transStackInt + " " + this);
                 for (ElementContainer ec : selectedContainer) {
-                    getCollection().getTman().addPostSelectionItem(ec.getHashString(), pid);
+                    String hash = ec.getHashString();
+                    transactionManager.addPostSelectionItem(hash, pid);
                 }
             }
-            getCollection().getTman().finishTransaction(pid);
+            transactionManager.finishTransaction(pid);
         }
         //Sys.err("finish " + pid + "  " + log);
     }
@@ -1649,11 +1736,20 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     protected final void normalizeFontElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
-        String szenHash = ec.getGraphDocument().hashString;
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT + " " + szenHash + " " + ec.getHashString(), "", pid);
+        GraphDocument doc = ec.getGraphDocument();
+        String szenHash = doc.getHashString();
+        String elementHash = ec.getHashString();
+        String command = GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_FONT + " " + szenHash + " " + elementHash;
+        addRedoCommandOrReplace(command, "", pid);
 
-        if (ec.getFontName() != null) {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_FONT + " " + szenHash + " " + ec.getHashString(), GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
+        String fontName = ec.getFontName();
+        if (fontName != null) {
+            command = GDCommands.MODEL_ACTION_SET_ELEMENT_FONT + " " + szenHash + " " + elementHash;
+            String parseSaveFontName = ParseSaveStringHandler.getParseSaveString(fontName);
+            int fontSize = ec.getFontSize();
+            int fontStyle = ec.getFontStyle();
+            String arguments = parseSaveFontName + " " + fontSize + " " + fontStyle;
+            addUndoCommandIfNotExist(command, arguments, pid);
             ec.setFont(null);
         }
         finish_transaction(pid);
@@ -1667,7 +1763,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public final void normalizeFontElement(final String szenHash, final String elementHash, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
-            normalizeFontElement(szen.findContainerCoded(elementHash), pid);
+            ElementContainer ec = szen.findContainerCoded(elementHash);
+            normalizeFontElement(ec, pid);
         }
     }
 
@@ -1677,10 +1774,16 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     protected final void normalizeColorElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
-        String szenHash = ec.getGraphDocument().hashString;
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR + " " + szenHash + " " + ec.getHashString(), "", pid);
-        if (ec.getColor() != null) {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + ec.getHashString(), ec.getColor().getRGB(), pid);
+        GraphDocument doc = ec.getGraphDocument();
+        String szenHash = doc.getHashString();
+        String elementHash = ec.getHashString();
+        String command = GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_COLOR + " " + szenHash + " " + elementHash;
+        addRedoCommandOrReplace(command, "", pid);
+        Color color = ec.getColor();
+        if (color != null) {
+            command = GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + elementHash;
+            int rgb = color.getRGB();
+            addUndoCommandIfNotExist(command, rgb, pid);
             ec.setColor(null);
         }
         finish_transaction(pid);
@@ -1694,7 +1797,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     protected final void normalizeColorElement(final String szenHash, final String elementHash, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
-            normalizeColorElement(szen.findContainerCoded(elementHash), pid);
+            ElementContainer ec = szen.findContainerCoded(elementHash);
+            normalizeColorElement(ec, pid);
         }
     }
 
@@ -1706,9 +1810,14 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     protected final void normalizeTransparencyElement(final ElementContainer ec, final int pid) {
         start_transaction(pid);
-        String szenHash = ec.getGraphDocument().hashString;
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY + " " + szenHash + " " + ec.getHashString(), "", pid);
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + ec.getHashString(), ec.getAlpha(), pid);
+        GraphDocument doc = ec.getGraphDocument();
+        String szenHash = doc.hashString;
+        String elementHash = ec.getHashString();
+        String redoCommand = GDCommands.MODEL_ACTION_SET_ELEMENT_DEFAULT_TRANSPARENCY + " " + szenHash + " " + elementHash;
+        addRedoCommandOrReplace(redoCommand, "", pid);
+        String undoCommand = GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + elementHash;
+        int alpha = ec.getAlpha();
+        addUndoCommandIfNotExist(undoCommand, alpha, pid);
         ec.setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
         finish_transaction(pid);
     }
@@ -1721,7 +1830,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     protected final void normalizeTransparencyElement(final String szenHash, final String elementHash, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
-            normalizeTransparencyElement(szen.findContainerCoded(elementHash), pid);
+            ElementContainer ec = szen.findContainerCoded(elementHash);
+            normalizeTransparencyElement(ec, pid);
         }
     }
 
@@ -1729,7 +1839,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void normalizeSelected(final int pid) {
-        if (selectedContainer.size() == 0) {
+        if (selectedContainer.isEmpty()) {
             return;
         }
         start_transaction(pid);
@@ -1745,7 +1855,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void normalizeFontSelected(final int pid) {
-        if (selectedContainer.size() == 0) {
+        if (selectedContainer.isEmpty()) {
             return;
         }
         start_transaction(pid);
@@ -1760,7 +1870,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void normalizeColorSelected(final int pid) {
-        if (selectedContainer.size() == 0) {
+        if (selectedContainer.isEmpty()) {
             return;
         }
         start_transaction(pid);
@@ -1776,7 +1886,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void normalizeTransparencySelected(final int pid) {
-        if (selectedContainer.size() == 0) {
+        if (selectedContainer.isEmpty()) {
             return;
         }
         start_transaction(pid);
@@ -1804,31 +1914,34 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (!(t instanceof NodeContainer)) {
             return;
         }
-        NodeContainer mc = (NodeContainer) t;
+        NodeContainer nc = (NodeContainer) t;
         szen.start_transaction(pid);
-        if (mc.getColor() != null) {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + mc.getHashString(), mc.getColor().getRGB(), pid);
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + mc.getHashString(), mc.getAlpha(), pid);
+        String elementHash = nc.getHashString();
+        Color color = nc.getColor();
+        Integer rgb = color == null ? null : color.getRGB();
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + elementHash, rgb, pid);
+        int alpha = color == null ? 255 : color.getAlpha();
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + elementHash, alpha, pid);
+        if (nc.getIcon() != null) {
+            String iconString = nc.getIconString();
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + elementHash, iconString, pid);
         } else {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + mc.getHashString(), "null", pid);
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + mc.getHashString(), "255", pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE + " " + szenHash + " " + elementHash, "", pid);
         }
-        if (mc.getIcon() != null) {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + mc.getHashString(), mc.getIconString(), pid);
-        } else {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE + " " + szenHash + " " + mc.getElement().getHashString(), "", pid);
-        }
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + mc.getHashString(), iconKey, pid);
-        mc.setIcon(iconKey, gdcoll.getIconTable());
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + elementHash, iconKey, pid);
+        GDCollectionIconTable iconTable = gdcoll.getIconTable();
+        nc.setIcon(iconKey, iconTable);
         szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, mc, pid);
+        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, nc, pid);
     }
 
     /**
      * @param pid
      */
     public final void chooseIcon(final int pid) {
-        File iconFile = ImageChooser.getImageFile(getMainFrame(), UserProperties.getIconPath());
+        MainFrame mainFrame = getMainFrame();
+        File iconPath = UserProperties.getIconPath();
+        File iconFile = ImageChooser.getImageFile(mainFrame, iconPath);
         if (iconFile != null) {
             setIcon(iconFile, pid);
         }
@@ -1841,7 +1954,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public final void setIcon(final String iconKey, final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
-            setIcon(hashString, ec.getElement().getHashString(), iconKey, pid);
+            ModelElement me = ec.getElement();
+            String elementHash = me.getHashString();
+            setIcon(hashString, elementHash, iconKey, pid);
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
@@ -1851,7 +1966,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param iconFile
      */
     public final void setIcon(final File iconFile, final int pid) {
-        String iconKey = gdcoll.getIconTable().loadIcon(iconFile);
+        GDCollectionIconTable iconTable = gdcoll.getIconTable();
+        String iconKey = iconTable.loadIcon(iconFile);
         if (iconKey == null) {
             return;
         }
@@ -1867,19 +1983,22 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (!(szen instanceof Szenario)) {
             return;
         }
-        ElementContainer t = szen.findContainerCoded(hashString);
-        if (!(t instanceof NodeContainer)) {
+        ElementContainer ec = szen.findContainerCoded(hashString);
+        if (!(ec instanceof NodeContainer)) {
             return;
         }
-        NodeContainer mc = (NodeContainer) t;
+        NodeContainer nc = (NodeContainer) ec;
         szen.start_transaction(pid);
-        if (mc.getIcon() != null) {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + mc.getHashString(), mc.getIconString(), pid);
+        String elementHash = nc.getHashString();
+        if (nc.getIcon() != null) {
+            String iconString = nc.getIconString();
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON + " " + szenHash + " " + elementHash, iconString, pid);
         }
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE + " " + szenHash + " " + mc.getHashString(), "", pid);
-        mc.setIcon(null, gdcoll.getIconTable());
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ICON_NONE + " " + szenHash + " " + elementHash, "", pid);
+        GDCollectionIconTable iconTable = gdcoll.getIconTable();
+        nc.setIcon(null, iconTable);
         szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, mc, pid);
+        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, nc, pid);
     }
 
     /**
@@ -1888,7 +2007,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public final void unsetIcon(final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
-            unsetIcon(hashString, ec.getHashString(), pid);
+            String elementHash = ec.getHashString();
+            unsetIcon(hashString, elementHash, pid);
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
@@ -1901,11 +2021,12 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void changeColor(final String docHash, final String hashCode, final Color color, final int pid) {
-        GraphDocument gdoc = gdcoll.getGraphDocumentCoded(docHash);
-        if (gdoc == null) {
+        GraphDocument doc = gdcoll.getGraphDocumentCoded(docHash);
+        if (doc == null) {
             return;
         }
-        changeColor(gdoc.findContainerCoded(hashCode), color, pid);
+        ElementContainer ec = doc.findContainerCoded(hashCode);
+        changeColor(ec, color, pid);
     }
 
     /**
@@ -1931,7 +2052,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 break;
             }
         }
-        Color col = JColorChooser.showDialog(new JFrame(), getResString("farbe_ausw"), oldcol);
+        MainFrame mainFrame = getMainFrame();
+        String title = getResString("farbe_ausw");
+        Color col = JColorChooser.showDialog(mainFrame, title, oldcol);
         if (col == null) {
             return;
         }
@@ -1955,16 +2078,16 @@ public abstract class GraphDocument extends ElementSelectionContext {
         GraphDocument ecDoc = ec.getGraphDocument();
         ecDoc.start_transaction(pid);
         String szenHash = ecDoc.hashString;
-        if (color == null) {
-            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + ec.getHashString(), "null", pid);
-        } else {
-            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + ec.getHashString(), color.getRGB(), pid);
-        }
-        if (ec.getColor() == null) {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + ec.getHashString(), "null", pid);
-        } else {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + ec.getHashString(), ec.getColor().getRGB(), pid);
-        }
+        String elementHash = ec.getHashString();
+        String command = GDCommands.MODEL_ACTION_SET_ELEMENT_COLOR + " " + szenHash + " " + elementHash;
+        //redo
+        Integer rgb = color == null ? null : color.getRGB();
+        addRedoCommandOrReplace(command, rgb, pid);
+        //undo
+        Color undoColor = ec.getColor();
+        rgb = undoColor == null ? null : undoColor.getRGB();
+        addUndoCommandIfNotExist(command, rgb, pid);
+        //do
         ec.setColor(color);
         ecDoc.finish_transaction(pid);
         ecDoc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
@@ -1974,8 +2097,11 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param col
      * @param pid
      */
-    public final void changeLayerColor(final Color col, final int pid) {
-        changeLayerColor(gdcoll.getSelectedDoc().hashString, gdcoll.getActiveLayer(), col, pid);
+    public final void changeLayerColor(final Color color, final int pid) {
+        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+        String szenHash = selectedDoc.getHashString();
+        int activeLayer = gdcoll.getActiveLayer();
+        changeLayerColor(szenHash, activeLayer, color, pid);
     }
 
     /**
@@ -1998,7 +2124,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 break;
             }
         }
-        Color col = JColorChooser.showDialog(null, getResString("farbe_ausw"), oldcol);
+        MainFrame mainFrame = getMainFrame();
+        String title = getResString("farbe_ausw");
+        Color col = JColorChooser.showDialog(mainFrame, title, oldcol);
         if (col == null) {
             return;
         }
@@ -2016,19 +2144,22 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (gdcoll.isAutomaticMode()) {
             return;
         }
-        Color col = JColorChooser.showDialog(null, getResString("farbe_ausw"), layer[layer_idx].getColor());
-        if (col == null) {
+        MainFrame mainFrame = getMainFrame();
+        String title = getResString("farbe_ausw");
+        Color color = layer[layer_idx].getColor();
+        color = JColorChooser.showDialog(mainFrame, title, color);
+        if (color == null) {
             return;
         }
-        changeLayerColor(szenHash, layer_idx, col, pid);
+        changeLayerColor(szenHash, layer_idx, color, pid);
     }
 
     /**
      * @param layer_idx
-     * @param col
+     * @param color
      * @param pid
      */
-    public final void changeLayerColor(final String szenHash, final int layer_idx, final Color col, final int pid) {
+    public final void changeLayerColor(final String szenHash, final int layer_idx, final Color color, final int pid) {
         if (layer_idx < 0 || layer_idx > 4) {
             return;
         }
@@ -2037,19 +2168,19 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return;
         }
         szen.start_transaction(pid);
-        if (col == null) {
-            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, "null", pid);
-        } else {
-            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, col.getRGB(), pid);
-        }
-        if (szen.layer[layer_idx].getColor() == null) {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, "null", pid);
-        } else {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getColor().getRGB(), pid);
-        }
-        szen.layer[layer_idx].setColor(col);
+        String command = GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx;
+        //redo
+        Integer rgb = color == null ? null : color.getRGB();
+        addRedoCommandOrReplace(command, rgb, pid);
+        LayerContainer lc = szen.layer[layer_idx];
+        //undo
+        Color undoColor = lc.getColor();
+        rgb = undoColor == null ? null : undoColor.getRGB();
+        addUndoCommandIfNotExist(command, rgb, pid);
+        //do
+        szen.layer[layer_idx].setColor(color);
         szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, szen.layer[layer_idx], pid);
+        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, lc, pid);
     }
 
     /**
@@ -2080,23 +2211,24 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public void changeAlpha(final String szenHash, final String hashCode, final int alphaMode, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
-            changeAlpha(szen.findContainerCoded(hashCode), alphaMode, pid);
+            ElementContainer ec = szen.findContainerCoded(hashCode);
+            changeAlpha(ec, alphaMode, pid);
         }
     }
 
     /**
      * @param ec
-     * @param alphaMode
+     * @param alpha
      * @param pid
      */
-    private void changeAlpha(final ElementContainer ec, int alphaMode, final int pid) {
+    private void changeAlpha(final ElementContainer ec, int alpha, final int pid) {
         if (ec.layerFor() < 0) {
             return;
         }
-        if (alphaMode < 0) {
-            alphaMode = GraphElementLayout.TRANSPARENCY_FULL;
-        } else if (alphaMode > 255) {
-            alphaMode = GraphElementLayout.TRANSPARENCY_NONE;
+        if (alpha < 0) {
+            alpha = GraphElementLayout.TRANSPARENCY_FULL;
+        } else if (alpha > 255) {
+            alpha = GraphElementLayout.TRANSPARENCY_NONE;
         }
 
         GraphDocument ecDoc = ec.getGraphDocument();
@@ -2104,11 +2236,18 @@ public abstract class GraphDocument extends ElementSelectionContext {
 
         ecDoc.start_transaction(pid);
         if (ec.getColor() == null) {
-            changeColor(ec, mapping.getStandardBackGroundColor(ec), pid);
+            Color standardBackGroundColor = mapping.getStandardBackGroundColor(ec);
+            changeColor(ec, standardBackGroundColor, pid);
         }
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + ec.getHashString(), alphaMode, pid);
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + ec.getHashString(), ec.getAlpha(), pid);
-        ec.setAlpha(alphaMode);
+        String elementHash = ec.getHashString();
+        String command = GDCommands.MODEL_ACTION_SET_ELEMENT_ALPHA + " " + szenHash + " " + elementHash;
+        //redo
+        addRedoCommandOrReplace(command, alpha, pid);
+        //undo
+        int undoAlpha = ec.getAlpha();
+        addUndoCommandIfNotExist(command, undoAlpha, pid);
+        //do
+        ec.setAlpha(alpha);
         ecDoc.finish_transaction(pid);
         ecDoc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
@@ -2131,12 +2270,15 @@ public abstract class GraphDocument extends ElementSelectionContext {
         } else if (alphaMode > 255) {
             alphaMode = GraphElementLayout.TRANSPARENCY_NONE;
         }
+        LayerContainer lc = szen.layer[layer_idx];
         szen.start_transaction(pid);
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layer_idx, alphaMode, pid);
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getAlpha(), pid);
-        szen.layer[layer_idx].setAlpha(alphaMode);
+        String command = GDCommands.MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layer_idx;
+        addRedoCommandOrReplace(command, alphaMode, pid);
+        int undoAlpha = lc.getAlpha();
+        addUndoCommandIfNotExist(command, undoAlpha, pid);
+        lc.setAlpha(alphaMode);
         szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, szen.layer[layer_idx], pid);
+        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, lc, pid);
     }
 
     /**
@@ -2144,7 +2286,10 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void changeLayerAlpha(final int alphaMode, final int pid) {
-        changeLayerAlpha(gdcoll.getSelectedDoc().hashString, gdcoll.getActiveLayer(), alphaMode, pid);
+        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+        String szenHash = selectedDoc.getHashString();
+        int activeLayer = gdcoll.getActiveLayer();
+        changeLayerAlpha(szenHash, activeLayer, alphaMode, pid);
     }
 
     /**
@@ -2160,18 +2305,22 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return;
         }
         szen.start_transaction(pid);
-
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getAlpha(), pid);
+        //redo
         addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY + " " + szenHash + " " + layer_idx, "", pid);
-        if (szen.layer[layer_idx].getColor() == null) {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, "null", pid);
-        } else {
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, szen.layer[layer_idx].getColor().getRGB(), pid);
-        }
-        szen.layer[layer_idx].setColor(Color.white);
-        szen.layer[layer_idx].setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
+        //undo
+        LayerContainer lc = szen.layer[layer_idx];
+        //undo alpha
+        int alpha = lc.getAlpha();
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layer_idx, alpha, pid);
+        //undo color
+        Color color = lc.getColor();
+        Integer rgb = color == null ? null : color.getRGB();
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layer_idx, rgb, pid);
+        //do
+        lc.setColor(Color.white);
+        lc.setAlpha(GraphElementLayout.TRANSPARENCY_NONE);
         szen.finish_transaction(pid);
-        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, szen.layer[layer_idx], pid);
+        szen.distributeEvent(ELEMENT_GRAPHICS_CHANGED, lc, pid);
     }
 
     /**
@@ -2183,21 +2332,30 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (ec == null) {
             return;
         }
-
-        GraphDocument ecDoc = ec.getGraphDocument();
-        ecDoc.start_transaction(pid);
-        String szenHash = ecDoc.hashString;
+        GraphDocument doc = ec.getGraphDocument();
+        doc.start_transaction(pid);
+        String szenHash = doc.hashString;
 
         String commandPrefix = GDCommands.MODEL_ACTION_SET_ELEMENT_FONT + " " + szenHash + " " + ec.getHashString();
-        String undoCommandArguments = ec.hasStandardFont() ? "" : GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle();
-        String redoCommandArguments = ec.isStandardFont(font) ? "" : GDCOMMAND_TEXT_SURROUNDER + font.getName() + GraphDocument.GDCOMMAND_TEXT_SURROUNDER + " " + font.getSize() + " " + font.getStyle();
+        //undo
+        String fontName = ec.getFontName();
+        fontName = ParseSaveStringHandler.getParseSaveString(fontName);
+        int fontSize = ec.getFontSize();
+        int fontStyle = ec.getFontStyle();
+        String undoCommandArguments = ec.hasStandardFont() ? "" : fontName + " " + fontSize + " " + fontStyle;
         addUndoCommandIfNotExist(commandPrefix, undoCommandArguments, pid);
+        //redo
+        fontName = font.getName();
+        fontName = ParseSaveStringHandler.getParseSaveString(fontName);
+        fontSize = font.getSize();
+        fontStyle = font.getStyle();
+        String redoCommandArguments = ec.isStandardFont(font) ? "" : fontName + " " + fontSize + " " + fontStyle;
         addRedoCommandOrReplace(commandPrefix, redoCommandArguments, pid);
-
+        //do
         ec.setFont(font);
         ec.refreshText();
-        ecDoc.finish_transaction(pid);
-        ecDoc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
+        doc.finish_transaction(pid);
+        doc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, ec, pid);
     }
 
     /**
@@ -2221,7 +2379,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return;
         }
         szen.start_transaction(pid);
-        Font font = name == null || name.equals("") ? null : new Font(name, style, size);
+        boolean invalidFontName = Strings.isNullOrEmpty(name);
+        Font font = invalidFontName ? null : new Font(name, style, size);
         ElementContainer ec = szen.findContainerCoded(hashCode);
         changeFont(ec, font, pid);
         szen.finish_transaction(pid);
@@ -2233,15 +2392,19 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void changeFont(Font font, final int pid) {
+        if (selectedContainer.isEmpty()) {
+            return;
+        }
         start_transaction(pid);
-        if (selectedContainer.size() != 0) {
-            if (font == null) {
-                font = EasyDialogAccess.getFontByChooser(Static.getMainFrame(), getLastSelected().getFont());
-            }
-            if (font != null) {
-                for (ElementContainer ec : selectedContainer) {
-                    changeFont(ec, font, pid);
-                }
+        if (font == null) {
+            MainFrame mainFrame = getMainFrame();
+            ElementContainer lastSelected = getLastSelected();
+            Font lastSelectedFont = lastSelected.getFont();
+            font = EasyDialogAccess.getFontByChooser(mainFrame, lastSelectedFont);
+        }
+        if (font != null) {
+            for (ElementContainer ec : selectedContainer) {
+                changeFont(ec, font, pid);
             }
         }
         finish_transaction(pid);
@@ -2261,7 +2424,11 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void moveNodeContainer(final NodeContainer nc, final int x, final int y, final int width, final int height, final int pid) {
-        if (nc == null || !nc.getElement().isPaintable()) {
+        if (nc == null) {
+            return;
+        }
+        ModelElement me = nc.getElement();
+        if (!me.isPaintable()) {
             return;
         }
         start_transaction(pid);
@@ -2277,8 +2444,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
         //wenn NodeContainer verschoben werden (keine KnickpinktContainer)
         if (!(nc instanceof BendpointContainer)) {
             //bei allen Kanten dieser Node
-            for (Edge ka : nc.getNode().getEdges()) {
-                EdgeContainer edgeC = (EdgeContainer) ka.getContainer(this);
+            for (Edge edge : me.getEdges()) {
+                EdgeContainer edgeC = (EdgeContainer) edge.getContainer(this);
                 //wenn die Edge keinen Container in diesem Teilmodell hat (dann wird sie
                 //auch nicht Grafisch dargestellt und es braucht nichts verschoben werden) -> weiter
                 if (edgeC == null) {
@@ -2288,7 +2455,10 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 edgeC.computeBorderPoints();
             }
         } else {
-            ((BendpointContainer) nc).getBendpoint().getOwner().computeBorderPoints();
+            BendpointContainer bc = (BendpointContainer) nc;
+            Bendpoint bendpoint = bc.getBendpoint();
+            EdgeContainer edgeC = bendpoint.getOwner();
+            edgeC.computeBorderPoints();
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, nc, pid);
@@ -2322,14 +2492,16 @@ public abstract class GraphDocument extends ElementSelectionContext {
         //Unterelemente ebenfalls selektieren, damit sie mitverschoben werden und ihr Verschieben
         //dann auch als Undo gelogt wird
         List<ElementContainer> selection = expandSelection(OPTION_GRAPH_MOVE_SUBELEMENTS.is());
-        for (NodeContainer kc : getSelectedRealElementContainerIterable()) {
-            if (layer == ModelConstants.NO_LAYER || layer == kc.layerFor()) {
-                moveNodeContainer(kc, kc.getX() + deltaX, kc.getY() + deltaY, kc.getWidth(), kc.getHeight(), pid);
-            }
-        }
-        for (BendpointContainer kc : getSelectedBendpointContainerIterable()) {
-            if (layer == ModelConstants.NO_LAYER || layer == kc.layerFor()) {
-                moveNodeContainer(kc, kc.getX() + deltaX, kc.getY() + deltaY, kc.getWidth(), kc.getHeight(), pid);
+        Iterable<NodeContainer> nodeContainers = getSelectedRealElementContainerIterable();
+        Iterable<BendpointContainer> bendpointContainers = getSelectedBendpointContainerIterable();
+        Iterable<NodeContainer> allNodeContainers = CollectionUtils.getCommonIterable(nodeContainers, bendpointContainers);
+        for (NodeContainer nc : allNodeContainers) {
+            if (layer == ModelConstants.NO_LAYER || layer == nc.layerFor()) {
+                int x = nc.getX();
+                int y = nc.getY();
+                int width = nc.getWidth();
+                int height = nc.getHeight();
+                moveNodeContainer(nc, x + deltaX, y + deltaY, width, height, pid);
             }
         }
         setSelection(selection);
@@ -2374,7 +2546,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return false;
         }
         ElementContainer lastSelected = getLastSelectedGraphVisibleNodeOrBendpoint();
-        return lastSelected.getElement().isPaintable();
+        ModelElement me = lastSelected.getElement();
+        return me.isPaintable();
     }
 
     /**
@@ -2455,11 +2628,12 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 }
             }
         }
-        if (container2Select.size() == 0) {
+        if (container2Select.isEmpty()) {
             return null;
         }
         List<ElementContainer> oldSelection = getSelectedContainer();
-        ElementContainer lastSelected = oldSelection.get(oldSelection.size() - 1);
+        int lastSelectedIndex = oldSelection.size() - 1;
+        ElementContainer lastSelected = oldSelection.get(lastSelectedIndex);
         for (ElementContainer ec : container2Select) {
             addSimpleToSelection(ec);
         }
@@ -2469,10 +2643,12 @@ public abstract class GraphDocument extends ElementSelectionContext {
         MetaModel metaModel = getMetaModel();
         for (ElementContainer ec : selectedContainer) {
             ModelElement me = ec.getElement();
-            if (metaModel.isPaintable(me.getClass())) {
+            Class<? extends ModelElement> elementClass = me.getClass();
+            if (metaModel.isPaintable(elementClass)) {
                 for (Edge edge : me.getEdges()) {
                     ModelElement other = edge.getOther(me);
-                    if (metaModel.isPaintable(other.getClass())) {
+                    Class<? extends ModelElement> otherElementClass = other.getClass();
+                    if (metaModel.isPaintable(otherElementClass)) {
                         ElementContainer otherEc = other.getContainer(this);
                         if (selectedContainer.contains(otherEc)) {
                             EdgeContainer edgeC = (EdgeContainer) edge.getContainer(this);
@@ -2527,7 +2703,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public final void setExpanded(final boolean expand, final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
-            setExpanded(expand, gdcoll, hashString, ec.getHashString(), !expand, pid);
+            String elementHash = ec.getHashString();
+            setExpanded(expand, gdcoll, hashString, elementHash, !expand, pid);
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
@@ -2542,7 +2719,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
         start_transaction(pid);
         for (ElementContainer ec : selectedContainer) {
             boolean expand = !ec.isExpanded();
-            setExpanded(expand, gdcoll, hashString, ec.getHashString(), !expand, pid);
+            String elementHash = ec.getHashString();
+            setExpanded(expand, gdcoll, hashString, elementHash, !expand, pid);
         }
         finish_transaction(pid);
         distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
@@ -2571,7 +2749,10 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (ec == null) {
             return;
         }
-        if (ec.getElement().getDirectPartContainers(szen).size() == 0) {
+
+        ModelElement me = ec.getElement();
+        List<ElementContainer> directPartContainers = me.getDirectPartContainers(szen);
+        if (directPartContainers.isEmpty()) {
             return;
         }
 
@@ -2600,17 +2781,25 @@ public abstract class GraphDocument extends ElementSelectionContext {
         tmpExpansionLevel--;
     }
 
+    /**
+     * @param szen
+     * @param ec
+     * @param pid
+     */
     private static final void expand(final GraphDocument szen, final ElementContainer ec, final int pid) {
         ec.setExpanded(true);
         ModelElement me = ec.getElement();
-        for (ElementContainer c : me.getDirectPartContainers(szen)) {
-            c.setVisible(true);
-            if (c.isExpanded()) {
-                setExpanded(true, szen.getCollection(), szen.getHashString(), c.getHashString(), false, pid);
+        for (ElementContainer partC : me.getDirectPartContainers(szen)) {
+            partC.setVisible(true);
+            if (partC.isExpanded()) {
+                GDCollection gdcoll = szen.getCollection();
+                String szenHash = szen.getHashString();
+                String partHash = partC.getHashString();
+                setExpanded(true, gdcoll, szenHash, partHash, false, pid);
             }
         }
         // Anpassen der Kanten
-        for (Edge edge : ec.getElement().getEdges()) {
+        for (Edge edge : me.getEdges()) {
             EdgeContainer kc = (EdgeContainer) edge.getContainer(szen);
             if (kc == null) {
                 continue;
@@ -2619,18 +2808,27 @@ public abstract class GraphDocument extends ElementSelectionContext {
         }
     }
 
+    /**
+     * @param szen
+     * @param ec
+     * @param doCollapse
+     * @param pid
+     */
     private static final void collapse(final GraphDocument szen, final ElementContainer ec, final boolean doCollapse, final int pid) {
         if (doCollapse) {
             ec.setExpanded(false);
         }
         ModelElement me = ec.getElement();
-        for (ElementContainer c : me.getDirectPartContainers(szen)) {
-            if (tmpExpandedElements.contains(c)) {
+        for (ElementContainer partC : me.getDirectPartContainers(szen)) {
+            if (tmpExpandedElements.contains(partC)) {
                 continue;
             }
-            c.setVisible(false);
-            if (c.isExpanded()) {
-                setExpanded(false, szen.getCollection(), szen.getHashString(), c.getHashString(), false, pid);
+            partC.setVisible(false);
+            if (partC.isExpanded()) {
+                GDCollection gdcoll = szen.getCollection();
+                String szenHash = szen.getHashString();
+                String partHash = partC.getHashString();
+                setExpanded(false, gdcoll, szenHash, partHash, false, pid);
             }
         }
     }
@@ -2733,23 +2931,26 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param visible
      * @param pid
      */
-    private final void setVisible(final boolean visible, final String szenHash, final Collection<ElementContainer> container, final int pid) {
+    private final void setVisible(final boolean visible, final String szenHash, final Collection<ElementContainer> containers, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (!(szen instanceof Szenario)) {
             return;
         }
-        if (container.size() == 0) {
+        if (containers.isEmpty()) {
             return;
         }
         szen.start_transaction(pid);
-        StringBuilder sb = new StringBuilder();
-        for (ElementContainer ec : container) {
+        StringBuilder commandArgumentsBuilder = new StringBuilder(" ");
+        commandArgumentsBuilder.append(szenHash);
+        for (ElementContainer ec : containers) {
             ec.setVisible(visible);
-            sb.append(" ");
-            sb.append(ec.getHashString());
+            commandArgumentsBuilder.append(" ");
+            commandArgumentsBuilder.append(ec.getHashString());
         }
-        szen.addUndoCommand((visible ? GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF : GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON) + " " + szenHash + sb, pid);
-        szen.addRedoCommand((visible ? GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF) + " " + szenHash + sb, pid);
+        String commandArguments = commandArgumentsBuilder.toString();
+
+        szen.addUndoCommand((visible ? GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF : GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON) + commandArguments, pid);
+        szen.addRedoCommand((visible ? GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_ON : GDCommands.MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF) + commandArguments, pid);
         szen.finish_transaction(pid);
         szen.distributeEvent(DATA_CHANGED, pid);
     }
@@ -2778,38 +2979,64 @@ public abstract class GraphDocument extends ElementSelectionContext {
         start_transaction(PID, false);
         deselectAll(true);
         //alle Kanten im angegebenen Bereich selektieren
-        for (EdgeContainer ka : layer[gdcoll.getActiveLayer()].getEdgeContainers()) {
-            ElementContainer start = ka.getEdge().getStart().getContainer(this);
-            ElementContainer end = ka.getEdge().getEnd().getContainer(this);
-            if (start == null || !start.getElement().isPaintable()) {
+        int activeLayerIndex = gdcoll.getActiveLayer();
+        LayerContainer activeLayer = layer[activeLayerIndex];
+        for (EdgeContainer edgeC : activeLayer.getEdgeContainers()) {
+            ElementContainer startC = edgeC.getStartElementContainer();
+            if (!startC.isPaintable()) {
                 continue;
             }
-            if (end == null || !end.getElement().isPaintable()) {
+            ElementContainer endC = edgeC.getEndElementContainer();
+            if (!endC.isPaintable()) {
                 continue;
             }
-            if (start.getX() < right_x && start.getX() > left_x && start.getY() < right_y && start.getY() > left_y && end.getX() < right_x && end.getX() > left_x && end.getY() < right_y && end.getY() > left_y && !ka.isSelected()) {
-                addToSelection(ka, PID);
+            if (isInRect(startC, left_x, left_y, right_x, right_y)) {
+                if (isInRect(endC, left_x, left_y, right_x, right_y)) {
+                    if (!edgeC.isSelected()) { //this question is much more expensive than the other both, so don't change the order
+                        addToSelection(edgeC, PID);
+                    }
+                }
             }
             //alle Knickpunkte der Edge, die im Auswahlrechteck liegen ebenfall selektieren
-            if (ka.isVisible()) {
-                for (BendpointContainer kpc : ka.iterateBendpointContainers()) {
-                    if (kpc.getX() < right_x && kpc.getX() > left_x && kpc.getY() < right_y && kpc.getY() > left_y && !kpc.isSelected()) {
-                        addToSelection(kpc, PID);
+            if (edgeC.isVisible()) {
+                for (BendpointContainer bc : edgeC.iterateBendpointContainers()) {
+                    if (isInRect(bc, left_x, left_y, right_x, right_y)) {
+                        addToSelection(bc, PID);
                     }
                 }
             }
         }
         //alle Node im angegebenen Bereich selektieren
-        for (NodeContainer kn : layer[gdcoll.getActiveLayer()].getGraphNodeContainers()) {
-            if (!kn.getElement().isPaintable()) {
-                continue;
-            }
-            if (kn.getX() < right_x && kn.getX() > left_x && kn.getY() < right_y && kn.getY() > left_y && !kn.isSelected()) {
-                addToSelection(kn, PID);
+        for (NodeContainer nc : activeLayer.getGraphNodeContainers()) {
+            if (nc.isPaintable()) {
+                if (isInRect(nc, left_x, left_y, right_x, right_y)) {
+                    if (!nc.isSelected()) {
+                        addToSelection(nc, PID);
+                    }
+                }
             }
         }
         finish_transaction(PID, false);
         distributeEvent(SELECTION_CHANGED, PID);
+    }
+
+    /**
+     * @param ec
+     * @param rect_left_x
+     * @param rect_left_y
+     * @param rect_right_x
+     * @param rect_right_y
+     * @return
+     */
+    private boolean isInRect(final ElementContainer ec, final int rect_left_x, final int rect_left_y, final int rect_right_x, final int rect_right_y) {
+        int coord = ec.getX();
+        if (coord < rect_right_x && coord > rect_left_x) {
+            coord = ec.getY();
+            if (coord < rect_right_y && coord > rect_left_y) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -2834,13 +3061,14 @@ public abstract class GraphDocument extends ElementSelectionContext {
         start_transaction(PID, false);
         deselectAll(true);
         for (int i = 0; i < layer.length; i++) {
-            for (ElementContainer ec : layer[i].getNodeContainersAlphabetical()) {
+            LayerContainer lc = layer[i];
+            for (ElementContainer ec : lc.getGraphNodeContainers()) {
                 gdcoll.addToSelection(ec);
             }
-            for (ElementContainer ec : layer[i].getEdgeContainers()) {
+            for (ElementContainer ec : lc.getEdgeContainers()) {
                 gdcoll.addToSelection(ec);
             }
-            for (ElementContainer ec : layer[i].getBendpointContainers()) {
+            for (ElementContainer ec : lc.getBendpointContainers()) {
                 gdcoll.addToSelection(ec);
             }
         }
@@ -2974,8 +3202,12 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (prefix == null) {
             prefix = "";
         }
-        String name = prefix + getElementsNameBuilder().getDisplayableName(elementClass) + " ";
-        String newName = CollectionUtils.getNextIndicatedName(name, gdcoll.getMainGraphDocument().getModelItems(elementClass));
+        ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
+        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        List<ModelElement> modelItems = mainDoc.getModelItems(elementClass);
+        String displayableName = elementsNameBuilder.getDisplayableName(elementClass);
+        String name = prefix + displayableName + " ";
+        String newName = CollectionUtils.getNextIndicatedName(name, modelItems);
         return newName;
     }
 
@@ -2995,7 +3227,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     public NodeContainer createNodeAndContainer(final String elementClassName, final int pid) {
         MetaModel metaModel = getMetaModel();
-        return createNodeAndContainer(metaModel.getClassForName(elementClassName), pid);
+        Class<? extends ModelElement> elementClass = metaModel.getClassForName(elementClassName);
+        return createNodeAndContainer(elementClass, pid);
     }
 
     /**
@@ -3062,14 +3295,20 @@ public abstract class GraphDocument extends ElementSelectionContext {
         lastCreated = null;
         start_transaction(pid);
         if (Node.class.isAssignableFrom(elementClass)) {
+            Class<? extends Node> nodeClass = elementClass.asSubclass(Node.class);
             //das neue Element im Hauptdokument anlegen
-            lastCreated = gdcoll.createNodeAndContainer(elementClass.asSubclass(Node.class), name, description, hashString, pid);
+            lastCreated = gdcoll.createNodeAndContainer(nodeClass, name, description, hashString, pid);
         }
-        if (lastCreated != null && !lastCreated.getElement().isUnique() && this instanceof Szenario) {
-            lastCreated = addElementToSzenario(this.hashString, lastCreated, pid);
-            x = x != GDCommands.INVALID_POSITION_X ? x : next_x_pos;
-            y = y != GDCommands.INVALID_POSITION_Y ? y : next_y_pos;
-            moveNodeContainer(lastCreated, x, y, width, height, pid);
+        if (lastCreated != null) {
+            ModelElement me = lastCreated.getElement();
+            if (!me.isUnique()) {
+                if (this instanceof Szenario) {
+                    lastCreated = addElementToSzenario(this.hashString, lastCreated, pid);
+                    x = x != GDCommands.INVALID_POSITION_X ? x : next_x_pos;
+                    y = y != GDCommands.INVALID_POSITION_Y ? y : next_y_pos;
+                    moveNodeContainer(lastCreated, x, y, width, height, pid);
+                }
+            }
         }
         if (!gdcoll.isBulkMode()) {
             select(lastCreated, pid);
@@ -3093,7 +3332,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return null;
         }
 
-        return me.getContainer(me.isUnique() ? getCollection().getMainGraphDocument() : this);
+        return me.getContainer(me.isUnique() ? gdcoll.getMainGraphDocument() : this);
     }
 
     /**
@@ -3110,7 +3349,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return null;
         }
 
-        return (NodeContainer) me.getContainer(me.isUnique() ? getCollection().getMainGraphDocument() : this);
+        return (NodeContainer) me.getContainer(me.isUnique() ? gdcoll.getMainGraphDocument() : this);
     }
 
     /**
@@ -3127,7 +3366,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return null;
         }
 
-        return (EdgeContainer) me.getContainer(me.isUnique() ? getCollection().getMainGraphDocument() : this);
+        return (EdgeContainer) me.getContainer(me.isUnique() ? gdcoll.getMainGraphDocument() : this);
     }
 
     /**
@@ -3144,7 +3383,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return null;
         }
 
-        return (BendpointContainer) me.getContainer(me.isUnique() ? getCollection().getMainGraphDocument() : this);
+        return (BendpointContainer) me.getContainer(me.isUnique() ? gdcoll.getMainGraphDocument() : this);
     }
 
     /**
@@ -3156,17 +3395,20 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     public ModelElement findElementWithUserField(final String userFieldName, final String value) {
-        if (getCollection().getMainGraphDocument() != this) {
-            return getCollection().getMainGraphDocument().findElementWithUserField(userFieldName, value);
+        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        if (mainDoc != this) {
+            return mainDoc.findElementWithUserField(userFieldName, value);
         }
 
         if (userFieldName == null || value == null) {
             return null;
         }
         for (LayerContainer lc : layer) {
-            ModelElement me = findElementWithUserField(lc.getNodeContainersAlphabetical(), userFieldName, value);
+            List<NodeContainer> nodeContainersAlphabetical = lc.getNodeContainersAlphabetical();
+            ModelElement me = findElementWithUserField(nodeContainersAlphabetical, userFieldName, value);
             if (me == null) {
-                me = findElementWithUserField(lc.getEdgeContainers(), userFieldName, value);
+                Iterable<EdgeContainer> edgeContainers = lc.getEdgeContainers();
+                me = findElementWithUserField(edgeContainers, userFieldName, value);
             }
             if (me != null) {
                 return me;
@@ -3175,15 +3417,23 @@ public abstract class GraphDocument extends ElementSelectionContext {
         return null;
     }
 
+    /**
+     * @param elementContainers
+     * @param userFieldName
+     * @param value
+     * @return
+     */
     private ModelElement findElementWithUserField(final Iterable<? extends ElementContainer> elementContainers, final String userFieldName, final String value) {
+        UserFieldDefinitions ufd = gdcoll.getUserFieldDefinitions();
         for (ElementContainer ec : elementContainers) {
             ModelElement me = ec.getElement();
-            UserFieldDefinitions ufd = getCollection().getUserFieldDefinitions();
-            UserField uf = ufd.getUserField(me.getClass(), userFieldName);
+            Class<? extends ModelElement> elementClass = me.getClass();
+            UserField uf = ufd.getUserField(elementClass, userFieldName);
             if (uf == null) {
                 continue;
             }
-            if (value.equals(me.getUserFieldInputValue(uf))) {
+            String userFieldInputValue = me.getUserFieldInputValue(uf);
+            if (value.equals(userFieldInputValue)) {
                 return me;
             }
         }
@@ -3216,14 +3466,15 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     public Node findNodeCoded(final String hashString) {
-        if (getCollection().getMainGraphDocument() != this) {
-            return getCollection().getMainGraphDocument().findNodeCoded(hashString);
+        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        if (mainDoc != this) {
+            return mainDoc.findNodeCoded(hashString);
         }
         if (hashString != null) {
             for (LayerContainer lc : layer) {
                 for (NodeContainer ec : lc.getNodeContainersAlphabetical()) {
-                    String ecHash = ec.getHashString();
-                    if (hashString.equals(ecHash)) {
+                    String hash = ec.getHashString();
+                    if (hashString.equals(hash)) {
                         return ec.getNode();
                     }
                 }
@@ -3237,14 +3488,16 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     public Edge findEdgeCoded(final String hashString) {
-        if (getCollection().getMainGraphDocument() != this) {
-            return getCollection().getMainGraphDocument().findEdgeCoded(hashString);
+        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        if (mainDoc != this) {
+            return mainDoc.findEdgeCoded(hashString);
         }
         if (hashString != null) {
             for (LayerContainer lc : layer) {
-                for (EdgeContainer ec : lc.getEdgeContainers()) {
-                    if (hashString.equals(ec.getHashString())) {
-                        return ec.getEdge();
+                for (EdgeContainer edgeC : lc.getEdgeContainers()) {
+                    String hash = edgeC.getHashString();
+                    if (hashString.equals(hash)) {
+                        return edgeC.getEdge();
                     }
                 }
             }
@@ -3257,23 +3510,20 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     public Bendpoint findKnickpunktCoded(final String hashString) {
-        if (getCollection().getMainGraphDocument() != this) {
-            return getCollection().getMainGraphDocument().findKnickpunktCoded(hashString);
-        }
-
-        if (hashString == null) {
-            return null;
+        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        if (mainDoc != this) {
+            return mainDoc.findKnickpunktCoded(hashString);
         }
         if (hashString != null) {
             for (LayerContainer lc : layer) {
                 for (BendpointContainer bc : lc.getBendpointContainers()) {
-                    if (hashString.equals(bc.getHashString())) {
+                    String hash = bc.getHashString();
+                    if (hashString.equals(hash)) {
                         return bc.getBendpoint();
                     }
                 }
             }
         }
-
         return null;
     }
 
@@ -3315,7 +3565,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return null;
         }
         MetaModel metaModel = doc.getMetaModel();
-        if (!metaModel.isConnecting(edgeClass, master.getClass(), slaveClass)) {
+        Class<? extends ModelElement> masterClass = master.getClass();
+        if (!metaModel.isConnecting(edgeClass, masterClass, slaveClass)) {
             return null;
         }
         doc.start_transaction(pid);
@@ -3323,18 +3574,18 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return null;
         }
         String name = slaveName;
-        if (slaveName == null || slaveName.trim().equals("")) {
+        if (slaveName == null || slaveName.trim().isEmpty()) {
             String masterName = master.getClearName();
             name = doc.getNextNewName(masterName + "_", slaveClass);
         }
-        GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
+        GDCollection gdcoll = doc.getCollection();
+        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
         NodeContainer slaveContainer = mainDoc.createNodeAndContainer(slaveClass, name, GDCommands.INVALID_DESCRIPTION, slaveHashString, pid);
         if (slaveContainer == null) {
             doc.finish_transaction(pid);
             return null;
         }
         ModelElement slave = slaveContainer.getElement();
-        GDCollection gdcoll = doc.getCollection();
         gdcoll.link(edgeClass, master, slave, pid);
 
         List<Long> times1 = new ArrayList<>();
@@ -3342,7 +3593,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
         for (Szenario szen : gdcoll.getSzenarios()) {
             if (master.getContainer(szen) != null) {
                 long l = System.currentTimeMillis();
-                szen.addElementToSzenario(szen.getHashString(), slaveContainer, pid);
+                String szenHash = szen.getHashString();
+                szen.addElementToSzenario(szenHash, slaveContainer, pid);
                 times1.add(new Long(System.currentTimeMillis() - l));
                 l = System.currentTimeMillis();
                 szen.addict(master, slave, edgeClass, pid);
@@ -3404,7 +3656,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     public final Edge addict(final String szenHash, final ModelElement me1, final ModelElement me2, final Class<? extends CompositionEdge> edgeClass, final int pid) {
-        return addict(szenHash, edgeClass.getSimpleName(), null, me1, me2, -1, pid);
+        String simpleEdgeClassName = edgeClass.getSimpleName();
+        return addict(szenHash, simpleEdgeClassName, null, me1, me2, -1, pid);
     }
 
     /**
@@ -3434,7 +3687,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      * @return
      */
-    protected final Edge addict(final String szenHash, final String edgeClassName, final String edgeHash, final ModelElement masterElement, final ModelElement slaveElement, final int position, final int pid) {
+    protected final Edge addict(final String szenHash, final String edgeClassName, final String ___edgeHashSinnlos___removeMe, final ModelElement masterElement, final ModelElement slaveElement, final int position, final int pid) {
         if (masterElement == null || slaveElement == null) {
             return null;
         }
@@ -3446,27 +3699,35 @@ public abstract class GraphDocument extends ElementSelectionContext {
         szen.start_transaction(pid);
 
         MetaModel metaModel = getMetaModel();
-        List<Edge> edges = masterElement.getEdgesWith(slaveElement, metaModel.getClassForName(edgeClassName).asSubclass(Edge.class));
-        if (edges.size() == 0 || !(szen instanceof Szenario)) {
+        Class<? extends ModelElement> elementClass = metaModel.getClassForName(edgeClassName);
+        Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
+        List<Edge> edges = masterElement.getEdgesWith(slaveElement, edgeClass);
+        if (edges.isEmpty() || !(szen instanceof Szenario)) {
             finish_transaction(pid);
             return null;
         }
-        Edge k = edges.get(0);
+        Edge edge = edges.get(0);
         if (!(masterElement instanceof Node) || !(slaveElement instanceof Node)) {
-            return k;
+            return edge;
         }
         NodeContainer masterContainer = (NodeContainer) masterElement.getContainer(szen);
         NodeContainer slaveContainer = (NodeContainer) slaveElement.getContainer(szen);
         //slaveContainer ist null, wenn das untergeordnete Element unique ist und keinen Grafikcontainer in jedem Teilmodell hat
         if (slaveContainer != null) {
             Dimension pos = calculateAddictPosition(masterContainer);
-
-            addRedoCommand(MODEL_ACTION_ADDICT + " " + szenHash + " " + edgeClassName + " " + k.getHashString() + " " + masterElement.getHashString() + " " + slaveElement.getHashString() + " " + position, pid);
-            addUndoCommand(MODEL_ACTION_SET_ELEMENT_POSITION + " " + szenHash + " " + slaveElement.getHashString() + " " + slaveContainer.getX() + " " + slaveContainer.getY() + " " + slaveContainer.getWidth() + " " + slaveContainer.getHeight(), pid);
-            slaveContainer.setCoordinates(pos.width, pos.height, slaveContainer.getWidth(), slaveContainer.getHeight());
+            String edgeHash = edge.getHashString();
+            String masterHash = masterElement.getHashString();
+            String slaveHash = slaveElement.getHashString();
+            int slaveX = slaveContainer.getX();
+            int slaveY = slaveContainer.getY();
+            int slaveWidth = slaveContainer.getWidth();
+            int slaveHeight = slaveContainer.getHeight();
+            addRedoCommand(MODEL_ACTION_ADDICT + " " + szenHash + " " + edgeClassName + " " + edgeHash + " " + masterHash + " " + slaveHash + " " + position, pid);
+            addUndoCommand(MODEL_ACTION_SET_ELEMENT_POSITION + " " + szenHash + " " + slaveHash + " " + slaveX + " " + slaveY + " " + slaveWidth + " " + slaveHeight, pid);
+            slaveContainer.setCoordinates(pos.width, pos.height, slaveWidth, slaveHeight);
 
             for (Szenario szenario : gdcoll.getSzenarios()) {
-                EdgeContainer kac = (EdgeContainer) k.getContainer(szenario);
+                EdgeContainer kac = (EdgeContainer) edge.getContainer(szenario);
                 if (kac != null) {
                     kac.computeBorderPoints();
                 }
@@ -3475,165 +3736,171 @@ public abstract class GraphDocument extends ElementSelectionContext {
 
         szen.finish_transaction(pid);
         szen.distributeEvent(DATA_CHANGED, pid);
-        return k;
+        return edge;
     }
 
     /**
      * Berechnet die Position untergeordneter Elemente auf einem Oberelementcontainer.
      *
-     * @param kc
+     * @param nc
      *            Oberelementcontainer auf dem untergeordnete Elemente positioniert werden sollen
      * @return
      */
-    private static final Dimension calculateAddictPosition(final NodeContainer kc) {
-        Dimension retVal = new Dimension(kc.getX(), kc.getY());
-
-        int wieviele = -1;
-        ModelElement me = kc.getElement();
+    private static final Dimension calculateAddictPosition(final NodeContainer nc) {
+        int addictedCount = -1;
+        ModelElement me = nc.getElement();
         for (Edge edge : me.getEdges()) {
             if (edge instanceof CompositionEdge) {
                 ModelElement slave = ((CompositionEdge) edge).getSlave();
                 if (slave != me && slave.isPaintable()) {
-                    wieviele++;
+                    addictedCount++;
                 }
             }
         }
-        switch (wieviele % 34) {
+
+        int x = nc.getX();
+        int y = nc.getY();
+        int w = nc.getWidth();
+        int h = nc.getHeight();
+
+        Dimension retVal = new Dimension(x, y);
+
+        switch (addictedCount % 34) {
         case 0:
-            retVal.width = kc.getX() - kc.getWidth() / 7;
-            retVal.height = kc.getY() - kc.getHeight() / 3;
+            retVal.width = x - w / 7;
+            retVal.height = y - h / 3;
             break;
         case 1:
-            retVal.width = kc.getX() - kc.getWidth() / 5;
-            retVal.height = kc.getY() - kc.getHeight() / 3;
+            retVal.width = x - w / 5;
+            retVal.height = y - h / 3;
             break;
         case 2:
-            retVal.width = kc.getX() - kc.getWidth() / 4;
-            retVal.height = kc.getY() - kc.getHeight() / 3;
+            retVal.width = x - w / 4;
+            retVal.height = y - h / 3;
             break;
         case 3:
-            retVal.width = kc.getX() - kc.getWidth() / 3;
-            retVal.height = kc.getY() - kc.getHeight() / 3;
+            retVal.width = x - w / 3;
+            retVal.height = y - h / 3;
             break;
         case 4:
-            retVal.width = kc.getX() - (int) (kc.getWidth() / 2.5);
-            retVal.height = kc.getY() - kc.getHeight() / 3;
+            retVal.width = x - (int) (w / 2.5);
+            retVal.height = y - h / 3;
             break;
         case 5:
-            retVal.width = kc.getX() + kc.getWidth() / 7;
-            retVal.height = kc.getY() + kc.getHeight() / 3;
+            retVal.width = x + w / 7;
+            retVal.height = y + h / 3;
             break;
         case 6:
-            retVal.width = kc.getX() + kc.getWidth() / 5;
-            retVal.height = kc.getY() + kc.getHeight() / 3;
+            retVal.width = x + w / 5;
+            retVal.height = y + h / 3;
             break;
         case 7:
-            retVal.width = kc.getX() + kc.getWidth() / 4;
-            retVal.height = kc.getY() + kc.getHeight() / 3;
+            retVal.width = x + w / 4;
+            retVal.height = y + h / 3;
             break;
         case 8:
-            retVal.width = kc.getX() + kc.getWidth() / 3;
-            retVal.height = kc.getY() + kc.getHeight() / 3;
+            retVal.width = x + w / 3;
+            retVal.height = y + h / 3;
             break;
         case 9:
-            retVal.width = kc.getX() + (int) (kc.getWidth() / 2.5);
-            retVal.height = kc.getY() + kc.getHeight() / 3;
+            retVal.width = x + (int) (w / 2.5);
+            retVal.height = y + h / 3;
             break;
         case 10:
-            retVal.width = kc.getX() - kc.getWidth() / 7;
-            retVal.height = kc.getY() + kc.getHeight() / 3;
+            retVal.width = x - w / 7;
+            retVal.height = y + h / 3;
             break;
         case 11:
-            retVal.width = kc.getX() - kc.getWidth() / 5;
-            retVal.height = kc.getY() + kc.getHeight() / 3;
+            retVal.width = x - w / 5;
+            retVal.height = y + h / 3;
             break;
         case 12:
-            retVal.width = kc.getX() - kc.getWidth() / 4;
-            retVal.height = kc.getY() + kc.getHeight() / 3;
+            retVal.width = x - w / 4;
+            retVal.height = y + h / 3;
             break;
         case 13:
-            retVal.width = kc.getX() - kc.getWidth() / 3;
-            retVal.height = kc.getY() + kc.getHeight() / 3;
+            retVal.width = x - w / 3;
+            retVal.height = y + h / 3;
             break;
         case 14:
-            retVal.width = kc.getX() - (int) (kc.getWidth() / 2.5);
-            retVal.height = kc.getY() + kc.getHeight() / 3;
+            retVal.width = x - (int) (w / 2.5);
+            retVal.height = y + h / 3;
             break;
         case 15:
-            retVal.width = kc.getX() + kc.getWidth() / 7;
-            retVal.height = kc.getY() - kc.getHeight() / 3;
+            retVal.width = x + w / 7;
+            retVal.height = y - h / 3;
             break;
         case 16:
-            retVal.width = kc.getX() + kc.getWidth() / 5;
-            retVal.height = kc.getY() - kc.getHeight() / 3;
+            retVal.width = x + w / 5;
+            retVal.height = y - h / 3;
             break;
         case 17:
-            retVal.width = kc.getX() + kc.getWidth() / 4;
-            retVal.height = kc.getY() - kc.getHeight() / 3;
+            retVal.width = x + w / 4;
+            retVal.height = y - h / 3;
             break;
         case 18:
-            retVal.width = kc.getX() + kc.getWidth() / 3;
-            retVal.height = kc.getY() - kc.getHeight() / 3;
+            retVal.width = x + w / 3;
+            retVal.height = y - h / 3;
             break;
         case 19:
-            retVal.width = kc.getX() + (int) (kc.getWidth() / 2.5);
-            retVal.height = kc.getY() - kc.getHeight() / 3;
+            retVal.width = x + (int) (w / 2.5);
+            retVal.height = y - h / 3;
             break;
         case 20:
-            retVal.width = kc.getX() - kc.getWidth() / 7;
-            retVal.height = kc.getY();
+            retVal.width = x - w / 7;
+            retVal.height = y;
             break;
         case 21:
-            retVal.width = kc.getX() - kc.getWidth() / 5;
-            retVal.height = kc.getY();
+            retVal.width = x - w / 5;
+            retVal.height = y;
             break;
         case 22:
-            retVal.width = kc.getX() - kc.getWidth() / 4;
-            retVal.height = kc.getY();
+            retVal.width = x - w / 4;
+            retVal.height = y;
             break;
         case 23:
-            retVal.width = kc.getX() - kc.getWidth() / 3;
-            retVal.height = kc.getY();
+            retVal.width = x - w / 3;
+            retVal.height = y;
             break;
         case 24:
-            retVal.width = kc.getX() - (int) (kc.getWidth() / 2.5);
-            retVal.height = kc.getY();
+            retVal.width = x - (int) (w / 2.5);
+            retVal.height = y;
             break;
         case 25:
-            retVal.width = kc.getX() + kc.getWidth() / 7;
-            retVal.height = kc.getY();
+            retVal.width = x + w / 7;
+            retVal.height = y;
             break;
         case 26:
-            retVal.width = kc.getX() + kc.getWidth() / 5;
-            retVal.height = kc.getY();
+            retVal.width = x + w / 5;
+            retVal.height = y;
             break;
         case 27:
-            retVal.width = kc.getX() + kc.getWidth() / 4;
-            retVal.height = kc.getY();
+            retVal.width = x + w / 4;
+            retVal.height = y;
             break;
         case 28:
-            retVal.width = kc.getX() + kc.getWidth() / 3;
-            retVal.height = kc.getY();
+            retVal.width = x + w / 3;
+            retVal.height = y;
             break;
         case 29:
-            retVal.width = kc.getX() + (int) (kc.getWidth() / 2.5);
-            retVal.height = kc.getY();
+            retVal.width = x + (int) (w / 2.5);
+            retVal.height = y;
             break;
         case 30:
-            retVal.width = kc.getX();
-            retVal.height = kc.getY() + kc.getHeight() / 5;
+            retVal.width = x;
+            retVal.height = y + h / 5;
             break;
         case 31:
-            retVal.width = kc.getX();
-            retVal.height = kc.getY() + kc.getHeight() / 3;
+            retVal.width = x;
+            retVal.height = y + h / 3;
             break;
         case 32:
-            retVal.width = kc.getX();
-            retVal.height = kc.getY() - kc.getHeight() / 5;
+            retVal.width = x;
+            retVal.height = y - h / 5;
             break;
         case 33:
-            retVal.width = kc.getX();
-            retVal.height = kc.getY() - kc.getHeight() / 3;
+            retVal.width = x;
+            retVal.height = y - h / 3;
             break;
         }
 
@@ -3657,7 +3924,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
         NodeContainer instanceContainer = doc.createNodeAndContainer(class2Create, name, pid);
         if (instanceContainer != null) { // kann null sein, wenn der Dialig zur Namenseingae abgebrochen wurde
             ModelElement instanceElement = instanceContainer.getElement();
-            gdcoll.link(instanciationEdgeClass, master, instanceContainer.getElement(), pid);
+            ModelElement instance = instanceContainer.getElement();
+            gdcoll.link(instanciationEdgeClass, master, instance, pid);
 
             //Ebenfalls zu instanziierende Nebenpfade anlegen
             MetaModel metaModel = getMetaModel();
@@ -3770,7 +4038,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
             NodeContainer pathEndElementContainer = createNodeAndContainer(pathEndClass, pid);
             gdcoll.setAutomaticMode(oldAutomaticMode);
             if (pathEndElementContainer != null) { // kann passieren, wenn der Benutzer abbrechen im Namensdialog drückt
-                createPath(startElement, pathEndElementContainer.getElement(), metaPath, pid);
+                ModelElement pathEndElement = pathEndElementContainer.getElement();
+                createPath(startElement, pathEndElement, metaPath, pid);
             }
             createSubPath = true;
         }
@@ -3848,10 +4117,11 @@ public abstract class GraphDocument extends ElementSelectionContext {
             edge = gdcoll.link(edgeClass, startElement, endElement, pid);
         }
         if (CompositionEdge.class.isAssignableFrom(edgeClass)) {
+            Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);
             if (elementaryMetaPath.hasDirectionForward()) {
-                addict(startElement, endElement, edgeClass.asSubclass(CompositionEdge.class), pid);
+                addict(startElement, endElement, compositionEdgeClass, pid);
             } else {
-                addict(endElement, startElement, edgeClass.asSubclass(CompositionEdge.class), pid);
+                addict(endElement, startElement, compositionEdgeClass, pid);
             }
         }
         if (edge == null) {
@@ -3868,14 +4138,17 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     public final void linkSelected(final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         start_transaction(pid);
-        ModelElement lastSelecedElement = getLastSelected().getElement();
+        ElementContainer lastSelectedContainer = getLastSelected();
+        ModelElement lastSelecedElement = lastSelectedContainer.getElement();
         if (direction == BACKWARD) {
             for (ElementContainer ec : selectedContainer) {
-                gdcoll.link(edgeClass, ec.getElement(), lastSelecedElement, pid);
+                ModelElement me = ec.getElement();
+                gdcoll.link(edgeClass, me, lastSelecedElement, pid);
             }
         } else {
             for (ElementContainer ec : selectedContainer) {
-                gdcoll.link(edgeClass, lastSelecedElement, ec.getElement(), pid);
+                ModelElement me = ec.getElement();
+                gdcoll.link(edgeClass, lastSelecedElement, me, pid);
             }
         }
         finish_transaction(pid);
@@ -3889,14 +4162,17 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     public final void unlinkSelected(final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
         start_transaction(pid);
-        ModelElement lastSelecedElement = getLastSelected().getElement();
+        ElementContainer lastSelectedContainer = getLastSelected();
+        ModelElement lastSelecedElement = lastSelectedContainer.getElement();
         if (direction == BACKWARD) {
             for (ElementContainer ec : selectedContainer) {
-                gdcoll.unlink(ec.getElement(), lastSelecedElement, edgeClass, pid);
+                ModelElement me = ec.getElement();
+                gdcoll.unlink(me, lastSelecedElement, edgeClass, pid);
             }
         } else {
             for (ElementContainer ec : selectedContainer) {
-                gdcoll.unlink(lastSelecedElement, ec.getElement(), edgeClass, pid);
+                ModelElement me = ec.getElement();
+                gdcoll.unlink(lastSelecedElement, me, edgeClass, pid);
             }
         }
         finish_transaction(pid);
@@ -3919,8 +4195,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
         int pos1, pos2;
         try {
             me = findElementCoded(nodehash);
-            pos1 = new Integer(edgeIndex1).intValue();
-            pos2 = new Integer(edgeIndex2).intValue();
+            pos1 = Integer.parseInt(edgeIndex1);
+            pos2 = Integer.parseInt(edgeIndex2);
         } catch (Exception e) {
             Log(e);
             return;
@@ -3945,8 +4221,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
         }
         start_transaction(pid);
         if (me.swapEdges(edgeIndex2, edgeIndex2)) {
-            addRedoCommand(MODEL_ACTION_SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex1 + " " + edgeIndex2, pid);
-            addUndoCommand(MODEL_ACTION_SWAP_EDGE_POSITIONS + " " + me.getHashString() + " " + edgeIndex2 + " " + edgeIndex1, pid);
+            String elementHash = me.getHashString();
+            addRedoCommand(MODEL_ACTION_SWAP_EDGE_POSITIONS + " " + elementHash + " " + edgeIndex1 + " " + edgeIndex2, pid);
+            addUndoCommand(MODEL_ACTION_SWAP_EDGE_POSITIONS + " " + elementHash + " " + edgeIndex2 + " " + edgeIndex1, pid);
         }
         /*
          * if (knot.isSpecialInfoKnot()){
@@ -3959,21 +4236,25 @@ public abstract class GraphDocument extends ElementSelectionContext {
     }
 
     /**
-     * @param mc
+     * @param ec
      * @param pid
      */
-    public final void z_move_up(final ElementContainer mc, final int pid) {
-        int ebene = mc.layerFor();
-        if (ebene < 0) {
+    public final void z_move_up(final ElementContainer ec, final int pid) {
+        int layer = ec.layerFor();
+        if (layer < 0) {
             return;
         }
-        GraphDocument doc = mc.getGraphDocument();
+        GraphDocument doc = ec.getGraphDocument();
+        String szenHash = doc.getHashString();
+        String elementHash = ec.getHashString();
+        LayerContainer lc = doc.layer[layer];
+        int indexOnLayer = lc.indexOf(ec);
         doc.start_transaction(pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + mc.getGraphDocument().hashString + " " + mc.getHashString(), pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + mc.getGraphDocument().hashString + " " + mc.getHashString() + " " + doc.layer[ebene].indexOf(mc), pid);
-        doc.layer[ebene].z_move_up(mc);
+        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + szenHash + " " + elementHash, pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + szenHash + " " + elementHash + " " + indexOnLayer, pid);
+        lc.z_move_up(ec);
         doc.finish_transaction(pid);
-        distributeEvent(GROUP_ORDER_CHANGED, doc.layer[ebene], pid);
+        distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
     }
 
     /**
@@ -3984,7 +4265,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public final void z_move_up(final String szenHash, final String elementHash, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
-            z_move_up(szen.findContainerCoded(elementHash), pid);
+            ElementContainer ec = szen.findContainerCoded(elementHash);
+            z_move_up(ec, pid);
         }
     }
 
@@ -4005,21 +4287,26 @@ public abstract class GraphDocument extends ElementSelectionContext {
     }
 
     /**
-     * @param mc
+     * @param ec
      * @param pid
      */
-    private final void z_move_down(final ElementContainer mc, final int pid) {
-        int ebene = mc.layerFor();
-        if (ebene < 0) {
+    private final void z_move_down(final ElementContainer ec, final int pid) {
+        int layer = ec.layerFor();
+        if (layer < 0) {
             return;
         }
-        GraphDocument doc = mc.getGraphDocument();
+        GraphDocument doc = ec.getGraphDocument();
+
+        String szenHash = doc.getHashString();
+        String elementHash = ec.getHashString();
+        LayerContainer lc = doc.layer[layer];
+        int indexOnLayer = lc.indexOf(ec);
         doc.start_transaction(pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + mc.getGraphDocument().hashString + " " + mc.getHashString(), pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + mc.getGraphDocument().hashString + " " + mc.getHashString() + " " + doc.layer[ebene].indexOf(mc), pid);
-        doc.layer[ebene].z_move_down(mc);
+        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + szenHash + " " + elementHash, pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + szenHash + " " + elementHash + " " + indexOnLayer, pid);
+        lc.z_move_down(ec);
         doc.finish_transaction(pid);
-        distributeEvent(GROUP_ORDER_CHANGED, doc.layer[ebene], pid);
+        distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
     }
 
     /**
@@ -4030,7 +4317,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public final void z_move_down(final String szenHash, final String elementHash, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
-            z_move_down(szen.findContainerCoded(elementHash), pid);
+            ElementContainer ec = szen.findContainerCoded(elementHash);
+            z_move_down(ec, pid);
         }
     }
 
@@ -4061,16 +4349,18 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return;
         }
         ElementContainer ec = szen.findContainerCoded(elementHash);
-        int ebene = ec.layerFor();
-        if (ebene < 0) {
+        int layer = ec.layerFor();
+        if (layer < 0) {
             return;
         }
+        LayerContainer lc = szen.layer[layer];
+        int indexOnLayer = lc.indexOf(ec);
         szen.start_transaction(pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + ec.getGraphDocument().hashString + " " + ec.getHashString() + " " + position, pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + ec.getGraphDocument().hashString + " " + ec.getHashString() + " " + szen.layer[ebene].indexOf(ec), pid);
-        szen.layer[ebene].z_move(ec, position);
+        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + szenHash + " " + elementHash + " " + position, pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER + " " + szenHash + " " + elementHash + " " + indexOnLayer, pid);
+        lc.z_move(ec, position);
         szen.finish_transaction(pid);
-        distributeEvent(GROUP_ORDER_CHANGED, szen.layer[ebene], pid);
+        distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
     }
 
     /**
@@ -4089,7 +4379,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public final void z_step_up(final String szenHash, final String elementHash, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
-            z_step_up(szen.findContainerCoded(elementHash), pid);
+            ElementContainer ec = szen.findContainerCoded(elementHash);
+            z_step_up(ec, pid);
         }
     }
 
@@ -4099,19 +4390,22 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param log
      */
     private final void z_step_up(final ElementContainer ec, final int pid, final boolean log) {
-        int ebene = ec.layerFor();
-        if (ebene < 0) {
+        int layer = ec.layerFor();
+        if (layer < 0) {
             return;
         }
         GraphDocument doc = ec.getGraphDocument();
         doc.start_transaction(pid, log);
         if (log) {
-            addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
-            addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
+            String szenHash = doc.getHashString();
+            String elementHash = ec.getHashString();
+            addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + szenHash + " " + elementHash, pid);
+            addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + szenHash + " " + elementHash, pid);
         }
-        doc.layer[ebene].z_step_up(ec);
+        LayerContainer lc = doc.layer[layer];
+        lc.z_step_up(ec);
         doc.finish_transaction(pid, log);
-        distributeEvent(GROUP_ORDER_CHANGED, doc.layer[ebene], pid);
+        distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
     }
 
     /**
@@ -4135,17 +4429,20 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     private final void z_step_down(final ElementContainer ec, final int pid) {
-        int ebene = ec.layerFor();
-        if (ebene < 0) {
+        int layer = ec.layerFor();
+        if (layer < 0) {
             return;
         }
         GraphDocument doc = ec.getGraphDocument();
         doc.start_transaction(pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
-        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + ec.getGraphDocument().hashString + " " + ec.getHashString(), pid);
-        doc.layer[ebene].z_step_down(ec);
+        String szenHash = doc.getHashString();
+        String elementHash = ec.getHashString();
+        addRedoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_DOWN + " " + szenHash + " " + elementHash, pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_MOVE_ORDER_ONE_POSITION_UP + " " + szenHash + " " + elementHash, pid);
+        LayerContainer lc = doc.layer[layer];
+        lc.z_step_down(ec);
         doc.finish_transaction(pid);
-        distributeEvent(GROUP_ORDER_CHANGED, doc.layer[ebene], pid);
+        distributeEvent(GROUP_ORDER_CHANGED, lc, pid);
     }
 
     /**
@@ -4156,7 +4453,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public final void z_step_down(final String szenHash, final String elementHash, final int pid) {
         GraphDocument szen = gdcoll.getGraphDocumentCoded(szenHash);
         if (szen instanceof Szenario) {
-            z_step_down(szen.findContainerCoded(elementHash), pid);
+            ElementContainer ec = szen.findContainerCoded(elementHash);
+            z_step_down(ec, pid);
         }
     }
 
@@ -4185,7 +4483,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
         List<ElementContainer> selectedContainer = onlyLastSelected ? ImmutableList.of(getLastSelected()) : getSelectedContainer();
         for (ElementContainer ec : selectedContainer) {
             if (ec != null) {
-                showPropertyDialog(ec.getElement());
+                ModelElement me = ec.getElement();
+                showPropertyDialog(me);
             }
         }
     }
@@ -4194,7 +4493,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param me
      */
     public void showPropertyDialog(final ModelElement me) {
-        me.getPropertyDialog().showDialog();
+        ElementPropertyDialog propertyDialog = me.getPropertyDialog();
+        propertyDialog.showDialog();
     }
 
     /**
@@ -4345,17 +4645,21 @@ public abstract class GraphDocument extends ElementSelectionContext {
 
     /**
      * @param hashCode
-     * @param newName
+     * @param name
      * @param pid
      */
-    public final void setName(final ModelElement me, final String newName, final int pid) {
+    public final void setName(final ModelElement me, final String name, final int pid) {
         if (me == null) {
             return;
         }
         start_transaction(pid);
+        String elementHash = me.getHashString();
+        String newName = getParseSaveString(name);
+        String oldName = me.getName();
+        oldName = getParseSaveString(oldName);
         //falls in derselben Transaction der Name mehrfach geändert wird, soll das nur 1 Mal geloggt werden
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_NAME + " " + me.getHashString(), getParseSaveString(newName), pid);
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_NAME + " " + me.getHashString(), getParseSaveString(me.getName()), pid);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_NAME + " " + elementHash, newName, pid);
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_NAME + " " + elementHash, oldName, pid);
         //	Das hier sollte man nicht einfach ohne Nachfragen machen! Wenn dann nur mit Bestätigungsdialog
         //      Verbundene Elemente die den Namen dieses Elementes in sich tragen auch updaten
         //		List<ModelElement> connected = me.getConnectedElements(ModelElement.class);
@@ -4367,8 +4671,9 @@ public abstract class GraphDocument extends ElementSelectionContext {
         //			}
         //		}
 
-        me.setName(getDecodedParseSaveString(newName));
-        //irgendein Container dieses Elementes muss ins Event gapackt werden. Welcher ist egal, da eigentlich das Element selsbt wichtig wäre
+        newName = getDecodedParseSaveString(name);
+        me.setName(newName);
+        //irgendein Container dieses Elementes muss ins Event gapackt werden. Welcher ist egal, da eigentlich das Element selbst wichtig wäre
         ElementContainer ec = me.getContainer(this);
         finish_transaction(pid);
         distributeEvent(ELEMENT_NAME_CHANGED, ec, pid);
@@ -4376,18 +4681,22 @@ public abstract class GraphDocument extends ElementSelectionContext {
 
     /**
      * @param hashString
-     * @param newDescr
+     * @param description
      * @param pid
      */
-    public final void setDescription(final ModelElement me, final String newDescr, final int pid) {
+    public final void setDescription(final ModelElement me, final String description, final int pid) {
         if (me == null) {
             return;
         }
-
         start_transaction(pid);
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_DESCRIPTION + " " + me.getHashString(), getParseSaveString(newDescr), pid);
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_DESCRIPTION + " " + me.getHashString(), getParseSaveString(me.getDescription()), pid);
-        me.setDescription(getDecodedParseSaveString(newDescr));
+        String elementHash = me.getHashString();
+        String newDescription = getParseSaveString(description);
+        String oldDescription = me.getDescription();
+        oldDescription = getParseSaveString(oldDescription);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_DESCRIPTION + " " + elementHash, newDescription, pid);
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_DESCRIPTION + " " + elementHash, oldDescription, pid);
+        newDescription = getDecodedParseSaveString(description);
+        me.setDescription(newDescription);
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
     }
@@ -4415,14 +4724,20 @@ public abstract class GraphDocument extends ElementSelectionContext {
      *
      * @param me
      * @param userField
-     * @param newValue
+     * @param value
      * @param pid
      */
-    public void setUserFieldValue(final ModelElement me, final UserField userField, final String newValue, final int pid) {
+    public void setUserFieldValue(final ModelElement me, final UserField userField, final String value, final int pid) {
         start_transaction(pid);
-        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + userField.getHashCode(), getParseSaveString(newValue, true), pid);
-        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_USER_FIELD_VALUE + " " + me.getHashString() + " " + userField.getHashCode(), getParseSaveString(userField.getValue(me), true), pid);
-        me.setUserFieldInputValue(userField, getDecodedParseSaveString(newValue));
+        String elementHash = me.getHashString();
+        String userFieldHash = userField.getHashCode();
+        String newValue = getParseSaveString(value, true);
+        String oldValue = userField.getValue(me);
+        oldValue = getParseSaveString(oldValue, true);
+        addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_USER_FIELD_VALUE + " " + elementHash + " " + userFieldHash, newValue, pid);
+        addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_USER_FIELD_VALUE + " " + elementHash + " " + userFieldHash, oldValue, pid);
+        newValue = getDecodedParseSaveString(value);
+        me.setUserFieldInputValue(userField, newValue);
         finish_transaction(pid);
         distributeEvent(USER_FIELD_VALUE_CHANGED, pid);
     }
@@ -4493,12 +4808,14 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return;
         }
         OptionalEdge optional = (OptionalEdge) edge;
+        //optinality really switched? -> write Undo-Redo-Commands
         if (optional.setOptional(value)) {
-            //UNDO und REDO Commands schreiben
             start_transaction(pid);
             String hash = edge.getHashString();
-            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL + " " + hash, Boolean.toString(value), pid);
-            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL + " " + hash, Boolean.toString(!value), pid);
+            String newValue = Boolean.toString(value);
+            String oldValue = Boolean.toString(!value);
+            addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL + " " + hash, newValue, pid);
+            addUndoCommandIfNotExist(GDCommands.MODEL_ACTION_SET_ELEMENT_OPTIONAL + " " + hash, oldValue, pid);
             finish_transaction(pid);
         }
     }
@@ -4530,10 +4847,15 @@ public abstract class GraphDocument extends ElementSelectionContext {
             finish_transaction(pid);
             return;
         }
-        szen.setPageSizeFactor(getPageSizeFactor());
-        szen.getMapping().adapt(getMapping());
-        szen.getFrame().getInputGraphArea().adaptSettings(frame.getInputGraphArea());
-        addElementsToSzenario(szen.getHashString(), elements, pid);
+        double pageSizeFactor = getPageSizeFactor();
+        szen.setPageSizeFactor(pageSizeFactor);
+        szen.getMapping().adapt(mapping);
+        InputGraphArea inputGraphArea = frame.getInputGraphArea();
+        InternalGraphFrame otherFrame = szen.getFrame();
+        InputGraphArea otherInputGraphArea = otherFrame.getInputGraphArea();
+        otherInputGraphArea.adaptSettings(inputGraphArea);
+        String otherHashString = szen.getHashString();
+        addElementsToSzenario(otherHashString, elements, pid);
         finish_transaction(pid);
         szen.distributeEvent(ACTIVE_LAYER_CHANGED, pid);
         szen.distributeEvent(DATA_CHANGED, pid);
@@ -4560,7 +4882,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 if (metaModel.isSlaveType(elementClass)) {
                     continue;
                 }
-                addElementToSzenario(szen.getHashString(), (NodeContainer) ec, pid);
+                String szenHash = szen.getHashString();
+                addElementToSzenario(szenHash, (NodeContainer) ec, pid);
             }
             finish_transaction(pid, false);
             distributeEvent(SELECTION_CHANGED, pid);
@@ -4597,21 +4920,24 @@ public abstract class GraphDocument extends ElementSelectionContext {
             finish_transaction(pid);
             return;
         }
+        String szenHash = szen.getHashString();
         for (ElementContainer ec : elements) {
-            linkElementToSzenario(szen.getHashString(), ec.getHashString(), pid);
+            String elementHash = ec.getHashString();
+            linkElementToSzenario(szenHash, elementHash, pid);
         }
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
     }
 
     /**
-     * @param szenHashString
+     * @param szenHash
      * @param pid
      */
-    public final void linkElementsToSzenario(final String szenHashString, final Collection<ElementContainer> elements, final int pid) {
+    public final void linkElementsToSzenario(final String szenHash, final Collection<ElementContainer> elements, final int pid) {
         start_transaction(pid);
         for (ElementContainer ec : elements) {
-            linkElementToSzenario(szenHashString, ec.getHashString(), pid);
+            String elementHash = ec.getHashString();
+            linkElementToSzenario(szenHash, elementHash, pid);
         }
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, pid);
@@ -4625,7 +4951,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     private final void linkElementToSzenario(final String szenHashString, final String hashCode, final int pid) {
         ElementContainer ec = findContainerCoded(hashCode);
         if (ec == null) {
-            ec = gdcoll.getMainGraphDocument().findContainerCoded(hashCode);
+            LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+            ec = mainDoc.findContainerCoded(hashCode);
         }
         linkElementToSzenario(szenHashString, ec, pid);
     }
@@ -4647,41 +4974,44 @@ public abstract class GraphDocument extends ElementSelectionContext {
     }
 
     /**
-     * @param szenHash
-     * @param ec
+     * @param targetSzenHash
+     * @param sourceContainer
      * @param pid
      */
-    protected final NodeContainer addElementToSzenario(final String szenHash, final NodeContainer ec, final int pid) {
-        if (ec == null) {
+    protected final NodeContainer addElementToSzenario(final String targetSzenHash, final NodeContainer sourceContainer, final int pid) {
+        if (sourceContainer == null) {
             return null;
         }
-        ModelElement me = ec.getElement();
+        ModelElement me = sourceContainer.getElement();
         if (me instanceof Bendpoint || me.isUnique()) {
             return null;
         }
 
-        GraphDocument szenario = gdcoll.getGraphDocumentCoded(szenHash);
-        if (!(szenario instanceof Szenario)) {
+        GraphDocument targetDoc = gdcoll.getGraphDocumentCoded(targetSzenHash);
+        if (!(targetDoc instanceof Szenario)) {
             return null;
         }
-        Szenario szen = (Szenario) szenario;
+        Szenario targetSzenario = (Szenario) targetDoc;
 
-        szen.start_transaction(pid);
+        targetSzenario.start_transaction(pid);
 
-        NodeContainer nc = (NodeContainer) szen.addContainerCopy(ec);
-        if (nc != null) {
-            if (nc != ec) {
-                szen.addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL + " " + szenHash + " " + ec.getHashString(), pid);
+        NodeContainer targetContainer = (NodeContainer) targetSzenario.addContainerCopy(sourceContainer);
+        if (targetContainer != null) {
+            if (targetContainer != sourceContainer) {
+                String elementHash = me.getHashString();
+                GraphDocument sourceDoc = sourceContainer.getGraphDocument();
+                String sourceDocHash = sourceDoc.getHashString();
+                targetSzenario.addUndoCommand(GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL + " " + targetSzenHash + " " + elementHash, pid);
                 //Argumente: 1.) Quell-GraphDoc 2.) Zielszenario 3.) Hash des Elementes
-                szen.addRedoCommand(GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL + " " + ec.getGraphDocument().getHashString() + " " + szenHash + " " + ec.getHashString(), pid);
-                szen.createEdgeContainer(nc, ec.getGraphDocument(), true, pid);
+                targetSzenario.addRedoCommand(GDCommands.MODEL_ACTION_ADD_ELEMENT_TO_SUBMODEL + " " + sourceDocHash + " " + targetSzenHash + " " + elementHash, pid);
+                targetSzenario.createEdgeContainer(targetContainer, sourceDoc, true, pid);
             }
-            szen.addToSelection(nc, pid);
-            szen.raiseSlaves(nc);
+            targetSzenario.addToSelection(targetContainer, pid);
+            targetSzenario.raiseSlaves(targetContainer);
         }
-        szen.finish_transaction(pid);
-        szen.distributeEvent(DATA_CHANGED, pid);
-        return nc;
+        targetSzenario.finish_transaction(pid);
+        targetSzenario.distributeEvent(DATA_CHANGED, pid);
+        return targetContainer;
     }
 
     /**
@@ -4689,45 +5019,51 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param ec
      * @param pid
      */
-    public final void linkElementToSzenario(final String szenHashString, final ElementContainer ec, final int pid) {
-        if (ec.getElement() instanceof Edge) {
+    public final void linkElementToSzenario(String szenHashString, final ElementContainer ec, final int pid) {
+        if (ec instanceof BendpointContainer) {
             return;
         }
         start_transaction(pid);
-        String oldSzen = ((NodeContainer) ec).getNode().getAssociatedDoc();
-        ((NodeContainer) ec).getNode().setAssociatedDoc("null".equals(szenHashString) ? null : szenHashString);
-
+        ModelElement me = ec.getElement();
+        String elementHash = me.getHashString();
+        String oldSzen = me.getAssociatedDoc();
+        szenHashString = "null".equals(szenHashString) ? null : szenHashString;
+        me.setAssociatedDoc(szenHashString);
         String oldSzenHash = oldSzen == null ? "null" : oldSzen;
-        addUndoCommand(GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL + " " + oldSzenHash + " " + ec.getHashString(), pid);
-        addRedoCommand(GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL + " " + szenHashString + " " + ec.getHashString(), pid);
+        addUndoCommand(GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL + " " + oldSzenHash + " " + elementHash, pid);
+        addRedoCommand(GDCommands.MODEL_ACTION_LINK_ELEMENT_TO_SUBMODEL + " " + szenHashString + " " + elementHash, pid);
         finish_transaction(pid);
         distributeEvent(DATA_CHANGED, ec, 0);
     }
 
     /**
-     * @param kc
+     * @param nc
      * @param pid
      * @param log
      */
-    public void moveDependentNodeContainersUp(final NodeContainer kc, final int pid, final boolean log) {
-        if (!isMyElement(kc)) {
+    public void moveDependentNodeContainersUp(final NodeContainer nc, final int pid, final boolean log) {
+        if (!isMyElement(nc)) {
             return;
         }
         start_transaction(pid, log);
         MetaModel metaModel = getMetaModel();
-        for (Class<? extends ModelElement> c : metaModel.getCopyDependencies(kc.getNode().getClass())) {
-            List<ElementContainer> dependentObjects = kc.getNode().getConnectedContainers(c, this);
+        Node node = nc.getNode();
+        Class<? extends Node> nodeClass = node.getClass();
+        for (Class<? extends ModelElement> c : metaModel.getCopyDependencies(nodeClass)) {
+            List<ElementContainer> dependentObjects = node.getConnectedContainers(c, this);
             for (int j = 0; j < dependentObjects.size(); j++) {
-                NodeContainer sc = (NodeContainer) dependentObjects.get(j);
-                Node sk = sc.getNode();
-                if (!isMyElement(sk)) {
+                NodeContainer dependentContainer = (NodeContainer) dependentObjects.get(j);
+                Node dependentNode = dependentContainer.getNode();
+                if (!isMyElement(dependentNode)) {
                     continue;
                 }
-                LayerContainer lc1 = getLayer(kc.getNode().layerFor());
-                LayerContainer lc2 = getLayer(sk.layerFor());
+                int nodeLayer = node.layerFor();
+                int dependentNodeLayer = dependentNode.layerFor();
+                LayerContainer lc1 = getLayer(nodeLayer);
+                LayerContainer lc2 = getLayer(dependentNodeLayer);
                 if (lc1 == lc2) {
-                    while (lc1.indexOf(sc) < lc1.indexOf(kc)) {
-                        z_step_up(sc, pid, log);
+                    while (lc1.indexOf(dependentContainer) < lc1.indexOf(nc)) {
+                        z_step_up(dependentContainer, pid, log);
                     }
                 }
             }
@@ -4739,11 +5075,13 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void joinSelected(final int pid) {
-        if (selectedContainer.size() > 1) {
-            String targetHash = getLastSelected().getHashString();
+        if (!selectedContainer.isEmpty()) {
+            ElementContainer lastSelected = getLastSelected();
+            String targetHash = lastSelected.getHashString();
             List<ElementContainer> selection = new ArrayList<>(selectedContainer);
             for (ElementContainer ec : new ArrayList<>(selection)) {
-                joinElements(ec.getHashString(), targetHash, pid);
+                String element2JoinHash = ec.getHashString();
+                joinElements(element2JoinHash, targetHash, pid);
             }
             //nach dem Join kann man kein Undo mehr machen -> alle Undo-Kommandos davor auch löschen
             gdcoll.getTransStackTable().clear();
@@ -4764,9 +5102,10 @@ public abstract class GraphDocument extends ElementSelectionContext {
         ModelElement joinedElement = gdcoll.join(removeElementHashString, remainElementHashString, null, pid);
         if (joinedElement != null) {
             String hash = joinedElement.getHashString();
-            ElementContainer kc = findNodeContainerCoded(hash);
-            if (kc != null && kc instanceof NodeContainer) {
-                for (Edge edge : kc.getElement().getEdges()) {
+            ElementContainer ec = findNodeContainerCoded(hash);
+            if (ec != null && ec instanceof NodeContainer) {
+                ModelElement me = ec.getElement();
+                for (Edge edge : me.getEdges()) {
                     EdgeContainer kac = (EdgeContainer) edge.getContainer(this);
                     if (kac == null) {
                         continue;
@@ -4890,7 +5229,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
 
         ModelCategory modelCategory = getModelCategory();
         MetaModel metaModel = getMetaModel();
-        GraphDocument document = metaModel.isUnique(clazz, modelCategory) ? getCollection().getMainGraphDocument() : this;
+        GraphDocument document = metaModel.isUnique(clazz, modelCategory) ? gdcoll.getMainGraphDocument() : this;
         List<ElementContainer> objects = new ArrayList<>();
         //Ebene der gesuchten Elementklasse bestimmen
         int layer = metaModel.layerFor(clazz);
@@ -5039,7 +5378,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public final List<ModelElement> getModelItems(final Iterable<Class<? extends ModelElement>> classes, final boolean includeSubClasses, final boolean absolutePartsOnly, final boolean alphabetical) {
         List<ModelElement> elements = new ArrayList<>();
         for (Class<? extends ModelElement> elementClass : classes) {
-            elements.addAll(GraphDocumentHandler.getModelItems(this, elementClass, includeSubClasses, absolutePartsOnly, alphabetical));
+            List<ModelElement> modelItems = GraphDocumentHandler.getModelItems(this, elementClass, includeSubClasses, absolutePartsOnly, alphabetical);
+            elements.addAll(modelItems);
         }
         return elements;
     }
@@ -5054,7 +5394,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (modelElement == null) {
             return null;
         }
-        return modelElement.getContainer(modelElement.isUnique() ? getCollection().getMainGraphDocument() : this);
+        return modelElement.getContainer(modelElement.isUnique() ? gdcoll.getMainGraphDocument() : this);
     }
 
     /**
@@ -5064,11 +5404,12 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param modelElement
      * @return
      */
-    public ElementContainer getElementContainer(final ElementContainer elementContainer) {
-        if (elementContainer == null) {
+    public ElementContainer getElementContainer(final ElementContainer ec) {
+        if (ec == null) {
             return null;
         }
-        return getElementContainer(elementContainer.getElement());
+        ModelElement me = ec.getElement();
+        return getElementContainer(me);
     }
 
     /**
