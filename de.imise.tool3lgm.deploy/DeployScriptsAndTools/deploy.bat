@@ -165,7 +165,8 @@ SET "CLH=/wait javaw -classpath ^"%DEPLOY_TOOLS_JAR%^" de.axs.deploytools.Change
 ::  ECHO %CLH% 
 ::  ECHO "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
 ::  START javaw -classpath "%DEPLOY_TOOLS_JAR%" de.axs.deploytools.ChangeLineHandler "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
-START %CLH% "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
+::Hinweis: Aktuell darf die POM-Datei nicht geändert werden, da es Abhängigkeiten zu anderen POM Dateien (Plugins) gibt.
+::  START %CLH% "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
 ::Debug:
 ::  EXIT /B
 ::Version in die ISS-Datei schreiben
