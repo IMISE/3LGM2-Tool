@@ -1658,13 +1658,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                             doc.finish_transaction(pid);
                             return null;
                         }
-                        boolean oldBulkMode = setBulkMode(true);
                         AbstractPath createdPath = doc.createPath(inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement, inferenceEdgeConditionMetaPath, pid);
-                        setBulkMode(oldBulkMode);
-                        if (createdPath == null) {
                             doc.finish_transaction(pid);
-                            return null;
+                        if (createdPath != null) {
+                            doc.distributeEvent(DATA_CHANGED, pid);
+                            edge = startElement.getEdgeTo(endElement, edgeClass); //the edge will be created through DATA_CHANGED (via updateInferenceEdges)
                         }
+                        return edge;
                     }
                 }
                 edge = metaModel.createElement(edgeClass);
