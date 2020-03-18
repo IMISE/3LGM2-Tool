@@ -42,9 +42,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAY
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_COLOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_SET_LAYER_SIZE_FACTOR;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_UNLINK;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.GDCOMMAND_TEXT_SURROUNDER;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.getDecodedParseSaveString;
-import static de.imise.tool3lgm.graphtools.model.GraphDocument.getParseSaveString;
 import static de.imise.tool3lgm.graphtools.model.GraphDocumentHandler.getModelItems;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.ACTIVE_LAYER_CHANGED;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
@@ -56,6 +53,8 @@ import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_ELEMENT_LAYOUT;
 import static de.imise.tool3lgm.log.Log.ERROR;
 import static de.imise.util.collections.CollectionUtils.getNextIndicatedName;
+import static de.imise.util.htmlxml.ParseSaveStringHandler.getDecodedParseSaveString;
+import static de.imise.util.htmlxml.ParseSaveStringHandler.getParseSaveString;
 import static java.lang.Integer.parseInt;
 import static javax.swing.BoxLayout.Y_AXIS;
 import static javax.swing.JOptionPane.DEFAULT_OPTION;
@@ -730,7 +729,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_SHAPE + " " + ecDocHash + " " + ecHash + " " + ec.getForm(), pid);
         }
         if (!ec.hasStandardFont()) {
-            ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_FONT + " " + ecDocHash + " " + ecHash + " " + GDCOMMAND_TEXT_SURROUNDER + ec.getFontName() + GDCOMMAND_TEXT_SURROUNDER + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
+            ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_FONT + " " + ecDocHash + " " + ecHash + " " + getParseSaveString(ec.getFontName()) + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
         }
         if (ec instanceof NodeContainer) {
             NodeContainer kc = (NodeContainer) ec;
@@ -2301,6 +2300,14 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (doc.getHashString().equals(szenHash)) {
             return doc;
         }
+        return getSzenarioCoded(szenHash);
+    }
+
+    /**
+     * @param szenHash
+     * @return
+     */
+    public Szenario getSzenarioCoded(final String szenHash) {
         for (Szenario szen : szenarios) {
             if (szen.getHashString().equals(szenHash)) {
                 return szen;

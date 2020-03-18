@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.metamodel.original.action;
 
+import static de.imise.util.htmlxml.ParseSaveStringHandler.getParseSaveString;
+
 import java.awt.event.ActionEvent;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -134,25 +136,25 @@ public class B1ExportPlugin {
         for (int i = parentLists.size() - 1; i >= 0; i--) {
             parents = parentLists.get(i);
             Alphabetical.sort(parents);
-            linePartBuilder.append(GraphDocument.getParseSaveString(getHashListColumn(parents), true));
+            linePartBuilder.append(getParseSaveString(getHashListColumn(parents), true));
             linePartBuilder.append("\t");
-            linePartBuilder.append(GraphDocument.getParseSaveString(getNamesListColumn(parents), true));
+            linePartBuilder.append(getParseSaveString(getNamesListColumn(parents), true));
             linePartBuilder.append("\t");
         }
         //Beschreibung der übergebenen Funktion anhängen
-        linePartBuilder.append(GraphDocument.getParseSaveString(func.getDescription(), true));
+        linePartBuilder.append(getParseSaveString(func.getDescription(), true));
         linePartBuilder.append("\t");
 
         //Ort der Durchführung des Prozesses ist ein UserField namens 'Räume'
         for (UserField uf : func.getUserFieldInputValueKeys()) {
             if (uf.getName().equals("Raum")) {
-                linePartBuilder.append(GraphDocument.getParseSaveString(func.getUserFieldInputValue(uf), true));
+                linePartBuilder.append(getParseSaveString(func.getUserFieldInputValue(uf), true));
                 break;
             }
         }
         //wenn kein solches Userfield gefunden wurde, steht immer noch der TAB aus der letzten Spalte vorne -> ein Leerzeichen anhängen
         if (linePartBuilder.charAt(linePartBuilder.length() - 1) == '\t') {
-            linePartBuilder.append(GraphDocument.getParseSaveString(""));
+            linePartBuilder.append(getParseSaveString(""));
         }
         linePartBuilder.append("\t");
 
@@ -186,7 +188,7 @@ public class B1ExportPlugin {
             linePartBuilder.append(lineStart);
 
             Alphabetical.sort(oes);
-            linePartBuilder.append(GraphDocument.getParseSaveString(getNamesListColumn(oes), true));
+            linePartBuilder.append(getParseSaveString(getNamesListColumn(oes), true));
             linePartBuilder.append("\t");
 
             //ACHTUNG: es werden einfach alle Konfigurationen ausgeblendet, also einfach nur alle verknüpften AWBs eingesammelt,
@@ -198,7 +200,7 @@ public class B1ExportPlugin {
 
             //Kein AWB vorhanden -> aktuelle Zeile für diese OEs abschließen
             if (awbs.size() == 0) {
-                linePartBuilder.append(GraphDocument.getParseSaveString("Kein Anwendungssystem verknüpft"));
+                linePartBuilder.append(getParseSaveString("Kein Anwendungssystem verknüpft"));
                 linePartBuilder.append("\t");
                 //aktuelle Zeile mit Leerspalten auffüllen und abschließen
                 appendEmptyColumns(linePartBuilder, 2, true);
@@ -207,7 +209,7 @@ public class B1ExportPlugin {
             }
 
             //jetzt die AWBnamen kommasepariert eimntragen
-            linePartBuilder.append(GraphDocument.getParseSaveString(getNamesListColumn(awbs)));
+            linePartBuilder.append(getParseSaveString(getNamesListColumn(awbs)));
             linePartBuilder.append("\t");
 
             //Physische DV-Baustein-Konfigs holen. ACHTUNG: Auch hier werden einfach alle Konfigurationen in einen
@@ -223,7 +225,7 @@ public class B1ExportPlugin {
             }
 
             if (pdvbs.size() == 0) {
-                linePartBuilder.append(GraphDocument.getParseSaveString("Keine Physischen DV-Bausteine verknüpft"));
+                linePartBuilder.append(getParseSaveString("Keine Physischen DV-Bausteine verknüpft"));
                 linePartBuilder.append("\t");
                 //aktuelle Zeile mit Leerspalten auffüllen und abschließen
                 appendEmptyColumns(linePartBuilder, 1, true);
@@ -232,7 +234,7 @@ public class B1ExportPlugin {
             }
 
             //jetzt die PDVBnamen kommasepariert eimntragen
-            linePartBuilder.append(GraphDocument.getParseSaveString(getNamesListColumn(pdvbs)));
+            linePartBuilder.append(getParseSaveString(getNamesListColumn(pdvbs)));
             linePartBuilder.append("\t");
 
             //Speicherplatz ist noch nicht gekärt -> einfach Leer setzen
@@ -250,7 +252,7 @@ public class B1ExportPlugin {
      */
     private static final void appendEmptyColumns(final StringBuilder sb, final int count, final boolean lineEnd) {
         for (int i = 0; i < count; i++) {
-            sb.append(GraphDocument.getParseSaveString(""));
+            sb.append(getParseSaveString(""));
             sb.append("\t");
         }
         if (lineEnd) {
@@ -266,7 +268,7 @@ public class B1ExportPlugin {
      * @param sb
      */
     private static final void appendNoOeConnected(final StringBuilder sb) {
-        sb.append(GraphDocument.getParseSaveString("Keine Organisationseinheit verknüpft"));
+        sb.append(getParseSaveString("Keine Organisationseinheit verknüpft"));
         sb.append("\t");
         appendEmptyColumns(sb, 3, true);
     }

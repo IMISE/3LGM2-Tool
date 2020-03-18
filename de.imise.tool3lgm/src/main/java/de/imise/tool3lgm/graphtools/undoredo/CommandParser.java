@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.undoredo;
 
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.util.htmlxml.ParseSaveStringHandler;
 
 public class CommandParser {
 
@@ -54,12 +54,12 @@ public class CommandParser {
                     continue;
                 }
                 //Zeichen ist ein Hochkomma
-            } else if (c == GraphDocument.GDCOMMAND_TEXT_SURROUNDER) {
+            } else if (c == ParseSaveStringHandler.TEXT_SURROUNDER) {
                 //suche dahinter das schließende Hochkomma
                 for (int w = i + 1; w < lineLength; w++) {
                     c = line.charAt(w);
                     //wenn das 2. Hochkomma gefunden wurde
-                    if (c == GraphDocument.GDCOMMAND_TEXT_SURROUNDER) {
+                    if (c == ParseSaveStringHandler.TEXT_SURROUNDER) {
                         //schneide das Wort zwischen den Hochkommas aus und speichere es als Argument
                         args.add(line.substring(wordStart + 1, w));
                         //wenn das nächste Zeichen in der Zeile ein Leerzeichen ist
@@ -96,7 +96,7 @@ public class CommandParser {
                 int w;
                 for (w = i + 1; w < line.length(); w++) {
                     c = line.charAt(w);
-                    if (c == ' ' || c == GraphDocument.GDCOMMAND_TEXT_SURROUNDER) {
+                    if (c == ' ' || c == ParseSaveStringHandler.TEXT_SURROUNDER) {
                         break;
                     }
                 }
