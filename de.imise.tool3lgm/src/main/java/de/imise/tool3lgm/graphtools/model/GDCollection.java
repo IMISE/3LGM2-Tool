@@ -122,7 +122,7 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.util.StringUtils;
 import de.imise.util.collections.AlphabeticalSet;
-import de.imise.util.pair.Triple;
+import de.imise.util.outparam.OutParamObject;
 import de.imise.util.swing.dialog.NameAndColorInputDialog;
 
 /**
@@ -1648,17 +1648,16 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 //wenn eine Ableitungskante angelegt werden soll
                 if (InferenceEdge.class.isAssignableFrom(edgeClass) && !linkInferenceEdgesDirect) {
                     //hole die Bedingungspfade
-                    Triple<ModelElement, ModelElement, AbstractMetaPath> inferenceEdgeConditionMetaPathWithCorrectElementOrder = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, startElement, endElement);
-                    ModelElement inferenceEdgeConditionMetaPathStartElement = inferenceEdgeConditionMetaPathWithCorrectElementOrder.getFirstElement();
-                    ModelElement inferenceEdgeConditionMetaPathEndElement = inferenceEdgeConditionMetaPathWithCorrectElementOrder.getSecondElement();
-                    AbstractMetaPath inferenceEdgeConditionMetaPath = inferenceEdgeConditionMetaPathWithCorrectElementOrder.getThirdElement();
-                    if (!MetaPathFunctions.isConnected(inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement, inferenceEdgeConditionMetaPath)) {
+                    OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement = new OutParamObject<>(startElement);
+                    OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement = new OutParamObject<>(endElement);
+                    AbstractMetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
+                    if (!MetaPathFunctions.isConnected(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value, inferenceEdgeConditionMetaPath)) {
                         if (!inferenceEdgeConditionMetaPath.isCreatable(false)) {
                             doc.finish_transaction(pid);
                             return null;
                         }
-                        AbstractPath createdPath = doc.createPath(inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement, inferenceEdgeConditionMetaPath, pid);
-                            doc.finish_transaction(pid);
+                        AbstractPath createdPath = doc.createPath(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value, inferenceEdgeConditionMetaPath, pid);
+                        doc.finish_transaction(pid);
                         if (createdPath != null) {
                             doc.distributeEvent(DATA_CHANGED, pid);
                             edge = startElement.getEdgeTo(endElement, edgeClass); //the edge will be created through DATA_CHANGED (via updateInferenceEdges)
@@ -1745,26 +1744,26 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
     /**
      * @param potencialInferenceEdgeClass must impelemnt {@link InferenceEdge} interface (hard cast)
-     * @param me1 original startElement of a potencial inference edge instance
-     * @param me2 original endElement of a potencial inference edge instance
+     * @param inferenceEdgeConditionMetaPathStartElement original startElement of a potencial inference edge instance
+     * @param inferenceEdgeConditionMetaPathEndElement original endElement of a potencial inference edge instance
      * @return triple with the conditionMetaPath of the inference edge as the first triple element and
      *         the given elements in the correct order that the second triple element is the start element
      *         of the condition path and the third triple element is the end element of the condition path
      */
-    private Triple<ModelElement, ModelElement, AbstractMetaPath> getInferenceEdgeConditionMetaPathWithCorrectElementOrder(final Class<? extends Edge> potencialInferenceEdgeClass, final ModelElement me1, final ModelElement me2) {
+    private AbstractMetaPath getInferenceEdgeConditionMetaPathWithCorrectElementOrder(final Class<? extends Edge> potencialInferenceEdgeClass, final OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement,
+            final OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement) {
         Class<? extends InferenceEdge> inferenceEdgeClass = potencialInferenceEdgeClass.asSubclass(InferenceEdge.class);
         AbstractMetaPath inferenceEdgeConditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
         //es kann sein, dass die Bedingungspfade genau andersrum als die Kante (also mit verdrehtem Start- und Endelement) definiert sind
-        ModelElement inferenceEdgeConditionMetaPathStartElement = me1;
-        ModelElement inferenceEdgeConditionMetaPathEndElement = me2;
-        Class<? extends ModelElement> startClass = me1.getClass();
-        Class<? extends ModelElement> endClass = me1.getClass();
+        ModelElement startElement = inferenceEdgeConditionMetaPathStartElement.value;
+        ModelElement endElement = inferenceEdgeConditionMetaPathEndElement.value;
+        Class<? extends ModelElement> startClass = startElement.getClass();
+        Class<? extends ModelElement> endClass = endElement.getClass();
         if (!inferenceEdgeConditionMetaPath.isStartAndEndClass(startClass, endClass)) {
-            inferenceEdgeConditionMetaPathStartElement = me2;
-            inferenceEdgeConditionMetaPathEndElement = me1;
+            inferenceEdgeConditionMetaPathStartElement.value = endElement;
+            inferenceEdgeConditionMetaPathEndElement.value = startElement;
         }
-        Triple<ModelElement, ModelElement, AbstractMetaPath> returnTriple = new Triple<>(inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement, inferenceEdgeConditionMetaPath);
-        return returnTriple;
+        return inferenceEdgeConditionMetaPath;
     }
 
     /**
@@ -1916,10 +1915,17 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         Class<? extends Edge> absoluteEdgeClass = edge.getClass(); // die übergebene Kanten-Klasse kann null gewesen oder eine Oberklasse sein
         //InferenceEdge? -> delete condition paths
         if (InferenceEdge.class.isAssignableFrom(absoluteEdgeClass)) {
-            Triple<ModelElement, ModelElement, AbstractMetaPath> inferenceEdgeConditionMetaPathWithCorrectElementOrder = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, me1, me2);
-            ModelElement inferenceEdgeConditionMetaPathStartElement = inferenceEdgeConditionMetaPathWithCorrectElementOrder.getFirstElement();
-            ModelElement inferenceEdgeConditionMetaPathEndElement = inferenceEdgeConditionMetaPathWithCorrectElementOrder.getSecondElement();
-            AbstractMetaPath inferenceEdgeConditionMetaPath = inferenceEdgeConditionMetaPathWithCorrectElementOrder.getThirdElement();
+            OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement = new OutParamObject<>(me1);
+            OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement = new OutParamObject<>(me2);
+            AbstractMetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
+
+            //TODO: Remove Inference Egdes implementieren
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            /// ACHTUNG: hier fehlt jetzt das REMOVE von InferenceEdges bzw. deren Bedingungspfaden ///
+            ///////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////////////////////
+
         }
         if (MetaModel.isDoubleMeaningEdge(absoluteEdgeClass)) {
             DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
