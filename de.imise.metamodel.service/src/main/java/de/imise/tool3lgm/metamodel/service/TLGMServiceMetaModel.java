@@ -29,6 +29,7 @@ import de.imise.tool3lgm.metamodel.service.edge.IheActorInstanceCommunicationLin
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_IheActorInstanceInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActor_MustBeGroupedWith_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_IheActorInstanceCommunicationLink_Edge;
@@ -315,6 +316,7 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
                 Service_ServiceClass_Edge.class,
                 ServiceUses_Edge.class,
                 //IHE-Kanten
+                IheActor_IheActor_MustBeGroupedWith_Edge.class,
                 IheActor_IheActorInstance_Edge.class,
                 IheActor_IheInterface_Edge.class,
                 ApplicationSystem_IheActorInstance_Edge.class,

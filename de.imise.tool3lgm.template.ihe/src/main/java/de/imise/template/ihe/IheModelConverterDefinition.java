@@ -13,6 +13,7 @@ import de.imise.template.ihe.IheImportMetaModelDefinition.IheDomain_Edge;
 import de.imise.template.ihe.IheImportMetaModelDefinition.IheIntegrationProfile_Edge;
 import de.imise.template.ihe.IheImportMetaModelDefinition.IheTransaction_Edge;
 import de.imise.template.ihe.IheImportMetaModelDefinition.IntegrationProfile;
+import de.imise.template.ihe.IheImportMetaModelDefinition.MustBeGroupedWith_Edge;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConverterDefinition.TargetPathsCreationDefinition.NameSource;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -27,6 +28,7 @@ import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.metamodel.service.TLGMServiceMetaModel;
+import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActor_MustBeGroupedWith_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheIntegrationProfile_IheActor_Edge;
@@ -59,7 +61,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
 
     @Override
     public Map<Class<? extends Edge>, Class<? extends Edge>> getSourceEdgeClassesToTargetEdgeClasses() {
-        return ImmutableMap.of();
+        return ImmutableMap.of(MustBeGroupedWith_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
     }
 
     @Override
