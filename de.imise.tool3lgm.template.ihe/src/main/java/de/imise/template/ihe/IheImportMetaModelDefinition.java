@@ -49,6 +49,12 @@ public class IheImportMetaModelDefinition extends ImportMetaModelDefinition {
         public static final Class<? extends ModelElement> ETCL = Actor.class;
     }
 
+    /** 3LGM2: MustBeGroupedWith_Edge -> OWL: mustBeGroupedWith */
+    public static class MustBeGroupedWith_Edge extends SimpleEdge {
+        public static final Class<? extends ModelElement> STCL = Actor.class;
+        public static final Class<? extends ModelElement> ETCL = Actor.class;
+    }
+
     @Override
     public Set<Class<? extends Node>> getNodes() {
         return ImmutableSet.of(Domain.class, IntegrationProfile.class, Actor.class);
@@ -60,7 +66,7 @@ public class IheImportMetaModelDefinition extends ImportMetaModelDefinition {
 
     @Override
     public Set<Class<? extends Edge>> getEdges() {
-        return ImmutableSet.of(IheDomain_Edge.class, IheIntegrationProfile_Edge.class, IheTransaction_Edge.class);
+        return ImmutableSet.of(IheDomain_Edge.class, IheIntegrationProfile_Edge.class, IheTransaction_Edge.class, MustBeGroupedWith_Edge.class);
         //        return ImmutableSet.of(IheDomain_Edge.class);
         //        return ImmutableSet.of(IheIntegrationProfile_Edge.class);
         //        return ImmutableSet.of(IheTransaction_Edge.class);
