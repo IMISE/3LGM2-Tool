@@ -102,6 +102,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         if (editable) {
             constraints.anchor = GridBagConstraints.EAST;
             add(this, viewButton, constraints, 0, 6, 1, 1);
+        } else {
+            viewButton = null;
         }
 
         constraints.anchor = GridBagConstraints.WEST;
