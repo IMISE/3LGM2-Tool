@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 
 /**
  * ACHTUNG: Wenn der Name der Klasse refactored werden sollte, müssen die ErrorResourcen angepasst werden!
- * 
+ *
  * @author Ich
  * @create 17.08.2015
  */
@@ -19,6 +19,12 @@ public class IDNotUniqueError extends AbstractIDError {
      */
     private final Collection<ModelElement> allWithSameID;
 
+    /**
+     * @param me
+     * @param idUserField
+     * @param gdcoll
+     * @param allWithSameID
+     */
     public IDNotUniqueError(final ModelElement me, final UserField idUserField, final GDCollection gdcoll, final Collection<ModelElement> allWithSameID) {
         super(me, idUserField, gdcoll);
         this.allWithSameID = allWithSameID;

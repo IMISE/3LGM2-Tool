@@ -29,15 +29,6 @@ public abstract class AbstractCardinalityError extends AbstractError {
         this.cardValue = cardValue;
     }
 
-    @Override
-    public boolean equals(final Object obj) {
-        if (!super.equals(obj)) {
-            return false;
-        }
-        AbstractCardinalityError ce = (AbstractCardinalityError) obj;
-        return cardValue == ce.cardValue;
-    }
-
     @SuppressWarnings("unchecked")
     public Class<? extends Edge> getEdgeClass() {
         if (errorField instanceof ElementaryMetaPath) {
@@ -59,6 +50,32 @@ public abstract class AbstractCardinalityError extends AbstractError {
      */
     public ElementaryMetaPath getElementaryMetaPath() {
         return (ElementaryMetaPath) errorField;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + cardValue;
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        AbstractCardinalityError other = (AbstractCardinalityError) obj;
+        if (cardValue != other.cardValue) {
+            return false;
+        }
+        return true;
     }
 
 }

@@ -28,8 +28,14 @@ public class CardinalityDefinition {
      */
     public boolean filterNewCardinalities = false;
 
+    /**
+     *
+     */
     private Map<Class<? extends Edge>, EdgeCardinality> edgeClassToNewForwardCardinality;
 
+    /**
+     *
+     */
     private Map<Class<? extends Edge>, EdgeCardinality> edgeClassToNewBackwardCardinality;
 
     /**

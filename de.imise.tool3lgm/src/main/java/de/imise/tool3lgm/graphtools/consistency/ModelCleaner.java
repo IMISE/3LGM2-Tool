@@ -340,6 +340,11 @@ public class ModelCleaner {
         gdcoll.setBulkMode(bulkMode);
     }
 
+    /**
+     * @param me
+     * @param doc
+     * @param id
+     */
     private void print(final ModelElement me, final GraphDocument doc, final int id) {
         if (PRINT_ERRORS) {
             String hashString = me.getHashString();

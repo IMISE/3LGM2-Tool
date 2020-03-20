@@ -44,15 +44,24 @@ public class ConsistencyDefinition {
         this.metaModel = metaModel;
     }
 
+    /**
+     * @param cardinalityDefinition
+     */
     public void setCardinalityDefinition(final CardinalityDefinition cardinalityDefinition) {
         this.cardinalityDefinition = cardinalityDefinition;
     }
 
+    /**
+     *
+     */
     public void reset() {
         cardinalityDefinition.reset();
         elementToOnlyLeafAllowedEdgeClasses.clear();
     }
 
+    /**
+     * @return
+     */
     public CardinalityDefinition getCardinalityDefinition() {
         return cardinalityDefinition;
     }

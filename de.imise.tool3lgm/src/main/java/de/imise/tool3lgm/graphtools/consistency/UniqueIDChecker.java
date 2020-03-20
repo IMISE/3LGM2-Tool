@@ -17,11 +17,10 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 
+/**
+ * @author AXS (20.03.2016)
+ */
 public class UniqueIDChecker {
-
-    public UniqueIDChecker() {
-
-    }
 
     /**
      * Liefert eine Liste aller {@link AbstractIDError} in dem übergebenen Modell

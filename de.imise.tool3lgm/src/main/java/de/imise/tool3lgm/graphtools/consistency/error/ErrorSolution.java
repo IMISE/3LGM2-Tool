@@ -7,6 +7,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 
+/**
+ * @author AXS (20.03.2008)
+ */
 public class ErrorSolution {
 
     /**

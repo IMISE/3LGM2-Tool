@@ -5,6 +5,12 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 
+/**
+ * An error object that holds the model ({@link GDCollection}) and a model element that is
+ * the source of the error. Additionally it stores an object to identify the erorr type.
+ *
+ * @author AXS (20.03.2008)
+ */
 public abstract class AbstractError extends Error {
 
     /**
@@ -130,18 +136,46 @@ public abstract class AbstractError extends Error {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (errorField == null ? 0 : errorField.hashCode());
+        result = prime * result + (gdcoll == null ? 0 : gdcoll.hashCode());
+        result = prime * result + (me == null ? 0 : me.hashCode());
+        return result;
+    }
+
+    @Override
     public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
         if (obj == null) {
             return false;
         }
-        if (super.equals(obj)) {
-            return true;
-        }
-        if (!(obj.getClass() == getClass())) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        AbstractError ce = (AbstractError) obj;
-        if (me != ce.me || errorField != ce.errorField) {
+        AbstractError other = (AbstractError) obj;
+        if (errorField == null) {
+            if (other.errorField != null) {
+                return false;
+            }
+        } else if (!errorField.equals(other.errorField)) {
+            return false;
+        }
+        if (gdcoll == null) {
+            if (other.gdcoll != null) {
+                return false;
+            }
+        } else if (!gdcoll.equals(other.gdcoll)) {
+            return false;
+        }
+        if (me == null) {
+            if (other.me != null) {
+                return false;
+            }
+        } else if (!me.equals(other.me)) {
             return false;
         }
         return true;

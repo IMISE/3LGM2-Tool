@@ -71,6 +71,9 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      */
     private ConsistencyDefinition consistencyDefinition;
 
+    /**
+     *
+     */
     private final UniqueIDChecker idChecker;
 
     /**
@@ -258,14 +261,23 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         return getInconsistencies(AbstractCardinalityError.class).size() > 0;
     }
 
+    /**
+     * @return
+     */
     public List<AbstractError> getAllInconsistencies() {
         return getInconsistencies(AbstractError.class);
     }
 
+    /**
+     * @return
+     */
     public List<AbstractError> getCardinalityInconsistencies() {
         return getInconsistencies(AbstractCardinalityError.class);
     }
 
+    /**
+     * @return
+     */
     public List<AbstractError> getIDInconsistencies() {
         return getInconsistencies(AbstractIDError.class);
     }
