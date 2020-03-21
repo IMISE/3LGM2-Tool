@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.util.swing.component.MinSizedIconButton;
 
 /**
@@ -49,10 +49,10 @@ public abstract class AbstractExpandablePanel extends LGMDragNDropPanel {
      * @param dialog
      * @param titleLabelOption
      * @param westLabelOption
-     * @param simpleMetaPath
+     * @param metaPath
      */
-    public AbstractExpandablePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, titleLabelOption, westLabelOption, simpleMetaPath);
+    public AbstractExpandablePanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath) {
+        super(dialog, titleLabelOption, westLabelOption, metaPath);
     }
 
     @Override

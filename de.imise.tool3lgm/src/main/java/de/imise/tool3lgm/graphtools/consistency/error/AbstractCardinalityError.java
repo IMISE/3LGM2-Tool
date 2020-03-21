@@ -5,6 +5,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 
 /**
@@ -24,17 +25,26 @@ public abstract class AbstractCardinalityError extends AbstractError {
      * @param cardValue
      * @param gdcoll
      */
-    public AbstractCardinalityError(final ModelElement me, final ElementaryMetaPath elementaryMetaPath, final GDCollection gdcoll, final int cardValue) {
-        super(me, elementaryMetaPath, gdcoll);
+    public AbstractCardinalityError(final ModelElement me, final AbstractMetaPath metaPath, final GDCollection gdcoll, final int cardValue) {
+        super(me, metaPath, gdcoll);
         this.cardValue = cardValue;
     }
 
-    @SuppressWarnings("unchecked")
-    public Class<? extends Edge> getEdgeClass() {
+    /**
+     * @return
+     */
+    private Class<? extends Edge> getEdgeClass() {
         if (errorField instanceof ElementaryMetaPath) {
             return ((ElementaryMetaPath) errorField).getEdgeClass();
         }
-        return (Class<? extends Edge>) errorField;
+        return null;
+    }
+
+    /**
+     * @return
+     */
+    public AbstractMetaPath getMetaPath() {
+        return (AbstractMetaPath) errorField;
     }
 
     @Override
@@ -43,13 +53,6 @@ public abstract class AbstractCardinalityError extends AbstractError {
         MetaModel metaModel = gdcoll.getMetaModel();
         ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
         return edgeClass != null ? elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass) : "";
-    }
-
-    /**
-     * @return
-     */
-    public ElementaryMetaPath getElementaryMetaPath() {
-        return (ElementaryMetaPath) errorField;
     }
 
     @Override

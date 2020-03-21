@@ -879,7 +879,7 @@ public final class MetaModel implements MetaModelSpecific {
      * @param metaPath
      * @return
      */
-    public final boolean isVisible(final SimpleMetaPath metaPath) {
+    public final boolean isVisible(final AbstractMetaPath metaPath) {
         if (Static.isExpertMode()) {
             return true;
         }

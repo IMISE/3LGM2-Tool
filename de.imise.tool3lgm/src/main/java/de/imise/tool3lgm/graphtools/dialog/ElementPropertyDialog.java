@@ -32,6 +32,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.util.swing.component.TabbedPane;
@@ -326,7 +327,16 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      */
     @SafeVarargs
     public final void addDescriptedSingleConnectionPanel(final Class<? extends Edge>... edgeClasses) {
-        addTab(new DescriptedSingleConnectionPanel(this, createSimpleMetaPath(null, edgeClasses)));
+        SimpleMetaPath simpleMetaPath = createSimpleMetaPath(null, edgeClasses);
+        addDescriptedSingleConnectionPanel(simpleMetaPath);
+    }
+
+    /**
+     * @param metaPath
+     */
+    public final void addDescriptedSingleConnectionPanel(final AbstractMetaPath metaPath) {
+        DescriptedSingleConnectionPanel panel = new DescriptedSingleConnectionPanel(this, metaPath);
+        addTab(panel);
     }
 
     ///////////////
@@ -374,6 +384,13 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     }
 
     /**
+     * @param edgeClasses
+     */
+    public final void addPathConnectionPanel(final AbstractMetaPath metaPath) {
+        addPathConnectionPanel(LABEL_END_ELEMENT_TYPE, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath);
+    }
+
+    /**
      * @param searchElementClass
      * @param edgeClasses
      */
@@ -401,6 +418,15 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     @SafeVarargs
     public final void addPathConnectionPanel(final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
         SimpleMetaPath metaPath = createSimpleMetaPath(searchElementClass, edgeClasses);
+        addPathConnectionPanel(titleLabelOption, westLabelOption, metaPath);
+    }
+
+    /**
+     * @param titleLabelOption
+     * @param westLabelOption
+     * @param metaPath
+     */
+    public final void addPathConnectionPanel(final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath) {
         MetaModel metaModel = modelElement.getMetaModel();
         if (metaModel.isVisible(metaPath)) {
             boolean singleConnection = metaPath.isSingleConnection();
@@ -414,7 +440,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
             if (editable || !singleConnection) {
                 addTab(new PathConnectionPanel(this, titleLabelOption, westLabelOption, false, metaPath));
             } else {
-                addDescriptedSingleConnectionPanel(edgeClasses);
+                addDescriptedSingleConnectionPanel(metaPath);
             }
         }
     }

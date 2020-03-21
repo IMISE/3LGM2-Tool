@@ -35,6 +35,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -460,7 +461,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
             ErrorSolution es = solutionsLibrary.getSolution(error);
             if (es == null) {
                 AbstractCardinalityError cardError = (AbstractCardinalityError) error;
-                ElementaryMetaPath elementaryMetaPath = cardError.getElementaryMetaPath();
+                AbstractMetaPath elementaryMetaPath = cardError.getMetaPath();
                 ModelElement me = cardError.getModelElement();
                 ElementPropertyDialog dialog = me.getPropertyDialog();
                 Class<? extends ModelElement> errorConnectedClass = elementaryMetaPath.getEndClass();
@@ -469,7 +470,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
                 int existingTabIndex = dialog.selectTab(tabName, PathConnectionPanel.class);
                 ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
                 if (existingTabIndex < 0) {
-                    dialog.addPathConnectionPanel(elementaryMetaPath.getEdgeClass());
+                    dialog.addPathConnectionPanel(elementaryMetaPath);
                     dialog.setLastTabIcon(Tool3lgmConstants.getIcon("error.gif"));
                     dialog.setLastTabTitle(tabName);
                     dialog.selectTab(tabName, PathConnectionPanel.class);

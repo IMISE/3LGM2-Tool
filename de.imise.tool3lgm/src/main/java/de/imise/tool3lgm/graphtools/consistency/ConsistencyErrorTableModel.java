@@ -38,6 +38,9 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         }
     }
 
+    /**
+     *
+     */
     public ConsistencyErrorTableModel() {
         super();
         COL_NAMES[] colIdentifiers = COL_NAMES.values();

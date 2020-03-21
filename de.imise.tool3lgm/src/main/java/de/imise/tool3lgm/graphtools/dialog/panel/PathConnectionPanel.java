@@ -36,8 +36,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
@@ -81,28 +81,28 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     private final LGMAction newElementAction;
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, -1, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+        this(dialog, -1, metaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, titleLabelOption, westLabelOption, false, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath) {
+        this(dialog, titleLabelOption, westLabelOption, false, metaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, false, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final AbstractMetaPath metaPath) {
+        this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, false, metaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, renderLeftTreeAsList, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final boolean renderLeftTreeAsList, final AbstractMetaPath metaPath) {
+        this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, renderLeftTreeAsList, metaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, titleLabelOption, westLabelOption, -1, renderLeftTreeAsList, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final boolean renderLeftTreeAsList, final AbstractMetaPath metaPath) {
+        this(dialog, titleLabelOption, westLabelOption, -1, renderLeftTreeAsList, metaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final boolean renderLeftTreeAsList, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, titleLabelOption, westLabelOption, simpleMetaPath);
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final boolean renderLeftTreeAsList, final AbstractMetaPath metaPath) {
+        super(dialog, titleLabelOption, westLabelOption, metaPath);
         showRightTree = isEditable();
         if (!showRightTree) {
             setUnexpandable();

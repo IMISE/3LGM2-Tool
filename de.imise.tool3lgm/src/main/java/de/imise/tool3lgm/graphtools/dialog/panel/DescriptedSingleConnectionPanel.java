@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.util.htmlxml.ParseSaveStringHandler;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
@@ -34,8 +34,8 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      * @param dialog
      * @param simpleMetaPath
      */
-    public DescriptedSingleConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, LABEL_END_ELEMENT_TYPE, simpleMetaPath);
+    public DescriptedSingleConnectionPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+        this(dialog, LABEL_END_ELEMENT_TYPE, metaPath);
     }
 
     /**
@@ -47,10 +47,10 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der letzten Kante des
      *            MetaPfades</li>
      *            </ul>
-     * @param simpleMetaPath
+     * @param metaPath
      */
-    public DescriptedSingleConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, panelLabelOption, simpleMetaPath);
+    public DescriptedSingleConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final AbstractMetaPath metaPath) {
+        super(dialog, panelLabelOption, metaPath);
     }
 
     @Override

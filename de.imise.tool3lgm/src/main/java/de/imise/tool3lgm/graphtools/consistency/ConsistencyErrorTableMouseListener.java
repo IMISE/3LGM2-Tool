@@ -36,8 +36,14 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
      */
     private final ConsistencyChecker checker;
 
+    /**
+     *
+     */
     private List<AbstractError> errors;
 
+    /**
+     *
+     */
     private final List<ModelElement> selectedErrorElements = new ArrayList<>();
 
     /**
@@ -49,6 +55,9 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         table = errorTable;
     }
 
+    /**
+     * @param e
+     */
     private void showPopup(final MouseEvent e) {
         int clickedRow = table.rowAtPoint(e.getPoint());
         table.addRowSelectionInterval(clickedRow, clickedRow);

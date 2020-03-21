@@ -25,7 +25,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.NamedObjectContainer;
@@ -75,10 +75,10 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
 
     /**
      * @param dialog
-     * @param edgeClasses
+     * @param metaPath
      */
-    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final SimpleMetaPath simpleMetaPath) {
-        this(dialog, PanelLabelOption.LABEL_END_ELEMENT_TYPE, simpleMetaPath);
+    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+        this(dialog, PanelLabelOption.LABEL_END_ELEMENT_TYPE, metaPath);
     }
 
     /**
@@ -90,13 +90,13 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      *            <li>{@link PanelLabelOption#LABEL_LAST_EDGE_CONNECTION_NAME} = Anzeigename der gerichteten Verbindung der letzten Kante des
      *            MetaPfades</li>
      *            </ul>
-     * @param simpleMetaPath
+     * @param metaPath
      */
-    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final SimpleMetaPath simpleMetaPath) {
-        super(dialog, panelLabelOption, panelLabelOption, simpleMetaPath);
+    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final AbstractMetaPath metaPath) {
+        super(dialog, panelLabelOption, panelLabelOption, metaPath);
         setLayout(new BorderLayout());
         update(); //connectedElement initial setzen!
-        boolean editable = !dialog.isInfoDialog() && simpleMetaPath.isCreatable(false); // für editable reicht es, wenn der Pfad zw. bestehenden Elementen entfernt oder angehängt werden kann. Das zu verbindende Element muss nicht neu erzeugt werden können
+        boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(false); // für editable reicht es, wenn der Pfad zw. bestehenden Elementen entfernt oder angehängt werden kann. Das zu verbindende Element muss nicht neu erzeugt werden können
         if (!editable || !metaPath.isRemoveable(true) && connectedElement != null) {
             connectedElementsBox = null;
             itemListener = null;
@@ -116,7 +116,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             addMouseActions(connectedElementsBox);
             add(connectedElementsBox, BorderLayout.CENTER);
         }
-        createNew = editable && simpleMetaPath.isCreatable(true) ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getElementNameBuilder().getDisplayableName(searchElementClass)) : null;
+        createNew = editable && metaPath.isCreatable(true) ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getElementNameBuilder().getDisplayableName(searchElementClass)) : null;
     }
 
     @Override
