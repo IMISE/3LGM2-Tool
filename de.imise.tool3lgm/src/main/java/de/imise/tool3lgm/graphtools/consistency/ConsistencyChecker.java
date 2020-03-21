@@ -18,7 +18,7 @@ import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
 import de.imise.tool3lgm.graphtools.consistency.error.ErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.error.ErrorSolutionLibraryVersion;
@@ -179,7 +179,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         ConsistencyChecker checker = new ConsistencyChecker(gdcoll, false);
         // dieses Löschen muss man nicht rückgängig machen können -> BulkMode einschalten
         boolean oldBulkMode = checker.gdcoll.setBulkMode(true);
-        for (AbstractError err : checker.getAllInconsistencies()) {
+        for (AbstractConsistencyError err : checker.getAllInconsistencies()) {
             if (!checker.isSolutionExecuteable(err)) {
                 ModelElement errorElement = err.getModelElement();
                 checker.gdcoll.deleteElement(errorElement, TransactionManager.STANDARD_PID);
@@ -265,29 +265,29 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     /**
      * @return
      */
-    public List<AbstractError> getAllInconsistencies() {
-        return getInconsistencies(AbstractError.class);
+    public List<AbstractConsistencyError> getAllInconsistencies() {
+        return getInconsistencies(AbstractConsistencyError.class);
     }
 
     /**
      * @return
      */
-    public List<AbstractError> getCardinalityInconsistencies() {
+    public List<AbstractConsistencyError> getCardinalityInconsistencies() {
         return getInconsistencies(AbstractCardinalityError.class);
     }
 
     /**
      * @return
      */
-    public List<AbstractError> getIDInconsistencies() {
+    public List<AbstractConsistencyError> getIDInconsistencies() {
         return getInconsistencies(AbstractIDError.class);
     }
 
     /**
      * @return
      */
-    private List<AbstractError> getInconsistencies(final Class<? extends AbstractError> errorClass) {
-        List<AbstractError> errors = new ArrayList<>();
+    private List<AbstractConsistencyError> getInconsistencies(final Class<? extends AbstractConsistencyError> errorClass) {
+        List<AbstractConsistencyError> errors = new ArrayList<>();
 
         if (gdcoll == null) {
             return errors;
@@ -313,7 +313,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      * @param me
      * @param returnList
      */
-    private void addCardinalityErrors(final ModelElement me, final List<AbstractError> returnList) {
+    private void addCardinalityErrors(final ModelElement me, final List<AbstractConsistencyError> returnList) {
         if (!isValid()) {
             return;
         }
@@ -417,7 +417,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      * @param error
      * @return
      */
-    private Collection<ModelElement> getSolutionPropertyDialogElement(final AbstractError error) {
+    private Collection<ModelElement> getSolutionPropertyDialogElement(final AbstractConsistencyError error) {
         if (error == null) {
             return null;
         }
@@ -445,7 +445,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      * @param error
      * @return
      */
-    public boolean isSolutionExecuteable(final AbstractError error) {
+    public boolean isSolutionExecuteable(final AbstractConsistencyError error) {
         return getSolutionPropertyDialogElement(error) != null;
     }
 
@@ -453,7 +453,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      * @param error
      * @return
      */
-    public void execSolution(final AbstractError error) {
+    public void execSolution(final AbstractConsistencyError error) {
         // 'es' ist null, wenn für den Fehler keine Solution hinterlegt wurde. Das gilt nur
         // für Fehler, für die im Eigenschaftsdialog des Elementes dann ein zusätzliches
         // OneToNUndirectedConnectionPanel angezeigt werden soll, in dem man den Fehler beheben kann

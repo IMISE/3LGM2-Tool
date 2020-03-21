@@ -8,7 +8,7 @@ import java.util.List;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 
 /**
  * @author AXS
@@ -47,7 +47,7 @@ class ConsistencyErrorTableGenerator {
      *
      */
     void updateTable() {
-        List<AbstractError> errors = checker.getAllInconsistencies();
+        List<AbstractConsistencyError> errors = checker.getAllInconsistencies();
         ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
         model.setErrors(errors);
         table.clearSelection();

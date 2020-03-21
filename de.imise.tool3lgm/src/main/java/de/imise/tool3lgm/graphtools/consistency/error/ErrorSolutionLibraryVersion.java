@@ -66,7 +66,7 @@ public class ErrorSolutionLibraryVersion {
      * @param error
      * @return
      */
-    public final ErrorSolution getSolution(final AbstractError error) {
+    public final ErrorSolution getSolution(final AbstractConsistencyError error) {
         for (ErrorSolution es : CARDINALITY_ERROR_SOLUTIONS) {
             if (es.getTargetClass().isAssignableFrom(error.getModelElement().getClass()) && es.getEdgeClass() == error.errorField) {
                 return es;

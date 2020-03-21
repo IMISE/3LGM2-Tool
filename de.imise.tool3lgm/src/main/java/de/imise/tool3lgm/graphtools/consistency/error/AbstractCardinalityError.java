@@ -5,14 +5,13 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 
 /**
  * @author AXS
  * @created 13.09.2008
  */
-public abstract class AbstractCardinalityError extends AbstractError {
+public abstract class AbstractCardinalityError extends AbstractElementaryPathError {
 
     /**
      * Wert der Kardinalität, die über oder unterschritten wurde
@@ -25,8 +24,8 @@ public abstract class AbstractCardinalityError extends AbstractError {
      * @param cardValue
      * @param gdcoll
      */
-    public AbstractCardinalityError(final ModelElement me, final AbstractMetaPath metaPath, final GDCollection gdcoll, final int cardValue) {
-        super(me, metaPath, gdcoll);
+    public AbstractCardinalityError(final ModelElement me, final ElementaryMetaPath elementaryMetaPath, final GDCollection gdcoll, final int cardValue) {
+        super(me, elementaryMetaPath, gdcoll);
         this.cardValue = cardValue;
     }
 
@@ -38,13 +37,6 @@ public abstract class AbstractCardinalityError extends AbstractError {
             return ((ElementaryMetaPath) errorField).getEdgeClass();
         }
         return null;
-    }
-
-    /**
-     * @return
-     */
-    public AbstractMetaPath getMetaPath() {
-        return (AbstractMetaPath) errorField;
     }
 
     @Override

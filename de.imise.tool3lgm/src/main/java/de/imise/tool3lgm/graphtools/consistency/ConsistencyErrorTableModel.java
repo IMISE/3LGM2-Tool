@@ -12,7 +12,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.NamedObjectContainer;
@@ -54,7 +54,7 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
     /**
      * @param dataVector
      */
-    public void setErrors(List<AbstractError> dataVector) {
+    public void setErrors(List<AbstractConsistencyError> dataVector) {
 
         if (dataVector == null) {
             dataVector = new ArrayList<>(0);
@@ -74,13 +74,13 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
 
         int nullRows = 0;
         for (int i = 0; i < dataVector.size(); i++) {
-            AbstractError error = dataVector.get(i);
+            AbstractConsistencyError error = dataVector.get(i);
 
             // Zeilennummer
             setValueAt(new Integer(i + 1), i, COL_NAMES.number.ordinal());
 
             // Fehlertyp
-            NamedObjectContainer<AbstractError> type = new NamedObjectContainer<>(error, error.getTypeString());
+            NamedObjectContainer<AbstractConsistencyError> type = new NamedObjectContainer<>(error, error.getTypeString());
             setValueAt(type, i, COL_NAMES.errorType.ordinal());
 
             ModelElement me = error.getModelElement();

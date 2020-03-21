@@ -9,7 +9,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
  *
  * @author AXS (17.08.15)
  */
-public class AbstractIDError extends AbstractError {
+public class AbstractIDError extends AbstractConsistencyError {
 
     /**
      * @param me

@@ -16,7 +16,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.util.NamedObjectContainer;
@@ -39,7 +39,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
     /**
      *
      */
-    private List<AbstractError> errors;
+    private List<AbstractConsistencyError> errors;
 
     /**
      *
@@ -68,8 +68,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         errors = new ArrayList<>();
         selectedErrorElements.clear();
         for (int r : rows) {
-            NamedObjectContainer<AbstractError> errContainer = (NamedObjectContainer<AbstractError>) table.getValueAt(r, ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal());
-            AbstractError error = errContainer.getObject();
+            NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) table.getValueAt(r, ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal());
+            AbstractConsistencyError error = errContainer.getObject();
             errors.add(error);
             selectedErrorElements.add(error.getModelElement());
         }
@@ -91,8 +91,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
             int clickedRow = table.rowAtPoint(e.getPoint());
             int column = ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal();
             Object value = table.getValueAt(clickedRow, column);
-            NamedObjectContainer<AbstractError> errContainer = (NamedObjectContainer<AbstractError>) value;
-            AbstractError error = errContainer.getObject();
+            NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) value;
+            AbstractConsistencyError error = errContainer.getObject();
             checker.execSolution(error);
         }
 
@@ -116,7 +116,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         JMenuItem item = new JMenuItem(new AbstractAction(getResString("error_element_solution_dialog")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                for (AbstractError err : errors) {
+                for (AbstractConsistencyError err : errors) {
                     checker.execSolution(err);
                 }
             }

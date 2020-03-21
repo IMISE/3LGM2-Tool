@@ -29,7 +29,7 @@ import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinit
 import de.imise.tool3lgm.graphtools.consistency.CardinalityDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -206,7 +206,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             cardinalityDefinition.setNewForwardCardinality(edgeClass, definition.getNewForwardCardinality(edgeClass));
             cardinalityDefinition.setNewBackwardCardinality(edgeClass, definition.getNewBackwardCardinality(edgeClass));
         }
-        List<AbstractError> errors = consistencyChecker.getCardinalityInconsistencies();
+        List<AbstractConsistencyError> errors = consistencyChecker.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
         if (errors.size() > 0) {
             // Custom button xmlText

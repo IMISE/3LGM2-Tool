@@ -11,7 +11,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
  *
  * @author AXS (20.03.2008)
  */
-public abstract class AbstractError extends Error {
+public abstract class AbstractConsistencyError extends Error {
 
     /**
      * Suffix, der an den SimpleClassName gehängt wird, um die genaue BEschreibung des Fehlers
@@ -42,7 +42,7 @@ public abstract class AbstractError extends Error {
      */
     protected GDCollection gdcoll;
 
-    public AbstractError(final ModelElement me, final Object errorField, final GDCollection gdcoll) {
+    public AbstractConsistencyError(final ModelElement me, final Object errorField, final GDCollection gdcoll) {
         this.me = me;
         this.errorField = errorField;
         this.gdcoll = gdcoll;
@@ -156,7 +156,7 @@ public abstract class AbstractError extends Error {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        AbstractError other = (AbstractError) obj;
+        AbstractConsistencyError other = (AbstractConsistencyError) obj;
         if (errorField == null) {
             if (other.errorField != null) {
                 return false;
