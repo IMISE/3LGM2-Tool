@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.consistency;
+package de.imise.tool3lgm.graphtools.consistency.checker;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 
@@ -17,6 +17,9 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibraryVersion;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;

@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.consistency;
+package de.imise.tool3lgm.graphtools.consistency.checker;
 
 import java.util.ArrayList;
 import java.util.Collection;
