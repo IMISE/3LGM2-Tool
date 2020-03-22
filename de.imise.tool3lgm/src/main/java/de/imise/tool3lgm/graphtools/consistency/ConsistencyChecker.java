@@ -20,8 +20,6 @@ import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
-import de.imise.tool3lgm.graphtools.consistency.error.ErrorSolution;
-import de.imise.tool3lgm.graphtools.consistency.error.ErrorSolutionLibraryVersion;
 import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.MinCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableGenerator;

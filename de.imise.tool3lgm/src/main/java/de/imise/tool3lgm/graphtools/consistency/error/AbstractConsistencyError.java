@@ -117,6 +117,13 @@ public abstract class AbstractConsistencyError extends Error {
     }
 
     /**
+     * @return the errorField
+     */
+    public Object getErrorField() {
+        return errorField;
+    }
+
+    /**
      * Liefert einen String, der für jede Art von Fehler eindeutig sein sollte (z.B. "MIN", "MAX" oder "ID").
      * Wird in den Resourcen nichts gefunden, wird "ERROR" zurück gegeben.
      *

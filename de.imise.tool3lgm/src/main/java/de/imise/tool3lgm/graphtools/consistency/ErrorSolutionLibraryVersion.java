@@ -1,7 +1,9 @@
 /**
  *
  */
-package de.imise.tool3lgm.graphtools.consistency.error;
+package de.imise.tool3lgm.graphtools.consistency;
+
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 
 /**
  * Diese Datei ist aktuell überflüssig und nur noch drin, damit man erkennen kann, wie die ErrorSolutions funktionieren.
@@ -68,7 +70,7 @@ public class ErrorSolutionLibraryVersion {
      */
     public final ErrorSolution getSolution(final AbstractConsistencyError error) {
         for (ErrorSolution es : CARDINALITY_ERROR_SOLUTIONS) {
-            if (es.getTargetClass().isAssignableFrom(error.getModelElement().getClass()) && es.getEdgeClass() == error.errorField) {
+            if (es.getTargetClass().isAssignableFrom(error.getModelElement().getClass()) && es.getEdgeClass() == error.getErrorField()) {
                 return es;
             }
         }
