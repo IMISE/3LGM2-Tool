@@ -24,6 +24,7 @@ import de.imise.tool3lgm.graphtools.consistency.error.ErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.error.ErrorSolutionLibraryVersion;
 import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.MinCardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableGenerator;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
@@ -208,7 +209,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      *
      * @return überprüftes Modell
      */
-    GDCollection getGDCollection() {
+    public GDCollection getGDCollection() {
         return gdcoll;
     }
 

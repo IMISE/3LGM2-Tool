@@ -1,7 +1,7 @@
 /**
  *
  */
-package de.imise.tool3lgm.graphtools.consistency;
+package de.imise.tool3lgm.graphtools.consistency.tableview;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 

@@ -1,20 +1,18 @@
-/**
- *
- */
-package de.imise.tool3lgm.graphtools.consistency;
+package de.imise.tool3lgm.graphtools.consistency.tableview;
 
 import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import de.imise.tool3lgm.graphtools.consistency.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 
 /**
  * @author AXS
  * @created 13.09.2008
  */
-class ConsistencyErrorTableGenerator {
+public class ConsistencyErrorTableGenerator {
 
     /**
      * Der Baum, der aufgebaut wird
@@ -29,7 +27,7 @@ class ConsistencyErrorTableGenerator {
     /**
      * @param checker Konsistenzprüfer, der alle Fehler liefert
      */
-    ConsistencyErrorTableGenerator(final ConsistencyChecker checker) {
+    public ConsistencyErrorTableGenerator(final ConsistencyChecker checker) {
         super();
         this.checker = checker;
         ConsistencyErrorTableModel treeModel = new ConsistencyErrorTableModel();
@@ -46,7 +44,7 @@ class ConsistencyErrorTableGenerator {
     /**
      *
      */
-    void updateTable() {
+    public void updateTable() {
         List<AbstractConsistencyError> errors = checker.getAllInconsistencies();
         ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
         model.setErrors(errors);
@@ -58,7 +56,7 @@ class ConsistencyErrorTableGenerator {
     /**
      * @return the table
      */
-    JTable getTable() {
+    public JTable getTable() {
         updateTable();
         return table;
     }
