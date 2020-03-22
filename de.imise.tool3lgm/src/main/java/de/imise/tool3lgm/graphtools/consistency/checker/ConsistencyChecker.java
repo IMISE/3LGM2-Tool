@@ -21,6 +21,7 @@ import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibraryVersion;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
+import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableGenerator;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
@@ -354,10 +355,12 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
                 Class<? extends ModelElement> errorConnectedClass = elementaryMetaPath.getEndClass();
                 ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
                 String tabName = elementaryMetaPath.isSingleConnection() ? elementsNameBuilder.getDisplayableName(errorConnectedClass) : elementsNameBuilder.getDisplayablePluralName(errorConnectedClass);
+                //das folgende haut nicht hin. Die Tabs werden anscheinend immer doppelt angezeigt bzw. neu hinzugefügt, auch wenn ein identischer bereits ex.
                 int existingTabIndex = dialog.selectTab(tabName, PathConnectionPanel.class);
                 ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
                 if (existingTabIndex < 0) {
-                    dialog.addPathConnectionPanel(elementaryMetaPath);
+                    //if the maximum cardinality is exceeded -> show always a multiple connection panel
+                    dialog.addPathConnectionPanel(elementaryMetaPath, error instanceof MaxCardinalityError);
                     dialog.setLastTabIcon(Tool3lgmConstants.getIcon("error.gif"));
                     dialog.setLastTabTitle(tabName);
                     dialog.selectTab(tabName, PathConnectionPanel.class);

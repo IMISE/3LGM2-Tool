@@ -387,7 +387,15 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param edgeClasses
      */
     public final void addPathConnectionPanel(final AbstractMetaPath metaPath) {
-        addPathConnectionPanel(LABEL_END_ELEMENT_TYPE, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath);
+        addPathConnectionPanel(metaPath, false);
+    }
+
+    /**
+     * @param metaPath
+     * @param showMultipleConnectionEvenIfMetaPathIsSingleConnection
+     */
+    public final void addPathConnectionPanel(final AbstractMetaPath metaPath, final boolean showMultipleConnectionEvenIfMetaPathIsSingleConnection) {
+        addPathConnectionPanel(LABEL_END_ELEMENT_TYPE, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath, showMultipleConnectionEvenIfMetaPathIsSingleConnection);
     }
 
     /**
@@ -427,9 +435,19 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param metaPath
      */
     public final void addPathConnectionPanel(final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath) {
+        addPathConnectionPanel(titleLabelOption, westLabelOption, metaPath, false);
+    }
+
+    /**
+     * @param titleLabelOption
+     * @param westLabelOption
+     * @param metaPath
+     * @param showMultipleConnectionEvenIfMetaPathIsSingleConnection
+     */
+    public final void addPathConnectionPanel(final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath, final boolean showMultipleConnectionEvenIfMetaPathIsSingleConnection) {
         MetaModel metaModel = modelElement.getMetaModel();
         if (metaModel.isVisible(metaPath)) {
-            boolean singleConnection = metaPath.isSingleConnection();
+            boolean singleConnection = !showMultipleConnectionEvenIfMetaPathIsSingleConnection && metaPath.isSingleConnection();
             //            System.err.print(metaPath.getEndClass().getSimpleName() + ": ");
             boolean editable = metaPath.isCreatable(false);
             //            System.err.print(editable + " -> ");

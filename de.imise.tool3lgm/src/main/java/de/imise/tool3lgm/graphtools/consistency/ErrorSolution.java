@@ -55,7 +55,6 @@ public class ErrorSolution {
      * @param panelNameResKey
      */
     public ErrorSolution(final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final SimpleMetaPath pathToPropertyDialogElement, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
-        super();
         this.targetClass = targetClass;
         this.edgeClass = edgeClass;
         this.pathToPropertyDialogElement = pathToPropertyDialogElement;
