@@ -242,7 +242,7 @@ public class RedundancyAnalysis extends WindowAdapter {
         RedundancyAnalysisResult res = redundancyAnalysisResults.get(0);
 
         // Analysiertes Gesamtmodell
-        GDCollection col = res.getGDCollection();
+        GDCollection col = res.getCollection();
         OutputDialog outputDialog;
 
         // Titel des Dialoges

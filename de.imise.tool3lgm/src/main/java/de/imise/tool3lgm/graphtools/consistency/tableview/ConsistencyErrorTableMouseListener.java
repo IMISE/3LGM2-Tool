@@ -109,7 +109,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         // @Override
         // public void actionPerformed(ActionEvent e) {
         // for (ModelElement me : selectedErrorElements)
-        // me.getPropertyDialog(checker.getGDCollection()).showDialog();
+        // me.getPropertyDialog(checker.getCollection()).showDialog();
         // }
         // });
         // menu.add(item);
@@ -126,7 +126,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         item = new JMenuItem(new AbstractAction(getResString("error_element_delete")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                checker.getGDCollection().deleteElements(selectedErrorElements, TransactionManager.STANDARD_PID);
+                checker.getCollection().deleteElements(selectedErrorElements, TransactionManager.STANDARD_PID);
             }
         });
         menu.add(item);

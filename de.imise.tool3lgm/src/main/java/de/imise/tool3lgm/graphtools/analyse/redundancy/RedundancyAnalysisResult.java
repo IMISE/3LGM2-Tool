@@ -107,7 +107,7 @@ public class RedundancyAnalysisResult {
     /**
      * @return Returns the gdcoll.
      */
-    public GDCollection getGDCollection() {
+    public GDCollection getCollection() {
         return gdcoll;
     }
 

@@ -207,7 +207,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      *
      * @return überprüftes Modell
      */
-    public GDCollection getGDCollection() {
+    public GDCollection getCollection() {
         return gdcoll;
     }
 

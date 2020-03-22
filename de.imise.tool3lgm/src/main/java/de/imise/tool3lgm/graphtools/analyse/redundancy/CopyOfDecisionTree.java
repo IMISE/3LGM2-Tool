@@ -145,7 +145,7 @@ public class CopyOfDecisionTree {
      * Initialiert die globalen Variablen und Felder.
      */
     private void init() {
-        GraphDocument doc = result.getGDCollection().getMainGraphDocument();
+        GraphDocument doc = result.getCollection().getMainGraphDocument();
 
         // alle Aufgaben des doc ohne Teilaufgaben in einer alphabetischen Liste holen
         // ArrayList<ModelElement> functions = doc.getModelItems(result.getEndClass(), true, true,
