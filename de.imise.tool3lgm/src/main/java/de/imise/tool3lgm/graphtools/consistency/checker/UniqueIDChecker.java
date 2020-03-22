@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
 import de.imise.tool3lgm.graphtools.consistency.error.IDEmptyError;
 import de.imise.tool3lgm.graphtools.consistency.error.IDNotUniqueError;
@@ -20,7 +21,19 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 /**
  * @author AXS (20.03.2016)
  */
-public class UniqueIDChecker {
+public class UniqueIDChecker implements ConsistencyErrorChecker {
+
+    /**
+     *
+     */
+    private final GDCollection gdcoll;
+
+    /**
+     * @param gdcoll
+     */
+    public UniqueIDChecker(final GDCollection gdcoll) {
+        this.gdcoll = gdcoll;
+    }
 
     /**
      * Liefert eine Liste aller {@link AbstractIDError} in dem übergebenen Modell
@@ -28,8 +41,9 @@ public class UniqueIDChecker {
      * @param gdcoll
      * @return
      */
-    public List<AbstractIDError> getIDErrors(final GDCollection gdcoll) {
-        List<AbstractIDError> idErrors = new ArrayList<>();
+    @Override
+    public Collection<AbstractConsistencyError> getErrors() {
+        List<AbstractConsistencyError> idErrors = new ArrayList<>();
         UserFieldDefinitions ufd = gdcoll.getUserFieldDefinitions();
         GraphDocument doc = gdcoll.getMainGraphDocument();
         //alle ID-UserFields aller Klassen

@@ -5,7 +5,6 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -78,7 +77,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      */
     private ConsistencyChecker(final GDCollection gdcoll, final boolean changeContext) {
         solutionsLibrary = new ErrorSolutionLibraryVersion();
-        idChecker = new UniqueIDChecker();
+        idChecker = new UniqueIDChecker(gdcoll);
         consistencyDefinition = gdcoll == null ? null : new ConsistencyDefinition(gdcoll.getMetaModel());
         if (changeContext) {
             changeContext(gdcoll);
@@ -251,37 +250,38 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     /**
      * @return
      */
-    public List<AbstractConsistencyError> getAllInconsistencies() {
+    public Collection<AbstractConsistencyError> getAllInconsistencies() {
         return getInconsistencies(AbstractConsistencyError.class);
     }
 
     /**
      * @return
      */
-    public List<AbstractConsistencyError> getCardinalityInconsistencies() {
+    public Collection<AbstractConsistencyError> getCardinalityInconsistencies() {
         return getInconsistencies(AbstractCardinalityError.class);
     }
 
     /**
      * @return
      */
-    public List<AbstractConsistencyError> getIDInconsistencies() {
+    public Collection<AbstractConsistencyError> getIDInconsistencies() {
         return getInconsistencies(AbstractIDError.class);
     }
 
     /**
+     * @param errorClass
      * @return
      */
-    private List<AbstractConsistencyError> getInconsistencies(final Class<? extends AbstractConsistencyError> errorClass) {
-        List<AbstractConsistencyError> errors;
+    private Collection<AbstractConsistencyError> getInconsistencies(final Class<? extends AbstractConsistencyError> errorClass) {
+        Collection<AbstractConsistencyError> errors;
         if (errorClass.isAssignableFrom(AbstractCardinalityError.class)) {
             EdgeCardinalityChecker edgeCardinalityChecker = new EdgeCardinalityChecker(gdcoll, consistencyDefinition);
-            errors = edgeCardinalityChecker.getCardinalityErrors();
+            errors = edgeCardinalityChecker.getErrors();
         } else {
             errors = new ArrayList<>();
         }
         if (errorClass.isAssignableFrom(AbstractIDError.class)) {
-            Collection<AbstractIDError> idErrors = idChecker.getIDErrors(gdcoll);
+            Collection<AbstractConsistencyError> idErrors = idChecker.getErrors();
             errors.addAll(idErrors);
         }
         return errors;

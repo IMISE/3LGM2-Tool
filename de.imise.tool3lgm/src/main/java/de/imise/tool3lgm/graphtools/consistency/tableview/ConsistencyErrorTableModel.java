@@ -6,7 +6,7 @@ package de.imise.tool3lgm.graphtools.consistency.tableview;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -54,27 +54,15 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
     /**
      * @param dataVector
      */
-    public void setErrors(List<AbstractConsistencyError> dataVector) {
-
+    public void setErrors(Collection<AbstractConsistencyError> dataVector) {
         if (dataVector == null) {
             dataVector = new ArrayList<>(0);
         }
-        // System.err.println(dataVector.size());
-        // System.err.println(this.dataVector.size());
-        // System.err.println(getRowCount());
-        // System.err.println("---");
-
         this.dataVector.clear();
-
         setRowCount(dataVector.size());
 
-        // System.err.println(this.dataVector.size());
-        // System.err.println(getRowCount());
-        // System.err.println("---");
-
-        int nullRows = 0;
-        for (int i = 0; i < dataVector.size(); i++) {
-            AbstractConsistencyError error = dataVector.get(i);
+        int i = 0;
+        for (AbstractConsistencyError error : dataVector) {
 
             // Zeilennummer
             setValueAt(new Integer(i + 1), i, COL_NAMES.number.ordinal());
@@ -99,20 +87,8 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
             // Beschreibung
             setValueAt(error.getMessage(), i, COL_NAMES.description.ordinal());
 
+            i++;
         }
-        // System.err.println(this.dataVector.size());
-        // System.err.println(getRowCount());
-        // System.err.println("---");
-
-        setRowCount(getRowCount() - nullRows);
-
-        // System.err.println(this.dataVector.size());
-        // System.err.println(getRowCount());
-        // System.err.println("---");
-        // System.err.println();
-        //
-        // new Error().printStackTrace();
-
     }
 
 }

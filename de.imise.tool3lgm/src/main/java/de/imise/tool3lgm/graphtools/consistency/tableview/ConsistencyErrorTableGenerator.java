@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.graphtools.consistency.tableview;
 
-import java.util.List;
+import java.util.Collection;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -45,7 +45,7 @@ public class ConsistencyErrorTableGenerator {
      *
      */
     public void updateTable() {
-        List<AbstractConsistencyError> errors = checker.getAllInconsistencies();
+        Collection<AbstractConsistencyError> errors = checker.getAllInconsistencies();
         ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
         model.setErrors(errors);
         table.clearSelection();

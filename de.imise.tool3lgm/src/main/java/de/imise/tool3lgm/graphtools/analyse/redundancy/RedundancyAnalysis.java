@@ -15,6 +15,7 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -206,7 +207,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             cardinalityDefinition.setNewForwardCardinality(edgeClass, definition.getNewForwardCardinality(edgeClass));
             cardinalityDefinition.setNewBackwardCardinality(edgeClass, definition.getNewBackwardCardinality(edgeClass));
         }
-        List<AbstractConsistencyError> errors = consistencyChecker.getCardinalityInconsistencies();
+        Collection<AbstractConsistencyError> errors = consistencyChecker.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
         if (errors.size() > 0) {
             // Custom button xmlText

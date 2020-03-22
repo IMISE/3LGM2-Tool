@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.consistency.checker;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
@@ -22,7 +23,7 @@ import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 /**
  * @author AXS (22.03.2020)
  */
-public class EdgeCardinalityChecker {
+public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
 
     /**
      *
@@ -50,12 +51,10 @@ public class EdgeCardinalityChecker {
         return consistencyDefinition != null;
     }
 
-    /**
-     * @return
-     */
-    public List<AbstractConsistencyError> getCardinalityErrors() {
+    @Override
+    public Collection<AbstractConsistencyError> getErrors() {
         GraphDocument doc = gdcoll.getMainGraphDocument();
-        List<AbstractConsistencyError> errors = new ArrayList<>();
+        Collection<AbstractConsistencyError> errors = new ArrayList<>();
         for (ModelElement me : doc.getModelItems(ModelElement.class, true)) {
             addCardinalityErrors(me, errors);
         }
@@ -68,7 +67,7 @@ public class EdgeCardinalityChecker {
      * @param me
      * @param returnList
      */
-    private void addCardinalityErrors(final ModelElement me, final List<AbstractConsistencyError> returnList) {
+    private void addCardinalityErrors(final ModelElement me, final Collection<AbstractConsistencyError> returnList) {
         if (!isValid()) {
             return;
         }
