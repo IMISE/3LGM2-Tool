@@ -27,6 +27,13 @@ public class DifferenceMetaPath extends ParallelMetaPath {
         super(name, metaPaths);
     }
 
+    /**
+     * @param other
+     */
+    public DifferenceMetaPath(final ParallelMetaPath other) {
+        super(other);
+    }
+
     @Override
     protected void initStartEndClasses() {
         ImmutableSet.Builder<Class<? extends ModelElement>> startElementClassesBuilder = ImmutableSet.builder();

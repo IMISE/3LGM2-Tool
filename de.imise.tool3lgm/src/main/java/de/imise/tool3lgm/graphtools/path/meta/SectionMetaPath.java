@@ -21,6 +21,13 @@ public class SectionMetaPath extends ParallelMetaPath {
         super(name, metaPaths);
     }
 
+    /**
+     * @param other
+     */
+    public SectionMetaPath(final ParallelMetaPath other) {
+        super(other);
+    }
+
     @Override
     public String createName() {
         //TODO:das hier macht nur super

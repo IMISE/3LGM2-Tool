@@ -16,6 +16,13 @@ public abstract class ParallelMetaPath extends ListMetaPath {
     /**
      * @param metaPaths
      */
+    public ParallelMetaPath(final ParallelMetaPath other) {
+        super(other);
+    }
+
+    /**
+     * @param metaPaths
+     */
     public ParallelMetaPath(final AbstractMetaPath... metaPaths) {
         this(null, metaPaths);
     }
@@ -26,6 +33,14 @@ public abstract class ParallelMetaPath extends ListMetaPath {
      */
     public ParallelMetaPath(final String baseResKeyOrName, final AbstractMetaPath... metaPaths) {
         super(baseResKeyOrName, metaPaths);
+    }
+
+    /**
+     * @param baseResKeyOrName
+     * @param other
+     */
+    public ParallelMetaPath(final String baseResKeyOrName, final ParallelMetaPath other) {
+        super(baseResKeyOrName, other);
     }
 
     @Override

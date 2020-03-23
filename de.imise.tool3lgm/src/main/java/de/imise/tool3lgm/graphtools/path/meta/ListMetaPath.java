@@ -42,6 +42,24 @@ public abstract class ListMetaPath extends AbstractMetaPath {
         initStartEndClasses();
     }
 
+    /**
+     * @param other
+     */
+    public ListMetaPath(final ListMetaPath other) {
+        this(null, other);
+    }
+
+    /**
+     * @param baseResKeyOrName
+     * @param other
+     */
+    public ListMetaPath(final String baseResKeyOrName, final ListMetaPath other) {
+        super(other.getMetaModel());
+        this.baseResKeyOrName = baseResKeyOrName;
+        metaPaths = CollectionUtils.ensureImmutable(other.metaPaths);
+        initStartEndClasses();
+    }
+
     protected abstract void initStartEndClasses();
 
     /**
@@ -55,6 +73,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
     /**
      * @return
      */
+    @Override
     public final int getMetaPathCount() {
         return metaPaths.size();
     }

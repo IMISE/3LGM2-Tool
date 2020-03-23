@@ -21,6 +21,13 @@ public class UnionMetaPath extends ParallelMetaPath {
         super(name, metaPaths);
     }
 
+    /**
+     * @param other
+     */
+    public UnionMetaPath(final ParallelMetaPath other) {
+        super(other);
+    }
+
     @Override
     public String createName() {
         //TODO:das hier macht nur super
