@@ -26,6 +26,7 @@ import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduc
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_IheActorInstanceInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActor_MustBeGroupedWith_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheActorInstanceInvokingInterface_Edge;
@@ -195,6 +196,20 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         AbstractMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath1, iheTransaction_IheCommunicationLink_InferenceMetaPath2);
 
         return ImmutableMap.of(Service_CommunicationLink_Edge.class, service_CommunicationLink_InferenceMetaPath, IheTransaction_IheCommunicationLink_Edge.class, iheTransaction_IheCommunicationLink_InferenceMetaPath);
+    }
+
+    /////////////////////////////////////
+    //  ConsistencyConditionMetaPaths  //
+    /////////////////////////////////////
+
+    @Override
+    public Collection<SectionMetaPath> getConsistencyConditionSameElementsConnectedMetaPaths() {
+        SimpleMetaPath consistencyConditionSubMetaPath1 = simpleMetaPathCreator.createSimpleMetaPath(IheActorInstance.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class,
+                IheActor_IheActorInstance_Edge.class);
+        SimpleMetaPath consistencyConditionSubMetaPath2 = simpleMetaPathCreator.createSimpleMetaPath(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
+        SectionMetaPath consistencyConditionMetaPath = new SectionMetaPath(consistencyConditionSubMetaPath1, consistencyConditionSubMetaPath2);
+        return ImmutableList.of(consistencyConditionMetaPath);
+
     }
 
 }

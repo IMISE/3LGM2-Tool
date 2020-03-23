@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
@@ -389,6 +390,18 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      */
     public Map<Class<? extends InferenceEdge>, AbstractMetaPath> getInferenceEdgeToConditionMetaPath() {
         return ImmutableMap.of();
+    }
+
+    /**
+     * @return a collection of all {@link SectionMetaPath}s which must be checked to ensure
+     *         consistency of a model. The meaning is that every subpath of the parallel
+     *         metapaths must have the same result used with a ModelElement of the start type
+     *         of the metapath.<br>
+     *         This conditions says that the SectionMetaPath must have the same result as
+     *         the same ParallelMetaPath as a UnionMetaPath.
+     */
+    public Collection<SectionMetaPath> getConsistencyConditionSameElementsConnectedMetaPaths() {
+        return ImmutableList.of();
     }
 
 }
