@@ -65,30 +65,44 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         for (AbstractConsistencyError error : dataVector) {
 
             // Zeilennummer
-            setValueAt(new Integer(i + 1), i, COL_NAMES.number.ordinal());
+            setValueAt(new Integer(i + 1), i, COL_NAMES.number);
 
             // Fehlertyp
             NamedObjectContainer<AbstractConsistencyError> type = new NamedObjectContainer<>(error, error.getTypeString());
-            setValueAt(type, i, COL_NAMES.errorType.ordinal());
+            setValueAt(type, i, COL_NAMES.errorType);
 
             ModelElement me = error.getModelElement();
 
             // Elementtyp
             GDCollection gdcoll = error.getCollection();
             ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
-            setValueAt(elementsNameBuilder.getDisplayableName(me.getClass()), i, COL_NAMES.elementType.ordinal());
+            Class<? extends ModelElement> elementClass = me.getClass();
+            String displayableClassName = elementsNameBuilder.getDisplayableName(elementClass);
+            setValueAt(displayableClassName, i, COL_NAMES.elementType);
 
             // Element
-            setValueAt(me, i, COL_NAMES.element.ordinal());
+            setValueAt(me, i, COL_NAMES.element);
 
             // Verbindungsart / Feld
-            setValueAt(error.getErrorFieldString(), i, COL_NAMES.connectionType.ordinal());
+            String errorFieldString = error.getErrorFieldString();
+            setValueAt(errorFieldString, i, COL_NAMES.connectionType);
 
             // Beschreibung
-            setValueAt(error.getMessage(), i, COL_NAMES.description.ordinal());
+            String errorDescription = error.getMessage();
+            setValueAt(errorDescription, i, COL_NAMES.description);
 
             i++;
         }
+    }
+
+    /**
+     * @param aValue
+     * @param row
+     * @param columnIdentifier
+     */
+    private void setValueAt(final Object aValue, final int row, final COL_NAMES columnIdentifier) {
+        int column = columnIdentifier.ordinal();
+        setValueAt(aValue, row, column);
     }
 
 }
