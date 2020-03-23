@@ -17,7 +17,13 @@ public abstract class AbstractConsistencyError extends Error {
      * Suffix, der an den SimpleClassName gehängt wird, um die genaue BEschreibung des Fehlers
      * aus den Error-Resourcen zu laden.
      */
-    protected static final String ERROR_DESCRIPTION_SUFFIX = "_descrip";
+    protected static final String ERROR_TYPE_RESOURCE_KEY_SUFFIX = "_type";
+
+    /**
+     * Suffix, der an den SimpleClassName gehängt wird, um die genaue BEschreibung des Fehlers
+     * aus den Error-Resourcen zu laden.
+     */
+    protected static final String ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX = "_descrip";
 
     /**
      * Dieser Placeholder kann zum Beispiel in der Beschreibung in den Resourcen verwendet werden,
@@ -49,7 +55,7 @@ public abstract class AbstractConsistencyError extends Error {
     }
 
     @Override
-    public final String getMessage() {
+    public String getMessage() {
         return getMessageBuilder().toString();
     }
 
@@ -61,7 +67,7 @@ public abstract class AbstractConsistencyError extends Error {
     protected StringBuilder getMessageBuilder() {
         StringBuilder sb = new StringBuilder();
         String errClassName = getClass().getSimpleName();
-        sb.append(getResString(errClassName + ERROR_DESCRIPTION_SUFFIX));
+        sb.append(getResString(errClassName + ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX));
         replacePlaceHolder(sb);
         return sb;
     }
@@ -134,7 +140,9 @@ public abstract class AbstractConsistencyError extends Error {
         String type = null;
         while (type == null && clazz != Object.class) {
             try {
-                type = getResString(clazz.getSimpleName());
+                String resourceKey = clazz.getSimpleName();
+                resourceKey += ERROR_TYPE_RESOURCE_KEY_SUFFIX;
+                type = getResString(resourceKey);
             } catch (Exception e) {
                 clazz = clazz.getSuperclass();
             }
