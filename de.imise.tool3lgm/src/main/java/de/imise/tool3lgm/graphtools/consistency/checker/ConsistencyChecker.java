@@ -21,6 +21,7 @@ import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
 import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
+import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableGenerator;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
@@ -41,6 +42,9 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  * fehlerhafte Elemente zurück gegeben.
  *
  * @author AXS created on 06.08.2008
+ */
+/**
+ * @author AXS (23.03.2020)
  */
 public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3lgmChangeListener, PropertyChangeListener {
 
@@ -70,6 +74,12 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     private final UniqueIDChecker idChecker;
 
     /**
+     * @param gdcoll
+     * @param changeContext
+     */
+    private final MissingPathChecker missingPathChecker;
+
+    /**
      * Erzeugt einen neuen <code>ConsistencyChecker</code> mit initialisierter <code>ErrorSolutionLibraryVersion</code>.
      *
      * @param gdcoll
@@ -78,6 +88,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     private ConsistencyChecker(final GDCollection gdcoll, final boolean changeContext) {
         solutionsLibrary = new ErrorSolutionLibraryVersion();
         idChecker = new UniqueIDChecker(gdcoll);
+        missingPathChecker = new MissingPathChecker(gdcoll);
         consistencyDefinition = gdcoll == null ? null : new ConsistencyDefinition(gdcoll.getMetaModel());
         if (changeContext) {
             changeContext(gdcoll);
@@ -269,6 +280,13 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     }
 
     /**
+     * @return
+     */
+    public Collection<AbstractConsistencyError> getMissingPathInconsistencies() {
+        return getInconsistencies(MissingPathError.class);
+    }
+
+    /**
      * @param errorClass
      * @return
      */
@@ -283,6 +301,10 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         if (errorClass.isAssignableFrom(AbstractIDError.class)) {
             Collection<AbstractConsistencyError> idErrors = idChecker.getErrors();
             errors.addAll(idErrors);
+        }
+        if (errorClass.isAssignableFrom(MissingPathError.class)) {
+            Collection<AbstractConsistencyError> missingPathErrors = missingPathChecker.getErrors();
+            errors.addAll(missingPathErrors);
         }
         return errors;
     }
