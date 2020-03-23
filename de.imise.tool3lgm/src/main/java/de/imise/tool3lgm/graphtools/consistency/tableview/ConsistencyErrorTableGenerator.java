@@ -4,9 +4,12 @@ import java.util.Collection;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableModel.COL_NAMES;
 
 /**
  * @author AXS
@@ -28,17 +31,36 @@ public class ConsistencyErrorTableGenerator {
      * @param checker Konsistenzprüfer, der alle Fehler liefert
      */
     public ConsistencyErrorTableGenerator(final ConsistencyChecker checker) {
-        super();
         this.checker = checker;
-        ConsistencyErrorTableModel treeModel = new ConsistencyErrorTableModel();
-        table = new UneditableJTable(treeModel);
-        table.addMouseListener(new ConsistencyErrorTableMouseListener(checker, table));
 
-        table.getTableHeader().setReorderingAllowed(false);
+        //TableModel
+        ConsistencyErrorTableModel tableModel = new ConsistencyErrorTableModel();
+        table = new UneditableJTable(tableModel);
+
+        //MouseListener
+        ConsistencyErrorTableMouseListener consistencyErrorTableMouseListener = new ConsistencyErrorTableMouseListener(checker, table);
+        table.addMouseListener(consistencyErrorTableMouseListener);
+
+        //Header
+        JTableHeader tableHeader = table.getTableHeader();
+        tableHeader.setReorderingAllowed(false);
+
+        //Table
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+
+        //Column number (0)
+        COL_NAMES number = ConsistencyErrorTableModel.COL_NAMES.number;
+        String culumnNumberDisplayableName = number.getDisplayableName();
+        TableColumn columnNumber = table.getColumn(culumnNumberDisplayableName);
+        columnNumber.setMaxWidth(40);
+
+        //Column error type (1)
+        COL_NAMES errorType = ConsistencyErrorTableModel.COL_NAMES.errorType;
+        String columnErrorTypeDisplayableName = errorType.getDisplayableName();
+        TableColumn columnErrorType = table.getColumn(columnErrorTypeDisplayableName);
+        columnErrorType.setMaxWidth(40);
+
         updateTable();
-        table.getColumn(ConsistencyErrorTableModel.COL_NAMES.number.getDisplayableName()).setMaxWidth(40);
-        table.getColumn(ConsistencyErrorTableModel.COL_NAMES.errorType.getDisplayableName()).setMaxWidth(40);
     }
 
     /**
