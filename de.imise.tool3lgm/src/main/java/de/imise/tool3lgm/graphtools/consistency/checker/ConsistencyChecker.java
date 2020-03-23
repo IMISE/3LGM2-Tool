@@ -87,8 +87,8 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      */
     private ConsistencyChecker(final GDCollection gdcoll, final boolean changeContext) {
         solutionsLibrary = new ErrorSolutionLibraryVersion();
-        idChecker = new UniqueIDChecker(gdcoll);
-        missingPathChecker = new MissingPathChecker(gdcoll);
+        idChecker = new UniqueIDChecker();
+        missingPathChecker = new MissingPathChecker();
         consistencyDefinition = gdcoll == null ? null : new ConsistencyDefinition(gdcoll.getMetaModel());
         if (changeContext) {
             changeContext(gdcoll);
@@ -291,20 +291,20 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      * @return
      */
     private Collection<AbstractConsistencyError> getInconsistencies(final Class<? extends AbstractConsistencyError> errorClass) {
-        Collection<AbstractConsistencyError> errors;
-        if (errorClass.isAssignableFrom(AbstractCardinalityError.class)) {
-            EdgeCardinalityChecker edgeCardinalityChecker = new EdgeCardinalityChecker(gdcoll, consistencyDefinition);
-            errors = edgeCardinalityChecker.getErrors();
-        } else {
-            errors = new ArrayList<>();
-        }
-        if (errorClass.isAssignableFrom(AbstractIDError.class)) {
-            Collection<AbstractConsistencyError> idErrors = idChecker.getErrors();
-            errors.addAll(idErrors);
-        }
-        if (errorClass.isAssignableFrom(MissingPathError.class)) {
-            Collection<AbstractConsistencyError> missingPathErrors = missingPathChecker.getErrors();
-            errors.addAll(missingPathErrors);
+        Collection<AbstractConsistencyError> errors = new ArrayList<>();
+        if (gdcoll != null) {
+            if (errorClass.isAssignableFrom(AbstractCardinalityError.class)) {
+                EdgeCardinalityChecker edgeCardinalityChecker = new EdgeCardinalityChecker(consistencyDefinition);
+                errors = edgeCardinalityChecker.getErrors(gdcoll);
+            }
+            if (errorClass.isAssignableFrom(AbstractIDError.class)) {
+                Collection<AbstractConsistencyError> idErrors = idChecker.getErrors(gdcoll);
+                errors.addAll(idErrors);
+            }
+            if (errorClass.isAssignableFrom(MissingPathError.class)) {
+                Collection<AbstractConsistencyError> missingPathErrors = missingPathChecker.getErrors(gdcoll);
+                errors.addAll(missingPathErrors);
+            }
         }
         return errors;
     }

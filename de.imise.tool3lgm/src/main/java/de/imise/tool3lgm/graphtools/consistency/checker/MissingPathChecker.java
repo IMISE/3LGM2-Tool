@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.consistency.checker;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
@@ -10,21 +11,10 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
  */
 public class MissingPathChecker implements ConsistencyErrorChecker {
 
-    /**
-     *
-     */
-    private final GDCollection gdcoll;
-
-    /**
-     * @param gdcoll
-     */
-    public MissingPathChecker(final GDCollection gdcoll) {
-        this.gdcoll = gdcoll;
-    }
-
     @Override
-    public Collection<AbstractConsistencyError> getErrors() {
-        return null;
+    public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll) {
+        ArrayList<AbstractConsistencyError> errors = new ArrayList<>();
+        return errors;
     }
 
 }

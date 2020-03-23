@@ -28,19 +28,12 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
     /**
      *
      */
-    private final GDCollection gdcoll;
-
-    /**
-     *
-     */
     private final ConsistencyDefinition consistencyDefinition;
 
     /**
-     * @param gdcoll
      * @param consistencyDefinition
      */
-    public EdgeCardinalityChecker(final GDCollection gdcoll, final ConsistencyDefinition consistencyDefinition) {
-        this.gdcoll = gdcoll;
+    public EdgeCardinalityChecker(final ConsistencyDefinition consistencyDefinition) {
         this.consistencyDefinition = consistencyDefinition;
     }
 
@@ -52,11 +45,11 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
     }
 
     @Override
-    public Collection<AbstractConsistencyError> getErrors() {
+    public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll) {
         GraphDocument doc = gdcoll.getMainGraphDocument();
         Collection<AbstractConsistencyError> errors = new ArrayList<>();
         for (ModelElement me : doc.getModelItems(ModelElement.class, true)) {
-            addCardinalityErrors(me, errors);
+            addCardinalityErrors(gdcoll, me, errors);
         }
         return errors;
     }
@@ -64,15 +57,16 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
     /**
      * Fügt der übergebenen Error-Liste alle Kardinalitätsfehler des übergebenen Elementes hinzu.
      *
+     * @param gdcoll
      * @param me
      * @param returnList
      */
-    private void addCardinalityErrors(final ModelElement me, final Collection<AbstractConsistencyError> returnList) {
+    private void addCardinalityErrors(final GDCollection gdcoll, final ModelElement me, final Collection<AbstractConsistencyError> returnList) {
         if (!isValid()) {
             return;
         }
-        Class<? extends ModelElement> meClass = me.getClass();
         MetaModel metaModel = gdcoll.getMetaModel();
+        Class<? extends ModelElement> meClass = me.getClass();
         ElementaryMetaPathHandler elementaryMetaPathHandler = metaModel.getElementaryMetaPathHandler();
         Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(meClass);
         // nur Elementarten beachten, die wenigstens eine Edge besitzen können
