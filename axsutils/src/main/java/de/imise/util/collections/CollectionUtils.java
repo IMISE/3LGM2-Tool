@@ -410,11 +410,11 @@ public abstract class CollectionUtils {
      * @param original
      * @return
      */
-    public static <T> ImmutableSet<T> ensureImmutable(final Set<T> original) {
+    public static <T> ImmutableList<T> ensureImmutable(final Collection<T> original) {
         if (original == null) {
-            return ImmutableSet.of();
+            return ImmutableList.of();
         }
-        return original instanceof ImmutableSet ? (ImmutableSet<T>) original : ImmutableSet.copyOf(original);
+        return original instanceof ImmutableList ? (ImmutableList<T>) original : ImmutableList.copyOf(original);
     }
 
     /**
@@ -424,10 +424,20 @@ public abstract class CollectionUtils {
      * @return
      */
     public static <T> ImmutableList<T> ensureImmutable(final List<T> original) {
+        return ensureImmutable((Collection<T>) original);
+    }
+
+    /**
+     * Liefert eine Immutable-Variante des übergebenen Sets. Ist es bereits immutable, dann kommt das Set selbst zurück.
+     *
+     * @param original
+     * @return
+     */
+    public static <T> ImmutableSet<T> ensureImmutable(final Set<T> original) {
         if (original == null) {
-            return ImmutableList.of();
+            return ImmutableSet.of();
         }
-        return original instanceof ImmutableList ? (ImmutableList<T>) original : ImmutableList.copyOf(original);
+        return original instanceof ImmutableSet ? (ImmutableSet<T>) original : ImmutableSet.copyOf(original);
     }
 
     /**
