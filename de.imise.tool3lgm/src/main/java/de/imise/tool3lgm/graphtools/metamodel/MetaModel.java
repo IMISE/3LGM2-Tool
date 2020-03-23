@@ -2113,6 +2113,13 @@ public final class MetaModel implements MetaModelSpecific {
     }
 
     /**
+     * @return
+     */
+    public Collection<SectionMetaPath> getConsistencyConditionSameElementsConnectedMetaPaths() {
+        return consistencyConditionSameElementsConnectedMetaPaths;
+    }
+
+    /**
      * Liefert alle anlegbaren MetaPfade, bei denen für selektierte Elemente der übergebenen Elementart im Kontextmenü eine Liste aller existierenden
      * Elemente angeboten werden soll, zu denen ein Pfad angelegt werden soll.
      *
