@@ -34,15 +34,33 @@ public class MaxCardinalityError extends AbstractCardinalityError {
     }
 
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = super.hashCode();
+        result = prime * result + (connections == null ? 0 : connections.hashCode());
+        return result;
+    }
+
+    @Override
     public boolean equals(final Object obj) {
+        if (this == obj) {
+            return true;
+        }
         if (!super.equals(obj)) {
             return false;
         }
-        if (!(obj instanceof MaxCardinalityError)) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        MaxCardinalityError ce = (MaxCardinalityError) obj;
-        return connections.equals(ce.connections);
+        MaxCardinalityError other = (MaxCardinalityError) obj;
+        if (connections == null) {
+            if (other.connections != null) {
+                return false;
+            }
+        } else if (!connections.equals(other.connections)) {
+            return false;
+        }
+        return true;
     }
 
 }
