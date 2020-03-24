@@ -17,8 +17,10 @@ public abstract class ListMetaPath extends AbstractMetaPath {
     protected final List<AbstractMetaPath> metaPaths;
 
     /**
-     * BasisResourcenschlüssel oder Name des Pfades. Wenn dieser Schlüssel nicht mit der jeweiligen Richtung "_f" (FORWARD) pder "_b" (BACKWARD) und
-     * auch nicht so wie hier übergeben in den Resourcen gefunden wird, dann wird er selbst als Name gesetzt.
+     * BasisResourcenschlüssel oder Name des Pfades. Wenn dieser Schlüssel nicht
+     * mit der jeweiligen Richtung "_f" (FORWARD) pder "_b" (BACKWARD) und auch
+     * nicht so wie hier übergeben in den Resourcen gefunden wird, dann wird er
+     * selbst als Name gesetzt.
      */
     protected final String baseResKeyOrName;
 
@@ -85,6 +87,13 @@ public abstract class ListMetaPath extends AbstractMetaPath {
 
     public enum InvalidReason {
         INVALID_LIST_PATH_EMPTY
+    }
+
+    /**
+     * @return the the {@link #baseResKeyOrName}
+     */
+    public final String getBaseResKeyOrName() {
+        return baseResKeyOrName;
     }
 
     @Override
