@@ -31,7 +31,6 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
             for (ModelElement me : possibleInconsistentElements) {
                 AbstractMetaPath metaPathToNeededElements = consistencyConditionSectionMetaPath.getFirstMetaPath();
                 Collection<ModelElement> neededElements = MetaPathFunctions.getConnectedElements(me, metaPathToNeededElements);
-                System.err.println(neededElements);
                 if (!neededElements.isEmpty()) {
                     Collection<ModelElement> connectedElements = MetaPathFunctions.getConnectedElements(me, consistencyConditionSectionMetaPath);
                     if (connectedElements.isEmpty()) {
