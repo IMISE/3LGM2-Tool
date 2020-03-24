@@ -16,7 +16,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
-import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibraryVersion;
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableGenerator;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -48,18 +49,15 @@ import de.imise.tool3lgm.userproperties.UserProperties;
  */
 public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3lgmChangeListener, PropertyChangeListener {
 
-    /** Checks the consistency of a model. This instance is used for the current selected Model */
+    /**
+     * Checks the consistency of a model. This instance is used for the current selected Model
+     */
     private static ConsistencyChecker consistencyChecker;
 
     /**
      * Modell, das überprüft wird.
      */
     private GDCollection gdcoll;
-
-    /**
-     * Katalog der Lösungen zu den Fehlern
-     */
-    private final ErrorSolutionLibraryVersion solutionsLibrary;
 
     /**
      * Die Kardinalitäts und Fehlerdefinitionen für die bei der Prüfung relevanten Kanten. Wenn
@@ -86,7 +84,6 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      * @param changeContext
      */
     private ConsistencyChecker(final GDCollection gdcoll, final boolean changeContext) {
-        solutionsLibrary = new ErrorSolutionLibraryVersion();
         idChecker = new UniqueIDChecker();
         missingPathChecker = new MissingPathChecker();
         consistencyDefinition = gdcoll == null ? null : new ConsistencyDefinition(gdcoll.getMetaModel());
@@ -158,8 +155,8 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
 
     /**
      * Löscht alle Elemente komplett, die fehlerhaft sind, deren Fehler man aber nicht behandeln
-     * kann. Darunter fallen alle Fehler, für die eine Error-Solution mit einem gültigen <code>MetaPath</code> zu einem verbundenen Element hinterlegt
-     * ist hinterlegt ist, das aber
+     * kann. Darunter fallen alle Fehler, für die eine Error-Solution mit einem gültigen
+     * <code>MetaPath</code> zu einem verbundenen Element hinterlegt ist hinterlegt ist, das aber
      * nicht erreichtbar ist, weil auch die Verbindung zu diesem Element fehlt. Somit kann der
      * Fehler nirgends behoben werden und man kann das Element löschen. In Metamodell 2.7 heißt das:
      * Anwendungsbaustein-Konfigurationen ohne einen Anwendungsbautein könnte man im Dialog der
@@ -331,6 +328,8 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         if (error == null) {
             return null;
         }
+        MetaModel metaModel = gdcoll.getMetaModel();
+        ErrorSolutionLibrary solutionsLibrary = metaModel.getErrorSolutionLibrary();
         ErrorSolution es = solutionsLibrary.getSolution(error);
         if (es == null) {
             return new HashSet<>();
@@ -368,6 +367,8 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         // für Fehler, für die im Eigenschaftsdialog des Elementes dann ein zusätzliches
         // OneToNUndirectedConnectionPanel angezeigt werden soll, in dem man den Fehler beheben kann
         if (error instanceof AbstractCardinalityError) {
+            MetaModel metaModel = gdcoll.getMetaModel();
+            ErrorSolutionLibrary solutionsLibrary = metaModel.getErrorSolutionLibrary();
             ErrorSolution es = solutionsLibrary.getSolution(error);
             if (es == null) {
                 AbstractCardinalityError cardError = (AbstractCardinalityError) error;

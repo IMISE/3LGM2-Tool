@@ -31,6 +31,7 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -340,6 +341,9 @@ public final class MetaModel implements MetaModelSpecific {
     /** Actions, die für das spezielle Metamodell in das Extras-Menü eingetragen werden sollen */
     private final ExtrasActionsDefinition extrasActionsDefinition;
 
+    /** {@link ErrorSolutionLibrary} of this MetaModel */
+    private final ErrorSolutionLibrary errorSolutionLibrary;
+
     /**
      * @param metaModelContext
      * @throws IllegalAccessException
@@ -395,6 +399,7 @@ public final class MetaModel implements MetaModelSpecific {
         copyDependencies = metaModelDefinition.getCopyDependencies();
         analysesDefinition = getInstance(metaModelDefinition.getAnalysesDefinitionClass());
         extrasActionsDefinition = getInstance(metaModelDefinition.getExtrasActionsDefinitionClass());
+        errorSolutionLibrary = getInstance(metaModelDefinition.getErrorSolutionLibraryClass());
         // Die MetaPathsDefinition und die darauffolgend zu initialisierenden Maps
         metaPathsDefinition = getInstance(metaModelDefinition.getMetaPathsDefinitionClass());
         edgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getConditionMetaPaths());
@@ -2195,6 +2200,13 @@ public final class MetaModel implements MetaModelSpecific {
      */
     public final AnalysesDefinition getAnalysesDefinition() {
         return analysesDefinition;
+    }
+
+    /**
+     * @return {@link ErrorSolutionLibrary} of the metamodel
+     */
+    public final ErrorSolutionLibrary getErrorSolutionLibrary() {
+        return errorSolutionLibrary;
     }
 
     /**

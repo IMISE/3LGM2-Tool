@@ -1,8 +1,7 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
@@ -48,18 +47,20 @@ public class ErrorSolution {
     private final String panelName;
 
     /**
+     * @param metaModel
      * @param targetClass
      * @param edgeClass
      * @param pathToPropertyDialogElement
      * @param panelClass
      * @param panelNameResKey
      */
-    public ErrorSolution(final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final SimpleMetaPath pathToPropertyDialogElement, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
+    public ErrorSolution(final MetaModel metaModel, final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final SimpleMetaPath pathToPropertyDialogElement, final Class<? extends ElementDialogPanel> panelClass,
+            final String panelNameResKey) {
         this.targetClass = targetClass;
         this.edgeClass = edgeClass;
         this.pathToPropertyDialogElement = pathToPropertyDialogElement;
         this.panelClass = panelClass;
-        panelName = getResString(panelNameResKey);
+        panelName = metaModel.getResString(panelNameResKey);
     }
 
     /**
@@ -80,8 +81,8 @@ public class ErrorSolution {
      * @param panelClass
      * @param panelNameResKey
      */
-    public ErrorSolution(final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
-        this(targetClass, edgeClass, (SimpleMetaPath) null, panelClass, panelNameResKey);
+    public ErrorSolution(final MetaModel metaModel, final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
+        this(metaModel, targetClass, edgeClass, (SimpleMetaPath) null, panelClass, panelNameResKey);
     }
 
     /**
