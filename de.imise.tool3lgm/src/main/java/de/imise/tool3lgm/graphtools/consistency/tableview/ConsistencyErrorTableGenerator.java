@@ -1,8 +1,11 @@
 package de.imise.tool3lgm.graphtools.consistency.tableview;
 
+import java.awt.Component;
 import java.util.Collection;
 
+import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
@@ -10,6 +13,7 @@ import javax.swing.table.TableColumn;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableModel.COL_NAMES;
+import de.imise.util.NamedObjectContainer;
 
 /**
  * @author AXS
@@ -60,7 +64,28 @@ public class ConsistencyErrorTableGenerator {
         TableColumn columnErrorType = table.getColumn(columnErrorTypeDisplayableName);
         columnErrorType.setMaxWidth(40);
 
+        //Column description (5)
+        COL_NAMES description = ConsistencyErrorTableModel.COL_NAMES.description;
+        String columnDescriptionDisplayableName = description.getDisplayableName();
+        TableColumn columnDescription = table.getColumn(columnDescriptionDisplayableName);
+        columnDescription.setCellRenderer(new DescriptionCellRenderer());
+
         updateTable();
+    }
+
+    private static class DescriptionCellRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {
+            JComponent c = (JComponent) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            // This...
+            if (value instanceof NamedObjectContainer) {
+                NamedObjectContainer<?> cellValueWithTooltip = (NamedObjectContainer<?>) value;
+                Object cellObject = cellValueWithTooltip.getObject();
+                String tooltip = cellObject.toString();
+                c.setToolTipText(tooltip);
+            }
+            return c;
+        }
     }
 
     /**

@@ -61,6 +61,13 @@ public abstract class AbstractConsistencyError extends Error {
     }
 
     /**
+     * @return
+     */
+    public String getLongMessage() {
+        return getMessage();
+    }
+
+    /**
      * Liefert einen {@link StringBuilder} mit der Fehlermeldung
      *
      * @return

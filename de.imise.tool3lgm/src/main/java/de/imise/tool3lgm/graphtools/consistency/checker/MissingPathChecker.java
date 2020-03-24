@@ -11,6 +11,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
 
 /**
@@ -30,7 +31,9 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
             for (ModelElement me : possibleInconsistentElements) {
                 Collection<ModelElement> connectedElements = MetaPathFunctions.getConnectedElements(me, consistencyConditionSectionMetaPath);
                 if (connectedElements.isEmpty()) {
-                    MissingPathError error = new MissingPathError(me, consistencyConditionSectionMetaPath, gdcoll);
+                    AbstractMetaPath metaPathToMissingElements = consistencyConditionSectionMetaPath.getFirstMetaPath();
+                    Collection<ModelElement> missingElements = MetaPathFunctions.getConnectedElements(me, metaPathToMissingElements);
+                    MissingPathError error = new MissingPathError(me, consistencyConditionSectionMetaPath, gdcoll, missingElements);
                     errors.add(error);
                 }
             }

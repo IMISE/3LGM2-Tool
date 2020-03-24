@@ -18,6 +18,12 @@ public abstract class AbstractPathError extends AbstractConsistencyError {
     public static final String PATH_ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX = "_error_descrip";
 
     /**
+     * According to the {@link #PATH_ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX} this suffix will be used
+     * to show a longer/better description of the error as tooltip or in a detals view.
+     */
+    public static final String PATH_ERROR_LONG_DESCRIPTION_RESOURCE_KEY_SUFFIX = "_error_descrip_long";
+
+    /**
      * @param me
      * @param metaPath
      * @param cardValue

@@ -91,7 +91,9 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
 
             // Beschreibung
             String errorDescription = error.getMessage();
-            setValueAt(errorDescription, i, COL_NAMES.description);
+            String errorDescriptionToolTip = error.getLongMessage();
+            NamedObjectContainer<String> errorDescriptionContainer = new NamedObjectContainer<>(errorDescriptionToolTip, errorDescription);
+            setValueAt(errorDescriptionContainer, i, COL_NAMES.description);
 
             i++;
         }
