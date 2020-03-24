@@ -22,7 +22,7 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll) {
         ArrayList<AbstractConsistencyError> errors = new ArrayList<>();
         MetaModel metaModel = gdcoll.getMetaModel();
-        Collection<SectionMetaPath> consistencyConditionSameElementsConnectedMetaPaths = metaModel.getConsistencyConditionSameElementsConnectedMetaPaths();
+        Collection<SectionMetaPath> consistencyConditionSameElementsConnectedMetaPaths = metaModel.getConsistencyConditionMissingConnectedElementsMetaPaths();
         LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
         for (SectionMetaPath consistencyConditionSectionMetaPath : consistencyConditionSameElementsConnectedMetaPaths) {
             Class<? extends ModelElement> startClass = consistencyConditionSectionMetaPath.getStartClass();

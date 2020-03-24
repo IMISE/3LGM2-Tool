@@ -269,9 +269,9 @@ public final class MetaModel implements MetaModelSpecific {
 
     /**
      * Metapaths which are used to ensure model consistency. This paths say that a model element must be connected
-     * over this SectionMetaPaths with the same
+     * over this SectionMetaPaths with the same elements.
      */
-    private final Collection<SectionMetaPath> consistencyConditionSameElementsConnectedMetaPaths;
+    private final Collection<SectionMetaPath> consistencyConditionMissingConnectedElementsMetaPaths;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException //
@@ -405,7 +405,7 @@ public final class MetaModel implements MetaModelSpecific {
         edgeClassToInitialCreatedNameSourcePath = CollectionUtils.ensureImmutable(metaPathsDefinition.getEdgeClassToInitialCreatedNameSourcePath());
 
         inferenceEdgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getInferenceEdgeToConditionMetaPath());
-        consistencyConditionSameElementsConnectedMetaPaths = CollectionUtils.ensureImmutable(metaPathsDefinition.getConsistencyConditionSameElementsConnectedMetaPaths());
+        consistencyConditionMissingConnectedElementsMetaPaths = CollectionUtils.ensureImmutable(metaPathsDefinition.getConsistencyConditionMissingConnectedElementsMetaPaths());
     }
 
     /**
@@ -2115,8 +2115,8 @@ public final class MetaModel implements MetaModelSpecific {
     /**
      * @return
      */
-    public Collection<SectionMetaPath> getConsistencyConditionSameElementsConnectedMetaPaths() {
-        return consistencyConditionSameElementsConnectedMetaPaths;
+    public Collection<SectionMetaPath> getConsistencyConditionMissingConnectedElementsMetaPaths() {
+        return consistencyConditionMissingConnectedElementsMetaPaths;
     }
 
     /**

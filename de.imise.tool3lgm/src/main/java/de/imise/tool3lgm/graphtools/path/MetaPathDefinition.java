@@ -394,13 +394,15 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
 
     /**
      * @return a collection of all {@link SectionMetaPath}s which must be checked to ensure
-     *         consistency of a model. The meaning is that every subpath of the parallel
-     *         metapaths must have the same result used with a ModelElement of the start type
-     *         of the metapath.<br>
-     *         This conditions says that the SectionMetaPath must have the same result as
-     *         the same ParallelMetaPath as a UnionMetaPath.
+     *         consistency of a model. <br>
+     *         This conditions says that the SectionMetaPath should not have an empty result.
+     *         That means that at least one element must be connected over all sub-metapaths
+     *         of this SectionMetaPath. The very first sub metaPath must lead to the set of
+     *         all elements which *could* be connected. The next metapath(s) should lead to
+     *         the elements which *are* connected. This is relevant to generate an error
+     *         description with the elements which should be connected to solve the problem.
      */
-    public Collection<SectionMetaPath> getConsistencyConditionSameElementsConnectedMetaPaths() {
+    public Collection<SectionMetaPath> getConsistencyConditionMissingConnectedElementsMetaPaths() {
         return ImmutableList.of();
     }
 
