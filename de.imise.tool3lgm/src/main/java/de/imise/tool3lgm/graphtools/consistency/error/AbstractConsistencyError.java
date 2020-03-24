@@ -20,8 +20,9 @@ public abstract class AbstractConsistencyError extends Error {
     protected static final String ERROR_TYPE_RESOURCE_KEY_SUFFIX = "_type";
 
     /**
-     * Suffix, der an den SimpleClassName gehängt wird, um die genaue BEschreibung des Fehlers
-     * aus den Error-Resourcen zu laden.
+     * Suffix, der an den SimpleClassName gehängt wird, um die genaue Beschreibung des Fehlers
+     * aus den Error-Resourcen zu laden. Diese Beschreibung steht in den allgemeinen Resourcen
+     * des Baukastens.
      */
     protected static final String ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX = "_descrip";
 
