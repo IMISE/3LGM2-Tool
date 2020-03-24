@@ -23,16 +23,25 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll) {
         ArrayList<AbstractConsistencyError> errors = new ArrayList<>();
         MetaModel metaModel = gdcoll.getMetaModel();
-        Collection<SectionMetaPath> consistencyConditionSameElementsConnectedMetaPaths = metaModel.getConsistencyConditionMissingConnectedElementsMetaPaths();
+        Collection<SectionMetaPath> consistencyConditionMissingConnectedElementsMetaPaths = metaModel.getConsistencyConditionMissingConnectedElementsMetaPaths();
         LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
-        for (SectionMetaPath consistencyConditionSectionMetaPath : consistencyConditionSameElementsConnectedMetaPaths) {
+        //for every of the SectionMetaPaths with a consistency condition
+        for (SectionMetaPath consistencyConditionSectionMetaPath : consistencyConditionMissingConnectedElementsMetaPaths) {
+            //get start element class of thsi metapath = element class which must have these connections to be valid
             Class<? extends ModelElement> startClass = consistencyConditionSectionMetaPath.getStartClass();
+            //get all of the elements of the path start class
             List<ModelElement> possibleInconsistentElements = mainDoc.getModelItems(startClass, true);
+            //for every of these elements
             for (ModelElement me : possibleInconsistentElements) {
+                //the first sub metapath of the SectionMetaPath describes the connection to the needed elements -> get the first
                 AbstractMetaPath metaPathToNeededElements = consistencyConditionSectionMetaPath.getFirstMetaPath();
+                //get the elements which should be connected over the other subpaths too
                 Collection<ModelElement> neededElements = MetaPathFunctions.getConnectedElements(me, metaPathToNeededElements);
+                //if there are needed elements
                 if (!neededElements.isEmpty()) {
+                    //get the result of the whole SectionMetaPath = the section of the set of needed elements and the really connected elements
                     Collection<ModelElement> connectedElements = MetaPathFunctions.getConnectedElements(me, consistencyConditionSectionMetaPath);
+                    //if there is not at least on of the needed connected to the current path start element -> error
                     if (connectedElements.isEmpty()) {
                         MissingPathError error = new MissingPathError(me, consistencyConditionSectionMetaPath, gdcoll, neededElements);
                         errors.add(error);
