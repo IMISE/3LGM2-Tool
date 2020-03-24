@@ -14,11 +14,11 @@ public class SectionMetaPath extends ParallelMetaPath {
     }
 
     /**
-     * @param name
+     * @param baseResKeyOrName
      * @param metaPaths
      */
-    public SectionMetaPath(final String name, final AbstractMetaPath... metaPaths) {
-        super(name, metaPaths);
+    public SectionMetaPath(final String baseResKeyOrName, final AbstractMetaPath... metaPaths) {
+        super(baseResKeyOrName, metaPaths);
     }
 
     /**
@@ -26,12 +26,6 @@ public class SectionMetaPath extends ParallelMetaPath {
      */
     public SectionMetaPath(final ParallelMetaPath other) {
         super(other);
-    }
-
-    @Override
-    public String createName() {
-        //TODO:das hier macht nur super
-        return "SectionMetaPath#createName() is not implemented";
     }
 
     @Override
