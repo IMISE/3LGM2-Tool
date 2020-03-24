@@ -133,7 +133,8 @@ public class MetaPathFunctions {
      * @return
      */
     public static final Collection<ModelElement> getConnectedElements(final ModelElement me, final AbstractMetaPath metaPath, final boolean multiple) {
-        return getResultTree(me, metaPath).getConnectedElements(multiple);
+        PathResultTreeModel resultTree = getResultTree(me, metaPath);
+        return resultTree.getConnectedElements(multiple);
     }
 
     /**
