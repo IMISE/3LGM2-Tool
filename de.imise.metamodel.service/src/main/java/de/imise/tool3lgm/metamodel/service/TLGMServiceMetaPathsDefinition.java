@@ -207,8 +207,8 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         SimpleMetaPath consistencyConditionSubMetaPath1 = simpleMetaPathCreator.createSimpleMetaPath(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
         SimpleMetaPath consistencyConditionSubMetaPath2 = simpleMetaPathCreator.createSimpleMetaPath(IheActorInstance.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class,
                 IheActor_IheActorInstance_Edge.class);
-        SectionMetaPath consistencyConditionMetaPath = new SectionMetaPath(consistencyConditionSubMetaPath1, consistencyConditionSubMetaPath2);
-        return ImmutableList.of(consistencyConditionMetaPath);
+        SectionMetaPath consistencyConditionMetaPathActorInstanceMustBeGroupedWith = new SectionMetaPath("PATH_IheActorInstance_mustBeGroupedWith_IheActor", consistencyConditionSubMetaPath1, consistencyConditionSubMetaPath2);
+        return ImmutableList.of(consistencyConditionMetaPathActorInstanceMustBeGroupedWith);
 
     }
 
