@@ -25,7 +25,7 @@ public class TLGMServiceCopyDependencies extends CopyDependencies {
     private void initCopyDepenencies() {
         set(IheDomain.class, IheIntegrationProfile.class);
         set(IheIntegrationProfile.class, IheDomain.class, IheActor.class);
-        set(IheActor.class, IheIntegrationProfile.class, IheInvokingInterface.class, IheProvidingInterface.class);
+        set(IheActor.class, IheIntegrationProfile.class, IheInvokingInterface.class, IheActor.class, IheProvidingInterface.class);
         set(IheInvokingInterface.class, IheActor.class, IheTransaction.class);
         set(IheProvidingInterface.class, IheActor.class, IheTransaction.class);
     }
