@@ -184,6 +184,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
             }
             if (bottomSplitPane != null) {
                 workarea.remove(bottomSplitPane);
+                bottomSplitPane = null;
             }
             workarea.add(topComponent, BorderLayout.CENTER);
         } else {
