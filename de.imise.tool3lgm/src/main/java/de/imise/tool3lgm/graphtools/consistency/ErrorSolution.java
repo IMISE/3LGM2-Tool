@@ -64,28 +64,6 @@ public class ErrorSolution {
     }
 
     /**
-     * @param targetClass
-     * @param edgeClass
-     * @param panelClass
-     * @param panelNameResKey
-     * @param edgeClassToPanelElement / public ErrorSolution(Class<? extends ModelElement>
-     *            targetClass, Class<? extends Edge> edgeClass, Class<? extends ElementDialogPanel>
-     *            panelClass, String panelNameResKey, Class<? extends Edge>
-     *            edgeClassToPanelElement, int i){ this(targetClass, edgeClass, (MetaPath)null,
-     *            panelClass, panelNameResKey); if (edgeClassToPanelElement!=null) try {
-     *            pathToPropertyDialogElement = new MetaPath(targetClass,
-     *            Edge.getOther(edgeClassToPanelElement, targetClass), edgeClassToPanelElement); }
-     *            catch (Exception e) { e.printStackTrace(); } } /**
-     * @param targetClass
-     * @param edgeClass
-     * @param panelClass
-     * @param panelNameResKey
-     */
-    public ErrorSolution(final MetaModel metaModel, final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final Class<? extends ElementDialogPanel> panelClass, final String panelNameResKey) {
-        this(metaModel, targetClass, edgeClass, (SimpleMetaPath) null, panelClass, panelNameResKey);
-    }
-
-    /**
      * @return the targetClass
      */
     public Class<? extends ModelElement> getTargetClass() {
