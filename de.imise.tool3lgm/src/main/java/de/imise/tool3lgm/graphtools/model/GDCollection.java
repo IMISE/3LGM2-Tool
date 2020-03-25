@@ -2492,13 +2492,20 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         for (UserField userField : me.getUserFieldInputValueKeys()) {
             userFields.add(userField);
         }
+        Class<? extends ModelElement> elementClass = me.getClass();
         if (me instanceof Edge) {
-            for (BendpointContainer bpc : doc.getLayer(me.layerFor()).getBendpointContainers()) {
+            int layer = me.layerFor();
+            LayerContainer lc = doc.getLayer(layer);
+            Iterable<BendpointContainer> bendpointContainers = lc.getBendpointContainers();
+            for (BendpointContainer bpc : bendpointContainers) {
                 Bendpoint bendpoint = bpc.getBendpoint();
                 String edgeHash = bendpoint.getEdgeHash();
-                if (edgeHash != null && edgeHash.equals(me.getHashString())) {
-                    if (!elements.contains(bendpoint)) {
-                        elements.add(bendpoint);
+                if (edgeHash != null) {
+                    String meHash = me.getHashString();
+                    if (edgeHash.equals(meHash)) {
+                        if (!elements.contains(bendpoint)) {
+                            elements.add(bendpoint);
+                        }
                     }
                 }
             }
@@ -2506,26 +2513,29 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             ModelElement start = edge.getStart();
             if (!elements.contains(start)) {
                 elements.add(start);
-                resolveCopyDependencies(start, me.getClass(), elements, userFields);
+                resolveCopyDependencies(start, elementClass, elements, userFields);
             }
             ModelElement end = edge.getEnd();
             if (!elements.contains(end)) {
                 elements.add(end);
-                resolveCopyDependencies(end, me.getClass(), elements, userFields);
+                resolveCopyDependencies(end, elementClass, elements, userFields);
             }
         }
-        for (Class<? extends ModelElement> elementClass : metaModel.getCopyDependencies(me.getClass())) {
-            if (ignoreClass == null || !elementClass.isAssignableFrom(ignoreClass)) {
-                for (ElementContainer ec : me.getConnectedContainers(elementClass, doc)) {
+        Collection<Class<? extends ModelElement>> copyDependencies = metaModel.getCopyDependencies(elementClass);
+        for (Class<? extends ModelElement> copyDependentClass : copyDependencies) {
+            if (ignoreClass == null || !copyDependentClass.isAssignableFrom(ignoreClass)) {
+                List<ElementContainer> connectedContainers = me.getConnectedContainers(copyDependentClass, doc);
+                for (ElementContainer ec : connectedContainers) {
                     ModelElement connected = ec.getElement();
                     if (!elements.contains(connected)) {
                         elements.add(connected);
-                        resolveCopyDependencies(connected, me.getClass(), elements, userFields);
+                        resolveCopyDependencies(connected, elementClass, elements, userFields);
                     }
-                    for (Edge e : me.getEdgesWith(connected)) {
-                        if (!elements.contains(e)) {
-                            elements.add(e);
-                            resolveCopyDependencies(e, me.getClass(), elements, userFields);
+                    List<Edge> edgesWith = me.getEdgesWith(connected);
+                    for (Edge edge : edgesWith) {
+                        if (!elements.contains(edge)) {
+                            elements.add(edge);
+                            resolveCopyDependencies(edge, elementClass, elements, userFields);
                         }
                     }
                 }
@@ -2533,11 +2543,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         }
         //elements wird in der Schleife vergrößert -> nicht über Iterable gehen
         for (int i = 0; i < elements.size(); i++) {
-            ModelElement m = elements.get(i);
-            for (Edge ka : me.getEdgesWith(m)) {
-                if (!elements.contains(ka)) {
-                    elements.add(ka);
-                    resolveCopyDependencies(ka, me.getClass(), elements, userFields);
+            ModelElement element = elements.get(i);
+            List<Edge> edgesWith = me.getEdgesWith(element);
+            for (Edge edge : edgesWith) {
+                if (!elements.contains(edge)) {
+                    elements.add(edge);
+                    resolveCopyDependencies(edge, elementClass, elements, userFields);
                 }
             }
         }
