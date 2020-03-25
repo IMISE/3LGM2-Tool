@@ -24,6 +24,7 @@ import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableGenerator;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -370,6 +371,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
             MetaModel metaModel = gdcoll.getMetaModel();
             ErrorSolutionLibrary solutionsLibrary = metaModel.getErrorSolutionLibrary();
             ErrorSolution es = solutionsLibrary.getSolution(error);
+            ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
             if (es == null) {
                 AbstractCardinalityError cardError = (AbstractCardinalityError) error;
                 AbstractMetaPath elementaryMetaPath = cardError.getMetaPath();
@@ -380,11 +382,10 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
                 String tabName = elementaryMetaPath.isSingleConnection() ? elementsNameBuilder.getDisplayableName(errorConnectedClass) : elementsNameBuilder.getDisplayablePluralName(errorConnectedClass);
                 //das folgende haut nicht hin. Die Tabs werden anscheinend immer doppelt angezeigt bzw. neu hinzugefügt, auch wenn ein identischer bereits ex.
                 int existingTabIndex = dialog.selectTab(tabName, PathConnectionPanel.class);
-                ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
                 if (existingTabIndex < 0) {
                     //if the maximum cardinality is exceeded -> show always a multiple connection panel
                     dialog.addPathConnectionPanel(elementaryMetaPath, error instanceof MaxCardinalityError);
-                    dialog.setLastTabIcon(Tool3lgmConstants.getIcon("error.gif"));
+                    dialog.setLastTabIcon(icon);
                     dialog.setLastTabTitle(tabName);
                     dialog.selectTab(tabName, PathConnectionPanel.class);
                 } else {
@@ -399,7 +400,10 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
                 }
                 for (ModelElement connected : solutionPropertyDialogElement) {
                     ElementPropertyDialog dialog = connected.getPropertyDialog();
-                    dialog.selectTab(es.getPanelName(), es.getPanelClass());
+                    String panelName = es.getPanelName();
+                    Class<? extends ElementDialogPanel> panelClass = es.getPanelClass();
+                    int selectedTabIndex = dialog.selectTab(panelName, panelClass);
+                    dialog.setTabIcon(selectedTabIndex, icon);
                     dialog.showDialog();
                 }
             }
