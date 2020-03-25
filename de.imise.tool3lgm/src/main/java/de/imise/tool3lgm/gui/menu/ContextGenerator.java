@@ -5,6 +5,8 @@ import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -25,6 +27,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.util.swing.event.ExtendedAction;
+import de.imise.util.swing.menu.MenuScroller;
 
 /**
  * @author AXS (23.09.2019)
@@ -253,6 +256,43 @@ public abstract class ContextGenerator implements ActionListener {
             } else { //JPopupMenu und alles andere
                 checkEnabled(comp);
             }
+        }
+    }
+
+    /**
+     * Sets a menu scroller for the given menu with pleasant values for most cases.
+     *
+     * @param menu
+     */
+    protected void setMenuScroller(final JMenu menu) {
+        setMenuScroller(menu, 0, 0);
+    }
+
+    /**
+     * Sets a menu scroller for the given menu with pleasant values for most cases.
+     *
+     * @param menu
+     * @param topFixedCount number of items before the scroller
+     * @param bottomFixedCount number of items after the scroller
+     */
+    protected void setMenuScroller(final JMenu menu, final int topFixedCount, final int bottomFixedCount) {
+        int itemCount = menu.getItemCount();
+        int height = 0;
+        int maxSingelItemHeight = 0;
+        for (int i = 0; i < itemCount; i++) {
+            JMenuItem item = menu.getItem(i);
+            Dimension preferredSize = item.getPreferredSize();
+            if (preferredSize.height > maxSingelItemHeight) {
+                maxSingelItemHeight = preferredSize.height;
+            }
+            height += preferredSize.height;
+        }
+        Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
+        Dimension screenSize = defaultToolkit.getScreenSize();
+        int maxItemCount = screenSize.height / maxSingelItemHeight - 3 - topFixedCount - bottomFixedCount;
+        if (itemCount > maxItemCount) {
+            int interval = 125;
+            MenuScroller.setScrollerFor(menu, maxItemCount, interval, topFixedCount, bottomFixedCount);
         }
     }
 

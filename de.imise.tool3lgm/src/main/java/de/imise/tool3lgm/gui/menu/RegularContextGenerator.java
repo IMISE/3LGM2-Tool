@@ -62,7 +62,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
-import javax.swing.JSeparator;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
@@ -102,7 +101,6 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.pair.Pair;
-import de.imise.util.swing.menu.MenuScroller;
 
 /**
  * @author N.N., Thomas, AXS
@@ -312,6 +310,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         for (JMenuItem item : items) {
             sub_elem.add(item);
         }
+        setMenuScroller(sub_elem);
         return sub_elem;
     }
 
@@ -325,7 +324,6 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         JMenu szenario_menu = new JMenu(getResString("inszenario"));
         JMenuItem item = getItem(MODEL_ACTION_ADD_SELECTED_TO_NEW_SUBMODEL);
         szenario_menu.add(item);
-        szenario_menu.add(new JSeparator());
 
         GDCollection gdcoll = getSelectedGDCollection();
 
@@ -344,13 +342,9 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         }
 
         item = getItem(MODEL_ACTION_ADD_SELECTED_TO_ALL_SUBMODELS);
-        szenario_menu.add(new JSeparator());
         szenario_menu.add(item);
 
-        if (gdcoll.getSzenarioCount() > 20) {
-            MenuScroller.setScrollerFor(szenario_menu, 20, 125, 2, 2);
-        }
-
+        setMenuScroller(szenario_menu, 1, 1);
         return szenario_menu;
     }
 
@@ -363,7 +357,6 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         JMenu link_to_szenario_menu = new JMenu(getResString("verkn_mit_szen"));
         JMenuItem item = getItem(MODEL_ACTION_LINK_SELECTED_TO_NEW_SUBMODEL);
         link_to_szenario_menu.add(item);
-        link_to_szenario_menu.add(new JSeparator());
 
         GDCollection gdcoll = getSelectedGDCollection();
         for (Szenario szen : gdcoll.getSzenarios()) {
@@ -381,6 +374,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             item.setActionCommand(MODEL_ACTION_LINK_SELECTED_TO_SUBMODEL + " " + szen.getHashString());
             link_to_szenario_menu.add(item);
         }
+        setMenuScroller(link_to_szenario_menu, 1, 0);
         return link_to_szenario_menu;
     }
 
@@ -411,7 +405,8 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                     menu.add(connectLabel);
                 }
                 Class<? extends ModelElement> endClass = metaPath.getEndClass();
-                JMenu pathConnectableElements = new JMenu(metaPath.getName(false, true));
+                String metaPathName = metaPath.getName(false, true);
+                JMenu pathConnectableElements = new JMenu(metaPathName);
                 pathConnectableElements.setIcon(link_icon);
                 GraphDocument doc = getDoc();
                 List<ModelElement> endElements = doc.getModelItems(endClass, true, true);
@@ -425,6 +420,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                         pathConnectableElements.add(createPathItem);
                     }
                 }
+                setMenuScroller(pathConnectableElements);
             }
 
             //InstaciationEdges -> "Neue Instanz" der verbundenen Klasse erzeugen anbieten
