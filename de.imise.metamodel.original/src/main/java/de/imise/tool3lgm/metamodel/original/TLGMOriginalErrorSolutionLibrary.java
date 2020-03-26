@@ -37,10 +37,13 @@ public class TLGMOriginalErrorSolutionLibrary extends ErrorSolutionLibrary imple
     protected final Collection<ErrorSolution> getErrorSolutions() {
         MetaModel metaModel = getMetaModel();
         SimpleMetaPath smp;
+
         smp = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ABKonfiguration.class, Aufgabe.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
         ErrorSolution solution1 = new ErrorSolution(metaModel, ABKonfiguration.class, AwbAwbkVerbindung.class, smp, PathConnectionPanel.class, "Anwendungsbaustein_p");
+
         smp = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ABKonfiguration.class, Anwendungsbaustein.class, AwbAwbkVerbindung.class);
         ErrorSolution solution2 = new ErrorSolution(metaModel, ABKonfiguration.class, AwbkAufOrgVerbindung.class, smp, PathConnectionPanel.class, "Aufgabe_p");
+
         smp = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, DBKonfiguration.class, Anwendungsbaustein.class, PdvbkAwbVerbindung.class);
         ErrorSolution solution3 = new ErrorSolution(metaModel, DBKonfiguration.class, PdvbPdvbkVerbindung.class, smp, PathConnectionPanel.class, "PhysischerDVBaustein_p");
         return ImmutableList.of(solution1, solution2, solution3);
