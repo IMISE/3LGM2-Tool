@@ -278,7 +278,7 @@ public abstract class ContextGenerator implements ActionListener {
     protected void setMenuScroller(final JMenu menu, final int topFixedCount, final int bottomFixedCount) {
         int itemCount = menu.getItemCount();
         int height = 0;
-        int maxSingelItemHeight = 0;
+        int maxSingelItemHeight = 1;
         for (int i = 0; i < itemCount; i++) {
             JMenuItem item = menu.getItem(i);
             Dimension preferredSize = item.getPreferredSize();
