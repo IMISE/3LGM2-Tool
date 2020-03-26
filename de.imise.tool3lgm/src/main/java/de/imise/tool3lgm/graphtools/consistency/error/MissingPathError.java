@@ -15,7 +15,7 @@ public class MissingPathError extends AbstractPathError {
     /**
      * Elements which should be connected to remove this error
      */
-    final Collection<ModelElement> missingElements;
+    private final Collection<ModelElement> missingElements;
 
     /**
      * @param me
@@ -30,13 +30,18 @@ public class MissingPathError extends AbstractPathError {
 
     @Override
     public String getErrorFieldString() {
-        SectionMetaPath metaPath = (SectionMetaPath) getMetaPath();
+        SectionMetaPath metaPath = getMetaPath();
         return metaPath.getFullName();
     }
 
     @Override
     public String getMessage() {
         return getErrorResourceString(false);
+    }
+
+    @Override
+    public SectionMetaPath getMetaPath() {
+        return (SectionMetaPath) errorField;
     }
 
     @Override
@@ -61,7 +66,7 @@ public class MissingPathError extends AbstractPathError {
      * @return
      */
     private String getErrorResourceString(final boolean longDescription) {
-        SectionMetaPath metaPath = (SectionMetaPath) getMetaPath();
+        SectionMetaPath metaPath = getMetaPath();
         String errorDescriptionResourceKey = metaPath.getBaseResKeyOrName();
         errorDescriptionResourceKey += longDescription ? PATH_ERROR_LONG_DESCRIPTION_RESOURCE_KEY_SUFFIX : PATH_ERROR_DESCRIPTION_RESOURCE_KEY_SUFFIX;
         MetaModel metaModel = metaPath.getMetaModel();
