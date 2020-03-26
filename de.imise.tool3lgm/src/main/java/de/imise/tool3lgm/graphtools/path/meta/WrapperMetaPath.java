@@ -13,8 +13,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 public class WrapperMetaPath extends SequenceMetaPath {
 
     /**
-     * @param baseResKeyOrName
-     * @param metaPaths
+     * @param newStartClass
+     * @param newEndClass
+     * @param wrappedMetaPath
      */
     private WrapperMetaPath(final Class<? extends ModelElement> newStartClass, final Class<? extends ModelElement> newEndClass, final AbstractMetaPath wrappedMetaPath) {
         super(getWrappedMetaPath(newStartClass, newEndClass, wrappedMetaPath));
@@ -78,9 +79,9 @@ public class WrapperMetaPath extends SequenceMetaPath {
 
     @Override
     protected final String createName() {
-        AbstractMetaPath firstMetaPath = metaPaths.get(0);
+        AbstractMetaPath firstMetaPath = subMetaPaths.get(0);
         if (firstMetaPath instanceof ElementaryMetaPath && ((ElementaryMetaPath) firstMetaPath).getType() == ElementaryMetaPath.Type.SINGLE_ELEMENT) {
-            return metaPaths.get(1).createName();
+            return subMetaPaths.get(1).createName();
         }
         return firstMetaPath.createName();
     }

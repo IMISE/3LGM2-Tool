@@ -34,7 +34,7 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
             //for every of these elements
             for (ModelElement me : possibleInconsistentElements) {
                 //the first sub metapath of the SectionMetaPath describes the connection to the needed elements -> get the first
-                AbstractMetaPath metaPathToNeededElements = consistencyConditionSectionMetaPath.getFirstMetaPath();
+                AbstractMetaPath metaPathToNeededElements = consistencyConditionSectionMetaPath.getFirstSubMetaPath();
                 //get the elements which should be connected over the other subpaths too
                 Collection<ModelElement> neededElements = MetaPathFunctions.getConnectedElements(me, metaPathToNeededElements);
                 //if there are needed elements

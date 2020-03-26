@@ -373,7 +373,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
             //solange aus dem SequenceMetaPath den jeweils ersten MetaPath holen, bis man bei einem
             //MetaPath ist, der selbst kein SequenceMetaPath mehr ist
             while (realFirstMetaPath instanceof SequenceMetaPath) {
-                realFirstMetaPath = ((SequenceMetaPath) realFirstMetaPath).getMetaPaths().get(0);
+                realFirstMetaPath = ((SequenceMetaPath) realFirstMetaPath).getSubMetaPaths().get(0);
                 //TODO: hier muss ein paralleler MetaPfad kommen, den wir später behandeln...
             }
 
@@ -465,7 +465,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
     private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final SequenceMetaPath metaPath, final boolean isSubStep) {
         List<PathResultTreeNode> resultNodes = new ArrayList<>();
         resultNodes.add(startNode);
-        for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
+        for (AbstractMetaPath subMetaPath : metaPath.getSubMetaPaths()) {
             List<PathResultTreeNode> actStartNodes = new ArrayList<>(resultNodes);
             resultNodes.clear();
             for (PathResultTreeNode actStartNode : actStartNodes) {
@@ -493,7 +493,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      */
     private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final UnionMetaPath metaPath, final boolean isSubStep) {
         List<PathResultTreeNode> resultNodes = new ArrayList<>();
-        for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
+        for (AbstractMetaPath subMetaPath : metaPath.getSubMetaPaths()) {
             List<PathResultTreeNode> pathResultTreeNodes = addPath(startNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true);
             resultNodes.addAll(pathResultTreeNodes);
         }
@@ -513,7 +513,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
         //weiteren Pfade auch vorkommt -> wenn nicht, das endElement löschen und ggf. deleteBranch mit aktualisierung der IncompleteLeafs anstoßen
         PathResultTreeNode startNodeClone = new PathResultTreeNode(startNode);
         List<PathResultTreeNode> nextPathResultNodes = new ArrayList<>();
-        for (AbstractMetaPath subMetaPath : metaPath.getMetaPaths()) {
+        for (AbstractMetaPath subMetaPath : metaPath.getSubMetaPaths()) {
             if (firstMetaPath == null) {
                 firstMetaPath = subMetaPath;
                 List<PathResultTreeNode> pathResultTreeNodes = addPath(startNode, subMetaPath, subMetaPath instanceof ElementaryMetaPath ? isSubStep : true);

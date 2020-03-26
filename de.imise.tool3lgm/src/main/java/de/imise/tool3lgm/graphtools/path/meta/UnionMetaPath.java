@@ -37,7 +37,7 @@ public class UnionMetaPath extends ParallelMetaPath {
     @Override
     protected boolean isForwardRecursive() {
         //bei Vereinigungsmengen reicht es, wenn einer der enthaltenen Pfade für die Elemente rekursiv ist
-        for (AbstractMetaPath metaPath : metaPaths) {
+        for (AbstractMetaPath metaPath : subMetaPaths) {
             if (metaPath.isForwardRecursive()) {
                 return true;
             }
@@ -47,7 +47,7 @@ public class UnionMetaPath extends ParallelMetaPath {
 
     @Override
     public boolean isCreatable(final boolean checkCreateEndElement) {
-        for (AbstractMetaPath metaPath : getMetaPaths()) {
+        for (AbstractMetaPath metaPath : getSubMetaPaths()) {
             if (!metaPath.isCreatable(checkCreateEndElement)) {
                 return false;
             }

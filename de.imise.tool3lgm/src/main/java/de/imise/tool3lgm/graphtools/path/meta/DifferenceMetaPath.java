@@ -38,15 +38,15 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     protected void initStartEndClasses() {
         ImmutableSet.Builder<Class<? extends ModelElement>> startElementClassesBuilder = ImmutableSet.builder();
         ImmutableSet.Builder<Class<? extends ModelElement>> endElementClassesBuilder = ImmutableSet.builder();
-        startElementClassesBuilder.addAll(metaPaths.get(0).startElementClasses);
-        endElementClassesBuilder.addAll(metaPaths.get(0).endElementClasses);
+        startElementClassesBuilder.addAll(subMetaPaths.get(0).startElementClasses);
+        endElementClassesBuilder.addAll(subMetaPaths.get(0).endElementClasses);
     }
 
     @Override
     protected String createName() {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
-        Iterator<AbstractMetaPath> it = metaPaths.iterator();
+        Iterator<AbstractMetaPath> it = subMetaPaths.iterator();
         if (it.hasNext()) {
             sb.append(it.next().getFullName());
         }
@@ -66,7 +66,7 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     @Override
     protected boolean isForwardRecursive() {
         //rekursiv, wenn der erste MetaPath (der die Elemente festlegt, von denen die der folgenden MetaPfade abgezogen werden) rekursiv ist
-        AbstractMetaPath firstMetaPath = metaPaths.get(0);
+        AbstractMetaPath firstMetaPath = subMetaPaths.get(0);
         return firstMetaPath.isRecursive();
     }
 

@@ -14,7 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 public abstract class ParallelMetaPath extends ListMetaPath {
 
     /**
-     * @param metaPaths
+     * @param subMetaPaths
      */
     public ParallelMetaPath(final ParallelMetaPath other) {
         super(other);
@@ -47,7 +47,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
     protected void initStartEndClasses() {
         ImmutableSet.Builder<Class<? extends ModelElement>> startElementClassesBuilder = ImmutableSet.builder();
         ImmutableSet.Builder<Class<? extends ModelElement>> endElementClassesBuilder = ImmutableSet.builder();
-        for (AbstractMetaPath metaPath : metaPaths) {
+        for (AbstractMetaPath metaPath : subMetaPaths) {
             startElementClassesBuilder.addAll(metaPath.startElementClasses);
             endElementClassesBuilder.addAll(metaPath.endElementClasses);
         }
@@ -62,7 +62,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
         }
         //Klassengleichheit wird in super.equals() schon getestet
         ParallelMetaPath other = (ParallelMetaPath) obj;
-        return other.metaPaths.equals(metaPaths);
+        return other.subMetaPaths.equals(subMetaPaths);
     }
 
     @Override
@@ -72,7 +72,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
 
     @Override
     public boolean isDirected() {
-        for (AbstractMetaPath metaPath : metaPaths) {
+        for (AbstractMetaPath metaPath : subMetaPaths) {
             if (!metaPath.isDirected()) {
                 return false;
             }
@@ -82,7 +82,7 @@ public abstract class ParallelMetaPath extends ListMetaPath {
 
     @Override
     public boolean containsPropertyTransferEdge() {
-        for (AbstractMetaPath metaPath : metaPaths) {
+        for (AbstractMetaPath metaPath : subMetaPaths) {
             if (metaPath.containsPropertyTransferEdge()) {
                 return true;
             }

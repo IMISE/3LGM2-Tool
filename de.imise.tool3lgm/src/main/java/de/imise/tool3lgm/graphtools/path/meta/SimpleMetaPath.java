@@ -155,7 +155,7 @@ public class SimpleMetaPath extends SequenceMetaPath {
      * @return
      */
     public SimpleMetaPath getSubPath(final int pathStepStartIndex) {
-        return getSubPath(pathStepStartIndex, getMetaPathCount());
+        return getSubPath(pathStepStartIndex, getSubMetaPathCount());
     }
 
     /**
@@ -166,11 +166,11 @@ public class SimpleMetaPath extends SequenceMetaPath {
      * @return
      */
     public SimpleMetaPath getSubPath(final int pathStepStartIndex, final int pathStepEndIndex) {
-        int fullPathLength = metaPaths.size();
+        int fullPathLength = subMetaPaths.size();
         if (pathStepStartIndex >= pathStepEndIndex || pathStepStartIndex < 0 || pathStepStartIndex >= fullPathLength || pathStepEndIndex < 0 || pathStepEndIndex > fullPathLength) {
             throw new IllegalArgumentException("Invalid pathStepStartIndex=" + pathStepStartIndex + " and pathStepEndIndex=" + pathStepEndIndex);
         }
-        ElementaryMetaPath[] metaPathsArray = metaPaths.toArray(new ElementaryMetaPath[0]);
+        ElementaryMetaPath[] metaPathsArray = subMetaPaths.toArray(new ElementaryMetaPath[0]);
         ElementaryMetaPath[] subMetaPathsArray = new ElementaryMetaPath[pathStepEndIndex - pathStepStartIndex];
         System.arraycopy(metaPathsArray, pathStepStartIndex, subMetaPathsArray, 0, subMetaPathsArray.length);
         //Hier wird noch vor der ersten und nach der letzten Kante die Elementart eingeschränkt, weil die Elementart der "weggeschnittenen" Kante die Start- oder Zielklasse des verkürzten Pfades eigentlich einschränken kann
@@ -241,10 +241,10 @@ public class SimpleMetaPath extends SequenceMetaPath {
 
     /**
      * @return getMetaPathCount()
-     * @see #getMetaPathCount()
+     * @see #getSubMetaPathCount()
      */
     public int length() {
-        return getMetaPathCount();
+        return getSubMetaPathCount();
     }
 
 }

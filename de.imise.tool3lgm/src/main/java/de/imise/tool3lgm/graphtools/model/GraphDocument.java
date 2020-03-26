@@ -3876,7 +3876,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             MetaModel metaModel = getMetaModel();
             for (SimpleMetaPath metaPath : metaModel.getInstanciablePath(instanciationEdgeClass)) {
                 int path2CreateStartIndex = 0;
-                for (; path2CreateStartIndex < metaPath.getMetaPathCount(); path2CreateStartIndex++) {
+                for (; path2CreateStartIndex < metaPath.getSubMetaPathCount(); path2CreateStartIndex++) {
                     List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
                     ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(path2CreateStartIndex);
                     if (elementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
@@ -3923,7 +3923,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         } else if (metaPath instanceof ParallelMetaPath) {
             ParallelMetaPath parallelMetaPath = (ParallelMetaPath) metaPath;
             List<AbstractPath> paths = new ArrayList<>();
-            for (AbstractMetaPath internalMetaPath : parallelMetaPath.iterableMetaPaths()) {
+            for (AbstractMetaPath internalMetaPath : parallelMetaPath.iterableSubMetaPaths()) {
                 AbstractPath subPath = createPath(startElement, endElement, internalMetaPath, pid);
                 paths.add(subPath);
             }
@@ -3956,7 +3956,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         List<ElementaryPath> createdElementaryPaths = new ArrayList<>();
         SimplePath createdSubPath = null;
         start_transaction(pid);
-        final int lastPathStepIndex = metaPath.getMetaPathCount() - 1;
+        final int lastPathStepIndex = metaPath.getSubMetaPathCount() - 1;
         //wenn ein EndElement ex. und die letzte Kante eine InstanciationEdge ist, wobei das EndElement der Master dieser InstanciationEdge ist, dann
         //wird das EndElement über diese Kante instanziiert und der Restpfad bis zu dieser Instanz dann wieder über diese Funktion angelegt
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();

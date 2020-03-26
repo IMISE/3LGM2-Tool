@@ -14,7 +14,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
     /**
      * Liste der Pfade, die dieser Metapfad parallel enthält.
      */
-    protected final List<AbstractMetaPath> metaPaths;
+    protected final List<AbstractMetaPath> subMetaPaths;
 
     /**
      * BasisResourcenschlüssel oder Name des Pfades. Wenn dieser Schlüssel nicht
@@ -26,21 +26,21 @@ public abstract class ListMetaPath extends AbstractMetaPath {
 
     /**
      * @param metaModel
-     * @param metaPaths
+     * @param subMetaPaths
      */
-    public ListMetaPath(final AbstractMetaPath... metaPaths) {
-        this(null, metaPaths);
+    public ListMetaPath(final AbstractMetaPath... subMetaPaths) {
+        this(null, subMetaPaths);
     }
 
     /**
      * @param metaModel
      * @param baseResKeyOrName
-     * @param metaPaths
+     * @param subMetaPaths
      */
-    public ListMetaPath(final String baseResKeyOrName, final AbstractMetaPath... metaPaths) {
-        super(metaPaths[0].getMetaModel());
+    public ListMetaPath(final String baseResKeyOrName, final AbstractMetaPath... subMetaPaths) {
+        super(subMetaPaths[0].getMetaModel());
         this.baseResKeyOrName = baseResKeyOrName;
-        this.metaPaths = ImmutableList.copyOf(metaPaths);
+        this.subMetaPaths = ImmutableList.copyOf(subMetaPaths);
         initStartEndClasses();
     }
 
@@ -58,7 +58,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
     public ListMetaPath(final String baseResKeyOrName, final ListMetaPath other) {
         super(other.getMetaModel());
         this.baseResKeyOrName = baseResKeyOrName;
-        metaPaths = CollectionUtils.ensureImmutable(other.metaPaths);
+        subMetaPaths = CollectionUtils.ensureImmutable(other.subMetaPaths);
         initStartEndClasses();
     }
 
@@ -68,16 +68,24 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      * @return the metaPaths
      */
     @Override
-    public final List<AbstractMetaPath> getMetaPaths() {
-        return metaPaths;
+    public final List<AbstractMetaPath> getSubMetaPaths() {
+        return subMetaPaths;
+    }
+
+    /**
+     * @param index
+     * @return
+     */
+    public AbstractMetaPath getSubMetaPath(final int index) {
+        return subMetaPaths.get(index);
     }
 
     /**
      * @return
      */
     @Override
-    public final int getMetaPathCount() {
-        return metaPaths.size();
+    public final int getSubMetaPathCount() {
+        return subMetaPaths.size();
     }
 
     @Override
@@ -100,12 +108,12 @@ public abstract class ListMetaPath extends AbstractMetaPath {
     public InvalidityCheckResult getInvalidityCheckResult() {
         //wenn der Pfad aus Sicht des AbstractMetaPath valide ist
         if (super.getInvalidityCheckResult().invalidReason == null) {
-            if (metaPaths.size() == 0) {
+            if (subMetaPaths.size() == 0) {
                 invalidityCheckResult = new InvalidityCheckResult(InvalidReason.INVALID_LIST_PATH_EMPTY);
             } else {
                 //jeden Einzelpfad durchgehen
-                for (int i = 0; i < metaPaths.size(); i++) {
-                    AbstractMetaPath metaPath = metaPaths.get(i);
+                for (int i = 0; i < subMetaPaths.size(); i++) {
+                    AbstractMetaPath metaPath = subMetaPaths.get(i);
                     InvalidityCheckResult innerInvalidityCheckResult = metaPath.getInvalidityCheckResult();
                     //wenn der Einzelpfad nicht valide ist
                     if (innerInvalidityCheckResult.invalidReason != null) {
@@ -123,8 +131,8 @@ public abstract class ListMetaPath extends AbstractMetaPath {
     /**
      * @return iterable over all metapaths
      */
-    public Iterable<AbstractMetaPath> iterableMetaPaths() {
-        return CollectionUtils.iterable(metaPaths);
+    public Iterable<AbstractMetaPath> iterableSubMetaPaths() {
+        return CollectionUtils.iterable(subMetaPaths);
     }
 
     /**
@@ -133,22 +141,22 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      * @param metaPathIndex
      */
     public final void setRecursive(final int metaPathIndex, final boolean recursive) {
-        AbstractMetaPath metaPath = metaPaths.get(metaPathIndex);
+        AbstractMetaPath metaPath = subMetaPaths.get(metaPathIndex);
         metaPath.setRecursive(recursive);
     }
 
     /**
      * @return
      */
-    public final AbstractMetaPath getFirstMetaPath() {
-        return metaPaths.get(0);
+    public final AbstractMetaPath getFirstSubMetaPath() {
+        return subMetaPaths.get(0);
     }
 
     /**
      * @return
      */
-    public final AbstractMetaPath getLastMetaPath() {
-        return metaPaths.get(getMetaPathCount() - 1);
+    public final AbstractMetaPath getLastSubMetaPath() {
+        return subMetaPaths.get(getSubMetaPathCount() - 1);
     }
 
 }

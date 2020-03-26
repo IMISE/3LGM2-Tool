@@ -98,7 +98,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                         colName = OptionalEdge.getOptionalityName();
                     } else {
                         Collection<String> colNameParts = new ArrayList<>();
-                        List<AbstractMetaPath> metaPaths = columnHeaderReferencePath.getMetaPaths();
+                        List<AbstractMetaPath> metaPaths = columnHeaderReferencePath.getSubMetaPaths();
                         for (AbstractMetaPath metaPath : metaPaths) {
                             List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
                             int pathStepIndex = columnDefinition.getPathStepIndex();

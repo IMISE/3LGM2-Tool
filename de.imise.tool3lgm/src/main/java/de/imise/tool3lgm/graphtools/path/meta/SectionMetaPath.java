@@ -31,7 +31,7 @@ public class SectionMetaPath extends ParallelMetaPath {
     @Override
     protected boolean isForwardRecursive() {
         //bei Schnittmengenpfaden müssen alle enthaltenen Pfade rekursiv sein, damit es Ergebniselemente geben kann
-        for (AbstractMetaPath metaPath : metaPaths) {
+        for (AbstractMetaPath metaPath : subMetaPaths) {
             if (!metaPath.isForwardRecursive()) {
                 return false;
             }
@@ -41,7 +41,7 @@ public class SectionMetaPath extends ParallelMetaPath {
 
     @Override
     public boolean isCreatable(final boolean checkCreateEndElement) {
-        for (AbstractMetaPath metaPath : getMetaPaths()) {
+        for (AbstractMetaPath metaPath : getSubMetaPaths()) {
             if (!metaPath.isCreatable(checkCreateEndElement)) {
                 return false;
             }

@@ -550,12 +550,12 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
 
     @SuppressWarnings("unchecked")
     @Override
-    public final List<AbstractMetaPath> getMetaPaths() {
+    public final List<AbstractMetaPath> getSubMetaPaths() {
         return (List<AbstractMetaPath>) (List<?>) getElementaryMetaPaths();
     }
 
     @Override
-    public int getMetaPathCount() {
+    public int getSubMetaPathCount() {
         return 1;
     }
 

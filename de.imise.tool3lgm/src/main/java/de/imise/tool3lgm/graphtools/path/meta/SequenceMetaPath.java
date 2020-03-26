@@ -75,9 +75,9 @@ public class SequenceMetaPath extends ListMetaPath {
 
     @Override
     protected void initStartEndClasses() {
-        if (metaPaths != null && metaPaths.size() > 0) {
-            startElementClasses = metaPaths.get(0).startElementClasses;
-            endElementClasses = metaPaths.get(metaPaths.size() - 1).endElementClasses;
+        if (subMetaPaths != null && !subMetaPaths.isEmpty()) {
+            startElementClasses = subMetaPaths.get(0).startElementClasses;
+            endElementClasses = subMetaPaths.get(subMetaPaths.size() - 1).endElementClasses;
         }
     }
 
@@ -87,7 +87,7 @@ public class SequenceMetaPath extends ListMetaPath {
         int result = super.hashCode();
         result = prime * result + (directed ? 1231 : 1237);
         result = prime * result + (direction == null ? 0 : direction.hashCode());
-        result = prime * result + (metaPaths == null ? 0 : metaPaths.hashCode());
+        result = prime * result + (subMetaPaths == null ? 0 : subMetaPaths.hashCode());
         result = prime * result + (elementaryMetaPaths == null ? 0 : elementaryMetaPaths.hashCode());
         return result;
     }
@@ -110,11 +110,11 @@ public class SequenceMetaPath extends ListMetaPath {
         if (direction != other.direction) {
             return false;
         }
-        if (metaPaths == null) {
-            if (other.metaPaths != null) {
+        if (subMetaPaths == null) {
+            if (other.subMetaPaths != null) {
                 return false;
             }
-        } else if (!metaPaths.equals(other.metaPaths)) {
+        } else if (!subMetaPaths.equals(other.subMetaPaths)) {
             return false;
         }
         if (elementaryMetaPaths == null) {
@@ -146,7 +146,7 @@ public class SequenceMetaPath extends ListMetaPath {
 
     public String getAllMetaPathsName() {
         StringBuilder sb = new StringBuilder();
-        for (AbstractMetaPath metaPath : metaPaths) {
+        for (AbstractMetaPath metaPath : subMetaPaths) {
             sb.append(metaPath.getFullName());
             sb.append(" -> ");
         }
@@ -185,10 +185,10 @@ public class SequenceMetaPath extends ListMetaPath {
 
     protected AbstractMetaPath[] getOtherDirectionMetaPaths() {
         // versuchen, die Gegenrichtung zusammen zu bauen
-        AbstractMetaPath[] otherDirectionMetaPaths = new AbstractMetaPath[metaPaths.size()];
+        AbstractMetaPath[] otherDirectionMetaPaths = new AbstractMetaPath[subMetaPaths.size()];
         // Gegenrichtung der enthaltenen Einzelpfade in umgekehrter Reihenfolge einfügen
         for (int i = otherDirectionMetaPaths.length - 1; i >= 0; i--) {
-            AbstractMetaPath currentMetaPath = metaPaths.get(i);
+            AbstractMetaPath currentMetaPath = subMetaPaths.get(i);
             AbstractMetaPath otherDirection = currentMetaPath.getOtherDirection();
             if (otherDirection == null) {
                 otherDirectionMetaPaths = null;
@@ -287,7 +287,7 @@ public class SequenceMetaPath extends ListMetaPath {
     public final List<ElementaryMetaPath> getElementaryMetaPaths() {
         if (elementaryMetaPaths == null) {
             ImmutableList.Builder<ElementaryMetaPath> simpleMetaPathBuilder = ImmutableList.builder();
-            for (AbstractMetaPath metaPath : metaPaths) {
+            for (AbstractMetaPath metaPath : subMetaPaths) {
                 List<ElementaryMetaPath> innerMetaPaths = metaPath.getElementaryMetaPaths();
                 if (innerMetaPaths.isEmpty()) { //der aktuelle innere Pfad hat keine einfache Elementarpfadliste
                     elementaryMetaPaths = EMPTY_ELEMENTARY_PATH_LIST;
@@ -322,9 +322,9 @@ public class SequenceMetaPath extends ListMetaPath {
         if (!getStartClasses().equals(getEndClasses())) {
             return false;
         }
-        int metaPathCount = metaPaths == null ? 0 : metaPaths.size();
+        int metaPathCount = subMetaPaths == null ? 0 : subMetaPaths.size();
         //bei einer ungeraden Anzahl von Pfaden muss der mittlere Pfad selbst undirected sein
-        if (metaPathCount % 2 == 1 && !metaPaths.get(metaPathCount / 2).isDirected()) {
+        if (metaPathCount % 2 == 1 && !subMetaPaths.get(metaPathCount / 2).isDirected()) {
             return false;
         }
         //Der Pfad muss zur Mitte hin symmetrisch sein, d.h. alle Pfade müssen von beiden Seiten von Außen
@@ -333,7 +333,7 @@ public class SequenceMetaPath extends ListMetaPath {
         //von Pfad 5 sein und Pfad 2 die Gegenrichtung von Pfad 4. Bei einer geraden Anzahl von Pfaden müssen
         //die Pfade von Außen nach Innen immer paarweise ihre Gegenrichtungen sein.
         for (int i = 0; i < metaPathCount / 2; i++) {
-            if (!metaPaths.get(i).getOtherDirection().equals(metaPathCount - 1 - i, true)) {
+            if (!subMetaPaths.get(i).getOtherDirection().equals(metaPathCount - 1 - i, true)) {
                 return false;
             }
         }
@@ -342,7 +342,7 @@ public class SequenceMetaPath extends ListMetaPath {
 
     @Override
     public boolean containsPropertyTransferEdge() {
-        for (AbstractMetaPath metaPath : metaPaths) {
+        for (AbstractMetaPath metaPath : subMetaPaths) {
             if (metaPath.containsPropertyTransferEdge()) {
                 return true;
             }
@@ -362,12 +362,12 @@ public class SequenceMetaPath extends ListMetaPath {
      * @return
      */
     public final Set<Class<? extends ModelElement>> getPathStepConnectingClasses(final int pathStepIndex) {
-        AbstractMetaPath metaPath = metaPaths.get(pathStepIndex);
+        AbstractMetaPath metaPath = subMetaPaths.get(pathStepIndex);
         Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
-        if (pathStepIndex == metaPaths.size() - 1) {
+        if (pathStepIndex == subMetaPaths.size() - 1) {
             return endClasses;
         }
-        AbstractMetaPath nextMetaPath = metaPaths.get(pathStepIndex + 1);
+        AbstractMetaPath nextMetaPath = subMetaPaths.get(pathStepIndex + 1);
         Set<Class<? extends ModelElement>> nextStartClasses = nextMetaPath.getStartClasses();
         Set<Class<? extends ModelElement>> pathStepClasses = new HashSet<>();
         for (Class<? extends ModelElement> endClass : endClasses) {
@@ -417,7 +417,7 @@ public class SequenceMetaPath extends ListMetaPath {
         //wenn der Pfad aus Sicht des AbstractMetaPath valide ist
         if (super.getInvalidityCheckResult().invalidReason == null) {
             //jeden Einzelpfad durchgehen
-            for (int i = 0; i < metaPaths.size(); i++) {
+            for (int i = 0; i < subMetaPaths.size(); i++) {
                 //Hole alle Elementklassen die einen Pfad mit dem nächsten verbinden
                 Set<Class<? extends ModelElement>> pathStepElementClasses = getPathStepConnectingClasses(i);
                 //2 aufeinanderfolgende Pfade passen nicht zusmammen
@@ -433,7 +433,7 @@ public class SequenceMetaPath extends ListMetaPath {
     @Override
     protected boolean isForwardRecursive() {
         Class<? extends ModelElement> endClass = getEndClass();
-        List<AbstractMetaPath> metaPaths = getMetaPaths();
+        List<AbstractMetaPath> metaPaths = getSubMetaPaths();
         AbstractMetaPath firstMetaPath = metaPaths.get(0);
         return firstMetaPath.isStartClass(endClass);
     }

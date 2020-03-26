@@ -288,16 +288,16 @@ public class MetaPathFunctions {
             return endElement.isForwardLinkable(startElement, elemMetaPath.getEdgeClass(), checkConsistency);
         } else if (metaPath instanceof SequenceMetaPath) {
             SequenceMetaPath sequenceMetaPath = (SequenceMetaPath) metaPath;
-            AbstractMetaPath firstMetaPath = sequenceMetaPath.getMetaPaths().get(0);
+            AbstractMetaPath firstMetaPath = sequenceMetaPath.getSubMetaPaths().get(0);
             while (firstMetaPath instanceof SequenceMetaPath) {
-                firstMetaPath = ((SequenceMetaPath) firstMetaPath).getMetaPaths().get(0);
+                firstMetaPath = ((SequenceMetaPath) firstMetaPath).getSubMetaPaths().get(0);
             }
             if (!(firstMetaPath instanceof ElementaryMetaPath)) {
                 return false;
             }
-            AbstractMetaPath lastMetaPath = sequenceMetaPath.getMetaPaths().get(sequenceMetaPath.getMetaPaths().size() - 1);
+            AbstractMetaPath lastMetaPath = sequenceMetaPath.getSubMetaPaths().get(sequenceMetaPath.getSubMetaPaths().size() - 1);
             while (lastMetaPath instanceof SequenceMetaPath) {
-                List<AbstractMetaPath> lastSequenceMetaPathList = ((SequenceMetaPath) lastMetaPath).getMetaPaths();
+                List<AbstractMetaPath> lastSequenceMetaPathList = ((SequenceMetaPath) lastMetaPath).getSubMetaPaths();
                 lastMetaPath = lastSequenceMetaPathList.get(lastSequenceMetaPathList.size() - 1);
             }
             if (!(lastMetaPath instanceof ElementaryMetaPath)) {
