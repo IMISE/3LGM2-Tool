@@ -208,7 +208,14 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         SimpleMetaPath consistencyConditionSubMetaPath2 = simpleMetaPathCreator.createSimpleMetaPath(IheActorInstance.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class,
                 IheActor_IheActorInstance_Edge.class);
         SectionMetaPath consistencyConditionMetaPathActorInstanceMustBeGroupedWith = new SectionMetaPath("PATH_IheActorInstance_mustBeGroupedWith_IheActor", consistencyConditionSubMetaPath1, consistencyConditionSubMetaPath2);
-        return ImmutableList.of(consistencyConditionMetaPathActorInstanceMustBeGroupedWith);
+
+        //der folgende MetePafd muss als UND-interpretierter SectionMetaPath implementiert werden, da die Fehler bei dieser Impelementierung verschwinden, sobald ein Element zugeweisen wurde (ODER-interpretierter SectionMetaPath)
+        //        SimpleMetaPath consistencyConditionSubMetaPath3 = simpleMetaPathCreator.createSimpleMetaPath(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class,
+        //                IheActor_IheActor_MustBeGroupedWith_Edge.class);
+        //        SimpleMetaPath consistencyConditionSubMetaPath4 = simpleMetaPathCreator.createSimpleMetaPath(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
+        //        SectionMetaPath consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances = new SectionMetaPath("PATH_ApplicationSystem_needsGroupingOf_IheActorInstances", consistencyConditionSubMetaPath3, consistencyConditionSubMetaPath4);
+
+        return ImmutableList.of(consistencyConditionMetaPathActorInstanceMustBeGroupedWith);//, consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances);
 
     }
 
