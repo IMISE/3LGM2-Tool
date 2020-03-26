@@ -82,6 +82,14 @@ public abstract class Edge extends ModelElement {
         FORWARD,
         BACKWARD;
         //ACHTUNG: toString() darf nicht überschrieben werden und muss dasselbe wie name() zurück liefern, weil das in den UNDO-REDO-Kommandos genutzt wird
+        ;
+
+        /**
+         * @return
+         */
+        public Direction getOther() {
+            return this == FORWARD ? BACKWARD : FORWARD;
+        }
     }
 
     @Override

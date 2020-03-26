@@ -224,4 +224,20 @@ public final class ElementaryPath extends AbstractPath {
         return startElement + " " + metaPathName + " " + endElement;
     }
 
+    /**
+     * @return
+     */
+    public ElementaryPath getOtherDirection() {
+        ElementaryMetaPath elementaryMetaPath = (ElementaryMetaPath) metaPath;
+        ElementaryPath otherDirectionPath = null;
+        Type type = elementaryMetaPath.getType();
+        if (type == Type.SINGLE_ELEMENT) {
+            otherDirectionPath = this;
+        } else {
+            ElementaryMetaPath otherDirectionElementaryMetaPath = elementaryMetaPath.getOtherDirection();
+            otherDirectionPath = new ElementaryPath(otherDirectionElementaryMetaPath, endElement, startElement, edge);
+        }
+        return otherDirectionPath;
+    }
+
 }

@@ -38,7 +38,11 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         /** Typ für MetaPfade, die bei einer Kantenklasse starten */
         START_WITH_EDGE,
         /** Typ für MetaPfade, die auf einer Kantenklasse enden */
-        END_WITH_EDGE,
+        END_WITH_EDGE;
+
+        public Type getOtherDirection() {
+            return this == START_WITH_EDGE ? END_WITH_EDGE : this == END_WITH_EDGE ? START_WITH_EDGE : this;
+        }
     }
 
     private static enum InvalidReason {
@@ -138,8 +142,6 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     ElementaryMetaPath(final MetaModel metaModel, final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState) {
         this(metaModel, (Class<? extends ModelElement>) null, edgeClass, (Class<? extends ModelElement>) null, getDirection(direction), connectionState, Type.ELEMENT_EDGE_ELEMENT);
-        otherDirection = new ElementaryMetaPath(metaModel, endClass, edgeClass, startClass, this.direction == Direction.BACKWARD ? Direction.FORWARD : Direction.BACKWARD, connectionState, Type.ELEMENT_EDGE_ELEMENT);
-        otherDirection.otherDirection = this;
     }
 
     /**
@@ -153,8 +155,6 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     ElementaryMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final ElementaryMetaPath originalElementaryMetaPath, final Class<? extends ModelElement> endClass) {
         this(metaModel, startClass, originalElementaryMetaPath.edgeClass, endClass, originalElementaryMetaPath.direction, originalElementaryMetaPath.connectionState, originalElementaryMetaPath.type);
-        otherDirection = new ElementaryMetaPath(metaModel, endClass, edgeClass, startClass, direction == Direction.BACKWARD ? Direction.FORWARD : Direction.BACKWARD, connectionState, originalElementaryMetaPath.type);
-        otherDirection.otherDirection = this;
     }
 
     /**
@@ -240,7 +240,17 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
 
     @Override
     public ElementaryMetaPath getOtherDirection() {
-        return (ElementaryMetaPath) super.getOtherDirection();
+        if (otherDirection == null) {
+            if (type == Type.SINGLE_ELEMENT) {
+                otherDirection = this;
+            } else {
+                Type otherDirectionType = type.getOtherDirection();
+                //TODO: testen, ob man den ConnectionState hier auch umdrehen muss!?
+                otherDirection = new ElementaryMetaPath(metaModel, endClass, edgeClass, startClass, direction.getOther(), connectionState, otherDirectionType);
+                otherDirection.otherDirection = this;
+            }
+        }
+        return (ElementaryMetaPath) otherDirection;
     }
 
     /**
