@@ -44,6 +44,13 @@ public class MissingPathError extends AbstractPathError {
         return (SectionMetaPath) errorField;
     }
 
+    /**
+     * @return the missingElements
+     */
+    public Collection<ModelElement> getMissingElements() {
+        return missingElements;
+    }
+
     @Override
     public String getLongMessage() {
         StringBuilder sb = new StringBuilder();
@@ -75,7 +82,6 @@ public class MissingPathError extends AbstractPathError {
             errorDescription = super.getMessage();
         }
         return errorDescription;
-
     }
 
 }

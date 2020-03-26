@@ -379,6 +379,57 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     }
 
     /**
+     * @param menu
+     * @param startElement
+     * @param creatableMetaPath
+     * @param endElements
+     * @return <code>true</code> if something was added to the menu
+     */
+    public boolean addConnectMenuItems(final JPopupMenu menu, final ModelElement startElement, final SimpleMetaPath creatableMetaPath, final Collection<ModelElement> endElements) {
+        return addConnectMenuItems(menu, startElement, ImmutableList.of(creatableMetaPath), endElements);
+
+    }
+
+    /**
+     * @param menu
+     * @param startElement
+     * @param creatableMetaPaths
+     * @param endElements
+     * @return <code>true</code> if something was added to the menu
+     */
+    private boolean addConnectMenuItems(final JPopupMenu menu, final ModelElement startElement, final Collection<SimpleMetaPath> creatableMetaPaths, Collection<ModelElement> endElements) {
+        JLabel connectLabel = null;
+        boolean somethingAdded = false;
+        for (SimpleMetaPath metaPath : creatableMetaPaths) {
+            if (connectLabel == null) {
+                connectLabel = new JLabel(getResString("LABEL_CONNECT"));
+                menu.add(connectLabel);
+                somethingAdded = true;
+            }
+            Class<? extends ModelElement> endClass = metaPath.getEndClass();
+            String metaPathName = metaPath.getName(false, true);
+            JMenu pathConnectableElements = new JMenu(metaPathName);
+            pathConnectableElements.setIcon(link_icon);
+            GraphDocument doc = getDoc();
+            if (endElements == null) {
+                endElements = doc.getModelItems(endClass, true, true);
+            }
+            pathConnectableElements.setEnabled(!endElements.isEmpty());
+            menu.add(pathConnectableElements);
+            for (ModelElement endMe : endElements) {
+                endClass = endMe.getClass();
+                if (metaPath.isEndClass(endClass)) {
+                    Action createPathAction = createPathAction(startElement, metaPath, endMe);
+                    JMenuItem createPathItem = getItem(createPathAction);
+                    pathConnectableElements.add(createPathItem);
+                }
+            }
+            setMenuScroller(pathConnectableElements);
+        }
+        return somethingAdded;
+    }
+
+    /**
      * Kontextmenü eines Einzelknotens
      *
      * @param contextSource
@@ -397,31 +448,9 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             Class<? extends ModelElement> meClass = me.getClass();
 
             //Anlegbare Pfade zu anderen Elementen anbieten
-            JLabel connectLabel = null;
             MetaModel metaModel = me.getMetaModel();
-            for (SimpleMetaPath metaPath : metaModel.getCreatableMetaPaths(meClass)) {
-                if (connectLabel == null) {
-                    connectLabel = new JLabel(getResString("LABEL_CONNECT"));
-                    menu.add(connectLabel);
-                }
-                Class<? extends ModelElement> endClass = metaPath.getEndClass();
-                String metaPathName = metaPath.getName(false, true);
-                JMenu pathConnectableElements = new JMenu(metaPathName);
-                pathConnectableElements.setIcon(link_icon);
-                GraphDocument doc = getDoc();
-                List<ModelElement> endElements = doc.getModelItems(endClass, true, true);
-                pathConnectableElements.setEnabled(!endElements.isEmpty());
-                menu.add(pathConnectableElements);
-                for (ModelElement endMe : endElements) {
-                    endClass = endMe.getClass();
-                    if (metaPath.isEndClass(endClass)) {
-                        Action createPathAction = createPathAction(metaPath, endMe);
-                        JMenuItem createPathItem = getItem(createPathAction);
-                        pathConnectableElements.add(createPathItem);
-                    }
-                }
-                setMenuScroller(pathConnectableElements);
-            }
+            Collection<SimpleMetaPath> creatableMetaPaths = metaModel.getCreatableMetaPaths(meClass);
+            boolean connectMenuAdded = addConnectMenuItems(menu, me, creatableMetaPaths, null);
 
             //InstaciationEdges -> "Neue Instanz" der verbundenen Klasse erzeugen anbieten
             JLabel newInstanceLabel = null;
@@ -442,7 +471,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 }
             }
 
-            if (newInstanceLabel != null || connectLabel != null) {
+            if (newInstanceLabel != null || connectMenuAdded) {
                 menu.addSeparator();
             }
 
@@ -1845,48 +1874,60 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         GraphDocument doc = getDoc();
         List<ModelElement> selectedElements = doc.getSelectedElements();
         String pathName = path2create.getName(false, true);
-        return createPathAction(path2create, selectedElements, pathName, link_icon);
+        return createPathAction(null, path2create, selectedElements, pathName, link_icon);
     }
 
     /**
-     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem zuletzt selektierten Element und allen zum Endelement des Pfades passenden anderen
-     * selektierten Elementen angelegt wird.
+     * Liefert eine Action zu einem SimpleMetaPath der zwischen dem übergebenen StartElement hin zum übergebenen Endelement angelegt wird.
+     * Ist das startElement null wird das zuletzt seletierte genommen.
      *
+     * @param startElement
      * @param path2create
+     * @param endElement
      * @return
      */
-    private Action createPathAction(final SimpleMetaPath path2create, final ModelElement endElement) {
-        return createPathAction(path2create, ImmutableList.of(endElement), endElement.getName(), null);
+    private Action createPathAction(final ModelElement startElement, final SimpleMetaPath path2create, final ModelElement endElement) {
+        return createPathAction(startElement, path2create, ImmutableList.of(endElement), endElement.getName(), null);
     }
 
     /**
      * Liefert eine Action zu einem SimpleMetaPath der zwischen dem zuletzt selektierten Element und allen zum Endelement des Pfades passenden anderen
      * übergebenen Elementen angelegt wird.
      *
+     * @param startElement
      * @param path2create Pfad der angelegt werden soll
      * @param endElements Elemente, zu denen der Pfad vom zuletzt selektierten Element aus angelegt werden soll
      * @param name Name der Action
      * @param icon Icon der Sction
      * @return
      */
-    private Action createPathAction(final SimpleMetaPath path2create, final Collection<ModelElement> endElements, final String name, final Icon icon) {
+    private Action createPathAction(final ModelElement startElement, final SimpleMetaPath path2create, final Collection<ModelElement> endElements, final String name, final Icon icon) {
         return new AbstractAction(name, icon) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 Class<? extends ModelElement> startClass = path2create.getStartClass();
                 Class<? extends ModelElement> endClass = path2create.getEndClass();
                 GraphDocument doc = getDoc();
-                ModelElement lastSelected = doc.getLastSelected().getElement();
-                if (!startClass.isAssignableFrom(lastSelected.getClass())) {
+                ModelElement realStartElement = startElement;
+                if (realStartElement == null) {
+                    ElementContainer lastSelected = doc.getLastSelected();
+                    realStartElement = lastSelected.getElement();
+                }
+                Class<? extends ModelElement> realStartElementClass = realStartElement.getClass();
+                if (!startClass.isAssignableFrom(realStartElementClass)) {
                     return;
                 }
                 for (ModelElement me : endElements) {
-                    if (lastSelected == me || !endClass.isAssignableFrom(me.getClass())) {
+                    if (realStartElement == me) {
+                        continue;
+                    }
+                    Class<? extends ModelElement> meClass = me.getClass();
+                    if (!endClass.isAssignableFrom(meClass)) {
                         continue;
                     }
                     GDCollection gdcoll = doc.getCollection();
                     boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
-                    doc.createPath(lastSelected, me, path2create, STANDARD_PID);
+                    doc.createPath(realStartElement, me, path2create, STANDARD_PID);
                     gdcoll.setAutomaticMode(lastAutomaticMode);
                 }
             }
