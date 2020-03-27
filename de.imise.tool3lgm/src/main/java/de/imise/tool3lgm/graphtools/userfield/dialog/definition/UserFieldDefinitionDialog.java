@@ -25,10 +25,13 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.AbstractInputPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.FormatPanel;
 import de.imise.tool3lgm.graphtools.userfield.dialog.definition.panel.FormulaPanel;
@@ -115,24 +118,31 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
 
         //Label mit dem Namen und der Art des zu bearbeitenden Feldes
         StringBuilder sb = new StringBuilder();
-        sb.append(getResString("attribute"));
+        String label = getResString("attribute");
+        sb.append(label);
         sb.append(":  ");
-        if (MetaModel.isNodeType(userField.getTargetClass())) {
-            sb.append(getResString(userField.getTargetClass().getSimpleName()));
+        Class<? extends UserFieldTarget> targetClass = userField.getTargetClass();
+        MetaModel metaModel = definitions.getMetaModel();
+        ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+        if (MetaModel.isNodeType(targetClass)) {
+            Class<? extends Node> nodeClass = targetClass.asSubclass(Node.class);
+            String displayableClassName = elementsNameBuilder.getDisplayableName(nodeClass);
+            sb.append(displayableClassName);
         } else {
-            if (MetaModel.isEdgeType(userField.getTargetClass())) {
-                MetaModel metaModel = definitions.getMetaModel();
-                ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
-                sb.append(elementsNameBuilder.getMetaAssociationName(userField.getTargetClass().asSubclass(Edge.class), Direction.FORWARD, ConnectionState.DOUBLE, true, true));
+            if (MetaModel.isEdgeType(targetClass)) {
+                Class<? extends Edge> edgeClass = targetClass.asSubclass(Edge.class);
+                sb.append(elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD, ConnectionState.DOUBLE, true, true));
             } else if (userField.isGlobalOrFormat()) {
                 sb.append(UserFieldDefinitions.getDisplayableGlobalFieldIdentifierName());
             }
 
         }
         sb.append("  ");
-        sb.append(getResString("attribute_typ"));
+        label = getResString("attribute_typ");
+        sb.append(label);
         sb.append(":  ");
-        sb.append(CostingUtil.getDisplayableStyleName(userField.getStyle()));
+        Style style = userField.getStyle();
+        sb.append(CostingUtil.getDisplayableStyleName(style));
         JLabel topLabel = new JLabel(sb.toString());
         topLabel.setFont(topLabel.getFont().deriveFont(14f).deriveFont(Font.BOLD));
         pane.add(topLabel, gbc);
@@ -144,8 +154,6 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         gbc.weighty = 1.0;
         pane.add(nameDescripPanel, gbc);
         gbc.weighty = 0.0;
-
-        UserField.Style style = userField.getStyle();
 
         //Kennzahl
         if (style == UserField.Style.CLASSIFICATION_NUMBER) {
