@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ConsistencyCheckSectionMetaPath;
 
 /**
  * @author AXS (22.03.2020)
@@ -23,10 +23,10 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll) {
         ArrayList<AbstractConsistencyError> errors = new ArrayList<>();
         MetaModel metaModel = gdcoll.getMetaModel();
-        Collection<SectionMetaPath> consistencyConditionMissingConnectedElementsMetaPaths = metaModel.getConsistencyConditionMissingConnectedElementsMetaPaths();
+        Collection<ConsistencyCheckSectionMetaPath> consistencyConditionMissingConnectedElementsMetaPaths = metaModel.getConsistencyConditionMissingConnectedElementsMetaPaths();
         LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
         //for every of the SectionMetaPaths with a consistency condition
-        for (SectionMetaPath consistencyConditionSectionMetaPath : consistencyConditionMissingConnectedElementsMetaPaths) {
+        for (ConsistencyCheckSectionMetaPath consistencyConditionSectionMetaPath : consistencyConditionMissingConnectedElementsMetaPaths) {
             //get start element class of thsi metapath = element class which must have these connections to be valid
             Class<? extends ModelElement> startClass = consistencyConditionSectionMetaPath.getStartClass();
             //get all of the elements of the path start class
@@ -34,7 +34,7 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
             //for every of these elements
             for (ModelElement me : possibleInconsistentElements) {
                 //the first sub metapath of the SectionMetaPath describes the connection to the needed elements -> get the first
-                AbstractMetaPath metaPathToNeededElements = consistencyConditionSectionMetaPath.getFirstSubMetaPath();
+                AbstractMetaPath metaPathToNeededElements = consistencyConditionSectionMetaPath.getFirstSubMetaPathToConnectableElements();
                 //get the elements which should be connected over the other subpaths too
                 Collection<ModelElement> neededElements = MetaPathFunctions.getConnectedElements(me, metaPathToNeededElements);
                 //if there are needed elements

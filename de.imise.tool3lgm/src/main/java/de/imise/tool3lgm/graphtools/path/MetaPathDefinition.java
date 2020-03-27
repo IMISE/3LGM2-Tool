@@ -23,6 +23,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
@@ -402,7 +403,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      *         the elements which *are* connected. This is relevant to generate an error
      *         description with the elements which should be connected to solve the problem.
      */
-    public Collection<SectionMetaPath> getConsistencyConditionMissingConnectedElementsMetaPaths() {
+    public Collection<ConsistencyCheckSectionMetaPath> getConsistencyConditionMissingConnectedElementsMetaPaths() {
         return ImmutableList.of();
     }
 

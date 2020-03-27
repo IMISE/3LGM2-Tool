@@ -5,6 +5,7 @@ import java.util.Collection;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.path.meta.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
 
 /**
@@ -23,7 +24,7 @@ public class MissingPathError extends AbstractPathError {
      * @param gdcoll
      * @param missingElements
      */
-    public MissingPathError(final ModelElement me, final SectionMetaPath metaPath, final GDCollection gdcoll, final Collection<ModelElement> missingElements) {
+    public MissingPathError(final ModelElement me, final ConsistencyCheckSectionMetaPath metaPath, final GDCollection gdcoll, final Collection<ModelElement> missingElements) {
         super(me, metaPath, gdcoll);
         this.missingElements = missingElements;
     }
@@ -40,8 +41,8 @@ public class MissingPathError extends AbstractPathError {
     }
 
     @Override
-    public SectionMetaPath getMetaPath() {
-        return (SectionMetaPath) errorField;
+    public ConsistencyCheckSectionMetaPath getMetaPath() {
+        return (ConsistencyCheckSectionMetaPath) errorField;
     }
 
     /**

@@ -17,6 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
@@ -209,15 +210,17 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     /////////////////////////////////////
 
     @Override
-    public Collection<SectionMetaPath> getConsistencyConditionMissingConnectedElementsMetaPaths() {
+    public Collection<ConsistencyCheckSectionMetaPath> getConsistencyConditionMissingConnectedElementsMetaPaths() {
         SimpleMetaPath consistencyConditionSubMetaPath1 = smp(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
         SimpleMetaPath consistencyConditionSubMetaPath2 = smp(IheActorInstance.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-        SectionMetaPath consistencyConditionMetaPathActorInstanceMustBeGroupedWith = new SectionMetaPath("PATH_IheActorInstance_mustBeGroupedWith_IheActor", consistencyConditionSubMetaPath1, consistencyConditionSubMetaPath2);
+        ConsistencyCheckSectionMetaPath consistencyConditionMetaPathActorInstanceMustBeGroupedWith = new ConsistencyCheckSectionMetaPath("PATH_IheActorInstance_mustBeGroupedWith_IheActor", consistencyConditionSubMetaPath1,
+                consistencyConditionSubMetaPath2);
 
         //der folgende MetePafd muss als UND-interpretierter SectionMetaPath implementiert werden, da die Fehler bei dieser Impelementierung verschwinden, sobald ein Element zugeweisen wurde (ODER-interpretierter SectionMetaPath)
         SimpleMetaPath consistencyConditionSubMetaPath3 = smp(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
         SimpleMetaPath consistencyConditionSubMetaPath4 = smp(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-        SectionMetaPath consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances = new SectionMetaPath("PATH_ApplicationSystem_needsGroupingOf_IheActorInstances", consistencyConditionSubMetaPath3, consistencyConditionSubMetaPath4);
+        ConsistencyCheckSectionMetaPath consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances = new ConsistencyCheckSectionMetaPath("PATH_ApplicationSystem_needsGroupingOf_IheActorInstances", consistencyConditionSubMetaPath3,
+                consistencyConditionSubMetaPath4);
 
         return ImmutableList.of(consistencyConditionMetaPathActorInstanceMustBeGroupedWith);//, consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances);
 

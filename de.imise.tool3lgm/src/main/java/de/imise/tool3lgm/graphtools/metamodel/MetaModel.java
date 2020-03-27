@@ -52,9 +52,9 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
-import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -272,7 +272,7 @@ public final class MetaModel implements MetaModelSpecific {
      * Metapaths which are used to ensure model consistency. This paths say that a model element must be connected
      * over this SectionMetaPaths with the same elements.
      */
-    private final Collection<SectionMetaPath> consistencyConditionMissingConnectedElementsMetaPaths;
+    private final Collection<ConsistencyCheckSectionMetaPath> consistencyConditionMissingConnectedElementsMetaPaths;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException //
@@ -2120,7 +2120,7 @@ public final class MetaModel implements MetaModelSpecific {
     /**
      * @return
      */
-    public Collection<SectionMetaPath> getConsistencyConditionMissingConnectedElementsMetaPaths() {
+    public Collection<ConsistencyCheckSectionMetaPath> getConsistencyConditionMissingConnectedElementsMetaPaths() {
         return consistencyConditionMissingConnectedElementsMetaPaths;
     }
 
