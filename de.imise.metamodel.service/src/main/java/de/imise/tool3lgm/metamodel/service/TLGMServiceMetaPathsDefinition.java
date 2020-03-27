@@ -102,6 +102,12 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     @Override
     public Collection<SimpleMetaPath> getCreatablePaths() {
         SimpleMetaPath metaPath1 = smp(ApplicationSystem.class, IheActor.class, "PATH_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
+        //        SimpleMetaPath metaPath2 = smp(IheActorInstance.class, IheActor.class, "PATH_IheActorInstance_ApplicationSystem_IheActor", ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class,
+        //                IheActor_IheActorInstance_Edge.class);
+        //        return ImmutableList.of(metaPath1, metaPath2);
+        //das folgende muss in die Resourcen, sollte man den Pfad oben mal schrf schalten (bisher nur deutsch)
+        //        PATH_IheActorInstance_ApplicationSystem_IheActor_f      muss gruppiert werden mit
+        //        PATH_IheActorInstance_ApplicationSystem_IheActor_b      wird zur Gruppierung benötigt von
         return ImmutableList.of(metaPath1);
     }
 
