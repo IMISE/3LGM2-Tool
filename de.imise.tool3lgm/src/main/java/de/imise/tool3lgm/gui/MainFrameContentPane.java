@@ -584,6 +584,11 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
 
     @Override
     public void internalFrameDeactivated(final InternalFrameEvent e) {
+        //without the following (usally redundant) assignment sometimes activeFrame is null here
+        //and this throws an exception. Usally only the deactivated frame can be active Frame
+        if (activateFame == null) {
+            activeFrame = (AbstractInternalFrame) e.getInternalFrame();
+        }
         GraphDocument doc = activeFrame.getGraphDocument();
         doc.removeClosedTransactionsListener(internalFrameToolbarManager);
         activeFrame = null;
