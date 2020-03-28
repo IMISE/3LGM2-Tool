@@ -106,6 +106,7 @@
     <!-- http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheTransaction -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheTransaction">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#usesActor"/>
         <rdfs:domain rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <rdfs:range rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <rdfs:comment xml:lang="en">Convention: Only &quot;invoking&quot; is modeled! The &quot;reacting&quot; counterpart could be derived, later.</rdfs:comment>
@@ -128,6 +129,7 @@
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheTransaction"/>
+        <rdfs:label>ITI Transactions</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -400,6 +402,7 @@
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#lab">
         <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iheTransaction"/>
+        <rdfs:label>LAB Transactions</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -459,6 +462,18 @@
     
 
 
+    <!-- http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#mustBeGroupedWith">
+        <rdfs:subPropertyOf rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#usesActor"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
+        <rdfs:comment xml:lang="en">Convention: Only &quot;must be grouped with&quot; is modeled! The &quot;is required for grouping of&quot; counterpart could be derived, later.</rdfs:comment>
+        <rdfs:label xml:lang="en">must be grouped with</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#provides -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#provides">
@@ -487,6 +502,16 @@
     <!-- http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#toDo -->
 
     <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#toDo"/>
+    
+
+
+    <!-- http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#usesActor -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#usesActor">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#IHEConcept"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
+    </owl:ObjectProperty>
     
 
 
@@ -672,6 +697,7 @@
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA"/>
         <lgm2ihe:iti-20 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_ARR</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system unit that receives and collects audit records from multiple systems. </terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Audit Record Repository (ATNA)</rdfs:label>
@@ -684,6 +710,9 @@
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_AUDIT_CONSUMER">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA"/>
+        <lgm2ihe:iti-81 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR"/>
+        <lgm2ihe:iti-82 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_AUDIT_CONSUMER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Search for syslog and ATNA audit messages based upon queries using Syslog metadata and ATNA audit message content. Subsequent processing is not defined. </terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Audit Consumer (ATNA)</rdfs:label>
@@ -697,6 +726,7 @@
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA"/>
         <lgm2ihe:iti-20 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_AUDIT_RECORD_FORWARDER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This actor filters audit records that have been received and forwards selected audit records to an Audit Record Repository. Added to the ATNA profile in Sept 2015 in CP-ITI-872</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Audit Record Forwarder (ATNA)</rdfs:label>
@@ -711,6 +741,7 @@
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA"/>
         <lgm2ihe:iti-19 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <lgm2ihe:iti-20 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_SA</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The difference between the Secure Node and the Secure Application is the extent to which the underlying operating system and other environment are secured. A Secure Node includes all aspects of user authentication, file system protections, and operating environment security. The Secure Application is a product that does not include the operating environment. The Secure Application provides security features only for the application features. See section 9.7 for the relationships among a Secure Node, Secure Application, and other actors. </terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Secure Application (ATNA)</rdfs:label>
@@ -725,6 +756,7 @@
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA"/>
         <lgm2ihe:iti-19 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <lgm2ihe:iti-20 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_ARR"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">ATNA_SN</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system unit that validates the identity of any user and of any other node, and determines whether or not access to the system for this user and information exchange with the other node is allowed. Maintains the correct time.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Secure Node (ATNA)</rdfs:label>
@@ -1223,6 +1255,7 @@ PIX_MANAGER</ontology:abbreviation>
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIX"/>
         <lgm2ihe:iti-9 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIX_PAT_IDENTITY_X_REF_MGR"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <ontology:abbreviation>PIX_PAT_IDENTITY_CONSUMER</ontology:abbreviation>
         <terms:description>This actor allows a system in a Patient Identification Domain to find out the identification of a patient in a different Patient Identification Domain by using the services of a Patient Identity Cross-Reference Manager Actor.</terms:description>
         <rdfs:label>Patient Identifier Cross-reference Consumer (PIX)</rdfs:label>
@@ -1237,6 +1270,7 @@ PIX_MANAGER</ontology:abbreviation>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIX"/>
         <lgm2ihe:iti-30 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIX_PAT_IDENTITY_X_REF_MGR"/>
         <lgm2ihe:iti-8 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIX_PAT_IDENTITY_X_REF_MGR"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <ontology:abbreviation>PIX_PAT_IDENTITY_SRC</ontology:abbreviation>
         <terms:description>Each Patient Identification Domain requires this Actor to assign patient identities and to notify a Patient Identity Cross-reference Manager Actor of all events related to patient identification (creation, update, merge, etc.). For example, the Registration (ADT) Actor defined by the radiology Scheduled Workflow Profile would likely be a Patient Identity Source.</terms:description>
         <rdfs:label>Patient Identity Source (PIX)</rdfs:label>
@@ -1256,6 +1290,7 @@ PIX_MANAGER</ontology:abbreviation>
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIX"/>
         <lgm2ihe:iti-10 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIX_PAT_IDENTITY_CONSUMER"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <ontology:abbreviation>PIX_PAT_IDENTITY_X_REF_MGR</ontology:abbreviation>
         <terms:description>Serves a well-defined set of Patient Identification Domains. Based on information provided by in each Patient Identification Domain by a Patient Identification Source Actor, it manages the cross-referencing of patient identifiers across Patient Identification Domains.</terms:description>
         <rdfs:label>Patient Identity Cross-reference Manager (PIX)</rdfs:label>
@@ -1465,6 +1500,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_ADMINISTRATOR">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR"/>
+        <lgm2ihe:iti-57 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDR_DOC_ADMINISTRATOR</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Administrator is an actor capable of updating and/or removing metadata from the Document Registry. This actor may also be capable of removing associated documents from the Document Repository.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Document Administrator (XDR)</rdfs:label>
@@ -1477,6 +1513,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDR_DOC_RECIPIENT</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system that receives documents and metadata sent by another actor.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Document Recipient (XDR)</rdfs:label>
@@ -1490,6 +1527,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR"/>
         <lgm2ihe:iti-41 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDR_DOC_SOURCE</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Source is the producer and publisher of documents and metadata.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Document Source (XDR)</rdfs:label>
@@ -1502,6 +1540,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_METADATA_LTD_DOC_SOURCE">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDR_METADATA_LTD_DOC_SOURCE</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Metadata-Limited Document Source sends documents and metadata similar to a Document Source but is limited in the quantity of metadata it is able to provide.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Metadata-Limited Document Source (XDR)</rdfs:label>
@@ -1527,6 +1566,8 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD_CONTENT_CONSUMER">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDS-SD_CONTENT_CONSUMER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Content Consumer consumes content in a content integration profile</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Content Consumer (XDS-SD)</rdfs:label>
@@ -1539,6 +1580,8 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD_CONTENT_CREATOR">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_SOURCE"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDS-SD_CONTENT_CREATOR</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Content Creator creates content in a content integration profile</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Content Creator (XDS-SD)</rdfs:label>
@@ -1567,11 +1610,21 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b"/>
+        <lgm2ihe:iti-18 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY"/>
+        <lgm2ihe:iti-57 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <lgm2ihe:status>Trial Implementation</lgm2ihe:status>
         <ontology:abbreviation>XDSB_DOC_ADMINISTRATOR</ontology:abbreviation>
         <terms:description>The Document Administrator actor supports metadata update by issuing the Update Document Set transaction [ITI-57] and Delete Document Set [ITI-61 ] transaction to the Document Registry actor.</terms:description>
         <rdfs:label>Document Administrator (XDS.b)</rdfs:label>
     </owl:NamedIndividual>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_ADMINISTRATOR"/>
+        <owl:annotatedProperty rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-18"/>
+        <owl:annotatedTarget rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY"/>
+        <saref4ee:optionalSlot rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">optional</saref4ee:optionalSlot>
+    </owl:Axiom>
     
 
 
@@ -1584,6 +1637,8 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <lgm2ihe:iti-43 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY"/>
         <lgm2ihe:iti-43 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_EMBED_REPOS"/>
         <lgm2ihe:iti-43 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_ON_DEMAND_DOC_SOURCE"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation>XDSB_DOC_CONSUMER</ontology:abbreviation>
         <terms:description>The Document Consumer Actor queries a Document Registry Actor for documents meeting certain criteria, and retrieves selected documents from one or more Document Repository actors.</terms:description>
         <rdfs:label>Document Consumer (XDS.b)</rdfs:label>
@@ -1596,6 +1651,8 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation>XDSB_DOC_REGISTRY</ontology:abbreviation>
         <terms:description>The Document Registry Actor maintains metadata about each registered document in a document entry. This includes a link to the Document in the Repository where it is stored. The Document Registry responds to queries from Document Consumer actors about documents meeting specific criteria. It also enforces some healthcare specific technical policies at the time of document registration.</terms:description>
         <rdfs:label>Document Registry (XDS.b)</rdfs:label>
@@ -1609,6 +1666,8 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b"/>
         <lgm2ihe:iti-42 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation>XDSB_DOC_REPOSITORY</ontology:abbreviation>
         <terms:description>The Document Repository is responsible for both the persistent storage of these documents as well as for their registration with the appropriate Document Registry. It assigns a URI to documents for subsequent retrieval by a Document Consumer.</terms:description>
         <rdfs:label>Document Repository (XDS.b)</rdfs:label>
@@ -1622,6 +1681,8 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b"/>
         <lgm2ihe:iti-41 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation>XDSB_DOC_SOURCE</ontology:abbreviation>
         <terms:description>The Document Source is the producer and publisher of documents and metadata.</terms:description>
         <rdfs:label>Document Source (XDS.b)</rdfs:label>
@@ -1635,6 +1696,10 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b"/>
         <lgm2ihe:iti-42 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REPOSITORY"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE"/>
         <ontology:abbreviation>XDSB_EMBED_REPOS</ontology:abbreviation>
         <terms:description>The Integrated Document Source / Repository is an XDS combination of Document Source and Document Repository that does not expose the interface between the Source and Repository. That is, this Source only publishes documents to its own Repository. It does register documents with a Document Registry</terms:description>
         <rdfs:label>Integrated Document Source / Repository (XDS.b)</rdfs:label>
@@ -1648,6 +1713,8 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b"/>
         <lgm2ihe:iti-61 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation>XDSB_ON_DEMAND_DOC_SOURCE</ontology:abbreviation>
         <terms:description>The On-Demand Document Source is the producer and publisher of On-Demand Documents. This actor registers On-Demand Document Entries with the Document Registry and responds to Retrieve Document Set transactions with a document reflecting current information for the entry requested.</terms:description>
         <rdfs:label>On-Demand Document Source (XDS.b)</rdfs:label>
@@ -1668,6 +1735,8 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <lgm2ihe:iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS.b"/>
         <lgm2ihe:iti-44 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY"/>
         <lgm2ihe:iti-8 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_REGISTRY"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
+        <lgm2ihe:mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation>XDSB_PAT_IDENTITY_SRC</ontology:abbreviation>
         <terms:description>Each Patient Identification Domain requires this Actor to assign patient identities and to notify a Patient Identity Cross-reference Manager Actor of all events related to patient identification (creation, update, merge, etc.). For example, the Registration (ADT) Actor defined by the radiology Scheduled Workflow Profile would likely be a Patient Identity Source.</terms:description>
         <rdfs:label>Patient Identity Source (XDS.b)</rdfs:label>
