@@ -83,9 +83,10 @@ public class HTMLConverter {
                 case '\"':
                     sb.append("&quot;");
                     continue;
-                case '\'':
-                    sb.append("&apos;");
-                    continue;
+                //Apostrophe dürfen nicht mehr kodiert werden. Java HTML erkennt das "&apos;" nicht und stellt das als Text dar.
+                //                case '\'':
+                //                    sb.append("&apos;");
+                //                    continue;
                 case '\\':
                     int nextC = c + 1;
                     if (nextC < l) {
