@@ -18,6 +18,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 
+import de.imise.util.OperatingSystem;
 import de.imise.util.SimpleResourceHandler;
 
 /**
@@ -287,7 +288,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
      */
     public static final void registerMacShortcuts(final JTextComponent textComponent) {
         InputMap im = textComponent.getInputMap();
-        if (System.getProperty("os.name", "").toUpperCase().startsWith("MAC")) {
+        if (OperatingSystem.isMacOs()) {
             im.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
             im.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
             im.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
