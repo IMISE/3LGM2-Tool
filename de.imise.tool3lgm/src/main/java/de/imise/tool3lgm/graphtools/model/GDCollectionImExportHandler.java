@@ -141,7 +141,8 @@ public final class GDCollectionImExportHandler {
         bitmaps = new HashSet<>(sourceGDColl.getIconTable().size());
         Set<UserField> userFields = new HashSet<>();
 
-        sourceGDColl.resolveCopyDependencies(importSzenarios, elements, bitmaps, userFields);
+        CopyDependencyResolver copyDependencyResolver = gdcoll.getCopyDependencyResolver();
+        copyDependencyResolver.resolveCopyDependencies(importSzenarios, elements, bitmaps, userFields);
         UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
         for (UserField uf : userFields) {
             userFieldDefinitions.add(uf);
@@ -243,7 +244,8 @@ public final class GDCollectionImExportHandler {
             Set<String> iconHashes = new HashSet<>(iconTable.size());
             // HashStrings aller benutzdefinierten Eigenschaftsfelder, die mit kopiert werden müssen
             Set<UserField> userFields = new HashSet<>();
-            gdcoll.resolveCopyDependencies(szenarios, elements, iconHashes, userFields);
+            CopyDependencyResolver copyDependencyResolver = gdcoll.getCopyDependencyResolver();
+            copyDependencyResolver.resolveCopyDependencies(szenarios, elements, iconHashes, userFields);
             ToolXMLWriter.writeExport(gdcoll, file, szenarios, elements, userFields, iconHashes);
         }
     }

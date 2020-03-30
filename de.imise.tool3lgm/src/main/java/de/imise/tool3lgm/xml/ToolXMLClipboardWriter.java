@@ -16,6 +16,7 @@ import javax.xml.stream.XMLStreamException;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -54,7 +55,8 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         Set<UserField> userFields = new HashSet<>();
         LGMGraphDocument lgmDoc = (LGMGraphDocument) selectedDoc;
         List<ElementContainer> sortedSelection = lgmDoc.getSortedSelection();
-        gdcoll.resolveCopyDependencies(sortedSelection, copyElements, userFields);
+        CopyDependencyResolver copyDependencyResolver = gdcoll.getCopyDependencyResolver();
+        copyDependencyResolver.resolveCopyDependencies(sortedSelection, copyElements, userFields);
 
         writeStartDocument();
         writeStartElement("tool3lgm_clipboard"); //<tool3lgm_clipboard>

@@ -304,7 +304,8 @@ public class LGMGraphDocument extends GraphDocument {
 
         List<ModelElement> sourceElements = new ArrayList<>();
         HashSet<UserField> sourceUserFields = new HashSet<>();
-        sourceCollection.resolveCopyDependencies(sourceDoc.selectedContainer, sourceElements, sourceUserFields);
+        CopyDependencyResolver copyDependencyResolver = sourceCollection.getCopyDependencyResolver();
+        copyDependencyResolver.resolveCopyDependencies(sourceDoc.selectedContainer, sourceElements, sourceUserFields);
         //Liste aller Kanten, bei denen das das eine Endelement gerade kopiert werden soll und das
         //andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt hinzufügen
         addSplittedSourceEdgesToCopy(sourceElements, targetDoc);
