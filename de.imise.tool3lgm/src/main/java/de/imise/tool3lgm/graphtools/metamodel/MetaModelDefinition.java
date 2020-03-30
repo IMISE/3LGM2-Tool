@@ -94,22 +94,13 @@ public abstract class MetaModelDefinition implements Serializable {
     // CopyDependencies //
     //////////////////////
 
-    private CopyDependencies copyDependencies;
-
-    public final CopyDependencies getCopyDependencies() {
-        if (copyDependencies == null) {
-            copyDependencies = createCopyDependencies();
-        }
-        return copyDependencies;
-    }
-
     /**
-     * Erzeugt standardmäßig eine 'leere' CopyDependency
+     * Unterklassen können diese Funktion überschreiben und damit eine eigene Definition anlegen.
      *
-     * @return 'leere' CopyDependency
+     * @return
      */
-    protected CopyDependencies createCopyDependencies() {
-        return new CopyDependencies();
+    public Class<? extends CopyDependencies> getCopyDependenciesClass() {
+        return CopyDependencies.class;
     }
 
     ////////////////////////

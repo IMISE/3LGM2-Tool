@@ -81,6 +81,17 @@ public final class ElementaryMetaPathHandler {
     }
 
     /**
+     * @param startClass
+     * @param edgeClass
+     * @return
+     */
+    public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {
+        Direction direction = metaModel.isStartClass(edgeClass, startClass) ? Direction.FORWARD : Direction.BACKWARD;
+        ElementaryMetaPath returnMetaPath = getMetaPath(startClass, edgeClass, direction);
+        return returnMetaPath;
+    }
+
+    /**
      * Gibt einen ElementaryMetaPath zurück, der bis auf die Start- und Zielklasse identisch ist mit dem übergebenen Elementarpfad. Sind die Start-
      * und Zielklassen dieselben wie beim übergebenen Elementarpfad, so kommt dieser unverändert zurück. Startklasse des zurück gegebenen Pfades ist
      * die speziellere Klasse aus der übergebenen startClass und der Startklasse des übergebenen Elementarpfades. Endklasse analog.

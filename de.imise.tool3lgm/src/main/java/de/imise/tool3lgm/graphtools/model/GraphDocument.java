@@ -4994,11 +4994,10 @@ public abstract class GraphDocument extends ElementSelectionContext {
         MetaModel metaModel = getMetaModel();
         Node node = nc.getNode();
         Class<? extends Node> nodeClass = node.getClass();
-        for (Class<? extends ModelElement> c : metaModel.getCopyDependencies(nodeClass)) {
-            List<ElementContainer> dependentObjects = node.getConnectedContainers(c, this);
-            for (int j = 0; j < dependentObjects.size(); j++) {
-                NodeContainer dependentContainer = (NodeContainer) dependentObjects.get(j);
-                Node dependentNode = dependentContainer.getNode();
+        for (ElementaryMetaPath elementaryMetaPath : metaModel.getCopyDependencies(nodeClass)) {
+            Collection<ElementContainer> dependentObjects = MetaPathFunctions.getConnectedContainer(node, this, elementaryMetaPath);
+            for (ElementContainer dependentContainer : dependentObjects) {
+                ModelElement dependentNode = dependentContainer.getElement();
                 if (!isMyElement(dependentNode)) {
                     continue;
                 }

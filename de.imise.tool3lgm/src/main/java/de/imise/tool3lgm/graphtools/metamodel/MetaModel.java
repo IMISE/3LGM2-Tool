@@ -396,12 +396,12 @@ public final class MetaModel implements MetaModelSpecific {
         generateNameClasses = CollectionUtils.ensureImmutable(metaModelDefinition.getGenerateNameClasses());
         importableNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getImportableNodes());
         uniqueNodes = getUniqueNodes(); //ist schon immutable
-        copyDependencies = metaModelDefinition.getCopyDependencies();
         analysesDefinition = getInstance(metaModelDefinition.getAnalysesDefinitionClass());
         extrasActionsDefinition = getInstance(metaModelDefinition.getExtrasActionsDefinitionClass());
         errorSolutionLibrary = getInstance(metaModelDefinition.getErrorSolutionLibraryClass());
         // Die MetaPathsDefinition und die darauffolgend zu initialisierenden Maps
         metaPathsDefinition = getInstance(metaModelDefinition.getMetaPathsDefinitionClass());
+        copyDependencies = getInstance(metaModelDefinition.getCopyDependenciesClass());
         edgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getConditionMetaPaths());
         instanciationEdgeToAdditionalInstanciationMetaPaths = CollectionUtils.ensureImmutable(getInstanciationEdgeToAdditionalInstanciationNonAbstractMetaPaths(metaPathsDefinition.getInstanciationEdgeToAdditionalInstanciationMetaPaths()));
         elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatablePaths()));
@@ -2173,7 +2173,7 @@ public final class MetaModel implements MetaModelSpecific {
 
     // die weiteren zum Metamodell gehörigen Definitionen
 
-    public Collection<Class<? extends ModelElement>> getCopyDependencies(final Class<? extends ModelElement> elementClass) {
+    public Collection<ElementaryMetaPath> getCopyDependencies(final Class<? extends ModelElement> elementClass) {
         return copyDependencies.get(elementClass);
     }
 

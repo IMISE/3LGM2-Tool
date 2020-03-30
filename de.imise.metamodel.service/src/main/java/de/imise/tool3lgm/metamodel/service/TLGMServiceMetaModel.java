@@ -157,8 +157,8 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
     //////////////////////
 
     @Override
-    public final CopyDependencies createCopyDependencies() {
-        return new TLGMServiceCopyDependencies();
+    public final Class<? extends CopyDependencies> getCopyDependenciesClass() {
+        return TLGMServiceCopyDependencies.class;
     }
 
     ////////////////////////

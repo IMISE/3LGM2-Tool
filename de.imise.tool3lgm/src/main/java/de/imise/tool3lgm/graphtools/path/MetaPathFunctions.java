@@ -176,6 +176,16 @@ public class MetaPathFunctions {
      * @param me
      * @param doc
      * @param metaPath
+     * @return
+     */
+    public static final Collection<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final AbstractMetaPath metaPath) {
+        return getConnectedContainer(me, doc, metaPath, false);
+    }
+
+    /**
+     * @param me
+     * @param doc
+     * @param metaPath
      * @param forlast
      * @return
      */

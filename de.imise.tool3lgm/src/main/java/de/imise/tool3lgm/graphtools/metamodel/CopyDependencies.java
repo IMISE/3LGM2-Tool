@@ -13,28 +13,69 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
 
 /**
  * @author AXS (15.08.2017)
  */
-public class CopyDependencies {
+public class CopyDependencies extends MetaModelSpecificAdapter {
 
-    private final Map<Class<? extends ModelElement>, Collection<Class<? extends ModelElement>>> copyDependencies = new HashMap<>();
+    /**
+     *
+     */
+    private final Map<Class<? extends ModelElement>, Collection<ElementaryMetaPath>> copyDependencies = new HashMap<>();
 
-    private static final Collection<Class<? extends ModelElement>> EMPTY_COLLECTION = ImmutableSet.of();
+    /**
+     *
+     */
+    private static final Collection<ElementaryMetaPath> EMPTY_COLLECTION = ImmutableSet.of();
 
+    /**
+     *
+     */
     private final Set<Class<? extends ModelElement>> avoidDuplicatesClasses = new HashSet<>();
+
+    /**
+     * @param metaModel
+     */
+    public CopyDependencies(final MetaModel metaModel) {
+        super(metaModel);
+    }
 
     //////////////////////
     // copyDependencies //
     //////////////////////
 
-    protected final void set(final Class<? extends ModelElement> elementClass, @SuppressWarnings("unchecked") final Class<? extends ModelElement>... copyClasses) {
-        copyDependencies.put(elementClass, ImmutableSet.copyOf(copyClasses));
+    /**
+     * @param elementClass
+     * @param copyElementaryMetaPaths
+     */
+    protected final void set(final Class<? extends ModelElement> elementClass, @SuppressWarnings("unchecked") final Class<? extends Edge>... copyEdgeClasses) {
+        MetaModel metaModel = getMetaModel();
+        ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
+        ImmutableSet.Builder<ElementaryMetaPath> copyElementaryMetaPathsBuilder = ImmutableSet.builder();
+        for (Class<? extends Edge> edgeClass : copyEdgeClasses) {
+            ElementaryMetaPath elementaryMetaPath = emph.getMetaPath(elementClass, edgeClass);
+            copyElementaryMetaPathsBuilder.add(elementaryMetaPath);
+        }
+        copyDependencies.put(elementClass, copyElementaryMetaPathsBuilder.build());
     }
 
-    public final Collection<Class<? extends ModelElement>> get(final Class<? extends ModelElement> elementClass) {
-        Collection<Class<? extends ModelElement>> immutableCollection = copyDependencies.get(elementClass);
+    /**
+     * @param elementClass
+     * @param copyElementaryMetaPaths
+     */
+    protected final void set(final Class<? extends ModelElement> elementClass, final ElementaryMetaPath... copyElementaryMetaPaths) {
+        copyDependencies.put(elementClass, ImmutableSet.copyOf(copyElementaryMetaPaths));
+    }
+
+    /**
+     * @param elementClass
+     * @return
+     */
+    public final Collection<ElementaryMetaPath> get(final Class<? extends ModelElement> elementClass) {
+        Collection<ElementaryMetaPath> immutableCollection = copyDependencies.get(elementClass);
         return immutableCollection == null ? EMPTY_COLLECTION : immutableCollection;
     }
 
@@ -52,6 +93,10 @@ public class CopyDependencies {
         avoidDuplicatesClasses.add(elementClass);
     }
 
+    /**
+     * @param elementClass
+     * @return
+     */
     public final boolean avoidDuplicates(final Class<? extends ModelElement> elementClass) {
         if (Edge.class.isAssignableFrom(elementClass)) {
             Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);

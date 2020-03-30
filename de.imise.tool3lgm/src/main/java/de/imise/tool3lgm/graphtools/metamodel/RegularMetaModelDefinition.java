@@ -48,7 +48,7 @@ public interface RegularMetaModelDefinition {
     // CopyDependencies //
     //////////////////////
 
-    public CopyDependencies getCopyDependencies();
+    public Class<? extends CopyDependencies> getCopyDependenciesClass();
 
     ////////////////////////
     // AnalysisDefinition //

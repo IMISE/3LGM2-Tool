@@ -135,8 +135,8 @@ public class TLGMOriginalMetaModel extends MetaModelDefinition implements Regula
     //////////////////////
 
     @Override
-    public final CopyDependencies createCopyDependencies() {
-        return new TLGMOriginalCopyDependencies();
+    public Class<? extends CopyDependencies> getCopyDependenciesClass() {
+        return TLGMOriginalCopyDependencies.class;
     }
 
     ////////////////////////
