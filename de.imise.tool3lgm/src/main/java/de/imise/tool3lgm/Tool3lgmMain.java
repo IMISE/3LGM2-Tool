@@ -58,7 +58,7 @@ public class Tool3lgmMain {
      * @return all start parameters
      */
     public static List<String> getStartParameters() {
-        return Arrays.asList(allStartParameters);
+        return allStartParameters == null ? new ArrayList<>() : Arrays.asList(allStartParameters);
     }
 
     /**
