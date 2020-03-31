@@ -1130,11 +1130,24 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * Gibt eine alphabetisch sortierte Liste aller ElementContainer zurück, die mit diesem Node übder die angegebene Kantenart verbundenen sind.
      *
      * @param doc Node aus diesem Dokument
-     * @param searchEdgeClass Art der zu suchenden verbindungen
+     * @param searchEdgeClass Art der zu suchenden Verbindungen
      * @return List mit ElementContainer der gefundenen Node
      */
     public final List<ElementContainer> getConnectedContainers(final GraphDocument doc, final Class<? extends Edge> searchEdgeClass) {
         return getConnectedContainers(ModelElement.class, doc, searchEdgeClass);
+    }
+
+    /**
+     * Gibt eine alphabetisch sortierte Liste aller ElementContainer zurück, die mit diesem Node übder die angegebene Kantenart in der
+     * angegebenen Richtung verbundenen sind.
+     *
+     * @param doc Node aus diesem Dokument
+     * @param searchEdgeClass Art der zu suchenden Verbindungen
+     * @param direction Richtung der Kante
+     * @return List mit ElementContainer der gefundenen Node
+     */
+    public final List<ElementContainer> getConnectedContainers(final GraphDocument doc, final Class<? extends Edge> searchEdgeClass, final Direction direction) {
+        return getConnectedContainers(ModelElement.class, doc, searchEdgeClass, direction, true);
     }
 
     /**
@@ -1640,6 +1653,18 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      */
     public final List<ModelElement> getConnectedElements(final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge> edgeClass, final boolean alphabetical) {
         return getConnectedElements(searchElementClass, edgeClass, null, alphabetical);
+    }
+
+    /**
+     * Gibt alle mit diesem <code>ModelElement</code> verbundenen <code>ModelElement</code>s des Klasse <code>searchElementClass</code> zurueck.
+     *
+     * @param searchElementClass
+     * @param edgeClass
+     * @param direction
+     * @return
+     */
+    public final List<ModelElement> getConnectedElements(final Class<? extends Edge> edgeClass, final Direction direction) {
+        return getConnectedElements(ModelElement.class, edgeClass, direction, false);
     }
 
     /**

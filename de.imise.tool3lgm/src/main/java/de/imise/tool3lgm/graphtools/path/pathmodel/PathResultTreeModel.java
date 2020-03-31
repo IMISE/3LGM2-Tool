@@ -279,7 +279,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      *            nur einmal enthalten.
      * @return
      */
-    public final Collection<ModelElement> getConnectedElements(final boolean multiple) {
+    public final List<ModelElement> getConnectedElements(final boolean multiple) {
         return getConnectedElements(multiple, false);
     }
 
@@ -293,10 +293,13 @@ public class PathResultTreeModel extends DefaultTreeModel {
      *            lang, kommem die Ausgangselemente zurück
      * @return
      */
-    public final Collection<ModelElement> getConnectedElements(final boolean multiple, final boolean forlast) {
-        Collection<ModelElement> returnCollection = multiple ? new ArrayList<>() : new HashSet<>();
+    public final List<ModelElement> getConnectedElements(final boolean multiple, final boolean forlast) {
+        List<ModelElement> returnCollection = new ArrayList<>();
         for (PathResultTreeNode node : getCompletePathLeafs()) {
-            returnCollection.add(forlast ? node.getStartElement() : node.getEndElement());
+            ModelElement me = forlast ? node.getStartElement() : node.getEndElement();
+            if (multiple || !returnCollection.contains(me)) {
+                returnCollection.add(me);
+            }
         }
         return returnCollection;
     }
@@ -306,7 +309,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      *
      * @return
      */
-    public Collection<ModelElement> getConnectedElements() {
+    public List<ModelElement> getConnectedElements() {
         return getConnectedElements(false, false);
     }
 
@@ -316,7 +319,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      *
      * @return
      */
-    public Collection<ModelElement> getForlastConnectedElements() {
+    public List<ModelElement> getForlastConnectedElements() {
         return getConnectedElements(false, true);
     }
 
@@ -328,7 +331,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      *            nur einmal enthalten.
      * @return
      */
-    public final Collection<ElementContainer> getConnectedContainer(final GraphDocument doc) {
+    public final List<ElementContainer> getConnectedContainer(final GraphDocument doc) {
         return getConnectedContainer(doc, false);
     }
 
@@ -343,12 +346,12 @@ public class PathResultTreeModel extends DefaultTreeModel {
      *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
      * @return
      */
-    public final Collection<ElementContainer> getConnectedContainer(final GraphDocument doc, final boolean forlast) {
-        Collection<ElementContainer> returnCollection = new HashSet<>();
+    public final List<ElementContainer> getConnectedContainer(final GraphDocument doc, final boolean forlast) {
+        List<ElementContainer> returnCollection = new ArrayList<>();
         for (PathResultTreeNode node : getCompletePathLeafs()) {
             ModelElement endElement = forlast ? node.getStartElement() : node.getEndElement();
             ElementContainer ec = endElement.getContainer(doc);
-            if (ec != null) {
+            if (ec != null && !returnCollection.contains(ec)) {
                 returnCollection.add(ec);
             }
         }
