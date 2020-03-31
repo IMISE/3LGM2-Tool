@@ -563,7 +563,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *
      * @param component
      */
-    protected void addMouseActions(final Component component) {
+    protected final void addMouseActions(final Component component) {
         // Das unten auskommentierte hatte ich (AXS) mal gebaut, damit auf Comboboxen auch das Kontextmenü funktioniert. Das klappt aber auf dem MAC gar nicht
         // und es reicht der untere Aufruf völlig -> Testen ob das auch auf Windows so geht und wenn ja, dann das auskommentierte Löschen. Das muss aber mal
         // nötig gewesen sein, sonst hätte ich das nicht geschrieben. Evtl. auch Änderung durch neue Java-Version!?
