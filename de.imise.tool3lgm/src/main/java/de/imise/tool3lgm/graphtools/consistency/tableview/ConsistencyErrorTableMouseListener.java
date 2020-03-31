@@ -74,10 +74,13 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         errors = new ArrayList<>();
         selectedErrorElements.clear();
         for (int r : rows) {
-            NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) table.getValueAt(r, ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal());
+            int errorColumnIndex = ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal();
+            Object errorValue = table.getValueAt(r, errorColumnIndex);
+            NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) errorValue;
             AbstractConsistencyError error = errContainer.getObject();
             errors.add(error);
-            selectedErrorElements.add(error.getModelElement());
+            ModelElement me = error.getModelElement();
+            selectedErrorElements.add(me);
         }
         JPopupMenu popupMenu = getPopupMenu();
         popupMenu.show(table, e.getX(), e.getY());
