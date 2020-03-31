@@ -348,6 +348,14 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     /**
+     * @param direction
+     * @return
+     */
+    public final boolean hasDirection(final Direction direction) {
+        return this.direction == direction;
+    }
+
+    /**
      * @return the connectionState
      */
     public ConnectionState getConnectionState() {
