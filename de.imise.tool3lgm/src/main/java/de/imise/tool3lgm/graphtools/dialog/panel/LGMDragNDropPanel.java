@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
 import javax.swing.JTree;
+import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
@@ -171,8 +172,9 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
                 if (n > 2) {
                     for (int i = 0; i < n; i++) {
                         JTree tree = dndActionChains[i].getSrcTree();
-                        if (tree != focusedTree) {
-                            tree.removeSelectionPaths(tree.getSelectionPaths());
+                        if (tree != null && tree != focusedTree) {
+                            TreePath[] selectionPaths = tree.getSelectionPaths();
+                            tree.removeSelectionPaths(selectionPaths);
                         }
                     }
                 }

@@ -150,8 +150,6 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
             buttonpanel1 = createBetweenTreesButtonPanel(loaddAction, loremoveAction);
             buttonpanel2 = createBetweenTreesButtonPanel(luaddAction, luremoveAction);
 
-            initTreeListenerAndDragNDrop();
-
             //alles dafür tun, dass beide Dialogseiten gleich breit sind. Das wird über die PreferredSize der breitesten Komponente gesteuert.
             SwingUtils.fillToSameLength(lolabel, lulabel, rolabel, rulabel);
             SwingUtils.setSamePreferredSize(lolabel, lulabel, rolabel, rulabel);
@@ -159,6 +157,9 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
 
             showFullDialog(true);
         }
+
+        initTreeListenerAndDragNDrop();
+
     }
 
     protected String getEdgeDisplayName(final ConnectionState connectionState) {
