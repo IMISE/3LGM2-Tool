@@ -23,9 +23,6 @@ import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.meta.ConsistencyCheckSectionMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.util.NamedObjectContainer;
@@ -148,35 +145,15 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
      * @param menu
      */
     private void addConnectMenuItemsForMissingPathErrors(final JPopupMenu menu) {
+        //only if one error is selected in the table -> add the create path menu items
         if (errors.size() == 1) {
             AbstractConsistencyError consistencyError = errors.get(0);
             if (consistencyError instanceof MissingPathError) {
                 MissingPathError missingPathError = (MissingPathError) consistencyError;
-                ModelElement missingPathStartElement = missingPathError.getModelElement();
-                ConsistencyCheckSectionMetaPath metaPath = missingPathError.getMetaPath();
-                SimpleMetaPath secondSubMetaPathToConnectedElements = metaPath.getSecondSubMetaPathToConnectedElements();
-                List<ElementaryMetaPath> elementaryMetaPaths = secondSubMetaPathToConnectedElements.getElementaryMetaPaths();
-                int createPathStartIndex = 0;
-                for (int i = 0; i < elementaryMetaPaths.size() - 1; i++) {
-                    ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
-                    ElementaryMetaPath nextElementaryMetaPath = elementaryMetaPaths.get(i + 1);
-                    ElementaryMetaPath nextElementaryMetaPathOtherDirection = nextElementaryMetaPath.getOtherDirection();
-                    if (elementaryMetaPath.equals(nextElementaryMetaPathOtherDirection)) {
-                        createPathStartIndex = i + 1;
-                    }
-                }
-                if (createPathStartIndex > 0) {
-                    SimpleMetaPath subMetaPath = secondSubMetaPathToConnectedElements.getSubPath(0, createPathStartIndex);
-                    if (subMetaPath.isSingleConnection()) {
-                        Collection<ModelElement> connected = MetaPathFunctions.getConnectedElements(missingPathStartElement, subMetaPath);
-                        if (!connected.isEmpty()) {
-                            missingPathStartElement = connected.iterator().next();
-                            secondSubMetaPathToConnectedElements = secondSubMetaPathToConnectedElements.getSubPath(createPathStartIndex);
-                        }
-                    }
-                }
+                ModelElement missingPathStartElement = missingPathError.getMissingPathStartElement();
+                SimpleMetaPath errorCorrectingCreatableMetaPath = missingPathError.getErrorCorrectingCreatableMetaPath();
                 Collection<ModelElement> missingElements = missingPathError.getMissingElements();
-                Static.contextGenerator.addConnectMenuItems(menu, missingPathStartElement, secondSubMetaPathToConnectedElements, missingElements);
+                Static.contextGenerator.addConnectMenuItems(menu, missingPathStartElement, errorCorrectingCreatableMetaPath, missingElements);
             }
 
         }
