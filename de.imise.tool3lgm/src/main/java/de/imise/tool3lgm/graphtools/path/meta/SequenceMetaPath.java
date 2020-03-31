@@ -430,12 +430,4 @@ public class SequenceMetaPath extends ListMetaPath {
         return invalidityCheckResult;
     }
 
-    @Override
-    protected boolean isForwardRecursive() {
-        Class<? extends ModelElement> endClass = getEndClass();
-        List<AbstractMetaPath> metaPaths = getSubMetaPaths();
-        AbstractMetaPath firstMetaPath = metaPaths.get(0);
-        return firstMetaPath.isStartClass(endClass);
-    }
-
 }

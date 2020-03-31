@@ -29,10 +29,10 @@ public class SectionMetaPath extends ParallelMetaPath {
     }
 
     @Override
-    protected boolean isForwardRecursive() {
+    protected boolean canBeRecursive() {
         //bei Schnittmengenpfaden müssen alle enthaltenen Pfade rekursiv sein, damit es Ergebniselemente geben kann
         for (AbstractMetaPath metaPath : subMetaPaths) {
-            if (!metaPath.isForwardRecursive()) {
+            if (!metaPath.canBeRecursive()) {
                 return false;
             }
         }

@@ -67,7 +67,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * If <code>true</code> and the metapath can be recursive (ends with an element type that can be the start element type) then the path is
      * interpreted as recursive.
      */
-    private boolean recursive;
+    private boolean interpretAsRecursive;
 
     /** the metamodel */
     protected final MetaModel metaModel;
@@ -236,26 +236,30 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
     /**
      * @return <code>true</code>, if the metapath is applicable to the endelements as startelements otherwise <code>false</code>
      */
-    public final boolean isRecursive() {
-        return recursive;
+    public final boolean isInterpretAsRecursive() {
+        return interpretAsRecursive;
     }
 
     /**
-     * @param recursive the recursive to set
+     * @param
      */
-    public void setRecursive(final boolean recursive) {
-        this.recursive = recursive;
-        if (recursive) {
-            this.recursive = isForwardRecursive();
+    public final void setInterpretAsRecursive(final boolean interpretAsRecursive) {
+        this.interpretAsRecursive = interpretAsRecursive;
+    }
+
+    /**
+     * @return <code>true</code> if at least one endElement class can be the startElement class
+     *         of this metaPath
+     */
+    protected boolean canBeRecursive() {
+        Set<Class<? extends ModelElement>> endClasses = getEndClasses();
+        for (Class<? extends ModelElement> endClass : endClasses) {
+            if (isStartClass(endClass)) {
+                return true;
+            }
         }
+        return false;
     }
-
-    /**
-     * @param startClass
-     * @param endClass
-     * @return
-     */
-    protected abstract boolean isForwardRecursive();
 
     /**
      * Repräsentiert den Validitätszustand eines MetaPath. Ist der invalidReason <code>null</code>, dann gilt der MetaPath als valide, sonst nicht.

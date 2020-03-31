@@ -64,10 +64,10 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     }
 
     @Override
-    protected boolean isForwardRecursive() {
+    protected boolean canBeRecursive() {
         //rekursiv, wenn der erste MetaPath (der die Elemente festlegt, von denen die der folgenden MetaPfade abgezogen werden) rekursiv ist
         AbstractMetaPath firstMetaPath = subMetaPaths.get(0);
-        return firstMetaPath.isRecursive();
+        return firstMetaPath.canBeRecursive();
     }
 
     @Override

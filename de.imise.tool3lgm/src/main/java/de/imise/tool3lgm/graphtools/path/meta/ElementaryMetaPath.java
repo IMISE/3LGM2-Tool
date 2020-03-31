@@ -588,7 +588,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     }
 
     @Override
-    public boolean isForwardRecursive() {
+    public boolean canBeRecursive() {
         return metaModel.isRecursiveForElementClass(edgeClass, endClass);
     }
 

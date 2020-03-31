@@ -140,9 +140,9 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      *
      * @param metaPathIndex
      */
-    public final void setRecursive(final int metaPathIndex, final boolean recursive) {
+    public final void setInterpretAsRecursive(final int metaPathIndex, final boolean recursive) {
         AbstractMetaPath metaPath = subMetaPaths.get(metaPathIndex);
-        metaPath.setRecursive(recursive);
+        metaPath.setInterpretAsRecursive(recursive);
     }
 
     /**

@@ -157,7 +157,10 @@ public class CopyDependencyResolver {
         Collection<ElementaryMetaPath> copyDependencies = metaModel.getCopyDependencies(elementClass);
         for (ElementaryMetaPath copyDependentElementaryMetaPath : copyDependencies) {
             Class<? extends ModelElement> copyDependentClass = copyDependentElementaryMetaPath.getEndClass();
-            if (ignoreClass == null || !copyDependentClass.isAssignableFrom(ignoreClass) || copyDependentElementaryMetaPath.isRecursive()) {
+            boolean resolveCopyDependenciesOfConnected = ignoreClass == null;
+            resolveCopyDependenciesOfConnected = resolveCopyDependenciesOfConnected || copyDependentElementaryMetaPath.canBeRecursive();
+            resolveCopyDependenciesOfConnected = resolveCopyDependenciesOfConnected || !copyDependentClass.isAssignableFrom(ignoreClass);
+            if (resolveCopyDependenciesOfConnected) {
                 Collection<ElementContainer> connectedContainers = MetaPathFunctions.getConnectedContainer(me, mainDoc, copyDependentElementaryMetaPath);
                 for (ElementContainer ec : connectedContainers) {
                     ModelElement connected = ec.getElement();
