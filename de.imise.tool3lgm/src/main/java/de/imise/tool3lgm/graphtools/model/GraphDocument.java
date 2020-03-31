@@ -3963,8 +3963,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
         boolean createSubPath = false;
         if (lastPathStepIndex > 0 && endElement != null) {
             ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(lastPathStepIndex);
-            if (!lastElementaryMetaPath.hasDirectionForward()) {
-                if (lastElementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
+            if (lastElementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
+                if (!lastElementaryMetaPath.hasDirection(InstanciationEdge.MASTER_TO_INSTANCE_DIRECTION)) {
                     Class<? extends Edge> edgeClass = lastElementaryMetaPath.getEdgeClass();
                     NodeContainer createdInstanceContainer = createInstance(this, edgeClass.asSubclass(InstanciationEdge.class), endElement, pid);
                     ModelElement createdInstance = createdInstanceContainer.getElement();

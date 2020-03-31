@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath.Type;
@@ -234,9 +235,13 @@ public class SequenceMetaPath extends ListMetaPath {
         if (elementaryMetaPaths.isEmpty()) {
             return false;
         }
+        if (elementaryMetaPaths.size() == 1) {
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(0);
+            return elementaryMetaPath.isCreatable(checkCreateEndElement);
+        }
         Class<? extends ModelElement> startClass = getStartClass();
         Class<? extends ModelElement> endClass = getEndClass();
-        if (!metaModel.isEditable(startClass, endClass)) {
+        if (!metaModel.isEditable(startClass)) {
             return false;
         }
         // prüfen, ob die Zwischenelemente angelegt werden können
@@ -247,13 +252,9 @@ public class SequenceMetaPath extends ListMetaPath {
             if (i == 0 && type == Type.END_WITH_EDGE || type == Type.START_WITH_EDGE) {
                 //das muss ja schon da sein, weil es vom StartElement ausgeht -> also anlegbar
                 continue;
-            } else if (i == maxElementaryMetaPathsIndex && !checkCreateEndElement && (type == Type.END_WITH_EDGE || type == Type.START_WITH_EDGE)) {
-                //wenn das endElement nicht angelegt werden soll und der letzte Elementarpfad vom Start- oder EndElement
-                //einer Kante auf diese Kante geht, dann müssen ja auch das Start- und EndElement dieser Kante bereits
-                //existieren und dieser Schritt braucht nicht grüft werden
-                continue;
-                //nur Elementarpfade mit einer Kante dazwischen sind anlegbar, wenn die Kantenklasse nicht abstract ist
-            } else if (!elementaryMetaPath.isCreatable(false)) {
+            }
+            //nur Elementarpfade mit einer Kante dazwischen sind anlegbar, wenn die Kantenklasse nicht abstract ist
+            if (!elementaryMetaPath.isCreatable(false)) {
                 return false;
             }
             ElementaryMetaPath nextElementaryMetaPath = elementaryMetaPaths.get(i + 1);
@@ -266,6 +267,29 @@ public class SequenceMetaPath extends ListMetaPath {
         ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(maxElementaryMetaPathsIndex);
         if (checkCreateEndElement) {
             return metaModel.isCreatable(endClass, lastElementaryMetaPath, null);
+        }
+        Type type = lastElementaryMetaPath.getType();
+        if (type == Type.END_WITH_EDGE || type == Type.START_WITH_EDGE) {
+            //wenn das endElement nicht angelegt werden soll und der letzte Elementarpfad vom Start- oder EndElement
+            //einer Kante auf diese Kante geht, dann müssen ja auch das Start- und EndElement dieser Kante bereits
+            //existieren und dieser Schritt braucht nicht grüft werden
+            return true;
+        }
+        //wenn die letzte Kante eine InstanciationEdge und der Richtung des letzten Elementarmetapfades
+        //aber von der Instanz auf den Master ist, dann ist dieser letzte Elementarmetapfad trotzdem
+        //anlegbar, weil die Funktion createPath(...) in GDCollection dann einfach den Master ableitet
+        //wodurch die Insatnz von alleine entsteht und dann der Pfad nur bis zum vorletzten in Vorwärtsrichtung
+        //angelegt wird. Theoretisch müsste man solange von hinten prüfen (und nicht nur 1x), ob man den Pfad
+        //auch rückwärts durch Instanziierung erzeugen kann, bis man einen Elementarmetapfad findet, der keine
+        //Rückwärtsinstanziierung mehr ist. Im Moment reicht es aber, nur einen Rückwärtsinstanziierungsschritt
+        //zu gehen.
+        if (lastElementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
+            if (!lastElementaryMetaPath.hasDirection(InstanciationEdge.MASTER_TO_INSTANCE_DIRECTION)) {
+                return true;
+            }
+        }
+        if (!metaModel.isEditable(endClass)) {
+            return false;
         }
         return lastElementaryMetaPath.isCreatable(false);
     }
