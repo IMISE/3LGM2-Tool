@@ -1584,6 +1584,14 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     /**
      *
      */
+    private void deselect() {
+        GraphDocument doc = getDoc();
+        doc.deselect(ec, STANDARD_PID);
+    }
+
+    /**
+     *
+     */
     private void left_node_noshift_none() {
         select();
     }
@@ -1621,7 +1629,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      */
     private void left_node_shift_nodes() {
         if (ec.isSelected()) {
-            select();
+            deselect();
         } else {
             addToSelection();
         }
@@ -1682,12 +1690,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      *
      */
     private void left_edge_shift_nodes() {
-        if (ec.isSelected()) {
-            GraphDocument doc = getDoc();
-            doc.deselect(ec, STANDARD_PID);
-        } else {
-            addToSelection();
-        }
+        left_node_shift_nodes();
     }
 
     /**
