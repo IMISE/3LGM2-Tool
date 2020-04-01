@@ -36,6 +36,7 @@ import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.gui.menu.RegularContextGenerator;
 import de.imise.tool3lgm.gui.menu.TemplateContextGenerator;
+import de.imise.util.OperatingSystem;
 import de.imise.util.PluginUtils;
 import de.imise.util.Sys;
 import de.imise.util.swing.dialog.OutputDialog;
@@ -47,6 +48,8 @@ import de.imise.util.swing.dialog.ProgressDialog;
  * @author AXS
  */
 public class Static {
+
+    public static final boolean IS_MAC_OS = OperatingSystem.isMacOs();
 
     static Tool3lgm tool;
 

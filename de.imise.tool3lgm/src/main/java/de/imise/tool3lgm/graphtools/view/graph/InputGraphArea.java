@@ -46,6 +46,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.gui.menu.RegularContextGenerator;
 import de.imise.util.ReflectionUtils;
+import de.imise.util.event.InputEvents;
 
 /**
  * COMMENTME
@@ -404,14 +405,17 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     // --- Methoden der Rueckberechnung von Koordinaten --- Ende ---
 
     // Methoden des MouseListener-Interfaces --- Anfang ---
+
     @Override
     public final void mouseClicked(final MouseEvent e) {
-        if (e.getClickCount() <= 1) {
+        int clickCount = e.getClickCount();
+        if (clickCount <= 1) {
             return;
         }
-        if ((e.getModifiers() & (InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)) != 0) {
-            contextGenerator.setControlled(true);
-        }
+
+        boolean controlKeyPressed = InputEvents.isOperatingSystemDependentCTRLorCMDdown(e);
+        contextGenerator.setControlled(controlKeyPressed);
+
         ElementContainer ka = getMouseOverElementContainer();
         // ElementContainer ka = null;
         //
@@ -434,8 +438,10 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         if (ka != null) {
             szenario.select(ka, 0);
         }
+        int modifiers = e.getModifiers();
         // Verknüpftes Teilmodell öffnen
-        if ((e.getModifiers() & InputEvent.ALT_MASK) != 0) {
+        int modifiersMask = modifiers & InputEvent.ALT_MASK;
+        if (modifiersMask != 0) {
             // Component source, int id, long when, int modifiers,
             // int keyCode, char keyChar, int keyLocation
             dispatchEvent(new KeyEvent(this, KeyEvent.KEY_RELEASED, 0l, 0, KeyEvent.VK_ALT, KeyEvent.CHAR_UNDEFINED, KeyEvent.KEY_LOCATION_STANDARD));
@@ -455,6 +461,11 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         }
     }
 
+    /**
+     * @param x
+     * @param y
+     * @return
+     */
     private final boolean isInPage(final int x, final int y) {
         int halfPageWidth = layerWidth / 2;
         int halfPageHeight = layerHeight / 2;
@@ -463,9 +474,10 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     @Override
     public void mousePressed(final MouseEvent e) {
-        if ((e.getModifiers() & (InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK)) != 0) {
-            contextGenerator.setControlled(true);
-        }
+
+        boolean controlKeyPressed = InputEvents.isOperatingSystemDependentCTRLorCMDdown(e);
+        contextGenerator.setControlled(controlKeyPressed);
+
         xin = e.getX();
         yin = e.getY();
         computeRealCoordinates(true);
