@@ -1134,11 +1134,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             // nur Kanten selektiert
             if (doc.isSelectedOnlyEdges()) {
                 if (left_button && !controlled) {
-                    left_nodehand_noshift_edges();
+                    left_nodehand_noctrl_edges();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_nodehand_shift_edges();
+                    left_nodehand_ctrl_edges();
                     return;
                 }
                 return;
@@ -1146,22 +1146,22 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             // nur Node selektiert
             if (doc.isSelectedOnlyNodes()) {
                 if (left_button && !controlled) {
-                    left_nodehand_noshift_nodes();
+                    left_nodehand_noctrl_nodes();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_nodehand_shift_nodes();
+                    left_nodehand_ctrl_nodes();
                     return;
                 }
                 return;
             }
             // Node und Kanten selektiert
             if (left_button && !controlled) {
-                left_nodehand_noshift_multi();
+                left_nodehand_noctrl_multi();
                 return;
             }
             if (left_button && controlled) {
-                left_nodehand_shift_multi();
+                left_nodehand_ctrl_multi();
                 return;
             }
             return;
@@ -1187,11 +1187,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 // nichts selektiert
                 if (!doc.isSelection()) {
                     if (left_button && !controlled) {
-                        left_node_noshift_none();
+                        left_node_noctrl_none();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_node_shift_none();
+                        left_node_ctrl_none();
                         return;
                     }
                     if (right_button) {
@@ -1203,11 +1203,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 // nur Kanten selektiert
                 if (doc.isSelectedOnlyEdges()) {
                     if (left_button && !controlled) {
-                        left_node_noshift_edges();
+                        left_node_noctrl_edges();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_node_shift_edges();
+                        left_node_ctrl_edges();
                         return;
                     }
                     if (right_button) {
@@ -1219,11 +1219,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 // nur Node selektiert
                 if (doc.isSelectedOnlyNodes()) {
                     if (left_button && !controlled) {
-                        left_node_noshift_nodes();
+                        left_node_noctrl_nodes();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_node_shift_nodes();
+                        left_node_ctrl_nodes();
                         return;
                     }
                     if (right_button) {
@@ -1234,11 +1234,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 }
                 // Node und Kanten selektiert
                 if (left_button && !controlled) {
-                    left_node_noshift_multi();
+                    left_node_noctrl_multi();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_node_shift_multi();
+                    left_node_ctrl_multi();
                     return;
                 }
                 if (right_button) {
@@ -1250,11 +1250,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 // nichts selektiert
                 if (!doc.isSelection()) {
                     if (left_button && !controlled) {
-                        left_edge_noshift_none();
+                        left_edge_noctrl_none();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_edge_shift_none();
+                        left_edge_ctrl_none();
                         return;
                     }
                     if (right_button) {
@@ -1266,11 +1266,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 // nur Kanten selektiert
                 if (doc.isSelectedOnlyEdges()) {
                     if (left_button && !controlled) {
-                        left_edge_noshift_edges();
+                        left_edge_noctrl_edges();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_edge_shift_edges();
+                        left_edge_ctrl_edges();
                         return;
                     }
                     if (right_button) {
@@ -1282,11 +1282,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 // nur Node selektiert
                 if (doc.isSelectedOnlyNodes()) {
                     if (left_button && !controlled) {
-                        left_edge_noshift_nodes();
+                        left_edge_noctrl_nodes();
                         return;
                     }
                     if (left_button && controlled) {
-                        left_edge_shift_nodes();
+                        left_edge_ctrl_nodes();
                         return;
                     }
                     if (right_button) {
@@ -1297,11 +1297,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 }
                 // Node und Kanten selektiert
                 if (left_button && !controlled) {
-                    left_edge_noshift_multi();
+                    left_edge_noctrl_multi();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_edge_shift_multi();
+                    left_edge_ctrl_multi();
                     return;
                 }
                 if (right_button) {
@@ -1316,11 +1316,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             // nichts selektiert
             if (!doc.isSelection()) {
                 if (left_button && !controlled) {
-                    left_layer_noshift_none();
+                    left_layer_noctrl_none();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_layer_shift_none();
+                    left_layer_ctrl_none();
                     return;
                 }
                 if (right_button) {
@@ -1332,11 +1332,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             // nur Kanten selektiert
             if (doc.isSelectedOnlyEdges()) {
                 if (left_button && !controlled) {
-                    left_layer_noshift_edges();
+                    left_layer_noctrl_edges();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_layer_shift_edges();
+                    left_layer_ctrl_edges();
                     return;
                 }
                 if (right_button) {
@@ -1348,11 +1348,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             // nur Node selektiert
             if (doc.isSelectedOnlyNodes()) {
                 if (left_button && !controlled) {
-                    left_layer_noshift_nodes();
+                    left_layer_noctrl_nodes();
                     return;
                 }
                 if (left_button && controlled) {
-                    left_layer_shift_nodes();
+                    left_layer_ctrl_nodes();
                     return;
                 }
                 if (right_button) {
@@ -1363,11 +1363,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             }
             // Node und Kanten selektiert
             if (left_button && !controlled) {
-                left_layer_noshift_multi();
+                left_layer_noctrl_multi();
                 return;
             }
             if (left_button && controlled) {
-                left_layer_shift_multi();
+                left_layer_ctrl_multi();
                 return;
             }
             if (right_button) {
@@ -1378,11 +1378,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         }
         //_general
         if (left_button && !controlled) {
-            left_noshift_outside();
+            left_noctrl_outside();
             return;
         }
         if (left_button && controlled) {
-            left_shift_outside();
+            left_ctrl_outside();
             return;
         }
     }
@@ -1393,7 +1393,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     // richtig programmiert werden, der Grossteil wird nix machen oder auf andere
     // Methoden zeigen, die dasselbe machen
 
-    // Namensgebung: Button_ObjektTyp_Shift_Selection
+    // Namensgebung: Button_ObjektTyp_Ctrl_Selection
 
     private void deselectAll() {
         GraphDocument doc = getDoc();
@@ -1403,68 +1403,68 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     /**
      *
      */
-    private void left_shift_outside() {
+    private void left_ctrl_outside() {
     }
 
     /**
      *
      */
-    private void left_noshift_outside() {
+    private void left_noctrl_outside() {
         deselectAll();
     }
 
     /**
      *
      */
-    private void left_layer_noshift_none() {
+    private void left_layer_noctrl_none() {
         deselectAll();
     }
 
     /**
      *
      */
-    private void left_layer_noshift_nodes() {
+    private void left_layer_noctrl_nodes() {
         deselectAll();
     }
 
     /**
      *
      */
-    private void left_layer_noshift_edges() {
+    private void left_layer_noctrl_edges() {
         deselectAll();
     }
 
     /**
      *
      */
-    private void left_layer_noshift_multi() {
+    private void left_layer_noctrl_multi() {
         deselectAll();
     }
 
     /**
      *
      */
-    private void left_layer_shift_none() {
+    private void left_layer_ctrl_none() {
     }
 
     /**
      *
      */
-    private void left_layer_shift_nodes() {
+    private void left_layer_ctrl_nodes() {
         deselectAll();
     }
 
     /**
      *
      */
-    private void left_layer_shift_edges() {
+    private void left_layer_ctrl_edges() {
         deselectAll();
     }
 
     /**
      *
      */
-    private void left_layer_shift_multi() {
+    private void left_layer_ctrl_multi() {
     }
 
     /**
@@ -1592,42 +1592,42 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     /**
      *
      */
-    private void left_node_noshift_none() {
+    private void left_node_noctrl_none() {
         select();
     }
 
     /**
      *
      */
-    private void left_node_noshift_nodes() {
+    private void left_node_noctrl_nodes() {
         select();
     }
 
     /**
      *
      */
-    private void left_node_noshift_edges() {
+    private void left_node_noctrl_edges() {
         select();
     }
 
     /**
      *
      */
-    private void left_node_noshift_multi() {
+    private void left_node_noctrl_multi() {
         select();
     }
 
     /**
      *
      */
-    private void left_node_shift_none() {
+    private void left_node_ctrl_none() {
         addToSelection();
     }
 
     /**
      *
      */
-    private void left_node_shift_nodes() {
+    private void left_node_ctrl_nodes() {
         if (ec.isSelected()) {
             deselect();
         } else {
@@ -1638,15 +1638,15 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     /**
      *
      */
-    private void left_node_shift_edges() {
-        left_node_shift_nodes();
+    private void left_node_ctrl_edges() {
+        left_node_ctrl_nodes();
     }
 
     /**
      *
      */
-    private void left_node_shift_multi() {
-        left_node_shift_nodes();
+    private void left_node_ctrl_multi() {
+        left_node_ctrl_nodes();
     }
 
     // Klicks auf die Kanten
@@ -1654,57 +1654,57 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     /**
      *
      */
-    private void left_edge_noshift_none() {
+    private void left_edge_noctrl_none() {
         select();
     }
 
     /**
      *
      */
-    private void left_edge_noshift_nodes() {
+    private void left_edge_noctrl_nodes() {
         select();
     }
 
     /**
      *
      */
-    private void left_edge_noshift_edges() {
+    private void left_edge_noctrl_edges() {
         select();
     }
 
     /**
      *
      */
-    private void left_edge_noshift_multi() {
+    private void left_edge_noctrl_multi() {
         select();
     }
 
     /**
      *
      */
-    private void left_edge_shift_none() {
+    private void left_edge_ctrl_none() {
         addToSelection();
     }
 
     /**
      *
      */
-    private void left_edge_shift_nodes() {
-        left_node_shift_nodes();
+    private void left_edge_ctrl_nodes() {
+        left_node_ctrl_nodes();
     }
 
     /**
      *
      */
-    private void left_edge_shift_edges() {
-        left_edge_shift_nodes();
+    private void left_edge_ctrl_edges() {
+        left_edge_ctrl_nodes();
     }
 
     /**
      *
      */
-    private void left_edge_shift_multi() {
-        left_edge_shift_nodes();
+    private void left_edge_ctrl_multi() {
+        left_edge_ctrl_nodes();
     }
 
     /**
@@ -1767,40 +1767,40 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     /**
      *
      */
-    private void left_nodehand_noshift_nodes() {
+    private void left_nodehand_noctrl_nodes() {
         select();
     }
 
     /**
      *
      */
-    private void left_nodehand_noshift_edges() {
+    private void left_nodehand_noctrl_edges() {
         select();
     }
 
     /**
      *
      */
-    private void left_nodehand_noshift_multi() {
+    private void left_nodehand_noctrl_multi() {
         select();
     }
 
     /**
      *
      */
-    private void left_nodehand_shift_nodes() {
+    private void left_nodehand_ctrl_nodes() {
     }
 
     /**
      *
      */
-    private void left_nodehand_shift_edges() {
+    private void left_nodehand_ctrl_edges() {
     }
 
     /**
      *
      */
-    private void left_nodehand_shift_multi() {
+    private void left_nodehand_ctrl_multi() {
     }
 
     /**
