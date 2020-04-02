@@ -225,7 +225,7 @@ public class ModelConverter {
                     ModelElement targetStartElement = targetMainDoc.findNodeCoded(sourceEdgeStartElementHash);
                     ModelElement targetEndElement = targetMainDoc.findNodeCoded(sourceEdgeEndElementHash);
                     //lege den MetaPfad im Zielmodell an
-                    SimplePath createdPath = targetMainDoc.createSimplePath(targetStartElement, targetEndElement, targetMetaPath, STANDARD_PID);
+                    SimplePath createdPath = targetMainDoc.createSimplePath(targetStartElement, targetEndElement, targetMetaPath, false, STANDARD_PID);
                     //replace the generated 3LGM-hashStrings by derived hashStrings from the source edge or join created elements if the same element (same type with same hash id prefix) already exists
                     ModelConverterUtils.replaceGeneratedHashStringsAndJoinEqualsElements(createdPath, sourceEdgeHash);
                     //nach der Definiton der Umbenennungen die Namen der Elemente in Abhängigkeit von der Source-Edge umbenennen

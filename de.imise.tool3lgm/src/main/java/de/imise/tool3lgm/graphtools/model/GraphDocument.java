@@ -3937,17 +3937,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param startElement
      * @param endElement
      * @param metaPath
-     * @param pid
-     * @return
-     */
-    public final SimplePath createSimplePath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final int pid) {
-        return createSimplePath(startElement, endElement, metaPath, false, pid);
-    }
-
-    /**
-     * @param startElement
-     * @param endElement
-     * @param metaPath
      * @param askNameForNewEndElement
      * @param pid
      * @return
