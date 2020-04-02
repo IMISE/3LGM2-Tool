@@ -575,10 +575,11 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
     public ElementaryMetaPath getLastElementaryMetaPath() {
         List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
         //wenn der Pfad keine einfache Liste von Elementarpfaden ist, dann wird davon ausgegangen, dass das letzte Pfadelement gebraucht wird
-        if (elementaryMetaPaths.isEmpty()) {
+        if (elementaryMetaPaths == null || elementaryMetaPaths.isEmpty()) {
             return null;
         }
-        ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(elementaryMetaPaths.size() - 1);
+        int lastElementaryMetaPathIndex = elementaryMetaPaths.size() - 1;
+        ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(lastElementaryMetaPathIndex);
         return lastElementaryMetaPath;
     }
 
