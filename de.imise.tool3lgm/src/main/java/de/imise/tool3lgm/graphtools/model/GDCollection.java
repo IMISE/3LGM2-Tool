@@ -1470,6 +1470,26 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     //#############################################################################################//
     /////////////////////////////////////////////////////////////////////////////////////////////////
     //START LINK //
+
+    /**
+     * Verbindet die beiden Elemente je nach übergebener Richtung vorwärts oder rückwärts. Alle anderen
+     * link()-Funktionen ohne Richtung verbinden vorwärts.
+     *
+     * @param startElement
+     * @param endElement
+     * @param edgeClass
+     * @param direction
+     * @param pid
+     */
+    public void link(final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
+        //das neue Element mit dem startElement verknüpfen
+        if (direction == Direction.FORWARD) {
+            link(edgeClass, startElement, endElement, false, pid);
+        } else {
+            link(edgeClass, endElement, startElement, false, pid);
+        }
+    }
+
     /**
      * Verbindet die beiden Modellelemente miteinander, wenn noch keine Edge zwischen ihnen existiert.<br>
      *
@@ -1797,6 +1817,24 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             name = doc.getNextNewName(edgeClass);
         }
         return name;
+    }
+
+    /**
+     * Löst die Verbindung zwischen Start- und Endelement in der angegebenen Richtung. Alle anderen
+     * unlink()-Funktionen unlinken vorwärts.
+     *
+     * @param startElement
+     * @param endElement
+     * @param edgeClass
+     * @param direction
+     * @param pid
+     */
+    public void unlink(final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
+        if (direction == Direction.FORWARD) {
+            unlink(startElement, endElement, edgeClass, pid);
+        } else {
+            unlink(endElement, startElement, edgeClass, pid);
+        }
     }
 
     /**

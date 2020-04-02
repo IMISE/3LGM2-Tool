@@ -82,7 +82,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                         ElementContainer ec = (ElementContainer) node.getUserObject();
                         ModelElement me = ec.getElement();
                         ModelElement topLevelMe = getTopLevelModelElement(targetTree);
-                        link(gdcoll, topLevelMe, me, edgeClass, direction, pid);
+                        gdcoll.link(topLevelMe, me, edgeClass, direction, pid);
                     }
                 }
             }
@@ -112,7 +112,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                         ElementContainer ec = (ElementContainer) node.getUserObject();
                         ModelElement me = ec.getElement();
                         ModelElement topLevelModelElement = getTopLevelModelElement(targetTree == null ? srcTree : targetTree);
-                        unlink(gdcoll, topLevelModelElement, me, edgeClass, direction, pid);
+                        gdcoll.unlink(topLevelModelElement, me, edgeClass, direction, pid);
                     }
                 }
             }

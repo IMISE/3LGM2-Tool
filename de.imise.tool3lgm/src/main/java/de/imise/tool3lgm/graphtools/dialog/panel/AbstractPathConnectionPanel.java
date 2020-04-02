@@ -340,7 +340,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             Class<? extends Edge> edgeClass2Create = elementaryMetaPath.getEdgeClass();
             Direction direction = elementaryMetaPath.getDirection();
             for (ModelElement element2Connect : elements2Connect) {
-                link(gdcoll, targetElement, element2Connect, edgeClass2Create, direction, pid);
+                gdcoll.link(targetElement, element2Connect, edgeClass2Create, direction, pid);
             }
         }
     }
@@ -381,43 +381,6 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             }
         }
         gdcoll.setAutomaticMode(lastAutomaticMode);
-    }
-
-    /**
-     * Verbindet die beiden Elemente je nach übergebener Richtung vorwärts oder rückwärts.
-     *
-     * @param gdcoll
-     * @param startElement
-     * @param endElement
-     * @param edgeClass
-     * @param direction
-     * @param pid
-     */
-    protected static void link(final GDCollection gdcoll, final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
-        //das neue Element mit dem startElement verknüpfen
-        if (direction == FORWARD) {
-            gdcoll.link(edgeClass, startElement, endElement, false, pid);
-        } else {
-            gdcoll.link(edgeClass, endElement, startElement, false, pid);
-        }
-    }
-
-    /**
-     * Löst die Verbindung zwischen Start- und Endelement in der angegebenen Richtung
-     *
-     * @param gdcoll
-     * @param startElement
-     * @param endElement
-     * @param edgeClass
-     * @param direction
-     * @param pid
-     */
-    protected static void unlink(final GDCollection gdcoll, final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
-        if (direction == FORWARD) {
-            gdcoll.unlink(startElement, endElement, edgeClass, pid);
-        } else {
-            gdcoll.unlink(endElement, startElement, edgeClass, pid);
-        }
     }
 
     /**

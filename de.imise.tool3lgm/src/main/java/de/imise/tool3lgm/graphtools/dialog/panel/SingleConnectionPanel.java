@@ -309,7 +309,8 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             ModelElement me = ec.getElement();
             List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, lastDirectionInPath);
             for (ModelElement connected : connectedElements) {
-                unlink(gdcoll, me, connected, lastEdgeInPath, lastDirectionInPath, dialog.getTransactionID());
+                int pid = dialog.getTransactionID();
+                gdcoll.unlink(me, connected, lastEdgeInPath, lastDirectionInPath, pid);
             }
         }
     }

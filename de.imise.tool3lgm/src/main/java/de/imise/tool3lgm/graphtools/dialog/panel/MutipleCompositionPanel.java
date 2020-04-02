@@ -172,7 +172,7 @@ public class MutipleCompositionPanel extends AbstractPathConnectionTreePanel {
                         ModelElement topLevelModelElement;
                         topLevelModelElement = getModelElement();
                         GDCollection gdcoll = getGraphDocument().getCollection();
-                        unlink(gdcoll, topLevelModelElement, ec.getElement(), getLastEdgeClassInPath(), MASTER_TO_SLAVE_DIRECTION, getTransactionID());
+                        gdcoll.unlink(topLevelModelElement, ec.getElement(), getLastEdgeClassInPath(), MASTER_TO_SLAVE_DIRECTION, getTransactionID());
                     }
                 }
             }
