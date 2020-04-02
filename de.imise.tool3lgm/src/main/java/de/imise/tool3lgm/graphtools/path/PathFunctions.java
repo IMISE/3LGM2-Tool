@@ -601,7 +601,7 @@ public class PathFunctions {
 
             //das neue Element mit dem startElement verknüpfen. Dast Startelement kann null sein, wenn nur das neue Element angelegt werden soll
             if (startElement != null) {
-                PathFunctions.link(gdcoll, startElement, createdDependent, edgeClassToNewElement, directionToNewElement, pid);
+                gdcoll.link(startElement, createdDependent, edgeClassToNewElement, directionToNewElement, pid);
             }
         }
 
@@ -679,26 +679,6 @@ public class PathFunctions {
         }
         gdcoll.setAutomaticMode(lastAutomaticMode);
         return createdDependent;
-    }
-
-    /**
-     * Verbindet die beiden Elemente je nach übergebener Richtung vorwärts oder rückwärts. Richtung und Kantenklasse ergeben sich aus dem
-     * Elementarpfad.
-     *
-     * @param gdcoll
-     * @param startElement
-     * @param endElement
-     * @param edgeClass
-     * @param direction
-     * @param pid
-     */
-    private static void link(final GDCollection gdcoll, final ModelElement startElement, final ModelElement endElement, final Class<? extends Edge> edgeClass, final Direction direction, final int pid) {
-        //das neue Element mit dem startElement verknüpfen
-        if (direction == FORWARD) {
-            gdcoll.link(edgeClass, startElement, endElement, pid);
-        } else {
-            gdcoll.link(edgeClass, endElement, startElement, pid);
-        }
     }
 
 }
