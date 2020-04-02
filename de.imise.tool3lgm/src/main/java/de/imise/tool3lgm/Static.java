@@ -433,7 +433,7 @@ public class Static {
     public static boolean isDragNDropOnMac() {
         //Ausnahme für Mac-Java-Bug: wenn Dialoge aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
         //Dieser Bug ist nicht zu umgehen.
-        if (System.getProperty("os.name").toLowerCase().contains("mac") && Sys.stackTraceContains(DropTarget.class)) {
+        if (IS_MAC_OS && Sys.stackTraceContains(DropTarget.class)) {
             return true;
         }
         return false;
