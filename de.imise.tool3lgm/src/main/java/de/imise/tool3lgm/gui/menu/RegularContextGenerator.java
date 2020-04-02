@@ -303,7 +303,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
         for (Pair<Class<? extends CompositionEdge>, Class<? extends ModelElement>> slavePair : slavePairs) {
             Class<? extends CompositionEdge> compositionClass = slavePair.getFirstItem();
             JMenuItem item = getItem(slavePair.getSecondItem().getSimpleName(), MODEL_ACTION_CREATE_ADDICTED, doc.getHashString() + " " + me.getHashString() + " " + compositionClass.getSimpleName() + " " + slavePair.getSecondItem().getSimpleName());
-            item.setEnabled(me.countConnections(compositionClass) < metaModel.getMaxMasterToSlaveCardinality(compositionClass));
+            item.setEnabled(me.countConnections(compositionClass) < MetaModel.getMaxMasterToSlaveCardinality(compositionClass));
             items.add(item);
         }
         Alphabetical.sort(items);
@@ -457,7 +457,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             if (!metaModel.isSlaveType(meClass)) {
                 ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
                 for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(meClass)) {
-                    if (metaModel.isInstanciationMaster(edgeClass, meClass)) {
+                    if (MetaModel.isInstanciationMaster(edgeClass, meClass)) {
                         if (newInstanceLabel == null) {
                             newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
                             menu.add(newInstanceLabel);
@@ -610,7 +610,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                             boolean addLinkMenuEntry = false;
 
                             //prüfen, ob die Kante in der aktuellen Richtung hinzugefügt werden soll
-                            if (metaModel.isConnecting(edgeClass, lastSelectedClass, me2Class, edgeDirection)) {
+                            if (MetaModel.isConnecting(edgeClass, lastSelectedClass, me2Class, edgeDirection)) {
                                 if (edgeDirection == Direction.FORWARD) {
                                     addLinkMenuEntry = true;
                                 } else {

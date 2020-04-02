@@ -92,12 +92,11 @@ public final class RedundancyAnalysisDefinitions extends MetaPathDefinition {
             }
             cardinalityDefinition = new CardinalityDefinition();
             cardinalityDefinition.filterNewCardinalities = true;
-            MetaModel metaModel = metaPath.getMetaModel();
             //alle Standardkardinalitäten der Kanten des MetaPfades zur cardinalityDefinition hinzufügen
             for (ElementaryMetaPath elementaryMetaPath : metaPath.getElementaryMetaPaths()) {
                 Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-                cardinalityDefinition.setNewForwardCardinality(edgeClass, metaModel.getForwardCardinality(edgeClass));
-                cardinalityDefinition.setNewBackwardCardinality(edgeClass, metaModel.getBackwardCardinality(edgeClass));
+                cardinalityDefinition.setNewForwardCardinality(edgeClass, MetaModel.getForwardCardinality(edgeClass));
+                cardinalityDefinition.setNewBackwardCardinality(edgeClass, MetaModel.getBackwardCardinality(edgeClass));
             }
         }
 

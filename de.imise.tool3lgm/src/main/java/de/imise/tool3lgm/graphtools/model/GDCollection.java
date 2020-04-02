@@ -1029,7 +1029,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     //der minimalen Kardinalität für diese Kantenart ist, dann muss das verbundene Element auch gelöscht werden
                     //auf Gleichheit muss getestet werden, weil die Edge ja noch nicht wirklich gelöscht ist und somit mitgezählt wird
                     Class<? extends Edge> edgeClass = edge.getClass();
-                    if (elem != null && elem.countConnections(edgeClass) <= metaModel.getMinCardinality(elem.getClass(), edgeClass)) {
+                    if (elem != null && elem.countConnections(edgeClass) <= MetaModel.getMinCardinality(elem.getClass(), edgeClass)) {
                         if (!allElementsToDelete.contains(elem)) {
                             allElementsToDelete.add(elem);
                             dependentDeletedElements.add(elem);
@@ -1314,9 +1314,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public void createInitialSubtypes(final ModelElement me, final int pid) {
         Class<? extends ModelElement> elementClass = me.getClass();
         for (Class<? extends Edge> subTypeEdgeClass : metaModel.getInitialSubtypes(elementClass)) {
-            Class<? extends ModelElement> subType = metaModel.isStartClass(subTypeEdgeClass, elementClass) ? getEndClass(subTypeEdgeClass) : getStartClass(subTypeEdgeClass);
+            Class<? extends ModelElement> subType = MetaModel.isStartClass(subTypeEdgeClass, elementClass) ? getEndClass(subTypeEdgeClass) : getStartClass(subTypeEdgeClass);
             //minimale kardinalität für die Unterelemente
-            int minCardForSubType = metaModel.getMinCardinality(me.getClass(), subTypeEdgeClass);
+            int minCardForSubType = MetaModel.getMinCardinality(me.getClass(), subTypeEdgeClass);
             //bisher verbundene Anzahl von Unterelementen
             List<ModelElement> connectedSubTypes = me.getConnectedElements(subType, subTypeEdgeClass);
             //soviele Unterelemente wie fehlen neu anlegen
@@ -1655,7 +1655,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             return null;
         }
         Class<? extends Edge> edgeClass = edgeClassOrNull == null ? null : edgeClassOrNull.asSubclass(Edge.class);
-        if (edgeClass != null && !metaModel.isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
+        if (edgeClass != null && !MetaModel.isConnecting(edgeClass, startElement.getClass(), endElement.getClass())) {
             return null;
         }
 
@@ -1707,7 +1707,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     edge.setHashString(edgeHash);
                 }
                 ConnectionState connectionState = FORWARD; // wird nur für die DoubleMeaningEdges gebraucht
-                if (!metaModel.isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
+                if (!MetaModel.isConnectingForward(edgeClass, startElement.getClass(), endElement.getClass())) {
                     ModelElement dummy = startElement;
                     startElement = endElement;
                     endElement = dummy;
@@ -1922,7 +1922,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
         Class<? extends ModelElement> me1Class = me1.getClass();
         Class<? extends ModelElement> me2Class = me2.getClass();
-        boolean isDirectionImportent = MetaModel.isDoubleMeaningEdge(edgeClass) || metaModel.isConnecting(edgeClass, me1Class, me2Class) && metaModel.isConnecting(edgeClass, me2Class, me1Class);
+        boolean isDirectionImportent = MetaModel.isDoubleMeaningEdge(edgeClass) || MetaModel.isConnecting(edgeClass, me1Class, me2Class) && MetaModel.isConnecting(edgeClass, me2Class, me1Class);
         if (isDirectionImportent) {
             edges = me1.getEdgesTo(me2, edgeClass, me1EdgeIndex);
         } else {
@@ -2050,7 +2050,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 //edgeTypeBetweenInstances = CommunicationLink_Edge.class
                 Class<? extends Edge> edgeTypeBetweenInstances = edgeTypeBetweenInstancesAsElementClass.asSubclass(Edge.class);
                 //otherInstanceElementClass = InvokingInterface.class
-                Class<? extends ModelElement> otherInstanceElementClass = metaModel.getOther(edgeTypeBetweenInstances, instanceElementClass);
+                Class<? extends ModelElement> otherInstanceElementClass = MetaModel.getOther(edgeTypeBetweenInstances, instanceElementClass);
                 if (otherInstanceElementClass == null) {
                     continue;
                 }

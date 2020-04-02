@@ -86,7 +86,7 @@ public final class ElementaryMetaPathHandler {
      * @return
      */
     public final ElementaryMetaPath getMetaPath(final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass) {
-        Direction direction = metaModel.isStartClass(edgeClass, startClass) ? Direction.FORWARD : Direction.BACKWARD;
+        Direction direction = MetaModel.isStartClass(edgeClass, startClass) ? Direction.FORWARD : Direction.BACKWARD;
         ElementaryMetaPath returnMetaPath = getMetaPath(startClass, edgeClass, direction);
         return returnMetaPath;
     }
@@ -220,7 +220,7 @@ public final class ElementaryMetaPathHandler {
         Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(startClass, endClass);
         Class<? extends Edge> commonSuperClass = null;
         for (Class<? extends Edge> edgeClass : edgeTypes) {
-            if (metaModel.isConnectingForward(edgeClass, startClass, endClass)) {
+            if (MetaModel.isConnectingForward(edgeClass, startClass, endClass)) {
                 if (commonSuperClass == null) {
                     commonSuperClass = edgeClass;
                 } else {

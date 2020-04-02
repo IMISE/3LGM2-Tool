@@ -544,9 +544,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 Class<? extends ModelElement> elementClass = availableMe.getClass();
                 boolean remove = false;
                 if (elementaryMetaPath.getDirection() == FORWARD) {
-                    remove = !metaModel.isEndClass(edgeClass, elementClass);
+                    remove = !MetaModel.isEndClass(edgeClass, elementClass);
                 } else { // if (elementaryMetaPath.getDirection() == BACKWARD) {
-                    remove = !metaModel.isStartClass(edgeClass, elementClass);
+                    remove = !MetaModel.isStartClass(edgeClass, elementClass);
                 }
                 if (remove) {
                     available.remove(i);

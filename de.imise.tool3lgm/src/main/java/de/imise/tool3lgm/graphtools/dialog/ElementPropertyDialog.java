@@ -526,7 +526,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
         }
         MetaModel metaModel = modelElement.getMetaModel();
         Class<? extends ModelElement> meClass = modelElement.getClass();
-        if (!metaModel.isStartOrEndClass(edgeClass, meClass)) { //checken, wenn das Panel aus einer Oberklasse kommt, ob diese Kante in der Unterklasse überhaupt noch vorkommt (siehe removed edges in Metamodel)
+        if (!MetaModel.isStartOrEndClass(edgeClass, meClass)) { //checken, wenn das Panel aus einer Oberklasse kommt, ob diese Kante in der Unterklasse überhaupt noch vorkommt (siehe removed edges in Metamodel)
             //System.err.println(searchElementClass.getSimpleName() + " removed " + edgeClass.getSimpleName() or invalid path definition);
             return null;
         }

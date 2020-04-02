@@ -95,8 +95,8 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
             int maxStartCard = forwardCardinality.max();
             int minEndCard = backwardCardinality.min();
             int maxEndCard = backwardCardinality.max();
-            boolean meHasStartClass = metaModel.isStartClass(edgeClass, meClass);
-            boolean meHasEndClass = metaModel.isEndClass(edgeClass, meClass);
+            boolean meHasStartClass = MetaModel.isStartClass(edgeClass, meClass);
+            boolean meHasEndClass = MetaModel.isEndClass(edgeClass, meClass);
 
             ElementaryMetaPath forwardElementaryMetaPath = elementaryMetaPathHandler.getForwardMetaPath(edgeClass);
             // Bei Teil-Von-Beziehungen oder Beziehungen bei denen meClass

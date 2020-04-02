@@ -227,7 +227,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         ModelElement me = dialog.getModelElement();
         Class<? extends ModelElement> elementClass = me.getClass();
         MetaModel metaModel = dialog.getMetaModel();
-        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, elementClass, metaModel.getOther(multipleConnectionEgdeClass, elementClass), multipleConnectionEgdeClass);
+        SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, elementClass, MetaModel.getOther(multipleConnectionEgdeClass, elementClass), multipleConnectionEgdeClass);
         return simpleMetaPath;
     }
 

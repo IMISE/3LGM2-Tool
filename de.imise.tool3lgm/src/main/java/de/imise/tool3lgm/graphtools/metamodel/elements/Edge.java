@@ -341,10 +341,9 @@ public abstract class Edge extends ModelElement {
         boolean switchStart = false, switchEnd = false;
         if (startElement != null && endElement != null) {
             Class<? extends ModelElement> elementClass = startElement.getClass();
-            MetaModel metaModel = getMetaModel();
             Class<? extends Edge> edgeClass = getClass();
             //prüfen, ob das StartElement von einer der Startklassen ist
-            if (!metaModel.isStartClass(edgeClass, elementClass)) {
+            if (!MetaModel.isStartClass(edgeClass, elementClass)) {
                 //wenn nicht
                 switchStart = isEndClass(elementClass);
             } else {
@@ -445,9 +444,8 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public final boolean isStartClass(final Class<? extends ModelElement> elementClass) {
-        MetaModel metaModel = getMetaModel();
         Class<? extends Edge> edgeClass = getClass();
-        return metaModel.isStartClass(edgeClass, elementClass);
+        return MetaModel.isStartClass(edgeClass, elementClass);
     }
 
     /**
@@ -457,45 +455,40 @@ public abstract class Edge extends ModelElement {
      * @return
      */
     public final boolean isEndClass(final Class<? extends ModelElement> elementClass) {
-        MetaModel metaModel = getMetaModel();
         Class<? extends Edge> edgeClass = getClass();
-        return metaModel.isEndClass(edgeClass, elementClass);
+        return MetaModel.isEndClass(edgeClass, elementClass);
     }
 
     /**
      * @return
      */
     public final int getMinForwardCardinality() {
-        MetaModel metaModel = getMetaModel();
         Class<? extends Edge> edgeClass = getClass();
-        return metaModel.getMinForwardCardinality(edgeClass);
+        return MetaModel.getMinForwardCardinality(edgeClass);
     }
 
     /**
      * @return
      */
     public final int getMaxForwardCardinality() {
-        MetaModel metaModel = getMetaModel();
         Class<? extends Edge> edgeClass = getClass();
-        return metaModel.getMaxForwardCardinality(edgeClass);
+        return MetaModel.getMaxForwardCardinality(edgeClass);
     }
 
     /**
      * @return
      */
     public final int getMinBackwardCardinality() {
-        MetaModel metaModel = getMetaModel();
         Class<? extends Edge> edgeClass = getClass();
-        return metaModel.getMinBackwardCardinality(edgeClass);
+        return MetaModel.getMinBackwardCardinality(edgeClass);
     }
 
     /**
      * @return
      */
     public final int getMaxBackwardCardinality() {
-        MetaModel metaModel = getMetaModel();
         Class<? extends Edge> edgeClass = getClass();
-        return metaModel.getMaxBackwardCardinality(edgeClass);
+        return MetaModel.getMaxBackwardCardinality(edgeClass);
     }
 
     /**

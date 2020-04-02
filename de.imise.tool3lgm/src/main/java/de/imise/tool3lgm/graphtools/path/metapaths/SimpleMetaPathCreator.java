@@ -494,9 +494,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             if (startClass != null) {
                 Class<? extends ModelElement> commonSuperStartAndEdgeClass = ReflectionUtils.getMostSpecialClass(startClass, edgeClass);
                 if (commonSuperStartAndEdgeClass != null) { // START_WITH_EDGE
-                    if (endClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass)) {
+                    if (endClass == null || MetaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass)) {
                         return emph.getEdgeToEndElementMetaPath(edgeClass, endClass); //FORWARD to edgeEndElement
-                    } else if (metaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass)) {
+                    } else if (MetaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass)) {
                         return emph.getEdgeToStartElementMetaPath(edgeClass, endClass); //BACKWARD to edgeStartElement
                     }
                 }
@@ -505,9 +505,9 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
             if (endClass != null) {
                 Class<? extends ModelElement> commonSuperEndAndEdgeClass = ReflectionUtils.getMostSpecialClass(endClass, edgeClass);
                 if (commonSuperEndAndEdgeClass != null) { // END_WITH_EDGE
-                    if (startClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) {
+                    if (startClass == null || MetaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) {
                         return emph.getStartElementToEdgeMetaPath(startClass, edgeClass);//FORWARD to edge
-                    } else if (metaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) {
+                    } else if (MetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass)) {
                         return emph.getEndElementToEdgeMetaPath(startClass, edgeClass);//BACKWARD to edge
                     }
                 }
@@ -544,7 +544,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      * @return
      */
     private static boolean isForward(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
-        return (startClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) && (endClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass));
+        return (startClass == null || MetaModel.isStartClassOrStartClassSuperclass(edgeClass, startClass)) && (endClass == null || MetaModel.isEndClassOrEndClassSuperclass(edgeClass, endClass));
     }
 
     /**
@@ -555,15 +555,7 @@ public class SimpleMetaPathCreator extends MetaModelSpecificAdapter {
      * @return
      */
     private static boolean isBackward(final MetaModel metaModel, final Class<? extends ModelElement> startClass, final Class<? extends Edge> edgeClass, final Class<? extends ModelElement> endClass) {
-        return startClass == null || metaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass) && endClass == null || metaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass);
-    }
-
-    /**
-     * @param clazz
-     * @return
-     */
-    private static String c(final Class<?> clazz) {
-        return clazz == null ? null : clazz.getSimpleName();
+        return startClass == null || MetaModel.isEndClassOrEndClassSuperclass(edgeClass, startClass) && endClass == null || MetaModel.isStartClassOrStartClassSuperclass(edgeClass, endClass);
     }
 
     /**

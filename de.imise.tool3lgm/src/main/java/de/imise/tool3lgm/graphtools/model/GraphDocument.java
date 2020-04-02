@@ -3513,13 +3513,12 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (master == null || edgeClass == null || slaveClass == null) {
             return null;
         }
-        MetaModel metaModel = doc.getMetaModel();
         Class<? extends ModelElement> masterClass = master.getClass();
-        if (!metaModel.isConnecting(edgeClass, masterClass, slaveClass)) {
+        if (!MetaModel.isConnecting(edgeClass, masterClass, slaveClass)) {
             return null;
         }
         doc.start_transaction(pid);
-        if (master.countConnections(edgeClass) >= metaModel.getMaxMasterToSlaveCardinality(edgeClass)) {
+        if (master.countConnections(edgeClass) >= MetaModel.getMaxMasterToSlaveCardinality(edgeClass)) {
             return null;
         }
         String name = slaveName;
@@ -3660,7 +3659,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         //slaveContainer ist null, wenn das untergeordnete Element unique ist und keinen Grafikcontainer in jedem Teilmodell hat
         if (slaveContainer != null) {
             Dimension pos = calculateAddictPosition(masterContainer);
-            String edgeHash = edge.getHashString();
+            String edgeHash = edge.getHashString();//eigentlich müsste der hier auch beim Undo auf diesen Wert gesetzt werden, aber das passiert im Moment nicht
             String masterHash = masterElement.getHashString();
             String slaveHash = slaveElement.getHashString();
             int slaveX = slaveContainer.getX();
@@ -5118,14 +5117,13 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     private final List<ElementContainer> getElementContainersOfStartOrEndClass(final Class<? extends Edge> edgeClass, final boolean startClass) {
-        MetaModel metaModel = getMetaModel();
         Class<? extends ModelElement> elementClass = startClass ? Edge.getStartClass(edgeClass) : Edge.getEndClass(edgeClass);
         List<ElementContainer> elementContainers = getElementContainers(elementClass, true, true);
         for (int i = elementContainers.size() - 1; i >= 0; i--) {
             ElementContainer ec = elementContainers.get(i);
             ModelElement me = ec.getElement();
             elementClass = me.getClass();
-            boolean isValidElementForEdge = startClass ? metaModel.isStartClass(edgeClass, elementClass) : metaModel.isEndClass(edgeClass, elementClass);
+            boolean isValidElementForEdge = startClass ? MetaModel.isStartClass(edgeClass, elementClass) : MetaModel.isEndClass(edgeClass, elementClass);
             if (!isValidElementForEdge) {
                 elementContainers.remove(i);
             }

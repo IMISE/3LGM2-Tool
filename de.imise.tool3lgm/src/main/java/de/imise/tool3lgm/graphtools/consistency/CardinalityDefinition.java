@@ -124,7 +124,7 @@ public class CardinalityDefinition {
         //Wenn für die Kante neue Kardinalitäten angegeben wurden, gib diese zurück. Wenn keien neuen da sind und gefltert werden soll (= nur neue
         //Kardinalitäten sollen zu Konsistenzfehlern führen), dann gibt für alle Kanten ohne neue Kardinalitäten ZERO_UNLIMITED zurück (-> keine Fehler bei diesen Kanten).
         //Wenn aber nicht gefiltert werden soll und keine neuen Kardinalitäten definiert wurden, dann gib die originalen Kantenkardinalitäten zurück.
-        return newForwardCardinality != null ? newForwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : metaModel.getForwardCardinality(edgeClass);
+        return newForwardCardinality != null ? newForwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : MetaModel.getForwardCardinality(edgeClass);
     }
 
     /**
@@ -136,7 +136,7 @@ public class CardinalityDefinition {
         //Wenn für die Kante neue Kardinalitäten angegeben wurden, gib diese zurück. Wenn keien neuen da sind und gefltert werden soll (= nur neue
         //Kardinalitäten sollen zu Konsistenzfehlern führen), dann gibt für alle Kanten ohne neue Kardinalitäten ZERO_UNLIMITED zurück (-> keine Fehler bei diesen Kanten).
         //Wenn aber nicht gefiltert werden soll und keine neuen Kardinalitäten definiert wurden, dann gib die originalen Kantenkardinalitäten zurück.
-        return newBackwardCardinality != null ? newBackwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : metaModel.getBackwardCardinality(edgeClass);
+        return newBackwardCardinality != null ? newBackwardCardinality : filterNewCardinalities ? EdgeCardinality.ZERO_UNLIMITED : MetaModel.getBackwardCardinality(edgeClass);
     }
 
 }

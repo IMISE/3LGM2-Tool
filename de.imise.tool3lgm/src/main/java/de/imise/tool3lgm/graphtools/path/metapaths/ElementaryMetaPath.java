@@ -297,7 +297,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     public final boolean isStartClass(final Class<? extends ModelElement> elementClass) {
         boolean isStartClass = false;
         if (type == Type.ELEMENT_EDGE_ELEMENT || type == Type.END_WITH_EDGE) {
-            isStartClass = direction == Direction.FORWARD ? metaModel.isStartClass(edgeClass, elementClass) : metaModel.isEndClass(edgeClass, elementClass);
+            isStartClass = direction == Direction.FORWARD ? MetaModel.isStartClass(edgeClass, elementClass) : MetaModel.isEndClass(edgeClass, elementClass);
         } else if (type == Type.START_WITH_EDGE) {
             isStartClass = ReflectionUtils.isAssignable(edgeClass, elementClass);
         }
@@ -319,7 +319,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     public final boolean isEndClass(final Class<? extends ModelElement> elementClass) {
         boolean isEndClass = false;
         if (type == Type.ELEMENT_EDGE_ELEMENT || type == Type.START_WITH_EDGE) {
-            isEndClass = direction == Direction.FORWARD ? metaModel.isEndClass(edgeClass, elementClass) : metaModel.isStartClass(edgeClass, elementClass);
+            isEndClass = direction == Direction.FORWARD ? MetaModel.isEndClass(edgeClass, elementClass) : MetaModel.isStartClass(edgeClass, elementClass);
         } else if (type == Type.END_WITH_EDGE) {
             isEndClass = ReflectionUtils.isAssignable(edgeClass, elementClass);
         }
@@ -445,15 +445,15 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
                 invalidReason = InvalidReason.INVALID_DIRECTION;
             } else if (type == Type.ELEMENT_EDGE_ELEMENT) {
                 if (direction == Direction.FORWARD) {
-                    if (!metaModel.isStartClass(edgeClass, startClass)) {
+                    if (!MetaModel.isStartClass(edgeClass, startClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_STARTCLASS_AND_METAPATH_STARTCLASS;
-                    } else if (!metaModel.isEndClass(edgeClass, endClass)) {
+                    } else if (!MetaModel.isEndClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_ENDCLASS_AND_METAPATH_ENDCLASS;
                     }
                 } else { //direction == Direction.BACKWARD
-                    if (!metaModel.isStartClass(edgeClass, endClass)) {
+                    if (!MetaModel.isStartClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_STARTCLASS_AND_METAPATH_ENDCLASS;
-                    } else if (!metaModel.isEndClass(edgeClass, startClass)) {
+                    } else if (!MetaModel.isEndClass(edgeClass, startClass)) {
                         invalidReason = InvalidReason.INVALID_EDGE_ENDCLASS_AND_METAPATH_STARTCLASS;
                     }
                 }
@@ -464,11 +464,11 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
                     invalidReason = InvalidReason.INVALID_END_CLASS;
                 }
                 if (direction == Direction.FORWARD) {
-                    if (!metaModel.isEndClass(edgeClass, endClass)) {
+                    if (!MetaModel.isEndClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_END_CLASS;
                     }
                 } else { //direction == Direction.BACKWARD
-                    if (!metaModel.isStartClass(edgeClass, endClass)) {
+                    if (!MetaModel.isStartClass(edgeClass, endClass)) {
                         invalidReason = InvalidReason.INVALID_END_CLASS;
                     }
                 }
@@ -479,11 +479,11 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
                     invalidReason = InvalidReason.INVALID_START_CLASS;
                 }
                 if (direction == Direction.FORWARD) {
-                    if (!metaModel.isStartClass(edgeClass, startClass)) {
+                    if (!MetaModel.isStartClass(edgeClass, startClass)) {
                         invalidReason = InvalidReason.INVALID_START_CLASS;
                     }
                 } else { //direction == Direction.BACKWARD
-                    if (!metaModel.isEndClass(edgeClass, startClass)) {
+                    if (!MetaModel.isEndClass(edgeClass, startClass)) {
                         invalidReason = InvalidReason.INVALID_START_CLASS;
                     }
                 }
@@ -584,7 +584,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
             return EdgeCardinality.ZERO_UNLIMITED;
         }
         //Wird die Kante in Vorwärtsrichtung gelesen, dann ist es auch die Vorwärtskardinalität der Kante, sonst die Rückwärtskardinalität
-        return direction == Direction.BACKWARD ? metaModel.getBackwardCardinality(edgeClass) : metaModel.getForwardCardinality(edgeClass);
+        return direction == Direction.BACKWARD ? MetaModel.getBackwardCardinality(edgeClass) : MetaModel.getForwardCardinality(edgeClass);
     }
 
     /**
@@ -592,7 +592,7 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
      */
     public EdgeCardinality getBackwardCardinality() {
         //Wird die Kante in Vorwärtsrichtung gelesen, dann ist es die Rückwärtskardinalität der Kante, sonst die Vorwärtskardinalität
-        return direction == Direction.BACKWARD ? metaModel.getForwardCardinality(edgeClass) : metaModel.getBackwardCardinality(edgeClass);
+        return direction == Direction.BACKWARD ? MetaModel.getForwardCardinality(edgeClass) : MetaModel.getBackwardCardinality(edgeClass);
     }
 
     @Override
