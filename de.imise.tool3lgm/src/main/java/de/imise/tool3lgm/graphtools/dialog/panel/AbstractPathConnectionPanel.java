@@ -26,6 +26,7 @@ import javax.swing.JTable;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
@@ -353,11 +354,15 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected final void connect(final ModelElement startElement, final Iterable<ModelElement> elements2Connect, final int startEdgeIndex) {
         GraphDocument selDoc = getSelectedGraphDocument();
         int pid = getTransactionID();
-        //wenn ein gültiges Element2Connect übergeben wurde, dann muss man den Pfad nur bis zur vorletzten Edge
-        //anlegen, sonst bis einschließlich zur letzten
+        GDCollection gdcoll = selDoc.getCollection();
+
+        //Ausnahme für Mac-Java-Bug: wenn Dialoge auf dem MAC aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
+        //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach nicht angezeigt und der Name generiert.
+        boolean dragNDropOnMac = Static.isDragNDropOnMac();
+        boolean lastAutomaticMode = gdcoll.setAutomaticMode(dragNDropOnMac);
+
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         if (!elementaryMetaPaths.isEmpty()) {
-            MetaModel metaModel = getMetaModel();
             SimpleMetaPath path2Create;
             if (startEdgeIndex == 0) {
                 path2Create = metaPath instanceof SimpleMetaPath ? (SimpleMetaPath) metaPath : new SimpleMetaPath(elementaryMetaPaths);
@@ -374,6 +379,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 }
             }
         }
+        gdcoll.setAutomaticMode(lastAutomaticMode);
     }
 
     /**
