@@ -14,7 +14,7 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.AlphabeticalSet;
@@ -169,7 +169,7 @@ public class DecisionTree {
             // Set aller Aufgaben, die der AWB unterstützt
             AlphabeticalSet<ModelElement> funcsOfAWB = new AlphabeticalSet<>();
             awbToFuncsSets.put(as, funcsOfAWB);
-            Collection<ModelElement> funcsAwb = MetaPathFunctions.getConnectedElements(as, metaPath);
+            Collection<ModelElement> funcsAwb = PathFunctions.getConnectedElements(as, metaPath);
             Set<ModelElement> leafFuncAwb = new HashSet<>(funcsAwb.size());
             for (ModelElement func : funcsAwb) {
                 leafFuncAwb.addAll(func.getAbsolutePartElements());
@@ -860,10 +860,10 @@ public class DecisionTree {
     private final AlphabeticalSet<ModelElement> getSameSupporter(final ModelElement me) {
         SingleRedundancyAnalysisDefinition definition = result.getDefinition();
         AbstractMetaPath metaPath = definition.getMetaPath();
-        Collection<ModelElement> supported = MetaPathFunctions.getConnectedElements(me, metaPath);
+        Collection<ModelElement> supported = PathFunctions.getConnectedElements(me, metaPath);
         AlphabeticalSet<ModelElement> returnSet = new AlphabeticalSet<>();
         for (ModelElement supped : supported) {
-            Collection<ModelElement> supporter = MetaPathFunctions.getConnectedElements(supped, metaPath.getOtherDirection());
+            Collection<ModelElement> supporter = PathFunctions.getConnectedElements(supped, metaPath.getOtherDirection());
             for (ModelElement supper : supporter) {
                 if (!result.uselessAWB.contains(supper) && !result.moreUselessAWB.contains(supper)) {
                     returnSet.add(supper);

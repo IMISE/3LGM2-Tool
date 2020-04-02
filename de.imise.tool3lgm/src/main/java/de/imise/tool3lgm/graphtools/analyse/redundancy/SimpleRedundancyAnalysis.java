@@ -11,7 +11,7 @@ import de.imise.tool3lgm.graphtools.analyse.redundancy.SimpleRedundancyAnalysisD
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -149,7 +149,7 @@ public class SimpleRedundancyAnalysis {
     private List<ElementContainer> getConnectedInDoc(final ElementContainer ec, final AbstractMetaPath metaPath) {
         List<ElementContainer> connectedElements = new ArrayList<>();
         ModelElement me = ec.getElement();
-        Collection<ModelElement> allConnectedElements = MetaPathFunctions.getConnectedElements(me, metaPath);
+        Collection<ModelElement> allConnectedElements = PathFunctions.getConnectedElements(me, metaPath);
         GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
         for (ModelElement connected : allConnectedElements) {
             ElementContainer connectedEc = connected.getContainer(connected.isUnique() ? mainDoc : doc);

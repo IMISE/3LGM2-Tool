@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeNode;
@@ -139,7 +139,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
         Class<? extends ModelElement> startClass = actor_Transaction_Actor_MetaPath.getStartClass();
         GraphDocument doc = target.getMainGraphDocument();
         List<ModelElement> actors = doc.getModelItems(startClass);
-        PathResultTreeModel resultTree = MetaPathFunctions.getResultTree(actors, actor_Transaction_Actor_MetaPath);
+        PathResultTreeModel resultTree = PathFunctions.getResultTree(actors, actor_Transaction_Actor_MetaPath);
         PathResultTreeNode root = resultTree.getRoot();
         for (PathResultTreeNode actorNodes : root.getChildren()) {
             for (PathResultTreeNode invokingInterfaceNodes : actorNodes.getChildren()) {

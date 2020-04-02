@@ -10,7 +10,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
 
@@ -36,11 +36,11 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
                 //the first sub metapath of the SectionMetaPath describes the connection to the needed elements -> get the first
                 AbstractMetaPath metaPathToNeededElements = consistencyConditionSectionMetaPath.getFirstSubMetaPathToConnectableElements();
                 //get the elements which should be connected over the other subpaths too
-                Collection<ModelElement> neededElements = MetaPathFunctions.getConnectedElements(me, metaPathToNeededElements);
+                Collection<ModelElement> neededElements = PathFunctions.getConnectedElements(me, metaPathToNeededElements);
                 //if there are needed elements
                 if (!neededElements.isEmpty()) {
                     //get the result of the whole SectionMetaPath = the section of the set of needed elements and the really connected elements
-                    Collection<ModelElement> connectedElements = MetaPathFunctions.getConnectedElements(me, consistencyConditionSectionMetaPath);
+                    Collection<ModelElement> connectedElements = PathFunctions.getConnectedElements(me, consistencyConditionSectionMetaPath);
                     //if there is not at least on of the needed connected to the current path start element -> error
                     if (connectedElements.isEmpty()) {
                         MissingPathError error = new MissingPathError(me, consistencyConditionSectionMetaPath, gdcoll, neededElements);

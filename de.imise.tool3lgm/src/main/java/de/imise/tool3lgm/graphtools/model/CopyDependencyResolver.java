@@ -9,7 +9,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
@@ -161,7 +161,7 @@ public class CopyDependencyResolver {
             resolveCopyDependenciesOfConnected = resolveCopyDependenciesOfConnected || copyDependentElementaryMetaPath.canBeRecursive();
             resolveCopyDependenciesOfConnected = resolveCopyDependenciesOfConnected || !copyDependentClass.isAssignableFrom(ignoreClass);
             if (resolveCopyDependenciesOfConnected) {
-                Collection<ElementContainer> connectedContainers = MetaPathFunctions.getConnectedContainer(me, mainDoc, copyDependentElementaryMetaPath);
+                Collection<ElementContainer> connectedContainers = PathFunctions.getConnectedContainer(me, mainDoc, copyDependentElementaryMetaPath);
                 for (ElementContainer ec : connectedContainers) {
                     ModelElement connected = ec.getElement();
                     if (!elements.contains(connected)) {

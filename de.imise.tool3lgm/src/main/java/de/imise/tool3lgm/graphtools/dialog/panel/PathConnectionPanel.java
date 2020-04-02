@@ -36,6 +36,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -583,7 +584,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                     GraphDocument selDoc = gdcoll.getSelectedDoc();
                     ElementaryMetaPath lastElementaryMetaPath = metaPath.getLastElementaryMetaPath();
                     int pid = getTransactionID();
-                    MetaPathFunctions.createNodeWithContainerAndDependents(selDoc, null, lastElementaryMetaPath, null, pid);
+                    PathFunctions.createNodeWithContainerAndDependents(selDoc, null, lastElementaryMetaPath, null, pid);
                 }
             }
         };

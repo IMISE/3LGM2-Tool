@@ -17,7 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
@@ -211,7 +211,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
 
     public void update() {
         //get resultTree with incomplete paths
-        currentPathResultTreeModel = MetaPathFunctions.getResultTree(modelElement, metaPath, true);
+        currentPathResultTreeModel = PathFunctions.getResultTree(modelElement, metaPath, true);
         setData();
     }
 

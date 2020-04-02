@@ -17,7 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -87,7 +87,7 @@ public class ConfigurationRenderer {
                     MetaModel metaModel = me.getMetaModel();
                     GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
                     SimpleMetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(me);
-                    Collection<ModelElement> interLayerConnectedElements = MetaPathFunctions.getConnectedElements(me, interLayerMetaPath);
+                    Collection<ModelElement> interLayerConnectedElements = PathFunctions.getConnectedElements(me, interLayerMetaPath);
                     for (ModelElement connected : interLayerConnectedElements) {
                         ElementContainer connectedEc = connected.getContainer(doc);
                         if (connectedEc != null) {

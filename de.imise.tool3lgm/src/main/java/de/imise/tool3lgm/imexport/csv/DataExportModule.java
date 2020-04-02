@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -133,7 +133,7 @@ public class DataExportModule {
                     v = "";
                     for (SimpleMetaPath metaPath : metaPaths2Export) {
                         if (metaPath.getStartClass().isAssignableFrom(elementClass)) {
-                            Collection<ModelElement> connected = MetaPathFunctions.getConnectedElements(me, metaPath);
+                            Collection<ModelElement> connected = PathFunctions.getConnectedElements(me, metaPath);
                             for (ModelElement con : connected) {
                                 v += con.getName() + ", ";
                             }

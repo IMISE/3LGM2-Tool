@@ -66,7 +66,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
@@ -3885,7 +3885,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 }
                 //für diesen Pfadteil müssen die verbundenen Elemente herausgesucht werden
                 SimpleMetaPath subPathConnected = metaPath.getSubPath(0, path2CreateStartIndex);
-                Collection<ModelElement> connectedElements = MetaPathFunctions.getConnectedElements(master, subPathConnected);
+                Collection<ModelElement> connectedElements = PathFunctions.getConnectedElements(master, subPathConnected);
                 for (ModelElement me : connectedElements) {
                     //ab diesem Pfadteil muss neu angelegt werden
                     SimpleMetaPath subPathCreate = metaPath.getSubPath(path2CreateStartIndex);
@@ -4995,7 +4995,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         Node node = nc.getNode();
         Class<? extends Node> nodeClass = node.getClass();
         for (ElementaryMetaPath elementaryMetaPath : metaModel.getCopyDependencies(nodeClass)) {
-            Collection<ElementContainer> dependentObjects = MetaPathFunctions.getConnectedContainer(node, this, elementaryMetaPath);
+            Collection<ElementContainer> dependentObjects = PathFunctions.getConnectedContainer(node, this, elementaryMetaPath);
             for (ElementContainer dependentContainer : dependentObjects) {
                 ModelElement dependentNode = dependentContainer.getElement();
                 if (!isMyElement(dependentNode)) {

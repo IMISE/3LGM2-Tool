@@ -39,6 +39,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -331,7 +332,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         for (int i = startEdgeIndex; i < edgeSearchStopIndex; i++) {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
             ElementaryMetaPath nextElementaryMetaPath = i + 1 < elementaryMetaPathCount ? elementaryMetaPaths.get(i + 1) : null;
-            targetElement = MetaPathFunctions.createNodeWithContainerAndDependents(selDoc, startElement, elementaryMetaPath, nextElementaryMetaPath, pid);
+            targetElement = PathFunctions.createNodeWithContainerAndDependents(selDoc, startElement, elementaryMetaPath, nextElementaryMetaPath, pid);
         }
         //wenn gültige elments2Connect übergeben wurde, dann müssen sie an das vorletzte Pfadelement angehängt werden
         if (edgeSearchStopIndex < elementaryMetaPathCount) {
@@ -564,7 +565,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 if (elementaryMetaPath.getDirection() == BACKWARD) {
                     conditionMetaPath = conditionMetaPath.getOtherDirection();
                 }
-                Collection<ModelElement> conditionElements = MetaPathFunctions.getConnectedElements(me, conditionMetaPath);
+                Collection<ModelElement> conditionElements = PathFunctions.getConnectedElements(me, conditionMetaPath);
                 available = new ArrayList<>(conditionElements.size());
                 for (ModelElement conditionElement : conditionElements) {
                     available.add(conditionElement.getContainer(mainDoc));

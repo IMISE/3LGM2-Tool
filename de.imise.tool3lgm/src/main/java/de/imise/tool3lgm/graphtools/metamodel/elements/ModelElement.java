@@ -33,7 +33,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
@@ -468,7 +468,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     private void updateHTMLNameSuffixBuffer(final AbstractMetaPath nameExtension) {
         suffixBuf.setLength(0);
         if (nameExtension != null) {
-            Collection<ModelElement> directConnectedElements = MetaPathFunctions.getConnectedElements(this, nameExtension);
+            Collection<ModelElement> directConnectedElements = PathFunctions.getConnectedElements(this, nameExtension);
             //Kein Element, dessen Namen in Klammern angezeigt werden soll verbunden -> weiter
             if (!directConnectedElements.isEmpty()) {
                 //genau ein Element verbunden, das denselben Namen hat wie dieses Element -> weiter (damit in der Grafik nicht

@@ -69,7 +69,7 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
@@ -455,7 +455,7 @@ public class ActionLibrary {
                             GraphViewDefinition graphViewDefinition = selectedMetaModel.getGraphViewDefinition();
                             AbstractMetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(selected);
                             if (interLayerMetaPath != null) {
-                                Collection<ModelElement> interLayerConnectedElements = MetaPathFunctions.getConnectedElements(me, interLayerMetaPath);
+                                Collection<ModelElement> interLayerConnectedElements = PathFunctions.getConnectedElements(me, interLayerMetaPath);
                                 if (!interLayerConnectedElements.isEmpty()) {
                                     boolean hasVisibleConfigs = ((InterLayerConnectedNodeContainer) ec).isShowInterLayerConnections();
                                     if (show != hasVisibleConfigs) {
