@@ -17,8 +17,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 
 /**
  * @author AXS (22.03.2020)

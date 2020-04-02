@@ -21,8 +21,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.pathmodel.SimplePath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.paths.SimplePath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 

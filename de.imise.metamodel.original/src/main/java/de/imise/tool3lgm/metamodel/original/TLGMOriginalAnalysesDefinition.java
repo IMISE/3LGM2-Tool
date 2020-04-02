@@ -1,14 +1,14 @@
 package de.imise.tool3lgm.metamodel.original;
 
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ONE_ONE;
-import static de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator.createSimpleMetaPath;
+import static de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator.createSimpleMetaPath;
 
 import javax.swing.Action;
 
 import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinitions.SingleRedundancyAnalysisDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.metamodel.original.analyse.DataAvailabilityFinder;
 import de.imise.tool3lgm.metamodel.original.analyse.InterfaceCanSendOTAnalysis;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;

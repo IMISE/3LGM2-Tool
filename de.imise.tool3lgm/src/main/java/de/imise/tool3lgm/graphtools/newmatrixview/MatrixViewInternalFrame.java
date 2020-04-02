@@ -17,7 +17,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;

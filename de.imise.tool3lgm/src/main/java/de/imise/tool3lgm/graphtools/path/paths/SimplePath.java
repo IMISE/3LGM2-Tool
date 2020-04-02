@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path.pathmodel;
+package de.imise.tool3lgm.graphtools.path.paths;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,8 +9,8 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.util.collections.CollectionUtils;
 
 /**

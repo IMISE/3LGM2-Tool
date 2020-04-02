@@ -5,7 +5,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 
 /**
  * @author AXS (Sa, 21.03.2020, 8:14' (Corona time...))

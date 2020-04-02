@@ -6,7 +6,7 @@ import java.util.Objects;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.util.ReflectionUtils;
 
 /**

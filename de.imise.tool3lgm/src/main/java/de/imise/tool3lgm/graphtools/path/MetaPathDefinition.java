@@ -22,15 +22,15 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.ConsistencyCheckSectionMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
-import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPathCreator;
-import de.imise.tool3lgm.graphtools.path.meta.WrapperMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
+import de.imise.tool3lgm.graphtools.path.metapaths.WrapperMetaPath;
 import de.imise.util.Alphabetical;
 
 /**

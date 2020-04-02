@@ -21,7 +21,7 @@ import javax.swing.border.TitledBorder;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
  * Panel, das mehrere andere Panels aufnehmen kann.

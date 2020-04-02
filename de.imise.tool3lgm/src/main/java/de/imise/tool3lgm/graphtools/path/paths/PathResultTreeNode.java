@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path.pathmodel;
+package de.imise.tool3lgm.graphtools.path.paths;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import javax.swing.tree.TreeNode;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 
 /**
  * Knoten, der genutzt werden kann um Pfade in einem Baum zu speichern. Jeder dieser

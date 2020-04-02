@@ -5,8 +5,8 @@ import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPa
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
-import de.imise.tool3lgm.metamodel.service.edge.PartableApplicationComponent_CommunicationInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.PartableApplicationComponent_CommunicationInterface_Edge;
 
 /**
  * @author AXS (26.12.2017)

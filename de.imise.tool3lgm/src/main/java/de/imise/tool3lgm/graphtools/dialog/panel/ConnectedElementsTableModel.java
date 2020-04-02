@@ -18,12 +18,12 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeModel;
-import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
+import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeNode;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.StringUtils;
 

@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions.PathConnectionState;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.log.Log;
 
 /**

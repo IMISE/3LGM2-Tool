@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.util.swing.component.MinSizedIconButton;
 
 /**

@@ -6,7 +6,7 @@ import java.util.List;
 
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
  * Datenobjekt, das die Definition von Spaltenköpfen eines {@link ConnectedElementsTable} repräsentiert.

@@ -13,8 +13,8 @@ import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPathHandler;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 
 /**
  * @author AXS (15.08.2017)

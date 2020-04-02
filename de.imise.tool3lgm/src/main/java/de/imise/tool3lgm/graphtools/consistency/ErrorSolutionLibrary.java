@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 
 /**
  * Diese Datei ist aktuell überflüssig und nur noch drin, damit man erkennen kann, wie die ErrorSolutions funktionieren.

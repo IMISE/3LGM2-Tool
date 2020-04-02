@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.analyse.redundancy.RedundancyAnalysisDefinit
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.AlphabeticalSet;
 

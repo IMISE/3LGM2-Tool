@@ -23,7 +23,7 @@ import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.util.NamedObjectContainer;
 

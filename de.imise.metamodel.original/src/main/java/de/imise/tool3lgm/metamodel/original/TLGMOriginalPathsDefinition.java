@@ -7,7 +7,7 @@ import com.google.common.collect.ImmutableMap;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbAwbkVerbindung;
 import de.imise.tool3lgm.metamodel.original.edge.AwbKommssVerbindung;

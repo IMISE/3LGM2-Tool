@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path.meta;
+package de.imise.tool3lgm.graphtools.path.metapaths;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath.Type;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 

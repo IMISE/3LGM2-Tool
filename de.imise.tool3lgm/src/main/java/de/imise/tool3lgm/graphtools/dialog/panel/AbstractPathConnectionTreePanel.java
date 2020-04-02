@@ -10,7 +10,7 @@ import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMTreeSelectionListener;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
 /**

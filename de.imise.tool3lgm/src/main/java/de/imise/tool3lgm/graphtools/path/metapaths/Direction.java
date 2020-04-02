@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path.meta;
+package de.imise.tool3lgm.graphtools.path.metapaths;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 

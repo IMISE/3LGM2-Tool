@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 
 /**
  * Definition aller {@link SimpleRedundancyAnalysis}

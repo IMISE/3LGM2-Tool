@@ -1,12 +1,12 @@
-package de.imise.tool3lgm.graphtools.path.pathmodel;
+package de.imise.tool3lgm.graphtools.path.paths;
 
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
  * Ein SequencePath ist ein Pfad der selbst wieder Pfade enthält

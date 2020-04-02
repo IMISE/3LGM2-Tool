@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path.pathmodel;
+package de.imise.tool3lgm.graphtools.path.paths;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,15 +15,15 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.DifferenceMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.ElementaryMetaPath.Type;
-import de.imise.tool3lgm.graphtools.path.meta.ParallelMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SequenceMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
-import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode.NodeType;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.DifferenceMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
+import de.imise.tool3lgm.graphtools.path.metapaths.ParallelMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.UnionMetaPath;
+import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeNode.NodeType;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
 /**

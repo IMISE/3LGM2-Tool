@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;

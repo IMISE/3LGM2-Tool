@@ -24,10 +24,10 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinitio
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.UnionMetaPath;
-import de.imise.tool3lgm.graphtools.path.pathmodel.PathResultTreeNode;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.UnionMetaPath;
+import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeNode;
 
 /**
  * Table, der für ein ModelElement über Pfade verbundene Elemente, Kanten oder deren Eigenschaften in Spalten darstellen kann.

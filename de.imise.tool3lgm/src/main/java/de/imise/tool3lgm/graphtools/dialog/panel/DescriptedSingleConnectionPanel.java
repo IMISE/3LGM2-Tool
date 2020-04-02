@@ -12,7 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.util.htmlxml.ParseSaveStringHandler;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 

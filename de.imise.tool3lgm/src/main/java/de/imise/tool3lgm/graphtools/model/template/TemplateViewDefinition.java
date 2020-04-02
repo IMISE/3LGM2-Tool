@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.model.template;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 

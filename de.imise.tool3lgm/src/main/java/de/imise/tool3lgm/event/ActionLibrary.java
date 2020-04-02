@@ -70,7 +70,7 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;

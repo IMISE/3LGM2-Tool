@@ -6,9 +6,9 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.meta.ConsistencyCheckSectionMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SectionMetaPath;
-import de.imise.tool3lgm.graphtools.path.meta.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
  * @author AXS (21.03.2020)

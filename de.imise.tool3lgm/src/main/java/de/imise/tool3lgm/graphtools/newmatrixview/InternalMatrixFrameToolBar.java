@@ -24,7 +24,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**

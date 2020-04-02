@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path.meta;
+package de.imise.tool3lgm.graphtools.path.metapaths;
 
 import static de.imise.util.ReflectionUtils.getMostSpecialClass;
 
@@ -437,9 +437,9 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
             InvalidReason invalidReason = null;
             if (type == null) {
                 invalidReason = InvalidReason.INVALID_TYPE;
-            } else if (startClass == null || de.imise.tool3lgm.graphtools.path.meta.Direction.class.isAssignableFrom(startClass)) {
+            } else if (startClass == null || de.imise.tool3lgm.graphtools.path.metapaths.Direction.class.isAssignableFrom(startClass)) {
                 invalidReason = InvalidReason.INVALID_START_CLASS;
-            } else if (endClass == null || de.imise.tool3lgm.graphtools.path.meta.Direction.class.isAssignableFrom(endClass)) {
+            } else if (endClass == null || de.imise.tool3lgm.graphtools.path.metapaths.Direction.class.isAssignableFrom(endClass)) {
                 invalidReason = InvalidReason.INVALID_END_CLASS;
             } else if (direction != null && edgeClass == null) {
                 invalidReason = InvalidReason.INVALID_DIRECTION;

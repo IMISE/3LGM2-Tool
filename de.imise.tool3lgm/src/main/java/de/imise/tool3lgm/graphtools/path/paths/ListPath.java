@@ -1,11 +1,11 @@
-package de.imise.tool3lgm.graphtools.path.pathmodel;
+package de.imise.tool3lgm.graphtools.path.paths;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.meta.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.util.collections.CollectionUtils;
 
 /**
