@@ -317,7 +317,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param elements2Connect Die Elemente die am Ende angehängt werden sollen
      * @param startEdgeIndex Index der Edge, bei der der anzulegende Teilpfad losgeht
      */
-    protected void connect(final ModelElement startElement, final Iterable<ModelElement> elements2Connect, final int startEdgeIndex) {
+    protected void connectOld(final ModelElement startElement, final Iterable<ModelElement> elements2Connect, final int startEdgeIndex) {
         GraphDocument selDoc = getSelectedGraphDocument();
         GDCollection gdcoll = selDoc.getCollection();
         ModelElement targetElement = startElement;
@@ -339,6 +339,39 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             Direction direction = elementaryMetaPath.getDirection();
             for (ModelElement element2Connect : elements2Connect) {
                 link(gdcoll, targetElement, element2Connect, edgeClass2Create, direction, pid);
+            }
+        }
+    }
+
+    /**
+     * Legt für das übergebene Startelement den Teilpfad ab startEdgeIndex an und hängt die übergebenen elements2connect an.
+     *
+     * @param startElement Das Element bei dem der Teilpfad losgehen soll.
+     * @param elements2Connect Die Elemente die am Ende angehängt werden sollen
+     * @param startEdgeIndex Index der Edge, bei der der anzulegende Teilpfad losgeht
+     */
+    protected final void connect(final ModelElement startElement, final Iterable<ModelElement> elements2Connect, final int startEdgeIndex) {
+        GraphDocument selDoc = getSelectedGraphDocument();
+        int pid = getTransactionID();
+        //wenn ein gültiges Element2Connect übergeben wurde, dann muss man den Pfad nur bis zur vorletzten Edge
+        //anlegen, sonst bis einschließlich zur letzten
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        if (!elementaryMetaPaths.isEmpty()) {
+            MetaModel metaModel = getMetaModel();
+            SimpleMetaPath path2Create;
+            if (startEdgeIndex == 0) {
+                path2Create = metaPath instanceof SimpleMetaPath ? (SimpleMetaPath) metaPath : new SimpleMetaPath(elementaryMetaPaths);
+            } else {
+                int size = elementaryMetaPaths.size();
+                List<ElementaryMetaPath> subelementaryMetaPaths = elementaryMetaPaths.subList(startEdgeIndex, size);
+                path2Create = new SimpleMetaPath(subelementaryMetaPaths);
+            }
+            if (elements2Connect == null) {
+                selDoc.createPath(startElement, null, path2Create, pid);
+            } else {
+                for (ModelElement endElement : elements2Connect) {
+                    selDoc.createPath(startElement, endElement, path2Create, pid);
+                }
             }
         }
     }
