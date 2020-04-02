@@ -12,6 +12,7 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.swing.Icon;
+import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -21,6 +22,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinitio
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTablePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescriptedSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.InstanciationPathLeafPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.MultiPanelElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.MutipleCompositionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
@@ -456,7 +458,11 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
             editable &= !metaPath.isLastPathElementDependent();
             //            System.err.println(editable);
             if (editable || !singleConnection) {
-                addTab(new PathConnectionPanel(this, titleLabelOption, westLabelOption, false, metaPath));
+                JPanel panel2Add = InstanciationPathLeafPanel.getInstanciationPathLeafPanel(this, metaPath);
+                if (panel2Add == null) {
+                    panel2Add = new PathConnectionPanel(this, titleLabelOption, westLabelOption, false, metaPath);
+                }
+                addTab(panel2Add);
             } else {
                 addDescriptedSingleConnectionPanel(metaPath);
             }
