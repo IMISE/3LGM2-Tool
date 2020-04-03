@@ -33,7 +33,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
@@ -44,7 +43,7 @@ import de.imise.util.swing.component.TabbedPane;
  *
  * @author N.N., AXS
  */
-public class ElementPropertyDialog extends AbstractElementPropertyDialog implements ActionListener, LGMChangeListenerSimple {
+public class ElementPropertyDialog extends AbstractElementPropertyDialog implements ActionListener {
 
     /**
      * @param modelElement

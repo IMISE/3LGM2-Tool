@@ -130,11 +130,11 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     private void changeContext(final GDCollection gdcoll) {
         if (this.gdcoll != gdcoll) {
             if (this.gdcoll != null) {
-                this.gdcoll.removeClosedTransactionsListener(this);
+                this.gdcoll.removeAllTransactionsListener(this);
             }
             this.gdcoll = gdcoll;
             if (this.gdcoll != null) {
-                gdcoll.addClosedTransactionsListener(this);
+                gdcoll.addAllTransactionsListener(this);
             }
         }
         resetConsistencyDefinition();
@@ -240,11 +240,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
 
     @Override
     public void dataChanged(final GraphDocument source) {
-        // nicht abgeschlossene Dialogtransaktionen ignorieren -> erst updaten, wenn keine
-        // Transaktion mehr offen ist
-        if (gdcoll != null && !gdcoll.getTman().isInTransaction()) {
-            updateErrorTable();
-        }
+        updateErrorTable();
     }
 
     @Override
