@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_START_ELEMENT_TYPE;
+
 import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
@@ -50,7 +53,7 @@ public class InstanciationPathPanel extends PathConnectionPanel {
      * @param simpleMetaPath
      */
     private InstanciationPathPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
-        super(dialog, metaPath);
+        super(dialog, LABEL_END_ELEMENT_TYPE, LABEL_LAST_EDGE_START_ELEMENT_TYPE, metaPath);
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         elementaryMetaPathCount = elementaryMetaPaths.size();
         lastElementaryMetaPathWithBackwardInstanciationEdge = metaPath.getLastElementaryMetaPath();

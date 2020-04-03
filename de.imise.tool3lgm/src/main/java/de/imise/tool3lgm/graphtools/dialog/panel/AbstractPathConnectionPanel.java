@@ -8,6 +8,9 @@ import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPa
 import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_ELEMENT_NAME;
 import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_ELEMENT_NAME_PLURAL;
 import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_ELEMENT_NAME_SINGULAR;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_START_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_START_ELEMENT_TYPE_PLURAL;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_START_ELEMENT_TYPE_SINGULAR;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
 
@@ -93,8 +96,27 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
          * in plural.
          */
         LABEL_LAST_EDGE_ELEMENT_NAME_PLURAL,
-        /** Indicator to label the panel with directed name of the connection from the resources. */
+        /**
+         * Indicator to label the panel with directed name of the connection from the resources.
+         */
         LABEL_LAST_EDGE_CONNECTION_NAME,
+        /**
+         * Indicator to label the panel with the start element type of the last edge with
+         * the name from the resources.
+         * If the meta path is a single connection meta path, the singular will be shown
+         * as label. If not the plural.
+         */
+        LABEL_LAST_EDGE_START_ELEMENT_TYPE,
+        /**
+         * Indicator to label the panel with the end element type of the last edge with
+         * name from the resources in singular.
+         */
+        LABEL_LAST_EDGE_START_ELEMENT_TYPE_SINGULAR,
+        /**
+         * Indicator to label the panel with the end element type of the last edge with
+         * name from the resources in plural.
+         */
+        LABEL_LAST_EDGE_START_ELEMENT_TYPE_PLURAL,
     }
 
     /** Der MetaPfad zu anderen Elementen */
@@ -180,7 +202,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             if (panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME || panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME_SINGULAR || panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME_PLURAL) {
                 nameSourceClass = getEdgeClassInPath(labelEdgeIndex);
             } else {
-                nameSourceClass = MetaPathFunctions.getElementaryPathsConnectingClass(metaPath, labelEdgeIndex);
+                boolean labelSecondLastElementClass = panelLabelOption == LABEL_LAST_EDGE_START_ELEMENT_TYPE || panelLabelOption == LABEL_LAST_EDGE_START_ELEMENT_TYPE_SINGULAR || panelLabelOption == LABEL_LAST_EDGE_START_ELEMENT_TYPE_PLURAL;
+                int labelEdgeIndexDiff = labelSecondLastElementClass ? 1 : 0;
+                nameSourceClass = MetaPathFunctions.getElementaryPathsConnectingClass(metaPath, labelEdgeIndex - labelEdgeIndexDiff);
                 //zur Beschriftung des Labels wird immer die speziellere Klasse genommen aus Endklasse des Pfades und searchElementClass. Weil immer nur davon können die verbundenen Elemente sein.
                 if (nameSourceClass == null || nameSourceClass.isAssignableFrom(searchElementClass)) {
                     nameSourceClass = searchElementClass;
@@ -189,9 +213,9 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
 
             // display plural name?
             boolean plural;
-            if (panelLabelOption == LABEL_END_ELEMENT_TYPE_SINGULAR || panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME_SINGULAR) {
+            if (panelLabelOption == LABEL_END_ELEMENT_TYPE_SINGULAR || panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME_SINGULAR || panelLabelOption == LABEL_LAST_EDGE_START_ELEMENT_TYPE_SINGULAR) {
                 plural = false;
-            } else if (panelLabelOption == LABEL_END_ELEMENT_TYPE_PLURAL || panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME_PLURAL) {
+            } else if (panelLabelOption == LABEL_END_ELEMENT_TYPE_PLURAL || panelLabelOption == LABEL_LAST_EDGE_ELEMENT_NAME_PLURAL || panelLabelOption == LABEL_LAST_EDGE_START_ELEMENT_TYPE_PLURAL) {
                 plural = true;
             } else {
                 plural = !metaPath.isSingleConnection();
