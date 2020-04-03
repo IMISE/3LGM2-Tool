@@ -3,10 +3,12 @@ package de.imise.tool3lgm.graphtools.consistency.checker;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -23,7 +25,8 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll) {
         ArrayList<AbstractConsistencyError> errors = new ArrayList<>();
         MetaModel metaModel = gdcoll.getMetaModel();
-        Collection<ConsistencyCheckSectionMetaPath> consistencyConditionMissingConnectedElementsMetaPaths = metaModel.getConsistencyConditionMissingConnectedElementsMetaPaths();
+        Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> consistencyConditionMissingConnectedElementsMetaPathsMap = metaModel.getConsistencyConditionMissingConnectedElementsMetaPaths();
+        Collection<ConsistencyCheckSectionMetaPath> consistencyConditionMissingConnectedElementsMetaPaths = consistencyConditionMissingConnectedElementsMetaPathsMap.keySet();
         LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
         //for every of the SectionMetaPaths with a consistency condition
         for (ConsistencyCheckSectionMetaPath consistencyConditionSectionMetaPath : consistencyConditionMissingConnectedElementsMetaPaths) {

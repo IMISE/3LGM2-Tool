@@ -13,6 +13,8 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -394,17 +396,21 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
-     * @return a collection of all {@link SectionMetaPath}s which must be checked to ensure
-     *         consistency of a model. <br>
+     * @return A map where the keys are a collection of all {@link SectionMetaPath}s which
+     *         must be checked to ensure consistency of a model.<br>
      *         This conditions says that the SectionMetaPath should not have an empty result.
      *         That means that at least one element must be connected over all sub-metapaths
      *         of this SectionMetaPath. The very first sub metaPath must lead to the set of
      *         all elements which *could* be connected. The next metapath(s) should lead to
      *         the elements which *are* connected. This is relevant to generate an error
      *         description with the elements which should be connected to solve the problem.
+     *         The values of this map are an edge class which is only used to identify the
+     *         corresponding {@link ErrorSolution}. This ErrorSolutions are defined in the
+     *         {@link ErrorSolutionLibrary} of the metamodel. This edge class must be the same
+     *         as the edge class in the {@link ErrorSolution}.
      */
-    public Collection<ConsistencyCheckSectionMetaPath> getConsistencyConditionMissingConnectedElementsMetaPaths() {
-        return ImmutableList.of();
+    public Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> getConsistencyConditionMissingConnectedElementsMetaPaths() {
+        return ImmutableMap.of();
     }
 
 }

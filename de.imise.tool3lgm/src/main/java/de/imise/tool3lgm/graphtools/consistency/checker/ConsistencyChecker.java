@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractPathError;
 import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableGenerator;
@@ -367,15 +368,15 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         // 'es' ist null, wenn für den Fehler keine Solution hinterlegt wurde. Das gilt nur
         // für Fehler, für die im Eigenschaftsdialog des Elementes dann ein zusätzliches
         // OneToNUndirectedConnectionPanel angezeigt werden soll, in dem man den Fehler beheben kann
-        if (error instanceof AbstractCardinalityError) {
+        if (error instanceof AbstractPathError) {
             MetaModel metaModel = gdcoll.getMetaModel();
             ErrorSolutionLibrary solutionsLibrary = metaModel.getErrorSolutionLibrary();
             ErrorSolution es = solutionsLibrary.getSolution(error);
             ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
             if (es == null) {
-                AbstractCardinalityError cardError = (AbstractCardinalityError) error;
-                AbstractMetaPath elementaryMetaPath = cardError.getMetaPath();
-                ModelElement me = cardError.getModelElement();
+                AbstractPathError pathError = (AbstractPathError) error;
+                AbstractMetaPath elementaryMetaPath = pathError.getMetaPath();
+                ModelElement me = pathError.getModelElement();
                 ElementPropertyDialog dialog = me.getPropertyDialog();
                 Class<? extends ModelElement> errorConnectedClass = elementaryMetaPath.getEndClass();
                 ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();

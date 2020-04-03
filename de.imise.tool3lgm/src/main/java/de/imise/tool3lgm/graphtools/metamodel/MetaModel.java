@@ -247,7 +247,7 @@ public final class MetaModel extends CoreMetaModel {
      * Metapaths which are used to ensure model consistency. This paths say that a model element must be connected
      * over this SectionMetaPaths with the same elements.
      */
-    private final Collection<ConsistencyCheckSectionMetaPath> consistencyConditionMissingConnectedElementsMetaPaths;
+    private final Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> consistencyConditionMissingConnectedElementsMetaPaths;
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Die folgenden Arrays müssen hier unten initialisiert werden nachdem die Maps mit den Edges gefüllt sind, sonst InitialException //
@@ -1661,7 +1661,7 @@ public final class MetaModel extends CoreMetaModel {
     /**
      * @return
      */
-    public Collection<ConsistencyCheckSectionMetaPath> getConsistencyConditionMissingConnectedElementsMetaPaths() {
+    public Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> getConsistencyConditionMissingConnectedElementsMetaPaths() {
         return consistencyConditionMissingConnectedElementsMetaPaths;
     }
 

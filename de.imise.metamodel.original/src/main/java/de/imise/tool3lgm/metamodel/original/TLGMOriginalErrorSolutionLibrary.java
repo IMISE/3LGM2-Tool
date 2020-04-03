@@ -9,7 +9,6 @@ import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
-import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.metamodel.original.edge.AufAufOrgVerbindung;
@@ -25,7 +24,7 @@ import de.imise.tool3lgm.metamodel.original.node.DBKonfiguration;
 /**
  * @author AXS (24.03.2020)
  */
-public class TLGMOriginalErrorSolutionLibrary extends ErrorSolutionLibrary implements MetaModelSpecific {
+public class TLGMOriginalErrorSolutionLibrary extends ErrorSolutionLibrary {
 
     // wenn man keine Error-Solution für einen Min oder Max-Fehler findet, wird ein neues
     // PathConnectionPanel angefügt, das den Fehler anzeigt wenn die minimale Kardinalität

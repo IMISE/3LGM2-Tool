@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.metamodel.AnalysesDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.CopyDependencies;
 import de.imise.tool3lgm.graphtools.metamodel.ExtrasActionsDefinition;
@@ -179,6 +180,15 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
     public Class<? extends ExtrasActionsDefinition> getExtrasActionsDefinitionClass() {
         //im Moment hat dieses Metamodell keine eigene Pfaddefinition. Man könnte diese Funktion auch weglassen.
         return super.getExtrasActionsDefinitionClass();
+    }
+
+    //////////////////////////
+    // ErrorSolutionLibrary //
+    //////////////////////////
+
+    @Override
+    public Class<? extends ErrorSolutionLibrary> getErrorSolutionLibraryClass() {
+        return TLGMServiceErrorSolutionLibrary.class;
     }
 
     ////////////

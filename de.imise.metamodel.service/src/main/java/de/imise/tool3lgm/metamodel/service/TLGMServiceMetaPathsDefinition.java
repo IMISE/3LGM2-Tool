@@ -210,7 +210,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     /////////////////////////////////////
 
     @Override
-    public Collection<ConsistencyCheckSectionMetaPath> getConsistencyConditionMissingConnectedElementsMetaPaths() {
+    public Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> getConsistencyConditionMissingConnectedElementsMetaPaths() {
         SimpleMetaPath consistencyConditionSubMetaPath1 = smp(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
         SimpleMetaPath consistencyConditionSubMetaPath2 = smp(IheActorInstance.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         ConsistencyCheckSectionMetaPath consistencyConditionMetaPathActorInstanceMustBeGroupedWith = new ConsistencyCheckSectionMetaPath("PATH_IheActorInstance_mustBeGroupedWith_IheActor", consistencyConditionSubMetaPath1,
@@ -222,7 +222,8 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         ConsistencyCheckSectionMetaPath consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances = new ConsistencyCheckSectionMetaPath("PATH_ApplicationSystem_needsGroupingOf_IheActorInstances", consistencyConditionSubMetaPath3,
                 consistencyConditionSubMetaPath4);
 
-        return ImmutableList.of(consistencyConditionMetaPathActorInstanceMustBeGroupedWith);//, consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances);
+        //the identifier for the corresponding ErrorSolution is the IheActor_IheActor_MustBeGroupedWith_Edge.class
+        return ImmutableMap.of(consistencyConditionMetaPathActorInstanceMustBeGroupedWith, IheActor_IheActor_MustBeGroupedWith_Edge.class);//, consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances);
 
     }
 
