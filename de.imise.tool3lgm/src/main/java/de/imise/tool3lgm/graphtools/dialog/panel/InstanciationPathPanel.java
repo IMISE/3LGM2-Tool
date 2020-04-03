@@ -24,18 +24,18 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
  *
  * @author AXS (02.04.2020)
  */
-public class InstanciationPathLeafPanel extends PathConnectionLeafPanel {
+public class InstanciationPathPanel extends PathConnectionPanel {
 
     /**
      * @param dialog
      * @param simpleMetaPath
      */
-    private InstanciationPathLeafPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+    private InstanciationPathPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
         super(dialog, metaPath);
     }
 
     /**
-     * Returns only a valid panel (and not null) if the simpleMetaPath fits the condition.
+     * Returns a valid panel (and not null) only if the simpleMetaPath fits the conditions.
      * These are that the metaPath must be creatable and the last {@link ElementaryMetaPath}
      * must be an {@link InstanciationEdge} from instance element to instanciation master
      * element.
@@ -44,9 +44,9 @@ public class InstanciationPathLeafPanel extends PathConnectionLeafPanel {
      * @param simpleMetaPath
      * @return
      */
-    public static final InstanciationPathLeafPanel getInstanciationPathLeafPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath simpleMetaPath) {
+    public static final InstanciationPathPanel getInstanciationPathPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath simpleMetaPath) {
         if (isCreatableMetaPathWithBackwardInstanciationEnd(simpleMetaPath)) {
-            return new InstanciationPathLeafPanel(dialog, simpleMetaPath);
+            return new InstanciationPathPanel(dialog, simpleMetaPath);
         }
         return null;
     }

@@ -33,10 +33,10 @@ import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 public class PathConnectionLeafPanel extends PathConnectionPanel {
 
     /**
-     * Mappt von einem Endelement (Blattknoten) auf das ModelElement des im linke Baum darüber liegenden
+     * Mappt von einem Endelement (Blattknoten) auf das ModelElement des im linken Baum darüber liegenden
      * Knotens. Das ist der Node, von dem aus ein eventuell durchzuführendes Unlinken angestoßen werden muss.
      */
-    private Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
+    protected Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 
     public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, metaPath);
@@ -65,6 +65,17 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
     }
 
     /**
+     * Initializes nodeToParentModelElement or clears it if it is already initialized.
+     */
+    protected void resetNodeToParentModelElement() {
+        if (nodeToParentModelElement == null) {
+            nodeToParentModelElement = new HashMap<>();
+        } else {
+            nodeToParentModelElement.clear();
+        }
+    }
+
+    /**
      * Baut im linken Baum nur die Elemente der letzten Edge des Pfades auf
      */
     @Override
@@ -75,13 +86,9 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
         if (getEdgesInPathCount() == 1) {
             return leafNodes;
         }
-        if (nodeToParentModelElement == null) {
-            nodeToParentModelElement = new HashMap<>();
-        } else {
-            nodeToParentModelElement.clear();
-        }
+        resetNodeToParentModelElement();
         if (!leafNodes.isEmpty()) {
-            if (metaPath.isCreatable(false)) { //wen der anlegbar ist, dann werden die Blätter sooft angezeigt, wie Pfade existeren (also Elemente evtl. auch doppelt)
+            if (metaPath.isCreatable(false)) { //wenn der anlegbar ist, dann werden die Blätter sooft angezeigt, wie Pfade existeren (also Elemente evtl. auch doppelt)
                 //vor dem Umhängen der Blätter an den root für jedes Blatt das echte Vorgängerelement auf dem Pfad merken
                 for (LGMTreeNode leaf : leafNodes) {
                     LGMTreeNode leafParent = (LGMTreeNode) leaf.getParent();

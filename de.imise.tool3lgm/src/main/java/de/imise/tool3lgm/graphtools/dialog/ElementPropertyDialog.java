@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinitio
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTablePanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DescriptedSingleConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.InstanciationPathLeafPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.InstanciationPathPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.MultiPanelElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.MutipleCompositionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
@@ -458,7 +458,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
             editable &= !metaPath.isLastPathElementDependent();
             //            System.err.println(editable);
             if (editable || !singleConnection) {
-                JPanel panel2Add = InstanciationPathLeafPanel.getInstanciationPathLeafPanel(this, metaPath);
+                JPanel panel2Add = InstanciationPathPanel.getInstanciationPathPanel(this, metaPath);
                 if (panel2Add == null) {
                     panel2Add = new PathConnectionPanel(this, titleLabelOption, westLabelOption, false, metaPath);
                 }
