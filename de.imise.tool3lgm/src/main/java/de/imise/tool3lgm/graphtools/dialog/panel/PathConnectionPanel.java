@@ -591,4 +591,16 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         };
     }
 
+    /**
+     * @param endElement
+     */
+    public final void createPath(final ModelElement endElement) {
+        if (!metaPath.isCreatable(endElement != null)) {
+            return;
+        }
+        ModelElement me = dialog.getModelElement();
+        int pid = dialog.getTransactionID();
+        doc.createPath(me, endElement, metaPath, true, pid);
+    }
+
 }

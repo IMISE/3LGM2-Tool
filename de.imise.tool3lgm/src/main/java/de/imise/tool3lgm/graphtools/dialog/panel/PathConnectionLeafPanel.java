@@ -158,16 +158,4 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
         createPath(element2Connect);
     }
 
-    /**
-     * @param endElement
-     */
-    public void createPath(final ModelElement endElement) {
-        if (!metaPath.isCreatable(endElement != null)) {
-            return;
-        }
-        ModelElement me = dialog.getModelElement();
-        int pid = dialog.getTransactionID();
-        doc.createPath(me, endElement, metaPath, true, pid);
-    }
-
 }
