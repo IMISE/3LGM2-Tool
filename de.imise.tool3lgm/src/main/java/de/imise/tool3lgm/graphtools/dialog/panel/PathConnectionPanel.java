@@ -510,9 +510,10 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
         Direction direction = elementaryMetaPath.getDirection();
         gdcoll.unlink(startInPath, endInPath, edgeClass, direction, pid);
-        if (!startInPath.isConsistent()) {
-            gdcoll.deleteElement(startInPath, selDoc, pid);
-        }
+        //das hier stand mal drin, aber gdcoll.unlink() löscht startInPath auch schon, wenn das es durch das unlink inkonsistent wird
+        //        if (!startInPath.isConsistent()) {
+        //            gdcoll.deleteElement(startInPath, selDoc, pid);
+        //        }
         int nextEdgeIndexInPath = edgeIndexInPath + 1;
         if (nextEdgeIndexInPath < elementaryMetaPaths.size()) {
             ElementaryMetaPath nextElementaryMetaPath = elementaryMetaPaths.get(nextEdgeIndexInPath);
