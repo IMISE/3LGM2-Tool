@@ -1,16 +1,20 @@
 package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import java.util.Collection;
+import java.util.EventObject;
 import java.util.List;
 
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
+import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -37,12 +41,19 @@ public class InstanciationPathPanel extends PathConnectionPanel {
     private final int elementaryMetaPathCount;
 
     /**
+     *
+     */
+    private final ElementaryMetaPath lastElementaryMetaPathWithBackwardInstanciationEdge;
+
+    /**
      * @param dialog
      * @param simpleMetaPath
      */
-    private InstanciationPathPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath, final int elementaryMetaPathCount) {
+    private InstanciationPathPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
         super(dialog, metaPath);
-        this.elementaryMetaPathCount = elementaryMetaPathCount;
+        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        elementaryMetaPathCount = elementaryMetaPaths.size();
+        lastElementaryMetaPathWithBackwardInstanciationEdge = metaPath.getLastElementaryMetaPath();
     }
 
     /**
@@ -52,13 +63,12 @@ public class InstanciationPathPanel extends PathConnectionPanel {
      * element.
      *
      * @param dialog
-     * @param simpleMetaPath
+     * @param metaPath
      * @return
      */
-    public static final InstanciationPathPanel getInstanciationPathPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath simpleMetaPath) {
-        int elementaryMetaPathCount = isCreatableMetaPathWithBackwardInstanciationEnd(simpleMetaPath);
-        if (elementaryMetaPathCount > 0) {
-            return new InstanciationPathPanel(dialog, simpleMetaPath, elementaryMetaPathCount);
+    public static final InstanciationPathPanel getInstanciationPathPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+        if (isCreatableMetaPathWithBackwardInstanciationEnd(metaPath)) {
+            return new InstanciationPathPanel(dialog, metaPath);
         }
         return null;
     }
@@ -67,9 +77,9 @@ public class InstanciationPathPanel extends PathConnectionPanel {
      * @return the elementaryMetaPathCount of the given metaPath if this metaPath fits the conditions
      *         for this panel or -1 if the conditions are not fulfilled.
      */
-    private static final int isCreatableMetaPathWithBackwardInstanciationEnd(final AbstractMetaPath metaPath) {
+    private static final boolean isCreatableMetaPathWithBackwardInstanciationEnd(final AbstractMetaPath metaPath) {
         if (!metaPath.isCreatable(false)) {
-            return -1;
+            return false;
         }
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         int elementaryMetaPathCount = elementaryMetaPaths.size();
@@ -77,22 +87,22 @@ public class InstanciationPathPanel extends PathConnectionPanel {
             // 2 is the minimum for this type of metapath. The first elementary metapath(s) is/are
             // at least one edge from the dialog modelelement to the instance and the second is
             // the backward instance edge to the instanciation master element
-            return -1;
+            return false;
         }
         ElementaryMetaPath lastElementaryMetaPath = metaPath.getLastElementaryMetaPath();
         if (lastElementaryMetaPath == null) {
-            return -1;
+            return false;
         }
         Class<? extends Edge> edgeClass = lastElementaryMetaPath.getEdgeClass();
         if (!MetaModel.isInstanciation(edgeClass)) {
-            return -1;
+            return false;
         }
         //the direction of the last elementary metapath must be backward = from the instance
         //element to the instanciation master element
         if (!lastElementaryMetaPath.hasDirection(InstanciationEdge.INSTANCE_TO_MASTER_DIRECTION)) {
-            return -1;
+            return false;
         }
-        return elementaryMetaPathCount;
+        return true;
     }
 
     /**
@@ -129,6 +139,40 @@ public class InstanciationPathPanel extends PathConnectionPanel {
     protected void connectToFirstPath(final ModelElement element2Connect) {
         //dieses Panel ändert das ursprüngliche Verhalten dahingehend, dass es immer den ganzen Pfad neu anlegt und nicht nur den letzten Teil
         createPath(element2Connect);
+    }
+
+    /**
+     * Methode liefert eine <code>LGMAction</code> zurück, die das Verschieben von Elementen aus dem
+     * <code>srcTree</code> in den <code>targetTree</code> realisiert. Diese <code>LGMAction</code>
+     * sollte an die "removeButtons" der Panels angefügt werden.
+     *
+     * @param srcTree linker Baum mit dem verknüpften Pfaden
+     * @param targetTree rechter Baum mit den Elementen, die ausgewählt werden können
+     */
+    @Override
+    protected LGMAction getDisconnectAction() {
+        final PathConnectionPanel panel = this;
+        return new LGMAction(DialogActionCommands.ACTION_DIALOG_DISCONNECT_ELEMENT) {
+
+            @Override
+            public void execute(final EventObject eo) {
+                int selrows = ltree.getSelectionCount();
+                if (selrows < 1) {
+                    return;
+                }
+
+                TreePath[] path2disconnect = ltree.getSelectionPaths();
+                for (int i = 0; i < path2disconnect.length; i++) {
+                    //das ist der Index der Edge im Pfad, ab der entfernt werden soll
+                    int treePathEdgeIndex = path2disconnect[i].getPathCount() - 2;
+                    ModelElement instanceElement = PathConnectionPanel.getPathModelElement(path2disconnect[i]);
+                    List<ModelElement> instanciationMasters = PathFunctions.getConnectedElements(instanceElement, lastElementaryMetaPathWithBackwardInstanciationEdge);
+                    for (ModelElement instanciationMaster : instanciationMasters) {
+                        panel.disconnect(instanceElement, instanciationMaster, treePathEdgeIndex + 1);
+                    }
+                }
+            }
+        };
     }
 
 }

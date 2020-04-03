@@ -449,7 +449,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      * @param treePath
      * @return
      */
-    private static ModelElement getPathModelElement(final TreePath treePath) {
+    protected static ModelElement getPathModelElement(final TreePath treePath) {
         LGMTreeNode node = (LGMTreeNode) treePath.getLastPathComponent();
         return getNodeModelElement(node);
     }
