@@ -36,6 +36,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
@@ -191,8 +192,9 @@ public class RedundancyAnalysis extends WindowAdapter {
         // Redundanzanalyse relevant sind
         // eigentlich sollte hier immer schon dieselbe GDCollection selektiert sein, aber zur
         // Sicherheit wird mal dahin gewechselt
+        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
         if (Static.getSelectedGDCollection() != gdcoll) {
-            Static.setSelectedDoc(gdcoll.getSelectedDoc());
+            Static.setSelectedDoc(selectedDoc);
         }
         ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
         consistencyChecker.resetConsistencyDefinition();
@@ -209,14 +211,18 @@ public class RedundancyAnalysis extends WindowAdapter {
         }
         Collection<AbstractConsistencyError> errors = consistencyChecker.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
-        if (errors.size() > 0) {
+        if (!errors.isEmpty()) {
             // Custom button xmlText
             Object[] options = {
                     getResString("ana_fr_resolve_errors"), getResString("ana_fr_ignore_errors"), getResString("cancel")
             };
             int answer = JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("ana_fr_error_message"), getResString("ana_fr_error_message_title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
             if (answer == JOptionPane.YES_OPTION) {
-                OPTION_CHECK_CONSISTENCY.set(true);
+                if (!OPTION_CHECK_CONSISTENCY.is()) {
+                    OPTION_CHECK_CONSISTENCY.set(true);
+                } else {
+                    consistencyChecker.dataChanged(selectedDoc);
+                }
             }
             return;
         }
