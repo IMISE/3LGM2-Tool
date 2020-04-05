@@ -1,7 +1,9 @@
 package de.imise.tool3lgm.graphtools.path;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -10,19 +12,24 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JCheckBox;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.apache.jena.ext.com.google.common.base.Strings;
+
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -108,7 +115,7 @@ public class MetaPathSelector implements ActionListener {
         elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (Class<? extends ModelElement> elementClass : startElementClassesInPaths) {
             String name = elementsNameBuilder.getDisplayableName(elementClass);
-            if (name != null && name != "") {
+            if (!Strings.isNullOrEmpty(name)) {
                 class1ComboBox.addItem(elementClass, name);
             }
         }
@@ -118,9 +125,11 @@ public class MetaPathSelector implements ActionListener {
         class2ComboBox = new AlphabeticalComboBox();
         class2ComboBox.addActionListener(this);
         class2ComboBox.setEnabled(false);
-        class2ComboBox.setPreferredSize(class1ComboBox.getPreferredSize());
+        Dimension preferredSizeBox1 = class1ComboBox.getPreferredSize();
+        class2ComboBox.setPreferredSize(preferredSizeBox1);
 
-        showPartsOnlyCheckBox = new JCheckBox(Tool3lgmConstants.getResString("showAbsolutePartsOnly"));
+        String showPartsOnlyCheckBoxLabel = Tool3lgmConstants.getResString("showAbsolutePartsOnly");
+        showPartsOnlyCheckBox = new JCheckBox(showPartsOnlyCheckBoxLabel);
         showPartsOnlyCheckBox.addActionListener(this);
 
         selectedMetaPaths = new ArrayList<>();
@@ -128,9 +137,11 @@ public class MetaPathSelector implements ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        if (e.getSource() == class1ComboBox) {
+        Object eventSource = e.getSource();
+        if (eventSource == class1ComboBox) {
             class2ComboBox.removeAllItems();
-            if (class1ComboBox.getSelectedItem() == null) {
+            Object box1SelectedItem = class1ComboBox.getSelectedItem();
+            if (box1SelectedItem == null) {
                 class2ComboBox.setEnabled(false);
                 return;
             }
@@ -138,16 +149,18 @@ public class MetaPathSelector implements ActionListener {
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
             for (Class<? extends ModelElement> elementClass : endElementClassesInPaths) {
                 Set<AbstractMetaPath> metaPathes = model.getMetaPaths(class1BoxSelection, elementClass, false);
-                if (metaPathes != null && metaPathes.size() > 0) {
-                    class2ComboBox.addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
+                if (!metaPathes.isEmpty()) {
+                    String name = elementsNameBuilder.getDisplayableName(elementClass);
+                    class2ComboBox.addItem(elementClass, name);
                 }
             }
             selectedMetaPaths.clear();
             selectableMetaPaths = null;
             deliverChangeEvent(class1ComboBox);
-        } else if (e.getSource() == class2ComboBox) {
+        } else if (eventSource == class2ComboBox) {
             class2ComboBox.setPopupVisible(false);
-            if (class2ComboBox.getSelectedItem() == null) {
+            Object box2SelectedItem = class2ComboBox.getSelectedItem();
+            if (box2SelectedItem == null) {
                 return;
             }
             Class<? extends ModelElement> class1BoxSelection = ((Class<?>) class1ComboBox.getSelectedObject()).asSubclass(ModelElement.class);
@@ -163,36 +176,40 @@ public class MetaPathSelector implements ActionListener {
                 } else if (selectableMetaPaths.size() > 1) {
                     List<NamedObjectContainer<AbstractMetaPath>> pathNames = new ArrayList<>(selectableMetaPaths.size());
                     for (AbstractMetaPath metaPath : selectableMetaPaths) {
-                        pathNames.add(new NamedObjectContainer<>(metaPath, metaPath.getFullName()));
+                        String metaPathFullName = metaPath.getFullName();
+                        pathNames.add(new NamedObjectContainer<>(metaPath, metaPathFullName));
                     }
-
-                    StringBuilder sb = new StringBuilder(Tool3lgmConstants.getResString("text_path_1"));
+                    StringBuilder sb = append(null, "text_path_1");
                     sb.append(" ");
                     //beliebig viele Pfade sind auswählbar
                     if (maxParallelSelectedPaths <= 0 || maxParallelSelectedPaths >= selectableMetaPaths.size()) {
-                        sb.append(Tool3lgmConstants.getResString("text_path_2"));
+                        append(sb, "text_path_2");
                         //maximal 1 Pfad ist auswählbar
                     } else if (maxParallelSelectedPaths == 1) {
-                        sb.append(Tool3lgmConstants.getResString("text_path_3"));
+                        append(sb, "text_path_3");
                         //es dürfen einer oder mehrere, aber nicht alle zur Verfügung stehenden Pfade ausgewählt werden
                     } else {
-                        sb.append(Tool3lgmConstants.getResString("text_path_4_1"));
-                        sb.append(" ");
-                        sb.append(maxParallelSelectedPaths);
-                        sb.append(" ");
-                        sb.append(Tool3lgmConstants.getResString("text_path_4_2"));
+                        append(sb, "text_path_4_1");
+                        append(sb, " ");
+                        append(sb, maxParallelSelectedPaths);
+                        append(sb, " ");
+                        append(sb, "text_path_4_2");
                     }
                     Object[] selectedArray = new Object[selectableMetaPaths.size()];
                     List<?> selected = Arrays.asList(selectedArray);
                     while (selected != null && (selectedMetaPaths.size() == 0 || selectedMetaPaths.size() > maxParallelSelectedPaths)) {
                         selectedMetaPaths.clear();
-                        selected = MultipleOptionPane.showCheckBoxOptionDialog(getMainFrame(), Tool3lgmConstants.getResString("choice"), sb.toString(), pathNames, null, false);
+                        MainFrame mainFrame = getMainFrame();
+                        String title = getResString("choice");
+                        String message = sb.toString();
+                        selected = MultipleOptionPane.showCheckBoxOptionDialog(mainFrame, title, message, pathNames, null, false);
                         for (int i = 0; selected != null && i < selected.size(); i++) {
                             Object selectedI = selected.get(i);
                             if (selectedI != null) {
                                 @SuppressWarnings("unchecked")
                                 NamedObjectContainer<AbstractMetaPath> metaPathCont = (NamedObjectContainer<AbstractMetaPath>) selectedI;
-                                selectedMetaPaths.add(metaPathCont.getObject());
+                                AbstractMetaPath metaPath = metaPathCont.getObject();
+                                selectedMetaPaths.add(metaPath);
                             }
                         }
                     }
@@ -202,6 +219,23 @@ public class MetaPathSelector implements ActionListener {
         } else {
             deliverChangeEvent(e.getSource());
         }
+    }
+
+    /**
+     * @param sb
+     * @param resKey
+     * @return
+     */
+    private StringBuilder append(StringBuilder sb, final Object resKeyOrToStringObject) {
+        if (sb == null) {
+            sb = new StringBuilder();
+        }
+        String s = String.valueOf(resKeyOrToStringObject);
+        if (resKeyOrToStringObject instanceof String) {
+            s = Tool3lgmConstants.getResStringWithoutError(s);
+        }
+        sb.append(s);
+        return sb;
     }
 
     /**
@@ -252,7 +286,10 @@ public class MetaPathSelector implements ActionListener {
         };
         JOptionPane op = new JOptionPane();
         op.setMessage(metaPathSelectorMessage);
-        op.createDialog(null, Tool3lgmConstants.getResString("metapath_selection")).setVisible(true);
+        MainFrame mainFrame = Static.getMainFrame();
+        String message = Tool3lgmConstants.getResString("metapath_selection");
+        JDialog dialog = op.createDialog(mainFrame, message);
+        dialog.setVisible(true);
         dialogMetaPathSelecor.selectedMetaPaths.clear();
         Object selectedMetaPath = metaPathJList.getSelectedObject();
         if (selectedMetaPath != null) {
@@ -288,8 +325,14 @@ public class MetaPathSelector implements ActionListener {
      */
     private Class<? extends ModelElement> getSelectedClass(final AlphabeticalComboBox classComboBox) {
         Object o = classComboBox.getSelectedObject();
-        if (o != null && Class.class.isAssignableFrom(o.getClass()) && ModelElement.class.isAssignableFrom((Class<?>) o)) {
-            return ((Class<?>) o).asSubclass(ModelElement.class);
+        if (o != null) {
+            Class<? extends Object> clazz = o.getClass();
+            if (Class.class.isAssignableFrom(clazz)) {
+                Class<?> objectAsClass = (Class<?>) o;
+                if (ModelElement.class.isAssignableFrom(objectAsClass)) {
+                    return objectAsClass.asSubclass(ModelElement.class);
+                }
+            }
         }
         return null;
     }
