@@ -22,6 +22,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.Alphabetical;
+import de.imise.util.StringUtils;
 
 /**
  * @author AXS (25.10.2018)
@@ -59,6 +60,18 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
      *
      * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
+     * @param elementClass Klasse für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    public final String getDisplayableName(final boolean plural, final Class<? extends ModelElement> elementClass) {
+        return getDisplayableName(elementClass, plural);
+
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
+     *
+     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
@@ -67,31 +80,30 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
         if (classes == null || classes.length == 0) {
             return "";
         }
-        return getDisplayableName(plural, Arrays.asList(classes));
+        return getDisplayableName(plural, Arrays.asList(classes), true);
     }
 
     /**
      * @param plural
      * @param classes
+     * @param alphabetical
      * @return
      */
-    private final String getDisplayableName(final boolean plural, final Collection<Class<? extends ModelElement>> classes) {
+    private final String getDisplayableName(final boolean plural, final Collection<Class<? extends ModelElement>> classes, final boolean alphabetical) {
         if (classes == null) {
             return "";
         }
-        StringBuilder names = new StringBuilder();
+        List<String> names = new ArrayList<>();
         for (Iterator<Class<? extends ModelElement>> classesIt = classes.iterator(); classesIt.hasNext();) {
             Class<? extends ModelElement> elementClass = classesIt.next();
             String name = getDisplayableName(elementClass, plural);
-            if (name == null) {
-                name = elementClass.getSimpleName();
-            }
-            names.append(name);
-            if (classesIt.hasNext()) {
-                names.append(", ");
+            if (alphabetical) {
+                Alphabetical.insert(names, name);
+            } else {
+                names.add(name);
             }
         }
-        return names.toString();
+        return StringUtils.createCollectionString(names);
     }
 
     /**
@@ -100,7 +112,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @return
      */
     private String getDisplayableName(Class<? extends ModelElement> elementClass, final boolean plural) {
-        //wenn der Anzeigename gleich für eine allg. Klasse heruas gesucht werden soll, dann muss der Resourcenname genommen werden, sonst der SimpleClassName
+        //wenn der Anzeigename gleich für eine allg. Klasse heraus gesucht werden soll, dann muss der Resourcenname genommen werden, sonst der SimpleClassName
         boolean dontReturnSimpleClassName = elementClass.getPackage() == ModelElement.class.getPackage();
         MetaModelContext metaModelContext = getMetaModelContext();
         while (ModelElement.class.isAssignableFrom(elementClass) && elementClass.getPackage() != ModelElement.class.getPackage() || dontReturnSimpleClassName) {
@@ -139,7 +151,18 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @return String aus dem geladenen ResourcenBundle
      */
     public final String getDisplayablePluralName(final Collection<Class<? extends ModelElement>> classes) {
-        return getDisplayableName(true, classes);
+        return getDisplayableName(true, classes, false);
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     *
+     * @param elementClass Klasse für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    public final String getDisplayableName(final Class<? extends ModelElement> elementClass) {
+        return getDisplayableName(false, elementClass);
     }
 
     /**
@@ -162,7 +185,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @return String aus dem geladenen ResourcenBundle
      */
     public final String getDisplayableName(final Collection<Class<? extends ModelElement>> classes) {
-        return getDisplayableName(false, classes);
+        return getDisplayableName(false, classes, false);
     }
 
     /**
