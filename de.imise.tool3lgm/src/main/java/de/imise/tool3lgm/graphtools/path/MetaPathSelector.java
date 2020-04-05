@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -26,6 +27,7 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.CoreMetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
@@ -114,9 +116,19 @@ public class MetaPathSelector implements ActionListener {
         MetaModel metaModel = model.getMetaModel();
         elementsNameBuilder = metaModel.getElementsNameBuilder();
         for (Class<? extends ModelElement> elementClass : startElementClassesInPaths) {
-            String name = elementsNameBuilder.getDisplayableName(elementClass);
-            if (!Strings.isNullOrEmpty(name)) {
-                class1ComboBox.addItem(elementClass, name);
+            String displayableClassName = elementsNameBuilder.getDisplayableName(elementClass);
+            if (!Strings.isNullOrEmpty(displayableClassName)) {
+                Collection<Class<? extends ModelElement>> instanciableAssignableClasses = metaModel.getInstanciableAssignableClasses(elementClass);
+                boolean showInstanciableElementClassList = CoreMetaModel.isAbstract(elementClass) || instanciableAssignableClasses.size() > 1;
+                if (showInstanciableElementClassList) {
+                    StringBuilder sb = new StringBuilder(displayableClassName);
+                    sb.append(" (");
+                    String displayableNames = elementsNameBuilder.getDisplayableName(instanciableAssignableClasses);
+                    sb.append(displayableNames);
+                    sb.append(")");
+                    displayableClassName = sb.toString();
+                }
+                class1ComboBox.addItem(elementClass, displayableClassName);
             }
         }
         class1ComboBox.setSelectedItem(null);
