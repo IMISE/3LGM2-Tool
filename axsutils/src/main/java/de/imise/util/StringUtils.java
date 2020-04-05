@@ -1,7 +1,9 @@
 package de.imise.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -394,8 +396,42 @@ public class StringUtils {
      * @param delimiter
      * @return
      */
+    public static String createCollectionString(final Collection<?> collection) {
+        return createCollectionString(collection, ", ");
+    }
+
+    /**
+     * Gibt den verketteten String aller Objekte in der Collection zurück. Diese sind durch den angegebenen Delimiter getrennt.
+     *
+     * @param collection
+     * @param delimiter
+     * @return
+     */
     public static String createCollectionString(final Collection<?> collection, final String delimiter) {
         return appendCollectionString(null, collection, delimiter).toString();
+    }
+
+    /**
+     * Returns a comma separated alphabetical sorted string of all objects in the collection
+     *
+     * @param collection
+     * @return
+     */
+    public static String createAlphabeticalCollectionString(final Collection<?> collection) {
+        return createAlphabeticalCollectionString(collection, ", ");
+    }
+
+    /**
+     * Returns an alphabetical sorted string of all objects in the collection.
+     *
+     * @param collection
+     * @param delimiter delimiter between the values
+     * @return
+     */
+    public static String createAlphabeticalCollectionString(final Collection<?> collection, final String delimiter) {
+        List<?> sortedList = new ArrayList<>(collection);
+        Alphabetical.sort(sortedList);
+        return createCollectionString(sortedList, delimiter);
     }
 
 }
