@@ -36,19 +36,19 @@ public abstract class Tool3lgmConstants {
      * {@link Tool3lgmConstants#FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehängt.
      */
     public static enum FileFilterType {
-    LGM3,
-    LGM3_ZIP,
-    LGM3_UNZIPPED,
-    USERFIELD,
-    LIC,
-    XSL,
-    CSV,
-    JAR
+        LGM3,
+        LGM3_ZIP,
+        LGM3_UNZIPPED,
+        USERFIELD,
+        LIC,
+        XSL,
+        CSV,
+        JAR
     }
 
     /** String with the version-identifier for Tool3lgm */
     // TODO _____###### ständig aktualisieren!
-    public static final String TOOL_VERSION = "4.1.1 (dev)";
+    public static final String TOOL_VERSION = "4.1.1";
     public static final String Branch = ""; //"origin/SplitMetaModelAndTemplates";
 
     /**
