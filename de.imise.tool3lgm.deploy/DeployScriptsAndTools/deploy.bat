@@ -1,4 +1,12 @@
-@ECHO ON &SETLOCAL
+@ECHO OFF &SETLOCAL
+
+::Default Variablen setzen
+::  Per Default Bat_To_Exe_Converter nicht ausfuehren, da aktuell Windows 10 Viren in den generierten EXE-Dateien findet (false-positive)
+::  Alternativ: CMD-Line Parameter "-skip-bat2exe" verwenden
+SET "SKIPBAT2EXE=yes" 
+::  Per Default Maven Jobs ausfuehren
+::  Alternativ: CMD-Line Parameter "-skip-mvn" verwenden
+SET "SKIPMVN=no" 
 
 SET "INITIAL_DIR=%CD%"
 
@@ -46,9 +54,10 @@ SET "INNOSETUP_PROGRAM_DIR=Inno Setup 5"
 ::Pfad zur 7zip-Exe
 SET "SEVENZIP_PROGRAM_FILE=7zip\7z.exe"
 ::Pfad zum Bat To Exe Converter
-::SET "BAT_TO_EXE_CONVERTER_PROGRAM_DIR=Bat_To_Exe_Converter\Windows (32 bit)"
-SET "BAT_TO_EXE_CONVERTER_PROGRAM_DIR=Bat_To_Exe_Converter_v3.0.10"
-
+SET "BAT_TO_EXE_CONVERTER_PROGRAM_DIR=Bat_To_Exe_Converter_v1.6\Windows (32 bit)"
+::SET "BAT_TO_EXE_CONVERTER_PROGRAM_DIR=Bat_To_Exe_Converter_v3.1"
+::SET "BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR=Bat_To_Exe_Converter_v3.0.10"
+SET "BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR=Bat_To_Exe_Converter_v3.1"
 
 ::Basisname der von Innosetup erzeugten Exe-Installationsdatei. Diese wird noch um die Version ergänzt
 SET "WINDOWS_INSTALLER_EXE_BASE_NAME=setup3lgm_V" 
@@ -122,9 +131,25 @@ SET "POM_FILE_LINE_END=^</version^>"
 :: (1.) Austausch von Zeilen in einer Datei mit einem bestimmten Anfang und Ende
 :: (2.) Auskommentieren und Wiederreinnehmen von PAUSE-Anweisungen in Batch-Dateien
 SET "DEPLOY_TOOLS_PROJECT_DIR=DeployTools\de.axs.deploytools" 
+
+::Maven Build Job ueberspringen
+IF "%SKIPMVN%"=="yes" (
+  ECHO "### Skipping Maven Job (SKIPMVN=yes)"
+  GOTO NEXT1
+)
+FOR %%A IN (%*) DO (
+  IF "%%A"=="-skip-mvn" (
+    ECHO "### Skipping Maven Job (-skip-mvn)"
+    GOTO NEXT1
+  )
+)
+
 ::create deploytools per Maven und speichere Pfad zur jar in einer Variable 
 CD /D %DEPLOY_TOOLS_PROJECT_DIR%
 CALL mvn -B clean install
+
+:NEXT1
+
 ::suche die jar-Datei der Deploy-Tools im target-Ordner des deploy-tools-Projektes. Falls mal jemand die Version
 ::der Deploy-Tools in deren pom.xml ändert, dann heißt die generierte jar-Datei anders. Indem man sie hier
 ::automatisch heraussucht, funktioniert das hier dann trotzdem noch.
@@ -135,7 +160,7 @@ FOR %%F IN (target\*.jar) DO (
 :deploy_tools_jar_found
 CD /D %SCRIPT_LOCATION%
 
-@ECHO on
+::@ECHO on
 ECHO.
 
 ::Zeile mit der Version aus der Tool3lgmConstants.java-Datei lesen
@@ -146,7 +171,8 @@ FOR /f "tokens=* usebackq" %%a IN (`FINDSTR /C:"%JAVA_FILE_WITH_TOOL_VERSION_LIN
     FOR /f "tokens=1-3 delims=?" %%a IN ("!z!") DO SET lgmVersion=%%b
 )
 ::3LGM-Version ausgeben
-ECHO Current version %lgmVersion%
+ECHO "### Current version %lgmVersion%"
+ECHO.
 
 ::voller Name der von Innosetup erzeugten Exe-Installationsdatei mit Version und Untertrichen statt Leerzeichen
 SET "WINDOWS_INSTALLER_EXE_BASE_NAME=%WINDOWS_INSTALLER_EXE_BASE_NAME%%lgmVersion%" 
@@ -165,7 +191,7 @@ SET "CLH=/wait javaw -classpath ^"%DEPLOY_TOOLS_JAR%^" de.axs.deploytools.Change
 ::  ECHO %CLH% 
 ::  ECHO "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
 ::  START javaw -classpath "%DEPLOY_TOOLS_JAR%" de.axs.deploytools.ChangeLineHandler "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
-::Hinweis: Aktuell darf die POM-Datei nicht ge�ndert werden, da es Abh�ngigkeiten zu anderen POM Dateien (Plugins) gibt.
+::Hinweis: Aktuell darf die POM-Datei nicht geändert werden, da es Abhängigkeiten zu anderen POM Dateien (Plugins) gibt.
 ::  START %CLH% "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
 ::Debug:
 ::  EXIT /B
@@ -198,6 +224,18 @@ START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEALL_SRT%" "%ISS_FILE_LINE_FILEALL_E
 ::zurück gewechselt werden. Das ist auf jeden Fall einfacher, als erst nochmal die ganzen Pfade
 ::absolut zu machen.
 
+::Maven Build Job ueberspringen
+IF "%SKIPMVN%"=="yes" (
+  ECHO "### Skipping Maven Jobs (SKIPMVN=yes)"
+  GOTO NEXT2
+)
+FOR %%A IN (%*) DO (
+  IF "%%A"=="-skip-mvn" (
+    ECHO "### Skipping Maven Jobs (-skip-mvn)"
+    GOTO NEXT2
+  )
+)
+
 ::create axsutils per Maven
 CD /D %AXSUTILS_PROJECT_DIR%
 CALL mvn -B clean install
@@ -223,6 +261,8 @@ CD /D %IHE_TEMPLATE_PROJECT_DIR%
 CALL mvn -B clean install
 CD /D %SCRIPT_LOCATION%
 
+:NEXT2
+
 ::IHE Domain Ontology pull
 ::ToDo: Repo pullen
 ::CD /D %METAMODEL3LGM2_DIR%
@@ -232,11 +272,23 @@ CD /D %SCRIPT_LOCATION%
 ECHO "### Copy IHE Domain Ontology %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf -> %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\"
 COPY /Y %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\
 
+::bat-to-exe-converter ueberspringen
+IF "%SKIPBAT2EXE%"=="yes" (
+  ECHO "### Skipping bat-to-exe-converter (SKIPBAT2EXE=yes)"
+  GOTO NEXT3
+)
+FOR %%A IN (%*) DO (
+  IF "%%A"=="-skip-bat2exe" (
+    ECHO "### Skipping bat-to-exe-converter (-skip-bat2exe)"
+    GOTO NEXT3
+  )
+)
+
 ::Jetzt im zu deployenden Tool die exe-Datei zum Starten des Tools aus der bat-Datei neu erzeugen.
 ::Vorher alte exe löschen (eigentlich gibt es eine Option, so dass Bat_To_Exe_Converter.exe eine
-::vorhandene Datei überschreibt, aber das funktioniert nicht!)
-::DEL %DEPLOY_PROJECT_TOOL3LGM_START_EXE% /s /q
-::DEL %DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64% /s /q
+::vorhandene Datei überschreibt, aber das funktioniert in Version 1.6 nicht!)
+DEL %DEPLOY_PROJECT_TOOL3LGM_START_EXE% /s /q
+::  DEL %DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64% /s /q
 ::tool3lgm2.exe neu bauen aus der aktuellen tool3lgm2.bat. Aber ohne das PAUSE am Ende, da die exe
 ::sonst nie beendet wird. Das macht der BatchPauseEnabledSwitch aus den Java-Deploy-Tools.
 SET "BATCH_PAUSE_ENABLED_SWITCH=/wait javaw -classpath ^"%DEPLOY_TOOLS_JAR%^" de.axs.deploytools.BatchPauseEnabledSwitch"
@@ -244,15 +296,24 @@ SET "BATCH_PAUSE_ENABLED_SWITCH=/wait javaw -classpath ^"%DEPLOY_TOOLS_JAR%^" de
 START %BATCH_PAUSE_ENABLED_SWITCH% "-%DEPLOY_PROJECT_TOOL3LGM_START_BAT%"
 ::Siehe https://documentation.help/bat-to-exe-converter/de.html#cmd
 ECHO "### Execute Bat_To_Exe_Converter"
+CD /D %DEPLOY_PROJECT_TOOL3LGM_DIR%
 ::v1.7:
-::  CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_DIR%\Bat_To_Exe_Converter.exe" -bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" -save "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%" -icon "%DEPLOY_TOOL3LGM_ICON%" -invisible
-::v3.0.10 (32 Bit):
-CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_DIR%\Bat_To_Exe_Converter.exe" /bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" /exe "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%" /overwrite /icon "%DEPLOY_TOOL3LGM_ICON%" /invisble /overide /attributes /display /fileversion "1.0.0.0" /productversion "%lgmVersion%" /productname "3lgm2-tool"
-::v3.0.10 (64 Bit):
-CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_DIR%\Bat_To_Exe_Converter_(x64).exe" /bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" /exe "%DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64%" /overwrite /icon "%DEPLOY_TOOL3LGM_ICON%" /invisble /x64 /overide /attributes /display /fileversion "1.0.0.0" /productversion "%lgmVersion%" /productname "3lgm2-tool"
+::  CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_DIR%\Bat_To_Exe_Converter.exe" -bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" -save "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%" -icon "%DEPLOY_TOOL3LGM_ICON%" -invisible -overwrite
+::v1.6.0 (32 Bit):
+CALL "%SCRIPT_LOCATION%%BAT_TO_EXE_CONVERTER_PROGRAM_DIR%\Bat_To_Exe_Converter.exe" -bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" -save "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%" -icon "%DEPLOY_TOOL3LGM_ICON%" -invisible
+::v3.x (32 Bit):
+::  CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR%\Bat_To_Exe_Converter_(x64).exe" /bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" /exe "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%" /icon "%DEPLOY_TOOL3LGM_ICON%" /invisible /upx /overwrite /attributes /display /fileversion "1.0.0.0" /productversion "%lgmVersion%" /productname "3lgm2-tool"
+CD /D %SCRIPT_LOCATION%
+::v3.x (64 Bit):
+CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR%\Bat_To_Exe_Converter_(x64).exe" /bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" /exe "%DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64%" /icon "%DEPLOY_TOOL3LGM_ICON%" /invisible /x64 /workdir "%SCRIPT_LOCATION%%BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR%" /upx /overwrite /attributes /display /fileversion "1.0.0.0" /productversion "%lgmVersion%" /productname "3lgm2-tool"
 ::Das PAUSE wieder aktivieren. Plus (+) als Marker vor dem Dateinamen
 START %BATCH_PAUSE_ENABLED_SWITCH% "+%DEPLOY_PROJECT_TOOL3LGM_START_BAT%"
 
+:NEXT3
+
+::Bestehende Dateien im Verzeichnis %DEPLOY_DESTINATION_DIR% löschen
+ECHO "### Entferne vorhandene Dateien im Verzeichnis %DEPLOY_DESTINATION_DIR%"
+DEL %DEPLOY_DESTINATION_DIR%\*  /s /q
 
 ::run Inno Setup -> Erzeuge Windows-Installer
 CD /D "%INNOSETUP_PROGRAM_DIR%"
@@ -262,7 +323,7 @@ CD /D %SCRIPT_LOCATION%
 ::Name der zu erstellenden zip und tar.gz-Dateien
 SET "ZIP_AND_TARGZ_RESULT_NAME=%ZIP_AND_TARGZ_RESULT_BASE_NAME%%lgmVersion%"
 SET ZIP_AND_TARGZ_RESULT_NAME=%ZIP_AND_TARGZ_RESULT_NAME: =_%
-ECHO %ZIP_AND_TARGZ_RESULT_BASE_NAME%
+ECHO "### ZIP_AND_TARGZ_RESULT_NAME = %ZIP_AND_TARGZ_RESULT_NAME% "
 
 :: ZIP the deploy Files with 7zip
 FOR /d %%X IN ("%DEPLOY_PROJECT_TOOL3LGM_DIR%") DO "%SEVENZIP_PROGRAM_FILE%" a "%DEPLOY_DESTINATION_DIR%\%ZIP_AND_TARGZ_RESULT_NAME%.zip" "%%X\"
