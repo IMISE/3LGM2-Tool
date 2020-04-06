@@ -1,0 +1,1 @@
+"..\DeployScriptsAndTools\Bat_To_Exe_Converter_v3.1\Bat_To_Exe_Converter.exe" /bat 3lgm2tool.bat /exe test31.exe /icon ..\DeployScriptsAndTools\Icons\toolIcon_gross.ico /invisble /overide /attributes /display /fileversion "1.0.0.0" /productversion "4.1.1dev" /productname "3lgm2-tool"
