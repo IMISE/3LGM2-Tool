@@ -18,6 +18,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RASTER_WIDTH;
 import static java.awt.Cursor.DEFAULT_CURSOR;
 
+import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -44,6 +45,7 @@ import de.imise.tool3lgm.graphtools.view.container.EdgeContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
+import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.gui.menu.RegularContextGenerator;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.event.InputEvents;
@@ -165,7 +167,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             addMouseListener(this);
             addMouseMotionListener(this);
             addMouseWheelListener(this);
-            getMainFrame().addMouseListener(this);
+            MainFrame mainFrame = getMainFrame();
+            mainFrame.addMouseListener(this);
             xin = 0;
             yin = 0;
             grabbed = false;
@@ -1133,10 +1136,12 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     @Override
     public void mouseWheelMoved(final MouseWheelEvent e) {
         if (!e.isControlDown()) {
-            getParent().dispatchEvent(e);
+            Container parent = getParent();
+            parent.dispatchEvent(e);
             return;
         }
-        double zoomStep = zoom - 0.05 * e.getWheelRotation();
+        int wheelRotation = e.getWheelRotation();
+        double zoomStep = zoom - 0.05 * wheelRotation;
         setZoom(zoomStep);
     }
 
@@ -1145,7 +1150,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
      * Entfernt dieses Panel aus den Listener/Listen, in denen es vorkommt.
      */
     public void dispose() {
-        getMainFrame().removeMouseListener(this);
+        MainFrame mainFrame = getMainFrame();
+        mainFrame.removeMouseListener(this);
     }
 
 }
