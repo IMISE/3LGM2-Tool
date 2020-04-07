@@ -4,9 +4,12 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
+import java.awt.GraphicsConfiguration;
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -115,6 +118,17 @@ public class SwingUtils {
         gbc.gridwidth = w;
         gbc.gridheight = h;
         container.add(component, gbc);
+    }
+
+    /**
+     * @param graphicsConfiguration
+     * @return the height of the titleBar oj a {@link JFrame} with the given {@link GraphicsConfiguration}.
+     */
+    public static final int getJFrameTitlebarHight(final GraphicsConfiguration graphicsConfiguration) {
+        JFrame jFrame = new JFrame(graphicsConfiguration);
+        jFrame.pack();
+        Insets insets = jFrame.getInsets();
+        return insets.top;
     }
 
 }
