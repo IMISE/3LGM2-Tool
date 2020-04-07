@@ -13,6 +13,7 @@ import javax.swing.event.ChangeListener;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.util.swing.component.MinMaxNumberTextField3;
 
@@ -34,7 +35,7 @@ public class GraphAreaOptionSliders implements ChangeListener {
 
     private void init(final int preferredSizeWidth, final int preferredSizeHeight) {
         sliderDegree = new SliderWithTextField(0, 80, preferredSizeWidth, preferredSizeHeight, "winkel");
-        sliderZoom = new SliderWithTextField(10, 200, preferredSizeWidth, preferredSizeHeight, "zoom");
+        sliderZoom = new SliderWithTextField((int) (BasicGraphArea.ZOOM_FACTOR_MINIMUM * 100), (int) (BasicGraphArea.ZOOM_FACTOR_MAXIMUM * 100), preferredSizeWidth, preferredSizeHeight, "zoom");
         sliderGap = new SliderWithTextField(0, getSliderGapMaximum(), preferredSizeWidth, preferredSizeHeight, "abstand");
         sliderPageSizeFactor = new SliderWithTextField(100, 1000, preferredSizeWidth, preferredSizeHeight, "page_zoom");
         updateValues();

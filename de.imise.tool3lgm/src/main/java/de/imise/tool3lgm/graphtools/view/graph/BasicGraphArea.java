@@ -127,9 +127,9 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     private final Insets graphBorder = new Insets(50, 50, 50, 50);
 
     /** Minimaler interner Zoom-Wert */
-    private static final double ZOOM_FACTOR_MINIMUM = 0d;
+    public static final double ZOOM_FACTOR_MINIMUM = 0.1d;
     /** Maximaler interner Zoom-Wert */
-    private static final double ZOOM_FACTOR_MAXIMUM = 2d;
+    public static final double ZOOM_FACTOR_MAXIMUM = 5d;
 
     private final List<BasicGraphAreaChangeListener> changeListener = new ArrayList<>();
 
