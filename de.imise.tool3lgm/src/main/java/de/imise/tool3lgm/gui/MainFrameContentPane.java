@@ -118,6 +118,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
 
         // Direkthilfe für die einzelnen Baukastenteile
         CSH.setHelpIDString(modelBrowserPanel, "uebersicht_modellbrowser");
+        checkModelBrowserVisibility();
         checkConsistencyTableVisibility();
         checkTemplateBrowserVisibility();
 
