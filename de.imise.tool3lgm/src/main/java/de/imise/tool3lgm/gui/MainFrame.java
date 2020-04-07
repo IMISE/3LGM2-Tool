@@ -45,10 +45,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     /** Pane, das in das ContentPane dieses Frames gelegt wird */
     private final MainFrameContentPane contentPane;
 
-    /**
-     * @param visible
-     */
-    public MainFrame(final boolean visible) {
+    public MainFrame() {
         setIconImage(Tool3lgmConstants.getIcon("toolIcon.gif").getImage());
         setTitle(null);
 
@@ -68,13 +65,21 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
         addAsToolChangeListener();
         updateTitle();
         addComponentListener(this);
-        restorePositionAndSizeFromUserProperties();
-        setVisible(visible);
+    }
+
+    @Override
+    public void setVisible(final boolean b) {
+        if (b) {
+            restorePositionAndSizeFromUserProperties();
+        } else {
+            savePositionAndSizeInUserProperties();
+        }
+        super.setVisible(b);
     }
 
     @Override
     public void dispose() {
-        Static.getTool().close();
+        Static.close();
     }
 
     /**
@@ -98,13 +103,12 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
         int frameY = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.get();
         int frameWidth = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.get();
         int frameHeight = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT.get();
-        Rectangle screenBounds = getGraphicsConfiguration().getBounds();
+        Rectangle screenBounds = graphicsConfiguration.getBounds();
         if (frameHeight <= jFrameTitlebarHight * 2) { // if the frame has only at maximum the double titlebar height
             setBounds(screenBounds); //full sreen
         } else {
             setBounds(frameX, frameY, frameWidth, frameHeight); //last height
         }
-
     }
 
     /**

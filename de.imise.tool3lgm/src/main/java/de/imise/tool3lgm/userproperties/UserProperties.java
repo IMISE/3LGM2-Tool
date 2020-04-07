@@ -525,36 +525,21 @@ public class UserProperties {
      * @author AXS (9 Aug 2017)
      */
     public static enum IntProperty {
-        PROPERTY_INT_MAINFRAME_SCREEN_POSX {
-            @Override
-            public int getDefault() {
-                return -1;
-            }
-        },
-        PROPERTY_INT_MAINFRAME_SCREEN_POSY {
-            @Override
-            public int getDefault() {
-                return -1;
-            }
-        },
-        PROPERTY_INT_MAINFRAME_SCREEN_WIDTH {
-            @Override
-            public int getDefault() {
-                return -1;
-            }
-        },
-        PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT {
-            @Override
-            public int getDefault() {
-                return -1;
-            }
-        },
+        PROPERTY_INT_MAINFRAME_SCREEN_POSX,
+        PROPERTY_INT_MAINFRAME_SCREEN_POSY,
+        PROPERTY_INT_MAINFRAME_SCREEN_WIDTH,
+        PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT,
+        PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION,
+        PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION,
+        PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION,
+
         PROPERTY_INT_RASTER_WIDTH {
             @Override
             public int getDefault() {
                 return 5;
             }
         },
+
         /**
          * Bitpattern for Rendering-Hints (standard value: all bits are set to zero
          * bit0: ANTIALIASING

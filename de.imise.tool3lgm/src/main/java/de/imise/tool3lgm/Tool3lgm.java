@@ -75,7 +75,8 @@ public class Tool3lgm {
         // er sich korrekt updated, bevor der TemplateBrowser beim selben Ereignis (selectedModelChanged)
         // auf ihn zugreift
         templateLibrariesManager = visible ? new TemplateLibrariesManager() : null;
-        mainFrame = new MainFrame(visible);
+        mainFrame = new MainFrame();
+        mainFrame.setVisible(visible);
 
         //den Hauptframe in die Mitte setzen
         //setLocationRelativeTo(null);
