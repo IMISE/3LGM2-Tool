@@ -393,15 +393,18 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         if (multiView) {
             for (int c = MAX_LAYER_INDEX; c >= MIN_LAYER_INDEX; c--) {
                 if (!isInterLayer(c)) {
-                    returnContainer = chooseObject(szenario.getLayer(c), xreal[c], yreal[c]);
+                    LayerContainer lc = szenario.getLayer(c);
+                    returnContainer = chooseObject(lc, xreal[c], yreal[c]);
                     if (returnContainer != null) {
                         break;
                     }
                 }
             }
         } else {
-            int ebene = szenario.getCollection().getActiveLayer();
-            returnContainer = chooseObject(szenario.getLayer(ebene), xreal[ebene], yreal[ebene]);
+            GDCollection gdcoll = szenario.getCollection();
+            int layer = gdcoll.getActiveLayer();
+            LayerContainer lc = szenario.getLayer(layer);
+            returnContainer = chooseObject(lc, xreal[layer], yreal[layer]);
         }
         return returnContainer;
     }
@@ -422,24 +425,6 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         contextGenerator.setControlled(controlKeyPressed);
 
         ElementContainer ka = getMouseOverElementContainer();
-        // ElementContainer ka = null;
-        //
-        // if (multi_view) {
-        //        for (int c = MAX_LAYER_INDEX; c >= MIN_LAYER_INDEX; c--) {
-        //            if (!ModelConstants.isInterLayer(c)) {
-        //das hier sollte nicht mehr über diese MAGIC-Numbers lauf sondern so, wie die nächsten beiden Zeile:
-        //            for (int c = MAX_LAYER_INDEX; c >= MIN_LAYER_INDEX; c--) {
-        //         if (!ModelConstants.isInterLayer(c)) {
-        // for (int c = 4; c >= 0; c -= 2) {
-        // ka = chooseObject(doc.getLayer(c), xreal[c], yreal[c]);
-        // if (ka != null) {
-        // break;
-        // }
-        // }
-        // } else {
-        // int ebene = doc.getCollection().getActiveLayer();
-        // ka = chooseObject(doc.getLayer(ebene), xreal[ebene], yreal[ebene]);
-        // }
         if (ka != null) {
             szenario.select(ka, 0);
         }
