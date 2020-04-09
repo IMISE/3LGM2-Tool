@@ -6,3 +6,5 @@ de.imise.tool3lgm/lib
 target
 Plugins
 de.imise.tool3lgm.deploy/Tool3lgm/lib
+.DS_Store
+bin
