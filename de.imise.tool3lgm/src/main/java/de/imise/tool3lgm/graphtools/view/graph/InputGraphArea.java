@@ -412,11 +412,13 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     @Override
     public final void mouseClicked(final MouseEvent e) {
         int clickCount = e.getClickCount();
+
+        //only double clicks are relevant here
         if (clickCount <= 1) {
             return;
         }
 
-        boolean controlKeyPressed = InputEvents.isOperatingSystemDependentCTRLorCMDdown(e);
+        boolean controlKeyPressed = InputEvents.isOperatingSystemDependentCTRLorCMDorSHIFTdown(e);
         contextGenerator.setControlled(controlKeyPressed);
 
         ElementContainer ka = getMouseOverElementContainer();
@@ -478,7 +480,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     @Override
     public void mousePressed(final MouseEvent e) {
 
-        boolean controlKeyPressed = InputEvents.isOperatingSystemDependentCTRLorCMDdown(e);
+        boolean controlKeyPressed = InputEvents.isOperatingSystemDependentCTRLorCMDorSHIFTdown(e);
         contextGenerator.setControlled(controlKeyPressed);
 
         xin = e.getX();
