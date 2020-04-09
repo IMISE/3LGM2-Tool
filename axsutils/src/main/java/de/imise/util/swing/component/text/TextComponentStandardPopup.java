@@ -211,8 +211,12 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
                     // Workaround für Exception in thread "AWT-EventQueue-0" java.awt.IllegalComponentStateException:
                     // component must be showing on the screen to determine its location
                     SwingUtilities.invokeLater(() -> {
-                        findReplaceXPos = findIt.getLocationOnScreen().x;
-                        findReplaceYPos = findIt.getLocationOnScreen().y;
+                        try {
+                            findReplaceXPos = findIt.getLocationOnScreen().x;
+                            findReplaceYPos = findIt.getLocationOnScreen().y;
+                        } catch (Exception ex) {
+                            //Exception in thread "AWT-EventQueue-0" java.awt.IllegalComponentStateException: component must be showing on the screen to determine its location
+                        }
                     });
                 }
             }
