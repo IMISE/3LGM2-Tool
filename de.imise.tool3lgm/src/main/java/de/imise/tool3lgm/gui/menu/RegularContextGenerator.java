@@ -97,7 +97,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.pair.Pair;
@@ -228,7 +228,8 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
 
         JMenuItem verify = getItem(MODEL_OPTION_GDOC_VERIFICATION_MODE);
         JMenuItem interactive = getItem(MODEL_OPTION_GDCOLL_AUTOMATIC_MODE);
-        JMenuItem expertMode = UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE.createAction().createMenuItem();
+        JMenuItem debugGraph = getItem(BooleanProperty.TRANSIENT_OPTION_DEBUG_GRAPH);
+        JMenuItem expertMode = getItem(BooleanProperty.OPTION_ENABLE_EXPERT_MODE);
 
         command_line = getItem(MODEL_ACTION_COMMAND_LINE);
         queue = getItem(MODEL_ACTION_PRINT_QUEUE);
@@ -236,6 +237,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
 
         internals = new JMenu(getResString("intern"));
         internals.add(verify);
+        internals.add(debugGraph);
         internals.add(interactive);
         internals.add(expertMode);
         internals.addSeparator();

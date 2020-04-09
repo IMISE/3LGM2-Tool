@@ -450,7 +450,13 @@ public class UserProperties {
          * Zusammengeklappte Elemente werden speziell gezeichnet.<br>
          * Diese Option wird absichtlich <b>nicht </b> gespeichert und ist zu Beginn immer eingeschaltet.
          */
-        TRANSIENT_OPTION_SHOW_EXPANSION_SIGN;
+        TRANSIENT_OPTION_SHOW_EXPANSION_SIGN,
+
+        /**
+         * Interne Option die das zusätzliche Zeichenen der Rechtecke um die selektierten Elemente in der
+         * Grafik ein- oder ausschalten kann. Nur für Debug-Zwecke.
+         */
+        TRANSIENT_OPTION_DEBUG_GRAPH;
 
         /**
          * Alle BooleanProperties, deren Default-Wert <code>true</code> ist

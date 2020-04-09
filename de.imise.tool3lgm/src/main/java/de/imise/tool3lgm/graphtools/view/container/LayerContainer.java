@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_RASTER;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_DEBUG_GRAPH;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RASTER_WIDTH;
 import static de.imise.util.GraphicsFunctions.drawRect;
 
@@ -531,7 +532,7 @@ public class LayerContainer extends ElementContainer {
             }
             paintingSurrogates = false;
         }
-        if (doc.isVerificationMode()) {
+        if (TRANSIENT_OPTION_DEBUG_GRAPH.is()) {
             paintDebugRectangles(g);
         }
     }

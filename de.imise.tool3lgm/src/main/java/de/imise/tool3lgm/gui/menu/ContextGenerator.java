@@ -20,12 +20,14 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.event.ExtendedAction;
 import de.imise.util.swing.menu.MenuScroller;
 
@@ -169,6 +171,17 @@ public abstract class ContextGenerator implements ActionListener {
             return new JCheckBoxMenuItem(action);
         }
         return getItem(command.name(), command);
+    }
+
+    /**
+     * @param resKey
+     * @param command
+     * @return
+     */
+    protected final JMenuItem getItem(final BooleanProperty booleanProperty) {
+        UserPropertyBooleanChangeAction action = booleanProperty.createAction();
+        JCheckBoxMenuItem menuItem = action.createMenuItem();
+        return menuItem;
     }
 
     /**
