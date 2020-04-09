@@ -399,7 +399,47 @@ public abstract class Tool3lgmConstants {
      * @return
      */
     public static final boolean isPopupTrigger(final MouseEvent e) {
-        return (e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK;
+        //the origianl e.isPopupTrigger() returns true if the right button is pressed or
+        //(and that is the problem) if CTRL is pressed togehter with the left button.
+        //If CTRL is pressed togehter with the left button we want only an add to selection
+        //and no popups
+        //return e.isPopupTrigger(); //don't activate this!!!
+
+        //pupup triggered only if the right button is pressed
+        return isMouseButton3(e);
+    }
+
+    /**
+     * @param e
+     * @return <code>true</code> only if the left mouse
+     */
+    public static final boolean isMouseButton1(final MouseEvent e) {
+        return isMouseButton(e, InputEvent.BUTTON1_MASK);
+    }
+
+    /**
+     * @param e
+     * @return <code>true</code> only if the left mouse
+     */
+    public static final boolean isMouseButton2(final MouseEvent e) {
+        return isMouseButton(e, InputEvent.BUTTON2_MASK);
+    }
+
+    /**
+     * @param e
+     * @return <code>true</code> only if the left mouse
+     */
+    public static final boolean isMouseButton3(final MouseEvent e) {
+        return isMouseButton(e, InputEvent.BUTTON3_MASK);
+    }
+
+    /**
+     * @param e
+     * @return <code>true</code> only if the left mouse
+     */
+    private static final boolean isMouseButton(final MouseEvent e, final int buttonMask) {
+        boolean mouseButtonPressed = (e.getModifiers() & buttonMask) == buttonMask;
+        return mouseButtonPressed;
     }
 
     /**
