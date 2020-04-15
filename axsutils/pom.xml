@@ -5,10 +5,11 @@
 	<groupId>de.axs</groupId>
 	<artifactId>de-axs-utils</artifactId>
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/org.testng/testng -->
 		<dependency>
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
-			<version>6.14.3</version>
+			<version>7.1.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -73,19 +74,19 @@
 			</testResource>
 		</testResources>
 		<!-- Entweder das hier ODER das oben in properties -> maven.compiler.source und maven.compiler.target -->
-<!-- 		<pluginManagement> -->
-<!-- 			<plugins> -->
-<!-- 				<plugin> -->
-<!-- 					<groupId>org.apache.maven.plugins</groupId> -->
-<!-- 					<artifactId>maven-compiler-plugin</artifactId> -->
-<!-- 					<version>3.8.1</version> -->
-<!-- 					<configuration> -->
-<!-- 						<source>1.8</source> -->
-<!-- 						<target>1.8</target> -->
-<!-- 					</configuration> -->
-<!-- 				</plugin> -->
-<!-- 			</plugins> -->
-<!-- 		</pluginManagement> -->
+		<!-- <pluginManagement> -->
+		<!-- <plugins> -->
+		<!-- <plugin> -->
+		<!-- <groupId>org.apache.maven.plugins</groupId> -->
+		<!-- <artifactId>maven-compiler-plugin</artifactId> -->
+		<!-- <version>3.8.1</version> -->
+		<!-- <configuration> -->
+		<!-- <source>1.8</source> -->
+		<!-- <target>1.8</target> -->
+		<!-- </configuration> -->
+		<!-- </plugin> -->
+		<!-- </plugins> -->
+		<!-- </pluginManagement> -->
 	</build>
 	<name>de-axs-utils</name>
 </project>
