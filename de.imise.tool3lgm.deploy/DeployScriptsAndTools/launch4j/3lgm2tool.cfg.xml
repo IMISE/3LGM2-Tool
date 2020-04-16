@@ -3,7 +3,7 @@
   <dontWrapJar>true</dontWrapJar>
   <headerType>gui</headerType>
   <jar>lib\tool3lgm.jar</jar>
-  <outfile>C:\Users\sippe\git\3LGM\tool-3lgm2\de.imise.tool3lgm.deploy\Tool3lgm\3lgm2toolj.exe</outfile>
+  <outfile>..\..\Tool3lgm\3lgm2toolj.exe</outfile>
   <errTitle></errTitle>
   <cmdLine></cmdLine>
   <chdir>.</chdir>
@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>C:\Users\sippe\git\3LGM\tool-3lgm2\de.imise.tool3lgm.deploy\DeployScriptsAndTools\Icons\toolIcon_gross.ico</icon>
+  <icon>..\Icons\toolIcon_gross.ico</icon>
   <var>PATH=%PATH%;.;lib;Plugins</var>
   <classPath>
     <mainClass>de.imise.tool3lgm.Tool3lgmMain</mainClass>
@@ -37,7 +37,7 @@
     <fileDescription>Executable for 3LGM² Tool</fileDescription>
     <copyright>IMISE</copyright>
     <productVersion>4.1.1.0</productVersion>
-    <txtProductVersion>4.1.1</txtProductVersion>
+    <txtProductVersion>4.3.0 (dev)</txtProductVersion>
     <productName>3LGM² Tool</productName>
     <companyName>IMISE</companyName>
     <internalName>3lgm2toolj</internalName>
