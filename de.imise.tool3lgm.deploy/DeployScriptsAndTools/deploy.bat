@@ -4,6 +4,9 @@
 ::  Per Default Bat_To_Exe_Converter nicht ausfuehren, da aktuell Windows 10 Viren in den generierten EXE-Dateien findet (false-positive)
 ::  Alternativ: CMD-Line Parameter "-skip-bat2exe" verwenden
 SET "SKIPBAT2EXE=yes" 
+::  Per Default launch4j ausfuehren
+::  Alternativ: CMD-Line Parameter "-skip-launch4j" verwenden, um den Aufruf von launch4j zu unterdrücken
+SET "SKIPLAUNCH4J=no" 
 ::  Per Default Maven Jobs ausfuehren
 ::  Alternativ: CMD-Line Parameter "-skip-mvn" verwenden
 SET "SKIPMVN=no" 
@@ -58,6 +61,8 @@ SET "BAT_TO_EXE_CONVERTER_PROGRAM_DIR=Bat_To_Exe_Converter_v1.6\Windows (32 bit)
 ::SET "BAT_TO_EXE_CONVERTER_PROGRAM_DIR=Bat_To_Exe_Converter_v3.1"
 ::SET "BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR=Bat_To_Exe_Converter_v3.0.10"
 SET "BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR=Bat_To_Exe_Converter_v3.1"
+::Pfad zu launch4j (erzeugt aus einer Jar-Datei eine Exe-Datei)
+SET "LAUNCH4J_DIR=launch4j"
 
 ::Basisname der von Innosetup erzeugten Exe-Installationsdatei. Diese wird noch um die Version ergänzt
 SET "WINDOWS_INSTALLER_EXE_BASE_NAME=setup3lgm_V" 
@@ -118,13 +123,22 @@ SET "ISS_FILE_LINE_FILEALL_END=\"; DestDir: \"{app}\"; Flags: ignoreversion recu
 
 ::update version in pom.xml of the tool
 ::Zeile mit der Version in der pom.xml des Tools wird ebenfalls vor dem Compilieren geupdatet. Damit das klappt
-::muss die pom.xml-Datei auf jeden Fall formatiert sein (bzw. vor dem <version>-Tag muss ein Tab stehen!)
+::muss die pom.xml-Datei auf jeden Fall formatiert sein (bzw. für die Tab-Version muss vor dem <version>-Tag muss ein Tab stehen!)
 ::Hinweis: auch spitze Klammern müsses gequotet werden: "^<"
 SET "POM_FILE=%TOOL3LGM_PROJECT_DIR%\pom.xml"
 SET "POM_FILE_LINE_SRT=  ^<version^>"
 ::"Tab"-Version. Sicherheitshalber sollten keine "Tab"s verwendet werden. In der POM-Datei wurden alle Tabs durch "  " (2 Leerzeichen) ersetzt.
 ::SET "POM_FILE_LINE_SRT=	^<version^>"
 SET "POM_FILE_LINE_END=^</version^>"
+
+::update version in launch4j\3lgm2tool.cfg.xml
+::Zeile mit der Version in der pom.xml des Tools wird ebenfalls vor dem Compilieren geupdatet. Damit das klappt
+::Hinweise: auch spitze Klammern müsses gequotet werden: "^<"
+::  Die Formatierung der Datei ist wichtig (Leerzeichen)!
+SET "LAUNCH4J_FILE=%LAUNCH4J_DIR%\3lgm2tool.cfg.xml"
+SET "LAUNCH4J_FILE_LINE_SRT=    ^<txtProductVersion^>"
+SET "LAUNCH4J_FILE_LINE_END=^</txtProductVersion^>"
+
 
 ::Pfad zu den Java/Deploy-Tools. Diese sind extra für dieses Projekt geschrieben und befinden sich ebenfalls in
 ::diesem Deply-Projekt. Sie bieten im Grunde 2 Funktionen:
@@ -195,6 +209,8 @@ SET "CLH=/wait javaw -classpath ^"%DEPLOY_TOOLS_JAR%^" de.axs.deploytools.Change
 ::  START %CLH% "%POM_FILE%" "%POM_FILE_LINE_SRT%" "%POM_FILE_LINE_END%" "%lgmVersion%"
 ::Debug:
 ::  EXIT /B
+::Version in die launch4j Config-Datei schreiben
+START %CLH% "%LAUNCH4J_FILE%" "%LAUNCH4J_FILE_LINE_SRT%" "%LAUNCH4J_FILE_LINE_END%" "%lgmVersion%"
 ::Version in die ISS-Datei schreiben
 START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_VERSION_SRT%" "%ISS_FILE_LINE_VERSION_END%" "%lgmVersion%"
 ::ExeName in die ISS-Datei schreiben
@@ -272,7 +288,7 @@ CD /D %SCRIPT_LOCATION%
 ECHO "### Copy IHE Domain Ontology %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf -> %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\"
 COPY /Y %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\
 
-::bat-to-exe-converter ueberspringen
+::bat-to-exe-converter
 IF "%SKIPBAT2EXE%"=="yes" (
   ECHO "### Skipping bat-to-exe-converter (SKIPBAT2EXE=yes)"
   GOTO NEXT3
@@ -310,6 +326,30 @@ CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR%\Bat_To_Exe_Converter_(x64).exe" /
 START %BATCH_PAUSE_ENABLED_SWITCH% "+%DEPLOY_PROJECT_TOOL3LGM_START_BAT%"
 
 :NEXT3
+
+
+::launch4j: erzeugt aus einer Jar-Datei eine Exe-Datei
+::  es ist entweder Bat-to-Exe oder launch4j erforerlich, um die Exe-Datei zu erzeugen.
+IF "%SKIPLAUNCH4J%"=="yes" (
+  ECHO "### Skipping launch4j (SKIPLAUNCH4J=yes)"
+  GOTO NEXT4
+)
+FOR %%A IN (%*) DO (
+  IF "%%A"=="-skip-launch4j" (
+    ECHO "### Skipping launch4j (-skip-launch4j)"
+    GOTO NEXT4
+  )
+)
+
+::[ToDo]
+::  launch4j-Config anpassen, z.B. Version anpassen
+
+ECHO "### Execute launch4j"
+CD /D %SCRIPT_LOCATION%
+CALL "%LAUNCH4J_DIR%\launch4jc.exe" %LAUNCH4J_FILE%
+
+:NEXT4
+
 
 ::Bestehende Dateien im Verzeichnis %DEPLOY_DESTINATION_DIR% löschen
 ECHO "### Entferne vorhandene Dateien im Verzeichnis %DEPLOY_DESTINATION_DIR%"
