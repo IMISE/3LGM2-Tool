@@ -40,8 +40,8 @@
     <txtProductVersion>4.3.0 (dev)</txtProductVersion>
     <productName>3LGM² Tool</productName>
     <companyName>IMISE</companyName>
-    <internalName>3lgm2toolj</internalName>
-    <originalFilename>3lgm2toolj.exe</originalFilename>
+    <internalName>3lgm2tool</internalName>
+    <originalFilename>3lgm2tool.exe</originalFilename>
     <trademarks></trademarks>
     <language>ENGLISH_US</language>
   </versionInfo>
