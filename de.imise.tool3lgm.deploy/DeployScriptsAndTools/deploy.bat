@@ -67,6 +67,13 @@ SET "ZIP_AND_TARGZ_RESULT_BASE_NAME=Tool3lgm_V"
 SET "DEPLOY_PROJECT_TOOL3LGM_DIR_NAME=Tool3lgm"
 ::Pfad zum Ordner mit dem zu deployenden Tools
 SET "DEPLOY_PROJECT_TOOL3LGM_DIR=..\%DEPLOY_PROJECT_TOOL3LGM_DIR_NAME%"
+
+::einfacher Name der und voller Name zur Exe-Datei zum Starten des Tools im Ordner mit dem zu
+::deployenden Tool (diese wird aus der Batch-Datei erzeugt)
+SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE_FILENAME=3lgm2tool.exe"
+::Pfad dieser Exe
+SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE=%DEPLOY_PROJECT_TOOL3LGM_DIR%\%DEPLOY_PROJECT_TOOL3LGM_START_EXE_FILENAME%"
+
 ::voller Name der Icon-Datei, mit der die Exe und der Innosetup-Installer versehen wird
 SET "DEPLOY_TOOL3LGM_ICON=..\DeployScriptsAndTools\Icons\toolIcon_gross.ico"
 
