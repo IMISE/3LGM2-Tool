@@ -1,9 +1,6 @@
 @ECHO OFF &SETLOCAL
 
 ::Default Variablen setzen
-::  Per Default Bat_To_Exe_Converter nicht ausfuehren, da aktuell Windows 10 Viren in den generierten EXE-Dateien findet (false-positive)
-::  Alternativ: CMD-Line Parameter "-skip-bat2exe" verwenden
-SET "SKIPBAT2EXE=yes" 
 ::  Per Default launch4j ausfuehren
 ::  Alternativ: CMD-Line Parameter "-skip-launch4j" verwenden, um den Aufruf von launch4j zu unterdrücken
 SET "SKIPLAUNCH4J=no" 
@@ -56,11 +53,6 @@ SET "IHE_TEMPLATE_PROJECT_DIR=..\..\de.imise.tool3lgm.template.ihe"
 SET "INNOSETUP_PROGRAM_DIR=Inno Setup 5"
 ::Pfad zur 7zip-Exe
 SET "SEVENZIP_PROGRAM_FILE=7zip\7z.exe"
-::Pfad zum Bat To Exe Converter
-SET "BAT_TO_EXE_CONVERTER_PROGRAM_DIR=Bat_To_Exe_Converter_v1.6\Windows (32 bit)"
-::SET "BAT_TO_EXE_CONVERTER_PROGRAM_DIR=Bat_To_Exe_Converter_v3.1"
-::SET "BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR=Bat_To_Exe_Converter_v3.0.10"
-SET "BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR=Bat_To_Exe_Converter_v3.1"
 ::Pfad zu launch4j (erzeugt aus einer Jar-Datei eine Exe-Datei)
 SET "LAUNCH4J_DIR=launch4j"
 
@@ -75,16 +67,6 @@ SET "ZIP_AND_TARGZ_RESULT_BASE_NAME=Tool3lgm_V"
 SET "DEPLOY_PROJECT_TOOL3LGM_DIR_NAME=Tool3lgm"
 ::Pfad zum Ordner mit dem zu deployenden Tools
 SET "DEPLOY_PROJECT_TOOL3LGM_DIR=..\%DEPLOY_PROJECT_TOOL3LGM_DIR_NAME%"
-::voller Name der Batch-Datei zum Starten des Tools im Ordner mit dem zu deployenden Tool (diese wird
-::in eine exe umgewandelt)
-SET "DEPLOY_PROJECT_TOOL3LGM_START_BAT=%DEPLOY_PROJECT_TOOL3LGM_DIR%\3lgm2tool.bat"
-::einfacher Name der und voller Name zur Exe-Datei zum Starten des Tools im Ordner mit dem zu
-::deployenden Tool (diese wird aus der Batch-Datei erzeugt)
-SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE_FILENAME=3lgm2tool.exe"
-SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64_FILENAME=3lgm2tool_x64.exe"
-::Pfad dieser Exe
-SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE=%DEPLOY_PROJECT_TOOL3LGM_DIR%\%DEPLOY_PROJECT_TOOL3LGM_START_EXE_FILENAME%"
-SET "DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64=%DEPLOY_PROJECT_TOOL3LGM_DIR%\%DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64_FILENAME%"
 ::voller Name der Icon-Datei, mit der die Exe und der Innosetup-Installer versehen wird
 SET "DEPLOY_TOOL3LGM_ICON=..\DeployScriptsAndTools\Icons\toolIcon_gross.ico"
 
@@ -149,12 +131,12 @@ SET "DEPLOY_TOOLS_PROJECT_DIR=DeployTools\de.axs.deploytools"
 ::Maven Build Job ueberspringen
 IF "%SKIPMVN%"=="yes" (
   ECHO "### Skipping Maven Job (SKIPMVN=yes)"
-  GOTO NEXT1
+  GOTO MVN_NEXT1
 )
 FOR %%A IN (%*) DO (
   IF "%%A"=="-skip-mvn" (
     ECHO "### Skipping Maven Job (-skip-mvn)"
-    GOTO NEXT1
+    GOTO MVN_NEXT1
   )
 )
 
@@ -162,7 +144,7 @@ FOR %%A IN (%*) DO (
 CD /D %DEPLOY_TOOLS_PROJECT_DIR%
 CALL mvn -B clean install
 
-:NEXT1
+:MVN_NEXT1
 
 ::suche die jar-Datei der Deploy-Tools im target-Ordner des deploy-tools-Projektes. Falls mal jemand die Version
 ::der Deploy-Tools in deren pom.xml ändert, dann heißt die generierte jar-Datei anders. Indem man sie hier
@@ -243,12 +225,12 @@ START %CLH% "%ISS_FILE%" "%ISS_FILE_LINE_FILEALL_SRT%" "%ISS_FILE_LINE_FILEALL_E
 ::Maven Build Job ueberspringen
 IF "%SKIPMVN%"=="yes" (
   ECHO "### Skipping Maven Jobs (SKIPMVN=yes)"
-  GOTO NEXT2
+  GOTO MVN_NEXT2
 )
 FOR %%A IN (%*) DO (
   IF "%%A"=="-skip-mvn" (
     ECHO "### Skipping Maven Jobs (-skip-mvn)"
-    GOTO NEXT2
+    GOTO MVN_NEXT2
   )
 )
 
@@ -277,7 +259,7 @@ CD /D %IHE_TEMPLATE_PROJECT_DIR%
 CALL mvn -B clean install
 CD /D %SCRIPT_LOCATION%
 
-:NEXT2
+:MVN_NEXT2
 
 ::IHE Domain Ontology pull
 ::ToDo: Repo pullen
@@ -288,67 +270,25 @@ CD /D %SCRIPT_LOCATION%
 ECHO "### Copy IHE Domain Ontology %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf -> %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\"
 COPY /Y %METAMODEL3LGM2_DIR%\IHE\iheDomain_Ontology_straight-forward_v2.rdf %SCRIPT_LOCATION%\..\Tool3lgm\Templates\IHE\
 
-::bat-to-exe-converter
-IF "%SKIPBAT2EXE%"=="yes" (
-  ECHO "### Skipping bat-to-exe-converter (SKIPBAT2EXE=yes)"
-  GOTO NEXT3
-)
-FOR %%A IN (%*) DO (
-  IF "%%A"=="-skip-bat2exe" (
-    ECHO "### Skipping bat-to-exe-converter (-skip-bat2exe)"
-    GOTO NEXT3
-  )
-)
-
-::Jetzt im zu deployenden Tool die exe-Datei zum Starten des Tools aus der bat-Datei neu erzeugen.
-::Vorher alte exe löschen (eigentlich gibt es eine Option, so dass Bat_To_Exe_Converter.exe eine
-::vorhandene Datei überschreibt, aber das funktioniert in Version 1.6 nicht!)
-DEL %DEPLOY_PROJECT_TOOL3LGM_START_EXE% /s /q
-::  DEL %DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64% /s /q
-::tool3lgm2.exe neu bauen aus der aktuellen tool3lgm2.bat. Aber ohne das PAUSE am Ende, da die exe
-::sonst nie beendet wird. Das macht der BatchPauseEnabledSwitch aus den Java-Deploy-Tools.
-SET "BATCH_PAUSE_ENABLED_SWITCH=/wait javaw -classpath ^"%DEPLOY_TOOLS_JAR%^" de.axs.deploytools.BatchPauseEnabledSwitch"
-::Das Minus (-) vor dem Dateinamen ist der Marker für das disablen von PAUSE.
-START %BATCH_PAUSE_ENABLED_SWITCH% "-%DEPLOY_PROJECT_TOOL3LGM_START_BAT%"
-::Siehe https://documentation.help/bat-to-exe-converter/de.html#cmd
-ECHO "### Execute Bat_To_Exe_Converter"
-CD /D %DEPLOY_PROJECT_TOOL3LGM_DIR%
-::v1.7:
-::  CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_DIR%\Bat_To_Exe_Converter.exe" -bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" -save "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%" -icon "%DEPLOY_TOOL3LGM_ICON%" -invisible -overwrite
-::v1.6.0 (32 Bit):
-CALL "%SCRIPT_LOCATION%%BAT_TO_EXE_CONVERTER_PROGRAM_DIR%\Bat_To_Exe_Converter.exe" -bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" -save "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%" -icon "%DEPLOY_TOOL3LGM_ICON%" -invisible
-::v3.x (32 Bit):
-::  CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR%\Bat_To_Exe_Converter_(x64).exe" /bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" /exe "%DEPLOY_PROJECT_TOOL3LGM_START_EXE%" /icon "%DEPLOY_TOOL3LGM_ICON%" /invisible /upx /overwrite /attributes /display /fileversion "1.0.0.0" /productversion "%lgmVersion%" /productname "3lgm2-tool"
-CD /D %SCRIPT_LOCATION%
-::v3.x (64 Bit):
-CALL "%BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR%\Bat_To_Exe_Converter_(x64).exe" /bat "%DEPLOY_PROJECT_TOOL3LGM_START_BAT%" /exe "%DEPLOY_PROJECT_TOOL3LGM_START_EXE_X64%" /icon "%DEPLOY_TOOL3LGM_ICON%" /invisible /x64 /workdir "%SCRIPT_LOCATION%%BAT_TO_EXE_CONVERTER_PROGRAM_64BIT_DIR%" /upx /overwrite /attributes /display /fileversion "1.0.0.0" /productversion "%lgmVersion%" /productname "3lgm2-tool"
-::Das PAUSE wieder aktivieren. Plus (+) als Marker vor dem Dateinamen
-START %BATCH_PAUSE_ENABLED_SWITCH% "+%DEPLOY_PROJECT_TOOL3LGM_START_BAT%"
-
-:NEXT3
-
 
 ::launch4j: erzeugt aus einer Jar-Datei eine Exe-Datei
 ::  es ist entweder Bat-to-Exe oder launch4j erforerlich, um die Exe-Datei zu erzeugen.
 IF "%SKIPLAUNCH4J%"=="yes" (
   ECHO "### Skipping launch4j (SKIPLAUNCH4J=yes)"
-  GOTO NEXT4
+  GOTO LAUNCH4J_NEXT
 )
 FOR %%A IN (%*) DO (
   IF "%%A"=="-skip-launch4j" (
     ECHO "### Skipping launch4j (-skip-launch4j)"
-    GOTO NEXT4
+    GOTO LAUNCH4J_NEXT
   )
 )
-
-::[ToDo]
-::  launch4j-Config anpassen, z.B. Version anpassen
 
 ECHO "### Execute launch4j"
 CD /D %SCRIPT_LOCATION%
 CALL "%LAUNCH4J_DIR%\launch4jc.exe" %LAUNCH4J_FILE%
 
-:NEXT4
+:LAUNCH4J_NEXT
 
 
 ::Bestehende Dateien im Verzeichnis %DEPLOY_DESTINATION_DIR% löschen
