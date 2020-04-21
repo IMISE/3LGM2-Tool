@@ -234,8 +234,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      */
     private static Class<? extends ModelElement> getInitialSearchElementClass(final AbstractMetaPath metaPath) {
         Set<Class<? extends ModelElement>> endClasses = metaPath.getEndClasses();
-        Class<?> superEndClass = ReflectionUtils.getCommonSuperClass(endClasses);
-        Class<? extends ModelElement> searchElementClass = superEndClass.asSubclass(ModelElement.class);
+        Class<? extends ModelElement> searchElementClass = ReflectionUtils.getCommonSuperClassOfClasses(endClasses);
         return searchElementClass;
     }
 

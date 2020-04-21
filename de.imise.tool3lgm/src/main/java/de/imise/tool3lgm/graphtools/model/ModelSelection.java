@@ -543,8 +543,10 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
 
         //speziellste gemeinsame Oberklasse aller selektierten Elemente (nicht von deren Containern) ermitteln
         for (Iterator<NodeContainer> elemIt = selectedRealNodeContainer.iterator(); elemIt.hasNext();) {
-            NodeContainer kc = elemIt.next();
-            mostSpecialRealElementClass = ReflectionUtils.getCommonSuperClass(mostSpecialRealElementClass, kc.getElement().getClass()).asSubclass(ModelElement.class);
+            NodeContainer nc = elemIt.next();
+            ModelElement me = nc.getElement();
+            Class<? extends ModelElement> elementClass = me.getClass();
+            mostSpecialRealElementClass = ReflectionUtils.getCommonSuperClassOfClasses(mostSpecialRealElementClass, elementClass);
             if (mostSpecialRealElementClass == commonRealElementsSuperClass) {
                 break;
             }
@@ -559,7 +561,7 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
      *
      * @return
      */
-    public Class<? extends ModelElement> _getMostSpecialRealElementsClass() {
+    public Class<? extends ModelElement> getMostSpecialRealElementsClass() {
         return mostSpecialRealElementClass;
     }
 

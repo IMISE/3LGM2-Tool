@@ -48,7 +48,7 @@ public interface MetaModelSpecific {
     public default String getMetaModelID() {
         Class<? extends MetaModelDefinition> metaModelDefinitionClass = getMetaModelDefinitionClass();
         String name = metaModelDefinitionClass.getSimpleName();
-        Long metaModelClassSerialVersionUID = ReflectionUtils.getField(metaModelDefinitionClass, "serialVersionUID", Long.TYPE);
+        Long metaModelClassSerialVersionUID = ReflectionUtils.getField(metaModelDefinitionClass, "serialVersionUID");
         String idString = metaModelClassSerialVersionUID == null ? "" : "@" + String.valueOf(metaModelClassSerialVersionUID); // ein @ kann nicht im Klassenname vorkommen -> Trenner zwischen Klassenname und UID
         String classID = name + idString;
         return classID;
