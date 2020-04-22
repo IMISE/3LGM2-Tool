@@ -1,17 +1,20 @@
 #!/bin/sh
 
-### Java stuff
-## java default
-#java=java
-#JAVA_HOME=$JAVA_HOME
+### [Debug] Java stuff
+### [ToDo] implement a better way to detect/select JRE
 ## OpenJDK 11
-#java=/usr/lib/jvm/java-11-openjdk-amd64/bin/java
 #JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 ## Oracle Java 8
-#java=/usr/lib/jvm/java-8-oracle/bin/java
 #JAVA_HOME=/usr/lib/jvm/java-8-oracle
-#
+#JAVA_HOME=/opt/java/jdk1.8.0_251
 #export JAVA_HOME
+## java executable (default)
+java=java
+## java executable (specific to JAVA_HOME)
+#java=$JAVA_HOME/bin/java
+## print JAVA_HOME and java version
+#echo JAVA_HOME=$JAVA_HOME
+#$java -version
 
 # Max Memory for 32-Bit Systems
 MEMORY32="-Xmx512m -Xss20m"
@@ -48,4 +51,4 @@ if [ $# -gt 0 ]; then
 	fi
 fi
 
-java -classpath ./lib/*:./Plugins/* -splash:splash.gif $MEMORY de.imise.tool3lgm.Tool3lgmMain
+$java -classpath ./lib/*:./Plugins/* -splash:splash.gif $MEMORY de.imise.tool3lgm.Tool3lgmMain
