@@ -1,5 +1,8 @@
 package de.imise.util;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
@@ -308,55 +311,40 @@ public class ReflectionUtilsTest {
 
         aClasses = Sets.newHashSet(A.class, A1.class, A2.class, A11.class, A12.class, A21.class, A111.class, A121.class, A211.class);
         ReflectionUtils.removeSubClasses(aClasses);
-        assertEquals(aClasses.size(), 1);
-        assertTrue(aClasses.contains(A.class));
+        assertThat(aClasses, contains(A.class));
         ReflectionUtils.removeSubClasses(aClasses); //second run doesn't change the result anymore
-        assertEquals(aClasses.size(), 1);
-        assertTrue(aClasses.contains(A.class));
+        assertThat(aClasses, contains(A.class));
 
         //same test with List
         aClasses = Lists.newArrayList(A.class, A1.class, A2.class, A11.class, A12.class, A21.class, A111.class, A121.class, A211.class);
         ReflectionUtils.removeSubClasses(aClasses);
-        assertEquals(aClasses.size(), 1);
-        assertTrue(aClasses.contains(A.class));
+        assertThat(aClasses, contains(A.class));
         ReflectionUtils.removeSubClasses(aClasses); //second run doesn't change the result anymore
-        assertEquals(aClasses.size(), 1);
-        assertTrue(aClasses.contains(A.class));
+        assertThat(aClasses, contains(A.class));
 
         aClasses = Sets.newHashSet(A1.class, A2.class, A11.class, A12.class, A21.class, A111.class, A121.class, A211.class);
         ReflectionUtils.removeSubClasses(aClasses);
-        assertEquals(aClasses.size(), 2);
-        assertTrue(aClasses.contains(A1.class));
-        assertTrue(aClasses.contains(A2.class));
+        assertThat(aClasses, contains(A1.class, A2.class));
 
         aClasses = Sets.newHashSet(A1.class, A2.class);
         ReflectionUtils.removeSubClasses(aClasses);
-        assertEquals(aClasses.size(), 2);
-        assertTrue(aClasses.contains(A1.class));
-        assertTrue(aClasses.contains(A2.class));
+        assertThat(aClasses, contains(A1.class, A2.class));
 
         aClasses = Sets.newHashSet(A111.class, A211.class);
         ReflectionUtils.removeSubClasses(aClasses);
-        assertEquals(aClasses.size(), 2);
-        assertTrue(aClasses.contains(A111.class));
-        assertTrue(aClasses.contains(A211.class));
+        assertThat(aClasses, containsInAnyOrder(A111.class, A211.class));
 
         aClasses = Sets.newHashSet(A1.class, A111.class, A211.class);
         ReflectionUtils.removeSubClasses(aClasses);
-        assertEquals(aClasses.size(), 2);
-        assertTrue(aClasses.contains(A1.class));
-        assertTrue(aClasses.contains(A211.class));
+        assertThat(aClasses, containsInAnyOrder(A1.class, A211.class));
 
         aClasses = Sets.newHashSet(A1.class, A1.class);
         ReflectionUtils.removeSubClasses(aClasses);
-        assertEquals(aClasses.size(), 1);
-        assertTrue(aClasses.contains(A1.class));
+        assertThat(aClasses, contains(A1.class));
 
         aClasses = Sets.newHashSet(A1.class, A2.class, A1.class, A2.class, A11.class, A11.class, A21.class, A21.class);
         ReflectionUtils.removeSubClasses(aClasses);
-        assertEquals(aClasses.size(), 2);
-        assertTrue(aClasses.contains(A1.class));
-        assertTrue(aClasses.contains(A2.class));
+        assertThat(aClasses, containsInAnyOrder(A1.class, A2.class));
 
     }
 
@@ -389,69 +377,46 @@ public class ReflectionUtilsTest {
 
         aClasses = Sets.newHashSet(A.class, A1.class, A2.class, A11.class, A12.class, A21.class, A111.class, A121.class, A211.class);
         ReflectionUtils.removeSuperClasses(aClasses);
-        assertEquals(aClasses.size(), 3);
-        assertTrue(aClasses.contains(A111.class));
-        assertTrue(aClasses.contains(A121.class));
-        assertTrue(aClasses.contains(A211.class));
+        assertThat(aClasses, containsInAnyOrder(A111.class, A121.class, A211.class));
+
         ReflectionUtils.removeSuperClasses(aClasses); //second run doesn't change the result anymore
-        assertEquals(aClasses.size(), 3);
-        assertTrue(aClasses.contains(A111.class));
-        assertTrue(aClasses.contains(A121.class));
-        assertTrue(aClasses.contains(A211.class));
+        assertThat(aClasses, containsInAnyOrder(A111.class, A121.class, A211.class));
 
         //same test with List
         aClasses = Lists.newArrayList(A.class, A1.class, A2.class, A11.class, A12.class, A21.class, A111.class, A121.class, A211.class);
         ReflectionUtils.removeSuperClasses(aClasses);
-        assertEquals(aClasses.size(), 3);
-        assertTrue(aClasses.contains(A111.class));
-        assertTrue(aClasses.contains(A121.class));
-        assertTrue(aClasses.contains(A211.class));
+        assertThat(aClasses, containsInAnyOrder(A111.class, A121.class, A211.class));
+
         ReflectionUtils.removeSuperClasses(aClasses); //second run doesn't change the result anymore
-        assertEquals(aClasses.size(), 3);
-        assertTrue(aClasses.contains(A111.class));
-        assertTrue(aClasses.contains(A121.class));
-        assertTrue(aClasses.contains(A211.class));
+        assertThat(aClasses, containsInAnyOrder(A111.class, A121.class, A211.class));
 
         aClasses = Sets.newHashSet(A1.class, A2.class, A11.class, A12.class, A21.class, A111.class, A121.class, A211.class);
         ReflectionUtils.removeSuperClasses(aClasses);
-        assertEquals(aClasses.size(), 3);
-        assertTrue(aClasses.contains(A111.class));
-        assertTrue(aClasses.contains(A121.class));
-        assertTrue(aClasses.contains(A211.class));
+        assertThat(aClasses, containsInAnyOrder(A111.class, A121.class, A211.class));
 
         aClasses = Sets.newHashSet(A1.class, A2.class);
         ReflectionUtils.removeSuperClasses(aClasses);
-        assertEquals(aClasses.size(), 2);
-        assertTrue(aClasses.contains(A1.class));
-        assertTrue(aClasses.contains(A2.class));
+        assertThat(aClasses, containsInAnyOrder(A1.class, A2.class));
 
         aClasses = Sets.newHashSet(A111.class, A211.class);
         ReflectionUtils.removeSuperClasses(aClasses);
-        assertEquals(aClasses.size(), 2);
-        assertTrue(aClasses.contains(A111.class));
-        assertTrue(aClasses.contains(A211.class));
+        assertThat(aClasses, containsInAnyOrder(A111.class, A211.class));
 
         aClasses = Sets.newHashSet(A1.class, A211.class);
         ReflectionUtils.removeSuperClasses(aClasses);
-        assertEquals(aClasses.size(), 2);
-        assertTrue(aClasses.contains(A1.class));
-        assertTrue(aClasses.contains(A211.class));
+        assertThat(aClasses, containsInAnyOrder(A1.class, A211.class));
 
         aClasses = Sets.newHashSet(A1.class, A111.class);
         ReflectionUtils.removeSuperClasses(aClasses);
-        assertEquals(aClasses.size(), 1);
-        assertTrue(aClasses.contains(A111.class));
+        assertThat(aClasses, containsInAnyOrder(A111.class));
 
         aClasses = Sets.newHashSet(A1.class, A1.class);
         ReflectionUtils.removeSuperClasses(aClasses);
-        assertEquals(aClasses.size(), 1);
-        assertTrue(aClasses.contains(A1.class));
+        assertThat(aClasses, containsInAnyOrder(A1.class));
 
         aClasses = Sets.newHashSet(A1.class, A2.class, A1.class, A2.class);
         ReflectionUtils.removeSuperClasses(aClasses);
-        assertEquals(aClasses.size(), 2);
-        assertTrue(aClasses.contains(A1.class));
-        assertTrue(aClasses.contains(A2.class));
+        assertThat(aClasses, containsInAnyOrder(A1.class, A2.class));
 
     }
 
@@ -470,14 +435,11 @@ public class ReflectionUtilsTest {
 
         aClasses = Lists.newArrayList(A1.class, A2.class, A11.class, A12.class, A21.class);
         ReflectionUtils.retainSubClasses(aClasses, A2.class); //class
-        assertEquals(aClasses.size(), 2);
-        assertTrue(aClasses.contains(A2.class));
-        assertTrue(aClasses.contains(A21.class));
+        assertThat(aClasses, contains(A2.class, A21.class));
+
         aClasses = Lists.newArrayList(A1.class, A2.class, A11.class, A12.class, A21.class);
         ReflectionUtils.retainSubClasses(aClasses, I2.class); //interface
-        assertEquals(aClasses.size(), 2);
-        assertTrue(aClasses.contains(A2.class));
-        assertTrue(aClasses.contains(A21.class));
+        assertThat(aClasses, contains(A2.class, A21.class));
 
     }
 
@@ -488,46 +450,32 @@ public class ReflectionUtilsTest {
 
         aClasses = Sets.newHashSet(A.class);
         classesWithSuperClasses = ReflectionUtils.getClassesWithSuperClasses(aClasses, null); //no excluded super class
-        assertEquals(classesWithSuperClasses.size(), 2);
-        assertTrue(classesWithSuperClasses.contains(A.class));
-        assertTrue(classesWithSuperClasses.contains(Object.class));
+        assertThat(classesWithSuperClasses, containsInAnyOrder(A.class, Object.class));
 
         aClasses = Sets.newHashSet(A.class);
         classesWithSuperClasses = ReflectionUtils.getClassesWithSuperClasses(aClasses, String.class); //invalid excluded super class = no stopping class
-        assertEquals(classesWithSuperClasses.size(), 2);
-        assertTrue(classesWithSuperClasses.contains(A.class));
-        assertTrue(classesWithSuperClasses.contains(Object.class));
+        assertThat(classesWithSuperClasses, containsInAnyOrder(A.class, Object.class));
 
         aClasses = Sets.newHashSet(A.class);
         classesWithSuperClasses = ReflectionUtils.getClassesWithSuperClasses(aClasses, A1.class); //sub class as excluded super class = invalid excluded super class = no excluded super class
-        assertEquals(classesWithSuperClasses.size(), 2);
-        assertTrue(classesWithSuperClasses.contains(A.class));
-        assertTrue(classesWithSuperClasses.contains(Object.class));
+        assertThat(classesWithSuperClasses, containsInAnyOrder(A.class, Object.class));
 
         aClasses = Sets.newHashSet(A.class);
         classesWithSuperClasses = ReflectionUtils.getClassesWithSuperClasses(aClasses, Object.class); //Object.class as excluded super class
-        assertEquals(classesWithSuperClasses.size(), 1);
-        assertTrue(classesWithSuperClasses.contains(A.class));
+        assertThat(classesWithSuperClasses, containsInAnyOrder(A.class));
 
         aClasses = Sets.newHashSet(A.class);
         classesWithSuperClasses = ReflectionUtils.getClassesWithSuperClasses(aClasses, A.class); //same class as excluded super class
+        assertThat(classesWithSuperClasses, containsInAnyOrder());
         assertTrue(classesWithSuperClasses.isEmpty());
 
         aClasses = Sets.newHashSet(A111.class);
         classesWithSuperClasses = ReflectionUtils.getClassesWithSuperClasses(aClasses, A.class); //3 hierarchy steps away excluded super class
-        assertEquals(classesWithSuperClasses.size(), 3);
-        assertTrue(classesWithSuperClasses.contains(A111.class));
-        assertTrue(classesWithSuperClasses.contains(A11.class));
-        assertTrue(classesWithSuperClasses.contains(A1.class));
+        assertThat(classesWithSuperClasses, containsInAnyOrder(A111.class, A11.class, A1.class));
 
         aClasses = Sets.newHashSet(A11.class, A21.class);
         classesWithSuperClasses = ReflectionUtils.getClassesWithSuperClasses(aClasses, Object.class); //2 hierarchy steps away excluded super class
-        assertEquals(classesWithSuperClasses.size(), 5);
-        assertTrue(classesWithSuperClasses.contains(A11.class));
-        assertTrue(classesWithSuperClasses.contains(A21.class));
-        assertTrue(classesWithSuperClasses.contains(A1.class));
-        assertTrue(classesWithSuperClasses.contains(A2.class));
-        assertTrue(classesWithSuperClasses.contains(A.class));
+        assertThat(classesWithSuperClasses, containsInAnyOrder(A11.class, A21.class, A1.class, A2.class, A.class));
     }
 
     @Test
@@ -535,32 +483,22 @@ public class ReflectionUtilsTest {
         Set<Class<?>> classWithSuperClasses;
 
         classWithSuperClasses = ReflectionUtils.getClassWithSuperClasses(A.class, null); //no excluded super class
-        assertEquals(classWithSuperClasses.size(), 2);
-        assertTrue(classWithSuperClasses.contains(A.class));
-        assertTrue(classWithSuperClasses.contains(Object.class));
+        assertThat(classWithSuperClasses, containsInAnyOrder(A.class, Object.class));
 
         classWithSuperClasses = ReflectionUtils.getClassWithSuperClasses(A.class, String.class); //invalid excluded super class = no excluded super class
-        assertEquals(classWithSuperClasses.size(), 2);
-        assertTrue(classWithSuperClasses.contains(A.class));
-        assertTrue(classWithSuperClasses.contains(Object.class));
+        assertThat(classWithSuperClasses, containsInAnyOrder(A.class, Object.class));
 
         classWithSuperClasses = ReflectionUtils.getClassWithSuperClasses(A.class, A1.class); //sub class as excluded super class = invalid excluded super class = no excluded super class
-        assertEquals(classWithSuperClasses.size(), 2);
-        assertTrue(classWithSuperClasses.contains(A.class));
-        assertTrue(classWithSuperClasses.contains(Object.class));
+        assertThat(classWithSuperClasses, containsInAnyOrder(A.class, Object.class));
 
         classWithSuperClasses = ReflectionUtils.getClassWithSuperClasses(A.class, Object.class); //Object.class as excluded super class
-        assertEquals(classWithSuperClasses.size(), 1);
-        assertTrue(classWithSuperClasses.contains(A.class));
+        assertThat(classWithSuperClasses, containsInAnyOrder(A.class));
 
         classWithSuperClasses = ReflectionUtils.getClassWithSuperClasses(A.class, A.class); // same class as excluded super class
         assertTrue(classWithSuperClasses.isEmpty());
 
         classWithSuperClasses = ReflectionUtils.getClassWithSuperClasses(A111.class, A.class); //3 hierarchy steps away excluded super class
-        assertEquals(classWithSuperClasses.size(), 3);
-        assertTrue(classWithSuperClasses.contains(A111.class));
-        assertTrue(classWithSuperClasses.contains(A11.class));
-        assertTrue(classWithSuperClasses.contains(A1.class));
+        assertThat(classWithSuperClasses, containsInAnyOrder(A111.class, A11.class, A1.class));
     }
 
     @Test
