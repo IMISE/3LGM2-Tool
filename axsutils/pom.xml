@@ -12,10 +12,11 @@
 			<version>7.1.0</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
 		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>1.10.19</version>
+			<artifactId>mockito-core</artifactId>
+			<version>3.3.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -73,7 +74,8 @@
 				<directory>src\test\resources</directory>
 			</testResource>
 		</testResources>
-		<!-- Entweder das hier ODER das oben in properties -> maven.compiler.source und maven.compiler.target -->
+		<!-- Entweder das hier ODER das oben in properties -> maven.compiler.source 
+			und maven.compiler.target -->
 		<!-- <pluginManagement> -->
 		<!-- <plugins> -->
 		<!-- <plugin> -->
