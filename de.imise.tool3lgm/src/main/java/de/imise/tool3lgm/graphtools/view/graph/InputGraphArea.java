@@ -20,6 +20,7 @@ import static java.awt.Cursor.DEFAULT_CURSOR;
 
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.InputEvent;
@@ -30,6 +31,8 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.Set;
+
+import javax.swing.JViewport;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -1157,8 +1160,37 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             return;
         }
         int wheelRotation = e.getWheelRotation();
-        double zoomStep = zoom - 0.05 * wheelRotation;
-        setZoom(zoomStep);
+        double zoomDiff = -0.05 * wheelRotation;
+        double newZoom = zoom + zoomDiff;
+        Dimension preferredSizeBeforeZoom = getPreferredSize();
+        setZoom(newZoom);
+        Dimension preferredSizeAfterZoom = getPreferredSize();
+        centerToMouse(e, zoomDiff, preferredSizeBeforeZoom, preferredSizeAfterZoom);
+    }
+
+    /**
+     * @param e
+     * @param factor
+     */
+    private void centerToMouse(final MouseEvent e, final double factor, final Dimension preferredSizeBeforeZoom, final Dimension preferredSizeAfterZoom) {
+        Container parent = getParent();
+        if (parent instanceof JViewport) {
+            int xDiff = preferredSizeAfterZoom.width - preferredSizeBeforeZoom.width;
+            int yDiff = preferredSizeAfterZoom.height - preferredSizeBeforeZoom.height;
+
+            JViewport viewport = (JViewport) parent;
+            Point viewPosition = viewport.getViewPosition();
+            int x = viewPosition.x + xDiff / 2;
+            int y = viewPosition.y + yDiff / 2;
+
+            if (x < 0) {
+                x = 0;
+            }
+            if (y < 0) {
+                y = 0;
+            }
+            viewport.setViewPosition(new Point(x, y));
+        }
     }
 
     // --- Methoden des MouseMotionListener-Interfaces --- Ende ---
