@@ -41,7 +41,8 @@ public class Alphabetical {
             localizedComparator = null;
         }
         if (localizedComparator == null) {
-            localizedComparator = new ObjectToStringComparator(Collator.getInstance(locale));
+            Collator collator = Collator.getInstance(locale);
+            localizedComparator = new ObjectToStringComparator(collator);
         }
         return localizedComparator;
     }
@@ -103,7 +104,8 @@ public class Alphabetical {
      * @param elementToInsert
      */
     public static final <T> void insert(final List<T> list, final T elementToInsert) {
-        list.add(getInsertPosition(list, elementToInsert), elementToInsert);
+        int insertPosition = getInsertPosition(list, elementToInsert);
+        list.add(insertPosition, elementToInsert);
     }
 
     /**
@@ -113,7 +115,8 @@ public class Alphabetical {
      *            Liste, die sortiert werden soll
      */
     public static final <T> void sort(final List<? extends T> list) {
-        Collections.sort(list, getLocalizedComparator());
+        Comparator<Object> localizedComparator = getLocalizedComparator();
+        Collections.sort(list, localizedComparator);
     }
 
     /**
@@ -122,8 +125,9 @@ public class Alphabetical {
      * @param list
      *            Liste, die sortiert werden soll
      */
-    public static final void sort(final Object[] list) {
-        Arrays.sort(list, getLocalizedComparator());
+    public static final void sort(final Object... list) {
+        Comparator<Object> localizedComparator = getLocalizedComparator();
+        Arrays.sort(list, localizedComparator);
     }
 
     /**
@@ -138,7 +142,8 @@ public class Alphabetical {
      *         Position, an der das Objekt <code>o</code> in die sortierte Liste <code>list</code> eingefügt werden soll
      */
     public static final <T> int getInsertPosition(final List<? extends T> list, final T o) {
-        int pos = Collections.binarySearch(list, o, getLocalizedComparator());
+        Comparator<Object> localizedComparator = getLocalizedComparator();
+        int pos = Collections.binarySearch(list, o, localizedComparator);
         if (pos >= 0) {
             return pos;
         }
@@ -157,7 +162,8 @@ public class Alphabetical {
      *         Position, an der das Objekt <code>o</code> in die sortierte Liste <code>list</code> eingefügt werden soll
      */
     public static final int getInsertPosition(final Object[] array, final Object o) {
-        int pos = Arrays.binarySearch(array, o, getLocalizedComparator());
+        Comparator<Object> localizedComparator = getLocalizedComparator();
+        int pos = Arrays.binarySearch(array, o, localizedComparator);
         if (pos >= 0) {
             return pos;
         }
@@ -177,7 +183,8 @@ public class Alphabetical {
      * @see Collections#binarySearch(java.util.List, java.lang.Object)
      */
     public static final int binarySearch(final List<?> list, final Object o) {
-        return Collections.binarySearch(list, o, getLocalizedComparator());
+        Comparator<Object> localizedComparator = getLocalizedComparator();
+        return Collections.binarySearch(list, o, localizedComparator);
     }
 
 }

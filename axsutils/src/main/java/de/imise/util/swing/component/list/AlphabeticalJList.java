@@ -134,6 +134,7 @@ public class AlphabeticalJList extends JList<Object> {
         /**
          * @param items
          */
+        @Override
         public void addAll(final Collection<?> items) {
             for (Iterator<?> it = items.iterator(); it.hasNext();) {
                 addElement(it.next());
@@ -142,7 +143,8 @@ public class AlphabeticalJList extends JList<Object> {
 
         @Override
         public void add(int index, final Object element) {
-            index = Alphabetical.getInsertPosition(toArray(), element);
+            Object[] array = toArray();
+            index = Alphabetical.getInsertPosition(array, element);
             super.add(index, element);
         }
 
