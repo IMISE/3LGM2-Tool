@@ -32,6 +32,8 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.util.Set;
 
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import de.imise.tool3lgm.Static;
@@ -53,6 +55,7 @@ import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.gui.menu.RegularContextGenerator;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.event.InputEvents;
+import de.imise.util.math.Maths;
 
 /**
  * COMMENTME
@@ -151,6 +154,9 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     /** <code>true</code>, wenn die Maus gedragged wird */
     private boolean mouse_dragged = false;
+
+    /** Postion of the mouse before the current drag step */
+    private Point lastDragPosition = null;
 
     /** Element, das angeklickt wurde */
     private ElementContainer clickedEc;
@@ -558,6 +564,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     @Override
     public void mouseReleased(final MouseEvent e) {
+        lastDragPosition = null;
+
         if (mouse_selection) {
             if (left_sel_y != right_sel_y || left_sel_x != right_sel_x) {
                 szenario.selectArea(left_sel_x, left_sel_y, right_sel_x, right_sel_y);
@@ -885,6 +893,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         }
         xin = e.getX();
         yin = e.getY();
+
         computeRealCoordinates(false);
         GDCollection gdcoll = szenario.getCollection();
         int ebene = gdcoll.getActiveLayer();
@@ -895,6 +904,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             return;
         }
         if (Tool3lgmConstants.isPopupTrigger(e)) {
+            contextGenerator.closeMenu();
+            dragView(e);
             return;
         }
         if (!mouse_dragged) {
@@ -1169,16 +1180,29 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
     }
 
     /**
+     * @return the viewport this component is contained in (=the parent)
+     */
+    private JViewport getViewport() {
+        Container parent = getParent();
+        JViewport viewport = null;
+        if (parent instanceof JViewport) {
+            viewport = (JViewport) parent;
+        }
+        return viewport;
+    }
+
+    /**
      * @param e
      * @param factor
+     * @param preferredSizeBeforeZoom
+     * @param preferredSizeAfterZoom
      */
     private void centerToMouse(final MouseEvent e, final double factor, final Dimension preferredSizeBeforeZoom, final Dimension preferredSizeAfterZoom) {
-        Container parent = getParent();
-        if (parent instanceof JViewport) {
+        JViewport viewport = getViewport();
+        if (viewport != null) {
             int xDiff = preferredSizeAfterZoom.width - preferredSizeBeforeZoom.width;
             int yDiff = preferredSizeAfterZoom.height - preferredSizeBeforeZoom.height;
 
-            JViewport viewport = (JViewport) parent;
             Point viewPosition = viewport.getViewPosition();
             int x = viewPosition.x + xDiff / 2;
             int y = viewPosition.y + yDiff / 2;
@@ -1190,6 +1214,42 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 y = 0;
             }
             viewport.setViewPosition(new Point(x, y));
+        }
+    }
+
+    /**
+     * @param e
+     */
+    private void dragView(final MouseEvent e) {
+        Point locationOnScreen = e.getLocationOnScreen();
+
+        int xDiff = 0;
+        int yDiff = 0;
+        if (lastDragPosition != null) {
+            xDiff = lastDragPosition.x - locationOnScreen.x;
+            yDiff = lastDragPosition.y - locationOnScreen.y;
+        }
+
+        lastDragPosition = e.getLocationOnScreen();
+
+        if (xDiff != 0 || yDiff != 0) {
+            JViewport viewport = getViewport();
+            if (viewport != null) {
+                Container parent = viewport.getParent();
+                JScrollPane scrollPane = (JScrollPane) parent;
+                JScrollBar xScrollBar = scrollPane.getHorizontalScrollBar();
+                JScrollBar yScrollBar = scrollPane.getVerticalScrollBar();
+                int xScrollValue = xScrollBar.getValue();
+                int yScrollValue = yScrollBar.getValue();
+                xScrollValue += xDiff;
+                yScrollValue += yDiff;
+                int xMax = xScrollBar.getMaximum();
+                xScrollValue = Maths.getValueInMinMax(xScrollValue, 0, xMax);
+                int yMax = yScrollBar.getMaximum();
+                yScrollValue = Maths.getValueInMinMax(yScrollValue, 0, yMax);
+                xScrollBar.setValue(xScrollValue);
+                yScrollBar.setValue(yScrollValue);
+            }
         }
     }
 

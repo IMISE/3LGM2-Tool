@@ -1806,6 +1806,13 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     }
 
     /**
+     *
+     */
+    public final void closeMenu() {
+        menu.setVisible(false);
+    }
+
+    /**
      * @return
      */
     public JPopupMenu getDialogSelectionContextMenu(final boolean propertiesOnly) {
