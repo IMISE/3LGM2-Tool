@@ -29,6 +29,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JViewport;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
@@ -377,7 +378,8 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         for (int i = 0; i < frames.length; i++) {
             if (frames[i] instanceof MatrixViewInternalFrame) {
                 MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) frames[i];
-                if (matrixFrame.getGraphDocument() == doc) {
+                GraphDocument frameDoc = matrixFrame.getGraphDocument();
+                if (frameDoc == doc) {
                     if (matrixFrame.titleIndex >= max) {
                         max = matrixFrame.titleIndex + 1;
                     }
@@ -399,11 +401,16 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         InputGraphArea bgp = frame.getInputGraphArea();
         boolean multiView = view.multiView;
         bgp.setMultiView(multiView);
-        frame.getGraphDocument().getCollection().setActiveLayer(view.activeLayer);
+        GraphDocument doc = frame.getGraphDocument();
+        GDCollection gdcoll = doc.getCollection();
+        gdcoll.setActiveLayer(view.activeLayer);
         bgp.setMultiViewLayerAngle(view.layerAngle);
         bgp.setMultiViewLayerGap(view.layerGap);
         bgp.setZoom(view.zoom);
-        frame.getScrollPane().getViewport().setViewPosition(new Point(view.viewPositionX, view.viewPositionY));
+        JScrollPane scrollPane = frame.getScrollPane();
+        JViewport viewport = scrollPane.getViewport();
+        Point viewPosition = new Point(view.viewPositionX, view.viewPositionY);
+        viewport.setViewPosition(viewPosition);
     }
 
     /**

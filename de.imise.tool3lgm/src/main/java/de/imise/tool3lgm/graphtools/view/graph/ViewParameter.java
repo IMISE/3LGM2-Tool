@@ -16,7 +16,7 @@ public class ViewParameter {
 
     public static final int INITIAL_LAYER_ANGLE = 65;
 
-    public static final double INITIAL_ZOOM = .8d;
+    public static final double INITIAL_MIN_ZOOM = .8d;
 
     public static final double INITIAL_PAGE_SIZE_FACTOR = 1d;
 
@@ -27,7 +27,7 @@ public class ViewParameter {
     public int layerGap = INITIAL_LAYER_GAP;
     public int layerAngle = INITIAL_LAYER_ANGLE;
     public boolean multiView = true;
-    public double zoom = INITIAL_ZOOM;
+    public double zoom = INITIAL_MIN_ZOOM;
     public double pageSizeFactor = INITIAL_PAGE_SIZE_FACTOR;
     public int activeLayer = INITILA_ACTIVE_LAYER;
     public boolean selected = false;
