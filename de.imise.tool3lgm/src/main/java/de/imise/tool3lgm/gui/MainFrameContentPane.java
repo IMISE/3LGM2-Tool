@@ -398,15 +398,15 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     private void setWorkArea(final InternalGraphFrame frame) {
         Szenario szenario = (Szenario) frame.getGraphDocument();
         ViewParameter view = szenario.getViewParameter();
-        InputGraphArea bgp = frame.getInputGraphArea();
+        InputGraphArea inputGraphArea = frame.getInputGraphArea();
         boolean multiView = view.multiView;
-        bgp.setMultiView(multiView);
+        inputGraphArea.setMultiView(multiView);
         GraphDocument doc = frame.getGraphDocument();
         GDCollection gdcoll = doc.getCollection();
         gdcoll.setActiveLayer(view.activeLayer);
-        bgp.setMultiViewLayerAngle(view.layerAngle);
-        bgp.setMultiViewLayerGap(view.layerGap);
-        bgp.setZoom(view.zoom);
+        inputGraphArea.setMultiViewLayerAngle(view.layerAngle);
+        inputGraphArea.setMultiViewLayerGap(view.layerGap);
+        inputGraphArea.setZoom(view.zoom);
         JScrollPane scrollPane = frame.getScrollPane();
         JViewport viewport = scrollPane.getViewport();
         Point viewPosition = new Point(view.viewPositionX, view.viewPositionY);
