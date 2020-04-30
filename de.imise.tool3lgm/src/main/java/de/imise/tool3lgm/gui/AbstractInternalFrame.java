@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -74,6 +75,13 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      */
     public JScrollPane getScrollPane() {
         return scrollPane;
+    }
+
+    /**
+     * @return the viewport of the scrollpane
+     */
+    public JViewport getViewport() {
+        return scrollPane.getViewport();
     }
 
     @Override
