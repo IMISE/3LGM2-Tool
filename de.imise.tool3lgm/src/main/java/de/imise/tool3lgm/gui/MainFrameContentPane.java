@@ -14,6 +14,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPER
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
@@ -41,6 +42,7 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
+import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserPanel;
@@ -344,6 +346,9 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
             setWorkArea(frame);
         }
         desktop.add(frame);
+        if (doc instanceof Szenario) {
+            setBettterDefaultZoom(frame);
+        }
         frame.setVisible(true);
         return frame;
     }
@@ -411,6 +416,34 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         JViewport viewport = scrollPane.getViewport();
         Point viewPosition = new Point(view.viewPositionX, view.viewPositionY);
         viewport.setViewPosition(viewPosition);
+    }
+
+    /**
+     * @param frame
+     */
+    private void setBettterDefaultZoom(final InternalGraphFrame frame) {
+        //raise default zoom to fill the whole screen
+        InputGraphArea inputGraphArea = frame.getInputGraphArea();
+        double zoom = inputGraphArea.getZoom();
+        if (zoom == ViewParameter.INITIAL_MIN_ZOOM) {
+            JViewport viewport = frame.getViewport();
+            Dimension viewportSize = viewport.getSize();
+            int w = viewportSize.width - BasicGraphArea.GRAPH_BORDER.left - BasicGraphArea.GRAPH_BORDER.right;
+            inputGraphArea.setZoom(1d);
+            Dimension inputGraphAreaPreferredSize = inputGraphArea.getPreferredSize();
+            int w1 = inputGraphAreaPreferredSize.width;
+            inputGraphArea.setZoom(2d);
+            inputGraphAreaPreferredSize = inputGraphArea.getPreferredSize();
+            int w2 = inputGraphAreaPreferredSize.width;
+
+            int wDiff = w2 - w1;
+            zoom = (double) w / wDiff;
+            if (zoom > ViewParameter.INITIAL_MIN_ZOOM) {
+                inputGraphArea.setZoom(zoom);
+            } else {
+                inputGraphArea.setZoom(ViewParameter.INITIAL_MIN_ZOOM);
+            }
+        }
     }
 
     /**
