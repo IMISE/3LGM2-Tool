@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
+import java.awt.Image;
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -18,12 +19,15 @@ import javax.swing.JOptionPane;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
 
+import com.apple.eawt.Application;
+
 import de.imise.tool3lgm.graphtools.dialog.RMIErrorPanel;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.rmi.Tool3lgmServer;
 import de.imise.tool3lgm.rmi.Tool3lgmServerImpl;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.util.OperatingSystem;
 
 public class Tool3lgmMain {
 
@@ -81,6 +85,8 @@ public class Tool3lgmMain {
      */
     public static void main(final String args[]) {
 
+        setDocIcon();
+
         allStartParameters = args;
 
         //Ausgabe des ClassPaths bzw. aller jar-URLs an die der Systemclassloader kommt. Das funktioniert nur bis Java8! Ab 9 ist der SystemClassLoader kein URLClassLoader mehr...
@@ -127,6 +133,9 @@ public class Tool3lgmMain {
         activateRMI(arguments, visible, newInstance);
     }
 
+    /**
+     *
+     */
     private static final void setUIDefaults() {
         /* table of defaults for Swing components */
         UIDefaults defaults = UIManager.getDefaults();
@@ -152,6 +161,24 @@ public class Tool3lgmMain {
         defaults.put("OptionPane.yesButtonText", getResString("yes"));
     }
 
+    /**
+     *
+     */
+    private static void setDocIcon() {
+        try {
+            if (OperatingSystem.isMacOs()) {
+                Application application = Application.getApplication();
+                Image image = Tool3lgmConstants.getIcon("toolIcon.gif").getImage();
+                application.setDockIconImage(image);
+            }
+        } catch (Exception e) {
+            // do nothing
+        }
+    }
+
+    /**
+     *
+     */
     private static void setLookAndFeel() {
         try {
             if (System.getProperty("os.name").startsWith("Windows")) {
