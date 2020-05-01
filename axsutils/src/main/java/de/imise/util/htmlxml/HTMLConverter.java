@@ -38,9 +38,11 @@ public class HTMLConverter {
      * Liefert <code>true</code>, wenn ein übergebenes Zeichen in HTML kodiert werden soll.
      *
      * @param ch
+     * @param encodeWhitespaces if <code>true</code> whitespaces will return <code>true</code>
+     *            otherwise false
      * @return
      */
-    private static boolean encode(final char ch) {
+    private static boolean encode(final char ch, final boolean encodeWhitespaces) {
         //Character.isLetter sagt je nach Locale z.B. im deutschen auch bei Ä true -> nur die englischen Buchstaben durchlassen
         // check if ch is a letter
         if (ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z') {
@@ -51,7 +53,7 @@ public class HTMLConverter {
             return false;
         }
         // check if ch is a whitespace (Chracter.isWhiteSpace() sagt auch bei '\n' true, was hier nich richtig wäre
-        if (ch == ' ' || ch == '\t') {
+        if (!encodeWhitespaces && (ch == ' ' || ch == '\t')) {
             return false;
         }
         return true;
@@ -63,9 +65,11 @@ public class HTMLConverter {
      *
      * @param sb
      * @param s
+     * @param encodeWhitespaces if <code>true</code> whitespaces will also be encoded html conform,
+     *            if <code>false</code> the original whitepace character will be appended.
      * @return
      */
-    public static final StringBuilder appendDecimalEncodedHTMLString(final StringBuilder sb, final String s) {
+    public static final StringBuilder appendDecimalEncodedHTMLString(final StringBuilder sb, final String s, final boolean encodeWhitespaces) {
         if (!Strings.isNullOrEmpty(s)) {
             int l = s.length();
             for (int c = 0; c < l; c++) {
@@ -104,7 +108,7 @@ public class HTMLConverter {
                     sb.append("<BR>");
                     continue;
                 default:
-                    if (!encode(ch)) {
+                    if (!encode(ch, encodeWhitespaces)) {
                         sb.append(ch);
                     } else {
                         decimalHtmlEncoder.encode(ch, sb);
@@ -120,11 +124,13 @@ public class HTMLConverter {
      * Wandelt Sonderzeichen im übergebenen String HTML-konform um und gibt den String zurück.
      *
      * @param s
+     * @param encodeWhitespaces if <code>true</code> whitespaces will also be encoded html conform,
+     *            if <code>false</code> the original whitepace character will be appended.
      * @return
      */
-    public static final String getDecimalEncodedHTMLString(final String s) {
+    public static final String getDecimalEncodedHTMLString(final String s, final boolean encodeWhitespaces) {
         StringBuilder sb = new StringBuilder();
-        appendDecimalEncodedHTMLString(sb, s);
+        appendDecimalEncodedHTMLString(sb, s, encodeWhitespaces);
         return sb.toString();
     }
 

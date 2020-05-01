@@ -29,6 +29,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.htmlxml.HTMLConverter;
 import de.imise.util.htmlxml.ParseSaveStringHandler;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.LimitedSizeScrollTextPane;
@@ -163,6 +164,15 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                 connectedElementName.setText(oldname);
             } else {
                 connectedElementName.setText("");
+            }
+        }
+        if (connectedElementName != null || connectedElementsBox != null) {
+            String description = connectedElement == null ? null : connectedElement.getDescription();
+            description = description == null || description.trim().isEmpty() ? null : "<HTML>" + HTMLConverter.getDecimalEncodedHTMLString(description, true) + "</HTML>";
+            if (connectedElementName != null) {
+                connectedElementName.setToolTipText(description);
+            } else {
+                connectedElementsBox.setToolTipText(description);
             }
         }
     }
