@@ -21,6 +21,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +36,7 @@ import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -425,7 +427,16 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         //raise default zoom to fill the whole screen
         InputGraphArea inputGraphArea = frame.getInputGraphArea();
         double zoom = inputGraphArea.getZoom();
-        if (zoom == ViewParameter.INITIAL_MIN_ZOOM) {
+        //if the zoom is equals to the initial zoom -> adjust zoom to max width
+        boolean adjustZoom = zoom == ViewParameter.INITIAL_MIN_ZOOM;
+        //if the model file is the example model file -> -> adjust zoom to max width
+        if (!adjustZoom) {
+            GDCollection gdcoll = frame.doc.getCollection();
+            File file = gdcoll.getFile();
+            adjustZoom = Tool3lgmConstants.EXAMPLE_MODEL_FILE.equals(file);
+        }
+
+        if (adjustZoom) {
             JViewport viewport = frame.getViewport();
             Dimension viewportSize = viewport.getSize();
             int w = viewportSize.width - BasicGraphArea.GRAPH_BORDER.left - BasicGraphArea.GRAPH_BORDER.right;
@@ -438,11 +449,9 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
 
             int wDiff = w2 - w1;
             zoom = (double) w / wDiff;
-            if (zoom > ViewParameter.INITIAL_MIN_ZOOM) {
-                inputGraphArea.setZoom(zoom);
-            } else {
-                inputGraphArea.setZoom(ViewParameter.INITIAL_MIN_ZOOM);
-            }
+            //default zoom is never smaller then the initial zoom
+            zoom = Math.max(zoom, ViewParameter.INITIAL_MIN_ZOOM);
+            inputGraphArea.setZoom(zoom);
         }
     }
 
