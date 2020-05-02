@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.DebugGraphics;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
@@ -168,7 +169,8 @@ public class Tool3lgmMain {
         try {
             if (OperatingSystem.isMacOs()) {
                 Application application = Application.getApplication();
-                Image image = Tool3lgmConstants.getIcon("toolIcon.gif").getImage();
+                ImageIcon icon = Tool3lgmConstants.TOOL_ICON_TRANSPARENT_128;
+                Image image = icon.getImage();
                 application.setDockIconImage(image);
             }
         } catch (Exception e) {

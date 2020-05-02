@@ -1,11 +1,13 @@
 package de.imise.tool3lgm;
 
 import java.awt.Cursor;
+import java.awt.Image;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -13,6 +15,8 @@ import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -146,7 +150,29 @@ public abstract class Tool3lgmConstants {
     /** Name des Verzeichnisses in dem die Ressourcen für den Webexport liegen */
     public static final String WEB_EXPORT_RESOURCE_DIR_NAME = "webexport/";
 
+    /** Transparent icons in the usual sizes */
+    public static final ImageIcon TOOL_ICON_TRANSPARENT_16 = getIcon("toolIcon_transparent_16.gif");
+    public static final ImageIcon TOOL_ICON_TRANSPARENT_24 = getIcon("toolIcon_transparent_24.gif");
+    public static final ImageIcon TOOL_ICON_TRANSPARENT_32 = getIcon("toolIcon_transparent_32.gif");
+    public static final ImageIcon TOOL_ICON_TRANSPARENT_64 = getIcon("toolIcon_transparent_64.gif");
+    public static final ImageIcon TOOL_ICON_TRANSPARENT_128 = getIcon("toolIcon_transparent_128.gif");
     // Anfang FileFilter
+    /** Transparent icons in the usual sizes */
+    public static final ImageIcon TOOL_ICON_16 = getIcon("toolIcon_16.gif");
+    public static final ImageIcon TOOL_ICON_24 = getIcon("toolIcon_24.gif");
+    public static final ImageIcon TOOL_ICON_32 = getIcon("toolIcon_32.gif");
+    public static final ImageIcon TOOL_ICON_64 = getIcon("toolIcon_64.gif");
+    public static final ImageIcon TOOL_ICON_128 = getIcon("toolIcon_128.gif");
+
+    /** All tool ions als list to initialize the frame (like MainFrame) */
+    public static final List<Image> TOOL_ICON_IMAGES = ImmutableList.of(TOOL_ICON_16.getImage(), TOOL_ICON_24.getImage(), TOOL_ICON_32.getImage(), TOOL_ICON_64.getImage(), TOOL_ICON_128.getImage());
+
+    /** All trasparent tool ions als list to initialize the frame (like MainFrame) */
+    //    public static final List<Image> TOOL_ICON_IMAGES_TRANSPARENT = ImmutableList.of(TOOL_ICON_TRANSPARENT_16.getImage(), TOOL_ICON_TRANSPARENT_24.getImage(), TOOL_ICON_TRANSPARENT_32.getImage(), TOOL_ICON_TRANSPARENT_64.getImage(),
+    //            TOOL_ICON_TRANSPARENT_128.getImage());
+
+    /** icon for frames, dialogs and tabs */
+    public static final ImageIcon TOOL_ICON_13 = new ImageIcon(TOOL_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
 
     /** Anzahl der im Menü angezeigten zu letzt benutzen Dateien */
     public static final int LAST_USED_MODEL_FILES_IN_MENU = 10;

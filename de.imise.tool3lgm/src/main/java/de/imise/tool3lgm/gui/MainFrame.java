@@ -46,7 +46,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     private final MainFrameContentPane contentPane;
 
     public MainFrame() {
-        setIconImage(Tool3lgmConstants.getIcon("toolIcon.gif").getImage());
+        setIconImage(Tool3lgmConstants.TOOL_ICON_16.getImage());
         setTitle(null);
 
         contentPane = new MainFrameContentPane();

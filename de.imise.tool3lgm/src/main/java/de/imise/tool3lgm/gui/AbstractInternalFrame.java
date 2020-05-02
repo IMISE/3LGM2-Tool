@@ -39,7 +39,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
         scrollPane = new JScrollPane();
         getContentPane().add(scrollPane);
 
-        setFrameIcon(Tool3lgmConstants.getIcon("toolIcon.gif"));
+        setFrameIcon(Tool3lgmConstants.TOOL_ICON_16);
 
         doc.addAllTransactionsListener(this);
     }
