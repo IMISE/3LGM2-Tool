@@ -313,7 +313,10 @@ public class WebExportDialog extends JDialog {
      */
     public static final void createImage(final BasicGraphArea area, final String filename, final double zoomFactor, final int layer) {
         if (layer < 0) {
-            area.setLayerGap(new Double(400 * area.getSzenario().getPageSizeFactor()).intValue());
+            Szenario szen = area.getSzenario();
+            double pageSizeFactor = szen.getPageSizeFactor();
+            Double layerGap = 400d * pageSizeFactor;
+            area.setLayerGap(layerGap.intValue());
             area.setLayerAngle(45);
             area.setMultiView(true);
         } else {
@@ -435,7 +438,7 @@ public class WebExportDialog extends JDialog {
             this.xslScripts = xslScripts;
             selections = new Boolean[xslScripts.size()];
             for (int i = 0; i < xslScripts.size(); i++) {
-                selections[i] = new Boolean(true);
+                selections[i] = Boolean.valueOf(true);
             }
         }
 
@@ -454,7 +457,7 @@ public class WebExportDialog extends JDialog {
                 newSelections[i] = selections[i];
             }
             for (; i < newSelections.length; i++) {
-                newSelections[i] = new Boolean(true);
+                newSelections[i] = Boolean.valueOf(true);
             }
             selections = newSelections;
         }
@@ -529,7 +532,7 @@ public class WebExportDialog extends JDialog {
         //		 * /
         //		public void selectAll() {
         //			for (int i = 0; i < getRowCount(); i++)
-        //				setValueAt(new Boolean(true), i, 0);
+        //				setValueAt(Boolean.valueOf(true), i, 0);
         //		}
 
         /**

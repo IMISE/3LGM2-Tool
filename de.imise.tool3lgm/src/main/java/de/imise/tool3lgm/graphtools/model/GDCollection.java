@@ -1942,7 +1942,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 if (i == 0) {
                     b.setSelected(true);
                 }
-                b.setActionCommand(new Integer(i).toString());
+                b.setActionCommand(String.valueOf(i));
                 messagePanel.add(b);
                 buttonGroup.add(b);
             }
@@ -2414,10 +2414,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     public final void distribute(final LGMChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
-        Integer pidInteger = new Integer(pid);
+        Integer pidInteger = pid;
         Integer transStackInteger = getTransStackTable().get(pidInteger);
         if (transStackInteger == null) {
-            transStackInteger = new Integer(0);
+            transStackInteger = 0;
         }
         boolean deliverStatic = true;
         if (transStackInteger <= 1) {

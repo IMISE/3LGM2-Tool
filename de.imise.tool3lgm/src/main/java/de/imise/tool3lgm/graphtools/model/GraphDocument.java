@@ -1548,15 +1548,13 @@ public abstract class GraphDocument extends ElementSelectionContext {
             transactionManager.startTransaction("", "", pid, this);
         }
         Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
-        Integer pidInteger = new Integer(pid);
-        Integer transStackInteger = transStackTable.remove(pidInteger);
+        Integer transStackInteger = transStackTable.remove(pid);
         if (transStackInteger == null) {
-            transStackInteger = new Integer(0);
+            transStackInteger = 0;
         }
         int transStackInt = transStackInteger.intValue();
         transStackInt++;
-        transStackInteger = new Integer(transStackInt);
-        transStackTable.put(pidInteger, transStackInteger);
+        transStackTable.put(pid, transStackInt);
 
         //		Integer tst = transStackTable.get(pidInteger);
         //		System.err.println(iii++ + " + " + pid + ": "+ tst + " " + this);
@@ -1600,18 +1598,17 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return;
         }
         Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
-        Integer pidInteger = new Integer(pid);
-        Integer transStackInteger = transStackTable.remove(pidInteger);
+        Integer transStackInteger = transStackTable.remove(pid);
         if (transStackInteger == null) {
-            transStackInteger = new Integer(0);
+            transStackInteger = 0;
         }
         int transStackInt = transStackInteger.intValue();
         transStackInt--;
         if (transStackInt > 0) {
-            transStackInteger = new Integer(transStackInt);
-            transStackTable.put(pidInteger, transStackInteger);
+            transStackInteger = transStackInt;
+            transStackTable.put(pid, transStackInteger);
         }
-        Integer tst = transStackTable.get(pidInteger);
+        Integer tst = transStackTable.get(pid);
         //		System.err.println(iii++ + " - " + pid + ": "+ tst + " " + this);
         lastTransStackInt = tst == null ? 0 : tst;
         if (log) {
@@ -3543,10 +3540,10 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 long l = System.currentTimeMillis();
                 String szenHash = szen.getHashString();
                 szen.addElementToSzenario(szenHash, slaveContainer, pid);
-                times1.add(new Long(System.currentTimeMillis() - l));
+                times1.add(System.currentTimeMillis() - l);
                 l = System.currentTimeMillis();
                 szen.addict(master, slave, edgeClass, pid);
-                times2.add(new Long(System.currentTimeMillis() - l));
+                times2.add(System.currentTimeMillis() - l);
             }
         }
 

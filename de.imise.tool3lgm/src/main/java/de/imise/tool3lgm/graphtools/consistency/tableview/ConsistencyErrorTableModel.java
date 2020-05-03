@@ -65,8 +65,7 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         for (AbstractConsistencyError error : dataVector) {
 
             // Zeilennummer
-            Integer errorIndex = new Integer(i + 1);
-            setValueAt(errorIndex, i, COL_NAMES.number);
+            setValueAt(i + 1, i, COL_NAMES.number);
 
             // Fehlertyp
             String errorTypeString = error.getTypeString();

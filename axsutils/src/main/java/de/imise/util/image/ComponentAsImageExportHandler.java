@@ -84,7 +84,8 @@ public class ComponentAsImageExportHandler {
     private final FileNameExtensionFilter[] getFileNameExtensionFilters(final FileFilterType... filterNames) {
         FileNameExtensionFilter[] returnFilter = new FileNameExtensionFilter[filterNames.length];
         for (int i = 0; i < filterNames.length; i++) {
-            returnFilter[i] = new FileNameExtensionFilter(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i]), StringUtils.tokenize(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i] + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false));
+            returnFilter[i] = new FileNameExtensionFilter(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i]),
+                    StringUtils.tokenize(drh.getResString(FILE_FILTER_RESOURCE_PREFIX + filterNames[i] + FILE_FILTER_RESOURCE_EXTENSION_POSTFIX), " ", false));
         }
         return returnFilter;
     }
@@ -139,8 +140,9 @@ public class ComponentAsImageExportHandler {
             size = comp.getSize();
             comp.setSize(comp.getPreferredSize());
         }
-        int w = new Double(comp.getPreferredSize().getWidth()).intValue();
-        int h = new Double(comp.getPreferredSize().getHeight()).intValue();
+        Dimension preferredSize = comp.getPreferredSize();
+        int w = preferredSize.width;
+        int h = preferredSize.height;
 
         BufferedImage buffer = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
         Graphics og = buffer.getGraphics();
@@ -293,7 +295,7 @@ public class ComponentAsImageExportHandler {
 
         /**
          * Liefert den aktuellen Zoom-Wert
-         * 
+         *
          * @return
          */
         public abstract double getZoom();

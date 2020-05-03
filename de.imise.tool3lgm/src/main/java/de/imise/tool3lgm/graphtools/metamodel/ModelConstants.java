@@ -75,6 +75,6 @@ public final class ModelConstants {
     /**
      * Standardrückgabewert bei Fehlern = -1 ;
      */
-    public static final int STANDARD_ERROR_INT_VALUE = new Integer(-1);
+    public static final int STANDARD_ERROR_INT_VALUE = -1;
 
 }

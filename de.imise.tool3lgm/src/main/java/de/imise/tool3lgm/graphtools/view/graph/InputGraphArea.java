@@ -242,9 +242,9 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
 
     // --- Methoden der Rueckberechnung von Koordinaten --- Anfang ---
     /**
-     * COMMENTME
+     * @param initLastAsReal
      */
-    public final void computeRealCoordinates(final boolean initLastAsReal) {
+    private final void computeRealCoordinates(final boolean initLastAsReal) {
         if (!initLastAsReal) {
             for (int layerIndex : LAYERS) {
                 if (!isInterLayer(layerIndex)) {
