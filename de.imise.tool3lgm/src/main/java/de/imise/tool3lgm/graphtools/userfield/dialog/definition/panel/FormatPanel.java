@@ -13,6 +13,7 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -145,13 +147,21 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         unitBox.setEditable(true);
 
         unitBoxElements.add("");
+
         Locale locale = getLocale();
-        Currency currency = Currency.getInstance(locale);
-        String currencySymbol = currency.getSymbol(locale);
-        unitBoxElements.add(currencySymbol);
-        unitBoxElements.add("%");
-        DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(unitBoxElements);
-        unitBox.setModel(comboBoxModel);
+
+        Collection<Locale> localesWithCountry = ChangeLocaleAction.getLocalesWithCountry(locale);
+        for (Locale localeWithCountry : localesWithCountry) {
+            try {
+                Currency currency = Currency.getInstance(localeWithCountry);
+                String currencySymbol = currency.getSymbol(localeWithCountry);
+                if (!unitBoxElements.contains(currencySymbol)) {
+                    unitBoxElements.add(currencySymbol);
+                }
+            } catch (Exception e) {
+                // ignore exceptions
+            }
+        }
 
         refreshButton = new JButton(getResString("refreshButtonText"));
         refreshButton.addActionListener(this);
@@ -259,7 +269,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
                 }
             }
         }
-        unitBox.setModel(new DefaultComboBoxModel(unitBoxElements.toArray()));
+        unitBox.addAll(unitBoxElements);
 
         //Wenn sich das Standardformat % mit 2 Nachkommastellen noch nicht im
         // Kostenmodell befindet, wird es hinzugefügt.

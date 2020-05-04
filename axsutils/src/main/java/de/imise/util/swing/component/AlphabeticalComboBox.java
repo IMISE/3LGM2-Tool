@@ -584,4 +584,9 @@ public class AlphabeticalComboBox extends JComboBox {
         this.nullAble = nullAble;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getName() + items;
+    }
+
 }
