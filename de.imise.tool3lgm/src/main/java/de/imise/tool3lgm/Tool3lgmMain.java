@@ -86,8 +86,6 @@ public class Tool3lgmMain {
      */
     public static void main(final String args[]) {
 
-        setDocIcon();
-
         allStartParameters = args;
 
         //Ausgabe des ClassPaths bzw. aller jar-URLs an die der Systemclassloader kommt. Das funktioniert nur bis Java8! Ab 9 ist der SystemClassLoader kein URLClassLoader mehr...
@@ -108,6 +106,8 @@ public class Tool3lgmMain {
 
         //UserProperties initialisieren, damit die richige Locale gesetzt ist
         UserProperties.init();
+
+        setDocIcon();
 
         //In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
         ToolSplashScreen.update();
