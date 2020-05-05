@@ -1,6 +1,10 @@
 package de.imise.tool3lgm.event.action;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
+import static de.imise.tool3lgm.Tool3lgmConstants.CONFIRM_QUESTION_RESSOURCE_PREFIX;
+import static de.imise.tool3lgm.Tool3lgmConstants.ICON_LARGE_PREFIX;
+import static de.imise.tool3lgm.Tool3lgmConstants.ICON_SMALL_PREFIX;
+import static de.imise.tool3lgm.Tool3lgmConstants.TOOLTIP_RESSOURCE_PREFIX;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
@@ -47,11 +51,6 @@ public abstract class StaticAction extends ExtendedAction {
 
     /** Key, für das Argument des auszuführenden Kommandos */
     public static final String ARGUMENT_KEY = "ArgumentKey";
-
-    public static final String CONFIRM_QUESTION_RESSOURCE_PREFIX = "CONFIRM_";
-    public static final String TOOLTIP_RESSOURCE_PREFIX = "TOOLTIP_";
-    public static final String ICON_LARGE_PREFIX = "ICON_LARGE_";
-    public static final String ICON_SMALL_PREFIX = "ICON_SMALL_";
 
     /**
      * Konstruktor
@@ -209,12 +208,12 @@ public abstract class StaticAction extends ExtendedAction {
         Object iconIdentifier = identifier instanceof ActionSource ? ((ActionSource) identifier).getIconIdentifier() : identifier;
         String iconBaseName = getIdentifierName(iconIdentifier);
         //LargeIcon laden (wenn vorhanden)
-        String iconName = StaticAction.ICON_LARGE_PREFIX + iconBaseName + ".gif";
+        String iconName = ICON_LARGE_PREFIX + iconBaseName + ".gif";
         Icon icon = loadIcon(iconName);
         setLargeIcon(icon);
         boolean iconExists = icon != null;
         //SmallIcon laden (wenn vorhanden)
-        iconName = StaticAction.ICON_SMALL_PREFIX + iconBaseName + ".gif";
+        iconName = ICON_SMALL_PREFIX + iconBaseName + ".gif";
         icon = loadIcon(iconName);
         setSmallIcon(icon);
         iconExists |= icon != null;

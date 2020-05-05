@@ -150,6 +150,12 @@ public abstract class Tool3lgmConstants {
     /** Name des Verzeichnisses in dem die Ressourcen für den Webexport liegen */
     public static final String WEB_EXPORT_RESOURCE_DIR_NAME = "webexport/";
 
+    /** Prefixes of resources */
+    public static final String CONFIRM_QUESTION_RESSOURCE_PREFIX = "CONFIRM_";
+    public static final String TOOLTIP_RESSOURCE_PREFIX = "TOOLTIP_";
+    public static final String ICON_LARGE_PREFIX = "ICON_LARGE_";
+    public static final String ICON_SMALL_PREFIX = "ICON_SMALL_";
+
     /** Transparent icons in the usual sizes */
     public static final ImageIcon TOOL_ICON_TRANSPARENT_16 = getIcon("toolIcon_transparent_16.gif");
     public static final ImageIcon TOOL_ICON_TRANSPARENT_24 = getIcon("toolIcon_transparent_24.gif");
@@ -285,13 +291,35 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * gibt das spezifiziert ImageIcon aus dem Standard-Iconpfad zurück
+     * Gibt das spezifizierte ImageIcon aus dem Standard-Iconpfad zurück.
      *
      * @param name
      * @return ImageIcon
      */
     public static ImageIcon getIcon(final String name) {
         return getImageIcon(RESOURCE_ICON_DIR_NAME + name);
+    }
+
+    /**
+     * Gibt das spezifizierte ImageIcon mit dem Namensprefix ICON_SMALL_ aus
+     * dem Standard-Iconpfad zurück.
+     *
+     * @param name
+     * @return ImageIcon
+     */
+    public static ImageIcon getSmallIcon(final String name) {
+        return getIcon(ICON_SMALL_PREFIX + name);
+    }
+
+    /**
+     * Gibt das spezifizierte ImageIcon mit dem Namensprefix ICON_SMALL_ aus
+     * dem Standard-Iconpfad zurück.
+     *
+     * @param name
+     * @return ImageIcon
+     */
+    public static ImageIcon getSmallIcon(final Enum<?> name) {
+        return getIcon(ICON_SMALL_PREFIX + name.name());
     }
 
     /**
@@ -321,6 +349,9 @@ public abstract class Tool3lgmConstants {
      */
     public static ImageIcon getImageIcon(final String dir) {
         URL url = ClassLoader.getSystemClassLoader().getResource(dir);
+        if (url == null && !dir.endsWith(".gif")) {
+            url = ClassLoader.getSystemClassLoader().getResource(dir + ".gif");
+        }
         ImageIcon icon;
         if (url != null) {
             icon = new ImageIcon(url);
@@ -328,7 +359,13 @@ public abstract class Tool3lgmConstants {
             icon = new ImageIcon(dir);
         }
         if (icon.getIconWidth() == -1 && icon.getIconHeight() == -1) {
-            return null;
+            if (!dir.endsWith(".gif")) {
+                String nameWithGifEnding = dir + ".gif";
+                icon = new ImageIcon(nameWithGifEnding);
+            }
+            if (icon.getIconWidth() == -1 && icon.getIconHeight() == -1) {
+                return null;
+            }
         }
         return icon;
     }

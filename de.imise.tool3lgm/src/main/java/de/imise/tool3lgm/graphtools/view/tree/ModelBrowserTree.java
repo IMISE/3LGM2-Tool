@@ -12,6 +12,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER;
 
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
@@ -28,6 +30,8 @@ import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.KeyStrokes;
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
@@ -57,17 +61,17 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     /**
      * Node für die Fachliche Ebene
      */
-    private final LGMTreeNode domainLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.DOMAIN_LAYER));
+    private final LGMTreeNode domainLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.DOMAIN_LAYER), getLayerIcon(ActionIdentifier.ACTION_ACTIVATE_DOMAIN_LAYER));
 
     /**
      * Node für die Logische Werkzeugebene
      */
-    private final LGMTreeNode logicalLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.LOGICAL_LAYER));
+    private final LGMTreeNode logicalLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.LOGICAL_LAYER), getLayerIcon(ActionIdentifier.ACTION_ACTIVATE_LOGICAL_LAYER));
 
     /**
      * Node für die physische Werkzeugebene
      */
-    private final LGMTreeNode physicalLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.PHYSICAL_LAYER));
+    private final LGMTreeNode physicalLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.PHYSICAL_LAYER), getLayerIcon(ActionIdentifier.ACTION_ACTIVATE_PHYSICAL_LAYER));
 
     /**
      * COMMENTME
@@ -133,6 +137,20 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         setShowsRootHandles(true);
         buildTree();
         myModel = (DefaultTreeModel) getModel();
+        //Expand the 3 layer nodes
+        //        expandRow(2);
+        //        expandRow(1);
+        //        expandRow(0);
+    }
+
+    /**
+     * @param iconIdentifier
+     * @return
+     */
+    private static ImageIcon getLayerIcon(final Enum<?> iconIdentifier) {
+        ImageIcon icon = Tool3lgmConstants.getSmallIcon(iconIdentifier);
+        icon = new ImageIcon(icon.getImage().getScaledInstance(14, 14, Image.SCALE_SMOOTH));
+        return icon;
     }
 
     /**
