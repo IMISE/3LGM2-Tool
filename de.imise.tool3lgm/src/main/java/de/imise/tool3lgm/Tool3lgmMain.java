@@ -85,6 +85,8 @@ public class Tool3lgmMain {
      *            </table>
      */
     public static void main(final String args[]) {
+        System.setProperty("apple.laf.useScreenMenuBar", "true"); //set the menu from frame to screen
+        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "3LGM² Tool"); //should set the application name in the dock and cmd-tab-view but doesn't work :( (still 'java')
 
         allStartParameters = args;
 
@@ -107,7 +109,7 @@ public class Tool3lgmMain {
         //UserProperties initialisieren, damit die richige Locale gesetzt ist
         UserProperties.init();
 
-        setDocIcon();
+        setDockIcon();
 
         //In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
         ToolSplashScreen.update();
@@ -165,7 +167,7 @@ public class Tool3lgmMain {
     /**
      *
      */
-    private static void setDocIcon() {
+    private static void setDockIcon() {
         try {
             if (OperatingSystem.isMacOs()) {
                 Application application = Application.getApplication();
