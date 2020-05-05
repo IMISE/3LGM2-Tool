@@ -134,7 +134,6 @@ public class AlphabeticalJList extends JList<Object> {
         /**
          * @param items
          */
-        @Override
         public void addAll(final Collection<?> items) {
             for (Iterator<?> it = items.iterator(); it.hasNext();) {
                 addElement(it.next());
