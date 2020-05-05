@@ -6,7 +6,8 @@
 #mvn -version
 #exit 0
 
-APPDIR=$(dirname $0)
+SELF=$(realpath $0)
+APPDIR=$(dirname $SELF)
 cd $APPDIR
 
 echo '#############################################'
