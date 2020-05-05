@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
@@ -890,22 +889,6 @@ public abstract class CollectionUtils {
         };
     }
 
-    public static <K, V> Iterable<V> getValuesIterable(final Map<K, Iterable<V>> map) {
-        return getValuesIterable(map, null);
-    }
-
-    public static <K, V> Iterable<V> getValuesIterable(final Map<K, Iterable<V>> map, final Predicate<K> keyCondition) {
-        Set<K> keys = map.keySet();
-        ImmutableList.Builder<Iterable<V>> iterables = new ImmutableList.Builder<>();
-        for (K key : keys) {
-            if (keyCondition == null || keyCondition.test(key)) {
-                iterables.add(map.get(key));
-            }
-        }
-        ImmutableList<Iterable<V>> build = iterables.build();
-        return getCommonIterable(build);
-    }
-
     /**
      * Liefert ein Iterable-Objekt, das rückwärts durch die gegebene Liste iteriert.
      *
@@ -962,67 +945,6 @@ public abstract class CollectionUtils {
                 originalIterator.add(e);
             }
         };
-    }
-
-    private enum MapKey {
-        ONE,
-        TWO,
-        THREE,
-    }
-
-    private static final Set<MapKey> specialKeys = ImmutableSet.of(MapKey.TWO);
-
-    public static Predicate<MapKey> isNotTwo() {
-        return key -> !specialKeys.contains(key);
-    };
-
-    @SuppressWarnings("unused")
-    private static void testMapIterable() {
-        Map<MapKey, Iterable<String>> map = new HashMap<>();
-        List<String> list = new ArrayList<>();
-        list.add("eins");
-        list.add("zwei");
-        list.add("drei");
-        map.put(MapKey.ONE, list);
-        list = new ArrayList<>();
-        list.add("vier");
-        list.add("fünf");
-        list.add("sechs");
-        map.put(MapKey.TWO, list);
-        list = new ArrayList<>();
-        list.add("sieben");
-        list.add("acht");
-        list.add("neun");
-        map.put(MapKey.THREE, list);
-        for (String s : getValuesIterable(map, isNotTwo())) {
-            System.err.println(s);
-        }
-    }
-
-    private static void testCommonIterable() {
-        List<String> strings = new ArrayList<>();
-        strings.add("eins");
-        strings.add("zwei");
-        strings.add("drei");
-        List<Integer> ints = new ArrayList<>();
-        ints.add(new Integer(1));
-        ints.add(new Integer(2));
-        ints.add(new Integer(3));
-        List<Object> empty = new ArrayList<>();
-        List<?>[] lists = {
-                strings, empty, ints
-        };
-        for (Object o : getCommonIterable(strings, empty, ints)) {
-            System.err.println(o);
-        }
-        for (Object o : getCommonIterable(lists)) {
-            System.err.println(o);
-        }
-    }
-
-    public static void main(final String[] args) {
-        testCommonIterable();
-        //        Sys.err1(new CollectionUtils.Sub(500).clone().toString());
     }
 
     public static class Super implements Cloneable {
