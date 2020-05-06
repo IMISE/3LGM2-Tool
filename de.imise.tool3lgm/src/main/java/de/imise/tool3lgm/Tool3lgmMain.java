@@ -85,7 +85,9 @@ public class Tool3lgmMain {
      *            </table>
      */
     public static void main(final String args[]) {
-        //        System.setProperty("apple.laf.useScreenMenuBar", "true"); //set the menu from frame to screen
+        //https://stackoverflow.com/questions/307024/native-swing-menu-bar-support-for-macos-x-in-java
+        //links im oberen Teil des Stackoverflow-Post beachten!
+        //        System.setProperty("apple.laf.useScreenMenuBar", "true"); //set the menu from frame to screen but the enabled state than nver will be updated
         //        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "3LGM² Tool"); //should set the application name in the dock and cmd-tab-view but doesn't work :( (still 'java')
         allStartParameters = args;
 
