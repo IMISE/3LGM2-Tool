@@ -85,9 +85,8 @@ public class Tool3lgmMain {
      *            </table>
      */
     public static void main(final String args[]) {
-        System.setProperty("apple.laf.useScreenMenuBar", "true"); //set the menu from frame to screen
-        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "3LGM² Tool"); //should set the application name in the dock and cmd-tab-view but doesn't work :( (still 'java')
-
+        //        System.setProperty("apple.laf.useScreenMenuBar", "true"); //set the menu from frame to screen
+        //        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "3LGM² Tool"); //should set the application name in the dock and cmd-tab-view but doesn't work :( (still 'java')
         allStartParameters = args;
 
         //Ausgabe des ClassPaths bzw. aller jar-URLs an die der Systemclassloader kommt. Das funktioniert nur bis Java8! Ab 9 ist der SystemClassLoader kein URLClassLoader mehr...
