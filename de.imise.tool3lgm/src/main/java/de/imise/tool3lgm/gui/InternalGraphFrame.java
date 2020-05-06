@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JDesktopPane;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
@@ -38,11 +37,10 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     private final JButton but;
 
     /**
-     * @param pane
      * @param inputGraphArea
      * @param doc
      */
-    public InternalGraphFrame(final JDesktopPane pane, final InputGraphArea inputGraphArea, final GraphDocument doc) {
+    public InternalGraphFrame(final InputGraphArea inputGraphArea, final GraphDocument doc) {
         super(doc, "");
 
         // Diese Reihenfolge ist wichtig! Im Konstruktor von Werkzeugleiste

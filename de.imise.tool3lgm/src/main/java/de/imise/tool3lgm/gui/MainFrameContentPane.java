@@ -340,7 +340,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      */
     public InternalGraphFrame createGraphFrame(final GraphDocument doc) {
         InputGraphArea area = new InputGraphArea(doc);
-        InternalGraphFrame frame = new InternalGraphFrame(desktop, area, doc);
+        InternalGraphFrame frame = new InternalGraphFrame(area, doc);
         modelBrowserPanel.addGraphDocument(doc);
         frame.addInternalFrameListener(this);
         frame.setBounds(desktop.getBounds());
