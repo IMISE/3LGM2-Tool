@@ -45,6 +45,7 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         addAncestorListener(this);
         pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"), true);
         setModel(pathTreeModel);
+        TemplateBrowserDragNDropActivator.add(this);
     }
 
     @Override
