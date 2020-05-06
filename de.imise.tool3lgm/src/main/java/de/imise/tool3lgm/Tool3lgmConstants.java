@@ -151,10 +151,10 @@ public abstract class Tool3lgmConstants {
     public static final String WEB_EXPORT_RESOURCE_DIR_NAME = "webexport/";
 
     /** Prefixes of resources */
-    public static final String CONFIRM_QUESTION_RESSOURCE_PREFIX = "CONFIRM_";
-    public static final String TOOLTIP_RESSOURCE_PREFIX = "TOOLTIP_";
-    public static final String ICON_LARGE_PREFIX = "ICON_LARGE_";
-    public static final String ICON_SMALL_PREFIX = "ICON_SMALL_";
+    private static final String CONFIRM_QUESTION_RESSOURCE_PREFIX = "CONFIRM_";
+    private static final String TOOLTIP_RESSOURCE_PREFIX = "TOOLTIP_";
+    private static final String ICON_LARGE_PREFIX = "ICON_LARGE_";
+    private static final String ICON_SMALL_PREFIX = "ICON_SMALL_";
 
     /** Transparent icons in the usual sizes */
     public static final ImageIcon TOOL_ICON_TRANSPARENT_16 = getIcon("toolIcon_transparent_16.gif");
@@ -323,6 +323,28 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
+     * Gibt das spezifizierte ImageIcon mit dem Namensprefix ICON_LARGE_ aus
+     * dem Standard-Iconpfad zurück.
+     *
+     * @param name
+     * @return ImageIcon
+     */
+    public static ImageIcon getLargeIcon(final String name) {
+        return getIcon(ICON_LARGE_PREFIX + name);
+    }
+
+    /**
+     * Gibt das spezifizierte ImageIcon mit dem Namensprefix ICON_LARGE_ aus
+     * dem Standard-Iconpfad zurück.
+     *
+     * @param name
+     * @return ImageIcon
+     */
+    public static ImageIcon getLargeIcon(final Enum<?> name) {
+        return getIcon(ICON_LARGE_PREFIX + name.name());
+    }
+
+    /**
      * gibt das spezifiziert ImageIcon aus dem lokalisierten Iconpfad zurück
      *
      * @param name
@@ -380,6 +402,22 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
+     * @param baseKey
+     * @return a resource string with the full key "TOOLTIP_" + baseKey
+     */
+    public static String getTooltipResString(final Object baseKey) {
+        return getResString(TOOLTIP_RESSOURCE_PREFIX, baseKey);
+    }
+
+    /**
+     * @param baseKey
+     * @return a resource string with the full key "CONFIRM_" + baseKey
+     */
+    public static String getConfirmQuestionResString(final Object baseKey) {
+        return getResString(CONFIRM_QUESTION_RESSOURCE_PREFIX, baseKey);
+    }
+
+    /**
      * Gets a string for the given key from this resource bundle or one of its parents.
      *
      * @param key
@@ -391,6 +429,33 @@ public abstract class Tool3lgmConstants {
         //MissingResocureException regaieren (z.B. die Funktionen zum heraussuchen der Kantennamen bei
         //Kanten mit doppelter Bedeutung
         return resourceBundle.getString(key);
+    }
+
+    /**
+     * Gets a string for the given key from this resource bundle or one of its parents.
+     *
+     * @param key
+     *            String with key for resource or the key
+     * @return String with value of resource
+     */
+    public static String getResString(final Object key) {
+        return getResString(null, key);
+    }
+
+    /**
+     * Gets a string for the given key from this resource bundle or one of its parents.
+     *
+     * @param prefix
+     * @param baseKey
+     *            String with key for resource or the key
+     * @return String with value of resource
+     */
+    public static String getResString(final String prefix, final Object baseKey) {
+        String key = baseKey instanceof Enum ? ((Enum<?>) baseKey).name() : baseKey.toString();
+        if (prefix != null) {
+            key = prefix + key;
+        }
+        return getResString(key);
     }
 
     /**

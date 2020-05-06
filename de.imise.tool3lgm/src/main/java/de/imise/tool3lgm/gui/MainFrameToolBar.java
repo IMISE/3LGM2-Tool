@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.gui;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.TOOLTIP_RESSOURCE_PREFIX;
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.Tool3lgmConstants.getTooltipResString;
 
 import java.awt.Component;
 import java.awt.event.MouseEvent;
@@ -198,12 +197,19 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
             undo.setToolTipText(queue);
             redo.setToolTipText(queue);
         } else {
-            String identifier = undo.getAction().getValue(StaticAction.IDENTIFIER_KEY).toString();
-            undo.setToolTipText(getResString(TOOLTIP_RESSOURCE_PREFIX + identifier));
-
-            identifier = redo.getAction().getValue(StaticAction.IDENTIFIER_KEY).toString();
-            redo.setToolTipText(getResString(TOOLTIP_RESSOURCE_PREFIX + identifier));
+            setStaticResourceTooltip(undo);
+            setStaticResourceTooltip(redo);
         }
+    }
+
+    /**
+     * @param button
+     */
+    private void setStaticResourceTooltip(final JButton button) {
+        Action action = button.getAction();
+        Object tooltipReskey = action.getValue(StaticAction.IDENTIFIER_KEY);
+        String tooltipText = getTooltipResString(tooltipReskey);
+        button.setToolTipText(tooltipText);
     }
 
     private final class ToolbarButton extends JButton {

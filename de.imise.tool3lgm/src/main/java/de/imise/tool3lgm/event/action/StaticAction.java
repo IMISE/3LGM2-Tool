@@ -1,10 +1,7 @@
 package de.imise.tool3lgm.event.action;
 
 import static de.imise.tool3lgm.Static.getMainFrame;
-import static de.imise.tool3lgm.Tool3lgmConstants.CONFIRM_QUESTION_RESSOURCE_PREFIX;
-import static de.imise.tool3lgm.Tool3lgmConstants.ICON_LARGE_PREFIX;
-import static de.imise.tool3lgm.Tool3lgmConstants.ICON_SMALL_PREFIX;
-import static de.imise.tool3lgm.Tool3lgmConstants.TOOLTIP_RESSOURCE_PREFIX;
+import static de.imise.tool3lgm.Tool3lgmConstants.getConfirmQuestionResString;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
@@ -208,29 +205,14 @@ public abstract class StaticAction extends ExtendedAction {
         Object iconIdentifier = identifier instanceof ActionSource ? ((ActionSource) identifier).getIconIdentifier() : identifier;
         String iconBaseName = getIdentifierName(iconIdentifier);
         //LargeIcon laden (wenn vorhanden)
-        String iconName = ICON_LARGE_PREFIX + iconBaseName + ".gif";
-        Icon icon = loadIcon(iconName);
+        Icon icon = Tool3lgmConstants.getLargeIcon(iconBaseName);
         setLargeIcon(icon);
         boolean iconExists = icon != null;
         //SmallIcon laden (wenn vorhanden)
-        iconName = ICON_SMALL_PREFIX + iconBaseName + ".gif";
-        icon = loadIcon(iconName);
+        icon = Tool3lgmConstants.getSmallIcon(iconBaseName);
         setSmallIcon(icon);
         iconExists |= icon != null;
         return iconExists;
-    }
-
-    /**
-     * @param iconName
-     * @return
-     */
-    private Icon loadIcon(final String iconName) {
-        //erst localized suchen
-        Icon icon = Tool3lgmConstants.getLocalizedIcon(iconName);
-        if (icon == null) {
-            icon = Tool3lgmConstants.getIcon(iconName);
-        }
-        return icon;
     }
 
     /**
@@ -251,7 +233,7 @@ public abstract class StaticAction extends ExtendedAction {
     private void setToolTip(final String command) {
         //ToolTip laden (wenn vorhanden)
         try {
-            setShortDescription(Tool3lgmConstants.getResString(TOOLTIP_RESSOURCE_PREFIX + command));
+            setShortDescription(Tool3lgmConstants.getTooltipResString(command));
         } catch (MissingResourceException e) {
         }
     }
@@ -268,10 +250,10 @@ public abstract class StaticAction extends ExtendedAction {
             return;
         }
         Object identifier = getValue(IDENTIFIER_KEY);
-        String confirmQuestionResKey = CONFIRM_QUESTION_RESSOURCE_PREFIX + getIdentifierName(identifier);
+        String confirmQuestionResBaseKey = getIdentifierName(identifier);
         boolean perform = false;
         try {
-            String confirmQuestion = getResString(confirmQuestionResKey);
+            String confirmQuestion = getConfirmQuestionResString(confirmQuestionResBaseKey);
             //wenn es eine confirm-Question in den Resourcen gibt -> Confirm-Frage stellen
             int answer = JOptionPane.showConfirmDialog(getMainFrame(), confirmQuestion, getResString("confirm"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             if (answer == JOptionPane.YES_OPTION) {
