@@ -64,7 +64,7 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
      *            Der Title soll unterscheidbar sein und das wird er durch diese Nummer.
      */
     public MatrixViewInternalFrame(final GraphDocument doc, final InternalFrameToolbarManager toolbarManager, final int titleIndex) {
-        super(doc, "");
+        super(doc);
         this.toolbarManager = toolbarManager;
         this.titleIndex = titleIndex;
         setClosable(true);

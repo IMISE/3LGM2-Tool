@@ -41,7 +41,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
      * @param doc
      */
     public InternalGraphFrame(final InputGraphArea inputGraphArea, final GraphDocument doc) {
-        super(doc, "");
+        super(doc);
 
         // Diese Reihenfolge ist wichtig! Im Konstruktor von Werkzeugleiste
         // braucht man das Area, um die Regler bei neuen Modellen auf den dann

@@ -28,12 +28,11 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      * Konstruktor
      *
      * @param _graphDocument darzustellendes (Teil-)Modell
-     * @param _title Fensterüberschrift
      */
-    public AbstractInternalFrame(final GraphDocument doc, final String _title) {
+    public AbstractInternalFrame(final GraphDocument doc) {
 
         /* JInternalFrame mit Titel, resizable, closable, maximizable, and iconifiable */
-        super(_title, true, false, true, true);
+        super("", true, false, true, true);
 
         this.doc = doc;
         scrollPane = new JScrollPane();
