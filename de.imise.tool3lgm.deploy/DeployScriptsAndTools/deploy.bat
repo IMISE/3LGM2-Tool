@@ -50,7 +50,7 @@ SET "IHE_TEMPLATE_PROJECT_DIR=..\..\de.imise.tool3lgm.template.ihe"
 ::###                                                                                  ###
 ::########################################################################################
 ::Pfad zu Inno Setup
-SET "INNOSETUP_PROGRAM_DIR=Inno Setup 5"
+SET "INNOSETUP_PROGRAM_DIR=InnoSetup6"
 ::Pfad zur 7zip-Exe
 SET "SEVENZIP_PROGRAM_FILE=7zip\7z.exe"
 ::Pfad zu launch4j (erzeugt aus einer Jar-Datei eine Exe-Datei)
