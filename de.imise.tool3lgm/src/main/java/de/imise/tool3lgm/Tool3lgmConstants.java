@@ -1,11 +1,13 @@
 package de.imise.tool3lgm;
 
 import java.awt.Cursor;
+import java.awt.Image;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -13,6 +15,8 @@ import java.util.ResourceBundle;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -146,7 +150,35 @@ public abstract class Tool3lgmConstants {
     /** Name des Verzeichnisses in dem die Ressourcen für den Webexport liegen */
     public static final String WEB_EXPORT_RESOURCE_DIR_NAME = "webexport/";
 
+    /** Prefixes of resources */
+    private static final String CONFIRM_QUESTION_RESSOURCE_PREFIX = "CONFIRM_";
+    private static final String TOOLTIP_RESSOURCE_PREFIX = "TOOLTIP_";
+    private static final String ICON_LARGE_PREFIX = "ICON_LARGE_";
+    private static final String ICON_SMALL_PREFIX = "ICON_SMALL_";
+
+    /** Transparent icons in the usual sizes */
+    public static final ImageIcon TOOL_ICON_TRANSPARENT_16 = getIcon("toolIcon_transparent_16.gif");
+    public static final ImageIcon TOOL_ICON_TRANSPARENT_24 = getIcon("toolIcon_transparent_24.gif");
+    public static final ImageIcon TOOL_ICON_TRANSPARENT_32 = getIcon("toolIcon_transparent_32.gif");
+    public static final ImageIcon TOOL_ICON_TRANSPARENT_64 = getIcon("toolIcon_transparent_64.gif");
+    public static final ImageIcon TOOL_ICON_TRANSPARENT_128 = getIcon("toolIcon_transparent_128.gif");
     // Anfang FileFilter
+    /** Transparent icons in the usual sizes */
+    public static final ImageIcon TOOL_ICON_16 = getIcon("toolIcon_16.gif");
+    public static final ImageIcon TOOL_ICON_24 = getIcon("toolIcon_24.gif");
+    public static final ImageIcon TOOL_ICON_32 = getIcon("toolIcon_32.gif");
+    public static final ImageIcon TOOL_ICON_64 = getIcon("toolIcon_64.gif");
+    public static final ImageIcon TOOL_ICON_128 = getIcon("toolIcon_128.gif");
+
+    /** All tool ions als list to initialize the frame (like MainFrame) */
+    public static final List<Image> TOOL_ICON_IMAGES = ImmutableList.of(TOOL_ICON_16.getImage(), TOOL_ICON_24.getImage(), TOOL_ICON_32.getImage(), TOOL_ICON_64.getImage(), TOOL_ICON_128.getImage());
+
+    /** All trasparent tool ions als list to initialize the frame (like MainFrame) */
+    //    public static final List<Image> TOOL_ICON_IMAGES_TRANSPARENT = ImmutableList.of(TOOL_ICON_TRANSPARENT_16.getImage(), TOOL_ICON_TRANSPARENT_24.getImage(), TOOL_ICON_TRANSPARENT_32.getImage(), TOOL_ICON_TRANSPARENT_64.getImage(),
+    //            TOOL_ICON_TRANSPARENT_128.getImage());
+
+    /** icon for frames, dialogs and tabs */
+    public static final ImageIcon TOOL_ICON_13 = new ImageIcon(TOOL_ICON_16.getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
 
     /** Anzahl der im Menü angezeigten zu letzt benutzen Dateien */
     public static final int LAST_USED_MODEL_FILES_IN_MENU = 10;
@@ -259,13 +291,57 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
-     * gibt das spezifiziert ImageIcon aus dem Standard-Iconpfad zurück
+     * Gibt das spezifizierte ImageIcon aus dem Standard-Iconpfad zurück.
      *
      * @param name
      * @return ImageIcon
      */
     public static ImageIcon getIcon(final String name) {
         return getImageIcon(RESOURCE_ICON_DIR_NAME + name);
+    }
+
+    /**
+     * Gibt das spezifizierte ImageIcon mit dem Namensprefix ICON_SMALL_ aus
+     * dem Standard-Iconpfad zurück.
+     *
+     * @param name
+     * @return ImageIcon
+     */
+    public static ImageIcon getSmallIcon(final String name) {
+        return getIcon(ICON_SMALL_PREFIX + name);
+    }
+
+    /**
+     * Gibt das spezifizierte ImageIcon mit dem Namensprefix ICON_SMALL_ aus
+     * dem Standard-Iconpfad zurück.
+     *
+     * @param name
+     * @return ImageIcon
+     */
+    public static ImageIcon getSmallIcon(final Enum<?> name) {
+        return getIcon(ICON_SMALL_PREFIX + name.name());
+    }
+
+    /**
+     * Gibt das spezifizierte ImageIcon mit dem Namensprefix ICON_LARGE_ aus
+     * dem Standard-Iconpfad zurück.
+     *
+     * @param name
+     * @return ImageIcon
+     */
+    public static ImageIcon getLargeIcon(final String name) {
+        return getIcon(ICON_LARGE_PREFIX + name);
+    }
+
+    /**
+     * Gibt das spezifizierte ImageIcon mit dem Namensprefix ICON_LARGE_ aus
+     * dem Standard-Iconpfad zurück.
+     *
+     * @param name
+     * @return ImageIcon
+     */
+    public static ImageIcon getLargeIcon(final Enum<?> name) {
+        return getIcon(ICON_LARGE_PREFIX + name.name());
     }
 
     /**
@@ -295,6 +371,9 @@ public abstract class Tool3lgmConstants {
      */
     public static ImageIcon getImageIcon(final String dir) {
         URL url = ClassLoader.getSystemClassLoader().getResource(dir);
+        if (url == null && !dir.endsWith(".gif")) {
+            url = ClassLoader.getSystemClassLoader().getResource(dir + ".gif");
+        }
         ImageIcon icon;
         if (url != null) {
             icon = new ImageIcon(url);
@@ -302,7 +381,13 @@ public abstract class Tool3lgmConstants {
             icon = new ImageIcon(dir);
         }
         if (icon.getIconWidth() == -1 && icon.getIconHeight() == -1) {
-            return null;
+            if (!dir.endsWith(".gif")) {
+                String nameWithGifEnding = dir + ".gif";
+                icon = new ImageIcon(nameWithGifEnding);
+            }
+            if (icon.getIconWidth() == -1 && icon.getIconHeight() == -1) {
+                return null;
+            }
         }
         return icon;
     }
@@ -317,6 +402,22 @@ public abstract class Tool3lgmConstants {
     }
 
     /**
+     * @param baseKey
+     * @return a resource string with the full key "TOOLTIP_" + baseKey
+     */
+    public static String getTooltipResString(final Object baseKey) {
+        return getResString(TOOLTIP_RESSOURCE_PREFIX, baseKey);
+    }
+
+    /**
+     * @param baseKey
+     * @return a resource string with the full key "CONFIRM_" + baseKey
+     */
+    public static String getConfirmQuestionResString(final Object baseKey) {
+        return getResString(CONFIRM_QUESTION_RESSOURCE_PREFIX, baseKey);
+    }
+
+    /**
      * Gets a string for the given key from this resource bundle or one of its parents.
      *
      * @param key
@@ -328,6 +429,33 @@ public abstract class Tool3lgmConstants {
         //MissingResocureException regaieren (z.B. die Funktionen zum heraussuchen der Kantennamen bei
         //Kanten mit doppelter Bedeutung
         return resourceBundle.getString(key);
+    }
+
+    /**
+     * Gets a string for the given key from this resource bundle or one of its parents.
+     *
+     * @param key
+     *            String with key for resource or the key
+     * @return String with value of resource
+     */
+    public static String getResString(final Object key) {
+        return getResString(null, key);
+    }
+
+    /**
+     * Gets a string for the given key from this resource bundle or one of its parents.
+     *
+     * @param prefix
+     * @param baseKey
+     *            String with key for resource or the key
+     * @return String with value of resource
+     */
+    public static String getResString(final String prefix, final Object baseKey) {
+        String key = baseKey instanceof Enum ? ((Enum<?>) baseKey).name() : baseKey.toString();
+        if (prefix != null) {
+            key = prefix + key;
+        }
+        return getResString(key);
     }
 
     /**
@@ -399,7 +527,47 @@ public abstract class Tool3lgmConstants {
      * @return
      */
     public static final boolean isPopupTrigger(final MouseEvent e) {
-        return (e.getModifiers() & InputEvent.BUTTON1_MASK) != InputEvent.BUTTON1_MASK;
+        //the origianl e.isPopupTrigger() returns true if the right button is pressed or
+        //(and that is the problem) if CTRL is pressed togehter with the left button.
+        //If CTRL is pressed togehter with the left button we want only an add to selection
+        //and no popups
+        //return e.isPopupTrigger(); //don't activate this!!!
+
+        //pupup triggered only if the right button is pressed
+        return isMouseButton3(e);
+    }
+
+    /**
+     * @param e
+     * @return <code>true</code> only if the left mouse
+     */
+    public static final boolean isMouseButton1(final MouseEvent e) {
+        return isMouseButton(e, InputEvent.BUTTON1_MASK);
+    }
+
+    /**
+     * @param e
+     * @return <code>true</code> only if the left mouse
+     */
+    public static final boolean isMouseButton2(final MouseEvent e) {
+        return isMouseButton(e, InputEvent.BUTTON2_MASK);
+    }
+
+    /**
+     * @param e
+     * @return <code>true</code> only if the left mouse
+     */
+    public static final boolean isMouseButton3(final MouseEvent e) {
+        return isMouseButton(e, InputEvent.BUTTON3_MASK);
+    }
+
+    /**
+     * @param e
+     * @return <code>true</code> only if the left mouse
+     */
+    private static final boolean isMouseButton(final MouseEvent e, final int buttonMask) {
+        boolean mouseButtonPressed = (e.getModifiers() & buttonMask) == buttonMask;
+        return mouseButtonPressed;
     }
 
     /**

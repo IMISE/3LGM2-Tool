@@ -95,7 +95,7 @@ public class NumberTextField extends ExtendedJFormattedTextField {
      * Liefert ein <code>NumberTextField</code> mit dem
      * Standard-Zahlenformatter, das auch negative Zahlen als Eingabe
      * akzeptiert.
-     * 
+     *
      * @return
      */
     public static NumberTextField getNumberTextField() {
@@ -173,7 +173,7 @@ public class NumberTextField extends ExtendedJFormattedTextField {
                 }
                 double newDoubleValue = Double.parseDouble(s);
                 setFormatterFactory(tmpNumberFormaterFactory);
-                setValue(Double.valueOf(newDoubleValue));
+                setValue(newDoubleValue);
             } catch (Exception ex) {
 
             }
@@ -187,7 +187,7 @@ public class NumberTextField extends ExtendedJFormattedTextField {
      * String
      * alle Punkte gegen Kommas, wenn der DecimalSeparator ein Komma ist und
      * umgekehrt.
-     * 
+     *
      * @param string
      */
     private static final String replaceWrongDecimalSeparator(final Object objectToString) {

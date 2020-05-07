@@ -59,8 +59,10 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
 
         setClosable(false);
 
+        JViewport viewport = getViewport();
+        viewport.setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
+
         JScrollPane sp = getScrollPane();
-        sp.getViewport().setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
         //		sp.getViewport().setScrollMode(JViewport.BLIT_SCROLL_MODE );
         //		sp.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
         sp.setViewportView(inputGraphArea);
@@ -97,11 +99,11 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
      *
      */
     public void center() {
-        JViewport view = getScrollPane().getViewport();
-        Rectangle vp = view.getViewRect();
+        JViewport viewport = getViewport();
+        Rectangle vp = viewport.getViewRect();
         int x = (int) (area.getWidth() - vp.getWidth()) / 2;
         int y = (int) (area.getHeight() - vp.getHeight()) / 2;
-        view.setViewPosition(new Point(x, y));
+        viewport.setViewPosition(new Point(x, y));
     }
 
     @Override

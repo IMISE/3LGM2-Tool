@@ -195,8 +195,8 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
      * @return
      * @see de.imise.tool3lgm.graphtools.model.ModelSelection#getMostSpecialRealElementsClass()
      */
-    public Class<? extends ModelElement> _getMostSpecialRealElementsClass() {
-        return selectedContainer._getMostSpecialRealElementsClass();
+    public Class<? extends ModelElement> getMostSpecialRealElementsClass() {
+        return selectedContainer.getMostSpecialRealElementsClass();
     }
 
     /**

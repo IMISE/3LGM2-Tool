@@ -15,6 +15,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.util.Alphabetical;
+import de.imise.util.collections.CollectionUtils;
 
 public class PrintModelStatistics {
 
@@ -39,7 +40,7 @@ public class PrintModelStatistics {
                 Class<? extends ModelElement> meClass = me.getClass();
 
                 Integer count = class2ElementCount.get(meClass);
-                count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);
+                count = count == null ? 1 : count.intValue() + 1;
                 class2ElementCount.put(meClass, count);
 
                 List<GraphDocument> docs = new ArrayList<>(gdcoll.getSzenarioCount() + 1);
@@ -51,31 +52,18 @@ public class PrintModelStatistics {
                 //Anzahl der ElementContainer der Modellelemente im Gesamtmodell hochzählen
                 for (GraphDocument doc : docs) {
                     for (LayerContainer lcc : doc.getLayers()) {
-                        for (ElementContainer layerEc : lcc.getBendpointContainers()) {
+                        Iterable<ElementContainer> elementContainers = CollectionUtils.getCommonIterable(lcc.getBendpointContainers(), lcc.getNodeContainersAlphabetical(), lcc.getEdgeContainers());
+                        for (ElementContainer layerEc : elementContainers) {
                             if (layerEc.getElement() == me) {
                                 count = class2ContainerCountFromGraphDocuments.get(meClass);
-                                count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);
-                                class2ContainerCountFromGraphDocuments.put(meClass, count);
-                            }
-                        }
-                        for (ElementContainer layerEc : lcc.getNodeContainersAlphabetical()) {
-                            if (layerEc.getElement() == me) {
-                                count = class2ContainerCountFromGraphDocuments.get(meClass);
-                                count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);
-                                class2ContainerCountFromGraphDocuments.put(meClass, count);
-                            }
-                        }
-                        for (ElementContainer layerEc : lcc.getEdgeContainers()) {
-                            if (layerEc.getElement() == me) {
-                                count = class2ContainerCountFromGraphDocuments.get(meClass);
-                                count = count == null ? new Integer(1) : new Integer(count.intValue() + 1);
+                                count = count == null ? 1 : count.intValue() + 1;
                                 class2ContainerCountFromGraphDocuments.put(meClass, count);
                             }
                         }
                     }
                 }
                 count = class2ContainerCountFromModelElements.get(meClass);
-                count = count == null ? new Integer(me.getContainerCount()) : new Integer(count.intValue() + me.getContainerCount());
+                count = count == null ? me.getContainerCount() : count.intValue() + me.getContainerCount();
                 class2ContainerCountFromModelElements.put(meClass, count);
             }
 

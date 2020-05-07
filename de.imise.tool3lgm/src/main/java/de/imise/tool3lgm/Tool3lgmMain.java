@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RMI_PORT;
 
+import java.awt.Image;
 import java.rmi.Naming;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -14,9 +15,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.DebugGraphics;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIDefaults;
 import javax.swing.UIManager;
+
+import com.apple.eawt.Application;
 
 import de.imise.tool3lgm.graphtools.dialog.RMIErrorPanel;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
@@ -24,6 +28,7 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.rmi.Tool3lgmServer;
 import de.imise.tool3lgm.rmi.Tool3lgmServerImpl;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.util.OperatingSystem;
 
 public class Tool3lgmMain {
 
@@ -80,7 +85,10 @@ public class Tool3lgmMain {
      *            </table>
      */
     public static void main(final String args[]) {
-
+        //https://stackoverflow.com/questions/307024/native-swing-menu-bar-support-for-macos-x-in-java
+        //links im oberen Teil des Stackoverflow-Post beachten!
+        //        System.setProperty("apple.laf.useScreenMenuBar", "true"); //set the menu from frame to screen but the enabled state than nver will be updated
+        //        System.setProperty("com.apple.mrj.application.apple.menu.about.name", "3LGM² Tool"); //should set the application name in the dock and cmd-tab-view but doesn't work :( (still 'java')
         allStartParameters = args;
 
         //Ausgabe des ClassPaths bzw. aller jar-URLs an die der Systemclassloader kommt. Das funktioniert nur bis Java8! Ab 9 ist der SystemClassLoader kein URLClassLoader mehr...
@@ -101,6 +109,8 @@ public class Tool3lgmMain {
 
         //UserProperties initialisieren, damit die richige Locale gesetzt ist
         UserProperties.init();
+
+        setDockIcon();
 
         //In den <code>SplashScreen</code> die lokalisierten Informationen schreiben
         ToolSplashScreen.update();
@@ -127,6 +137,9 @@ public class Tool3lgmMain {
         activateRMI(arguments, visible, newInstance);
     }
 
+    /**
+     *
+     */
     private static final void setUIDefaults() {
         /* table of defaults for Swing components */
         UIDefaults defaults = UIManager.getDefaults();
@@ -152,6 +165,25 @@ public class Tool3lgmMain {
         defaults.put("OptionPane.yesButtonText", getResString("yes"));
     }
 
+    /**
+     *
+     */
+    private static void setDockIcon() {
+        try {
+            if (OperatingSystem.isMacOs()) {
+                Application application = Application.getApplication();
+                ImageIcon icon = Tool3lgmConstants.TOOL_ICON_TRANSPARENT_128;
+                Image image = icon.getImage();
+                application.setDockIconImage(image);
+            }
+        } catch (Exception e) {
+            // do nothing
+        }
+    }
+
+    /**
+     *
+     */
     private static void setLookAndFeel() {
         try {
             if (System.getProperty("os.name").startsWith("Windows")) {

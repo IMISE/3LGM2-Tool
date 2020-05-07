@@ -91,7 +91,7 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
         int elementsCount = selectedElementContainer.size();
 
         if (rowSpinnerValue == -1 || rowSpinnerValue > elementsCount || colSpinnerValue > elementsCount) {
-            int initialRows = new Double(Math.round(Math.sqrt(elementsCount))).intValue();
+            int initialRows = Double.valueOf(Math.round(Math.sqrt(elementsCount))).intValue();
             int initialCols = initialRows - 1;
             while (initialRows * initialCols < elementsCount) {
                 initialCols++;
@@ -256,7 +256,7 @@ public class ElementAlignmentDialog extends JDialog implements ChangeListener {
             otherSpinnerValue++;
         }
         otherSpinner.removeChangeListener(this);
-        otherSpinner.setValue(new Double(otherSpinnerValue));
+        otherSpinner.setValue(Double.valueOf(otherSpinnerValue));
         otherSpinner.addChangeListener(this);
     }
 }

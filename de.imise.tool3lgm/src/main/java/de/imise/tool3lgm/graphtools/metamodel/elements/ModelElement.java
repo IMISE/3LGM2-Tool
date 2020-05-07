@@ -550,7 +550,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (isHyperlink()) {
             textBuf.append("<U>");
         }
-        HTMLConverter.appendDecimalEncodedHTMLString(textBuf, name);
+        HTMLConverter.appendDecimalEncodedHTMLString(textBuf, name, false);
         if (isHyperlink()) {
             textBuf.append("</U>");
         }
@@ -562,7 +562,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 HTMLConverter.appendHTMLColor(textBuf, bg_color);
                 textBuf.append("\">");
             }
-            HTMLConverter.appendDecimalEncodedHTMLString(textBuf, suffixBuf.toString());
+            HTMLConverter.appendDecimalEncodedHTMLString(textBuf, suffixBuf.toString(), false);
             if (bg_color != null) {
                 textBuf.append("</span>");
             }

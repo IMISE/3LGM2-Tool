@@ -415,7 +415,7 @@ public class GDCollectionFileHandler {
         randomAccessFile.setLength(0);
 
         long l = tempFile.length();
-        int length = new Long(l).intValue();
+        int length = Long.valueOf(l).intValue();
         byte[] data = new byte[length];
         tmpIStream.read(data);
         ByteBuffer byteBuf = ByteBuffer.wrap(data);

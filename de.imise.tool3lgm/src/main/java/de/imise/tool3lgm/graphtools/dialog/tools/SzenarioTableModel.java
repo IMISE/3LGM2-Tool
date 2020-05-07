@@ -42,12 +42,11 @@ public class SzenarioTableModel extends AbstractTableModel {
      * @param selectioColName Titel der Spalte zum Auswählen der Szenarios
      */
     public SzenarioTableModel(final GDCollection collection, final String selectioColName) {
-        super();
         this.collection = collection;
         selectionColName = selectioColName;
         selections = new Boolean[collection.getSzenarioCount()];
         for (int i = 0; i < collection.getSzenarioCount(); i++) {
-            selections[i] = new Boolean(false);
+            selections[i] = Boolean.FALSE;
         }
     }
 
@@ -121,7 +120,7 @@ public class SzenarioTableModel extends AbstractTableModel {
      */
     public void selectAll() {
         for (int i = 0; i < getRowCount(); i++) {
-            setValueAt(new Boolean(true), i, 0);
+            setValueAt(Boolean.valueOf(true), i, 0);
         }
     }
 

@@ -8,14 +8,11 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -27,9 +24,6 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
 
     /** show ModelBrowsers sidy by side or all models in one browser */
     protected boolean showModelsInSeparateBrowser = false;
-
-    /** icon for tap with model of active frame */
-    protected final static ImageIcon activeIcon = new ImageIcon(Tool3lgmConstants.getIcon("toolIcon.gif").getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
 
     /** xmlText color for tab with model of active frame */
     protected final static Color activeColor = Color.BLUE;

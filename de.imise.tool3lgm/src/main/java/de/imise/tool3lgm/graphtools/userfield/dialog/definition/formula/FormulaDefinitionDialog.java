@@ -735,7 +735,7 @@ public class FormulaDefinitionDialog extends JDialog implements ActionListener {
             char decimalSeparator = new DecimalFormat().getDecimalFormatSymbols().getDecimalSeparator();
             buttoncomma = createButton("" + decimalSeparator);
             for (int i = 0; i < numberButtons.length; i++) {
-                numberButtons[i] = createButton(new Integer(i).toString());
+                numberButtons[i] = createButton(String.valueOf(i));
             }
             addButtons();
         }

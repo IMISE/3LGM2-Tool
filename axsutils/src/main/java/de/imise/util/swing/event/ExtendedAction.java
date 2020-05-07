@@ -132,7 +132,7 @@ public abstract class ExtendedAction extends AbstractAction {
      * @param mnemonicIndex
      */
     public void setMnemonicIndex(final int mnemonicIndex) {
-        putValue(DISPLAYED_MNEMONIC_INDEX_KEY, new Integer(mnemonicIndex));
+        putValue(DISPLAYED_MNEMONIC_INDEX_KEY, mnemonicIndex);
     }
 
     /**

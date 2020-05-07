@@ -9,7 +9,7 @@ package de.imise.tool3lgm.graphtools.analyse.redundancy;
  * Es können maximal 2 Kindknoten hinzugefügt werden.<br>
  * Jeder Node hat einen <code>boolean</code>-Status. Im Kontext eines Entscheidungsbaumes gibt der
  * Status an, ob ein Element, das der Node repräsentiert, dazugehört oder nicht.
- * 
+ *
  * @author AXS
  */
 public class DecisionTreeNode {
@@ -92,7 +92,7 @@ public class DecisionTreeNode {
      * Entfernt den übergebenen Node von diesem Node, wenn er der Vater davon ist. Falls der zu
      * löschende Node der erste Kindknoten ist und es noch einen zweiten Knidknoten gibt, ist der
      * ehemals zweite nach dem Löschen der erste.
-     * 
+     *
      * @param node
      */
     public void removeChild(final DecisionTreeNode node) {
@@ -171,7 +171,8 @@ public class DecisionTreeNode {
 
     @Override
     public String toString() {
-        return super.toString() + " [" + needed + ", " + (deleted ? "deleted" : "not deleted") + ", " + (isLeaf() ? new Integer(getValue()).toString() : "-1") + "]";
+        int leafValue = isLeaf() ? getValue() : -1;
+        return super.toString() + " [" + needed + ", " + (deleted ? "deleted" : "not deleted") + ", " + leafValue + "]";
     }
 
     /**
@@ -191,7 +192,7 @@ public class DecisionTreeNode {
     /**
      * Klasse für die Blätter des Baumes. Sie merken sich zusätzlich noch den Gesamtwert der
      * Unterstützung
-     * 
+     *
      * @author AXS
      */
     private static final class DecisionTreeLeaf extends DecisionTreeNode {

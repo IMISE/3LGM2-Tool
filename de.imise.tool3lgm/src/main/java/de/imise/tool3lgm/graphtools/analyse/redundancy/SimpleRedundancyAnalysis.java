@@ -91,7 +91,7 @@ public class SimpleRedundancyAnalysis {
             NodeContainer nc = (NodeContainer) ec;
             nc.setVariable(size);
             // Anzahl ihrer redundanten Elemente unten rechts neben den Container schreiben
-            nc.setAdditionalTextRightDown(new Integer(size).toString());
+            nc.setAdditionalTextRightDown(String.valueOf(size));
         }
         if (definition.isShowFullSystemResults()) {
             // Redundanzfaktor des Gesamtsystems berechen
@@ -201,11 +201,11 @@ public class SimpleRedundancyAnalysis {
         sb.append(": ");
         sb.append(getResString("SIMPLE_REDUNDNANCY_ANALYSIS_redundancy_factor"));
         sb.append("=");
-        sb.append(new Float(redundance));
+        sb.append(Float.valueOf(redundance));
         sb.append("   ");
         sb.append(getResString("SIMPLE_REDUNDNANCY_ANALYSIS_saturation_factor"));
         sb.append("=");
-        sb.append(new Float(saturation));
+        sb.append(Float.valueOf(saturation));
         return sb.toString();
     }
 

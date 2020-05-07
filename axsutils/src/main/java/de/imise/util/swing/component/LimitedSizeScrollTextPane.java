@@ -209,4 +209,10 @@ public class LimitedSizeScrollTextPane extends JScrollPane {
         }
     }
 
+    @Override
+    public void setToolTipText(final String text) {
+        super.setToolTipText(text);
+        textPane.setToolTipText(text);
+    }
+
 }

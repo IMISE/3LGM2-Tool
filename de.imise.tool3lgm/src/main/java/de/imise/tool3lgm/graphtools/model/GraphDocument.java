@@ -162,12 +162,12 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public final static int INITIAL_PAGE_WIDTH = 1024;
 
     /**
-     * COMMENTME
+     * X-position of a new created element
      */
     private int next_x_pos = 0;
 
     /**
-     * COMMENTME
+     * Y-position of a new created element
      */
     private int next_y_pos = 0;
 
@@ -1548,15 +1548,13 @@ public abstract class GraphDocument extends ElementSelectionContext {
             transactionManager.startTransaction("", "", pid, this);
         }
         Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
-        Integer pidInteger = new Integer(pid);
-        Integer transStackInteger = transStackTable.remove(pidInteger);
+        Integer transStackInteger = transStackTable.remove(pid);
         if (transStackInteger == null) {
-            transStackInteger = new Integer(0);
+            transStackInteger = 0;
         }
         int transStackInt = transStackInteger.intValue();
         transStackInt++;
-        transStackInteger = new Integer(transStackInt);
-        transStackTable.put(pidInteger, transStackInteger);
+        transStackTable.put(pid, transStackInt);
 
         //		Integer tst = transStackTable.get(pidInteger);
         //		System.err.println(iii++ + " + " + pid + ": "+ tst + " " + this);
@@ -1600,18 +1598,17 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return;
         }
         Map<Integer, Integer> transStackTable = gdcoll.getTransStackTable();
-        Integer pidInteger = new Integer(pid);
-        Integer transStackInteger = transStackTable.remove(pidInteger);
+        Integer transStackInteger = transStackTable.remove(pid);
         if (transStackInteger == null) {
-            transStackInteger = new Integer(0);
+            transStackInteger = 0;
         }
         int transStackInt = transStackInteger.intValue();
         transStackInt--;
         if (transStackInt > 0) {
-            transStackInteger = new Integer(transStackInt);
-            transStackTable.put(pidInteger, transStackInteger);
+            transStackInteger = transStackInt;
+            transStackTable.put(pid, transStackInteger);
         }
-        Integer tst = transStackTable.get(pidInteger);
+        Integer tst = transStackTable.get(pid);
         //		System.err.println(iii++ + " - " + pid + ": "+ tst + " " + this);
         lastTransStackInt = tst == null ? 0 : tst;
         if (log) {
@@ -1672,6 +1669,23 @@ public abstract class GraphDocument extends ElementSelectionContext {
     public final void setNodeContainerInsertPosition(final int x, final int y) {
         next_x_pos = x;
         next_y_pos = y;
+    }
+
+    /**
+     * Set the insertPosition to the center of the element if it is not null and
+     * has a visible container in this doc.
+     *
+     * @param me
+     */
+    private final void setNodeContainerInsertPosition(final ModelElement me) {
+        if (me != null && me.isPaintable()) {
+            ElementContainer ec = me.getContainer(this);
+            boolean setInserpositionToPathEndElement = ec != null && ec.isVisible();
+            if (setInserpositionToPathEndElement) {
+                GraphElementLayout layout = ec.get3LGMLayout();
+                setNodeContainerInsertPosition(layout.x, layout.y);
+            }
+        }
     }
 
     // --- Layer-Verwaltung --- Ende ---
@@ -3543,10 +3557,10 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 long l = System.currentTimeMillis();
                 String szenHash = szen.getHashString();
                 szen.addElementToSzenario(szenHash, slaveContainer, pid);
-                times1.add(new Long(System.currentTimeMillis() - l));
+                times1.add(System.currentTimeMillis() - l);
                 l = System.currentTimeMillis();
                 szen.addict(master, slave, edgeClass, pid);
-                times2.add(new Long(System.currentTimeMillis() - l));
+                times2.add(System.currentTimeMillis() - l);
             }
         }
 
@@ -3949,6 +3963,13 @@ public abstract class GraphDocument extends ElementSelectionContext {
         //wird das EndElement über diese Kante instanziiert und der Restpfad bis zu dieser Instanz dann wieder über diese Funktion angelegt
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         boolean createSubPath = false;
+
+        //set the insertPosition to the center of the end element if existst and is visible
+        //maybe this is not correct for future paths, but now (05.05.2020) there is only a
+        //path between an actor and an application system and the actor instance should be
+        //created in the center of the application system
+        setNodeContainerInsertPosition(endElement);
+
         if (lastPathStepIndex > 0 && endElement != null) {
             ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(lastPathStepIndex);
             if (lastElementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {

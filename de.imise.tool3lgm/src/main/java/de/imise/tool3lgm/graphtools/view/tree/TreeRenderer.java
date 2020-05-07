@@ -15,6 +15,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 
 public class TreeRenderer extends DefaultTreeCellRenderer {
 
@@ -101,6 +102,10 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
                     container.checkTreeIcon();
                     setIcon(icon);
                 }
+            } else if (value instanceof StringTreeNode) {
+                StringTreeNode stringTreeNode = (StringTreeNode) value;
+                ImageIcon icon = stringTreeNode.getIcon();
+                setIcon(icon);
             }
             return this;
         }

@@ -384,7 +384,7 @@ public abstract class CoreMetaModel implements MetaModelSpecific {
      */
     private static final EdgeCardinality getCardinality(final Class<? extends Edge> edgeClass, final boolean backward) {
         String fieldName = backward ? Edge.START_CARDINALITY_FIELD_NAME : Edge.END_CARDINALITY_FIELD_NAME;
-        return ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName, EdgeCardinality.class);
+        return ReflectionUtils.getField(edgeClass, ModelElement.class, fieldName);
     }
 
     /**

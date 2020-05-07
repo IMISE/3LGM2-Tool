@@ -224,7 +224,7 @@ public final class ElementaryMetaPathHandler {
                 if (commonSuperClass == null) {
                     commonSuperClass = edgeClass;
                 } else {
-                    commonSuperClass = ReflectionUtils.getCommonSuperClass(commonSuperClass, edgeClass);
+                    commonSuperClass = ReflectionUtils.getCommonSuperClassOfClasses(commonSuperClass, edgeClass);
                 }
             }
         }

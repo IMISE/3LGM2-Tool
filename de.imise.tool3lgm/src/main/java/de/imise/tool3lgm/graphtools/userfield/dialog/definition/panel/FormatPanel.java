@@ -13,9 +13,11 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
@@ -33,6 +35,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.imise.tool3lgm.event.action.ChangeLocaleAction;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.util.swing.component.AlphabeticalComboBox;
@@ -128,7 +131,6 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
      * @param definitions
      */
     public FormatPanel(final JDialog owner, final UserField userField, final UserFieldDefinitions definitions) {
-        super();
         this.owner = owner;
         this.userField = userField;
         this.definitions = definitions;
@@ -146,11 +148,20 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
 
         unitBoxElements.add("");
 
-        String currency = Currency.getInstance(getLocale()).getSymbol(getLocale());
-        unitBoxElements.add(currency);
-        unitBoxElements.add("%");
-        DefaultComboBoxModel<String> comboBoxModel = new DefaultComboBoxModel<>(unitBoxElements);
-        unitBox.setModel(comboBoxModel);
+        Locale locale = getLocale();
+
+        Collection<Locale> localesWithCountry = ChangeLocaleAction.getLocalesWithCountry(locale);
+        for (Locale localeWithCountry : localesWithCountry) {
+            try {
+                Currency currency = Currency.getInstance(localeWithCountry);
+                String currencySymbol = currency.getSymbol(localeWithCountry);
+                if (!unitBoxElements.contains(currencySymbol)) {
+                    unitBoxElements.add(currencySymbol);
+                }
+            } catch (Exception e) {
+                // ignore exceptions
+            }
+        }
 
         refreshButton = new JButton(getResString("refreshButtonText"));
         refreshButton.addActionListener(this);
@@ -258,7 +269,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
                 }
             }
         }
-        unitBox.setModel(new DefaultComboBoxModel(unitBoxElements.toArray()));
+        unitBox.addAll(unitBoxElements);
 
         //Wenn sich das Standardformat % mit 2 Nachkommastellen noch nicht im
         // Kostenmodell befindet, wird es hinzugefügt.
@@ -316,7 +327,9 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
      * @return Wenn ein Duplikat entdeckt wird, gibt die Methode <code>true</code> zurück, sonst <code>false</code>.
      */
     private boolean isDuplicateFormat() {
-        int spinnerFractionDigits = new Integer(digitSpinner.getValue().toString()).intValue();
+        Object digitSpinnerValue = digitSpinner.getValue();
+        String digitSpinnerValueString = digitSpinnerValue.toString();
+        int spinnerFractionDigits = Integer.parseInt(digitSpinnerValueString);
         for (UserField uf : definitions.getFormatUserFields()) {
             if (uf.hasStyle(UserField.Style.FORMAT)) {
                 if (uf.getFormatFractionDigits() != spinnerFractionDigits) {
@@ -369,7 +382,10 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         format.setName("FormatTemplate" + System.currentTimeMillis());
         format.setDescription(getResString("format_template"));
         format.setTreeVisibility(false);
-        format.setFormatFractionDigits(new Integer(digitSpinner.getValue().toString()).intValue());
+        Object digitSpinnerValueObject = digitSpinner.getValue();
+        String digitSpinnerValueString = String.valueOf(digitSpinnerValueObject);
+        int formatFractionDigits = Integer.parseInt(digitSpinnerValueString);
+        format.setFormatFractionDigits(formatFractionDigits);
         Object selectedUnitItem = unitBox.getSelectedItem();
         String formatUnit = selectedUnitItem == null ? "" : selectedUnitItem.toString();
 
@@ -416,7 +432,7 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
         } else if (e.getSource() == formatComboBox) {
             Object selectedFormat = formatComboBox.getSelectedObject();
             if (selectedFormat == null) {
-                digitSpinner.setValue(new Integer(0));
+                digitSpinner.setValue(0);
                 if (unitBox.getItemCount() > 0) {
                     unitBox.setSelectedIndex(0);
                 }
@@ -424,7 +440,8 @@ public class FormatPanel extends AbstractInputPanel implements ActionListener, C
                 return;
             }
             UserField formatUserField = (UserField) selectedFormat;
-            digitSpinner.setValue(new Integer(formatUserField.getFormatFractionDigits()));
+            Integer digits = formatUserField.getFormatFractionDigits();
+            digitSpinner.setValue(digits);
             deleteButton.setEnabled(true);
         } else if (e.getSource() == expandPanelButton) {
             if (!zahlenFormatPanel.isVisible()) {

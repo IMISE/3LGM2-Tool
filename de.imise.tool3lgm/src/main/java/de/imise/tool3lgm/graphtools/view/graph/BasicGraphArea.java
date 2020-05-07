@@ -124,12 +124,12 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     protected boolean mouse_selection = false;
 
     /** Aktuelle Abstände der Ebenendarstellung vom Gesamtrand dieser Komponente */
-    private final Insets graphBorder = new Insets(50, 50, 50, 50);
+    public static final Insets GRAPH_BORDER = new Insets(50, 50, 50, 50);
 
     /** Minimaler interner Zoom-Wert */
-    private static final double ZOOM_FACTOR_MINIMUM = 0d;
+    public static final double ZOOM_FACTOR_MINIMUM = 0.1d;
     /** Maximaler interner Zoom-Wert */
-    private static final double ZOOM_FACTOR_MAXIMUM = 2d;
+    public static final double ZOOM_FACTOR_MAXIMUM = 10d;
 
     private final List<BasicGraphAreaChangeListener> changeListener = new ArrayList<>();
 
@@ -522,10 +522,10 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         c.bottom += (int) (zoom * layerGap);
 
         // Rand addieren
-        c.top -= graphBorder.top;
-        c.bottom += graphBorder.bottom;
-        c.left -= graphBorder.left;
-        c.right += graphBorder.right;
+        c.top -= GRAPH_BORDER.top;
+        c.bottom += GRAPH_BORDER.bottom;
+        c.left -= GRAPH_BORDER.left;
+        c.right += GRAPH_BORDER.right;
 
         // Wenn das dann noch kleiner ist als der Rahmen, dann
         if (c.bottom < frameHeight / 2) {

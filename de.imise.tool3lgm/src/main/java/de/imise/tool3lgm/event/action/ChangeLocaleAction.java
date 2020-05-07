@@ -4,12 +4,16 @@ import static de.imise.tool3lgm.Static.getMainFrame;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.ActionEvent;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
+
+import org.apache.jena.ext.com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -51,19 +55,24 @@ public class ChangeLocaleAction extends ExtendedAction {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        if (locale.getLanguage().equals(UserProperties.getLocale().getLanguage())) {
+        String language = locale.getLanguage();
+        Locale userPropertiesLocale = UserProperties.getLocale();
+        String userPropertiesLocaleLanguage = userPropertiesLocale.getLanguage();
+        if (language.equals(userPropertiesLocaleLanguage)) {
             setSelected(true);
             return;
         }
 
         // wenn die Locale wieder zurückgestellt wurde auf die Locale mit der der Baukasten
         // grade läuft)
-        if (locale.getLanguage().equals(Tool3lgmConstants.START_LOCALE.getLanguage())) {
-            UserProperties.setLocale(locale.getLanguage());
+        Locale startLocale = Tool3lgmConstants.START_LOCALE;
+        String startLocaleLanguage = startLocale.getLanguage();
+        if (language.equals(startLocaleLanguage)) {
+            UserProperties.setLocale(language);
             setSelected(true);
             return;
         }
-        UserProperties.setLocale(locale.getLanguage());
+        UserProperties.setLocale(language);
         showLocaleChangeNeedsRestartMessage();
         setSelected(true);
     }
@@ -164,6 +173,28 @@ public class ChangeLocaleAction extends ExtendedAction {
         Locale[] returnArray = new Locale[foundLocales];
         System.arraycopy(allFoundLocales, 0, returnArray, 0, foundLocales);
         return returnArray;
+    }
+
+    /**
+     * @param locale the locale with the language of all result locales
+     * @return a collection of all locales with the same language but different
+     *         countries like the given locale
+     */
+    public static final Collection<Locale> getLocalesWithCountry(final Locale locale) {
+        Collection<Locale> locales = new HashSet<>();
+        String language = locale.getLanguage();
+        for (Locale otherLocale : Locale.getAvailableLocales()) {
+            String otherCountry = otherLocale.getCountry();
+            if (!Strings.isNullOrEmpty(otherCountry)) {
+                String otherLanguage = otherLocale.getLanguage();
+                if (language != null) {
+                    if (language.equals(otherLanguage)) {
+                        locales.add(otherLocale);
+                    }
+                }
+            }
+        }
+        return locales;
     }
 
 }

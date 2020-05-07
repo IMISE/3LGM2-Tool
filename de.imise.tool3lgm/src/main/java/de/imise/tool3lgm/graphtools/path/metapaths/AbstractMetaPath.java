@@ -135,8 +135,8 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      */
     public Class<? extends ModelElement> getStartClass() {
         Set<Class<? extends ModelElement>> startClasses = getStartClasses();
-        Class<?> commonSuperClass = ReflectionUtils.getCommonSuperClass(startClasses);
-        return commonSuperClass.asSubclass(ModelElement.class);
+        Class<? extends ModelElement> commonSuperClass = ReflectionUtils.getCommonSuperClassOfClasses(startClasses);
+        return commonSuperClass;
     }
 
     /**
@@ -151,8 +151,8 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      */
     public Class<? extends ModelElement> getEndClass() {
         Set<Class<? extends ModelElement>> endClasses = getEndClasses();
-        Class<?> commonSuperClass = ReflectionUtils.getCommonSuperClass(endClasses);
-        return commonSuperClass.asSubclass(ModelElement.class);
+        Class<? extends ModelElement> commonSuperClass = ReflectionUtils.getCommonSuperClassOfClasses(endClasses);
+        return commonSuperClass;
     }
 
     /**

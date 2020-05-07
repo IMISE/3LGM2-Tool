@@ -142,7 +142,8 @@ public class AlphabeticalJList extends JList<Object> {
 
         @Override
         public void add(int index, final Object element) {
-            index = Alphabetical.getInsertPosition(toArray(), element);
+            Object[] array = toArray();
+            index = Alphabetical.getInsertPosition(array, element);
             super.add(index, element);
         }
 

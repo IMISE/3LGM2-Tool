@@ -251,7 +251,7 @@ public class MultipleOptionPane extends JOptionPane {
                 buttonGroup.add(checkBox);
             }
             checkBox.setSelected(selected != null && Boolean.TRUE.equals(selected.get(i)));
-            checkBox.setActionCommand(new Integer(i).toString());
+            checkBox.setActionCommand(String.valueOf(i));
             checkBoxPanel.add(checkBox);
         }
         JCheckBox dontShowThisDialogAgainOption = null;

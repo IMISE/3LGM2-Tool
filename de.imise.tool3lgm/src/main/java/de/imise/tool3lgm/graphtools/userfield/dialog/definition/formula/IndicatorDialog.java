@@ -273,7 +273,7 @@ public class IndicatorDialog extends JDialog implements ActionListener {
                 while (st.hasMoreElements()) {
                     String value = st.nextElement().toString();
 
-                    spinner.setValue(new Integer(spinnerValue));
+                    spinner.setValue(spinnerValue);
 
                     if (spinnerValue == 1) {
                         //bei 1 müssen zwei TextFields dargestellt werden. Das für den untersten Grenzwert und der erste obere Grenzwert.

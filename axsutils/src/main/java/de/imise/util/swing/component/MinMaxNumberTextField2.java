@@ -46,8 +46,8 @@ public class MinMaxNumberTextField2 extends JFormattedTextField implements Caret
         decimalSeparator = format.getDecimalFormatSymbols().getDecimalSeparator();
         NumberFormatter formatter = new NumberFormatter(format);
         setFormatterFactory(new DefaultFormatterFactory(formatter));
-        formatter.setMinimum(new Double(min));
-        formatter.setMaximum(new Double(max));
+        formatter.setMinimum(min);
+        formatter.setMaximum(max);
         addCaretListener(this);
         addFocusListener(this);
         oldText = getText();
@@ -66,7 +66,7 @@ public class MinMaxNumberTextField2 extends JFormattedTextField implements Caret
         String newText = text.replace('.', decimalSeparator);
         try {
             //testen, ob
-            Double value = new Double(Double.parseDouble(parseableText));
+            Double value = Double.valueOf(parseableText);
             NumberFormatter formatter = (NumberFormatter) getFormatter();
             //Unterschreiten des Minimums und Unterschreiten des Maximums bei der Eingabe verhindern
             Comparable minimum = formatter.getMinimum();

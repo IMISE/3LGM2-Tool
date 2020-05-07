@@ -450,7 +450,13 @@ public class UserProperties {
          * Zusammengeklappte Elemente werden speziell gezeichnet.<br>
          * Diese Option wird absichtlich <b>nicht </b> gespeichert und ist zu Beginn immer eingeschaltet.
          */
-        TRANSIENT_OPTION_SHOW_EXPANSION_SIGN;
+        TRANSIENT_OPTION_SHOW_EXPANSION_SIGN,
+
+        /**
+         * Interne Option die das zusätzliche Zeichenen der Rechtecke um die selektierten Elemente in der
+         * Grafik ein- oder ausschalten kann. Nur für Debug-Zwecke.
+         */
+        TRANSIENT_OPTION_DEBUG_GRAPH;
 
         /**
          * Alle BooleanProperties, deren Default-Wert <code>true</code> ist
@@ -525,36 +531,21 @@ public class UserProperties {
      * @author AXS (9 Aug 2017)
      */
     public static enum IntProperty {
-        PROPERTY_INT_MAINFRAME_SCREEN_POSX {
-            @Override
-            public int getDefault() {
-                return -1;
-            }
-        },
-        PROPERTY_INT_MAINFRAME_SCREEN_POSY {
-            @Override
-            public int getDefault() {
-                return -1;
-            }
-        },
-        PROPERTY_INT_MAINFRAME_SCREEN_WIDTH {
-            @Override
-            public int getDefault() {
-                return -1;
-            }
-        },
-        PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT {
-            @Override
-            public int getDefault() {
-                return -1;
-            }
-        },
+        PROPERTY_INT_MAINFRAME_SCREEN_POSX,
+        PROPERTY_INT_MAINFRAME_SCREEN_POSY,
+        PROPERTY_INT_MAINFRAME_SCREEN_WIDTH,
+        PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT,
+        PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION,
+        PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION,
+        PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION,
+
         PROPERTY_INT_RASTER_WIDTH {
             @Override
             public int getDefault() {
                 return 5;
             }
         },
+
         /**
          * Bitpattern for Rendering-Hints (standard value: all bits are set to zero
          * bit0: ANTIALIASING

@@ -136,7 +136,9 @@ public class ConnectPathDialog implements ActionListener {
         String title = getResString("CONNECT_PATH_TITLE");
         JDialog dialog = pane.createDialog(parentComponent, title);
         dialog.setVisible(true);
-        return new Integer(JOptionPane.OK_OPTION).equals(pane.getValue());
+        Object paneValue = pane.getValue();
+        Integer okValue = JOptionPane.OK_OPTION; //autoboxing int to Integer -> can use equals
+        return okValue.equals(paneValue);
     }
 
 }

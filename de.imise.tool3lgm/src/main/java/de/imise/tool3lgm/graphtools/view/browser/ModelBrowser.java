@@ -4,11 +4,9 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -20,9 +18,6 @@ import de.imise.util.swing.component.TabbedPane;
 
 /** Erzeugt ModelBrowser für 3lgm */
 public final class ModelBrowser extends TabbedPane implements ChangeListener, FocusListener {
-
-    /** icon for tap with model of active frame */
-    private final static ImageIcon activeIcon = new ImageIcon(Tool3lgmConstants.getIcon("toolIcon.gif").getImage().getScaledInstance(13, 13, Image.SCALE_FAST));
 
     /** xmlText color for tab with model of active frame */
     private final static Color activeColor = Color.BLUE;
@@ -176,7 +171,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
         }
         index = getSelectedIndex();
         if (index >= 0) {
-            setIconAt(index, activeIcon);
+            setIconAt(index, Tool3lgmConstants.TOOL_ICON_13);
             setForegroundAt(index, activeColor);
         }
 

@@ -212,15 +212,15 @@ public class UserFieldTable extends JTable implements ContentExchanger {
         InputMap im = getInputMap();
         ActionMap am = getActionMap();
 
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), new Integer(KeyEvent.VK_Z));
-        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), new Integer(KeyEvent.VK_Y));
-        am.put(new Integer(KeyEvent.VK_Z), new AbstractAction() {
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK), KeyEvent.VK_Z);
+        im.put(KeyStroke.getKeyStroke(KeyEvent.VK_Y, KeyEvent.CTRL_DOWN_MASK), KeyEvent.VK_Y);
+        am.put(KeyEvent.VK_Z, new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 undo();
             }
         });
-        am.put(new Integer(KeyEvent.VK_Y), new AbstractAction() {
+        am.put(KeyEvent.VK_Y, new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 redo();

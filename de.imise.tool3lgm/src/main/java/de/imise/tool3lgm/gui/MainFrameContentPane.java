@@ -7,16 +7,21 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION;
+import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,10 +31,12 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JViewport;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -37,16 +44,19 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
+import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserPanel;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
+import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 /**
  * @author AXS (6 Aug 2019)
  */
-public class MainFrameContentPane extends JPanel implements PropertyChangeListener, InternalFrameListener, ComponentListener {
+public final class MainFrameContentPane extends JPanel implements PropertyChangeListener, InternalFrameListener, ComponentListener {
 
     /** Panel with verticalSplitPane and werkzeugleiste */
     private final JPanel workarea = new JPanel();
@@ -87,12 +97,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     /** InternalFrame in desktop, which has the focus */
     private AbstractInternalFrame activeFrame = null;
 
-    /** Position of divider betweeen the tree and the graph view in pixel from the left side */
-    private int leftDividerLocation = getToolkit().getScreenSize().width / 5;
-
-    /** Position of divider betweeen the tree and the graph view in pixel from the left side */
-    private int rightDividerLocation = getToolkit().getScreenSize().width - leftDividerLocation;
-
     /**
      * Diese Variable wird in <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht,
      * um beim Aktivieren eines Matix-Fensters zwar den dazugehörigen ModelBrowser in den
@@ -116,10 +120,10 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktopscroll);
         leftSplitPane.setOneTouchExpandable(true);
         leftSplitPane.setDividerSize(10);
-        leftSplitPane.setDividerLocation(leftDividerLocation);
 
         // Direkthilfe für die einzelnen Baukastenteile
         CSH.setHelpIDString(modelBrowserPanel, "uebersicht_modellbrowser");
+        checkModelBrowserVisibility();
         checkConsistencyTableVisibility();
         checkTemplateBrowserVisibility();
 
@@ -129,6 +133,7 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
 
         setShowStandardToolbar();
         UserProperties.addPropertyChangeListener(this);
+
     }
 
     /**
@@ -164,6 +169,62 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
             setShowStandardToolbar();
         } else if (OPTION_ENABLE_EXPERT_MODE.isChanged(evt)) {
             modelBrowserPanel.updateModelBrowsers();
+        } else {
+            String propertyName = evt.getPropertyName();
+            if (propertyName.equals("dividerLocation")) {
+                savePositionAndSizeInUserProperties();
+            }
+        }
+    }
+
+    /**
+     * Sets the corresponding UserPropertiy values for the screen index, the width and the height.
+     */
+    private void savePositionAndSizeInUserProperties() {
+        if (OPTION_SHOW_MODEL_BROWSER.is() && leftSplitPane != null && leftSplitPane.isVisible()) {
+            int dividerLocation = leftSplitPane.getDividerLocation();
+            IntProperty.PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION.set(dividerLocation);
+        }
+        if (OPTION_SHOW_TEMPLATE_BROWSER.is() && rightSplitPane != null && rightSplitPane.isVisible()) {
+            int dividerLocation = rightSplitPane.getDividerLocation();
+            IntProperty.PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION.set(dividerLocation);
+        }
+        if (OPTION_CHECK_CONSISTENCY.is() && bottomSplitPane != null && bottomSplitPane.isVisible()) {
+            int dividerLocation = bottomSplitPane.getDividerLocation();
+            IntProperty.PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION.set(dividerLocation);
+        }
+    }
+
+    /**
+     * Restores the screen index, the width and the height from the corresponding UserPropertiy values.
+     */
+    private void restorePositionAndSizeFromUserProperties() {
+        setDividerLocation(OPTION_SHOW_MODEL_BROWSER, PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION, leftSplitPane, 0.2d, true);
+        setDividerLocation(OPTION_SHOW_TEMPLATE_BROWSER, PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION, rightSplitPane, 0.8d, true);
+        setDividerLocation(OPTION_CHECK_CONSISTENCY, PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION, bottomSplitPane, 0.7d, false);
+    }
+
+    /**
+     * @param dividerVisibleProperty
+     * @param dividerLocationProperty
+     * @param splitPane
+     * @param mainFramePart
+     * @param width
+     */
+    private void setDividerLocation(final BooleanProperty dividerVisibleProperty, final IntProperty dividerLocationProperty, final JSplitPane splitPane, final double mainFramePart, final boolean width) {
+        if (dividerVisibleProperty.is() && splitPane != null) {
+            int dividerLocation = dividerLocationProperty.get();
+            int dividerSize = splitPane.getDividerSize();
+            if (dividerLocation < dividerSize) {
+                MainFrame mainFrame = Static.getMainFrame();
+                if (mainFrame != null) {
+                    int mainFrameSizeValue = width ? mainFrame.getWidth() : mainFrame.getHeight();
+                    dividerLocation = (int) (mainFrameSizeValue * mainFramePart);
+                }
+            }
+            splitPane.removePropertyChangeListener(this);
+            splitPane.setDividerLocation(dividerLocation);
+            splitPane.addPropertyChangeListener(this);
         }
     }
 
@@ -192,8 +253,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
                 bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topComponent, new JScrollPane(consistencyChecker.getErrorTable()));
                 bottomSplitPane.setOneTouchExpandable(true);
                 bottomSplitPane.setDividerSize(10);
-                bottomSplitPane.setDividerLocation(workarea.getHeight() / 4 * 3);
                 workarea.add(bottomSplitPane, BorderLayout.CENTER);
+                restorePositionAndSizeFromUserProperties();
             }
         }
         revalidate();
@@ -213,7 +274,6 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
             rightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSplitPane, templateBrowserPanel);
             rightSplitPane.setOneTouchExpandable(true);
             rightSplitPane.setDividerSize(10);
-            rightSplitPane.setDividerLocation(rightDividerLocation);
             if (!isCheckConsistency) {
                 workarea.add(rightSplitPane, BorderLayout.CENTER);
             } else {
@@ -221,11 +281,11 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
                 bottomSplitPane.setTopComponent(rightSplitPane);
                 bottomSplitPane.setDividerLocation(dividerLocation);
             }
+            restorePositionAndSizeFromUserProperties();
         } else {
             if (rightSplitPane == null) {
                 return;
             }
-            rightDividerLocation = rightSplitPane.getDividerLocation();
             workarea.remove(rightSplitPane);
             if (!isCheckConsistency) {
                 workarea.add(leftSplitPane, BorderLayout.CENTER);
@@ -244,9 +304,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     private final void checkModelBrowserVisibility() {
         if (OPTION_SHOW_MODEL_BROWSER.is()) {
             leftSplitPane.setLeftComponent(modelBrowserPanel);
-            leftSplitPane.setDividerLocation(leftDividerLocation);
+            restorePositionAndSizeFromUserProperties();
         } else {
-            leftDividerLocation = leftSplitPane.getDividerLocation();
             leftSplitPane.remove(leftSplitPane.getLeftComponent());
         }
         revalidate();
@@ -289,6 +348,9 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
             setWorkArea(frame);
         }
         desktop.add(frame);
+        if (doc instanceof Szenario) {
+            setBettterDefaultZoom(frame);
+        }
         frame.setVisible(true);
         return frame;
     }
@@ -323,7 +385,8 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
         for (int i = 0; i < frames.length; i++) {
             if (frames[i] instanceof MatrixViewInternalFrame) {
                 MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) frames[i];
-                if (matrixFrame.getGraphDocument() == doc) {
+                GraphDocument frameDoc = matrixFrame.getGraphDocument();
+                if (frameDoc == doc) {
                     if (matrixFrame.titleIndex >= max) {
                         max = matrixFrame.titleIndex + 1;
                     }
@@ -342,14 +405,54 @@ public class MainFrameContentPane extends JPanel implements PropertyChangeListen
     private void setWorkArea(final InternalGraphFrame frame) {
         Szenario szenario = (Szenario) frame.getGraphDocument();
         ViewParameter view = szenario.getViewParameter();
-        InputGraphArea bgp = frame.getInputGraphArea();
+        InputGraphArea inputGraphArea = frame.getInputGraphArea();
         boolean multiView = view.multiView;
-        bgp.setMultiView(multiView);
-        frame.getGraphDocument().getCollection().setActiveLayer(view.activeLayer);
-        bgp.setMultiViewLayerAngle(view.layerAngle);
-        bgp.setMultiViewLayerGap(view.layerGap);
-        bgp.setZoom(view.zoom);
-        frame.getScrollPane().getViewport().setViewPosition(new Point(view.viewPositionX, view.viewPositionY));
+        inputGraphArea.setMultiView(multiView);
+        GraphDocument doc = frame.getGraphDocument();
+        GDCollection gdcoll = doc.getCollection();
+        gdcoll.setActiveLayer(view.activeLayer);
+        inputGraphArea.setMultiViewLayerAngle(view.layerAngle);
+        inputGraphArea.setMultiViewLayerGap(view.layerGap);
+        inputGraphArea.setZoom(view.zoom);
+        JScrollPane scrollPane = frame.getScrollPane();
+        JViewport viewport = scrollPane.getViewport();
+        Point viewPosition = new Point(view.viewPositionX, view.viewPositionY);
+        viewport.setViewPosition(viewPosition);
+    }
+
+    /**
+     * @param frame
+     */
+    private void setBettterDefaultZoom(final InternalGraphFrame frame) {
+        //raise default zoom to fill the whole screen
+        InputGraphArea inputGraphArea = frame.getInputGraphArea();
+        double zoom = inputGraphArea.getZoom();
+        //if the zoom is equals to the initial zoom -> adjust zoom to max width
+        boolean adjustZoom = zoom == ViewParameter.INITIAL_MIN_ZOOM;
+        //if the model file is the example model file -> -> adjust zoom to max width
+        if (!adjustZoom) {
+            GDCollection gdcoll = frame.doc.getCollection();
+            File file = gdcoll.getFile();
+            adjustZoom = Tool3lgmConstants.EXAMPLE_MODEL_FILE.equals(file);
+        }
+
+        if (adjustZoom) {
+            JViewport viewport = frame.getViewport();
+            Dimension viewportSize = viewport.getSize();
+            int w = viewportSize.width - BasicGraphArea.GRAPH_BORDER.left - BasicGraphArea.GRAPH_BORDER.right;
+            inputGraphArea.setZoom(1d);
+            Dimension inputGraphAreaPreferredSize = inputGraphArea.getPreferredSize();
+            int w1 = inputGraphAreaPreferredSize.width;
+            inputGraphArea.setZoom(2d);
+            inputGraphAreaPreferredSize = inputGraphArea.getPreferredSize();
+            int w2 = inputGraphAreaPreferredSize.width;
+
+            int wDiff = w2 - w1;
+            zoom = (double) w / wDiff;
+            //default zoom is never smaller then the initial zoom
+            zoom = Math.max(zoom, ViewParameter.INITIAL_MIN_ZOOM);
+            inputGraphArea.setZoom(zoom);
+        }
     }
 
     /**

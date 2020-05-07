@@ -3,6 +3,7 @@ package de.imise.tool3lgm.gui;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Cursor;
+import java.awt.GraphicsConfiguration;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -28,6 +29,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
+import de.imise.util.swing.SwingUtils;
 
 /**
  * Hauptfenster der Anwendung. Das hier ist alles aus Tool3lgm herausgelöst, das bis dahin das Hauptfenster war. Aber es hat noch eine Menge
@@ -43,11 +45,9 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     /** Pane, das in das ContentPane dieses Frames gelegt wird */
     private final MainFrameContentPane contentPane;
 
-    /**
-     * @param visible
-     */
-    public MainFrame(final boolean visible) {
-        setIconImage(Tool3lgmConstants.getIcon("toolIcon.gif").getImage());
+    public MainFrame() {
+        //setIconImage(Tool3lgmConstants.TOOL_ICON_16.getImage());
+        setIconImages(Tool3lgmConstants.TOOL_ICON_IMAGES);
         setTitle(null);
 
         contentPane = new MainFrameContentPane();
@@ -66,13 +66,21 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
         addAsToolChangeListener();
         updateTitle();
         addComponentListener(this);
-        restorePositionAndSizeFromUserProperties();
-        setVisible(visible);
+    }
+
+    @Override
+    public void setVisible(final boolean b) {
+        if (b) {
+            restorePositionAndSizeFromUserProperties();
+        } else {
+            savePositionAndSizeInUserProperties();
+        }
+        super.setVisible(b);
     }
 
     @Override
     public void dispose() {
-        Static.getTool().close();
+        Static.close();
     }
 
     /**
@@ -90,15 +98,17 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
      * Restores the screen index, the width and the height from the corresponding UserPropertiy values.
      */
     private void restorePositionAndSizeFromUserProperties() {
+        GraphicsConfiguration graphicsConfiguration = getGraphicsConfiguration();
+        int jFrameTitlebarHight = SwingUtils.getJFrameTitlebarHight(graphicsConfiguration);
         int frameX = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.get();
         int frameY = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.get();
         int frameWidth = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.get();
         int frameHeight = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT.get();
-        Rectangle screenBounds = getGraphicsConfiguration().getBounds();
-        if (frameWidth < 20 || frameHeight < 20) { //don't allow windows smaller 20 in one dimension
-            setBounds(screenBounds);
+        Rectangle screenBounds = graphicsConfiguration.getBounds();
+        if (frameHeight <= jFrameTitlebarHight * 2) { // if the frame has only at maximum the double titlebar height
+            setBounds(screenBounds); //full sreen
         } else {
-            setBounds(frameX, frameY, frameWidth, frameHeight);
+            setBounds(frameX, frameY, frameWidth, frameHeight); //last height
         }
     }
 

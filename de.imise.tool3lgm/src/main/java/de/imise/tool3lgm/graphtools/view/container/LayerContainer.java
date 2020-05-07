@@ -2,8 +2,9 @@ package de.imise.tool3lgm.graphtools.view.container;
 
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_RASTER;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.TRANSIENT_OPTION_DEBUG_GRAPH;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RASTER_WIDTH;
-import static de.imise.util.GraphicsFunctions.drawRect;
+import static de.imise.util.GraphicsFunctions.drawPointRect;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -380,7 +381,6 @@ public class LayerContainer extends ElementContainer {
             if (OPTION_SHOW_RASTER.is() && paintState != PaintState.WEBEXPORT) {
                 paintRaster(gc, page_width, page_height);
             }
-            //paintCrossInTeMiddle(g);
 
             //Diese Fallunterscheidung ist nur, um in dieser zeitkritischen Funktion nicht Zuweisungen doppelt zu machen
             if (additionalTextAbove != null && additionalTextDown != null) {
@@ -461,7 +461,6 @@ public class LayerContainer extends ElementContainer {
      *
      * @param g
      */
-    @SuppressWarnings("unused")
     private void paintCrossInTeMiddle(final Graphics g) {
         //malt ein großes Kreuz in den Mittelpunkt der Zeichenfläche
         int crossSize = 100;
@@ -531,7 +530,7 @@ public class LayerContainer extends ElementContainer {
             }
             paintingSurrogates = false;
         }
-        if (doc.isVerificationMode()) {
+        if (TRANSIENT_OPTION_DEBUG_GRAPH.is()) {
             paintDebugRectangles(g);
         }
     }
@@ -543,9 +542,10 @@ public class LayerContainer extends ElementContainer {
      * @param g
      */
     private void paintDebugRectangles(final Graphics g) {
-        drawRect(g, InputGraphArea.grabbedElementsFullRect, Color.red);
-        drawRect(g, InputGraphArea.grabbedElementsRasteredRect, Color.green);
-        drawRect(g, InputGraphArea.grabbedElementsRealRect, Color.blue);
+        paintCrossInTeMiddle(g);
+        drawPointRect(g, InputGraphArea.grabbedElementsFullRect, Color.red);
+        drawPointRect(g, InputGraphArea.grabbedElementsRasteredRect, Color.green);
+        drawPointRect(g, InputGraphArea.grabbedElementsRealRect, Color.blue);
     }
 
     @Override
