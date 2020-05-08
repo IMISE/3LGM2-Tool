@@ -327,7 +327,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      * @param doc
      * @return
      */
-    public InternalGraphFrame createGraphFrame(final GraphDocument doc) {
+    public void createGraphFrame(final GraphDocument doc) {
         InternalGraphFrame frame = new InternalGraphFrame(doc);
         modelBrowserPanel.addGraphDocument(doc);
         frame.addInternalFrameListener(this);
@@ -341,7 +341,6 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
             setBettterDefaultZoom(frame);
         }
         frame.setVisible(true);
-        return frame;
     }
 
     /**

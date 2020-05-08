@@ -143,32 +143,33 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
      */
     private void addCollection(final GDCollection gdcoll) {
         contentPane.addCollection(gdcoll);
-        Static.setProgressDialogStatusLabel("create_frame", gdcoll.getMainGraphDocument().getTitle());
-        createGraphFrame(gdcoll.getMainGraphDocument());
+        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        String title = mainDoc.getTitle();
+        Static.setProgressDialogStatusLabel("create_frame", title);
+        createGraphFrame(mainDoc);
 
         for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
             Szenario szen = gdcoll.getSzenario(i);
-            Static.setProgressDialogStatusLabel("create_frame", szen.getTitle());
+            title = szen.getTitle();
+            Static.setProgressDialogStatusLabel("create_frame", title);
             createGraphFrame(szen);
         }
     }
 
     /**
      * @param doc
-     * @return
      */
-    private InternalGraphFrame createGraphFrame(final GraphDocument doc) {
-        return contentPane.createGraphFrame(doc);
+    private void createGraphFrame(final GraphDocument doc) {
+        contentPane.createGraphFrame(doc);
     }
 
     /**
      * Create new MatrixViewFrame and add it to parent GraphDocument
      *
      * @param doc Sub-Model as source for the MatrixView
-     * @return boolean with true, if methode run successful
      */
-    public boolean createTableInternalFrame(final LGMGraphDocument doc) {
-        return contentPane.createTableInternalFrame(doc);
+    public void createTableInternalFrame(final LGMGraphDocument doc) {
+        contentPane.createTableInternalFrame(doc);
     }
 
     /**
