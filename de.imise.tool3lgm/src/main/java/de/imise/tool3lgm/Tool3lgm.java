@@ -335,7 +335,8 @@ public class Tool3lgm {
      *
      */
     public void openMatrixView() {
-        mainFrame.createTableInternalFrame(getSelectedDoc());
+        LGMGraphDocument selectedDoc = getSelectedDoc();
+        mainFrame.createTableInternalFrame(selectedDoc);
     }
 
     /**
