@@ -37,17 +37,16 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
     private final JButton but;
 
     /**
-     * @param inputGraphArea
      * @param doc
      */
-    public InternalGraphFrame(final InputGraphArea inputGraphArea, final GraphDocument doc) {
+    public InternalGraphFrame(final GraphDocument doc) {
         super(doc);
 
         // Diese Reihenfolge ist wichtig! Im Konstruktor von Werkzeugleiste
         // braucht man das Area, um die Regler bei neuen Modellen auf den dann
         // dargestellten Wert zu setzen
         doc.setFrame(this);
-        area = inputGraphArea;
+        area = new InputGraphArea(doc);
 
         if (!(doc instanceof Szenario)) {
             docCount++;
@@ -63,7 +62,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
         JScrollPane sp = getScrollPane();
         //		sp.getViewport().setScrollMode(JViewport.BLIT_SCROLL_MODE );
         //		sp.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
-        sp.setViewportView(inputGraphArea);
+        sp.setViewportView(area);
         sp.getHorizontalScrollBar().setUnitIncrement(10);
         sp.getVerticalScrollBar().setUnitIncrement(10);
         but = new JButton(Tool3lgmConstants.getIcon("zent.gif"));
