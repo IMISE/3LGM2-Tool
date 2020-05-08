@@ -116,8 +116,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         desktop = new JDesktopPane();
         desktop.addComponentListener(this); //resize desktop -> resize frames
 
-        JScrollPane desktopscroll = new JScrollPane(desktop);
-        leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktopscroll);
+        leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktop);
         leftSplitPane.setOneTouchExpandable(true);
         leftSplitPane.setDividerSize(10);
 
@@ -347,6 +346,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
             setWorkArea(frame);
         }
         desktop.add(frame);
+        frame.setLocation(0, 0);
         if (doc instanceof Szenario) {
             setBettterDefaultZoom(frame);
         }
