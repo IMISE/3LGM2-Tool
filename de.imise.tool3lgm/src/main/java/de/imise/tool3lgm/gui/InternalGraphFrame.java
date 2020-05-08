@@ -13,7 +13,6 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -22,9 +21,6 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
  * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
  */
 public class InternalGraphFrame extends AbstractInternalFrame implements ActionListener {
-
-    /** Anzahl der jemals geöffneten Teilmodelle */
-    static int docCount = 0;
 
     /**
      * COMMENTME
@@ -47,10 +43,6 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
         // dargestellten Wert zu setzen
         doc.setFrame(this);
         area = new InputGraphArea(doc);
-
-        if (!(doc instanceof Szenario)) {
-            docCount++;
-        }
 
         updateTitle();
 
