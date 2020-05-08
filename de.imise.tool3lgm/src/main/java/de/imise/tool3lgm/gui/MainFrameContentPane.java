@@ -17,16 +17,11 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.help.CSH;
-import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -56,7 +51,7 @@ import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 /**
  * @author AXS (6 Aug 2019)
  */
-public final class MainFrameContentPane extends JPanel implements PropertyChangeListener, InternalFrameListener, ComponentListener {
+public final class MainFrameContentPane extends JPanel implements PropertyChangeListener, InternalFrameListener {
 
     /** Panel with verticalSplitPane and werkzeugleiste */
     private final JPanel workarea = new JPanel();
@@ -88,11 +83,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     private TemplateBrowserPanel templateBrowserPanel;
 
     /** contain all windows of opened documents (JDesktopPane is a container used to create a multiple-document interface or a virtual desktop) */
-    private final JDesktopPane desktop;
-
-    /** if the desktop size changes the frames will be resized too */
-    private int desktopWidth = -1;
-    private int desktopHeight = -1;
+    private final MainFrameDesktopPane desktop;
 
     /** InternalFrame in desktop, which has the focus */
     private AbstractInternalFrame activeFrame = null;
@@ -113,8 +104,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         workarea.setLayout(new BorderLayout());
         modelBrowserPanel = new ModelBrowserPanel();
 
-        desktop = new JDesktopPane();
-        desktop.addComponentListener(this); //resize desktop -> resize frames
+        desktop = new MainFrameDesktopPane();
 
         leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktop);
         leftSplitPane.setOneTouchExpandable(true);
@@ -696,72 +686,6 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         activeFrame = null;
         internalFrameToolbarManager.updateToolBar();
         mainFrameToolbar.update();
-    }
-
-    //////////////////////////////////////////////
-    // resize desktop -> resize internal frames //
-    //////////////////////////////////////////////
-
-    /**
-     * @return all internal frames with the 0 position and max width of the desktop
-     */
-    private Iterable<JInternalFrame> getFramesWithMaxSize() {
-        Set<JInternalFrame> framesWithMaxSize = new HashSet<>();
-        for (JInternalFrame frame : desktop.getAllFrames()) {
-            Point location = frame.getLocation();
-            if (location.x == 0 && location.y == 0) {
-                Rectangle frameBounds = frame.getBounds();
-                if (frameBounds.width == desktopWidth && frameBounds.height == desktopHeight) {
-                    framesWithMaxSize.add(frame);
-                }
-            }
-        }
-        return framesWithMaxSize;
-    }
-
-    /**
-     * Resize all given frames to the maximum with of the desktop
-     *
-     * @param frames
-     */
-    private void setFramesToMaxSize(final Iterable<JInternalFrame> frames) {
-        for (JInternalFrame frame : frames) {
-            Rectangle frameBounds = frame.getBounds();
-            frameBounds.width = desktopWidth;
-            frameBounds.height = desktopHeight;
-            frame.setBounds(frameBounds);
-        }
-    }
-
-    @Override
-    public void componentResized(final ComponentEvent e) {
-        Object source = e.getSource();
-        if (source == desktop) {
-            if (desktopWidth != -1) {
-                Iterable<JInternalFrame> framesWithMaxSize = getFramesWithMaxSize();
-                desktopWidth = desktop.getWidth();
-                desktopHeight = desktop.getHeight();
-                setFramesToMaxSize(framesWithMaxSize);
-            } else {
-                desktopWidth = desktop.getWidth();
-                desktopHeight = desktop.getHeight();
-            }
-        }
-    }
-
-    @Override
-    public void componentMoved(final ComponentEvent e) {
-        //do nothing
-    }
-
-    @Override
-    public void componentShown(final ComponentEvent e) {
-        //do nothing
-    }
-
-    @Override
-    public void componentHidden(final ComponentEvent e) {
-        //do nothing
     }
 
 }
