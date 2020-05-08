@@ -27,7 +27,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
     /**
      * Konstruktor
      *
-     * @param _graphDocument darzustellendes (Teil-)Modell
+     * @param doc darzustellendes (Teil-)Modell
      */
     public AbstractInternalFrame(final GraphDocument doc) {
 
@@ -96,21 +96,6 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
             dispose();
         }
     }
-
-    /**
-     * COMMENTME
-     */
-    double oldzoom = 0;
-
-    /**
-     * COMMENTME
-     */
-    int oldwidth = 0;
-
-    /**
-     * COMMENTME
-     */
-    int oldheight = 0;
 
     @Override
     public void dispose() {
