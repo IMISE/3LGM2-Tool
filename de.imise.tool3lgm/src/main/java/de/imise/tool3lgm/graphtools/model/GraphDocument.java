@@ -94,8 +94,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
-import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -195,11 +194,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * COMMENTME
      */
     protected NodeContainer lastCreated = null;
-
-    /**
-     * COMMENTME
-     */
-    protected InternalGraphFrame frame = null;
 
     /**
      * @param _gdcoll
@@ -338,9 +332,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             addRedoCommandOrReplace(GDCommands.MODEL_ACTION_SET_LAYER_SIZE_FACTOR + " " + hashString, newPageSizeFactor, pid);
             finish_transaction(pid);
         }
-        if (frame != null) {
-            frame.layoutChanged(this);
-        }
+        distributeEvent(LGMChangeType.LAYOUT_CHANGED);
     }
 
     /**
@@ -4801,13 +4793,11 @@ public abstract class GraphDocument extends ElementSelectionContext {
             finish_transaction(pid);
             return;
         }
+        ViewParameter viewParameter = Static.getViewParameter(szen);
+        szen.adaptViewParameter(viewParameter);
         double pageSizeFactor = getPageSizeFactor();
         szen.setPageSizeFactor(pageSizeFactor);
         szen.getMapping().adapt(mapping);
-        InputGraphArea inputGraphArea = frame.getInputGraphArea();
-        InternalGraphFrame otherFrame = szen.getFrame();
-        InputGraphArea otherInputGraphArea = otherFrame.getInputGraphArea();
-        otherInputGraphArea.adaptSettings(inputGraphArea);
         String otherHashString = szen.getHashString();
         addElementsToSzenario(otherHashString, elements, pid);
         finish_transaction(pid);
@@ -5491,24 +5481,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     public int getNext_y_pos() {
         return next_y_pos;
-    }
-
-    /**
-     * @param _frame
-     */
-    public void setFrame(final InternalGraphFrame _frame) {
-        if (_frame == null) {
-            frame = _frame;
-        } else if (_frame.getGraphDocument().equals(this)) {
-            frame = _frame;
-        }
-    }
-
-    /**
-     * @return
-     */
-    public InternalGraphFrame getFrame() {
-        return frame;
     }
 
 }

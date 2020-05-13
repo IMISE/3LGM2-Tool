@@ -647,9 +647,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Nachdem alle Szenarios eingelesen wurden, mus man einmal diese Funktion hier aufrufen,
-     * damit das richtige Graphdocument selektiert ist. Nur wenn dieses Modell über ein File
-     * eingelesen wurde, haben die Teilmodelle auch ViewParameter.
+     * Nachdem alle Szenarios eingelesen oder das eine eines neuen Modell erstellt wurden, muss
+     * man einmal diese Funktion hier aufrufen, damit das richtige Graphdocument selektiert ist.
      */
     public void initSelectedDocByViewParameterFromFile() {
         for (Szenario szen : szenarios) {

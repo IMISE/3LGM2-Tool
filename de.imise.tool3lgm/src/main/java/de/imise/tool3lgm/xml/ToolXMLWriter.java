@@ -12,7 +12,6 @@ import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDAR
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -28,6 +27,7 @@ import javax.xml.stream.XMLStreamException;
 import com.google.common.base.Strings;
 import com.google.common.collect.Table.Cell;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
@@ -48,8 +48,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.htmlxml.IntendingXMLWriter;
@@ -451,22 +450,18 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeAttribute("titel", szen.getTitle());
             writeElement("description", szen.getDescription());
             // Informationen über Ansicht speichern
-            InternalGraphFrame frame = szen.getFrame();
-            if (frame != null) {
-                writeStartElement("view"); //<view>
-                writeElement("selected", frame.isSelected());
-                Point viewPosition = frame.getScrollPane().getViewport().getViewPosition();
-                writeElement("x", viewPosition.x);
-                writeElement("y", viewPosition.y);
-                InputGraphArea inputGraphArea = frame.getInputGraphArea();
-                writeElement("zoom", inputGraphArea.getZoom());
-                writeElement("degree", inputGraphArea.getMultiViewLayerAngle());
-                writeElement("shift", inputGraphArea.getMultiViewLayerGap());
-                writeElement("pageSizeFactor", szen.getPageSizeFactor());
-                writeElement("activeLayer", gdcoll.getActiveLayer());
-                writeElement("multiView", inputGraphArea.isMultiView());
-                writeEndElement(); //</view>
-            }
+            ViewParameter viewParameter = Static.getViewParameter(szen);
+            writeStartElement("view"); //<view>
+            writeElement("selected", viewParameter.selected);
+            writeElement("x", viewParameter.viewPositionX);
+            writeElement("y", viewParameter.viewPositionY);
+            writeElement("zoom", viewParameter.zoom);
+            writeElement("degree", viewParameter.layerAngle);
+            writeElement("shift", viewParameter.layerGap);
+            writeElement("pageSizeFactor", szen.getPageSizeFactor());
+            writeElement("activeLayer", gdcoll.getActiveLayer());
+            writeElement("multiView", viewParameter.multiView);
+            writeEndElement(); //</view>
             writeStartElement("mapping"); //"<mapping>"
             ElementsLayoutDefinition mapping = szen.getMapping();
             for (Class<? extends ModelElement> elementClass : mapping.getElementClassesWithStandardLayout()) {

@@ -10,6 +10,8 @@ import java.util.Set;
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
+
 /**
  * @author AXS (08.05.2020)
  */
@@ -24,6 +26,23 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
      */
     public MainFrameDesktopPane() {
         addComponentListener(this); //resize desktop -> resize frames
+    }
+
+    /**
+     * @param doc
+     * @return
+     */
+    public GraphViewContainer getViewContainer(final GraphDocument doc) {
+        JInternalFrame[] allFrames = getAllFrames();
+        for (JInternalFrame frame : allFrames) {
+            if (frame instanceof InternalGraphFrame) {
+                InternalGraphFrame graphFrame = (InternalGraphFrame) frame;
+                if (graphFrame.hasGraphDocument(doc)) {
+                    return graphFrame;
+                }
+            }
+        }
+        return null;
     }
 
     //////////////////////////////////////////////

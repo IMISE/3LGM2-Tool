@@ -19,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JSeparator;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
@@ -172,6 +173,18 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
     }
 
     // --- Dokumentenverwaltung --- Anfang ---
+
+    public ViewParameter getViewParameter() {
+        ViewParameter viewParameter = new ViewParameter();
+        GDCollection gdcoll = szenario.getCollection();
+        viewParameter.activeLayer = gdcoll.getActiveLayer();
+        viewParameter.layerAngle = layerAngle;
+        viewParameter.layerGap = layerGap;
+        viewParameter.multiView = multiView;
+        viewParameter.pageSizeFactor = szenario.getPageSizeFactor();
+        viewParameter.zoom = zoom;
+        return viewParameter;
+    }
 
     /**
      * @param szen

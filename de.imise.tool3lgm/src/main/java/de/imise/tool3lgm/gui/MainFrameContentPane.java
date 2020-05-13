@@ -392,19 +392,19 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      */
     private void setWorkArea(final InternalGraphFrame frame) {
         Szenario szenario = (Szenario) frame.getGraphDocument();
-        ViewParameter view = szenario.getViewParameter();
+        ViewParameter viewParameter = szenario.getViewParameter();
         InputGraphArea inputGraphArea = frame.getInputGraphArea();
-        boolean multiView = view.multiView;
+        boolean multiView = viewParameter.multiView;
         inputGraphArea.setMultiView(multiView);
         GraphDocument doc = frame.getGraphDocument();
         GDCollection gdcoll = doc.getCollection();
-        gdcoll.setActiveLayer(view.activeLayer);
-        inputGraphArea.setMultiViewLayerAngle(view.layerAngle);
-        inputGraphArea.setMultiViewLayerGap(view.layerGap);
-        inputGraphArea.setZoom(view.zoom);
+        gdcoll.setActiveLayer(viewParameter.activeLayer);
+        inputGraphArea.setMultiViewLayerAngle(viewParameter.layerAngle);
+        inputGraphArea.setMultiViewLayerGap(viewParameter.layerGap);
+        inputGraphArea.setZoom(viewParameter.zoom);
         JScrollPane scrollPane = frame.getScrollPane();
         JViewport viewport = scrollPane.getViewport();
-        Point viewPosition = new Point(view.viewPositionX, view.viewPositionY);
+        Point viewPosition = new Point(viewParameter.viewPositionX, viewParameter.viewPositionY);
         viewport.setViewPosition(viewPosition);
     }
 
@@ -466,12 +466,12 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         if (activateGraphView) {
             //wenn nicht grade vorher ein Matrix-View aktiviert wurde (nur dann wäre die globale Variable==false)
             if (this.activateGraphView) {
+                GraphViewContainer viewContainer = Static.getViewContainer(doc);
                 //den richtigen Frame nach vorne holen
-                InternalGraphFrame frame = doc.getFrame();
-                if (frame != null) {
-                    if (!frame.isSelected()) {
+                if (viewContainer != null) {
+                    if (!viewContainer.isSelected()) {
                         try {
-                            frame.setSelected(true);
+                            viewContainer.setSelected(true);
                         } catch (Exception ex) {
                             Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
                         }
@@ -534,6 +534,14 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
             }
         }
         return frame;
+    }
+
+    /**
+     * @param doc
+     * @return the view container that contains the graph of the GraphDocument if exists or <code>null</code>
+     */
+    public final GraphViewContainer getViewContainer(final GraphDocument doc) {
+        return desktop.getViewContainer(doc);
     }
 
     /**
@@ -627,6 +635,17 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
 
     @Override
     public void internalFrameClosing(final InternalFrameEvent e) {
+        //before closing -> store all view parameter in the szenario view parameter (inclusive view position)
+        Object source = e.getSource();
+        if (source instanceof GraphViewContainer) {
+            GraphViewContainer viewContainer = (GraphViewContainer) source;
+            GraphDocument doc = viewContainer.getGraphDocument();
+            if (doc instanceof Szenario) {
+                Szenario szen = (Szenario) doc;
+                ViewParameter viewParameter = viewContainer.getViewParameter();
+                szen.adaptViewParameter(viewParameter);
+            }
+        }
     }
 
     @Override

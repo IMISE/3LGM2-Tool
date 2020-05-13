@@ -31,4 +31,23 @@ public class ViewParameter {
     public double pageSizeFactor = INITIAL_PAGE_SIZE_FACTOR;
     public int activeLayer = INITILA_ACTIVE_LAYER;
     public boolean selected = false;
+
+    public ViewParameter() {
+
+    }
+
+    public ViewParameter(final ViewParameter other) {
+        adapt(other);
+    }
+
+    public void adapt(final ViewParameter other) {
+        viewPositionX = other.viewPositionX;
+        viewPositionY = other.viewPositionY;
+        layerGap = other.layerGap;
+        layerAngle = other.layerAngle;
+        multiView = other.multiView;
+        zoom = other.zoom;
+        pageSizeFactor = other.pageSizeFactor;
+    }
+
 }

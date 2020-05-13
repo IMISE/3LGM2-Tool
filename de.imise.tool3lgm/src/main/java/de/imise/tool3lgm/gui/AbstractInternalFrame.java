@@ -63,8 +63,16 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      *
      * @return GraphDocument
      */
-    public GraphDocument getGraphDocument() {
+    public final GraphDocument getGraphDocument() {
         return doc;
+    }
+
+    /**
+     * @param doc
+     * @return <code>true</code> if the GraphDocument of this frame is teh same like the parameter.
+     */
+    public final boolean hasGraphDocument(final GraphDocument doc) {
+        return this.doc == doc;
     }
 
     /**

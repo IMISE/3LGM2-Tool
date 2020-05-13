@@ -246,9 +246,9 @@ public class Tool3lgm {
             }
         }
         UserProperties.setWorkingDirectory(file);
+        boolean openModel = openModel(gdcoll);
         //jede neue GDCollection wird mit bulk_mode true initialisiert, aber ab jetzt
         //sollen die UNDO-REDO-Kommandos wieder geloggt werden.
-        boolean openModel = openModel(gdcoll);
         gdcoll.setBulkMode(false);
         gdcoll.setAutomaticMode(false);
         return openModel;
@@ -636,18 +636,10 @@ public class Tool3lgm {
                 if (value == JOptionPane.YES_OPTION) {
                     BrowseUtils.browse(hyperlink);
                 } else if (value == JOptionPane.NO_OPTION) {
-                    try {
-                        frame.setSelected(true);
-                    } catch (PropertyVetoException ex) {
-                        Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
-                    }
+                    frame.setSelected(true);
                 }
             } else {
-                try {
-                    frame.setSelected(true);
-                } catch (PropertyVetoException ex) {
-                    Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
-                }
+                frame.setSelected(true);
             }
         } else if (hyperlink != null) {
             BrowseUtils.browse(hyperlink);

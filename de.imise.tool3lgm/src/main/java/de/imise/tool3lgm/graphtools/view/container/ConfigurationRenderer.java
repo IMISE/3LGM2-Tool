@@ -13,15 +13,16 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 
 public class ConfigurationRenderer {
 
@@ -40,15 +41,13 @@ public class ConfigurationRenderer {
      * @param doc the submodel in which the configurations should be shown
      */
     public static final void render(final Graphics g, final InterLayerConnectedNodeContainer configurationStart, final GraphDocument doc) {
-        boolean configurationStartIsAnalysisResult = doc.isAnalysisResult(configurationStart);
+        Szenario szen = (Szenario) doc; //wenn das kein Szenario ist, dann sollte dieser Renderer auch nicht aufgerufen werden
+        boolean configurationStartIsAnalysisResult = szen.isAnalysisResult(configurationStart);
         if (!configurationStart.isShowInterLayerConnections()) {
             if (!configurationStartIsAnalysisResult) {
                 return;
             }
         }
-        InternalGraphFrame frame = doc.getFrame();
-        InputGraphArea inputGraphArea = frame.getInputGraphArea();
-        boolean multiView = inputGraphArea.isMultiView();
 
         List<ElementContainer> configurationStartContainer = null;
         List<ElementContainer> configurationEndContainer = null;
@@ -61,6 +60,7 @@ public class ConfigurationRenderer {
             configurationStartContainer.add(configurationStart);
         }
 
+        ViewParameter viewParameter = Static.getViewParameter(szen); //ACHTUNG DAS HIER PASSIERT BEI JEDEM RENDERN UND IST RELATIV AUFWENDIG, WENN ES VIELE OFFENE FRAMES GIBT -> GGF. OPTIMIEREN!
         for (int b = 0; b < configurationStartContainer.size(); b++) {
             if (configurationStart.getInterLayerConnectionColor() == null) {
                 colorCounter = (colorCounter + 1) % STANDARD_COLORS.length;
@@ -78,7 +78,7 @@ public class ConfigurationRenderer {
             if (!kc1.isVisible()) {
                 continue;
             }
-            if (multiView) {
+            if (viewParameter.multiView) {
                 Graphics2D gc = (Graphics2D) g;
                 Stroke s = gc.getStroke();
                 if (configurationEndContainer == null) {
@@ -89,7 +89,7 @@ public class ConfigurationRenderer {
                     SimpleMetaPath interLayerMetaPath = graphViewDefinition.getInterLayerMetaPath(me);
                     Collection<ModelElement> interLayerConnectedElements = PathFunctions.getConnectedElements(me, interLayerMetaPath);
                     for (ModelElement connected : interLayerConnectedElements) {
-                        ElementContainer connectedEc = connected.getContainer(doc);
+                        ElementContainer connectedEc = connected.getContainer(szen);
                         if (connectedEc != null) {
                             configurationEndContainer.add(connectedEc);
                         }
@@ -97,7 +97,7 @@ public class ConfigurationRenderer {
                     int layerOfStartElement = metaModel.layerFor(me.getClass());
                     int layerOfEndElement = metaModel.layerFor(interLayerMetaPath.getEndClass());
                     int shiftCount = (layerOfStartElement - layerOfEndElement) / 2;
-                    LayerContainer layer = doc.getLayer(layerOfEndElement);
+                    LayerContainer layer = szen.getLayer(layerOfEndElement);
                     x_shift = (int) layer.x_shift * shiftCount;
                     y_shift = (int) layer.y_shift * shiftCount;
                 }
@@ -114,7 +114,7 @@ public class ConfigurationRenderer {
                         if (!kc2.isVisible()) {
                             continue;
                         }
-                        if (configurationStartIsAnalysisResult && doc.isAnalysisResult(connectedEc)) {
+                        if (configurationStartIsAnalysisResult && szen.isAnalysisResult(connectedEc)) {
                             g.setColor(Color.black);
                             gc.setStroke(GraphElementLayout.MEDUIM_STROKE);
                             g.drawLine(kc1.getX(), kc1.getY(), kc2.getX() - x_shift, kc2.getY() - y_shift);

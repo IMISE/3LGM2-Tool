@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyVetoException;
 
 import javax.swing.JButton;
 import javax.swing.JScrollPane;
@@ -16,11 +17,12 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 
 /**
  * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
  */
-public class InternalGraphFrame extends AbstractInternalFrame implements ActionListener {
+public class InternalGraphFrame extends AbstractInternalFrame implements GraphViewContainer, ActionListener {
 
     /**
      * COMMENTME
@@ -41,7 +43,6 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
         // Diese Reihenfolge ist wichtig! Im Konstruktor von Werkzeugleiste
         // braucht man das Area, um die Regler bei neuen Modellen auf den dann
         // dargestellten Wert zu setzen
-        doc.setFrame(this);
         area = new InputGraphArea(doc);
 
         updateTitle();
@@ -61,7 +62,6 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
         but.setActionCommand("z");
         getScrollPane().setCorner(JScrollPane.LOWER_RIGHT_CORNER, but);
         but.addActionListener(this);
-
     }
 
     /**
@@ -204,6 +204,25 @@ public class InternalGraphFrame extends AbstractInternalFrame implements ActionL
             return false;
         }
         return true;
+    }
+
+    @Override
+    public ViewParameter getViewParameter() {
+        ViewParameter viewParameter = area.getViewParameter();
+        JViewport viewport = getViewport();
+        Point viewPosition = viewport.getViewPosition();
+        viewParameter.viewPositionX = viewPosition.x;
+        viewParameter.viewPositionY = viewPosition.y;
+        return viewParameter;
+    }
+
+    @Override
+    public void setSelected(final boolean selected) {
+        try {
+            super.setSelected(selected);
+        } catch (PropertyVetoException e) {
+            //ignore the possible error
+        }
     }
 
 }

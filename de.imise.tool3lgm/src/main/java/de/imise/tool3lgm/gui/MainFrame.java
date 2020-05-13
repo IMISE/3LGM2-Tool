@@ -25,7 +25,6 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
@@ -143,17 +142,17 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
      */
     private void addCollection(final GDCollection gdcoll) {
         contentPane.addCollection(gdcoll);
-        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
-        String title = mainDoc.getTitle();
-        Static.setProgressDialogStatusLabel("create_frame", title);
-        createGraphFrame(mainDoc);
-
-        for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
-            Szenario szen = gdcoll.getSzenario(i);
-            title = szen.getTitle();
-            Static.setProgressDialogStatusLabel("create_frame", title);
-            createGraphFrame(szen);
-        }
+        //        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        //        String title = mainDoc.getTitle();
+        //        Static.setProgressDialogStatusLabel("create_frame", title);
+        //        createGraphFrame(mainDoc);
+        //
+        //        for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
+        //            Szenario szen = gdcoll.getSzenario(i);
+        //            title = szen.getTitle();
+        //            Static.setProgressDialogStatusLabel("create_frame", title);
+        //            createGraphFrame(szen);
+        //        }
     }
 
     /**
@@ -186,6 +185,14 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
      */
     public AbstractInternalFrame getActiveFrame() {
         return contentPane.getActiveFrame();
+    }
+
+    /**
+     * @param doc
+     * @return the view container that contains the graph of the GraphDocument if exists or <code>null</code>
+     */
+    public final GraphViewContainer getViewContainer(final GraphDocument doc) {
+        return contentPane.getViewContainer(doc);
     }
 
     /**
