@@ -15,6 +15,8 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
@@ -47,19 +49,21 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
      * @return
      */
     public final void addCollection(final GDCollection gdcoll) {
+        ModelBrowser modelBrowser;
         if (showModelsInSeparateBrowser) {
-            ModelBrowser modelBrowser = new ModelBrowser();
+            modelBrowser = new ModelBrowser();
             modelBrowser.addCollection(gdcoll);
             ((GridLayout) getLayout()).setColumns(((GridLayout) getLayout()).getColumns() + 1);
             add(modelBrowser);
         } else {
-            ModelBrowser firstBrowser = getFirstBrowser();
-            if (firstBrowser == null) {
-                firstBrowser = new ModelBrowser();
-                add(firstBrowser);
+            modelBrowser = getFirstBrowser();
+            if (modelBrowser == null) {
+                modelBrowser = new ModelBrowser();
+                add(modelBrowser);
             }
-            firstBrowser.addCollection(gdcoll);
+            modelBrowser.addCollection(gdcoll);
         }
+        addGraphDocuments(modelBrowser, gdcoll);
     }
 
     /**
@@ -75,13 +79,15 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     }
 
     /**
-     * @param doc
+     * @param gdcoll
      * @return
      */
-    public void addGraphDocument(final GraphDocument doc) {
-        GDCollection gdcoll = doc.getCollection();
-        ModelBrowser modelBrowser = getModelBrowser(gdcoll);
-        modelBrowser.addGraphDocument(doc);
+    private void addGraphDocuments(final ModelBrowser modelBrowser, final GDCollection gdcoll) {
+        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        modelBrowser.addGraphDocument(mainDoc);
+        for (Szenario szen : gdcoll.getSzenarios()) {
+            modelBrowser.addGraphDocument(szen);
+        }
     }
 
     /**
