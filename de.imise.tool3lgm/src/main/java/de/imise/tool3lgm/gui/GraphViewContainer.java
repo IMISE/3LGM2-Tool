@@ -26,6 +26,6 @@ public interface GraphViewContainer {
     /**
      * @param selected
      */
-    public void select(boolean selected);
+    public void setSelected(boolean selected);
 
 }
