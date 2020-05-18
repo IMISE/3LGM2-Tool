@@ -14,9 +14,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,6 +29,7 @@ import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Table.Cell;
 
 import de.imise.tool3lgm.Static;
@@ -51,6 +56,7 @@ import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.log.Log;
+import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.htmlxml.IntendingXMLWriter;
 import de.imise.util.io.FileHandler;
@@ -437,6 +443,19 @@ public class ToolXMLWriter extends IntendingXMLWriter {
     /////////////////////////////
 
     /**
+     * @param mapping
+     * @return a alphabetical sortet list of all element classes with standard layout
+     */
+    private List<Class<? extends ModelElement>> getElementClassesWithStandardLayout(final ElementsLayoutDefinition mapping) {
+        Iterable<Class<? extends ModelElement>> elementClassesWithStandardLayout = mapping.getElementClassesWithStandardLayout();
+        ArrayList<Class<? extends ModelElement>> elementClassesWithStandardLayoutAlphabetical = Lists.newArrayList(elementClassesWithStandardLayout);
+        //to ensure that the order of element classes is the same independently of the systems locale we always sort here with english locale
+        Comparator<Object> comparator = Alphabetical.getComparator(Locale.ENGLISH);
+        Collections.sort(elementClassesWithStandardLayoutAlphabetical, comparator);
+        return elementClassesWithStandardLayoutAlphabetical;
+    }
+
+    /**
      * @param szenarios Liste der Szenarios, die rausgeschrieben werden sollen. Ist die Liste <code>null</code>, werden alle Szenarios rausgeschrieben
      * @param elements ist diese Collection nicht null, werden nur die Elemente der Szenarios rausgeschrieben, die sich in der Collection befinden
      * @throws XMLStreamException
@@ -466,7 +485,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeEndElement(); //</view>
             writeStartElement("mapping"); //"<mapping>"
             ElementsLayoutDefinition mapping = szen.getMapping();
-            for (Class<? extends ModelElement> elementClass : mapping.getElementClassesWithStandardLayout()) {
+            for (Class<? extends ModelElement> elementClass : getElementClassesWithStandardLayout(mapping)) {
                 GraphElementLayout standardElementLayout = mapping.getStandardElementLayout(elementClass);
                 writeGraphElementLayout(elementClass, standardElementLayout, true);
             }
