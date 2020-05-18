@@ -80,7 +80,6 @@ public class Alphabetical {
          * @param stringComparator
          */
         public ObjectToStringComparator(final Comparator<Object> realComparator) {
-            super();
             this.realComparator = realComparator;
         }
 
@@ -95,6 +94,12 @@ public class Alphabetical {
             return realComparator.compare(s1, s2);
         }
 
+    }
+
+    public static final Comparator<Object> getComparator(final Locale locale) {
+        Collator collator = Collator.getInstance(locale);
+        Comparator<Object> localizedComparator = new ObjectToStringComparator(collator);
+        return localizedComparator;
     }
 
     /**
