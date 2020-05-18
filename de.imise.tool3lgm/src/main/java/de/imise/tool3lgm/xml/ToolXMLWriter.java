@@ -34,6 +34,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
@@ -441,6 +442,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
      * @throws XMLStreamException
      */
     private void writeSzenarios(final List<Szenario> szenarios, final Collection<ModelElement> elements) throws XMLStreamException {
+        GraphDocument selectedDoc = gdcoll.getSelectedDoc();
         for (Szenario szen : gdcoll.getSzenarios()) {
             if (szenarios != null && !szenarios.contains(szen)) {
                 continue;
@@ -452,7 +454,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             // Informationen über Ansicht speichern
             ViewParameter viewParameter = Static.getViewParameter(szen);
             writeStartElement("view"); //<view>
-            writeElement("selected", viewParameter.selected);
+            writeElement("selected", selectedDoc == szen);
             writeElement("x", viewParameter.viewPositionX);
             writeElement("y", viewParameter.viewPositionY);
             writeElement("zoom", viewParameter.zoom);
