@@ -655,9 +655,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             ViewParameter viewParameter = szen.getViewParameter();
             if (viewParameter != null && viewParameter.selected) {
                 setSelectedDoc(szen);
-                break;
+                return;
             }
         }
+        setSelectedDoc(doc);
     }
 
     /**

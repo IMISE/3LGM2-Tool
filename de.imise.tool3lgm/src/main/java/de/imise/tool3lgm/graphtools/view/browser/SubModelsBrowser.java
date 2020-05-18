@@ -82,12 +82,6 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
         //die Elemente darunter (alle Szenarios) sortiert werden
         if (submodelBox.getItemCount() == 1) {
             submodelBox.addSeparator(false);
-            // if the  <All Elements> main model was the last selected before save of the collection
-            //whose GraphDocuments are added here, there will be no selected_doc_changed-Event and
-            //the selection of the submodelBox is empty -> initial select the main doc. If a submodel
-            //was the last active this selection will be changed. If the main model was the last selected
-            //this selection is correct.
-            submodelBox.setSelectedIndex(0);
         }
     }
 
