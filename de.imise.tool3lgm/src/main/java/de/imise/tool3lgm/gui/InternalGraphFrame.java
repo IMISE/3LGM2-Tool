@@ -47,7 +47,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
 
         updateTitle();
 
-        setClosable(false);
+        setClosable(true);
 
         JViewport viewport = getViewport();
         viewport.setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
