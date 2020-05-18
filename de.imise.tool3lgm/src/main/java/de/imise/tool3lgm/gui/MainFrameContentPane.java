@@ -357,6 +357,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, internalFrameToolbarManager, nextMatrixViewTitleIndex);
         matrixView.setBounds(desktop.getBounds());
         desktop.add(matrixView);
+        matrixView.setLocation(0, 0);
         matrixView.addInternalFrameListener(this);
         matrixView.setVisible(true);
         desktop.setSelectedFrame(matrixView);
