@@ -102,7 +102,8 @@ public class AlphabeticalComboBox extends JComboBox {
     })
     public AlphabeticalComboBox(final int shift) {
         super();
-        setModel(new DefaultComboBoxModel(items));
+        DefaultComboBoxModel model = new DefaultComboBoxModel(items);
+        setModel(model);
         setRenderer(new MyRenderer(shift));
         //30 Zeilen solten eigentlich immer darstellbar sein
         setMaximumRowCount(30);
@@ -521,6 +522,25 @@ public class AlphabeticalComboBox extends JComboBox {
     }
 
     /**
+     * @param anObject
+     * @return
+     */
+    public int getIndexOf(final Object anObject) {
+        DefaultComboBoxModel model = (DefaultComboBoxModel) getModel();
+        int index = model.getIndexOf(anObject);
+        return index;
+    }
+
+    /**
+     * @param anObject
+     * @return <code>true</code> if the list contains the object
+     */
+    public boolean contains(final Object anObject) {
+        int index = getIndexOf(anObject);
+        return index >= 0;
+    }
+
+    /**
      * Zuerst wird versucht, das übergebene Object zu entfernen. Wenn es sich nicht entfernen ließ,
      * werden alle <code>NamedObjectContainer</code> durchsucht, ob sie das übergebene Object einthalten,
      * bis der erste von hinten gefunden wurde. Dieser wird dann entfernt.
@@ -529,8 +549,7 @@ public class AlphabeticalComboBox extends JComboBox {
      */
     @Override
     public void removeItem(final Object anObject) {
-        DefaultComboBoxModel model = (DefaultComboBoxModel) getModel();
-        int index = model.getIndexOf(anObject);
+        int index = getIndexOf(anObject);
 
         // Wenn der zurückgegebene Index <0 ist, ist das zu löschende Element nicht in der comboBox und der removeItemAt würde eine Ex. werfen.
         if (index < 0) {
@@ -540,6 +559,7 @@ public class AlphabeticalComboBox extends JComboBox {
         if (index >= 0 && index < newListStartIndex) {
             newListStartIndex--;
         } else {
+            DefaultComboBoxModel model = (DefaultComboBoxModel) getModel();
             for (int i = 0; i < model.getSize(); i++) {
                 Object o = model.getElementAt(i);
                 if (o instanceof NamedObjectContainer) {
