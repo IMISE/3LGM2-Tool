@@ -327,7 +327,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      * @param doc
      * @return
      */
-    public void createGraphFrame(final GraphDocument doc) {
+    private GraphViewContainer createGraphFrame(final GraphDocument doc) {
         InternalGraphFrame frame = new InternalGraphFrame(doc);
         frame.addInternalFrameListener(this);
         frame.setBounds(desktop.getBounds());
@@ -340,6 +340,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
             setBettterDefaultZoom(frame);
         }
         frame.setVisible(true);
+        return frame;
     }
 
     /**
@@ -460,13 +461,15 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         if (doc == null) {
             return;
         }
-
         //wenn der interne Frame mit dem grafischen View in den Vordergrund geholt werden soll,
         if (activateGraphView) {
             //wenn nicht grade vorher ein Matrix-View aktiviert wurde (nur dann wäre die globale Variable==false)
             if (this.activateGraphView) {
                 GraphViewContainer viewContainer = Static.getViewContainer(doc);
                 //den richtigen Frame nach vorne holen
+                if (viewContainer == null) {
+                    viewContainer = createGraphFrame(doc);
+                }
                 if (viewContainer != null) {
                     if (!viewContainer.isSelected()) {
                         try {
@@ -500,7 +503,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
             this.activateGraphView = false;
         }
 
-        modelBrowserPanel.setCurrentDoc(doc);
+        modelBrowserPanel.addGraphDocumentAndSetSelected(doc);
         //beim nächsten Konextwechsel auch das nach Vorne holen des grafischen Views wieder einschalten
         this.activateGraphView = true;
 
@@ -540,7 +543,11 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      * @return the view container that contains the graph of the GraphDocument if exists or <code>null</code>
      */
     public final GraphViewContainer getViewContainer(final GraphDocument doc) {
-        return desktop.getViewContainer(doc);
+        GraphViewContainer viewContainerOfDesktop = desktop.getGraphViewContainer(doc);
+        if (viewContainerOfDesktop == null) {
+            viewContainerOfDesktop = createGraphFrame(doc);
+        }
+        return viewContainerOfDesktop;
     }
 
     /**

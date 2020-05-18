@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 /**
  * @author AXS (08.05.2020)
  */
-public class MainFrameDesktopPane extends JDesktopPane implements ComponentListener {
+public class MainFrameDesktopPane extends JDesktopPane implements ComponentListener, GraphViewContainerParent {
 
     /** if the desktop size changes the frames will be resized too */
     private int desktopWidth = -1;
@@ -32,7 +32,8 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
      * @param doc
      * @return
      */
-    public GraphViewContainer getViewContainer(final GraphDocument doc) {
+    @Override
+    public GraphViewContainer getGraphViewContainer(final GraphDocument doc) {
         JInternalFrame[] allFrames = getAllFrames();
         for (JInternalFrame frame : allFrames) {
             if (frame instanceof InternalGraphFrame) {

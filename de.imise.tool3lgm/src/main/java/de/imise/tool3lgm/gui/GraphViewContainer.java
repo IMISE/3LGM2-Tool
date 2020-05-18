@@ -4,6 +4,8 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 
 /**
+ * Interface for a graph view of a Szenario.
+ *
  * @author AXS (10.05.2020)
  */
 public interface GraphViewContainer {

@@ -73,6 +73,9 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
      * @param doc
      */
     public void addGraphDocument(final GraphDocument doc) {
+        if (submodelBox.contains(doc)) {
+            return;
+        }
         submodelBox.addItem(doc);
         //das erste doc ist immer das Gesamtmodell -> erstes Doc in eigene Liste packen (also einen
         //Separator nach dem ersten einfügen), damit es immer oben steht (egal wie es heißt) und nur

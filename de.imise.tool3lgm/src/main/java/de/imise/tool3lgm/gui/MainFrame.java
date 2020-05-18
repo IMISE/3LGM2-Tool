@@ -156,13 +156,6 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     }
 
     /**
-     * @param doc
-     */
-    private void createGraphFrame(final GraphDocument doc) {
-        contentPane.createGraphFrame(doc);
-    }
-
-    /**
      * Create new MatrixViewFrame and add it to parent GraphDocument
      *
      * @param doc Sub-Model as source for the MatrixView
@@ -252,7 +245,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
         //Bei neuen Modellen werden GraphFrames in der Funktion addCollection(GDCollection)
         //hinzugefügt.
         if (gdcoll.isInitialzed()) {
-            contentPane.createGraphFrame(source);
+            contentPane.setCurrentDoc(source, true);
         }
     }
 

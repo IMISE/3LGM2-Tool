@@ -91,22 +91,33 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     }
 
     /**
+     * @param doc
+     */
+    public void addGraphDocumentAndSetSelected(final GraphDocument doc) {
+        GDCollection gdcoll = doc.getCollection();
+        ModelBrowser modelBrowser = getModelBrowser(gdcoll);
+        modelBrowser.addGraphDocument(doc);
+        modelBrowser.setCurrentDoc(doc);
+    }
+
+    /**
      * Entfernt ein Teil-Modell aus dem dazugehörigen Browser. Wenn das letzte Teilmodell eines Modells entfernt wird, dann wird das ganze Modell
      * entfernt.
      *
      * @param doc
      */
     public void removeGraphDocument(final GraphDocument doc) {
+        GDCollection gdcoll = doc.getCollection();
+        ModelBrowser modelBrowser = getModelBrowser(gdcoll);
+        modelBrowser.removeGraphDocument(doc);
         if (showModelsInSeparateBrowser) {
-            ModelBrowser modelBrowser = getModelBrowser(doc.getCollection());
-            modelBrowser.removeGraphDocument(doc);
             if (modelBrowser.getTabCount() == 0) {
                 remove(modelBrowser);
                 GridLayout layout = (GridLayout) getLayout();
-                layout.setColumns(Math.max(layout.getColumns() - 1, 1));
+                int columns = layout.getColumns();
+                columns = Math.max(columns - 1, 1);
+                layout.setColumns(columns);
             }
-        } else {
-            getFirstBrowser().removeGraphDocument(doc);
         }
     }
 
@@ -134,7 +145,8 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
      * Aktiviert die Baumansicht für das übergebene <code>GraphDocument</code>
      */
     public void setCurrentDoc(final GraphDocument doc) {
-        ModelBrowser modelBrowser = getModelBrowser(doc.getCollection());
+        GDCollection gdcoll = doc.getCollection();
+        ModelBrowser modelBrowser = getModelBrowser(gdcoll);
         if (modelBrowser != null) {
             modelBrowser.setCurrentDoc(doc);
         }
