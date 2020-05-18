@@ -25,6 +25,8 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.model.Szenario;
+import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
@@ -178,6 +180,15 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
      */
     public AbstractInternalFrame getActiveFrame() {
         return contentPane.getActiveFrame();
+    }
+
+    /**
+     * @param szen
+     * @return the viewParameter of the current grapg view if the view is
+     *         closed the stored view parameters of the szenario
+     */
+    public ViewParameter getViewParameter(final Szenario szen) {
+        return contentPane.getViewParameter(szen);
     }
 
     /**

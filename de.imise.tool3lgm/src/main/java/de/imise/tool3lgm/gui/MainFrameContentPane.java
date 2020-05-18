@@ -540,15 +540,26 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     }
 
     /**
+     * @param szen
+     * @return the viewParameter of the current grapg view if the view is
+     *         closed the stored view parameters of the szenario
+     */
+    public ViewParameter getViewParameter(final Szenario szen) {
+        GraphViewContainer viewContainer = desktop.getGraphViewContainer(szen);
+        ViewParameter viewParameter = viewContainer != null ? viewContainer.getViewParameter() : szen.getViewParameter();
+        return viewParameter;
+    }
+
+    /**
      * @param doc
      * @return the view container that contains the graph of the GraphDocument if exists or <code>null</code>
      */
     public final GraphViewContainer getViewContainer(final GraphDocument doc) {
-        GraphViewContainer viewContainerOfDesktop = desktop.getGraphViewContainer(doc);
-        if (viewContainerOfDesktop == null) {
-            viewContainerOfDesktop = createGraphFrame(doc);
+        GraphViewContainer viewContainer = desktop.getGraphViewContainer(doc);
+        if (viewContainer == null) {
+            viewContainer = createGraphFrame(doc);
         }
-        return viewContainerOfDesktop;
+        return viewContainer;
     }
 
     /**

@@ -222,9 +222,8 @@ public class Static {
 
     /**
      * @param doc
-     * @return the ViewParameter of the GraphDocuemt. If the GraphDocument is a Szanrio
-     *         and has a frame then the view parameter of the frame will be retured
-     *         otherwise the in the szenario stored view parameters are returned
+     * @return the ViewContainer of the GraphDocument. If the ViewContainer is not
+     *         initialized or closed, a new ViewContainer will be created.
      */
     public static final GraphViewContainer getViewContainer(final GraphDocument doc) {
         MainFrame mainFrame = getMainFrame();
@@ -239,8 +238,8 @@ public class Static {
      *         szenario stored view parameters are returned
      */
     public static final ViewParameter getViewParameter(final Szenario szen) {
-        GraphViewContainer viewContainer = getViewContainer(szen);
-        return viewContainer == null ? szen.getViewParameter() : viewContainer.getViewParameter();
+        MainFrame mainFrame = getMainFrame();
+        return mainFrame == null ? szen.getViewParameter() : mainFrame.getViewParameter(szen);
     }
 
     // template library manager
