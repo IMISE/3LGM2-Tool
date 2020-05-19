@@ -32,7 +32,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
     /**
      * COMMENTME
      */
-    private final JButton but;
+    private final JButton centerViewButton;
 
     /**
      * @param doc
@@ -58,10 +58,10 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
         sp.setViewportView(area);
         sp.getHorizontalScrollBar().setUnitIncrement(10);
         sp.getVerticalScrollBar().setUnitIncrement(10);
-        but = new JButton(Tool3lgmConstants.getIcon("zent.gif"));
-        but.setActionCommand("z");
-        getScrollPane().setCorner(JScrollPane.LOWER_RIGHT_CORNER, but);
-        but.addActionListener(this);
+        centerViewButton = new JButton(Tool3lgmConstants.getIcon("zent.gif"));
+        centerViewButton.setActionCommand("z");
+        getScrollPane().setCorner(JScrollPane.LOWER_RIGHT_CORNER, centerViewButton);
+        centerViewButton.addActionListener(this);
     }
 
     /**
