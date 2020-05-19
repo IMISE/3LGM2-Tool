@@ -5,8 +5,6 @@ import java.beans.PropertyVetoException;
 
 import javax.swing.JViewport;
 
-import de.imise.tool3lgm.MetaModelContext;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -37,6 +35,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
     /**
      * @return
      */
+    @Override
     public InputGraphArea getInputGraphArea() {
         return area;
     }
@@ -52,12 +51,8 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
      */
     @Override
     public void updateTitle() {
-        GDCollection gdcoll = getCollection();
-        String gdcollName = gdcoll.getName();
-        String docName = getGraphDocument().getTitle();
-        MetaModelContext metaModelContext = gdcoll.getMetaModelContext();
-        String metaModelDisplayName = metaModelContext.getMetaModelDisplayName();
-        setTitle(gdcollName + " - " + docName + "   (" + metaModelDisplayName + ")");
+        String fullName = getFullName();
+        setTitle(fullName);
     }
 
     @Override
@@ -112,6 +107,9 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
         refreshElementContainer(ec);
     }
 
+    /**
+     * @param ec
+     */
     private void refreshElementContainer(final ElementContainer ec) {
         GraphDocument ecDoc = ec.getGraphDocument();
         GraphDocument doc = getGraphDocument();
