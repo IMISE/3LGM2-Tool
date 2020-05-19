@@ -1,9 +1,6 @@
 package de.imise.tool3lgm.gui;
 
-import java.awt.Point;
 import java.beans.PropertyVetoException;
-
-import javax.swing.JViewport;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -152,12 +149,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
 
     @Override
     public ViewParameter getViewParameter() {
-        ViewParameter viewParameter = area.getViewParameter();
-        JViewport viewport = getViewport();
-        Point viewPosition = viewport.getViewPosition();
-        viewParameter.viewPositionX = viewPosition.x;
-        viewParameter.viewPositionY = viewPosition.y;
-        return viewParameter;
+        return area.getViewParameter();
     }
 
     @Override

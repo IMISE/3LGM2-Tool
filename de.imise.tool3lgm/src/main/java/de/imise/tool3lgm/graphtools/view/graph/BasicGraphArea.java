@@ -3,6 +3,7 @@ package de.imise.tool3lgm.graphtools.view.graph;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
 
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -17,6 +18,7 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JSeparator;
+import javax.swing.JViewport;
 
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -189,6 +191,15 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     public ViewParameter getViewParameter() {
         ViewParameter viewParameter = new ViewParameter();
         GDCollection gdcoll = szenario.getCollection();
+        Container parent = getParent();
+        viewParameter.viewPositionX = 0;
+        viewParameter.viewPositionY = 0;
+        if (parent != null && parent instanceof JViewport) {
+            JViewport viewport = (JViewport) parent;
+            Point viewPosition = viewport.getViewPosition();
+            viewParameter.viewPositionX = viewPosition.x;
+            viewParameter.viewPositionY = viewPosition.y;
+        }
         viewParameter.activeLayer = gdcoll.getActiveLayer();
         viewParameter.layerAngle = layerAngle;
         viewParameter.layerGap = layerGap;
