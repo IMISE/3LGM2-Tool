@@ -10,7 +10,7 @@ import com.google.common.base.Strings;
  *
  * @author AXS created on 21.08.2007
  */
-public class SimpleResourceHandler implements SimpleResourceSource {
+public class SimpleResourceBundleHandler implements SimpleResourceSource {
 
     /**
      * ResourceBundles mit den speziellen Ressourcen für eine bestimmte Klasse
@@ -24,7 +24,7 @@ public class SimpleResourceHandler implements SimpleResourceSource {
      *            Klassenname, der den Namen der zu ladenden Ressorcendatei vorgibt. Außerdem wird von dieser Klasse der ClassLoader genutzt,
      *            um das ResourceBundle zu laden.
      */
-    public SimpleResourceHandler() {
+    public SimpleResourceBundleHandler() {
         this(null, null);
     }
 
@@ -35,7 +35,7 @@ public class SimpleResourceHandler implements SimpleResourceSource {
      *            Klassenname, der den Namen der zu ladenden Ressorcendatei vorgibt. Außerdem wird von dieser Klasse der ClassLoader genutzt,
      *            um das ResourceBundle zu laden.
      */
-    public SimpleResourceHandler(final Class<?> ressourceNameClassSource) {
+    public SimpleResourceBundleHandler(final Class<?> ressourceNameClassSource) {
         this(ressourceNameClassSource, null);
     }
 
@@ -50,7 +50,7 @@ public class SimpleResourceHandler implements SimpleResourceSource {
      *            <code>null</code>, dann wird der GesamtName aus <code>ressourcePackageNameSource</code> gebildet - also nicht nur das Package
      *            genommen, sondern auch der SimpleName der Klasse als Package-Name.
      */
-    public SimpleResourceHandler(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName) {
+    public SimpleResourceBundleHandler(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName) {
         this(ressourcePackageNameSource, resourceBundleSimpleName, Locale.getDefault());
     }
 
@@ -67,7 +67,7 @@ public class SimpleResourceHandler implements SimpleResourceSource {
      * @param locale
      *            Locale des ResourceBundles
      */
-    public SimpleResourceHandler(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName, final Locale locale) {
+    public SimpleResourceBundleHandler(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName, final Locale locale) {
         resourceBundle = loadResourceBundle(ressourcePackageNameSource, resourceBundleSimpleName, locale);
     }
 

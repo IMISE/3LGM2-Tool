@@ -19,12 +19,12 @@ import de.imise.tool3lgm.metamodel.original.edge.KommBeziehung;
 import de.imise.tool3lgm.metamodel.original.edge.KommbezEtntVerbindung;
 import de.imise.tool3lgm.metamodel.original.node.Bausteinschnittstelle;
 import de.imise.tool3lgm.metamodel.original.node.EtntEtdtKombination;
-import de.imise.util.SimpleResourceHandler;
+import de.imise.util.SimpleResourceBundleHandler;
 import de.imise.util.SimpleResourceSource;
 
 public class ExtrasActions {
 
-    private final SimpleResourceSource resHandler = new SimpleResourceHandler(getClass());
+    private final SimpleResourceSource resHandler = new SimpleResourceBundleHandler(getClass());
 
     public Action[] getActions() {
         return new Action[] {

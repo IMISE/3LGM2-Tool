@@ -3,7 +3,7 @@ package de.imise.util;
 import java.util.MissingResourceException;
 
 /**
- * Ein Interface das in Verbindung mit dem {@link SimpleResourceHandler} genutzt werden kann, um zu markieren, dass die implementierende Klasse einen
+ * Ein Interface das in Verbindung mit dem {@link SimpleResourceBundleHandler} genutzt werden kann, um zu markieren, dass die implementierende Klasse einen
  * ResourceString zurück liefern kann.
  *
  * @author AXS (3 Aug 2019)

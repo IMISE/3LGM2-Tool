@@ -28,7 +28,7 @@ import de.imise.tool3lgm.metamodel.original.node.EtntEtdtKombination;
 import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.original.node.Repraesentationsform;
 import de.imise.tool3lgm.metamodel.original.node.Schnittstelle;
-import de.imise.util.SimpleResourceHandler;
+import de.imise.util.SimpleResourceBundleHandler;
 import de.imise.util.SimpleResourceSource;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.component.list.AlphabeticalJList;
@@ -46,7 +46,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
     public InterfaceCanSendOTAnalysis(final MetaModelContext metaModelContext) {
         super(metaModelContext);
         startClasses.add(Bausteinschnittstelle.class);
-        SimpleResourceHandler resHandler = new SimpleResourceHandler(getClass());
+        SimpleResourceBundleHandler resHandler = new SimpleResourceBundleHandler(getClass());
         name = resHandler.getResString("ANALYSIS_NAME");
     }
 
@@ -64,7 +64,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
             connectedObjectTypes.addAll(getSendableObjectTypes(bs));
         }
 
-        SimpleResourceSource resHandler = new SimpleResourceHandler(getClass());
+        SimpleResourceSource resHandler = new SimpleResourceBundleHandler(getClass());
 
         // die Schnittstelle versendet nichts
         if (connectedObjectTypes.size() == 0) {

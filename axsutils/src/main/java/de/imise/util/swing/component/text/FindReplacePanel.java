@@ -35,7 +35,7 @@ import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.text.JTextComponent;
 
 import de.imise.util.IntRange;
-import de.imise.util.SimpleResourceHandler;
+import de.imise.util.SimpleResourceBundleHandler;
 import de.imise.util.StringUtils;
 import de.imise.util.swing.component.HistoryComboBox;
 
@@ -59,7 +59,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
      */
     private JTextComponent myTargetComponent = null;
 
-    final static SimpleResourceHandler resHandler = new SimpleResourceHandler(FindReplacePanel.class);
+    final static SimpleResourceBundleHandler resHandler = new SimpleResourceBundleHandler(FindReplacePanel.class);
 
     /**
      * Groß/Kleinschreibung

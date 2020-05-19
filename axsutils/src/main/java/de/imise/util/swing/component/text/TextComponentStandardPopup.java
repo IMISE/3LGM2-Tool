@@ -19,7 +19,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 
 import de.imise.util.OperatingSystem;
-import de.imise.util.SimpleResourceHandler;
+import de.imise.util.SimpleResourceBundleHandler;
 
 /**
  * @author AXS, STKR
@@ -68,7 +68,7 @@ public class TextComponentStandardPopup extends JPopupMenu implements MouseListe
      * @param textComponent
      */
     private void init(final JTextComponent textComponent) {
-        final SimpleResourceHandler resHandler = new SimpleResourceHandler(TextComponentStandardPopup.class);
+        final SimpleResourceBundleHandler resHandler = new SimpleResourceBundleHandler(TextComponentStandardPopup.class);
 
         final String cutString = resHandler.getResString("TOOLS_CONTEXTMENU_CUT");
         final JMenuItem cutIt = new JMenuItem(cutString);

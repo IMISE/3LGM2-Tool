@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.model.template;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.util.SimpleResourceHandler;
+import de.imise.util.SimpleResourceBundleHandler;
 import de.imise.util.SimpleResourceSource;
 
 /**
@@ -13,14 +13,14 @@ import de.imise.util.SimpleResourceSource;
  */
 public abstract class TemplateLibraryProvider extends MetaModelSpecificAdapter implements SimpleResourceSource {
 
-    private final SimpleResourceHandler resourceHandler;
+    private final SimpleResourceBundleHandler resourceHandler;
 
     /**
      *
      */
     public TemplateLibraryProvider(final Class<? extends MetaModelDefinition> metaModelDefinitionClass) {
         super(metaModelDefinitionClass);
-        resourceHandler = new SimpleResourceHandler(getClass());
+        resourceHandler = new SimpleResourceBundleHandler(getClass());
     }
 
     /**

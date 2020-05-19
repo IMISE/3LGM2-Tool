@@ -26,7 +26,7 @@ import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.original.process.ModelAnalyzerCache;
 import de.imise.tool3lgm.metamodel.original.process.ShortestCommunicationPathFinder;
 import de.imise.util.Alphabetical;
-import de.imise.util.SimpleResourceHandler;
+import de.imise.util.SimpleResourceBundleHandler;
 import de.imise.util.pair.SameTypePair;
 import de.imise.util.swing.dialog.OutputDialog;
 
@@ -222,7 +222,7 @@ public class DataAvailabilityFinder {
      *
      */
     private void showReport() {
-        SimpleResourceHandler resHandler = new SimpleResourceHandler(getClass());
+        SimpleResourceBundleHandler resHandler = new SimpleResourceBundleHandler(getClass());
 
         ModelAnalyzerCache mac = commPathFinder.getAnalyzerCache();
 
@@ -441,7 +441,7 @@ public class DataAvailabilityFinder {
     }
 
     public static final Action getAction() {
-        return new GraphDocumentAction(DataAvailabilityFinder.class, null, new SimpleResourceHandler(DataAvailabilityFinder.class).getResString("data_availability"), null) {
+        return new GraphDocumentAction(DataAvailabilityFinder.class, null, new SimpleResourceBundleHandler(DataAvailabilityFinder.class).getResString("data_availability"), null) {
             @Override
             protected void actionPerformed() {
                 // Dieser Aufruf startet auch die Ausgabe des DataAvailabilityFinder
