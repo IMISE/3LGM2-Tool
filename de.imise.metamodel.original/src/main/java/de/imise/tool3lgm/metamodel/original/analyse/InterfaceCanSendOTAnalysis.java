@@ -29,7 +29,7 @@ import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.original.node.Repraesentationsform;
 import de.imise.tool3lgm.metamodel.original.node.Schnittstelle;
 import de.imise.util.SimpleResourceBundleHandler;
-import de.imise.util.SimpleResourceSource;
+import de.imise.util.SimpleResourceBundleSource;
 import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.dialog.MultipleOptionPane;
@@ -64,7 +64,7 @@ public class InterfaceCanSendOTAnalysis extends AbstractAnalysis {
             connectedObjectTypes.addAll(getSendableObjectTypes(bs));
         }
 
-        SimpleResourceSource resHandler = new SimpleResourceBundleHandler(getClass());
+        SimpleResourceBundleSource resHandler = new SimpleResourceBundleHandler(getClass());
 
         // die Schnittstelle versendet nichts
         if (connectedObjectTypes.size() == 0) {

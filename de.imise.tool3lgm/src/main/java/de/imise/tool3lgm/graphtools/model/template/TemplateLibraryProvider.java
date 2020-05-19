@@ -4,14 +4,14 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.SimpleResourceBundleHandler;
-import de.imise.util.SimpleResourceSource;
+import de.imise.util.SimpleResourceBundleSource;
 
 /**
  * Plugin base class for all handlers which load a model as a template library.
  *
  * @author AXS (24.08.2019)
  */
-public abstract class TemplateLibraryProvider extends MetaModelSpecificAdapter implements SimpleResourceSource {
+public abstract class TemplateLibraryProvider extends MetaModelSpecificAdapter implements SimpleResourceBundleSource {
 
     private final SimpleResourceBundleHandler resourceHandler;
 

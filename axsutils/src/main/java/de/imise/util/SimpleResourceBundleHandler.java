@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
  *
  * @author AXS created on 21.08.2007
  */
-public class SimpleResourceBundleHandler implements SimpleResourceSource {
+public class SimpleResourceBundleHandler implements SimpleResourceBundleSource {
 
     /**
      * ResourceBundles mit den speziellen Ressourcen für eine bestimmte Klasse

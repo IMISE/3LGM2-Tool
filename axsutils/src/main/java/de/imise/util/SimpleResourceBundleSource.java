@@ -2,7 +2,7 @@ package de.imise.util;
 
 import java.util.MissingResourceException;
 
-import com.google.common.base.Strings;
+import de.imise.util.swing.SimpleResourceSource;
 
 /**
  * Ein Interface das in Verbindung mit dem {@link SimpleResourceBundleHandler} genutzt werden kann, um zu markieren, dass die implementierende Klasse
@@ -11,7 +11,7 @@ import com.google.common.base.Strings;
  *
  * @author AXS (3 Aug 2019)
  */
-public interface SimpleResourceSource {
+public interface SimpleResourceBundleSource extends SimpleResourceSource {
 
     /**
      * Liefert für einen übergebenen Resourcen-KeyString einen String aus den Resourcen.
@@ -34,24 +34,6 @@ public interface SimpleResourceSource {
         } catch (Exception e) {
             return resKey;
         }
-    }
-
-    /**
-     * @param ressourcePackageNameSource
-     * @param resourceName
-     * @return
-     */
-    public default String getResourceFileName(Class<?> ressourcePackageNameSource, final String resourceName) {
-        boolean appendSimpleName = !Strings.isNullOrEmpty(resourceName);
-        if (ressourcePackageNameSource == null) {
-            ressourcePackageNameSource = getClass();
-        }
-        String resourceFileName = !appendSimpleName ? ressourcePackageNameSource.getName() : ressourcePackageNameSource.getPackage().getName();
-        if (appendSimpleName) {
-            resourceFileName += "." + resourceName;
-        }
-        resourceFileName = resourceFileName.replace('.', '/');
-        return resourceFileName;
     }
 
 }
