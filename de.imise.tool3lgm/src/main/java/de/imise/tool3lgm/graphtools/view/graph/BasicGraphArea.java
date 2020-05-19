@@ -21,6 +21,7 @@ import javax.swing.JSeparator;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -29,10 +30,20 @@ import de.imise.util.image.ComponentAsImageExportHandler.ZoomableComponent;
 /**
  * @author N.N.
  */
-public class BasicGraphArea extends JComponent implements ZoomableComponent {
+public class BasicGraphArea extends JComponent implements ZoomableComponent, GraphDocumentOwner {
 
-    /** Teilmodell das dieses Area darstellt */
-    protected Szenario szenario;
+    /**
+     * The {@link GraphDocument} this area is initialized with. If this doc is
+     * a {@link Szenario} then the {@link #szenario} is the same value otherwise
+     * it is <code>null</code>.
+     */
+    protected final GraphDocument doc;
+
+    /**
+     * Submodel this are is displaying if it was initialized with a {@link Szenario}.
+     * If the GraphDocument is not a {@link Szenario} the this variable is <code>null</code>.
+     */
+    protected final Szenario szenario;
 
     /**
      * Factor, mit dem die Zeichenfläche ausgehend von ihrer ursprünglichen Größe gestreckt wird
@@ -152,6 +163,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
      */
     public BasicGraphArea(final GraphDocument doc) {
         setLayout(null);
+        this.doc = doc;
         szenario = doc instanceof Szenario ? (Szenario) doc : null;
         if (szenario != null) {
             layerWidth = szenario.getPageWidth();
@@ -186,12 +198,9 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent {
         return viewParameter;
     }
 
-    /**
-     * @param szen
-     */
-    public final void setSzenario(final Szenario szen) {
-        szenario = szen;
-        revalidateRepaint();
+    @Override
+    public GraphDocument getGraphDocument() {
+        return doc;
     }
 
     /**

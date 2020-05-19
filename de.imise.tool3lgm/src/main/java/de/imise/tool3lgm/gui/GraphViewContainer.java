@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.gui;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
+import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 
 /**
@@ -8,12 +10,16 @@ import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
  *
  * @author AXS (10.05.2020)
  */
-public interface GraphViewContainer {
+public interface GraphViewContainer extends GraphDocumentOwner {
 
     /**
      * @return the {@link GraphDocument} this GraphViewContainer is displaying
      */
-    public GraphDocument getGraphDocument();
+    @Override
+    public default GraphDocument getGraphDocument() {
+        InputGraphArea inputGraphArea = getInputGraphArea();
+        return inputGraphArea.getGraphDocument();
+    }
 
     /**
      * @return the {@link ViewParameter} of this graph view
@@ -29,5 +35,10 @@ public interface GraphViewContainer {
      * @param selected
      */
     public void setSelected(boolean selected);
+
+    /**
+     * @return the InputGraphArea this GraphViewContainer is displaying
+     */
+    public InputGraphArea getInputGraphArea();
 
 }
