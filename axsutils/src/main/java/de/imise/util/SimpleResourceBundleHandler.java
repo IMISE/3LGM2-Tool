@@ -79,21 +79,31 @@ public class SimpleResourceBundleHandler implements SimpleResourceSource {
      * @param locale
      * @return
      */
-    private ResourceBundle loadResourceBundle(Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName, final Locale locale) {
-        boolean appendSimpleName = !Strings.isNullOrEmpty(resourceBundleSimpleName);
-        if (ressourcePackageNameSource == null) {
-            ressourcePackageNameSource = getClass();
-        }
-        String resourceFileName = !appendSimpleName ? ressourcePackageNameSource.getName() : ressourcePackageNameSource.getPackage().getName();
-        if (appendSimpleName) {
-            resourceFileName += "." + resourceBundleSimpleName;
-        }
-        resourceFileName = resourceFileName.replace('.', '/');
+    private ResourceBundle loadResourceBundle(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName, final Locale locale) {
+        String resourceFileName = getResourceFileName(ressourcePackageNameSource, resourceBundleSimpleName);
         try {
             return ResourceBundle.getBundle(resourceFileName, locale, ressourcePackageNameSource.getClassLoader());
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * @param ressourcePackageNameSource
+     * @param resourceName
+     * @return
+     */
+    private final String getResourceFileName(Class<?> ressourcePackageNameSource, final String resourceName) {
+        boolean appendSimpleName = !Strings.isNullOrEmpty(resourceName);
+        if (ressourcePackageNameSource == null) {
+            ressourcePackageNameSource = getClass();
+        }
+        String resourceFileName = !appendSimpleName ? ressourcePackageNameSource.getName() : ressourcePackageNameSource.getPackage().getName();
+        if (appendSimpleName) {
+            resourceFileName += "." + resourceName;
+        }
+        resourceFileName = resourceFileName.replace('.', '/');
+        return resourceFileName;
     }
 
     /**
