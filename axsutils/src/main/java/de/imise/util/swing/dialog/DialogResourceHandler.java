@@ -3,7 +3,7 @@ package de.imise.util.swing.dialog;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import de.imise.util.SimpleResourceBundleHandler;
+import de.imise.util.resource.SimpleResourceBundleHandler;
 
 /**
  * Stellt für Dilaoge die Resourcen nach folgende Regeln bereit:

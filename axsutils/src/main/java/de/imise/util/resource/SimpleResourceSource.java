@@ -1,4 +1,4 @@
-package de.imise.util.swing;
+package de.imise.util.resource;
 
 import com.google.common.base.Strings;
 

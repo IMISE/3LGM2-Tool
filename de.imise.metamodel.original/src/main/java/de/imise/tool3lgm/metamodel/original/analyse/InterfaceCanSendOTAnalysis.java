@@ -28,9 +28,9 @@ import de.imise.tool3lgm.metamodel.original.node.EtntEtdtKombination;
 import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.original.node.Repraesentationsform;
 import de.imise.tool3lgm.metamodel.original.node.Schnittstelle;
-import de.imise.util.SimpleResourceBundleHandler;
-import de.imise.util.SimpleResourceBundleSource;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.resource.SimpleResourceBundleHandler;
+import de.imise.util.resource.SimpleResourceBundleSource;
 import de.imise.util.swing.component.list.AlphabeticalJList;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 

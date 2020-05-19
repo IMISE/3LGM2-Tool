@@ -1,8 +1,6 @@
-package de.imise.util;
+package de.imise.util.resource;
 
 import java.util.MissingResourceException;
-
-import de.imise.util.swing.SimpleResourceSource;
 
 /**
  * Ein Interface das in Verbindung mit dem {@link SimpleResourceBundleHandler} genutzt werden kann, um zu markieren, dass die implementierende Klasse

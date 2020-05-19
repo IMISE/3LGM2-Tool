@@ -26,8 +26,8 @@ import de.imise.tool3lgm.metamodel.original.node.Objekttyp;
 import de.imise.tool3lgm.metamodel.original.process.ModelAnalyzerCache;
 import de.imise.tool3lgm.metamodel.original.process.ShortestCommunicationPathFinder;
 import de.imise.util.Alphabetical;
-import de.imise.util.SimpleResourceBundleHandler;
 import de.imise.util.pair.SameTypePair;
+import de.imise.util.resource.SimpleResourceBundleHandler;
 import de.imise.util.swing.dialog.OutputDialog;
 
 /**

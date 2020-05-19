@@ -1,7 +1,9 @@
-package de.imise.util;
+package de.imise.util.resource;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import de.imise.util.Sys;
 
 /**
  * Erzeugt einen neuen Handler, der die Resourcen für eine übergebene Klasse zurückgeben kann.

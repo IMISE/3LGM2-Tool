@@ -19,7 +19,7 @@ import javax.swing.text.DefaultEditorKit;
 import javax.swing.text.JTextComponent;
 
 import de.imise.util.OperatingSystem;
-import de.imise.util.SimpleResourceBundleHandler;
+import de.imise.util.resource.SimpleResourceBundleHandler;
 
 /**
  * @author AXS, STKR

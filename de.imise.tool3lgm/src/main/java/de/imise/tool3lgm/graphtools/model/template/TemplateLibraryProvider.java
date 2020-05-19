@@ -3,8 +3,8 @@ package de.imise.tool3lgm.graphtools.model.template;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.util.SimpleResourceBundleHandler;
-import de.imise.util.SimpleResourceBundleSource;
+import de.imise.util.resource.SimpleResourceBundleHandler;
+import de.imise.util.resource.SimpleResourceBundleSource;
 
 /**
  * Plugin base class for all handlers which load a model as a template library.

@@ -9,7 +9,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.util.SimpleResourceBundleHandler;
+import de.imise.util.resource.SimpleResourceBundleHandler;
 
 /**
  * Klasse, die die Klasse eines Metamodells und das dazugehörige ResouceBundle dieses Metamodells enthält. Es enthält noch nicht das MetaModel

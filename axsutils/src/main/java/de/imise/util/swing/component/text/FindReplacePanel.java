@@ -35,8 +35,8 @@ import javax.swing.plaf.ActionMapUIResource;
 import javax.swing.text.JTextComponent;
 
 import de.imise.util.IntRange;
-import de.imise.util.SimpleResourceBundleHandler;
 import de.imise.util.StringUtils;
+import de.imise.util.resource.SimpleResourceBundleHandler;
 import de.imise.util.swing.component.HistoryComboBox;
 
 /**
