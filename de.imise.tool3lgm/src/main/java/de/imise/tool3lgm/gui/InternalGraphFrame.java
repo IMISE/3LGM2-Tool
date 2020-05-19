@@ -1,17 +1,12 @@
 package de.imise.tool3lgm.gui;
 
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
 
-import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import de.imise.tool3lgm.MetaModelContext;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -22,17 +17,12 @@ import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 /**
  * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
  */
-public class InternalGraphFrame extends AbstractInternalFrame implements GraphViewContainer, ActionListener {
+public class InternalGraphFrame extends AbstractInternalFrame implements GraphViewContainer {
 
     /**
      * COMMENTME
      */
     private final InputGraphArea area;
-
-    /**
-     * COMMENTME
-     */
-    private final JButton centerViewButton;
 
     /**
      * @param doc
@@ -53,15 +43,7 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
         viewport.setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
 
         JScrollPane sp = getScrollPane();
-        //		sp.getViewport().setScrollMode(JViewport.BLIT_SCROLL_MODE );
-        //		sp.getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
         sp.setViewportView(area);
-        sp.getHorizontalScrollBar().setUnitIncrement(10);
-        sp.getVerticalScrollBar().setUnitIncrement(10);
-        centerViewButton = new JButton(Tool3lgmConstants.getIcon("zent.gif"));
-        centerViewButton.setActionCommand("z");
-        getScrollPane().setCorner(JScrollPane.LOWER_RIGHT_CORNER, centerViewButton);
-        centerViewButton.addActionListener(this);
     }
 
     /**
@@ -69,30 +51,6 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
      */
     public InputGraphArea getInputGraphArea() {
         return area;
-    }
-
-    /**
-     * implementiert ActionListener zum selbständigen zentrieren der Frames
-     *
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-     */
-    @Override
-    public void actionPerformed(final ActionEvent e) {
-        String str = e.getActionCommand();
-        if (str == "z") {
-            center();
-        }
-    }
-
-    /**
-     *
-     */
-    public void center() {
-        JViewport viewport = getViewport();
-        Rectangle vp = viewport.getViewRect();
-        int x = (int) (area.getWidth() - vp.getWidth()) / 2;
-        int y = (int) (area.getHeight() - vp.getHeight()) / 2;
-        viewport.setViewPosition(new Point(x, y));
     }
 
     @Override

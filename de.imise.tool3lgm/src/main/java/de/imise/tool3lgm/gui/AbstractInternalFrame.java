@@ -10,6 +10,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
+import de.imise.util.swing.component.CenterableScrollPane;
 
 /**
  * Abstrakte Klasse für alle internen Fenster zur Darstellung von (Teil-)Modellen
@@ -35,7 +36,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
         super("", true, false, true, true);
 
         this.doc = doc;
-        scrollPane = new JScrollPane();
+        scrollPane = new CenterableScrollPane();
         getContentPane().add(scrollPane);
 
         setFrameIcon(Tool3lgmConstants.TOOL_ICON_16);
