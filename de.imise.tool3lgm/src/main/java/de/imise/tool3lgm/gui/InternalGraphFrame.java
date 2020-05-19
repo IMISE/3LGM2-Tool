@@ -3,7 +3,6 @@ package de.imise.tool3lgm.gui;
 import java.awt.Point;
 import java.beans.PropertyVetoException;
 
-import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import de.imise.tool3lgm.MetaModelContext;
@@ -29,21 +28,10 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
      */
     public InternalGraphFrame(final GraphDocument doc) {
         super(doc);
-
-        // Diese Reihenfolge ist wichtig! Im Konstruktor von Werkzeugleiste
-        // braucht man das Area, um die Regler bei neuen Modellen auf den dann
-        // dargestellten Wert zu setzen
-        area = new InputGraphArea(doc);
-
-        updateTitle();
-
         setClosable(true);
-
-        JViewport viewport = getViewport();
-        viewport.setScrollMode(JViewport.BACKINGSTORE_SCROLL_MODE);
-
-        JScrollPane sp = getScrollPane();
-        sp.setViewportView(area);
+        area = new InputGraphArea(doc);
+        scrollPane.setViewportView(area);
+        updateTitle();
     }
 
     /**
