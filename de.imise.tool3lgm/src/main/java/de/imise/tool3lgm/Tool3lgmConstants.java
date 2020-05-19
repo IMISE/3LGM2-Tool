@@ -25,6 +25,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ApplicationManager;
 import de.imise.util.StringUtils;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.resource.SimpleResourceIconHandler;
 
 /**
  * @author Thomas Rudert, AXS Klasse, die alle global benötigten Parameter, und deren Zugriffsmethoden, des Programms enthält
@@ -370,26 +371,7 @@ public abstract class Tool3lgmConstants {
      * @return
      */
     public static ImageIcon getImageIcon(final String dir) {
-        URL url = ClassLoader.getSystemClassLoader().getResource(dir);
-        if (url == null && !dir.endsWith(".gif")) {
-            url = ClassLoader.getSystemClassLoader().getResource(dir + ".gif");
-        }
-        ImageIcon icon;
-        if (url != null) {
-            icon = new ImageIcon(url);
-        } else {
-            icon = new ImageIcon(dir);
-        }
-        if (icon.getIconWidth() == -1 && icon.getIconHeight() == -1) {
-            if (!dir.endsWith(".gif")) {
-                String nameWithGifEnding = dir + ".gif";
-                icon = new ImageIcon(nameWithGifEnding);
-            }
-            if (icon.getIconWidth() == -1 && icon.getIconHeight() == -1) {
-                return null;
-            }
-        }
-        return icon;
+        return SimpleResourceIconHandler.getImageIcon(dir);
     }
 
     /**
