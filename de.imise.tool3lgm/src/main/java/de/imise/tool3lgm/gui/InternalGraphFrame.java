@@ -1,12 +1,14 @@
 package de.imise.tool3lgm.gui;
 
+import java.awt.Component;
 import java.beans.PropertyVetoException;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 
 /**
  * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
@@ -25,8 +27,13 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
         super(doc);
         setClosable(true);
         area = new InputGraphArea(doc);
-        scrollPane.setViewportView(area);
+        setView(area);
         updateTitle();
+    }
+
+    @Override
+    public void setView(final Component view) {
+        scrollPane.setViewportView(view);
     }
 
     /**
@@ -92,11 +99,9 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
         area.revalidateRepaint();
     }
 
-    /**
-     * @return
-     */
-    public GraphDocument getSzenario() {
-        return getGraphDocument();
+    @Override
+    public Szenario getSzenario() {
+        return doc instanceof Szenario ? (Szenario) doc : null;
     }
 
     @Override

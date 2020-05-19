@@ -5,8 +5,8 @@ import java.awt.Component;
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 
 /**
  * Interface for a graph view of a Szenario.
