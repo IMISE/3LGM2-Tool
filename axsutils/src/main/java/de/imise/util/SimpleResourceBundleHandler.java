@@ -3,8 +3,6 @@ package de.imise.util;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import com.google.common.base.Strings;
-
 /**
  * Erzeugt einen neuen Handler, der die Resourcen für eine übergebene Klasse zurückgeben kann.
  *
@@ -86,24 +84,6 @@ public class SimpleResourceBundleHandler implements SimpleResourceSource {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    /**
-     * @param ressourcePackageNameSource
-     * @param resourceName
-     * @return
-     */
-    private final String getResourceFileName(Class<?> ressourcePackageNameSource, final String resourceName) {
-        boolean appendSimpleName = !Strings.isNullOrEmpty(resourceName);
-        if (ressourcePackageNameSource == null) {
-            ressourcePackageNameSource = getClass();
-        }
-        String resourceFileName = !appendSimpleName ? ressourcePackageNameSource.getName() : ressourcePackageNameSource.getPackage().getName();
-        if (appendSimpleName) {
-            resourceFileName += "." + resourceName;
-        }
-        resourceFileName = resourceFileName.replace('.', '/');
-        return resourceFileName;
     }
 
     /**
