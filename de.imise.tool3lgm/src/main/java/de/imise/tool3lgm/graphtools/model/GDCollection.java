@@ -117,7 +117,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.InterLayerConnectedNodeContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.xml.ToolXMLParser;
 import de.imise.util.StringUtils;
@@ -652,8 +652,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public void initSelectedDocByViewParameterFromFile() {
         for (Szenario szen : szenarios) {
-            ViewParameter viewParameter = szen.getViewParameter();
-            if (viewParameter != null && viewParameter.selected) {
+            GraphViewParameter graphViewParameter = szen.getGraphViewParameter();
+            if (graphViewParameter != null && graphViewParameter.selected) {
                 setSelectedDoc(szen);
                 return;
             }

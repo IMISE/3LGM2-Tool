@@ -6,7 +6,7 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 
 /**
  * Interface for a graph view of a Szenario.
@@ -61,9 +61,9 @@ public interface GraphViewContainer extends ViewContainer {
     public Component getParent();
 
     /**
-     * @return the {@link ViewParameter} of this graph view
+     * @return the {@link GraphViewParameter} of this graph view
      */
-    public ViewParameter getViewParameter();
+    public GraphViewParameter getGraphViewParameter();
 
     /**
      * @return the InputGraphArea this GraphViewContainer is displaying

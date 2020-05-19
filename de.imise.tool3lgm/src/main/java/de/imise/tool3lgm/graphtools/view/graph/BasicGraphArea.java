@@ -126,10 +126,10 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
     private final int frameHeight = layerHeight;
 
     /**  */
-    private int oldLayerAngle = ViewParameter.INITIAL_LAYER_ANGLE;
+    private int oldLayerAngle = GraphViewParameter.INITIAL_LAYER_ANGLE;
 
     /**  */
-    private int oldLayerGap = ViewParameter.INITIAL_LAYER_GAP;
+    private int oldLayerGap = GraphViewParameter.INITIAL_LAYER_GAP;
 
     /**  */
     protected int left_sel_x, left_sel_y, right_sel_x, right_sel_y;
@@ -188,25 +188,25 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
 
     // --- Dokumentenverwaltung --- Anfang ---
 
-    public ViewParameter getViewParameter() {
-        ViewParameter viewParameter = new ViewParameter();
+    public GraphViewParameter getGraphViewParameter() {
+        GraphViewParameter graphViewParameter = new GraphViewParameter();
         GDCollection gdcoll = szenario.getCollection();
         Container parent = getParent();
-        viewParameter.viewPositionX = 0;
-        viewParameter.viewPositionY = 0;
+        graphViewParameter.viewPositionX = 0;
+        graphViewParameter.viewPositionY = 0;
         if (parent != null && parent instanceof JViewport) {
             JViewport viewport = (JViewport) parent;
             Point viewPosition = viewport.getViewPosition();
-            viewParameter.viewPositionX = viewPosition.x;
-            viewParameter.viewPositionY = viewPosition.y;
+            graphViewParameter.viewPositionX = viewPosition.x;
+            graphViewParameter.viewPositionY = viewPosition.y;
         }
-        viewParameter.activeLayer = gdcoll.getActiveLayer();
-        viewParameter.layerAngle = layerAngle;
-        viewParameter.layerGap = layerGap;
-        viewParameter.multiView = multiView;
-        viewParameter.pageSizeFactor = szenario.getPageSizeFactor();
-        viewParameter.zoom = zoom;
-        return viewParameter;
+        graphViewParameter.activeLayer = gdcoll.getActiveLayer();
+        graphViewParameter.layerAngle = layerAngle;
+        graphViewParameter.layerGap = layerGap;
+        graphViewParameter.multiView = multiView;
+        graphViewParameter.pageSizeFactor = szenario.getPageSizeFactor();
+        graphViewParameter.zoom = zoom;
+        return graphViewParameter;
     }
 
     @Override

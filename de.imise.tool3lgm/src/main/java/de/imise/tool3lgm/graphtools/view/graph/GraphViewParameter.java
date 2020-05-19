@@ -6,7 +6,7 @@ import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
  * @author Thomas Rudert
  *         modelElement to hold view-informations about InputGraphArea during loading xml-file or init the GraphArea
  */
-public class ViewParameter {
+public class GraphViewParameter {
 
     public static final int INITIAL_VIEW_POSITION_X = 200;
 
@@ -32,15 +32,15 @@ public class ViewParameter {
     public int activeLayer = INITILA_ACTIVE_LAYER;
     public boolean selected = false;
 
-    public ViewParameter() {
+    public GraphViewParameter() {
 
     }
 
-    public ViewParameter(final ViewParameter other) {
+    public GraphViewParameter(final GraphViewParameter other) {
         adapt(other);
     }
 
-    public void adapt(final ViewParameter other) {
+    public void adapt(final GraphViewParameter other) {
         viewPositionX = other.viewPositionX;
         viewPositionY = other.viewPositionY;
         layerGap = other.layerGap;

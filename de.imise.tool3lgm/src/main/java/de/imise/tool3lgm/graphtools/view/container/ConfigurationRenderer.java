@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 
 public class ConfigurationRenderer {
 
@@ -60,7 +60,7 @@ public class ConfigurationRenderer {
             configurationStartContainer.add(configurationStart);
         }
 
-        ViewParameter viewParameter = Static.getViewParameter(szen); //ACHTUNG DAS HIER PASSIERT BEI JEDEM RENDERN UND IST RELATIV AUFWENDIG, WENN ES VIELE OFFENE FRAMES GIBT -> GGF. OPTIMIEREN!
+        GraphViewParameter graphViewParameter = Static.getGraphViewParameter(szen); //ACHTUNG DAS HIER PASSIERT BEI JEDEM RENDERN UND IST RELATIV AUFWENDIG, WENN ES VIELE OFFENE FRAMES GIBT -> GGF. OPTIMIEREN!
         for (int b = 0; b < configurationStartContainer.size(); b++) {
             if (configurationStart.getInterLayerConnectionColor() == null) {
                 colorCounter = (colorCounter + 1) % STANDARD_COLORS.length;
@@ -78,7 +78,7 @@ public class ConfigurationRenderer {
             if (!kc1.isVisible()) {
                 continue;
             }
-            if (viewParameter.multiView) {
+            if (graphViewParameter.multiView) {
                 Graphics2D gc = (Graphics2D) g;
                 Stroke s = gc.getStroke();
                 if (configurationEndContainer == null) {

@@ -54,7 +54,7 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
 import de.imise.util.collections.CollectionUtils;
@@ -471,17 +471,17 @@ public class ToolXMLWriter extends IntendingXMLWriter {
             writeAttribute("titel", szen.getTitle());
             writeElement("description", szen.getDescription());
             // Informationen über Ansicht speichern
-            ViewParameter viewParameter = Static.getViewParameter(szen);
+            GraphViewParameter graphViewParameter = Static.getGraphViewParameter(szen);
             writeStartElement("view"); //<view>
             writeElement("selected", selectedDoc == szen);
-            writeElement("x", viewParameter.viewPositionX);
-            writeElement("y", viewParameter.viewPositionY);
-            writeElement("zoom", viewParameter.zoom);
-            writeElement("degree", viewParameter.layerAngle);
-            writeElement("shift", viewParameter.layerGap);
+            writeElement("x", graphViewParameter.viewPositionX);
+            writeElement("y", graphViewParameter.viewPositionY);
+            writeElement("zoom", graphViewParameter.zoom);
+            writeElement("degree", graphViewParameter.layerAngle);
+            writeElement("shift", graphViewParameter.layerGap);
             writeElement("pageSizeFactor", szen.getPageSizeFactor());
             writeElement("activeLayer", gdcoll.getActiveLayer());
-            writeElement("multiView", viewParameter.multiView);
+            writeElement("multiView", graphViewParameter.multiView);
             writeEndElement(); //</view>
             writeStartElement("mapping"); //"<mapping>"
             ElementsLayoutDefinition mapping = szen.getMapping();

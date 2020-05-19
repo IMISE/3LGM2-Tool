@@ -55,18 +55,18 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
     }
 
     @Override
-    public boolean isSelected(final GraphViewContainer viewContainer) {
-        if (viewContainer instanceof InternalGraphFrame) {
-            InternalGraphFrame internalFrame = (InternalGraphFrame) viewContainer;
+    public boolean isSelected(final GraphViewContainer graphViewContainer) {
+        if (graphViewContainer instanceof InternalGraphFrame) {
+            InternalGraphFrame internalFrame = (InternalGraphFrame) graphViewContainer;
             return internalFrame.isSelected();
         }
         return false;
     }
 
     @Override
-    public void setSelected(final GraphViewContainer viewContainer) {
-        if (viewContainer instanceof InternalGraphFrame) {
-            InternalGraphFrame internalFrame = (InternalGraphFrame) viewContainer;
+    public void setSelected(final GraphViewContainer graphViewContainer) {
+        if (graphViewContainer instanceof InternalGraphFrame) {
+            InternalGraphFrame internalFrame = (InternalGraphFrame) graphViewContainer;
             internalFrame.setSelected(true);
         }
     }

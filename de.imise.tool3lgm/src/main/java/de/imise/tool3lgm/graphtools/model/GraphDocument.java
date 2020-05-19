@@ -94,7 +94,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHorizontal;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
-import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
@@ -4793,8 +4793,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
             finish_transaction(pid);
             return;
         }
-        ViewParameter viewParameter = Static.getViewParameter(szen);
-        szen.adaptViewParameter(viewParameter);
+        GraphViewParameter graphViewParameter = Static.getGraphViewParameter(szen);
+        szen.adaptGraphViewParameter(graphViewParameter);
         double pageSizeFactor = getPageSizeFactor();
         szen.setPageSizeFactor(pageSizeFactor);
         szen.getMapping().adapt(mapping);

@@ -8,7 +8,7 @@ import org.xml.sax.SAXException;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.log.Log;
 
 /**
@@ -17,7 +17,7 @@ import de.imise.tool3lgm.log.Log;
  */
 public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
 
-    protected ViewParameter viewParameter = null;
+    protected GraphViewParameter graphViewParameter = null;
 
     /**
      * @param coll
@@ -58,7 +58,7 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
 
         if (qName.equals("view")) {
             if (szenario instanceof Szenario) {
-                viewParameter = ((Szenario) szenario).getViewParameter();
+                graphViewParameter = ((Szenario) szenario).getGraphViewParameter();
             }
         } else {
             super.startElement(namespaceURI, localName, qName, atts);
@@ -68,38 +68,38 @@ public class ToolContentHandlerV3_1 extends ToolContentHandlerV3_0 {
     @Override
     public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
         try {
-            if (qName.equals("x") && viewParameter != null) {
-                viewParameter.viewPositionX = Integer.parseInt(elementValue.toString());
+            if (qName.equals("x") && graphViewParameter != null) {
+                graphViewParameter.viewPositionX = Integer.parseInt(elementValue.toString());
 
-            } else if (qName.equals("y") && viewParameter != null) {
-                viewParameter.viewPositionY = Integer.parseInt(elementValue.toString());
+            } else if (qName.equals("y") && graphViewParameter != null) {
+                graphViewParameter.viewPositionY = Integer.parseInt(elementValue.toString());
 
             } else if (qName.equals("zoom")) {
-                if (viewParameter == null) {
+                if (graphViewParameter == null) {
                     return;
                 }
-                viewParameter.zoom = Double.parseDouble(elementValue.toString());
+                graphViewParameter.zoom = Double.parseDouble(elementValue.toString());
 
             } else if (qName.equals("shift")) {
-                viewParameter.layerGap = Integer.parseInt(elementValue.toString());
+                graphViewParameter.layerGap = Integer.parseInt(elementValue.toString());
 
             } else if (qName.equals("degree")) {
-                viewParameter.layerAngle = Integer.parseInt(elementValue.toString());
+                graphViewParameter.layerAngle = Integer.parseInt(elementValue.toString());
 
             } else if (qName.equals("pageSizeFactor")) {
                 szenario.setPageSizeFactor(Double.parseDouble(elementValue.toString()));
 
             } else if (qName.equals("activeLayer")) {
-                viewParameter.activeLayer = Integer.parseInt(elementValue.toString());
+                graphViewParameter.activeLayer = Integer.parseInt(elementValue.toString());
 
             } else if (qName.equals("multiView")) {
-                viewParameter.multiView = Boolean.valueOf(elementValue.toString()).booleanValue();
+                graphViewParameter.multiView = Boolean.valueOf(elementValue.toString()).booleanValue();
 
             } else if (qName.equals("selected")) {
-                viewParameter.selected = Boolean.valueOf(elementValue.toString()).booleanValue();
+                graphViewParameter.selected = Boolean.valueOf(elementValue.toString()).booleanValue();
 
             } else if (qName.equals("view")) {
-                viewParameter = null;
+                graphViewParameter = null;
 
             } else {
                 super.endElement(namespaceURI, localName, qName);

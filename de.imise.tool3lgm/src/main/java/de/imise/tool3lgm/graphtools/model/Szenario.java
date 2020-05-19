@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
-import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.util.StringUtils;
 
 /**
@@ -32,7 +32,7 @@ public class Szenario extends LGMGraphDocument {
     /**
      * COMMENTME
      */
-    private final ViewParameter viewParameter = new ViewParameter();
+    private final GraphViewParameter graphViewParameter = new GraphViewParameter();
 
     /**
      * @param _gdcoll
@@ -210,15 +210,15 @@ public class Szenario extends LGMGraphDocument {
     /**
      * @return
      */
-    public ViewParameter getViewParameter() {
-        return viewParameter;
+    public GraphViewParameter getGraphViewParameter() {
+        return graphViewParameter;
     }
 
     /**
-     * @param viewParameter
+     * @param graphViewParameter
      */
-    public void adaptViewParameter(final ViewParameter viewParameter) {
-        this.viewParameter.adapt(viewParameter);
+    public void adaptGraphViewParameter(final GraphViewParameter graphViewParameter) {
+        this.graphViewParameter.adapt(graphViewParameter);
     }
 
 }

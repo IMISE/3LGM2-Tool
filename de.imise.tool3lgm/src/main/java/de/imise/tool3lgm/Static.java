@@ -31,7 +31,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
-import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.GraphViewContainer;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
@@ -225,10 +225,10 @@ public class Static {
      * @return the ViewContainer of the GraphDocument. If the ViewContainer is not
      *         initialized or closed, a new ViewContainer will be created.
      */
-    public static final GraphViewContainer getViewContainer(final GraphDocument doc) {
+    public static final GraphViewContainer getGraphViewContainer(final GraphDocument doc) {
         MainFrame mainFrame = getMainFrame();
-        GraphViewContainer viewContainer = mainFrame.getViewContainer(doc);
-        return viewContainer;
+        GraphViewContainer graphViewContainer = mainFrame.getGraphViewContainer(doc);
+        return graphViewContainer;
     }
 
     /**
@@ -237,9 +237,9 @@ public class Static {
      *         the view parameter of the frame will be retured otherwise the in the
      *         szenario stored view parameters are returned
      */
-    public static final ViewParameter getViewParameter(final Szenario szen) {
+    public static final GraphViewParameter getGraphViewParameter(final Szenario szen) {
         MainFrame mainFrame = getMainFrame();
-        return mainFrame == null ? szen.getViewParameter() : mainFrame.getViewParameter(szen);
+        return mainFrame == null ? szen.getGraphViewParameter() : mainFrame.getGraphViewParameter(szen);
     }
 
     // template library manager

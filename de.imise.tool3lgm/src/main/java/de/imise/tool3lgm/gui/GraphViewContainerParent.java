@@ -19,17 +19,17 @@ public interface GraphViewContainerParent {
     public GraphViewContainer getGraphViewContainer(GraphDocument doc);
 
     /**
-     * @param viewContainer
+     * @param graphViewContainer
      * @return <code>true</code> if this component is the selected or active component
      */
-    public boolean isSelected(GraphViewContainer viewContainer);
+    public boolean isSelected(GraphViewContainer graphViewContainer);
 
     /**
      * Sets component with the given {@link GraphDocument} as the selected or active
      * component.
      *
-     * @param viewContainer
+     * @param graphViewContainer
      */
-    public void setSelected(GraphViewContainer viewContainer);
+    public void setSelected(GraphViewContainer graphViewContainer);
 
 }

@@ -6,7 +6,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
+import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 
 /**
  * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
@@ -148,8 +148,8 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
     }
 
     @Override
-    public ViewParameter getViewParameter() {
-        return area.getViewParameter();
+    public GraphViewParameter getGraphViewParameter() {
+        return area.getGraphViewParameter();
     }
 
     @Override
