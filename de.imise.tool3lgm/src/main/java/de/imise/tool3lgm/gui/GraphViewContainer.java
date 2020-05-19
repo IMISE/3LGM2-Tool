@@ -1,9 +1,10 @@
 package de.imise.tool3lgm.gui;
 
+import java.awt.Component;
+
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
 
@@ -12,7 +13,7 @@ import de.imise.tool3lgm.graphtools.view.graph.ViewParameter;
  *
  * @author AXS (10.05.2020)
  */
-public interface GraphViewContainer extends GraphDocumentOwner {
+public interface GraphViewContainer extends ViewContainer {
 
     /**
      * @return the {@link GraphDocument} this GraphViewContainer is displaying
@@ -24,19 +25,45 @@ public interface GraphViewContainer extends GraphDocumentOwner {
     }
 
     /**
+     * @return
+     */
+    public default GraphViewContainerParent getGraphViewContainerParent() {
+        Component parent = getParent();
+        while (parent != null) {
+            if (parent instanceof GraphViewContainerParent) {
+                return (GraphViewContainerParent) parent;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return if this component is the soelected or active component in the
+     *         corresponding {@link GraphViewContainerParent}
+     */
+    public default boolean isSelected() {
+        GraphViewContainerParent graphViewContainerParent = getGraphViewContainerParent();
+        return graphViewContainerParent != null && graphViewContainerParent.isSelected(this);
+    }
+
+    /**
+     * Sets this component selected or active in its {@link GraphViewContainerParent}
+     */
+    public default void setSelected() {
+        GraphViewContainerParent graphViewContainerParent = getGraphViewContainerParent();
+        if (graphViewContainerParent != null) {
+            graphViewContainerParent.setSelected(this);
+        }
+    }
+    /**
+     * @return
+     */
+    public Component getParent();
+
+    /**
      * @return the {@link ViewParameter} of this graph view
      */
     public ViewParameter getViewParameter();
-
-    /**
-     * @return <code>true</code> if this component is the selected or focused component
-     */
-    public boolean isSelected();
-
-    /**
-     * @param selected
-     */
-    public void setSelected(boolean selected);
 
     /**
      * @return the InputGraphArea this GraphViewContainer is displaying

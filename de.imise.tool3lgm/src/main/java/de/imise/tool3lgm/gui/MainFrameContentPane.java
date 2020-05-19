@@ -474,7 +474,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
                 if (viewContainer != null) {
                     if (!viewContainer.isSelected()) {
                         try {
-                            viewContainer.setSelected(true);
+                            viewContainer.setSelected();
                         } catch (Exception ex) {
                             Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
                         }

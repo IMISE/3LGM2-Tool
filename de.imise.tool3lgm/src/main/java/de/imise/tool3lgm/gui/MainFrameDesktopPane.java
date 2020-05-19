@@ -34,6 +34,14 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
      */
     @Override
     public GraphViewContainer getGraphViewContainer(final GraphDocument doc) {
+        return getInternalFrame(doc);
+    }
+
+    /**
+     * @param doc
+     * @return
+     */
+    private final InternalGraphFrame getInternalFrame(final GraphDocument doc) {
         JInternalFrame[] allFrames = getAllFrames();
         for (JInternalFrame frame : allFrames) {
             if (frame instanceof InternalGraphFrame) {
@@ -44,6 +52,23 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean isSelected(final GraphViewContainer viewContainer) {
+        if (viewContainer instanceof InternalGraphFrame) {
+            InternalGraphFrame internalFrame = (InternalGraphFrame) viewContainer;
+            return internalFrame.isSelected();
+        }
+        return false;
+    }
+
+    @Override
+    public void setSelected(final GraphViewContainer viewContainer) {
+        if (viewContainer instanceof InternalGraphFrame) {
+            InternalGraphFrame internalFrame = (InternalGraphFrame) viewContainer;
+            internalFrame.setSelected(true);
+        }
     }
 
     //////////////////////////////////////////////
