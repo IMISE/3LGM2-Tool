@@ -10,6 +10,7 @@ import javax.swing.JViewport;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
+import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.util.swing.component.CenterableScrollPane;
 
 /**
@@ -59,6 +60,16 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
         return doc;
     }
 
+    @Override
+    public final Szenario getSzenario() {
+        return doc instanceof Szenario ? (Szenario) doc : null;
+    }
+
+    @Override
+    public final AbstractInternalFrame getRealViewComponent() {
+        return this;
+    }
+
     /**
      * gibt den scrollbaren Bereich zurück
      *
@@ -80,7 +91,13 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
         updateTitle();
     }
 
-    public abstract void updateTitle();
+    /**
+     * Sets the frame title
+     */
+    public final void updateTitle() {
+        String fullName = getFullName();
+        setTitle(fullName);
+    }
 
     @Override
     public void szenarioRemoved(final GraphDocument source) {

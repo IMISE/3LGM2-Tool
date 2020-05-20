@@ -3,7 +3,6 @@ package de.imise.tool3lgm.gui;
 import java.beans.PropertyVetoException;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
@@ -12,7 +11,7 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 /**
  * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
  */
-public class InternalGraphFrame extends AbstractInternalFrame implements GraphViewContainer {
+public final class InternalGraphFrame extends AbstractInternalFrame implements GraphViewContainer {
 
     /**
      * COMMENTME
@@ -30,11 +29,6 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
         updateTitle();
     }
 
-    @Override
-    public InternalGraphFrame getRealViewComponent() {
-        return this;
-    }
-
     /**
      * @return
      */
@@ -47,15 +41,6 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
     public void dispose() {
         super.dispose();
         area.dispose();
-    }
-
-    /**
-     * Setzt den Titel des Frames
-     */
-    @Override
-    public void updateTitle() {
-        String fullName = getFullName();
-        setTitle(fullName);
     }
 
     @Override
@@ -96,11 +81,6 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
     @Override
     public void userFieldValueChanged(final UserFieldTarget userFieldTarget) {
         area.revalidateRepaint();
-    }
-
-    @Override
-    public Szenario getSzenario() {
-        return doc instanceof Szenario ? (Szenario) doc : null;
     }
 
     @Override

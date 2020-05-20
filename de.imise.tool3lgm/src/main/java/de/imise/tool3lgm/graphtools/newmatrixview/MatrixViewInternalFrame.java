@@ -82,9 +82,20 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame implements Mo
     }
 
     @Override
-    public void updateTitle() {
+    public String getFullName() {
+        getName();
         String title = doc.getCollection().getName() + " - " + doc.getTitle() + " - " + getResString("matrix") + " #" + titleIndex;
-        setTitle(title);
+        return title;
+    }
+
+    /**
+     * @return the name of this view. Default is the name of the {@link GraphDocument}
+     */
+    @Override
+    public String getName() {
+        GraphDocument doc = getGraphDocument();
+        String name = doc.toString();
+        return name;
     }
 
     /**
