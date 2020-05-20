@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.gui;
 
+import java.util.List;
+
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**
@@ -7,7 +9,16 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
  *
  * @author AXS (16.05.2020)
  */
-public interface GraphViewContainerParent {
+public interface ViewContainerParent {
+
+    /**
+     * Returns a list of all {@link ViewContainer} for the given
+     * {@link GraphDocument}.
+     *
+     * @param doc
+     * @return the activated graph view for the {@link GraphDocument}
+     */
+    public List<ViewContainer> getViewContainers(GraphDocument doc);
 
     /**
      * Activates or creates and activates the the graph view for a given

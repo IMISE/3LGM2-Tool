@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.gui;
 
-import java.awt.Component;
 import java.beans.PropertyVetoException;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -27,13 +26,13 @@ public class InternalGraphFrame extends AbstractInternalFrame implements GraphVi
         super(doc);
         setClosable(true);
         area = new InputGraphArea(doc);
-        setView(area);
+        scrollPane.setViewportView(area);
         updateTitle();
     }
 
     @Override
-    public void setView(final Component view) {
-        scrollPane.setViewportView(view);
+    public InternalGraphFrame getRealViewComponent() {
+        return this;
     }
 
     /**

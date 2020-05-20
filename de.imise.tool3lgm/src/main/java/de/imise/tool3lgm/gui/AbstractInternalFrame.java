@@ -2,12 +2,12 @@ package de.imise.tool3lgm.gui;
 
 import java.awt.Rectangle;
 
+import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.util.swing.component.CenterableScrollPane;
@@ -17,7 +17,7 @@ import de.imise.util.swing.component.CenterableScrollPane;
  *
  * @author Thomas Rudert
  */
-public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListenerSimple {
+public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListenerSimple, ViewContainer {
 
     /** darzustellendes (Teil-)Modell */
     protected final GraphDocument doc;
@@ -31,32 +31,22 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      * @param doc darzustellendes (Teil-)Modell
      */
     public AbstractInternalFrame(final GraphDocument doc) {
-
         /* JInternalFrame mit Titel, resizable, closable, maximizable, and iconifiable */
         super("", true, false, true, true);
-
         this.doc = doc;
         scrollPane = new CenterableScrollPane();
         getContentPane().add(scrollPane);
-
         setFrameIcon(Tool3lgmConstants.TOOL_ICON_16);
-
         doc.addAllTransactionsListener(this);
     }
 
     @Override
     public Rectangle getNormalBounds() {
-        if (getDesktopPane() == null) {
+        JDesktopPane desktopPane = getDesktopPane();
+        if (desktopPane == null) {
             return new Rectangle(0, 0);
         }
-        return getDesktopPane().getBounds();
-    }
-
-    /**
-     * @return
-     */
-    public GDCollection getCollection() {
-        return getGraphDocument().getCollection();
+        return desktopPane.getBounds();
     }
 
     /**
@@ -64,16 +54,9 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      *
      * @return GraphDocument
      */
+    @Override
     public final GraphDocument getGraphDocument() {
         return doc;
-    }
-
-    /**
-     * @param doc
-     * @return <code>true</code> if the GraphDocument of this frame is teh same like the parameter.
-     */
-    public final boolean hasGraphDocument(final GraphDocument doc) {
-        return this.doc == doc;
     }
 
     /**

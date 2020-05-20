@@ -4,7 +4,9 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JDesktopPane;
@@ -15,7 +17,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 /**
  * @author AXS (08.05.2020)
  */
-public class MainFrameDesktopPane extends JDesktopPane implements ComponentListener, GraphViewContainerParent {
+public class MainFrameDesktopPane extends JDesktopPane implements ComponentListener, ViewContainerParent {
 
     /** if the desktop size changes the frames will be resized too */
     private int desktopWidth = -1;
@@ -52,6 +54,21 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
             }
         }
         return null;
+    }
+
+    @Override
+    public List<ViewContainer> getViewContainers(final GraphDocument doc) {
+        JInternalFrame[] allFrames = getAllFrames();
+        List<ViewContainer> viewContainers = new ArrayList<>();
+        for (JInternalFrame frame : allFrames) {
+            if (frame instanceof ViewContainer) {
+                ViewContainer viewContainer = (ViewContainer) frame;
+                if (viewContainer.hasGraphDocument(doc)) {
+                    viewContainers.add(viewContainer);
+                }
+            }
+        }
+        return viewContainers;
     }
 
     @Override

@@ -26,7 +26,7 @@ public interface ViewContainer extends GraphDocumentOwner {
     public Szenario getSzenario();
 
     /**
-     * @param view
+     *
      */
-    public void setView(Component view);
+    public Component getRealViewComponent();
 }

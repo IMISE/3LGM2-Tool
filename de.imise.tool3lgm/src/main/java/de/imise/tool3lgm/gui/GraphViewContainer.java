@@ -27,11 +27,11 @@ public interface GraphViewContainer extends ViewContainer {
     /**
      * @return
      */
-    public default GraphViewContainerParent getGraphViewContainerParent() {
+    public default ViewContainerParent getGraphViewContainerParent() {
         Component parent = getParent();
         while (parent != null) {
-            if (parent instanceof GraphViewContainerParent) {
-                return (GraphViewContainerParent) parent;
+            if (parent instanceof ViewContainerParent) {
+                return (ViewContainerParent) parent;
             }
         }
         return null;
@@ -39,18 +39,18 @@ public interface GraphViewContainer extends ViewContainer {
 
     /**
      * @return if this component is the soelected or active component in the
-     *         corresponding {@link GraphViewContainerParent}
+     *         corresponding {@link ViewContainerParent}
      */
     public default boolean isSelected() {
-        GraphViewContainerParent graphViewContainerParent = getGraphViewContainerParent();
+        ViewContainerParent graphViewContainerParent = getGraphViewContainerParent();
         return graphViewContainerParent != null && graphViewContainerParent.isSelected(this);
     }
 
     /**
-     * Sets this component selected or active in its {@link GraphViewContainerParent}
+     * Sets this component selected or active in its {@link ViewContainerParent}
      */
     public default void setSelected() {
-        GraphViewContainerParent graphViewContainerParent = getGraphViewContainerParent();
+        ViewContainerParent graphViewContainerParent = getGraphViewContainerParent();
         if (graphViewContainerParent != null) {
             graphViewContainerParent.setSelected(this);
         }
