@@ -7,7 +7,7 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 /**
  * @author AXS (19.05.2020)
  */
-public class GraphViewPane extends ViewPane implements GraphViewContainer {
+public final class GraphViewPane extends ViewPane implements GraphViewContainer {
 
     /**
      *

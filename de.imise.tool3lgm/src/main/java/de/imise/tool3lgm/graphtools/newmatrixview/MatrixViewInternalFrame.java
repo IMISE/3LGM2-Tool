@@ -30,20 +30,20 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame {
      * @return
      */
     public int getTitleIndex() {
-        MatrixViewContainer viewContainer = getViewContainer();
+        MatrixViewContainer viewContainer = getViewPane();
         return viewContainer.getTitleIndex();
     }
 
     @Override
-    public MatrixViewContainer getViewContainer() {
-        return (MatrixViewContainer) super.getViewContainer();
+    public MatrixViewPane getViewPane() {
+        return (MatrixViewPane) super.getViewPane();
     }
 
     /**
      * @return
      */
     public MetaPathSelection getMetaPathSelection() {
-        MatrixViewContainer viewContainer = getViewContainer();
+        MatrixViewContainer viewContainer = getViewPane();
         MetaPathSelection metaPathSelection = viewContainer.getMetaPathSelection();
         return metaPathSelection;
     }
@@ -52,7 +52,7 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame {
      * @param metaPathSelection
      */
     public void setMetaPathSelection(final MetaPathSelection metaPathSelection) {
-        MatrixViewContainer viewContainer = getViewContainer();
+        MatrixViewContainer viewContainer = getViewPane();
         viewContainer.setMetaPathSelection(metaPathSelection);
     }
 
@@ -60,7 +60,7 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame {
      * @param mainFrameToolBar
      */
     public void setMatrixViewToolBar(final InternalMatrixFrameToolBar matrixViewToolBar) {
-        MatrixViewContainer viewContainer = getViewContainer();
+        MatrixViewContainer viewContainer = getViewPane();
         viewContainer.setMatrixViewToolBar(matrixViewToolBar);
     }
 

@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.gui;
 
-import java.awt.Component;
 import java.awt.Rectangle;
 
 import javax.swing.JDesktopPane;
@@ -20,19 +19,18 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListenerSimple, ViewContainerFrameComponent {
 
     /** the view to display */
-    protected final ViewContainer viewContainer;
+    protected ViewPane viewPane;
 
     /**
      * Konstruktor
      *
      * @param viewContainer the view to display
      */
-    public AbstractInternalFrame(final ViewContainer viewContainer) {
+    public AbstractInternalFrame(final ViewPane viewPane) {
         /* JInternalFrame mit Titel, resizable, closable, maximizable, and iconifiable */
         super("", true, false, true, true);
-        this.viewContainer = viewContainer;
-        Component realViewComponent = viewContainer.getRealViewComponent();
-        getContentPane().add(realViewComponent);
+        this.viewPane = viewPane;
+        getContentPane().add(viewPane);
         setFrameIcon(Tool3lgmConstants.TOOL_ICON_16);
         GraphDocument doc = getGraphDocument();
         doc.addAllTransactionsListener(this);
@@ -48,8 +46,8 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
     }
 
     @Override
-    public ViewContainer getViewContainer() {
-        return viewContainer;
+    public ViewPane getViewPane() {
+        return viewPane;
     }
 
     /**
@@ -58,8 +56,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      * @return JScrollPane
      */
     public JScrollPane getScrollPane() {
-        JScrollPane scrollPane = (JScrollPane) viewContainer.getRealViewComponent();
-        return scrollPane;
+        return viewPane.getScrollPane();
     }
 
     /**
@@ -79,7 +76,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      * Sets the frame title
      */
     public final void updateTitle() {
-        String fullName = viewContainer.getFullName();
+        String fullName = viewPane.getFullName();
         setTitle(fullName);
     }
 

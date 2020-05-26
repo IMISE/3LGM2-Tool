@@ -20,22 +20,17 @@ public final class InternalGraphFrame extends AbstractInternalFrame {
      */
     public InternalGraphFrame(final GraphDocument doc) {
         super(new GraphViewPane(doc));
-        GraphViewContainer graphViewPane = getViewContainer();
+        GraphViewPane graphViewPane = (GraphViewPane) viewPane;
         area = graphViewPane.getInputGraphArea();
         setClosable(true);
         updateTitle();
     }
 
-    @Override
-    public GraphViewContainer getViewContainer() {
-        return (GraphViewContainer) viewContainer;
-    };
-
     /**
      * @return
      */
     public GraphViewPane getGraphViewPane() {
-        return (GraphViewPane) viewContainer;
+        return (GraphViewPane) viewPane;
     }
 
     /**

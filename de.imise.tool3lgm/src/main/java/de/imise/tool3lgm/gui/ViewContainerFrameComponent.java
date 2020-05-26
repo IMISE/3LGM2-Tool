@@ -15,12 +15,12 @@ public interface ViewContainerFrameComponent extends GraphDocumentOwner {
     /**
      * @return the contained {@link ViewContainer}
      */
-    public ViewContainer getViewContainer();
+    public ViewPane getViewPane();
 
     @Override
     public default GraphDocument getGraphDocument() {
-        ViewContainer viewContainer = getViewContainer();
-        return viewContainer == null ? null : viewContainer.getGraphDocument();
+        ViewPane viewPane = getViewPane();
+        return viewPane == null ? null : viewPane.getGraphDocument();
     }
 
     /**
@@ -38,6 +38,7 @@ public interface ViewContainerFrameComponent extends GraphDocumentOwner {
             if (parent instanceof ViewContainerFrameComponentParent) {
                 return (ViewContainerFrameComponentParent) parent;
             }
+            parent = parent.getParent();
         }
         return null;
     }

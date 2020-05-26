@@ -35,6 +35,7 @@ public interface GraphViewContainer extends ViewContainer {
             if (parent instanceof ViewContainerFrameComponent) {
                 return (ViewContainerFrameComponent) parent;
             }
+            parent = parent.getParent();
         }
         return null;
     }
@@ -57,11 +58,6 @@ public interface GraphViewContainer extends ViewContainer {
             graphViewContainer.setSelected();
         }
     }
-
-    /**
-     * @return
-     */
-    public Component getParent();
 
     /**
      * @return the {@link GraphViewParameter} of this graph view

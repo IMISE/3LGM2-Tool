@@ -28,13 +28,13 @@ public interface ViewContainer extends GraphDocumentOwner {
     public Szenario getSzenario();
 
     /**
-     *
+     * @return
      */
-    public Component getRealViewComponent();
+    public JScrollPane getScrollPane();
 
     /**
      * @return
      */
-    public JScrollPane getScrollPane();
+    public Component getParent();
 
 }

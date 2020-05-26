@@ -40,10 +40,10 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
         for (JInternalFrame frame : allFrames) {
             if (frame instanceof InternalGraphFrame) {
                 InternalGraphFrame graphFrame = (InternalGraphFrame) frame;
-                ViewContainer viewContainer = graphFrame.getViewContainer();
-                if (viewContainer.hasGraphDocument(doc)) {
-                    if (viewContainer instanceof GraphViewContainer) {
-                        return (GraphViewContainer) viewContainer;
+                ViewPane viewPane = graphFrame.getViewPane();
+                if (viewPane.hasGraphDocument(doc)) {
+                    if (viewPane instanceof GraphViewContainer) {
+                        return (GraphViewContainer) viewPane;
                     }
                 }
             }

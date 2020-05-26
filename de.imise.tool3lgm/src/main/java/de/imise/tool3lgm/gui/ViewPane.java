@@ -2,7 +2,6 @@ package de.imise.tool3lgm.gui;
 
 import java.awt.Component;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -61,15 +60,10 @@ public abstract class ViewPane extends JPanel implements ViewContainer {
             add(view);
         } else {
             scrollPane.setViewportView(view);
+            add(scrollPane);
         }
     }
 
-    @Override
-    public final JComponent getRealViewComponent() {
-        return scrollPane != null ? scrollPane : this;
-    }
-
-    @Override
     public final JScrollPane getScrollPane() {
         return scrollPane;
     }

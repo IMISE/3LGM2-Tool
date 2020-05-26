@@ -463,6 +463,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         if (doc == null) {
             return;
         }
+
         //wenn der interne Frame mit dem grafischen View in den Vordergrund geholt werden soll,
         if (activateGraphView) {
             //wenn nicht grade vorher ein Matrix-View aktiviert wurde (nur dann wäre die globale Variable==false)
@@ -644,7 +645,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         Object source = e.getSource();
         if (source instanceof ViewContainerFrameComponent) {
             ViewContainerFrameComponent viewContainerFrameComponent = (ViewContainerFrameComponent) source;
-            ViewContainer viewContainer = viewContainerFrameComponent.getViewContainer();
+            ViewContainer viewContainer = viewContainerFrameComponent.getViewPane();
             if (viewContainer instanceof GraphViewContainer) {
                 GraphViewContainer graphViewContainer = (GraphViewContainer) viewContainer;
                 GraphDocument doc = graphViewContainer.getGraphDocument();
