@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.newmatrixview.CellPanel;
 import de.imise.tool3lgm.graphtools.newmatrixview.ColPanel;
@@ -82,8 +83,11 @@ public class MatrixViewPane extends ViewPane implements MatrixViewContainer, Mou
 
     @Override
     public String getFullName() {
-        getName();
-        String title = doc.getCollection().getName() + " - " + doc.getTitle() + " - " + getResString("matrix") + " #" + titleIndex;
+        GDCollection gdcoll = doc.getCollection();
+        String gdcollName = gdcoll.getName();
+        String docName = getName();
+        String matrixLabel = getResString("matrix");
+        String title = gdcollName + " - " + docName + " - " + matrixLabel + " s#" + titleIndex;
         return title;
     }
 
@@ -93,7 +97,7 @@ public class MatrixViewPane extends ViewPane implements MatrixViewContainer, Mou
     @Override
     public String getName() {
         GraphDocument doc = getGraphDocument();
-        String name = doc.toString();
+        String name = doc.getTitle();
         return name;
     }
 
