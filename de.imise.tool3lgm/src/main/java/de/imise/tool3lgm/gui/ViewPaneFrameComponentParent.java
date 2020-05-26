@@ -54,11 +54,20 @@ public interface ViewPaneFrameComponentParent {
     public void setSelected(ViewPaneFrameComponent viewPaneFrameComponent);
 
     /**
-     * Adds the given {@link ViewPaneFrameComponent} to this
-     *
-     * @param viewPaneFrameComponent
+     * @param doc
+     * @return
      */
-    public void add(ViewPaneFrameComponent viewPaneFrameComponent);
+    public GraphViewPaneFrameComponent createGraphView(final GraphDocument doc);
+
+    /**
+     * Create new MatrixViewFrame and add it to parent GraphDocument
+     *
+     * @param doc Sub-Model as source for the MatrixView
+     * @param titleIndex Index of the matrix view for this doc to display in the title
+     * @param viewPaneToolbarManager
+     * @return the created matrix component
+     */
+    public MatrixViewPaneFrameComponent createMatrixView(final GraphDocument doc, int titleIndex, ViewPaneToolbarManager viewPaneToolbarManager);
 
     /**
      * @return
@@ -67,4 +76,10 @@ public interface ViewPaneFrameComponentParent {
         List<ViewPaneFrameComponent> children = getAllViewPaneFrameComponents();
         return !children.isEmpty();
     }
+
+    /**
+     * @param listener
+     */
+    void addViewPaneFrameComponentListener(final ViewPaneFrameComponentListener listener);
+
 }

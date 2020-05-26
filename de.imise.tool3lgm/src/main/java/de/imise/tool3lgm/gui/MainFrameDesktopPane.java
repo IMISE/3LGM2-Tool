@@ -14,14 +14,17 @@ import java.util.Set;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
+import javax.swing.event.InternalFrameEvent;
+import javax.swing.event.InternalFrameListener;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.log.Log;
 
 /**
  * @author AXS (08.05.2020)
  */
-public class MainFrameDesktopPane extends JDesktopPane implements ComponentListener, ViewPaneFrameComponentParent {
+public class MainFrameDesktopPane extends JDesktopPane implements ComponentListener, ViewPaneFrameComponentParent, InternalFrameListener {
 
     /** if the desktop size changes the frames will be resized too */
     private int desktopWidth = -1;
@@ -32,6 +35,18 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
      */
     public MainFrameDesktopPane() {
         addComponentListener(this); //resize desktop -> resize frames
+    }
+
+    /**
+     *
+     */
+    private final List<ViewPaneFrameComponentListener> viewPaneFrameComponentListeners = new ArrayList<>();
+
+    @Override
+    public void addViewPaneFrameComponentListener(final ViewPaneFrameComponentListener listener) {
+        if (!viewPaneFrameComponentListeners.contains(listener)) {
+            viewPaneFrameComponentListeners.add(listener);
+        }
     }
 
     /**
@@ -171,16 +186,83 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
         //do nothing
     }
 
-    @Override
-    public void add(final ViewPaneFrameComponent viewPaneFrameComponent) {
+    private void addView(final ViewPaneFrameComponent viewPaneFrameComponent) {
         if (viewPaneFrameComponent instanceof AbstractInternalFrame) {
             AbstractInternalFrame frame = (AbstractInternalFrame) viewPaneFrameComponent;
+            frame.addInternalFrameListener(this);
             Rectangle bounds = getBounds();
             frame.setBounds(bounds);
             super.add(frame);
             frame.setLocation(0, 0);
             frame.setVisible(true);
             setSelectedFrame(frame);
+        }
+    }
+
+    /**
+     * @param doc
+     * @return
+     */
+    @Override
+    public GraphViewPaneFrameComponent createGraphView(final GraphDocument doc) {
+        InternalGraphFrame frame = new InternalGraphFrame(doc);
+        frame.addInternalFrameListener(this);
+        addView(frame);
+        return frame;
+    }
+
+    @Override
+    public MatrixViewPaneFrameComponent createMatrixView(final GraphDocument doc, final int titleIndex, final ViewPaneToolbarManager viewPaneToolbarManager) {
+        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, viewPaneToolbarManager, titleIndex);
+        matrixView.addInternalFrameListener(this);
+        addView(matrixView);
+        return matrixView;
+    }
+
+    @Override
+    public void internalFrameOpened(final InternalFrameEvent e) {
+        // nothing to do
+    }
+
+    @Override
+    public void internalFrameClosing(final InternalFrameEvent e) {
+        for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
+            AbstractInternalFrame source = (AbstractInternalFrame) e.getSource();
+            l.viewClosing(source);
+        }
+    }
+
+    @Override
+    public void internalFrameClosed(final InternalFrameEvent e) {
+        for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
+            AbstractInternalFrame source = (AbstractInternalFrame) e.getSource();
+            l.viewClosed(source);
+        }
+    }
+
+    @Override
+    public void internalFrameIconified(final InternalFrameEvent e) {
+        // nothing to do
+    }
+
+    @Override
+    public void internalFrameDeiconified(final InternalFrameEvent e) {
+        // nothing to do
+    }
+
+    @Override
+    public void internalFrameActivated(final InternalFrameEvent e) {
+        for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
+            AbstractInternalFrame source = (AbstractInternalFrame) e.getSource();
+            l.viewActivated(source);
+        }
+    }
+
+    @Override
+    public void internalFrameDeactivated(final InternalFrameEvent e) {
+        for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
+            AbstractInternalFrame source = (AbstractInternalFrame) e.getSource();
+            l.viewDeactivated(source);
         }
     }
 

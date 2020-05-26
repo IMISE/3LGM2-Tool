@@ -27,8 +27,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JViewport;
-import javax.swing.event.InternalFrameEvent;
-import javax.swing.event.InternalFrameListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -38,7 +36,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
@@ -52,7 +49,7 @@ import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 /**
  * @author AXS (6 Aug 2019)
  */
-public final class MainFrameContentPane extends JPanel implements PropertyChangeListener, InternalFrameListener {
+public final class MainFrameContentPane extends JPanel implements PropertyChangeListener, ViewPaneFrameComponentListener {
 
     /** Panel with verticalSplitPane and werkzeugleiste */
     private final JPanel workarea = new JPanel();
@@ -66,7 +63,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     private final Container matrixFrameToolbarParent = workarea;
 
     /** Aktualisiert die Toolbar je nach Kontext des aktiven Frames */
-    private final ViewPaneToolbarManager internalFrameToolbarManager = new ViewPaneToolbarManager(graphFrameToolbarParent, matrixFrameToolbarParent);
+    private final ViewPaneToolbarManager viewPaneToolbarManager = new ViewPaneToolbarManager(graphFrameToolbarParent, matrixFrameToolbarParent);
 
     /** splitted pane with modelBrowserPanel on the left and desktop on the right */
     private final JSplitPane leftSplitPane;
@@ -86,7 +83,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     /** contain all windows of opened documents (JDesktopPane is a container used to create a multiple-document interface or a virtual desktop) */
     private final ViewPaneFrameComponentParent desktop;
 
-    /** InternalFrame in desktop, which has the focus */
+    /** Frame component at desktop, which has the focus */
     private ViewPaneFrameComponent activeFrame = null;
 
     /**
@@ -106,6 +103,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         modelBrowserPanel = new ModelBrowserPanel();
 
         desktop = new MainFrameDesktopPane();
+        desktop.addViewPaneFrameComponentListener(this);
 
         leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, (JComponent) desktop);
         leftSplitPane.setOneTouchExpandable(true);
@@ -154,7 +152,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         } else if (OPTION_SHOW_MODEL_BROWSER.isChanged(evt)) {
             checkModelBrowserVisibility();
         } else if (OPTION_SHOW_PAINTING_TOOLBAR.isChanged(evt)) {
-            internalFrameToolbarManager.setToolBarVisibility();
+            viewPaneToolbarManager.setToolBarVisibility();
         } else if (OPTION_SHOW_STANDARD_TOOLBAR.isChanged(evt)) {
             setShowStandardToolbar();
         } else if (OPTION_ENABLE_EXPERT_MODE.isChanged(evt)) {
@@ -329,16 +327,14 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      * @return
      */
     private GraphViewPaneFrameComponent createGraphView(final GraphDocument doc) {
-        InternalGraphFrame frame = new InternalGraphFrame(doc);
+        GraphViewPaneFrameComponent graphView = desktop.createGraphView(doc);
         if (doc instanceof Szenario) {
-            setWorkArea(frame);
+            setWorkArea(graphView);
         }
-        frame.addInternalFrameListener(this);
-        desktop.add(frame);
         if (doc instanceof Szenario) {
-            setBettterDefaultZoom(frame);
+            setBettterDefaultZoom(graphView);
         }
-        return frame;
+        return graphView;
     }
 
     /**
@@ -348,14 +344,9 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      * @return boolean with true, if methode run successful
      */
     public boolean createMatrixView(final GraphDocument doc) {
-        if (doc == null) {
-            return false;
-        }
         int nextMatrixViewTitleIndex = getNextMatrixViewTitleIndex(doc);
-        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, internalFrameToolbarManager, nextMatrixViewTitleIndex);
-        matrixView.addInternalFrameListener(this);
-        desktop.add(matrixView);
-        return true;
+        MatrixViewPaneFrameComponent matrixView = desktop.createMatrixView(doc, nextMatrixViewTitleIndex, viewPaneToolbarManager);
+        return matrixView != null;
     }
 
     /**
@@ -367,8 +358,8 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         int max = 1;
         for (int i = 0; i < frames.size(); i++) {
             ViewPaneFrameComponent frame = frames.get(i);
-            if (frame instanceof MatrixViewInternalFrame) {
-                MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) frame;
+            if (frame instanceof MatrixViewPaneFrameComponent) {
+                MatrixViewPaneFrameComponent matrixFrame = (MatrixViewPaneFrameComponent) frame;
                 GraphDocument frameDoc = matrixFrame.getGraphDocument();
                 if (frameDoc == doc) {
                     int titleIndex = matrixFrame.getTitleIndex();
@@ -409,7 +400,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     /**
      * @param frame
      */
-    private void setBettterDefaultZoom(final InternalGraphFrame frame) {
+    private void setBettterDefaultZoom(final GraphViewPaneFrameComponent frame) {
         //raise default zoom to fill the whole screen
         InputGraphArea inputGraphArea = frame.getInputGraphArea();
         double zoom = inputGraphArea.getZoom();
@@ -423,7 +414,9 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         }
 
         if (adjustZoom) {
-            JViewport viewport = frame.getViewport();
+            ViewPane viewPane = frame.getViewPane();
+            JScrollPane scrollPane = viewPane.getScrollPane();
+            JViewport viewport = scrollPane.getViewport();
             Dimension viewportSize = viewport.getSize();
             int w = viewportSize.width - BasicGraphArea.GRAPH_BORDER.left - BasicGraphArea.GRAPH_BORDER.right;
             inputGraphArea.setZoom(1d);
@@ -548,60 +541,44 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         }
     }
 
-    /////////////////////////
-    // InternalFrameListener //
-    ///////////////////////////
+    ////////////////////////////////////
+    // ViewPaneFrameComponentListener //
+    ////////////////////////////////////
 
     @Override
-    public void internalFrameClosing(final InternalFrameEvent e) {
+    public void viewClosing(final ViewPaneFrameComponent source) {
         //before closing -> store all view parameter in the szenario view parameter (inclusive view position)
-        Object source = e.getSource();
-        if (source instanceof ViewPaneFrameComponent) {
-            ViewPaneFrameComponent viewPaneFrameComponent = (ViewPaneFrameComponent) source;
-            ViewPane viewPane = viewPaneFrameComponent.getViewPane();
-            if (viewPane instanceof GraphViewPane) {
-                GraphViewPane graphViewPane = (GraphViewPane) viewPane;
-                GraphDocument doc = graphViewPane.getGraphDocument();
-                if (doc instanceof Szenario) {
-                    Szenario szen = (Szenario) doc;
-                    GraphViewParameter graphViewParameter = graphViewPane.getGraphViewParameter();
-                    szen.adaptGraphViewParameter(graphViewParameter);
-                }
+        ViewPaneFrameComponent viewPaneFrameComponent = source;
+        ViewPane viewPane = viewPaneFrameComponent.getViewPane();
+        if (viewPane instanceof GraphViewPane) {
+            GraphViewPane graphViewPane = (GraphViewPane) viewPane;
+            GraphDocument doc = graphViewPane.getGraphDocument();
+            if (doc instanceof Szenario) {
+                Szenario szen = (Szenario) doc;
+                GraphViewParameter graphViewParameter = graphViewPane.getGraphViewParameter();
+                szen.adaptGraphViewParameter(graphViewParameter);
             }
         }
     }
 
     @Override
-    public void internalFrameClosed(final InternalFrameEvent e) {
-        AbstractInternalFrame frame = (AbstractInternalFrame) e.getSource();
-        LastAndNextViewManager.removeWindow(frame);
+    public void viewClosed(final ViewPaneFrameComponent source) {
+        LastAndNextViewManager.removeWindow(source);
         if (!desktop.hasViewPaneFrameComponents()) {
             activeFrame = null;
         }
         workarea.revalidate();
-        internalFrameToolbarManager.updateToolBar();
+        viewPaneToolbarManager.updateToolBar();
     }
 
     @Override
-    public void internalFrameOpened(final InternalFrameEvent e) {
-    }
-
-    @Override
-    public void internalFrameIconified(final InternalFrameEvent e) {
-    }
-
-    @Override
-    public void internalFrameDeiconified(final InternalFrameEvent e) {
-    }
-
-    @Override
-    public void internalFrameActivated(final InternalFrameEvent e) {
+    public void viewActivated(final ViewPaneFrameComponent source) {
         ViewPaneFrameComponent oldActiveFrame = activeFrame;
-        activeFrame = (AbstractInternalFrame) e.getInternalFrame();
+        activeFrame = source;
         if (oldActiveFrame != activeFrame) {
             GraphDocument doc = activeFrame.getGraphDocument();
-            doc.addClosedTransactionsListener(internalFrameToolbarManager);
-            internalFrameToolbarManager.updateToolBar();
+            doc.addClosedTransactionsListener(viewPaneToolbarManager);
+            viewPaneToolbarManager.updateToolBar();
             //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
             //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
             setCurrentDoc(doc, false);
@@ -613,18 +590,18 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     }
 
     @Override
-    public void internalFrameDeactivated(final InternalFrameEvent e) {
+    public void viewDeactivated(final ViewPaneFrameComponent source) {
         //without the following (usally redundant) assignment sometimes activeFrame is null here
         //and this throws an exception. Usally only the deactivated frame can be active Frame
         //        JInternalFrame oldActiveFrame = activeFrame;
         if (activeFrame == null) {
-            activeFrame = (AbstractInternalFrame) e.getInternalFrame();
+            activeFrame = source;
         }
         //        Sys.err(" ############## " + oldActiveFrame + "\n" + activeFrame);
         GraphDocument doc = activeFrame.getGraphDocument();
-        doc.removeClosedTransactionsListener(internalFrameToolbarManager);
+        doc.removeClosedTransactionsListener(viewPaneToolbarManager);
         activeFrame = null;
-        internalFrameToolbarManager.updateToolBar();
+        viewPaneToolbarManager.updateToolBar();
         mainFrameToolbar.update();
     }
 
