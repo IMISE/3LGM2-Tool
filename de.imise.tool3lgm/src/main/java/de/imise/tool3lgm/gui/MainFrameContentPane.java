@@ -66,7 +66,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     private final Container matrixFrameToolbarParent = workarea;
 
     /** Aktualisiert die Toolbar je nach Kontext des aktiven Frames */
-    private final InternalFrameToolbarManager internalFrameToolbarManager = new InternalFrameToolbarManager(graphFrameToolbarParent, matrixFrameToolbarParent);
+    private final ViewPaneToolbarManager internalFrameToolbarManager = new ViewPaneToolbarManager(graphFrameToolbarParent, matrixFrameToolbarParent);
 
     /** splitted pane with modelBrowserPanel on the left and desktop on the right */
     private final JSplitPane leftSplitPane;
@@ -347,7 +347,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      * @param doc Sub-Model as source for the MatrixView
      * @return boolean with true, if methode run successful
      */
-    public boolean createTableInternalFrame(final GraphDocument doc) {
+    public boolean createMatrixView(final GraphDocument doc) {
         if (doc == null) {
             return false;
         }

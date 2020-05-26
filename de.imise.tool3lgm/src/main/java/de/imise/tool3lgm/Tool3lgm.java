@@ -29,7 +29,6 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.gui.ViewPaneFrameComponent;
@@ -335,7 +334,7 @@ public class Tool3lgm {
      */
     public void openMatrixView() {
         LGMGraphDocument selectedDoc = getSelectedDoc();
-        mainFrame.createTableInternalFrame(selectedDoc);
+        mainFrame.createMatrixView(selectedDoc);
     }
 
     /**
@@ -565,7 +564,7 @@ public class Tool3lgm {
     }
 
     /**
-     * return all InternalFrames at desktop
+     * return all frame components at desktop
      *
      * @return List<ViewPaneFrameComponent>
      */
@@ -574,7 +573,7 @@ public class Tool3lgm {
     }
 
     /**
-     * @return Returns the activeFrame.
+     * @return Returns the active frame component
      */
     public ViewPaneFrameComponent getActiveFrame() {
         return mainFrame.getActiveFrame();
@@ -685,10 +684,8 @@ public class Tool3lgm {
             }
             List<ViewPaneFrameComponent> frames = getAllFrames();
             for (ViewPaneFrameComponent frame : frames) {
-                if (frame instanceof AbstractInternalFrame) {
-                    if (((AbstractInternalFrame) frame).getGraphDocument().getHashString().equalsIgnoreCase(params[0])) {
-                        frame.setSelected();
-                    }
+                if (frame.getGraphDocument().getHashString().equalsIgnoreCase(params[0])) {
+                    frame.setSelected();
                 }
             }
         } else if (command.equalsIgnoreCase("select")) {

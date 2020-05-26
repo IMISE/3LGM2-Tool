@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.gui.GraphAreaOptionSliders;
 import de.imise.tool3lgm.gui.GraphAreaOptionSliders.SliderWithTextField;
-import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.gui.GraphViewPaneFrameComponent;
 
 /**
  * Dialog zum Einstellen von Ebenenabstand, Zoom, Winkel und Größe der Zeichenfläche
@@ -49,7 +49,7 @@ public class GraphViewOptionsDialog extends JDialog {
     /**
      * @param frame
      */
-    public void showDialog(final InternalGraphFrame frame) {
+    public void showDialog(final GraphViewPaneFrameComponent frame) {
         // Dialog nur für Teilmodelle anzeigen, da nur Teilmodelle einen Grafischen View besitzen
         if (!(frame.getGraphDocument() instanceof Szenario)) {
             return;

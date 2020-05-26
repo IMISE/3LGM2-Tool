@@ -28,11 +28,11 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
-import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
-import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.gui.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.MainFrame;
+import de.imise.tool3lgm.gui.MatrixViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.ViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.menu.RegularContextGenerator;
 import de.imise.tool3lgm.gui.menu.TemplateContextGenerator;
@@ -188,9 +188,9 @@ public class Static {
     }
 
     /**
-     * return all InternalFrames at desktop
+     * return all frame components at desktop
      *
-     * @return AbstractInternalFrame[]
+     * @return List<ViewPaneFrameComponent>
      */
     public static List<ViewPaneFrameComponent> getAllFrames() {
         return tool == null ? null : tool.getAllFrames();
@@ -209,13 +209,13 @@ public class Static {
     /** Gibt zurück, ob ein aktiver, sichtbarer Grafik-Frame existiert */
     public static boolean isActiveFrameGraphFrame() {
         ViewPaneFrameComponent f = getActiveFrame();
-        return f != null && f instanceof InternalGraphFrame && f.getGraphDocument() instanceof Szenario && f.isVisible();
+        return f != null && f instanceof GraphViewPaneFrameComponent && f.getGraphDocument() instanceof Szenario && f.isVisible();
     }
 
     /** Gibt zurück, ob ein aktiver, sichtbarer Matrix-Frame existiert */
     public static boolean isActiveFrameMatrixFrame() {
         ViewPaneFrameComponent f = getActiveFrame();
-        return f != null && f instanceof MatrixViewInternalFrame && f.isVisible();
+        return f != null && f instanceof MatrixViewPaneFrameComponent && f.isVisible();
     }
 
     /**

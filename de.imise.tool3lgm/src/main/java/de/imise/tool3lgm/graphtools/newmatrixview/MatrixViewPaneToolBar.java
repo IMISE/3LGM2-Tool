@@ -29,11 +29,11 @@ import de.imise.tool3lgm.gui.MatrixViewPaneFrameComponent;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
- * Klasse für die Toolbar eines InternalFrame mit Matrixdarstellung
+ * Klasse für die Toolbar einer {@link MatrixViewPaneFrameComponent}
  *
  * @author Thomas Rudert, AXS (22.10.07)
  */
-public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements ChangeListener {
+public class MatrixViewPaneToolBar extends UnfloatableToolBar implements ChangeListener {
 
     /**
      * Label für die ComboBox zur Klassenauswahl der Matrixzeilen
@@ -85,8 +85,8 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
      * @param controlledFrame
      *            Frame dessen Darstellung durch diese Toolbar beeinfluss wird.
      */
-    public InternalMatrixFrameToolBar(final MatrixViewPaneFrameComponent controlledFrame) {
-        // dieser Constructor sollte nur mit TableInternalFrames aufgerufen werden. ACHTUNG: der
+    public MatrixViewPaneToolBar(final MatrixViewPaneFrameComponent controlledFrame) {
+        // dieser Constructor sollte nur mit MatrixViewPaneFrameComponent aufgerufen werden. ACHTUNG: der
         // wird per Refelction aufgerufen, daher findet man im Code keine 'direkte' Verwendung
         this.controlledFrame = controlledFrame;
 

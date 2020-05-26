@@ -162,14 +162,14 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
      *
      * @param doc Sub-Model as source for the MatrixView
      */
-    public void createTableInternalFrame(final LGMGraphDocument doc) {
-        contentPane.createTableInternalFrame(doc);
+    public void createMatrixView(final LGMGraphDocument doc) {
+        contentPane.createMatrixView(doc);
     }
 
     /**
-     * return all InternalFrames at desktop
+     * return all frame components at desktop
      *
-     * @return JInternalFrame[]
+     * @return List<ViewPaneFrameComponent>
      */
     public List<ViewPaneFrameComponent> getAllFrames() {
         List<ViewPaneFrameComponent> allFrames = contentPane.getAllFrames();

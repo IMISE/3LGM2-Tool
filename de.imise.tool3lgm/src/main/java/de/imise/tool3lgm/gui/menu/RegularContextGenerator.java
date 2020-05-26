@@ -194,7 +194,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     /**
      * Konstruktor, den Tool3lgm am Anfang aufruft. Der ContextListener und das
      * GrapDocument sind erstmal egal, da sie beim ersten aktivieren über
-     * changeContext(GraphDocument) eines InternalFrames auf korrekte Werte
+     * changeContext(GraphDocument) eines Frames auf korrekte Werte
      * gesetzt werden.
      */
     public RegularContextGenerator() {

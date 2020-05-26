@@ -1,6 +1,6 @@
 package de.imise.tool3lgm.gui;
 
-import de.imise.tool3lgm.graphtools.newmatrixview.InternalMatrixFrameToolBar;
+import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewPaneToolBar;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 
 /**
@@ -39,7 +39,7 @@ public interface MatrixViewPaneFrameComponent extends ViewPaneFrameComponent {
     /**
      * @param mainFrameToolBar
      */
-    public default void setMatrixViewToolBar(final InternalMatrixFrameToolBar matrixViewToolBar) {
+    public default void setMatrixViewToolBar(final MatrixViewPaneToolBar matrixViewToolBar) {
         MatrixViewPane viewPane = getViewPane();
         viewPane.setMatrixViewToolBar(matrixViewToolBar);
     }

@@ -13,7 +13,7 @@ import de.imise.tool3lgm.event.action.GraphDocumentAction;
  */
 public class LastAndNextViewManager {
 
-    /** List of all InternalFrames in the order they were active */
+    /** List of all frame components in the order they were active */
     private static final List<ViewPaneFrameComponent> windowList = new ArrayList<>();
 
     /** if true blocks the circular update */

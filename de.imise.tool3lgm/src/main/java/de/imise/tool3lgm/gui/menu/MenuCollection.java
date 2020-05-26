@@ -343,7 +343,7 @@ public class MenuCollection {
         @SuppressWarnings("unchecked")
         @Override
         protected void updateItems(final DynamicMenuPlaceholder placeholder) {
-            Action[] a = ActionLibrary.DynamicActions.getSelectInternalFrameActions();
+            Action[] a = ActionLibrary.DynamicActions.getSelectFrameActions();
             if (a == null || a.length == 0) {
                 return;
             }

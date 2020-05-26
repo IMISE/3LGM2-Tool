@@ -9,7 +9,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.newmatrixview.InternalMatrixFrameToolBar;
+import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewPaneToolBar;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.util.swing.component.UnfloatableToolBar;
@@ -21,7 +21,7 @@ import de.imise.util.swing.component.UnfloatableToolBar;
  *
  * @author AXS (8 Aug 2017)
  */
-public class InternalFrameToolbarManager implements LGMChangeListenerSimple, BasicGraphAreaChangeListener {
+public class ViewPaneToolbarManager implements LGMChangeListenerSimple, BasicGraphAreaChangeListener {
 
     /** toolbar with tools for active layer and sliders for zoom, angel and distance (Graph) or MetaPathSelector (Matrix) */
     private UnfloatableToolBar currentToolBar;
@@ -39,7 +39,7 @@ public class InternalFrameToolbarManager implements LGMChangeListenerSimple, Bas
      * @param graphFrameToolbarParent
      * @param matrixFrameToolbarParent
      */
-    public InternalFrameToolbarManager(final Container graphFrameToolbarParent, final Container matrixFrameToolbarParent) {
+    public ViewPaneToolbarManager(final Container graphFrameToolbarParent, final Container matrixFrameToolbarParent) {
         this.graphFrameToolbarParent = graphFrameToolbarParent;
         this.matrixFrameToolbarParent = matrixFrameToolbarParent;
     }
@@ -68,12 +68,12 @@ public class InternalFrameToolbarManager implements LGMChangeListenerSimple, Bas
                 setToolBarVisibility();
             } else if (activeFrame instanceof MatrixViewPaneFrameComponent) {
                 MatrixViewPaneFrameComponent matrixFrame = (MatrixViewPaneFrameComponent) activeFrame;
-                if (currentToolBar == null || !(currentToolBar instanceof InternalMatrixFrameToolBar)) {
+                if (currentToolBar == null || !(currentToolBar instanceof MatrixViewPaneToolBar)) {
                     removeToolBar();
-                    currentToolBar = new InternalMatrixFrameToolBar(matrixFrame);
+                    currentToolBar = new MatrixViewPaneToolBar(matrixFrame);
                     addToolBar();
                 }
-                InternalMatrixFrameToolBar matrixViewToolBar = (InternalMatrixFrameToolBar) currentToolBar;
+                MatrixViewPaneToolBar matrixViewToolBar = (MatrixViewPaneToolBar) currentToolBar;
                 matrixViewToolBar.setFrame(matrixFrame);
                 matrixFrame.setMatrixViewToolBar(matrixViewToolBar);
                 if (matrixViewToolBar.getParent() == null) {
@@ -123,7 +123,7 @@ public class InternalFrameToolbarManager implements LGMChangeListenerSimple, Bas
      * @return <code>true</code>, wenn die aktuelle Toolbar eine {@link GraphAreaToolBar} ist
      */
     public final boolean isMatrixViewToolBar() {
-        return currentToolBar != null && currentToolBar instanceof InternalMatrixFrameToolBar;
+        return currentToolBar != null && currentToolBar instanceof MatrixViewPaneToolBar;
     }
 
     /**
@@ -136,8 +136,8 @@ public class InternalFrameToolbarManager implements LGMChangeListenerSimple, Bas
     /**
      * @return
      */
-    public InternalMatrixFrameToolBar getMatrixViewToolBar() {
-        return isMatrixViewToolBar() ? (InternalMatrixFrameToolBar) currentToolBar : null;
+    public MatrixViewPaneToolBar getMatrixViewToolBar() {
+        return isMatrixViewToolBar() ? (MatrixViewPaneToolBar) currentToolBar : null;
     }
 
     /**

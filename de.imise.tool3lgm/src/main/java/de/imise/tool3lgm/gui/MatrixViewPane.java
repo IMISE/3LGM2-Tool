@@ -18,7 +18,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.newmatrixview.CellPanel;
 import de.imise.tool3lgm.graphtools.newmatrixview.ColPanel;
-import de.imise.tool3lgm.graphtools.newmatrixview.InternalMatrixFrameToolBar;
+import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewPaneToolBar;
 import de.imise.tool3lgm.graphtools.newmatrixview.RowPanel;
 import de.imise.tool3lgm.graphtools.newmatrixview.TableCell;
 import de.imise.tool3lgm.graphtools.newmatrixview.TableModel;
@@ -32,7 +32,7 @@ import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 public class MatrixViewPane extends ViewPane implements MouseMotionListener, MouseListener {
 
     /** Liefert die aktuelle Toolbar */
-    private final InternalFrameToolbarManager toolbarManager;
+    private final ViewPaneToolbarManager toolbarManager;
 
     /** Panel für die Zeilenbeschriftungen (Elementnamen) */
     private final RowPanel rowHeaderPanel;
@@ -64,7 +64,7 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
      * @param titleIndex Zähler, der an den Titel des Fensters angehängt wird. Man kann beliebig viele Matrixfenster für dasselbe Teilmodell öffnen.
      *            Der Title soll unterscheidbar sein und das wird er durch diese Nummer.
      */
-    public MatrixViewPane(final GraphDocument doc, final InternalFrameToolbarManager toolbarManager, final int titleIndex) {
+    public MatrixViewPane(final GraphDocument doc, final ViewPaneToolbarManager toolbarManager, final int titleIndex) {
         super(doc);
         this.toolbarManager = toolbarManager;
         this.titleIndex = titleIndex;
@@ -154,12 +154,12 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
     }
 
     /** Werkzeugleiste zu diesem Fenster */
-    private InternalMatrixFrameToolBar matrixViewToolBar = null;
+    private MatrixViewPaneToolBar matrixViewToolBar = null;
 
     /**
      * @param matrixViewToolBar
      */
-    public void setMatrixViewToolBar(final InternalMatrixFrameToolBar matrixViewToolBar) {
+    public void setMatrixViewToolBar(final MatrixViewPaneToolBar matrixViewToolBar) {
         this.matrixViewToolBar = matrixViewToolBar;
     }
 
@@ -172,7 +172,7 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
         ModelElement colElement = colHeaderPanel.getCol(e.getX());
         ModelElement rowElement = rowHeaderPanel.getRow(e.getY());
         if (toolbarManager.isMatrixViewToolBar()) {
-            InternalMatrixFrameToolBar matrixFrameToolBar = toolbarManager.getMatrixViewToolBar();
+            MatrixViewPaneToolBar matrixFrameToolBar = toolbarManager.getMatrixViewToolBar();
             TableCell cell = tableModel.getCell(colHeaderPanel.getColIndex(e.getX()), rowHeaderPanel.getRowIndex(e.getY()));
             String pathName = cell == null ? null : matrixFrameToolBar.getPathName(cell.getColor());
             matrixFrameToolBar.positionChanged(colElement, rowElement, pathName);
