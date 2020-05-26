@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.DOMAIN_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.LOGICAL_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MAX_LAYER_INDEX;
@@ -118,7 +117,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      * @param doc
      */
     public ModelBrowserTree(final GraphDocument doc) {
-        super(new DefaultTreeModel(new StringTreeNode(getResString("MODEL_BRWOSER_TITLE"), false)));
+        super(new DefaultTreeModel(new StringTreeNode(Tool3lgmConstants.getResString("MODEL_BRWOSER_TITLE"), false)));
         this.doc = doc;
         initTree();
         nodesToClear = elementClassToParentNode.values();

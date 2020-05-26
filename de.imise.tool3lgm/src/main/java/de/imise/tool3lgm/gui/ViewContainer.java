@@ -2,6 +2,8 @@ package de.imise.tool3lgm.gui;
 
 import java.awt.Component;
 
+import javax.swing.JScrollPane;
+
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 
@@ -29,4 +31,10 @@ public interface ViewContainer extends GraphDocumentOwner {
      *
      */
     public Component getRealViewComponent();
+
+    /**
+     * @return
+     */
+    public JScrollPane getScrollPane();
+
 }

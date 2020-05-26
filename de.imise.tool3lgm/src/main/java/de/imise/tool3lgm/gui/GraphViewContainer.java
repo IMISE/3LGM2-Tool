@@ -9,7 +9,8 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 
 /**
- * Interface for a graph view of a Szenario.
+ * Interface for a panel for the graph view of a Szenario or the
+ * main {@link GraphDocument}.
  *
  * @author AXS (10.05.2020)
  */
@@ -25,13 +26,14 @@ public interface GraphViewContainer extends ViewContainer {
     }
 
     /**
-     * @return
+     * @return the component that contains this. The parent component of this
+     *         should be a {@link ViewContainerFrameComponent}.
      */
-    public default ViewContainerParent getGraphViewContainerParent() {
+    public default ViewContainerFrameComponent getFrameComponent() {
         Component parent = getParent();
         while (parent != null) {
-            if (parent instanceof ViewContainerParent) {
-                return (ViewContainerParent) parent;
+            if (parent instanceof ViewContainerFrameComponent) {
+                return (ViewContainerFrameComponent) parent;
             }
         }
         return null;
@@ -39,22 +41,23 @@ public interface GraphViewContainer extends ViewContainer {
 
     /**
      * @return if this component is the soelected or active component in the
-     *         corresponding {@link ViewContainerParent}
+     *         corresponding {@link ViewContainerFrameComponentParent}
      */
     public default boolean isSelected() {
-        ViewContainerParent graphViewContainerParent = getGraphViewContainerParent();
-        return graphViewContainerParent != null && graphViewContainerParent.isSelected(this);
+        ViewContainerFrameComponent graphViewContainer = getFrameComponent();
+        return graphViewContainer != null && graphViewContainer.isSelected();
     }
 
     /**
-     * Sets this component selected or active in its {@link ViewContainerParent}
+     * Sets this component selected or active in its {@link ViewContainerFrameComponentParent}
      */
     public default void setSelected() {
-        ViewContainerParent graphViewContainerParent = getGraphViewContainerParent();
-        if (graphViewContainerParent != null) {
-            graphViewContainerParent.setSelected(this);
+        ViewContainerFrameComponent graphViewContainer = getFrameComponent();
+        if (graphViewContainer != null) {
+            graphViewContainer.setSelected();
         }
     }
+
     /**
      * @return
      */
@@ -73,6 +76,7 @@ public interface GraphViewContainer extends ViewContainer {
     /**
      * @return the name of this view. Default is the name of the {@link GraphDocument}
      */
+    @Override
     public default String getName() {
         GraphDocument doc = getGraphDocument();
         String name = doc.toString();
@@ -83,6 +87,7 @@ public interface GraphViewContainer extends ViewContainer {
      * @return the name of this view. Default is "Name of GDCollection" + " - " +
      *         "Name of GraphDocument" + " (" + "Name of MetaModel" + ")";
      */
+    @Override
     public default String getFullName() {
         GDCollection gdcoll = getCollection();
         String gdcollName = gdcoll.getName();

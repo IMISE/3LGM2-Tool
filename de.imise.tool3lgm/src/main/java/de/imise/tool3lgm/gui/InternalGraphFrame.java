@@ -11,28 +11,36 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 /**
  * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
  */
-public final class InternalGraphFrame extends AbstractInternalFrame implements GraphViewContainer {
+public final class InternalGraphFrame extends AbstractInternalFrame {
 
-    /**
-     * COMMENTME
-     */
     private final InputGraphArea area;
 
     /**
      * @param doc
      */
     public InternalGraphFrame(final GraphDocument doc) {
-        super(doc);
+        super(new GraphViewPane(doc));
+        GraphViewContainer graphViewPane = getViewContainer();
+        area = graphViewPane.getInputGraphArea();
         setClosable(true);
-        area = new InputGraphArea(doc);
-        scrollPane.setViewportView(area);
         updateTitle();
+    }
+
+    @Override
+    public GraphViewContainer getViewContainer() {
+        return (GraphViewContainer) viewContainer;
+    };
+
+    /**
+     * @return
+     */
+    public GraphViewPane getGraphViewPane() {
+        return (GraphViewPane) viewContainer;
     }
 
     /**
      * @return
      */
-    @Override
     public InputGraphArea getInputGraphArea() {
         return area;
     }
@@ -101,37 +109,6 @@ public final class InternalGraphFrame extends AbstractInternalFrame implements G
         repaint();
     }
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (doc == null ? 0 : doc.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        InternalGraphFrame other = (InternalGraphFrame) obj;
-        if (doc == null) {
-            if (other.doc != null) {
-                return false;
-            }
-        } else if (!doc.equals(other.doc)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
     public GraphViewParameter getGraphViewParameter() {
         return area.getGraphViewParameter();
     }

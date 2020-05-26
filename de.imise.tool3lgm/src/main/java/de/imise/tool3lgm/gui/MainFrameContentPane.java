@@ -47,6 +47,7 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
+import de.imise.util.Sys;
 
 /**
  * @author AXS (6 Aug 2019)
@@ -323,17 +324,23 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         super.setCursor(cursor);
     }
 
+    static int iii = 0;
     /**
      * @param doc
      * @return
      */
-    private GraphViewContainer createGraphFrame(final GraphDocument doc) {
+    private ViewContainerFrameComponent createGraphFrame(final GraphDocument doc) {
+        if (iii++ < 5) {
+            Sys.err(iii + " " + doc);
+        } else {
+            System.exit(0);
+        }
         InternalGraphFrame frame = new InternalGraphFrame(doc);
-        frame.addInternalFrameListener(this);
         frame.setBounds(desktop.getBounds());
         if (doc instanceof Szenario) {
             setWorkArea(frame);
         }
+        frame.addInternalFrameListener(this);
         desktop.add(frame);
         frame.setLocation(0, 0);
         if (doc instanceof Szenario) {
@@ -376,8 +383,9 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
                 MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) frames[i];
                 GraphDocument frameDoc = matrixFrame.getGraphDocument();
                 if (frameDoc == doc) {
-                    if (matrixFrame.titleIndex >= max) {
-                        max = matrixFrame.titleIndex + 1;
+                    int titleIndex = matrixFrame.getTitleIndex();
+                    if (titleIndex >= max) {
+                        max = titleIndex + 1;
                     }
                 }
             }
@@ -420,7 +428,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         boolean adjustZoom = zoom == GraphViewParameter.INITIAL_MIN_ZOOM;
         //if the model file is the example model file -> -> adjust zoom to max width
         if (!adjustZoom) {
-            GDCollection gdcoll = frame.doc.getCollection();
+            GDCollection gdcoll = frame.getCollection();
             File file = gdcoll.getFile();
             adjustZoom = Tool3lgmConstants.EXAMPLE_MODEL_FILE.equals(file);
         }
@@ -466,29 +474,14 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         if (activateGraphView) {
             //wenn nicht grade vorher ein Matrix-View aktiviert wurde (nur dann wäre die globale Variable==false)
             if (this.activateGraphView) {
-                GraphViewContainer graphViewContainer = Static.getGraphViewContainer(doc);
+                this.activateGraphView = false;
+                ViewContainerFrameComponent graphViewContainerFrameComponent = getGraphViewContainerFrameComponent(doc);
                 //den richtigen Frame nach vorne holen
-                if (graphViewContainer == null) {
-                    graphViewContainer = createGraphFrame(doc);
-                }
-                if (graphViewContainer != null) {
-                    if (!graphViewContainer.isSelected()) {
-                        try {
-                            graphViewContainer.setSelected();
-                        } catch (Exception ex) {
-                            Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
-                        }
-                    }
-                } else {
-                    JInternalFrame oldframe = desktop.getSelectedFrame();
-                    if (oldframe != null) {
-                        if (oldframe.isSelected()) {
-                            try {
-                                oldframe.setSelected(false);
-                            } catch (Exception ex) {
-                                Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
-                            }
-                        }
+                if (!graphViewContainerFrameComponent.isSelected()) {
+                    try {
+                        graphViewContainerFrameComponent.setSelected();
+                    } catch (Exception ex) {
+                        Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
                     }
                 }
 
@@ -552,14 +545,16 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
 
     /**
      * @param doc
-     * @return the view container that contains the graph of the GraphDocument if exists or <code>null</code>
+     * @return the frame component of the view container that contains the
+     *         graph of the {@link GraphDocument} if exists or <code>null</code>
      */
-    public final GraphViewContainer getGraphViewContainer(final GraphDocument doc) {
+    public final ViewContainerFrameComponent getGraphViewContainerFrameComponent(final GraphDocument doc) {
         GraphViewContainer graphViewContainer = desktop.getGraphViewContainer(doc);
-        if (graphViewContainer == null) {
-            graphViewContainer = createGraphFrame(doc);
+        ViewContainerFrameComponent graphViewContainerFrameComponent = graphViewContainer == null ? null : graphViewContainer.getFrameComponent();
+        if (graphViewContainerFrameComponent == null) {
+            graphViewContainerFrameComponent = createGraphFrame(doc);
         }
-        return graphViewContainer;
+        return graphViewContainerFrameComponent;
     }
 
     /**
@@ -655,13 +650,17 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     public void internalFrameClosing(final InternalFrameEvent e) {
         //before closing -> store all view parameter in the szenario view parameter (inclusive view position)
         Object source = e.getSource();
-        if (source instanceof GraphViewContainer) {
-            GraphViewContainer graphViewContainer = (GraphViewContainer) source;
-            GraphDocument doc = graphViewContainer.getGraphDocument();
-            if (doc instanceof Szenario) {
-                Szenario szen = (Szenario) doc;
-                GraphViewParameter graphViewParameter = graphViewContainer.getGraphViewParameter();
-                szen.adaptGraphViewParameter(graphViewParameter);
+        if (source instanceof ViewContainerFrameComponent) {
+            ViewContainerFrameComponent viewContainerFrameComponent = (ViewContainerFrameComponent) source;
+            ViewContainer viewContainer = viewContainerFrameComponent.getViewContainer();
+            if (viewContainer instanceof GraphViewContainer) {
+                GraphViewContainer graphViewContainer = (GraphViewContainer) viewContainer;
+                GraphDocument doc = graphViewContainer.getGraphDocument();
+                if (doc instanceof Szenario) {
+                    Szenario szen = (Szenario) doc;
+                    GraphViewParameter graphViewParameter = graphViewContainer.getGraphViewParameter();
+                    szen.adaptGraphViewParameter(graphViewParameter);
+                }
             }
         }
     }
@@ -692,31 +691,31 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
 
     @Override
     public void internalFrameActivated(final InternalFrameEvent e) {
+        JInternalFrame oldActiveFrame = activeFrame;
         activeFrame = (AbstractInternalFrame) e.getInternalFrame();
-        GraphDocument doc = activeFrame.getGraphDocument();
-        doc.addClosedTransactionsListener(internalFrameToolbarManager);
-        internalFrameToolbarManager.updateToolBar();
-        //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
-        //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
-        setCurrentDoc(doc, activeFrame instanceof InternalGraphFrame);
-        try {
-            activeFrame.setSelected(true);
-        } catch (Exception ex) {
-            Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
+        if (oldActiveFrame != activeFrame) {
+            GraphDocument doc = activeFrame.getGraphDocument();
+            doc.addClosedTransactionsListener(internalFrameToolbarManager);
+            internalFrameToolbarManager.updateToolBar();
+            //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
+            //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
+            setCurrentDoc(doc, activeFrame instanceof InternalGraphFrame);
+            workarea.revalidate();
+            workarea.repaint();
+            LastAndNextViewManager.addWindow(activeFrame);
+            mainFrameToolbar.update();
         }
-        workarea.revalidate();
-        workarea.repaint();
-        LastAndNextViewManager.addWindow(activeFrame);
-        mainFrameToolbar.update();
     }
 
     @Override
     public void internalFrameDeactivated(final InternalFrameEvent e) {
         //without the following (usally redundant) assignment sometimes activeFrame is null here
         //and this throws an exception. Usally only the deactivated frame can be active Frame
+        //        JInternalFrame oldActiveFrame = activeFrame;
         if (activeFrame == null) {
             activeFrame = (AbstractInternalFrame) e.getInternalFrame();
         }
+        //        Sys.err(" ############## " + oldActiveFrame + "\n" + activeFrame);
         GraphDocument doc = activeFrame.getGraphDocument();
         doc.removeClosedTransactionsListener(internalFrameToolbarManager);
         activeFrame = null;

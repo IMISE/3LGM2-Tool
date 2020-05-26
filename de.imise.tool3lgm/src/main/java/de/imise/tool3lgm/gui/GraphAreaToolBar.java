@@ -11,6 +11,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.GraphAreaOptionSliders.SliderWithTextField;
 import de.imise.util.swing.component.UnfloatableToolBar;
@@ -44,7 +45,8 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
      */
     public GraphAreaToolBar(final InternalGraphFrame frame) {
         buttonSwitchMouseMode = ToolButton.createDisableMouseMakesElementsButton();
-        MetaModel metaModel = frame.doc.getMetaModel();
+        GraphDocument doc = frame.getGraphDocument();
+        MetaModel metaModel = doc.getMetaModel();
         buttonCreateEdge = ToolButton.createEdgeButton(metaModel, dummyEdgeButtonNodeClass);
         buttonGroup.add(buttonSwitchMouseMode);
         buttonGroup.add(buttonCreateEdge);
@@ -75,7 +77,8 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
     //    }
 
     private List<Class<? extends Node>> getLayerGraphElementClasses(final int layerIndex) {
-        MetaModel metaModel = frame.doc.getMetaModel();
+        GraphDocument doc = frame.getGraphDocument();
+        MetaModel metaModel = doc.getMetaModel();
         List<Class<? extends Node>> paintableNodeClasses = new ArrayList<>(5);
         for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
             if (MetaModel.isNodeType(elementClass)) { //Assoziationsklassen stehn auch in ALL_NODES -> rausfiltern
@@ -113,7 +116,8 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
                 buttonGroup.remove(button);
             }
             buttonsCreateElement.clear();
-            MetaModel metaModel = frame.doc.getMetaModel();
+            GraphDocument doc = frame.getGraphDocument();
+            MetaModel metaModel = doc.getMetaModel();
             for (Class<? extends Node> paintableLayerElementClass : getLayerGraphElementClasses(currentLayer)) {
                 ToolButton createNodeButton = ToolButton.createNodeButton(metaModel, paintableLayerElementClass);
                 buttonsCreateElement.add(createNodeButton);

@@ -9,7 +9,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
  *
  * @author AXS (16.05.2020)
  */
-public interface ViewContainerParent {
+public interface ViewContainerFrameComponentParent {
 
     /**
      * Returns a list of all {@link ViewContainer} for the given
@@ -18,7 +18,7 @@ public interface ViewContainerParent {
      * @param doc
      * @return the activated graph view for the {@link GraphDocument}
      */
-    public List<ViewContainer> getViewContainers(GraphDocument doc);
+    public List<ViewContainerFrameComponent> getViewContainerFrameComponents(GraphDocument doc);
 
     /**
      * Activates or creates and activates the the graph view for a given
@@ -30,17 +30,17 @@ public interface ViewContainerParent {
     public GraphViewContainer getGraphViewContainer(GraphDocument doc);
 
     /**
-     * @param graphViewContainer
+     * @param viewContainerFrameComponent
      * @return <code>true</code> if this component is the selected or active component
      */
-    public boolean isSelected(GraphViewContainer graphViewContainer);
+    public boolean isSelected(ViewContainerFrameComponent viewContainerFrameComponent);
 
     /**
-     * Sets component with the given {@link GraphDocument} as the selected or active
+     * Sets component with the given {@link ViewContainerFrameComponent} as the selected or active
      * component.
      *
-     * @param graphViewContainer
+     * @param viewContainerFrameComponent
      */
-    public void setSelected(GraphViewContainer graphViewContainer);
+    public void setSelected(ViewContainerFrameComponent viewContainerFrameComponent);
 
 }

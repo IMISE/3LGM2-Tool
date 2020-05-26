@@ -33,7 +33,6 @@ import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
-import de.imise.tool3lgm.gui.GraphViewContainer;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.gui.menu.RegularContextGenerator;
@@ -220,17 +219,17 @@ public class Static {
         return f != null && f instanceof MatrixViewInternalFrame && f.isVisible();
     }
 
-    /**
-     * @param doc
-     * @return the ViewContainer of the GraphDocument. If the ViewContainer is not
-     *         initialized or closed, a new ViewContainer will be created.
-     */
-    public static final GraphViewContainer getGraphViewContainer(final GraphDocument doc) {
-        MainFrame mainFrame = getMainFrame();
-        GraphViewContainer graphViewContainer = mainFrame.getGraphViewContainer(doc);
-        return graphViewContainer;
-    }
-
+    //    /**
+    //     * @param doc
+    //     * @return the ViewContainer of the GraphDocument. If the ViewContainer is not
+    //     *         initialized or closed, a new ViewContainer will be created.
+    //     */
+    //    public static final GraphViewContainer getGraphViewContainer(final GraphDocument doc) {
+    //        MainFrame mainFrame = getMainFrame();
+    //        GraphViewContainer graphViewContainer = mainFrame.getGraphViewContainer(doc);
+    //        return graphViewContainer;
+    //    }
+    //
     /**
      * @param doc
      * @return the ViewParameter of the szenario. If the szanrio has a frame then

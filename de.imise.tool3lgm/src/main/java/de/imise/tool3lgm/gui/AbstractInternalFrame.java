@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.gui;
 
+import java.awt.Component;
 import java.awt.Rectangle;
 
 import javax.swing.JDesktopPane;
@@ -10,34 +11,30 @@ import javax.swing.JViewport;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
-import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.util.swing.component.CenterableScrollPane;
 
 /**
  * Abstrakte Klasse für alle internen Fenster zur Darstellung von (Teil-)Modellen
  *
  * @author Thomas Rudert
  */
-public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListenerSimple, ViewContainer {
+public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListenerSimple, ViewContainerFrameComponent {
 
-    /** darzustellendes (Teil-)Modell */
-    protected final GraphDocument doc;
-
-    /** die JScrollFläche für den Inhalt */
-    protected JScrollPane scrollPane;
+    /** the view to display */
+    protected final ViewContainer viewContainer;
 
     /**
      * Konstruktor
      *
-     * @param doc darzustellendes (Teil-)Modell
+     * @param viewContainer the view to display
      */
-    public AbstractInternalFrame(final GraphDocument doc) {
+    public AbstractInternalFrame(final ViewContainer viewContainer) {
         /* JInternalFrame mit Titel, resizable, closable, maximizable, and iconifiable */
         super("", true, false, true, true);
-        this.doc = doc;
-        scrollPane = new CenterableScrollPane();
-        getContentPane().add(scrollPane);
+        this.viewContainer = viewContainer;
+        Component realViewComponent = viewContainer.getRealViewComponent();
+        getContentPane().add(realViewComponent);
         setFrameIcon(Tool3lgmConstants.TOOL_ICON_16);
+        GraphDocument doc = getGraphDocument();
         doc.addAllTransactionsListener(this);
     }
 
@@ -50,24 +47,9 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
         return desktopPane.getBounds();
     }
 
-    /**
-     * gibt das darzustellende (Teil-)Modell zurück
-     *
-     * @return GraphDocument
-     */
     @Override
-    public final GraphDocument getGraphDocument() {
-        return doc;
-    }
-
-    @Override
-    public final Szenario getSzenario() {
-        return doc instanceof Szenario ? (Szenario) doc : null;
-    }
-
-    @Override
-    public final AbstractInternalFrame getRealViewComponent() {
-        return this;
+    public ViewContainer getViewContainer() {
+        return viewContainer;
     }
 
     /**
@@ -76,6 +58,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      * @return JScrollPane
      */
     public JScrollPane getScrollPane() {
+        JScrollPane scrollPane = (JScrollPane) viewContainer.getRealViewComponent();
         return scrollPane;
     }
 
@@ -83,6 +66,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      * @return the viewport of the scrollpane
      */
     public JViewport getViewport() {
+        JScrollPane scrollPane = getScrollPane();
         return scrollPane.getViewport();
     }
 
@@ -95,7 +79,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      * Sets the frame title
      */
     public final void updateTitle() {
-        String fullName = getFullName();
+        String fullName = viewContainer.getFullName();
         setTitle(fullName);
     }
 
@@ -108,12 +92,14 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
 
     @Override
     public void dispose() {
+        GraphDocument doc = getGraphDocument();
         doc.removeAllTransactionsListener(this);
         super.dispose();
     }
 
     @Override
     public String toString() {
+        GraphDocument doc = getGraphDocument();
         return getClass().getName() + " " + doc;
     }
 

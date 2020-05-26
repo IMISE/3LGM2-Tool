@@ -57,7 +57,9 @@ public class GraphAreaOptionSliders implements ChangeListener {
 
     private int getSliderGapMaximum() {
         //den maximalen Abstand in Anhängigkeit von der Ebenengröße berechnen
-        double pageSizeFactor = frame.getSzenario().getPageSizeFactor();
+        GraphViewPane graphViewPane = frame.getGraphViewPane();
+        Szenario szen = graphViewPane.getSzenario();
+        double pageSizeFactor = szen.getPageSizeFactor();
         int maxPageSizeFactor = Double.valueOf(800d * pageSizeFactor).intValue();
         return maxPageSizeFactor;
     }
@@ -70,7 +72,7 @@ public class GraphAreaOptionSliders implements ChangeListener {
         if (area != null) {
             sliderZoom.setValue(Double.valueOf(area.getZoom() * 100d).intValue());
             sliderDegree.setValue(area.getLayerAngle());
-            Szenario szen = (Szenario) frame.getSzenario();
+            Szenario szen = area.getSzenario();
             double pageSizeFactor = szen.getPageSizeFactor();
             sliderPageSizeFactor.setValue(Double.valueOf(pageSizeFactor * 100d).intValue());
             sliderGap.setMaximum(getSliderGapMaximum());
