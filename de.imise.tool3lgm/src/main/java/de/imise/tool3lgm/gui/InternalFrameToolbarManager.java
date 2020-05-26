@@ -10,7 +10,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.InternalMatrixFrameToolBar;
-import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.util.swing.component.UnfloatableToolBar;
@@ -34,7 +33,7 @@ public class InternalFrameToolbarManager implements LGMChangeListenerSimple, Bas
     private final Container matrixFrameToolbarParent;
 
     /** der gerade aktive Frame */
-    private AbstractInternalFrame currentFrame;
+    private ViewPaneFrameComponent currentFrame;
 
     /**
      * @param graphFrameToolbarParent
@@ -49,13 +48,13 @@ public class InternalFrameToolbarManager implements LGMChangeListenerSimple, Bas
      * Aktualisiert die Toolbar, wenn sich der aktive Frame geändert hat.
      */
     public void updateToolBar() {
-        AbstractInternalFrame activeFrame = Static.getActiveFrame();
+        ViewPaneFrameComponent activeFrame = Static.getActiveFrame();
         if (currentFrame != activeFrame) {
             removeMeAsGraphFrameChangeListener();
             if (activeFrame == null) {
                 removeToolBar();
-            } else if (activeFrame instanceof InternalGraphFrame && activeFrame.getGraphDocument() instanceof Szenario) {
-                InternalGraphFrame graphFrame = (InternalGraphFrame) activeFrame;
+            } else if (activeFrame instanceof GraphViewPaneFrameComponent && activeFrame.getGraphDocument() instanceof Szenario) {
+                GraphViewPaneFrameComponent graphFrame = (GraphViewPaneFrameComponent) activeFrame;
                 if (currentToolBar == null || !(currentToolBar instanceof GraphAreaToolBar)) {
                     removeToolBar();
                     currentToolBar = new GraphAreaToolBar(graphFrame);
@@ -67,8 +66,8 @@ public class InternalFrameToolbarManager implements LGMChangeListenerSimple, Bas
                     }
                 }
                 setToolBarVisibility();
-            } else if (activeFrame instanceof MatrixViewInternalFrame) {
-                MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) activeFrame;
+            } else if (activeFrame instanceof MatrixViewPaneFrameComponent) {
+                MatrixViewPaneFrameComponent matrixFrame = (MatrixViewPaneFrameComponent) activeFrame;
                 if (currentToolBar == null || !(currentToolBar instanceof InternalMatrixFrameToolBar)) {
                     removeToolBar();
                     currentToolBar = new InternalMatrixFrameToolBar(matrixFrame);

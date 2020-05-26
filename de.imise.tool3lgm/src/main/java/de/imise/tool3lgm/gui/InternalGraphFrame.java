@@ -26,10 +26,8 @@ public final class InternalGraphFrame extends AbstractInternalFrame implements G
         updateTitle();
     }
 
-    /**
-     * @return
-     */
-    public GraphViewPane getGraphViewPane() {
+    @Override
+    public GraphViewPane getViewPane() {
         return (GraphViewPane) viewPane;
     }
 

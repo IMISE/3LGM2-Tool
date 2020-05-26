@@ -19,7 +19,6 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JColorChooser;
-import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
@@ -67,7 +66,6 @@ import de.imise.tool3lgm.graphtools.model.GDCollectionImExportHandler;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.dialog.declaration.UserFieldDeclarationDialog;
@@ -78,10 +76,11 @@ import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea.PaintState;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.NodeRenderer;
-import de.imise.tool3lgm.gui.AbstractInternalFrame;
+import de.imise.tool3lgm.gui.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.Tool3lgmMetaModelContextChooser;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
+import de.imise.tool3lgm.gui.ViewPane;
 import de.imise.tool3lgm.gui.ViewPaneFrameComponent;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.imexport.DataImporter;
@@ -274,14 +273,15 @@ public class ActionLibrary {
 
                 @Override
                 protected void actionPerformed() {
-                    AbstractInternalFrame selframe = Static.getActiveFrame();
-                    if (selframe instanceof InternalGraphFrame) {
-                        InputGraphArea iga = ((InternalGraphFrame) selframe).getInputGraphArea();
+                    ViewPaneFrameComponent selframe = Static.getActiveFrame();
+                    if (selframe instanceof GraphViewPaneFrameComponent) {
+                        InputGraphArea iga = ((GraphViewPaneFrameComponent) selframe).getInputGraphArea();
                         iga.setPaintState(PaintState.SAVE_IMAGE_AS_FILE);
                         ComponentAsImageExportHandler.createFile(iga);
                         iga.setPaintState(PaintState.REGULAR);
-                    } else if (selframe instanceof MatrixViewInternalFrame) {
-                        JScrollPane sp = selframe.getScrollPane();
+                    } else { //MatrixView
+                        ViewPane viewPane = selframe.getViewPane();
+                        JScrollPane sp = viewPane.getScrollPane();
                         Dimension size = sp.getSize();
                         sp.setSize(sp.getMaximumSize());
                         sp.revalidate();
@@ -544,7 +544,7 @@ public class ActionLibrary {
         public static final Action[] getSelectInternalFrameActions() {
 
             List<ViewPaneFrameComponent> internalFrames = Static.getAllFrames();
-            JInternalFrame selectedFrame = Static.getActiveFrame();
+            ViewPaneFrameComponent selectedFrame = Static.getActiveFrame();
 
             Action[] actions = new Action[internalFrames.size()];
             int index = 0, next;

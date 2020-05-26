@@ -179,7 +179,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     /**
      * @return Returns the activeFrame.
      */
-    public AbstractInternalFrame getActiveFrame() {
+    public ViewPaneFrameComponent getActiveFrame() {
         return contentPane.getActiveFrame();
     }
 

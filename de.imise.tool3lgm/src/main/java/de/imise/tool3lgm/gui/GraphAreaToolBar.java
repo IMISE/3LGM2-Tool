@@ -26,7 +26,7 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
 
     private final ToolButton buttonCreateEdge;
 
-    private InternalGraphFrame frame;
+    private GraphViewPaneFrameComponent frame;
 
     private final ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -43,7 +43,7 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
     /**
      * @param frame
      */
-    public GraphAreaToolBar(final InternalGraphFrame frame) {
+    public GraphAreaToolBar(final GraphViewPaneFrameComponent frame) {
         buttonSwitchMouseMode = ToolButton.createDisableMouseMakesElementsButton();
         GraphDocument doc = frame.getGraphDocument();
         MetaModel metaModel = doc.getMetaModel();
@@ -95,7 +95,7 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
         return paintableNodeClasses;
     }
 
-    void setFrame(final InternalGraphFrame frame) {
+    void setFrame(final GraphViewPaneFrameComponent frame) {
         this.frame = frame;
         sliders.setFrame(frame);
         update();

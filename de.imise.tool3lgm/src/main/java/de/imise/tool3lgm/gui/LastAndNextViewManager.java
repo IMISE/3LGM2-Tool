@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.gui;
 
-import java.beans.PropertyVetoException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import de.imise.tool3lgm.event.action.GraphDocumentAction;
 public class LastAndNextViewManager {
 
     /** List of all InternalFrames in the order they were active */
-    private static final List<AbstractInternalFrame> windowList = new ArrayList<>();
+    private static final List<ViewPaneFrameComponent> windowList = new ArrayList<>();
 
     /** if true blocks the circular update */
     private static boolean operatingWindowList = false;
@@ -34,14 +33,9 @@ public class LastAndNextViewManager {
         @Override
         protected void actionPerformed() {
             operatingWindowList = true;
-            AbstractInternalFrame f = getPreviousWindow();
+            ViewPaneFrameComponent f = getPreviousWindow();
             if (f != null) {
-                try {
-                    f.setSelected(true);
-                } catch (Exception ex) {
-                    //do nothing because it's not critical
-                    //Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
-                }
+                f.setSelected();
             }
             operatingWindowList = false;
         }
@@ -58,14 +52,9 @@ public class LastAndNextViewManager {
         @Override
         protected void actionPerformed() {
             operatingWindowList = true;
-            AbstractInternalFrame f = getNextWindow();
+            ViewPaneFrameComponent f = getNextWindow();
             if (f != null) {
-                try {
-                    f.setSelected(true);
-                } catch (Exception ex) {
-                    //do nothing because it's not critical
-                    //Log.show(Log.ERROR, getResString("FehlerAllgemein"), ex);
-                }
+                f.setSelected();
             }
             operatingWindowList = false;
         }
@@ -80,7 +69,7 @@ public class LastAndNextViewManager {
     /**
      * @param frame
      */
-    public static void addWindow(final AbstractInternalFrame frame) {
+    public static void addWindow(final ViewPaneFrameComponent frame) {
         if (operatingWindowList) {
             return;
         }
@@ -103,7 +92,7 @@ public class LastAndNextViewManager {
     /**
      * @param frame
      */
-    public static void removeWindow(final AbstractInternalFrame frame) {
+    public static void removeWindow(final ViewPaneFrameComponent frame) {
         if (operatingWindowList) {
             return;
         }
@@ -128,26 +117,23 @@ public class LastAndNextViewManager {
      *
      */
     public static void selectLastFrame() {
-        AbstractInternalFrame lastFrame = getNextWindow();
+        ViewPaneFrameComponent lastFrame = getNextWindow();
         if (lastFrame == null) {
             lastFrame = getPreviousWindow();
         }
         if (lastFrame != null) {
-            try {
-                lastFrame.setSelected(true);
-            } catch (PropertyVetoException ex) {
-            }
+            lastFrame.setSelected();
         }
     }
 
     /**
      * @return
      */
-    private static AbstractInternalFrame getNextWindow() {
+    private static ViewPaneFrameComponent getNextWindow() {
         if (windowIndex < 0 || windowIndex >= windowList.size() - 1) {
             return null;
         }
-        AbstractInternalFrame retVal = windowList.get(windowIndex + 1);
+        ViewPaneFrameComponent retVal = windowList.get(windowIndex + 1);
         if (windowIndex < windowList.size() - 1) {
             windowIndex++;
         }
@@ -157,11 +143,11 @@ public class LastAndNextViewManager {
     /**
      * @return
      */
-    private static AbstractInternalFrame getPreviousWindow() {
+    private static ViewPaneFrameComponent getPreviousWindow() {
         if (windowIndex <= 0 || windowIndex > windowList.size()) {
             return null;
         }
-        AbstractInternalFrame retVal = windowList.get(windowIndex - 1);
+        ViewPaneFrameComponent retVal = windowList.get(windowIndex - 1);
         if (windowIndex >= 0) {
             windowIndex--;
         }

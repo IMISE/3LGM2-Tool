@@ -576,7 +576,7 @@ public class Tool3lgm {
     /**
      * @return Returns the activeFrame.
      */
-    public AbstractInternalFrame getActiveFrame() {
+    public ViewPaneFrameComponent getActiveFrame() {
         return mainFrame.getActiveFrame();
     }
 

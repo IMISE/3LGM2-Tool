@@ -1,17 +1,17 @@
 package de.imise.tool3lgm.graphtools.newmatrixview;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalFrameToolbarManager;
 import de.imise.tool3lgm.gui.MatrixViewPane;
+import de.imise.tool3lgm.gui.MatrixViewPaneFrameComponent;
 
 /**
  * Klasse zur Darstellung von Verbindungen zwischen Objekten in einer Tabelle
  *
  * @author Thomas Rudert, AXS
  */
-public class MatrixViewInternalFrame extends AbstractInternalFrame {
+public class MatrixViewInternalFrame extends AbstractInternalFrame implements MatrixViewPaneFrameComponent {
 
     /**
      * @param doc
@@ -25,42 +25,9 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame {
         updateTitle();
     }
 
-    /**
-     * @return
-     */
-    public int getTitleIndex() {
-        MatrixViewPane viewPane = getViewPane();
-        return viewPane.getTitleIndex();
-    }
-
     @Override
     public MatrixViewPane getViewPane() {
         return (MatrixViewPane) viewPane;
-    }
-
-    /**
-     * @return
-     */
-    public MetaPathSelection getMetaPathSelection() {
-        MatrixViewPane viewPane = getViewPane();
-        MetaPathSelection metaPathSelection = viewPane.getMetaPathSelection();
-        return metaPathSelection;
-    }
-
-    /**
-     * @param metaPathSelection
-     */
-    public void setMetaPathSelection(final MetaPathSelection metaPathSelection) {
-        MatrixViewPane viewPane = getViewPane();
-        viewPane.setMetaPathSelection(metaPathSelection);
-    }
-
-    /**
-     * @param mainFrameToolBar
-     */
-    public void setMatrixViewToolBar(final InternalMatrixFrameToolBar matrixViewToolBar) {
-        MatrixViewPane viewPane = getViewPane();
-        viewPane.setMatrixViewToolBar(matrixViewToolBar);
     }
 
 }

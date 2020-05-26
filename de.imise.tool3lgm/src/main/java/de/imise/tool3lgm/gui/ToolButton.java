@@ -35,7 +35,7 @@ public class ToolButton extends JToggleButton {
 
     private static final Dimension PREFRERRED_SIZE = new Dimension(30, 30);
 
-    private InternalGraphFrame frame;
+    private GraphViewPaneFrameComponent frame;
 
     /**
      * COMMENTME
@@ -148,7 +148,7 @@ public class ToolButton extends JToggleButton {
         return PREFRERRED_SIZE;
     }
 
-    public void setFrame(final InternalGraphFrame frame) {
+    public void setFrame(final GraphViewPaneFrameComponent frame) {
         if (frame != null && paintedNode != null) {
             GraphDocument doc = frame.getGraphDocument();
             paintedNodeContainer = new NodeContainer(paintedNode, doc);

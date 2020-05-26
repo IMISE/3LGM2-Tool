@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.gui.MatrixViewPaneFrameComponent;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
@@ -73,7 +74,7 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
     /**
      * Frame dessen Darstellung durch diese Toolbar beeinflusst wird
      */
-    private MatrixViewInternalFrame controlledFrame;
+    private MatrixViewPaneFrameComponent controlledFrame;
 
     /**
      * Maximale Anzahle gleichzeitig auswählbarer Metapfade, wenn es mehrere gibt
@@ -84,7 +85,7 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
      * @param controlledFrame
      *            Frame dessen Darstellung durch diese Toolbar beeinfluss wird.
      */
-    public InternalMatrixFrameToolBar(final MatrixViewInternalFrame controlledFrame) {
+    public InternalMatrixFrameToolBar(final MatrixViewPaneFrameComponent controlledFrame) {
         // dieser Constructor sollte nur mit TableInternalFrames aufgerufen werden. ACHTUNG: der
         // wird per Refelction aufgerufen, daher findet man im Code keine 'direkte' Verwendung
         this.controlledFrame = controlledFrame;
@@ -132,9 +133,10 @@ public class InternalMatrixFrameToolBar extends UnfloatableToolBar implements Ch
 
     }
 
-    public void setFrame(final MatrixViewInternalFrame frame) {
+    public void setFrame(final MatrixViewPaneFrameComponent frame) {
         controlledFrame = frame;
-        metaPathSelector.setSelection(frame.getMetaPathSelection());
+        MetaPathSelection metaPathSelection = frame.getMetaPathSelection();
+        metaPathSelector.setSelection(metaPathSelection);
     }
 
     /**

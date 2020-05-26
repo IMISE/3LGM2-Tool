@@ -23,7 +23,6 @@ import java.util.List;
 
 import javax.help.CSH;
 import javax.swing.JComponent;
-import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -88,7 +87,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     private final ViewPaneFrameComponentParent desktop;
 
     /** InternalFrame in desktop, which has the focus */
-    private AbstractInternalFrame activeFrame = null;
+    private ViewPaneFrameComponent activeFrame = null;
 
     /**
      * Diese Variable wird in <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht,
@@ -130,7 +129,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     /**
      * @return das gerade aktive Interne Fenster
      */
-    public final AbstractInternalFrame getActiveFrame() {
+    public final ViewPaneFrameComponent getActiveFrame() {
         return activeFrame;
     }
 
@@ -354,9 +353,8 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         }
         int nextMatrixViewTitleIndex = getNextMatrixViewTitleIndex(doc);
         MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, internalFrameToolbarManager, nextMatrixViewTitleIndex);
-        desktop.add(matrixView);
         matrixView.addInternalFrameListener(this);
-        matrixView.setVisible(true);
+        desktop.add(matrixView);
         return true;
     }
 
@@ -598,7 +596,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
 
     @Override
     public void internalFrameActivated(final InternalFrameEvent e) {
-        JInternalFrame oldActiveFrame = activeFrame;
+        ViewPaneFrameComponent oldActiveFrame = activeFrame;
         activeFrame = (AbstractInternalFrame) e.getInternalFrame();
         if (oldActiveFrame != activeFrame) {
             GraphDocument doc = activeFrame.getGraphDocument();

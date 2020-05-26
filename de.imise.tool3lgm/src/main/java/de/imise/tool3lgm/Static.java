@@ -31,7 +31,6 @@ import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
-import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.gui.ViewPaneFrameComponent;
@@ -198,7 +197,7 @@ public class Static {
     }
 
     /** Gibt das gerade aktivierte Frame zurück */
-    public static AbstractInternalFrame getActiveFrame() {
+    public static ViewPaneFrameComponent getActiveFrame() {
         return tool == null ? null : tool.getActiveFrame();
     }
 
@@ -209,13 +208,13 @@ public class Static {
 
     /** Gibt zurück, ob ein aktiver, sichtbarer Grafik-Frame existiert */
     public static boolean isActiveFrameGraphFrame() {
-        AbstractInternalFrame f = getActiveFrame();
+        ViewPaneFrameComponent f = getActiveFrame();
         return f != null && f instanceof InternalGraphFrame && f.getGraphDocument() instanceof Szenario && f.isVisible();
     }
 
     /** Gibt zurück, ob ein aktiver, sichtbarer Matrix-Frame existiert */
     public static boolean isActiveFrameMatrixFrame() {
-        AbstractInternalFrame f = getActiveFrame();
+        ViewPaneFrameComponent f = getActiveFrame();
         return f != null && f instanceof MatrixViewInternalFrame && f.isVisible();
     }
 

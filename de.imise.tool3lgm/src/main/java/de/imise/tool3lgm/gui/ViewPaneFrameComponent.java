@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.gui;
 
 import java.awt.Component;
+import java.awt.Cursor;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
@@ -27,6 +28,16 @@ public interface ViewPaneFrameComponent extends GraphDocumentOwner {
      * @return
      */
     public Component getParent();
+
+    /**
+     *
+     */
+    public void setCursor(final Cursor cursor);
+
+    /**
+     * @return
+     */
+    public boolean isVisible();
 
     /**
      * @return the component that contains this. The direct or indirect parent

@@ -21,13 +21,13 @@ public class GraphAreaOptionSliders implements ChangeListener {
 
     private SliderWithTextField sliderDegree, sliderZoom, sliderGap, sliderPageSizeFactor;
 
-    private InternalGraphFrame frame;
+    private GraphViewPaneFrameComponent frame;
 
-    public GraphAreaOptionSliders(final InternalGraphFrame frame) {
+    public GraphAreaOptionSliders(final GraphViewPaneFrameComponent frame) {
         this(frame, -1, -1);
     }
 
-    public GraphAreaOptionSliders(final InternalGraphFrame frame, final int preferredSizeWidth, final int preferredSizeHeight) {
+    public GraphAreaOptionSliders(final GraphViewPaneFrameComponent frame, final int preferredSizeWidth, final int preferredSizeHeight) {
         this.frame = frame;
         init(preferredSizeWidth, preferredSizeHeight);
         addChangeListener();
@@ -57,7 +57,7 @@ public class GraphAreaOptionSliders implements ChangeListener {
 
     private int getSliderGapMaximum() {
         //den maximalen Abstand in Anhängigkeit von der Ebenengröße berechnen
-        GraphViewPane graphViewPane = frame.getGraphViewPane();
+        GraphViewPane graphViewPane = (GraphViewPane) frame.getViewPane();
         Szenario szen = graphViewPane.getSzenario();
         double pageSizeFactor = szen.getPageSizeFactor();
         int maxPageSizeFactor = Double.valueOf(800d * pageSizeFactor).intValue();
@@ -96,7 +96,7 @@ public class GraphAreaOptionSliders implements ChangeListener {
         return sliderPageSizeFactor;
     }
 
-    public void setFrame(final InternalGraphFrame frame) {
+    public void setFrame(final GraphViewPaneFrameComponent frame) {
         //die Listener müssen entfernt werden, weil in updateValues() sonst ein stateChanged() ausgelöst wird und der aktuelle Frame ein falsches Gap bekommt
         removeChangeListener();
         this.frame = frame;
