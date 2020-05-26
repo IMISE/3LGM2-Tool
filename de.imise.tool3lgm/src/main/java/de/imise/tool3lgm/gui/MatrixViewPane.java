@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.gui;
 
 import static de.imise.tool3lgm.Static.contextGenerator;
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -78,6 +77,7 @@ public class MatrixViewPane extends ViewPane implements MatrixViewContainer, Mou
         cellPanel.addMouseMotionListener(this);
         cellPanel.addMouseListener(this);
         setComponents();
+
     }
 
     @Override

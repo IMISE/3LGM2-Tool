@@ -18,17 +18,9 @@ public final class GraphViewPane extends ViewPane implements GraphViewContainer 
      *
      */
     public GraphViewPane(final GraphDocument doc) {
-        this(doc, true);
-    }
-
-    /**
-     * @param doc
-     * @param insertScrollPanel
-     */
-    public GraphViewPane(final GraphDocument doc, final boolean insertScrollPanel) {
-        super(doc, insertScrollPanel);
+        super(doc);
         area = new InputGraphArea(doc);
-        setViewComponent(area);
+        scrollPane.setViewportView(area);
     }
 
     @Override
