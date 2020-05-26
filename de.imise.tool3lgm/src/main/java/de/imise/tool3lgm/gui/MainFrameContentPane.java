@@ -47,7 +47,6 @@ import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
-import de.imise.util.Sys;
 
 /**
  * @author AXS (6 Aug 2019)
@@ -324,17 +323,11 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         super.setCursor(cursor);
     }
 
-    static int iii = 0;
     /**
      * @param doc
      * @return
      */
     private ViewContainerFrameComponent createGraphFrame(final GraphDocument doc) {
-        if (iii++ < 5) {
-            Sys.err(iii + " " + doc);
-        } else {
-            System.exit(0);
-        }
         InternalGraphFrame frame = new InternalGraphFrame(doc);
         frame.setBounds(desktop.getBounds());
         if (doc instanceof Szenario) {
@@ -474,7 +467,6 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         if (activateGraphView) {
             //wenn nicht grade vorher ein Matrix-View aktiviert wurde (nur dann wäre die globale Variable==false)
             if (this.activateGraphView) {
-                this.activateGraphView = false;
                 ViewContainerFrameComponent graphViewContainerFrameComponent = getGraphViewContainerFrameComponent(doc);
                 //den richtigen Frame nach vorne holen
                 if (!graphViewContainerFrameComponent.isSelected()) {
@@ -699,7 +691,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
             internalFrameToolbarManager.updateToolBar();
             //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
             //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
-            setCurrentDoc(doc, activeFrame instanceof InternalGraphFrame);
+            setCurrentDoc(doc, false);
             workarea.revalidate();
             workarea.repaint();
             LastAndNextViewManager.addWindow(activeFrame);
