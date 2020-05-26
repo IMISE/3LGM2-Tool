@@ -49,6 +49,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.StringUtils;
+import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
  * Panel für alle einfachen Verbindungen zwischen 2 Elementen
@@ -515,13 +516,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             return true;
         }
         if (source instanceof Component) {
-            Component comp = ((Component) source).getParent();
-            while (comp != null) {
-                if (maybeSourceClass.isAssignableFrom(comp.getClass())) {
-                    return true;
-                }
-                comp = comp.getParent();
-            }
+            return ParentComponentFinder.hasParent((Component) source, maybeSourceClass);
         }
         return false;
     }

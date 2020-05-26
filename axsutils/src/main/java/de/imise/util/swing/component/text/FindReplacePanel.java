@@ -1,5 +1,7 @@
 package de.imise.util.swing.component.text;
 
+import static de.imise.util.swing.component.ParentComponentFinder.getFrameOrDialog;
+
 import java.awt.Component;
 import java.awt.DefaultFocusTraversalPolicy;
 import java.awt.Dimension;
@@ -104,23 +106,6 @@ public class FindReplacePanel extends JPanel implements ActionListener {
         super();
         // baue nur das JPanel
         init(textComponent);
-    }
-
-    /**
-     * Liefert den Dialog oder das Fenster, der die übergebene Komponente enthält
-     *
-     * @param comp
-     * @return
-     */
-    public static final Component getFrameOrDialog(final Component comp) {
-        Component parent = comp.getParent();
-        while (parent != null) {
-            if (parent instanceof JDialog || parent instanceof JFrame) {
-                return parent;
-            }
-            parent = parent.getParent();
-        }
-        return null;
     }
 
     /**

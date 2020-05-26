@@ -1,8 +1,9 @@
 package de.imise.util.image;
 
+import static de.imise.util.swing.component.ParentComponentFinder.getFrameOrDialog;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
@@ -13,8 +14,6 @@ import java.io.RandomAccessFile;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -250,23 +249,6 @@ public class ComponentAsImageExportHandler {
      */
     public static final void createFile(final JComponent comp) {
         new ComponentAsImageExportHandler().createFileInternal(comp);
-    }
-
-    /**
-     * Liefert den Dialog oder das Fenster, der die übergebene Komponente enthält
-     *
-     * @param comp
-     * @return
-     */
-    public static final Component getFrameOrDialog(final Component comp) {
-        Component parent = comp.getParent();
-        while (parent != null) {
-            if (parent instanceof JDialog || parent instanceof JFrame) {
-                return parent;
-            }
-            parent = parent.getParent();
-        }
-        return null;
     }
 
     /**

@@ -21,8 +21,6 @@ import java.util.Vector;
 import javax.swing.AbstractAction;
 import javax.swing.ActionMap;
 import javax.swing.InputMap;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -48,6 +46,7 @@ import de.imise.util.clipboard.ContentManagerImpl;
 import de.imise.util.clipboard.IllegalContentException;
 import de.imise.util.clipboard.SimpleContentParser;
 import de.imise.util.pair.Pair;
+import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
  * Klasse repräsentiert einen speziellen <code>JTable</code>, der zur Eingabe und Darstellung von Kennzahlen, Verteilungsgewichten und Modelvaribalen
@@ -427,17 +426,8 @@ public class UserFieldTable extends JTable implements ContentExchanger {
      * @param key
      */
     private void showWarningMessage(final String key) {
-        Component parentComponent = getParent();
-        if (parentComponent == null) {
-            return;
-        }
-        while (parentComponent != null) {
-            if (parentComponent instanceof JDialog || parentComponent instanceof JFrame) {
-                break;
-            }
-            parentComponent = parentComponent.getParent();
-        }
-        JOptionPane.showMessageDialog(parentComponent, getResString(key), getResString("userFieldTable_warning"), JOptionPane.WARNING_MESSAGE);
+        Component parentFrameOrDialog = ParentComponentFinder.getFrameOrDialog(this);
+        JOptionPane.showMessageDialog(parentFrameOrDialog, getResString(key), getResString("userFieldTable_warning"), JOptionPane.WARNING_MESSAGE);
     }
 
     /**

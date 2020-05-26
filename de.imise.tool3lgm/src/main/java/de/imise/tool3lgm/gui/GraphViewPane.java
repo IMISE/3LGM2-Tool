@@ -1,12 +1,11 @@
 package de.imise.tool3lgm.gui;
 
-import java.awt.Component;
-
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
  * @author AXS (19.05.2020)
@@ -61,14 +60,7 @@ public final class GraphViewPane extends ViewPane {
      *         should be a {@link ViewPaneFrameComponent}.
      */
     public ViewPaneFrameComponent getFrameComponent() {
-        Component parent = getParent();
-        while (parent != null) {
-            if (parent instanceof ViewPaneFrameComponent) {
-                return (ViewPaneFrameComponent) parent;
-            }
-            parent = parent.getParent();
-        }
-        return null;
+        return ParentComponentFinder.getParent(this, ViewPaneFrameComponent.class);
     }
 
     //    /**
