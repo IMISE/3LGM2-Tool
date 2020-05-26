@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
  *
  * @author Thomas Rudert
  */
-public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListenerSimple, ViewContainerFrameComponent {
+public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListenerSimple, ViewPaneFrameComponent {
 
     /** the view to display */
     protected ViewPane viewPane;
@@ -24,7 +24,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
     /**
      * Konstruktor
      *
-     * @param viewContainer the view to display
+     * @param viewPane the view to display
      */
     public AbstractInternalFrame(final ViewPane viewPane) {
         /* JInternalFrame mit Titel, resizable, closable, maximizable, and iconifiable */

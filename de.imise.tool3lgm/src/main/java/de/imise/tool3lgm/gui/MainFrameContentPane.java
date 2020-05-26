@@ -327,7 +327,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      * @param doc
      * @return
      */
-    private ViewContainerFrameComponent createGraphFrame(final GraphDocument doc) {
+    private ViewPaneFrameComponent createGraphFrame(final GraphDocument doc) {
         InternalGraphFrame frame = new InternalGraphFrame(doc);
         frame.setBounds(desktop.getBounds());
         if (doc instanceof Szenario) {
@@ -468,11 +468,11 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         if (activateGraphView) {
             //wenn nicht grade vorher ein Matrix-View aktiviert wurde (nur dann wäre die globale Variable==false)
             if (this.activateGraphView) {
-                ViewContainerFrameComponent graphViewContainerFrameComponent = getGraphViewContainerFrameComponent(doc);
+                ViewPaneFrameComponent graphViewPaneFrameComponent = getGraphViewPaneFrameComponent(doc);
                 //den richtigen Frame nach vorne holen
-                if (!graphViewContainerFrameComponent.isSelected()) {
+                if (!graphViewPaneFrameComponent.isSelected()) {
                     try {
-                        graphViewContainerFrameComponent.setSelected();
+                        graphViewPaneFrameComponent.setSelected();
                     } catch (Exception ex) {
                         Log.show(Log.FATAL, getResString("FehlerAllgemein"), ex);
                     }
@@ -531,23 +531,23 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      *         closed the stored view parameters of the szenario
      */
     public GraphViewParameter getGraphViewParameter(final Szenario szen) {
-        GraphViewContainer graphViewContainer = desktop.getGraphViewContainer(szen);
-        GraphViewParameter graphViewParameter = graphViewContainer != null ? graphViewContainer.getGraphViewParameter() : szen.getGraphViewParameter();
+        GraphViewPane graphViewPane = desktop.getGraphViewPane(szen);
+        GraphViewParameter graphViewParameter = graphViewPane != null ? graphViewPane.getGraphViewParameter() : szen.getGraphViewParameter();
         return graphViewParameter;
     }
 
     /**
      * @param doc
-     * @return the frame component of the view container that contains the
+     * @return the frame component of the view pane that contains the
      *         graph of the {@link GraphDocument} if exists or <code>null</code>
      */
-    public final ViewContainerFrameComponent getGraphViewContainerFrameComponent(final GraphDocument doc) {
-        GraphViewContainer graphViewContainer = desktop.getGraphViewContainer(doc);
-        ViewContainerFrameComponent graphViewContainerFrameComponent = graphViewContainer == null ? null : graphViewContainer.getFrameComponent();
-        if (graphViewContainerFrameComponent == null) {
-            graphViewContainerFrameComponent = createGraphFrame(doc);
+    public final ViewPaneFrameComponent getGraphViewPaneFrameComponent(final GraphDocument doc) {
+        GraphViewPane graphViewPane = desktop.getGraphViewPane(doc);
+        ViewPaneFrameComponent graphViewPaneFrameComponent = graphViewPane == null ? null : graphViewPane.getFrameComponent();
+        if (graphViewPaneFrameComponent == null) {
+            graphViewPaneFrameComponent = createGraphFrame(doc);
         }
-        return graphViewContainerFrameComponent;
+        return graphViewPaneFrameComponent;
     }
 
     /**
@@ -643,15 +643,15 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     public void internalFrameClosing(final InternalFrameEvent e) {
         //before closing -> store all view parameter in the szenario view parameter (inclusive view position)
         Object source = e.getSource();
-        if (source instanceof ViewContainerFrameComponent) {
-            ViewContainerFrameComponent viewContainerFrameComponent = (ViewContainerFrameComponent) source;
-            ViewContainer viewContainer = viewContainerFrameComponent.getViewPane();
-            if (viewContainer instanceof GraphViewContainer) {
-                GraphViewContainer graphViewContainer = (GraphViewContainer) viewContainer;
-                GraphDocument doc = graphViewContainer.getGraphDocument();
+        if (source instanceof ViewPaneFrameComponent) {
+            ViewPaneFrameComponent viewPaneFrameComponent = (ViewPaneFrameComponent) source;
+            ViewPane viewPane = viewPaneFrameComponent.getViewPane();
+            if (viewPane instanceof GraphViewPane) {
+                GraphViewPane graphViewPane = (GraphViewPane) viewPane;
+                GraphDocument doc = graphViewPane.getGraphDocument();
                 if (doc instanceof Szenario) {
                     Szenario szen = (Szenario) doc;
-                    GraphViewParameter graphViewParameter = graphViewContainer.getGraphViewParameter();
+                    GraphViewParameter graphViewParameter = graphViewPane.getGraphViewParameter();
                     szen.adaptGraphViewParameter(graphViewParameter);
                 }
             }

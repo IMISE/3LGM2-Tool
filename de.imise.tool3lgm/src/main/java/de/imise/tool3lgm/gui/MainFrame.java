@@ -191,14 +191,6 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
         return contentPane.getGraphViewParameter(szen);
     }
 
-    //    /**
-    //     * @param doc
-    //     * @return the view container that contains the graph of the GraphDocument if exists or <code>null</code>
-    //     */
-    //    public final GraphViewContainer _getGraphViewContainer(final GraphDocument doc) {
-    //        return contentPane.getGraphViewContainer(doc);
-    //    }
-    //
     /**
      * ordnet alle InternalFrames neu an (überlappt)
      */
@@ -213,11 +205,6 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
         contentPane.reorderFramesSideBySide();
     }
 
-    //    /** Holt den erstbesten Frame in den Vordergrund (und damit das dazugehörige Doc) */
-    //    private void selectLastFrame() {
-    //        contentPane.selectLastFrame();
-    //    }
-    //
     ////////////////////////////
     // Tool3lgmChangeListener //
     ////////////////////////////

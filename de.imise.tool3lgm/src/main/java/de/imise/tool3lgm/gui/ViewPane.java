@@ -6,13 +6,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.util.swing.component.CenterableScrollPane;
 
 /**
  * @author AXS (19.05.2020)
  */
-public abstract class ViewPane extends JPanel implements ViewContainer {
+public abstract class ViewPane extends JPanel implements GraphDocumentOwner {
 
     /**
      *
@@ -45,12 +46,10 @@ public abstract class ViewPane extends JPanel implements ViewContainer {
         return doc;
     }
 
-    @Override
     public final Szenario getSzenario() {
         return szen;
     }
 
-    @Override
     public final JScrollPane getScrollPane() {
         return scrollPane;
     }
@@ -62,6 +61,11 @@ public abstract class ViewPane extends JPanel implements ViewContainer {
         result = prime * result + (doc == null ? 0 : doc.hashCode());
         return result;
     }
+
+    /**
+     * @return
+     */
+    public abstract String getFullName();
 
     @Override
     public boolean equals(final Object obj) {

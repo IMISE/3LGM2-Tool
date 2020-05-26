@@ -17,7 +17,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 /**
  * @author AXS (08.05.2020)
  */
-public class MainFrameDesktopPane extends JDesktopPane implements ComponentListener, ViewContainerFrameComponentParent {
+public class MainFrameDesktopPane extends JDesktopPane implements ComponentListener, ViewPaneFrameComponentParent {
 
     /** if the desktop size changes the frames will be resized too */
     private int desktopWidth = -1;
@@ -35,15 +35,15 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
      * @return
      */
     @Override
-    public GraphViewContainer getGraphViewContainer(final GraphDocument doc) {
+    public GraphViewPane getGraphViewPane(final GraphDocument doc) {
         JInternalFrame[] allFrames = getAllFrames();
         for (JInternalFrame frame : allFrames) {
             if (frame instanceof InternalGraphFrame) {
                 InternalGraphFrame graphFrame = (InternalGraphFrame) frame;
                 ViewPane viewPane = graphFrame.getViewPane();
                 if (viewPane.hasGraphDocument(doc)) {
-                    if (viewPane instanceof GraphViewContainer) {
-                        return (GraphViewContainer) viewPane;
+                    if (viewPane instanceof GraphViewPane) {
+                        return (GraphViewPane) viewPane;
                     }
                 }
             }
@@ -52,33 +52,33 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
     }
 
     @Override
-    public List<ViewContainerFrameComponent> getViewContainerFrameComponents(final GraphDocument doc) {
+    public List<ViewPaneFrameComponent> getViewPaneFrameComponents(final GraphDocument doc) {
         JInternalFrame[] allFrames = getAllFrames();
-        List<ViewContainerFrameComponent> viewContainerFrameComponents = new ArrayList<>();
+        List<ViewPaneFrameComponent> viewPaneFrameComponents = new ArrayList<>();
         for (JInternalFrame frame : allFrames) {
-            if (frame instanceof ViewContainerFrameComponent) {
-                ViewContainerFrameComponent viewContainerFrameComponent = (ViewContainerFrameComponent) frame;
-                if (viewContainerFrameComponent.hasGraphDocument(doc)) {
-                    viewContainerFrameComponents.add(viewContainerFrameComponent);
+            if (frame instanceof ViewPaneFrameComponent) {
+                ViewPaneFrameComponent viewPaneFrameComponent = (ViewPaneFrameComponent) frame;
+                if (viewPaneFrameComponent.hasGraphDocument(doc)) {
+                    viewPaneFrameComponents.add(viewPaneFrameComponent);
                 }
             }
         }
-        return viewContainerFrameComponents;
+        return viewPaneFrameComponents;
     }
 
     @Override
-    public boolean isSelected(final ViewContainerFrameComponent viewContainerFrameComponent) {
-        if (viewContainerFrameComponent instanceof InternalGraphFrame) {
-            InternalGraphFrame internalFrame = (InternalGraphFrame) viewContainerFrameComponent;
+    public boolean isSelected(final ViewPaneFrameComponent viewPaneFrameComponent) {
+        if (viewPaneFrameComponent instanceof InternalGraphFrame) {
+            InternalGraphFrame internalFrame = (InternalGraphFrame) viewPaneFrameComponent;
             return internalFrame.isSelected();
         }
         return false;
     }
 
     @Override
-    public void setSelected(final ViewContainerFrameComponent viewContainerFrameComponent) {
-        if (viewContainerFrameComponent instanceof InternalGraphFrame) {
-            InternalGraphFrame internalFrame = (InternalGraphFrame) viewContainerFrameComponent;
+    public void setSelected(final ViewPaneFrameComponent viewPaneFrameComponent) {
+        if (viewPaneFrameComponent instanceof InternalGraphFrame) {
+            InternalGraphFrame internalFrame = (InternalGraphFrame) viewPaneFrameComponent;
             internalFrame.setSelected(true);
         }
     }

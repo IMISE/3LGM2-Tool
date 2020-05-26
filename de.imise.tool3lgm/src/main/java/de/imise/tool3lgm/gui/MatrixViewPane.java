@@ -29,7 +29,7 @@ import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 /**
  * @author AXS (21.05.2020)
  */
-public class MatrixViewPane extends ViewPane implements MatrixViewContainer, MouseMotionListener, MouseListener {
+public class MatrixViewPane extends ViewPane implements MouseMotionListener, MouseListener {
 
     /** Liefert die aktuelle Toolbar */
     private final InternalFrameToolbarManager toolbarManager;
@@ -101,7 +101,9 @@ public class MatrixViewPane extends ViewPane implements MatrixViewContainer, Mou
         return name;
     }
 
-    @Override
+    /**
+     * @return
+     */
     public int getTitleIndex() {
         return titleIndex;
     }
@@ -109,7 +111,6 @@ public class MatrixViewPane extends ViewPane implements MatrixViewContainer, Mou
     /**
      * @param metaPathSelection
      */
-    @Override
     public void setMetaPathSelection(final MetaPathSelection metaPathSelection) {
         this.metaPathSelection = metaPathSelection;
         tableModel.fillTableModel(metaPathSelection);
@@ -122,7 +123,6 @@ public class MatrixViewPane extends ViewPane implements MatrixViewContainer, Mou
     /**
      * @return
      */
-    @Override
     public MetaPathSelection getMetaPathSelection() {
         return metaPathSelection;
     }
@@ -156,7 +156,9 @@ public class MatrixViewPane extends ViewPane implements MatrixViewContainer, Mou
     /** Werkzeugleiste zu diesem Fenster */
     private InternalMatrixFrameToolBar matrixViewToolBar = null;
 
-    @Override
+    /**
+     * @param matrixViewToolBar
+     */
     public void setMatrixViewToolBar(final InternalMatrixFrameToolBar matrixViewToolBar) {
         this.matrixViewToolBar = matrixViewToolBar;
     }
@@ -191,9 +193,6 @@ public class MatrixViewPane extends ViewPane implements MatrixViewContainer, Mou
     public void mousePressed(final MouseEvent e) {
     }
 
-    /**
-     * @see java.awt.event.MouseListener#mouseReleased(java.awt.event.MouseEvent)
-     */
     @Override
     public void mouseReleased(final MouseEvent e) {
         mouseEventRoutine(e);
@@ -238,16 +237,10 @@ public class MatrixViewPane extends ViewPane implements MatrixViewContainer, Mou
         contextGenerator.setElementClicked(false);
     }
 
-    /**
-     * @see java.awt.event.MouseListener#mouseEntered(java.awt.event.MouseEvent)
-     */
     @Override
     public void mouseEntered(final MouseEvent arg0) {
     }
 
-    /**
-     * @see java.awt.event.MouseListener#mouseExited(java.awt.event.MouseEvent)
-     */
     @Override
     public void mouseExited(final MouseEvent arg0) {
         matrixViewToolBar.positionChanged(null, null, null);

@@ -4,7 +4,6 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalFrameToolbarManager;
-import de.imise.tool3lgm.gui.MatrixViewContainer;
 import de.imise.tool3lgm.gui.MatrixViewPane;
 
 /**
@@ -30,21 +29,21 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame {
      * @return
      */
     public int getTitleIndex() {
-        MatrixViewContainer viewContainer = getViewPane();
-        return viewContainer.getTitleIndex();
+        MatrixViewPane viewPane = getViewPane();
+        return viewPane.getTitleIndex();
     }
 
     @Override
     public MatrixViewPane getViewPane() {
-        return (MatrixViewPane) super.getViewPane();
+        return (MatrixViewPane) viewPane;
     }
 
     /**
      * @return
      */
     public MetaPathSelection getMetaPathSelection() {
-        MatrixViewContainer viewContainer = getViewPane();
-        MetaPathSelection metaPathSelection = viewContainer.getMetaPathSelection();
+        MatrixViewPane viewPane = getViewPane();
+        MetaPathSelection metaPathSelection = viewPane.getMetaPathSelection();
         return metaPathSelection;
     }
 
@@ -52,16 +51,16 @@ public class MatrixViewInternalFrame extends AbstractInternalFrame {
      * @param metaPathSelection
      */
     public void setMetaPathSelection(final MetaPathSelection metaPathSelection) {
-        MatrixViewContainer viewContainer = getViewPane();
-        viewContainer.setMetaPathSelection(metaPathSelection);
+        MatrixViewPane viewPane = getViewPane();
+        viewPane.setMetaPathSelection(metaPathSelection);
     }
 
     /**
      * @param mainFrameToolBar
      */
     public void setMatrixViewToolBar(final InternalMatrixFrameToolBar matrixViewToolBar) {
-        MatrixViewContainer viewContainer = getViewPane();
-        viewContainer.setMatrixViewToolBar(matrixViewToolBar);
+        MatrixViewPane viewPane = getViewPane();
+        viewPane.setMatrixViewToolBar(matrixViewToolBar);
     }
 
 }
