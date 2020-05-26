@@ -1,10 +1,13 @@
 package de.imise.tool3lgm.gui;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +16,7 @@ import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.log.Log;
 
 /**
  * @author AXS (08.05.2020)
@@ -64,6 +68,24 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
             }
         }
         return viewPaneFrameComponents;
+    }
+
+    @Override
+    public List<ViewPaneFrameComponent> getAllViewPaneFrameComponents() {
+        JInternalFrame[] allFrames = getAllFrames();
+        ViewPaneFrameComponent[] viewPaneFrameComponents = new ViewPaneFrameComponent[allFrames.length];
+        System.arraycopy(allFrames, 0, viewPaneFrameComponents, 0, allFrames.length);
+        return Arrays.asList(viewPaneFrameComponents);
+    }
+
+    @Override
+    public void removeViewPaneFrameComponents(final GraphDocument doc) {
+        List<ViewPaneFrameComponent> viewPaneFrameComponents = getViewPaneFrameComponents(doc);
+        for (ViewPaneFrameComponent frameComponent : viewPaneFrameComponents) {
+            AbstractInternalFrame frame = (AbstractInternalFrame) frameComponent;
+            LastAndNextViewManager.removeWindow(frame);
+            frame.dispose();
+        }
     }
 
     @Override
@@ -147,6 +169,80 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
     @Override
     public void componentHidden(final ComponentEvent e) {
         //do nothing
+    }
+
+    @Override
+    public void add(final ViewPaneFrameComponent viewPaneFrameComponent) {
+        if (viewPaneFrameComponent instanceof AbstractInternalFrame) {
+            AbstractInternalFrame frame = (AbstractInternalFrame) viewPaneFrameComponent;
+            Rectangle bounds = getBounds();
+            frame.setBounds(bounds);
+            super.add(frame);
+            frame.setLocation(0, 0);
+            frame.setVisible(true);
+            setSelectedFrame(frame);
+        }
+    }
+
+    /**
+     * ordnet alle InternalFrames neu an (überlappt)
+     */
+    public void reorderFramesWithOverlap() {
+        JInternalFrame[] frames = getAllFrames();
+        Rectangle rect = getVisibleRect();
+        double height = rect.getHeight();
+        double width = rect.getWidth();
+        int xOffset = 10, yOffset = 10;
+        int openFrameCount = 0;
+        for (int n = frames.length; n > 0; n--) {
+            ++openFrameCount;
+            double count = openFrameCount;
+            if (height - yOffset * count < 50) {
+                count = (height - 50) / yOffset;
+            }
+            frames[n - 1].setSize((int) width - xOffset * (int) count, (int) height - yOffset * (int) count);
+            frames[n - 1].setLocation(xOffset * (int) count, yOffset * (int) count);
+        }
+        try {
+            frames[frames.length - 1].setMaximum(false);
+        } catch (java.beans.PropertyVetoException evt) {
+            Log.show(Log.FATAL, getResString("FehlerAllgemein"), evt);
+        }
+    }
+
+    /**
+     * ordnet alle InternalFrames neu an (nebeneinander)
+     */
+    public void reorderFramesSideBySide() {
+        JInternalFrame[] frames = getAllFrames();
+        try {
+            frames[frames.length - 1].setMaximum(false);
+        } catch (java.beans.PropertyVetoException evt) {
+            Log.show(Log.FATAL, getResString("FehlerAllgemein"), evt);
+        }
+        Rectangle rect = getVisibleRect();
+        double height = rect.getHeight();
+        double width = rect.getWidth();
+        int spalten, zeilen;
+        double hilfe = Math.sqrt(frames.length);
+        if ((int) hilfe * (int) hilfe == frames.length) {
+            zeilen = (int) hilfe;
+            spalten = (int) hilfe;
+        } else {
+            zeilen = (int) hilfe + 1;
+            spalten = (int) hilfe;
+        }
+        int count = 0;
+        for (int m = 0; m < zeilen - 1; m++) {
+            for (int n = 0; n < spalten; n++) {
+                frames[count].setBounds(0 + n * (int) width / spalten, 0 + m * (int) height / zeilen, (int) width / spalten, (int) height / zeilen);
+                count++;
+            }
+        }
+        int rest = frames.length - count;
+        for (int k = count; k < frames.length; k++) {
+            frames[k].setBounds(0 + (k - count) * (int) width / rest, (int) height / zeilen * (zeilen - 1), (int) width / rest, (int) height / zeilen);
+        }
     }
 
 }

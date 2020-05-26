@@ -11,7 +11,6 @@ import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPER
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyVetoException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -83,12 +82,12 @@ import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.Tool3lgmMetaModelContextChooser;
 import de.imise.tool3lgm.gui.ToolSplashScreen;
+import de.imise.tool3lgm.gui.ViewPaneFrameComponent;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.imexport.DataImporter;
 import de.imise.tool3lgm.imexport.csv.DataExportModule;
 import de.imise.tool3lgm.imexport.csv.DataImportModule;
 import de.imise.tool3lgm.imexport.graphml.GraphmlExporter;
-import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.tool3lgm.xslt.WebExportDialog;
@@ -544,29 +543,25 @@ public class ActionLibrary {
         /** Gibt ein Array zurück, dessen Elemente Actions zum Öffnen der Teilmodell-Frames sind */
         public static final Action[] getSelectInternalFrameActions() {
 
-            JInternalFrame[] internalFrames = Static.getAllFrames();
+            List<ViewPaneFrameComponent> internalFrames = Static.getAllFrames();
             JInternalFrame selectedFrame = Static.getActiveFrame();
 
-            Action[] actions = new Action[internalFrames.length];
+            Action[] actions = new Action[internalFrames.size()];
             int index = 0, next;
-            for (final JInternalFrame internalFrame : internalFrames) {
+            for (final ViewPaneFrameComponent frame : internalFrames) {
 
-                if (internalFrame != selectedFrame) {
+                if (frame != selectedFrame) {
                     next = ++index;
                 } else {
                     next = 0;
                 }
 
-                actions[next] = new AbstractAction(internalFrame.getTitle()) {
+                actions[next] = new AbstractAction(frame.getTitle()) {
 
                     @Override
                     public void actionPerformed(final ActionEvent e) {
-                        try {
-                            if (!internalFrame.isSelected()) {
-                                internalFrame.setSelected(true);
-                            }
-                        } catch (PropertyVetoException exp) {
-                            Log.show(Log.FATAL, getResString("FehlerAllgemein"), exp);
+                        if (!frame.isSelected()) {
+                            frame.setSelected();
                         }
                     }
                 };
@@ -1021,30 +1016,6 @@ public class ActionLibrary {
             }
         };
 
-    }
-
-    /**
-     * Actions für Fenster-Einstellungen
-     *
-     * @author fstephan
-     */
-    public static class WindowActions {
-
-        /** Aktiviert die parallele Darstellung der (Teil-)Modelle */
-        public static final Action ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT) {
-            @Override
-            public void actionPerformed() {
-                getMainFrame().reorderFramesSideBySide();
-            }
-        };
-
-        /** Aktiviert das überlappende Darstellen der (Teil-)Modelle */
-        public static final Action ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT = new GraphFrameAction(ActionIdentifier.ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT) {
-            @Override
-            public void actionPerformed() {
-                getMainFrame().reorderFramesWithOverlap();
-            }
-        };
     }
 
 }

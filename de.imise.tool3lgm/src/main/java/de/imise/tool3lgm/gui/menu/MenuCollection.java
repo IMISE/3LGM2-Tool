@@ -334,7 +334,7 @@ public class MenuCollection {
         private final int scrollItemCount = 30;
 
         public WindowMenu() {
-            super(title, MenuCreator.createMenuEntries(true, ActionLibrary.WindowActions.ACTION_GRAPH_FRAMES_PARALLEL_ARRAGEMENT, ActionLibrary.WindowActions.ACTION_GRAPH_FRAMES_OVERLAPPING_ARRAGEMENT, new JSeparator(), new DynamicMenuPlaceholder()));
+            super(title, MenuCreator.createMenuEntries(true, new DynamicMenuPlaceholder()));
             DynamicMenuPlaceholder placeHolder = getPlaceholder(0);
             //firstFrameIndex + 2 weil der jeweils aktive Frame und der darauffolgende JSeparator nicht mitgescrollt werden sollen
             MenuScroller.setScrollerFor(this, scrollItemCount, 125, placeHolder.getStartIndex() + 2, 0);

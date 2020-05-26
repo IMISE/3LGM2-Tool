@@ -8,10 +8,10 @@ import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseListener;
+import java.util.List;
 
 import javax.help.CSH;
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.WindowConstants;
 
 import com.google.common.base.Strings;
@@ -171,8 +171,9 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
      *
      * @return JInternalFrame[]
      */
-    public JInternalFrame[] getAllFrames() {
-        return contentPane.getAllFrames();
+    public List<ViewPaneFrameComponent> getAllFrames() {
+        List<ViewPaneFrameComponent> allFrames = contentPane.getAllFrames();
+        return allFrames;
     }
 
     /**
@@ -189,20 +190,6 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
      */
     public GraphViewParameter getGraphViewParameter(final Szenario szen) {
         return contentPane.getGraphViewParameter(szen);
-    }
-
-    /**
-     * ordnet alle InternalFrames neu an (überlappt)
-     */
-    public void reorderFramesWithOverlap() {
-        contentPane.reorderFramesWithOverlap();
-    }
-
-    /**
-     * ordnet alle InternalFrames neu an (nebeneinander)
-     */
-    public void reorderFramesSideBySide() {
-        contentPane.reorderFramesSideBySide();
     }
 
     ////////////////////////////
@@ -249,7 +236,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
 
     @Override
     public void model_change_szenario_removed(final GraphDocument source) {
-        contentPane.closeFrame(source);
+        contentPane.closeFrames(source);
     }
 
     ///////////////////

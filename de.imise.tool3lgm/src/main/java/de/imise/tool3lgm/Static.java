@@ -14,7 +14,6 @@ import java.util.List;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
@@ -35,6 +34,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.InternalGraphFrame;
 import de.imise.tool3lgm.gui.MainFrame;
+import de.imise.tool3lgm.gui.ViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.menu.RegularContextGenerator;
 import de.imise.tool3lgm.gui.menu.TemplateContextGenerator;
 import de.imise.util.OperatingSystem;
@@ -193,7 +193,7 @@ public class Static {
      *
      * @return AbstractInternalFrame[]
      */
-    public static JInternalFrame[] getAllFrames() {
+    public static List<ViewPaneFrameComponent> getAllFrames() {
         return tool == null ? null : tool.getAllFrames();
     }
 
@@ -204,7 +204,7 @@ public class Static {
 
     /** Gibt zurück, ob interne Frames existieren */
     public static boolean isFramesExists() {
-        return tool != null && tool.getAllFrames().length > 0;
+        return tool != null && !tool.getAllFrames().isEmpty();
     }
 
     /** Gibt zurück, ob ein aktiver, sichtbarer Grafik-Frame existiert */

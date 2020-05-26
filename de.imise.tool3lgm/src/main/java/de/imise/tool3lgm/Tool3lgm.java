@@ -8,12 +8,10 @@ import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_
 
 import java.awt.Cursor;
 import java.awt.Frame;
-import java.beans.PropertyVetoException;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -32,8 +30,9 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.AbstractInternalFrame;
-import de.imise.tool3lgm.gui.InternalGraphFrame;
+import de.imise.tool3lgm.gui.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.MainFrame;
+import de.imise.tool3lgm.gui.ViewPaneFrameComponent;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
@@ -568,9 +567,9 @@ public class Tool3lgm {
     /**
      * return all InternalFrames at desktop
      *
-     * @return JInternalFrame[]
+     * @return List<ViewPaneFrameComponent>
      */
-    public JInternalFrame[] getAllFrames() {
+    public List<ViewPaneFrameComponent> getAllFrames() {
         return mainFrame.getAllFrames();
     }
 
@@ -613,11 +612,12 @@ public class Tool3lgm {
         if (!(me instanceof Node)) {
             return;
         }
-        InternalGraphFrame frame = null;
-        JInternalFrame[] frames = getAllFrames();
-        for (int i = 0; i < frames.length; i++) {
-            if (frames[i] instanceof InternalGraphFrame) {
-                InternalGraphFrame f = (InternalGraphFrame) frames[i];
+        GraphViewPaneFrameComponent frame = null;
+        List<ViewPaneFrameComponent> frames = getAllFrames();
+        for (int i = 0; i < frames.size(); i++) {
+            ViewPaneFrameComponent viewPaneFrameComponent = frames.get(i);
+            if (viewPaneFrameComponent instanceof GraphViewPaneFrameComponent) {
+                GraphViewPaneFrameComponent f = (GraphViewPaneFrameComponent) viewPaneFrameComponent;
                 GraphDocument cd = f.getGraphDocument();
                 if (cd instanceof Szenario && ((Szenario) cd).getHashString().equals(me.getAssociatedDoc())) {
                     frame = f;
@@ -636,10 +636,10 @@ public class Tool3lgm {
                 if (value == JOptionPane.YES_OPTION) {
                     BrowseUtils.browse(hyperlink);
                 } else if (value == JOptionPane.NO_OPTION) {
-                    frame.setSelected(true);
+                    frame.setSelected();
                 }
             } else {
-                frame.setSelected(true);
+                frame.setSelected();
             }
         } else if (hyperlink != null) {
             BrowseUtils.browse(hyperlink);
@@ -683,14 +683,11 @@ public class Tool3lgm {
             if (params == null || params.length < 1) {
                 return;
             }
-            JInternalFrame[] frames = getAllFrames();
-            for (int i = 0; i < frames.length; i++) {
-                if (frames[i] instanceof AbstractInternalFrame) {
-                    if (((AbstractInternalFrame) frames[i]).getGraphDocument().getHashString().equalsIgnoreCase(params[0])) {
-                        try {
-                            frames[i].setSelected(true);
-                        } catch (PropertyVetoException e) {
-                        }
+            List<ViewPaneFrameComponent> frames = getAllFrames();
+            for (ViewPaneFrameComponent frame : frames) {
+                if (frame instanceof AbstractInternalFrame) {
+                    if (((AbstractInternalFrame) frame).getGraphDocument().getHashString().equalsIgnoreCase(params[0])) {
+                        frame.setSelected();
                     }
                 }
             }

@@ -62,4 +62,12 @@ public interface ViewPaneFrameComponent extends GraphDocumentOwner {
         }
     }
 
+    /**
+     * @return
+     */
+    public default String getTitle() {
+        ViewPane viewPane = getViewPane();
+        return viewPane.getFullName();
+    }
+
 }

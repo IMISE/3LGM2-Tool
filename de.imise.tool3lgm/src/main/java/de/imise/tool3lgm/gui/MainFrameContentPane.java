@@ -16,12 +16,13 @@ import java.awt.Container;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.List;
 
 import javax.help.CSH;
+import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -36,6 +37,7 @@ import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewInternalFrame;
 import de.imise.tool3lgm.graphtools.view.browser.ModelBrowserPanel;
@@ -83,7 +85,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     private TemplateBrowserPanel templateBrowserPanel;
 
     /** contain all windows of opened documents (JDesktopPane is a container used to create a multiple-document interface or a virtual desktop) */
-    private final MainFrameDesktopPane desktop;
+    private final ViewPaneFrameComponentParent desktop;
 
     /** InternalFrame in desktop, which has the focus */
     private AbstractInternalFrame activeFrame = null;
@@ -106,7 +108,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
 
         desktop = new MainFrameDesktopPane();
 
-        leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, desktop);
+        leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, (JComponent) desktop);
         leftSplitPane.setOneTouchExpandable(true);
         leftSplitPane.setDividerSize(10);
 
@@ -327,19 +329,16 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      * @param doc
      * @return
      */
-    private ViewPaneFrameComponent createGraphFrame(final GraphDocument doc) {
+    private GraphViewPaneFrameComponent createGraphView(final GraphDocument doc) {
         InternalGraphFrame frame = new InternalGraphFrame(doc);
-        frame.setBounds(desktop.getBounds());
         if (doc instanceof Szenario) {
             setWorkArea(frame);
         }
         frame.addInternalFrameListener(this);
         desktop.add(frame);
-        frame.setLocation(0, 0);
         if (doc instanceof Szenario) {
             setBettterDefaultZoom(frame);
         }
-        frame.setVisible(true);
         return frame;
     }
 
@@ -355,12 +354,9 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         }
         int nextMatrixViewTitleIndex = getNextMatrixViewTitleIndex(doc);
         MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, internalFrameToolbarManager, nextMatrixViewTitleIndex);
-        matrixView.setBounds(desktop.getBounds());
         desktop.add(matrixView);
-        matrixView.setLocation(0, 0);
         matrixView.addInternalFrameListener(this);
         matrixView.setVisible(true);
-        desktop.setSelectedFrame(matrixView);
         return true;
     }
 
@@ -369,11 +365,12 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      * @return
      */
     private int getNextMatrixViewTitleIndex(final GraphDocument doc) {
-        JInternalFrame[] frames = desktop.getAllFrames();
+        List<ViewPaneFrameComponent> frames = desktop.getViewPaneFrameComponents(doc);
         int max = 1;
-        for (int i = 0; i < frames.length; i++) {
-            if (frames[i] instanceof MatrixViewInternalFrame) {
-                MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) frames[i];
+        for (int i = 0; i < frames.size(); i++) {
+            ViewPaneFrameComponent frame = frames.get(i);
+            if (frame instanceof MatrixViewInternalFrame) {
+                MatrixViewInternalFrame matrixFrame = (MatrixViewInternalFrame) frame;
                 GraphDocument frameDoc = matrixFrame.getGraphDocument();
                 if (frameDoc == doc) {
                     int titleIndex = matrixFrame.getTitleIndex();
@@ -392,7 +389,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      * @param InputGraphArea
      *            to set
      */
-    private void setWorkArea(final InternalGraphFrame frame) {
+    private void setWorkArea(final GraphViewPaneFrameComponent frame) {
         Szenario szenario = (Szenario) frame.getGraphDocument();
         GraphViewParameter graphViewParameter = szenario.getGraphViewParameter();
         InputGraphArea inputGraphArea = frame.getInputGraphArea();
@@ -404,7 +401,8 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         inputGraphArea.setMultiViewLayerAngle(graphViewParameter.layerAngle);
         inputGraphArea.setMultiViewLayerGap(graphViewParameter.layerGap);
         inputGraphArea.setZoom(graphViewParameter.zoom);
-        JScrollPane scrollPane = frame.getScrollPane();
+        ViewPane viewPane = frame.getViewPane();
+        JScrollPane scrollPane = viewPane.getScrollPane();
         JViewport viewport = scrollPane.getViewport();
         Point viewPosition = new Point(graphViewParameter.viewPositionX, graphViewParameter.viewPositionY);
         viewport.setViewPosition(viewPosition);
@@ -498,31 +496,13 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     }
 
     /**
-     * return all InternalFrames at desktop
+     * return all ViewPaneFrameComponents at desktop
      *
-     * @return JInternalFrame[]
+     * @return ViewPaneFrameComponent[]
      */
-    public final AbstractInternalFrame[] getAllFrames() {
-        JInternalFrame[] intFrames = desktop.getAllFrames();
-        AbstractInternalFrame[] frames = new AbstractInternalFrame[intFrames.length];
-        System.arraycopy(intFrames, 0, frames, 0, intFrames.length);
-        return frames;
-    }
-
-    /**
-     * @param szen
-     * @return
-     */
-    private final AbstractInternalFrame findFirstInternalFrame(final GraphDocument szen) {
-        JInternalFrame[] frames = getAllFrames();
-        AbstractInternalFrame frame = null;
-        for (int c = 0; c < frames.length; c++) {
-            if (((AbstractInternalFrame) frames[c]).getGraphDocument() == szen) {
-                frame = (AbstractInternalFrame) frames[c];
-                break;
-            }
-        }
-        return frame;
+    public final List<ViewPaneFrameComponent> getAllFrames() {
+        List<ViewPaneFrameComponent> allViewPaneFrameComponents = desktop.getAllViewPaneFrameComponents();
+        return allViewPaneFrameComponents;
     }
 
     /**
@@ -545,7 +525,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         GraphViewPane graphViewPane = desktop.getGraphViewPane(doc);
         ViewPaneFrameComponent graphViewPaneFrameComponent = graphViewPane == null ? null : graphViewPane.getFrameComponent();
         if (graphViewPaneFrameComponent == null) {
-            graphViewPaneFrameComponent = createGraphFrame(doc);
+            graphViewPaneFrameComponent = createGraphView(doc);
         }
         return graphViewPaneFrameComponent;
     }
@@ -553,13 +533,8 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     /**
      * @param szen
      */
-    public final void closeFrame(final GraphDocument szen) {
-        AbstractInternalFrame frame = findFirstInternalFrame(szen);
-        while (frame != null) {
-            LastAndNextViewManager.removeWindow(frame);
-            frame.dispose();
-            frame = findFirstInternalFrame(szen);
-        }
+    public final void closeFrames(final GraphDocument szen) {
+        desktop.removeViewPaneFrameComponents(szen);
         modelBrowserPanel.removeGraphDocument(szen);
     }
 
@@ -567,71 +542,11 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
      * @param gdcoll
      */
     public void closeAllFramesAndTabs(final GDCollection gdcoll) {
-        modelBrowserPanel.removeGraphDocument(gdcoll.getMainGraphDocument());
-        closeFrame(gdcoll.getMainGraphDocument());
+        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        modelBrowserPanel.removeGraphDocument(mainDoc);
+        closeFrames(mainDoc);
         for (Szenario szen : gdcoll.getSzenarios()) {
-            closeFrame(szen);
-        }
-    }
-
-    /**
-     * ordnet alle InternalFrames neu an (überlappt)
-     */
-    public void reorderFramesWithOverlap() {
-        JInternalFrame[] frames = desktop.getAllFrames();
-        Rectangle rect = desktop.getVisibleRect();
-        double height = rect.getHeight();
-        double width = rect.getWidth();
-        int xOffset = 10, yOffset = 10;
-        int openFrameCount = 0;
-        for (int n = frames.length; n > 0; n--) {
-            ++openFrameCount;
-            double count = openFrameCount;
-            if (height - yOffset * count < 50) {
-                count = (height - 50) / yOffset;
-            }
-            frames[n - 1].setSize((int) width - xOffset * (int) count, (int) height - yOffset * (int) count);
-            frames[n - 1].setLocation(xOffset * (int) count, yOffset * (int) count);
-        }
-        try {
-            frames[frames.length - 1].setMaximum(false);
-        } catch (java.beans.PropertyVetoException evt) {
-            Log.show(Log.FATAL, getResString("FehlerAllgemein"), evt);
-        }
-    }
-
-    /**
-     * ordnet alle InternalFrames neu an (nebeneinander)
-     */
-    public void reorderFramesSideBySide() {
-        JInternalFrame[] frames = desktop.getAllFrames();
-        try {
-            frames[frames.length - 1].setMaximum(false);
-        } catch (java.beans.PropertyVetoException evt) {
-            Log.show(Log.FATAL, getResString("FehlerAllgemein"), evt);
-        }
-        Rectangle rect = desktop.getVisibleRect();
-        double height = rect.getHeight();
-        double width = rect.getWidth();
-        int spalten, zeilen;
-        double hilfe = Math.sqrt(frames.length);
-        if ((int) hilfe * (int) hilfe == frames.length) {
-            zeilen = (int) hilfe;
-            spalten = (int) hilfe;
-        } else {
-            zeilen = (int) hilfe + 1;
-            spalten = (int) hilfe;
-        }
-        int count = 0;
-        for (int m = 0; m < zeilen - 1; m++) {
-            for (int n = 0; n < spalten; n++) {
-                frames[count].setBounds(0 + n * (int) width / spalten, 0 + m * (int) height / zeilen, (int) width / spalten, (int) height / zeilen);
-                count++;
-            }
-        }
-        int rest = frames.length - count;
-        for (int k = count; k < frames.length; k++) {
-            frames[k].setBounds(0 + (k - count) * (int) width / rest, (int) height / zeilen * (zeilen - 1), (int) width / rest, (int) height / zeilen);
+            closeFrames(szen);
         }
     }
 
@@ -660,13 +575,12 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
 
     @Override
     public void internalFrameClosed(final InternalFrameEvent e) {
-        JInternalFrame[] frames = desktop.getAllFrames();
         AbstractInternalFrame frame = (AbstractInternalFrame) e.getSource();
-        workarea.revalidate();
         LastAndNextViewManager.removeWindow(frame);
-        if (frames.length == 0) {
+        if (!desktop.hasViewPaneFrameComponents()) {
             activeFrame = null;
         }
+        workarea.revalidate();
         internalFrameToolbarManager.updateToolBar();
     }
 
