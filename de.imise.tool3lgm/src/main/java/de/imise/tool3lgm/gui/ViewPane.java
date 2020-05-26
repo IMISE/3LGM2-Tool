@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.gui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.JPanel;
@@ -40,6 +41,7 @@ public abstract class ViewPane extends JPanel implements ViewContainer {
         this.doc = doc;
         szen = doc instanceof Szenario ? (Szenario) doc : null;
         scrollPane = insertScrollPanel ? new CenterableScrollPane() : null;
+        setLayout(new BorderLayout());
     }
 
     @Override
@@ -55,15 +57,15 @@ public abstract class ViewPane extends JPanel implements ViewContainer {
     /**
      * @param view
      */
-    protected final void setViewComponent(final Component view) {
-        if (scrollPane == null) {
-            add(view);
-        } else {
+    protected final void setViewComponent(Component view) {
+        if (scrollPane != null) {
             scrollPane.setViewportView(view);
-            add(scrollPane);
+            view = scrollPane;
         }
+        add(view, BorderLayout.CENTER);
     }
 
+    @Override
     public final JScrollPane getScrollPane() {
         return scrollPane;
     }
