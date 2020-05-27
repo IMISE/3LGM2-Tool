@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.gui;
+package de.imise.tool3lgm.gui.internalframe;
 
 import java.awt.Rectangle;
 
@@ -10,6 +10,8 @@ import javax.swing.JViewport;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
+import de.imise.tool3lgm.gui.ViewPane;
+import de.imise.tool3lgm.gui.ViewPaneFrameComponent;
 
 /**
  * Abstrakte Klasse für alle internen Fenster zur Darstellung von (Teil-)Modellen

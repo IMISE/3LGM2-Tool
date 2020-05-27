@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewPaneToolBar;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.gui.internalframe.InternalGraphFrame;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**

@@ -41,6 +41,7 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserPanel;
+import de.imise.tool3lgm.gui.internalframe.MainFrameDesktopPane;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;

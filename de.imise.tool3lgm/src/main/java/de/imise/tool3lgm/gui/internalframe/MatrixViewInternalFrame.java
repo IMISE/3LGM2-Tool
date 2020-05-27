@@ -1,7 +1,6 @@
-package de.imise.tool3lgm.graphtools.newmatrixview;
+package de.imise.tool3lgm.gui.internalframe;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.gui.AbstractInternalFrame;
 import de.imise.tool3lgm.gui.ViewPaneToolbarManager;
 import de.imise.tool3lgm.gui.MatrixViewPane;
 import de.imise.tool3lgm.gui.MatrixViewPaneFrameComponent;

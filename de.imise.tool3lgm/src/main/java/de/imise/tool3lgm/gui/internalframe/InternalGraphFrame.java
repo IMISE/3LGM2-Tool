@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.gui;
+package de.imise.tool3lgm.gui.internalframe;
 
 import java.beans.PropertyVetoException;
 
@@ -7,6 +7,8 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.gui.GraphViewPane;
+import de.imise.tool3lgm.gui.GraphViewPaneFrameComponent;
 
 /**
  * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
