@@ -18,7 +18,7 @@ import de.imise.tool3lgm.gui.ViewPaneFrameComponent;
  *
  * @author Thomas Rudert
  */
-public abstract class AbstractInternalFrame extends JInternalFrame implements LGMChangeListenerSimple, ViewPaneFrameComponent {
+public abstract class ToolInternalFrame extends JInternalFrame implements LGMChangeListenerSimple, ViewPaneFrameComponent {
 
     /** the view to display */
     protected ViewPane viewPane;
@@ -28,7 +28,7 @@ public abstract class AbstractInternalFrame extends JInternalFrame implements LG
      *
      * @param viewPane the view to display
      */
-    public AbstractInternalFrame(final ViewPane viewPane) {
+    public ToolInternalFrame(final ViewPane viewPane) {
         /* JInternalFrame mit Titel, resizable, closable, maximizable, and iconifiable */
         super("", true, false, true, true);
         this.viewPane = viewPane;

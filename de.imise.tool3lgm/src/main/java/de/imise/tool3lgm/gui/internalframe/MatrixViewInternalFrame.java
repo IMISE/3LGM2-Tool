@@ -10,7 +10,7 @@ import de.imise.tool3lgm.gui.MatrixViewPaneFrameComponent;
  *
  * @author Thomas Rudert, AXS
  */
-public class MatrixViewInternalFrame extends AbstractInternalFrame implements MatrixViewPaneFrameComponent {
+public class MatrixViewInternalFrame extends ToolInternalFrame implements MatrixViewPaneFrameComponent {
 
     /**
      * @param doc

@@ -13,14 +13,14 @@ import de.imise.tool3lgm.gui.GraphViewPaneFrameComponent;
 /**
  * Erzeugt InternalFrame für 3lgm mit bestimmter Größe und und Lage. Es werden freie Stellen gesucht und eingfügt.
  */
-public final class InternalGraphFrame extends AbstractInternalFrame implements GraphViewPaneFrameComponent {
+public final class GraphViewInternalFrame extends ToolInternalFrame implements GraphViewPaneFrameComponent {
 
     private final InputGraphArea area;
 
     /**
      * @param doc
      */
-    public InternalGraphFrame(final GraphDocument doc) {
+    public GraphViewInternalFrame(final GraphDocument doc) {
         super(new GraphViewPane(doc));
         GraphViewPane graphViewPane = (GraphViewPane) viewPane;
         area = graphViewPane.getInputGraphArea();

@@ -65,8 +65,8 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
     public GraphViewPane getGraphViewPane(final GraphDocument doc) {
         JInternalFrame[] allFrames = getAllFrames();
         for (JInternalFrame frame : allFrames) {
-            if (frame instanceof InternalGraphFrame) {
-                InternalGraphFrame graphFrame = (InternalGraphFrame) frame;
+            if (frame instanceof GraphViewInternalFrame) {
+                GraphViewInternalFrame graphFrame = (GraphViewInternalFrame) frame;
                 ViewPane viewPane = graphFrame.getViewPane();
                 if (viewPane.hasGraphDocument(doc)) {
                     if (viewPane instanceof GraphViewPane) {
@@ -105,7 +105,7 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
     public void removeViewPaneFrameComponents(final GraphDocument doc) {
         List<ViewPaneFrameComponent> viewPaneFrameComponents = getViewPaneFrameComponents(doc);
         for (ViewPaneFrameComponent frameComponent : viewPaneFrameComponents) {
-            AbstractInternalFrame frame = (AbstractInternalFrame) frameComponent;
+            ToolInternalFrame frame = (ToolInternalFrame) frameComponent;
             LastAndNextViewManager.removeWindow(frame);
             frame.dispose();
         }
@@ -113,8 +113,8 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
 
     @Override
     public boolean isSelected(final ViewPaneFrameComponent viewPaneFrameComponent) {
-        if (viewPaneFrameComponent instanceof InternalGraphFrame) {
-            InternalGraphFrame internalFrame = (InternalGraphFrame) viewPaneFrameComponent;
+        if (viewPaneFrameComponent instanceof GraphViewInternalFrame) {
+            GraphViewInternalFrame internalFrame = (GraphViewInternalFrame) viewPaneFrameComponent;
             return internalFrame.isSelected();
         }
         return false;
@@ -122,8 +122,8 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
 
     @Override
     public void setSelected(final ViewPaneFrameComponent viewPaneFrameComponent) {
-        if (viewPaneFrameComponent instanceof InternalGraphFrame) {
-            InternalGraphFrame internalFrame = (InternalGraphFrame) viewPaneFrameComponent;
+        if (viewPaneFrameComponent instanceof GraphViewInternalFrame) {
+            GraphViewInternalFrame internalFrame = (GraphViewInternalFrame) viewPaneFrameComponent;
             internalFrame.setSelected(true);
         }
     }
@@ -195,8 +195,8 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
     }
 
     private void addView(final ViewPaneFrameComponent viewPaneFrameComponent) {
-        if (viewPaneFrameComponent instanceof AbstractInternalFrame) {
-            AbstractInternalFrame frame = (AbstractInternalFrame) viewPaneFrameComponent;
+        if (viewPaneFrameComponent instanceof ToolInternalFrame) {
+            ToolInternalFrame frame = (ToolInternalFrame) viewPaneFrameComponent;
             frame.addInternalFrameListener(this);
             Rectangle bounds = getBounds();
             frame.setBounds(bounds);
@@ -213,7 +213,7 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
      */
     @Override
     public GraphViewPaneFrameComponent createGraphView(final GraphDocument doc) {
-        InternalGraphFrame frame = new InternalGraphFrame(doc);
+        GraphViewInternalFrame frame = new GraphViewInternalFrame(doc);
         frame.addInternalFrameListener(this);
         addView(frame);
         return frame;
@@ -235,7 +235,7 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
     @Override
     public void internalFrameClosing(final InternalFrameEvent e) {
         for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
-            AbstractInternalFrame source = (AbstractInternalFrame) e.getSource();
+            ToolInternalFrame source = (ToolInternalFrame) e.getSource();
             l.viewClosing(source);
         }
     }
@@ -243,7 +243,7 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
     @Override
     public void internalFrameClosed(final InternalFrameEvent e) {
         for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
-            AbstractInternalFrame source = (AbstractInternalFrame) e.getSource();
+            ToolInternalFrame source = (ToolInternalFrame) e.getSource();
             l.viewClosed(source);
         }
     }
@@ -261,7 +261,7 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
     @Override
     public void internalFrameActivated(final InternalFrameEvent e) {
         for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
-            AbstractInternalFrame source = (AbstractInternalFrame) e.getSource();
+            ToolInternalFrame source = (ToolInternalFrame) e.getSource();
             l.viewActivated(source);
         }
     }
@@ -269,7 +269,7 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
     @Override
     public void internalFrameDeactivated(final InternalFrameEvent e) {
         for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
-            AbstractInternalFrame source = (AbstractInternalFrame) e.getSource();
+            ToolInternalFrame source = (ToolInternalFrame) e.getSource();
             l.viewDeactivated(source);
         }
     }
