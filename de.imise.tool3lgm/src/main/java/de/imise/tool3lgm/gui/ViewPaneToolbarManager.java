@@ -12,7 +12,6 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewPaneToolBar;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.internalframe.InternalGraphFrame;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**
@@ -95,8 +94,8 @@ public class ViewPaneToolbarManager implements LGMChangeListenerSimple, BasicGra
      *
      */
     private void removeMeAsGraphFrameChangeListener() {
-        if (currentFrame != null && currentFrame instanceof InternalGraphFrame) {
-            InternalGraphFrame graphFrame = (InternalGraphFrame) currentFrame;
+        if (currentFrame != null && currentFrame instanceof GraphViewPaneFrameComponent) {
+            GraphViewPaneFrameComponent graphFrame = (GraphViewPaneFrameComponent) currentFrame;
             InputGraphArea inputGraphArea = graphFrame.getInputGraphArea();
             inputGraphArea.removeChangeListener(this);
         }
@@ -106,8 +105,8 @@ public class ViewPaneToolbarManager implements LGMChangeListenerSimple, BasicGra
      *
      */
     private void addMeAsGraphFrameChangeListener() {
-        if (currentFrame != null && currentFrame instanceof InternalGraphFrame) {
-            InternalGraphFrame graphFrame = (InternalGraphFrame) currentFrame;
+        if (currentFrame != null && currentFrame instanceof GraphViewPaneFrameComponent) {
+            GraphViewPaneFrameComponent graphFrame = (GraphViewPaneFrameComponent) currentFrame;
             InputGraphArea inputGraphArea = graphFrame.getInputGraphArea();
             inputGraphArea.addChangeListener(this);
         }

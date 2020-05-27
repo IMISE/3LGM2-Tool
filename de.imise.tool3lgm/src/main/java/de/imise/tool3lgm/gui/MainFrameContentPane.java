@@ -592,9 +592,6 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
 
     @Override
     public void viewDeactivated(final ViewPaneFrameComponent source) {
-        //without the following (usally redundant) assignment sometimes activeFrame is null here
-        //and this throws an exception. Usally only the deactivated frame can be active Frame
-        //        JInternalFrame oldActiveFrame = activeFrame;
         if (activeFrame == null) {
             activeFrame = source;
         }
