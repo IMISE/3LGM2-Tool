@@ -21,12 +21,12 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.gui.GraphViewPane;
 import de.imise.tool3lgm.gui.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.LastAndNextViewManager;
-import de.imise.tool3lgm.gui.MatrixViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.ViewPane;
 import de.imise.tool3lgm.gui.ViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.ViewPaneFrameComponentListener;
 import de.imise.tool3lgm.gui.ViewPaneFrameComponentParent;
 import de.imise.tool3lgm.gui.ViewPaneToolbarManager;
+import de.imise.tool3lgm.gui.matrixview.MatrixViewPaneFrameComponent;
 import de.imise.tool3lgm.log.Log;
 
 /**

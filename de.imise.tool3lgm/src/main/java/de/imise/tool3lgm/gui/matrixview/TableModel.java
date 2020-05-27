@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.newmatrixview;
+package de.imise.tool3lgm.gui.matrixview;
 
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;

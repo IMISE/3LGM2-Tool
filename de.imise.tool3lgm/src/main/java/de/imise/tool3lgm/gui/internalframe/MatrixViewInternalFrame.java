@@ -2,8 +2,8 @@ package de.imise.tool3lgm.gui.internalframe;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.gui.ViewPaneToolbarManager;
-import de.imise.tool3lgm.gui.MatrixViewPane;
-import de.imise.tool3lgm.gui.MatrixViewPaneFrameComponent;
+import de.imise.tool3lgm.gui.matrixview.MatrixViewPane;
+import de.imise.tool3lgm.gui.matrixview.MatrixViewPaneFrameComponent;
 
 /**
  * Klasse zur Darstellung von Verbindungen zwischen Objekten in einer Tabelle

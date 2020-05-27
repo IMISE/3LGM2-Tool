@@ -9,9 +9,10 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.newmatrixview.MatrixViewPaneToolBar;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.gui.matrixview.MatrixViewPaneFrameComponent;
+import de.imise.tool3lgm.gui.matrixview.MatrixViewPaneToolBar;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**

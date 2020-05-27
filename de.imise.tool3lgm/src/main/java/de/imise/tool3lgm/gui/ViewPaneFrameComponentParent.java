@@ -3,6 +3,7 @@ package de.imise.tool3lgm.gui;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.gui.matrixview.MatrixViewPaneFrameComponent;
 
 /**
  * Interface of the component that contains all {@link ViewPaneFrameComponent}.

@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.newmatrixview;
+package de.imise.tool3lgm.gui.matrixview;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,7 +25,6 @@ import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
-import de.imise.tool3lgm.gui.MatrixViewPaneFrameComponent;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**

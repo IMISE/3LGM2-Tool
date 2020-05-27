@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.newmatrixview;
+package de.imise.tool3lgm.gui.matrixview;
 
 import java.awt.Color;
 
