@@ -29,11 +29,13 @@ public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneF
     @Override
     public GraphViewPane getGraphViewPane(final GraphDocument doc) {
         for (int i = getTabCount() - 1; i >= 0; i--) {
-            Component tab = getTabComponentAt(i);
+            Component tab = getComponentAt(i);
             if (tab instanceof GraphViewPaneFrameComponent) {
                 GraphViewPaneFrameComponent graphViewPaneFrameComponent = (GraphViewPaneFrameComponent) tab;
-                GraphViewPane viewPane = graphViewPaneFrameComponent.getViewPane();
-                return viewPane;
+                if (graphViewPaneFrameComponent.hasGraphDocument(doc)) {
+                    GraphViewPane viewPane = graphViewPaneFrameComponent.getViewPane();
+                    return viewPane;
+                }
             }
         }
         return null;
@@ -44,7 +46,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneF
         int tabCount = getTabCount();
         List<ViewPaneFrameComponent> viewPaneFrameComponents = new ArrayList<>(doc == null ? tabCount : 3); //more than 1 graph view and 2 matrix views per doc is unlikely
         for (int i = 0; i < tabCount; i++) {
-            Component tab = getTabComponentAt(i);
+            Component tab = getComponentAt(i);
             if (tab instanceof ViewPaneFrameComponent) {
                 ViewPaneFrameComponent viewPaneFrameComponent = (ViewPaneFrameComponent) tab;
                 if (doc == null || viewPaneFrameComponent.hasGraphDocument(doc)) {
@@ -63,11 +65,11 @@ public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneF
     @Override
     public void removeViewPaneFrameComponents(final GraphDocument doc) {
         for (int i = getTabCount() - 1; i >= 0; i--) {
-            Component tab = getTabComponentAt(i);
+            Component tab = getComponentAt(i);
             if (tab instanceof ViewPaneFrameComponent) {
                 ViewPaneFrameComponent viewPaneFrameComponent = (ViewPaneFrameComponent) tab;
                 if (viewPaneFrameComponent.hasGraphDocument(doc)) {
-                    remove(i);
+                    removeTabAt(i);
                     viewPaneFrameComponent.dispose();
                 }
             }
@@ -86,22 +88,24 @@ public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneF
     }
 
     /**
-     * @param doc
-     * @return
+     * @param tabComponent
      */
+    private void addView(final MainFrameDesktopTabComponent tabComponent) {
+        addTab(tabComponent.getTitle(), null, tabComponent, tabComponent.getTitle());
+        setSelected(tabComponent);
+    }
+
     @Override
     public GraphViewPaneFrameComponent createGraphView(final GraphDocument doc) {
         MainFrameDesktopGraphTabComponent graphView = new MainFrameDesktopGraphTabComponent(doc);
-        super.add(graphView);
-        setSelected(graphView);
+        addView(graphView);
         return graphView;
     }
 
     @Override
     public MatrixViewPaneFrameComponent createMatrixView(final GraphDocument doc, final int titleIndex, final ViewPaneToolbarManager viewPaneToolBarManager) {
         MainFrameDesktopMatrixTabComponent matrixView = new MainFrameDesktopMatrixTabComponent(doc);
-        super.add(matrixView);
-        setSelected(matrixView);
+        addView(matrixView);
         return matrixView;
     }
 
