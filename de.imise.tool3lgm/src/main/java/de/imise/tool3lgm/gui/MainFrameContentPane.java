@@ -41,7 +41,7 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserPanel;
-import de.imise.tool3lgm.gui.internalframe.MainFrameDesktopPane;
+import de.imise.tool3lgm.gui.tabbedframe.MainFrameDesktopTabbedPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentListener;
@@ -111,7 +111,8 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
         workarea.setLayout(new BorderLayout());
         modelBrowserPanel = new ModelBrowserPanel();
 
-        desktop = new MainFrameDesktopPane();
+        //desktop = new MainFrameDesktopPane();
+        desktop = new MainFrameDesktopTabbedPane();
         desktop.addViewPaneFrameComponentListener(this);
 
         leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, (JComponent) desktop);

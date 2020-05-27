@@ -57,10 +57,6 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
         }
     }
 
-    /**
-     * @param doc
-     * @return
-     */
     @Override
     public GraphViewPane getGraphViewPane(final GraphDocument doc) {
         JInternalFrame[] allFrames = getAllFrames();

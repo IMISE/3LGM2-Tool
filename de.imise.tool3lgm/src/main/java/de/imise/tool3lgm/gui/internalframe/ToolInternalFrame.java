@@ -9,7 +9,7 @@ import javax.swing.JViewport;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListener;
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 
@@ -18,10 +18,10 @@ import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
  *
  * @author Thomas Rudert
  */
-public abstract class ToolInternalFrame extends JInternalFrame implements LGMChangeListenerSimple, ViewPaneFrameComponent {
+public abstract class ToolInternalFrame extends JInternalFrame implements ViewPaneFrameComponent, LGMChangeListener {
 
     /** the view to display */
-    protected ViewPane viewPane;
+    protected final ViewPane viewPane;
 
     /**
      * Konstruktor
