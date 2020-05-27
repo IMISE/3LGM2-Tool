@@ -32,7 +32,7 @@ import de.imise.util.swing.component.UnfloatableToolBar;
  *
  * @author Thomas Rudert, AXS (22.10.07)
  */
-public class MatrixViewPaneToolBar extends UnfloatableToolBar implements ChangeListener {
+public class MatrixViewPaneToolbar extends UnfloatableToolBar implements ChangeListener {
 
     /**
      * Label für die ComboBox zur Klassenauswahl der Matrixzeilen
@@ -84,7 +84,7 @@ public class MatrixViewPaneToolBar extends UnfloatableToolBar implements ChangeL
      * @param controlledFrame
      *            Frame dessen Darstellung durch diese Toolbar beeinfluss wird.
      */
-    public MatrixViewPaneToolBar(final MatrixViewPaneFrameComponent controlledFrame) {
+    public MatrixViewPaneToolbar(final MatrixViewPaneFrameComponent controlledFrame) {
         // dieser Constructor sollte nur mit MatrixViewPaneFrameComponent aufgerufen werden. ACHTUNG: der
         // wird per Refelction aufgerufen, daher findet man im Code keine 'direkte' Verwendung
         this.controlledFrame = controlledFrame;

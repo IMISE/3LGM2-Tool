@@ -27,13 +27,13 @@ import de.imise.util.swing.component.UnfloatableToolBar;
 import de.imise.util.swing.event.ActionSource;
 import de.imise.util.swing.event.ExtendedAction;
 
-public class MainFrameToolBar extends UnfloatableToolBar implements MouseListener, LGMChangeListenerSimple, Tool3lgmChangeListener {
+public class MainFrameToolbar extends UnfloatableToolBar implements MouseListener, LGMChangeListenerSimple, Tool3lgmChangeListener {
 
     private GraphDocument doc = null;
 
     private final JButton undo, redo;
 
-    public MainFrameToolBar() {
+    public MainFrameToolbar() {
         JButton switchView = new ToolbarButton(ActionLibrary.ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE);
 
         JButton fach = new ToolbarButton(ActionLibrary.ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER);

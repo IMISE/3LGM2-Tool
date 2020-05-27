@@ -14,12 +14,12 @@ public class MatrixViewInternalFrame extends ToolInternalFrame implements Matrix
 
     /**
      * @param doc
-     * @param toolbarManager
+     * @param toolBarManager
      * @param titleIndex Zähler, der an den Titel des Fensters angehängt wird. Man kann beliebig viele Matrixfenster für dasselbe Teilmodell öffnen.
      *            Der Title soll unterscheidbar sein und das wird er durch diese Nummer.
      */
-    public MatrixViewInternalFrame(final GraphDocument doc, final ViewPaneToolbarManager toolbarManager, final int titleIndex) {
-        super(new MatrixViewPane(doc, toolbarManager, titleIndex));
+    public MatrixViewInternalFrame(final GraphDocument doc, final ViewPaneToolbarManager toolBarManager, final int titleIndex) {
+        super(new MatrixViewPane(doc, toolBarManager, titleIndex));
         setClosable(true);
         updateTitle();
     }

@@ -16,15 +16,15 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.gui.GraphAreaOptionSliders.SliderWithTextField;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
-public class GraphAreaToolBar extends UnfloatableToolBar {
+public class GraphAreaToolbar extends UnfloatableToolBar {
 
     private final GraphAreaOptionSliders sliders;
 
-    private final ToolButton buttonSwitchMouseMode;
+    private final GraphAreaToolbarButton buttonSwitchMouseMode;
 
-    private final List<ToolButton> buttonsCreateElement = new ArrayList<>();
+    private final List<GraphAreaToolbarButton> buttonsCreateElement = new ArrayList<>();
 
-    private final ToolButton buttonCreateEdge;
+    private final GraphAreaToolbarButton buttonCreateEdge;
 
     private GraphViewPaneFrameComponent frame;
 
@@ -43,11 +43,11 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
     /**
      * @param frame
      */
-    public GraphAreaToolBar(final GraphViewPaneFrameComponent frame) {
-        buttonSwitchMouseMode = ToolButton.createDisableMouseMakesElementsButton();
+    public GraphAreaToolbar(final GraphViewPaneFrameComponent frame) {
+        buttonSwitchMouseMode = GraphAreaToolbarButton.createDisableMouseMakesElementsButton();
         GraphDocument doc = frame.getGraphDocument();
         MetaModel metaModel = doc.getMetaModel();
-        buttonCreateEdge = ToolButton.createEdgeButton(metaModel, dummyEdgeButtonNodeClass);
+        buttonCreateEdge = GraphAreaToolbarButton.createEdgeButton(metaModel, dummyEdgeButtonNodeClass);
         buttonGroup.add(buttonSwitchMouseMode);
         buttonGroup.add(buttonCreateEdge);
         sliders = new GraphAreaOptionSliders(frame, 150, 30);
@@ -112,14 +112,14 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
         if (currentLayer != activeLayer || multiView != areaMultiView) {
             currentLayer = activeLayer;
             multiView = areaMultiView;
-            for (ToolButton button : buttonsCreateElement) {
+            for (GraphAreaToolbarButton button : buttonsCreateElement) {
                 buttonGroup.remove(button);
             }
             buttonsCreateElement.clear();
             GraphDocument doc = frame.getGraphDocument();
             MetaModel metaModel = doc.getMetaModel();
             for (Class<? extends Node> paintableLayerElementClass : getLayerGraphElementClasses(currentLayer)) {
-                ToolButton createNodeButton = ToolButton.createNodeButton(metaModel, paintableLayerElementClass);
+                GraphAreaToolbarButton createNodeButton = GraphAreaToolbarButton.createNodeButton(metaModel, paintableLayerElementClass);
                 buttonsCreateElement.add(createNodeButton);
                 createNodeButton.setFrame(frame);
                 buttonGroup.add(createNodeButton);
@@ -129,7 +129,7 @@ public class GraphAreaToolBar extends UnfloatableToolBar {
 
             removeAll();
             add(buttonSwitchMouseMode);
-            for (ToolButton button : buttonsCreateElement) {
+            for (GraphAreaToolbarButton button : buttonsCreateElement) {
                 add(button);
             }
             add(buttonCreateEdge);

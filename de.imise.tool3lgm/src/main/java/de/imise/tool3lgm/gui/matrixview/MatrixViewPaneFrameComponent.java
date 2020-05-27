@@ -37,11 +37,11 @@ public interface MatrixViewPaneFrameComponent extends ViewPaneFrameComponent {
     }
 
     /**
-     * @param mainFrameToolBar
+     * @param mainFrameToolbar
      */
-    public default void setMatrixViewToolBar(final MatrixViewPaneToolBar matrixViewToolBar) {
+    public default void setMatrixViewToolbar(final MatrixViewPaneToolbar matrixViewToolbar) {
         MatrixViewPane viewPane = getViewPane();
-        viewPane.setMatrixViewToolBar(matrixViewToolBar);
+        viewPane.setMatrixViewToolbar(matrixViewToolbar);
     }
 
 }

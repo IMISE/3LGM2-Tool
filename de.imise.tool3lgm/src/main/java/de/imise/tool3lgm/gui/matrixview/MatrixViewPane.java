@@ -150,13 +150,13 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
     }
 
     /** Werkzeugleiste zu diesem Fenster */
-    private MatrixViewPaneToolBar matrixViewToolBar = null;
+    private MatrixViewPaneToolbar matrixViewToolbar = null;
 
     /**
-     * @param matrixViewToolBar
+     * @param matrixViewToolbar
      */
-    public void setMatrixViewToolBar(final MatrixViewPaneToolBar matrixViewToolBar) {
-        this.matrixViewToolBar = matrixViewToolBar;
+    public void setMatrixViewToolbar(final MatrixViewPaneToolbar matrixViewToolbar) {
+        this.matrixViewToolbar = matrixViewToolbar;
     }
 
     @Override
@@ -167,11 +167,11 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
     public void mouseMoved(final MouseEvent e) {
         ModelElement colElement = colHeaderPanel.getCol(e.getX());
         ModelElement rowElement = rowHeaderPanel.getRow(e.getY());
-        if (toolbarManager.isMatrixViewToolBar()) {
-            MatrixViewPaneToolBar matrixFrameToolBar = toolbarManager.getMatrixViewToolBar();
+        if (toolbarManager.isMatrixViewToolbar()) {
+            MatrixViewPaneToolbar matrixFrameToolbar = toolbarManager.getMatrixViewToolbar();
             TableCell cell = tableModel.getCell(colHeaderPanel.getColIndex(e.getX()), rowHeaderPanel.getRowIndex(e.getY()));
-            String pathName = cell == null ? null : matrixFrameToolBar.getPathName(cell.getColor());
-            matrixFrameToolBar.positionChanged(colElement, rowElement, pathName);
+            String pathName = cell == null ? null : matrixFrameToolbar.getPathName(cell.getColor());
+            matrixFrameToolbar.positionChanged(colElement, rowElement, pathName);
             if (cell == null) {
                 cellPanel.setToolTipText(null);
             } else {
@@ -239,7 +239,7 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
 
     @Override
     public void mouseExited(final MouseEvent arg0) {
-        matrixViewToolBar.positionChanged(null, null, null);
+        matrixViewToolbar.positionChanged(null, null, null);
     }
 
     //  Methoden des Interfaces GDCollectionChangeListener --- Anfang ---

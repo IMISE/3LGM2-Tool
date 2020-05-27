@@ -27,7 +27,7 @@ import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
  * @author N.N.
  * @create Very long time ago
  */
-public class ToolButton extends JToggleButton {
+public class GraphAreaToolbarButton extends JToggleButton {
 
     private final Node paintedNode;
 
@@ -47,7 +47,7 @@ public class ToolButton extends JToggleButton {
      * @param paintableElementClass
      * @param isEdgeButton
      */
-    private ToolButton(final MetaModel metaModel, final Class<? extends ModelElement> paintableElementClass, final boolean isEdgeButton) {
+    private GraphAreaToolbarButton(final MetaModel metaModel, final Class<? extends ModelElement> paintableElementClass, final boolean isEdgeButton) {
         this.isEdgeButton = isEdgeButton;
         paintedNode = paintableElementClass == null ? null : (Node) metaModel.createElement(paintableElementClass);
         setPreferredSize(PREFRERRED_SIZE);
@@ -58,8 +58,8 @@ public class ToolButton extends JToggleButton {
      * @param paintableElementClass
      * @return
      */
-    public static ToolButton createNodeButton(final MetaModel metaModel, final Class<? extends Node> paintableElementClass) {
-        final ToolButton button = new ToolButton(metaModel, paintableElementClass, false);
+    public static GraphAreaToolbarButton createNodeButton(final MetaModel metaModel, final Class<? extends Node> paintableElementClass) {
+        final GraphAreaToolbarButton button = new GraphAreaToolbarButton(metaModel, paintableElementClass, false);
         button.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -85,8 +85,8 @@ public class ToolButton extends JToggleButton {
      *            irgendeine der grafisch darstellbaren Klassen, die man braucht, um einen Strich auf den Button der Kanten zu malen
      * @return
      */
-    public static ToolButton createEdgeButton(final MetaModel metaModel, final Class<? extends Node> dummyPaintableElementClass) {
-        ToolButton button = new ToolButton(metaModel, dummyPaintableElementClass, true);
+    public static GraphAreaToolbarButton createEdgeButton(final MetaModel metaModel, final Class<? extends Node> dummyPaintableElementClass) {
+        GraphAreaToolbarButton button = new GraphAreaToolbarButton(metaModel, dummyPaintableElementClass, true);
         button.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -103,8 +103,8 @@ public class ToolButton extends JToggleButton {
         return button;
     }
 
-    public static ToolButton createDisableMouseMakesElementsButton() {
-        ToolButton button = new ToolButton(null, null, false);
+    public static GraphAreaToolbarButton createDisableMouseMakesElementsButton() {
+        GraphAreaToolbarButton button = new GraphAreaToolbarButton(null, null, false);
         button.setAction(new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent e) {

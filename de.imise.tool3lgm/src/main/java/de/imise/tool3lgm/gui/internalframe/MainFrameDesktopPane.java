@@ -220,8 +220,8 @@ public class MainFrameDesktopPane extends JDesktopPane implements ComponentListe
     }
 
     @Override
-    public MatrixViewPaneFrameComponent createMatrixView(final GraphDocument doc, final int titleIndex, final ViewPaneToolbarManager viewPaneToolbarManager) {
-        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, viewPaneToolbarManager, titleIndex);
+    public MatrixViewPaneFrameComponent createMatrixView(final GraphDocument doc, final int titleIndex, final ViewPaneToolbarManager viewPaneToolBarManager) {
+        MatrixViewInternalFrame matrixView = new MatrixViewInternalFrame(doc, viewPaneToolBarManager, titleIndex);
         matrixView.addInternalFrameListener(this);
         addView(matrixView);
         return matrixView;
