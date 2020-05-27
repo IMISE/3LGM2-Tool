@@ -1,7 +1,7 @@
-package de.imise.tool3lgm.gui.matrixview;
+package de.imise.tool3lgm.gui.viewpane.matrix;
 
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
-import de.imise.tool3lgm.gui.ViewPaneFrameComponent;
+import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 
 /**
  * @author AXS (26.05.2020)

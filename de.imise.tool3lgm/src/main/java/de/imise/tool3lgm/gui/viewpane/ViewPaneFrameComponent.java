@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.gui;
+package de.imise.tool3lgm.gui.viewpane;
 
 import java.awt.Component;
 import java.awt.Cursor;

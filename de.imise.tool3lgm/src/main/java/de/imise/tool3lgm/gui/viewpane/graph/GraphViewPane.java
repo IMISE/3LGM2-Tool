@@ -1,10 +1,12 @@
-package de.imise.tool3lgm.gui;
+package de.imise.tool3lgm.gui.viewpane.graph;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
+import de.imise.tool3lgm.gui.viewpane.ViewPane;
+import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 import de.imise.util.swing.component.ParentComponentFinder;
 
 /**

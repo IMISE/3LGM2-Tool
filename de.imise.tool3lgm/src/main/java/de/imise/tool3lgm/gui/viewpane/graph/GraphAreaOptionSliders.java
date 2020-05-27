@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.gui;
+package de.imise.tool3lgm.gui.viewpane.graph;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 

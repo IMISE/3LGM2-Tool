@@ -13,8 +13,8 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.gui.GraphViewPaneFrameComponent;
-import de.imise.tool3lgm.gui.matrixview.MatrixViewPaneFrameComponent;
+import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
+import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
 
 public interface LGMChangeListener {
 

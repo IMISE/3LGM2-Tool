@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.gui;
+package de.imise.tool3lgm.gui.viewpane;
 
 /**
  * @author AXS (26.05.2020)

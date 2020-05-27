@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.gui.matrixview;
+package de.imise.tool3lgm.gui.viewpane.matrix;
 
 import java.awt.Color;
 import java.awt.Dimension;

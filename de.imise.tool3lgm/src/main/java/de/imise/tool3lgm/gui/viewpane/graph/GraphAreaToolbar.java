@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.gui;
+package de.imise.tool3lgm.gui.viewpane.graph;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.GraphAreaOptionSliders.SliderWithTextField;
+import de.imise.tool3lgm.gui.viewpane.graph.GraphAreaOptionSliders.SliderWithTextField;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 public class GraphAreaToolbar extends UnfloatableToolBar {
@@ -95,7 +95,7 @@ public class GraphAreaToolbar extends UnfloatableToolBar {
         return paintableNodeClasses;
     }
 
-    void setFrame(final GraphViewPaneFrameComponent frame) {
+    public void setFrame(final GraphViewPaneFrameComponent frame) {
         this.frame = frame;
         sliders.setFrame(frame);
         update();

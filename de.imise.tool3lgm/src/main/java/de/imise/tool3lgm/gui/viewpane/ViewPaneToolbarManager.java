@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.gui;
+package de.imise.tool3lgm.gui.viewpane;
 
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR;
 
@@ -11,8 +11,10 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphAreaChangeListener;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
-import de.imise.tool3lgm.gui.matrixview.MatrixViewPaneFrameComponent;
-import de.imise.tool3lgm.gui.matrixview.MatrixViewPaneToolbar;
+import de.imise.tool3lgm.gui.viewpane.graph.GraphAreaToolbar;
+import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
+import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
+import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneToolbar;
 import de.imise.util.swing.component.UnfloatableToolBar;
 
 /**

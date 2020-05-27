@@ -28,6 +28,7 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.gui.menu.MenuBar;
+import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.util.swing.SwingUtils;

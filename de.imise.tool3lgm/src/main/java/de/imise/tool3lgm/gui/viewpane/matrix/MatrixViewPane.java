@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.gui.matrixview;
+package de.imise.tool3lgm.gui.viewpane.matrix;
 
 import static de.imise.tool3lgm.Static.contextGenerator;
 
@@ -19,8 +19,8 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
-import de.imise.tool3lgm.gui.ViewPane;
-import de.imise.tool3lgm.gui.ViewPaneToolbarManager;
+import de.imise.tool3lgm.gui.viewpane.ViewPane;
+import de.imise.tool3lgm.gui.viewpane.ViewPaneToolbarManager;
 
 /**
  * @author AXS (21.05.2020)

@@ -7,6 +7,7 @@ import javax.swing.Action;
 
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
+import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 
 /**
  * @author AXS (29.01.2020)
