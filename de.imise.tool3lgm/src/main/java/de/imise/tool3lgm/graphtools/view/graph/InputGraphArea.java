@@ -359,7 +359,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
             // Rechteck inklusive der evtl. mitzubewegenden Teilelemente berechnet
             grabbedElementsRealRect = null;
             grabbedElementsFullRect = null;
-            int ebene = szenario.getCollection().getActiveLayer();
+            GDCollection gdcoll = szenario.getCollection();
+            int ebene = gdcoll.getActiveLayer();
             for (NodeContainer kc : szenario.getSelectedRealElementContainerIterable()) {
                 if (!kc.isVisible() || !multiView && kc.layerFor() != ebene) {
                     continue;

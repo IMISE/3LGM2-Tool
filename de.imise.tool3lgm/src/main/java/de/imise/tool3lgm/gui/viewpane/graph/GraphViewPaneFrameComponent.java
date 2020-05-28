@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.gui.viewpane.graph;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -9,7 +10,7 @@ import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 /**
  * @author AXS (26.05.2020)
  */
-public interface GraphViewPaneFrameComponent extends ViewPaneFrameComponent {
+public interface GraphViewPaneFrameComponent extends ViewPaneFrameComponent, LGMChangeListenerSimple {
 
     /**
      * @return

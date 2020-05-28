@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
  *
  * @author AXS (20.05.2020)
  */
-public interface ViewPaneFrameComponent extends GraphDocumentOwner, LGMChangeListenerSimple {
+public interface ViewPaneFrameComponent extends GraphDocumentOwner {
 
     /**
      * @return the contained {@link ViewPane}
@@ -82,7 +82,15 @@ public interface ViewPaneFrameComponent extends GraphDocumentOwner, LGMChangeLis
     /**
      * @return
      */
-    public default String getTitle() {
+    public default String getName() {
+        ViewPane viewPane = getViewPane();
+        return viewPane.getName();
+    }
+
+    /**
+     * @return
+     */
+    public default String getFullName() {
         ViewPane viewPane = getViewPane();
         return viewPane.getFullName();
     }

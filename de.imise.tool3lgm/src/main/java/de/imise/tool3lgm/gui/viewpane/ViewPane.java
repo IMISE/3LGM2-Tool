@@ -68,6 +68,11 @@ public abstract class ViewPane extends JPanel implements GraphDocumentOwner {
     public abstract String getFullName();
 
     @Override
+    public String getName() {
+        return doc.getTitle();
+    }
+
+    @Override
     public boolean equals(final Object obj) {
         if (this == obj) {
             return true;

@@ -22,7 +22,6 @@ public class MainFrameDesktopGraphTabComponent extends MainFrameDesktopTabCompon
         super(new GraphViewPane(doc));
         GraphViewPane graphViewPane = getViewPane();
         area = graphViewPane.getInputGraphArea();
-        updateTitle();
     }
 
     @Override
@@ -37,7 +36,6 @@ public class MainFrameDesktopGraphTabComponent extends MainFrameDesktopTabCompon
 
     @Override
     public void dispose() {
-        super.dispose();
         area.dispose();
     }
 

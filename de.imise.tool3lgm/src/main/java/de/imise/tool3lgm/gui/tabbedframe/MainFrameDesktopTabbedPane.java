@@ -91,7 +91,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneF
      * @param tabComponent
      */
     private void addView(final MainFrameDesktopTabComponent tabComponent) {
-        addTab(tabComponent.getTitle(), null, tabComponent, tabComponent.getTitle());
+        addTab(tabComponent.getName(), null, tabComponent, tabComponent.getFullName());
         setSelected(tabComponent);
     }
 

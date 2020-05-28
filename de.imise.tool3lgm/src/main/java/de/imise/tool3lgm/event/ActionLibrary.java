@@ -555,7 +555,7 @@ public class ActionLibrary {
                     next = 0;
                 }
 
-                actions[next] = new AbstractAction(frame.getTitle()) {
+                actions[next] = new AbstractAction(frame.getFullName()) {
 
                     @Override
                     public void actionPerformed(final ActionEvent e) {

@@ -15,12 +15,6 @@ public class MainFrameDesktopMatrixTabComponent extends MainFrameDesktopTabCompo
      */
     public MainFrameDesktopMatrixTabComponent(final GraphDocument doc) {
         super(new GraphViewPane(doc));
-        updateTitle();
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
     }
 
     @Override
