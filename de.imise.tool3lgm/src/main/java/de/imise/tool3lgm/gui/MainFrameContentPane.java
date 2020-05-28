@@ -64,7 +64,7 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     private final JPanel workarea = new JPanel();
 
     /** ToolBar with general tools */
-    private final MainFrameToolbar mainFrameToolbar = new MainFrameToolbar();
+    private final MainFrameToolBar mainFrameToolbar = new MainFrameToolBar();
 
     /** parent der Toolbar Workarea == unten, mainFrameToolbar = oben in der Haupt-Toolbar */
     private final Container graphFrameToolbarParent = workarea; // auch unten wie beim MatrixView
