@@ -229,7 +229,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
         result = prime * result + (gdcoll == null ? 0 : gdcoll.hashCode());
         result = prime * result + (hashString == null ? 0 : hashString.hashCode());
         result = prime * result + Arrays.hashCode(layer);
-        result = prime * result + (title == null ? 0 : title.hashCode());
         return result;
     }
 
@@ -260,13 +259,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return false;
         }
         if (!Arrays.equals(layer, other.layer)) {
-            return false;
-        }
-        if (title == null) {
-            if (other.title != null) {
-                return false;
-            }
-        } else if (!title.equals(other.title)) {
             return false;
         }
         return true;
