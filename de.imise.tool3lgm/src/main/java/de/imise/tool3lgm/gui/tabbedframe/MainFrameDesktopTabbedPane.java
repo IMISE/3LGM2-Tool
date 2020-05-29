@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentListener;
@@ -24,6 +27,25 @@ public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneF
      *
      */
     public MainFrameDesktopTabbedPane() {
+        addTabChangeListener();
+    }
+
+    /**
+     *
+     */
+    private void addTabChangeListener() {
+        ChangeListener changeListener = new ChangeListener() {
+            @Override
+            public void stateChanged(final ChangeEvent e) {
+                Component selectedComponent = getSelectedComponent();
+                if (selectedComponent instanceof ViewPaneFrameComponent) {
+                    ViewPaneFrameComponent frame = (ViewPaneFrameComponent) selectedComponent;
+                    GraphDocument doc = frame.getGraphDocument();
+                    Static.setSelectedDoc(doc);
+                }
+            }
+        };
+        addChangeListener(changeListener);
     }
 
     @Override
