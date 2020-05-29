@@ -126,7 +126,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneF
 
     @Override
     public MatrixViewPaneFrameComponent createMatrixView(final GraphDocument doc, final int titleIndex, final ViewPaneToolbarManager viewPaneToolBarManager) {
-        MainFrameDesktopMatrixTabComponent matrixView = new MainFrameDesktopMatrixTabComponent(doc);
+        MainFrameDesktopMatrixTabComponent matrixView = new MainFrameDesktopMatrixTabComponent(doc, viewPaneToolBarManager, titleIndex);
         addView(matrixView);
         return matrixView;
     }
