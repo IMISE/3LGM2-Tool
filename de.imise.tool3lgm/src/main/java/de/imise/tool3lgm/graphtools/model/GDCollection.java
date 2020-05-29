@@ -959,13 +959,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      *            und dem Hauptmodell gelöscht.
      * @param pid
      */
-    public final void deleteElements(final String[] elementHashesToDelete, final GraphDocument gdoc, final int pid) {
+    public final void deleteElements(final String[] elementHashesToDelete, final GraphDocument doc, final int pid) {
         List<ModelElement> elementsToDelete = new ArrayList<>(elementHashesToDelete.length);
         for (String elementHash : elementHashesToDelete) {
             ModelElement me = mainDoc.findElementCoded(elementHash);
             elementsToDelete.add(me);
         }
-        deleteElements(elementsToDelete, gdoc, pid);
+        deleteElements(elementsToDelete, doc, pid);
     }
 
     /**
@@ -984,7 +984,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      *            und dem Hauptmodell gelöscht.
      * @param pid
      */
-    public final void deleteElements(final List<? extends ModelElement> elementsToDelete, final GraphDocument gdoc, final int pid) {
+    public final void deleteElements(final List<? extends ModelElement> elementsToDelete, final GraphDocument doc, final int pid) {
         //das wird die Liste mit allen zu löschenden Elementen. Das sind alle Elemente aus <code>elementsToDelete</code>,
         //alle Kanten dieser Elemente und rekursiv alle von den zu löschenden Elementen abhängigen Elemente (min. Karfinalität=1)
         //sowie deren Kanten
@@ -994,7 +994,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         Set<ModelElement> dependentDeletedElements = new HashSet<>();
         //das wird die Liste aller zu löschenden Verbindungen
         List<Edge> edgesToDelete = new ArrayList<>();
-        gdoc.start_transaction(pid);
+        doc.start_transaction(pid);
         for (int i = 0; i < allElementsToDelete.size(); i++) {
             ModelElement me = allElementsToDelete.get(i);
             if (me == null) {
@@ -1008,7 +1008,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             }
             //Knickpunkte kann man gleich löschen
             if (me instanceof Bendpoint) {
-                ElementContainer kpc = me.getContainer(gdoc);
+                ElementContainer kpc = me.getContainer(doc);
                 if (kpc == null) {
                     kpc = me.getContainer(mainDoc);
                 }
@@ -1044,9 +1044,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             }
         }
         if (allElementsToDelete.isEmpty()) {
-            gdoc.finish_transaction(pid);
-            gdoc.distributeEvent(DATA_CHANGED, pid);
-            gdoc.distributeEvent(SELECTION_CHANGED, pid);
+            doc.finish_transaction(pid);
+            doc.distributeEvent(DATA_CHANGED, pid);
+            doc.distributeEvent(SELECTION_CHANGED, pid);
             return;
         }
         //alle Elemente einfach aus den Szenarien löschen
@@ -1127,9 +1127,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 removeOptional((OptionalEdge) me);
             }
         }
-        gdoc.finish_transaction(pid);
-        gdoc.distributeEvent(DATA_CHANGED, pid);
-        gdoc.distributeEvent(SELECTION_CHANGED, pid);
+        doc.finish_transaction(pid);
+        doc.distributeEvent(DATA_CHANGED, pid);
+        doc.distributeEvent(SELECTION_CHANGED, pid);
     }
 
     /**
