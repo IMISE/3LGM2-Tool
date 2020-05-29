@@ -846,7 +846,7 @@ public final class UserFieldDefinitions extends UserFieldDefinitionChangeHandler
 
         //Das Hauptdokument der GDCollection holen (UserField-Änderungen gelten immer für alle
         //Elemente, also immer im Hauptdokument arbeiten)
-        GraphDocument doc = gdcoll.getMainGraphDocument();
+        GraphDocument doc = gdcoll.getMainDoc();
 
         //Für alle Kennzahlformel-UserFields
         for (UserField userField : formulaUserFieldList) {

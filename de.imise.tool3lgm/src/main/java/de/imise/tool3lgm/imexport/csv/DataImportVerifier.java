@@ -220,7 +220,7 @@ public class DataImportVerifier {
                 errors.add(line, COLUMN_INDEX_HASH, HASH_DUPLICATE, hash, "" + index);
             }
             //prüfen, ob im Modell ein Element einer anderen Art vorkommt, das denselben Hash hat
-            ModelElement me = gdcoll.getMainGraphDocument().findElementCoded(hash);
+            ModelElement me = gdcoll.getMainDoc().findElementCoded(hash);
             if (me != null && me.getClass() != elementClass) {
                 ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
                 String displayableName = elementsNameBuilder.getDisplayableName(me.getClass());

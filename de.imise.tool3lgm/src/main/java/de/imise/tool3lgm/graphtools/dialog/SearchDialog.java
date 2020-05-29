@@ -386,7 +386,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
 
         List<ElementContainer> searchSet = doc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true);
-        GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
+        GraphDocument mainDoc = doc.getCollection().getMainDoc();
         if (doc != mainDoc) {
             for (ElementContainer ec : mainDoc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true)) {
                 if (ec.isUnique()) {
@@ -758,7 +758,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         if (gdcoll == null) {
             return;
         }
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
         subModelBox.addItem(mainDoc, mainDoc.getTitle());
         for (Szenario szen : gdcoll.getSzenarios()) {
             subModelBox.addItem(szen, szen.getTitle());

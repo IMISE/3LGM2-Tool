@@ -180,7 +180,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
         if (paste) {
             pastedElements = new ArrayList<>();
         }
-        doc = collection.getMainGraphDocument();
+        doc = collection.getMainDoc();
         szenario = collection.getSelectedDoc();
         userFieldDefinitions = coll.getUserFieldDefinitions();
     }
@@ -465,7 +465,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 //            } else if (qName.equals("userFieldFormatString")) {
                 //
             } else if (qName.equals("modell_3lgm_2")) {
-                doc = collection.getMainGraphDocument();
+                doc = collection.getMainDoc();
 
             } else if (qName.equals("tool3lgm_clipboard")) {
                 String timeStamp = atts.getValue("time");
@@ -475,7 +475,7 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                     copyAndPastePositionShift = collection.resetPasteCounter();
                     lastCopyFileTimeStamp = timeStamp;
                 }
-                doc = Static.getSelectedGDCollection().getMainGraphDocument();
+                doc = Static.getSelectedGDCollection().getMainDoc();
                 szenario = collection.getSelectedDoc();
                 szenario.clearSelection();
                 oldToNewHashString = new HashMap<>();

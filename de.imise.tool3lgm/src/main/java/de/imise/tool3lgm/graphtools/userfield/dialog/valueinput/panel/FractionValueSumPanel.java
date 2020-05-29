@@ -170,7 +170,7 @@ public class FractionValueSumPanel extends ClassificationNumberFormulaPanel {
         if (elementBox.isEnabled()) {
             boolean selectedEdgeDirectionForward = isSelectedEdgeDirectionForward();
             Class<? extends ModelElement> elementClass = selectedEdgeDirectionForward ? getStartClass(selectedEdgeClass) : getEndClass(selectedEdgeClass);
-            GraphDocument doc = definitions.getCollection().getMainGraphDocument();
+            GraphDocument doc = definitions.getCollection().getMainDoc();
             List<ModelElement> elements = doc.getModelItems(elementClass, true, true);
             for (ModelElement me : elements) {
                 elementBox.addItem(me);

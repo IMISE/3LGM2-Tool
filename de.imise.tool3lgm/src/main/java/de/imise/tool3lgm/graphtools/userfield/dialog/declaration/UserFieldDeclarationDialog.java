@@ -169,7 +169,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
             }
             GDCollection gdcoll = definitions.getCollection();
             if (gdcoll != null) {
-                gdcoll.getMainGraphDocument().distributeEvent(DATA_CHANGED);
+                gdcoll.getMainDoc().distributeEvent(DATA_CHANGED);
             }
         } else if (is(cancelButton)) {
             if (returnValue != 0) {

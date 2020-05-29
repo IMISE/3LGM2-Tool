@@ -100,7 +100,7 @@ public class ShortestCommunicationPathFinderOld {
     public ShortestCommunicationPathFinderOld(final List<ModelElement> objekttypList, final GDCollection gdcoll) {
         super();
         if (objekttypList != null && objekttypList.size() > 0) {
-            mainDoc = gdcoll.getMainGraphDocument();
+            mainDoc = gdcoll.getMainDoc();
             objectTypes = objekttypList;
             initPathAndCostMatrix();
         }
@@ -112,7 +112,7 @@ public class ShortestCommunicationPathFinderOld {
     public ShortestCommunicationPathFinderOld(final List<ModelElement> objekttypList, final ModelAnalyzerCache analyzerCache) {
         super();
         if (objekttypList != null && objekttypList.size() > 0) {
-            mainDoc = analyzerCache.getCollection().getMainGraphDocument();
+            mainDoc = analyzerCache.getCollection().getMainDoc();
             objectTypes = objekttypList;
             initPathAndCostMatrix();
         }

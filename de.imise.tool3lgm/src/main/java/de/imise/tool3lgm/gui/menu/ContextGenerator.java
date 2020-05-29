@@ -230,7 +230,7 @@ public abstract class ContextGenerator implements ActionListener {
         JMenu menu = new JMenu(gdcoll.getName());
         JMenuItem item = new JMenuItem(getResString("main_model"));
         LGMGraphDocument doc = (LGMGraphDocument) getDoc();
-        item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(doc, gdcoll.getMainGraphDocument()));
+        item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(doc, gdcoll.getMainDoc()));
         menu.add(item);
         for (final Szenario szen : gdcoll.getSzenarios()) {
             item = new JMenuItem(szen.getTitle());

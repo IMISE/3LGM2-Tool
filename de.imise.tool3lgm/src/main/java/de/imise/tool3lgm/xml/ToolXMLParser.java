@@ -291,7 +291,7 @@ public class ToolXMLParser {
         for (Szenario szen : gdcoll.getSzenarios()) {
             docs.add(szen);
         }
-        docs.add(gdcoll.getMainGraphDocument());
+        docs.add(gdcoll.getMainDoc());
         for (GraphDocument d : docs) {
             for (LayerContainer lc : d.getLayers()) {
                 lc.refreshAlpahbetical();

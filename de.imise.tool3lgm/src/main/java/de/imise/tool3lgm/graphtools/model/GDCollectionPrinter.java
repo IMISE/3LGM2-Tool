@@ -25,7 +25,7 @@ public class GDCollectionPrinter {
     private StringBuilder appendMainModelInfromation() {
         appendln("Model name=", gdcoll.getName());
         increaseIndent();
-        appendGraphDocument(gdcoll.getMainGraphDocument());
+        appendGraphDocument(gdcoll.getMainDoc());
         for (Szenario szen : gdcoll.getSzenarios()) {
             appendGraphDocument(szen);
         }

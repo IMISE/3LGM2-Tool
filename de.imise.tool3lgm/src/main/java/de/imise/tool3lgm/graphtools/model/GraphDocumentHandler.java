@@ -48,7 +48,7 @@ public class GraphDocumentHandler {
         if (!includeSubClasses || clazz == Bendpoint.class) {
             List<Class<? extends ModelElement>> searchClasses = new ArrayList<>();
             searchClasses.add(clazz);
-            return getModelItemsForClasses(metaModel.isUnique(clazz, modelCategory) ? doc.getCollection().getMainGraphDocument() : doc, searchClasses, absolutePartsOnly, alphabetical);
+            return getModelItemsForClasses(metaModel.isUnique(clazz, modelCategory) ? doc.getCollection().getMainDoc() : doc, searchClasses, absolutePartsOnly, alphabetical);
             //          return getModelItemsForSingleClass(clazz, absolutePartsOnly, alphabetical);
         }
         List<ModelElement> objects = null;
@@ -71,7 +71,7 @@ public class GraphDocumentHandler {
             searchClassesNotUnique.clear();
         }
         if (!searchClassesUnique.isEmpty()) {
-            objects = getModelItemsForClasses(doc.getCollection().getMainGraphDocument(), searchClassesUnique, absolutePartsOnly, alphabetical);
+            objects = getModelItemsForClasses(doc.getCollection().getMainDoc(), searchClassesUnique, absolutePartsOnly, alphabetical);
         }
         if (!searchClassesNotUnique.isEmpty()) {
             List<ModelElement> elems = getModelItemsForClasses(doc, searchClassesNotUnique, absolutePartsOnly, alphabetical);
@@ -92,7 +92,7 @@ public class GraphDocumentHandler {
      * @return
      */
     public static List<ModelElement> getModelItems(final GDCollection gdcoll, final Collection<Class<? extends ModelElement>> searchClasses) {
-        return getModelItemsForClasses(gdcoll.getMainGraphDocument(), searchClasses, false, false);
+        return getModelItemsForClasses(gdcoll.getMainDoc(), searchClasses, false, false);
     }
 
     /**
@@ -174,7 +174,7 @@ public class GraphDocumentHandler {
                     //wenn das ModelElement des Conatainers einer gesuchten Klasse entspricht
                     if (searchClasses.contains(me.getClass())) {
                         //die Teil-Von-Eigenschaft wird nicht für dieses Teilmodell sondern für das Gesamtmodell geprüft
-                        if (absolutePartsOnly && me.hasDirectPartContainer(doc.getCollection().getMainGraphDocument())) {
+                        if (absolutePartsOnly && me.hasDirectPartContainer(doc.getCollection().getMainDoc())) {
                             continue;
                         }
                         //zur Rückgabeliste hinzufügen

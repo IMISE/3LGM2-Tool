@@ -83,7 +83,7 @@ public class ModelConverterUtils {
                 me.setName(resultingName);
                 me.setDescription(resultingDescription);
 
-                LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+                LGMGraphDocument mainDoc = gdcoll.getMainDoc();
 
                 //Achtung: Das Join haut nicht richtig hin! daher muss es im Moment umgenagen werden, indem man dafür sorgt, dass es nichts zu joinen gibt und
                 //den 2.Pfad, der entstehen soll, auf andere Weise anlegt
@@ -109,7 +109,7 @@ public class ModelConverterUtils {
      */
     private static ModelElement getEqualElement(final ModelElement me, final String hashString) {
         GDCollection gdcoll = me.getCollection();
-        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         Class<? extends ModelElement> elementClass = me.getClass();
         List<ModelElement> elements = mainDoc.getModelItems(elementClass);
         String hashStringPrefix = hashString + '_';
@@ -138,7 +138,7 @@ public class ModelConverterUtils {
      * @return
      */
     private static int setHashString(final GDCollection gdcoll, final ModelElement me, final String hashString, int counter) {
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
         String fullHashString = counter < 1 ? hashString : hashString + "_" + (++counter);
         while (mainDoc.findElementCoded(fullHashString) != null) {
             fullHashString = hashString + "_" + (++counter);
@@ -201,7 +201,7 @@ public class ModelConverterUtils {
         String renamedName = renamedElement.getName();
         String renamedHash = renamedElement.getHashString();
         GDCollection gdcoll = renamedElement.getCollection();
-        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         Class<? extends ModelElement> renamedElementClass = renamedElement.getClass();
         ModelElement resultElement = renamedElement;
         for (ModelElement me : alreadyRenamedElements) {

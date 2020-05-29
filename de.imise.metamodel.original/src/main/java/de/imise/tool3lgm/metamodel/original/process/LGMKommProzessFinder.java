@@ -26,7 +26,7 @@ public class LGMKommProzessFinder {
     public LGMKommProzessFinder(final GraphDocument doc, final List<LGMProzessStep> steps) {
         super();
         // alle Analysen finden immer im Gesamtmodell und nicht in einem Teilmodell statt
-        getKommProzessForSteps(doc.getCollection().getMainGraphDocument(), steps);
+        getKommProzessForSteps(doc.getCollection().getMainDoc(), steps);
     }
 
     /**

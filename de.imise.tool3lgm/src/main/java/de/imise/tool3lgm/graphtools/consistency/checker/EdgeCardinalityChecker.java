@@ -46,7 +46,7 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
 
     @Override
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll) {
-        GraphDocument doc = gdcoll.getMainGraphDocument();
+        GraphDocument doc = gdcoll.getMainDoc();
         Collection<AbstractConsistencyError> errors = new ArrayList<>();
         for (ModelElement me : doc.getModelItems(ModelElement.class, true)) {
             addCardinalityErrors(gdcoll, me, errors);

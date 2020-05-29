@@ -275,7 +275,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return <code>true</code> if this Graphdocument is the main GraphDocument of the model, otherwise <code>false</code>
      */
     public final boolean isMainGraphDocument() {
-        LGMGraphDocument mainGraphDocument = gdcoll.getMainGraphDocument();
+        LGMGraphDocument mainGraphDocument = gdcoll.getMainDoc();
         return mainGraphDocument == this;
     }
 
@@ -672,7 +672,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         // - aktuelles Modell = Hauptdokument
         // - alle selektierten Elemente sind unique (= ohne grafische Repräsentation sind sie immer in allen Teilmodellen)
         // - das Element ist ein untergeordnetes Element, aber sein übergeordnetes ist auch in dem Teilmodell
-        else if (this == gdcoll.getMainGraphDocument() || isSelectedOnlyUnique() || isSelectedOnlySlaveRealNodes()) {
+        else if (this == gdcoll.getMainDoc() || isSelectedOnlyUnique() || isSelectedOnlySlaveRealNodes()) {
             if (OPTION_SHOW_REMOVE_WARNING.is()) {
                 MainFrame mainFrame = Static.getMainFrame();
                 String dialogTitle = getResString("attention");
@@ -1033,7 +1033,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         }
         case MODEL_ACTION_SET_ELEMENT_OPTIONAL: {
             if (argc == 2) {
-                LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+                LGMGraphDocument mainDoc = gdcoll.getMainDoc();
                 Edge edge = mainDoc.findEdgeCoded(argv[0]);
                 boolean bool = Boolean.parseBoolean(argv[1]);
                 setOptional(edge, bool, pid);
@@ -3150,7 +3150,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             prefix = "";
         }
         ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
-        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         List<ModelElement> modelItems = mainDoc.getModelItems(elementClass);
         String displayableName = elementsNameBuilder.getDisplayableName(elementClass);
         String name = prefix + displayableName + " ";
@@ -3279,7 +3279,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return null;
         }
 
-        return me.getContainer(me.isUnique() ? gdcoll.getMainGraphDocument() : this);
+        return me.getContainer(me.isUnique() ? gdcoll.getMainDoc() : this);
     }
 
     /**
@@ -3296,7 +3296,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return null;
         }
 
-        return (NodeContainer) me.getContainer(me.isUnique() ? gdcoll.getMainGraphDocument() : this);
+        return (NodeContainer) me.getContainer(me.isUnique() ? gdcoll.getMainDoc() : this);
     }
 
     /**
@@ -3313,7 +3313,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return null;
         }
 
-        return (EdgeContainer) me.getContainer(me.isUnique() ? gdcoll.getMainGraphDocument() : this);
+        return (EdgeContainer) me.getContainer(me.isUnique() ? gdcoll.getMainDoc() : this);
     }
 
     /**
@@ -3330,7 +3330,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             return null;
         }
 
-        return (BendpointContainer) me.getContainer(me.isUnique() ? gdcoll.getMainGraphDocument() : this);
+        return (BendpointContainer) me.getContainer(me.isUnique() ? gdcoll.getMainDoc() : this);
     }
 
     /**
@@ -3342,7 +3342,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     public ModelElement findElementWithUserField(final String userFieldName, final String value) {
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
         if (mainDoc != this) {
             return mainDoc.findElementWithUserField(userFieldName, value);
         }
@@ -3413,7 +3413,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     public Node findNodeCoded(final String hashString) {
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
         if (mainDoc != this) {
             return mainDoc.findNodeCoded(hashString);
         }
@@ -3435,7 +3435,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     public Edge findEdgeCoded(final String hashString) {
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
         if (mainDoc != this) {
             return mainDoc.findEdgeCoded(hashString);
         }
@@ -3457,7 +3457,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     public Bendpoint findBendpointCoded(final String hashString) {
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
         if (mainDoc != this) {
             return mainDoc.findBendpointCoded(hashString);
         }
@@ -3525,7 +3525,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
             name = doc.getNextNewName(masterName + "_", slaveClass);
         }
         GDCollection gdcoll = doc.getCollection();
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
         NodeContainer slaveContainer = mainDoc.createNodeAndContainer(slaveClass, name, GDCommands.INVALID_DESCRIPTION, slaveHashString, pid);
         if (slaveContainer == null) {
             doc.finish_transaction(pid);
@@ -4646,7 +4646,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @param pid
      */
     public final void setUserFieldValue(final String elementHash, final String userFieldHash, final String newValue, final int pid) {
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
         ModelElement me = mainDoc.findElementCoded(elementHash);
         if (me == null) {
             return;
@@ -4887,7 +4887,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     private final void linkElementToSzenario(final String szenHashString, final String hashCode, final int pid) {
         ElementContainer ec = findContainerCoded(hashCode);
         if (ec == null) {
-            LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+            LGMGraphDocument mainDoc = gdcoll.getMainDoc();
             ec = mainDoc.findContainerCoded(hashCode);
         }
         linkElementToSzenario(szenHashString, ec, pid);
@@ -4901,7 +4901,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return
      */
     private final ElementContainer addElementToSzenario(final String sourceDocHash, final String targetSzenHash, final String elementHashCode, final int pid) {
-        GraphDocument sourceDoc = sourceDocHash == null ? gdcoll.getMainGraphDocument() : gdcoll.getGraphDocumentCoded(sourceDocHash);
+        GraphDocument sourceDoc = sourceDocHash == null ? gdcoll.getMainDoc() : gdcoll.getGraphDocumentCoded(sourceDocHash);
         NodeContainer ec = sourceDoc.findNodeContainerCoded(elementHashCode);
         if (ec != null) {
             return addElementToSzenario(targetSzenHash, ec, pid);
@@ -5163,7 +5163,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
 
         ModelCategory modelCategory = getModelCategory();
         MetaModel metaModel = getMetaModel();
-        GraphDocument document = metaModel.isUnique(clazz, modelCategory) ? gdcoll.getMainGraphDocument() : this;
+        GraphDocument document = metaModel.isUnique(clazz, modelCategory) ? gdcoll.getMainDoc() : this;
         List<ElementContainer> objects = new ArrayList<>();
         //Ebene der gesuchten Elementklasse bestimmen
         int layer = metaModel.layerFor(clazz);
@@ -5328,7 +5328,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         if (modelElement == null) {
             return null;
         }
-        return modelElement.getContainer(modelElement.isUnique() ? gdcoll.getMainGraphDocument() : this);
+        return modelElement.getContainer(modelElement.isUnique() ? gdcoll.getMainDoc() : this);
     }
 
     /**

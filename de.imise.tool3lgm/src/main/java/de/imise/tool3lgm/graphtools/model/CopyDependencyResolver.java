@@ -49,7 +49,7 @@ public class CopyDependencyResolver {
      */
     public void resolveCopyDependencies(final List<? extends GraphDocument> export, final List<ModelElement> elements, final Set<String> bitmaps, final Set<UserField> userFields) {
         /* alle übergebenen Szenarios durchgehen und copyDependcies auflösen */
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
         for (LayerContainer lc : mainDoc.getLayers()) {
             for (NodeContainer nc : lc.getGraphNodeContainers()) {
                 Node node = nc.getNode();
@@ -123,7 +123,7 @@ public class CopyDependencyResolver {
         for (UserField userField : me.getUserFieldInputValueKeys()) {
             userFields.add(userField);
         }
-        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         Class<? extends ModelElement> elementClass = me.getClass();
         if (me instanceof Edge) {
             int layer = me.layerFor();

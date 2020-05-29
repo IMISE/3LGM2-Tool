@@ -153,7 +153,7 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         Class<? extends ModelElement> pathStepConnectionClass = elementsPath.getStartClass();
         Collection<ElementContainerTreeNode> pathStepNodes = new ArrayList<>();
         for (GDCollection template : templates) {
-            LGMGraphDocument mainGraphDocument = template.getMainGraphDocument();
+            LGMGraphDocument mainGraphDocument = template.getMainDoc();
             List<ElementContainer> elementContainers = mainGraphDocument.getElementContainers(pathStepConnectionClass);
             createNodes(pathStepNodes, elementContainers, lastHierarchyNode);
         }

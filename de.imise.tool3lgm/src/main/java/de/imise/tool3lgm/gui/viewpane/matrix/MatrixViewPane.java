@@ -224,7 +224,7 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
             return;
         }
 
-        GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
+        GraphDocument mainDoc = doc.getCollection().getMainDoc();
 
         mainDoc.select(colNode.getContainer(mainDoc), TransactionManager.STANDARD_PID);
         contextGenerator.setElementContainer(rowNode.getContainer(mainDoc));

@@ -243,7 +243,7 @@ public class LGMGraphDocument extends GraphDocument {
      * @param targetDoc
      */
     private static final void addSplittedSourceEdgesToCopy(final List<ModelElement> sourceElements, final LGMGraphDocument targetDoc) {
-        LGMGraphDocument targetMainDoc = targetDoc.getCollection().getMainGraphDocument();
+        LGMGraphDocument targetMainDoc = targetDoc.getCollection().getMainDoc();
         for (int i = 0; i < sourceElements.size(); i++) {
             ModelElement me = sourceElements.get(i);
             if (me instanceof Bendpoint) {
@@ -286,9 +286,9 @@ public class LGMGraphDocument extends GraphDocument {
     public static final void copySelectedToModel(final LGMGraphDocument sourceDoc, final LGMGraphDocument targetDoc) {
 
         GDCollection sourceCollection = sourceDoc.getCollection();
-        GraphDocument sourceMainDoc = sourceCollection.getMainGraphDocument();
+        GraphDocument sourceMainDoc = sourceCollection.getMainDoc();
         GDCollection targetCollection = targetDoc.getCollection();
-        GraphDocument targetMainDoc = targetCollection.getMainGraphDocument();
+        GraphDocument targetMainDoc = targetCollection.getMainDoc();
 
         //Keine Ahnung warum hier mal irgendwer ein Speichern erzwingen wollte!?
         //        if (destGDColl.isChanged()) {
@@ -538,9 +538,9 @@ public class LGMGraphDocument extends GraphDocument {
                 continue;
             }
 
-            gdcoll.getMainGraphDocument().getLayer(edge.layerFor()).add(edge.createContainer(gdcoll.getMainGraphDocument()));
+            gdcoll.getMainDoc().getLayer(edge.layerFor()).add(edge.createContainer(gdcoll.getMainDoc()));
 
-            if (this != gdcoll.getMainGraphDocument() && me1.getContainer(this) != null && me3.getContainer(this) != null) {
+            if (this != gdcoll.getMainDoc() && me1.getContainer(this) != null && me3.getContainer(this) != null) {
                 getLayer(edge.layerFor()).add(edge.createContainer(this));
             }
 

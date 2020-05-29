@@ -219,7 +219,7 @@ public class WebExportDialog extends JDialog {
 
             raf = new RandomAccessFile(new File(filesDir, "description.html"), "rw");
             raf.setLength(0);
-            raf.writeBytes(getDescriptionHTMLString(collection.getMainGraphDocument()));
+            raf.writeBytes(getDescriptionHTMLString(collection.getMainDoc()));
             raf.close();
 
             raf = new RandomAccessFile(new File(filesDir, "menu.html"), "rw");

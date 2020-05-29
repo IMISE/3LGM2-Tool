@@ -27,7 +27,7 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
         MetaModel metaModel = gdcoll.getMetaModel();
         Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> consistencyConditionMissingConnectedElementsMetaPathsMap = metaModel.getConsistencyConditionMissingConnectedElementsMetaPaths();
         Collection<ConsistencyCheckSectionMetaPath> consistencyConditionMissingConnectedElementsMetaPaths = consistencyConditionMissingConnectedElementsMetaPathsMap.keySet();
-        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         //for every of the SectionMetaPaths with a consistency condition
         for (ConsistencyCheckSectionMetaPath consistencyConditionSectionMetaPath : consistencyConditionMissingConnectedElementsMetaPaths) {
             //get start element class of thsi metapath = element class which must have these connections to be valid

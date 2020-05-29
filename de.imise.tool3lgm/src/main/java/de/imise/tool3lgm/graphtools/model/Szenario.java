@@ -112,14 +112,14 @@ public class Szenario extends LGMGraphDocument {
             if (!isMyElement(slave)) {
                 ElementContainer slaveCont = slave.getContainer(sourceDoc);
                 if (slaveCont == null) {
-                    slaveCont = slave.getContainer(gdcoll.getMainGraphDocument());
+                    slaveCont = slave.getContainer(gdcoll.getMainDoc());
                 }
                 if (!(slaveCont instanceof NodeContainer)) {
                     return;
                 }
                 addElementToSzenario(getHashString(), (NodeContainer) slaveCont, TransactionManager.STANDARD_PID);
                 //wenn der Container aus dem Hauptdokument übernommen wurde -> initiale Grafik setzen
-                if (sourceDoc == getCollection().getMainGraphDocument()) {
+                if (sourceDoc == getCollection().getMainDoc()) {
                     addict(hashString, edge.getClass().getName(), master, slave, TransactionManager.STANDARD_PID);
                 }
             }
@@ -159,7 +159,7 @@ public class Szenario extends LGMGraphDocument {
                         EdgeContainer oldKC = (EdgeContainer) ka.getContainer(sourceDoc);
                         //wenn es keinen gibt, hole den Container aus dem Hauptmodell
                         if (oldKC == null) {
-                            oldKC = (EdgeContainer) ka.getContainer(sourceDoc.getCollection().getMainGraphDocument());
+                            oldKC = (EdgeContainer) ka.getContainer(sourceDoc.getCollection().getMainDoc());
                         }
                         //füge eine Kopie des Edge-Containers in dieses Szenario ein
                         EdgeContainer kc = (EdgeContainer) addContainerCopy(oldKC);

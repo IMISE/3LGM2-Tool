@@ -22,7 +22,7 @@ public class FractionValueSumTableModel extends AbstractUserFieldTableModel {
     }
 
     public FractionValueSumTableModel(final ModelElement me, final Class<? extends Edge> edgeClass, final boolean edgeForwardDirection, final boolean showTopLevel, final boolean showInner, final boolean showLeafs) {
-        super(me.getCollection().getMainGraphDocument());
+        super(me.getCollection().getMainDoc());
         setData(me, edgeClass, edgeForwardDirection, showTopLevel, showInner, showLeafs);
     }
 

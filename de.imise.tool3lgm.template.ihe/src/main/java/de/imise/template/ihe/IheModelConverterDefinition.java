@@ -137,7 +137,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
     private void createCommunicationLinks(final GDCollection target) {
         SimpleMetaPath actor_Transaction_Actor_MetaPath = get_Actor_Transaction_Actor_MetaPath();
         Class<? extends ModelElement> startClass = actor_Transaction_Actor_MetaPath.getStartClass();
-        GraphDocument doc = target.getMainGraphDocument();
+        GraphDocument doc = target.getMainDoc();
         List<ModelElement> actors = doc.getModelItems(startClass);
         PathResultTreeModel resultTree = PathFunctions.getResultTree(actors, actor_Transaction_Actor_MetaPath);
         PathResultTreeNode root = resultTree.getRoot();
@@ -162,7 +162,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
      * @param target
      */
     private void renameCommunicationInterfacesWithTransactionNames(final GDCollection source, final GDCollection target) {
-        LGMGraphDocument doc = target.getMainGraphDocument();
+        LGMGraphDocument doc = target.getMainDoc();
         for (ModelElement me : doc.getModelItems(IheInterface.class, true)) {
             StringBuilder sb = new StringBuilder();
             for (ModelElement connected : me.getConnectedElements(IheInterface_IheTransaction_Edge.class)) {

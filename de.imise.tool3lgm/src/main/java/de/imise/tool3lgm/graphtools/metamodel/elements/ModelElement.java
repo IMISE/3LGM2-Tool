@@ -363,7 +363,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (gdcoll == null) {
             return;
         }
-        mySzenarios.remove(gdcoll.getMainGraphDocument());
+        mySzenarios.remove(gdcoll.getMainDoc());
         List<GraphDocument> mySortedSzenarios = new ArrayList<>(mySzenarios);
         Alphabetical.sort(mySortedSzenarios);
         nameBuffer.append("      ");
@@ -1800,7 +1800,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                 continue;
             }
             if (container) {
-                ElementContainer ec = connected.getContainer(connected.isUnique() ? doc.getCollection().getMainGraphDocument() : doc);
+                ElementContainer ec = connected.getContainer(connected.isUnique() ? doc.getCollection().getMainDoc() : doc);
                 if (ec != null) {
                     if (alphabetical) {
                         Alphabetical.insert(connectedElements, ec);
@@ -1809,7 +1809,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
                     }
                 }
             } else {
-                if (doc != null && connected.getContainer(connected.isUnique() ? doc.getCollection().getMainGraphDocument() : doc) == null) {
+                if (doc != null && connected.getContainer(connected.isUnique() ? doc.getCollection().getMainDoc() : doc) == null) {
                     continue;
                 }
                 if (alphabetical) {

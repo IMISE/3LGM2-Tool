@@ -134,7 +134,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
                 me.setContainer(doc, this);
             } else {
                 GDCollection gdcoll = doc.getCollection();
-                this.doc = gdcoll.getMainGraphDocument();
+                this.doc = gdcoll.getMainDoc();
                 me.setContainer(this.doc, this);
             }
             if (me.hasLayout()) {

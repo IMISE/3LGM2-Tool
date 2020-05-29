@@ -50,7 +50,7 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
         submodelBox = addMouseAndFocusListener(new AlphabeticalComboBox());
         submodelBox.addItemListener(this);
         //ModelElements Tree
-        tree = addMouseAndFocusListener(new ModelBrowserTree(gdcoll.getMainGraphDocument()));
+        tree = addMouseAndFocusListener(new ModelBrowserTree(gdcoll.getMainDoc()));
         JScrollPane scrollPane = addMouseAndFocusListener(new JScrollPane(tree));
         addMouseAndFocusListener(scrollPane.getHorizontalScrollBar());
         addMouseAndFocusListener(scrollPane.getVerticalScrollBar());

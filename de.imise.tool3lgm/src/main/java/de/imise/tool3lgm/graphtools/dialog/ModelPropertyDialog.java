@@ -80,7 +80,7 @@ public final class ModelPropertyDialog extends AbstractPropertyDialog implements
         textPane.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         getContentPane().add(new JScrollPane(textPane), BorderLayout.CENTER);
 
-        docBox.addItem(gdcoll.getMainGraphDocument());
+        docBox.addItem(gdcoll.getMainDoc());
         for (Szenario szen : gdcoll.getSzenarios()) {
             docBox.addItem(szen);
         }

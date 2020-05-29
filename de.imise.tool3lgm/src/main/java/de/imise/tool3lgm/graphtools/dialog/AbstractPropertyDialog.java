@@ -83,7 +83,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     public AbstractPropertyDialog(final Frame owner, final GDCollection gdcoll) {
         super(owner, "", false);
         this.gdcoll = gdcoll;
-        doc = gdcoll.getMainGraphDocument();
+        doc = gdcoll.getMainDoc();
         init(gdcoll);
     }
 
@@ -94,7 +94,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     public AbstractPropertyDialog(final Dialog owner, final GDCollection gdcoll) {
         super(owner, "", owner instanceof AbstractPropertyDialog);
         this.gdcoll = gdcoll;
-        doc = gdcoll.getMainGraphDocument();
+        doc = gdcoll.getMainDoc();
         init(gdcoll);
     }
 

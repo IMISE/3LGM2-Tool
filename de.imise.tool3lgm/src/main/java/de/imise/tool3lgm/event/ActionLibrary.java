@@ -806,7 +806,7 @@ public class ActionLibrary {
                         public void changeOption() {
                             boolean oldState = isSelected();
                             for (GDCollection gdcoll : Static.iterableCollections()) {
-                                gdcoll.getMainGraphDocument().setSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition, !oldState);
+                                gdcoll.getMainDoc().setSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition, !oldState);
                                 for (Szenario szenario : gdcoll.getSzenarios()) {
                                     szenario.setSimpleRedundancyAnalysisState(singleSimpleRedundancyDefinition, !oldState);
                                 }

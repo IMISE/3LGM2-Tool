@@ -488,7 +488,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 //da die Selektion sowieso in allen Teilmodellen ausgeführt wird, ist es hier ok, das ModelElement durch
                 //den Container aus dem Hauptdokument zu ersetzen
                 ModelElement me = (ModelElement) selectedObject;
-                GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
+                GraphDocument mainDoc = doc.getCollection().getMainDoc();
                 selected = me.getContainer(mainDoc);
             }
             if (selected != null) {

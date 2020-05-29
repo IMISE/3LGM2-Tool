@@ -248,7 +248,7 @@ public class ModelAnalyzerCache {
         Set<ModelElement> returnSet = new HashSet<>();
         MetaModel metaModel = gdcoll.getMetaModel();
         if (metaModel.canHaveParts(elementClass)) {
-            for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(elementClass, true, true)) {
+            for (ModelElement me : gdcoll.getMainDoc().getModelItems(elementClass, true, true)) {
                 if (me.getDirectParentElements().size() > 1) {
                     returnSet.add(me);
                 }

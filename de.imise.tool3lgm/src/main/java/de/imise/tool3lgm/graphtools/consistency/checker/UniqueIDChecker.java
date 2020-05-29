@@ -33,7 +33,7 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll) {
         List<AbstractConsistencyError> idErrors = new ArrayList<>();
         UserFieldDefinitions ufd = gdcoll.getUserFieldDefinitions();
-        GraphDocument doc = gdcoll.getMainGraphDocument();
+        GraphDocument doc = gdcoll.getMainDoc();
         //alle ID-UserFields aller Klassen
         Iterable<UserField> idUserFields = ufd.getIDUserFields();
         //die letzte TargetClass und die zuletzt rausgesuchte Menge aller Elemente dieser Klassen cachen
@@ -94,7 +94,7 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
             return new ArrayList<>();
         }
         GDCollection gdcoll = me.getCollection();
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
         List<ModelElement> modelItems = mainDoc.getModelItems(meClass);
         for (int i = modelItems.size() - 1; i >= 0; i--) {
             ModelElement other = modelItems.get(i);

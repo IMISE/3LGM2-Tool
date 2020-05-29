@@ -337,11 +337,11 @@ public class ToolContentHandlerV2_0 implements ContentHandler {
             } else if (qName.equals("version")) {
 
             } else if (qName.equals("modell_3lgm_2")) {
-                doc = collection.getMainGraphDocument();
+                doc = collection.getMainDoc();
                 copyAndPastePositionShift = collection.resetPasteCounter();
 
             } else if (qName.equals("tool3lgm_clipboard")) {
-                doc = Static.getSelectedGDCollection().getMainGraphDocument();
+                doc = Static.getSelectedGDCollection().getMainDoc();
                 copyAndPastePositionShift = collection.increasePasteCounter();
                 szenario = collection.getSelectedDoc();
                 szenario.clearSelection();

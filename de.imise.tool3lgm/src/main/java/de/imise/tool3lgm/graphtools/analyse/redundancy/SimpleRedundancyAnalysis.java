@@ -150,7 +150,7 @@ public class SimpleRedundancyAnalysis {
         List<ElementContainer> connectedElements = new ArrayList<>();
         ModelElement me = ec.getElement();
         Collection<ModelElement> allConnectedElements = PathFunctions.getConnectedElements(me, metaPath);
-        GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
+        GraphDocument mainDoc = doc.getCollection().getMainDoc();
         for (ModelElement connected : allConnectedElements) {
             ElementContainer connectedEc = connected.getContainer(connected.isUnique() ? mainDoc : doc);
             if (connectedEc != null) {

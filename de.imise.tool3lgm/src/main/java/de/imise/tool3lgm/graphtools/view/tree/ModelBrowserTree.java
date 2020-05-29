@@ -366,7 +366,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         }
         ElementContainer kc = elementNode.getUserObject();
         LGMTreeNode parent = (LGMTreeNode) elementNode.getParent();
-        GraphDocument maindoc = doc.getCollection().getMainGraphDocument();
+        GraphDocument maindoc = doc.getCollection().getMainDoc();
         boolean isEnableSubmodelBrowser = OPTION_ENABLE_SUBMODEL_BROWSER.is();
         List<ElementContainer> all = kc.getElement().getDirectPartContainers(isEnableSubmodelBrowser ? selDoc : maindoc);
         loop1: for (ElementContainer pc : all) {
@@ -504,7 +504,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         if (doc == null) {
             return;
         }
-        GraphDocument maindoc = doc.getCollection().getMainGraphDocument();
+        GraphDocument maindoc = doc.getCollection().getMainDoc();
         setSelectionListenerActive(false);
         createTree();
         saveExpansionState();
@@ -548,7 +548,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         setSelectionListenerActive(false);
         TreePath[] path = new TreePath[doc.getSelectedRealElementContainerCount()];
         int m = 0;
-        GraphDocument mainDoc = doc.getCollection().getMainGraphDocument();
+        GraphDocument mainDoc = doc.getCollection().getMainDoc();
         for (NodeContainer ec : doc.getSelectedRealElementContainerIterable()) {
             ModelElement me = ec.getElement();
             ec = (NodeContainer) me.getContainer(doc);

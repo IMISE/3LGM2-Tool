@@ -257,7 +257,7 @@ public class ToolContentHandlerV1_0 implements ContentHandler {
         } else if (qName.equals("version")) {
 
         } else if (qName.equals("modell_3lgm_2")) {
-            doc = collection.getMainGraphDocument();
+            doc = collection.getMainDoc();
 
         } else if (qName.equals("objects")) {
             Static.setProgressDialogStatusLabel("labelReadElements");

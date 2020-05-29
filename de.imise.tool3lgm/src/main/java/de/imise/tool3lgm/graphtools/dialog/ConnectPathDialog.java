@@ -72,7 +72,7 @@ public class ConnectPathDialog implements ActionListener {
      * @param metaPaths
      */
     public ConnectPathDialog(final GraphDocument doc, final SimpleMetaPath... metaPaths) {
-        this.doc = doc.getCollection().getMainGraphDocument();
+        this.doc = doc.getCollection().getMainDoc();
         pathChooser = new AlphabeticalComboBox(metaPaths);
         endElementChooser = new AlphabeticalComboBox();
         pathChooser.addActionListener(this);

@@ -113,7 +113,7 @@ public class Tool3lgm {
      * @param source
      */
     public void distribute(final Tool3lgmChangeType changeType, final GDCollection source) {
-        distribute(changeType, source.getMainGraphDocument());
+        distribute(changeType, source.getMainDoc());
     }
 
     /**
@@ -383,7 +383,7 @@ public class Tool3lgm {
         if (gdcoll == null) {
             return null;
         }
-        return gdcoll.getMainGraphDocument();
+        return gdcoll.getMainDoc();
     }
 
     /**
@@ -477,7 +477,7 @@ public class Tool3lgm {
         //die Collection des aktiven Teilmodells holen
         GDCollection gdcoll = selDoc.getCollection();
         //das Hauptdokument holen
-        selDoc = gdcoll.getMainGraphDocument();
+        selDoc = gdcoll.getMainDoc();
 
         Static.showProgressDialog(true);
         Static.setProgressDialogTitle(getResString("close_model") + " " + gdcoll.getName());

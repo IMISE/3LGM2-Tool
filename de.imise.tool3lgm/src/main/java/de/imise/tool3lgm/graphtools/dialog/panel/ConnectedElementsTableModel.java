@@ -202,7 +202,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                     String newValueString = String.valueOf(newValue);
                     boolean isOptinal = OptionalEdge.getOptionOptionalDisplayName().equals(newValueString);
                     Edge edge = (Edge) oldObject;
-                    GraphDocument doc = edge.getCollection().getMainGraphDocument();
+                    GraphDocument doc = edge.getCollection().getMainDoc();
                     doc.setOptional(edge, isOptinal, pid);
                 }
             }

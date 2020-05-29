@@ -72,7 +72,7 @@ public class ModelCleaner {
         boolean bulkMode = gdcoll.isBulkMode();
         gdcoll.setBulkMode(true);
 
-        GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
 
         List<GraphDocument> docs = new ArrayList<>();
         docs.add(mainDoc);
@@ -250,7 +250,7 @@ public class ModelCleaner {
         final String[] superflousStrings = {
                 "-ZUSAMMENGEFÜHRT-", "-JOINED-"
         };
-        for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(ModelElement.class, true)) {
+        for (ModelElement me : gdcoll.getMainDoc().getModelItems(ModelElement.class, true)) {
             // Element-Namen und Beschreibungen bereinigen
             me.setName(getCleanString(me.getName(), getResString("joined"), superflousStrings));
             me.setDescription(getCleanString(me.getDescription(), getResString("joined"), superflousStrings));
@@ -319,7 +319,7 @@ public class ModelCleaner {
             if (subTypeEdges == null || subTypeEdges.size() == 0) {
                 continue;
             }
-            for (ModelElement me : gdcoll.getMainGraphDocument().getModelItems(elementClass, false)) {
+            for (ModelElement me : gdcoll.getMainDoc().getModelItems(elementClass, false)) {
                 gdcoll.createInitialSubtypes(me, STANDARD_PID);
             }
         }
@@ -472,7 +472,7 @@ public class ModelCleaner {
      * @param gdcoll
      */
     public static final void switchIsEdgesToHasPartEdges(final GDCollection gdcoll) {
-        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         List<ModelElement> hasPartEdges = mainDoc.getModelItems(HasPartEdge.class, true);
         for (ModelElement edge : hasPartEdges) {
             HasPartEdge hasPartEdge = (HasPartEdge) edge;

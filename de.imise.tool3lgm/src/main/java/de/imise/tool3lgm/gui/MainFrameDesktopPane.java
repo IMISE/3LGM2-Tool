@@ -543,7 +543,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      * @param gdcoll
      */
     public void closeAllFramesAndTabs(final GDCollection gdcoll) {
-        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         modelBrowserPanel.removeGraphDocument(mainDoc);
         closeFrames(mainDoc);
         for (Szenario szen : gdcoll.getSzenarios()) {

@@ -216,7 +216,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
         writeStartElement("modell_3lgm_2"); //<modell_3lgm_2>
         writeStartElement("header"); //<header>
         writeElement("title", name);
-        writeElement("description", gdcoll.getMainGraphDocument().getDescription());
+        writeElement("description", gdcoll.getMainDoc().getDescription());
         writeElement("version", gdcoll.getFileVersion());
         writeEndElement(); //</header>
         if (userFields == null) {
@@ -371,7 +371,7 @@ public class ToolXMLWriter extends IntendingXMLWriter {
                 writeModelElement(me);
             }
         } else {
-            LGMGraphDocument doc = gdcoll.getMainGraphDocument();
+            LGMGraphDocument doc = gdcoll.getMainDoc();
             for (LayerContainer lc : doc.getLayers()) {
                 for (NodeContainer kc : lc.getNodeContainersAlphabetical()) {
                     writeModelElement(kc.getElement());

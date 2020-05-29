@@ -428,7 +428,7 @@ public class TransactionManager {
             // ein Teilmodell betreffen (Layout-Änderungen, Entfernen  Hinzufügen von Elemente usw.)
             // müssen immer den HashString des Szenarios beachten, für das sie ausgeführt werden sollen
             String undoCommand = trans_q[j].getUndoCommand(i2);
-            LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+            LGMGraphDocument mainDoc = gdcoll.getMainDoc();
             mainDoc.exec(undoCommand, pid);
             if (showProgressDialog) {
                 Static.setProgressDialogStatusLabel("undo", transactions - i2 + " / " + transactions);

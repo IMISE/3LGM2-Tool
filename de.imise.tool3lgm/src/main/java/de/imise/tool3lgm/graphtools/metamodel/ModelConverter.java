@@ -118,9 +118,9 @@ public class ModelConverter {
         //Set aller Knotenklassen holen, die in die Zielklassen umgewandelt werden sollen
         Set<Class<? extends Node>> sourceNodeClasses = directMappingNodeClasses.keySet();
         //Hauptdokument des umzuwandelnden Modells (Ausgangsmodell)
-        GraphDocument sourceMainDoc = sourceModel.getMainGraphDocument();
+        GraphDocument sourceMainDoc = sourceModel.getMainDoc();
         //Hauptdokument des Zielmodells
-        GraphDocument targetMainDoc = targetModel.getMainGraphDocument();
+        GraphDocument targetMainDoc = targetModel.getMainDoc();
         //für jede umzuwandelnde Knotenart
         for (Class<? extends Node> sourceNodeClass : sourceNodeClasses) {
             //hole die Knotenklasse, in die sie im Zielmodell umgewandelt werden soll
@@ -158,9 +158,9 @@ public class ModelConverter {
         //Set aller Kantenklassen holen, die in die Zielklassen umgewandelt werden sollen
         Set<Class<? extends Edge>> sourceEdgeClasses = directMappingEdgeClasses.keySet();
         //Hauptdokument des umzuwandelnden Modells (Ausgangsmodell)
-        GraphDocument sourceMainDoc = sourceModel.getMainGraphDocument();
+        GraphDocument sourceMainDoc = sourceModel.getMainDoc();
         //Hauptdokument des Zielmodells
-        GraphDocument targetMainDoc = targetModel.getMainGraphDocument();
+        GraphDocument targetMainDoc = targetModel.getMainDoc();
         //für jede umzuwandelnde Kantenart
         for (Class<? extends Edge> sourceEdgeClass : sourceEdgeClasses) {
             //hole die Kantenklasse, in die sie im Zielmodell umgewandelt werden soll
@@ -199,9 +199,9 @@ public class ModelConverter {
         //Set aller Kantenklassen holen, die in die Metapfade umgewandelt werden sollen
         Set<Class<? extends Edge>> sourceEdgeClasses = edgesMappingMetaPaths.keySet();
         //Hauptdokument des umzuwandelnden Modells (Ausgangsmodell)
-        GraphDocument sourceMainDoc = sourceModel.getMainGraphDocument();
+        GraphDocument sourceMainDoc = sourceModel.getMainDoc();
         //Hauptdokument des Zielmodells
-        GraphDocument targetMainDoc = targetModel.getMainGraphDocument();
+        GraphDocument targetMainDoc = targetModel.getMainDoc();
         //für jede umzuwandelnde Kantenart
         for (Class<? extends Edge> sourceEdgeClass : sourceEdgeClasses) {
             //hole aus dem Ausgangsmodell alle Kanten der umzuwandelnden Art

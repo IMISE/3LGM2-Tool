@@ -83,7 +83,7 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
      * @return
      */
     private void addGraphDocuments(final ModelBrowser modelBrowser, final GDCollection gdcoll) {
-        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         modelBrowser.addGraphDocument(mainDoc);
         for (Szenario szen : gdcoll.getSzenarios()) {
             modelBrowser.addGraphDocument(szen);

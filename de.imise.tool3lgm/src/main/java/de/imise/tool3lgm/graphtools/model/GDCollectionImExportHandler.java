@@ -111,7 +111,7 @@ public final class GDCollectionImExportHandler {
         if (chooseSzenarioDialog) {
             importSzenarios.addAll(SzenarioDialog.showImportDialog(Static.getMainFrame(), sourceGDColl));
         } else {
-            importSzenarios.add(sourceGDColl.getMainGraphDocument());
+            importSzenarios.add(sourceGDColl.getMainDoc());
             importSzenarios.addAll(sourceGDColl.getSzenarios());
         }
         importSzenarios(importSzenarios.build(), sourceGDColl);
@@ -126,7 +126,7 @@ public final class GDCollectionImExportHandler {
         Static.showProgressDialog();
         Static.setProgressDialogStatusLabel("importSzenario");
         int size = 0;
-        LGMGraphDocument collectionMainDoc = sourceGDColl.getMainGraphDocument();
+        LGMGraphDocument collectionMainDoc = sourceGDColl.getMainDoc();
         for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
             LayerContainer lc = collectionMainDoc.getLayer(ModelConstants.LAYERS[i]);
             size += lc.getNodeContainerCount() + lc.getEdgeContainerCount() + lc.getBendpointContainerCount();
@@ -153,7 +153,7 @@ public final class GDCollectionImExportHandler {
             iconTable.put(bmHash, sourceGDColl.getIconTable().get(bmHash));
         }
 
-        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         for (ModelElement element : elements) {
             element.removeAllContainer();
             ElementContainer container = element.createContainer(mainDoc);
@@ -232,7 +232,7 @@ public final class GDCollectionImExportHandler {
             exportModel(file);
         } else {
             int size = 0;
-            GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+            GraphDocument mainDoc = gdcoll.getMainDoc();
             for (int i = 0; i < ModelConstants.LAYERS.length; i++) {
                 LayerContainer lc = mainDoc.getLayer(ModelConstants.LAYERS[i]);
                 size += lc.getNodeContainerCount() + lc.getEdgeContainerCount() + lc.getBendpointContainerCount();

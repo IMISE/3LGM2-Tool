@@ -431,7 +431,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
 
     public void setName(final String name) {
         this.name = name;
-        distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainGraphDocument(), STANDARD_PID);
+        distribute(MODEL_OR_SZENARIO_NAME_CHANGED, null, getMainDoc(), STANDARD_PID);
     }
 
     /**
@@ -628,7 +628,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         doc.finish_transaction(pid);
 
         szen.setTitle(szenTitle);
-        GraphDocument mainDoc = szen.getCollection().getMainGraphDocument();
+        GraphDocument mainDoc = szen.getCollection().getMainDoc();
         for (ModelElement me : mainDoc.getModelItems(ModelElement.class, true)) {
             me.invalidateNameWithSzens();
         }
@@ -2445,7 +2445,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     /**
      * @return Hauptdokument der Collection
      */
-    public LGMGraphDocument getMainGraphDocument() {
+    public LGMGraphDocument getMainDoc() {
         return doc;
     }
 

@@ -514,10 +514,10 @@ public abstract class Edge extends ModelElement {
             return false;
         }
 
-        startElement = coll.getMainGraphDocument().findElementCoded(startElement.getHashString());
-        endElement = coll.getMainGraphDocument().findElementCoded(endElement.getHashString());
+        startElement = coll.getMainDoc().findElementCoded(startElement.getHashString());
+        endElement = coll.getMainDoc().findElementCoded(endElement.getHashString());
 
-        if (startElement == null || endElement == null || coll.getMainGraphDocument().findElementCoded(getHashString()) == null) {
+        if (startElement == null || endElement == null || coll.getMainDoc().findElementCoded(getHashString()) == null) {
             return false;
         }
 

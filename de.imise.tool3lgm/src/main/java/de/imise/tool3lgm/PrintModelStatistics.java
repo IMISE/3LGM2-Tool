@@ -25,7 +25,7 @@ public class PrintModelStatistics {
      */
     public static final void printStatistic(final List<GDCollection> collections, final boolean useElements) {
         for (GDCollection gdcoll : collections) {
-            GraphDocument mainDoc = gdcoll.getMainGraphDocument();
+            GraphDocument mainDoc = gdcoll.getMainDoc();
 
             List<ElementContainer> allContainer = useElements ? null : mainDoc.getElementContainers(ModelElement.class, true);
             List<ModelElement> allElements = useElements ? mainDoc.getModelItems(ModelElement.class, true, true) : null;

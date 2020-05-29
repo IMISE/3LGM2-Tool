@@ -56,7 +56,7 @@ public class DataAvailabilityFinder {
     private DataAvailabilityFinder(final GraphDocument doc) {
         super();
         this.doc = doc;
-        mainDoc = doc.getCollection().getMainGraphDocument();
+        mainDoc = doc.getCollection().getMainDoc();
         commPathFinder = new ShortestCommunicationPathFinder(mainDoc.getCollection());
 
         /*
