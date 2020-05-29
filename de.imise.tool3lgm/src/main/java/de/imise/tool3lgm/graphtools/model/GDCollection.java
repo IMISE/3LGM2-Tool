@@ -172,7 +172,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private UserFieldDefinitions userFieldDefinitions;
 
     /** Hauptdokument der Collection */
-    private LGMGraphDocument doc;
+    private LGMGraphDocument mainDoc;
 
     /** Resolves the dependencies of copied elements */
     private CopyDependencyResolver copyDependencyResolver;
@@ -292,10 +292,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public void setModelType(final Tool3lgmModelType modelType) {
         this.modelType = modelType;
         metaModel = modelType.getMetaModel();
-        doc = new LGMGraphDocument(this);
+        mainDoc = new LGMGraphDocument(this);
         userFieldDefinitions = new UserFieldDefinitions(this);
         addClosedTransactionsListener(userFieldDefinitions);
-        activeGraphDocumentsList.add(doc);
+        activeGraphDocumentsList.add(mainDoc);
         UserfieldResourceHandler.loadDefaultUserfieldDefinition(this);
     }
 
@@ -552,10 +552,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         szenarios.add(szenario);
         activeGraphDocumentsList.add(szenario);
         if (log) {
-            doc.start_transaction(pid);
-            doc.addUndoCommand(MODEL_ACTION_DELETE_SUBMODEL + " " + szenario.getHashString(), pid);
-            doc.addRedoCommand(MODEL_ACTION_CREATE_SUBMODEL + " " + getParseSaveString(szenario.getTitle()) + " " + getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
-            doc.finish_transaction(pid);
+            mainDoc.start_transaction(pid);
+            mainDoc.addUndoCommand(MODEL_ACTION_DELETE_SUBMODEL + " " + szenario.getHashString(), pid);
+            mainDoc.addRedoCommand(MODEL_ACTION_CREATE_SUBMODEL + " " + getParseSaveString(szenario.getTitle()) + " " + getParseSaveString(szenario.getDescription()) + " " + szenario.getHashString(), pid);
+            mainDoc.finish_transaction(pid);
         }
         setChanged(true);
         distribute(SZENARIO_ADDED, null, szenario, pid);
@@ -571,10 +571,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (!(szen instanceof Szenario)) {
             return;
         }
-        doc.start_transaction(pid);
+        mainDoc.start_transaction(pid);
         //bei allen Elementen, die mit dem zu löschenden Teilmodell verknüpft sind
         //den Verweis auf dieses Teilmodell löschen (das passiert im Hauptmodell)
-        for (LayerContainer layer : doc.getLayers()) {
+        for (LayerContainer layer : mainDoc.getLayers()) {
             for (NodeContainer nc : layer.getNodeContainersAlphabetical()) {
                 Node node = nc.getNode();
                 String associatedDoc = node.getAssociatedDoc();
@@ -592,13 +592,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         szenarios.remove(szen);
         activeGraphDocumentsList.remove(szen);
         for (int layerIndex : LAYERS) {
-            doc.addUndoCommand(MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getColor().getRGB(), pid);
-            doc.addUndoCommand(MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getAlpha(), pid);
-            doc.addUndoCommand(MODEL_ACTION_SET_LAYER_SIZE_FACTOR + " " + szenHash + " " + szen.getPageSizeFactor(), pid);
+            mainDoc.addUndoCommand(MODEL_ACTION_SET_LAYER_COLOR + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getColor().getRGB(), pid);
+            mainDoc.addUndoCommand(MODEL_ACTION_SET_LAYER_ALPHA + " " + szenHash + " " + layerIndex + " " + szen.layer[layerIndex].getAlpha(), pid);
+            mainDoc.addUndoCommand(MODEL_ACTION_SET_LAYER_SIZE_FACTOR + " " + szenHash + " " + szen.getPageSizeFactor(), pid);
         }
-        doc.addUndoCommand(MODEL_ACTION_CREATE_SUBMODEL + " " + getParseSaveString(szen.getTitle()) + " " + getParseSaveString(szen.getDescription()) + " " + szen.hashString, pid);
-        doc.addRedoCommand(MODEL_ACTION_DELETE_SUBMODEL + " " + szen.hashString, pid);
-        doc.finish_transaction(pid);
+        mainDoc.addUndoCommand(MODEL_ACTION_CREATE_SUBMODEL + " " + getParseSaveString(szen.getTitle()) + " " + getParseSaveString(szen.getDescription()) + " " + szen.hashString, pid);
+        mainDoc.addRedoCommand(MODEL_ACTION_DELETE_SUBMODEL + " " + szen.hashString, pid);
+        mainDoc.finish_transaction(pid);
         setChanged(true);
         distribute(SZENARIO_REMOVED, null, szen, pid);
     }
@@ -609,8 +609,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public void renameSzenario(final String szenHash, final String title, final int pid) {
-        GraphDocument szen = getGraphDocumentCoded(szenHash);
-        if (!(szen instanceof Szenario)) {
+        GraphDocument szen = getSzenarioCoded(szenHash);
+        if (szen == null) {
             return;
         }
         String szenTitle = title;
@@ -622,14 +622,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             return;
         }
 
-        doc.start_transaction(pid);
-        doc.addUndoCommand(MODEL_ACTION_RENAME_SUBMODEL + " " + szen.hashString + " " + getParseSaveString(oldTitle), pid);
-        doc.addRedoCommand(MODEL_ACTION_RENAME_SUBMODEL + " " + szen.hashString + " " + getParseSaveString(szenTitle), pid);
-        doc.finish_transaction(pid);
+        mainDoc.start_transaction(pid);
+        mainDoc.addUndoCommand(MODEL_ACTION_RENAME_SUBMODEL + " " + szen.hashString + " " + getParseSaveString(oldTitle), pid);
+        mainDoc.addRedoCommand(MODEL_ACTION_RENAME_SUBMODEL + " " + szen.hashString + " " + getParseSaveString(szenTitle), pid);
+        mainDoc.finish_transaction(pid);
 
         szen.setTitle(szenTitle);
-        GraphDocument mainDoc = szen.getCollection().getMainDoc();
-        for (ModelElement me : mainDoc.getModelItems(ModelElement.class, true)) {
+        for (ModelElement me : szen.getModelItems(ModelElement.class, true)) {
             me.invalidateNameWithSzens();
         }
         setChanged(true);
@@ -658,7 +657,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 return;
             }
         }
-        setSelectedDoc(doc);
+        setSelectedDoc(mainDoc);
     }
 
     /**
@@ -727,42 +726,42 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     private void addLayoutUndoCommands(final ElementContainer ec, final int pid) {
-        GraphDocument ecDoc = ec.getGraphDocument();
+        GraphDocument doc = ec.getGraphDocument();
         //im Hauptdokument ist die LayoutInformation der Container egal
-        if (ecDoc == doc) {
+        if (doc == mainDoc) {
             return;
         }
         String ecHash = ec.getHashString();
-        String ecDocHash = ecDoc.hashString;
+        String ecDocHash = doc.hashString;
         if (ec.getColor() != null) {
-            ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_COLOR + " " + ecDocHash + " " + ecHash + " " + ec.getColor().getRGB(), pid);
-            ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_ALPHA + " " + ecDocHash + " " + ecHash + " " + ec.getAlpha(), pid);
+            doc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_COLOR + " " + ecDocHash + " " + ecHash + " " + ec.getColor().getRGB(), pid);
+            doc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_ALPHA + " " + ecDocHash + " " + ecHash + " " + ec.getAlpha(), pid);
         }
         if (ec.getForm() != null) {
-            ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_SHAPE + " " + ecDocHash + " " + ecHash + " " + ec.getForm(), pid);
+            doc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_SHAPE + " " + ecDocHash + " " + ecHash + " " + ec.getForm(), pid);
         }
         if (!ec.hasStandardFont()) {
-            ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_FONT + " " + ecDocHash + " " + ecHash + " " + getParseSaveString(ec.getFontName()) + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
+            doc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_FONT + " " + ecDocHash + " " + ecHash + " " + getParseSaveString(ec.getFontName()) + " " + ec.getFontSize() + " " + ec.getFontStyle(), pid);
         }
         if (ec instanceof NodeContainer) {
             NodeContainer kc = (NodeContainer) ec;
             String iconName = kc.getIconString();
             if (iconName != null) {
-                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_ICON + " " + ecDocHash + " " + ecHash + " " + iconName, pid);
+                doc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_ICON + " " + ecDocHash + " " + ecHash + " " + iconName, pid);
             }
-            ecDoc.addUndoCommand(MODEL_ACTION_MOVE_ORDER + " " + ecDocHash + " " + ecHash + " " + ecDoc.layer[ec.layerFor()].indexOf(ec), pid);
-            ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_POSITION + " " + ecDocHash + " " + ecHash + " " + ec.getX() + " " + ec.getY() + " " + ec.getWidth() + " " + ec.getHeight(), pid);
+            doc.addUndoCommand(MODEL_ACTION_MOVE_ORDER + " " + ecDocHash + " " + ecHash + " " + doc.layer[ec.layerFor()].indexOf(ec), pid);
+            doc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_POSITION + " " + ecDocHash + " " + ecHash + " " + ec.getX() + " " + ec.getY() + " " + ec.getWidth() + " " + ec.getHeight(), pid);
             if (!kc.isVisible()) {
-                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF + " " + ecDocHash + " " + ecHash, pid);
+                doc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_VISIBILITY_OFF + " " + ecDocHash + " " + ecHash, pid);
             }
             if (ec.getTextPositionHorizontal() != STANDARD_ELEMENT_LAYOUT.textPositionHorizontal) {
-                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().textPositionHorizontal, pid);
+                doc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_HORIZONTAL + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().textPositionHorizontal, pid);
             }
             if (ec.getTextPositionVertical() != STANDARD_ELEMENT_LAYOUT.textPositionVertical) {
-                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().textPositionVertical, pid);
+                doc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_TEXT_POSITION_VERTICAL + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().textPositionVertical, pid);
             }
             if (ec.getTextAlignmentHTML() != STANDARD_ELEMENT_LAYOUT.textAlignmentHTML) {
-                ecDoc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().textAlignmentHTML, pid);
+                doc.addUndoCommand(MODEL_ACTION_SET_ELEMENT_TEXT_ALIGNMENT_HTML + " " + ecDocHash + " " + ecHash + " " + kc.get3LGMLayout().textAlignmentHTML, pid);
             }
         }
     }
@@ -794,7 +793,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             GraphDocument ecDoc = ec.getGraphDocument();
             //man kann hier nur Elemente aus demselben Szenario (also nicht aus dem Hauptmodell und alle aus dem
             //gleichen Teilmodell löschen)
-            if (ecDoc == doc || szen != null && szen != ecDoc) {
+            if (ecDoc == mainDoc || szen != null && szen != ecDoc) {
                 continue;
             }
             if (ec instanceof BendpointContainer) {
@@ -927,7 +926,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public final void deleteElement(final ModelElement me, final int pid) {
-        deleteElement(me, doc, pid);
+        deleteElement(me, mainDoc, pid);
     }
 
     /**
@@ -949,7 +948,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public final void deleteElements(final String[] elementHashesToDelete, final int pid) {
-        deleteElements(elementHashesToDelete, doc, pid);
+        deleteElements(elementHashesToDelete, mainDoc, pid);
     }
 
     /**
@@ -963,7 +962,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public final void deleteElements(final String[] elementHashesToDelete, final GraphDocument gdoc, final int pid) {
         List<ModelElement> elementsToDelete = new ArrayList<>(elementHashesToDelete.length);
         for (String elementHash : elementHashesToDelete) {
-            ModelElement me = doc.findElementCoded(elementHash);
+            ModelElement me = mainDoc.findElementCoded(elementHash);
             elementsToDelete.add(me);
         }
         deleteElements(elementsToDelete, gdoc, pid);
@@ -974,7 +973,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public final void deleteElements(final List<? extends ModelElement> elementsToDelete, final int pid) {
-        deleteElements(elementsToDelete, doc, pid);
+        deleteElements(elementsToDelete, mainDoc, pid);
     }
 
     /**
@@ -1011,7 +1010,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             if (me instanceof Bendpoint) {
                 ElementContainer kpc = me.getContainer(gdoc);
                 if (kpc == null) {
-                    kpc = me.getContainer(doc);
+                    kpc = me.getContainer(mainDoc);
                 }
                 removeBendpoint((Bendpoint) me, pid);
                 allElementsToDelete.remove(i--);
@@ -1083,30 +1082,28 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     ConnectionState connectionState = edge instanceof DoubleMeaningEdge ? ((DoubleMeaningEdge) edge).getConnectionState() : ConnectionState.FORWARD;
                     switch (connectionState) {
                     case FORWARD:
-                        doc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
-                        doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
+                        mainDoc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
+                        mainDoc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
                         break;
                     case BACKWARD:
-                        doc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
-                        doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
+                        mainDoc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
+                        mainDoc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
                         break;
                     case DOUBLE:
-                        doc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
-                        doc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
-                        doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
+                        mainDoc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + endHash + " " + startHash + " " + endEdgeIndex + " " + startEdgeIndex, pid);
+                        mainDoc.addUndoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edgeHash + " " + startHash + " " + endHash + " " + startEdgeIndex + " " + endEdgeIndex, pid);
+                        mainDoc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + edgeHash, pid);
                         break;
                     }
                     ks.removeEdge(edge);
                     ke.removeEdge(edge);
                 }
-                //TODO:AXS:
-                //				ElementContainer edgeCont = edge.getContainer(this.doc);
-                //				int layer = ModelConstants.layerFor(edge.getClass());
-                //				this.doc.layer[layer].remove(edgeCont);
-                //				System.err.println("GDCollection.deleteElements() line 848");
-                doc.layer[edge.layerFor()].remove(edge.getContainer(doc));
-                //jetzt den Container selbst löschen (kann man sich sparen, weil die Edge seobst nicht mehr gepsüeichert wird)
-                edge.removeContainer(doc);
+                ElementContainer edgeC = edge.getContainer(mainDoc);
+                int layer = edge.layerFor();
+                LayerContainer lc = mainDoc.layer[layer];
+                lc.remove(edgeC);
+                //jetzt den Container selbst löschen (kann man sich sparen, weil die Edge seobst nicht mehr gepspeichert wird)
+                edge.removeContainer(mainDoc);
                 edgesToDelete.remove(i--);
             }
         }
@@ -1117,12 +1114,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             }
             Class<? extends ModelElement> meClass = me.getClass();
             String meHash = me.getHashString();
-            doc.addUndoCommand(MODEL_ACTION_CREATE_NODE + " " + meClass.getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + meHash, pid);
+            mainDoc.addUndoCommand(MODEL_ACTION_CREATE_NODE + " " + meClass.getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + meHash, pid);
             if (!dependentDeletedElements.contains(me)) {
-                doc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + meHash, pid);
+                mainDoc.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + meHash, pid);
             }
             //den Container des zu löschenden Elementes im Hauptmodell holen
-            doc.layer[me.layerFor()].remove(me.getContainer(doc));
+            mainDoc.layer[me.layerFor()].remove(me.getContainer(mainDoc));
             //und danach erst im Table des Elements
             //das Löschen aus dem ContainerTbale des Elementes kann man sich sparen, da das Element nirgends mehr gespeichert werden sollte
             //me.removeContainer(this.doc);
@@ -1162,7 +1159,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         //den Knickpunkt im Teilmodell löschen
         szen.getLayer(layerIndex).remove(bendpointContainer);
         //den Knickpunkt im Hauptmodell löschen
-        doc.getLayer(layerIndex).remove(bendpoint.getContainer(doc));
+        mainDoc.getLayer(layerIndex).remove(bendpoint.getContainer(mainDoc));
         szen.addRedoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + bendpoint.getHashString(), pid);
         szen.addUndoCommand(MODEL_ACTION_INSERT_BENDING_POINT + " " + szen.getHashString() + " " + edgeC.getHashString() + " " + bendpointContainer.getHashString() + " " + bendpointContainer.getX() + " " + bendpointContainer.getY() + " " + oldIndex, pid);
         szen.finish_transaction(pid);
@@ -1207,7 +1204,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             edgeContainer = (EdgeContainer) szen.getLastSelected();
         }
         Bendpoint bendpoint = metaModel.createElement(Bendpoint.class);
-        bendpoint.setName(doc.getNextNewName(bendpoint.getClass()));
+        bendpoint.setName(mainDoc.getNextNewName(bendpoint.getClass()));
         bendpointContainer = new BendpointContainer(bendpoint, szen);
         if (!isNullOrEmpty(bendpointHash)) {
             bendpointContainer.getNode().setHashString(bendpointHash);
@@ -1225,7 +1222,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             szen.undo(pid);
             return null;
         }
-        doc.getLayer(layerNumber).add(new BendpointContainer(bendpoint, doc));
+        mainDoc.getLayer(layerNumber).add(new BendpointContainer(bendpoint, mainDoc));
         edgeContainer.addBendpoint(bendpointContainer, bendpointIndex);
         if (x != INVALID_POSITION_X && y != INVALID_POSITION_Y) {
             bendpointContainer.setLocation(x, y);
@@ -1255,7 +1252,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         NodeContainer nc = null;
         try {
             me = metaModel.createElement(elementClass);
-            nc = (NodeContainer) me.createContainer(doc);
+            nc = (NodeContainer) me.createContainer(mainDoc);
         } catch (Exception ex) {
             Log.show(ERROR, getResString("FehlerAllgemein"), ex);
             return null;
@@ -1268,7 +1265,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (nameIsValidAndNotMarkedAsGenerated) {
             me.setName(getDecodedParseSaveString(name));
         } else {
-            String newName = nameIsEmpty ? doc.getNextNewName(me.getClass()) : name.substring(1);
+            String newName = nameIsEmpty ? mainDoc.getNextNewName(me.getClass()) : name.substring(1);
             me.setName(newName, false);
             if (!isAutomaticMode() && !metaModel.isGenerateName(me.getClass())) {
                 if (!askNameAndColor(nc)) {
@@ -1279,29 +1276,29 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (description != null && !description.trim().equals("")) {
             me.setDescription(getDecodedParseSaveString(description));
         }
-        doc.start_transaction(pid);
-        doc.addRedoCommand(MODEL_ACTION_CREATE_NODE + " " + me.getClass().getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + me.getHashString(), pid);
+        mainDoc.start_transaction(pid);
+        mainDoc.addRedoCommand(MODEL_ACTION_CREATE_NODE + " " + me.getClass().getName() + " " + getParseSaveString(me.getName()) + " " + getParseSaveString(me.getDescription()) + " " + me.getHashString(), pid);
         if (nc.getColor() != null) {
-            doc.addRedoCommand(MODEL_ACTION_SET_ELEMENT_COLOR + " " + doc.hashString + " " + me.getHashString() + " " + nc.getColor().getRGB(), pid);
+            mainDoc.addRedoCommand(MODEL_ACTION_SET_ELEMENT_COLOR + " " + mainDoc.hashString + " " + me.getHashString() + " " + nc.getColor().getRGB(), pid);
         }
-        doc.addUndoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + me.getHashString(), pid);
+        mainDoc.addUndoCommand(MODEL_ACTION_DELETE_FROM_MODEL + " " + me.getHashString(), pid);
         // den Layer bestimmen auf dem das Element eingefügt werden soll
         int layerNumber = me.layerFor();
         //das hier darf eigentlich nur bei Textfeldern passieren, da diese keinen festen Layer haben. Wahrscheinlich
         //würde dieser Weg auch bei allen anderen Elementen funktionieren, was aber nicht getestet ist.
         if (layerNumber == ModelConstants.NO_LAYER) {
-            layerNumber = doc.getActiveLayer().getLayerNumber();
+            layerNumber = mainDoc.getActiveLayer().getLayerNumber();
         }
-        LayerContainer lc = doc.getLayer(layerNumber);
+        LayerContainer lc = mainDoc.getLayer(layerNumber);
         if (lc.add(nc) == null) {
-            doc.undo(pid);
+            mainDoc.undo(pid);
             return null;
         }
         boolean oldAutomaticMode = setAutomaticMode(true);
         createInitialSubtypes(me, pid);
         setAutomaticMode(oldAutomaticMode);
-        doc.finish_transaction(pid);
-        doc.distributeEvent(DATA_CHANGED, pid);
+        mainDoc.finish_transaction(pid);
+        mainDoc.distributeEvent(DATA_CHANGED, pid);
         return nc;
     }
 
@@ -1365,7 +1362,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
                 Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
                 //get all instances of this InferenceEdge class
-                List<ModelElement> modelItems = doc.getModelItems(edgeClass);
+                List<ModelElement> modelItems = mainDoc.getModelItems(edgeClass);
                 //for every instance of this InferenceEdge class
                 for (ModelElement edgeItem : modelItems) {
                     //get the InferenceEdge as Edge
@@ -1434,19 +1431,19 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public void addNodeToMainDoc(NodeContainer kc, final int layerIndex) {
         NodeContainer nc = null;
-        if (kc.getGraphDocument() == doc) {
+        if (kc.getGraphDocument() == mainDoc) {
             nc = kc;
         } else {
             Node node = kc.getNode();
             if (kc instanceof BendpointContainer) {
-                nc = new BendpointContainer((Bendpoint) node, doc);
+                nc = new BendpointContainer((Bendpoint) node, mainDoc);
             } else if (metaModel.hasInterLayerStartClass(node)) {
-                kc = new InterLayerConnectedNodeContainer(node, doc);
+                kc = new InterLayerConnectedNodeContainer(node, mainDoc);
             } else {
-                nc = new NodeContainer(node, doc);
+                nc = new NodeContainer(node, mainDoc);
             }
         }
-        doc.getLayer(layerIndex).add(nc);
+        mainDoc.getLayer(layerIndex).add(nc);
     }
 
     /**
@@ -1455,9 +1452,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public void addEdge(final EdgeContainer edgeContainer, final int pid) {
         Edge edge = edgeContainer.getEdge();
-        EdgeContainer ec = new EdgeContainer(edgeContainer, doc);
+        EdgeContainer ec = new EdgeContainer(edgeContainer, mainDoc);
         int layer = edge.layerFor();
-        doc.getLayer(layer).add(ec);
+        mainDoc.getLayer(layer).add(ec);
         boolean bulkMode = setBulkMode(true);
         for (Szenario szen : szenarios) {
             szen.createEdgeContainer(edge.getStart().getContainer(szen), szen, false, pid);
@@ -1505,8 +1502,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @see #link(String, String, ModelElement, ModelElement, int, int)
      */
     public final Edge link(final String edgeClassName, final String hashString, final String startElementHash, final String endElementHash, final int startElementEdgeIndex, final int endElementEdgeIndex, final int pid) {
-        ModelElement me1 = doc.findElementCoded(startElementHash);
-        ModelElement me2 = doc.findElementCoded(endElementHash);
+        ModelElement me1 = mainDoc.findElementCoded(startElementHash);
+        ModelElement me2 = mainDoc.findElementCoded(endElementHash);
         return link(edgeClassName, hashString, me1, me2, startElementEdgeIndex, endElementEdgeIndex, true, pid);
     }
 
@@ -1659,12 +1656,12 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             return null;
         }
 
-        doc.start_transaction(pid);
+        mainDoc.start_transaction(pid);
         try {
             if (!MultipleEdge.class.isAssignableFrom(edgeClass)) {
                 edge = startElement.getEdgeTo(endElement, edgeClass, startElementEdgeIndex);
                 if (edge != null) {
-                    doc.finish_transaction(pid);
+                    mainDoc.finish_transaction(pid);
                     return edge;
                 }
             }
@@ -1686,13 +1683,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     AbstractMetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
                     if (!PathFunctions.isConnected(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value, inferenceEdgeConditionMetaPath)) {
                         if (!inferenceEdgeConditionMetaPath.isCreatable(false)) {
-                            doc.finish_transaction(pid);
+                            mainDoc.finish_transaction(pid);
                             return null;
                         }
-                        AbstractPath createdPath = doc.createPath(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value, inferenceEdgeConditionMetaPath, pid);
-                        doc.finish_transaction(pid);
+                        AbstractPath createdPath = mainDoc.createPath(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value, inferenceEdgeConditionMetaPath, pid);
+                        mainDoc.finish_transaction(pid);
                         if (createdPath != null) {
-                            doc.distributeEvent(DATA_CHANGED, pid);
+                            mainDoc.distributeEvent(DATA_CHANGED, pid);
                             edge = startElement.getEdgeTo(endElement, edgeClass); //the edge will be created through DATA_CHANGED (via updateInferenceEdges)
                         }
                         return edge;
@@ -1700,7 +1697,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 }
                 edge = metaModel.createElement(edgeClass);
                 if (edge == null) {
-                    doc.finish_transaction(pid);
+                    mainDoc.finish_transaction(pid);
                     return null;
                 }
                 if (!Strings.isNullOrEmpty(edgeHash)) {
@@ -1718,7 +1715,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 }
                 edge.setNodesAndInsert(startElement, startElementEdgeIndex, endElement, endElementEdgeIndex);
                 if (edge.getStart() != null && edge.getEnd() != null) {
-                    kac = new EdgeContainer(edge, doc);
+                    kac = new EdgeContainer(edge, mainDoc);
                     String name = getNewEdgeName(edge);
                     edge.setName(name, false);
                     addEdge(kac, pid);
@@ -1741,7 +1738,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     List<Edge> edgeList = startElement.getEdgesTo(edgeEndClass, edgeClass);
                     edgeList.remove(edge);
                     if (edgeList.size() == maxForwardCardinality) {
-                        deleteElement(edgeList.get(0), doc, pid);
+                        deleteElement(edgeList.get(0), mainDoc, pid);
                     }
                     //beim Endelement dasselbe nur in Rückwärtsrichtung
                     Class<? extends ModelElement> edgeStartClass = edge.getStartClass();
@@ -1749,17 +1746,17 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     edgeList = endElement.getEdgesFrom(edgeStartClass, edgeClass);
                     edgeList.remove(edge);
                     if (edgeList.size() == maxBackwardCardinality) {
-                        deleteElement(edgeList.get(0), doc, pid);
+                        deleteElement(edgeList.get(0), mainDoc, pid);
                     }
                 }
             }
             String startHash = startElement.getHashString();
             String endHash = endElement.getHashString();
-            doc.addRedoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
-            doc.addUndoCommand(MODEL_ACTION_UNLINK + " " + startHash + " " + endHash + " " + edgeClassName + " " + startElementEdgeIndex, pid);
+            mainDoc.addRedoCommand(MODEL_ACTION_LINK + " " + edgeClassName + " " + edge.getHashString() + " " + startHash + " " + endHash + " " + startElementEdgeIndex + " " + endElementEdgeIndex, pid);
+            mainDoc.addUndoCommand(MODEL_ACTION_UNLINK + " " + startHash + " " + endHash + " " + edgeClassName + " " + startElementEdgeIndex, pid);
         } catch (Exception e) {
             Log.show(ERROR, getResString("FehlerAllgemein"), e);
-            doc.undo(pid);
+            mainDoc.undo(pid);
             return null;
         }
         //wenn eine InstanciationEdge angelegt wurde, dann prüfen, ob dadurch eine neue Kante
@@ -1770,8 +1767,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         }
         //bei jeder Kante eventuell ableitbare InstanciationEdges ergänzen
         updateInstanciationEdgesForAssociationClasses(edge, pid);
-        doc.finish_transaction(pid);
-        doc.distributeEvent(DATA_CHANGED, pid);
+        mainDoc.finish_transaction(pid);
+        mainDoc.distributeEvent(DATA_CHANGED, pid);
         return edge;
     }
 
@@ -1814,7 +1811,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             }
         }
         if (name == null) {
-            name = doc.getNextNewName(edgeClass);
+            name = mainDoc.getNextNewName(edgeClass);
         }
         return name;
     }
@@ -1855,8 +1852,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param pid
      */
     public void unlink(final String nodehash1, final String nodehash2, final Class<? extends Edge> edgeClass, final int edgeIndex, final int pid) {
-        ModelElement me1 = doc.findElementCoded(nodehash1);
-        ModelElement me2 = doc.findElementCoded(nodehash2);
+        ModelElement me1 = mainDoc.findElementCoded(nodehash1);
+        ModelElement me2 = mainDoc.findElementCoded(nodehash2);
         unlink(me1, me2, edgeClass, edgeIndex, pid);
     }
 
@@ -1958,8 +1955,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         String me1Hash = me1.getHashString();
         String me2Hash = me2.getHashString();
         String edgeClassName = edgeClass == null ? "null" : edgeClass.getName();
-        doc.start_transaction(pid);
-        doc.addRedoCommand(MODEL_ACTION_UNLINK + " " + me1Hash + " " + me2Hash + " " + edgeClassName + " " + me1EdgeIndex, pid);
+        mainDoc.start_transaction(pid);
+        mainDoc.addRedoCommand(MODEL_ACTION_UNLINK + " " + me1Hash + " " + me2Hash + " " + edgeClassName + " " + me1EdgeIndex, pid);
         //Undo-Kommando wird in deleteElement gesetzt (s. u.)
         //nur bei Kanten mit doppelter bedeutung kann man in bestimmten Richtungen unlinken. Bei allen anderen
         //ist die Richtung egal und das Unlinken ist das Löschen der Edge
@@ -1982,20 +1979,20 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             DoubleMeaningEdge doubleMeaningEdge = (DoubleMeaningEdge) edge;
             if (doubleMeaningEdge.getConnectionState() == DOUBLE) {
                 if (edge.getStart() == me1) {
-                    doc.addUndoCommand(MODEL_ACTION_LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me1Hash + " " + me2Hash + " " + me1.getEdgeIndex(edge) + " " + me2.getEdgeIndex(edge), pid);
+                    mainDoc.addUndoCommand(MODEL_ACTION_LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me1Hash + " " + me2Hash + " " + me1.getEdgeIndex(edge) + " " + me2.getEdgeIndex(edge), pid);
                     doubleMeaningEdge.setConnectionState(BACKWARD);
                 } else {
-                    doc.addUndoCommand(MODEL_ACTION_LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me2Hash + " " + me1Hash + " " + me2.getEdgeIndex(edge) + " " + me1.getEdgeIndex(edge), pid);
+                    mainDoc.addUndoCommand(MODEL_ACTION_LINK + " " + absoluteEdgeClass.getName() + " " + edge.getHashString() + " " + me2Hash + " " + me1Hash + " " + me2.getEdgeIndex(edge) + " " + me1.getEdgeIndex(edge), pid);
                     doubleMeaningEdge.setConnectionState(FORWARD);
                 }
             } else {
-                deleteElement(edge, doc, pid);
+                deleteElement(edge, mainDoc, pid);
             }
         } else {
-            deleteElement(edge, doc, pid);
+            deleteElement(edge, mainDoc, pid);
         }
-        doc.finish_transaction(pid);
-        doc.distributeEvent(DATA_CHANGED, pid);
+        mainDoc.finish_transaction(pid);
+        mainDoc.distributeEvent(DATA_CHANGED, pid);
     }
 
     /**
@@ -2198,8 +2195,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @return the joined element (this is the element with remainElementHashString) or <code>null</code> if nothing was joined
      */
     private ModelElement joinRecursive(final String removeElementHashString, final String remainElementHashString, final GraphDocument source, final Collection<String> elementHashes2ExcludeFromJoin, final int pid) {
-        ModelElement removeElement = doc.findElementCoded(removeElementHashString);
-        ModelElement remainElement = doc.findElementCoded(remainElementHashString);
+        ModelElement removeElement = mainDoc.findElementCoded(removeElementHashString);
+        ModelElement remainElement = mainDoc.findElementCoded(remainElementHashString);
         if (removeElement == null || remainElement == null || removeElement == remainElement) {
             return null;
         }
@@ -2220,7 +2217,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             return null;
         }
         //Beginne umhängen der Kanten
-        doc.start_transaction(pid);
+        mainDoc.start_transaction(pid);
         for (Szenario s : szenarios) {
             s.start_transaction(pid, false);
         }
@@ -2286,7 +2283,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 }
             }
             if (deleteEdge) { //wenn die Edge doppelt vorkommen würde
-                deleteElement(edge, doc, pid);
+                deleteElement(edge, mainDoc, pid);
                 //              doc.removeEdge(kante, pid);//Edge einfach komplett löschen
             } else { //Edge muss umgehängt werden
                 removeNode.removeEdge(edge); //im zu löschenden Node die Edge entfernen
@@ -2321,14 +2318,14 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 szen.finish_transaction(TransactionManager.STANDARD_PID, false);
             }
         }
-        deleteElement(removeNode, doc, pid);
+        deleteElement(removeNode, mainDoc, pid);
         //      doc.removeNode((NodeContainer)knoten1.getContainer(doc), pid); //alle Kanten umgehängt -> wegfallenden Node komplett löschen
         for (Szenario szen : szenarios) {
             szen.finish_transaction(pid, false);
         }
         //Der TransaktionQueue wird einfach gelöscht. Das muss unbedingt mal geändert werden -> also alles richtig UNDO-/REDO-mässig
         tman.clearTransactionQueue();
-        doc.finish_transaction(pid);
+        mainDoc.finish_transaction(pid);
         distribute(DATA_CHANGED, null, source, pid);
         return remainNode;
     }
@@ -2354,8 +2351,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @return
      */
     public LGMGraphDocument getGraphDocumentCoded(final String szenHash) {
-        if (doc.getHashString().equals(szenHash)) {
-            return doc;
+        if (mainDoc.getHashString().equals(szenHash)) {
+            return mainDoc;
         }
         return getSzenarioCoded(szenHash);
     }
@@ -2429,7 +2426,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         }
         //TODO: das hier ist hässlich und sollte anders laufen. die SimpleRedundancyAnalysis sollte wahrscheinlich selbst Listener sein und das hier allein erledigen
         if (!isBulkMode() && changeType == DATA_CHANGED) {
-            doc.updateSimpleRedundancyAnalysis();
+            mainDoc.updateSimpleRedundancyAnalysis();
             for (Szenario szen : szenarios) {
                 szen.updateSimpleRedundancyAnalysis();
             }
@@ -2446,7 +2443,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @return Hauptdokument der Collection
      */
     public LGMGraphDocument getMainDoc() {
-        return doc;
+        return mainDoc;
     }
 
     /**
@@ -2536,8 +2533,8 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public void addToSelection(final ElementContainer ec) {
         ModelElement me = ec.getElement();
-        ElementContainer mainEc = me.getContainer(doc);
-        doc.selectedContainer.add(mainEc);
+        ElementContainer mainEc = me.getContainer(mainDoc);
+        mainDoc.selectedContainer.add(mainEc);
         for (Szenario szen : szenarios) {
             ElementContainer szenEc = me.getContainer(szen);
             if (szenEc == null) {
@@ -2554,7 +2551,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (ec == null) {
             return false;
         }
-        doc.deselectInElementSelectionContext(ec.getElement());
+        mainDoc.deselectInElementSelectionContext(ec.getElement());
         for (Szenario szen : szenarios) {
             szen.deselectInElementSelectionContext(ec.getElement());
         }
@@ -2565,7 +2562,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      * @param ec
      */
     public void deselectAll() {
-        doc.clearSelection();
+        mainDoc.clearSelection();
         for (Szenario szen : szenarios) {
             szen.clearSelection();
         }
@@ -2576,7 +2573,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     public void selectAllUniques() {
         for (Class<? extends ModelElement> elemClass : metaModel.uniqueNodes) {
-            for (ElementContainer ec : doc.getElementContainers(elemClass)) {
+            for (ElementContainer ec : mainDoc.getElementContainers(elemClass)) {
                 addToSelection(ec);
             }
         }
@@ -2632,7 +2629,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             //die eigenen UserFields mit den neuen ersetzen
             replaceUserFields(newDef);
             //hier müssen bei allen UserfieldTargets alle Userfields ausgetauscht werden, die sie über ihre UserField2Value-Maps referenzieren
-            for (ModelElement me : getModelItems(doc, ModelElement.class, true, false, false)) {
+            for (ModelElement me : getModelItems(mainDoc, ModelElement.class, true, false, false)) {
                 me.replaceUserFields(newDef);
             }
         }
@@ -2655,7 +2652,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 Class<? extends ModelElement> elemClass = null;
                 if (ModelElement.class.isAssignableFrom(userField.getTargetClass())) {
                     elemClass = userField.getTargetClass().asSubclass(ModelElement.class);
-                    for (ModelElement me : doc.getModelItems(elemClass, true)) {
+                    for (ModelElement me : mainDoc.getModelItems(elemClass, true)) {
                         me.removeUserField(userField);
                     }
                 }
