@@ -133,8 +133,8 @@ public class GraphAreaToolbarButton extends JToggleButton {
     @Override
     public void paint(final Graphics g) {
         super.paint(g);
-        GraphDocument gd = Static.getSelectedDoc();
-        if (gd == null) {
+        GraphDocument selectedDoc = Static.getSelectedDoc();
+        if (selectedDoc == null) {
             return;
         }
         if (paintedNodeContainer != null) {

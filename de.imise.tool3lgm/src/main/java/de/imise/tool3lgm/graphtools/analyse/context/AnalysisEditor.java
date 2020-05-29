@@ -360,18 +360,18 @@ public class AnalysisEditor extends JDialog implements ActionListener {
 
     @Override
     public void actionPerformed(final ActionEvent e) {
-        String str = e.getActionCommand();
-        if (str.equals(getResString("exit"))) {
+        String command = e.getActionCommand();
+        if (command.equals(getResString("exit"))) {
             dispose();
-        } else if (str.equals(getResString("ana_start"))) {
-            GraphDocument doc = Static.getSelectedDoc();
-            if (doc == null || !doc.getMetaModel().equals(metaModel)) {
+        } else if (command.equals(getResString("ana_start"))) {
+            GraphDocument selectedDoc = Static.getSelectedDoc();
+            if (selectedDoc == null || !selectedDoc.getMetaModel().equals(metaModel)) {
                 return;
             }
             PathStepComponent first = pathPanels.get(0);
             if (!(first.pathStepElementTypeList.isSelectionEmpty() && first.conditionElementTypeList.isSelectionEmpty())) {
                 try {
-                    XMLAnalysis.createAnalysis(doc.getMetaModelContext(), getAnalysisString()).setAnalysisResult(doc);
+                    XMLAnalysis.createAnalysis(selectedDoc.getMetaModelContext(), getAnalysisString()).setAnalysisResult(selectedDoc);
                 } catch (SAXException e1) {
                     Log.log(Log.ERROR, "Can't execute analysis\n" + getAnalysisString());
                     // e1.printStackTrace();
@@ -404,7 +404,7 @@ public class AnalysisEditor extends JDialog implements ActionListener {
             } else {
                 pack();
             }
-        } else if (str.equals(getResString("ana_insert_to_repository"))) {
+        } else if (command.equals(getResString("ana_insert_to_repository"))) {
             PathStepComponent first = pathPanels.get(0);
             if (!(first.pathStepElementTypeList.isSelectionEmpty() && first.conditionElementTypeList.isSelectionEmpty())) {
                 NameAndColorInputDialog nd = new NameAndColorInputDialog(this);

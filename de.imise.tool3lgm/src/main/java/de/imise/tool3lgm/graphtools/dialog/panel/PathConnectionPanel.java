@@ -583,10 +583,10 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                     connectToFirstPath(null);
                 } else { //es ist nicht klar, wohin ein neues Element gehängt werden sollte -> nur neu erzeugen und nicht verknüpfen
                     GDCollection gdcoll = doc.getCollection();
-                    GraphDocument selDoc = gdcoll.getSelectedDoc();
+                    GraphDocument selectedDoc = gdcoll.getSelectedDoc();
                     ElementaryMetaPath lastElementaryMetaPath = metaPath.getLastElementaryMetaPath();
                     int pid = getTransactionID();
-                    PathFunctions.createNodeWithContainerAndDependents(selDoc, null, lastElementaryMetaPath, null, pid);
+                    PathFunctions.createNodeWithContainerAndDependents(selectedDoc, null, lastElementaryMetaPath, null, pid);
                 }
             }
         };

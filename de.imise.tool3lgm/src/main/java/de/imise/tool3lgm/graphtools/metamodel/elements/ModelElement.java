@@ -197,21 +197,21 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @param gd
+     * @param doc
      * @param ec
      */
-    public final void setContainer(final GraphDocument gd, final ElementContainer ec) {
-        if (gd != null) {
-            containerTable.put(gd, ec);
+    public final void setContainer(final GraphDocument doc, final ElementContainer ec) {
+        if (doc != null) {
+            containerTable.put(doc, ec);
         }
         nameWithSzens = null;
     }
 
     /**
-     * @param gd
+     * @param doc
      */
-    public final void removeContainer(final GraphDocument gd) {
-        containerTable.remove(gd);
+    public final void removeContainer(final GraphDocument doc) {
+        containerTable.remove(doc);
         nameWithSzens = null;
     }
 
@@ -244,14 +244,14 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
-     * @param gd
+     * @param doc
      * @return
      */
-    public final ElementContainer getContainer(final GraphDocument gd) {
-        if (gd == null) {
+    public final ElementContainer getContainer(final GraphDocument doc) {
+        if (doc == null) {
             return null;
         }
-        return containerTable.get(gd);
+        return containerTable.get(doc);
     }
 
     /**

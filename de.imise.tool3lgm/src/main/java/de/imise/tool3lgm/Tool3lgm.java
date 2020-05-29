@@ -364,9 +364,8 @@ public class Tool3lgm {
     }
 
     /**
-     * Liefert das aktive Teilmodell
-     *
-     * @return selektiertes Teilmodell
+     * @return das aktive Teilmodell
+     * @see #setSelectedDoc(GraphDocument)
      */
     LGMGraphDocument getSelectedDoc() {
         GDCollection gdcoll = getSelectedGDCollection();
@@ -374,6 +373,17 @@ public class Tool3lgm {
             return null;
         }
         return gdcoll.getSelectedDoc();
+    }
+
+    /**
+     * @return Hauptmodell des aktuell selektierten Teilmodells
+     */
+    LGMGraphDocument getSelectedMainDoc() {
+        GDCollection gdcoll = getSelectedGDCollection();
+        if (gdcoll == null) {
+            return null;
+        }
+        return gdcoll.getMainGraphDocument();
     }
 
     /**
@@ -516,11 +526,11 @@ public class Tool3lgm {
         //            return false;
         //        }
         /* GDCollection zum ausgewähtlen Frame */
-        GraphDocument doc = getSelectedDoc();
-        if (doc == null) {
+        GraphDocument selectedDoc = getSelectedDoc();
+        if (selectedDoc == null) {
             return false;
         }
-        GDCollection gdcoll = doc.getCollection();
+        GDCollection gdcoll = selectedDoc.getCollection();
         GDCollectionFileHandler fileHandler = gdcoll.getFileHandler();
         saveAs = fileHandler.isReadOnly() || saveAs;
         if (saveAs) {
@@ -692,38 +702,35 @@ public class Tool3lgm {
             if (params == null || params.length < 1) {
                 return;
             }
-            GraphDocument doc = getSelectedDoc().getCollection().getMainGraphDocument();
-            if (doc == null) {
-                return;
-            }
-            doc.start_transaction(STANDARD_PID, false);
-            doc.deselectAll(true);
+            LGMGraphDocument selectedMainDoc = getSelectedMainDoc();
+            selectedMainDoc.start_transaction(STANDARD_PID, false);
+            selectedMainDoc.deselectAll(true);
             for (int i = 0; i < params.length; i++) {
-                ElementContainer ec = doc.findContainerCoded(params[i]);
+                ElementContainer ec = selectedMainDoc.findContainerCoded(params[i]);
                 if (ec != null) {
-                    doc.addToSelection(ec, STANDARD_PID);
+                    selectedMainDoc.addToSelection(ec, STANDARD_PID);
                 }
             }
-            doc.finish_transaction(STANDARD_PID, false);
-            doc.distributeEvent(SELECTION_CHANGED, STANDARD_PID);
+            selectedMainDoc.finish_transaction(STANDARD_PID, false);
+            selectedMainDoc.distributeEvent(SELECTION_CHANGED, STANDARD_PID);
         } else if (command.equalsIgnoreCase("selectByUserField")) {
             if (params == null || params.length < 2) {
                 return;
             }
-            GraphDocument doc = getSelectedDoc().getCollection().getMainGraphDocument();
-            if (doc == null) {
+            LGMGraphDocument selectedMainDoc = getSelectedMainDoc();
+            if (selectedMainDoc == null) {
                 return;
             }
-            doc.start_transaction(STANDARD_PID, false);
-            doc.deselectAll(true);
+            selectedMainDoc.start_transaction(STANDARD_PID, false);
+            selectedMainDoc.deselectAll(true);
             for (int i = 1; i < params.length; i++) {
-                ElementContainer ec = doc.findElementWithUserField(params[0], params[i]).getContainer(doc);
+                ElementContainer ec = selectedMainDoc.findElementWithUserField(params[0], params[i]).getContainer(selectedMainDoc);
                 if (ec != null) {
-                    doc.addToSelection(ec, STANDARD_PID);
+                    selectedMainDoc.addToSelection(ec, STANDARD_PID);
                 }
             }
-            doc.finish_transaction(STANDARD_PID, false);
-            doc.distributeEvent(SELECTION_CHANGED, STANDARD_PID);
+            selectedMainDoc.finish_transaction(STANDARD_PID, false);
+            selectedMainDoc.distributeEvent(SELECTION_CHANGED, STANDARD_PID);
         } else {
             String[] newParams = new String[params.length + 1];
             newParams[0] = command;

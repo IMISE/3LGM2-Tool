@@ -66,29 +66,29 @@ public class EdgeContainer extends ElementContainer {
 
     /**
      * @param neu
-     * @param gd
+     * @param doc
      */
-    public EdgeContainer(final Edge neu, final GraphDocument gd) {
-        super(neu, gd);
+    public EdgeContainer(final Edge neu, final GraphDocument doc) {
+        super(neu, doc);
         computeBorderPoints();
     }
 
     /**
      * @param neu
      * @param l
-     * @param gd
+     * @param doc
      */
-    public EdgeContainer(final Edge neu, final GraphElementLayout l, final GraphDocument gd) {
-        super(neu, l, gd);
+    public EdgeContainer(final Edge neu, final GraphElementLayout l, final GraphDocument doc) {
+        super(neu, l, doc);
         computeBorderPoints();
     }
 
     /**
      * @param alt
-     * @param gd
+     * @param doc
      */
-    public EdgeContainer(final EdgeContainer alt, final GraphDocument gd) {
-        super(alt, gd);
+    public EdgeContainer(final EdgeContainer alt, final GraphDocument doc) {
+        super(alt, doc);
         computeBorderPoints();
     }
 
@@ -120,9 +120,9 @@ public class EdgeContainer extends ElementContainer {
     /**
      * @param startNode
      * @param endNode
-     * @param gd
+     * @param doc
      */
-    public void setNodes(final Node startNode, final Node endNode, final GraphDocument gd) {
+    public void setNodes(final Node startNode, final Node endNode, final GraphDocument doc) {
         getEdge().setNodes(startNode, endNode);
     }
 

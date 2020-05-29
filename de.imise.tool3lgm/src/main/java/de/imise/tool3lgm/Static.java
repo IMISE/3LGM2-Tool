@@ -267,9 +267,9 @@ public class Static {
         //Das neu Zeichnen braucht nicht angestoßen werden, wenn auf die
         //Simple Grafik umgeschaltet wurde, denn dann bleibt, solange sich
         //nichts ändert immer noch die volle Grafik in der Anzeige erhalten
-        GraphDocument doc = getSelectedDoc();
-        if (doc != null) {
-            doc.distributeEvent(LAYOUT_CHANGED);
+        GraphDocument selectedDoc = getSelectedDoc();
+        if (selectedDoc != null) {
+            selectedDoc.distributeEvent(LAYOUT_CHANGED);
         }
     }
 
@@ -402,11 +402,11 @@ public class Static {
      * @see GraphDocument#isSelectedAtLeastOneRealNode()
      */
     public static final Iterable<NodeContainer> iterableSelectedRealElementContainer() {
-        GraphDocument doc = getSelectedDoc();
-        if (doc == null) {
+        GraphDocument selectedDoc = getSelectedDoc();
+        if (selectedDoc == null) {
             return new ArrayList<>(0);
         }
-        return doc.getSelectedRealElementContainerIterable();
+        return selectedDoc.getSelectedRealElementContainerIterable();
     }
 
     // MessageDialoge //

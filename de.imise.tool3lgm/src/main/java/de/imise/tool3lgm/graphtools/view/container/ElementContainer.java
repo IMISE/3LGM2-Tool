@@ -168,12 +168,12 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     }
 
     /**
-     * @param neu
+     * @param me
      * @param layout
-     * @param gd
+     * @param doc
      */
-    public ElementContainer(final ModelElement neu, final GraphElementLayout layout, final GraphDocument gd) {
-        this(neu, gd);
+    public ElementContainer(final ModelElement me, final GraphElementLayout layout, final GraphDocument doc) {
+        this(me, doc);
         expandedLayout = layout;
         this.layout = expandedLayout;
     }

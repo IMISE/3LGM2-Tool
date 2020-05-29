@@ -186,11 +186,11 @@ public class MainFrameToolBar extends UnfloatableToolBar implements MouseListene
      * der Undo-Stack als Tooltip angezeigt.
      */
     private void updateUndoRedoToolTips() {
-        GraphDocument doc = Static.getSelectedDoc();
+        GraphDocument selectedDoc = Static.getSelectedDoc();
         //die Tooltips auf den Undo-Redo-Buttons sollen den Queue anzeigen, wenn das aktuelle doc auf verfificationMode gestellt wurde oder der globale Code-Schalter an ist
-        boolean showQueueAsToolTip = doc != null && doc.getCollection().getTman() != null && doc.isVerificationMode();
+        boolean showQueueAsToolTip = selectedDoc != null && selectedDoc.getCollection().getTman() != null && selectedDoc.isVerificationMode();
         if (showQueueAsToolTip) {
-            TransactionManager tman = doc.getCollection().getTman();
+            TransactionManager tman = selectedDoc.getCollection().getTman();
             String queue = tman.getQueue(10);
             queue = queue.replaceAll("\n", "<br>");
             queue = "<html><body>" + queue + "</html></body>";

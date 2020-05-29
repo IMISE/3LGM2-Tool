@@ -20,14 +20,14 @@ public class DirectHelp extends JWindow {
     //   static private boolean open;
 
     public DirectHelp() {
-        GraphDocument doc = Static.getSelectedDoc();
-        if (doc == null) {
+        GraphDocument selectedDoc = Static.getSelectedDoc();
+        if (selectedDoc == null) {
             return;
         }
-        if (!doc.isSingleSelection()) {
+        if (!selectedDoc.isSingleSelection()) {
             return;
         }
-        ElementContainer me = doc.getLastSelected();
+        ElementContainer me = selectedDoc.getLastSelected();
         Point p = Static.getMainFrame().getLocationOnScreen();
         ExtendedTextArea area = new ExtendedTextArea(30, 10);
         area.setBackground(new Color(240, 210, 125));

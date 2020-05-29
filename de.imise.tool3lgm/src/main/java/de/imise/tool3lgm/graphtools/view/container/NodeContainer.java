@@ -91,30 +91,30 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
     }
 
     /**
-     * @param neu
-     * @param gd
+     * @param node
+     * @param doc
      */
-    public NodeContainer(final Node neu, final GraphDocument gd) {
-        super(neu, gd);
+    public NodeContainer(final Node node, final GraphDocument doc) {
+        super(node, doc);
         init();
     }
 
     /**
-     * @param neu
+     * @param node
      * @param l
-     * @param gd
+     * @param doc
      */
-    public NodeContainer(final Node neu, final GraphElementLayout l, final GraphDocument gd) {
-        super(neu, l, gd);
+    public NodeContainer(final Node node, final GraphElementLayout l, final GraphDocument doc) {
+        super(node, l, doc);
         init();
     }
 
     /**
-     * @param alt
-     * @param gd
+     * @param nc
+     * @param doc
      */
-    public NodeContainer(final NodeContainer alt, final GraphDocument gd) {
-        super(alt, gd);
+    public NodeContainer(final NodeContainer nc, final GraphDocument doc) {
+        super(nc, doc);
         init();
     }
 

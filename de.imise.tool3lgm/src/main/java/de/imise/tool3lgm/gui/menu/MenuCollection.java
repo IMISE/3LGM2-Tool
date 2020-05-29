@@ -304,21 +304,21 @@ public class MenuCollection {
         @Override
         protected void updateItems(final DynamicMenuPlaceholder placeholder) {
             removeAll();
-            GraphDocument doc = Static.getSelectedDoc();
-            if (doc == null) {
+            GraphDocument selectedDoc = Static.getSelectedDoc();
+            if (selectedDoc == null) {
                 return;
             }
             add(globalLayout);
-            if (doc.getActiveLayer() != null) {
+            if (selectedDoc.getActiveLayer() != null) {
                 add(new JSeparator());
             }
             add(layerLayoutMenu);
-            if (doc.isSelectedOnlyRealNodes()) {
+            if (selectedDoc.isSelectedOnlyRealNodes()) {
                 add(new JSeparator());
                 add(elementLayoutMenu);
                 add(new JSeparator());
                 add(elementLevelMenu);
-                if (doc.isSelectedOnlyNodes()) {
+                if (selectedDoc.isSelectedOnlyNodes()) {
                     add(elementAlignmentMenu);
                 }
             }

@@ -819,19 +819,19 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     public void valueChanged(final ListSelectionEvent e) {
         int[] selected = table.getSelectedRows();
         TableModel tablemodel = table.getModel();
-        GraphDocument doc = Static.getSelectedDoc();
-        if (doc == null) {
+        GraphDocument selectedDoc = Static.getSelectedDoc();
+        if (selectedDoc == null) {
             return;
         }
 
-        doc.deselectAll(false);
+        selectedDoc.deselectAll(false);
         for (int n = 0; n < selected.length; n++) {
             ElementContainer ec = (ElementContainer) tablemodel.getValueAt(selected[n], 1);
             if (ec == null) {
                 return;
             }
-            doc.getCollection().setActiveLayer(ec.getElement().layerFor());
-            doc.addToSelection(ec, TransactionManager.STANDARD_PID);
+            selectedDoc.getCollection().setActiveLayer(ec.getElement().layerFor());
+            selectedDoc.addToSelection(ec, TransactionManager.STANDARD_PID);
         }
     }
 

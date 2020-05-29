@@ -90,39 +90,39 @@ public class LayerContainer extends ElementContainer {
     private BasicGraphArea.PaintState paintState = PaintState.REGULAR;
 
     /**
-     * @param neu
-     * @param gd
+     * @param me
+     * @param doc
      * @param map
      */
-    public LayerContainer(final ModelElement neu, final GraphDocument gd, final int layerNumber) {
-        super(neu, gd);
+    public LayerContainer(final ModelElement me, final GraphDocument doc, final int layerNumber) {
+        super(me, doc);
         this.layerNumber = layerNumber;
         layout = new GraphElementLayout();
         init();
     }
 
     /**
-     * @param alt
-     * @param gd
+     * @param ec
+     * @param doc
      * @param map
      */
-    public LayerContainer(final ElementContainer alt, final GraphDocument gd, final int layerNumber) {
-        super(alt, gd);
+    public LayerContainer(final ElementContainer ec, final GraphDocument doc, final int layerNumber) {
+        super(ec, doc);
         this.layerNumber = layerNumber;
         layout = new GraphElementLayout();
         init();
     }
 
     /**
-     * @param neu
-     * @param l
-     * @param gd
+     * @param me
+     * @param layout
+     * @param doc
      * @param map
      */
-    public LayerContainer(final ModelElement neu, final GraphElementLayout l, final GraphDocument gd, final int layerNumber) {
-        super(neu, l, gd);
+    public LayerContainer(final ModelElement me, final GraphElementLayout layout, final GraphDocument doc, final int layerNumber) {
+        super(me, layout, doc);
         this.layerNumber = layerNumber;
-        layout = new GraphElementLayout();
+        this.layout = new GraphElementLayout();
         init();
     }
 

@@ -25,8 +25,8 @@ public class BendpointContainer extends NodeContainer {
         super();
     }
 
-    public BendpointContainer(final Bendpoint kp, final GraphDocument gd) {
-        super(kp, new GraphElementLayout(), gd);
+    public BendpointContainer(final Bendpoint kp, final GraphDocument doc) {
+        super(kp, new GraphElementLayout(), doc);
         layout.bg_color = new Color(0, 0, 0, 0);
         layout.width = 10;
         layout.height = 10;

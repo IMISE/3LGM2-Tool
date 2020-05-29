@@ -185,11 +185,11 @@ public class AnalysesRepositoryFrameActions {
     static final Action ACTION_RESET_ANALYSIS_RESULT = new AbstractAction(getResString("reset_result")) {
         @Override
         public void actionPerformed(final ActionEvent e) {
-            GraphDocument gd = Static.getSelectedDoc();
-            if (gd == null) {
+            GraphDocument selectedDoc = Static.getSelectedDoc();
+            if (selectedDoc == null) {
                 return;
             }
-            gd.clearAnalysisResult();
+            selectedDoc.clearAnalysisResult();
             AnalysesRepositoryFrame.refreshActionStates();
         }
     };
@@ -201,24 +201,21 @@ public class AnalysesRepositoryFrameActions {
 
         @Override
         public void actionPerformed(final ActionEvent e) {
-            GraphDocument doc = Static.getSelectedDoc();
-            if (doc == null) {
+            GraphDocument selectedDoc = Static.getSelectedDoc();
+            if (selectedDoc == null) {
             }
             int[] selection = AnalysesRepositoryFrame.table.getSelectedRows();
             for (int i = 0; i < selection.length; i++) {
                 XMLAnalysis query = AnalysesRepositoryFrame.analysen.get(selection[i]);
-                query.setAnalysisResult(doc);
+                query.setAnalysisResult(selectedDoc);
             }
             AnalysesRepositoryFrame.refreshActionStates();
         }
 
         @Override
         public boolean isEnabled() {
-            GraphDocument gd = Static.getSelectedDoc();
-            if (gd == null) {
-                return false;
-            }
-            return true;
+            GraphDocument selectedDoc = Static.getSelectedDoc();
+            return selectedDoc != null;
         }
 
     };

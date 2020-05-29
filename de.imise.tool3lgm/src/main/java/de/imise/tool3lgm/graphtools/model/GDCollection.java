@@ -938,10 +938,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      *            und dem Hauptmodell gelöscht.
      * @param pid
      */
-    public final void deleteElement(final ModelElement me, final GraphDocument gdoc, final int pid) {
+    public final void deleteElement(final ModelElement me, final GraphDocument doc, final int pid) {
         List<ModelElement> list = new ArrayList<>();
         list.add(me);
-        deleteElements(list, gdoc, pid);
+        deleteElements(list, doc, pid);
     }
 
     /**
