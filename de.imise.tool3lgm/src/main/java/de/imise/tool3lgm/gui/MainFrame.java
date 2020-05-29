@@ -45,14 +45,14 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     private final MenuBar menuBar;
 
     /** Pane, das in das ContentPane dieses Frames gelegt wird */
-    private final MainFrameContentPane contentPane;
+    private final MainFrameDesktopPane contentPane;
 
     public MainFrame() {
         //setIconImage(Tool3lgmConstants.TOOL_ICON_16.getImage());
         setIconImages(Tool3lgmConstants.TOOL_ICON_IMAGES);
         setTitle(null);
 
-        contentPane = new MainFrameContentPane();
+        contentPane = new MainFrameDesktopPane();
         getContentPane().add(contentPane);
 
         addAsToolChangeListener();

@@ -58,7 +58,7 @@ import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 /**
  * @author AXS (6 Aug 2019)
  */
-public final class MainFrameContentPane extends JPanel implements PropertyChangeListener, ViewPaneFrameComponentListener {
+public final class MainFrameDesktopPane extends JPanel implements PropertyChangeListener, ViewPaneFrameComponentListener {
 
     /** Panel with verticalSplitPane and werkzeugleiste */
     private final JPanel workarea = new JPanel();
@@ -107,11 +107,11 @@ public final class MainFrameContentPane extends JPanel implements PropertyChange
     /**
      *
      */
-    public MainFrameContentPane() {
+    public MainFrameDesktopPane() {
         workarea.setLayout(new BorderLayout());
         modelBrowserPanel = new ModelBrowserPanel();
 
-        //desktop = new MainFrameDesktopPane();
+        //desktop = new MainFrameDesktopInternalFramesPane();
         desktop = new MainFrameDesktopTabbedPane();
         desktop.addViewPaneFrameComponentListener(this);
 
