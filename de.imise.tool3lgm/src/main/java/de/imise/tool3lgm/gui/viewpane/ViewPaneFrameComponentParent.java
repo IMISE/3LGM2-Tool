@@ -80,9 +80,4 @@ public interface ViewPaneFrameComponentParent {
         return !children.isEmpty();
     }
 
-    /**
-     * @param listener
-     */
-    void addViewPaneFrameComponentListener(final ViewPaneFrameComponentListener listener);
-
 }

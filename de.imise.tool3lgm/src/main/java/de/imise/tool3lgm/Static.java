@@ -34,6 +34,7 @@ import de.imise.tool3lgm.gui.MainFrame;
 import de.imise.tool3lgm.gui.menu.RegularContextGenerator;
 import de.imise.tool3lgm.gui.menu.TemplateContextGenerator;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
+import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentListener;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
 import de.imise.util.OperatingSystem;
@@ -92,6 +93,16 @@ public class Static {
      */
     public static MainFrame getMainFrame() {
         return tool == null ? null : tool.getMainFrame();
+    }
+
+    /**
+     * Liefert den MainFrame des Tools
+     *
+     * @return mainFrame
+     */
+    public static ViewPaneFrameComponentListener getMainFrameDesktopPane() {
+        MainFrame mainFrame = getMainFrame();
+        return mainFrame == null ? null : mainFrame.getMainFrameDesktopPane();
     }
 
     /** Liefert den MetaModelContext des aktuell selektierten Modells */

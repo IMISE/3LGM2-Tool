@@ -8,9 +8,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.gui.MainFrameDesktopPane;
-import de.imise.tool3lgm.gui.viewpane.ViewPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentListener;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentParent;
@@ -18,7 +17,6 @@ import de.imise.tool3lgm.gui.viewpane.ViewPaneToolbarManager;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPane;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
-import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
  * @author AXS (27.05.2020)
@@ -40,15 +38,11 @@ public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneF
         ChangeListener changeListener = new ChangeListener() {
             @Override
             public void stateChanged(final ChangeEvent e) {
-                final MainFrameDesktopPane parent = ParentComponentFinder.getParent(thisPane, MainFrameDesktopPane.class);
-                if (parent != null) {
-                    Component selectedComponent = getSelectedComponent();
-                    if (selectedComponent instanceof ViewPaneFrameComponent) {
-                        ViewPaneFrameComponent frame = (ViewPaneFrameComponent) selectedComponent;
-                        GraphDocument doc = frame.getGraphDocument();
-                        ViewPane viewPane = frame.getViewPane();
-                        parent.setCurrentDoc(doc, viewPane instanceof GraphViewPane);
-                    }
+                ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
+                Component selectedComponent = getSelectedComponent();
+                if (selectedComponent instanceof ViewPaneFrameComponent) {
+                    ViewPaneFrameComponent frame = (ViewPaneFrameComponent) selectedComponent;
+                    mainFrameDesktopPane.viewActivated(frame);
                 }
             }
         };
@@ -136,12 +130,6 @@ public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneF
         MainFrameDesktopMatrixTabComponent matrixView = new MainFrameDesktopMatrixTabComponent(doc, viewPaneToolBarManager, titleIndex);
         addView(matrixView);
         return matrixView;
-    }
-
-    @Override
-    public void addViewPaneFrameComponentListener(final ViewPaneFrameComponentListener listener) {
-        // TODO Auto-generated method stub
-
     }
 
 }

@@ -29,6 +29,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.gui.menu.MenuBar;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
+import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentListener;
 import de.imise.tool3lgm.help.Help;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 import de.imise.util.swing.SwingUtils;
@@ -68,6 +69,13 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
         addAsToolChangeListener();
         updateTitle();
         addComponentListener(this);
+    }
+
+    /**
+     * @return the real content pane as {@link ViewPaneFrameComponentListener}
+     */
+    public ViewPaneFrameComponentListener getMainFrameDesktopPane() {
+        return contentPane;
     }
 
     @Override

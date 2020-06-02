@@ -17,6 +17,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.event.InternalFrameListener;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.gui.LastAndNextViewManager;
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
@@ -43,18 +44,6 @@ public class MainFrameDesktopInternalFramesPane extends JDesktopPane implements 
      */
     public MainFrameDesktopInternalFramesPane() {
         addComponentListener(this); //resize desktop -> resize frames
-    }
-
-    /**
-     *
-     */
-    private final List<ViewPaneFrameComponentListener> viewPaneFrameComponentListeners = new ArrayList<>();
-
-    @Override
-    public void addViewPaneFrameComponentListener(final ViewPaneFrameComponentListener listener) {
-        if (!viewPaneFrameComponentListeners.contains(listener)) {
-            viewPaneFrameComponentListeners.add(listener);
-        }
     }
 
     @Override
@@ -230,18 +219,16 @@ public class MainFrameDesktopInternalFramesPane extends JDesktopPane implements 
 
     @Override
     public void internalFrameClosing(final InternalFrameEvent e) {
-        for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
-            ToolInternalFrame source = (ToolInternalFrame) e.getSource();
-            l.viewClosing(source);
-        }
+        ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
+        ToolInternalFrame source = (ToolInternalFrame) e.getSource();
+        mainFrameDesktopPane.viewClosing(source);
     }
 
     @Override
     public void internalFrameClosed(final InternalFrameEvent e) {
-        for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
-            ToolInternalFrame source = (ToolInternalFrame) e.getSource();
-            l.viewClosed(source);
-        }
+        ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
+        ToolInternalFrame source = (ToolInternalFrame) e.getSource();
+        mainFrameDesktopPane.viewClosed(source);
     }
 
     @Override
@@ -256,18 +243,16 @@ public class MainFrameDesktopInternalFramesPane extends JDesktopPane implements 
 
     @Override
     public void internalFrameActivated(final InternalFrameEvent e) {
-        for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
-            ToolInternalFrame source = (ToolInternalFrame) e.getSource();
-            l.viewActivated(source);
-        }
+        ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
+        ToolInternalFrame source = (ToolInternalFrame) e.getSource();
+        mainFrameDesktopPane.viewActivated(source);
     }
 
     @Override
     public void internalFrameDeactivated(final InternalFrameEvent e) {
-        for (ViewPaneFrameComponentListener l : viewPaneFrameComponentListeners) {
-            ToolInternalFrame source = (ToolInternalFrame) e.getSource();
-            l.viewDeactivated(source);
-        }
+        ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
+        ToolInternalFrame source = (ToolInternalFrame) e.getSource();
+        mainFrameDesktopPane.viewDeactivated(source);
     }
 
     /**

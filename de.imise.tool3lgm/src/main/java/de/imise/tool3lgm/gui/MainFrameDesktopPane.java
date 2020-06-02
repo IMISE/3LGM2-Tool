@@ -113,7 +113,6 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
         //desktop = new MainFrameDesktopInternalFramesPane();
         desktop = new MainFrameDesktopTabbedPane();
-        desktop.addViewPaneFrameComponentListener(this);
 
         leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, (JComponent) desktop);
         leftSplitPane.setOneTouchExpandable(true);
