@@ -34,7 +34,6 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
     protected ModelBrowser(final int tabLayoutPolicy) {
         super(TabbedPane.TOP, tabLayoutPolicy);
         setMinimumSize(new Dimension(10, 10));
-        startChangeListening();
         addFocusListener(this);
         inactiveColor = getForeground();
     }

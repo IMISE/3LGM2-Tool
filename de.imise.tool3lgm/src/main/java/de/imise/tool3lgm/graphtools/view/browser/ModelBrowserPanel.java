@@ -67,6 +67,7 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
             modelBrowser.addCollection(gdcoll);
         }
         addGraphDocuments(modelBrowser, gdcoll);
+        modelBrowser.startChangeListening();
     }
 
     /**
