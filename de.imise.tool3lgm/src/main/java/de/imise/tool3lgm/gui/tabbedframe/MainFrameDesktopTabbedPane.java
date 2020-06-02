@@ -125,6 +125,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIcons implem
         super.removeTabAt(index);
         if (viewFrame != null) {
             mainFrameDesktopPane.viewClosed(viewFrame);
+            viewFrame.dispose(); //remove the InputGraphArea as MouseListener of the MainFrame
         }
     }
 
