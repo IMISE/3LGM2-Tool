@@ -31,12 +31,26 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
     /**
      * Ein neuer Browser
      */
-    protected ModelBrowser() {
-        super(TabbedPane.TOP, TabbedPane.SCROLL_TAB_LAYOUT);
+    protected ModelBrowser(final int tabLayoutPolicy) {
+        super(TabbedPane.TOP, tabLayoutPolicy);
         setMinimumSize(new Dimension(10, 10));
-        addChangeListener(this);
+        startChangeListening();
         addFocusListener(this);
         inactiveColor = getForeground();
+    }
+
+    /**
+     * Adds this as {@link ChangeListener}
+     */
+    public void startChangeListening() {
+        addChangeListener(this);
+    }
+
+    /**
+     * Removes this as {@link ChangeListener}
+     */
+    public void stopChangeListening() {
+        removeChangeListener(this);
     }
 
     /**
