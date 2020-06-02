@@ -6,16 +6,18 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.tree.ModelBrowserTree;
+import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponentListener;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
 /**
@@ -23,7 +25,7 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
  *
  * @author AXS
  */
-public final class SubModelsBrowser extends JPanel implements MouseListener, FocusListener, ItemListener {
+public final class SubModelsBrowser extends JPanel implements FocusListener, ItemListener, PopupMenuListener {
 
     /**
      * Das Modell das über dieses Tab-Pane dargestellt wird
@@ -47,13 +49,15 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
         super(new BorderLayout());
         this.gdcoll = gdcoll;
         //Submodel ComboBox
-        submodelBox = addMouseAndFocusListener(new AlphabeticalComboBox());
+        submodelBox = addFocusListener(new AlphabeticalComboBox());
         submodelBox.addItemListener(this);
+        submodelBox.addPopupMenuListener(this);
         //ModelElements Tree
-        tree = addMouseAndFocusListener(new ModelBrowserTree(gdcoll.getMainDoc()));
-        JScrollPane scrollPane = addMouseAndFocusListener(new JScrollPane(tree));
-        addMouseAndFocusListener(scrollPane.getHorizontalScrollBar());
-        addMouseAndFocusListener(scrollPane.getVerticalScrollBar());
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+        tree = addFocusListener(new ModelBrowserTree(mainDoc));
+        JScrollPane scrollPane = addFocusListener(new JScrollPane(tree));
+        addFocusListener(scrollPane.getHorizontalScrollBar());
+        addFocusListener(scrollPane.getVerticalScrollBar());
         //add
         add(submodelBox, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
@@ -63,8 +67,7 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
      * @param comp
      * @return
      */
-    private <T extends Component> T addMouseAndFocusListener(final T comp) {
-        comp.addMouseListener(this);
+    private <T extends Component> T addFocusListener(final T comp) {
         comp.addFocusListener(this);
         return comp;
     }
@@ -148,6 +151,9 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
         return gdcoll.getName();
     }
 
+    /**
+     *
+     */
     private void setSelectedDoc() {
         GraphDocument currentDoc = getCurrentDoc();
         if (currentDoc != Static.getSelectedDoc()) {
@@ -161,33 +167,30 @@ public final class SubModelsBrowser extends JPanel implements MouseListener, Foc
     }
 
     @Override
-    public void mouseClicked(final MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(final MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(final MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(final MouseEvent e) {
-        setSelectedDoc();
-    }
-
-    @Override
-    public void mouseReleased(final MouseEvent e) {
-    }
-
-    @Override
     public void focusGained(final FocusEvent e) {
         setSelectedDoc();
     }
 
     @Override
     public void focusLost(final FocusEvent e) {
+    }
+
+    @Override
+    public void popupMenuWillBecomeVisible(final PopupMenuEvent e) {
+        //ignore
+
+    }
+
+    @Override
+    public void popupMenuWillBecomeInvisible(final PopupMenuEvent e) {
+        ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
+        GraphDocument doc = getCurrentDoc();
+        mainFrameDesktopPane.activateOrCreateGraphView(doc);
+    }
+
+    @Override
+    public void popupMenuCanceled(final PopupMenuEvent e) {
+        //ignore
     }
 
 }

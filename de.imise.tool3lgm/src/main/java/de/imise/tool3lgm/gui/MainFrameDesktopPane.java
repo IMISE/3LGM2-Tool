@@ -443,6 +443,11 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         }
     }
 
+    @Override
+    public void activateOrCreateGraphView(final GraphDocument doc) {
+        setCurrentDoc(doc, true);
+    }
+
     /**
      * Wechselt den Kontext auf das übergebene Teilmodell. In jedem Fall wird der <code>ModelBrowser</code> des aktivierten Teilmodells in den
      * Vordergrund gebracht.
