@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -17,37 +15,18 @@ import de.imise.tool3lgm.gui.viewpane.ViewPaneToolbarManager;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPane;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
+import de.imise.util.swing.component.JTabbedPaneWithCloseIcons;
 
 /**
  * @author AXS (27.05.2020)
  */
-public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneFrameComponentParent {
+public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIcons implements ViewPaneFrameComponentParent {
 
     /**
      *
      */
     public MainFrameDesktopTabbedPane() {
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        addTabChangeListener();
-    }
-
-    /**
-     *
-     */
-    private void addTabChangeListener() {
-        final MainFrameDesktopTabbedPane thisPane = this;
-        ChangeListener changeListener = new ChangeListener() {
-            @Override
-            public void stateChanged(final ChangeEvent e) {
-                ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
-                Component selectedComponent = getSelectedComponent();
-                if (selectedComponent instanceof ViewPaneFrameComponent) {
-                    ViewPaneFrameComponent frame = (ViewPaneFrameComponent) selectedComponent;
-                    mainFrameDesktopPane.viewActivated(frame);
-                }
-            }
-        };
-        addChangeListener(changeListener);
     }
 
     @Override
@@ -131,6 +110,38 @@ public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneF
         MainFrameDesktopMatrixTabComponent matrixView = new MainFrameDesktopMatrixTabComponent(doc, viewPaneToolBarManager, titleIndex);
         addView(matrixView);
         return matrixView;
+    }
+
+    @Override
+    public void removeTabAt(final int index) {
+        Component selectedComponent = getSelectedComponent();
+        ViewPaneFrameComponent viewFrame = null;
+        ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
+        if (selectedComponent instanceof ViewPaneFrameComponent) {
+            viewFrame = (ViewPaneFrameComponent) selectedComponent;
+            mainFrameDesktopPane.viewDeactivated(viewFrame);
+            mainFrameDesktopPane.viewClosing(viewFrame);
+        }
+        super.removeTabAt(index);
+        if (viewFrame != null) {
+            mainFrameDesktopPane.viewClosed(viewFrame);
+        }
+    }
+
+    @Override
+    public void setSelectedIndex(final int index) {
+        Component selectedComponent = getSelectedComponent();
+        ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
+        if (selectedComponent instanceof ViewPaneFrameComponent) {
+            ViewPaneFrameComponent viewFrame = (ViewPaneFrameComponent) selectedComponent;
+            mainFrameDesktopPane.viewDeactivated(viewFrame);
+        }
+        super.setSelectedIndex(index);
+        selectedComponent = getSelectedComponent();
+        if (selectedComponent instanceof ViewPaneFrameComponent) {
+            ViewPaneFrameComponent viewFrame = (ViewPaneFrameComponent) selectedComponent;
+            mainFrameDesktopPane.viewActivated(viewFrame);
+        }
     }
 
 }

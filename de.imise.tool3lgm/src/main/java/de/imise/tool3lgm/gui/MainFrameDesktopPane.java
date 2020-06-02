@@ -557,6 +557,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
     @Override
     public void viewClosing(final ViewPaneFrameComponent source) {
+        //Sys.err1(source);
         //before closing -> store all view parameter in the szenario view parameter (inclusive view position)
         ViewPaneFrameComponent viewPaneFrameComponent = source;
         ViewPane viewPane = viewPaneFrameComponent.getViewPane();
@@ -573,6 +574,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
     @Override
     public void viewClosed(final ViewPaneFrameComponent source) {
+        //Sys.err1(source);
         LastAndNextViewManager.removeWindow(source);
         if (!desktop.hasViewPaneFrameComponents()) {
             activeFrame = null;
@@ -585,6 +587,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     public void viewActivated(final ViewPaneFrameComponent source) {
         ViewPaneFrameComponent oldActiveFrame = activeFrame;
         activeFrame = source;
+        //Sys.err1(oldActiveFrame + "\n" + activeFrame);
         if (oldActiveFrame != activeFrame) {
             GraphDocument doc = activeFrame.getGraphDocument();
             doc.addClosedTransactionsListener(viewPaneToolbarManager);
@@ -604,7 +607,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         if (activeFrame == null) {
             activeFrame = source;
         }
-        //        Sys.err(" ############## " + oldActiveFrame + "\n" + activeFrame);
+        //Sys.err1(activeFrame);
         GraphDocument doc = activeFrame.getGraphDocument();
         doc.removeClosedTransactionsListener(viewPaneToolbarManager);
         activeFrame = null;
