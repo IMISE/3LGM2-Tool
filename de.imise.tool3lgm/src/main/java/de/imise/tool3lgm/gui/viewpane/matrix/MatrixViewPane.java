@@ -93,7 +93,9 @@ public class MatrixViewPane extends ViewPane implements MouseMotionListener, Mou
     @Override
     public String getName() {
         GraphDocument doc = getGraphDocument();
-        String name = doc.getTitle();
+        String matrixLabel = getResString("matrix");
+        String docTitle = doc.getTitle();
+        String name = "(" + matrixLabel + " " + titleIndex + ") " + docTitle;
         return name;
     }
 
