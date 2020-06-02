@@ -30,7 +30,7 @@ public class GraphViewParameter {
     public double zoom = INITIAL_MIN_ZOOM;
     public double pageSizeFactor = INITIAL_PAGE_SIZE_FACTOR;
     public int activeLayer = INITILA_ACTIVE_LAYER;
-    public boolean selected = false;
+    public boolean selected = true; //ensure that a new created submodel is selected
 
     public GraphViewParameter() {
 
