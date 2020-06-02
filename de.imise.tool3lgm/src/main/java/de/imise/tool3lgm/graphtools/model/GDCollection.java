@@ -458,7 +458,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         //        if (allListener.contains(gdl)) {
         //            Sys.err1(gdl);
         //        }
-        allListener.add(gdl);
+        allListener.add(gdl); //Don't prevent adding multiple the same listener! The MainFrameDesktopTabbedPane needs to be added multiple
     }
 
     /**
