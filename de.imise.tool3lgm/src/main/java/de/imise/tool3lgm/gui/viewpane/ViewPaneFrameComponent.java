@@ -5,7 +5,6 @@ import java.awt.Cursor;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
-import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 
 /**
  * The component that surrounds resp. contains a single {@link ViewPane}.
