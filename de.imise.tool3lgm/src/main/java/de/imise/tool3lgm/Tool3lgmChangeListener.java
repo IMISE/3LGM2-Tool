@@ -57,6 +57,18 @@ public interface Tool3lgmChangeListener {
         ;
 
         /**
+         * Stores the last fired change type to prevent circles in event delivering
+         * (in combination with the {@link #lastDoc}
+         */
+        private static Tool3lgmChangeType lastChangeType;
+
+        /**
+         * Stores the doc which was the source of the last fired change type to prevent
+         * circles in event delivering (in combination with the {@link #lastChangeType}
+         */
+        private static GraphDocument lastDoc;
+
+        /**
          * @param l
          * @param source
          * @param last_elem
@@ -69,6 +81,13 @@ public interface Tool3lgmChangeListener {
          * @param last_elem
          */
         public void deliverEvent(final ListenerSupport<Tool3lgmChangeListener> listeners, final GraphDocument source) {
+            //esp. selected doc changed events can be called in circle
+            if (lastChangeType == this && lastDoc == source) {
+                return;
+            }
+            lastChangeType = this;
+            lastDoc = source;
+
             //das hier muss sein, weil es vorkommen kann, dass sich bei deliverEvent(l, source, last_elem); der aktuelle Listener aus der Listener-Liste löscht
             //eine andere Variante wäre, die Liste vorher zu clonen und auf dem Clone zu iterieren
             Tool3lgmChangeListener lastListener = null;
