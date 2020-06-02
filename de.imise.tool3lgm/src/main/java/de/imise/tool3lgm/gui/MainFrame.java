@@ -147,26 +147,6 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     }
 
     /**
-     * Fügt dem ModelBrowser das übergebene Modell hinzu
-     *
-     * @param gdcoll Modell, das hinzugefügt werden soll
-     */
-    private void addCollection(final GDCollection gdcoll) {
-        contentPane.addCollection(gdcoll);
-        //        LGMGraphDocument mainDoc = gdcoll.getMainGraphDocument();
-        //        String title = mainDoc.getTitle();
-        //        Static.setProgressDialogStatusLabel("create_frame", title);
-        //        createGraphFrame(mainDoc);
-        //
-        //        for (int i = 0; i < gdcoll.getSzenarioCount(); i++) {
-        //            Szenario szen = gdcoll.getSzenario(i);
-        //            title = szen.getTitle();
-        //            Static.setProgressDialogStatusLabel("create_frame", title);
-        //            createGraphFrame(szen);
-        //        }
-    }
-
-    /**
      * Create new MatrixViewFrame and add it to parent GraphDocument
      *
      * @param doc Sub-Model as source for the MatrixView
@@ -208,7 +188,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     @Override
     public void model_change_model_opened(final GraphDocument source) {
         GDCollection gdcoll = source.getCollection();
-        addCollection(gdcoll);
+        contentPane.addCollection(gdcoll);
     }
 
     @Override
