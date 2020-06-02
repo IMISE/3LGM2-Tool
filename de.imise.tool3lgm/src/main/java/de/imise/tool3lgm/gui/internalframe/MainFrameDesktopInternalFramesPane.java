@@ -32,7 +32,7 @@ import de.imise.tool3lgm.log.Log;
 /**
  * @author AXS (08.05.2020)
  */
-public class MainFrameDesktopIntenalFramesPane extends JDesktopPane implements ComponentListener, ViewPaneFrameComponentParent, InternalFrameListener {
+public class MainFrameDesktopInternalFramesPane extends JDesktopPane implements ComponentListener, ViewPaneFrameComponentParent, InternalFrameListener {
 
     /** if the desktop size changes the frames will be resized too */
     private int desktopWidth = -1;
@@ -41,7 +41,7 @@ public class MainFrameDesktopIntenalFramesPane extends JDesktopPane implements C
     /**
      *
      */
-    public MainFrameDesktopIntenalFramesPane() {
+    public MainFrameDesktopInternalFramesPane() {
         addComponentListener(this); //resize desktop -> resize frames
     }
 
