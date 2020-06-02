@@ -27,6 +27,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPane implements ViewPaneF
      *
      */
     public MainFrameDesktopTabbedPane() {
+        setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         addTabChangeListener();
     }
 
