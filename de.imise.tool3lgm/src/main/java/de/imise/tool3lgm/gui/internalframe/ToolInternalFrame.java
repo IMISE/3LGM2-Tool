@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.gui.internalframe;
 
 import java.awt.Rectangle;
+import java.beans.PropertyVetoException;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;
@@ -100,6 +101,15 @@ public abstract class ToolInternalFrame extends JInternalFrame implements ViewPa
     public String toString() {
         GraphDocument doc = getGraphDocument();
         return getClass().getName() + " " + doc;
+    }
+
+    @Override
+    public final void setSelected(final boolean selected) {
+        try {
+            super.setSelected(selected);
+        } catch (PropertyVetoException e) {
+            //ignore the possible error
+        }
     }
 
 }

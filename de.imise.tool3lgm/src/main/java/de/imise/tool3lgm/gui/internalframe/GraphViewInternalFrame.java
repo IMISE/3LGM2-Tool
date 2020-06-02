@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.gui.internalframe;
 
-import java.beans.PropertyVetoException;
-
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -44,15 +42,6 @@ public final class GraphViewInternalFrame extends ToolInternalFrame implements G
 
     public GraphViewParameter getGraphViewParameter() {
         return area.getGraphViewParameter();
-    }
-
-    @Override
-    public void setSelected(final boolean selected) {
-        try {
-            super.setSelected(selected);
-        } catch (PropertyVetoException e) {
-            //ignore the possible error
-        }
     }
 
 }

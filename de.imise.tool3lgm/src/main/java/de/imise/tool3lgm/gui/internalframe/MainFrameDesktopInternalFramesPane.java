@@ -98,19 +98,16 @@ public class MainFrameDesktopInternalFramesPane extends JDesktopPane implements 
 
     @Override
     public boolean isSelected(final ViewPaneFrameComponent viewPaneFrameComponent) {
-        if (viewPaneFrameComponent instanceof GraphViewInternalFrame) {
-            GraphViewInternalFrame internalFrame = (GraphViewInternalFrame) viewPaneFrameComponent;
-            return internalFrame.isSelected();
-        }
-        return false;
+        //hard cast because at the moment all ViewPaneFrameComponent are ToolInternalFrames
+        ToolInternalFrame internalFrame = (ToolInternalFrame) viewPaneFrameComponent;
+        return internalFrame.isSelected();
     }
 
     @Override
     public void setSelected(final ViewPaneFrameComponent viewPaneFrameComponent) {
-        if (viewPaneFrameComponent instanceof GraphViewInternalFrame) {
-            GraphViewInternalFrame internalFrame = (GraphViewInternalFrame) viewPaneFrameComponent;
-            internalFrame.setSelected(true);
-        }
+        //hard cast because at the moment all ViewPaneFrameComponent are ToolInternalFrames
+        ToolInternalFrame internalFrame = (ToolInternalFrame) viewPaneFrameComponent;
+        internalFrame.setSelected(true);
     }
 
     //////////////////////////////////////////////
