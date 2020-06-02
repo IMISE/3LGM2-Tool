@@ -132,20 +132,31 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIcons implem
             mainFrameDesktopPane.viewClosed(viewFrame);
             viewFrame.dispose(); //remove the InputGraphArea as MouseListener of the MainFrame
         }
+        //super.removeTabAt(index); donn't call setSelectedIndex() so we have to call
+        //the viewActivated(...) function explicitly
+        setSelectedTabAsActiveView();
     }
 
     @Override
     public void setSelectedIndex(final int index) {
         Component selectedComponent = getSelectedComponent();
-        ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
         if (selectedComponent instanceof ViewPaneFrameComponent) {
             ViewPaneFrameComponent viewFrame = (ViewPaneFrameComponent) selectedComponent;
+            ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
             mainFrameDesktopPane.viewDeactivated(viewFrame);
         }
         super.setSelectedIndex(index);
-        selectedComponent = getSelectedComponent();
+        setSelectedTabAsActiveView();
+    }
+
+    /**
+     * Sets the selected tab in the data model as active view
+     */
+    private void setSelectedTabAsActiveView() {
+        Component selectedComponent = getSelectedComponent();
         if (selectedComponent instanceof ViewPaneFrameComponent) {
             ViewPaneFrameComponent viewFrame = (ViewPaneFrameComponent) selectedComponent;
+            ViewPaneFrameComponentListener mainFrameDesktopPane = Static.getMainFrameDesktopPane();
             mainFrameDesktopPane.viewActivated(viewFrame);
         }
     }
