@@ -3708,139 +3708,139 @@ public abstract class GraphDocument extends ElementSelectionContext {
         Dimension retVal = new Dimension(x, y);
 
         switch (addictedCount % 34) {
-        case 0:
+        case 14:
             retVal.width = x - w / 7;
             retVal.height = y - h / 3;
             break;
-        case 1:
+        case 28:
             retVal.width = x - w / 5;
             retVal.height = y - h / 3;
-            break;
-        case 2:
-            retVal.width = x - w / 4;
-            retVal.height = y - h / 3;
-            break;
-        case 3:
-            retVal.width = x - w / 3;
-            retVal.height = y - h / 3;
-            break;
-        case 4:
-            retVal.width = x - (int) (w / 2.5);
-            retVal.height = y - h / 3;
-            break;
-        case 5:
-            retVal.width = x + w / 7;
-            retVal.height = y + h / 3;
-            break;
-        case 6:
-            retVal.width = x + w / 5;
-            retVal.height = y + h / 3;
-            break;
-        case 7:
-            retVal.width = x + w / 4;
-            retVal.height = y + h / 3;
             break;
         case 8:
-            retVal.width = x + w / 3;
-            retVal.height = y + h / 3;
-            break;
-        case 9:
-            retVal.width = x + (int) (w / 2.5);
-            retVal.height = y + h / 3;
-            break;
-        case 10:
-            retVal.width = x - w / 7;
-            retVal.height = y + h / 3;
-            break;
-        case 11:
-            retVal.width = x - w / 5;
-            retVal.height = y + h / 3;
-            break;
-        case 12:
             retVal.width = x - w / 4;
-            retVal.height = y + h / 3;
-            break;
-        case 13:
-            retVal.width = x - w / 3;
-            retVal.height = y + h / 3;
-            break;
-        case 14:
-            retVal.width = x - (int) (w / 2.5);
-            retVal.height = y + h / 3;
-            break;
-        case 15:
-            retVal.width = x + w / 7;
-            retVal.height = y - h / 3;
-            break;
-        case 16:
-            retVal.width = x + w / 5;
-            retVal.height = y - h / 3;
-            break;
-        case 17:
-            retVal.width = x + w / 4;
-            retVal.height = y - h / 3;
-            break;
-        case 18:
-            retVal.width = x + w / 3;
-            retVal.height = y - h / 3;
-            break;
-        case 19:
-            retVal.width = x + (int) (w / 2.5);
             retVal.height = y - h / 3;
             break;
         case 20:
+            retVal.width = x - w / 3;
+            retVal.height = y - h / 3;
+            break;
+        case 0:
+            retVal.width = x - (int) (w / 2.5);
+            retVal.height = y - h / 3;
+            break;
+        case 15:
+            retVal.width = x + w / 7;
+            retVal.height = y + h / 3;
+            break;
+        case 29:
+            retVal.width = x + w / 5;
+            retVal.height = y + h / 3;
+            break;
+        case 9:
+            retVal.width = x + w / 4;
+            retVal.height = y + h / 3;
+            break;
+        case 21:
+            retVal.width = x + w / 3;
+            retVal.height = y + h / 3;
+            break;
+        case 1:
+            retVal.width = x + (int) (w / 2.5);
+            retVal.height = y + h / 3;
+            break;
+        case 16:
+            retVal.width = x - w / 7;
+            retVal.height = y + h / 3;
+            break;
+        case 30:
+            retVal.width = x - w / 5;
+            retVal.height = y + h / 3;
+            break;
+        case 10:
+            retVal.width = x - w / 4;
+            retVal.height = y + h / 3;
+            break;
+        case 22:
+            retVal.width = x - w / 3;
+            retVal.height = y + h / 3;
+            break;
+        case 2:
+            retVal.width = x - (int) (w / 2.5);
+            retVal.height = y + h / 3;
+            break;
+        case 17:
+            retVal.width = x + w / 7;
+            retVal.height = y - h / 3;
+            break;
+        case 31:
+            retVal.width = x + w / 5;
+            retVal.height = y - h / 3;
+            break;
+        case 11:
+            retVal.width = x + w / 4;
+            retVal.height = y - h / 3;
+            break;
+        case 23:
+            retVal.width = x + w / 3;
+            retVal.height = y - h / 3;
+            break;
+        case 3:
+            retVal.width = x + (int) (w / 2.5);
+            retVal.height = y - h / 3;
+            break;
+        case 18:
             retVal.width = x - w / 7;
             retVal.height = y;
             break;
-        case 21:
+        case 32:
             retVal.width = x - w / 5;
             retVal.height = y;
             break;
-        case 22:
+        case 12:
             retVal.width = x - w / 4;
             retVal.height = y;
             break;
-        case 23:
+        case 24:
             retVal.width = x - w / 3;
             retVal.height = y;
             break;
-        case 24:
+        case 4:
             retVal.width = x - (int) (w / 2.5);
             retVal.height = y;
             break;
-        case 25:
+        case 19:
             retVal.width = x + w / 7;
             retVal.height = y;
             break;
-        case 26:
+        case 33:
             retVal.width = x + w / 5;
             retVal.height = y;
             break;
-        case 27:
+        case 13:
             retVal.width = x + w / 4;
             retVal.height = y;
             break;
-        case 28:
+        case 25:
             retVal.width = x + w / 3;
             retVal.height = y;
             break;
-        case 29:
+        case 5:
             retVal.width = x + (int) (w / 2.5);
             retVal.height = y;
             break;
-        case 30:
+        case 26:
             retVal.width = x;
             retVal.height = y + h / 5;
             break;
-        case 31:
+        case 6:
             retVal.width = x;
             retVal.height = y + h / 3;
             break;
-        case 32:
+        case 27:
             retVal.width = x;
             retVal.height = y - h / 5;
             break;
-        case 33:
+        case 7:
             retVal.width = x;
             retVal.height = y - h / 3;
             break;
