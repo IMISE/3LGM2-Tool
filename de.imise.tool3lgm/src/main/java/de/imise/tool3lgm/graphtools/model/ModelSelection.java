@@ -572,7 +572,7 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
      * @return Returns the joinableElements.
      */
     public boolean isJoinableElementsSelected() {
-        return mostSpecialRealElementClass != null && !Modifier.isAbstract(mostSpecialRealElementClass.getModifiers()) && selectedRealNodeContainer.size() > 1;
+        return mostSpecialRealElementClass != null && !Modifier.isAbstract(mostSpecialRealElementClass.getModifiers()) && selectedRealNodeContainer.size() > 1 && getMetaModel().isEditable(mostSpecialRealElementClass);
     }
 
     /**
