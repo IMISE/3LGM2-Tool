@@ -49,7 +49,7 @@ public interface ActionSource {
                 constructorParameterClass = constructorParameterClass.getSuperclass();
             }
         }
-        if (isInteractiveAction()) {
+        if (action != null && isInteractiveAction()) {
             action.putValue(Action.NAME, action.getValue(Action.NAME).toString() + PPP);
         }
         return action;

@@ -165,10 +165,13 @@ public abstract class ContextGenerator implements ActionListener {
      * @return
      */
     protected final JMenuItem getItem(final GDCommands command) {
+        ExtendedAction action = command.createAction();
         if (command.isModelOption()) {
-            ExtendedAction action = command.createAction();
             //            System.err.println(command.name() + " " + action.getClass() + " " + action.isEnabled());
-            return new JCheckBoxMenuItem(action);
+            return new JCheckBoxMenuItem(action); //in this case the action can/should not be null!
+        }
+        if (action != null) {
+            return new JMenuItem(action);
         }
         return getItem(command.name(), command);
     }
