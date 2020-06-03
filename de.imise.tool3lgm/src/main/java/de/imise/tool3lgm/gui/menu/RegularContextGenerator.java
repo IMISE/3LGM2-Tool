@@ -774,10 +774,10 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             }
         }
 
+        if (menu.getComponentCount() > 0) {
+            menu.addSeparator();
+        }
         if (doc instanceof Szenario && !doc.isSelectedOnlyUnique() && !doc.isSelectedOnlySlaveRealNodes() && !doc.isSelectedOnlySubmodelElements()) {
-            if (menu.getComponentCount() > 0) {
-                menu.addSeparator();
-            }
             menu.add(delete_selected_from_szenario);
         }
 
