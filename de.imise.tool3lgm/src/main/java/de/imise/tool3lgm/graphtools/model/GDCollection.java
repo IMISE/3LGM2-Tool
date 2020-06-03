@@ -1759,12 +1759,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             mainDoc.undo(pid);
             return null;
         }
-        //wenn eine InstanciationEdge angelegt wurde, dann prüfen, ob dadurch eine neue Kante
-        //zwischen dem InstanzElement und einem anderen InstanzElement abgeleitet werden muss
-        //Unlink prüfen, ob die Kanten da entfernt werden müssen!
-        if (edge instanceof InstanciationEdge) {
-            updateInstanciationInstanceEdgesBetweenInstances((InstanciationEdge) edge, pid);
-        }
         //bei jeder Kante eventuell ableitbare InstanciationEdges ergänzen
         updateInstanciationEdgesForAssociationClasses(edge, pid);
         mainDoc.finish_transaction(pid);
@@ -2012,7 +2006,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      *            Neue Kante zu einem Instanz-Knoten, für den geprüft wird, ob eine neue Kante zwischen ihm und
      *            einem anderen Instanz-Knoten gezogen werden muss. Bei dem anderen Knoten gibt es schon eine
      *            solche {@link InstanciationEdge} ähnlich wie die übergebene. Aber erst mit der übergebenen
-     *            Kante sind alle Voraussetzungen erfüllt, um die Kante zwischen den Knoten abzuleiten
+     *            Kante sind alle Voraussetzungen erfüllt, um die Kante zwischen den Knoten abzuleiten.
      * @param pid
      */
     private void updateInstanciationInstanceEdgesBetweenInstances(final InstanciationEdge instanciationEdge, final int pid) {
