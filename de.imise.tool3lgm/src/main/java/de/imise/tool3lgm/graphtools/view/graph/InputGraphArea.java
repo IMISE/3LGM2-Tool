@@ -480,16 +480,14 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                 clickedEc = chooseObject(layer, x, y);
                 if (clickedEc != null) {
                     szenario.select(clickedEc, 0);
-                    revalidate();
-                    repaint();
+                    revalidateRepaint();
                     break;
                 }
             } else if (mouse_makes_node != null && left_button) {
                 if (isInPage(x, y)) {
                     if (szenario.getMetaModel().layerFor(mouse_makes_node) == layerIndex) {
                         szenario.createNodeAndContainer(mouse_makes_node, STANDARD_PID);
-                        revalidate();
-                        repaint();
+                        revalidateRepaint();
                     }
                 }
             } else {
@@ -608,8 +606,7 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
                             szenario.linkSelected(edgeClass, BACKWARD, STANDARD_PID);
                         }
                     }
-                    revalidate();
-                    repaint();
+                    revalidateRepaint();
                     break;
                 }
             }
