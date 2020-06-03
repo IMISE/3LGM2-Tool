@@ -15,8 +15,8 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphAreaOptionSliders;
-import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphAreaOptionSliders.SliderWithTextField;
+import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 
 /**
  * Dialog zum Einstellen von Ebenenabstand, Zoom, Winkel und Größe der Zeichenfläche

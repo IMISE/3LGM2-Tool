@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.view.graph;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_RENDER_SETTINGS;
 
 import java.awt.Container;
