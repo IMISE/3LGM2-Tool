@@ -6,6 +6,7 @@ import java.util.List;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
+import de.imise.tool3lgm.Tool3lgm;
 import de.imise.util.swing.menu.MenuCreator;
 
 /**
@@ -36,7 +37,9 @@ public class MenuBar extends JMenuBar {
         add(MenuCollection.ANALYSIS_MENU);
         add(MenuCollection.OPTIONS_MENU);
         add(MenuCollection.EXTRAS_MENU);
-        add(MenuCollection.WINDOW_MENU);
+        if (!Tool3lgm.DESKTOP_WITH_TABS_INSTEAD_OF_INTERNAL_FRAMES) {
+            add(MenuCollection.WINDOW_MENU);
+        }
         add(MenuCollection.HELP_MENU);
 
         MenuCreator.setMnemonics(getAllMenus());

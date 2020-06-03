@@ -29,6 +29,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JViewport;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -41,6 +42,7 @@ import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserPanel;
+import de.imise.tool3lgm.gui.internalframe.MainFrameDesktopInternalFramesPane;
 import de.imise.tool3lgm.gui.tabbedframe.MainFrameDesktopTabbedPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
@@ -111,8 +113,11 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         workarea.setLayout(new BorderLayout());
         modelBrowserPanel = new ModelBrowserPanel();
 
-        //desktop = new MainFrameDesktopInternalFramesPane();
-        desktop = new MainFrameDesktopTabbedPane();
+        if (Tool3lgm.DESKTOP_WITH_TABS_INSTEAD_OF_INTERNAL_FRAMES) {
+            desktop = new MainFrameDesktopTabbedPane();
+        } else {
+            desktop = new MainFrameDesktopInternalFramesPane();
+        }
 
         leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, (JComponent) desktop);
         leftSplitPane.setOneTouchExpandable(true);

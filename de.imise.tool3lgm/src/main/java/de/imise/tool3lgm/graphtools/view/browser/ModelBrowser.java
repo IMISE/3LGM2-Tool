@@ -218,10 +218,10 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
     @Override
     public void setForegroundAt(final int index, final Color foreground) {
         //If we change the option showSubmodelsInSeparateBrowsers 3 or 4 times
-        //if there are two models opened and the first ist active then there is
+        //if there are two models opened and the first is active then there is
         //fired a java.lang.ArrayIndexOutOfBoundsException: 1 >= 1 at
         //java.desktop/javax.swing.plaf.basic.BasicTabbedPaneUI.getTextViewForTab(BasicTabbedPaneUI.java:1959).
-        //Hhis seems to be a java bug.
+        //This seems to be a java bug.
         //If we sourround this bug with try-catch everything is fine and it works.
         try {
             super.setForegroundAt(index, foreground);

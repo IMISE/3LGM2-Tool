@@ -12,7 +12,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JDesktopPane;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTabbedPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
@@ -30,6 +33,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.MainFrame;
+import de.imise.tool3lgm.gui.MainFrameDesktopPane;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.log.Log;
@@ -42,6 +46,13 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 
 /** Die eigentliche Anwendung 3lgm */
 public class Tool3lgm {
+
+    /**
+     * If <code>true</code> the {@link MainFrameDesktopPane} uses a {@link JTabbedPane}
+     * instead of a {@link JDesktopPane} with {@link JInternalFrame}s to sho the graph
+     * and matix views.
+     */
+    public static final boolean DESKTOP_WITH_TABS_INSTEAD_OF_INTERNAL_FRAMES = true;
 
     /** alle GDCollections */
     private final List<GDCollection> collections = new ArrayList<>();
