@@ -25,11 +25,13 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduct_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.CommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheActorInstanceCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActorInstance_IheActorInstanceInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActor_MustBeGroupedWith_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheCommunicationLink_IheActorInstanceCommunicationLink_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheActorInstanceInvokingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheInvokingInterface_IheTransaction_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheProvidingInterface_IheActorInstanceProvidingInterface_Edge;
@@ -41,6 +43,8 @@ import de.imise.tool3lgm.metamodel.service.edge.Service_ProvidingInterface_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
 import de.imise.tool3lgm.metamodel.service.node.IheActor;
 import de.imise.tool3lgm.metamodel.service.node.IheActorInstance;
+import de.imise.tool3lgm.metamodel.service.node.IheActorInstanceInvokingInterface;
+import de.imise.tool3lgm.metamodel.service.node.IheActorInstanceProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheInvokingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheProvidingInterface;
 import de.imise.tool3lgm.metamodel.service.node.IheTransaction;
@@ -164,45 +168,78 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         return ImmutableMap.of(IheCommunicationLink_Edge.class, iheCommunicationLink_nameMetaPath, CommunicationLink_Edge.class, communicationLink_nameMetaPath);
     }
 
-    ////////////////////
-    // InferenceEgdes //
-    ////////////////////
+    ////////////////////////////////////////////////////////////////////////////////
+    // InferenceEdges Condition-MetaPaths: (see also yEd-Modell *A1, *A2 und *A3) //
+    ////////////////////////////////////////////////////////////////////////////////
 
-    /**
-     * @return
-     */
     @Override
     public final Map<Class<? extends InferenceEdge>, AbstractMetaPath> getInferenceEdgeToConditionMetaPath() {
-        //        SimpleMetaPath service_CommunicationLink_InferenceMetaPath_part1 = simpleMetaPathCreator.createSimpleMetaPath(CommunicationLink_Edge.class, Service.class, Service_ProvidingInterface_Edge.class);
-        //        SimpleMetaPath service_CommunicationLink_InferenceMetaPath_part2 = simpleMetaPathCreator.createSimpleMetaPath(CommunicationLink_Edge.class, Service.class, Service_InvokingInterface_Edge.class);
+
         MetaModel metaModel = getMetaModel();
         ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
 
-        //Path: CommunicationLink_Edge -> CommunicationLink_Edge-StartElement = InvokingInterface ->  Service_InvokingInterface_Edge -> Service
+        // Edge between Service and CommunicationLink_Edge = Service_CommunicationLink_Edge
+        //   (*A1) Service_CommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
+        //     1.) CommunicationLink_Edge:InvokingInterface ( = CommunicationLink_Edge-StartElement)
+        //      -> Service_InvokingInterface_Edge -> Servide
         ElementaryMetaPath service_CommunicationLink_InferenceMetaPath1_pathStep1 = emph.getEdgeToStartElementMetaPath(CommunicationLink_Edge.class, InvokingInterface.class);
         ElementaryMetaPath service_CommunicationLink_InferenceMetaPath1_pathStep2 = emph.getMetaPath(InvokingInterface.class, Service_InvokingInterface_Edge.class, Direction.BACKWARD, Service.class);
         SimpleMetaPath service_CommunicationLink_InferenceMetaPath1 = new SimpleMetaPath(service_CommunicationLink_InferenceMetaPath1_pathStep1, service_CommunicationLink_InferenceMetaPath1_pathStep2);
-
-        //Path: CommunicationLink_Edge -> CommunicationLink_Edge-EndElement = ProvidingInterface ->  Service_InvokingInterface_Edge -> Service
+        //   (*A1) Service_CommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
+        //     2.) CommunicationLink_Edge:ProvidingInterface ( = CommunicationLink_Edge-EndElement)
+        //      -> Service_ProvidingInterface_Edge -> Servide
         ElementaryMetaPath service_CommunicationLink_InferenceMetaPath2_pathStep1 = emph.getEdgeToEndElementMetaPath(CommunicationLink_Edge.class, ProvidingInterface.class);
         ElementaryMetaPath service_CommunicationLink_InferenceMetaPath2_pathStep2 = emph.getMetaPath(InvokingInterface.class, Service_ProvidingInterface_Edge.class, Direction.BACKWARD, Service.class);
         SimpleMetaPath service_CommunicationLink_InferenceMetaPath2 = new SimpleMetaPath(service_CommunicationLink_InferenceMetaPath2_pathStep1, service_CommunicationLink_InferenceMetaPath2_pathStep2);
-
+        //   (*A1) Service_CommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
         AbstractMetaPath service_CommunicationLink_InferenceMetaPath = new SectionMetaPath(service_CommunicationLink_InferenceMetaPath1, service_CommunicationLink_InferenceMetaPath2);
 
-        //Path: IheCommunicationLink_Edge -> IheCommunicationLink_Edge-StartElement = IheInvokingInterface ->  IheTransaction_IheInvokingInterface_Edge -> IheTransaction
+        // Edge between IheTransaction and IheCommunicationLink_Edge = IheTransaction_IheCommunicationLink_Edge
+        //   (*A2) IheTransaction_IheCommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
+        //     1.) IheCommunicationLink_Edge:IheInvokingInterface ( = IheCommunicationLink_Edge-StartElement)
+        //      -> IheInvokingInterface_IheTransaction_Edge -> IheTransaction
         ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep1 = emph.getEdgeToStartElementMetaPath(IheCommunicationLink_Edge.class, IheInvokingInterface.class);
         ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep2 = emph.getMetaPath(IheInvokingInterface.class, IheInvokingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
         SimpleMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath1 = new SimpleMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep1, iheTransaction_IheCommunicationLink_InferenceMetaPath1_pathStep2);
-
-        //Path: IheCommunicationLink_Edge -> IheCommunicationLink_Edge-EndElement = IheProvidingInterface ->  IheTransaction_IheProvidingInterface_Edge -> IheTransaction
+        //   (*A2) IheTransaction_IheCommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
+        //     2.) IheCommunicationLink_Edge:IheProvidingInterface ( = IheCommunicationLink_Edge-EndElement)
+        //      -> IheProvidingInterface_IheTransaction_Edge -> IheTransaction
         ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep1 = emph.getEdgeToEndElementMetaPath(IheCommunicationLink_Edge.class, IheProvidingInterface.class);
         ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep2 = emph.getMetaPath(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
         SimpleMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2 = new SimpleMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep1, iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep2);
-
+        //   (*A2) IheTransaction_IheCommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
         AbstractMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath1, iheTransaction_IheCommunicationLink_InferenceMetaPath2);
 
-        return ImmutableMap.of(Service_CommunicationLink_Edge.class, service_CommunicationLink_InferenceMetaPath, IheTransaction_IheCommunicationLink_Edge.class, iheTransaction_IheCommunicationLink_InferenceMetaPath);
+        // Edge between IheCommunicationLink_Edge and IheActorInstanceCommunicationLink_Edge= IheCommunicationLink_IheActorInstanceCommunicationLink_Edge
+        //    (*A3) IheCommunicationLink_IheActorInstanceCommunicationLink_Edge InferenceEdge is inferred by Section-MetaPath of MetaPaths 1 and 2:
+        //      1.) IheActorInstanceCommunicationLink_Edge:IheActorInstanceInvokingInterface ( = IheActorInstanceCommunicationLink_Edge-StartElement)
+        //       -> IheInvokingInterface_IheActorInstanceInvokingInterface_Edge -> IheInvokingInterface
+        //       -> IheInvokingInterface:IheCommunicationLink_Edge (= IheCommunicationLink_Edge-StartElement)
+        ElementaryMetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1_pathStep1 = emph.getEdgeToStartElementMetaPath(IheActorInstanceCommunicationLink_Edge.class, IheActorInstanceInvokingInterface.class);
+        ElementaryMetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1_pathStep2 = emph.getMetaPath(IheActorInstanceInvokingInterface.class, IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class,
+                Direction.BACKWARD, IheInvokingInterface.class);
+        ElementaryMetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1_pathStep3 = emph.getStartElementToEdgeMetaPath(IheInvokingInterface.class, IheCommunicationLink_Edge.class);
+        SimpleMetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1 = new SimpleMetaPath(iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1_pathStep1,
+                iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1_pathStep2, iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1_pathStep3);
+
+        // Edge between IheCommunicationLink_Edge and IheActorInstanceCommunicationLink_Edge= IheCommunicationLink_IheActorInstanceCommunicationLink_Edge
+        //    (*A3) IheCommunicationLink_IheActorInstanceCommunicationLink_Edge InferenceEdge is inferred by Section-MetaPath of MetaPaths 1 and 2:
+        //      2.) IheActorInstanceCommunicationLink_Edge:IheActorInstanceProvidingInterface ( = IheActorInstanceCommunicationLink_Edge-EndElement)
+        //       -> IheProvidingInterface_IheActorInstanceProvidingInterface_Edge -> IheProvidingInterface
+        //       -> IheProvidingInterface:IheCommunicationLink_Edge (= IheCommunicationLink_Edge-EndElement)
+        ElementaryMetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2_pathStep1 = emph.getEdgeToEndElementMetaPath(IheActorInstanceCommunicationLink_Edge.class, IheActorInstanceProvidingInterface.class);
+        ElementaryMetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2_pathStep2 = emph.getMetaPath(IheActorInstanceProvidingInterface.class, IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class,
+                Direction.BACKWARD, IheProvidingInterface.class);
+        ElementaryMetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2_pathStep3 = emph.getEndElementToEdgeMetaPath(IheProvidingInterface.class, IheCommunicationLink_Edge.class);
+        SimpleMetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2 = new SimpleMetaPath(iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2_pathStep1,
+                iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2_pathStep2, iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2_pathStep3);
+
+        //    (*A3) IheCommunicationLink_IheActorInstanceCommunicationLink_Edge InferenceEdge is inferred by Section-MetaPath of MetaPaths 1 and 2:
+        AbstractMetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1,
+                iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2);
+
+        return ImmutableMap.of(Service_CommunicationLink_Edge.class, service_CommunicationLink_InferenceMetaPath, IheTransaction_IheCommunicationLink_Edge.class, iheTransaction_IheCommunicationLink_InferenceMetaPath,
+                IheCommunicationLink_IheActorInstanceCommunicationLink_Edge.class, iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath);
     }
 
     /////////////////////////////////////
