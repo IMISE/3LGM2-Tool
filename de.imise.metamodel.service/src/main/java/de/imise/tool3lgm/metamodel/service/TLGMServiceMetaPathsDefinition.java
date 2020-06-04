@@ -77,12 +77,11 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     @Override
     public final Map<Class<? extends Edge>, SimpleMetaPath> getConditionMetaPaths() {
         ImmutableMap.Builder<Class<? extends Edge>, SimpleMetaPath> builder = ImmutableMap.builder();
-        //IheInvokingInterface_InvokingInterface_Edge
-        builder.put(IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class, smp(Edge.getStartClass(IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class),
-                Edge.getEndClass(IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class), IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, IheActorInstance_IheActorInstanceInterface_Edge.class));
-        //IheProvidingInterface_ProvidingInterface_Edge
-        builder.put(IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class, smp(Edge.getStartClass(IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class),
-                Edge.getEndClass(IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class), IheActor_IheInterface_Edge.class, IheActor_IheActorInstance_Edge.class, IheActorInstance_IheActorInstanceInterface_Edge.class));
+        //hier ist im Moment nichts sinnvolles drin. Es gab mal einen Anwendungsfall als Anwendungssysteme ncoh die Oberklasse
+        //von IheActorInstances waren und sich beide Klassen dieselben Schnittstellen geteilt haben mit derselben Verbindung
+        //dahin. Trotzdem sollten die Schnittstellen von IheActors nicht mit den Schnittstellen von Anwendungssystemen sondern
+        //nur mit den Schnittstellen von IhcActorInstances verbunden werden können. Seit der Trennung von Anwendungssystemen
+        //und IhcActorInstances wird das hier nicht mehr gebraucht.
         return builder.build();
     }
 
