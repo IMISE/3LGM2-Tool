@@ -548,6 +548,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (title == null) {
             return null;
         }
+        int activeLayer = getActiveLayer();
         Szenario szenario = new Szenario(this, title, description, szenHash);
         szenarios.add(szenario);
         activeGraphDocumentsList.add(szenario);
@@ -559,6 +560,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         }
         setChanged(true);
         distribute(SZENARIO_ADDED, null, szenario, pid);
+        setActiveLayer(activeLayer);
         return szenario;
     }
 
