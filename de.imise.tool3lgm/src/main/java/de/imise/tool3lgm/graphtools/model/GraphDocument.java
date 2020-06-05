@@ -132,6 +132,11 @@ public abstract class GraphDocument extends ElementSelectionContext {
     private final List<ElementContainer> analysisResult;
 
     /**
+     * Manages the additional highlight for the current selection.
+     */
+    private final SelectionHighlighter selectionHighlighter;
+
+    /**
      * COMMENTME
      */
     private ElementDialogPanel lastActivePanel = null;
@@ -213,6 +218,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
         hashString = "DOC" + "_" + timeNow;
 
         analysisResult = new ArrayList<>();
+        selectionHighlighter = new SelectionHighlighter(this);
         GraphViewDefinition graphViewDefinition = metaModel.getGraphViewDefinition();
         ElementsLayoutDefinition defaultElementsLayout = graphViewDefinition.getDefaultElementsLayout();
         mapping = new ElementsLayoutDefinition(defaultElementsLayout);
@@ -3056,6 +3062,13 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     public final boolean isAnalysisResult(final ElementContainer ec) {
         return analysisResult.contains(ec);
+    }
+
+    /**
+     * @return the {@link SelectionHighlighter}
+     */
+    public final SelectionHighlighter getSelectionHighlighter() {
+        return selectionHighlighter;
     }
 
     /**
