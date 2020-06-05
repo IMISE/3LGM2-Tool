@@ -341,6 +341,19 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
     }
 
     /**
+     * Mappt von einer Kantenklasse auf den MetaPfad, über den verbindbare Elemente ebenfalls bereits verbunden sein SOLLTEN,
+     * aber nicht müssen.
+     * Dieser Mechanismus ist dafür gedacht, aus allen verbindbaren Elemente diejenigen herauszusuchen, die besser als andere
+     * zum Verbinden geeignet sind. Außerdem könnte man eine Warnung (aber eben keinen Fehler) erzeugen, wenn die Kante zu einem
+     * Element besteht, das nicht über einen hier beschriebenen Pfad verfügt.
+     *
+     * @return
+     */
+    public Map<Class<? extends Edge>, AbstractMetaPath> getSoftConditionMetaPaths() {
+        return ImmutableMap.of();
+    }
+
+    /**
      * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
      * Kantenklasse durchgeführt wird. <br>
      * Jeder der Pfade muss zwingend bei derselben Klasse starten, bei der diese Kante startet.<br>

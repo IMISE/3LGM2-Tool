@@ -211,8 +211,20 @@ public final class MetaModel extends CoreMetaModel {
     private final Map<Class<? extends Edge>, SimpleMetaPath> edgeClassToConditionMetaPath;
 
     /**
-     * Sammlung aller Pfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über diese
-     * Kantenklasse durchgeführt wird. <br>
+     * Mappt von einer Kantenklasse auf den MetaPfad, über den verbindbare Elemente ebenfalls bereits verbunden sein SOLLTEN,
+     * aber nicht müssen.
+     * Dieser Mechanismus ist dafür gedacht, aus allen verbindbaren Elemente diejenigen herauszusuchen, die besser als andere
+     * zum Verbinden geeignet sind. Außerdem könnte man eine Warnung (aber eben keinen Fehler) erzeugen, wenn die Kante zu einem
+     * Element besteht, das nicht über einen hier beschriebenen Pfad verfügt.
+     *
+     * @param edgeClass
+     * @return
+     */
+    private final Map<Class<? extends Edge>, AbstractMetaPath> edgeClassToSoftConditionMetaPath;
+
+    /**
+     * Sammlung aller MetaPfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über
+     * diese Kantenklasse durchgeführt wird. <br>
      * Jeder der Pfade muss zwingend bei derselben Klasse starten, bei der diese Kante startet.<br>
      * Der Pfad hat nur einen Effekt, wenn seine Startklasse zur Startklasse dieser Kante zuweisungskompatibel ist und er mind. eine
      * {@link InstanciationEdge} enthält. Der hiermit verbundene Mechanismus geht durch die Kantenklassen des Pfades. Ist die aktuelle
@@ -378,6 +390,7 @@ public final class MetaModel extends CoreMetaModel {
         metaPathsDefinition = getInstance(metaModelDefinition.getMetaPathsDefinitionClass());
         copyDependencies = getInstance(metaModelDefinition.getCopyDependenciesClass());
         edgeClassToConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getConditionMetaPaths());
+        edgeClassToSoftConditionMetaPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getSoftConditionMetaPaths());
         instanciationEdgeToAdditionalInstanciationMetaPaths = CollectionUtils.ensureImmutable(getInstanciationEdgeToAdditionalInstanciationNonAbstractMetaPaths(metaPathsDefinition.getInstanciationEdgeToAdditionalInstanciationMetaPaths()));
         elementClassToCreatableMetaPaths = CollectionUtils.ensureImmutable(getCreatableMetaPathsMap(metaPathsDefinition.getCreatablePaths()));
         elementClassToNameExtensionPath = CollectionUtils.ensureImmutable(metaPathsDefinition.getElementClassToNameExtensionPath());
@@ -973,6 +986,44 @@ public final class MetaModel extends CoreMetaModel {
      */
     public SimpleMetaPath getConditionMetaPath(final Class<? extends Edge> edgeClass) {
         return edgeClassToConditionMetaPath.get(edgeClass);
+    }
+
+    /**
+     * Liefert für die übergebene Kantenklasse den MetaPfad, über den verbindbare Elemente ebenfalls bereits verbunden sein SOLLTEN,
+     * aber nicht müssen.
+     * Dieser Mechanismus ist dafür gedacht, aus allen verbindbaren Elemente diejenigen herauszusuchen, die besser als andere
+     * zum Verbinden geeignet sind. Außerdem könnte man eine Warnung (aber eben keinen Fehler) erzeugen, wenn die Kante zu einem
+     * Element besteht, das nicht über einen hier beschriebenen Pfad verfügt.
+     *
+     * @param edgeClass
+     * @return
+     */
+    public AbstractMetaPath getSoftConditionMetaPath(final Class<? extends Edge> edgeClass) {
+        return edgeClassToSoftConditionMetaPath.get(edgeClass);
+    }
+
+    /**
+     * Liefert für eine Elementklasse alle MetaPfade zu allen anderen Elementen,
+     * mit denen sich das Ausgangselement am besten verbinden lassen würde.
+     *
+     * @param elenentClass
+     * @return best connectable element types
+     */
+    public Collection<AbstractMetaPath> getBestConnectableMetPath(final Class<? extends ModelElement> elementClass) {
+        List<AbstractMetaPath> bestConnectableMetaPaths = new ArrayList<>();
+        for (Class<? extends Edge> edgeClass : edgeClassToSoftConditionMetaPath.keySet()) {
+            AbstractMetaPath metaPath = edgeClassToSoftConditionMetaPath.get(edgeClass);
+            if (metaPath.isStartClass(elementClass)) {
+                bestConnectableMetaPaths.add(metaPath);
+            }
+            if (metaPath.isEndClass(elementClass)) {
+                metaPath = metaPath.getOtherDirection();
+                if (metaPath != null) {
+                    bestConnectableMetaPaths.add(metaPath);
+                }
+            }
+        }
+        return bestConnectableMetaPaths;
     }
 
     /**

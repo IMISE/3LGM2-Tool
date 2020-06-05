@@ -85,6 +85,14 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         return builder.build();
     }
 
+    @Override
+    public final Map<Class<? extends Edge>, AbstractMetaPath> getSoftConditionMetaPaths() {
+        //IheActorInstanceCommunicationLink_Edge (best connectable ActorInstanceInterfaces should be connected with IheInterfaces which are connected via an IheCommunicationInterface)
+        SimpleMetaPath cmp1 = smp(IheActorInstanceInvokingInterface.class, IheActorInstanceProvidingInterface.class, IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class, IheCommunicationLink_Edge.class,
+                IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class);
+        return ImmutableMap.of(IheActorInstanceCommunicationLink_Edge.class, cmp1);
+    }
+
     /////////////////////////////////////////////////////////////////////////////////////////////
     // Ebenfalls mitzuinstanziierende Pfade bei der Instanziierung über eine InstanciationEdge //
     /////////////////////////////////////////////////////////////////////////////////////////////
