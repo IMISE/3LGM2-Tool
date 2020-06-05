@@ -24,28 +24,37 @@ public class SelectionHighlighter implements LGMChangeListenerSimple {
      * for a selection (but in another way than the selection itself). This can be used
      * to mark/highlight elements which are (better) connectable a selected element.
      */
-    private final HashSet<ElementContainer> highlightForSelection;
+    private static final HashSet<ElementContainer> highlightForSelection = new HashSet<>();
 
     /**
      * @param doc the {@link GraphDocument} this highlighter reacts on selection changed events
      */
     public SelectionHighlighter(final GraphDocument doc) {
-        highlightForSelection = new HashSet<>();
         if (!(doc instanceof Szenario)) {
             doc.addAllTransactionsListener(this); //add only for the main doc because these listeners are added to the GDCollection
         }
     }
 
+    /**
+     *
+     */
+    private void clearHighlight() {
+        for (ElementContainer ec : highlightForSelection) {
+            ec.setHighLight(false);
+        }
+        highlightForSelection.clear();
+    }
+
     @Override
     public void selectionChanged(final GraphDocument doc) {
-        highlightForSelection.clear();
-        if (!doc.isSingleSelection() || doc.isSelectedOnlyBendpoints()) {
-            return;
-        }
+        clearHighlight();
         //only in the selected doc the highlight must be visible ->
         //so don't run the code in all GraphDocuments
         GDCollection gdcoll = doc.getCollection();
         if (gdcoll.getSelectedDoc() != doc) {
+            return;
+        }
+        if (!doc.isSingleSelection() || doc.isSelectedOnlyBendpoints()) {
             return;
         }
         List<ModelElement> selectedElements = doc.getSelectedElements();
@@ -55,7 +64,17 @@ public class SelectionHighlighter implements LGMChangeListenerSimple {
         Collection<AbstractMetaPath> bestConnectableMetPath = metaModel.getBestConnectableMetPath(meClass);
         for (AbstractMetaPath metaPath : bestConnectableMetPath) {
             List<ElementContainer> connectedContainer = PathFunctions.getConnectedContainer(me, doc, metaPath);
-            highlightForSelection.addAll(connectedContainer);
+            addHighlight(connectedContainer);
+        }
+    }
+
+    /**
+     * @param containerToHighlight
+     */
+    private void addHighlight(final List<ElementContainer> containerToHighlight) {
+        highlightForSelection.addAll(containerToHighlight);
+        for (ElementContainer ec : containerToHighlight) {
+            ec.setHighLight(true);
         }
     }
 
