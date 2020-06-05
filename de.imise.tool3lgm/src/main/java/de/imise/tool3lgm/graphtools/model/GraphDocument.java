@@ -111,8 +111,14 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  */
 public abstract class GraphDocument extends ElementSelectionContext {
 
+    /**
+     *
+     */
     public static final char GENERATED_NAME_PREFIX = 27; //ESCAPE
 
+    /**
+     *
+     */
     public final OptionsSupport optionsSupport = new OptionsSupport();
 
     /**
@@ -121,7 +127,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     protected LayerContainer[] layer;
 
     /**
-     * COMMENTME
+     * Contains all {@link ElementContainer} which are a result of a analysis.
      */
     private final List<ElementContainer> analysisResult;
 

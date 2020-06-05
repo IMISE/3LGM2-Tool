@@ -997,6 +997,7 @@ public final class MetaModel extends CoreMetaModel {
      *
      * @param edgeClass
      * @return
+     * @see #getBestConnectableMetPath(Class)
      */
     public AbstractMetaPath getSoftConditionMetaPath(final Class<? extends Edge> edgeClass) {
         return edgeClassToSoftConditionMetaPath.get(edgeClass);
