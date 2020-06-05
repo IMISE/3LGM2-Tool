@@ -3086,7 +3086,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
         }
         deselectAll(true);
         addToSelection(mc, pid);
-        distributeEvent(SELECTION_CHANGED, mc, pid);
     }
 
     /**
