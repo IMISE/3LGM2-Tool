@@ -29,6 +29,14 @@ public class ConsistencyCheckSectionMetaPath extends SectionMetaPath {
     private SimpleMetaPath errorCorrectingCreatableMetaPath;
 
     /**
+     * Special {@link SectionMetaPath} for missing path consistency checks. The path always consists
+     * of only two sub MetaPaths. The first is an {@link AbstractMetaPath} which leads to all elements
+     * which can be connected. The second sub MetaPath must be a creatable {@link SimpleMetaPath} which
+     * leads to all elements, which are really connected. If there is an consistency issue because not
+     * enough elements are connected over the second metapath which are marked as needed through the
+     * first metapath, so the solution is to create paths to the needed element over the creatable
+     * second MetaPath.
+     * 
      * @param baseResKeyOrName
      * @param firstMetaPathToConnectableElements
      * @param secondMetaPathToConnectedElements

@@ -175,9 +175,26 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         // dieses Löschen muss man nicht rückgängig machen können -> BulkMode einschalten
         boolean oldBulkMode = checker.gdcoll.setBulkMode(true);
         for (AbstractConsistencyError err : checker.getAllInconsistencies()) {
-            if (!checker.isSolutionExecuteable(err)) {
-                ModelElement errorElement = err.getModelElement();
-                checker.gdcoll.deleteElement(errorElement, TransactionManager.STANDARD_PID);
+            //AXS: 08.06.2020
+            //MissingPathErrors sollte man wahrscheinlich nicht automatisch durch Löschen
+            //des fehlerhaften Elementes 'beheben', da das an allem möglichen liegen kann,
+            //dass der Pfad fehlt und hartes Löschen einfach nicht richtig ist. Wahrscheinlich
+            //sollte man das in Warnings umwandeln oder generell, wie jetzt unten erfolgt, die
+            //MissingPathsErrors nicht als unfixable anzusehen.
+            //Die ausführliche Erläuterung von potenziellen Problemen bei den MissingPathErrors,
+            //steht in einem Kommentar von
+            //TLGMServiceMetaPathsDefinition#getConsistencyConditionMissingConnectedElementsMetaPaths().
+            //denn wenn sich das Element, für das der Fehler angezeigt wird und das Element, dessen
+            //Eigenschaftsdialog zur Fehlerbehebung geöffnet wird, voneinander unterscheiden, aber
+            //das Element zur Fehlerbehebung gar nicht existiert, dann gilt der Fehler als unfixable
+            //und das fehlerhafte Element wird gelöscht. Das ist aber nur in den seltensten Fällen
+            //erwünscht.
+            Class<? extends AbstractConsistencyError> errorClass = err.getClass();
+            if (!MissingPathError.class.isAssignableFrom(errorClass)) {
+                if (!checker.isSolutionExecuteable(err)) {
+                    ModelElement errorElement = err.getModelElement();
+                    checker.gdcoll.deleteElement(errorElement, TransactionManager.STANDARD_PID);
+                }
             }
         }
         // für alle explizit angegebenen nicht lösbaren Fehler -> lösche die betreffenden Elemente

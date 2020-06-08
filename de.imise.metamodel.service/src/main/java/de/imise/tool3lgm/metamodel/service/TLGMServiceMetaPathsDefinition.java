@@ -263,20 +263,36 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
 
     @Override
     public Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> getConsistencyConditionMissingConnectedElementsMetaPaths() {
+        //AXS am 08.09.20220:
+        //Dieser erste MetaPath beschreibt den Fehler aus Sicht der IheActorInstance. Fehlt für sie der muss-gruppiert-werden-mit-Partner, dann kommt der
+        //Fehler. Problem: der Fehler sagt aus, dass dem Anwendungssystem, dieser IheActorInstance ein weiteres Anwendungssystem zugeordnet werden muss.
+        //Das kommt auch, wenn die IheActorInstance gar keinem Anwendungssystem zugeordnet ist. Dadurch aber gibt es das sogenannte Element zur Fehlerbehebung
+        //nicht, dessen Eigenschaftsdialog man öffnen könnte, um den Fehler zu beheben (denn das geht nur durch Öffnen des Dialoes für das zugehörige
+        //Anwendungssystem, was ja nicht da ist). Dadurch gilt dieser Fehler automatisch als nicht behebbar. Dadurch wird die IheActorInsance beim Einlesen
+        //eines solchen fehlerhaften Modells gelöscht (in #clearUnfixableErrors()). Das soll aber nicht geschehen!
+        //Es gibt mehrere Möglichkeiten, das nicht erwünschte Löschen zu umgehen. 1.) den Fehler nicht aus Sicht der IheActorInsance sondern für das
+        //Anwenundungssystem generieren. Dann kommt der Fehler nur, wenn auch tatsächlich ein Anwendungssystem vorhanden ist. 2.) Generell festlegen, dass
+        //MissingPathErrors niemals als unfixable gelten und somit die betreffenden Elemente nicht gelöscht werden. Die normalen MIN-MAX-Errors sind davon
+        //nicht betroffen, da sie genau für eine einzelne Kante gelten. 3.) nicht wirklich praktikabel aber möglich: Man definiert noch eine Bedingung, die
+        //zutreffen muss, damit der Fehler anwendbar ist. In dem Fall hier, müsste man den ersten Pfadschritt irgendwie als Bedingung angeben, dass es ihn
+        //geben muss, damit der zweite Pfadschritt als fehlerhaft angesehen werden kann.
+        //Fazit: Ich habe mich dazu entschieden. den Fehler nur aus Sicht des Anwendungssystems anzuzeigen (also 1.) umzusetzen). Das ist der untere Pfad.
         SimpleMetaPath consistencyConditionSubMetaPath1 = smp(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
         SimpleMetaPath consistencyConditionSubMetaPath2 = smp(IheActorInstance.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         ConsistencyCheckSectionMetaPath consistencyConditionMetaPathActorInstanceMustBeGroupedWith = new ConsistencyCheckSectionMetaPath("PATH_IheActorInstance_mustBeGroupedWith_IheActor", consistencyConditionSubMetaPath1,
                 consistencyConditionSubMetaPath2);
 
-        //der folgende MetePafd muss als UND-interpretierter SectionMetaPath implementiert werden, da die Fehler bei dieser Impelementierung verschwinden, sobald ein Element zugeweisen wurde (ODER-interpretierter SectionMetaPath)
+        //Der folgende MetaPfad beschreibt die nicht erfüllte must-be-grouped-with-Beziehung ausgehend vom Anwendungssystem. Fehlt eine must-be-grouped-with-Beziehung,
+        //dann kommt der Fehler, dass diesem Anwendungssystem eine weitere IheActorInsatnce zugeordnet werden muss. Hat irgendeine zu gruppierende IheActorInstance gar
+        //kein Anwendungssystem, dann kommt kein Fehler.
         SimpleMetaPath consistencyConditionSubMetaPath3 = smp(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class, IheActor_IheActor_MustBeGroupedWith_Edge.class);
         SimpleMetaPath consistencyConditionSubMetaPath4 = smp(ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
         ConsistencyCheckSectionMetaPath consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances = new ConsistencyCheckSectionMetaPath("PATH_ApplicationSystem_needsGroupingOf_IheActorInstances", consistencyConditionSubMetaPath3,
                 consistencyConditionSubMetaPath4);
 
         //the identifier for the corresponding ErrorSolution is the IheActor_IheActor_MustBeGroupedWith_Edge.class
-        return ImmutableMap.of(consistencyConditionMetaPathActorInstanceMustBeGroupedWith, IheActor_IheActor_MustBeGroupedWith_Edge.class);//, consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances);
-
+        return ImmutableMap.of(/* consistencyConditionMetaPathActorInstanceMustBeGroupedWith, IheActor_IheActor_MustBeGroupedWith_Edge.class, */consistencyConditionApplicationSystemNeedsGroupingOfIheActorInstances,
+                IheActor_IheActor_MustBeGroupedWith_Edge.class);
     }
 
 }
