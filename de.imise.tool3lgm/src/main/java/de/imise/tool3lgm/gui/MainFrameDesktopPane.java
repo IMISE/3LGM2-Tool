@@ -469,6 +469,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         //Teilmodell-Tabs immer diese Funktion hier aufgerufen.
         //Es kann auch null sein, wenn das letzte Modell geschlossen wurde
         if (doc == null) {
+            checkConsistencyTableVisibility();
             return;
         }
 
@@ -559,6 +560,14 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         for (Szenario szen : gdcoll.getSzenarios()) {
             closeFrames(szen);
         }
+        //The function closeAllFramesAndTabs(GDCollection) is
+        //only called if a model is closed. At this point
+        //Static.getselectedDoc() already returns the new
+        //selected GraphDocument. If this is null because
+        //the last open model (=GDCollection) was closed, so
+        //the next call removes the consistency table or
+        //updates it to the next open model if not null.
+        checkConsistencyTableVisibility();
     }
 
     ////////////////////////////////////
@@ -602,7 +611,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             GraphDocument doc = activeFrame.getGraphDocument();
             doc.addClosedTransactionsListener(viewPaneToolbarManager);
             viewPaneToolbarManager.updateToolBar();
-            //wenn es ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
+            //wenn ein Grafikfenster aktiviert wurde, soll es intern auch in den Vordergrund geholt werden. Bei
             //allen anderen Fenstern (Matrix-Sicht-Fenster), soll dieses Fenster im Vordergrund bleiben.
             setCurrentDoc(doc, false);
             workarea.revalidate();
