@@ -13,7 +13,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 public class PathTreeDefinition extends MetaModelSpecificAdapter implements Iterable<PathTreeBranchDefinition> {
 
     /**
-     *
+     * Definition of the visible branches in the tree
      */
     private final List<PathTreeBranchDefinition> branches = new ArrayList<>();
 

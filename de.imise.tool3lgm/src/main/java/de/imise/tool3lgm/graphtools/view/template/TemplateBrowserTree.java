@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.template;
 
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Objects;
@@ -16,9 +17,11 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
+import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
+import de.imise.util.ToolTipProvider;
 
 /**
  * @author AXS (05.09.2019)
@@ -36,6 +39,12 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
     private TemplateLibrariesManager templateLibrariesManager;
 
     /**
+     * Object that provides the tooltips for the treenodes. If <code>null</code>
+     * no tooltips are shown.
+     */
+    private final ToolTipProvider toolTipProvider;
+
+    /**
      *
      */
     public TemplateBrowserTree() {
@@ -45,6 +54,7 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         addAncestorListener(this);
         pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"), true);
         setModel(pathTreeModel);
+        toolTipProvider = new ElementToolTipProvider(this);
     }
 
     @Override
@@ -83,6 +93,11 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         setSelectionListenerActive(true);
         setRootVisible(false);
         restoreExpansionState(templateTreeDefinition);
+    }
+
+    @Override
+    public String getToolTipText(final MouseEvent event) {
+        return toolTipProvider.getToolTip(event);
     }
 
     //    /**
