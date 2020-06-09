@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_FONT;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_TEXT_ALIGNMENT_HTML;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_TEXT_POSITION_HORIZONTAL;
@@ -26,6 +25,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -34,7 +34,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionHo
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextPositionVertical;
 import de.imise.tool3lgm.graphtools.view.graph.SpecialInfoLabel;
 
-public abstract class ElementContainer extends JLabel implements Cloneable {
+public abstract class ElementContainer extends JLabel implements Cloneable, GraphDocumentOwner {
 
     /**
      * COMMENTME
@@ -250,6 +250,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     /**
      * @return
      */
+    @Override
     public GraphDocument getGraphDocument() {
         return doc;
     }
@@ -257,6 +258,7 @@ public abstract class ElementContainer extends JLabel implements Cloneable {
     /**
      * @return
      */
+    @Override
     public GDCollection getCollection() {
         return doc.getCollection();
     }
