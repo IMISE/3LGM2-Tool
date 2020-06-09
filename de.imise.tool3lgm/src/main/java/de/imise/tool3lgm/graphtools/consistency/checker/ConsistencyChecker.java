@@ -5,10 +5,13 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
+
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
@@ -158,9 +161,9 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     /**
      * Löscht alle Elemente komplett, die fehlerhaft sind, deren Fehler man aber nicht behandeln
      * kann. Darunter fallen alle Fehler, für die eine Error-Solution mit einem gültigen
-     * <code>MetaPath</code> zu einem verbundenen Element hinterlegt ist hinterlegt ist, das aber
-     * nicht erreichtbar ist, weil auch die Verbindung zu diesem Element fehlt. Somit kann der
-     * Fehler nirgends behoben werden und man kann das Element löschen. In Metamodell 2.7 heißt das:
+     * <code>MetaPath</code> zu einem verbundenen Element hinterlegt ist, das aber nicht erreichtbar
+     * ist, weil auch die Verbindung zu diesem Element fehlt. Somit kann der Fehler nirgends behoben
+     * werden und man kann das Element löschen. In Metamodell 2.7 heißt das:
      * Anwendungsbaustein-Konfigurationen ohne einen Anwendungsbautein könnte man im Dialog der
      * Aufgaben an der mit der Anwendungsbaustein-Konfigurationen verbundenen AufOrgKombination
      * beheben. Wenn aber sowohl die Verbindung zur AufOrgKombination oder deren Verbindung zu einer
@@ -169,49 +172,29 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      * Datenverarbeitungsbausteine. Dies kann man im Dialog der Anwendungsbausteine der
      * Konfiguration beheben. Fehlt aber auch diese Verbindung, dann kann man die Konfiguration
      * löschen.
+     * ACHTUNG: MissingPathErrors werden hier doch nicht nach der obigen Beschreibung behandelt, d.h.
+     * sie werden igoriert, da nicht klar ist, warum die über einen längeren Pfad nicht vorhandenen
+     * Elemente fehlen (also an welcher Stelle der Pfad unterbrochen ist und an welchen Stellen bzw.
+     * in welchen Eigenschaftsdialog welcher Elemente im Pfad man den den Fehler beheben könnte. Die
+     * Aussage der MissingPathErrors bezieht sich immer nur auf die letzte Kante im Pfad. Wenn aber
+     * davor schon etwas nicht verbunden ist, kommt der Fehler auch und es gibt das Element überhaupt
+     * nicht, dessen Eigenschaftsdialog zur Fehlerbehebung man öffnen sollte. Deswegen darf das als
+     * fehlerhaft geltende Element aber trotzdem nicht einfach gelöscht werden.
      */
     public static void clearUnfixableErrors(final GDCollection gdcoll) {
         ConsistencyChecker checker = new ConsistencyChecker(gdcoll, false);
         // dieses Löschen muss man nicht rückgängig machen können -> BulkMode einschalten
         boolean oldBulkMode = checker.gdcoll.setBulkMode(true);
-        for (AbstractConsistencyError err : checker.getAllInconsistencies()) {
-            //AXS: 08.06.2020
-            //MissingPathErrors sollte man wahrscheinlich nicht automatisch durch Löschen
-            //des fehlerhaften Elementes 'beheben', da das an allem möglichen liegen kann,
-            //dass der Pfad fehlt und hartes Löschen einfach nicht richtig ist. Wahrscheinlich
-            //sollte man das in Warnings umwandeln oder generell, wie jetzt unten erfolgt, die
-            //MissingPathsErrors nicht als unfixable anzusehen.
-            //Die ausführliche Erläuterung von potenziellen Problemen bei den MissingPathErrors,
-            //steht in einem Kommentar von
-            //TLGMServiceMetaPathsDefinition#getConsistencyConditionMissingConnectedElementsMetaPaths().
-            //denn wenn sich das Element, für das der Fehler angezeigt wird und das Element, dessen
-            //Eigenschaftsdialog zur Fehlerbehebung geöffnet wird, voneinander unterscheiden, aber
-            //das Element zur Fehlerbehebung gar nicht existiert, dann gilt der Fehler als unfixable
-            //und das fehlerhafte Element wird gelöscht. Das ist aber nur in den seltensten Fällen
-            //erwünscht.
-            Class<? extends AbstractConsistencyError> errorClass = err.getClass();
-            if (!MissingPathError.class.isAssignableFrom(errorClass)) {
+        //ignore MissingPathErrors resp. check only AbstractCardinalityErrors and AbstractIDErrors
+        List<Class<? extends AbstractConsistencyError>> errorTypes = ImmutableList.of(AbstractCardinalityError.class, AbstractIDError.class);
+        for (Class<? extends AbstractConsistencyError> errorType : errorTypes) {
+            for (AbstractConsistencyError err : checker.getInconsistencies(errorType)) {
                 if (!checker.isSolutionExecuteable(err)) {
                     ModelElement errorElement = err.getModelElement();
                     checker.gdcoll.deleteElement(errorElement, TransactionManager.STANDARD_PID);
                 }
             }
         }
-        // für alle explizit angegebenen nicht lösbaren Fehler -> lösche die betreffenden Elemente
-        // for (Pair<Class<? extends ModelElement>, Class<? extends Edge>> pair :
-        // checker.solutionsLibrary.getMinCardinalityNoSolutuinErrors()){
-        // ArrayList<ModelElement> elements =
-        // gdcoll.getGraphDocument().getModelItems(pair.getFirstItem(), true);
-        // for (ModelElement me : elements){
-        // //System.err.println(me.getName() + "\t" + me.getHashString() + "\t" +
-        // getMinCardinality(me.getClass(), pair.getSecondItem()) + "\t" +
-        // me.countConnections(pair.getSecondItem()));
-        // if (me.countConnections(pair.getSecondItem()) < getMinCardinality(me.getClass(),
-        // pair.getSecondItem()))
-        // gdcoll.deleteElement(me, TransactionManager.STANDARD_PID);
-        // }
-        // }
-
         checker.gdcoll.setBulkMode(oldBulkMode);
     }
 
@@ -294,7 +277,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     /**
      * @return
      */
-    public Collection<AbstractConsistencyError> getMissingPathInconsistencies() {
+    public Collection<AbstractConsistencyError> _getMissingPathInconsistencies() {
         return getInconsistencies(MissingPathError.class);
     }
 
