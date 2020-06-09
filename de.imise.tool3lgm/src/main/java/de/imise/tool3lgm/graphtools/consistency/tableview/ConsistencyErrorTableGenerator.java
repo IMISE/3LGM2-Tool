@@ -12,7 +12,7 @@ import javax.swing.table.TableColumn;
 
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
-import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableModel.COL_NAMES;
+import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableModel.ColumnNames;
 import de.imise.util.NamedObjectContainer;
 
 /**
@@ -53,19 +53,19 @@ public class ConsistencyErrorTableGenerator {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
         //Column number (0)
-        COL_NAMES number = ConsistencyErrorTableModel.COL_NAMES.number;
+        ColumnNames number = ConsistencyErrorTableModel.ColumnNames.NUMBER;
         String culumnNumberDisplayableName = number.getDisplayableName();
         TableColumn columnNumber = table.getColumn(culumnNumberDisplayableName);
         columnNumber.setMaxWidth(40);
 
         //Column error type (1)
-        COL_NAMES errorType = ConsistencyErrorTableModel.COL_NAMES.errorType;
+        ColumnNames errorType = ConsistencyErrorTableModel.ColumnNames.ERROR_TYPE;
         String columnErrorTypeDisplayableName = errorType.getDisplayableName();
         TableColumn columnErrorType = table.getColumn(columnErrorTypeDisplayableName);
         columnErrorType.setMaxWidth(40);
 
         //Column description (5)
-        COL_NAMES description = ConsistencyErrorTableModel.COL_NAMES.description;
+        ColumnNames description = ConsistencyErrorTableModel.ColumnNames.DESCRIPTION;
         String columnDescriptionDisplayableName = description.getDisplayableName();
         TableColumn columnDescription = table.getColumn(columnDescriptionDisplayableName);
         columnDescription.setCellRenderer(new DescriptionCellRenderer());

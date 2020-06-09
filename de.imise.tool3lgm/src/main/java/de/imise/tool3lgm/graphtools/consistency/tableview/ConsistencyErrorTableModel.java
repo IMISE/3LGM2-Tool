@@ -25,16 +25,16 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
     /**
      * @author astruebi
      */
-    public static enum COL_NAMES {
-        number,
-        errorType,
-        elementType,
-        element,
-        connectionType,
-        description;
+    public static enum ColumnNames {
+        NUMBER,
+        ERROR_TYPE,
+        ELEMENT_TYPE,
+        ELEMENT,
+        CONNECTION_TYPE,
+        DESCRIPTION;
 
         public String getDisplayableName() {
-            return getResString("COL_NAMES_" + toString());
+            return getResString("ColumnNames_" + name());
         }
     }
 
@@ -43,9 +43,9 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
      */
     public ConsistencyErrorTableModel() {
         super();
-        COL_NAMES[] colIdentifiers = COL_NAMES.values();
+        ColumnNames[] colIdentifiers = ColumnNames.values();
         Vector<String> colNames = new Vector<>(colIdentifiers.length);
-        for (COL_NAMES cn : colIdentifiers) {
+        for (ColumnNames cn : colIdentifiers) {
             colNames.add(cn.getDisplayableName());
         }
         setColumnIdentifiers(colNames);
@@ -65,12 +65,12 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         for (AbstractConsistencyError error : dataVector) {
 
             // Zeilennummer
-            setValueAt(i + 1, i, COL_NAMES.number);
+            setValueAt(i + 1, i, ColumnNames.NUMBER);
 
             // Fehlertyp
             String errorTypeString = error.getTypeString();
             NamedObjectContainer<AbstractConsistencyError> type = new NamedObjectContainer<>(error, errorTypeString);
-            setValueAt(type, i, COL_NAMES.errorType);
+            setValueAt(type, i, ColumnNames.ERROR_TYPE);
 
             ModelElement me = error.getModelElement();
 
@@ -79,20 +79,20 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
             ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
             Class<? extends ModelElement> elementClass = me.getClass();
             String displayableClassName = elementsNameBuilder.getDisplayableName(elementClass);
-            setValueAt(displayableClassName, i, COL_NAMES.elementType);
+            setValueAt(displayableClassName, i, ColumnNames.ELEMENT_TYPE);
 
             // Element
-            setValueAt(me, i, COL_NAMES.element);
+            setValueAt(me, i, ColumnNames.ELEMENT);
 
             // Verbindungsart / Feld
             String errorFieldString = error.getErrorFieldString();
-            setValueAt(errorFieldString, i, COL_NAMES.connectionType);
+            setValueAt(errorFieldString, i, ColumnNames.CONNECTION_TYPE);
 
             // Beschreibung
             String errorDescription = error.getMessage();
             String errorDescriptionToolTip = error.getLongMessage();
             NamedObjectContainer<String> errorDescriptionContainer = new NamedObjectContainer<>(errorDescriptionToolTip, errorDescription);
-            setValueAt(errorDescriptionContainer, i, COL_NAMES.description);
+            setValueAt(errorDescriptionContainer, i, ColumnNames.DESCRIPTION);
 
             i++;
         }
@@ -103,7 +103,7 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
      * @param row
      * @param columnIdentifier
      */
-    private void setValueAt(final Object aValue, final int row, final COL_NAMES columnIdentifier) {
+    private void setValueAt(final Object aValue, final int row, final ColumnNames columnIdentifier) {
         int column = columnIdentifier.ordinal();
         setValueAt(aValue, row, column);
     }

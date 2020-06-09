@@ -74,7 +74,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         errors = new ArrayList<>();
         selectedErrorElements.clear();
         for (int r : rows) {
-            int errorColumnIndex = ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal();
+            int errorColumnIndex = ConsistencyErrorTableModel.ColumnNames.ERROR_TYPE.ordinal();
             Object errorValue = table.getValueAt(r, errorColumnIndex);
             NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) errorValue;
             AbstractConsistencyError error = errContainer.getObject();
@@ -99,7 +99,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
             showPopup(e);
         } else if (e.getClickCount() > 1) {
             int clickedRow = table.rowAtPoint(e.getPoint());
-            int column = ConsistencyErrorTableModel.COL_NAMES.errorType.ordinal();
+            int column = ConsistencyErrorTableModel.ColumnNames.ERROR_TYPE.ordinal();
             Object value = table.getValueAt(clickedRow, column);
             NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) value;
             AbstractConsistencyError error = errContainer.getObject();
