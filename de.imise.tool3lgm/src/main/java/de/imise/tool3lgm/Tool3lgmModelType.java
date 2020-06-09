@@ -82,4 +82,9 @@ public class Tool3lgmModelType extends MetaModelSpecificAdapter {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(modelCategory);
+    }
+
 }
