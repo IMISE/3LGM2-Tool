@@ -5,14 +5,15 @@ package de.imise.tool3lgm.graphtools.consistency.tableview;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
+import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.NamedObjectContainer;
@@ -52,17 +53,25 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
     }
 
     /**
-     * @param dataVector
+     * @param checker
      */
-    public void setErrors(Collection<AbstractConsistencyError> dataVector) {
-        if (dataVector == null) {
-            dataVector = new ArrayList<>(0);
-        }
-        this.dataVector.clear();
-        setRowCount(dataVector.size());
+    public void setErrors(final ConsistencyChecker checker) {
+        Collection<AbstractConsistencyError> errors = checker.getAllInconsistencies();
+        dataVector.clear();
+        setRowCount(errors.size());
 
         int i = 0;
-        for (AbstractConsistencyError error : dataVector) {
+        for (AbstractConsistencyError error : errors) {
+
+            //ignore unfixable missingPath errors. They can be only fixed
+            //with other fixable missingPathErrors (if defined)
+            if (error instanceof MissingPathError) {
+                if (!checker.isSolutionExecuteable(error)) {
+                    int rowCount = getRowCount();
+                    setRowCount(rowCount - 1);
+                    continue;
+                }
+            }
 
             // Zeilennummer
             setValueAt(i + 1, i, ColumnNames.NUMBER);

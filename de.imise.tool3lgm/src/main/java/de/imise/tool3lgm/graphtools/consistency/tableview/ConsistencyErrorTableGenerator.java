@@ -1,7 +1,6 @@
 package de.imise.tool3lgm.graphtools.consistency.tableview;
 
 import java.awt.Component;
-import java.util.Collection;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -11,7 +10,6 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
-import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableModel.ColumnNames;
 import de.imise.util.NamedObjectContainer;
 
@@ -92,9 +90,8 @@ public class ConsistencyErrorTableGenerator {
      *
      */
     public void updateTable() {
-        Collection<AbstractConsistencyError> errors = checker.getAllInconsistencies();
         ConsistencyErrorTableModel model = (ConsistencyErrorTableModel) table.getModel();
-        model.setErrors(errors);
+        model.setErrors(checker);
         table.clearSelection();
         table.revalidate();
         table.repaint();
