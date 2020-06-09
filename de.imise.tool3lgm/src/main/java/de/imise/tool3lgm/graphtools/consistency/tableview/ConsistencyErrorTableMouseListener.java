@@ -123,16 +123,27 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         // });
         // menu.add(item);
 
-        JMenuItem item = new JMenuItem(new AbstractAction(getResString("error_element_solution_dialog")) {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                for (AbstractConsistencyError err : errors) {
-                    checker.execSolution(err);
-                }
+        //at least one solution must be available to show the "open element
+        //dialog to remove the error".
+        boolean solutionAvailable = false;
+        for (AbstractConsistencyError error : errors) {
+            if (checker.isSolutionExecuteable(error)) {
+                solutionAvailable = true;
+                break;
             }
-        });
-        menu.add(item);
-        item = new JMenuItem(new AbstractAction(getResString("error_element_delete")) {
+        }
+        if (solutionAvailable) {
+            JMenuItem item = new JMenuItem(new AbstractAction(getResString("error_element_solution_dialog")) {
+                @Override
+                public void actionPerformed(final ActionEvent e) {
+                    for (AbstractConsistencyError err : errors) {
+                        checker.execSolution(err);
+                    }
+                }
+            });
+            menu.add(item);
+        }
+        JMenuItem item = new JMenuItem(new AbstractAction(getResString("error_element_delete")) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 GDCollection gdcoll = checker.getCollection();
@@ -140,7 +151,14 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
             }
         });
         menu.add(item);
-        addConnectMenuItemsForMissingPathErrors(menu);
+        //das jetzt folgende ist eventuell nur bedingt allgemein gültig. Da es aber bei dem bis
+        //jetzt einzigen MetaPfad immer nur dann angeboten werden sollte, wenn man auch den
+        //Eigenschaftsdialog zur Fehlerbehebung öffnen können sollte, ist das hier erst einmal
+        //ausreichend und müsste, falls MissingPathErrors hinzukommen, bei denen man den Pfad
+        //unabhängig vom Eigenschaftsdialog-Öffnen-Könnnen anlegen können soll, geändert werden.
+        if (solutionAvailable) {
+            addConnectMenuItemsForMissingPathErrors(menu);
+        }
         return menu;
     }
 
