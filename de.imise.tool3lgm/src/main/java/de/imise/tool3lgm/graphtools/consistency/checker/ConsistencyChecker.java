@@ -174,8 +174,8 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      * löschen.
      * ACHTUNG: MissingPathErrors werden hier doch nicht nach der obigen Beschreibung behandelt, d.h.
      * sie werden igoriert, da nicht klar ist, warum die über einen längeren Pfad nicht vorhandenen
-     * Elemente fehlen (also an welcher Stelle der Pfad unterbrochen ist und an welchen Stellen bzw.
-     * in welchen Eigenschaftsdialog welcher Elemente im Pfad man den den Fehler beheben könnte. Die
+     * Elemente fehlen, also an welcher Stelle der Pfad unterbrochen ist und an welchen Stellen bzw.
+     * in welchen Eigenschaftsdialogen welcher Elemente im Pfad man den den Fehler beheben könnte. Die
      * Aussage der MissingPathErrors bezieht sich immer nur auf die letzte Kante im Pfad. Wenn aber
      * davor schon etwas nicht verbunden ist, kommt der Fehler auch und es gibt das Element überhaupt
      * nicht, dessen Eigenschaftsdialog zur Fehlerbehebung man öffnen sollte. Deswegen darf das als
