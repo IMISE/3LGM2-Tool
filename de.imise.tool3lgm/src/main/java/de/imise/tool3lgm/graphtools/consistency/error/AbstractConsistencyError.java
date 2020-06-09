@@ -49,6 +49,11 @@ public abstract class AbstractConsistencyError extends Error {
      */
     protected GDCollection gdcoll;
 
+    /**
+     * @param me
+     * @param errorField
+     * @param gdcoll
+     */
     public AbstractConsistencyError(final ModelElement me, final Object errorField, final GDCollection gdcoll) {
         this.me = me;
         this.errorField = errorField;

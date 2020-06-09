@@ -277,7 +277,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     /**
      * @return
      */
-    public Collection<AbstractConsistencyError> _getMissingPathInconsistencies() {
+    public Collection<AbstractConsistencyError> getMissingPathInconsistencies() {
         return getInconsistencies(MissingPathError.class);
     }
 
