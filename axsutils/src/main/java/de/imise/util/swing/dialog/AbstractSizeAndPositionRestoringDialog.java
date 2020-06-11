@@ -7,9 +7,13 @@ import java.awt.GraphicsConfiguration;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Window;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.JDialog;
@@ -24,7 +28,9 @@ public abstract class AbstractSizeAndPositionRestoringDialog extends JDialog {
 
     private static final Map<Class<? extends AbstractSizeAndPositionRestoringDialog>, Rectangle> DIALOG_CLASS_TO_SIZE_AND_POSITION_MAP = new HashMap<>();
 
-    boolean initialized = false;
+    private static final List<AbstractSizeAndPositionRestoringDialog> openDialogs = new ArrayList<>();
+
+    private boolean initialized = false;
 
     public AbstractSizeAndPositionRestoringDialog() {
         init();
@@ -106,40 +112,69 @@ public abstract class AbstractSizeAndPositionRestoringDialog extends JDialog {
     }
 
     private void init() {
-        if (!initialized) {
+        //add ComponentListener after restoring the old or default position
+        addComponentListener(new ComponentAdapter() {
 
-            addComponentListener(new ComponentListener() {
-                @Override
-                public void componentHidden(final ComponentEvent e) {
-                }
-
-                @Override
-                public void componentMoved(final ComponentEvent e) {
+            @Override
+            public void componentMoved(final ComponentEvent e) {
+                if (initialized) {
                     storeSizeAndPosition();
                 }
+            }
 
-                @Override
-                public void componentResized(final ComponentEvent e) {
+            @Override
+            public void componentResized(final ComponentEvent e) {
+                if (initialized) {
                     storeSizeAndPosition();
                 }
+            }
 
-                @Override
-                public void componentShown(final ComponentEvent e) {
-                }
-            });
+        });
 
-            restoreSizeAndPosition();
-            initialized = true;
-        }
+        addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowOpened(final WindowEvent e) {
+                //unchecked cast is ok here
+                AbstractSizeAndPositionRestoringDialog dialog = (AbstractSizeAndPositionRestoringDialog) e.getSource();
+                openDialogs.add(dialog);
+
+            }
+            @Override
+            public void windowClosed(final WindowEvent e) {
+                //unchecked cas is ok here
+                AbstractSizeAndPositionRestoringDialog dialog = (AbstractSizeAndPositionRestoringDialog) e.getSource();
+                openDialogs.remove(dialog);
+            }
+        });
     }
 
     /**
-     * Liefert die Default-Größe des Dialogs
-     *
-     * @return
+     * @return the default size of this dialog
      */
-    public abstract Dimension getDefaultSize();
+    public Dimension getDefaultSize() {
+        return null;
+    }
 
+    /**
+     * @return the default position of this dialog.
+     *         A <code>null</code> value sets the dialog in
+     *         the center of its owner.
+     */
+    public Point getDefaultPosition() {
+        return null;
+    }
+
+    /**
+     * @return the offset of x and y
+     */
+    public int getNextDialogPositionOffset() {
+        return 0;
+    }
+
+    /**
+     *
+     */
     private void storeSizeAndPosition() {
         Point location = getLocation();
         Dimension size = getSize();
@@ -147,18 +182,45 @@ public abstract class AbstractSizeAndPositionRestoringDialog extends JDialog {
         DIALOG_CLASS_TO_SIZE_AND_POSITION_MAP.put(getClass(), sizeAndPosition);
     }
 
-    private void restoreSizeAndPosition() {
+    /**
+     *
+     */
+    protected void restoreSizeAndPosition() {
         Rectangle sizeAndPosition = DIALOG_CLASS_TO_SIZE_AND_POSITION_MAP.get(getClass());
         if (sizeAndPosition == null) {
             Dimension defaultSize = getDefaultSize();
             if (defaultSize != null) {
                 setSize(defaultSize);
+            } else {
+                pack();
             }
-            setLocationByPlatform(true);
+            Point defaultPosition = getDefaultPosition();
+            if (defaultPosition != null) {
+                Window owner = getOwner();
+                Point ownerLocation = owner == null ? new Point(0, 0) : owner.getLocation();
+                setLocation(ownerLocation.x + defaultPosition.x, ownerLocation.y + defaultPosition.y);
+            } else {
+                setLocationRelativeTo(getOwner());
+            }
         } else {
             setSize(sizeAndPosition.width, sizeAndPosition.height);
             setLocation(sizeAndPosition.x, sizeAndPosition.y);
         }
+        int nextDialogPositionOffset = getNextDialogPositionOffset();
+        if (nextDialogPositionOffset != 0) {
+            Point location = getLocation();
+            for (int i = 0; i < openDialogs.size(); i++) {
+                JDialog dialog = openDialogs.get(i);
+                Point otherLocation = dialog.getLocation();
+                if (location.x == otherLocation.x && location.y == otherLocation.y) {
+                    location.x += 20;
+                    location.y += 20;
+                    i = -1;
+                }
+            }
+            setLocation(location);
+        }
+        initialized = true;
     }
 
     protected Dimension getLastSize() {

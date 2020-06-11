@@ -126,6 +126,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
 
         // grafisches Initialisieren
         init();
+        restoreSizeAndPosition();
     }
 
     /**

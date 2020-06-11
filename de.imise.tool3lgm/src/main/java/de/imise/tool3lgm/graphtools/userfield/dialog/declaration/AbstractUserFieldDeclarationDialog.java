@@ -5,11 +5,11 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Point;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
@@ -28,8 +28,6 @@ import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.dialog.AbstractSizeAndPositionRestoringDialog;
 
 public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAndPositionRestoringDialog implements ActionListener {
-
-    private static Dimension defaultSize = null;
 
     /** combobox to select a model-class */
     protected UserFieldDeclarationDialogClassComboBox classComboBox;
@@ -55,13 +53,25 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     /** Buttons für den Im- und Export */
     protected final JButton importButton, exportButton;
 
-    protected final JButton cancelButton, okButton;
+    /**
+     *
+     */
+    protected final JButton cancelButton;
+
+    /**
+     *
+     */
+    protected final JButton okButton;
 
     /**
      * ComboBox mit der die Art des neuen benutzerdefinierten Eigenschaftsfeldes festgelegt wird
      */
     protected AlphabeticalComboBox userFieldTypeComboBox;
 
+    /**
+     * @param owner
+     * @param definitions
+     */
     public AbstractUserFieldDeclarationDialog(final Frame owner, final UserFieldDefinitions definitions) {
         super(owner, getResString("userfields"), true);
         MetaModel metaModel = definitions.getMetaModel();
@@ -129,10 +139,8 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
 
         pane.add(southPanel, BorderLayout.SOUTH);
 
-        if (defaultSize == null) {
-            pack();
-            defaultSize = getSize();
-        }
+        restoreSizeAndPosition();
+
     }
 
     protected void add(final Container con, final GridBagConstraints gbc, final int x, final int y, final int w, final int h, final Component c) {
@@ -164,8 +172,8 @@ public abstract class AbstractUserFieldDeclarationDialog extends AbstractSizeAnd
     }
 
     @Override
-    public final Dimension getDefaultSize() {
-        return defaultSize;
+    public final Point getDefaultPosition() {
+        return new Point(100, 100);
     }
 
 }

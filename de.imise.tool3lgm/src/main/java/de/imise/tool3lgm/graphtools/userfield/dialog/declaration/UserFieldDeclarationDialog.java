@@ -86,6 +86,7 @@ public final class UserFieldDeclarationDialog extends AbstractUserFieldDeclarati
         definitions = gdcoll.getUserFieldDefinitions();
         oldUserFieldDefionitions = definitions.clone();
         init();
+        restoreSizeAndPosition();
     }
 
     /**

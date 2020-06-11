@@ -12,8 +12,6 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +19,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -70,9 +67,14 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     static int lastHeight = -1;
 
     /**
-     *
+     * Default size of this dialogs
      */
     private static final Dimension DEFAULT_SIZE = new Dimension(600, 500);
+
+    /**
+     * Default position of this dialogs relatively to the owner
+     */
+    private static final Point DEFAULT_POSITION = new Point(100, 100);
 
     /**
      * Wird im Konstruktor auf <code>true</code> gesetzt und nach dem ersten zeigen des Dialoges auf <code>false</code>. Damit kann sicher gestellt
@@ -158,8 +160,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         contentPane.add(tabbedPane, BorderLayout.CENTER);
         contentPane.add(southButtonsPanel, BorderLayout.SOUTH);
 
-        addSizeOrPositionChangedListener();
-        setSizeAndLocation();
+        restoreSizeAndPosition();
         opening = true;
 
     }
@@ -416,93 +417,19 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         }
     }
 
-    /**
-     *
-     */
-    private void dialogPositionOrSizeChanged() {
-        lastWidth = getWidth();
-        lastHeight = getHeight();
-    }
-
-    /**
-     * @param lastHeight The lastHeight to set.
-     */
-    public static void setLastHeight(final int lastHeight) {
-        ElementPropertyDialog.lastHeight = lastHeight;
-    }
-
-    /**
-     * @param lastWidth The lastWidth to set.
-     */
-    public static void setLastWidth(final int lastWidth) {
-        ElementPropertyDialog.lastWidth = lastWidth;
-    }
-
     @Override
     public Dimension getDefaultSize() {
         return DEFAULT_SIZE;
     }
 
-    /**
-     *
-     */
-    private void addSizeOrPositionChangedListener() {
-        addComponentListener(new ComponentListener() {
-            @Override
-            public void componentHidden(final ComponentEvent e) {
-            }
-
-            @Override
-            public void componentMoved(final ComponentEvent e) {
-                dialogPositionOrSizeChanged();
-            }
-
-            @Override
-            public void componentResized(final ComponentEvent e) {
-                dialogPositionOrSizeChanged();
-            }
-
-            @Override
-            public void componentShown(final ComponentEvent e) {
-            }
-        });
+    @Override
+    public Point getDefaultPosition() {
+        return DEFAULT_POSITION;
     }
 
-    /**
-     *
-     */
-    private void setSizeAndLocation() {
-        pack();
-        JFrame mainFrame = Static.getMainFrame();
-        int xx = mainFrame.getX() + 100;
-        int yy = mainFrame.getY() + 100;
-        if (lastWidth == -1) {
-            setLastWidth(DEFAULT_SIZE.width);
-            setLastHeight(DEFAULT_SIZE.height);
-        } else {
-            for (int i = 0; i < ElemenPropertyDialogsContext.getDialogCount(); i++) {
-                ElementPropertyDialog pd = ElemenPropertyDialogsContext.getDialog(i);
-                Point location = pd.getLocation();
-                if (location.x == xx && location.y == yy) {
-                    xx += 20;
-                    yy += 20;
-                    i = -1;
-                }
-            }
-            setLocation(xx, yy);
-            //das hier hatte sicher mal eine Bedeutung, aber auf einem Multi-Monitor-System, bei dem das Tool auf dem zweiten
-            //Screen gezeigt wird, verhindert es dass mehrere Dialoge versetzt angezeigt werden, da diese untere und nun
-            //auskommentierte Bedingung immer eintrifft und alles auf derselbe Stelle landet
-            //            if (Toolkit.getDefaultToolkit().getScreenSize().width - xx < 150 || Toolkit.getDefaultToolkit().getScreenSize().height - yy < 150) {
-            //                xx = mainFrame.getX() + 100;
-            //                yy = mainFrame.getY() + 100;
-            //            }
-        }
-        setLocation(xx, yy);
-        setSize(lastWidth, lastHeight);
+    @Override
+    public int getNextDialogPositionOffset() {
+        return 20;
     }
-
-    // Size and Location End
-    // ####################################################################################
 
 }
