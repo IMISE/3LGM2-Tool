@@ -174,7 +174,7 @@ public class AnalysesRepositoryFrame extends JFrame {
         mainPanel.add(tableScrollPane, BorderLayout.CENTER);
         getContentPane().add(mainPanel);
         pack();
-
+        setLocationRelativeTo(getOwner());
     }
 
     @Override
