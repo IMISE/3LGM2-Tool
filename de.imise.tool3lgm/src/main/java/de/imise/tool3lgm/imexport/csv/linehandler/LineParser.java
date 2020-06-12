@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 
 /**
  * Splits a line in its column tokens
- * 
+ *
  * @author AXS
  * @create 06.10.2014
  */
@@ -22,7 +22,7 @@ public class LineParser {
     protected final String delim;
 
     /** List of all tokens of the line including the dlimiter tokens */
-    private final List<String> line = new ArrayList<String>();
+    private final List<String> line = new ArrayList<>();
 
     /** Original line string */
     private String string;
@@ -36,7 +36,7 @@ public class LineParser {
 
     /**
      * Creates a new line parser with the given delimiter
-     * 
+     *
      * @param delim
      */
     public LineParser(final String delim) {
@@ -45,7 +45,7 @@ public class LineParser {
 
     /**
      * Sets the current line to parse
-     * 
+     *
      * @param str
      *            line to parse
      */
@@ -125,7 +125,7 @@ public class LineParser {
      *         list of the values of all columns starting with the column at the given index
      */
     public List<String> getColumns(final int startColumn) {
-        List<String> columns = new ArrayList<String>();
+        List<String> columns = new ArrayList<>();
         for (int i = startColumn; i < getColumnCount(); i++) {
             columns.add(getColumn(i));
         }

@@ -179,7 +179,7 @@ public class MetaModelExporter {
             List<NamedObjectContainer<Class<? extends Edge>>> edgesStrings = new ArrayList<>();
             for (Class<? extends Edge> edgeClass : edgeClasses) {
                 if (isDefinedStartOrEndClass(elementClass, edgeClass)) {
-                    //                    NamedObjectContainer<Class<? extends Edge>> nocE = new NamedObjectContainer<Class<? extends Edge>>(edgeClass, getEdgeStringOrg2(edgeClass, elementClass, INDENTION + INDENTION));
+                    //                    NamedObjectContainer<Class<? extends Edge>> nocE = new NamedObjectContainer<>(edgeClass, getEdgeStringOrg2(edgeClass, elementClass, INDENTION + INDENTION));
                     NamedObjectContainer<Class<? extends Edge>> nocE = new NamedObjectContainer<>(edgeClass, getEdgeString(edgeClass, INDENTION + INDENTION));
                     edgesStrings.add(nocE);
                 }

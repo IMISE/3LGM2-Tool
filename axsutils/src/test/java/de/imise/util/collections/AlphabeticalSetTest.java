@@ -15,8 +15,8 @@ public class AlphabeticalSetTest {
 
     @Test
     public void SimpleTest() {
-        AlphabeticalSet<String> alphaSet = new AlphabeticalSet<String>(TestData.namesCol);
-        TreeSet<String> treeSet = new TreeSet<String>(Alphabetical.getLocalizedComparator());
+        AlphabeticalSet<String> alphaSet = new AlphabeticalSet<>(TestData.namesCol);
+        TreeSet<String> treeSet = new TreeSet<>(Alphabetical.getLocalizedComparator());
         treeSet.addAll(TestData.namesCol);
         assertThat(alphaSet, Matchers.contains(treeSet.toArray()));
     }

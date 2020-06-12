@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.view.container;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.STANDARD_COLORS;
 
 import java.awt.Font;
@@ -143,7 +142,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
             g.setColor(layout.bg_color);
             g.fillRect(0, 0, 14, 14);
             treeIcon = new ImageIcon(image);
-            //			specialInfoTargets = new ArrayList<ElementContainer>();
+            //			specialInfoTargets = new ArrayList<>();
             //			specialInfoTargets.addAll(me.getConnectedContainer(Aufgabe.class, doc, null, Doppelkante.FORWARD, false));
         }
 
@@ -400,7 +399,7 @@ public class NodeContainer extends ElementContainer/* implements GraphDocumentLi
      * HTML-labels are always bottom, if they must be wrapped automatically to multiple.
      * This bug seems to be created by wrong font metrics in the very first paint of such
      * a wrapped HTML string.
-     * 
+     *
      * @see https://stackoverflow.com/questions/16227877/how-to-update-a-jcomponent-with-html-without-flickering
      */
     private static final Graphics NOOP_GRAPHICS = NoopGraphics.createNoopGraphics();

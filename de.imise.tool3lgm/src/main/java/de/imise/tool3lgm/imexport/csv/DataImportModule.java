@@ -115,7 +115,7 @@ public class DataImportModule {
     }
 
     //    private void importData(final GDCollection gdcoll, final File importFile) {
-    //        ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>(5000);
+    //        ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<>>(5000);
     //
     //        BufferedReader reader = null;
     //        try {
@@ -126,7 +126,7 @@ public class DataImportModule {
     //                String line = reader.readLine();
     //                line = line.replaceAll("\\\\n", "\n").replaceAll("\\\\t", "\t");
     //                StringTokenizer tokenizer = new StringTokenizer(line, "\t");
-    //                ArrayList<String> tokens = new ArrayList<String>(10);
+    //                ArrayList<String> tokens = new ArrayList<>(10);
     //                while (tokenizer.hasMoreTokens()) {
     //                    tokens.add(tokenizer.nextToken());
     //                }
@@ -146,13 +146,13 @@ public class DataImportModule {
     //        }
     //
     //        UserFieldDefinitions definitions = new UserFieldDefinitions(doc.getCollection());
-    //        ArrayList<String> userFieldHashStrings = new ArrayList<String>(8);
+    //        ArrayList<String> userFieldHashStrings = new ArrayList<>(8);
     //        int nameIndex = -1;
     //        int descrIndex = -1;
     //        int hashFieldIndex = -1;
     //        int superHashFieldIndex = -1;
-    //        ArrayList<Integer> extIDPoss = new ArrayList<Integer>();
-    //        ArrayList<String> extIDKeys = new ArrayList<String>();
+    //        ArrayList<Integer> extIDPoss = new ArrayList<>();
+    //        ArrayList<String> extIDKeys = new ArrayList<>();
     //
     //        int sendBssIndex = -1;
     //        int recvBssIndex = -1;
@@ -265,7 +265,7 @@ public class DataImportModule {
     //                String evtTypExtID = "";
     //
     //                StringBuilder extIDStringBuilder = new StringBuilder(100000);
-    //                Map<String, String> extIDTable = new HashMap<String, String>();
+    //                Map<String, String> extIDTable = new HashMap<>();
     //                StringBuilder userFieldXMLStringBuilder = new StringBuilder(100000);
     //                int realIndex = 0;
     //                for (int j = 0; j < tokens.size(); j++) {
@@ -422,7 +422,7 @@ public class DataImportModule {
     //                            evtTyp.setExternalID("extID_EvtTyp", evtTypExtID);
     //                            evtTyp.setName(evtTypExtID);
     //                        }
-    //                        ArrayList<ModelElement> etnts = new ArrayList<ModelElement>();
+    //                        ArrayList<ModelElement> etnts = new ArrayList<>();
     //                        if (msgdocTyp instanceof Nachrichtentyp) {
     //                            etnts.addAll(msgdocTyp.getConnectedElements(EreignisNachrichtenTyp.class));
     //                        } else if (msgdocTyp instanceof Dokumententyp) {

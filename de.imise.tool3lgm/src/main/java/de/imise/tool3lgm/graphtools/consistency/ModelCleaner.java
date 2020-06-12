@@ -375,7 +375,7 @@ public class ModelCleaner {
         // Liste mit allen Tokens des Ausgangsstring, die durch "-ZUSAMMENGEFÜHRT-" voneinander
         // getrennt im Ausgangsstring stehen
         List<String> subStringList = new ArrayList<>();
-        // ArrayList<String> subStringDelimiterStringList = new ArrayList<String>();
+        // ArrayList<String> subStringDelimiterStringList = new ArrayList<>();
 
         // Index, ab dem nach dem nächsten Auftreten von "-ZUSAMMENGEFÜHRT-" gesucht wird
         int startIndex = 0;

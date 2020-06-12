@@ -32,7 +32,7 @@ public class LGMKommProzessFinder {
     /**
      * Setzt in den übergebenen LGMProzessSteps, den kürzesten Kommunikationspfad, wenn es einen
      * gibt. (Unendliche Pfade sind an Ende null)
-     * 
+     *
      * @param steps
      */
     private static final boolean getKommProzessForSteps(final GraphDocument doc, final List<LGMProzessStep> steps) {
@@ -43,7 +43,7 @@ public class LGMKommProzessFinder {
         }
 
         // ArrayList aller verschiedenen Objekttypen aus den übergebenen steps anlegen
-        List<ModelElement> initialObjekttypes = new ArrayList<ModelElement>();
+        List<ModelElement> initialObjekttypes = new ArrayList<>();
         for (LGMProzessStep step : steps) {
             // nur vollständige, korrekte Schritte müssen überhaupt betrachtet werden
             if (!step.isCorrect()) {
@@ -87,7 +87,7 @@ public class LGMKommProzessFinder {
             // durchlaufen werden) und
             // Medienbrüche mitzählen
             // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            List<Edge> edges = new ArrayList<Edge>();
+            List<Edge> edges = new ArrayList<>();
             List<ModelElement> kommProzessSchnittstellen = step.getKommProzessSchnittstellen();
             int count = kommProzessSchnittstellen.size() - 1;
 
@@ -155,7 +155,7 @@ public class LGMKommProzessFinder {
             // Kommunikation gesetzt werden
             if (count >= 0) {
                 // StartKonfiguration durchgehen
-                List<ModelElement> realKommunikationBausteine = new ArrayList<ModelElement>();
+                List<ModelElement> realKommunikationBausteine = new ArrayList<>();
                 Object schnittstelle = kommProzessSchnittstellen.get(0);
                 for (ModelElement awb : step.getStartAufgabeKonfBausteine()) {
                     boolean found = false;
@@ -177,7 +177,7 @@ public class LGMKommProzessFinder {
                 step.setRealCommunicationStartKonf(realKommunikationBausteine);
 
                 // EndKonfiguration durchgehen
-                realKommunikationBausteine = new ArrayList<ModelElement>();
+                realKommunikationBausteine = new ArrayList<>();
                 schnittstelle = kommProzessSchnittstellen.get(count);
                 for (ModelElement awb : step.getEndAufgabeKonfBausteine()) {
                     boolean found = false;

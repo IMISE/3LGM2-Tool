@@ -359,7 +359,7 @@ public class ShortestCommunicationPathFinderOld {
 
         int objectTypesCount = objectTypes.size();
 
-        // ArrayList<ModelElement> newObjectTypes = new ArrayList<ModelElement>(objectTypesCount);
+        // ArrayList<ModelElement> newObjectTypes = new ArrayList<>(objectTypesCount);
         // Das hier ist noch falsch, weil jetzt auch OTs rausfallen, deren Eltern Kommuniziert
         // werden können
         // //alle Objekttypen entfernen, die man nicht kommunizieren kann = die in keiner

@@ -129,7 +129,7 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
     //     * @return
     //     */
     //    public static final List<IDNotUniqueError> _getIDErrors(final ModelElement me) {
-    //        ArrayList<IDNotUniqueError> errors = new ArrayList<IDNotUniqueError>();
+    //        ArrayList<IDNotUniqueError> errors = new ArrayList<>();
     //        GDCollection gdcoll = me.getCollection();
     //        UserFieldDefinitions ufd = gdcoll.getUserFieldDefinitions();
     //        Class<? extends ModelElement> elementClass = me.getClass();
@@ -149,7 +149,7 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
     //     * @return
     //     */
     //    public static final List<IDNotUniqueError> _getIDErrors(final ModelElement me, final UserField idUserField) {
-    //        ArrayList<IDNotUniqueError> errors = new ArrayList<IDNotUniqueError>();
+    //        ArrayList<IDNotUniqueError> errors = new ArrayList<>();
     //        if (idUserField.getStyle() != UserField.Style.ID || !idUserField.getTargetClass().isAssignableFrom(me.getClass())) {
     //            return errors;
     //        }
@@ -166,7 +166,7 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
     //                sameID = sameID || otherUserFieldValue != null && otherUserFieldValue.equals(userFieldValue);
     //                if (sameID) {
     //                    if (otherWithSameID == null) {
-    //                        otherWithSameID = new ArrayList<ModelElement>();
+    //                        otherWithSameID = new ArrayList<>();
     //                    }
     //                    otherWithSameID.add(otherMe);
     //                }

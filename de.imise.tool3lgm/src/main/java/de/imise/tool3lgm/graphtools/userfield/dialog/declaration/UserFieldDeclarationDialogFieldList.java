@@ -24,7 +24,7 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
 
     public UserFieldDeclarationDialogFieldList(final UserFieldDefinitions definitions) {
         super();
-        model = new DefaultListModel<NamedObjectContainer<UserField>>();
+        model = new DefaultListModel<>();
         setModel(model);
         this.definitions = definitions;
         setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -61,7 +61,7 @@ public class UserFieldDeclarationDialogFieldList extends JList<NamedObjectContai
      */
     public void addEntry(final UserField userField, final int index) {
         String name = userField.getName() + "  ( " + getUserFieldStyle(userField) + " )";
-        NamedObjectContainer<UserField> noc = new NamedObjectContainer<UserField>(userField, name);
+        NamedObjectContainer<UserField> noc = new NamedObjectContainer<>(userField, name);
         model.add(index, noc);
     }
 

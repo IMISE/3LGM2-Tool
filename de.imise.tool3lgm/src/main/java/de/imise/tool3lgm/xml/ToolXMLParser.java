@@ -299,7 +299,7 @@ public class ToolXMLParser {
         }
         Static.setProgressDialogStatusLabel("labelReady");
 
-        ///*		AlphabeticalSet<Class<? extends ModelElement>> allUsedElementClasses = new AlphabeticalSet<Class<? extends ModelElement>>();
+        ///*		AlphabeticalSet<Class<? extends ModelElement>> allUsedElementClasses = new AlphabeticalSet<>();
         //		for (ModelElement me : gdcoll.getGraphDocument().getModelItems(ModelElement.class, true))
         //			allUsedElementClasses.add(me.getClass());
         //		for (Class<? extends ModelElement> elementClass : allUsedElementClasses)

@@ -9,7 +9,7 @@ import de.imise.tool3lgm.imexport.csv.linehandler.line.AbstractImportLine;
 
 /**
  * Collection of {@link ImportError} for a verification
- * 
+ *
  * @author AXS
  * @create 06.10.2014
  */
@@ -18,22 +18,22 @@ public class ImportErrorConfiguration {
     /**
      * List of all {@link ImportError} in the order of their occurance
      */
-    private final List<ImportError> errors = new ArrayList<ImportError>();
+    private final List<ImportError> errors = new ArrayList<>();
 
     /**
      * Stores the {@link ImportError.ErrorType} of all already added errors. This is for identifying errors which should not be added twice.
      */
-    private final Set<ImportError.ErrorType> addedErrorTypes = new HashSet<ImportError.ErrorType>();
+    private final Set<ImportError.ErrorType> addedErrorTypes = new HashSet<>();
 
     /**
-     * 
+     *
      */
     public ImportErrorConfiguration() {
     }
 
     /**
      * Adds a new {@link ImportError}
-     * 
+     *
      * @param line
      *            The line where the error occurs
      * @param col
@@ -59,7 +59,7 @@ public class ImportErrorConfiguration {
 
     /**
      * Creates where the error occurs
-     * 
+     *
      * @param line
      *            The line where the error occurs
      * @param col

@@ -242,7 +242,7 @@ public class MetaPathDefinition extends MetaModelSpecificAdapter {
      * Gibt die ModellElement-Klassen aus, für die Pfade definiert sind und dahinter die Pfade.
      * /
      * public final void writePathes() {
-     * ArrayList<Class<? extends ModelElement>> ccc = new ArrayList<Class<? extends ModelElement>>(element_class_to_direct_start_pathes.keySet());
+     * ArrayList<Class<? extends ModelElement>> ccc = new ArrayList<>(element_class_to_direct_start_pathes.keySet());
      * Alphabetical.sort(ccc);
      * for (Class<? extends ModelElement> elementClass : ccc)
      * System.err.println(elementClass.getSimpleName() + ": " + element_class_to_direct_start_pathes.get(elementClass));
