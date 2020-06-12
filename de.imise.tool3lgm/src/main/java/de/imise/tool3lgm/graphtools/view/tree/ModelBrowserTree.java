@@ -24,6 +24,7 @@ import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
@@ -51,70 +52,92 @@ import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.UserFieldTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 
 /**
+ * A tree view to the model. Under the root node are the layer nodes, then for every
+ * layer node the class nodes and then the instances with optional child nodes for
+ * the user defined properties.
+ *
  * @author N.N.
  */
 public final class ModelBrowserTree extends DynamicTree implements UserFieldListener {
 
-    /**
-     * Node für die Fachliche Ebene
-     */
+    /** Node for the Domain Layer */
     private final LGMTreeNode domainLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.DOMAIN_LAYER), getLayerIcon(ActionIdentifier.ACTION_ACTIVATE_DOMAIN_LAYER));
 
-    /**
-     * Node für die Logische Werkzeugebene
-     */
+    /** Node for the Logical Tool Layer */
     private final LGMTreeNode logicalLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.LOGICAL_LAYER), getLayerIcon(ActionIdentifier.ACTION_ACTIVATE_LOGICAL_LAYER));
 
-    /**
-     * Node für die physische Werkzeugebene
-     */
+    /** Node for the Physical Tool Layer */
     private final LGMTreeNode physicalLayer = new StringTreeNode(ModelConstants.getVisibleLayerName(ModelConstants.PHYSICAL_LAYER), getLayerIcon(ActionIdentifier.ACTION_ACTIVATE_PHYSICAL_LAYER));
 
     /**
-     * COMMENTME
+     * Node where all {@link Textfield} instances are displayed as
+     * children which exists at the Domain Layer in the corresponding
+     * {@link GraphDocument}.
      */
     private LGMTreeNode textFieldDomainLayer = null;
 
     /**
-     * COMMENTME
+     * Node where all {@link Textfield} instances are displayed as
+     * children which exists at the Logical Tool Layer in the
+     * corresponding {@link GraphDocument}.
      */
     private LGMTreeNode textFieldLogicalLayer = null;
 
     /**
-     * COMMENTME
+     * Node where all {@link Textfield} instances are displayed as
+     * children which exists at the Physical Tool Layer in the
+     * corresponding {@link GraphDocument}.
      */
     private LGMTreeNode textFieldPhysicalLayer = null;
 
     /**
-     * COMMENTME
+     * The {@link GraphDocument} this model browser is showing
+     * the elements from.
      */
     private GraphDocument doc;
 
+    /**
+     * A class that encapsulates all functions to update
+     * the model browser on change events. This is the
+     * {@link LGMChangeListener}.
+     */
     private final ModelBrowserTreeLGMChangeListener transactionListener;
 
     /**
-     * Transaktions-ID, mit der der Baum alle seine Änderungen vornimmt.
+     * Transaction id for all changes of this tree (always default id).
      */
     public static final int PID = STANDARD_PID;
 
-    /**
-     * COMMENTME
-     */
+    /** Rererence to the {@link TreeModel} of this tree as {@link DefaultTreeModel} */
     private final DefaultTreeModel myModel;
 
-    /**
-     * COMMENTME
-     */
+    /** The {@link TreePath} with root as last path element. */
     private final TreePath rootPath;
 
-    private final Map<Class<? extends ModelElement>, LGMTreeNode> elementClassToParentNode = new HashMap<>();
-
-    private final Collection<LGMTreeNode> nodesToClear;
+    /**
+     * Maps from a element class to the treenode which has to be only filled with
+     * instance children and added to the model browser if the tool is in enpert mode.
+     */
+    private final Map<Class<? extends ModelElement>, ElementClassTreeNode> elementClassToParentNode = new HashMap<>();
 
     /**
-     * @param doc
+     * Contains the class nodes where the instances of model elements resp. the
+     * element container are the children. In every rebuild of the tree all
+     * children of these nodes are removed and new generated.
+     */
+    private final Collection<ElementClassTreeNode> nodesToClear;
+
+    /** Caches the value of {@link BooleanProperty#OPTION_SHOW_PART_OF_HIERARCHY} */
+    private static boolean showPartOfHierarchy = false;
+
+    /** Caches the value of {@link BooleanProperty#OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER} */
+    private static boolean showUserDefinedProperties = false;
+
+    /**
+     * @param doc the {@link GraphDocument} this model sbrowser should display
      */
     public ModelBrowserTree(final GraphDocument doc) {
         super(new DefaultTreeModel(new StringTreeNode(Tool3lgmConstants.getResString("MODEL_BRWOSER_TITLE"), false)));
@@ -203,6 +226,11 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         }
     }
 
+    /**
+     * @param layerNode
+     * @param treeLayerVisibleAbstractNodes
+     * @param treeLayerVisibleInstancialeNodes
+     */
     private final void initLayer(final LGMTreeNode layerNode, final Class<? extends ModelElement>[] treeLayerVisibleAbstractNodes, final Iterable<Class<? extends ModelElement>> treeLayerVisibleInstancialeNodes) {
         //die abstracten Klassen holen, die in der Hierarchie des Baumes unterhalb des Layer-Knotens angezeigt werden sollen
         List<Class<? extends ModelElement>> abstractClasses = new ArrayList<>(Arrays.asList(treeLayerVisibleAbstractNodes));
@@ -219,7 +247,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         //jetzt die ElementKnoten unter die abstrakten Knoten hängen oder unter den LayerKnoten selbst, wenn es keinen abstakten Oberklassenkoten gibt
         for (Class<? extends ModelElement> elementClass : treeLayerVisibleInstancialeNodes) {
             String label = elementsNameBuilder.getDisplayableName(elementClass);
-            LGMTreeNode instanciableClassNode = new ElementClassTreeNode(elementClass, label, false); // muss nicht selbst sortieren, weil die Elemente bereits sortiert reinkommen
+            ElementClassTreeNode instanciableClassNode = new ElementClassTreeNode(elementClass, label, false); // muss nicht selbst sortieren, weil die Elemente bereits sortiert reinkommen
             elementClassToParentNode.put(elementClass, instanciableClassNode);
             boolean superClassFound = false;
             for (int i = abstractClasses.size() - 1; i >= 0; i--) {
@@ -490,12 +518,6 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         }
         return elementClassToParentNode.get(me.getClass());
     }
-
-    static boolean showPartOfHierarchy = false;
-
-    static boolean showUserDefinedProperties = false;
-
-    static int count = 0;
 
     /**
      *
