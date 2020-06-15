@@ -605,6 +605,10 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                         if (InstanciationEdge.class.isAssignableFrom(edgeClass)) {
                             continue;
                         }
+                        //edges between template elements are not creatable
+                        if (!metaModel.isCreatable(edgeClass)) {
+                            continue;
+                        }
                         //////////////
                         //   Edges  //
                         //////////////

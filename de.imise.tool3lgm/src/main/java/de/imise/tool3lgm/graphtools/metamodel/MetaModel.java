@@ -754,9 +754,11 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell editierbar ist. Das ist sie,
-     * wenn sich der Baukasten im ExpertMode befindet oder wenn er sich nicht im ExpertMode befindet
-     * und die Klasse keine Klasse aus den {@link #getPureTemplateSourceNodes()} ist.
+     * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell editierbar sind. Das sind sie,
+     * wenn sich das Tool im ExpertMode befindet oder wenn es sich nicht im ExpertMode befindet
+     * und die Klasse keine Klasse aus den {@link #getPureTemplateSourceNodes()} ist. Ist eine
+     * übergebene Klasse eine Kantenklasse, so muss diese Funktion für beide Endklassen ebenfalls
+     * <code>true</code> liefern, damit die Kantenklassen als editable gilt.
      *
      * @param elementClasses
      * @return
@@ -768,9 +770,12 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
-     * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell editierbar ist. Das ist sie,
-     * wenn sich der Baukasten im ExpertMode befindet oder wenn er sich nicht im ExpertMode befindet
-     * und die Klasse keine Klasse aus den {@link #getPureTemplateSourceNodes()} ist.
+     * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell editierbar sind. Das sind sie,
+     * wenn sich das Tool im ExpertMode befindet oder wenn es sich nicht im ExpertMode befindet
+     * und die Klasse keine Klasse aus den {@link #getPureTemplateSourceNodes()} ist. Ist eine
+     * übergebene Klasse eine Kantenklasse, so muss diese Funktion für eine der beiden Endklassen
+     * ebenfalls <code>true</code> liefern, damit die Kantenklassen als editable gilt. Sind beide
+     * Endklassen Templateklassen, dann ist sie nicht editable.
      *
      * @param elementClasses
      * @return
@@ -778,8 +783,38 @@ public final class MetaModel extends CoreMetaModel {
     public final boolean isEditable(final Iterable<Class<? extends ModelElement>> elementClasses) {
         if (!Static.isExpertMode()) {
             for (Class<? extends ModelElement> elementClass : elementClasses) {
-                if (pureTemplateElementClasses.contains(elementClass)) {
+                if (!isEditable(elementClass)) {
                     return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Liefert <code>true</code>, wenn die übergebene Klasse aktuell editierbar ist. Das ist sie,
+     * wenn sich das Tool im ExpertMode befindet oder wenn es sich nicht im ExpertMode befindet
+     * und die Klasse keine Klasse aus den {@link #getPureTemplateSourceNodes()} ist. Ist die
+     * übergebene Klasse eine Kantenklasse, so muss diese Funktion für eine der beiden Endklassen
+     * ebenfalls <code>true</code> liefern, damit die Kantenklassen als editable gilt. Sind beide
+     * Endklassen Templateklassen, dann ist sie nicht editable.
+     *
+     * @param elementClass
+     * @return
+     */
+    public final boolean isEditable(final Class<? extends ModelElement> elementClass) {
+        if (!Static.isExpertMode()) {
+            if (pureTemplateElementClasses.contains(elementClass)) {
+                return false;
+            }
+            if (Edge.class.isAssignableFrom(elementClass)) {
+                Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
+                Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
+                if (!isEditable(startClass)) {
+                    Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+                    if (!isEditable(endClass)) {
+                        return false;
+                    }
                 }
             }
         }
@@ -802,7 +837,9 @@ public final class MetaModel extends CoreMetaModel {
     /**
      * Prüft, ob die ein Element der übergebenen Art erzeugt werden kann, ohne gegen die Konsistenzregeln zu verstoßen,
      * wenn gleichzeitig die übergebenen Kanten hin zu diesem Element angelegt werden. Die Kanten und deren Richtung
-     * stecken in den Elementarmetapfaden.
+     * stecken in den Elementarmetapfaden.<br>
+     * Ist die übergebene Elementklasse selbst eine Kantenklasse, so wird ebenfalls gepüft, ob die Elementklassen, die
+     * sie verbindet, überhaupt editable sind.
      *
      * @param elementClass
      * @param toElement
