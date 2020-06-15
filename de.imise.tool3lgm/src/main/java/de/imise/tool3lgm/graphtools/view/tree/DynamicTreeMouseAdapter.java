@@ -86,8 +86,7 @@ public class DynamicTreeMouseAdapter implements MouseListener {
 
         if (left_button && selectedNode != null && selectedNode instanceof ElementContainerTreeNode) {
             ElementContainer ec = ((ElementContainerTreeNode) selectedNode).getUserObject();
-            ModelElement me = ec.getElement();
-            doc.showPropertyDialog(me);
+            Static.showPropertyDialog(ec);
         }
     }
 

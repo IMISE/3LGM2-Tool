@@ -41,7 +41,6 @@ import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
@@ -49,7 +48,6 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.event.action.UserPropertyBooleanChangeAction;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.tools.EasyDialogAccess;
 import de.imise.tool3lgm.graphtools.metamodel.GraphViewDefinition;
@@ -4424,29 +4422,6 @@ public abstract class GraphDocument extends ElementSelectionContext {
             finish_transaction(pid);
             distributeEvent(GROUP_ORDER_CHANGED, pid);
         }
-    }
-
-    /**
-     * Zeigt die PropertyDialoge aller selektierten Elemente an.
-     *
-     * @param onlyLastSelected wenn <code>true</code>, wird nur der Dialog des zuletzt selektierten Elementes angezeigt
-     */
-    public void showPropertyDialog(final boolean onlyLastSelected) {
-        List<ElementContainer> selectedContainer = onlyLastSelected ? ImmutableList.of(getLastSelected()) : getSelectedContainer();
-        for (ElementContainer ec : selectedContainer) {
-            if (ec != null) {
-                ModelElement me = ec.getElement();
-                showPropertyDialog(me);
-            }
-        }
-    }
-
-    /**
-     * @param me
-     */
-    public void showPropertyDialog(final ModelElement me) {
-        ElementPropertyDialog propertyDialog = me.getPropertyDialog();
-        propertyDialog.showDialog();
     }
 
     /**

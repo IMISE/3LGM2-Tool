@@ -22,12 +22,16 @@ import org.apache.commons.collections4.IterableUtils;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
+import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
 import de.imise.tool3lgm.gui.MainFrame;
@@ -196,6 +200,58 @@ public class Static {
             }
         }
         return collections;
+    }
+
+    /**
+     * Shows the property dialog for the given element. If the elenents model
+     * is a template model and this model is only shown in the template browser
+     * (and is not selected) so the function tries to find the same element
+     * in the current selected model. If found, the dilog of the element of the
+     * selected model will be openend. If the element is not presen in the
+     * selected model so the dialog of the original template element will be shown.
+     *
+     * @param ec
+     */
+    public static final void showPropertyDialog(final ElementContainer ec) {
+        GraphDocument doc = ec.getGraphDocument();
+        GraphDocument selectedDoc = getSelectedDoc();
+        ModelElement me = ec.getElement();
+        if (doc != selectedDoc) {
+            ModelCategory modelCategory = doc.getModelCategory();
+            if (modelCategory == ModelCategory.TEMPLATE) {
+                String elementHash = ec.getHashString();
+                ModelElement elementInSelectedDoc = selectedDoc.findElementCoded(elementHash);
+                if (elementInSelectedDoc != null) {
+                    doc = selectedDoc;
+                    me = elementInSelectedDoc;
+                }
+            }
+        }
+        ElementPropertyDialog propertyDialog = me.getPropertyDialog();
+        propertyDialog.showDialog();
+    }
+
+    /**
+     * Shows the PropertyDialog of the last selected Element in the current selected
+     */
+    public static final void showPropertyDialogOfLastSelected() {
+        LGMGraphDocument selectedDoc = getSelectedDoc();
+        if (selectedDoc != null) {
+            showPropertyDialogOfLastSelected(selectedDoc);
+        }
+    }
+
+    /**
+     * Shows the PropertyDialog of the last selected Element of the given {@link GraphDocument}.
+     *
+     * @doc
+     */
+    public static final void showPropertyDialogOfLastSelected(final GraphDocument doc) {
+        ElementContainer lastSelected = doc.getLastSelected();
+        if (lastSelected != null) {
+            ModelElement me = lastSelected.getElement();
+            me.showPropertyDialog();
+        }
     }
 
     /**

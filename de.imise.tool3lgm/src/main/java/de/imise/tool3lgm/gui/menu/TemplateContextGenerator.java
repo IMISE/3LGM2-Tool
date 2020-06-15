@@ -76,7 +76,12 @@ public class TemplateContextGenerator extends ContextGenerator {
             @Override
             public void actionPerformed() {
                 GraphDocument activeTemplateDoc = getActiveDoc();
-                activeTemplateDoc.showPropertyDialog(false);
+                ElementContainer lastSelectedTemplateElementContainer = activeTemplateDoc.getLastSelected();
+                //If the same element exists in the current model, this call opens the
+                //property dialog of the element in the model and not in the template.
+                //If there is no cops in the model this call shows the dialog of the
+                //template element.
+                Static.showPropertyDialog(lastSelectedTemplateElementContainer);
             }
         };
     }

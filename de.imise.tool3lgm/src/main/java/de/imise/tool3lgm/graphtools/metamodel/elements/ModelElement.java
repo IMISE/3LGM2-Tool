@@ -1823,13 +1823,21 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
+     * Shows the PropertyDialog
+     */
+    public final void showPropertyDialog() {
+        ElementPropertyDialog propertyDialog = getPropertyDialog();
+        propertyDialog.showDialog();
+    }
+
+    /**
      * Liefert einen Eigenschafts-Dialog für dieses Element. Wenn bereits einer existiert, wird dieser zurück gegeben, sonst wird ein neuer Dialog
      * angelegt. Der Dialog wird sofort angezeigt oder wenn er bereits angezeigt wird in den Vordergrund gebracht.
      *
      * @param gdcoll GDCollection, in der sich das Element befinden sollte
      * @return
      */
-    public ElementPropertyDialog getPropertyDialog() {
+    public final ElementPropertyDialog getPropertyDialog() {
         return ElemenPropertyDialogsContext.getDialog(this);
     }
 

@@ -438,7 +438,8 @@ public class InputGraphArea extends BasicGraphArea implements MouseListener, Mou
         if (ecUnderMouse instanceof BendpointContainer) {
             szenario.getCollection().removeBendpoint(((BendpointContainer) ecUnderMouse).getBendpoint(), TransactionManager.STANDARD_PID);
         } else if (ecUnderMouse != null) {
-            szenario.showPropertyDialog(ecUnderMouse.getElement());
+            ModelElement me = ecUnderMouse.getElement();
+            me.showPropertyDialog();
         }
     }
 

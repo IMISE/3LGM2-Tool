@@ -499,7 +499,11 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                     doc.addToSelection(selected, getTransactionID());
                 }
                 if (doubleClick) {
-                    doc.showPropertyDialog(selected.getElement());
+                    //even if this dialog model element is a template element this
+                    //Static call tries to open the dialog of the enventually existing
+                    //element with the same id (hashString) in the currently selected
+                    //doc
+                    Static.showPropertyDialog(selected);
                 }
             }
         }

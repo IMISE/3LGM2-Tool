@@ -594,7 +594,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                 // Aktive Zeile markieren
                 if (!isPopupTrigger(e)) {
                     if (e.getClickCount() > 1) {
-                        ((GraphDocument) subModelBox.getSelectedObject()).showPropertyDialog(true);
+                        GraphDocument doc = (GraphDocument) subModelBox.getSelectedObject();
+                        Static.showPropertyDialogOfLastSelected(doc);
                     }
                 } else {
                     GraphDocument selectedDoc = (GraphDocument) subModelBox.getSelectedObject();
