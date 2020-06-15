@@ -5,7 +5,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 /**
  * @author AXS (8 Apr 2019)
  */
-public class ElementClassTreeNode extends LGMTreeNode {
+public class ElementClassTreeNode extends IconifiedTreeNode {
 
     /**
      * @param elementClass

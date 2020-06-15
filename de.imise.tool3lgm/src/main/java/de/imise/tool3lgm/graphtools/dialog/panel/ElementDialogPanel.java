@@ -121,7 +121,7 @@ public abstract class ElementDialogPanel extends JPanel {
         setName(name);
         doc = dialog.getGraphDocument();
         mainDoc = doc.getCollection().getMainDoc();
-        treeRenderer = new TreeRenderer(doc);
+        treeRenderer = new TreeRenderer();
         elementsNameBuilder = doc.getElementsNameBuilder();
         init();
     }

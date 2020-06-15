@@ -8,7 +8,7 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 /**
  * @author AXS (8 Apr 2019)
  */
-public class ElementContainerTreeNode extends LGMTreeNode implements GraphDocumentOwner {
+public class ElementContainerTreeNode extends IconifiedTreeNode implements GraphDocumentOwner {
 
     /**
      * @param ec

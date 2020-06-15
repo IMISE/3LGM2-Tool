@@ -5,12 +5,7 @@ import javax.swing.ImageIcon;
 /**
  * @author AXS (8 Apr 2019)
  */
-public class StringTreeNode extends LGMTreeNode {
-
-    /**
-     *
-     */
-    private ImageIcon icon;
+public class StringTreeNode extends IconifiedTreeNode {
 
     /**
      * @param s
@@ -32,8 +27,7 @@ public class StringTreeNode extends LGMTreeNode {
      * @param icon
      */
     public StringTreeNode(final String s, final ImageIcon icon) {
-        super(s);
-        this.icon = icon;
+        super(s, icon);
     }
 
     /**
@@ -42,8 +36,7 @@ public class StringTreeNode extends LGMTreeNode {
      * @param sort
      */
     public StringTreeNode(final String s, final ImageIcon icon, final boolean sort) {
-        super(s, sort);
-        this.icon = icon;
+        super(s, sort, icon);
     }
 
     @Override
@@ -58,13 +51,6 @@ public class StringTreeNode extends LGMTreeNode {
         } else {
             throw new UnsupportedOperationException();
         }
-    }
-
-    /**
-     * @return
-     */
-    public ImageIcon getIcon() {
-        return icon;
     }
 
 }

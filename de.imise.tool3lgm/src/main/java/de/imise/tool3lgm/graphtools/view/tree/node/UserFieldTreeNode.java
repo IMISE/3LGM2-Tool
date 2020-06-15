@@ -8,7 +8,7 @@ import de.imise.util.pair.Pair;
 /**
  * @author AXS (8 Apr 2019)
  */
-public class UserFieldTreeNode extends LGMTreeNode {
+public class UserFieldTreeNode extends IconifiedTreeNode {
 
     /**
      * @param elementClass

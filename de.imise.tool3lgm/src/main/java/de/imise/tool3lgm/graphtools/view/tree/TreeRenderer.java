@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.tree;
 
+import static de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode.IconState.SHOW_ERROR_ICON;
+import static de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode.IconState.SHOW_NORMAL_ICON;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_USE_PROPERTY_COLORS;
 
 import java.awt.Color;
@@ -14,8 +16,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
+import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode.IconState;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
-import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 
 public class TreeRenderer extends DefaultTreeCellRenderer {
 
@@ -34,11 +37,10 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
     //	static ImageIcon errorIcon = Tool3lgmConstants.getIcon("error.gif");
     //	static ImageIcon warningIcon = Tool3lgmConstants.getIcon("warning.gif");
 
-    GraphDocument doc;
-
-    public TreeRenderer(final GraphDocument d) {
-        doc = d;
-
+    /**
+     *
+     */
+    public TreeRenderer() {
         setLeafIcon(null);
         setClosedIcon(null);
         setOpenIcon(null);
@@ -60,53 +62,57 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
 
             super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
 
-            if (userObject instanceof ElementContainer) {
-                int iconState = node.getIconState();
-                ElementContainer container = (ElementContainer) userObject;
-                ImageIcon icon = container.getTreeIcon();
-                if (icon == null) {
-                    ModelElement me = container.getElement();
-                    GraphElementLayout.SHAPE form = me.isPaintable() ? doc.getMapping().getStandardForm(container) : null;
-                    if (form != null) {
-                        switch (form) {
-                        case rechteck:
-                            if (iconState == LGMTreeNode.SHOW_NORMAL_ICON) {
-                                setIcon(rectIcon);
-                            } else if (iconState == LGMTreeNode.SHOW_ERROR_ICON) {
-                                setIcon(rectErrorIcon);
-                            }
-                            break;
-                        case oval:
-                            setIcon(circleIcon);
-                            break;
-                        case dreieck:
-                            setIcon(triangleIcon);
-                            break;
-                        case rundeck:
-                            setIcon(rundeckIcon);
-                            break;
-                        case rhombus:
-                            setIcon(rhombusIcon);
-                            break;
-                        case tonne:
-                            setIcon(tonneIcon);
-                            break;
-                        case wabe:
-                            setIcon(wabeIcon);
-                            break;
-                        default:
-                            setIcon(null);
-                        }
-                    }
-                } else {
-                    container.checkTreeIcon();
-                    setIcon(icon);
-                }
-            } else if (value instanceof StringTreeNode) {
-                StringTreeNode stringTreeNode = (StringTreeNode) value;
-                ImageIcon icon = stringTreeNode.getIcon();
-                setIcon(icon);
+            ImageIcon icon = null;
+            IconState iconState = null;
+            if (node instanceof IconifiedTreeNode) {
+                IconifiedTreeNode iconNode = (IconifiedTreeNode) node;
+                icon = iconNode.getIcon();
+                iconState = iconNode.getIconState();
             }
+            if (icon == null) {
+                if (userObject instanceof ElementContainer) {
+                    ElementContainer ec = (ElementContainer) userObject;
+                    icon = ec.getTreeIcon();
+                    if (icon == null) {
+                        GraphDocument doc = ec.getGraphDocument();
+                        ModelElement me = ec.getElement();
+                        GraphElementLayout.SHAPE form = me.isPaintable() ? doc.getMapping().getStandardForm(ec) : null;
+                        if (form != null) {
+                            switch (form) {
+                            case rechteck:
+                                if (iconState == SHOW_NORMAL_ICON) {
+                                    icon = rectIcon;
+                                } else if (iconState == SHOW_ERROR_ICON) {
+                                    setIcon(rectErrorIcon);
+                                }
+                                break;
+                            case oval:
+                                icon = circleIcon;
+                                break;
+                            case dreieck:
+                                icon = triangleIcon;
+                                break;
+                            case rundeck:
+                                icon = rundeckIcon;
+                                break;
+                            case rhombus:
+                                icon = rhombusIcon;
+                                break;
+                            case tonne:
+                                icon = tonneIcon;
+                                break;
+                            case wabe:
+                                icon = wabeIcon;
+                                break;
+                            default:
+                            }
+                        }
+                    } else {
+                        ec.checkTreeIcon();
+                    }
+                }
+            }
+            setIcon(icon);
             return this;
         }
         return super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);

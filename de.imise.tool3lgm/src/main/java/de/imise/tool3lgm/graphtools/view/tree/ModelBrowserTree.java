@@ -151,7 +151,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         //werden die ShortCuts aus dem RootPane des Tools hier nicht auch beachtet und müssen explizit hinzugefügt werden
         KeyStrokes.registerPublicKeyStrokes(this);
         transactionListener = new ModelBrowserTreeLGMChangeListener(this);
-        setCellRenderer(new TreeRenderer(doc));
+        setCellRenderer(new TreeRenderer());
         ((TreeRenderer) getCellRenderer()).setBackgroundNonSelectionColor(getBackground());
         setBackground(getBackground());
         setEditable(false);

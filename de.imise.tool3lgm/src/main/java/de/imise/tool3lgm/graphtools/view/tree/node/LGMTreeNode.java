@@ -23,13 +23,6 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
 
     private Color foregroundColor = Color.black;
 
-    // iconState = SHOW_NORMAL_ICON setzt in TreeRenderer das für den Node
-    // spezifische Icon, sonst wird ein Error- oder Warning-Icon gesetzt
-    public static final int SHOW_NORMAL_ICON = 0;
-    public static final int SHOW_ERROR_ICON = 1;
-    public static final int SHOW_WARNING_ICON = 2;
-    private int iconState = SHOW_NORMAL_ICON;
-
     /**
      * @param o
      * @param setTreeNode
@@ -108,20 +101,6 @@ public class LGMTreeNode extends DefaultMutableTreeNode {
      */
     public boolean isSelectable() {
         return selectable;
-    }
-
-    /**
-     * @return
-     */
-    public int getIconState() {
-        return iconState;
-    }
-
-    /**
-     * @param i
-     */
-    public void setIconState(final int i) {
-        iconState = i;
     }
 
     /**
