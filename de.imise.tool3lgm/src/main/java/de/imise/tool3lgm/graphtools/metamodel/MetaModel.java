@@ -141,7 +141,7 @@ public final class MetaModel extends CoreMetaModel {
     public final Set<Class<? extends ModelElement>> elementClassesWithNameExtensions;
 
     /** Alle Elementklassen, die nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true) angelegt und verändert werden können. */
-    private final Set<Class<? extends ModelElement>> onlyExpertModeEditableNodes;
+    private final Set<Class<? extends ModelElement>> pureTemplateElementClasses;
 
     /**
      * Elementklassen, die nur im Baum angezeigt werden sollen, wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
@@ -360,8 +360,8 @@ public final class MetaModel extends CoreMetaModel {
         //jetzt die GraphViewDefinition, weil die gleich gebraucht wird
         graphViewDefinition = getInstance(metaModelDefinition.getGraphViewDefinitionClass());
         //spezielle Knoteneigenschaften
-        onlyExpertModeEditableNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getPureTemplateSourceNodes());
-        onlyExpertModeVisibleNodes = CollectionUtils.ensureImmutableCombined(metaModelDefinition.getOnlyExpertModeVisibleNodes(), onlyExpertModeEditableNodes);
+        pureTemplateElementClasses = CollectionUtils.ensureImmutable(metaModelDefinition.getPureTemplateSourceNodes());
+        onlyExpertModeVisibleNodes = CollectionUtils.ensureImmutableCombined(metaModelDefinition.getOnlyExpertModeVisibleNodes());
         treeDomainLayerVisibleAbstractNodes = metaModelDefinition.getTreeDomainLayerVisibleAbstractNodes();
         treeLogicalLayerVisibleAbstractNodes = metaModelDefinition.getTreeLogicalLayerVisibleAbstractNodes();
         treePhysicalLayerVisibleAbstractNodes = metaModelDefinition.getTreePhysicalLayerVisibleAbstractNodes();
@@ -721,6 +721,13 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
+     * @return all element classes which can be only inserted in a model by copiing from a template
+     */
+    public final Set<Class<? extends ModelElement>> getPureTemplateElementClasses() {
+        return pureTemplateElementClasses;
+    }
+
+    /**
      * Liefert <code>true</code>, wenn die Klasse nicht angezeigt werden soll, also wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
      * auf <code>false</code> gestellt ist und die Klasse nur im Expert-Mode angezeigt werden soll.
      *
@@ -771,7 +778,7 @@ public final class MetaModel extends CoreMetaModel {
     public final boolean isEditable(final Iterable<Class<? extends ModelElement>> elementClasses) {
         if (!Static.isExpertMode()) {
             for (Class<? extends ModelElement> elementClass : elementClasses) {
-                if (onlyExpertModeEditableNodes.contains(elementClass)) {
+                if (pureTemplateElementClasses.contains(elementClass)) {
                     return false;
                 }
             }

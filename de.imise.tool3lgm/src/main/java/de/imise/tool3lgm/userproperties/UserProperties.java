@@ -405,6 +405,8 @@ public class UserProperties {
         OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
         /** Zeige Benutzerdefnierte Eigenschaften im ModellBrowser */
         OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER,
+        /** Show also the template elements in model browser (and not only in the template browser) */
+        OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER,
         /** Hänge alle Teilelemente in Bäumen unter ihre Oberelemente (true) oder ordne alle Elemente in einer flachen Liste an (false) */
         OPTION_SHOW_PART_OF_HIERARCHY,
         /** Kanten werden nur für selektierte Elemente in der Grafik gemalt (true) oder alle Kanten werde gezeichnet (false) */

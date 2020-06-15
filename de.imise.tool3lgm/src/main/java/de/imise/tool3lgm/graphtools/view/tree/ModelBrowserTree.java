@@ -7,8 +7,10 @@ import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.MIN_LAYER_IN
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.PHYSICAL_LAYER;
 import static de.imise.tool3lgm.graphtools.metamodel.ModelConstants.isInterLayer;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER;
 
 import java.awt.Image;
@@ -307,30 +309,18 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         transactionListener.setActive(active);
     }
 
-    private final Map<DefaultMutableTreeNode, DefaultMutableTreeNode> onlyExperModeVisibleNodesToParent = new HashMap<>();
+    private final Map<DefaultMutableTreeNode, DefaultMutableTreeNode> visibilityRestrictedNodesToParent = new HashMap<>();
 
     /**
      * Der allgemeine Baum wird erzeugt oder zurueckgesetzt
      */
     private void createTree() {
         //alle Knoten entfernen/einblenden, die nicht/nur im ExpertMode zu sehen sein sollen
-        for (Class<? extends ModelElement> onlyExperModeVisibleNodeClass : doc.getMetaModel().getOnlyExpertModeVisibleNodes()) {
-            LGMTreeNode node = elementClassToParentNode.get(onlyExperModeVisibleNodeClass);
-            if (node != null) {
-                if (Static.isExpertMode()) {
-                    DefaultMutableTreeNode parent = onlyExperModeVisibleNodesToParent.remove(node);
-                    if (parent != null) {
-                        parent.add(node);
-                    }
-                } else {
-                    DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
-                    if (parent != null) {
-                        onlyExperModeVisibleNodesToParent.put(node, parent);
-                        parent.remove(node);
-                    }
-                }
-            }
-        }
+        MetaModel metaModel = doc.getMetaModel();
+        Set<Class<? extends ModelElement>> onlyExpertModeVisibleNodes = metaModel.getOnlyExpertModeVisibleNodes();
+        Set<Class<? extends ModelElement>> pureTemplateElementClasses = metaModel.getPureTemplateElementClasses();
+        addOrRemoveVisibilityRestrictedElementClassNodes(onlyExpertModeVisibleNodes, OPTION_ENABLE_EXPERT_MODE, null);
+        addOrRemoveVisibilityRestrictedElementClassNodes(pureTemplateElementClasses, OPTION_ENABLE_EXPERT_MODE, OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER);
 
         for (LGMTreeNode node : nodesToClear) {
             node.removeAllChildren();
@@ -343,6 +333,32 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         }
         if (textFieldPhysicalLayer != null && textFieldPhysicalLayer.getParent() == physicalLayer) {
             physicalLayer.remove(textFieldPhysicalLayer);
+        }
+    }
+
+    /**
+     * @param visibilityRestrictedElementClasses
+     * @param property1
+     * @param property2
+     */
+    private void addOrRemoveVisibilityRestrictedElementClassNodes(final Iterable<Class<? extends ModelElement>> visibilityRestrictedElementClasses, final BooleanProperty property1, final BooleanProperty property2) {
+        boolean showRestrictedNodes = property1.is() || property2 != null && property2.is();
+        for (Class<? extends ModelElement> visibilityRestrictedElementClass : visibilityRestrictedElementClasses) {
+            LGMTreeNode node = elementClassToParentNode.get(visibilityRestrictedElementClass);
+            if (node != null) {
+                if (showRestrictedNodes) {
+                    DefaultMutableTreeNode parent = visibilityRestrictedNodesToParent.remove(node);
+                    if (parent != null) {
+                        parent.add(node);
+                    }
+                } else {
+                    DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
+                    if (parent != null) {
+                        visibilityRestrictedNodesToParent.put(node, parent);
+                        parent.remove(node);
+                    }
+                }
+            }
         }
     }
 
