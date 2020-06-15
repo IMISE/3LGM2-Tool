@@ -187,8 +187,9 @@ public abstract class MetaModelDefinition implements Serializable {
     }
 
     /**
-     * Liefert alle Elementklassen, die nur im Baum angezeigt werden sollen, wenn die Option {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE}
-     * auf <code>true</code> gestellt ist.
+     * Returns all element classes which are not in the set {@link #getPureTemplateSourceNodes()}
+     * but also only visible if the expert mode is enabled.
+     * ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true)
      * ACHTUNG: hier wird nur mit contains(class) gerpüft -> immer auch die Oberklassen, die versteckt werden sollen reinschreiben
      *
      * @return alle Elementklassen, die nur im ExpertMode im Baum angezeigt werden
@@ -198,12 +199,15 @@ public abstract class MetaModelDefinition implements Serializable {
     }
 
     /**
-     * Liefert alle Elementklassen, die nur im ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true) angelegt und verändert werden
-     * können.
+     * Returns all element classes which can be only created in a model by copy existing
+     * elements from a template to a model.
+     * You can make this elements also visible in the model explorer and changeable by
+     * enabling the ExpertMode ({@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} = true).
      *
-     * @return alle Elementklassen, die nur im ExpertMode geändert werden können
+     * @return all element classes form templates which can only changed via model browser
+     *         in expert mode
      */
-    public Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes() {
+    public Set<Class<? extends ModelElement>> getPureTemplateSourceNodes() {
         return ImmutableSet.of();
     }
 

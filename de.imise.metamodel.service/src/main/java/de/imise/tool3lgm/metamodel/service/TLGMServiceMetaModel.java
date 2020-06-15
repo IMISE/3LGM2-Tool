@@ -286,11 +286,11 @@ public class TLGMServiceMetaModel extends MetaModelDefinition implements Regular
     @Override
     public Set<Class<? extends ModelElement>> getOnlyExpertModeVisibleNodes() {
         //hier wird nur mit contains(class) gerpüft -> immer auch die Oberklassen, die versteckt werden sollen reinschreiben
-        return ImmutableSet.of(IheInterface.class, IheInvokingInterface.class, IheProvidingInterface.class, Use.class);
+        return ImmutableSet.of(Use.class, IheInterface.class, IheInvokingInterface.class, IheProvidingInterface.class);
     }
 
     @Override
-    public Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes() {
+    public Set<Class<? extends ModelElement>> getPureTemplateSourceNodes() {
         return ImmutableSet.of(IheActor.class, IheDomain.class, IheIntegrationProfile.class, IheInterface.class, IheInvokingInterface.class, IheProvidingInterface.class, IheTransaction.class);
     }
 

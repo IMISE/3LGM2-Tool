@@ -440,6 +440,20 @@ public abstract class CollectionUtils {
     }
 
     /**
+     * @param <T>
+     * @param sets
+     * @return
+     */
+    @SafeVarargs
+    public static <T> ImmutableSet<T> ensureImmutableCombined(final Set<T>... sets) {
+        ImmutableSet.Builder<T> setBuilder = ImmutableSet.builder();
+        for (Set<T> set : sets) {
+            setBuilder.addAll(set);
+        }
+        return setBuilder.build();
+    }
+
+    /**
      * Liefert eine Immutable-Variante der übergebenen Map. Ist es bereits immutable, dann kommt die Map selbst zurück.
      *
      * @param original

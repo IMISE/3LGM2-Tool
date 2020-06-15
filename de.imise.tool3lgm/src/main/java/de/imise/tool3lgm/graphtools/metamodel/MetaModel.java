@@ -360,8 +360,8 @@ public final class MetaModel extends CoreMetaModel {
         //jetzt die GraphViewDefinition, weil die gleich gebraucht wird
         graphViewDefinition = getInstance(metaModelDefinition.getGraphViewDefinitionClass());
         //spezielle Knoteneigenschaften
-        onlyExpertModeEditableNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getOnlyExpertModeEditableNodes());
-        onlyExpertModeVisibleNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getOnlyExpertModeVisibleNodes());
+        onlyExpertModeEditableNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getPureTemplateSourceNodes());
+        onlyExpertModeVisibleNodes = CollectionUtils.ensureImmutableCombined(metaModelDefinition.getOnlyExpertModeVisibleNodes(), onlyExpertModeEditableNodes);
         treeDomainLayerVisibleAbstractNodes = metaModelDefinition.getTreeDomainLayerVisibleAbstractNodes();
         treeLogicalLayerVisibleAbstractNodes = metaModelDefinition.getTreeLogicalLayerVisibleAbstractNodes();
         treePhysicalLayerVisibleAbstractNodes = metaModelDefinition.getTreePhysicalLayerVisibleAbstractNodes();
@@ -749,7 +749,7 @@ public final class MetaModel extends CoreMetaModel {
     /**
      * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell editierbar ist. Das ist sie,
      * wenn sich der Baukasten im ExpertMode befindet oder wenn er sich nicht im ExpertMode befindet
-     * und die Klasse keine Klasse aus den {@link #getOnlyExpertModeEditableNodes()} ist.
+     * und die Klasse keine Klasse aus den {@link #getPureTemplateSourceNodes()} ist.
      *
      * @param elementClasses
      * @return
@@ -763,7 +763,7 @@ public final class MetaModel extends CoreMetaModel {
     /**
      * Liefert <code>true</code>, wenn alle übergebenen Klassen aktuell editierbar ist. Das ist sie,
      * wenn sich der Baukasten im ExpertMode befindet oder wenn er sich nicht im ExpertMode befindet
-     * und die Klasse keine Klasse aus den {@link #getOnlyExpertModeEditableNodes()} ist.
+     * und die Klasse keine Klasse aus den {@link #getPureTemplateSourceNodes()} ist.
      *
      * @param elementClasses
      * @return

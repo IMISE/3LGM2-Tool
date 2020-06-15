@@ -121,7 +121,7 @@ public interface RegularMetaModelDefinition {
      *
      * @return alle Elementklassen, die nur im ExpertMode geändert werden können
      */
-    public Set<Class<? extends ModelElement>> getOnlyExpertModeEditableNodes();
+    public Set<Class<? extends ModelElement>> getPureTemplateSourceNodes();
 
     ////////////
     // Kanten //
