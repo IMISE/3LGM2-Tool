@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.tree.node;
 
+import javax.swing.ImageIcon;
+
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -16,7 +18,17 @@ public class ElementContainerTreeNode extends IconifiedTreeNode implements Graph
      * @param sort
      */
     public ElementContainerTreeNode(final ElementContainer ec, final boolean setTreeNode, final boolean sort) {
-        super(ec, sort);
+        this(ec, setTreeNode, sort, null);
+    }
+
+    /**
+     * @param ec
+     * @param setTreeNode
+     * @param sort
+     * @param icon
+     */
+    public ElementContainerTreeNode(final ElementContainer ec, final boolean setTreeNode, final boolean sort, final ImageIcon icon) {
+        super(ec, sort, icon);
         if (setTreeNode && ec instanceof NodeContainer) {
             ((NodeContainer) ec).setTreeNode(this);
         }
