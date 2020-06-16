@@ -28,8 +28,6 @@ public class SimpleResourceIconHandler implements SimpleResourceSource {
         this.resourcePackageSource = resourcePackageSource;
     }
 
-    }
-
     /**
      * Gibt das spezifizierte ImageIcon aus dem Standard-Iconpfad zurück.
      *
