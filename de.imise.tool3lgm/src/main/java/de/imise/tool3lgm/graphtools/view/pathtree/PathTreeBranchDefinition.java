@@ -3,12 +3,16 @@ package de.imise.tool3lgm.graphtools.view.pathtree;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
+
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.collections.CollectionUtils;
+import de.imise.util.resource.SimpleResourceIconHandler;
 
 /**
  * Defines one branch of a tree. A branch consists of optional hierarchy
@@ -16,7 +20,9 @@ import de.imise.util.collections.CollectionUtils;
  *
  * @author AXS (02.09.2019)
  */
-public class PathTreeBranchDefinition extends MetaModelSpecificAdapter {
+public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter {
+
+    public static final String TREE_ICONS_PATH_PREFIX = "icon/TREE_ICON_";
 
     /**
      * Alle Objekte in dieser Liste geben vor, welche Hierarchie-Knoten
@@ -59,6 +65,24 @@ public class PathTreeBranchDefinition extends MetaModelSpecificAdapter {
      */
     public SimpleMetaPath getElementsPath() {
         return elementsPath;
+    }
+
+    /**
+     * @param elementClass
+     * @return
+     */
+    public ImageIcon getIcon(final Class<? extends ModelElement> elementClass) {
+        return getIcon(elementClass.getSimpleName());
+    }
+
+    /**
+     * @param elementClass
+     * @return
+     */
+    public ImageIcon getIcon(final Object hierachyObject) {
+        String iconDir = TREE_ICONS_PATH_PREFIX + hierachyObject;
+        ImageIcon icon = SimpleResourceIconHandler.getImageIcon(iconDir);
+        return icon;
     }
 
     @Override
