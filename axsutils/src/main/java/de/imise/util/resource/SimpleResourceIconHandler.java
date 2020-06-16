@@ -12,7 +12,7 @@ public class SimpleResourceIconHandler implements SimpleResourceSource {
     /**
      *
      */
-    private final Class<?> ressourcePackageSource;
+    private final Class<?> resourcePackageSource;
 
     /**
      *
@@ -22,22 +22,24 @@ public class SimpleResourceIconHandler implements SimpleResourceSource {
     }
 
     /**
-     * @param ressourcePackageSource
+     * @param resourcePackageSource
      */
-    public SimpleResourceIconHandler(final Class<?> ressourcePackageSource) {
-        this.ressourcePackageSource = ressourcePackageSource;
+    public SimpleResourceIconHandler(final Class<?> resourcePackageSource) {
+        this.resourcePackageSource = resourcePackageSource;
+    }
+
     }
 
     /**
      * Gibt das spezifizierte ImageIcon aus dem Standard-Iconpfad zurück.
      *
-     * @param ressourcePackageSource
+     * @param resourcePackageSource
      * @param name
      * @return
      */
-    public static ImageIcon getIcon(final Class<?> ressourcePackageSource, final String name) {
+    public static ImageIcon getIcon(final Class<?> resourcePackageSource, final String name) {
         SimpleResourceSource simpleResourceSource = new SimpleResourceIconHandler();
-        String iconFileName = simpleResourceSource.getResourceFileName(ressourcePackageSource, name);
+        String iconFileName = simpleResourceSource.getResourceFileName(resourcePackageSource, name);
         return getImageIcon(iconFileName);
     }
 
@@ -48,7 +50,7 @@ public class SimpleResourceIconHandler implements SimpleResourceSource {
      * @return ImageIcon
      */
     public ImageIcon getIcon(final String name) {
-        String iconFileName = getResourceFileName(ressourcePackageSource == null ? getClass() : ressourcePackageSource, name);
+        String iconFileName = getResourceFileName(resourcePackageSource == null ? getClass() : resourcePackageSource, name);
         return getImageIcon(iconFileName);
     }
 
