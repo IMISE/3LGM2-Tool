@@ -13,7 +13,6 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER;
 
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -172,8 +171,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      * @return
      */
     private static ImageIcon getLayerIcon(final Enum<?> iconIdentifier) {
-        ImageIcon icon = Tool3lgmConstants.getSmallIcon(iconIdentifier);
-        icon = new ImageIcon(icon.getImage().getScaledInstance(14, 14, Image.SCALE_SMOOTH));
+        ImageIcon icon = Tool3lgmConstants.getLargeIcon(iconIdentifier);
+        //icon = new ImageIcon(icon.getImage().getScaledInstance(14, 14, Image.SCALE_SMOOTH));
         return icon;
     }
 
