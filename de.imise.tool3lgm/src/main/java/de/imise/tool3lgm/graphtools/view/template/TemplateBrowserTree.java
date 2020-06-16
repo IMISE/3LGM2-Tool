@@ -19,6 +19,7 @@ import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.tool3lgm.graphtools.view.tooltip.ElementToolTipProvider;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
+import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.util.ToolTipProvider;
@@ -55,6 +56,15 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         pathTreeModel = new PathTreeModel(Tool3lgmConstants.getResString("TEMPLATE_BROWSER_NO_TEMPLATES_AVAILABLE"), true);
         setModel(pathTreeModel);
         toolTipProvider = new ElementToolTipProvider(this);
+
+        //analog ModelBrowser
+        setCellRenderer(new TreeRenderer());
+        ((TreeRenderer) getCellRenderer()).setBackgroundNonSelectionColor(getBackground());
+        setBackground(getBackground());
+        setEditable(false);
+        putClientProperty("JTree.lineStyle", "Angled");
+        setToggleClickCount(-1);
+
     }
 
     @Override
