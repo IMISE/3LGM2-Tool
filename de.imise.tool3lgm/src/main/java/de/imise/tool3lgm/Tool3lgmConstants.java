@@ -25,7 +25,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.util.ApplicationManager;
 import de.imise.util.StringUtils;
 import de.imise.util.collections.CollectionUtils;
-import de.imise.util.resource.SimpleResourceIconHandler;
+import de.imise.util.resource.SimpleResourceIconSource;
 
 /**
  * @author Thomas Rudert, AXS Klasse, die alle global benötigten Parameter, und deren Zugriffsmethoden, des Programms enthält
@@ -371,7 +371,7 @@ public abstract class Tool3lgmConstants {
      * @return
      */
     public static ImageIcon getImageIcon(final String dir) {
-        return SimpleResourceIconHandler.getImageIcon(dir);
+        return SimpleResourceIconSource.getImageIcon(dir);
     }
 
     /**

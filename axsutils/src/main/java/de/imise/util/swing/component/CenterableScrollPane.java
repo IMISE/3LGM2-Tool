@@ -11,7 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
-import de.imise.util.resource.SimpleResourceIconHandler;
+import de.imise.util.resource.SimpleResourceIconSource;
 
 /**
  * @author AXS (19.05.2020)
@@ -64,7 +64,7 @@ public class CenterableScrollPane extends JScrollPane {
         //viewport.setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
         horizontalScrollBar.setUnitIncrement(10); //better default
         verticalScrollBar.setUnitIncrement(10); //better default
-        ImageIcon centerIcon = SimpleResourceIconHandler.getIcon(getClass(), "zent");
+        ImageIcon centerIcon = SimpleResourceIconSource.getIcon(getClass(), "zent");
         centerViewButton = new JButton(centerIcon);
         centerViewButton.addActionListener(new ActionListener() {
             @Override

@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.collections.CollectionUtils;
-import de.imise.util.resource.SimpleResourceIconHandler;
+import de.imise.util.resource.SimpleResourceIconSource;
 
 /**
  * Defines one branch of a tree. A branch consists of optional hierarchy
@@ -81,7 +81,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter {
      */
     public ImageIcon getIcon(final Object hierachyObject) {
         String iconDir = TREE_ICONS_PATH_PREFIX + hierachyObject;
-        ImageIcon icon = SimpleResourceIconHandler.getImageIcon(iconDir);
+        ImageIcon icon = SimpleResourceIconSource.getImageIcon(iconDir);
         return icon;
     }
 

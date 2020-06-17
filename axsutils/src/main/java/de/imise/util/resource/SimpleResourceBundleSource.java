@@ -9,7 +9,7 @@ import java.util.MissingResourceException;
  *
  * @author AXS (3 Aug 2019)
  */
-public interface SimpleResourceBundleSource extends SimpleResourceSource {
+public interface SimpleResourceBundleSource extends SimpleResourceFileLoader {
 
     /**
      * Liefert für einen übergebenen Resourcen-KeyString einen String aus den Resourcen.
