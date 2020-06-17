@@ -107,12 +107,22 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
     }
 
     @Override
-    public String getResString(final String resKey) { // als einzige nicht final, weil Unterklassen ihre String von sonstwo laden können
+    public String getResString(final String resKey) { //nicht final, weil Unterklassen ihre String von sonstwo laden können
         return MetaModelSpecific.super.getResString(resKey);
     }
 
     @Override
-    public final String getResStringWithoutError(final String resKey) {
+    public final String getResStringWithoutError(final Object o) {
+        return MetaModelSpecific.super.getResStringWithoutError(o);
+    }
+
+    @Override
+    public final String getResStringWithoutError(final String prefix, final Object o) {
+        return MetaModelSpecific.super.getResStringWithoutError(prefix, o);
+    }
+
+    @Override
+    public String getResStringWithoutError(final String resKey) { //nicht final, weil Unterklassen ihre String von sonstwo laden können
         return MetaModelSpecific.super.getResStringWithoutError(resKey);
     }
 

@@ -3,6 +3,8 @@ package de.imise.tool3lgm.graphtools.metamodel;
 import java.util.MissingResourceException;
 import java.util.Objects;
 
+import com.google.common.base.Strings;
+
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
@@ -87,15 +89,40 @@ public interface MetaModelSpecific {
     }
 
     /**
+     * @param o
+     * @return
+     */
+    public default String getResStringWithoutError(final Object o) {
+        return getResStringWithoutError(null, o);
+    }
+
+    /**
+     * @param prefix
+     * @param o
+     * @return
+     */
+    public default String getResStringWithoutError(final String prefix, final Object o) {
+        boolean classObject = o != null && o instanceof Class<?>;
+        String oString = classObject ? ((Class<?>) o).getSimpleName() : String.valueOf(o);
+        String resKey = Strings.isNullOrEmpty(prefix) ? oString : String.valueOf(prefix) + oString;
+        return getResStringWithoutError(resKey);
+    }
+
+    /**
      * @param resKey
      *            resource key
      * @return the string from the resources for the given resKey or the key if
      *         there is no string in the resources for the given key
      */
     public default String getResStringWithoutError(final String resKey) {
-        MetaModelContext metaModelContext = getMetaModelContext();
-        String resString = metaModelContext.getResStringWithoutError(resKey);
-        return resString;
+        try {
+            String resString = getResString(resKey); //if getResString(..) is overwritten
+            return resString;
+        } catch (Exception e) {
+            MetaModelContext metaModelContext = getMetaModelContext();
+            String resString = metaModelContext.getResStringWithoutError(resKey);
+            return resString;
+        }
     }
 
     /**
