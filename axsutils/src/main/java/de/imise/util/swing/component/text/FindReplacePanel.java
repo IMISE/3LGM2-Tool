@@ -38,7 +38,7 @@ import javax.swing.text.JTextComponent;
 
 import de.imise.util.IntRange;
 import de.imise.util.StringUtils;
-import de.imise.util.resource.SimpleResourceBundleHandler;
+import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
 import de.imise.util.swing.component.HistoryComboBox;
 
 /**
@@ -61,7 +61,7 @@ public class FindReplacePanel extends JPanel implements ActionListener {
      */
     private JTextComponent myTargetComponent = null;
 
-    final static SimpleResourceBundleHandler resHandler = new SimpleResourceBundleHandler(FindReplacePanel.class);
+    final static SimpleResourceBundleSourceAdapter resHandler = new SimpleResourceBundleSourceAdapter(FindReplacePanel.class);
 
     /**
      * Groß/Kleinschreibung

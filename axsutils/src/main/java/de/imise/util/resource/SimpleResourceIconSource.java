@@ -25,7 +25,7 @@ public interface SimpleResourceIconSource extends SimpleResourceFileLoader {
      * @return
      */
     public static ImageIcon getIcon(final Class<?> resourcePackageSource, final String name) {
-        SimpleResourceFileLoader simpleResourceSource = new SimpleResourceIconHandler();
+        SimpleResourceFileLoader simpleResourceSource = new SimpleResourceIconSourceAdapter();
         String iconFileName = simpleResourceSource.getResourceFileName(resourcePackageSource, name);
         return getImageIcon(iconFileName);
     }

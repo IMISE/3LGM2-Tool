@@ -9,7 +9,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.util.resource.SimpleResourceBundleHandler;
+import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
 
 /**
  * Klasse, die die Klasse eines Metamodells und das dazugehörige ResouceBundle dieses Metamodells enthält. Es enthält noch nicht das MetaModel
@@ -20,7 +20,7 @@ import de.imise.util.resource.SimpleResourceBundleHandler;
  *
  * @author AXS (8 May 2019)
  */
-public final class MetaModelContext extends SimpleResourceBundleHandler implements MetaModelSpecific {
+public final class MetaModelContext extends SimpleResourceBundleSourceAdapter implements MetaModelSpecific {
 
     /** Appendix of the resource key with the class name of the meta model and with the value of the description of this model type */
     public static final String META_MODEL_DESCRIPTION_RESKEY_POSTFIX = "_description";

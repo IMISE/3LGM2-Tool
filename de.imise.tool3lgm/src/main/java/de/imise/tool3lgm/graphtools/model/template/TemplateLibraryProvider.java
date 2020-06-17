@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.util.resource.SimpleResourceBundleHandler;
+import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
 import de.imise.util.resource.SimpleResourceIconSource;
 import de.imise.util.resource.SimpleResourceSource;
 
@@ -66,15 +66,15 @@ public abstract class TemplateLibraryProvider extends MetaModelSpecificAdapter {
         /**
          * Resource handler wit the text for the nodes in the template browser
          */
-        private final SimpleResourceBundleHandler resourceHandler;
+        private final SimpleResourceBundleSourceAdapter resourceHandler;
 
         /**
          * @param metaModelDefinitionClass
-         * @param resourceNameClass the class the {@link SimpleResourceBundleHandler} is initialized with
+         * @param resourceNameClass the class the {@link SimpleResourceBundleSourceAdapter} is initialized with
          */
         public TemplateLibraryProviderResourceHandler(final Class<? extends MetaModelDefinition> metaModelDefinitionClass, final Class<? extends TemplateLibraryProvider> resourceNameClass) {
             super(metaModelDefinitionClass);
-            resourceHandler = new SimpleResourceBundleHandler(resourceNameClass);
+            resourceHandler = new SimpleResourceBundleSourceAdapter(resourceNameClass);
 
         }
 

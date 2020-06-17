@@ -10,7 +10,7 @@ import de.imise.util.Sys;
  *
  * @author AXS created on 21.08.2007
  */
-public class SimpleResourceBundleHandler implements SimpleResourceBundleSource {
+public class SimpleResourceBundleSourceAdapter implements SimpleResourceBundleSource {
 
     /**
      * ResourceBundles mit den speziellen Ressourcen für eine bestimmte Klasse
@@ -24,7 +24,7 @@ public class SimpleResourceBundleHandler implements SimpleResourceBundleSource {
      *            Klassenname, der den Namen der zu ladenden Ressorcendatei vorgibt. Außerdem wird von dieser Klasse der ClassLoader genutzt,
      *            um das ResourceBundle zu laden.
      */
-    public SimpleResourceBundleHandler() {
+    public SimpleResourceBundleSourceAdapter() {
         this(null, null);
     }
 
@@ -35,7 +35,7 @@ public class SimpleResourceBundleHandler implements SimpleResourceBundleSource {
      *            Klassenname, der den Namen der zu ladenden Ressorcendatei vorgibt. Außerdem wird von dieser Klasse der ClassLoader genutzt,
      *            um das ResourceBundle zu laden.
      */
-    public SimpleResourceBundleHandler(final Class<?> ressourceNameClassSource) {
+    public SimpleResourceBundleSourceAdapter(final Class<?> ressourceNameClassSource) {
         this(ressourceNameClassSource, null);
     }
 
@@ -50,7 +50,7 @@ public class SimpleResourceBundleHandler implements SimpleResourceBundleSource {
      *            <code>null</code>, dann wird der GesamtName aus <code>ressourcePackageNameSource</code> gebildet - also nicht nur das Package
      *            genommen, sondern auch der SimpleName der Klasse als Package-Name.
      */
-    public SimpleResourceBundleHandler(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName) {
+    public SimpleResourceBundleSourceAdapter(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName) {
         this(ressourcePackageNameSource, resourceBundleSimpleName, Locale.getDefault());
     }
 
@@ -67,7 +67,7 @@ public class SimpleResourceBundleHandler implements SimpleResourceBundleSource {
      * @param locale
      *            Locale des ResourceBundles
      */
-    public SimpleResourceBundleHandler(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName, final Locale locale) {
+    public SimpleResourceBundleSourceAdapter(final Class<?> ressourcePackageNameSource, final String resourceBundleSimpleName, final Locale locale) {
         resourceBundle = loadResourceBundle(ressourcePackageNameSource, resourceBundleSimpleName, locale);
     }
 

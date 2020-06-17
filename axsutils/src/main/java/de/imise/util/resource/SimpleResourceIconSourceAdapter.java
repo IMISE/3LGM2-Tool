@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 /**
  * @author AXS (19.05.2020)
  */
-public class SimpleResourceIconHandler implements SimpleResourceIconSource {
+public class SimpleResourceIconSourceAdapter implements SimpleResourceIconSource {
 
     /**
      *
@@ -15,14 +15,14 @@ public class SimpleResourceIconHandler implements SimpleResourceIconSource {
     /**
      *
      */
-    public SimpleResourceIconHandler() {
+    public SimpleResourceIconSourceAdapter() {
         this(null);
     }
 
     /**
      * @param resourcePackageSource
      */
-    public SimpleResourceIconHandler(final Class<?> resourcePackageSource) {
+    public SimpleResourceIconSourceAdapter(final Class<?> resourcePackageSource) {
         this.resourcePackageSource = resourcePackageSource;
     }
 
