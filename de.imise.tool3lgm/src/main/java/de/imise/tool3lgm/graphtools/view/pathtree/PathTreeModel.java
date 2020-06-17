@@ -164,31 +164,29 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         for (GDCollection template : templates) {
             LGMGraphDocument mainGraphDocument = template.getMainDoc();
             List<ElementContainer> elementContainers = mainGraphDocument.getElementContainers(pathStepConnectionClass);
-            ImageIcon icon = branchDefinition.getIcon(pathStepConnectionClass);
-            createNodes(pathStepNodes, elementContainers, lastHierarchyNode, icon);
+            createNodes(pathStepNodes, elementContainers, lastHierarchyNode, branchDefinition);
         }
         int pathLength = elementsPath.length();
         for (int i = 0; i < pathLength; i++) {
             pathStepConnectionClass = elementsPath.getPathStepElementClass(i);
-            ImageIcon icon = branchDefinition.getIcon(pathStepConnectionClass);
-            pathStepNodes = addPathStepNodes(pathStepNodes, pathStepConnectionClass, icon);
+            pathStepNodes = addPathStepNodes(pathStepNodes, pathStepConnectionClass, branchDefinition);
         }
     }
 
     /**
      * @param parentNodes
      * @param nextPathStepElementClass
-     * @param icon
+     * @param branchDefinition
      * @return
      */
-    private Collection<ElementContainerTreeNode> addPathStepNodes(final Iterable<ElementContainerTreeNode> parentNodes, final Class<? extends ModelElement> nextPathStepElementClass, final ImageIcon createdNodesIcon) {
+    private Collection<ElementContainerTreeNode> addPathStepNodes(final Iterable<ElementContainerTreeNode> parentNodes, final Class<? extends ModelElement> nextPathStepElementClass, final PathTreeBranchDefinition branchDefinition) {
         Collection<ElementContainerTreeNode> nextPathStepNodes = new ArrayList<>();
         for (ElementContainerTreeNode parentNode : parentNodes) {
             ElementContainer parentEc = parentNode.getUserObject();
             GraphDocument doc = parentEc.getGraphDocument();
             ModelElement me = parentEc.getElement();
             List<ElementContainer> connectedContainers = me.getConnectedContainers(nextPathStepElementClass, doc);
-            createNodes(nextPathStepNodes, connectedContainers, parentNode, createdNodesIcon);
+            createNodes(nextPathStepNodes, connectedContainers, parentNode, branchDefinition);
         }
         return nextPathStepNodes;
     }
@@ -197,13 +195,15 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      * @param createdNodes
      * @param elementContainers
      * @param parent
-     * @param createdNodesIcon
+     * @param branchDefinition
      */
-    private void createNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent, final ImageIcon createdNodesIcon) {
+    private void createNodes(final Collection<ElementContainerTreeNode> createdNodes, final Iterable<ElementContainer> elementContainers, final LGMTreeNode parent, final PathTreeBranchDefinition branchDefinition) {
         for (ElementContainer ec : elementContainers) {
-            ElementContainerTreeNode pathStepNode = new ElementContainerTreeNode(ec, true, false, createdNodesIcon);
+            ModelElement me = ec.getElement();
+            Class<? extends ModelElement> meClass = me.getClass();
+            ImageIcon icon = branchDefinition.getIcon(meClass);
+            ElementContainerTreeNode pathStepNode = new ElementContainerTreeNode(ec, true, false, icon);
             if (!showElementNamesWithSubmodels) {
-                ModelElement me = ec.getElement();
                 String simpleName = me.toString();
                 String currentToStringName = pathStepNode.toString();
                 if (!simpleName.equals(currentToStringName)) { // nur setzen, wenn anders
