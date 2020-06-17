@@ -23,6 +23,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 
@@ -102,9 +103,10 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
     /**
      * @param parent
      * @param hierarchyDefinitionObject
+     * @param icon
      * @return
      */
-    private LGMTreeNode getOrCreateHierarchyNode(final LGMTreeNode parent, final Object hierarchyDefinitionObject) {
+    private LGMTreeNode getOrCreateHierarchyNode(final LGMTreeNode parent, final Object hierarchyDefinitionObject, final ImageIcon icon) {
         for (int i = 0; i < parent.getChildCount(); i++) {
             LGMTreeNode childNode = (LGMTreeNode) parent.getChildAt(i);
             Object childNodeUserObject = childNode.getUserObject();
@@ -115,16 +117,16 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         }
         if (hierarchyDefinitionObject instanceof Class) {
             try {
-                Class<? extends ModelElement> elementClass = ((Class) hierarchyDefinitionObject).asSubclass(ModelElement.class);
+                Class<? extends ModelElement> elementClass = ((Class<?>) hierarchyDefinitionObject).asSubclass(ModelElement.class);
                 ElementsNameBuilder elementsNameBuilder = treeDefinition.getElementsNameBuilder();
                 String elementClassName = elementsNameBuilder.getDisplayableName(elementClass);
-                return new ElementClassTreeNode(elementClass, elementClassName);
+                return new ElementClassTreeNode(elementClass, elementClassName, icon);
             } catch (Exception e) {
             }
         }
         String hierarchyNodeTextResourceKey = hierarchyDefinitionObject.toString();
         String hierarchyNodeText = treeDefinition.getResStringWithoutError(hierarchyNodeTextResourceKey);
-        LGMTreeNode hierarchyNode = new LGMTreeNode(hierarchyDefinitionObject, hierarchyNodeText, true);
+        LGMTreeNode hierarchyNode = new IconifiedTreeNode(hierarchyDefinitionObject, hierarchyNodeText, true, icon);
         parent.add(hierarchyNode);
         return hierarchyNode;
     }
@@ -137,8 +139,13 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
      */
     private LGMTreeNode getOrCreateBranchLastHierarchyNode(final PathTreeBranchDefinition branchDefinition) {
         LGMTreeNode lastHierarchyNode = root;
-        for (Object hiearchyObject : branchDefinition.iterableHierarchyObjects()) {
-            lastHierarchyNode = getOrCreateHierarchyNode(lastHierarchyNode, hiearchyObject);
+        for (Object hierarchyObject : branchDefinition.iterableHierarchyObjects()) {
+            ImageIcon icon = branchDefinition.getIcon(hierarchyObject);
+            //if String try to load a resource string for this string as key
+            if (hierarchyObject instanceof String) {
+                hierarchyObject = branchDefinition.getResStringWithoutError(hierarchyObject);
+            }
+            lastHierarchyNode = getOrCreateHierarchyNode(lastHierarchyNode, hierarchyObject, icon);
         }
         return lastHierarchyNode;
     }

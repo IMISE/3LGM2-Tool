@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.StringTreeNode;
 import de.imise.util.collections.CollectionUtils;
-import de.imise.util.resource.SimpleResourceIconSource;
+import de.imise.util.resource.SimpleResourceSource;
 
 /**
  * Defines one branch of a tree. A branch consists of optional hierarchy
@@ -20,9 +20,7 @@ import de.imise.util.resource.SimpleResourceIconSource;
  *
  * @author AXS (02.09.2019)
  */
-public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter {
-
-    public static final String TREE_ICONS_PATH_PREFIX = "icon/TREE_ICON_";
+public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter implements SimpleResourceSource {
 
     /**
      * Alle Objekte in dieser Liste geben vor, welche Hierarchie-Knoten
@@ -42,11 +40,18 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter {
     private final SimpleMetaPath elementsPath;
 
     /**
+     * Respurce Handler to get the strings and icons
+     */
+    private final SimpleResourceSource resourceHandler;
+
+    /**
+     * @param resourceHandler
      * @param elementsPath
      * @param hierarchyObjects
      */
-    public PathTreeBranchDefinition(final SimpleMetaPath elementsPath, final Object... hierarchyObjects) {
+    public PathTreeBranchDefinition(final SimpleResourceSource resourceHandler, final SimpleMetaPath elementsPath, final Object... hierarchyObjects) {
         super(elementsPath);
+        this.resourceHandler = resourceHandler;
         this.elementsPath = elementsPath;
         for (Object hierarchyObject : hierarchyObjects) {
             this.hierarchyObjects.add(hierarchyObject);
@@ -67,11 +72,16 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter {
         return elementsPath;
     }
 
+    @Override
+    public final ImageIcon getIcon(final String name) {
+        return resourceHandler.getIcon(name);
+    }
+
     /**
      * @param elementClass
      * @return
      */
-    public ImageIcon getIcon(final Class<? extends ModelElement> elementClass) {
+    public final ImageIcon getIcon(final Class<? extends ModelElement> elementClass) {
         return getIcon(elementClass.getSimpleName());
     }
 
@@ -79,10 +89,18 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter {
      * @param elementClass
      * @return
      */
-    public ImageIcon getIcon(final Object hierachyObject) {
-        String iconDir = TREE_ICONS_PATH_PREFIX + hierachyObject;
-        ImageIcon icon = SimpleResourceIconSource.getImageIcon(iconDir);
-        return icon;
+    public final ImageIcon getIcon(final Object hierachyObject) {
+        return resourceHandler.getIcon(String.valueOf(hierachyObject));
+    }
+
+    @Override
+    public final String getResString(final String resKey) {
+        return resourceHandler.getResString(resKey);
+    }
+
+    @Override
+    public final String getResStringWithoutError(final String resKey) {
+        return resourceHandler.getResStringWithoutError(resKey);
     }
 
     @Override

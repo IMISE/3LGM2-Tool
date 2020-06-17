@@ -6,6 +6,7 @@ import java.util.List;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeBranchDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
+import de.imise.util.resource.SimpleResourceSource;
 
 /**
  * Definition of the structure of the template browser.
@@ -15,10 +16,22 @@ import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 public abstract class TemplateViewDefinition {
 
     /**
+     * The resource handler to get the localized strings and load icons
+     */
+    private final SimpleResourceSource resourceHandler;
+
+    /**
+     * @param resourceHandler
+     */
+    public TemplateViewDefinition(final SimpleResourceSource resourceHandler) {
+        this.resourceHandler = resourceHandler;
+    }
+
+    /**
      * @return Name of the main category of this template library e.g "IHE" or "HL7". More than one template library can be in the same category. If
      *         <code>null</code> it will be ignored.
      */
-    protected String getMainCategoryName() {
+    protected String getMainCategoryResStringAndIconKey() {
         return null;
     }
 
@@ -36,9 +49,9 @@ public abstract class TemplateViewDefinition {
      */
     public final List<PathTreeBranchDefinition> getTreeBranchDefinition() {
         List<PathTreeBranchDefinition> treeBranchDefinitions = new ArrayList<>();
-        String mainCategoryName = getMainCategoryName();
+        String mainCategoryResStringAndIconKey = getMainCategoryResStringAndIconKey();
         for (SimpleMetaPath viewMetaPath : getViewMetaPaths()) {
-            PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(viewMetaPath, mainCategoryName);
+            PathTreeBranchDefinition pathTreeBranchDefinition = new PathTreeBranchDefinition(resourceHandler, viewMetaPath, mainCategoryResStringAndIconKey);
             treeBranchDefinitions.add(pathTreeBranchDefinition);
         }
         return treeBranchDefinitions;

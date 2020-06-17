@@ -52,11 +52,10 @@ public class IheTemplateLibraryProvider extends TemplateLibraryProvider {
 
     @Override
     public TemplateViewDefinition getViewDefinition() {
-        return new TemplateViewDefinition() {
-
+        return new TemplateViewDefinition(resourceHandler) {
             @Override
-            public String getMainCategoryName() {
-                return getResString("MAIN_CATEGORY_NAME");
+            public String getMainCategoryResStringAndIconKey() {
+                return "MAIN_CATEGORY_NAME";
             }
 
             @Override
