@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.view.tree.node;
 
+import javax.swing.ImageIcon;
+
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
@@ -9,6 +11,7 @@ public class ElementClassTreeNode extends IconifiedTreeNode {
 
     /**
      * @param elementClass
+     * @param label
      */
     public ElementClassTreeNode(final Class<? extends ModelElement> elementClass, final String label) {
         super(elementClass, label, true);
@@ -16,9 +19,29 @@ public class ElementClassTreeNode extends IconifiedTreeNode {
 
     /**
      * @param elementClass
+     * @param label
      * @param sort
      */
     public ElementClassTreeNode(final Class<? extends ModelElement> elementClass, final String label, final boolean sort) {
+        super(elementClass, label, sort);
+    }
+
+    /**
+     * @param elementClass
+     * @param label
+     * @param icon
+     */
+    public ElementClassTreeNode(final Class<? extends ModelElement> elementClass, final String label, final ImageIcon icon) {
+        super(elementClass, label, true);
+    }
+
+    /**
+     * @param elementClass
+     * @param label
+     * @param sort
+     * @param icon
+     */
+    public ElementClassTreeNode(final Class<? extends ModelElement> elementClass, final String label, final boolean sort, final ImageIcon icon) {
         super(elementClass, label, sort);
     }
 

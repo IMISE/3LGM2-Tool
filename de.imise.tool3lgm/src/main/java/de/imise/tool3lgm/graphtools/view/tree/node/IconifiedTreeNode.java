@@ -5,7 +5,7 @@ import javax.swing.ImageIcon;
 /**
  * @author AXS (15.06.2020)
  */
-public abstract class IconifiedTreeNode extends LGMTreeNode {
+public class IconifiedTreeNode extends LGMTreeNode {
 
     /**
      * @author AXS (15.06.2020)
