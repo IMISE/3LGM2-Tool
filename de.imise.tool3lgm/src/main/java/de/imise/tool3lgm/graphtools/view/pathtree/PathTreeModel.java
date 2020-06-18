@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.graphtools.view.pathtree;
 
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -142,7 +141,6 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
         LGMTreeNode lastHierarchyNode = root;
         for (Object hierarchyObject : branchDefinition.iterableHierarchyObjects()) {
             ImageIcon icon = branchDefinition.getIcon(hierarchyObject);
-            icon = new ImageIcon(icon.getImage().getScaledInstance(28, 16, Image.SCALE_SMOOTH));
             //if String try to load a resource string for this string as key
             if (hierarchyObject instanceof String) {
                 hierarchyObject = branchDefinition.getResStringWithoutError(hierarchyObject);
@@ -204,7 +202,6 @@ public class PathTreeModel extends DefaultTreeModel implements MetaModelSpecific
             ModelElement me = ec.getElement();
             Class<? extends ModelElement> meClass = me.getClass();
             ImageIcon icon = branchDefinition.getIcon(meClass);
-            icon = new ImageIcon(icon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH));
             ElementContainerTreeNode pathStepNode = new ElementContainerTreeNode(ec, true, false, icon);
             if (!showElementNamesWithSubmodels) {
                 String simpleName = me.toString();

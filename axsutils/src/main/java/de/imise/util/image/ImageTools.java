@@ -18,6 +18,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import de.imise.util.robot.ScreenRobot;
 
@@ -743,6 +744,41 @@ public class ImageTools {
             e.printStackTrace();
         }
         return encodedImage;
+    }
+
+    /**
+     * @param icon the icon to scale if necessary
+     * @param height target height
+     * @return a scaled imgae if the icons height was different to the height
+     */
+    public static ImageIcon getScaledInstance(final ImageIcon icon, final int height) {
+        return getScaledInstance(icon, height, 0);
+    }
+
+    /**
+     * @param icon the icon to scale if necessary
+     * @param height target height
+     * @param percentTolerance scale only if the size differs more than this in percent
+     * @return a scaled imgae if the icons height was different to the height
+     */
+    public static ImageIcon getScaledInstance(ImageIcon icon, final int height, final int percentTolerance) {
+        int iconHeight = icon.getIconHeight();
+        if (iconHeight != height) {
+            int diff = (int) (height / 100d * percentTolerance);
+            int heightDiff = height - diff;
+            boolean scale = iconHeight < heightDiff;
+            if (!scale) {
+                heightDiff = height + diff;
+                scale = iconHeight > heightDiff;
+            }
+            if (scale) {
+                int iconWidth = icon.getIconWidth();
+                double factor = (double) iconHeight / height;
+                iconWidth /= factor;
+                icon = new ImageIcon(icon.getImage().getScaledInstance(iconWidth, height, Image.SCALE_SMOOTH));
+            }
+        }
+        return icon;
     }
 
 }

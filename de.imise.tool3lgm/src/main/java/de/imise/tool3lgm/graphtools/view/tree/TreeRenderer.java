@@ -6,6 +6,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.ImageIcon;
 import javax.swing.JTree;
@@ -19,6 +20,7 @@ import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.IconifiedTreeNode.IconState;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
+import de.imise.util.image.ImageTools;
 
 public class TreeRenderer extends DefaultTreeCellRenderer {
 
@@ -111,6 +113,10 @@ public class TreeRenderer extends DefaultTreeCellRenderer {
                         ec.checkTreeIcon();
                     }
                 }
+            }
+            if (icon != null) {
+                Dimension preferredSize = getPreferredSize();
+                icon = ImageTools.getScaledInstance(icon, preferredSize.height, 10);
             }
             setIcon(icon);
             return this;
