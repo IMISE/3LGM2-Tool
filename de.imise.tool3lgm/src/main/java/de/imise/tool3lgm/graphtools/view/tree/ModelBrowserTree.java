@@ -13,6 +13,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER;
 
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -171,8 +172,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      * @return
      */
     private static ImageIcon getLayerIcon(final Enum<?> iconIdentifier) {
-        ImageIcon icon = Tool3lgmConstants.getLargeIcon(iconIdentifier);
-        //icon = new ImageIcon(icon.getImage().getScaledInstance(14, 14, Image.SCALE_SMOOTH));
+        ImageIcon icon = Tool3lgmConstants.getSmallIcon(iconIdentifier);
+        icon = new ImageIcon(icon.getImage().getScaledInstance(14, 14, Image.SCALE_SMOOTH));
         return icon;
     }
 
@@ -215,7 +216,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     private void sortedByAssignable(final List<Class<? extends ModelElement>> classes) {
-        int classesCount = classes.size();
+        final int classesCount = classes.size();
         for (int i = 0; i < classesCount - 1; i++) {
             for (int j = i + 1; j < classesCount; j++) {
                 if (classes.get(j).isAssignableFrom(classes.get(i))) {
@@ -234,27 +235,27 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      */
     private final void initLayer(final LGMTreeNode layerNode, final Class<? extends ModelElement>[] treeLayerVisibleAbstractNodes, final Iterable<Class<? extends ModelElement>> treeLayerVisibleInstancialeNodes) {
         //die abstracten Klassen holen, die in der Hierarchie des Baumes unterhalb des Layer-Knotens angezeigt werden sollen
-        List<Class<? extends ModelElement>> abstractClasses = new ArrayList<>(Arrays.asList(treeLayerVisibleAbstractNodes));
+        final List<Class<? extends ModelElement>> abstractClasses = new ArrayList<>(Arrays.asList(treeLayerVisibleAbstractNodes));
         //diese Liste so sortieren, dass sichergestellt ist, dass alle Klassen die in der Liste vorkommen, die Unterklasse einer anderen
         //Klasse in der Liste sind, immer nach dieser Oberklasse in der Liste stehen
         sortedByAssignable(abstractClasses);
         //Liste von Knoten für die abstrakten Klassen in derselben Reihenfolge wie die abstrakten Klassen
-        List<LGMTreeNode> abstractClassNodes = new ArrayList<>();
-        ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
-        for (Class<? extends ModelElement> abstractClass : abstractClasses) {
-            String label = elementsNameBuilder.getDisplayableName(abstractClass);
+        final List<LGMTreeNode> abstractClassNodes = new ArrayList<>();
+        final ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
+        for (final Class<? extends ModelElement> abstractClass : abstractClasses) {
+            final String label = elementsNameBuilder.getDisplayableName(abstractClass);
             abstractClassNodes.add(new ElementClassTreeNode(abstractClass, label));
         }
         //jetzt die ElementKnoten unter die abstrakten Knoten hängen oder unter den LayerKnoten selbst, wenn es keinen abstakten Oberklassenkoten gibt
-        for (Class<? extends ModelElement> elementClass : treeLayerVisibleInstancialeNodes) {
-            String label = elementsNameBuilder.getDisplayableName(elementClass);
-            ElementClassTreeNode instanciableClassNode = new ElementClassTreeNode(elementClass, label, false); // muss nicht selbst sortieren, weil die Elemente bereits sortiert reinkommen
+        for (final Class<? extends ModelElement> elementClass : treeLayerVisibleInstancialeNodes) {
+            final String label = elementsNameBuilder.getDisplayableName(elementClass);
+            final ElementClassTreeNode instanciableClassNode = new ElementClassTreeNode(elementClass, label, false); // muss nicht selbst sortieren, weil die Elemente bereits sortiert reinkommen
             elementClassToParentNode.put(elementClass, instanciableClassNode);
             boolean superClassFound = false;
             for (int i = abstractClasses.size() - 1; i >= 0; i--) {
-                Class<? extends ModelElement> abstractClass = abstractClasses.get(i);
+                final Class<? extends ModelElement> abstractClass = abstractClasses.get(i);
                 if (abstractClass.isAssignableFrom(elementClass)) {
-                    LGMTreeNode abstractClassNode = abstractClassNodes.get(i);
+                    final LGMTreeNode abstractClassNode = abstractClassNodes.get(i);
                     abstractClassNode.add(instanciableClassNode);
                     superClassFound = true;
                     break;
@@ -267,14 +268,14 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         //jetzt die abstrakten Knoten sich gegenseitig unterhängen (wenn der eine ein Oberklassenknoten des anderen ist) oder dem LayerKnoten unterhängen (wenn es keinen Oberklassenknoten gibt)
         //von hinten anfangen, weil die Klasse ja so sortiert wurden, dass die hinteren Unterklassen der vorderen sein können aber nicht mehr umgekehrt
         for (int i = abstractClasses.size() - 1; i >= 0; i--) {
-            Class<? extends ModelElement> potencialAbstractSubClass = abstractClasses.get(i);
-            LGMTreeNode potencialAbstractSubClassNode = abstractClassNodes.get(i);
+            final Class<? extends ModelElement> potencialAbstractSubClass = abstractClasses.get(i);
+            final LGMTreeNode potencialAbstractSubClassNode = abstractClassNodes.get(i);
             boolean superClassFound = false;
             //alle Klassen vor der aktuellen Klasse durchsuchen, ob es eine Oberklasse der aktuellen Klasse ist. Wenn ja -> hönge den Knoten der Klasse unter
             for (int j = i - 1; j >= 0; j--) {
-                Class<? extends ModelElement> potencialAbstractSuperClass = abstractClasses.get(j);
+                final Class<? extends ModelElement> potencialAbstractSuperClass = abstractClasses.get(j);
                 if (potencialAbstractSuperClass.isAssignableFrom(potencialAbstractSubClass)) {
-                    LGMTreeNode potencialAbstractSuperClassNode = abstractClassNodes.get(j);
+                    final LGMTreeNode potencialAbstractSuperClassNode = abstractClassNodes.get(j);
                     potencialAbstractSuperClassNode.add(potencialAbstractSubClassNode);
                     superClassFound = true;
                     break;
@@ -288,11 +289,11 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     private void initTree() {
-        LGMTreeNode top = (LGMTreeNode) treeModel.getRoot();
+        final LGMTreeNode top = (LGMTreeNode) treeModel.getRoot();
         top.add(domainLayer);
         top.add(logicalLayer);
         top.add(physicalLayer);
-        MetaModel metaModel = doc.getMetaModel();
+        final MetaModel metaModel = doc.getMetaModel();
         initLayer(domainLayer, metaModel.getTreeDomainLayerVisibleAbstractNodes(), metaModel.treeDomainLayerNodes);
         initLayer(logicalLayer, metaModel.getTreeLogicalLayerVisibleAbstractNodes(), metaModel.treeLogicalLayerNodes);
         initLayer(physicalLayer, metaModel.getTreePhysicalLayerVisibleAbstractNodes(), metaModel.treePhysicalLayerNodes);
@@ -315,13 +316,13 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      */
     private void createTree() {
         //alle Knoten entfernen/einblenden, die nicht/nur im ExpertMode zu sehen sein sollen
-        MetaModel metaModel = doc.getMetaModel();
-        Set<Class<? extends ModelElement>> onlyExpertModeVisibleNodes = metaModel.getOnlyExpertModeVisibleNodes();
-        Set<Class<? extends ModelElement>> pureTemplateElementClasses = metaModel.getPureTemplateElementClasses();
+        final MetaModel metaModel = doc.getMetaModel();
+        final Set<Class<? extends ModelElement>> onlyExpertModeVisibleNodes = metaModel.getOnlyExpertModeVisibleNodes();
+        final Set<Class<? extends ModelElement>> pureTemplateElementClasses = metaModel.getPureTemplateElementClasses();
         addOrRemoveVisibilityRestrictedElementClassNodes(onlyExpertModeVisibleNodes, OPTION_ENABLE_EXPERT_MODE, null);
         addOrRemoveVisibilityRestrictedElementClassNodes(pureTemplateElementClasses, OPTION_ENABLE_EXPERT_MODE, OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER);
 
-        for (LGMTreeNode node : nodesToClear) {
+        for (final LGMTreeNode node : nodesToClear) {
             node.removeAllChildren();
         }
         if (textFieldDomainLayer != null && textFieldDomainLayer.getParent() == domainLayer) {
@@ -341,17 +342,17 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      * @param property2
      */
     private void addOrRemoveVisibilityRestrictedElementClassNodes(final Iterable<Class<? extends ModelElement>> visibilityRestrictedElementClasses, final BooleanProperty property1, final BooleanProperty property2) {
-        boolean showRestrictedNodes = property1.is() || property2 != null && property2.is();
-        for (Class<? extends ModelElement> visibilityRestrictedElementClass : visibilityRestrictedElementClasses) {
-            LGMTreeNode node = elementClassToParentNode.get(visibilityRestrictedElementClass);
+        final boolean showRestrictedNodes = property1.is() || property2 != null && property2.is();
+        for (final Class<? extends ModelElement> visibilityRestrictedElementClass : visibilityRestrictedElementClasses) {
+            final LGMTreeNode node = elementClassToParentNode.get(visibilityRestrictedElementClass);
             if (node != null) {
                 if (showRestrictedNodes) {
-                    DefaultMutableTreeNode parent = visibilityRestrictedNodesToParent.remove(node);
+                    final DefaultMutableTreeNode parent = visibilityRestrictedNodesToParent.remove(node);
                     if (parent != null) {
                         parent.add(node);
                     }
                 } else {
-                    DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
+                    final DefaultMutableTreeNode parent = (DefaultMutableTreeNode) node.getParent();
                     if (parent != null) {
                         visibilityRestrictedNodesToParent.put(node, parent);
                         parent.remove(node);
@@ -370,7 +371,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     private void addObject(final ElementContainer ec, final boolean performingRebuild, final GraphDocument selDoc, final int layer) {
         if (ec instanceof NodeContainer) {
             NodeContainer kc = (NodeContainer) ec;
-            NodeContainer kc2 = (NodeContainer) kc.getElement().getContainer(selDoc);
+            final NodeContainer kc2 = (NodeContainer) kc.getElement().getContainer(selDoc);
             if (kc2 != null) {
                 kc = kc2;
             }
@@ -387,7 +388,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             } else {
                 elementNode.removeAllChildren();
             }
-            LGMTreeNode parent_node = getParentNodeOfType(kc, layer);
+            final LGMTreeNode parent_node = getParentNodeOfType(kc, layer);
             if (parent_node != null) {
                 parent_node.add(elementNode);
                 addChildren(elementNode, selDoc);
@@ -407,14 +408,14 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         if (!showPartOfHierarchy) {
             return;
         }
-        ElementContainer kc = elementNode.getUserObject();
-        LGMTreeNode parent = (LGMTreeNode) elementNode.getParent();
-        GraphDocument maindoc = doc.getCollection().getMainDoc();
-        boolean isEnableSubmodelBrowser = OPTION_ENABLE_SUBMODEL_BROWSER.is();
-        List<ElementContainer> all = kc.getElement().getDirectPartContainers(isEnableSubmodelBrowser ? selDoc : maindoc);
+        final ElementContainer kc = elementNode.getUserObject();
+        final LGMTreeNode parent = (LGMTreeNode) elementNode.getParent();
+        final GraphDocument maindoc = doc.getCollection().getMainDoc();
+        final boolean isEnableSubmodelBrowser = OPTION_ENABLE_SUBMODEL_BROWSER.is();
+        final List<ElementContainer> all = kc.getElement().getDirectPartContainers(isEnableSubmodelBrowser ? selDoc : maindoc);
         loop1: for (ElementContainer pc : all) {
-            ModelElement me = pc.getElement();
-            ElementContainer ecSelDoc = me.getContainer(selDoc);
+            final ModelElement me = pc.getElement();
+            final ElementContainer ecSelDoc = me.getContainer(selDoc);
             if (ecSelDoc != null) {
                 pc = ecSelDoc;
             }
@@ -433,13 +434,13 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             ElementContainerTreeNode childNode = null;
             //bei NodeContainern werden die evtl. bereits vorhandenen TreeNodes wiederverwendet
             if (pc instanceof NodeContainer) {
-                List<ElementContainer> directParentElements = me.getDirectParentContainers(isEnableSubmodelBrowser ? selDoc : maindoc);
+                final List<ElementContainer> directParentElements = me.getDirectParentContainers(isEnableSubmodelBrowser ? selDoc : maindoc);
                 // wenn es mehr als einen parent gibt, dann einfach alle Nodes neu erzeugen. Der Fall ist selten
                 //aber dann werden evtl. vorher ausgeklappte nodes nicht mehr aufgeklappt sein. Die Alternative wäre,
                 //sich statt nur eines Nodes im ElementContaier alle zu merken. Ich finde das muss nicht sein, da das
                 //nur in diesem seltenen Fals den expansionState von allen Node retten würde, die mehr als einen Parent haben.
                 if (directParentElements.size() < 2) {
-                    NodeContainer nc = (NodeContainer) pc;
+                    final NodeContainer nc = (NodeContainer) pc;
                     childNode = nc.getTreeNode();
                 }
             }
@@ -458,16 +459,16 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      * @param selDoc
      */
     private void addUserDefinedProperties(final ElementContainerTreeNode elementNode, final GraphDocument selDoc) {
-        ElementContainer ec = elementNode.getUserObject();
-        ModelElement me = ec.getElement();
-        Set<UserField> allOfThisElement = me.getUserFieldInputValueKeys();
-        GDCollection gdcol = doc.getCollection();
-        UserFieldDefinitions ufDefs = gdcol.getUserFieldDefinitions();
-        Class<? extends ModelElement> elementClass = me.getClass();
-        for (UserField uf : ufDefs.getUserFields(elementClass)) {
+        final ElementContainer ec = elementNode.getUserObject();
+        final ModelElement me = ec.getElement();
+        final Set<UserField> allOfThisElement = me.getUserFieldInputValueKeys();
+        final GDCollection gdcol = doc.getCollection();
+        final UserFieldDefinitions ufDefs = gdcol.getUserFieldDefinitions();
+        final Class<? extends ModelElement> elementClass = me.getClass();
+        for (final UserField uf : ufDefs.getUserFields(elementClass)) {
             if (uf.isTreeVisibility()) {
                 if (uf.hasStyle(UserField.Style.HYPERLINK) || uf.hasStyle(UserField.Style.SEPARATOR) || uf.isClassificationUserField() || allOfThisElement.contains(uf)) {
-                    UserFieldTreeNode userFieldTreeNode = new UserFieldTreeNode(uf, me);
+                    final UserFieldTreeNode userFieldTreeNode = new UserFieldTreeNode(uf, me);
                     elementNode.add(userFieldTreeNode);
                 }
             }
@@ -479,7 +480,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      */
     public void removeObject(final ElementContainer objekt) {
         if (objekt instanceof NodeContainer) {
-            LGMTreeNode node = ((NodeContainer) objekt).getTreeNode();
+            final LGMTreeNode node = ((NodeContainer) objekt).getTreeNode();
             ((DefaultTreeModel) treeModel).removeNodeFromParent(node);
         }
         ((DefaultTreeModel) treeModel).reload();
@@ -501,8 +502,8 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
 
     private LGMTreeNode getOrCreateTextFieldNode(final LGMTreeNode layerNode, LGMTreeNode textFieldNode) {
         if (textFieldNode == null) {
-            ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
-            String label = elementsNameBuilder.getDisplayableName(Textfield.class);
+            final ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
+            final String label = elementsNameBuilder.getDisplayableName(Textfield.class);
             textFieldNode = new ElementClassTreeNode(Textfield.class, label, false);
         }
         if (textFieldNode.getParent() == null) {
@@ -518,7 +519,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      * @return
      */
     private LGMTreeNode getParentNodeOfType(final NodeContainer obj, final int layer) {
-        Node me = (Node) obj.getElement();
+        final Node me = (Node) obj.getElement();
         if (me instanceof Textfield) {
             if (layer == DOMAIN_LAYER) {
                 textFieldDomainLayer = getOrCreateTextFieldNode(domainLayer, textFieldDomainLayer);
@@ -541,19 +542,19 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         if (doc == null) {
             return;
         }
-        GraphDocument maindoc = doc.getCollection().getMainDoc();
+        final GraphDocument maindoc = doc.getCollection().getMainDoc();
         setSelectionListenerActive(false);
         createTree();
         saveExpansionState();
         showPartOfHierarchy = OPTION_SHOW_PART_OF_HIERARCHY.is();
         showUserDefinedProperties = isShowUserDefinedPropertiesInModelBrowser();
-        boolean isEnableSubmodelBrowser = OPTION_ENABLE_SUBMODEL_BROWSER.is();
+        final boolean isEnableSubmodelBrowser = OPTION_ENABLE_SUBMODEL_BROWSER.is();
         for (int ebene = MAX_LAYER_INDEX; ebene >= MIN_LAYER_INDEX; ebene--) {
             if (isInterLayer(ebene)) {
                 continue;
             }
-            for (NodeContainer nc : maindoc.getLayer(ebene).getNodeContainersAlphabetical()) {
-                ModelElement me = nc.getElement();
+            for (final NodeContainer nc : maindoc.getLayer(ebene).getNodeContainersAlphabetical()) {
+                final ModelElement me = nc.getElement();
                 if (isEnableSubmodelBrowser) {
                     if (me.isUnique()) {
                         if (showPartOfHierarchy && nc.hasParent(maindoc)) {
@@ -583,16 +584,16 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      */
     public void selectObjects() {
         setSelectionListenerActive(false);
-        TreePath[] path = new TreePath[doc.getSelectedRealElementContainerCount()];
+        final TreePath[] path = new TreePath[doc.getSelectedRealElementContainerCount()];
         int m = 0;
-        GraphDocument mainDoc = doc.getCollection().getMainDoc();
+        final GraphDocument mainDoc = doc.getCollection().getMainDoc();
         for (NodeContainer ec : doc.getSelectedRealElementContainerIterable()) {
-            ModelElement me = ec.getElement();
+            final ModelElement me = ec.getElement();
             ec = (NodeContainer) me.getContainer(doc);
             if (ec == null) {
                 ec = (NodeContainer) me.getContainer(mainDoc);
             }
-            LGMTreeNode node = ec.getTreeNode();
+            final LGMTreeNode node = ec.getTreeNode();
             if (node != null) {
                 path[m++] = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(node));
             }
@@ -617,7 +618,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      */
     private void refreshNode(final TreeNode node) {
         for (int i = 0; i < node.getChildCount(); i++) {
-            TreeNode n = node.getChildAt(i);
+            final TreeNode n = node.getChildAt(i);
             myModel.nodeChanged(n);
             refreshNode(n);
         }
@@ -627,7 +628,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      *
      */
     public void refreshTree() {
-        for (LGMTreeNode nodeToRefresh : nodesToClear) {
+        for (final LGMTreeNode nodeToRefresh : nodesToClear) {
             refreshNode(nodeToRefresh);
         }
     }
