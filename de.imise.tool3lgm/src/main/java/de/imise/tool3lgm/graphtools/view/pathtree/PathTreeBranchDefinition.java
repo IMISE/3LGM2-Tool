@@ -74,6 +74,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
 
     @Override
     public final ImageIcon getIcon(final String name) {
+        //TODO: PathTreeModel macht diesen Aufruf bei jedem Knoten (z.B. beim Aufbau des TemplateBrowsers). Da sollte man die Icons evtl. cachen in einer Map.
         return resourceHandler.getIcon(name);
     }
 
@@ -90,7 +91,7 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
      * @return
      */
     public final ImageIcon getIcon(final Object hierachyObject) {
-        return resourceHandler.getIcon(String.valueOf(hierachyObject));
+        return getIcon(String.valueOf(hierachyObject));
     }
 
     @Override
