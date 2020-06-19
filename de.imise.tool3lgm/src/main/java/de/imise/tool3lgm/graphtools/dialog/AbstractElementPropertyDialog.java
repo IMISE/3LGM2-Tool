@@ -14,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -22,6 +23,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import org.apache.jena.ext.com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
@@ -50,6 +53,17 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      * ModelElement its properties are displayed or changable in this dialog.
      */
     protected final ModelElement modelElement;
+
+    /**
+     * If the modelElement is a copy from a template element so this variable
+     * strores the source modelElement from the template. If the dialog should
+     * be opened for a template element, so the the function
+     * {@link Static#showPropertyDialog(ElementContainer)} always opens the
+     * dialog for the element in the current selected model and not the template
+     * element - but omly if it exists in the model. If not the dialog will be
+     * opened for the template element.
+     */
+    private final ModelElement templateElementSource;
 
     /**
      * Panel with the type, name, id and ceration date of the dialogs element.
@@ -119,6 +133,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         Container contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         this.modelElement = modelElement;
+        templateElementSource = Static.getTemplateElement(modelElement);
 
         tabbedPane.setBorder(BorderFactory.createEmptyBorder(0, 5, 0, 5));
 
@@ -170,6 +185,17 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      */
     public final ModelElement getModelElement() {
         return modelElement;
+    }
+
+    /**
+     * @return a collection with at least the modelElement from this dialog and if exists
+     *         additionally the template element the modelElement was created from
+     */
+    public final Collection<ModelElement> getModelElementWithTemplateElement() {
+        if (templateElementSource == null) {
+            return Lists.newArrayList(modelElement);
+        }
+        return Lists.newArrayList(modelElement, templateElementSource);
     }
 
     /**
