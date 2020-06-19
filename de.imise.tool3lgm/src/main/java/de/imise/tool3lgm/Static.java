@@ -10,6 +10,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import java.awt.Component;
 import java.awt.dnd.DropTarget;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JDialog;
@@ -313,6 +314,40 @@ public class Static {
         if (templateLibrariesManager != null) {
             templateLibrariesManager.setActiveTemplate(doc);
         }
+    }
+
+    /**
+     * @param me
+     * @return the elemenmt from a currently active template with the same id.
+     */
+    public static final ModelElement getTemplateElement(final ModelElement me) {
+        GDCollection gdcoll = me.getCollection();
+        ModelCategory modelCategory = gdcoll.getModelCategory();
+        //the element is from a template itself -> no result
+        if (modelCategory == ModelCategory.TEMPLATE) {
+            return null;
+        }
+        MetaModel metaModel = gdcoll.getMetaModel();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        //the element is not a template element -> no result
+        if (!metaModel.isPureTemplateElementClass(elementClass)) {
+            return null;
+        }
+        MetaModelContext metaModelContext = gdcoll.getMetaModelContext();
+        TemplateLibrariesManager templateLibrariesManager = getTemplateLibrariesManager();
+        if (templateLibrariesManager == null) {
+            return null;
+        }
+        Collection<GDCollection> templates = templateLibrariesManager.getTemplates(metaModelContext);
+        String elementHash = me.getHashString();
+        for (GDCollection template : templates) {
+            LGMGraphDocument mainDoc = template.getMainDoc();
+            ModelElement templateElement = mainDoc.findElementCoded(elementHash);
+            if (templateElement != null) {
+                return templateElement;
+            }
+        }
+        return null;
     }
 
     /** Gibt zurück, ob der ExpertMode aktiv ist */
