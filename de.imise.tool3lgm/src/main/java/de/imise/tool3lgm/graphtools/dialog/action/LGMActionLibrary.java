@@ -12,14 +12,11 @@ import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.LGMDragNDropPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
-import de.imise.tool3lgm.log.Log;
 
 /**
  * Diese Klasse stellt statische Methoden zur Erzeugung von <code>LGMAction</code>s bereit. Panels erzeugen und verwenden diese Actions um Funktionen
@@ -157,26 +154,6 @@ public class LGMActionLibrary {
                 panel.update();
             }
         };
-    }
-
-    /**
-     * Gibt das <code>ModelElement</code> des <code>ElementPropertyDialog</code> s wieder, in dem
-     * sich der <code>tree</code> befindet.
-     *
-     * @param tree TODO: diese Funktion hat jetzt das {@link LGMDragNDropPanel}, so dass das hier
-     *            irgendwann mal weg kann
-     */
-    private static ModelElement getTopLevelModelElement(final JTree tree) {
-
-        ModelElement me = null;
-
-        try {
-            ElementPropertyDialog d = (ElementPropertyDialog) tree.getTopLevelAncestor();
-            me = d.getModelElement();
-        } catch (Exception ex) {
-            Log.log(Log.ERROR, "LGMActionLibary: could'nt find TopLevelAncestor for tree", ex);
-        }
-        return me;
     }
 
 }
