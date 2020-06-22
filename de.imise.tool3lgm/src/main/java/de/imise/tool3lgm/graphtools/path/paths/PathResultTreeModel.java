@@ -58,7 +58,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * parallelen Metapfade eins). Bei den {@link ElementaryMetaPath} und {@link SequenceMetaPath} steht immer nur eine Collection an Index 0 in der
      * Liste.
      */
-    private List<Collection<ModelElement>> startElements = new ArrayList<>();
+    private List<Collection<ModelElement>> startElementsCollections = new ArrayList<>();
 
     /**
      * Alle Blattknoten, die ausgehend von einem Startknoten im Ergebnisbaum vorhanden sind, die nicht
@@ -215,9 +215,9 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param startElementSets
      */
     public void setStartElementSets(final List<Collection<ModelElement>> startElements) {
-        this.startElements.clear();
+        startElementsCollections.clear();
         if (startElements != null) {
-            this.startElements = startElements;
+            startElementsCollections = startElements;
         }
 
         //irgendwas wollte ich hier noch machen, weiß aber nicht mehr was...
@@ -234,9 +234,9 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @param startElements
      */
     public void setStartElements(final Collection<ModelElement> startElements) {
-        this.startElements.clear();
+        startElementsCollections.clear();
         if (startElements != null && startElements.size() > 0) {
-            this.startElements.add(startElements);
+            startElementsCollections.add(startElements);
         }
         reload();
     }
@@ -244,7 +244,7 @@ public class PathResultTreeModel extends DefaultTreeModel {
     /**
      * Setzt das übergebene Element als StartElement für die suche der Verbindungen über den gesetzten Pfad
      *
-     * @param startElements
+     * @param startElement
      */
     public void setStartElements(final ModelElement startElement) {
         Collection<ModelElement> startElements = new ArrayList<>();
@@ -367,11 +367,11 @@ public class PathResultTreeModel extends DefaultTreeModel {
         root.removeAllChildren();
         completePathLeafs.clear();
         incompletePathLeafs.clear();
-        if (startElements == null || startElements.size() == 0) {
+        if (startElementsCollections == null || startElementsCollections.isEmpty()) {
             return;
         }
         //mehrere Startmemngen wurden übergeben (das geht nur bei einem alles umschließenden Parallelmetapfad)
-        if (startElements.size() > 1) {
+        if (startElementsCollections.size() > 1) {
             AbstractMetaPath realFirstMetaPath = metaPath;
             //solange aus dem SequenceMetaPath den jeweils ersten MetaPath holen, bis man bei einem
             //MetaPath ist, der selbst kein SequenceMetaPath mehr ist
@@ -382,7 +382,8 @@ public class PathResultTreeModel extends DefaultTreeModel {
 
             //eine einelementige Startelementliste wurde übergeben
         } else {
-            for (ModelElement me : startElements.get(0)) {
+            Collection<ModelElement> startElements = startElementsCollections.get(0);
+            for (ModelElement me : startElements) {
                 ElementaryPath elementaryPath = new ElementaryPath(null, me);
                 PathResultTreeNode node = new PathResultTreeNode(elementaryPath, PathResultTreeNode.NodeType.START_ELEMENT);
                 List<PathResultTreeNode> pathNodes = addPath(node, metaPath, false);
