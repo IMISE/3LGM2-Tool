@@ -149,7 +149,6 @@ public class PathResultTreeNode extends DefaultMutableTreeNode {
      *
      * @param nodes
      */
-    @SuppressWarnings("unchecked")
     public final void appendChildren(final Collection<PathResultTreeNode> nodes) {
         Iterator<TreeNode> childrenIt = children.iterator();
         while (childrenIt.hasNext()) {
