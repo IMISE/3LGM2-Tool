@@ -6,9 +6,6 @@ import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPa
 import java.awt.Component;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 import javax.swing.Icon;
@@ -592,30 +589,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param simpleMetaPath
      */
     public final void addTablePanel(final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath simpleMetaPath) {
-        addTablePanelInternal(tableDefinition, simpleMetaPath);
-    }
-
-    /**
-     * @param tableDefinition
-     * @param simpleMetaPaths
-     */
-    @SafeVarargs
-    private final void addTablePanelInternal(final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
-        boolean editable = true;
-        Set<SimpleMetaPath> allDifferentSimpleMetaPaths = new HashSet<>();
-        for (SimpleMetaPath simpleMetaPath : simpleMetaPaths) {
-            Collection<SimpleMetaPath> simpleMetaPathsNonAbstract = SimpleMetaPathCreator.getSimpleMetaPathsNonAbstract(simpleMetaPath);
-            allDifferentSimpleMetaPaths.addAll(simpleMetaPathsNonAbstract);
-            if (editable) {
-                for (SimpleMetaPath nonAbstractSimpleMetaPaths : simpleMetaPathsNonAbstract) {
-                    if (!nonAbstractSimpleMetaPaths.isCreatable(true)) {
-                        editable = false;
-                        break;
-                    }
-                }
-            }
-        }
-        ConnectedElementsTablePanel connectedElementsTablePanel = new ConnectedElementsTablePanel(this, tableDefinition, allDifferentSimpleMetaPaths);
+        ConnectedElementsTablePanel connectedElementsTablePanel = new ConnectedElementsTablePanel(this, tableDefinition, simpleMetaPath);
         addTab(connectedElementsTablePanel);
     }
 

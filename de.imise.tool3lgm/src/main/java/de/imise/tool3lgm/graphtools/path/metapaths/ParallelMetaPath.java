@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.path.metapaths;
 
+import java.util.Collection;
+
 import com.google.common.collect.ImmutableSet;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -18,6 +20,13 @@ public abstract class ParallelMetaPath extends ListMetaPath {
      */
     public ParallelMetaPath(final ParallelMetaPath other) {
         super(other);
+    }
+
+    /**
+     * @param metaPaths
+     */
+    public ParallelMetaPath(final Collection<SimpleMetaPath> metaPaths) {
+        this(toArray(metaPaths));
     }
 
     /**
@@ -88,6 +97,15 @@ public abstract class ParallelMetaPath extends ListMetaPath {
             }
         }
         return false;
+    }
+
+    /**
+     * @param simpleMetaPaths
+     * @return an array of the {@link SimpleMetaPath}s in the collection
+     */
+    public static SimpleMetaPath[] toArray(final Collection<SimpleMetaPath> simpleMetaPaths) {
+        SimpleMetaPath[] simpleMetaPathsArray = new SimpleMetaPath[simpleMetaPaths.size()];
+        return simpleMetaPaths.toArray(simpleMetaPathsArray);
     }
 
 }

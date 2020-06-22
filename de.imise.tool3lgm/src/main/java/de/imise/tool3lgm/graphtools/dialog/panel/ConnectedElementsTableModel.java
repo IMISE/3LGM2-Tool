@@ -2,7 +2,9 @@ package de.imise.tool3lgm.graphtools.dialog.panel;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.swing.table.DefaultTableModel;
@@ -22,6 +24,8 @@ import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
+import de.imise.tool3lgm.graphtools.path.metapaths.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeNode;
 import de.imise.util.NamedObjectContainer;
@@ -42,7 +46,7 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
     /**
      * MetaPfad, der in der Tabelle dargestellt werden soll
      */
-    private final AbstractMetaPath metaPath;
+    private final UnionMetaPath metaPath;
 
     /**
      * Definition der Spalten der Tabelle. Das bezieht sich im Header auf den im Konstruktor übergebenen {@link SimpleMetaPath} und in den
@@ -63,21 +67,27 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
 
     /**
      * @param modelElement
-     *            ModelElement, für das die verbundenen Elemente über den MetaPafd dargestellt werden sollen
-     * @param metaPath
+     *            ModelElement, für das die verbundenen Elemente über den MetaPfad dargestellt werden sollen
+     * @param simpleMetaPath
      *            MetaPfad, der in der Tabelle dargestellt werden soll
      * @param tableDefinition
      *            Definition der Spalten der Tabelle. Das bezieht sich im Header auf den im Konstruktor übergebenen {@link SimpleMetaPath} und in den
      *            Zellen auf die Positionen im {@link PathResultTreeModel}.
      */
-    public ConnectedElementsTableModel(final ModelElement modelElement, final AbstractMetaPath metaPath, final ConnectedElementsTableDefinition tableDefinition) {
+    public ConnectedElementsTableModel(final ModelElement modelElement, final SimpleMetaPath simpleMetaPath, final ConnectedElementsTableDefinition tableDefinition) {
         this.modelElement = modelElement;
-        this.metaPath = metaPath;
+        Set<SimpleMetaPath> allDifferentSimpleMetaPaths = new HashSet<>();
+        Collection<SimpleMetaPath> simpleMetaPathsNonAbstract = SimpleMetaPathCreator.getSimpleMetaPathsNonAbstract(simpleMetaPath);
+        allDifferentSimpleMetaPaths.addAll(simpleMetaPathsNonAbstract);
+        metaPath = new UnionMetaPath(allDifferentSimpleMetaPaths);
         this.tableDefinition = tableDefinition;
         setColumnIdentifiers(metaPath);
     }
 
-    private void setColumnIdentifiers(final AbstractMetaPath columnHeaderReferencePath) {
+    /**
+     * @param columnHeaderReferencePath
+     */
+    private void setColumnIdentifiers(final UnionMetaPath columnHeaderReferencePath) {
         //letzte Spalte ist hidden und enthält den PathResultTreeNode, aus dem die Zeile entstanden ist. Den braucht man, um zu wissen, wo der Pfad herkam und ihn löschen zu können
         Vector<Object> colNames = new Vector<>(tableDefinition.columnCount() + 1);
         for (SingleColumnDefinition columnDefinition : tableDefinition) {

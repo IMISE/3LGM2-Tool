@@ -9,7 +9,6 @@ import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.EventObject;
 import java.util.List;
 
@@ -28,7 +27,6 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.collections.CollectionUtils;
@@ -52,23 +50,14 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
     /**
      * @param dialog
      * @param tableDefinition Spaltendefinition (die zu den Pfaden passen sollte)
-     * @param simpleMetaPath MetaPfade, der in der Tabelle dargestellt werden soll
+     * @param simpleMetaPaths MetaPfad, der in der Tabelle dargestellt werden soll
      */
-    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final Collection<SimpleMetaPath> simpleMetaPaths) {
-        this(dialog, tableDefinition, toArray(simpleMetaPaths));
-    }
-
-    /**
-     * @param dialog
-     * @param tableDefinition Spaltendefinition (die zu den Pfaden passen sollte)
-     * @param simpleMetaPaths MetaPfade, die in der Tabelle dargestellt werden sollen
-     */
-    private ConnectedElementsTablePanel(final ElementPropertyDialog dialog, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath... simpleMetaPaths) {
-        super(dialog, new UnionMetaPath(simpleMetaPaths)); // den muss es geben!
+    public ConnectedElementsTablePanel(final ElementPropertyDialog dialog, @Nonnull final ConnectedElementsTableDefinition tableDefinition, final SimpleMetaPath simpleMetaPath) {
+        super(dialog, simpleMetaPath); // den muss es geben!
 
         this.tableDefinition = tableDefinition;
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true);
-        table = new ConnectedElementsTable(dialog.getModelElement(), metaPath, tableDefinition, editable, mouseListener, dialog.getTransactionID());
+        table = new ConnectedElementsTable(dialog.getModelElement(), simpleMetaPath, tableDefinition, editable, mouseListener, dialog.getTransactionID());
 
         //wenn in der columnsDefinion ein String als Resourcenschlüssel oder Tabellenname angegeben wurde, dann kommt hier irgendwas nicht leeres zurück
         String tableTabName = doc.getResStringWithoutError(tableDefinition.getTableResKeyOrName());
@@ -77,11 +66,6 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         }
 
         internalInit(editable);
-    }
-
-    private static SimpleMetaPath[] toArray(final Collection<SimpleMetaPath> simpleMetaPaths) {
-        SimpleMetaPath[] simpleMetaPathsArray = new SimpleMetaPath[simpleMetaPaths.size()];
-        return simpleMetaPaths.toArray(simpleMetaPathsArray);
     }
 
     /**

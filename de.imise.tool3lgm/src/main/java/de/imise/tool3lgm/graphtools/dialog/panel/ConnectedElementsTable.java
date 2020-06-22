@@ -24,9 +24,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinitio
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.UnionMetaPath;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeNode;
 
 /**
@@ -66,8 +64,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
      * @param modelElement
      *            ModelElement von dem die Pafde ausgehen. Das sollte das Element des diesen Table des beinhaltenden ElementPorpertyDialogs sein
      * @param metaPath
-     *            Ein {@link UnionMetaPath}, der nur aus {@link SimpleMetaPath}s bestehen sollte. Diese {@link SimpleMetaPath} sind die eigentlichen
-     *            Pfade, über die verbundene ELemente gesucht werden.
+     *            MetaPath, über den die verbundene Elemente gesucht werden.
      * @param tableDefinition
      *            Spaltendefinition der Tabelle, dei zu den Pfaden der Tabelle passen muss
      * @param editable wenn <code>true</code>, dann lassen sich die Optional-Werte ändern
@@ -76,7 +73,7 @@ public class ConnectedElementsTable extends JTable implements CellEditorListener
      * @param pid
      *            Transaction-ID mit der Änderungen vorgenommen werden. Das sollte wohl immer die des beinhaltenden ElementPorpertyDialogs sein
      */
-    ConnectedElementsTable(final ModelElement modelElement, final AbstractMetaPath metaPath, final ConnectedElementsTableDefinition tableDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
+    ConnectedElementsTable(final ModelElement modelElement, final SimpleMetaPath metaPath, final ConnectedElementsTableDefinition tableDefinition, final boolean editable, final MouseListener mouseListener, final int pid) {
         super(new ConnectedElementsTableModel(modelElement, metaPath, tableDefinition));
         this.tableDefinition = tableDefinition;
         this.editable = editable;

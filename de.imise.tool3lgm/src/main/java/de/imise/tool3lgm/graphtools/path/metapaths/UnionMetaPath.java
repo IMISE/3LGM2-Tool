@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.path.metapaths;
 
+import java.util.Collection;
+
 /**
  * @author AXS
  * @create 13.10.2010
@@ -10,6 +12,13 @@ public class UnionMetaPath extends ParallelMetaPath {
      * @param metaPaths
      */
     public UnionMetaPath(final AbstractMetaPath... metaPaths) {
+        super(metaPaths);
+    }
+
+    /**
+     * @param metaPaths
+     */
+    public UnionMetaPath(final Collection<SimpleMetaPath> metaPaths) {
         super(metaPaths);
     }
 
