@@ -3002,8 +3002,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
         gdcoll.deselectAll();
         if (!insideTransaction) {
             finish_transaction(TransactionManager.STANDARD_PID, false);
-            distributeEvent(SELECTION_CHANGED, TransactionManager.STANDARD_PID);
         }
+        distributeEvent(SELECTION_CHANGED, TransactionManager.STANDARD_PID);
     }
 
     /**
@@ -5046,6 +5046,13 @@ public abstract class GraphDocument extends ElementSelectionContext {
      */
     public final GDCollection getCollection() {
         return gdcoll;
+    }
+
+    /**
+     * @return
+     */
+    public final GraphDocument getMainDoc() {
+        return gdcoll.getMainDoc();
     }
 
     /**
