@@ -188,6 +188,14 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     }
 
     /**
+     * @return the template element the dialogs model element is created from
+     *         or <code>null</code> if it not created by a template element
+     */
+    public final ModelElement getTemplateElementSource() {
+        return templateElementSource;
+    }
+
+    /**
      * @return a collection with at least the modelElement from this dialog and if exists
      *         additionally the template element the modelElement was created from
      */

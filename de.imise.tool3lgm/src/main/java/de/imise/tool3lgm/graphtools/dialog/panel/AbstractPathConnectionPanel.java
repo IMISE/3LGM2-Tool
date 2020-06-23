@@ -41,6 +41,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
@@ -477,33 +478,38 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         boolean popup = Tool3lgmConstants.isPopupTrigger(e);
         boolean doubleClick = !popup && e.getClickCount() > 1;
         //set selection
-        GraphDocument doc = getGraphDocument();
-        doc.deselectAll(true);
-        ElementContainer selected = null;
-        boolean first = true;
+        List<GraphDocument> docs = new ArrayList<>();
+        GraphDocument mainDoc = doc.getMainDoc();
+        mainDoc.deselectAll(true);
         for (Object selectedObject : fullSelection) {
+            ModelElement me = null;
             if (selectedObject instanceof ElementContainer) {
-                selected = (ElementContainer) selectedObject;
+                ElementContainer ec = (ElementContainer) selectedObject;
+                me = ec.getElement();
             } else if (selectedObject instanceof ModelElement) {
-                //da die Selektion sowieso in allen Teilmodellen ausgeführt wird, ist es hier ok, das ModelElement durch
-                //den Container aus dem Hauptdokument zu ersetzen
-                ModelElement me = (ModelElement) selectedObject;
-                GraphDocument mainDoc = doc.getCollection().getMainDoc();
-                selected = me.getContainer(mainDoc);
+                me = (ModelElement) selectedObject;
             }
-            if (selected != null) {
-                if (first) {
-                    doc.select(selected, getTransactionID());
-                    first = false;
-                } else {
-                    doc.addToSelection(selected, getTransactionID());
-                }
+            String hashString = me.getHashString();
+            GDCollection gdcoll = me.getCollection();
+            LGMGraphDocument selectedObjectMainDoc = gdcoll.getMainDoc();
+            if (selectedObjectMainDoc != mainDoc && !docs.contains(selectedObjectMainDoc)) {
+                docs.add(selectedObjectMainDoc);
+                selectedObjectMainDoc.deselectAll(true);
+            }
+            ElementContainer selectedContainer = mainDoc.findContainerCoded(hashString);
+            if (selectedContainer == null) {
+                selectedContainer = selectedObjectMainDoc.findContainerCoded(hashString);
+                selectedObjectMainDoc.addToSelection(selectedContainer, getTransactionID());
+            } else {
+                mainDoc.addToSelection(selectedContainer, getTransactionID());
+            }
+            if (selectedContainer != null) {
                 if (doubleClick) {
                     //even if this dialog model element is a template element this
                     //Static call tries to open the dialog of the enventually existing
                     //element with the same id (hashString) in the currently selected
                     //doc
-                    Static.showPropertyDialog(selected);
+                    Static.showPropertyDialog(selectedContainer);
                 }
             }
         }
