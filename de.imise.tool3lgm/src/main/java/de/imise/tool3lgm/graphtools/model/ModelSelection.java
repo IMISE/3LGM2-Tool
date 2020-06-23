@@ -83,7 +83,7 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
     }
 
     /**
-     * Erzeugt eine neue Selektion mit den übergebenen Objeckten als Selektionsmenge.
+     * Erzeugt eine neue Selektion mit den übergebenen Objekten als Selektionsmenge.
      *
      * @param metaModel
      * @param selection
