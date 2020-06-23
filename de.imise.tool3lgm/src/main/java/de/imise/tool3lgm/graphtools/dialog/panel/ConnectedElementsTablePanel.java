@@ -26,6 +26,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.NamedObjectContainer;
@@ -57,7 +58,11 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
 
         this.tableDefinition = tableDefinition;
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true);
-        table = new ConnectedElementsTable(dialog.getModelElement(), simpleMetaPath, tableDefinition, editable, mouseListener, dialog.getTransactionID());
+        boolean startsWitTemplateElementsElementaryMetaPath = MetaPathFunctions.startsWitTemplateElementsElementaryMetaPath(simpleMetaPath);
+        ModelElement templateElementSource = dialog.getTemplateElementSource();
+        ModelElement tableElement = startsWitTemplateElementsElementaryMetaPath && templateElementSource != null ? templateElementSource : dialog.getModelElement();
+
+        table = new ConnectedElementsTable(tableElement, simpleMetaPath, tableDefinition, editable, mouseListener, dialog.getTransactionID());
 
         //wenn in der columnsDefinion ein String als Resourcenschlüssel oder Tabellenname angegeben wurde, dann kommt hier irgendwas nicht leeres zurück
         String tableTabName = doc.getResStringWithoutError(tableDefinition.getTableResKeyOrName());

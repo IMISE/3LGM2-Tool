@@ -10,6 +10,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -135,6 +136,26 @@ public class MetaPathFunctions {
         }
         isEdgeMasterToInstanceInstanciation = direction == InstanciationEdge.MASTER_TO_INSTANCE_DIRECTION;
         return isEdgeMasterToInstanceInstanciation;
+    }
+
+    /**
+     * @param simpleMetaPath
+     * @return <code>true</code> if the first {@link ElementaryMetaPath} is between pure template elements
+     * @see {@link MetaModel#isPureTemplateElementClass(Class)}
+     */
+
+    public static final boolean startsWitTemplateElementsElementaryMetaPath(final SimpleMetaPath simpleMetaPath) {
+        MetaModel metaModel = simpleMetaPath.getMetaModel();
+        ElementaryMetaPath firstElementaryMetaPath = simpleMetaPath.getFirstElementaryMetaPath();
+        Class<? extends ModelElement> startClass = firstElementaryMetaPath.getStartClass();
+        if (!metaModel.isPureTemplateElementClass(startClass)) {
+            return false;
+        }
+        Class<? extends ModelElement> endClass = firstElementaryMetaPath.getEndClass();
+        if (!metaModel.isPureTemplateElementClass(endClass)) {
+            return false;
+        }
+        return true;
     }
 
 }
