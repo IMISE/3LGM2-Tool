@@ -36,7 +36,6 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -123,8 +122,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      * @param modelElement
      * @param gdcoll
      */
-    public AbstractElementPropertyDialog(final ModelElement modelElement, final GDCollection gdcoll) {
-        super(gdcoll);
+    public AbstractElementPropertyDialog(final ModelElement modelElement) {
+        super(modelElement.getCollection());
         //add changeListener for tab changes to updates the displayed panel depending buttons
         //must be added before adding the tabs to get the very first tab change event
         tabbedPane.addChangeListener(this);

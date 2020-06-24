@@ -1852,7 +1852,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         if (gdcoll == null) {
             return null;
         }
-        return new ElementPropertyDialog(this, gdcoll);
+        return new ElementPropertyDialog(this);
     }
 
     /**
