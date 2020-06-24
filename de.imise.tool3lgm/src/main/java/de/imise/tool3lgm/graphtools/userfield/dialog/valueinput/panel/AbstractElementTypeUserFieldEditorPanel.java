@@ -155,8 +155,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
      * vom Typ <code>UserField.CLASSIFICATION_NUMBER_STYLE</code> definiert ist.
      */
     private void setElementTypeBoxContent() {
-
-        GraphDocument doc = getDialog().getGraphDocument();
+        GraphDocument doc = dialog.getMainDoc();
         GDCollection gdcoll = doc.getCollection();
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
         MetaModel metaModel = gdcoll.getMetaModel();
@@ -270,7 +269,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
 
     protected AbstractUserFieldTableModel getTableModel() {
         Class<? extends ModelElement> selectedClass = ((Class<?>) elementTypeBox.getSelectedObject()).asSubclass(ModelElement.class);
-        GraphDocument doc = getDialog().getGraphDocument();
+        GraphDocument doc = dialog.getMainDoc();
         GeneralUserFieldTableModel uftm = new GeneralUserFieldTableModel(doc, selectedClass, hierarchyTypeFilterPane.showTopLevel(), hierarchyTypeFilterPane.showInner(), hierarchyTypeFilterPane.showLeafs(), visibleUserFields);
         return uftm;
     }
@@ -316,7 +315,7 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
         if (uftm.dataChanged() == false) {
             return;
         }
-        GraphDocument doc = getDialog().getGraphDocument();
+        GraphDocument doc = dialog.getMainDoc();
         Vector<NamedObjectContainer<?>> rowIdentifiers = uftm.getRowIdentifiers();
         Vector<NamedObjectContainer<?>> columnIdentifiers = uftm.getColumnIdentifiers();
         GDCollection gdcoll = doc.getCollection();
@@ -331,7 +330,8 @@ public abstract class AbstractElementTypeUserFieldEditorPanel extends AbstractUs
                 UserField uf = (UserField) columnIdentifiers.elementAt(k).getObject();
                 // neuen Wert setzen
                 if (!newValue.equals(uf.getValue(me))) {
-                    doc.setUserFieldValue(me.getHashString(), uf.getHashCode(), newValue, getDialog().getTransactionID());
+                    int pid = dialog.getTransactionID();
+                    doc.setUserFieldValue(me.getHashString(), uf.getHashCode(), newValue, pid);
                 }
             }
         }

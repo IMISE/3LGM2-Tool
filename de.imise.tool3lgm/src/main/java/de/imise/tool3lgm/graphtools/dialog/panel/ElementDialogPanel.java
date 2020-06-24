@@ -26,6 +26,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.util.swing.SwingUtils;
@@ -34,18 +35,6 @@ import de.imise.util.swing.SwingUtils;
  * @author Thomas Ist ein TestPanel zur Verallgemeinerung abgeleiteter Panels
  */
 public abstract class ElementDialogPanel extends JPanel {
-
-    /**
-     * GraphDocument, für das das Panel geöffnet wurde. Über das Panel neu angelegte Elemente sind
-     * automatisch in diesem GraphDocument enthalten.
-     */
-    protected GraphDocument doc;
-
-    /**
-     * Das Hauptdokument des Modells. In den Dialogen werden immer alle Verbindungen angezeigt, die
-     * in diesem Dokument vorkommen.
-     */
-    protected GraphDocument mainDoc;
 
     /** Der Dialog in dem sich dieses Panel befindet */
     protected final AbstractElementPropertyDialog dialog;
@@ -116,13 +105,11 @@ public abstract class ElementDialogPanel extends JPanel {
      * @param name
      */
     public ElementDialogPanel(final AbstractElementPropertyDialog dialog, final String name) {
-        super();
         this.dialog = dialog;
         setName(name);
-        doc = dialog.getGraphDocument();
-        mainDoc = doc.getCollection().getMainDoc();
         treeRenderer = new TreeRenderer();
-        elementsNameBuilder = doc.getElementsNameBuilder();
+        GraphDocument mainDoc = dialog.getMainDoc();
+        elementsNameBuilder = mainDoc.getElementsNameBuilder();
         init();
     }
 
@@ -234,20 +221,6 @@ public abstract class ElementDialogPanel extends JPanel {
 
     // ----------------------------------------------------------------------------------------------------------------------------------
 
-    /**
-     * @return doc
-     */
-    public GraphDocument getGraphDocument() {
-        return doc;
-    }
-
-    /**
-     * @return Das selektierte {@link GraphDocument} der {@link GDCollection} des {@link GraphDocument} des Dialoges.
-     */
-    public GraphDocument getSelectedGraphDocument() {
-        return doc.getCollection().getSelectedDoc();
-    }
-
     public int getTransactionID() {
         return dialog.getTransactionID();
     }
@@ -325,22 +298,52 @@ public abstract class ElementDialogPanel extends JPanel {
     /**
      * @return modelElement
      */
-    public final ModelElement getModelElement() {
+    public ModelElement getModelElement() {
         return dialog.getModelElement();
     }
 
     /**
      * @return
      */
-    public final MetaModel getMetaModel() {
-        return mainDoc.getMetaModel();
+    public Class<? extends ModelElement> getModelElementClass() {
+        ModelElement me = getModelElement();
+        return me.getClass();
+    }
+
+    /**
+     * Das Hauptdokument des Modells. In den Dialogen werden immer alle Verbindungen angezeigt, die
+     * in diesem Dokument vorkommen.
+     *
+     * @return
+     */
+    public GraphDocument getMainDoc() {
+        GDCollection gdcoll = getCollection();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+        return mainDoc;
     }
 
     /**
      * @return
      */
-    public final ElementsNameBuilder getElementNameBuilder() {
-        return mainDoc.getElementsNameBuilder();
+    public GraphDocument getSelectedDoc() {
+        GDCollection gdcoll = getCollection();
+        return gdcoll.getSelectedDoc();
+    }
+
+    /**
+     * @return
+     */
+    public GDCollection getCollection() {
+        ModelElement me = getModelElement();
+        GDCollection gdcoll = me.getCollection();
+        return gdcoll;
+    }
+
+    /**
+     * @return
+     */
+    public final MetaModel getMetaModel() {
+        return elementsNameBuilder.getMetaModel();
     }
 
     // -------------------------------------------------------------------------------- -/

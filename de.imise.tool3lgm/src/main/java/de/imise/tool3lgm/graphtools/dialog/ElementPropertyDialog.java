@@ -55,7 +55,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     public void extendDefaultDialog() {
         if (isUnchangedDefaultDialog()) {
             MetaModel metaModel = getMetaModel();
-            Class<? extends ModelElement> elementClass = modelElement.getClass();
+            Class<? extends ModelElement> elementClass = getModelElementClass();
             for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(elementClass)) {
                 addEdgePanel(edgeClass);
             }
@@ -160,7 +160,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param metaPath
      */
     public final void addDescripPanel(final PanelLabelOption panelLabelOption, final boolean showDescription, final SimpleMetaPath metaPath) {
-        MetaModel metaModel = modelElement.getMetaModel();
+        MetaModel metaModel = getMetaModel();
         if (metaModel.isVisible(metaPath)) {
             if (metaPath.isSingleConnection()) {
                 if (showDescription) {
@@ -185,7 +185,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param elementClass
      */
     public final void addMultiPanel(final Class<? extends ModelElement> elementClass) {
-        ElementsNameBuilder elementsNameBuilder = modelElement.getElementsNameBuilder();
+        ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
         String displayablePluralName = elementsNameBuilder.getDisplayablePluralName(elementClass);
         addMultiPanel(displayablePluralName);
     }
@@ -276,7 +276,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param elementClass
      */
     public final void addTabbedPanel(final Class<? extends ModelElement> elementClass) {
-        ElementsNameBuilder elementsNameBuilder = modelElement.getElementsNameBuilder();
+        ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
         String displayablePluralName = elementsNameBuilder.getDisplayablePluralName(elementClass);
         addTabbedPanel(displayablePluralName);
     }
@@ -441,7 +441,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param showMultipleConnectionEvenIfMetaPathIsSingleConnection
      */
     public final void addPathConnectionPanel(final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath, final boolean showMultipleConnectionEvenIfMetaPathIsSingleConnection) {
-        MetaModel metaModel = modelElement.getMetaModel();
+        MetaModel metaModel = getMetaModel();
         if (metaModel.isVisible(metaPath)) {
             boolean singleConnection = !showMultipleConnectionEvenIfMetaPathIsSingleConnection && metaPath.isSingleConnection();
             //            System.err.print(metaPath.getEndClass().getSimpleName() + ": ");
@@ -524,8 +524,8 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
         if (metaPath == null) {
             return null;
         }
-        MetaModel metaModel = modelElement.getMetaModel();
-        Class<? extends ModelElement> meClass = modelElement.getClass();
+        MetaModel metaModel = getMetaModel();
+        Class<? extends ModelElement> meClass = getModelElementClass();
         if (!MetaModel.isStartOrEndClass(edgeClass, meClass)) { //checken, wenn das Panel aus einer Oberklasse kommt, ob diese Kante in der Unterklasse überhaupt noch vorkommt (siehe removed edges in Metamodel)
             //System.err.println(searchElementClass.getSimpleName() + " removed " + edgeClass.getSimpleName() or invalid path definition);
             return null;
@@ -574,7 +574,9 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     @SafeVarargs
     public final void addTablePanel(final ConnectedElementsTableDefinition tableDefinition, final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
         try {
-            SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(doc.getMetaModel(), modelElement.getClass(), metaPathStepWithPathName, edgeClasses);
+            MetaModel metaModel = getMetaModel();
+            Class<? extends ModelElement> modelElementClass = getModelElementClass();
+            SimpleMetaPath simpleMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, modelElementClass, metaPathStepWithPathName, edgeClasses);
             addTablePanel(tableDefinition, simpleMetaPath);
         } catch (Exception e) {
             //if in the createSimpleMetaPath(...) an error occurs then the tool should not crash

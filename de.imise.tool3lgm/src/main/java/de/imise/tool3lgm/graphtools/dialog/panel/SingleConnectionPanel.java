@@ -117,7 +117,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             addMouseActions(connectedElementsBox);
             add(connectedElementsBox, BorderLayout.CENTER);
         }
-        createNew = editable && metaPath.isCreatable(true) ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + getElementNameBuilder().getDisplayableName(searchElementClass)) : null;
+        createNew = editable && metaPath.isCreatable(true) ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + elementsNameBuilder.getDisplayableName(searchElementClass)) : null;
     }
 
     @Override
@@ -199,7 +199,10 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         }
         String newName = connectedElementName.getText();
         if (newName != null && !oldname.equals(newName)) {
-            doc.setName(connectedElement, ParseSaveStringHandler.getParseSaveString(newName), dialog.getTransactionID());
+            GraphDocument mainDoc = getMainDoc();
+            int pid = getTransactionID();
+            newName = ParseSaveStringHandler.getParseSaveString(newName);
+            mainDoc.setName(connectedElement, newName, pid);
         }
         connectedElement.refreshText();
     }
@@ -217,13 +220,12 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                 if (!(eo instanceof ItemEvent)) {
                     return;
                 }
-                GraphDocument mainDoc = panel.getGraphDocument();
-                AbstractElementPropertyDialog dialog = panel.getDialog();
-                ModelElement modelElement = panel.getModelElement();
+                GraphDocument mainDoc = panel.getMainDoc();
+                ModelElement me = panel.getModelElement();
 
                 ItemEvent e = (ItemEvent) eo;
                 Object selected = e.getItem();
-                int pid = dialog.getTransactionID();
+                int pid = panel.getTransactionID();
                 mainDoc.start_transaction(pid);
 
                 // vor jedem select gibt es ein Deselect, wenn erst etwas selektiert war -> alte
@@ -231,7 +233,8 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                 if (e.getStateChange() == ItemEvent.DESELECTED) {
                     if (selected instanceof NodeContainer) {
                         panel.unlinkAll();
-                        modelElement.getContainer(mainDoc).refreshText();
+                        ElementContainer ec = me.getContainer(mainDoc);
+                        ec.refreshText();
                         mainDoc.finish_transaction(pid);
                         return;
                     }
@@ -246,7 +249,8 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                     ModelElement element2Connect = container2Connect.getElement();
                     panel.connectToFirstPath(element2Connect);
                 }
-                modelElement.getContainer(mainDoc).refreshText();
+                ElementContainer ec = me.getContainer(mainDoc);
+                ec.refreshText();
                 mainDoc.finish_transaction(pid);
                 mainDoc.distributeEvent(DATA_CHANGED, pid);
             }
@@ -262,7 +266,9 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      * @return
      */
     private Collection<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
-        return PathFunctions.getConnectedContainer(getModelElement(), doc, metaPath, forelastInPath);
+        ModelElement me = getModelElement();
+        GraphDocument mainDoc = getMainDoc();
+        return PathFunctions.getConnectedContainer(me, mainDoc, metaPath, forelastInPath);
     }
 
     //    /**
@@ -311,15 +317,15 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      */
     private final void unlinkAll() {
         Collection<ElementContainer> searchElementConnectedContainer = getForelastConnectedContainer();
+        GDCollection gdcoll = getCollection();
         for (ElementContainer ec : searchElementConnectedContainer) {
             //da das in der Regel nur 1 Element ist, kann man die Variablen alle in der Schleife anlegen
-            GDCollection gdcoll = mainDoc.getCollection();
             Class<? extends Edge> lastEdgeInPath = getLastEdgeClassInPath();
             Direction lastDirectionInPath = getLastDirectionInPath();
             ModelElement me = ec.getElement();
             List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, lastDirectionInPath);
             for (ModelElement connected : connectedElements) {
-                int pid = dialog.getTransactionID();
+                int pid = getTransactionID();
                 gdcoll.unlink(me, connected, lastEdgeInPath, lastDirectionInPath, pid);
             }
         }

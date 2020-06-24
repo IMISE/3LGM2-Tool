@@ -115,6 +115,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
         JLabel ltreeLabel = westLabel;
         ModelElement me = getModelElement();
+        GraphDocument mainDoc = getMainDoc();
         ElementContainer ec = me.getContainer(mainDoc);
         boolean sortLeftTree = getSortLeftTreeRootChildrenAlphabetical();
         lroot = new ElementContainerTreeNode(ec, false, sortLeftTree);
@@ -313,6 +314,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
         Direction direction = elementaryMetaPath.getDirection();
         ModelElement me = getModelElement();
+        GraphDocument mainDoc = getMainDoc();
         List<ElementContainer> all = me.getConnectedContainers(pathStepEndClass, mainDoc, edgeClass, direction);
         addChildrenToExcludeFromRtree(edgeIndex, all, true);
         // nur Node für Elemente in der all-Liste bis zur Größe der direkt verbundenen dürfen am Ende selektierbar sein
@@ -501,8 +503,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
      * @param edgeIndexInPath
      */
     protected final void disconnect(final ModelElement startInPath, final ModelElement endInPath, final int edgeIndexInPath) {
-        GraphDocument selDoc = getSelectedGraphDocument();
-        GDCollection gdcoll = selDoc.getCollection();
+        GDCollection gdcoll = getCollection();
         //das disconnect sollte nur angeboten werden, wenn der Path ceratable ist und dann kommt bei metaPath.getElementaryMetaPaths() auch was sinnvolles zurück
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(edgeIndexInPath);
@@ -525,7 +526,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             }
         }
         if (!endInPath.isConsistent()) {
-            gdcoll.deleteElement(endInPath, selDoc, pid);
+            GraphDocument selectedDoc = getSelectedDoc();
+            gdcoll.deleteElement(endInPath, selectedDoc, pid);
         }
     }
 
@@ -570,7 +572,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (!metaPath.isCreatable(true)) {
             return null;
         }
-        MetaModel metaModel = getMetaModel();
+        final GDCollection gdcoll = getCollection();
+        MetaModel metaModel = gdcoll.getMetaModel();
         if (metaModel.isSlaveType(searchElementClass)) {
             return null;
         }
@@ -582,9 +585,8 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                 if (isConnectionPointUnique) {
                     connectToFirstPath(null);
                 } else { //es ist nicht klar, wohin ein neues Element gehängt werden sollte -> nur neu erzeugen und nicht verknüpfen
-                    GDCollection gdcoll = doc.getCollection();
-                    GraphDocument selectedDoc = gdcoll.getSelectedDoc();
                     ElementaryMetaPath lastElementaryMetaPath = metaPath.getLastElementaryMetaPath();
+                    GraphDocument selectedDoc = gdcoll.getSelectedDoc();
                     int pid = getTransactionID();
                     PathFunctions.createNodeWithContainerAndDependents(selectedDoc, null, lastElementaryMetaPath, null, pid);
                 }
@@ -599,9 +601,10 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
         if (!metaPath.isCreatable(endElement != null)) {
             return;
         }
-        ModelElement me = dialog.getModelElement();
-        int pid = dialog.getTransactionID();
-        doc.createPath(me, endElement, metaPath, true, pid);
+        ModelElement me = getModelElement();
+        GraphDocument selectedDoc = getSelectedDoc();
+        int pid = getTransactionID();
+        selectedDoc.createPath(me, endElement, metaPath, true, pid);
     }
 
 }

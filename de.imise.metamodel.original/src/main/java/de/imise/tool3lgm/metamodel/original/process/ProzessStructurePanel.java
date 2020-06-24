@@ -26,7 +26,6 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
-import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.ActionNotDefinedForClassException;
@@ -42,7 +41,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -254,7 +252,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      */
     private void appendObjectTypes(final LGMTreeNode aufgabenContainerNode) {
         ModelElement me = ((NodeContainer) aufgabenContainerNode.getUserObject()).getElement();
-        List<ElementContainer> ots = me.getConnectedContainers(Objekttyp.class, doc, null, BACKWARD, false);
+        GraphDocument mainDoc = getMainDoc();
+        List<ElementContainer> ots = me.getConnectedContainers(Objekttyp.class, mainDoc, null, BACKWARD, false);
         if (ots.size() > 0) {
             String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.BACKWARD, false, false);
             LGMTreeNode tmpNode = new StringTreeNode(typeNodeName);
@@ -266,7 +265,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
             }
             aufgabenContainerNode.add(tmpNode);
         }
-        ots = me.getConnectedContainers(Objekttyp.class, doc, null, FORWARD, false);
+        ots = me.getConnectedContainers(Objekttyp.class, mainDoc, null, FORWARD, false);
         if (ots.size() > 0) {
             String typeNodeName = elementsNameBuilder.getForwardMetaAssociationName(AufObjVerbindung.class, ConnectionState.FORWARD, false, false);
             LGMTreeNode tmpNode = new StringTreeNode(typeNodeName);
@@ -1083,25 +1082,23 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     // --- kleine Hilfsmethoden --- Ende ---
 
     /**
-     * @param edp
+     * @param panel
      * @param tree
      * @return
      * @throws ActionNotDefinedForClassException
      */
-    private static final LGMAction getVerfikationAction(final ElementDialogPanel edp, final JTree tree) throws ActionNotDefinedForClassException {
-        final ElementDialogPanel pane = edp;
+    private static final LGMAction getVerfikationAction(final ElementDialogPanel panel, final JTree tree) throws ActionNotDefinedForClassException {
         final LGMTreeNode lroot = (LGMTreeNode) tree.getModel().getRoot();
-        if (edp instanceof ProzessStructurePanel) {
-            AbstractElementPropertyDialog dialog = pane.getDialog();
-            LGMGraphDocument doc = dialog.getGraphDocument();
-            return new LGMAction(doc.getResString("PROCESS_PANEL_VERIFY")) {
+        if (panel instanceof ProzessStructurePanel) {
+            GraphDocument mainDoc = panel.getMainDoc();
+            return new LGMAction(mainDoc.getResString("PROCESS_PANEL_VERIFY")) {
 
                 @Override
                 public void execute(final EventObject e) {
-                    ProzessStructurePanel panel = (ProzessStructurePanel) pane;
-                    boolean verify = panel.getVerificationCheckBox().isSelected();
+                    ProzessStructurePanel processPanel = (ProzessStructurePanel) panel;
+                    boolean verify = processPanel.getVerificationCheckBox().isSelected();
                     ProzessStructurePanel.verify(verify);
-                    panel.getErrorButton().setVisible(verify);
+                    processPanel.getErrorButton().setVisible(verify);
                     //                    if (verify) {
                     //                        panel.check3LGMBuisnessProcess();
                     //                    } else {
@@ -1114,7 +1111,7 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                 }
             };
         }
-        throw new ActionNotDefinedForClassException(edp.getClass().getName());
+        throw new ActionNotDefinedForClassException(panel.getClass().getName());
     }
 
     /**
@@ -1122,20 +1119,18 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      * @return
      * @throws ActionNotDefinedForClassException
      */
-    private static final LGMAction getFehlerAction(final ElementDialogPanel edp) throws ActionNotDefinedForClassException {
-        final ElementDialogPanel pane = edp;
-        if (edp instanceof ProzessStructurePanel) {
-            AbstractElementPropertyDialog dialog = pane.getDialog();
-            LGMGraphDocument doc = dialog.getGraphDocument();
+    private static final LGMAction getFehlerAction(final ElementDialogPanel panel) throws ActionNotDefinedForClassException {
+        if (panel instanceof ProzessStructurePanel) {
+            GraphDocument doc = panel.getMainDoc();
             return new LGMAction(doc.getResString("PROCESS_PANEL_ERROR")) {
                 @Override
                 public void execute(final EventObject e) {
-                    ProzessStructurePanel panel = (ProzessStructurePanel) pane;
-                    JOptionPane.showMessageDialog(panel, panel.getErrorMessage(), panel.getErrorTitel(), JOptionPane.ERROR_MESSAGE);
+                    ProzessStructurePanel processPanel = (ProzessStructurePanel) panel;
+                    JOptionPane.showMessageDialog(processPanel, processPanel.getErrorMessage(), processPanel.getErrorTitel(), JOptionPane.ERROR_MESSAGE);
                 }
             };
         }
-        throw new ActionNotDefinedForClassException(edp.getClass().getName());
+        throw new ActionNotDefinedForClassException(panel.getClass().getName());
     }
 
     /**
@@ -1148,9 +1143,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      */
     private final LGMAction getAddElementAction(final JTree srcTree, final JTree targetTree) {
 
-        final GraphDocument doc = getGraphDocument();
-        final GDCollection gdcoll = doc.getCollection();
-        final ModelElement modelElement = getModelElement();
+        ModelElement modelElement = getModelElement();
+        GDCollection gdcoll = modelElement.getCollection();
 
         return new LGMAction(DialogActionCommands.ACTION_DIALOG_CONNECT_ELEMENT) {
 
@@ -1186,7 +1180,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                                     if (treeNode.getUserObject() instanceof NodeContainer && ((NodeContainer) treeNode.getUserObject()).getElement() instanceof Aufgabe) {
                                         int selRow = targetTree.getRowForPath(selPath);
                                         int index = lmodel.getIndexOfChild(lroot, treeNode);
-                                        gdcoll.link(PrzAufVerbindung.class, modelElement, nc.getElement(), index, GDCommands.INVALID_EDGE_INDEX, dialog.getTransactionID());
+                                        int pid = getTransactionID();
+                                        gdcoll.link(PrzAufVerbindung.class, modelElement, nc.getElement(), index, GDCommands.INVALID_EDGE_INDEX, pid);
                                         // ((NodeContainer)modelElement.getContainer(doc)).addSpecialInfoTarget(index,knot);
                                         selRow++;
                                         while (targetTree.getPathForRow(selRow).getPathCount() != 2) {
@@ -1202,7 +1197,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                                     // es wird eine neue ProzessKante
                                     // angelegt, aber der rechte Baum
                                     // braucht nicht aktualisiert werden
-                                    gdcoll.link(PrzAufVerbindung.class, modelElement, nc.getElement(), modelElement.getEdgesCount(), GDCommands.INVALID_EDGE_INDEX, dialog.getTransactionID());
+                                    int pid = getTransactionID();
+                                    gdcoll.link(PrzAufVerbindung.class, modelElement, nc.getElement(), modelElement.getEdgesCount(), GDCommands.INVALID_EDGE_INDEX, pid);
                                     targetTree.scrollRowToVisible(targetTree.getRowCount() - 1);
                                 }
                             }
@@ -1223,9 +1219,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
      */
     private final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree) {
 
-        final GDCollection gdcoll = getGraphDocument().getCollection();
-        final AbstractElementPropertyDialog dialog = getDialog();
         final ModelElement modelElement = getModelElement();
+        final GDCollection gdcoll = getCollection();
 
         return new LGMAction(DialogActionCommands.ACTION_DIALOG_DISCONNECT_ELEMENT) {
 
@@ -1250,7 +1245,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                                 // der rechte Baum braucht nicht aktualisiert
                                 // werden
                                 int index = lmodel.getIndexOfChild(lroot, node);
-                                gdcoll.unlink(modelElement, otherMe, PrzAufVerbindung.class, index, dialog.getTransactionID());
+                                int pid = getTransactionID();
+                                gdcoll.unlink(modelElement, otherMe, PrzAufVerbindung.class, index, pid);
                             }
                         }
                         // ####################################################################################################
@@ -1289,9 +1285,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
     private final LGMAction getMoveUpAction(final JTree tree) {
 
         final ProzessStructurePanel panel = this;
-        final GraphDocument doc = getGraphDocument();
+        final GraphDocument doc = getMainDoc();
         final ModelElement modelElement = getModelElement();
-        final AbstractElementPropertyDialog dialog = getDialog();
 
         return new LGMAction(DialogActionCommands.ACTION_DIALOG_MOVE_CONNECTION_STEP_UP) {
 
@@ -1346,7 +1341,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                         node.setText("[" + pos1 + "] " + node.getUserObject());
 
                         // das switchen in den connections vom Prozess ausführen
-                        doc.swapEdgePositions(modelElement, pos1, pos1 - 1, dialog.getTransactionID());
+                        int pid = getTransactionID();
+                        doc.swapEdgePositions(modelElement, pos1, pos1 - 1, pid);
                     }
                 }
                 ltree.repaint();
@@ -1367,9 +1363,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
         final JTree ltree = tree;
         final DefaultTreeModel lmodel = (DefaultTreeModel) tree.getModel();
         final LGMTreeNode lroot = (LGMTreeNode) lmodel.getRoot();
-        final GraphDocument doc = getGraphDocument();
+        final GraphDocument doc = getMainDoc();
         final ModelElement modelElement = getModelElement();
-        final AbstractElementPropertyDialog dialog = getDialog();
 
         return new LGMAction(DialogActionCommands.ACTION_DIALOG_MOVE_CONNECTION_STEP_DOWN) {
 
@@ -1406,7 +1401,8 @@ public class ProzessStructurePanel extends PathConnectionLeafPanel implements Tr
                         node.setText("[" + (pos1 + 1) + "] " + node.getUserObject());
                         node = (LGMTreeNode) lroot.getChildAt(pos1 + 1);
                         node.setText("[" + (pos1 + 2) + "] " + node.getUserObject());
-                        doc.swapEdgePositions(modelElement, pos1, pos1 + 1, dialog.getTransactionID());
+                        int pid = getTransactionID();
+                        doc.swapEdgePositions(modelElement, pos1, pos1 + 1, pid);
                     }
                 }
                 ltree.repaint();

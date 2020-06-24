@@ -39,6 +39,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -51,7 +52,7 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
     /**
      * ModelElement its properties are displayed or changable in this dialog.
      */
-    protected final ModelElement modelElement;
+    private final ModelElement modelElement;
 
     /**
      * If the modelElement is a copy from a template element so this variable
@@ -146,7 +147,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         addPartOfStructurePanel();
 
         // wenn es mind ein Userfield für diese Klasse gibt -> zeige das USerFieldPanel
-        if (doc.getCollection().getUserFieldDefinitions().hasUserFields(modelElement.getClass())) {
+        UserFieldDefinitions userFieldDefinitions = gdcoll.getUserFieldDefinitions();
+        Class<? extends ModelElement> modelElementClass = getModelElementClass();
+        if (userFieldDefinitions.hasUserFields(modelElementClass)) {
             propertyDialogUserFieldPanel = new PropertyDialogUserFieldPanel(this);
             addTab(getResString("userfields"), propertyDialogUserFieldPanel);
         } else {
@@ -184,6 +187,13 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      */
     public final ModelElement getModelElement() {
         return modelElement;
+    }
+
+    /**
+     * @return the class of the ModelElement this dialog is shown for
+     */
+    public final Class<? extends ModelElement> getModelElementClass() {
+        return modelElement.getClass();
     }
 
     /**
@@ -278,10 +288,10 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         return recursiveHasPartEdges;
     }
 
+    //siehe TODO an den ModelElement.createSimpleMetaPath()-Funktionen. Das sollte woanders hin.
     @SafeVarargs
     public final SimpleMetaPath createSimpleMetaPath(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        ModelElement me = getModelElement();
-        return me.createSimpleMetaPath(searchElementClass, edgeClasses);
+        return modelElement.createSimpleMetaPath(searchElementClass, edgeClasses);
     }
 
     /**
@@ -289,8 +299,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      */
     public void showDialog() {
         if (opening) {
-            doc.start_transaction(transactionID);
-            doc.addAllTransactionsListener(this);
+            mainDoc.start_transaction(transactionID);
+            mainDoc.addAllTransactionsListener(this);
             opening = false;
         }
         setVisible(true);
@@ -351,17 +361,17 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
                 selectedElementDialogPanel.update();
             }
         }
-        doc.finish_transaction(transactionID);
-        doc.distributeEvent(DATA_CHANGED, transactionID);
-        doc.start_transaction(createNewTransactionID());
+        mainDoc.finish_transaction(transactionID);
+        mainDoc.distributeEvent(DATA_CHANGED, transactionID);
+        mainDoc.start_transaction(createNewTransactionID());
     }
 
     /**
      *
      */
     public void cancel() {
-        doc.finish_transaction(transactionID);
-        doc.undo(transactionID);
+        mainDoc.finish_transaction(transactionID);
+        mainDoc.undo(transactionID);
         close();
     }
 
@@ -370,8 +380,8 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
      */
     private void close() {
         ElemenPropertyDialogsContext.removeDialog(modelElement);
-        doc.finish_transaction(transactionID);
-        doc.removeAllTransactionsListener(this);
+        mainDoc.finish_transaction(transactionID);
+        mainDoc.removeAllTransactionsListener(this);
         dispose();
     }
 
@@ -387,8 +397,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         } else if (e.getSource() == applyButton) {
             commit(true);
         }
-        doc.select(modelElement.getContainer(doc), transactionID);
-        doc.distributeEvent(SELECTION_CHANGED, transactionID);
+        ElementContainer ec = modelElement.getContainer(mainDoc);
+        mainDoc.select(ec, transactionID);
+        mainDoc.distributeEvent(SELECTION_CHANGED, transactionID);
     }
 
     @Override

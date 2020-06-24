@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.util.htmlxml.ParseSaveStringHandler;
 import de.imise.util.swing.component.text.ExtendedTextPane;
@@ -82,7 +83,9 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
         }
         String newDescription = descriptionTextPane.getText();
         if (newDescription != null && !olddescrip.equals(newDescription)) {
-            doc.setDescription(connectedElement, ParseSaveStringHandler.getParseSaveString(newDescription), dialog.getTransactionID());
+            GraphDocument mainDoc = getMainDoc();
+            int pid = getTransactionID();
+            mainDoc.setDescription(connectedElement, ParseSaveStringHandler.getParseSaveString(newDescription), pid);
         }
         connectedElement.refreshText();
     }

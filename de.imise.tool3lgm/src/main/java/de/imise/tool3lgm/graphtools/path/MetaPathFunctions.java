@@ -10,7 +10,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -139,21 +138,28 @@ public class MetaPathFunctions {
     }
 
     /**
-     * @param simpleMetaPath
+     * @param metaPath
      * @return <code>true</code> if the first {@link ElementaryMetaPath} is between pure template elements
      * @see {@link MetaModel#isPureTemplateElementClass(Class)}
      */
-
-    public static final boolean startsWitTemplateElementsElementaryMetaPath(final SimpleMetaPath simpleMetaPath) {
-        MetaModel metaModel = simpleMetaPath.getMetaModel();
-        ElementaryMetaPath firstElementaryMetaPath = simpleMetaPath.getFirstElementaryMetaPath();
-        Class<? extends ModelElement> startClass = firstElementaryMetaPath.getStartClass();
-        if (!metaModel.isPureTemplateElementClass(startClass)) {
-            return false;
-        }
-        Class<? extends ModelElement> endClass = firstElementaryMetaPath.getEndClass();
-        if (!metaModel.isPureTemplateElementClass(endClass)) {
-            return false;
+    public static final boolean startsWitTemplateElementsElementaryMetaPath(final AbstractMetaPath metaPath) {
+        List<AbstractMetaPath> subMetaPaths = metaPath.getSubMetaPaths();
+        MetaModel metaModel = metaPath.getMetaModel();
+        for (AbstractMetaPath subMetaPath : subMetaPaths) {
+            List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+            if (!elementaryMetaPaths.isEmpty()) {
+                ElementaryMetaPath firstElementaryMetaPath = elementaryMetaPaths.get(0); //only the first elementary metaPath counts
+                Class<? extends ModelElement> startClass = firstElementaryMetaPath.getStartClass();
+                if (!metaModel.isPureTemplateElementClass(startClass)) {
+                    return false;
+                }
+                Class<? extends ModelElement> endClass = firstElementaryMetaPath.getEndClass();
+                if (!metaModel.isPureTemplateElementClass(endClass)) {
+                    return false;
+                }
+            } else if (!startsWitTemplateElementsElementaryMetaPath(subMetaPath)) {
+                return false;
+            }
         }
         return true;
     }

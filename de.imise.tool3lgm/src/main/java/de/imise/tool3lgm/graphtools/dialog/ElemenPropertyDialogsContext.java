@@ -25,9 +25,9 @@ public class ElemenPropertyDialogsContext {
      * @return ModelElement obj, wenn schon ein Dialog existiert, null sonst
      */
     public static ElementPropertyDialog hasOpenDialog(final ModelElement obj) {
-        for (ElementPropertyDialog pd : dialogs) {
-            if (obj == pd.getModelElement()) {
-                return pd;
+        for (ElementPropertyDialog dialog : dialogs) {
+            if (obj == dialog.getModelElement()) {
+                return dialog;
             }
         }
         return null;
@@ -66,7 +66,8 @@ public class ElemenPropertyDialogsContext {
      */
     public static final void removeDialog(final ModelElement modelElement) {
         for (int n = 0; n < dialogs.size(); n++) {
-            if (modelElement == dialogs.get(n).getModelElement()) {
+            ElementPropertyDialog dialog = dialogs.get(n);
+            if (modelElement == dialog.getModelElement()) {
                 dialogs.remove(n--);
             }
         }
@@ -116,11 +117,11 @@ public class ElemenPropertyDialogsContext {
      */
     public static void closeAllDialogs(final GraphDocument doc) {
         for (int n = 0; n < dialogs.size(); n++) {
-            ElementPropertyDialog pd = dialogs.get(n);
+            ElementPropertyDialog dialog = dialogs.get(n);
             // wenn der Dialog zum zu schließenden Modell gehört
-            if (doc.isMyElement(pd.getModelElement())) {
+            if (doc.isMyElement(dialog.getModelElement())) {
                 // alle Änderungen der geöffneten Dialoge zurück rollen
-                pd.cancel();
+                dialog.cancel();
                 // in pd.cancel() wird die dialogs.size() um -1 geändert
                 n--;
             }

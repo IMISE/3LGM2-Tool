@@ -26,6 +26,8 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
@@ -66,6 +68,8 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
 
     private void internalInit() {
         ModelElement me = getModelElement();
+        GDCollection gdcoll = me.getCollection();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         String name = me.getName();
         // lotree
         JLabel lolabel = new JLabel(getResString("ueberg"));
@@ -152,7 +156,9 @@ public class StructurePanel extends AbstractPathOfOneEdgePanel {
     public void update() {
         childrenToExcludeFromRtree.clear();
         ModelElement me = getModelElement();
-        ElementContainer meContainer = me.getContainer(doc);
+        GDCollection gdcoll = me.getCollection();
+        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+        ElementContainer meContainer = me.getContainer(mainDoc);
         childrenToExcludeFromRtree.add(meContainer);
         lotree.saveExpansionAndSelection();
         loroot.removeAllChildren();

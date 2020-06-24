@@ -15,7 +15,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
@@ -69,8 +68,6 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param connectForward
      */
     protected final LGMAction getConnectAction(final JTree srcTree, final JTree targetTree, final Direction direction) {
-        final GraphDocument doc = getGraphDocument();
-        final GDCollection gdcoll = doc.getCollection();
         final int pid = getTransactionID();
         return new LGMAction(DialogActionCommands.ACTION_DIALOG_CONNECT_ELEMENT) {
             @Override
@@ -80,6 +77,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                     for (int n = 0; n < selpaths.length; n++) {
                         LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
                         ElementContainer ec = (ElementContainer) node.getUserObject();
+                        GDCollection gdcoll = ec.getCollection();
                         ModelElement me = ec.getElement();
                         ModelElement topLevelMe = getTopLevelModelElement(targetTree);
                         gdcoll.link(topLevelMe, me, edgeClass, direction, pid);
@@ -99,8 +97,6 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
      * @param disconnectForward
      */
     protected final LGMAction getDisconnectAction(final JTree srcTree, final JTree targetTree, final Direction direction) {
-        final GraphDocument doc = getGraphDocument();
-        final GDCollection gdcoll = doc.getCollection();
         final int pid = getTransactionID();
         return new LGMAction(DialogActionCommands.ACTION_DIALOG_DISCONNECT_ELEMENT) {
             @Override
@@ -110,6 +106,7 @@ public abstract class AbstractPathOfOneEdgePanel extends AbstractExpandablePanel
                     for (int n = 0; n < selpaths.length; n++) {
                         LGMTreeNode node = (LGMTreeNode) selpaths[n].getLastPathComponent();
                         ElementContainer ec = (ElementContainer) node.getUserObject();
+                        GDCollection gdcoll = ec.getCollection();
                         ModelElement me = ec.getElement();
                         ModelElement topLevelModelElement = getTopLevelModelElement(targetTree == null ? srcTree : targetTree);
                         gdcoll.unlink(topLevelModelElement, me, edgeClass, direction, pid);

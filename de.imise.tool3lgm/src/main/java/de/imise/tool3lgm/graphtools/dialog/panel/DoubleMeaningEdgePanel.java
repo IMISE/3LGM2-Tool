@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.ElementDialogPanelTree;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
@@ -77,6 +78,7 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         MetaModel metaModel = getMetaModel();
         boolean showRootHandles = metaModel.canHaveParts(this.searchElementClass);
 
+        GraphDocument mainDoc = getMainDoc();
         loroot = new StringTreeNode("loroot");
         lomodel = new DefaultTreeModel(loroot);
         lotree = new ElementDialogPanelTree(lomodel, mainDoc);
@@ -191,8 +193,8 @@ public class DoubleMeaningEdgePanel extends AbstractPathOfOneEdgePanel {
         boolean searchParts = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is();
         boolean searchParents = OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is();
 
+        GraphDocument mainDoc = getMainDoc();
         ModelElement modelElement = getModelElement();
-
         ElementContainer elementContainer = modelElement.getContainer(mainDoc);
         //egal welche Kante: es ist (im Moment) nicht erlaubt, sich selbst zu verbinden
         //-> eigenen Container niemals anbieten (was nur bei Kanten zw. derselben Elementklasse einen Effekt hat)

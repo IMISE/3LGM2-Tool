@@ -168,8 +168,8 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
                 }
 
                 // rückgängig machen der alten Transaktion
-                doc.finish_transaction(getTransactionID());
-                doc.undo(getTransactionID());
+                mainDoc.finish_transaction(getTransactionID());
+                mainDoc.undo(getTransactionID());
 
                 //finalDialog.dispose();
             }
@@ -222,7 +222,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
         add(createElementsAtPointPane(), constraints);
 
         // Neue Transaktion starten
-        doc.start_transaction(getTransactionID());
+        mainDoc.start_transaction(getTransactionID());
     }
 
     private void initDialogWithNoContentMessage() {
@@ -311,15 +311,15 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
 
                 }
                 // Alte Transaktion beenden
-                doc.finish_transaction(finalDialog.getTransactionID());
+                mainDoc.finish_transaction(finalDialog.getTransactionID());
 
                 // Falls in einem Table Änderungen aufgetreten sind, wird das dem GraphDocument mitgeteilt
                 if (dataChanged == true) {
-                    doc.distributeEvent(DATA_CHANGED, getTransactionID());
+                    mainDoc.distributeEvent(DATA_CHANGED, getTransactionID());
                 }
 
                 // Meue Transaktion starten
-                doc.start_transaction(finalDialog.createNewTransactionID());
+                mainDoc.start_transaction(finalDialog.createNewTransactionID());
             }
         };
 
@@ -337,7 +337,7 @@ public class UserFieldEditorDialog extends AbstractTabbedPropertyDialog {
                 finalDialog.okButtonPressed = true;
                 applyAction.actionPerformed(e);
                 // Alte Transaktion beenden
-                finalDialog.getGraphDocument().finish_transaction(finalDialog.getTransactionID());
+                mainDoc.finish_transaction(finalDialog.getTransactionID());
                 finalDialog.dispose();
                 finalDialog.okButtonPressed = false;
             }

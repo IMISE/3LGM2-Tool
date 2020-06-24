@@ -49,7 +49,8 @@ public class LGMActionLibrary {
                 if (panel.getCorrectingSelectionCount() > 0) {
                     return;
                 }
-                panel.getGraphDocument().deselectAll(true);
+                GraphDocument doc = panel.getMainDoc();
+                doc.deselectAll(true);
                 if (e == null) {
                     return;
                 }
@@ -58,9 +59,7 @@ public class LGMActionLibrary {
                 JTree tree = (JTree) e.getSource();
 
                 TreePath[] paths = tree.getSelectionPaths();
-                GraphDocument doc = panel.getGraphDocument();
-                AbstractElementPropertyDialog dialog = panel.getDialog();
-                int pid = dialog.getTransactionID();
+                int pid = panel.getTransactionID();
                 if (paths != null) {
                     panel.removeHighLights();
                     for (int i = 0; i < paths.length; i++) {
@@ -121,13 +120,10 @@ public class LGMActionLibrary {
      * Methode liefert eine <code>LGMAction</code> zurück, die beim Schließen eines Panels alle
      * WindowListener des Panels entfernt.
      *
-     * @param edp
+     * @param panel
      */
-    public static final LGMAction getWindowClosedAction(final ElementDialogPanel edp) {
-
-        final ElementDialogPanel panel = edp;
+    public static final LGMAction getWindowClosedAction(final ElementDialogPanel panel) {
         final AbstractElementPropertyDialog dialog = panel.getDialog();
-
         return new LGMAction() {
             @Override
             public void execute(final EventObject eo) {
@@ -142,12 +138,9 @@ public class LGMActionLibrary {
     }
 
     /**
-     * @param edp
+     * @param panel
      */
-    public static final LGMAction getComponentShownAction(final ElementDialogPanel edp) {
-
-        final ElementDialogPanel panel = edp;
-
+    public static final LGMAction getComponentShownAction(final ElementDialogPanel panel) {
         return new LGMAction() {
             @Override
             public void execute(final EventObject eo) {

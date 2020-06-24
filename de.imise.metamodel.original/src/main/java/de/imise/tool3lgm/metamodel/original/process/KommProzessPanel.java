@@ -160,25 +160,20 @@ public class KommProzessPanel extends ElementDialogPanel {
 
     private static final int MEDIUM_BREAKS = 10;
 
+    private final GraphDocument doc;
+
     /**
      * COMMENTME
      */
     private final JPanel checkPanel;
 
     /**
-     * Das {@link GraphDocument}, in dem die Teilprozessschritte visualisiert werden sollen.
+     * @param dialog
      */
-    @SuppressWarnings("unused")
-    private final GraphDocument selectedDoc;
+    public KommProzessPanel(final ElementPropertyDialog dialog) {
+        super(dialog);
 
-    /**
-     * @param pd
-     */
-    public KommProzessPanel(final ElementPropertyDialog pd) {
-        super(pd);
-
-        // selectedDoc = doc.getCollection().getActiveGraphDocument();
-        selectedDoc = doc.getCollection().getSelectedDoc();
+        doc = getMainDoc();
 
         prozess = (Prozess) getModelElement();
         prozessC = (NodeContainer) prozess.getContainer(doc);
@@ -674,8 +669,10 @@ public class KommProzessPanel extends ElementDialogPanel {
                     hc.setHighLight(true);
                 }
             }
-            int pid = dialog.getTransactionID();
-            doc.select(getModelElement().getContainer(doc), pid);
+            int pid = getTransactionID();
+            ModelElement me = getModelElement();
+            ElementContainer ec = me.getContainer(doc);
+            doc.select(ec, pid);
             doc.distributeEvent(SELECTION_CHANGED);
             doc.distributeEvent(ELEMENT_GRAPHICS_CHANGED, pid);
         }

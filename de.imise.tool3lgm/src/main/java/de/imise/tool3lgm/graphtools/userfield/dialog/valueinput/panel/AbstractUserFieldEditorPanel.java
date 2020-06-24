@@ -20,7 +20,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.UserFieldEditorDialog;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.table.UserFieldTable;
@@ -205,15 +205,6 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
     }
 
     /**
-     * Gibt den Dialog wieder, der dieses Panel enthält
-     *
-     * @return dialog
-     */
-    public UserFieldEditorDialog getDialog() {
-        return dialog;
-    }
-
-    /**
      * @return <code>true</code> wenn es mindestens ein anzuzeigendes Ergebnis in diesem Panel gibt sonst <code>false</code>
      */
     public abstract boolean hasValues();
@@ -249,7 +240,7 @@ public abstract class AbstractUserFieldEditorPanel extends JPanel implements Com
      * @param panel
      */
     protected void distributeSelectionChangedEvent() {
-        LGMGraphDocument doc = dialog.getGraphDocument();
+        GraphDocument doc = dialog.getMainDoc();
         int pid = dialog.getTransactionID();
         doc.distributeEvent(SELECTION_CHANGED, pid);
     }

@@ -281,8 +281,8 @@ public abstract class GraphDocument extends ElementSelectionContext {
      * @return <code>true</code> if this Graphdocument is the main GraphDocument of the model, otherwise <code>false</code>
      */
     public final boolean isMainGraphDocument() {
-        LGMGraphDocument mainGraphDocument = gdcoll.getMainDoc();
-        return mainGraphDocument == this;
+        GraphDocument mainDoc = getMainDoc();
+        return mainDoc == this;
     }
 
     /**

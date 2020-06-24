@@ -95,8 +95,8 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
     protected final ModelElement getTopLevelModelElement(final JTree tree) {
         ModelElement me = null;
         try {
-            ElementPropertyDialog d = (ElementPropertyDialog) tree.getTopLevelAncestor();
-            me = d.getModelElement();
+            ElementPropertyDialog dialog = (ElementPropertyDialog) tree.getTopLevelAncestor();
+            me = dialog.getModelElement();
         } catch (Exception ex) {
             Log.log(Log.ERROR, getClass().getSimpleName() + ": could'nt find TopLevelAncestor for tree", ex);
         }

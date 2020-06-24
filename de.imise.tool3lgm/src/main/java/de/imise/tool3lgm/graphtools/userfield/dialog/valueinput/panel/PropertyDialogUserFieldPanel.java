@@ -51,6 +51,8 @@ import com.google.common.collect.ImmutableList;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -161,7 +163,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         GridBagConstraints constraints = getDefaultConstraints();
 
         //Attributdefinitionen des GraphDocumentes holen
-        UserFieldDefinitions definitions = doc.getUserFieldDefinitions();
+        GDCollection gdcoll = getCollection();
+        UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
         ModelElement me = getModelElement();
         Class<? extends ModelElement> meClass = me.getClass();
 
@@ -269,7 +272,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         } else if (style == CLASSIFICATION_NUMBER_FORMULA) {
             JTextField textField = new JTextField();
             textField.setEditable(false);
-            String formattedValue = field.getFormattedValue(getModelElement(), true);
+            ModelElement me = getModelElement();
+            String formattedValue = field.getFormattedValue(me, true);
             textField.setText(formattedValue);
             editorComponent = textField;
         }
@@ -317,7 +321,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
         if (component instanceof JTextComponent) {
             JTextComponent textComponent = (JTextComponent) component;
             if (userField.hasStyle(CLASSIFICATION_NUMBER)) {
-                PropertyDialogUserFieldPanelNumberInputFocusListener inputFieldFocusListener = new PropertyDialogUserFieldPanelNumberInputFocusListener(changeHandler, getModelElement(), userField);
+                ModelElement me = getModelElement();
+                PropertyDialogUserFieldPanelNumberInputFocusListener inputFieldFocusListener = new PropertyDialogUserFieldPanelNumberInputFocusListener(changeHandler, me, userField);
                 textComponent.addFocusListener(inputFieldFocusListener);
             } else if (textComponent.isEditable()) {
                 textComponent.getDocument().addDocumentListener(changeHandler);
@@ -416,12 +421,13 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
 
             UserField.Style style = userField.getStyle();
             String newValue = getNewValue(style, editorComponent);
-            ModelElement me = getModelElement();
             //wenn bei RadioButtons noch gar nichts gesetzt war, kann newValue null sein
             //bei UserFields die Formeln sind, kommt auch null zurück -> dann nichts setzen
             if (newValue != null) {
+                ModelElement me = getModelElement();
                 if (isNewValue(me, userField, newValue)) { //wenn sich wirklich was geändert hat
-                    doc.setUserFieldValue(me, userField, newValue, dialog.getTransactionID());
+                    GraphDocument mainDoc = getMainDoc();
+                    mainDoc.setUserFieldValue(me, userField, newValue, getTransactionID());
                     changed = true;
                 }
             }
@@ -432,7 +438,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             // reset aus dem Calculator auf true gesetzt.
             // Jetzt kann man einfach dem Calculator sagen, er soll alle
             // Kennzahlformeln neu berechnen, wenn
-            doc.getCollection().getUserFieldDefinitions().initReset();
+            GDCollection gdcoll = getCollection();
+            gdcoll.getUserFieldDefinitions().initReset();
         }
 
     }
@@ -451,7 +458,8 @@ public class PropertyDialogUserFieldPanel extends ElementDialogPanel {
             UserField userField = userFieldEditorComponent.userField;
             if (userField.hasStyle(CLASSIFICATION_NUMBER_FORMULA)) {
                 JTextField formulaTextField = (JTextField) userFieldEditorComponent.editorComponent;
-                String formattedValue = userField.getFormattedValue(getModelElement(), true);
+                ModelElement me = getModelElement();
+                String formattedValue = userField.getFormattedValue(me, true);
                 formulaTextField.setText(formattedValue);
             }
         }

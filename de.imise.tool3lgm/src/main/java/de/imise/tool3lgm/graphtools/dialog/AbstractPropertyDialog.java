@@ -59,7 +59,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     protected final GDCollection gdcoll;
 
     /** Hauptmodell der GDCollection */
-    protected final LGMGraphDocument doc;
+    protected final LGMGraphDocument mainDoc;
 
     /** ID des Dialoges mit der alle Transaktionen durchgeführt werden */
     protected int transactionID;
@@ -83,7 +83,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     public AbstractPropertyDialog(final Frame owner, final GDCollection gdcoll) {
         super(owner, "", false);
         this.gdcoll = gdcoll;
-        doc = gdcoll.getMainDoc();
+        mainDoc = gdcoll.getMainDoc();
         init(gdcoll);
     }
 
@@ -94,7 +94,7 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     public AbstractPropertyDialog(final Dialog owner, final GDCollection gdcoll) {
         super(owner, "", owner instanceof AbstractPropertyDialog);
         this.gdcoll = gdcoll;
-        doc = gdcoll.getMainDoc();
+        mainDoc = gdcoll.getMainDoc();
         init(gdcoll);
     }
 
@@ -142,8 +142,15 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
     /**
      * @return <code>doc</code>
      */
-    public final LGMGraphDocument getGraphDocument() {
-        return doc;
+    public final GraphDocument getMainDoc() {
+        return mainDoc;
+    }
+
+    /**
+     * @return
+     */
+    public final GDCollection getCollection() {
+        return gdcoll;
     }
 
     /**
@@ -180,7 +187,6 @@ public abstract class AbstractPropertyDialog extends AbstractSizeAndPositionRest
 
     @Override
     public void windowActivated(final WindowEvent e) {
-        GDCollection gdcoll = doc.getCollection(); //doc ist immer das mainDoc
         LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
         Static.setSelectedDoc(selectedDoc);
     }

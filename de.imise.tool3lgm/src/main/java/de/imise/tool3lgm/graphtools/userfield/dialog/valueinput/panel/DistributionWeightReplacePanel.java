@@ -232,7 +232,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         if (!tableModel.dataChanged()) {
             return;
         }
-        GraphDocument doc = getDialog().getGraphDocument();
+        GraphDocument doc = dialog.getMainDoc();
         if (edgeClassBoxSelection != null) {
             Vector<NamedObjectContainer<?>> rowIdentifiers = tableModel.getRowIdentifiers();
             Vector<NamedObjectContainer<?>> columnIdentifiers = tableModel.getColumnIdentifiers();
@@ -265,7 +265,7 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
      * @param replaceUserField
      */
     private void setReplacement(final GraphDocument doc, final String rowElementHash, final UserField columnUserField, final UserField replaceUserField) {
-        int pid = getDialog().getTransactionID();
+        int pid = dialog.getTransactionID();
         WeightReplacer replacer = doc.getCollection().getUserFieldDefinitions().getWeightReplacer();
         //wenn es NICHT das Gleichverteilungs-UserField ist, das ersetzt werden soll
         if (columnUserField != null) {
@@ -354,7 +354,8 @@ public class DistributionWeightReplacePanel extends AbstractUserFieldEditorPanel
         Class<? extends ModelElement> elementClass = ((Class<?>) elementClassBox.getSelectedObject()).asSubclass(ModelElement.class);
         Class<? extends Edge> edgeClass = ((Class<?>) edgeClassBox.getSelectedObject()).asSubclass(Edge.class);
         //das Model damit initialisieren
-        AbstractTableModel uftm = new WeightReplaceTableModel(getDialog().getGraphDocument(), elementClass, edgeClass);
+        GraphDocument doc = dialog.getMainDoc();
+        AbstractTableModel uftm = new WeightReplaceTableModel(doc, elementClass, edgeClass);
         UserFieldTableController tec = UserFieldTableController.getNewDistributionWeightReplaceTableController(uftm);
         super.modifyTable(uftm, tec);
     }

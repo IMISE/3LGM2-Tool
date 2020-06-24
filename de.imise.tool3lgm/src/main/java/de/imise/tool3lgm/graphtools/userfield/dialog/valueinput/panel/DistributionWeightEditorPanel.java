@@ -241,7 +241,7 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         if (tableModel.dataChanged() == false) {
             return;
         }
-        GraphDocument doc = getDialog().getGraphDocument();
+        GraphDocument doc = dialog.getMainDoc();
         if (elementTypeBoxSelection != null) {
             UserField selectedWeigth = weightBoxSelection;
             Vector<NamedObjectContainer<?>> rowIdentifiers = tableModel.getRowIdentifiers();
@@ -269,16 +269,16 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
                     if (edge == null) {
                         continue;
                     }
-
+                    int pid = dialog.getTransactionID();
                     if (newValue.equals(UserField.EMPTY_STRING)) {
                         // Neuen Wert setzen
-                        doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
+                        doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, pid);
                     } else {
                         try {
                             //Warum soll man hier keine falschen Werte setzen dürfen, die dann bei Berechnungen zu NUMBER_FORMAT_ERRORS werden
                             new BigDecimal(newValue);
                             // Neuen Wert setzen
-                            doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, getDialog().getTransactionID());
+                            doc.setUserFieldValue(edge.getHashString(), selectedWeigth.getHashCode(), newValue, pid);
                         } catch (NumberFormatException nfe) {
                             continue;
                         }
@@ -367,7 +367,8 @@ public class DistributionWeightEditorPanel extends AbstractElementTypeUserFieldE
         ElementsNameBuilder elementsNameBuilder = dialog.getElementsNameBuilder();
         choosedEdgeDirection = selectedEdgeName.equals(elementsNameBuilder.getFullForwardMetaAssociationName(selectedEdgeClass)) ? FORWARD : BACKWARD;
         UserField selectedWeigthUserField = (UserField) weightBox.getSelectedObject();
-        AbstractUserFieldTableModel uftm = new UserFieldWeightTableModel(getDialog().getGraphDocument(), selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField, columnFilterBoxSelection);
+        GraphDocument doc = dialog.getMainDoc();
+        AbstractUserFieldTableModel uftm = new UserFieldWeightTableModel(doc, selectedEdgeClass, choosedEdgeDirection, selectedWeigthUserField, columnFilterBoxSelection);
         UserFieldTableController tec = UserFieldTableController.getNewDistributionWeightTableController(uftm);
         super.modifyTable(uftm, tec);
     }

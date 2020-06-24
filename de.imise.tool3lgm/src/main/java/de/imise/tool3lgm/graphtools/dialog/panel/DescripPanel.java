@@ -13,6 +13,7 @@ import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -56,7 +57,7 @@ public final class DescripPanel extends MultiPanelElementDialogPanel /* implemen
         //Name editable?
         boolean editableName = isEditableDialog;
         if (editableName) {
-            MetaModel metaModel = dialog.getMetaModel();
+            MetaModel metaModel = getMetaModel();
             ModelElement me = getModelElement();
             Class<? extends ModelElement> elementClass = me.getClass();
             editableName = !metaModel.isGenerateName(elementClass);
@@ -136,7 +137,9 @@ public final class DescripPanel extends MultiPanelElementDialogPanel /* implemen
         // nur wenn der Name explizit geändert wurde, dann auch den Namen in einer Transaktion ändern
         String name = me.getName();
         if (newName != null && !newName.equals(name)) {
-            doc.setName(me, newName, dialog.getTransactionID());
+            GraphDocument mainDoc = getMainDoc();
+            int pid = getTransactionID();
+            mainDoc.setName(me, newName, pid);
         } else {
             // wenn der Name gleich geblieben ist, kann aber trotzdem der HTML-Name in der Grafik
             // sich geändert haben, wenn in dem Dialog ein Element verknüpft wurde, das auch im
@@ -147,7 +150,9 @@ public final class DescripPanel extends MultiPanelElementDialogPanel /* implemen
         String newDescrip = descriptionTextPane.getText();
         String descrip = me.getDescription();
         if (newDescrip != null && !newDescrip.equals(descrip)) {
-            doc.setDescription(me, ParseSaveStringHandler.getParseSaveString(newDescrip), dialog.getTransactionID());
+            GraphDocument mainDoc = getMainDoc();
+            int pid = getTransactionID();
+            mainDoc.setDescription(me, ParseSaveStringHandler.getParseSaveString(newDescrip), pid);
         }
         me.refreshText();
         super.commit();

@@ -229,6 +229,17 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
+     * @return modelElement
+     */
+    @Override
+    public ModelElement getModelElement() {
+        boolean startsWitTemplateElementsElementaryMetaPath = MetaPathFunctions.startsWitTemplateElementsElementaryMetaPath(metaPath);
+        ModelElement templateElementSource = dialog.getTemplateElementSource();
+        ModelElement modelElement = startsWitTemplateElementsElementaryMetaPath && templateElementSource != null ? templateElementSource : super.getModelElement();
+        return modelElement;
+    }
+
+    /**
      * Gibt die gemeinsame Oberklasse aller Endklassen des Pfades zurück. Das ist die SearchElementClass.
      *
      * @param metaPath
@@ -345,8 +356,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param startEdgeIndex Index der Edge, bei der der anzulegende Teilpfad losgeht
      */
     protected void connectOld(final ModelElement startElement, final Iterable<ModelElement> elements2Connect, final int startEdgeIndex) {
-        GraphDocument selDoc = getSelectedGraphDocument();
-        GDCollection gdcoll = selDoc.getCollection();
+        GraphDocument selectedDoc = getSelectedDoc();
         ModelElement targetElement = startElement;
         int pid = getTransactionID();
         //wenn ein gültiges Element2Connect übergeben wurde, dann muss man den Pfad nur bis zur vorletzten Edge
@@ -357,13 +367,14 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         for (int i = startEdgeIndex; i < edgeSearchStopIndex; i++) {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
             ElementaryMetaPath nextElementaryMetaPath = i + 1 < elementaryMetaPathCount ? elementaryMetaPaths.get(i + 1) : null;
-            targetElement = PathFunctions.createNodeWithContainerAndDependents(selDoc, startElement, elementaryMetaPath, nextElementaryMetaPath, pid);
+            targetElement = PathFunctions.createNodeWithContainerAndDependents(selectedDoc, startElement, elementaryMetaPath, nextElementaryMetaPath, pid);
         }
         //wenn gültige elments2Connect übergeben wurde, dann müssen sie an das vorletzte Pfadelement angehängt werden
         if (edgeSearchStopIndex < elementaryMetaPathCount) {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(edgeSearchStopIndex);
             Class<? extends Edge> edgeClass2Create = elementaryMetaPath.getEdgeClass();
             Direction direction = elementaryMetaPath.getDirection();
+            GDCollection gdcoll = getCollection();
             for (ModelElement element2Connect : elements2Connect) {
                 gdcoll.link(targetElement, element2Connect, edgeClass2Create, direction, pid);
             }
@@ -378,13 +389,12 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param startEdgeIndex Index der Edge, bei der der anzulegende Teilpfad losgeht
      */
     protected final void connect(final ModelElement startElement, final Iterable<ModelElement> elements2Connect, final int startEdgeIndex) {
-        GraphDocument selDoc = getSelectedGraphDocument();
         int pid = getTransactionID();
-        GDCollection gdcoll = selDoc.getCollection();
 
         //Ausnahme für Mac-Java-Bug: wenn Dialoge auf dem MAC aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
         //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach nicht angezeigt und der Name generiert.
         boolean dragNDropOnMac = Static.isDragNDropOnMac();
+        GDCollection gdcoll = getCollection();
         boolean lastAutomaticMode = gdcoll.setAutomaticMode(dragNDropOnMac);
 
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
@@ -397,11 +407,12 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 List<ElementaryMetaPath> subelementaryMetaPaths = elementaryMetaPaths.subList(startEdgeIndex, size);
                 path2Create = new SimpleMetaPath(subelementaryMetaPaths);
             }
+            GraphDocument selectedDoc = getSelectedDoc();
             if (elements2Connect == null) {
-                selDoc.createPath(startElement, null, path2Create, pid);
+                selectedDoc.createPath(startElement, null, path2Create, pid);
             } else {
                 for (ModelElement endElement : elements2Connect) {
-                    selDoc.createPath(startElement, endElement, path2Create, pid);
+                    selectedDoc.createPath(startElement, endElement, path2Create, pid);
                 }
             }
         }
@@ -417,7 +428,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *            Ist es null wird auch das letzte Element des Pfades neu angelegt.
      */
     protected void connectToFirstPath(final ModelElement element2Connect) {
-        ModelElement me = dialog.getModelElement();
+        ModelElement me = getModelElement();
         //für den gesamten Pfad der angelegt werden muss
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         int elementaryMetaPathCount = elementaryMetaPaths.size();
@@ -479,7 +490,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         boolean doubleClick = !popup && e.getClickCount() > 1;
         //set selection
         List<GraphDocument> docs = new ArrayList<>();
-        GraphDocument mainDoc = doc.getMainDoc();
+        GraphDocument mainDoc = getMainDoc();
         mainDoc.deselectAll(true);
         for (Object selectedObject : fullSelection) {
             ModelElement me = null;
@@ -513,7 +524,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 }
             }
         }
-        if (popup && doc.isSelection()) {
+        if (popup && mainDoc.isSelection()) {
             boolean showOnlyOpenPropertiesInContexMenu = sourceIs(e, JTable.class);
             JPopupMenu dialogSelectionContextMenu = contextGenerator.getDialogSelectionContextMenu(showOnlyOpenPropertiesInContexMenu);
             dialogSelectionContextMenu.show(e.getComponent(), e.getX() + 3, e.getY() + 3);
@@ -545,17 +556,18 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
         List<ElementContainer> available = null;
         //Pfad des Panels besteht aus genau einer Kante
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
+        GraphDocument mainDoc = getMainDoc();
         if (elementaryMetaPaths.size() == 1) {
             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(0);
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-            ModelElement me = getModelElement();
-            MetaModel metaModel = me.getMetaModel();
+            MetaModel metaModel = mainDoc.getMetaModel();
             SimpleMetaPath conditionMetaPath = metaModel.getConditionMetaPath(edgeClass);
             //für diese eine Kante ist ein ConditionMetaPath angegeben
             if (conditionMetaPath != null) {
                 if (elementaryMetaPath.getDirection() == BACKWARD) {
                     conditionMetaPath = conditionMetaPath.getOtherDirection();
                 }
+                ModelElement me = getModelElement();
                 Collection<ModelElement> conditionElements = PathFunctions.getConnectedElements(me, conditionMetaPath);
                 available = new ArrayList<>(conditionElements.size());
                 for (ModelElement conditionElement : conditionElements) {

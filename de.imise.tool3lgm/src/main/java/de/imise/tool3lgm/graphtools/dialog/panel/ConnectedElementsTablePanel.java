@@ -24,9 +24,11 @@ import de.imise.tool3lgm.graphtools.dialog.ConnectPathDialog;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.NamedObjectContainer;
@@ -58,14 +60,12 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
 
         this.tableDefinition = tableDefinition;
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(true);
-        boolean startsWitTemplateElementsElementaryMetaPath = MetaPathFunctions.startsWitTemplateElementsElementaryMetaPath(simpleMetaPath);
-        ModelElement templateElementSource = dialog.getTemplateElementSource();
-        ModelElement tableElement = startsWitTemplateElementsElementaryMetaPath && templateElementSource != null ? templateElementSource : dialog.getModelElement();
-
+        ModelElement tableElement = getModelElement();
         table = new ConnectedElementsTable(tableElement, simpleMetaPath, tableDefinition, editable, mouseListener, dialog.getTransactionID());
 
         //wenn in der columnsDefinion ein String als Resourcenschlüssel oder Tabellenname angegeben wurde, dann kommt hier irgendwas nicht leeres zurück
-        String tableTabName = doc.getResStringWithoutError(tableDefinition.getTableResKeyOrName());
+        MetaModelSpecific resSource = dialog.getCollection();
+        String tableTabName = resSource.getResStringWithoutError(tableDefinition.getTableResKeyOrName());
         if (!Strings.isNullOrEmpty(tableTabName)) { //Name dieses Panels und somit des Tabs ggf. ersetzen (super setzt den Namen des Endelementes der Pfade)
             setName(tableTabName);
         }
@@ -114,7 +114,8 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         return new LGMAction(getResString("addButtonText")) {
             @Override
             public void execute(final EventObject eo) {
-                ConnectPathDialog connectPathDialog = new ConnectPathDialog(doc, metaPath);
+                GraphDocument mainDoc = getMainDoc();
+                ConnectPathDialog connectPathDialog = new ConnectPathDialog(mainDoc, metaPath);
                 boolean ok = connectPathDialog.createDialog(dialogParent);
                 while (ok && !connectPathDialog.hasValidSelection()) {
                     ok = connectPathDialog.createDialog(dialogParent);
@@ -122,7 +123,9 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
                 if (ok) {
                     SimpleMetaPath selectedPath = connectPathDialog.getSelectedPath();
                     ModelElement selectedEndElement = connectPathDialog.getSelectedEndElement();
-                    doc.createPath(getModelElement(), selectedEndElement, selectedPath, true, dialog.getTransactionID());
+                    ModelElement me = getModelElement();
+                    int pid = getTransactionID();
+                    mainDoc.createPath(me, selectedEndElement, selectedPath, true, pid);
                 }
             }
         };
@@ -138,7 +141,10 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
             @Override
             public void execute(final EventObject e) {
                 List<Edge> selectedPathLastEdges = table.getSelectedPathsLastEdges();
-                doc.getCollection().deleteElements(selectedPathLastEdges, doc, dialog.getTransactionID());
+                GraphDocument mainDoc = getMainDoc();
+                GDCollection gdcoll = mainDoc.getCollection();
+                int pid = getTransactionID();
+                gdcoll.deleteElements(selectedPathLastEdges, mainDoc, pid);
             }
         };
     }
@@ -171,7 +177,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         List<ModelElement> selectedElements = new ArrayList<>();
         for (int row : selectedRows) {
             ModelElement selectedElement = getModelElementAt(row, clickedColumn);
-            MetaModel metaModel = mainDoc.getMetaModel();
+            MetaModel metaModel = getMetaModel();
             if (selectedElement != null && !metaModel.isHiddenClass(selectedElement.getClass())) {
                 selectedElements.add(selectedElement);
             }

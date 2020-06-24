@@ -21,14 +21,14 @@ import de.imise.util.NamedObjectContainer;
 
 /**
  * Panel zur Eingabe von Modelvariablen
- * 
+ *
  * @author fstephan
  */
 public class ModelVariableEditorPanel extends AbstractUserFieldEditorPanel {
 
     /**
      * Kosntruktor
-     * 
+     *
      * @param dialog
      * @param name
      */
@@ -43,8 +43,7 @@ public class ModelVariableEditorPanel extends AbstractUserFieldEditorPanel {
     @Override
     public void takeOver() {
 
-        GraphDocument doc = getDialog().getGraphDocument();
-        GDCollection gdcoll = doc.getCollection();
+        GDCollection gdcoll = dialog.getCollection();
         UserFieldDefinitions definitions = gdcoll.getUserFieldDefinitions();
 
         if (!(table.getModel() instanceof AbstractUserFieldTableModel)) {
@@ -85,7 +84,8 @@ public class ModelVariableEditorPanel extends AbstractUserFieldEditorPanel {
 
     @Override
     protected void drawTable() {
-        UserFieldGlobalNumberTableModel uftm = new UserFieldGlobalNumberTableModel(getDialog().getGraphDocument());
+        GraphDocument mainDoc = dialog.getMainDoc();
+        UserFieldGlobalNumberTableModel uftm = new UserFieldGlobalNumberTableModel(mainDoc);
         UserFieldTableController tec = UserFieldTableController.getNewModelVariableTableController(uftm);
         super.modifyTable(uftm, tec);
     }

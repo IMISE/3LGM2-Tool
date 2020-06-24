@@ -18,6 +18,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 
 /**
@@ -55,7 +56,8 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         typeLabel = new JLabel();
         add(typeLabel, gbc);
 
-        if (MetaModel.isEdgeType(getModelElement().getClass())) {
+        ModelElement me = getModelElement();
+        if (me instanceof Edge) {
             gbc.gridx = 0;
             gbc.gridy++;
             gbc.weightx = 0.0;
@@ -89,8 +91,7 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
         gbc.fill = GridBagConstraints.BOTH;
         idLabel = new JLabel();
         add(idLabel, gbc);
-
-        if (MetaModel.isNodeType(getModelElement().getClass())) {
+        if (me instanceof Node) {
             gbc.gridx = 0;
             gbc.gridy++;
             gbc.weightx = 0.0;
@@ -108,11 +109,13 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
 
     @Override
     public void update() {
-        ModelElement me = dialog.getModelElement();
+        ModelElement me = getModelElement();
         if (me instanceof Node) {
             typeLabel.setText(elementsNameBuilder.getDisplayableName(me));
             labelLabel.setText("<html><b>" + me.getClearName() + "</b></html>");
-            GraphDocument vdoc = mainDoc.getCollection().getGraphDocumentCoded(me.getAssociatedDoc());
+            GDCollection gdcoll = getCollection();
+            String associatedDocHash = me.getAssociatedDoc();
+            GraphDocument vdoc = gdcoll.getGraphDocumentCoded(associatedDocHash);
             if (vdoc == null) {
                 subModelLabelLabel.setVisible(false);
                 submodelLabel.setVisible(false);
@@ -129,7 +132,8 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
             String forwardEdgeClassName = "&nbsp;&nbsp;<i>" + elementsNameBuilder.getMetaAssociationName(edgeClass, Direction.FORWARD) + "</i>&nbsp;&nbsp;";
             String endElementClassName = elementsNameBuilder.getDisplayableName(getEndClass(edgeClass));
             MetaModel metaModel = getMetaModel();
-            if (metaModel.isAssociationClass(getModelElement().getClass())) {
+            Class<? extends ModelElement> elementClass = me.getClass();
+            if (metaModel.isAssociationClass(elementClass)) {
                 typeLabel.setText("<html>" + elementsNameBuilder.getDisplayableName(me) + " (" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + ")</html>");
             } else {
                 typeLabel.setText("<html>" + startElementClassName + "  <i>" + forwardEdgeClassName + "</i>  " + endElementClassName + "</html>");
