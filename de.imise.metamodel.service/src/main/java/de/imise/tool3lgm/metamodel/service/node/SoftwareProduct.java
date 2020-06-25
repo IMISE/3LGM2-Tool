@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.metamodel.service.node;
 
-import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
-
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_SoftwareProduct_Edge;
@@ -18,8 +16,8 @@ public final class SoftwareProduct extends Node {
         ElementPropertyDialog dialog = super.createPropertyDialog();
         dialog.addEdgePanel(Function_SoftwareProduct_Edge.class);
         dialog.addMultiPanel(ApplicationSystem_SoftwareProduct_Edge.class);
-        dialog.addMultiPanelEdgePanel(LABEL_END_ELEMENT_TYPE, ApplicationSystem_SoftwareProduct_Edge.class);
-        dialog.addMultiPanelEdgePanel(LABEL_END_ELEMENT_TYPE, IheActorInstance_SoftwareProduct_Edge.class);
+        dialog.addMultiPanelEdgePanel(ApplicationSystem_SoftwareProduct_Edge.class);
+        dialog.addMultiPanelEdgePanel(IheActorInstance_SoftwareProduct_Edge.class);
         return dialog;
     }
 

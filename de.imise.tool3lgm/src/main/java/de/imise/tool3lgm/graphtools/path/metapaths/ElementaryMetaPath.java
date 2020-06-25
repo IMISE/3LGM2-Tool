@@ -600,4 +600,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
         return metaModel.isRecursiveForElementClass(edgeClass, endClass);
     }
 
+    @Override
+    public String toString() {
+        return getFullName();
+    }
 }

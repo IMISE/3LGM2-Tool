@@ -4,14 +4,22 @@ import java.awt.Component;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableModel.ColumnNames;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.swing.ToolTipShowTimeHandler;
 
 /**
  * @author AXS
@@ -38,6 +46,9 @@ public class ConsistencyErrorTableGenerator {
         //TableModel
         ConsistencyErrorTableModel tableModel = new ConsistencyErrorTableModel();
         table = new UneditableJTable(tableModel);
+
+        //Tooltip dismiss time increase (from 4s to 10s)
+        ToolTipShowTimeHandler.setDismissTime(table, 10000);
 
         //MouseListener
         ConsistencyErrorTableMouseListener consistencyErrorTableMouseListener = new ConsistencyErrorTableMouseListener(checker, table);
@@ -68,7 +79,40 @@ public class ConsistencyErrorTableGenerator {
         TableColumn columnDescription = table.getColumn(columnDescriptionDisplayableName);
         columnDescription.setCellRenderer(new DescriptionCellRenderer());
 
+        initTabelSelectionModel();
+
         updateTable();
+    }
+
+    /**
+     * Adds a SelectionListener to the table. If selection changed the element with
+     * the error will be selected in the selected model for a better orientation.
+     */
+    private void initTabelSelectionModel() {
+        ListSelectionModel selectionModel = table.getSelectionModel();
+        selectionModel.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(final ListSelectionEvent e) {
+                LGMGraphDocument selectedDoc = Static.getSelectedDoc();
+                selectedDoc.deselectAll(false);
+                try {
+                    Object selectedData = null;
+
+                    int[] selectedRow = table.getSelectedRows();
+
+                    for (int i = 0; i < selectedRow.length; i++) {
+                        ColumnNames element = ConsistencyErrorTableModel.ColumnNames.ELEMENT;
+                        int elementColumn = element.ordinal();
+                        selectedData = table.getValueAt(selectedRow[i], elementColumn);
+                        ModelElement selectedElement = (ModelElement) selectedData;
+                        String hash = selectedElement.getHashString();
+                        selectedDoc.addToSelection(hash, TransactionManager.STANDARD_PID);
+                    }
+                } catch (Exception ex) {
+                    // ignore
+                }
+            }
+        });
     }
 
     private static class DescriptionCellRenderer extends DefaultTableCellRenderer {

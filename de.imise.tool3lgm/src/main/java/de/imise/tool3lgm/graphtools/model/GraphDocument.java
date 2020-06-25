@@ -3876,9 +3876,10 @@ public abstract class GraphDocument extends ElementSelectionContext {
         Class<? extends ModelElement> class2Create = Edge.getEndClass(instanciationEdgeClass);
         String name = GENERATED_NAME_PREFIX + master.getName() + " " + Tool3lgmConstants.getResString("INSTANCE");
         NodeContainer instanceContainer = doc.createNodeAndContainer(class2Create, name, pid);
-        if (instanceContainer != null) { // kann null sein, wenn der Dialig zur Namenseingae abgebrochen wurde
-            ModelElement instanceElement = instanceContainer.getElement();
+        if (instanceContainer != null) { // kann null sein, wenn der Dialog zur Namenseingabe abgebrochen wurde
             ModelElement instance = instanceContainer.getElement();
+            String masterDescription = master.getDescription();
+            instance.setDescription(masterDescription);
             gdcoll.link(instanciationEdgeClass, master, instance, pid);
 
             //Ebenfalls zu instanziierende Nebenpfade anlegen
@@ -3898,7 +3899,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
                 for (ModelElement me : connectedElements) {
                     //ab diesem Pfadteil muss neu angelegt werden
                     SimpleMetaPath subPathCreate = metaPath.getSubPath(path2CreateStartIndex);
-                    doc.createPath(me, instanceElement, subPathCreate, pid);
+                    doc.createPath(me, instance, subPathCreate, pid);
                 }
             }
         }
