@@ -10,7 +10,6 @@ import javax.swing.JTree;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
 import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer;
@@ -18,7 +17,6 @@ import de.imise.tool3lgm.graphtools.dialog.dragdrop.DragNDropInitializer.DragNDr
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
-import de.imise.tool3lgm.log.Log;
 
 /**
  * @author fstephan Diese Klasse ist eine abstrakte Oberklasse, für alle
@@ -84,23 +82,6 @@ public abstract class LGMDragNDropPanel extends AbstractPathConnectionTreePanel 
      */
     public final Class<? extends Edge> getEdgeType(final ModelElement me1, final ModelElement me2) {
         return null;
-    }
-
-    /**
-     * Gibt das <code>ModelElement</code> des <code>ElementPropertyDialog</code> s wieder, in dem
-     * sich der <code>tree</code> befindet.
-     *
-     * @param tree
-     */
-    protected final ModelElement getTopLevelModelElement(final JTree tree) {
-        ModelElement me = null;
-        try {
-            ElementPropertyDialog dialog = (ElementPropertyDialog) tree.getTopLevelAncestor();
-            me = dialog.getModelElement();
-        } catch (Exception ex) {
-            Log.log(Log.ERROR, getClass().getSimpleName() + ": could'nt find TopLevelAncestor for tree", ex);
-        }
-        return me;
     }
 
     /**
