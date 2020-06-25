@@ -134,6 +134,11 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected final boolean isConnectionPointUnique;
 
     /**
+     *
+     */
+    private final ModelElement modelElement;
+
+    /**
      * Panel für eine einfache Assoziation. Das Label trägt den Anzeigenamen der letzten Elementart.
      *
      * @param dialog
@@ -165,6 +170,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     public AbstractPathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath) {
         super(dialog);
         this.metaPath = metaPath;
+        modelElement = getPanelModelElement();
         searchElementClass = getInitialSearchElementClass(metaPath);
         isConnectionPointUnique = isConnectionPointUnique();
 
@@ -229,13 +235,24 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
+     * Checks wheter this panel must show a template element or the model element.
+     * The template elememt will be shown if the metapath starts with a
+     * {@link ElementaryMetaPath} which is defined between pure template elenents.
+     *
+     * @return the real visible {@link ModelElement}
+     */
+    private final ModelElement getPanelModelElement() {
+        boolean startsWitTemplateElementsElementaryMetaPath = MetaPathFunctions.startsWitTemplateElementsElementaryMetaPath(metaPath);
+        ModelElement templateElementSource = dialog.getTemplateElementSource();
+        ModelElement modelElement = startsWitTemplateElementsElementaryMetaPath && templateElementSource != null ? templateElementSource : super.getModelElement();
+        return modelElement;
+    }
+
+    /**
      * @return modelElement
      */
     @Override
     public ModelElement getModelElement() {
-        boolean startsWitTemplateElementsElementaryMetaPath = MetaPathFunctions.startsWitTemplateElementsElementaryMetaPath(metaPath);
-        ModelElement templateElementSource = dialog.getTemplateElementSource();
-        ModelElement modelElement = startsWitTemplateElementsElementaryMetaPath && templateElementSource != null ? templateElementSource : super.getModelElement();
         return modelElement;
     }
 
