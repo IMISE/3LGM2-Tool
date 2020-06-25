@@ -262,6 +262,14 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private int active_layer = DOMAIN_LAYER;
 
     /**
+     * The list of change events which were fired during bulk_mode.
+     * This list contains teh same/equals event alsways only one times.
+     * The events are collected if bulk_mode ist active and they are
+     * fired if bulk_mode becomes inactive.
+     */
+    private final List<LGMChangeEvent> changeEvents = new ArrayList<>();
+
+    /**
      * @param templateModel
      */
     public GDCollection() {
@@ -2330,92 +2338,22 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * @author AXS (25.06.2020)
-     */
-    private class LGMChangeEvent {
-        final LGMChangeType changeType;
-        final ElementContainer last_elem;
-        final GraphDocument source;
-        final int pid;
-
-        /**
-         * @param changeType
-         * @param last_elem
-         * @param source
-         * @param pid
-         */
-        public LGMChangeEvent(final LGMChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
-            this.changeType = changeType;
-            this.last_elem = last_elem;
-            this.source = source;
-            this.pid = pid;
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + (changeType == null ? 0 : changeType.hashCode());
-            result = prime * result + (last_elem == null ? 0 : last_elem.hashCode());
-            result = prime * result + pid;
-            result = prime * result + (source == null ? 0 : source.hashCode());
-            return result;
-        }
-        @Override
-        public boolean equals(final Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            LGMChangeEvent other = (LGMChangeEvent) obj;
-            if (changeType != other.changeType) {
-                return false;
-            }
-            if (last_elem == null) {
-                if (other.last_elem != null) {
-                    return false;
-                }
-            } else if (!last_elem.equals(other.last_elem)) {
-                return false;
-            }
-            if (pid != other.pid) {
-                return false;
-            }
-            if (source == null) {
-                if (other.source != null) {
-                    return false;
-                }
-            } else if (!source.equals(other.source)) {
-                return false;
-            }
-            return true;
-        }
-
-    }
-
-    /**
-     *
-     */
-    private final List<LGMChangeEvent> changeEvents = new ArrayList<>();
-
-    /**
      * @param changeType
      * @param last_elem
      * @param source
      * @param pid
      */
-    public void collectChangeEvent(final LGMChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
+    private void collectChangeEvent(final LGMChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
         LGMChangeEvent changeEvent = new LGMChangeEvent(changeType, last_elem, source, pid);
         changeEvents.remove(changeEvent);
         changeEvents.add(changeEvent);
     }
 
-    public void distributeChangeEvents() {
+    /**
+     * Delivers all change events from the list {@link GDCollection#changeEvents}
+     * and after this clears the list.
+     */
+    private void distributeChangeEvents() {
         //Sys.err(changeEvents.size());
         for (LGMChangeEvent changeEvent : changeEvents) {
             distribute(changeEvent.changeType, changeEvent.last_elem, changeEvent.source, changeEvent.pid);
@@ -2423,6 +2361,17 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         changeEvents.clear();
     }
 
+    /**
+     * Distributes the given event to all listeners. If the bulk_mode is active
+     * the events are not distributed to the listeners directly. All different
+     * events are collected and fired in the order they occured as last if the
+     * bulk_mode will be inactivated.
+     *
+     * @param changeType
+     * @param last_elem
+     * @param source
+     * @param pid
+     */
     public final void distribute(final LGMChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
         if (isBulkMode()) {
             collectChangeEvent(changeType, last_elem, source, pid);
@@ -2442,7 +2391,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             LGMChangeListener.distributeEvent(changeType, closedListener, source, last_elem, deliverStatic);
         }
         //TODO: das hier ist hässlich und sollte anders laufen. die SimpleRedundancyAnalysis sollte wahrscheinlich selbst Listener sein und das hier allein erledigen
-        if (!isBulkMode() && changeType == DATA_CHANGED) {
+        if (changeType == DATA_CHANGED) {
             mainDoc.updateSimpleRedundancyAnalysis();
             for (Szenario szen : szenarios) {
                 szen.updateSimpleRedundancyAnalysis();
