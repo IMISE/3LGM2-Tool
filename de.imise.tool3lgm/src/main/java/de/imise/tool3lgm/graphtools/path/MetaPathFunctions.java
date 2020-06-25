@@ -148,7 +148,10 @@ public class MetaPathFunctions {
         for (AbstractMetaPath subMetaPath : subMetaPaths) {
             List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
             if (!elementaryMetaPaths.isEmpty()) {
-                ElementaryMetaPath firstElementaryMetaPath = elementaryMetaPaths.get(0); //only the first elementary metaPath counts
+                //At the moment only the first elementary metaPath counts. In special cases
+                //this can be wrong and must be expanded to the whole metaPath. At the moment
+                //this condition work for all cases we have.
+                ElementaryMetaPath firstElementaryMetaPath = elementaryMetaPaths.get(0);
                 Class<? extends ModelElement> startClass = firstElementaryMetaPath.getStartClass();
                 if (!metaModel.isPureTemplateElementClass(startClass)) {
                     return false;
