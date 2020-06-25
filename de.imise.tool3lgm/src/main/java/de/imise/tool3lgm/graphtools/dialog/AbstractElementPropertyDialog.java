@@ -39,6 +39,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
@@ -288,10 +289,9 @@ public class AbstractElementPropertyDialog extends AbstractTabbedPropertyDialog 
         return recursiveHasPartEdges;
     }
 
-    //siehe TODO an den ModelElement.createSimpleMetaPath()-Funktionen. Das sollte woanders hin.
     @SafeVarargs
     public final SimpleMetaPath createSimpleMetaPath(@Nullable final Class<? extends ModelElement> searchElementClass, final Class<? extends Edge>... edgeClasses) {
-        return modelElement.createSimpleMetaPath(searchElementClass, edgeClasses);
+        return SimpleMetaPathCreator.createSimpleMetaPath(modelElement, searchElementClass, edgeClasses);
     }
 
     /**

@@ -35,8 +35,6 @@ import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -2184,84 +2182,6 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      */
     public String getHyperlink() {
         return hyperlink;
-    }
-
-    /**
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
-     * @param edgeClasses
-     * @return
-     */
-    @SafeVarargs
-    public final SimpleMetaPath createSimpleMetaPath(final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
-        return createSimpleMetaPath(null, metaPathStepWithPathName, edgeClasses);
-    }
-
-    /**
-     * @param edgeClasses
-     * @return
-     */
-    @SafeVarargs
-    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends Edge>... edgeClasses) {
-        return createSimpleMetaPath((Class<? extends ModelElement>) null, edgeClasses);
-    }
-
-    /**
-     * @param endClass
-     * @param edgeClasses
-     * @return
-     */
-    @SafeVarargs
-    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final Class<? extends Edge>... edgeClasses) {
-        return SimpleMetaPathCreator.createSimpleMetaPath(getMetaModel(), getClass(), endClass, edgeClasses);
-    }
-
-    /**
-     * @param baseResKeyOrName
-     * @param edgeClasses
-     * @return
-     */
-    @SafeVarargs
-    public final SimpleMetaPath createSimpleMetaPath(final String baseResKeyOrName, final Class<? extends Edge>... edgeClasses) {
-        return createSimpleMetaPath(null, baseResKeyOrName, edgeClasses);
-    }
-
-    /**
-     * @param endClass
-     * @param baseResKeyOrName
-     * @param edgeClasses
-     * @return
-     */
-    @SafeVarargs
-    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final String baseResKeyOrName, final Class<? extends Edge>... edgeClasses) {
-        return SimpleMetaPathCreator.createSimpleMetaPath(getMetaModel(), getClass(), endClass, baseResKeyOrName, edgeClasses);
-    }
-
-    /**
-     * @param endClass
-     * @param metaPathStepWithPathName
-     *            Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
-     *            super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
-     * @param edgeClasses
-     * @return
-     */
-    @SafeVarargs
-    public final SimpleMetaPath createSimpleMetaPath(final Class<? extends ModelElement> endClass, final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
-        return SimpleMetaPathCreator.createSimpleMetaPath(getMetaModel(), getClass(), endClass, metaPathStepWithPathName, edgeClasses);
-    }
-
-    /**
-     * Erzeugt ein Array von allen konkreten MetaPfaden, die dem ggf. abstrakten übergebenen MetaPfad entsprechen. Ist keine der übergebenen
-     * Kantenklassen abstrakt, dann kommt in dem Set nur der übergebene Pfad zurück.
-     *
-     * @param metaPathStepWithPathName
-     * @param edgeClasses
-     * @return
-     */
-    @SafeVarargs
-    public final SimpleMetaPath[] createSimpleMetaPaths(final int metaPathStepWithPathName, final Class<? extends Edge>... edgeClasses) {
-        return SimpleMetaPathCreator.createSimpleMetaPaths(getMetaModel(), getClass(), metaPathStepWithPathName, edgeClasses);
     }
 
 }
