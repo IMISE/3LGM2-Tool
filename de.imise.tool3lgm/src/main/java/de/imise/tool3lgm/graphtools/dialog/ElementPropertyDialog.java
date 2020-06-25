@@ -256,7 +256,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param edgeClass
      */
     public final void addMultiPanelEdgePanel(final PanelLabelOption panelLabelOption, final Class<? extends Edge> edgeClass) {
-        addMultiPanelEdgePanel(LABEL_END_ELEMENT_TYPE, null, edgeClass);
+        addMultiPanelEdgePanel(panelLabelOption, null, edgeClass);
     }
 
     /**
