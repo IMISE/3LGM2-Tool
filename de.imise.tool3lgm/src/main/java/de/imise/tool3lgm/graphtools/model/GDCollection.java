@@ -376,28 +376,6 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * @param bulk_mode
-     * @return the previous bulk mode
-     */
-    public boolean setBulkMode(final boolean bulk_mode) {
-        //Sys.err("bulk_mode: " + this.bulk_mode + " -> " + bulk_mode);
-        //das erste Setzten des bulk_mode auf false beendet die Initialisierung
-        if (!initialized && !bulk_mode) {
-            initialized = true;
-        }
-        boolean oldMode = this.bulk_mode;
-        this.bulk_mode = bulk_mode;
-        return oldMode;
-    }
-
-    /**
-     * @return
-     */
-    public boolean isBulkMode() {
-        return bulk_mode;
-    }
-
-    /**
      * @param automatic_mode
      * @return previous automatic mode
      */
@@ -2317,6 +2295,31 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
+     * @param bulk_mode
+     * @return the previous bulk mode
+     */
+    public boolean setBulkMode(final boolean bulk_mode) {
+        //Sys.err("bulk_mode: " + this.bulk_mode + " -> " + bulk_mode);
+        //das erste Setzten des bulk_mode auf false beendet die Initialisierung
+        if (!initialized && !bulk_mode) {
+            initialized = true;
+        }
+        boolean oldMode = this.bulk_mode;
+        this.bulk_mode = bulk_mode;
+        if (oldMode && !bulk_mode) {
+            distributeChangeEvents();
+        }
+        return oldMode;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isBulkMode() {
+        return bulk_mode;
+    }
+
+    /**
      * Wenn die anderen Parameter aus der Methode <code>distribute(int, ElementContainer, LayerContainer, GraphDocument, int)</code> nicht angegeben
      * werden können, kann man hiermit ein allgemeines Ereignis feuern.
      *
@@ -2326,7 +2329,105 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         distribute(changeType, null, null, STANDARD_PID);
     }
 
+    /**
+     * @author AXS (25.06.2020)
+     */
+    private class LGMChangeEvent {
+        final LGMChangeType changeType;
+        final ElementContainer last_elem;
+        final GraphDocument source;
+        final int pid;
+
+        /**
+         * @param changeType
+         * @param last_elem
+         * @param source
+         * @param pid
+         */
+        public LGMChangeEvent(final LGMChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
+            this.changeType = changeType;
+            this.last_elem = last_elem;
+            this.source = source;
+            this.pid = pid;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + (changeType == null ? 0 : changeType.hashCode());
+            result = prime * result + (last_elem == null ? 0 : last_elem.hashCode());
+            result = prime * result + pid;
+            result = prime * result + (source == null ? 0 : source.hashCode());
+            return result;
+        }
+        @Override
+        public boolean equals(final Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            LGMChangeEvent other = (LGMChangeEvent) obj;
+            if (changeType != other.changeType) {
+                return false;
+            }
+            if (last_elem == null) {
+                if (other.last_elem != null) {
+                    return false;
+                }
+            } else if (!last_elem.equals(other.last_elem)) {
+                return false;
+            }
+            if (pid != other.pid) {
+                return false;
+            }
+            if (source == null) {
+                if (other.source != null) {
+                    return false;
+                }
+            } else if (!source.equals(other.source)) {
+                return false;
+            }
+            return true;
+        }
+
+    }
+
+    /**
+     *
+     */
+    private final List<LGMChangeEvent> changeEvents = new ArrayList<>();
+
+    /**
+     * @param changeType
+     * @param last_elem
+     * @param source
+     * @param pid
+     */
+    public void collectChangeEvent(final LGMChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
+        LGMChangeEvent changeEvent = new LGMChangeEvent(changeType, last_elem, source, pid);
+        changeEvents.remove(changeEvent);
+        changeEvents.add(changeEvent);
+    }
+
+    public void distributeChangeEvents() {
+        //Sys.err(changeEvents.size());
+        for (LGMChangeEvent changeEvent : changeEvents) {
+            distribute(changeEvent.changeType, changeEvent.last_elem, changeEvent.source, changeEvent.pid);
+        }
+        changeEvents.clear();
+    }
+
     public final void distribute(final LGMChangeType changeType, final ElementContainer last_elem, final GraphDocument source, final int pid) {
+        if (isBulkMode()) {
+            collectChangeEvent(changeType, last_elem, source, pid);
+            return;
+        }
         Integer pidInteger = pid;
         Integer transStackInteger = getTransStackTable().get(pidInteger);
         if (transStackInteger == null) {
@@ -2346,9 +2447,9 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
             for (Szenario szen : szenarios) {
                 szen.updateSimpleRedundancyAnalysis();
             }
-            setBulkMode(true);
+            bulk_mode = true;
             updateInferenceEdges(pid);
-            setBulkMode(false);
+            bulk_mode = false;
         }
         if (changeType != LGMChangeType.SELECTED_SZENARIO_CHANGED) {
             setChanged(true);
