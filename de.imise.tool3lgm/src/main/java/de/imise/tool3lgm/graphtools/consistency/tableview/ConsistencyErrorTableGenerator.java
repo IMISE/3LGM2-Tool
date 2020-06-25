@@ -12,6 +12,7 @@ import javax.swing.table.TableColumn;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.tableview.ConsistencyErrorTableModel.ColumnNames;
 import de.imise.util.NamedObjectContainer;
+import de.imise.util.swing.ToolTipShowTimeHandler;
 
 /**
  * @author AXS
@@ -38,6 +39,9 @@ public class ConsistencyErrorTableGenerator {
         //TableModel
         ConsistencyErrorTableModel tableModel = new ConsistencyErrorTableModel();
         table = new UneditableJTable(tableModel);
+
+        //Tooltip dismiss time increase (from 4s to 10s)
+        ToolTipShowTimeHandler.setDismissTime(table, 10000);
 
         //MouseListener
         ConsistencyErrorTableMouseListener consistencyErrorTableMouseListener = new ConsistencyErrorTableMouseListener(checker, table);

@@ -23,6 +23,7 @@ import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 import de.imise.util.ToolTipProvider;
+import de.imise.util.swing.ToolTipShowTimeHandler;
 
 /**
  * @author AXS (05.09.2019)
@@ -64,6 +65,8 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         setEditable(false);
         putClientProperty("JTree.lineStyle", "Angled");
         setToggleClickCount(-1);
+        //Tooltip dismiss time increase (from 4s to 15s)
+        ToolTipShowTimeHandler.setDismissTime(this, 15000);
 
     }
 
