@@ -11,6 +11,13 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 
 /**
+ * AXS: 25.06.2020: Nichts hiervon wird genutzt! Das kann man aber evtl. gebrauchen,
+ * wenn man das Draggen umsetzt, um die draggbaren Elemente zu definieren und was
+ * mitkommen soll, wenn man sie draggt. Ansonsten wird das hier angedachte (insbesondere
+ * die CopyDependencies) bereits über die ganz normalen CopyDependencies des Metamodells
+ * erledigt. Auf der rekursive Auschluss in beide Richtungen erfolgt in resolveCopyDependencies()
+ * beim Kopieren von einem Modell (z.B. einem Template) zu einem anderen (z.B. zu einem Zielmodell.
+ * <br>
  * Defines the elements and their relations which can be applied from a template to a regular model.
  *
  * @author AXS (19.09.2019)
