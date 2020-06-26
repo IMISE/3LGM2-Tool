@@ -154,8 +154,8 @@ public class ModelSelection extends MetaModelSpecificAdapter implements Set<Elem
      * @param orderSources
      * @return
      */
-    public final List<ElementContainer> getSortedSelection(final Iterable<NodeContainer>... orderSources) {
-        List<ElementContainer> returnList = new ArrayList<>(size());
+    public final SortedSelection getSortedSelection(final Iterable<NodeContainer>... orderSources) {
+        SortedSelection returnList = new SortedSelection(size());
         returnList.addAll(selectedRealNodeContainer);
         int insertIndex = 0;
         for (Iterable<NodeContainer> orderSource : orderSources) {

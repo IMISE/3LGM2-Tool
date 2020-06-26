@@ -208,15 +208,6 @@ public class ElementSelectionContext extends MetaModelSpecificAdapter {
     }
 
     /**
-     * @param orderSources
-     * @return
-     * @see de.imise.tool3lgm.graphtools.model.ModelSelection#getSortedSelection(List...)
-     */
-    protected final List<ElementContainer> getSortedSelection(final List<NodeContainer>... orderSources) {
-        return selectedContainer.getSortedSelection(orderSources);
-    }
-
-    /**
      * @return
      */
     public final boolean isSelection() {

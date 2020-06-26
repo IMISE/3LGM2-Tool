@@ -1823,6 +1823,13 @@ public final class MetaModel extends CoreMetaModel {
         return copyDependencies.get(elementClass);
     }
 
+    /**
+     * Elements which should not be copied if they come from the copy dependencies
+     * of an other element which should be copied.
+     *
+     * @param elementClass
+     * @return <code>true</code> if the element should not be duplicated during copiing
+     */
     public boolean avoidDuplicates(final Class<? extends ModelElement> elementClass) {
         return copyDependencies.avoidDuplicates(elementClass);
     }

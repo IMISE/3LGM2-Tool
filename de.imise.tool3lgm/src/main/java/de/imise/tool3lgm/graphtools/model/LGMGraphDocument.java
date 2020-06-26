@@ -173,7 +173,7 @@ public class LGMGraphDocument extends GraphDocument {
         return new File(Tool3lgmConstants.CLIPBOARD_PATH).exists();
     }
 
-    public final List<ElementContainer> getSortedSelection() {
+    public final SortedSelection getSortedSelection() {
         Iterable<NodeContainer>[] sortingElements = new Iterable[layer.length];
         for (int i = 0; i < layer.length; i++) {
             sortingElements[i] = layer[i].getGraphNodeContainers();

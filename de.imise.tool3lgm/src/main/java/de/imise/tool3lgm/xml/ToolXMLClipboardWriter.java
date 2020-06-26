@@ -19,6 +19,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.CopyDependencyResolver;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.model.SortedSelection;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
@@ -54,7 +55,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         List<ModelElement> copyElements = new ArrayList<>();
         Set<UserField> userFields = new HashSet<>();
         LGMGraphDocument lgmDoc = (LGMGraphDocument) selectedDoc;
-        List<ElementContainer> sortedSelection = lgmDoc.getSortedSelection();
+        SortedSelection sortedSelection = lgmDoc.getSortedSelection();
         CopyDependencyResolver copyDependencyResolver = gdcoll.getCopyDependencyResolver();
         copyDependencyResolver.resolveCopyDependencies(sortedSelection, copyElements, userFields);
 
@@ -65,7 +66,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         writeStartElement("objects"); //<objects>
         MetaModel metaModel = gdcoll.getMetaModel();
         for (ModelElement me : copyElements) {
-            if (metaModel.avoidDuplicates(me.getClass())) {
+            if (metaModel.avoidDuplicates(me.getClass()) && !sortedSelection.contains(me)) {
                 writeStartElement("avoidDuplicates"); //<avoidDuplicates>
                 writeModelElement(me);
                 writeEndElement(); //</avoidDuplicates>
