@@ -70,33 +70,33 @@ public class TLGMOriginalCopyDependencies extends CopyDependencies {
 
     @SuppressWarnings("unchecked")
     private void initCopyDepenencies() {
-        //        set(Anwendungsprogramm.class, Softwareprodukt.class);
-        //        set(Aufgabe.class, AufOrgKombination.class);
-        //        set(AufOrgKombination.class, ABKonfiguration.class, Organisationseinheit.class);
-        //        set(Bausteinschnittstelle.class, Kommunikationsstandard.class, EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class);
-        //        set(Datenbanksystem.class, DBVerwaltungssystem.class, Datensatztyp.class);
-        //        set(Dokumentensammlung.class, Dokumententyp.class);
-        //        set(EreignisDokumentenTyp.class, Ereignistyp.class, Dokumententyp.class, Kommunikationsstandard.class);
-        //        set(EreignisNachrichtenTyp.class, Ereignistyp.class, Nachrichtentyp.class, Kommunikationsstandard.class);
-        //        set(KonAnwendungsbaustein.class, Bausteinschnittstelle.class, Benutzungsschnittstelle.class, Dokumentensammlung.class, Organisationsplan.class, DBKonfiguration.class, ABKonfiguration.class);
-        //        set(PhysischerDVBaustein.class, Standort.class, Bausteintyp.class, Subnetz.class, DBKonfiguration.class);
-        //        set(Prozess.class, Aufgabe.class);
-        //        set(RechAnwendungsbaustein.class, Bausteinschnittstelle.class, Benutzungsschnittstelle.class, Datenbanksystem.class, Anwendungsprogramm.class, DBKonfiguration.class, ABKonfiguration.class);
-        //        set(Subnetz.class, Netzprotokoll.class);
-        //        set(KommBeziehung.class, EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class);
+        //Anwendungsprogramm.class -> Softwareprodukt.class
         set(Anwendungsprogramm.class, AwpSwpVerbindung.class);
+        //Aufgabe.class -> AufOrgKombination.class
         set(Aufgabe.class, AufAufOrgVerbindung.class);
+        //AufOrgKombination.class -> ABKonfiguration.class, Organisationseinheit.class
         set(AufOrgKombination.class, AwbkAufOrgVerbindung.class, OrgAufOrgVerbindung.class);
+        //Bausteinschnittstelle.class -> Kommunikationsstandard.class, EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class
         set(Bausteinschnittstelle.class, BssKommstVerbindung.class, BssEtntVerbindung.class);
+        //Datenbanksystem.class -> DBVerwaltungssystem.class, Datensatztyp.class
         set(Datenbanksystem.class, DbsDbvsVerbindung.class, DbsDatVerbindung.class);
+        //Dokumentensammlung.class -> Dokumententyp.class
         set(Dokumentensammlung.class, DoksDokVerbindung.class);
+        //EreignisDokumentenTyp.class -> Ereignistyp.class, Dokumententyp.class, Kommunikationsstandard.class
         set(EreignisDokumentenTyp.class, EtntEtVerbindung.class, EtntDotVerbindung.class, EtntKommstVerbindung.class);
+        //EreignisNachrichtenTyp.class -> Ereignistyp.class, Nachrichtentyp.class, Kommunikationsstandard.class
         set(EreignisNachrichtenTyp.class, EtntEtVerbindung.class, EtntNatVerbindung.class, EtntKommstVerbindung.class);
+        //KonAnwendungsbaustein.class -> Bausteinschnittstelle.class, Benutzungsschnittstelle.class, Dokumentensammlung.class, Organisationsplan.class, DBKonfiguration.class, ABKonfiguration.class
         set(KonAnwendungsbaustein.class, AwbKommssVerbindung.class, KawbDoksVerbindung.class, KawbOrgpVerbindung.class, PdvbkAwbVerbindung.class, AwbAwbkVerbindung.class);
+        //PhysischerDVBaustein.class -> Standort.class, Bausteintyp.class, Subnetz.class, DBKonfiguration.class
         set(PhysischerDVBaustein.class, PdvbStoVerbindung.class, PdvbBtypVerbindung.class, PdvbSubnVerbindung.class, PdvbPdvbkVerbindung.class);
+        //Prozess.class -> Aufgabe.class
         set(Prozess.class, PrzAufVerbindung.class);
+        //RechAnwendungsbaustein.class -> Bausteinschnittstelle.class, Benutzungsschnittstelle.class, Datenbanksystem.class, Anwendungsprogramm.class, DBKonfiguration.class, ABKonfiguration.class
         set(RechAnwendungsbaustein.class, AwbKommssVerbindung.class, RawbDbsVerbindung.class, RawbAwpVerbindung.class, PdvbkAwbVerbindung.class, AwbAwbkVerbindung.class);
+        //Subnetz.class -> Netzprotokoll.class
         set(Subnetz.class, SubnNetzpVerbindung.class);
+        //KommBeziehung.class -> EreignisNachrichtenTyp.class, EreignisDokumentenTyp.class
         set(KommBeziehung.class, KommbezEtntVerbindung.class);
     }
 
