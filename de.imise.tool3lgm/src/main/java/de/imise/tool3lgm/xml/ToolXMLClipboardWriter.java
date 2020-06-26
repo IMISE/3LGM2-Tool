@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLStreamException;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -67,7 +68,7 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         MetaModel metaModel = gdcoll.getMetaModel();
         for (ModelElement me : copyElements) {
             Class<? extends ModelElement> elementClass = me.getClass();
-            if (metaModel.avoidDuplicates(elementClass) && !sortedSelection.contains(me) || metaModel.isPureTemplateElementClass(elementClass)) {
+            if (metaModel.avoidDuplicates(elementClass) && !sortedSelection.contains(me) || !Static.isExpertMode() && metaModel.isPureTemplateElementClass(elementClass)) {
                 writeStartElement("avoidDuplicates"); //<avoidDuplicates>
                 writeModelElement(me);
                 writeEndElement(); //</avoidDuplicates>
