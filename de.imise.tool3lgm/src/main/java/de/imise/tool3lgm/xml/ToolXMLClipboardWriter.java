@@ -66,7 +66,8 @@ public class ToolXMLClipboardWriter extends ToolXMLWriter {
         writeStartElement("objects"); //<objects>
         MetaModel metaModel = gdcoll.getMetaModel();
         for (ModelElement me : copyElements) {
-            if (metaModel.avoidDuplicates(me.getClass()) && !sortedSelection.contains(me)) {
+            Class<? extends ModelElement> elementClass = me.getClass();
+            if (metaModel.avoidDuplicates(elementClass) && !sortedSelection.contains(me) || metaModel.isPureTemplateElementClass(elementClass)) {
                 writeStartElement("avoidDuplicates"); //<avoidDuplicates>
                 writeModelElement(me);
                 writeEndElement(); //</avoidDuplicates>
