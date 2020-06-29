@@ -94,8 +94,8 @@ public class ConsistencyErrorTableGenerator {
             @Override
             public void valueChanged(final ListSelectionEvent e) {
                 LGMGraphDocument selectedDoc = Static.getSelectedDoc();
-                selectedDoc.deselectAll(false);
                 try {
+                    selectedDoc.deselectAll(false);
                     Object selectedData = null;
 
                     int[] selectedRow = table.getSelectedRows();
