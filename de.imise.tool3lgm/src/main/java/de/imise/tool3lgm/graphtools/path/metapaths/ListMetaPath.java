@@ -2,14 +2,22 @@ package de.imise.tool3lgm.graphtools.path.metapaths;
 
 import java.util.List;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.util.collections.CollectionUtils;
 
 /**
  * @author AXS (10 Dec 2018)
  */
 public abstract class ListMetaPath extends AbstractMetaPath {
+
+    /**
+     * The default reskey for the path is the same like Edge (= is connected with)
+     */
+    private static final String DEFAULT_RESKEY = Edge.class.getSimpleName() + "_f";
 
     /**
      * Liste der Pfade, die dieser Metapfad parallel enthält.
@@ -38,10 +46,7 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      * @param subMetaPaths
      */
     public ListMetaPath(final String baseResKeyOrName, final AbstractMetaPath... subMetaPaths) {
-        super(subMetaPaths[0].getMetaModel());
-        this.baseResKeyOrName = baseResKeyOrName;
-        this.subMetaPaths = ImmutableList.copyOf(subMetaPaths);
-        initStartEndClasses();
+        this(subMetaPaths[0], baseResKeyOrName, ImmutableList.copyOf(subMetaPaths));
     }
 
     /**
@@ -56,9 +61,18 @@ public abstract class ListMetaPath extends AbstractMetaPath {
      * @param other
      */
     public ListMetaPath(final String baseResKeyOrName, final ListMetaPath other) {
-        super(other.getMetaModel());
-        this.baseResKeyOrName = baseResKeyOrName;
-        subMetaPaths = CollectionUtils.ensureImmutable(other.subMetaPaths);
+        this(other, baseResKeyOrName, CollectionUtils.ensureImmutable(other.subMetaPaths));
+    }
+
+    /**
+     * @param metaModelSource
+     * @param baseResKeyOrName
+     * @param subMetaPaths
+     */
+    private ListMetaPath(final MetaModelSpecific metaModelSource, final String baseResKeyOrName, final List<AbstractMetaPath> subMetaPaths) {
+        super(metaModelSource.getMetaModel());
+        this.baseResKeyOrName = !Strings.isNullOrEmpty(baseResKeyOrName) ? baseResKeyOrName : DEFAULT_RESKEY;
+        this.subMetaPaths = subMetaPaths;
         initStartEndClasses();
     }
 
