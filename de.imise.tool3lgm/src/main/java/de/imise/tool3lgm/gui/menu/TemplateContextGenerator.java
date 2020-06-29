@@ -11,6 +11,7 @@ import javax.swing.JPopupMenu;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
+import de.imise.tool3lgm.graphtools.model.GDCollectionPrinter;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -56,7 +57,7 @@ public class TemplateContextGenerator extends ContextGenerator {
                 if (template.isSingleSelection()) {
                     menu = getSingleNodeContextMenu(source, template);
                 } else if (template.isMultipleSelection()) {
-                    menu = getMultiNodeContextMenu(source);
+                    menu = getMultiNodeContextMenu(source, template);
                 }
             }
         }
@@ -110,7 +111,7 @@ public class TemplateContextGenerator extends ContextGenerator {
             addMenuItem(menu, properties);
             addMenuItem(menu, createCopyToModelItem());
         }
-
+        GDCollectionPrinter.print(template);
         return menu;
     }
 
@@ -118,8 +119,15 @@ public class TemplateContextGenerator extends ContextGenerator {
      * @param contextSource
      * @return
      */
-    private JPopupMenu getMultiNodeContextMenu(final Component contextSource) {
-        return null;
+    private JPopupMenu getMultiNodeContextMenu(final Component contextSource, final GraphDocument template) {
+        //      System.err.println("ContextGenerator.getSingleNodeContextMenu()");
+        JPopupMenu menu = createUpdatingPopupMenu();
+        ElementContainer ec = template.getLastSelected();
+        //        ModelElement me = ec.getElement();
+        if (!(ec instanceof BendpointContainer)) {
+            addMenuItem(menu, createCopyToModelItem());
+        }
+        return menu;
     }
 
 }
