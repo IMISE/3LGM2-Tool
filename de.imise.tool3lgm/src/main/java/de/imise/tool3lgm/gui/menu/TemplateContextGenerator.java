@@ -11,7 +11,6 @@ import javax.swing.JPopupMenu;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
-import de.imise.tool3lgm.graphtools.model.GDCollectionPrinter;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -111,7 +110,6 @@ public class TemplateContextGenerator extends ContextGenerator {
             addMenuItem(menu, properties);
             addMenuItem(menu, createCopyToModelItem());
         }
-        GDCollectionPrinter.print(template);
         return menu;
     }
 
