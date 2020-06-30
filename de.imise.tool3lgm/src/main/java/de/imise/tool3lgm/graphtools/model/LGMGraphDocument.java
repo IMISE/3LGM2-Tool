@@ -470,12 +470,12 @@ public class LGMGraphDocument extends GraphDocument {
         if (selectedContainer.size() != 1 || doc2.selectedContainer.size() != 1) {
             return;
         }
-
-        ModelElement me1 = selectedContainer.getLastSelected().getElement();
-        ModelElement me2 = doc2.selectedContainer.getLastSelected().getElement();
+        ElementContainer lastSelected = selectedContainer.getLastSelected();
+        ModelElement me1 = lastSelected.getElement();
+        lastSelected = doc2.selectedContainer.getLastSelected();
+        ModelElement me2 = lastSelected.getElement();
 
         joinElements(me1, me2, doc2, saveInBoth);
-
         distributeEvent(DATA_CHANGED);
     }
 
@@ -490,7 +490,8 @@ public class LGMGraphDocument extends GraphDocument {
             return;
         }
 
-        ModelElement me3 = findElementCoded(me2.getHashString());
+        String me2hash = me2.getHashString();
+        ModelElement me3 = findElementCoded(me2hash);
         if (me3 != null && me3 != me2) {
             if (me1.join(me2, false) == null) {
                 return;
