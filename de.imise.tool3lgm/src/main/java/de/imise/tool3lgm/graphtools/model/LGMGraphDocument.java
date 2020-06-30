@@ -538,10 +538,21 @@ public class LGMGraphDocument extends GraphDocument {
                 continue;
             }
 
-            gdcoll.getMainDoc().getLayer(edge.layerFor()).add(edge.createContainer(gdcoll.getMainDoc()));
-
-            if (this != gdcoll.getMainDoc() && me1.getContainer(this) != null && me3.getContainer(this) != null) {
-                getLayer(edge.layerFor()).add(edge.createContainer(this));
+            //Main Doc
+            LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+            int edgeLayer = edge.layerFor();
+            LayerContainer lc = mainDoc.getLayer(edgeLayer);
+            ElementContainer edgeContainer = edge.createContainer(mainDoc);
+            lc.add(edgeContainer);
+            //Szenario
+            if (this != mainDoc) {
+                if (me1.getContainer(this) != null) {
+                    if (me3.getContainer(this) != null) {
+                        edgeContainer = edge.createContainer(this);
+                        lc = getLayer(edgeLayer);
+                        lc.add(edgeContainer);
+                    }
+                }
             }
 
             joinElements(edge, oldEdge, doc2, saveInBoth);
