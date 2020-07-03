@@ -322,8 +322,7 @@ public class LGMGraphDocument extends GraphDocument {
 
         sourceMainDoc.deselectAll(false);
 
-        int pid = TransactionManager.STANDARD_PID;
-        targetMainDoc.start_transaction(pid);
+        targetMainDoc.start_transaction(STANDARD_PID);
 
         try {
             targetMainDoc.deselectAll(true);
@@ -357,8 +356,9 @@ public class LGMGraphDocument extends GraphDocument {
                     } else if (answer.overwriteOption == JOIN) {
                         targetDoc.joinElements(targetElement, sourceElement, sourceDoc, false);
                         if (targetElement instanceof Edge) {
-                            ((Edge) targetElement).reconnect(targetCollection);
-                            ((Edge) targetElement).refreshText();
+                            Edge edge = (Edge) targetElement;
+                            edge.reconnect(targetCollection);
+                            edge.refreshText();
                         }
                     } else if (answer.overwriteOption == IGNORE) {
                         continue;
@@ -385,15 +385,15 @@ public class LGMGraphDocument extends GraphDocument {
                         LayerContainer targetDocLayer = targetDoc.getLayer(layer);
                         targetDocLayer.add(targetContainer);
                     }
-                    targetMainDoc.addToSelection(targetMainContainer, pid);
+                    targetMainDoc.addToSelection(targetMainContainer, STANDARD_PID);
                 }
             }
             for (Edge edge : edges) {
                 if (!edge.reconnect(targetCollection)) {
-                    targetCollection.deleteElement(edge, pid);
+                    targetCollection.deleteElement(edge, STANDARD_PID);
                 } else {
                     EdgeContainer edgeCont = (EdgeContainer) edge.getContainer(targetMainDoc);
-                    targetCollection.addEdge(edgeCont, pid);
+                    targetCollection.addEdge(edgeCont, STANDARD_PID);
                     if (!edge.isUnique() && targetDoc instanceof Szenario) {
                         EdgeContainer newC = (EdgeContainer) edge.getContainer(targetDoc);
                         if (newC == null) {
@@ -407,7 +407,7 @@ public class LGMGraphDocument extends GraphDocument {
                         newC.computeBorderPoints();
                     }
                     ElementContainer edgeC = edge.getContainer(targetMainDoc);
-                    targetMainDoc.addToSelection(edgeC, pid);
+                    targetMainDoc.addToSelection(edgeC, STANDARD_PID);
                 }
             }
             List<EdgeContainer> edgeConts = new ArrayList<>();
@@ -453,7 +453,7 @@ public class LGMGraphDocument extends GraphDocument {
         sourceDoc.start_transaction(TransactionManager.STANDARD_PID, false);
         sourceDoc.deselectAll(true);
         for (int j = 0; j < tmpActive.size(); j++) {
-            sourceDoc.addToSelection(tmpActive.get(j), TransactionManager.STANDARD_PID);
+            sourceDoc.addToSelection(tmpActive.get(j), STANDARD_PID);
         }
         sourceDoc.finish_transaction(TransactionManager.STANDARD_PID, false);
         sourceDoc.distributeEvent(SELECTION_CHANGED);
