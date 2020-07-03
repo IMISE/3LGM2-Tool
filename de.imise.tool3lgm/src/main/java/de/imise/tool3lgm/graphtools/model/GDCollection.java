@@ -1331,11 +1331,37 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
+     * If <code>true</code>
+     */
+    private boolean lockInferenceEgdeCreation = false;
+
+    /**
      * Removes all superflous {@link InferenceEdge}s.
      *
      * @param pid
      */
-    private void removeInferenceEdges(final int pid) {
+    void removeInferenceEdges(final int pid) {
+        removeInferenceEdges(false, pid);
+    }
+    /**
+     * Removes all superflous {@link InferenceEdge}s.
+     *
+     * @param lockAndForceDelete if <code>true</code> the global variable lockInferenceEgdeCreation will be
+     *            switched to <code>true</code> too, so that the next normal call of {@link #createInferenceEdges(int)}
+     *            will not really create these edges until the global variable lockInferenceEgdeCreation will be switched
+     *            back to <code>false</code>. Additionally if this parameter here is <code>false</code>, then only those
+     *            InferenceEdges are removed whose condition metapaths are not fulfilled. If the parameter is <code>true</code>,
+     *            then all InferenceEdges are removed.
+     * @param pid
+     */
+    void removeInferenceEdges(final boolean lockAndForceDelete, final int pid) {
+        if (lockInferenceEgdeCreation) {
+            return;
+        }
+        if (lockAndForceDelete) {
+            lockInferenceEgdeCreation = true;
+        }
+        //Sys.outn(15, "REMOVE   Model name=" + getName() + " (" + getModelCategory().name() + ")");
         //get all InferenceEdge classes
         Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
         //for every InferenceEdge class
@@ -1358,10 +1384,13 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     //get the start and end element of this edge
                     ModelElement edgeStart = edge.getStart();
                     ModelElement edgeEnd = edge.getEnd();
-                    //is the condition metapath defined in the same direction like the edge?
-                    boolean readEdgeForward = conditionMetaPath.isStartAndEndClass(edgeStartClass, edgeEndClass);
-                    //is the condition for this InferenceEdge still fulfilled?
-                    boolean remove = !PathFunctions.isDirectConnected(readEdgeForward ? edgeStart : edgeEnd, readEdgeForward ? edgeEnd : edgeStart, conditionMetaPath);
+                    boolean remove = lockAndForceDelete;
+                    if (!remove) {
+                        //is the condition metapath defined in the same direction like the edge?
+                        boolean readEdgeForward = conditionMetaPath.isStartAndEndClass(edgeStartClass, edgeEndClass);
+                        //is the condition for this InferenceEdge still fulfilled?
+                        remove = !PathFunctions.isDirectConnected(readEdgeForward ? edgeStart : edgeEnd, readEdgeForward ? edgeEnd : edgeStart, conditionMetaPath);
+                    }
                     //if not -> remove the InferenceEdge
                     if (remove) {
                         unlink(edgeStart, edgeEnd, edgeClass, pid);
@@ -1372,16 +1401,32 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
-     * Kann man anschlaten, wenn man sehen möchte, was die Funktion {@link #createInferenceEdges(int)} macht.
-     */
-    private static final boolean LOG_CREATE_INFERENCE_EDGES = false;
-
-    /**
      * Creates all missing {@link InferenceEdge}s.
      *
      * @param pid
      */
-    private void createInferenceEdges(final int pid) {
+    void createInferenceEdges(final int pid) {
+        createInferenceEdges(false, pid);
+    }
+    /**
+     * Creates all missing {@link InferenceEdge}s.
+     *
+     * @param unlock if <code>true</code> the global variable {@link #lockInferenceEgdeCreation}
+     *            is set or left to <code>true</code>. If <code>false</code> the creation is only executed
+     *            if the global variable <code>lockInferenceEgdeCreation</code> is <code>false</code>. This
+     *            global variable can be set to <code>false</code> by the corresponding function
+     *            {@link #removeInferenceEdges(int)}. This prevents creation of all {@link InferenceEdge}s
+     *            until this function is called with unlock <code>true</code>.
+     * @param pid
+     */
+    void createInferenceEdges(final boolean unlock, final int pid) {
+        if (unlock) {
+            lockInferenceEgdeCreation = false;
+        }
+        if (lockInferenceEgdeCreation) {
+            return;
+        }
+        //Sys.outn(15, "CREATE   Model name=" + getName() + " (" + getModelCategory().name() + ")");
         //get all InferenceEdge classes
         Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
         //for every InferenceEdge class

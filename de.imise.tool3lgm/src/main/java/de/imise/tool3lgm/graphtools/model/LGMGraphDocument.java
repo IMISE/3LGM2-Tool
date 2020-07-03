@@ -290,6 +290,11 @@ public class LGMGraphDocument extends GraphDocument {
         GDCollection targetCollection = targetDoc.getCollection();
         GraphDocument targetMainDoc = targetCollection.getMainDoc();
 
+        sourceCollection.removeInferenceEdges(true, STANDARD_PID);
+        targetCollection.removeInferenceEdges(true, STANDARD_PID);
+
+
+        boolean targetCollectionBulkMode = targetCollection.setBulkMode(true);
 
         List<ModelElement> sourceElements = new ArrayList<>();
         HashSet<UserField> sourceUserFields = new HashSet<>();
@@ -446,6 +451,11 @@ public class LGMGraphDocument extends GraphDocument {
         }
         sourceDoc.finish_transaction(TransactionManager.STANDARD_PID, false);
         sourceDoc.distributeEvent(SELECTION_CHANGED);
+        targetCollection.setBulkMode(targetCollectionBulkMode);
+
+        sourceCollection.createInferenceEdges(true, STANDARD_PID);
+        targetCollection.createInferenceEdges(true, STANDARD_PID);
+
         targetDoc.distributeEvent(DATA_CHANGED);
     }
 
