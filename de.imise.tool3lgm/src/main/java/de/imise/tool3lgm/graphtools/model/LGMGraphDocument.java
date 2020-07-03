@@ -290,17 +290,6 @@ public class LGMGraphDocument extends GraphDocument {
         GDCollection targetCollection = targetDoc.getCollection();
         GraphDocument targetMainDoc = targetCollection.getMainDoc();
 
-        //Keine Ahnung warum hier mal irgendwer ein Speichern erzwingen wollte!?
-        //        if (destGDColl.isChanged()) {
-        //            int value = JOptionPane.showConfirmDialog(null, getResString("join_speicherfrage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-        //            if (value == JOptionPane.YES_OPTION) {
-        //                if (!destGDColl.getFileHandler().saveToFile()) {
-        //                    return;
-        //                }
-        //            } else {
-        //                return;
-        //            }
-        //        }
 
         List<ModelElement> sourceElements = new ArrayList<>();
         HashSet<UserField> sourceUserFields = new HashSet<>();
@@ -445,12 +434,12 @@ public class LGMGraphDocument extends GraphDocument {
                 edgeC.computeBorderPoints();
             }
 
-            targetMainDoc.finish_transaction(pid);
+            targetMainDoc.finish_transaction(STANDARD_PID);
         } catch (Exception ex) {
-            targetMainDoc.undo(pid);
+            targetMainDoc.undo(STANDARD_PID);
             Log.show(Log.ERROR, sourceDoc.getResString("FehlerKorrupt") + "\n" + targetCollection.getName(), ex);
         }
-        sourceDoc.start_transaction(TransactionManager.STANDARD_PID, false);
+        sourceDoc.start_transaction(STANDARD_PID, false);
         sourceDoc.deselectAll(true);
         for (int j = 0; j < tmpActive.size(); j++) {
             sourceDoc.addToSelection(tmpActive.get(j), STANDARD_PID);
