@@ -176,7 +176,7 @@ public class MenuCollection {
         /** Das Browser-Optionen-Menu */
         public static final JMenu BROWSER_OPTIONS_MENU = createMenu("browserOptionsMenu", BooleanProperty.OPTION_ENABLE_SUBMODEL_BROWSER, BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
                 //createCheckBoxItem(ActionLibrary.ViewActions.SHOW_SUBMODELS_IN_BROWSER_SIDE_BY_SIDE),
-                new JSeparator(), BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER, BooleanProperty.OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER);
+                new JSeparator(), BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER, BooleanProperty.OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER, BooleanProperty.OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER);
 
         /** Das Grafik-Optionen-Menu */
         public static final JMenu GRAPHICS_OPTIONS_MENU = new DynamicMenu(getResString("graphicOptionsMenu"), BooleanProperty.OPTION_USE_RASTER, BooleanProperty.OPTION_SHOW_RASTER, BooleanProperty.OPTION_PAINT_EDGES_ONLY_FOR_SELECTED_ELEMENTS,

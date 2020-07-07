@@ -12,6 +12,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PART_OF_HIERARCHY;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER;
 
 import java.awt.Image;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -319,8 +321,11 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         MetaModel metaModel = doc.getMetaModel();
         Set<Class<? extends ModelElement>> onlyExpertModeVisibleNodes = metaModel.getOnlyExpertModeVisibleNodes();
         Set<Class<? extends ModelElement>> pureTemplateElementClasses = metaModel.getPureTemplateElementClasses();
-        addOrRemoveVisibilityRestrictedElementClassNodes(onlyExpertModeVisibleNodes, OPTION_ENABLE_EXPERT_MODE, null);
-        addOrRemoveVisibilityRestrictedElementClassNodes(pureTemplateElementClasses, OPTION_ENABLE_EXPERT_MODE, OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER);
+        List<Class<? extends Node>> compositionSlaveNodes = metaModel.getCompositionSlaveNodes();
+        Set<Class<? extends ModelElement>> alreadyVisibilityRestrictedElementClasses = new HashSet<>();
+        addOrRemoveVisibilityRestrictedElementClassNodes(onlyExpertModeVisibleNodes, alreadyVisibilityRestrictedElementClasses, OPTION_ENABLE_EXPERT_MODE.is(), null);
+        addOrRemoveVisibilityRestrictedElementClassNodes(pureTemplateElementClasses, alreadyVisibilityRestrictedElementClasses, OPTION_ENABLE_EXPERT_MODE.is(), OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER.is());
+        addOrRemoveVisibilityRestrictedElementClassNodes(compositionSlaveNodes, alreadyVisibilityRestrictedElementClasses, !OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER.is(), null);
 
         for (LGMTreeNode node : nodesToClear) {
             node.removeAllChildren();
@@ -338,15 +343,18 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
 
     /**
      * @param visibilityRestrictedElementClasses
+     * @param alreadyVisibilityRestrictedElementClasses
      * @param property1
      * @param property2
+     * @return all hidden elementClasses
      */
-    private void addOrRemoveVisibilityRestrictedElementClassNodes(final Iterable<Class<? extends ModelElement>> visibilityRestrictedElementClasses, final BooleanProperty property1, final BooleanProperty property2) {
-        boolean showRestrictedNodes = property1.is() || property2 != null && property2.is();
+    private <T extends ModelElement> void addOrRemoveVisibilityRestrictedElementClassNodes(final Iterable<Class<? extends T>> visibilityRestrictedElementClasses, final Set<Class<? extends ModelElement>> alreadyVisibilityRestrictedElementClasses,
+            final Boolean property1, final Boolean property2) {
+        boolean showRestrictedNodes = property1 || property2 != null && property2;
         for (Class<? extends ModelElement> visibilityRestrictedElementClass : visibilityRestrictedElementClasses) {
             LGMTreeNode node = elementClassToParentNode.get(visibilityRestrictedElementClass);
             if (node != null) {
-                if (showRestrictedNodes) {
+                if (showRestrictedNodes && !alreadyVisibilityRestrictedElementClasses.contains(visibilityRestrictedElementClass)) {
                     DefaultMutableTreeNode parent = visibilityRestrictedNodesToParent.remove(node);
                     if (parent != null) {
                         parent.add(node);
@@ -357,6 +365,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
                         visibilityRestrictedNodesToParent.put(node, parent);
                         parent.remove(node);
                     }
+                    alreadyVisibilityRestrictedElementClasses.add(visibilityRestrictedElementClass);
                 }
             }
         }

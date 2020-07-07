@@ -137,6 +137,9 @@ public final class MetaModel extends CoreMetaModel {
     /** Alle Knotenklassen, die in jedem Teilmodell vorkommen, also nicht in jedem Teilmodell einen eigenen Container besitzen. */
     public final Set<Class<? extends Node>> uniqueNodes;
 
+    /** Alle Knotenklassen, die in Slave einer CompositionEdge sind (=nicht unabhängig exsistierende Elemente). */
+    public final List<Class<? extends Node>> compositionSlaveNodes;
+
     /** Alle Knotenklassen, bei denen in der Grafik zusätzlich zum eigenen Namen noch die Namen verbundener Elemente angezeigt werden sollen */
     public final Set<Class<? extends ModelElement>> elementClassesWithNameExtensions;
 
@@ -382,7 +385,8 @@ public final class MetaModel extends CoreMetaModel {
         initialSubtypes = CollectionUtils.ensureImmutable(getInitialSubtypes());
         generateNameClasses = CollectionUtils.ensureImmutable(metaModelDefinition.getGenerateNameClasses());
         importableNodes = CollectionUtils.ensureImmutable(metaModelDefinition.getImportableNodes());
-        uniqueNodes = getUniqueNodes(); //ist schon immutable
+        uniqueNodes = getUniqueNodes(); //already immutable
+        compositionSlaveNodes = getAllCompositionSlaveNodes(); //already immutable
         analysesDefinition = getInstance(metaModelDefinition.getAnalysesDefinitionClass());
         extrasActionsDefinition = getInstance(metaModelDefinition.getExtrasActionsDefinitionClass());
         errorSolutionLibrary = getInstance(metaModelDefinition.getErrorSolutionLibraryClass());
@@ -439,6 +443,27 @@ public final class MetaModel extends CoreMetaModel {
         }
         allElementClasses.add(ModelElement.class);
         return ImmutableSet.copyOf(allElementClasses);
+    }
+
+    /**
+     * @return all node classes which are the slave element of a {@link CompositionEdge}
+     */
+    private List<Class<? extends Node>> getAllCompositionSlaveNodes() {
+        ImmutableList.Builder<Class<? extends Node>> compositionSlaveNodes = new ImmutableList.Builder<>();
+        for (Class<? extends Edge> edgeClass : allEdgesSet) {
+            if (isComposition(edgeClass)) {
+                Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);
+                Class<? extends ModelElement> slaveType = CompositionEdge.getSlaveType(compositionEdgeClass);
+                if (isNodeType(slaveType)) {
+                    Collection<Class<? extends ModelElement>> instanciableAssignableClasses = getInstanciableAssignableClasses(slaveType);
+                    for (Class<? extends ModelElement> instanciableAssignableSlaveType : instanciableAssignableClasses) {
+                        Class<? extends Node> slaveNodeType = instanciableAssignableSlaveType.asSubclass(Node.class);
+                        compositionSlaveNodes.add(slaveNodeType);
+                    }
+                }
+            }
+        }
+        return compositionSlaveNodes.build();
     }
 
     /**
@@ -1352,6 +1377,14 @@ public final class MetaModel extends CoreMetaModel {
             }
         }
         return returnList;
+    }
+
+    /**
+     * @return a set of all node classes which are the subordiated element of a {@link CompositionEdge}.
+     *         The order is the same as the composition edges were found in the definition.
+     */
+    public List<Class<? extends Node>> getCompositionSlaveNodes() {
+        return compositionSlaveNodes;
     }
 
     /**

@@ -403,6 +403,8 @@ public class UserProperties {
         OPTION_ENABLE_SUBMODEL_BROWSER,
         /** Jedes geöffnete Modell hat einen eigenen ModelBrowser, die alle nebeneinander angeordnet werden */
         OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER,
+        /** Über CompositionEdges verbundene Elemente im ModellBrowser unterordnen */
+        OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER,
         /** Zeige Benutzerdefnierte Eigenschaften im ModellBrowser */
         OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER,
         /** Show also the template elements in model browser (and not only in the template browser) */
@@ -464,8 +466,8 @@ public class UserProperties {
          * Alle BooleanProperties, deren Default-Wert <code>true</code> ist
          */
         private static final Set<BooleanProperty> DEFAULT_TRUE_PROERTIES = ImmutableSet.of(OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, OPTION_GRAPH_MOVE_SUBELEMENTS, OPTION_SHOW_PAINTING_TOOLBAR,
-                OPTION_SHOW_STANDARD_TOOLBAR, OPTION_SHOW_MODEL_BROWSER, OPTION_ENABLE_SUBMODEL_BROWSER, OPTION_SHOW_PART_OF_HIERARCHY, OPTION_USE_PROPERTY_COLORS, OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING,
-                OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, TRANSIENT_OPTION_SHOW_EXPANSION_SIGN);
+                OPTION_SHOW_STANDARD_TOOLBAR, OPTION_SHOW_MODEL_BROWSER, OPTION_ENABLE_SUBMODEL_BROWSER, OPTION_SHOW_PART_OF_HIERARCHY, OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER, OPTION_USE_PROPERTY_COLORS, OPTION_USE_RASTER,
+                OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING, OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, TRANSIENT_OPTION_SHOW_EXPANSION_SIGN);
 
         /**
          * @return Default-Wert dieser Property
