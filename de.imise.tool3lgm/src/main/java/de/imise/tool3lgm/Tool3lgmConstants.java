@@ -146,7 +146,7 @@ public abstract class Tool3lgmConstants {
     public static final String RESOUCE_BASE_DEFAULT_USERPROPERTIES_DIR_NAME = "userfield/";
 
     /** Absoluter Name des Beispielmodells */
-    public static final File EXAMPLE_MODEL_FILE = new File(APPLICATION_DIR, "Beispiel.z3lgm");
+    public static final File EXAMPLE_MODEL_FILE = new File(TEMPLATE_DIR, "Beispiel.z3lgm");
 
     /** Name des Verzeichnisses in dem die Ressourcen für den Webexport liegen */
     public static final String WEB_EXPORT_RESOURCE_DIR_NAME = "webexport/";
