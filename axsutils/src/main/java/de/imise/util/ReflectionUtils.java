@@ -282,14 +282,12 @@ public class ReflectionUtils {
      *
      * @return
      */
-    public static final String _getAbsoluteDirectory(final Class<?> clazz) {
+    public static final String getAbsoluteDirectory(final Class<?> clazz) {
         File classFile = getClassFile(clazz);
         File parentFile = classFile.getParentFile();
         parentFile = parentFile.getParentFile();
         String path = parentFile.getPath();
         String absoluteDirectory = path + File.separator;
-        // die "%20" der URL müssen wieder raus, damit die Dateien gefunden werden
-        absoluteDirectory = absoluteDirectory.replace("%20", " ");
         return absoluteDirectory;
     }
 
@@ -304,6 +302,8 @@ public class ReflectionUtils {
         className += ".class";
         URL absolutePath = clazz.getResource(className);
         String path = absolutePath.getPath();
+        // die "%20" der URL müssen wieder raus, damit die Dateien gefunden werden
+        path = path.replace("%20", " ");
         File file = new File(path);
         return file;
     }
