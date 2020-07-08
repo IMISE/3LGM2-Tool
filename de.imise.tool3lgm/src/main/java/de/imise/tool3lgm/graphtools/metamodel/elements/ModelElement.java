@@ -43,10 +43,8 @@ import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.ElementsLayoutDefinition;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout;
 import de.imise.tool3lgm.graphtools.view.graph.GraphElementLayout.TextAlignmentHTML;
-import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActor_MustBeGroupedWith_Edge;
 import de.imise.util.Alphabetical;
 import de.imise.util.HashStringGenerator;
-import de.imise.util.Sys;
 import de.imise.util.htmlxml.HTMLConverter;
 
 public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific {
@@ -159,13 +157,8 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
         ModelElement retVal = (ModelElement) super.clone();
         retVal.gdcoll = null;
         retVal.hashstring = getNewHashString(this);
-        //        retVal.name = name;
-        //        retVal.descr = descr;
         retVal.initContainerTable();
         retVal.edges = null;
-        if (this instanceof IheActor_IheActor_MustBeGroupedWith_Edge) {
-            Sys.err("element: " + name + "  hash: " + getHashString() + "       <--->       retVal: " + retVal.name + "  retVal.hash: " + retVal.getHashString());
-        }
         return retVal;
     }
 
@@ -2115,22 +2108,10 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
             hashstring = other.getHashString();
         }
 
-        String oldName = name;
-
         String joined = Tool3lgmConstants.getResString("joined");
         if (!name.trim().equals(other.name.trim())) {
             name = name.concat("\n-" + joined + "-\n" + other.name);
         }
-        if (oldName.contains("null") || !oldName.equals(name) || !other.name.equals(name)) {
-            System.err.println("\n" + getClass().getSimpleName());
-            System.err.println("oldName:");
-            System.err.println(oldName);
-            System.err.println("other.name:");
-            System.err.println(other.name);
-            System.err.println("name:");
-            Sys.err(name);
-        }
-
         String descrip = descr.trim();
         //es gibt keine Beschreibung bei this
         if (Strings.isNullOrEmpty(descrip)) {

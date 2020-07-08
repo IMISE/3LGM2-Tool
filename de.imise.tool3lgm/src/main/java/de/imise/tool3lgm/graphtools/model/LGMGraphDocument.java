@@ -37,9 +37,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.LayerContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.log.Log;
-import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActor_MustBeGroupedWith_Edge;
 import de.imise.tool3lgm.xml.ToolXMLClipboardWriter;
-import de.imise.util.Sys;
 
 /**
  * @author thomas
@@ -292,14 +290,9 @@ public class LGMGraphDocument extends GraphDocument {
         GDCollection targetCollection = targetDoc.getCollection();
         GraphDocument targetMainDoc = targetCollection.getMainDoc();
 
-        //        GDCollectionPrinter.printElements(sourceCollection, IheTransaction_IheCommunicationLink_Edge.class);
-        GDCollectionPrinter.printElements(targetCollection, IheActor_IheActor_MustBeGroupedWith_Edge.class);
-
         sourceCollection.removeInferenceEdges(true, STANDARD_PID);
         targetCollection.removeInferenceEdges(true, STANDARD_PID);
 
-        //        GDCollectionPrinter.printElements(sourceCollection, IheTransaction_IheCommunicationLink_Edge.class);
-        //        GDCollectionPrinter.printElements(targetCollection, IheTransaction_IheCommunicationLink_Edge.class);
 
         boolean targetCollectionBulkMode = targetCollection.setBulkMode(true);
 
@@ -355,10 +348,6 @@ public class LGMGraphDocument extends GraphDocument {
                     if (answer.overwriteOption == OVERWRITE) {
                         //hier müsste das alte evtl. noch gelöscht werden !?
                     } else if (answer.overwriteOption == JOIN) {
-                        if (sourceElement instanceof IheActor_IheActor_MustBeGroupedWith_Edge) {
-                            Sys.err1("ist eine IheActor_IheActor_MustBeGroupedWith_Edge");
-                        }
-
                         targetDoc.joinElements(targetElement, sourceElement, sourceDoc, false);
                         if (targetElement instanceof Edge) {
                             Edge edge = (Edge) targetElement;
@@ -464,14 +453,8 @@ public class LGMGraphDocument extends GraphDocument {
         sourceDoc.distributeEvent(SELECTION_CHANGED);
         targetCollection.setBulkMode(targetCollectionBulkMode);
 
-        //        GDCollectionPrinter.printElements(sourceCollection, IheTransaction_IheCommunicationLink_Edge.class);
-        //        GDCollectionPrinter.printElements(targetCollection, IheTransaction_IheCommunicationLink_Edge.class);
-
         sourceCollection.createInferenceEdges(true, STANDARD_PID);
         targetCollection.createInferenceEdges(true, STANDARD_PID);
-
-        //        GDCollectionPrinter.printElements(sourceCollection, IheTransaction_IheCommunicationLink_Edge.class);
-        GDCollectionPrinter.printElements(targetCollection, IheActor_IheActor_MustBeGroupedWith_Edge.class);
 
         targetDoc.distributeEvent(DATA_CHANGED);
     }
@@ -521,10 +504,6 @@ public class LGMGraphDocument extends GraphDocument {
         me1.refreshText();
 
         MetaModel metaModel = getMetaModel();
-        if (!me1.getHashString().equals(me2.getHashString())) {
-            Sys.err1(me1 + "   " + me2 + "  " + me1.getClass().getSimpleName() + "     " + (!me1.getHashString().equals(me2.getHashString()) ? " ##########################################" : "") + "  (" + me1.getHashString() + " <-> " + me2.getHashString()
-                    + ")");
-        }
         for (Edge edge : me2.getEdges()) {
             Edge oldEdge;
             /* vorwaerts */
