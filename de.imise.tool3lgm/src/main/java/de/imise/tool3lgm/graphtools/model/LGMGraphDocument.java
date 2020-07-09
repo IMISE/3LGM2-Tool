@@ -262,24 +262,6 @@ public class LGMGraphDocument extends GraphDocument {
         }
     }
 
-    //	/**
-    //	 *
-    //	 * TODO:Bug beim Übenehmen von Elementen in ein anderes Modell
-    //	 *
-    //	 * Kanten werden nicht richtig in das neue Modell übenommen, d.h. der Container wird in diesem
-    //	 * Fall nicht im Layer abgelegt, so dass sie in der Grafik nicht auftauchen. Die Edge-Container
-    //	 * werden aber richtig in den Elementen eingetragen.
-    //	 *
-    //	 * Die untere Funktion ist die alte Variante; Die hier auskommentierte sollte die neue werden.
-    //	 * Allerdings liegt der Fehler irgendwo anders. Hier sollte unbeding auch beachtet werden, dass
-    //	 * wenn man ein Element in ein anderes Modell übernimmt, dass im Ursprungsmodell Verbindungen
-    //	 * zu anderen Elementen hat, auch Verbindungen zu Elementen übernommen werden, die sowohl im
-    //	 * Urpsungsmodell als auc im Zielmodell vorkommen. (Z.B. übernimmt man erst eine Aufgabe in ein
-    //	 * Modell und danach bei einer 2. Übernahme eine Unteraufgabe dieser Aufgabe in das gleiche Modell,
-    //	 * dann geht die Unterordnungsbeziehung im Zielmodell verloren.)
-    //	 *
-    //	 * @param dest
-    //	 * /
     /**
      * @param targetDoc
      */
@@ -387,6 +369,8 @@ public class LGMGraphDocument extends GraphDocument {
                     targetCollection.deleteElement(edge, STANDARD_PID);
                 } else {
                     EdgeContainer edgeCont = (EdgeContainer) edge.getContainer(targetMainDoc);
+                    //this call adds a edgeContainer to all szenarios where it mus be added
+                    //the tarte mainDoc and the target szenarion already contain the edge container
                     targetCollection.addEdge(edgeCont, STANDARD_PID);
                     if (!edge.isUnique() && targetDoc instanceof Szenario) {
                         EdgeContainer newC = (EdgeContainer) edge.getContainer(targetDoc);
