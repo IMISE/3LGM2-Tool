@@ -275,7 +275,6 @@ public class LGMGraphDocument extends GraphDocument {
         sourceCollection.removeInferenceEdges(true, STANDARD_PID);
         targetCollection.removeInferenceEdges(true, STANDARD_PID);
 
-
         boolean targetCollectionBulkMode = targetCollection.setBulkMode(true);
 
         List<ModelElement> sourceElements = new ArrayList<>();
@@ -330,7 +329,7 @@ public class LGMGraphDocument extends GraphDocument {
                     if (answer.overwriteOption == OVERWRITE) {
                         //hier müsste das alte evtl. noch gelöscht werden !?
                     } else if (answer.overwriteOption == JOIN) {
-                        targetDoc.joinElements(targetElement, sourceElement, sourceDoc, false);
+                        targetDoc.joinElements(targetElement, sourceElement, sourceDoc);
                         if (targetElement instanceof Edge) {
                             Edge edge = (Edge) targetElement;
                             edge.reconnect(targetCollection);
@@ -440,6 +439,8 @@ public class LGMGraphDocument extends GraphDocument {
         sourceCollection.createInferenceEdges(true, STANDARD_PID);
         targetCollection.createInferenceEdges(true, STANDARD_PID);
 
+        GDCollectionPrinter.print(targetCollection);
+
         targetDoc.distributeEvent(DATA_CHANGED);
     }
 
@@ -449,7 +450,7 @@ public class LGMGraphDocument extends GraphDocument {
      * @param doc2
      * @param saveInBoth
      */
-    public void joinElements(final GraphDocument doc2, final boolean saveInBoth) {
+    public void joinSelectedElements(final GraphDocument doc2) {
         if (selectedContainer.size() != 1 || doc2.selectedContainer.size() != 1) {
             return;
         }
@@ -458,7 +459,7 @@ public class LGMGraphDocument extends GraphDocument {
         lastSelected = doc2.selectedContainer.getLastSelected();
         ModelElement me2 = lastSelected.getElement();
 
-        joinElements(me1, me2, doc2, saveInBoth);
+        joinElements(me1, me2, doc2);
         distributeEvent(DATA_CHANGED);
     }
 
@@ -466,9 +467,8 @@ public class LGMGraphDocument extends GraphDocument {
      * @param me1
      * @param me2
      * @param doc2
-     * @param saveInBoth
      */
-    private void joinElements(final ModelElement me1, final ModelElement me2, final GraphDocument doc2, final boolean saveInBoth) {
+    private void joinElements(final ModelElement me1, final ModelElement me2, final GraphDocument doc2) {
         if (me1 instanceof Bendpoint) {
             return;
         }
@@ -487,7 +487,6 @@ public class LGMGraphDocument extends GraphDocument {
 
         me1.refreshText();
 
-        MetaModel metaModel = getMetaModel();
         for (Edge edge : me2.getEdges()) {
             Edge oldEdge;
             /* vorwaerts */
@@ -539,7 +538,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
             }
 
-            joinElements(edge, oldEdge, doc2, saveInBoth);
+            joinElements(edge, oldEdge, doc2);
         }
     }
 
