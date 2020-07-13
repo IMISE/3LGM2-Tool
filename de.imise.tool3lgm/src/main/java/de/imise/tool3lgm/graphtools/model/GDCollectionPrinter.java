@@ -160,12 +160,12 @@ public class GDCollectionPrinter {
     }
 
     public static final void print(final GDCollection gdcoll) {
-        Sys.outn(2, new GDCollectionPrinter(gdcoll));
+        Sys.outn(2, new GDCollectionPrinter(gdcoll, true));
     }
 
     public static final void print(final GDCollectionOwner gdcollOwner) {
         GDCollection gdcoll = gdcollOwner.getCollection();
-        Sys.outn(2, new GDCollectionPrinter(gdcoll));
+        Sys.outn(2, new GDCollectionPrinter(gdcoll, true));
     }
 
     @SafeVarargs
