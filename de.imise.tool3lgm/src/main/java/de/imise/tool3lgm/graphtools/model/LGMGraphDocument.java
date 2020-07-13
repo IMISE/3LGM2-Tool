@@ -439,8 +439,6 @@ public class LGMGraphDocument extends GraphDocument {
         sourceCollection.createInferenceEdges(true, STANDARD_PID);
         targetCollection.createInferenceEdges(true, STANDARD_PID);
 
-        GDCollectionPrinter.print(targetCollection);
-
         targetDoc.distributeEvent(DATA_CHANGED);
     }
 
