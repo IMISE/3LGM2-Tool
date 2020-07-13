@@ -501,7 +501,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
 
                 oldEdge = edge;
-                edge = (Edge) metaModel.createElement(edge, true);
+                edge = edge.clone();
                 edge.setStartAndInsert(me1);
                 edge.setEndAndInsert(me3);
                 /* rueckwaerts */
@@ -515,7 +515,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
 
                 oldEdge = edge;
-                edge = (Edge) metaModel.createElement(edge, true);
+                edge = edge.clone();
                 edge.setStartAndInsert(me3);
                 edge.setEndAndInsert(me1);
             } else {
