@@ -56,7 +56,7 @@ public class TemplateContextGenerator extends ContextGenerator {
                 if (template.isSingleSelection()) {
                     menu = getSingleNodeContextMenu(source, template);
                 } else if (template.isMultipleSelection()) {
-                    menu = getMultiNodeContextMenu(source);
+                    menu = getMultiNodeContextMenu(source, template);
                 }
             }
         }
@@ -110,7 +110,6 @@ public class TemplateContextGenerator extends ContextGenerator {
             addMenuItem(menu, properties);
             addMenuItem(menu, createCopyToModelItem());
         }
-
         return menu;
     }
 
@@ -118,8 +117,15 @@ public class TemplateContextGenerator extends ContextGenerator {
      * @param contextSource
      * @return
      */
-    private JPopupMenu getMultiNodeContextMenu(final Component contextSource) {
-        return null;
+    private JPopupMenu getMultiNodeContextMenu(final Component contextSource, final GraphDocument template) {
+        //      System.err.println("ContextGenerator.getSingleNodeContextMenu()");
+        JPopupMenu menu = createUpdatingPopupMenu();
+        ElementContainer ec = template.getLastSelected();
+        //        ModelElement me = ec.getElement();
+        if (!(ec instanceof BendpointContainer)) {
+            addMenuItem(menu, createCopyToModelItem());
+        }
+        return menu;
     }
 
 }

@@ -1952,18 +1952,6 @@ public final class MetaModel extends CoreMetaModel {
         return modelElementInstanceCreator.createElement(elementClass, log);
     }
 
-    /**
-     * Erzeugt eine neues ModelElement der gleichen Art wie das übergebene
-     *
-     * @return neues ModelElement der übergebenen Art oder im Fehlerfall <code>null</code>
-     * @param me ModelElement, das die Klasse des neu zu erzeugenden Elementes vorgibt
-     * @param log wenn <code>true</code> wird ein eventuell auftretender Fehler geloggt
-     * @return neues ModelElement oder <code>null</code>
-     */
-    public final ModelElement createElement(final ModelElement me, final boolean log) {
-        return createElement(me.getClass(), log);
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;

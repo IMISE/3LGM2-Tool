@@ -112,10 +112,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @return
      */
     private String getDisplayableName(Class<? extends ModelElement> elementClass, final boolean plural) {
-        //wenn der Anzeigename gleich für eine allg. Klasse heraus gesucht werden soll, dann muss der Resourcenname genommen werden, sonst der SimpleClassName
-        boolean dontReturnSimpleClassName = elementClass.getPackage() == ModelElement.class.getPackage();
         MetaModelContext metaModelContext = getMetaModelContext();
-        while (ModelElement.class.isAssignableFrom(elementClass) && elementClass.getPackage() != ModelElement.class.getPackage() || dontReturnSimpleClassName) {
+        while (ModelElement.class.isAssignableFrom(elementClass)) {
             try {
                 String resKey = elementClass.getSimpleName();
                 if (plural) {
@@ -124,11 +122,11 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
                 return metaModelContext.getResString(resKey);
             } catch (MissingResourceException mre) {
                 elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
-            } catch (NullPointerException e) {
+            } catch (NullPointerException npe) {
                 break;
             }
         }
-        return null;
+        return metaModelContext.getResString(ModelElement.class.getSimpleName());
     }
 
     /**

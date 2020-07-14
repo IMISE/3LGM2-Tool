@@ -107,7 +107,7 @@ import de.imise.util.swing.dialog.MultipleOptionPane;
  * Repräsentiert ein Teilmodell. Dieses Teilmodell kann das Hauptmodell sein (= spezielle Teilmodell das alle Elemente enthält, aber keine Grafik
  * besitzt) oder ein Szenario (= eine beliebige Elementauswahl aus allen Elementen mit einer grafischen Repräsentation)
  */
-public abstract class GraphDocument extends ElementSelectionContext {
+public abstract class GraphDocument extends ElementSelectionContext implements GDCollectionOwner {
 
     /**
      *
@@ -5045,6 +5045,7 @@ public abstract class GraphDocument extends ElementSelectionContext {
     /**
      * @return
      */
+    @Override
     public final GDCollection getCollection() {
         return gdcoll;
     }

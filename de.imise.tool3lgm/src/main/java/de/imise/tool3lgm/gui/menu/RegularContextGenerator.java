@@ -2027,18 +2027,11 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                 menu.addSeparator();
             }
             item = new JMenuItem(getResString("join_elements_result") + " " + doc.getCollection().getName());
-            item.addActionListener(e -> doc.joinElements(doc2, false));
+            item.addActionListener(e -> doc.joinSelectedElements(doc2));
             menu.add(item);
             item = new JMenuItem(getResString("join_elements_result") + " " + doc2.getCollection().getName());
-            item.addActionListener(e -> ((LGMGraphDocument) doc2).joinElements(doc, false));
+            item.addActionListener(e -> ((LGMGraphDocument) doc2).joinSelectedElements(doc));
             menu.add(item);
-            //			item = new JMenuItem(Tool3lgmConstants.getResourceString("join_elements_result_both"));
-            //			item.addActionListener(new ActionListener() {
-            //				public void actionPerformed(ActionEvent e) {
-            //					doc.joinElements(doc2, true);
-            //				}
-            //			});
-            //			menu.add(item);
         }
         return menu.getItemCount() > 0 ? menu : null;
     }

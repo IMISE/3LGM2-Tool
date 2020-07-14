@@ -20,7 +20,21 @@ import de.imise.util.Sys;
  */
 public class IheRDFDataImporter extends RDFDataImporter {
 
-    public static final File TEST_FILE = new File(Tool3lgmConstants.TEMPLATE_DIR, "/IHE/iheDomain_Ontology_straight-forward_v2.rdf");
+    public static final File TEST_FILE = getRdfFile();
+    //     /Users/astruebi/Projekte/eclipse/IMISE/tool-3l gm2/de.imise.tool3lgm/Templates/IHE/iheDomain_Ontology_straight-forward_v2.rdf
+
+    static File getRdfFile() {
+        File templateDir = Tool3lgmConstants.TEMPLATE_DIR;
+        String templateDirName = templateDir.getAbsolutePath();
+        String thisProjectNameSuffix = ".template.ihe";
+        int replaceStart = templateDirName.lastIndexOf(thisProjectNameSuffix);
+        if (replaceStart > 0) {
+            StringBuilder sb = new StringBuilder(templateDirName);
+            sb.replace(replaceStart, replaceStart + thisProjectNameSuffix.length(), "");
+            templateDirName = sb.toString();
+        }
+        return new File(templateDirName, "/IHE/iheDomain_Ontology_straight-forward_v2.rdf");
+    }
 
     /**
      * Da ObjectProperties u.U. genauso heißen, wie Knoten-Klassen, sollte man mit diesem Namenszusatz bei 3LGM2-Kantenklassen für Eindeutigkeit
@@ -35,6 +49,7 @@ public class IheRDFDataImporter extends RDFDataImporter {
      * @throws MalformedURLException
      */
     public static void main(final String[] args) throws MalformedURLException {
+
         IheRDFDataImporter importer = new IheRDFDataImporter(TEST_FILE);
 
         final int SINGLE_IMPORTS = 1; //300;

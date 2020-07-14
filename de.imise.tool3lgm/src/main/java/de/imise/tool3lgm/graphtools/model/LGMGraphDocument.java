@@ -262,24 +262,6 @@ public class LGMGraphDocument extends GraphDocument {
         }
     }
 
-    //	/**
-    //	 *
-    //	 * TODO:Bug beim Übenehmen von Elementen in ein anderes Modell
-    //	 *
-    //	 * Kanten werden nicht richtig in das neue Modell übenommen, d.h. der Container wird in diesem
-    //	 * Fall nicht im Layer abgelegt, so dass sie in der Grafik nicht auftauchen. Die Edge-Container
-    //	 * werden aber richtig in den Elementen eingetragen.
-    //	 *
-    //	 * Die untere Funktion ist die alte Variante; Die hier auskommentierte sollte die neue werden.
-    //	 * Allerdings liegt der Fehler irgendwo anders. Hier sollte unbeding auch beachtet werden, dass
-    //	 * wenn man ein Element in ein anderes Modell übernimmt, dass im Ursprungsmodell Verbindungen
-    //	 * zu anderen Elementen hat, auch Verbindungen zu Elementen übernommen werden, die sowohl im
-    //	 * Urpsungsmodell als auc im Zielmodell vorkommen. (Z.B. übernimmt man erst eine Aufgabe in ein
-    //	 * Modell und danach bei einer 2. Übernahme eine Unteraufgabe dieser Aufgabe in das gleiche Modell,
-    //	 * dann geht die Unterordnungsbeziehung im Zielmodell verloren.)
-    //	 *
-    //	 * @param dest
-    //	 * /
     /**
      * @param targetDoc
      */
@@ -290,17 +272,10 @@ public class LGMGraphDocument extends GraphDocument {
         GDCollection targetCollection = targetDoc.getCollection();
         GraphDocument targetMainDoc = targetCollection.getMainDoc();
 
-        //Keine Ahnung warum hier mal irgendwer ein Speichern erzwingen wollte!?
-        //        if (destGDColl.isChanged()) {
-        //            int value = JOptionPane.showConfirmDialog(null, getResString("join_speicherfrage"), getResString("tool3lgm"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-        //            if (value == JOptionPane.YES_OPTION) {
-        //                if (!destGDColl.getFileHandler().saveToFile()) {
-        //                    return;
-        //                }
-        //            } else {
-        //                return;
-        //            }
-        //        }
+        sourceCollection.removeInferenceEdges(true, STANDARD_PID);
+        targetCollection.removeInferenceEdges(true, STANDARD_PID);
+
+        boolean targetCollectionBulkMode = targetCollection.setBulkMode(true);
 
         List<ModelElement> sourceElements = new ArrayList<>();
         HashSet<UserField> sourceUserFields = new HashSet<>();
@@ -322,8 +297,7 @@ public class LGMGraphDocument extends GraphDocument {
 
         sourceMainDoc.deselectAll(false);
 
-        int pid = TransactionManager.STANDARD_PID;
-        targetMainDoc.start_transaction(pid);
+        targetMainDoc.start_transaction(STANDARD_PID);
 
         try {
             targetMainDoc.deselectAll(true);
@@ -355,20 +329,21 @@ public class LGMGraphDocument extends GraphDocument {
                     if (answer.overwriteOption == OVERWRITE) {
                         //hier müsste das alte evtl. noch gelöscht werden !?
                     } else if (answer.overwriteOption == JOIN) {
-                        targetDoc.joinElements(targetElement, sourceElement, sourceDoc, false);
+                        targetDoc.joinElements(targetElement, sourceElement, sourceDoc);
                         if (targetElement instanceof Edge) {
-                            ((Edge) targetElement).reconnect(targetCollection);
-                            ((Edge) targetElement).refreshText();
+                            Edge edge = (Edge) targetElement;
+                            edge.reconnect(targetCollection);
+                            edge.refreshText();
                         }
                     } else if (answer.overwriteOption == IGNORE) {
                         continue;
                     }
                     //wenn der Hash des zu kopierenden Elementes noch nicht im Modell vorkommt
                 } else {
-                    ElementContainer targetContainer = sourceContainer.clone(true, targetDoc);
-                    targetElement = targetContainer.getElement();
+                    //first create the element in the mainDoc
+                    ElementContainer targetMainContainer = sourceContainer.clone(true, targetMainDoc);
+                    targetElement = targetMainContainer.getElement();
                     targetElement.setHashString(sourceHash);
-                    ElementContainer targetMainContainer = targetContainer.clone(false, targetMainDoc);
                     targetMainContainer.setVisible(true);
                     targetMainContainer.setExpanded(true);
                     targetMainContainer.setHighLight(false);
@@ -377,23 +352,34 @@ public class LGMGraphDocument extends GraphDocument {
                     LayerContainer targetMainDocLayer = targetMainDoc.getLayer(layer);
                     targetMainDocLayer.add(targetMainContainer);
                     if (targetElement instanceof Edge) {
+                        //edges are inserted in the szenario separately
                         edges.add((Edge) targetElement);
-                    } else if (targetElement instanceof Bendpoint) {
-                        bendpoints.add((BendpointContainer) targetContainer);
+                        //all not unique elements must be inserted to the szenario
                     } else if (!targetElement.isUnique() && targetDoc instanceof Szenario) {
-                        targetContainer.refreshText();
-                        LayerContainer targetDocLayer = targetDoc.getLayer(layer);
-                        targetDocLayer.add(targetContainer);
+                        //create container for the szenario and adds this container to the
+                        //container map of the element
+                        ElementContainer targetContainer = sourceContainer.clone(false, targetDoc);
+                        if (targetElement instanceof Bendpoint) {
+                            //bendpoints separately too
+                            bendpoints.add((BendpointContainer) targetContainer);
+                        } else {
+                            //add the container to the layer of the szenario
+                            targetContainer.refreshText();
+                            LayerContainer targetDocLayer = targetDoc.getLayer(layer);
+                            targetDocLayer.add(targetContainer);
+                        }
                     }
-                    targetMainDoc.addToSelection(targetMainContainer, pid);
+                    targetMainDoc.addToSelection(targetMainContainer, STANDARD_PID);
                 }
             }
             for (Edge edge : edges) {
                 if (!edge.reconnect(targetCollection)) {
-                    targetCollection.deleteElement(edge, pid);
+                    targetCollection.deleteElement(edge, STANDARD_PID);
                 } else {
                     EdgeContainer edgeCont = (EdgeContainer) edge.getContainer(targetMainDoc);
-                    targetCollection.addEdge(edgeCont, pid);
+                    //this call adds a edgeContainer to all szenarios where it mus be added
+                    //the tarte mainDoc and the target szenarion already contain the edge container
+                    targetCollection.addEdge(edgeCont, STANDARD_PID);
                     if (!edge.isUnique() && targetDoc instanceof Szenario) {
                         EdgeContainer newC = (EdgeContainer) edge.getContainer(targetDoc);
                         if (newC == null) {
@@ -407,7 +393,7 @@ public class LGMGraphDocument extends GraphDocument {
                         newC.computeBorderPoints();
                     }
                     ElementContainer edgeC = edge.getContainer(targetMainDoc);
-                    targetMainDoc.addToSelection(edgeC, pid);
+                    targetMainDoc.addToSelection(edgeC, STANDARD_PID);
                 }
             }
             List<EdgeContainer> edgeConts = new ArrayList<>();
@@ -445,18 +431,26 @@ public class LGMGraphDocument extends GraphDocument {
                 edgeC.computeBorderPoints();
             }
 
-            targetMainDoc.finish_transaction(pid);
+            targetMainDoc.finish_transaction(STANDARD_PID);
         } catch (Exception ex) {
-            targetMainDoc.undo(pid);
+            targetMainDoc.undo(STANDARD_PID);
             Log.show(Log.ERROR, sourceDoc.getResString("FehlerKorrupt") + "\n" + targetCollection.getName(), ex);
         }
-        sourceDoc.start_transaction(TransactionManager.STANDARD_PID, false);
+        sourceDoc.start_transaction(STANDARD_PID, false);
         sourceDoc.deselectAll(true);
         for (int j = 0; j < tmpActive.size(); j++) {
-            sourceDoc.addToSelection(tmpActive.get(j), TransactionManager.STANDARD_PID);
+            sourceDoc.addToSelection(tmpActive.get(j), STANDARD_PID);
         }
         sourceDoc.finish_transaction(TransactionManager.STANDARD_PID, false);
         sourceDoc.distributeEvent(SELECTION_CHANGED);
+        targetCollection.setBulkMode(targetCollectionBulkMode);
+
+        sourceCollection.createInferenceEdges(true, STANDARD_PID);
+        targetCollection.createInferenceEdges(true, STANDARD_PID);
+
+        //bei Bdarf anschalten, um zu sehen, wie das Modell danach aussieht
+        //GDCollectionPrinter.print(targetCollection);
+
         targetDoc.distributeEvent(DATA_CHANGED);
     }
 
@@ -466,16 +460,16 @@ public class LGMGraphDocument extends GraphDocument {
      * @param doc2
      * @param saveInBoth
      */
-    public void joinElements(final GraphDocument doc2, final boolean saveInBoth) {
+    public void joinSelectedElements(final GraphDocument doc2) {
         if (selectedContainer.size() != 1 || doc2.selectedContainer.size() != 1) {
             return;
         }
+        ElementContainer lastSelected = selectedContainer.getLastSelected();
+        ModelElement me1 = lastSelected.getElement();
+        lastSelected = doc2.selectedContainer.getLastSelected();
+        ModelElement me2 = lastSelected.getElement();
 
-        ModelElement me1 = selectedContainer.getLastSelected().getElement();
-        ModelElement me2 = doc2.selectedContainer.getLastSelected().getElement();
-
-        joinElements(me1, me2, doc2, saveInBoth);
-
+        joinElements(me1, me2, doc2);
         distributeEvent(DATA_CHANGED);
     }
 
@@ -483,27 +477,20 @@ public class LGMGraphDocument extends GraphDocument {
      * @param me1
      * @param me2
      * @param doc2
-     * @param saveInBoth
      */
-    private void joinElements(final ModelElement me1, final ModelElement me2, final GraphDocument doc2, final boolean saveInBoth) {
+    private void joinElements(final ModelElement me1, final ModelElement me2, final GraphDocument doc2) {
         if (me1 instanceof Bendpoint) {
             return;
         }
 
-        ModelElement me3 = findElementCoded(me2.getHashString());
-        if (me3 != null && me3 != me2) {
-            if (me1.join(me2, false) == null) {
-                return;
-            }
-        } else {
-            if (me1.join(me2, true) == null) {
-                return;
-            }
+        String me2hash = me2.getHashString();
+        ModelElement me3 = findElementCoded(me2hash);
+        boolean overwriteHashString = me3 == null || me3 == me2;
+        if (me1.join(me2, overwriteHashString) == null) {
+            return;
         }
-
         me1.refreshText();
 
-        MetaModel metaModel = getMetaModel();
         for (Edge edge : me2.getEdges()) {
             Edge oldEdge;
             /* vorwaerts */
@@ -517,7 +504,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
 
                 oldEdge = edge;
-                edge = (Edge) metaModel.createElement(edge, true);
+                edge = edge.clone();
                 edge.setStartAndInsert(me1);
                 edge.setEndAndInsert(me3);
                 /* rueckwaerts */
@@ -531,20 +518,31 @@ public class LGMGraphDocument extends GraphDocument {
                 }
 
                 oldEdge = edge;
-                edge = (Edge) metaModel.createElement(edge, true);
+                edge = edge.clone();
                 edge.setStartAndInsert(me3);
                 edge.setEndAndInsert(me1);
             } else {
                 continue;
             }
 
-            gdcoll.getMainDoc().getLayer(edge.layerFor()).add(edge.createContainer(gdcoll.getMainDoc()));
-
-            if (this != gdcoll.getMainDoc() && me1.getContainer(this) != null && me3.getContainer(this) != null) {
-                getLayer(edge.layerFor()).add(edge.createContainer(this));
+            //Main Doc
+            LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+            int edgeLayer = edge.layerFor();
+            LayerContainer lc = mainDoc.getLayer(edgeLayer);
+            ElementContainer edgeContainer = edge.createContainer(mainDoc);
+            lc.add(edgeContainer);
+            //Szenario
+            if (this != mainDoc) {
+                if (me1.getContainer(this) != null) {
+                    if (me3.getContainer(this) != null) {
+                        edgeContainer = edge.createContainer(this);
+                        lc = getLayer(edgeLayer);
+                        lc.add(edgeContainer);
+                    }
+                }
             }
 
-            joinElements(edge, oldEdge, doc2, saveInBoth);
+            joinElements(edge, oldEdge, doc2);
         }
     }
 

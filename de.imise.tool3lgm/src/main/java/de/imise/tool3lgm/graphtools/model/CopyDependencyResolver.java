@@ -7,6 +7,7 @@ import java.util.Set;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Bendpoint;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
@@ -95,12 +96,7 @@ public class CopyDependencyResolver {
     public void resolveCopyDependencies(final Collection<ElementContainer> elements, final List<ModelElement> result, final Set<UserField> userFields) {
         for (ElementContainer ec : elements) {
             ModelElement me = ec.getElement();
-            if (!result.contains(me)) {
-                if (!(me instanceof Bendpoint)) {
-                    result.add(me);
-                    resolveCopyDependencies(me, null, result, userFields);
-                }
-            }
+            resolveCopyDependencies(me, null, result, userFields);
         }
     }
 
@@ -117,9 +113,11 @@ public class CopyDependencyResolver {
      * @param userFields
      */
     private void resolveCopyDependencies(final ModelElement me, final Class<? extends ModelElement> ignoreClass, final List<ModelElement> elements, final Set<UserField> userFields) {
-        if (me instanceof Bendpoint) {
+        if (me instanceof Bendpoint || me instanceof InferenceEdge || elements.contains(me)) {
             return;
         }
+        elements.add(me);
+
         for (UserField userField : me.getUserFieldInputValueKeys()) {
             userFields.add(userField);
         }
@@ -143,15 +141,9 @@ public class CopyDependencyResolver {
             }
             Edge edge = (Edge) me;
             ModelElement start = edge.getStart();
-            if (!elements.contains(start)) {
-                elements.add(start);
-                resolveCopyDependencies(start, elementClass, elements, userFields);
-            }
+            resolveCopyDependencies(start, elementClass, elements, userFields);
             ModelElement end = edge.getEnd();
-            if (!elements.contains(end)) {
-                elements.add(end);
-                resolveCopyDependencies(end, elementClass, elements, userFields);
-            }
+            resolveCopyDependencies(end, elementClass, elements, userFields);
         }
         MetaModel metaModel = gdcoll.getMetaModel();
         Collection<ElementaryMetaPath> copyDependencies = metaModel.getCopyDependencies(elementClass);
@@ -164,16 +156,10 @@ public class CopyDependencyResolver {
                 Collection<ElementContainer> connectedContainers = PathFunctions.getConnectedContainer(me, mainDoc, copyDependentElementaryMetaPath);
                 for (ElementContainer ec : connectedContainers) {
                     ModelElement connected = ec.getElement();
-                    if (!elements.contains(connected)) {
-                        elements.add(connected);
-                        resolveCopyDependencies(connected, elementClass, elements, userFields);
-                    }
+                    resolveCopyDependencies(connected, elementClass, elements, userFields);
                     List<Edge> edgesWith = me.getEdgesWith(connected);
                     for (Edge edge : edgesWith) {
-                        if (!elements.contains(edge)) {
-                            elements.add(edge);
-                            resolveCopyDependencies(edge, elementClass, elements, userFields);
-                        }
+                        resolveCopyDependencies(edge, elementClass, elements, userFields);
                     }
                 }
             }
@@ -183,10 +169,7 @@ public class CopyDependencyResolver {
             ModelElement element = elements.get(i);
             List<Edge> edgesWith = me.getEdgesWith(element);
             for (Edge edge : edgesWith) {
-                if (!elements.contains(edge)) {
-                    elements.add(edge);
-                    resolveCopyDependencies(edge, elementClass, elements, userFields);
-                }
+                resolveCopyDependencies(edge, elementClass, elements, userFields);
             }
         }
     }
