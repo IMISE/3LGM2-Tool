@@ -485,16 +485,10 @@ public class LGMGraphDocument extends GraphDocument {
 
         String me2hash = me2.getHashString();
         ModelElement me3 = findElementCoded(me2hash);
-        if (me3 != null && me3 != me2) {
-            if (me1.join(me2, false) == null) {
-                return;
-            }
-        } else {
-            if (me1.join(me2, true) == null) {
-                return;
-            }
+        boolean overwriteHashString = me3 == null || me3 == me2;
+        if (me1.join(me2, overwriteHashString) == null) {
+            return;
         }
-
         me1.refreshText();
 
         for (Edge edge : me2.getEdges()) {
