@@ -1,5 +1,8 @@
 package de.imise.tool3lgm.metamodel.service.node;
 
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
+import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_ELEMENT_NAME_SINGULAR;
+
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
@@ -21,7 +24,7 @@ public class IheActor extends Node {
         dialog.addDescripPanel(IheIntegrationProfile_IheActor_Edge.class, IheIntegrationProfile_IheDomain_Edge.class);
         dialog.addDescripPanel(IheIntegrationProfile_IheActor_Edge.class);
         dialog.addEdgePanel(IheActor_IheActorInstance_Edge.class);
-        dialog.addEdgePanel(IheActor_IheActor_MustBeGroupedWith_Edge.class);
+        dialog.addEdgePanel(LABEL_LAST_EDGE_ELEMENT_NAME_SINGULAR, LABEL_LAST_EDGE_CONNECTION_NAME, IheActor_IheActor_MustBeGroupedWith_Edge.class);
         //dieses tabbedPane wird nur im ExpertMode angezeigt! Und damit auch die darin enthaltenen Interface-Panels
         dialog.addTabbedPanel(IheInterface.class);
         dialog.addTabbedPanelPathConnectionPanel(IheInvokingInterface.class, IheActor_IheInterface_Edge.class);
