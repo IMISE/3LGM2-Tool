@@ -340,10 +340,10 @@ public class LGMGraphDocument extends GraphDocument {
                     }
                     //wenn der Hash des zu kopierenden Elementes noch nicht im Modell vorkommt
                 } else {
-                    ElementContainer targetContainer = sourceContainer.clone(true, targetDoc);
-                    targetElement = targetContainer.getElement();
+                    //first create the element in the mainDoc
+                    ElementContainer targetMainContainer = sourceContainer.clone(true, targetMainDoc);
+                    targetElement = targetMainContainer.getElement();
                     targetElement.setHashString(sourceHash);
-                    ElementContainer targetMainContainer = targetContainer.clone(false, targetMainDoc);
                     targetMainContainer.setVisible(true);
                     targetMainContainer.setExpanded(true);
                     targetMainContainer.setHighLight(false);
@@ -352,13 +352,22 @@ public class LGMGraphDocument extends GraphDocument {
                     LayerContainer targetMainDocLayer = targetMainDoc.getLayer(layer);
                     targetMainDocLayer.add(targetMainContainer);
                     if (targetElement instanceof Edge) {
+                        //edges are inserted in the szenario separately
                         edges.add((Edge) targetElement);
-                    } else if (targetElement instanceof Bendpoint) {
-                        bendpoints.add((BendpointContainer) targetContainer);
+                        //all not unique elements must be inserted to the szenario
                     } else if (!targetElement.isUnique() && targetDoc instanceof Szenario) {
-                        targetContainer.refreshText();
-                        LayerContainer targetDocLayer = targetDoc.getLayer(layer);
-                        targetDocLayer.add(targetContainer);
+                        //create container for the szenario and adds this container to the
+                        //container map of the element
+                        ElementContainer targetContainer = sourceContainer.clone(false, targetDoc);
+                        if (targetElement instanceof Bendpoint) {
+                            //bendpoints separately too
+                            bendpoints.add((BendpointContainer) targetContainer);
+                        } else {
+                            //add the container to the layer of the szenario
+                            targetContainer.refreshText();
+                            LayerContainer targetDocLayer = targetDoc.getLayer(layer);
+                            targetDocLayer.add(targetContainer);
+                        }
                     }
                     targetMainDoc.addToSelection(targetMainContainer, STANDARD_PID);
                 }
@@ -438,6 +447,9 @@ public class LGMGraphDocument extends GraphDocument {
 
         sourceCollection.createInferenceEdges(true, STANDARD_PID);
         targetCollection.createInferenceEdges(true, STANDARD_PID);
+
+        //bei Bdarf anschalten, um zu sehen, wie das Modell danach aussieht
+        //GDCollectionPrinter.print(targetCollection);
 
         targetDoc.distributeEvent(DATA_CHANGED);
     }
