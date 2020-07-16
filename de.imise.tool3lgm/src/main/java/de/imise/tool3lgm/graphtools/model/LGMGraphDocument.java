@@ -12,10 +12,13 @@ import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+
+import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
@@ -263,9 +266,29 @@ public class LGMGraphDocument extends GraphDocument {
     }
 
     /**
+     * @param ec
+     * @param targetDoc
+     */
+    public static final void copyToModel(final ElementContainer ec, final LGMGraphDocument targetDoc) {
+        Collection<ElementContainer> sourceElements = ImmutableList.of(ec);
+        LGMGraphDocument sourceDoc = (LGMGraphDocument) ec.getGraphDocument(); //hard cast (every GraphDocument is a LGMGraphDocument)
+        copyToModel(sourceElements, sourceDoc, targetDoc);
+    }
+
+    /**
+     * @param sourceDoc
      * @param targetDoc
      */
     public static final void copySelectedToModel(final LGMGraphDocument sourceDoc, final LGMGraphDocument targetDoc) {
+        copyToModel(sourceDoc.selectedContainer, sourceDoc, targetDoc);
+    }
+
+    /**
+     * @param sourceElements
+     * @param sourceDoc
+     * @param targetDoc
+     */
+    private static final void copyToModel(final Collection<ElementContainer> sourceElements, final LGMGraphDocument sourceDoc, final LGMGraphDocument targetDoc) {
 
         GDCollection sourceCollection = sourceDoc.getCollection();
         GraphDocument sourceMainDoc = sourceCollection.getMainDoc();
@@ -277,13 +300,13 @@ public class LGMGraphDocument extends GraphDocument {
 
         boolean targetCollectionBulkMode = targetCollection.setBulkMode(true);
 
-        List<ModelElement> sourceElements = new ArrayList<>();
+        List<ModelElement> sourceElementsAndDependents = new ArrayList<>();
         HashSet<UserField> sourceUserFields = new HashSet<>();
         CopyDependencyResolver copyDependencyResolver = sourceCollection.getCopyDependencyResolver();
-        copyDependencyResolver.resolveCopyDependencies(sourceDoc.selectedContainer, sourceElements, sourceUserFields);
+        copyDependencyResolver.resolveCopyDependencies(sourceElements, sourceElementsAndDependents, sourceUserFields);
         //Liste aller Kanten, bei denen das das eine Endelement gerade kopiert werden soll und das
         //andere nicht kopiert werden soll aber bereits im Zielmodell vorkommt hinzufügen
-        addSplittedSourceEdgesToCopy(sourceElements, targetDoc);
+        addSplittedSourceEdgesToCopy(sourceElementsAndDependents, targetDoc);
 
         for (UserField uf : sourceUserFields) {
             if (uf != null) {
@@ -311,7 +334,7 @@ public class LGMGraphDocument extends GraphDocument {
             OverwriteOption defaultOverwriteOption = sourceModelCategory == ModelCategory.TEMPLATE ? JOIN : null;
             //bei Templates soll nicht nachgefragt (applyToAll == true) und immer gejoint werden
             OverwriteDialog.OverwriteQuestionAnswer answer = new OverwriteQuestionAnswer(defaultOverwriteOption, defaultOverwriteOption != null);
-            for (ModelElement sourceElement : sourceElements) {
+            for (ModelElement sourceElement : sourceElementsAndDependents) {
                 ElementContainer sourceContainer = sourceElement.getContainer(sourceDoc);
                 if (sourceContainer == null) {
                     sourceContainer = sourceElement.getContainer(sourceMainDoc);

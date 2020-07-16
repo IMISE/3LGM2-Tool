@@ -191,7 +191,7 @@ public abstract class ContextGenerator implements ActionListener {
      * @param command
      * @return
      */
-    protected final JMenuItem getItem(final Action action) {
+    protected static final JMenuItem getItem(final Action action) {
         return new JMenuItem(action);
     }
 
@@ -280,7 +280,7 @@ public abstract class ContextGenerator implements ActionListener {
      *
      * @param menu
      */
-    protected void setMenuScroller(final JMenu menu) {
+    protected static void setMenuScroller(final JMenu menu) {
         setMenuScroller(menu, 0, 0);
     }
 
@@ -291,9 +291,8 @@ public abstract class ContextGenerator implements ActionListener {
      * @param topFixedCount number of items before the scroller
      * @param bottomFixedCount number of items after the scroller
      */
-    protected void setMenuScroller(final JMenu menu, final int topFixedCount, final int bottomFixedCount) {
+    protected static void setMenuScroller(final JMenu menu, final int topFixedCount, final int bottomFixedCount) {
         int itemCount = menu.getItemCount();
-        int height = 0;
         int maxSingelItemHeight = 1;
         for (int i = 0; i < itemCount; i++) {
             JMenuItem item = menu.getItem(i);
@@ -301,7 +300,6 @@ public abstract class ContextGenerator implements ActionListener {
             if (preferredSize.height > maxSingelItemHeight) {
                 maxSingelItemHeight = preferredSize.height;
             }
-            height += preferredSize.height;
         }
         Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
         Dimension screenSize = defaultToolkit.getScreenSize();

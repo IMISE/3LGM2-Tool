@@ -11,6 +11,7 @@ import javax.swing.JPopupMenu;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.event.action.SelectedElementsAction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.GraphDocumentOwner;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
@@ -109,6 +110,10 @@ public class TemplateContextGenerator extends ContextGenerator {
         if (!(ec instanceof BendpointContainer)) {
             addMenuItem(menu, properties);
             addMenuItem(menu, createCopyToModelItem());
+            //Anlegbare Pfade zu anderen Elementen anbieten
+            ModelElement me = ec.getElement();
+            boolean connectMenuAdded = RegularContextGenerator.addConnectMenuItems(menu, me);
+
         }
         return menu;
     }

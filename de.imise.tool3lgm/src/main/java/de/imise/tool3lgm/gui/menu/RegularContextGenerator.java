@@ -383,13 +383,25 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
     /**
      * @param menu
      * @param startElement
+     * @param endElements
+     * @return <code>true</code> if something was added to the menu
+     */
+    public static boolean addConnectMenuItems(final JPopupMenu menu, final ModelElement startElement) {
+        MetaModel metaModel = startElement.getMetaModel();
+        Class<? extends ModelElement> startElementClass = startElement.getClass();
+        Collection<SimpleMetaPath> creatableMetaPaths = metaModel.getCreatableMetaPaths(startElementClass);
+        return addConnectMenuItems(menu, startElement, creatableMetaPaths, null);
+    }
+
+    /**
+     * @param menu
+     * @param startElement
      * @param creatableMetaPath
      * @param endElements
      * @return <code>true</code> if something was added to the menu
      */
-    public boolean addConnectMenuItems(final JPopupMenu menu, final ModelElement startElement, final SimpleMetaPath creatableMetaPath, final Collection<ModelElement> endElements) {
+    public static boolean addConnectMenuItems(final JPopupMenu menu, final ModelElement startElement, final SimpleMetaPath creatableMetaPath, final Collection<ModelElement> endElements) {
         return addConnectMenuItems(menu, startElement, ImmutableList.of(creatableMetaPath), endElements);
-
     }
 
     /**
@@ -399,7 +411,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param endElements
      * @return <code>true</code> if something was added to the menu
      */
-    private boolean addConnectMenuItems(final JPopupMenu menu, final ModelElement startElement, final Collection<SimpleMetaPath> creatableMetaPaths, Collection<ModelElement> endElements) {
+    private static boolean addConnectMenuItems(final JPopupMenu menu, final ModelElement startElement, final Collection<SimpleMetaPath> creatableMetaPaths, Collection<ModelElement> endElements) {
         JLabel connectLabel = null;
         boolean somethingAdded = false;
         for (SimpleMetaPath metaPath : creatableMetaPaths) {
@@ -412,7 +424,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             String metaPathName = metaPath.getName(false, true);
             JMenu pathConnectableElements = new JMenu(metaPathName);
             pathConnectableElements.setIcon(link_icon);
-            GraphDocument doc = getDoc();
+            GraphDocument doc = Static.getSelectedDoc();
             if (endElements == null) {
                 endElements = doc.getModelItems(endClass, true, true);
             }
@@ -450,10 +462,9 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
             Class<? extends ModelElement> meClass = me.getClass();
 
             //Anlegbare Pfade zu anderen Elementen anbieten
-            MetaModel metaModel = me.getMetaModel();
-            Collection<SimpleMetaPath> creatableMetaPaths = metaModel.getCreatableMetaPaths(meClass);
-            boolean connectMenuAdded = addConnectMenuItems(menu, me, creatableMetaPaths, null);
+            boolean connectMenuAdded = addConnectMenuItems(menu, me);
 
+            MetaModel metaModel = me.getMetaModel();
             //InstaciationEdges -> "Neue Instanz" der verbundenen Klasse erzeugen anbieten
             JLabel newInstanceLabel = null;
             if (!metaModel.isSlaveType(meClass)) {
@@ -1888,8 +1899,8 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param path2create
      * @return
      */
-    private Action createPathAction(final SimpleMetaPath path2create) {
-        GraphDocument doc = getDoc();
+    private static Action createPathAction(final SimpleMetaPath path2create) {
+        GraphDocument doc = Static.getSelectedDoc();
         List<ModelElement> selectedElements = doc.getSelectedElements();
         String pathName = path2create.getName(false, true);
         return createPathAction(null, path2create, selectedElements, pathName, link_icon);
@@ -1904,7 +1915,7 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param endElement
      * @return
      */
-    private Action createPathAction(final ModelElement startElement, final SimpleMetaPath path2create, final ModelElement endElement) {
+    private static Action createPathAction(final ModelElement startElement, final SimpleMetaPath path2create, final ModelElement endElement) {
         return createPathAction(startElement, path2create, ImmutableList.of(endElement), endElement.getName(), null);
     }
 
@@ -1919,16 +1930,31 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
      * @param icon Icon der Sction
      * @return
      */
-    private Action createPathAction(final ModelElement startElement, final SimpleMetaPath path2create, final Collection<ModelElement> endElements, final String name, final Icon icon) {
+    private static Action createPathAction(final ModelElement startElement, final SimpleMetaPath path2create, final Collection<ModelElement> endElements, final String name, final Icon icon) {
         return new AbstractAction(name, icon) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 Class<? extends ModelElement> startClass = path2create.getStartClass();
                 Class<? extends ModelElement> endClass = path2create.getEndClass();
-                GraphDocument doc = getDoc();
-                ModelElement realStartElement = startElement;
+                LGMGraphDocument selectedDoc = Static.getSelectedDoc();
+                GDCollection selectedGDColl = selectedDoc.getCollection();
+                GDCollection startElementGDColl = startElement == null ? selectedGDColl : startElement.getCollection();
+                //if the startElement is not in the current selected model (because
+                //it is from a template in the template browser) copy this element
+                //and all of its dependent to the selected model
+                ModelElement realStartElement = null;
+                if (startElementGDColl != selectedGDColl) {
+                    LGMGraphDocument startElementDoc = startElementGDColl.getSelectedDoc();
+                    ElementContainer startElementContainer = startElementDoc.getElementContainer(startElement);
+                    LGMGraphDocument.copyToModel(startElementContainer, selectedDoc);
+                    String startElementHash = startElement.getHashString();
+                    realStartElement = selectedDoc.findElementCoded(startElementHash);
+                }
                 if (realStartElement == null) {
-                    ElementContainer lastSelected = doc.getLastSelected();
+                    realStartElement = startElement;
+                }
+                if (realStartElement == null) {
+                    ElementContainer lastSelected = selectedDoc.getLastSelected();
                     realStartElement = lastSelected.getElement();
                 }
                 Class<? extends ModelElement> realStartElementClass = realStartElement.getClass();
@@ -1943,9 +1969,9 @@ public class RegularContextGenerator extends ContextGenerator implements PopupMe
                     if (!endClass.isAssignableFrom(meClass)) {
                         continue;
                     }
-                    GDCollection gdcoll = doc.getCollection();
+                    GDCollection gdcoll = selectedDoc.getCollection();
                     boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
-                    doc.createPath(realStartElement, me, path2create, STANDARD_PID);
+                    selectedDoc.createPath(realStartElement, me, path2create, STANDARD_PID);
                     gdcoll.setAutomaticMode(lastAutomaticMode);
                 }
             }
