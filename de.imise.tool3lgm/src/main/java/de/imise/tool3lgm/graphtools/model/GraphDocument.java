@@ -967,7 +967,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         case MODEL_ACTION_SET_LAYER_DEFAULT_COLOR_AND_TRANSPARENCY: {
             if (argc == 0) {
-                LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+                GraphDocument selectedDoc = gdcoll.getSelectedDoc();
                 int activeLayer = gdcoll.getActiveLayer();
                 normalizeLayer(selectedDoc.hashString, activeLayer, pid);
             }
@@ -1013,7 +1013,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
         case MODEL_ACTION_SET_ELEMENT_OPTIONAL: {
             if (argc == 2) {
-                LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+                GraphDocument mainDoc = gdcoll.getMainDoc();
                 Edge edge = mainDoc.findEdgeCoded(argv[0]);
                 boolean bool = Boolean.parseBoolean(argv[1]);
                 setOptional(edge, bool, pid);
@@ -1271,7 +1271,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         case MODEL_ACTION_DELETE_SUBMODEL: {
             String szenHash = null;
             if (argc == 0) {
-                LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+                GraphDocument selectedDoc = gdcoll.getSelectedDoc();
                 szenHash = selectedDoc != null ? selectedDoc.hashString : null;
             } else {
                 szenHash = argv[0];
@@ -1283,7 +1283,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             String szenHash = null;
             String newName = null;
             if (argc == 0) {
-                LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+                GraphDocument selectedDoc = gdcoll.getSelectedDoc();
                 szenHash = selectedDoc != null ? selectedDoc.hashString : null;
             } else {
                 szenHash = argv[0];
@@ -2076,7 +2076,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         if (col == null) {
             return;
         }
-        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+        GraphDocument selectedDoc = gdcoll.getSelectedDoc();
         String szenHash = selectedDoc.getHashString();
         changeLayerColor(szenHash, activeLayer, col, pid);
     }
@@ -2213,7 +2213,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @param pid
      */
     private final void changeLayerAlpha(final int alphaMode, final int pid) {
-        LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
+        GraphDocument selectedDoc = gdcoll.getSelectedDoc();
         String szenHash = selectedDoc.getHashString();
         int activeLayer = gdcoll.getActiveLayer();
         changeLayerAlpha(szenHash, activeLayer, alphaMode, pid);
@@ -3136,7 +3136,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             prefix = "";
         }
         ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
-        LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
         List<ModelElement> modelItems = mainDoc.getModelItems(elementClass);
         String displayableName = elementsNameBuilder.getDisplayableName(elementClass);
         String name = prefix + displayableName + " ";
@@ -4630,7 +4630,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     private final void linkElementToSzenario(final String szenHashString, final String hashCode, final int pid) {
         ElementContainer ec = findContainerCoded(hashCode);
         if (ec == null) {
-            LGMGraphDocument mainDoc = gdcoll.getMainDoc();
+            GraphDocument mainDoc = gdcoll.getMainDoc();
             ec = mainDoc.findContainerCoded(hashCode);
         }
         linkElementToSzenario(szenHashString, ec, pid);
