@@ -45,6 +45,7 @@ import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
 import de.imise.util.OperatingSystem;
 import de.imise.util.PluginUtils;
 import de.imise.util.Sys;
+import de.imise.util.collections.CollectionUtils;
 import de.imise.util.swing.dialog.OutputDialog;
 import de.imise.util.swing.dialog.ProgressDialog;
 
@@ -157,6 +158,31 @@ public class Static {
         if (tool != null) {
             tool.setSelectedDoc(doc);
         }
+    }
+
+    /**
+     * Searches all loaded a models and templates to find the main {@link GraphDocument}
+     * or {@link Szenario} with the given hashString.
+     *
+     * @param hashString
+     *            hashString of the GraphDocument
+     * @return the {@link GraphDocument} of a model or a template with the given hashString
+     *         or <code>null</code>
+     */
+    public static LGMGraphDocument getGraphDocument(final String hashString) {
+        Iterable<GDCollection> allGDCollections = iterableCollections();
+        TemplateLibrariesManager templateLibrariesManager = getTemplateLibrariesManager();
+        if (templateLibrariesManager != null) {
+            Iterable<GDCollection> allTemplates = templateLibrariesManager.iterableTemplates();
+            allGDCollections = CollectionUtils.getCommonIterable(allGDCollections, allTemplates);
+        }
+        for (GDCollection gdcoll : allGDCollections) {
+            LGMGraphDocument doc = gdcoll.getGraphDocumentCoded(hashString);
+            if (doc != null) {
+                return doc;
+            }
+        }
+        return null;
     }
 
     /**

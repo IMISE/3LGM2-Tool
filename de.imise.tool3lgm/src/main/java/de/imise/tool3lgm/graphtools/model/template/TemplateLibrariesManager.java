@@ -145,4 +145,11 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
         return templateLibrariesContext.getTemplateTreeDefinition(metaModelContext);
     }
 
+    /**
+     * @return Iterable f all templates loaded template <code>GDCollection</code>s
+     */
+    public Iterable<GDCollection> iterableTemplates() {
+        return templateLibrariesContext.iterableTemplates();
+    }
+
 }

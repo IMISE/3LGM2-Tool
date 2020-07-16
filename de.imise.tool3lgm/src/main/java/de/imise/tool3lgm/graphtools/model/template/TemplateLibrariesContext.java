@@ -29,7 +29,7 @@ public class TemplateLibrariesContext {
      */
     private final Set<MetaModelContext> metaModelContextsWithLoadedTemplates;
 
-    /** Map with all branches for the tempalte browser tree which should be visible if such an template will be displayed */
+    /** Map with all branches for the template browser tree which should be visible if such an template will be displayed */
     private final Map<GDCollection, PathTreeDefinition> templateToTreeDefinition;
 
     /**
@@ -73,6 +73,13 @@ public class TemplateLibrariesContext {
             }
         }
         metaModelContextsWithLoadedTemplates.remove(metaModelContext);
+    }
+
+    /**
+     * @return Iterable f all templates loaded template <code>GDCollection</code>s
+     */
+    public Iterable<GDCollection> iterableTemplates() {
+        return templateToTreeDefinition.keySet();
     }
 
     /**
