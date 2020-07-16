@@ -12,6 +12,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.util.NamedObjectContainer;
 import de.imise.util.ToolTipProvider;
+import de.imise.util.htmlxml.HTMLConverter;
 
 /**
  * A {@link ToolTipProvider} implementation that provides the tooltips for ModelElements
@@ -65,6 +66,7 @@ public class ElementToolTipProvider implements ToolTipProvider {
             String description = me.getDescription();
             if (!Strings.isNullOrEmpty(description)) {
                 sb.append("<br><br>");
+                description = HTMLConverter.getDecimalEncodedHTMLString(description, true);
                 sb.append(description);
             }
             sb.append("</p></html>");
