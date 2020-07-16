@@ -112,8 +112,8 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
             addMenuItem(menu, createCopyToModelItem());
             //Anlegbare Pfade zu anderen Elementen anbieten
             ModelElement me = ec.getElement();
-            boolean connectMenuAdded = addConnectMenuItems(menu, me);
-
+            addConnectMenuItems(menu, me);
+            addNewInstanciationInstanceMenuItem(menu, me);
         }
         return menu;
     }

@@ -2,6 +2,7 @@ package de.imise.tool3lgm.gui.menu;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getIcon;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_INSTANCIATION;
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.event.ActionEvent;
@@ -20,13 +21,16 @@ import javax.swing.JPopupMenu;
 import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
+import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.util.StringUtils;
 
 public abstract class ElementSelectionContextGenerator extends ContextGenerator {
 
@@ -151,9 +155,7 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
                 //and all of its dependent to the selected model
                 ModelElement realStartElement = null;
                 if (startElementGDColl != selectedGDColl) {
-                    LGMGraphDocument startElementDoc = startElementGDColl.getSelectedDoc();
-                    ElementContainer startElementContainer = startElementDoc.getElementContainer(startElement);
-                    LGMGraphDocument.copyToModel(startElementContainer, selectedDoc);
+                    LGMGraphDocument.copyToModel(startElement, selectedDoc);
                     String startElementHash = startElement.getHashString();
                     realStartElement = selectedDoc.findElementCoded(startElementHash);
                 }
@@ -183,6 +185,42 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
                 }
             }
         };
+    }
+
+    /**
+     * @param menu
+     * @param me
+     * @return
+     */
+    public boolean addNewInstanciationInstanceMenuItem(final JPopupMenu menu, final ModelElement me) {
+        MetaModel metaModel = me.getMetaModel();
+        //InstaciationEdges -> "Neue Instanz" der verbundenen Klasse erzeugen anbieten
+        JLabel newInstanceLabel = null;
+        Class<? extends ModelElement> meClass = me.getClass();
+        if (!metaModel.isSlaveType(meClass)) {
+            ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
+            for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(meClass)) {
+                if (MetaModel.isInstanciationMaster(edgeClass, meClass)) {
+                    if (newInstanceLabel == null) {
+                        newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
+                        menu.add(newInstanceLabel);
+                    }
+                    String toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+                    Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+                    String label = elementsNameBuilder.getDisplayableName(endClass);
+                    String edgeClassName = edgeClass.getSimpleName();
+                    LGMGraphDocument sourceDoc = me.getSelectedDoc();
+                    String sourceDocHash = sourceDoc.getHashString();
+                    LGMGraphDocument targetDoc = Static.getSelectedDoc();
+                    String targetDocHash = targetDoc.getHashString();
+                    String elementHash = me.getHashString();
+                    String arguments = StringUtils.createCollectionString(" ", sourceDocHash, targetDocHash, edgeClassName, elementHash);
+                    JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, arguments, link_icon, true, toolTip);
+                    menu.add(item);
+                }
+            }
+        }
+        return newInstanceLabel != null;
     }
 
 }

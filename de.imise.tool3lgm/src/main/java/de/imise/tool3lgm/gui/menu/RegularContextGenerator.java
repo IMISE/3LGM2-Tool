@@ -8,7 +8,6 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SEL
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_ADD_SELECTED_TO_SUBMODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_COMMAND_LINE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_ADDICTED;
-import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_INSTANCIATION;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_NODE;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_MODEL;
 import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL;
@@ -95,6 +94,9 @@ import de.imise.util.NamedObjectContainer;
 import de.imise.util.pair.Pair;
 
 /**
+ * This is the context generator for a regular model. It is used in the ModelBrowser,
+ * the graph and the dialogs.
+ *
  * @author N.N., Thomas, AXS
  */
 public class RegularContextGenerator extends ElementSelectionContextGenerator implements PopupMenuListener {
@@ -387,27 +389,9 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
             //Anlegbare Pfade zu anderen Elementen anbieten
             boolean connectMenuAdded = addConnectMenuItems(menu, me);
 
-            MetaModel metaModel = me.getMetaModel();
-            //InstaciationEdges -> "Neue Instanz" der verbundenen Klasse erzeugen anbieten
-            JLabel newInstanceLabel = null;
-            if (!metaModel.isSlaveType(meClass)) {
-                ElementsNameBuilder elementsNameBuilder = metaModel.getElementsNameBuilder();
-                for (Class<? extends Edge> edgeClass : metaModel.getEdgeTypes(meClass)) {
-                    if (MetaModel.isInstanciationMaster(edgeClass, meClass)) {
-                        if (newInstanceLabel == null) {
-                            newInstanceLabel = new JLabel(getResString(MODEL_ACTION_CREATE_INSTANCIATION.name()));
-                            menu.add(newInstanceLabel);
-                        }
-                        String toolTip = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
-                        Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
-                        String label = elementsNameBuilder.getDisplayableName(endClass);
-                        JMenuItem item = getItem(label, MODEL_ACTION_CREATE_INSTANCIATION, edgeClass.getSimpleName(), link_icon, true, toolTip);
-                        menu.add(item);
-                    }
-                }
-            }
+            boolean newInstanciationInstanceMenuItemAdded = addNewInstanciationInstanceMenuItem(menu, me);
 
-            if (newInstanceLabel != null || connectMenuAdded) {
+            if (newInstanciationInstanceMenuItemAdded || connectMenuAdded) {
                 menu.addSeparator();
             }
 
@@ -439,6 +423,7 @@ public class RegularContextGenerator extends ElementSelectionContextGenerator im
                     addMenuItem(menu, show_configs);
                     addMenuItem(menu, hide_configs);
                 }
+                MetaModel metaModel = me.getMetaModel();
                 if (metaModel.hasLayout(me.getClass())) {
                     menu.addSeparator();
                     if (!ec.isVisible()) {
