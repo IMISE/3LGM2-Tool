@@ -746,6 +746,15 @@ public final class MetaModel extends CoreMetaModel {
     }
 
     /**
+     * @param elementClass
+     * @return <code>true</code>if this element class is a class that should be only
+     *         visible in expert mode
+     */
+    public final boolean isOnlyExpertModeVisibleElementClass(final Class<? extends ModelElement> elementClass) {
+        return onlyExpertModeVisibleNodes.contains(elementClass);
+    }
+
+    /**
      * @return all element classes which can be only inserted in a model by copiing from a template
      */
     public final Set<Class<? extends ModelElement>> getPureTemplateElementClasses() {

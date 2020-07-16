@@ -39,6 +39,7 @@ import de.imise.tool3lgm.event.ActionIdentifier;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Textfield;
@@ -139,6 +140,18 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
 
     /** Caches the value of {@link BooleanProperty#OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER} */
     private static boolean showUserDefinedProperties = false;
+
+    /** Caches the value of {@link BooleanProperty#OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER} */
+    private static boolean subordinateSlaveElements = false;
+
+    /** Caches the value of {@link BooleanProperty#OPTION_ENABLE_EXPERT_MODE} */
+    private static boolean showExpertModeOnlyVisisbleElements = false;
+
+    /** Caches the value of {@link BooleanProperty#OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER} */
+    private static boolean showTemplateElements = false;
+
+    /** Caches the value of {@link BooleanProperty#OPTION_ENABLE_SUBMODEL_BROWSER} */
+    private static boolean showSubmodelInBrowser = false;
 
     /**
      * @param doc the {@link GraphDocument} this model sbrowser should display
@@ -417,6 +430,9 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
      * @param selDoc
      */
     private void addChildren(final ElementContainerTreeNode elementNode, final GraphDocument selDoc) {
+        if (subordinateSlaveElements) {
+            addCompositionSlaves(elementNode, selDoc);
+        }
         if (showUserDefinedProperties) {
             addUserDefinedProperties(elementNode, selDoc);
         }
@@ -426,15 +442,14 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         ElementContainer kc = elementNode.getUserObject();
         LGMTreeNode parent = (LGMTreeNode) elementNode.getParent();
         GraphDocument maindoc = doc.getCollection().getMainDoc();
-        boolean isEnableSubmodelBrowser = OPTION_ENABLE_SUBMODEL_BROWSER.is();
-        List<ElementContainer> all = kc.getElement().getDirectPartContainers(isEnableSubmodelBrowser ? selDoc : maindoc);
+        List<ElementContainer> all = kc.getElement().getDirectPartContainers(showSubmodelInBrowser ? selDoc : maindoc);
         loop1: for (ElementContainer pc : all) {
             ModelElement me = pc.getElement();
             ElementContainer ecSelDoc = me.getContainer(selDoc);
             if (ecSelDoc != null) {
                 pc = ecSelDoc;
             }
-            if (isEnableSubmodelBrowser) {
+            if (showSubmodelInBrowser) {
                 if (!me.isUnique() && ecSelDoc == null) {
                     continue;
                 }
@@ -449,7 +464,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             ElementContainerTreeNode childNode = null;
             //bei NodeContainern werden die evtl. bereits vorhandenen TreeNodes wiederverwendet
             if (pc instanceof NodeContainer) {
-                List<ElementContainer> directParentElements = me.getDirectParentContainers(isEnableSubmodelBrowser ? selDoc : maindoc);
+                List<ElementContainer> directParentElements = me.getDirectParentContainers(showSubmodelInBrowser ? selDoc : maindoc);
                 // wenn es mehr als einen parent gibt, dann einfach alle Nodes neu erzeugen. Der Fall ist selten
                 //aber dann werden evtl. vorher ausgeklappte nodes nicht mehr aufgeklappt sein. Die Alternative wäre,
                 //sich statt nur eines Nodes im ElementContaier alle zu merken. Ich finde das muss nicht sein, da das
@@ -466,6 +481,57 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
             }
             elementNode.add(childNode);
             addChildren(childNode, selDoc);
+        }
+    }
+
+    /**
+     * @param elementTreeNode
+     * @param selDoc
+     */
+    private void addCompositionSlaves(final ElementContainerTreeNode elementTreeNode, final GraphDocument selDoc) {
+        ElementContainer ec = elementTreeNode.getUserObject();
+        ModelElement me = ec.getElement();
+        Class<? extends ModelElement> elementClass = me.getClass();
+        MetaModel metaModel = selDoc.getMetaModel();
+        Class<? extends CompositionEdge>[] compositionEdgeTypesForMaster = metaModel.getCompositionEdgeTypesForMaster(elementClass);
+        GraphDocument doc = OPTION_ENABLE_SUBMODEL_BROWSER.is() ? selDoc : selDoc.getMainDoc();
+        //        hier dürfen onlyExpertModeVsisibleNodes nciht hinzugefügt werden, wenn der ExpertMode aus ist
+        //        und hier dürfen TemplateElemente nicht hinzugefügt werden, wenn diese gerade nicth angezeigt werden sollen
+        for (Class<? extends CompositionEdge> composition : compositionEdgeTypesForMaster) {
+            List<ElementContainer> slaveContainers = me.getConnectedContainers(doc, composition);
+            for (ElementContainer slaveContainer : slaveContainers) {
+                ElementContainerTreeNode slaveTreeNode = null;
+                //Don't subordinate element classes to hide (expert mode only visible
+                //nodes and template elements).
+                //this must be checked for every single element because the composition
+                //slave class can be abstract and one instanciable, assignable class of
+                //of this slave class can be an expert mode only visible element class
+                //and another not. Same with template element classes.
+                if (!showExpertModeOnlyVisisbleElements) {
+                    ModelElement slave = slaveContainer.getElement();
+                    Class<? extends ModelElement> slaveClass = slave.getClass();
+                    if (metaModel.isOnlyExpertModeVisibleElementClass(slaveClass)) {
+                        continue;
+                    }
+                    if (!showTemplateElements) {
+                        if (metaModel.isPureTemplateElementClass(slaveClass)) {
+                            continue;
+                        }
+                    }
+                }
+                if (slaveContainer instanceof NodeContainer) {
+                    NodeContainer slaveNodeContainer = (NodeContainer) slaveContainer;
+                    slaveTreeNode = slaveNodeContainer.getTreeNode();
+                }
+                if (slaveTreeNode == null) {
+                    slaveTreeNode = new ElementContainerTreeNode(slaveContainer, true, false);
+                } else {
+                    slaveTreeNode.removeAllChildren();
+                }
+                elementTreeNode.add(slaveTreeNode);
+                addChildren(slaveTreeNode, selDoc);
+            }
+
         }
     }
 
@@ -562,26 +628,39 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         createTree();
         saveExpansionState();
         showPartOfHierarchy = OPTION_SHOW_PART_OF_HIERARCHY.is();
-        showUserDefinedProperties = isShowUserDefinedPropertiesInModelBrowser();
-        boolean isEnableSubmodelBrowser = OPTION_ENABLE_SUBMODEL_BROWSER.is();
+        showUserDefinedProperties = OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER.is();
+        subordinateSlaveElements = OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER.is();
+        showExpertModeOnlyVisisbleElements = OPTION_ENABLE_EXPERT_MODE.is();
+        showTemplateElements = OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER.is();
+        showSubmodelInBrowser = OPTION_ENABLE_SUBMODEL_BROWSER.is();
+
         for (int ebene = MAX_LAYER_INDEX; ebene >= MIN_LAYER_INDEX; ebene--) {
             if (isInterLayer(ebene)) {
                 continue;
             }
             for (NodeContainer nc : maindoc.getLayer(ebene).getNodeContainersAlphabetical()) {
                 ModelElement me = nc.getElement();
-                if (isEnableSubmodelBrowser) {
+                if (showSubmodelInBrowser) {
                     if (me.isUnique()) {
                         if (showPartOfHierarchy && nc.hasParent(maindoc)) {
+                            continue;
+                        }
+                        if (subordinateSlaveElements && me.isCompositionSlave(maindoc)) {
                             continue;
                         }
                     } else {
                         if (me.getContainer(doc) == null || showPartOfHierarchy && nc.hasParent(doc)) {
                             continue;
                         }
+                        if (subordinateSlaveElements && me.isCompositionSlave(doc)) {
+                            continue;
+                        }
                     }
                 } else {
                     if (showPartOfHierarchy && nc.hasParent(maindoc)) {
+                        continue;
+                    }
+                    if (subordinateSlaveElements && me.isCompositionSlave(maindoc)) {
                         continue;
                     }
                 }
@@ -714,30 +793,26 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         setExpandedPaths(expandedPaths);
     }
 
-    private boolean isShowUserDefinedPropertiesInModelBrowser() {
-        return OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER.is();
-    }
-
     ///////////////////////
     // UserFieldListener //
     ///////////////////////
     @Override
     public void userFieldAdded() {
-        if (isShowUserDefinedPropertiesInModelBrowser()) {
+        if (OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER.is()) {
             buildTree();
         }
     }
 
     @Override
     public void userFieldRemoved() {
-        if (isShowUserDefinedPropertiesInModelBrowser()) {
+        if (OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER.is()) {
             buildTree();
         }
     }
 
     @Override
     public void userFieldValueChanged() {
-        if (isShowUserDefinedPropertiesInModelBrowser()) {
+        if (OPTION_SHOW_USER_DEFINED_PROPERTIES_IN_MODEL_BROWSER.is()) {
             refreshTree();
         }
     }

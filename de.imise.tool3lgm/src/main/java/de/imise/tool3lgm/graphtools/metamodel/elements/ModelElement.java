@@ -1307,6 +1307,14 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
+     * @return <code>true</code> if the element is the slave of a composition edge
+     */
+    public boolean isCompositionSlave(final GraphDocument doc) {
+        List<ElementContainer> masterContainers = getConnectedContainers(ModelElement.class, doc, CompositionEdge.class, CompositionEdge.SLAVE_TO_MASTER_DIRECTION);
+        return !masterContainers.isEmpty();
+    }
+
+    /**
      * Liefert ein <code>List</code> aller <code>ElementContainer</code>, deren Elemente Teil dieses Elementes sind, aber selbst keine Teile
      * besitzen. <br>
      *
