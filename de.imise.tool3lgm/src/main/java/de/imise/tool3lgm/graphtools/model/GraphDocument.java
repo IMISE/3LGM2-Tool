@@ -58,23 +58,13 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;
-import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.LayerNode;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
-import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
-import de.imise.tool3lgm.graphtools.path.metapaths.ParallelMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.paths.AbstractPath;
-import de.imise.tool3lgm.graphtools.path.paths.ElementaryPath;
-import de.imise.tool3lgm.graphtools.path.paths.ParallelPath;
-import de.imise.tool3lgm.graphtools.path.paths.SimplePath;
 import de.imise.tool3lgm.graphtools.undoredo.CommandParser;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
@@ -825,22 +815,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
             Class<? extends CompositionEdge> compositionEdgeClass = elementClass.asSubclass(CompositionEdge.class);
             Class<? extends ModelElement> slaveClass = metaModel.getClassForName(argv[3]);
             createAddicted(doc, master, compositionEdgeClass, slaveClass, pid);
-            break;
-        }
-        case MODEL_ACTION_CREATE_INSTANCIATION: {
-            Class<? extends ModelElement> elementClass = metaModel.getClassForName(argv[0]);
-            Class<? extends InstanciationEdge> instanciationEdgeClass = elementClass.asSubclass(InstanciationEdge.class);
-            GraphDocument doc = null;
-            ModelElement master = null;
-            try {
-                doc = gdcoll.getGraphDocumentCoded(argv[1]);
-                master = doc.findElementCoded(argv[2]);
-            } catch (Exception e) {
-                //die letzten beiden sind optional. Wird ein doc angegeben, dann wird in dem gesucht,
-                //sonst im gerade aktiven doc. Wird ein Hash für das Ausgangselement der Kante
-                //angegeben, dann wird nur das genommen, sonst die Selektion.
-            }
-            createInstance(doc, instanciationEdgeClass, master, pid);
             break;
         }
         case MODEL_ACTION_SET_ELEMENT_COLOR: {
@@ -1667,7 +1641,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      *
      * @param me
      */
-    private final void setNodeContainerInsertPosition(final ModelElement me) {
+    protected final void setNodeContainerInsertPosition(final ModelElement me) {
         if (me != null && me.isPaintable()) {
             ElementContainer ec = me.getContainer(this);
             boolean setInserpositionToPathEndElement = ec != null && ec.isVisible();
@@ -3859,227 +3833,6 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         }
 
         return retVal;
-    }
-
-    /**
-     * @param doc
-     * @param instanciationEdgeClass
-     * @param master
-     * @param pid
-     * @return
-     */
-    public NodeContainer createInstance(GraphDocument doc, final Class<? extends InstanciationEdge> instanciationEdgeClass, ModelElement master, final int pid) {
-        doc = doc == null ? this : doc;
-        master = master == null ? doc.getLastSelected().getElement() : master;
-        doc.start_transaction(pid);
-        //Hauptkante anlegen
-        Class<? extends ModelElement> class2Create = Edge.getEndClass(instanciationEdgeClass);
-        String name = GENERATED_NAME_PREFIX + master.getName() + " " + Tool3lgmConstants.getResString("INSTANCE");
-        NodeContainer instanceContainer = doc.createNodeAndContainer(class2Create, name, pid);
-        if (instanceContainer != null) { // kann null sein, wenn der Dialog zur Namenseingabe abgebrochen wurde
-            ModelElement instance = instanceContainer.getElement();
-            String masterDescription = master.getDescription();
-            instance.setDescription(masterDescription);
-            gdcoll.link(instanciationEdgeClass, master, instance, pid);
-
-            //Ebenfalls zu instanziierende Nebenpfade anlegen
-            MetaModel metaModel = getMetaModel();
-            for (SimpleMetaPath metaPath : metaModel.getInstanciablePath(instanciationEdgeClass)) {
-                int path2CreateStartIndex = 0;
-                for (; path2CreateStartIndex < metaPath.getSubMetaPathCount(); path2CreateStartIndex++) {
-                    List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-                    ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(path2CreateStartIndex);
-                    if (elementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
-                        break;
-                    }
-                }
-                //für diesen Pfadteil müssen die verbundenen Elemente herausgesucht werden
-                SimpleMetaPath subPathConnected = metaPath.getSubPath(0, path2CreateStartIndex);
-                Collection<ModelElement> connectedElements = PathFunctions.getConnectedElements(master, subPathConnected);
-                for (ModelElement me : connectedElements) {
-                    //ab diesem Pfadteil muss neu angelegt werden
-                    SimpleMetaPath subPathCreate = metaPath.getSubPath(path2CreateStartIndex);
-                    doc.createPath(me, instance, subPathCreate, pid);
-                }
-            }
-        }
-        doc.finish_transaction(pid);
-        doc.distributeEvent(DATA_CHANGED, pid);
-        return instanceContainer;
-    }
-
-    /**
-     * @param startElement
-     * @param endElement
-     * @param metaPath
-     * @param pid
-     * @return
-     */
-    public final AbstractPath createPath(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final int pid) {
-        return createPath(startElement, endElement, metaPath, false, pid);
-    }
-
-    /**
-     * @param startElement
-     * @param endElement
-     * @param metaPath
-     * @param askNameForNewEndElement
-     * @param pid
-     * @return
-     */
-    public final AbstractPath createPath(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean askNameForNewEndElement, final int pid) {
-        if (metaPath instanceof SimpleMetaPath) {
-            return createSimplePath(startElement, endElement, (SimpleMetaPath) metaPath, askNameForNewEndElement, pid);
-        } else if (metaPath instanceof ParallelMetaPath) {
-            ParallelMetaPath parallelMetaPath = (ParallelMetaPath) metaPath;
-            List<AbstractPath> paths = new ArrayList<>();
-            for (AbstractMetaPath internalMetaPath : parallelMetaPath.iterableSubMetaPaths()) {
-                AbstractPath subPath = createPath(startElement, endElement, internalMetaPath, pid);
-                paths.add(subPath);
-            }
-            ParallelPath returnPath = new ParallelPath(parallelMetaPath, startElement, endElement, paths);
-            return returnPath;
-        }
-        return null;
-    }
-
-    /**
-     * @param startElement
-     * @param endElement
-     * @param metaPath
-     * @param askNameForNewEndElement
-     * @param pid
-     * @return
-     */
-    public final SimplePath createSimplePath(final ModelElement startElement, final ModelElement endElement, final SimpleMetaPath metaPath, final boolean askNameForNewEndElement, final int pid) {
-        List<ElementaryPath> createdElementaryPaths = new ArrayList<>();
-        SimplePath createdSubPath = null;
-        start_transaction(pid);
-        final int lastPathStepIndex = metaPath.getSubMetaPathCount() - 1;
-        //wenn ein EndElement ex. und die letzte Kante eine InstanciationEdge ist, wobei das EndElement der Master dieser InstanciationEdge ist, dann
-        //wird das EndElement über diese Kante instanziiert und der Restpfad bis zu dieser Instanz dann wieder über diese Funktion angelegt
-        List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
-        boolean createSubPath = false;
-
-        //set the insertPosition to the center of the end element if existst and is visible
-        //maybe this is not correct for future paths, but now (05.05.2020) there is only a
-        //path between an actor and an application system and the actor instance should be
-        //created in the center of the application system
-        setNodeContainerInsertPosition(endElement);
-
-        if (lastPathStepIndex > 0 && endElement != null) {
-            ElementaryMetaPath lastElementaryMetaPath = elementaryMetaPaths.get(lastPathStepIndex);
-            if (lastElementaryMetaPath.hasEdgeClass(InstanciationEdge.class)) {
-                if (!lastElementaryMetaPath.hasDirection(InstanciationEdge.MASTER_TO_INSTANCE_DIRECTION)) {
-                    Class<? extends Edge> edgeClass = lastElementaryMetaPath.getEdgeClass();
-                    NodeContainer createdInstanceContainer = createInstance(this, edgeClass.asSubclass(InstanciationEdge.class), endElement, pid);
-                    ModelElement createdInstance = createdInstanceContainer.getElement();
-                    Edge createdInstanceEdge = endElement.getEdgeTo(createdInstance, edgeClass);
-                    ElementaryPath createdInstanceEdgeElementaryPath = new ElementaryPath(lastElementaryMetaPath, createdInstanceEdge, endElement, createdInstanceEdge);
-                    SimpleMetaPath subMetaPath = metaPath.getSubPath(0, lastPathStepIndex);
-                    createdSubPath = createSimplePath(startElement, createdInstance, subMetaPath, false, pid);
-                    createdSubPath = createdSubPath.append(createdInstanceEdgeElementaryPath);
-                    createSubPath = true;
-                }
-            }
-        }
-        if (!createSubPath && endElement == null) {
-            Class<? extends ModelElement> pathEndClass = metaPath.getPathStepElementClass(lastPathStepIndex);
-            boolean oldAutomaticMode = gdcoll.setAutomaticMode(!askNameForNewEndElement);
-            NodeContainer pathEndElementContainer = createNodeAndContainer(pathEndClass, pid);
-            gdcoll.setAutomaticMode(oldAutomaticMode);
-            if (pathEndElementContainer != null) { // kann passieren, wenn der Benutzer abbrechen im Namensdialog drückt
-                ModelElement pathEndElement = pathEndElementContainer.getElement();
-                createPath(startElement, pathEndElement, metaPath, pid);
-            }
-            createSubPath = true;
-        }
-        if (!createSubPath) {
-            ModelElement pathStepStartElement = startElement;
-            for (int i = 0; i <= lastPathStepIndex; i++) {
-                ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
-                Type type = elementaryMetaPath.getType();
-                ElementaryPath createdElementaryPath = null;
-                if (i == 0) {
-                    if (type == Type.START_WITH_EDGE) {
-                        createdElementaryPath = ElementaryPath.createStartsWithEdgePath(elementaryMetaPath, (Edge) startElement);
-                    } else if (type == Type.END_WITH_EDGE) {
-                        createdElementaryPath = ElementaryPath.createEndsWithEdgePath(elementaryMetaPath, (Edge) startElement);
-                    }
-                } else if (i == lastPathStepIndex) {
-                    if (type == Type.START_WITH_EDGE) {
-                        createdElementaryPath = ElementaryPath.createStartsWithEdgePath(elementaryMetaPath, (Edge) endElement);
-                    } else if (type == Type.END_WITH_EDGE) {
-                        createdElementaryPath = ElementaryPath.createEndsWithEdgePath(elementaryMetaPath, (Edge) endElement);
-                    }
-                }
-                if (createdElementaryPath == null) {
-                    ModelElement pathStepEndElement = i == lastPathStepIndex ? endElement : null;
-                    Class<? extends ModelElement> pathStepEndClass = metaPath.getPathStepElementClass(i);
-                    MetaModel metaModel = getMetaModel();
-                    ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
-                    Class<? extends ModelElement> pathStepStartClass = pathStepStartElement.getClass();
-                    ElementaryMetaPath pathStepElementaryMetaPath = emph.getMetaPath(pathStepStartClass, elementaryMetaPath, pathStepEndClass);
-                    createdElementaryPath = createElementaryPath(pathStepStartElement, pathStepEndElement, pathStepElementaryMetaPath, pid);
-                }
-                createdElementaryPaths.add(createdElementaryPath);
-                pathStepStartElement = createdElementaryPath.getEndElement();
-            }
-        }
-        finish_transaction(pid);
-        distributeEvent(DATA_CHANGED, pid);
-        SimplePath simplePath = createSubPath ? createdSubPath : SimplePath.create(createdElementaryPaths);
-        return simplePath;
-    }
-
-    /**
-     * @param startElement
-     * @param endElement
-     * @param elementaryMetaPath
-     * @param pid
-     * @return
-     */
-    private ElementaryPath createElementaryPath(final ModelElement startElement, ModelElement endElement, final ElementaryMetaPath elementaryMetaPath, final int pid) {
-        //wenn ein endElement angegeben wurde, dann das im letzten Pfadschritt verknüpfen
-        boolean alreadyLinked = false;
-        Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
-        Edge edge = null;
-        //endElement auch erzeugen?
-        if (endElement == null) {
-            //wenn die Kante eine InstanciationEdge ist und diese Kante vorwärts im Pfad liegt (also vom zu instanzieerenden
-            //Element auf das Instanz-Element zeigt), dann wird diese auch selbst über den Instanziierungsmechanismus initialisiert
-            if (InstanciationEdge.class.isAssignableFrom(edgeClass) && elementaryMetaPath.hasDirectionForward()) {
-                boolean oldAutomaticMode = gdcoll.setAutomaticMode(true);
-                NodeContainer createdInstanceContainer = createInstance(this, edgeClass.asSubclass(InstanciationEdge.class), startElement, pid);
-                ModelElement createdInstance = createdInstanceContainer.getElement();
-                edge = startElement.getEdgeTo(createdInstance, edgeClass);
-                gdcoll.setAutomaticMode(oldAutomaticMode);
-                endElement = createdInstance;
-                alreadyLinked = true;
-            } else { // nächstes Pfadschrittelement anlegen
-                Class<? extends ModelElement> pathStepEndClass = elementaryMetaPath.getEndClass();
-                boolean oldAutomaticMode = gdcoll.setAutomaticMode(true);
-                NodeContainer pathStepEndElementContainer = createNodeAndContainer(pathStepEndClass, pid);
-                gdcoll.setAutomaticMode(oldAutomaticMode);
-                endElement = pathStepEndElementContainer.getElement();
-            }
-        }
-        if (!alreadyLinked) {
-            edge = gdcoll.link(edgeClass, startElement, endElement, pid);
-        }
-        if (CompositionEdge.class.isAssignableFrom(edgeClass)) {
-            Class<? extends CompositionEdge> compositionEdgeClass = edgeClass.asSubclass(CompositionEdge.class);
-            if (elementaryMetaPath.hasDirectionForward()) {
-                addict(startElement, endElement, compositionEdgeClass, pid);
-            } else {
-                addict(endElement, startElement, compositionEdgeClass, pid);
-            }
-        }
-        if (edge == null) {
-            return null;
-        }
-        ElementaryPath resultPath = new ElementaryPath(elementaryMetaPath, startElement, endElement, edge);
-        return resultPath;
     }
 
     /**

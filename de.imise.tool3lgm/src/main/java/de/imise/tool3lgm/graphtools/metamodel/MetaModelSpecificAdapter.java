@@ -16,7 +16,7 @@ public class MetaModelSpecificAdapter implements MetaModelSpecific {
     /**
      * Stores the Metamodel if a valid was given in
      */
-    private MetaModel metaModel;
+    protected MetaModel metaModel;
 
     /**
      * @param metaModelDefintionClass

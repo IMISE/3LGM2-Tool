@@ -18,6 +18,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
@@ -527,7 +528,7 @@ public class PathFunctions {
      * @param pid
      * @return
      */
-    public static final ModelElement createNodeWithContainerAndDependents(final GraphDocument doc, final ModelElement startElement, final ElementaryMetaPath pathToNewElement, final ElementaryMetaPath pathFromNewElement, final int pid) {
+    public static final ModelElement createNodeWithContainerAndDependents(final LGMGraphDocument doc, final ModelElement startElement, final ElementaryMetaPath pathToNewElement, final ElementaryMetaPath pathFromNewElement, final int pid) {
         Class<? extends ModelElement> newElementClass = MetaPathFunctions.getElementaryPathsConnectingClass(pathToNewElement, pathFromNewElement);
         Class<? extends Edge> edgeClass2Create = pathToNewElement.getEdgeClass();
         Direction edgeClass2CreateDirection = pathToNewElement.getDirection();
@@ -554,7 +555,7 @@ public class PathFunctions {
      * @return den neu angelegtes ModelElement mit allen davon abhängigen Elementen (außer denen, die evtl. auf dem Pfad liegen, der insgesamt
      *         angelegt werden soll)
      */
-    private static final ModelElement createNodeWithContainerAndDependents(final GraphDocument doc, final ModelElement startElement, final Class<? extends Edge> edgeClassToNewElement, final Direction directionToNewElement,
+    private static final ModelElement createNodeWithContainerAndDependents(final LGMGraphDocument doc, final ModelElement startElement, final Class<? extends Edge> edgeClassToNewElement, final Direction directionToNewElement,
             final Class<? extends ModelElement> newElementClass, final Class<? extends Edge> edgeClassFromNewElement, final Direction directionFromNewElement, final int pid) {
 
         //Collection des übergebenen doc holen

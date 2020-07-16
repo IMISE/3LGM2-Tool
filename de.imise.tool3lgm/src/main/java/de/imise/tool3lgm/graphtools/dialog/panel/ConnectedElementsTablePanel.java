@@ -29,6 +29,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.NamedObjectContainer;
@@ -114,7 +115,7 @@ public class ConnectedElementsTablePanel extends AbstractPathConnectionPanel {
         return new LGMAction(getResString("addButtonText")) {
             @Override
             public void execute(final EventObject eo) {
-                GraphDocument mainDoc = getMainDoc();
+                LGMGraphDocument mainDoc = getMainDoc();
                 ConnectPathDialog connectPathDialog = new ConnectPathDialog(mainDoc, metaPath);
                 boolean ok = connectPathDialog.createDialog(dialogParent);
                 while (ok && !connectPathDialog.hasValidSelection()) {

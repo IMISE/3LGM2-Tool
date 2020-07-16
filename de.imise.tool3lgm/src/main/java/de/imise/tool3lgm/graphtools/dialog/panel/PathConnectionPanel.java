@@ -35,6 +35,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
@@ -586,7 +587,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
                     connectToFirstPath(null);
                 } else { //es ist nicht klar, wohin ein neues Element gehängt werden sollte -> nur neu erzeugen und nicht verknüpfen
                     ElementaryMetaPath lastElementaryMetaPath = metaPath.getLastElementaryMetaPath();
-                    GraphDocument selectedDoc = gdcoll.getSelectedDoc();
+                    LGMGraphDocument selectedDoc = gdcoll.getSelectedDoc();
                     int pid = getTransactionID();
                     PathFunctions.createNodeWithContainerAndDependents(selectedDoc, null, lastElementaryMetaPath, null, pid);
                 }
@@ -602,7 +603,7 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
             return;
         }
         ModelElement me = getModelElement();
-        GraphDocument selectedDoc = getSelectedDoc();
+        LGMGraphDocument selectedDoc = getSelectedDoc();
         int pid = getTransactionID();
         selectedDoc.createPath(me, endElement, metaPath, true, pid);
     }

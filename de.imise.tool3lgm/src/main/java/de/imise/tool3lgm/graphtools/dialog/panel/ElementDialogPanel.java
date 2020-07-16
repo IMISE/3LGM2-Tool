@@ -316,7 +316,7 @@ public abstract class ElementDialogPanel extends JPanel {
      *
      * @return
      */
-    public GraphDocument getMainDoc() {
+    public LGMGraphDocument getMainDoc() {
         GDCollection gdcoll = getCollection();
         LGMGraphDocument mainDoc = gdcoll.getMainDoc();
         return mainDoc;
@@ -325,7 +325,7 @@ public abstract class ElementDialogPanel extends JPanel {
     /**
      * @return
      */
-    public GraphDocument getSelectedDoc() {
+    public LGMGraphDocument getSelectedDoc() {
         GDCollection gdcoll = getCollection();
         return gdcoll.getSelectedDoc();
     }

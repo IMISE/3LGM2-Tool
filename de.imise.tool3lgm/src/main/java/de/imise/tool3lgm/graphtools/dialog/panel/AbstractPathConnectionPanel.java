@@ -373,7 +373,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * @param startEdgeIndex Index der Edge, bei der der anzulegende Teilpfad losgeht
      */
     protected void connectOld(final ModelElement startElement, final Iterable<ModelElement> elements2Connect, final int startEdgeIndex) {
-        GraphDocument selectedDoc = getSelectedDoc();
+        LGMGraphDocument selectedDoc = getSelectedDoc();
         ModelElement targetElement = startElement;
         int pid = getTransactionID();
         //wenn ein gültiges Element2Connect übergeben wurde, dann muss man den Pfad nur bis zur vorletzten Edge
@@ -424,7 +424,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 List<ElementaryMetaPath> subelementaryMetaPaths = elementaryMetaPaths.subList(startEdgeIndex, size);
                 path2Create = new SimpleMetaPath(subelementaryMetaPaths);
             }
-            GraphDocument selectedDoc = getSelectedDoc();
+            LGMGraphDocument selectedDoc = getSelectedDoc();
             if (elements2Connect == null) {
                 selectedDoc.createPath(startElement, null, path2Create, pid);
             } else {

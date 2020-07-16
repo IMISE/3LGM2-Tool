@@ -20,6 +20,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.paths.SimplePath;
@@ -199,9 +200,9 @@ public class ModelConverter {
         //Set aller Kantenklassen holen, die in die Metapfade umgewandelt werden sollen
         Set<Class<? extends Edge>> sourceEdgeClasses = edgesMappingMetaPaths.keySet();
         //Hauptdokument des umzuwandelnden Modells (Ausgangsmodell)
-        GraphDocument sourceMainDoc = sourceModel.getMainDoc();
+        LGMGraphDocument sourceMainDoc = sourceModel.getMainDoc();
         //Hauptdokument des Zielmodells
-        GraphDocument targetMainDoc = targetModel.getMainDoc();
+        LGMGraphDocument targetMainDoc = targetModel.getMainDoc();
         //für jede umzuwandelnde Kantenart
         for (Class<? extends Edge> sourceEdgeClass : sourceEdgeClasses) {
             //hole aus dem Ausgangsmodell alle Kanten der umzuwandelnden Art
