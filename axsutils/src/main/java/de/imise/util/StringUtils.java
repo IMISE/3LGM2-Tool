@@ -434,4 +434,14 @@ public class StringUtils {
         return createCollectionString(sortedList, delimiter);
     }
 
+    /**
+     * @param delimiter
+     * @param objects
+     * @return
+     */
+    public static final String createCollectionString(final String delimiter, final Object... objects) {
+        List<Object> collection = Arrays.asList(objects);
+        return createCollectionString(collection, delimiter);
+    }
+
 }
