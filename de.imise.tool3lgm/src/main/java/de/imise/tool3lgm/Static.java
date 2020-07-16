@@ -171,11 +171,8 @@ public class Static {
      */
     public static LGMGraphDocument getGraphDocument(final String hashString) {
         Iterable<GDCollection> allGDCollections = iterableCollections();
-        TemplateLibrariesManager templateLibrariesManager = getTemplateLibrariesManager();
-        if (templateLibrariesManager != null) {
-            Iterable<GDCollection> allTemplates = templateLibrariesManager.iterableTemplates();
-            allGDCollections = CollectionUtils.getCommonIterable(allGDCollections, allTemplates);
-        }
+        Iterable<GDCollection> allTemplates = iterableTemplates();
+        allGDCollections = CollectionUtils.getCommonIterable(allGDCollections, allTemplates);
         for (GDCollection gdcoll : allGDCollections) {
             LGMGraphDocument doc = gdcoll.getGraphDocumentCoded(hashString);
             if (doc != null) {
@@ -192,6 +189,14 @@ public class Static {
      */
     public static Iterable<GDCollection> iterableCollections() {
         return tool == null ? IterableUtils.emptyIterable() : tool.iterableCollections();
+    }
+
+    /**
+     * @return Iterable of all loaded template <code>GDCollection</code>s
+     */
+    public static Iterable<GDCollection> iterableTemplates() {
+        TemplateLibrariesManager templateLibrariesManager = getTemplateLibrariesManager();
+        return templateLibrariesManager == null ? IterableUtils.emptyIterable() : templateLibrariesManager.iterableTemplates();
     }
 
     /**

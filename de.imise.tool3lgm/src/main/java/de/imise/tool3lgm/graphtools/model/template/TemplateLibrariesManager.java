@@ -94,7 +94,6 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
                 List<TemplateLibraryProvider> templateLibraryProviders = Static.loadPlugins(TemplateLibraryProvider.class);
                 removeUnfittingTemplateLibraryProviders(templateLibraryProviders, metaModelDefinitionClass);
                 addTemplateLibraries(templateLibraryProviders);
-
             }
         }
         firePropertyChange();
@@ -146,7 +145,7 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
     }
 
     /**
-     * @return Iterable f all templates loaded template <code>GDCollection</code>s
+     * @return Iterable of all loaded template <code>GDCollection</code>s
      */
     public Iterable<GDCollection> iterableTemplates() {
         return templateLibrariesContext.iterableTemplates();
