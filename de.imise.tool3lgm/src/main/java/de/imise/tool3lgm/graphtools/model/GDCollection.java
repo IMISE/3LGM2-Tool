@@ -2402,7 +2402,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      */
     private void distributeChangeEvents() {
         //Sys.err(changeEvents.size());
-        for (LGMChangeEvent changeEvent : changeEvents) {
+        //Don't use the iterator here! In some cases the distribution of a ChangeEvent
+        //will produce a new ChangeEvent and alters the list changeEvents
+        for (int i = 0; i < changeEvents.size(); i++) {
+            LGMChangeEvent changeEvent = changeEvents.get(i);
             distribute(changeEvent.changeType, changeEvent.last_elem, changeEvent.source, changeEvent.pid);
         }
         changeEvents.clear();
