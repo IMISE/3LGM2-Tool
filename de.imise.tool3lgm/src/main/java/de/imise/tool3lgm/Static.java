@@ -335,7 +335,7 @@ public class Static {
     /**
      * @param doc
      */
-    public static final void setActiveTemplate(final GraphDocument doc) {
+    public static final void setSelectedTemplate(final GraphDocument doc) {
         TemplateLibrariesManager templateLibrariesManager = getTemplateLibrariesManager();
         if (templateLibrariesManager != null) {
             templateLibrariesManager.setActiveTemplate(doc);

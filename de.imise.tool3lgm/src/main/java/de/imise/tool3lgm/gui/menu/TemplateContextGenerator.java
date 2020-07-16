@@ -52,7 +52,7 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
         if (source instanceof TemplateBrowserTree) {
             graphDocumentOwner = (TemplateBrowserTree) source;
             GraphDocument template = graphDocumentOwner.getGraphDocument();
-            Static.setActiveTemplate(template);
+            Static.setSelectedTemplate(template);
             if (!template.isSelectedOnlyBendpoints()) {
                 if (template.isSingleSelection()) {
                     menu = getSingleNodeContextMenu(source, template);
