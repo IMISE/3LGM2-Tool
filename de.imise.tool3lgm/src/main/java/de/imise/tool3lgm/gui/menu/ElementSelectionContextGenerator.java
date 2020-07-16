@@ -6,6 +6,7 @@ import static de.imise.tool3lgm.graphtools.model.GDCommands.MODEL_ACTION_CREATE_
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -84,9 +85,19 @@ public abstract class ElementSelectionContextGenerator extends ContextGenerator 
             String metaPathName = metaPath.getName(false, true);
             JMenu pathConnectableElements = new JMenu(metaPathName);
             pathConnectableElements.setIcon(link_icon);
-            GraphDocument doc = Static.getSelectedDoc();
             if (endElements == null) {
-                endElements = doc.getModelItems(endClass, true, true);
+                MetaModel metaModel = startElement.getMetaModel();
+                if (metaModel.isPureTemplateElementClass(endClass)) {
+                    endElements = new ArrayList<>();
+                    for (GDCollection template : Static.iterableTemplates()) {
+                        LGMGraphDocument activeTemplateDoc = template.getSelectedDoc();
+                        List<ModelElement> templateElements = activeTemplateDoc.getModelItems(endClass, true, true);
+                        endElements.addAll(templateElements);
+                    }
+                } else {
+                    GraphDocument doc = Static.getSelectedDoc();
+                    endElements = doc.getModelItems(endClass, true, true);
+                }
             }
             pathConnectableElements.setEnabled(!endElements.isEmpty());
             menu.add(pathConnectableElements);
