@@ -29,6 +29,7 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.event.ExtendedAction;
+import de.imise.util.swing.menu.DynamicPopupMenu;
 import de.imise.util.swing.menu.MenuScroller;
 
 /**
@@ -84,6 +85,7 @@ public abstract class ContextGenerator implements ActionListener {
                 if (source instanceof Container) {
                     Container menu = (Container) e.getSource();
                     checkEnabled(menu);
+                    DynamicPopupMenu.removeUselessSeparators(menu);
                 }
             }
 

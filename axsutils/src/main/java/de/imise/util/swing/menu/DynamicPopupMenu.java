@@ -1,8 +1,12 @@
 package de.imise.util.swing.menu;
 
+import java.awt.Component;
+import java.awt.Container;
+
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 
 /**
  * @author AXS?
@@ -52,6 +56,7 @@ public class DynamicPopupMenu extends JPopupMenu {
     protected void firePopupMenuWillBecomeVisible() {
         super.firePopupMenuWillBecomeVisible();
         updateItems();
+        removeUselessSeparators(this);
         MenuCreator.checkEnabledAndSelected(this);
     }
 
@@ -78,4 +83,27 @@ public class DynamicPopupMenu extends JPopupMenu {
             insert(item, pos++);
         }
     }
+
+    /**
+     * Removes all {@link JSeparator} at the end of the menu and every doubled
+     * {@link JSeparator}.
+     *
+     * @param menu the menu to clean from useless separators
+     */
+    public static final void removeUselessSeparators(final Container menu) {
+        boolean delete = true;
+        for (int i = menu.getComponentCount() - 1; i >= 0; i--) {
+            Component component = menu.getComponent(i);
+            if (component == null || component instanceof JSeparator) {
+                if (delete) {
+                    menu.remove(i);
+                } else {
+                    delete = true;
+                }
+            } else {
+                delete = false;
+            }
+        }
+    }
+
 }

@@ -87,6 +87,7 @@ public abstract class DynamicMenu extends JMenu {
             remove(placeholder);
             updateItems(placeholder);
         }
+        removeUselessSeparators(this);
     }
 
     protected abstract void updateItems(final DynamicMenuPlaceholder placeholder);
@@ -130,6 +131,28 @@ public abstract class DynamicMenu extends JMenu {
             return startIndex;
         }
 
+    }
+
+    /**
+     * Removes all {@link JSeparator} at the end of the menu and every doubled
+     * {@link JSeparator}.
+     *
+     * @param menu the menu to clean from useless separators
+     */
+    public static final void removeUselessSeparators(final JMenu menu) {
+        boolean delete = true;
+        for (int i = menu.getItemCount() - 1; i >= 0; i--) {
+            Component component = menu.getItem(i);
+            if (component == null || component instanceof JSeparator) {
+                if (delete) {
+                    menu.remove(i);
+                } else {
+                    delete = true;
+                }
+            } else {
+                delete = false;
+            }
+        }
     }
 
 }
