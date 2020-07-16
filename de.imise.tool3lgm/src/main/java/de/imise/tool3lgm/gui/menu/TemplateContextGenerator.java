@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
 /**
  * @author AXS (23.09.2019)
  */
-public class TemplateContextGenerator extends ContextGenerator {
+public class TemplateContextGenerator extends ElementSelectionContextGenerator {
 
     /**
      *
@@ -112,7 +112,7 @@ public class TemplateContextGenerator extends ContextGenerator {
             addMenuItem(menu, createCopyToModelItem());
             //Anlegbare Pfade zu anderen Elementen anbieten
             ModelElement me = ec.getElement();
-            boolean connectMenuAdded = RegularContextGenerator.addConnectMenuItems(menu, me);
+            boolean connectMenuAdded = addConnectMenuItems(menu, me);
 
         }
         return menu;
