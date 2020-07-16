@@ -31,6 +31,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
@@ -47,7 +48,7 @@ import de.imise.util.Alphabetical;
 import de.imise.util.HashStringGenerator;
 import de.imise.util.htmlxml.HTMLConverter;
 
-public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific {
+public abstract class ModelElement extends UserFieldTarget implements MetaModelSpecific, GDCollectionOwner {
 
     /**
      * Die Ebene auf der sich dieses Element befindet
@@ -2091,6 +2092,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      *
      * @return
      */
+    @Override
     public final GDCollection getCollection() {
         if (gdcoll == null) {
             //gibt vom erstbesten doc die gdcoll zurück

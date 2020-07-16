@@ -24,4 +24,12 @@ public interface GDCollectionOwner extends MetaModelSpecific {
         return gdcoll.getMetaModelDefinitionClass();
     }
 
+    /**
+     * @return the selected doc of the owned {@link GDCollection}
+     */
+    public default LGMGraphDocument getSelectedDoc() {
+        GDCollection gdcoll = getCollection();
+        return gdcoll.getSelectedDoc();
+    }
+
 }
