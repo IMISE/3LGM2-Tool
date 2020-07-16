@@ -1292,7 +1292,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public final boolean hasDirectParentContainer(final GraphDocument doc) {
-        return getDirectParentContainers(doc).size() > 0;
+        return !getDirectParentContainers(doc).isEmpty();
     }
 
     /**
@@ -1303,7 +1303,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
      * @return
      */
     public boolean hasDirectPartContainer(final GraphDocument doc) {
-        return getDirectPartContainers(doc).size() > 0;
+        return !getDirectPartContainers(doc).isEmpty();
     }
 
     /**

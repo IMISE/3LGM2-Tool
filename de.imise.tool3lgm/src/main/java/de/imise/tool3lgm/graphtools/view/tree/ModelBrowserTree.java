@@ -290,6 +290,9 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         }
     }
 
+    /**
+     *
+     */
     private void initTree() {
         LGMTreeNode top = (LGMTreeNode) treeModel.getRoot();
         top.add(domainLayer);
@@ -311,6 +314,9 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         transactionListener.setActive(active);
     }
 
+    /**
+     *
+     */
     private final Map<DefaultMutableTreeNode, DefaultMutableTreeNode> visibilityRestrictedNodesToParent = new HashMap<>();
 
     /**
@@ -688,12 +694,22 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     //	----------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     *
+     */
     Enumeration<TreePath> expandedPaths = null;
 
+    /**
+     *
+     */
     private void saveExpansionState() {
         expandedPaths = getExpandedDescendants(rootPath);
     }
 
+    /**
+     *
+     */
     public final void restoreExpansionState() {
         setExpandedPaths(expandedPaths);
     }
