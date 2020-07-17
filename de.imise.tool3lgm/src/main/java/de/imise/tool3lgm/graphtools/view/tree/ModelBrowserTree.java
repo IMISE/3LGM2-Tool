@@ -177,9 +177,9 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         buildTree();
         myModel = (DefaultTreeModel) getModel();
         //Expand the 3 layer nodes
-        //        expandRow(2);
-        //        expandRow(1);
-        //        expandRow(0);
+        for (int i = getRowCount() - 1; i >= 0; i--) {
+            expandRow(i);
+        }
     }
 
     /**
