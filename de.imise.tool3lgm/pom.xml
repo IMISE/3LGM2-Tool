@@ -145,23 +145,25 @@
 				<artifactId>maven-clean-plugin</artifactId>
 				<version>2.5</version>
 				<configuration>
-					<!-- Plugins-Verzeichnis im Deploy-Projekt leeren -->
 					<filesets>
-						<fileset>
-							<directory>../de.imise.tool3lgm.deploy/Tool3lgm/Plugins</directory>
-							<includes>
-								<include>**/*</include>
-							</includes>
-							<followSymlinks>false</followSymlinks>
-						</fileset>
+					
+						<!-- Plugins-Verzeichnis im Deploy-Projekt leeren -->
+						<!-- <fileset> -->
+						<!-- <directory>../de.imise.tool3lgm.deploy/Tool3lgm/Plugins</directory> -->
+						<!-- <includes> -->
+						<!-- <include>**/*</include> -->
+						<!-- </includes> -->
+						<!-- <followSymlinks>false</followSymlinks> -->
+						<!-- </fileset> -->
 						<!-- Plugins-Verzeichnis im Eclipse-Development-Projekt leeren -->
-						<fileset>
-							<directory>../de.imise.tool3lgm/Plugins/</directory>
-							<includes>
-								<include>**/*</include>
-							</includes>
-							<followSymlinks>false</followSymlinks>
-						</fileset>
+						<!-- <fileset> -->
+						<!-- <directory>../de.imise.tool3lgm/Plugins/</directory> -->
+						<!-- <includes> -->
+						<!-- <include>**/*</include> -->
+						<!-- </includes> -->
+						<!-- <followSymlinks>false</followSymlinks> -->
+						<!-- </fileset> -->
+						
 						<!-- lib-Verzeichnis im Deploy-Projekt leeren -->
 						<fileset>
 							<directory>../de.imise.tool3lgm.deploy/Tool3lgm/lib</directory>
@@ -170,7 +172,7 @@
 							</includes>
 							<followSymlinks>false</followSymlinks>
 						</fileset>
-						<!-- Templates-Ordner im Deploy-Projekt leeren  -->
+						<!-- Templates-Ordner im Deploy-Projekt leeren -->
 						<fileset>
 							<directory>../de.imise.tool3lgm.deploy/Tool3lgm/Templates</directory>
 							<includes>
@@ -218,10 +220,11 @@
 								<copy
 									file="${project.build.directory}/${project.artifactId}.${project.packaging}"
 									tofile="../de.imise.tool3lgm.deploy/Tool3lgm/lib/${project.artifactId}.${project.packaging}" />
-								<!-- Templates aus dem tool3lm-Projekt nach ../de.imise.tool3lgm.deploy/Tool3lgm/Templates kopieren -->
+								<!-- Templates aus dem tool3lm-Projekt nach ../de.imise.tool3lgm.deploy/Tool3lgm/Templates 
+									kopieren -->
 								<copy
 									toDir="../de.imise.tool3lgm.deploy/Tool3lgm/Templates">
-									<fileset dir="../de.imise.tool3lgm/Templates"/>
+									<fileset dir="../de.imise.tool3lgm/Templates" />
 								</copy>
 							</target>
 						</configuration>
