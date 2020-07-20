@@ -1382,7 +1382,9 @@ public final class MetaModel extends CoreMetaModel {
         List<Class<T>> returnList = new ArrayList<>();
         for (Class<? extends Edge> edgeType : edgeTypes) {
             if (subordinationEdgeClass.isAssignableFrom(edgeType)) {
-                returnList.add((Class<T>) edgeType);
+                if (superElement && isSubordinationMasterType(edgeType, elementClass) || !superElement && isSubordinationSlaveType(edgeType, elementClass)) {
+                    returnList.add((Class<T>) edgeType);
+                }
             }
         }
         return returnList;
