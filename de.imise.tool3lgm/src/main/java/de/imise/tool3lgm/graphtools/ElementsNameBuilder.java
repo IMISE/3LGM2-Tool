@@ -141,6 +141,15 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     }
 
     /**
+     * @param name
+     * @return the name with the appendix "(Template)"
+     */
+    public static final String appendTemplatePostfix(String name) {
+        name += " (" + Tool3lgmConstants.getResString("instanciaton_template") + ")";
+        return name;
+    }
+
+    /**
      * @param elementClass
      * @param plural
      * @param appendTemplatePostfix If <code>true</code> and the element class has a {@link InstanciationEdge}
@@ -166,7 +175,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
                         Class<? extends ModelElement> instanciationInstanceType = InstanciationEdge.getInstanciationInstance(instanciationEdgeType);
                         String instanceTypeDisplayableName = getDisplayableName(instanciationInstanceType, plural, false);
                         if (instanceTypeDisplayableName.equals(name)) {
-                            name += " (" + Tool3lgmConstants.getResString("instanciaton_template") + ")";
+                            name = appendTemplatePostfix(name);
                             break;
                         }
                     }
