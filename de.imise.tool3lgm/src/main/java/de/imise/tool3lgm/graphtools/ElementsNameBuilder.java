@@ -143,12 +143,11 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     /**
      * @param elementClass
      * @param plural
-     * @param appendRealizationOrTemplatePostfix If <code>true</code> and the element class has a {@link InstanciationEdge}
+     * @param appendTemplatePostfix If <code>true</code> and the element class has a {@link InstanciationEdge}
      *            then the name gets an appendix. If the element is the instanciation master, then the appendix is "(Template)".
-     *            If it is the instanciation slave element (= the instane)then the appendix is "(Realization)".
      * @return
      */
-    private String getDisplayableName(Class<? extends ModelElement> elementClass, final boolean plural, final boolean appendRealizationOrTemplatePostfix) {
+    private String getDisplayableName(Class<? extends ModelElement> elementClass, final boolean plural, final boolean appendTemplatePostfix) {
         MetaModelContext metaModelContext = getMetaModelContext();
         while (ModelElement.class.isAssignableFrom(elementClass)) {
             try {
@@ -157,11 +156,19 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
                     resKey += ModelConstants.PLURAL_NAME_RES_KEY_SUFFIX;
                 }
                 String name = metaModelContext.getResString(resKey);
-                if (appendRealizationOrTemplatePostfix) {
-                    if (!metaModel.getInstanciationEdgeTypesAsMaster(elementClass).isEmpty()) {
-                        name += " (" + Tool3lgmConstants.getResString("instanciaton_template") + ")";
-                    } else if (!metaModel.getInstanciationEdgeTypesAsSlave(elementClass).isEmpty()) {
-                        name += " (" + Tool3lgmConstants.getResString("instanciaton_realization") + ")";
+                if (appendTemplatePostfix) {
+                    //If the elementClass is a master type of an InstanciationEdge (start class of the edge type) then
+                    //check the dispalyable name of the instance type (end class of the edge type). If they have the
+                    //same displayable name, so append " (Template)" to the name of the master. This ensures that they
+                    //can be distinguished.
+                    List<Class<InstanciationEdge>> instanciationEdgeTypesAsMaster = metaModel.getInstanciationEdgeTypesAsMaster(elementClass);
+                    for (Class<InstanciationEdge> instanciationEdgeType : instanciationEdgeTypesAsMaster) {
+                        Class<? extends ModelElement> instanciationInstanceType = InstanciationEdge.getInstanciationInstance(instanciationEdgeType);
+                        String instanceTypeDisplayableName = getDisplayableName(instanciationInstanceType, plural, false);
+                        if (instanceTypeDisplayableName.equals(name)) {
+                            name += " (" + Tool3lgmConstants.getResString("instanciaton_template") + ")";
+                            break;
+                        }
                     }
                 }
                 return name;
