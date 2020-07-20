@@ -645,7 +645,7 @@ public class LGMGraphDocument extends GraphDocument {
 
         //Hauptkante anlegen
         Class<? extends ModelElement> class2Create = Edge.getEndClass(instanciationEdgeClass);
-        String name = GENERATED_NAME_PREFIX + master.getName() + " " + Tool3lgmConstants.getResString("INSTANCE");
+        String name = GENERATED_NAME_PREFIX + master.getName();
         NodeContainer instanceContainer = targetDoc.createNodeAndContainer(class2Create, name, pid);
         if (instanceContainer != null) { // kann null sein, wenn der Dialog zur Namenseingabe abgebrochen wurde
             ModelElement instance = instanceContainer.getElement();
