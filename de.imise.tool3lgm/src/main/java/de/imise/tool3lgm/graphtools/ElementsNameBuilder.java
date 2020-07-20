@@ -72,7 +72,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     /**
      * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
      * Im Unterschied zu {@link #getDisplayableName(boolean, Class...)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt und bei den Instanzen dieser "(Realisierung)".
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
      *
      * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
      * @param elementClass Klasse für die der anzeigbare Name geliefert werden soll
@@ -100,7 +100,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     /**
      * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
      * Im Unterschied zu {@link #getDisplayableName(boolean, Class...)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt und bei den Instanzen dieser "(Realisierung)".
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
      *
      * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
@@ -206,7 +206,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
      * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
      * Im Unterschied zu {@link #getDisplayablePluralName(Class...)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt und bei den Instanzen dieser "(Realisierung)".
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
      *
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -231,7 +231,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
      * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
      * Im Unterschied zu {@link #getDisplayableName(Collection)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt und bei den Instanzen dieser "(Realisierung)".
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
      *
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -255,7 +255,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
      * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
      * Im Unterschied zu {@link #getDisplayableName(Class)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt und bei den Instanzen dieser "(Realisierung)".
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
      *
      * @param elementClass Klasse für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -280,7 +280,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
      * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
      * Im Unterschied zu {@link #getDisplayableName(Class...)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt und bei den Instanzen dieser "(Realisierung)".
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
      *
      * @param classes Klasse für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
@@ -305,7 +305,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
      * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
      * Im Unterschied zu {@link #getDisplayableName(Collection)} wird hier bei Elementen, die der Master
-     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt und bei den Instanzen dieser "(Realisierung)".
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
      *
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
