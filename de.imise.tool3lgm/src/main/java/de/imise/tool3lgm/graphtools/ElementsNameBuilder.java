@@ -15,11 +15,13 @@ import java.util.MissingResourceException;
 import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.MetaModelContext;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
+import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.util.Alphabetical;
 import de.imise.util.StringUtils;
@@ -64,8 +66,20 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @return String aus dem geladenen ResourcenBundle
      */
     public final String getDisplayableName(final boolean plural, final Class<? extends ModelElement> elementClass) {
-        return getDisplayableName(elementClass, plural);
+        return getDisplayableName(elementClass, plural, false);
+    }
 
+    /**
+     * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
+     * Im Unterschied zu {@link #getDisplayableName(boolean, Class...)} wird hier bei Elementen, die der Master
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     *
+     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
+     * @param elementClass Klasse für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    public final String getDisplayableFullName(final boolean plural, final Class<? extends ModelElement> elementClass) {
+        return getDisplayableName(elementClass, plural, true);
     }
 
     /**
@@ -80,23 +94,43 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
         if (classes == null || classes.length == 0) {
             return "";
         }
-        return getDisplayableName(plural, Arrays.asList(classes), true);
+        return getDisplayableName(plural, Arrays.asList(classes), true, false);
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen der Klassen aus den Resoucen zurück.<br>
+     * Im Unterschied zu {@link #getDisplayableName(boolean, Class...)} wird hier bei Elementen, die der Master
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     *
+     * @param plural wenn true, wird der Pluralname zurück gegeben, sonst der Singular
+     * @param classes Klassen für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    @SafeVarargs
+    public final String getDisplayableFullName(final boolean plural, final Class<? extends ModelElement>... classes) {
+        if (classes == null || classes.length == 0) {
+            return "";
+        }
+        return getDisplayableName(plural, Arrays.asList(classes), true, true);
     }
 
     /**
      * @param plural
      * @param classes
      * @param alphabetical
+     * @param appendRealizationOrTemplatePostfix If <code>true</code> and the element class has a {@link InstanciationEdge}
+     *            then the name gets an appendix. If the element is the instanciation master, then the appendix is "(Template)".
+     *            If it is the instanciation slave element (= the instane)then the appendix is "(Realization)".
      * @return
      */
-    private final String getDisplayableName(final boolean plural, final Collection<Class<? extends ModelElement>> classes, final boolean alphabetical) {
+    private final String getDisplayableName(final boolean plural, final Collection<Class<? extends ModelElement>> classes, final boolean alphabetical, final boolean appendRealizationOrTemplatePostfix) {
         if (classes == null) {
             return "";
         }
         List<String> names = new ArrayList<>();
         for (Iterator<Class<? extends ModelElement>> classesIt = classes.iterator(); classesIt.hasNext();) {
             Class<? extends ModelElement> elementClass = classesIt.next();
-            String name = getDisplayableName(elementClass, plural);
+            String name = getDisplayableName(elementClass, plural, appendRealizationOrTemplatePostfix);
             if (alphabetical) {
                 Alphabetical.insert(names, name);
             } else {
@@ -107,11 +141,22 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     }
 
     /**
+     * @param name
+     * @return the name with the appendix "(Template)"
+     */
+    public static final String appendTemplatePostfix(String name) {
+        name += " (" + Tool3lgmConstants.getResString("instanciaton_template") + ")";
+        return name;
+    }
+
+    /**
      * @param elementClass
      * @param plural
+     * @param appendTemplatePostfix If <code>true</code> and the element class has a {@link InstanciationEdge}
+     *            then the name gets an appendix. If the element is the instanciation master, then the appendix is "(Template)".
      * @return
      */
-    private String getDisplayableName(Class<? extends ModelElement> elementClass, final boolean plural) {
+    private String getDisplayableName(Class<? extends ModelElement> elementClass, final boolean plural, final boolean appendTemplatePostfix) {
         MetaModelContext metaModelContext = getMetaModelContext();
         while (ModelElement.class.isAssignableFrom(elementClass)) {
             try {
@@ -119,7 +164,23 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
                 if (plural) {
                     resKey += ModelConstants.PLURAL_NAME_RES_KEY_SUFFIX;
                 }
-                return metaModelContext.getResString(resKey);
+                String name = metaModelContext.getResString(resKey);
+                if (appendTemplatePostfix) {
+                    //If the elementClass is a master type of an InstanciationEdge (start class of the edge type) then
+                    //check the dispalyable name of the instance type (end class of the edge type). If they have the
+                    //same displayable name, so append " (Template)" to the name of the master. This ensures that they
+                    //can be distinguished.
+                    List<Class<InstanciationEdge>> instanciationEdgeTypesAsMaster = metaModel.getInstanciationEdgeTypesAsMaster(elementClass);
+                    for (Class<InstanciationEdge> instanciationEdgeType : instanciationEdgeTypesAsMaster) {
+                        Class<? extends ModelElement> instanciationInstanceType = InstanciationEdge.getInstanciationInstance(instanciationEdgeType);
+                        String instanceTypeDisplayableName = getDisplayableName(instanciationInstanceType, plural, false);
+                        if (instanceTypeDisplayableName.equals(name)) {
+                            name = appendTemplatePostfix(name);
+                            break;
+                        }
+                    }
+                }
+                return name;
             } catch (MissingResourceException mre) {
                 elementClass = elementClass.getSuperclass().asSubclass(ModelElement.class);
             } catch (NullPointerException npe) {
@@ -144,12 +205,39 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     /**
      * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
      * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Im Unterschied zu {@link #getDisplayablePluralName(Class...)} wird hier bei Elementen, die der Master
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     *
+     * @param classes Klassen für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    @SafeVarargs
+    public final String getDisplayablePluralFullName(final Class<? extends ModelElement>... classes) {
+        return getDisplayableFullName(true, classes);
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
      *
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
     public final String getDisplayablePluralName(final Collection<Class<? extends ModelElement>> classes) {
-        return getDisplayableName(true, classes, false);
+        return getDisplayableName(true, classes, false, false);
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen einer Klasse in der Mehrzahl (Plural) aus den Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Im Unterschied zu {@link #getDisplayableName(Collection)} wird hier bei Elementen, die der Master
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     *
+     * @param classes Klassen für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    public final String getDisplayablePluralFullName(final Collection<Class<? extends ModelElement>> classes) {
+        return getDisplayableName(true, classes, false, true);
     }
 
     /**
@@ -161,6 +249,19 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      */
     public final String getDisplayableName(final Class<? extends ModelElement> elementClass) {
         return getDisplayableName(false, elementClass);
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Im Unterschied zu {@link #getDisplayableName(Class)} wird hier bei Elementen, die der Master
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     *
+     * @param elementClass Klasse für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    public final String getDisplayableFullName(final Class<? extends ModelElement> elementClass) {
+        return getDisplayableFullName(false, elementClass);
     }
 
     /**
@@ -178,12 +279,39 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
     /**
      * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
      * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Im Unterschied zu {@link #getDisplayableName(Class...)} wird hier bei Elementen, die der Master
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     *
+     * @param classes Klasse für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    @SafeVarargs
+    public final String getDisplayableFullName(final Class<? extends ModelElement>... classes) {
+        return getDisplayableFullName(false, classes);
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
      *
      * @param classes Klassen für die der anzeigbare Name geliefert werden soll
      * @return String aus dem geladenen ResourcenBundle
      */
     public final String getDisplayableName(final Collection<Class<? extends ModelElement>> classes) {
-        return getDisplayableName(false, classes, false);
+        return getDisplayableName(false, classes, false, false);
+    }
+
+    /**
+     * Gibt den anzeigbaren Namen einer Klasse aus den Resoucen zurück.<br>
+     * Wird <code>null</code> übergeben, wird der Name für ein Modell (im Deutschen also "Modell" zurück gegeben.)
+     * Im Unterschied zu {@link #getDisplayableName(Collection)} wird hier bei Elementen, die der Master
+     * einer {@link InstanciationEdge} sind noch "(Template)" angehängt.
+     *
+     * @param classes Klassen für die der anzeigbare Name geliefert werden soll
+     * @return String aus dem geladenen ResourcenBundle
+     */
+    public final String getDisplayableFullName(final Collection<Class<? extends ModelElement>> classes) {
+        return getDisplayableName(false, classes, false, true);
     }
 
     /**
@@ -377,7 +505,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @see getMetaAssociationName
      */
     public String getMetaAssociationName(final Class<? extends Edge> edgeClass, final Direction direction, final ConnectionState connectionState, final Class<? extends ModelElement> prefixClass, final Class<? extends ModelElement> postfixClass) {
-        return getMetaAssociationName(edgeClass, direction, connectionState, prefixClass == null ? null : getDisplayableName(prefixClass), postfixClass == null ? null : getDisplayableName(postfixClass));
+        return getMetaAssociationName(edgeClass, direction, connectionState, prefixClass == null ? null : getDisplayableFullName(prefixClass), postfixClass == null ? null : getDisplayableFullName(postfixClass));
     }
 
     /**

@@ -1,8 +1,6 @@
 package de.imise.tool3lgm.userproperties;
 
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -32,83 +30,13 @@ import de.imise.util.swing.event.ActionSource;
  * @author AXS
  *         created on 16.08.2007
  */
-public class UserProperties {
+public class UserProperties extends AbstractUserProperties {
 
     /** Pfad zur Default-Datei in den Ressourcen mit den Optionen für einen Benutzer */
     private static final URL DEFAULT_USER_INFO_FILE = ClassLoader.getSystemResource("DefaultUserProperties");
 
     /** Pfad zur Datei mit den Optionen eines Benutzers */
     private static final File USER_INFO_FILE = new File(System.getProperty("user.home"), ".tool3lgm2UserInfo");
-
-    /** Mit diesem Namenspräfix sind alle Properties zu versehen, die nicht gepspeichert werden sollen */
-    private static final String TRANSIENT_PROPERTY_NAME_PREFIX = "TRANSIENT_";
-
-    /**
-     * Liefert <code>true</code>, wenn der übergebene Property-Name mit dem String beginnt, der angibt, dass diese Property nicht gespeichert werden
-     * soll.
-     *
-     * @param propertyName
-     * @return
-     */
-    private static final boolean isTransient(final Object propertyName) {
-        return propertyName.toString().startsWith(TRANSIENT_PROPERTY_NAME_PREFIX);
-    }
-
-    /**
-     * Das eigentliche Property-Objekct, das alle Properties aufnimmt
-     */
-    static Properties properties = new Properties();
-
-    /**
-     * Stellt Property-Change-Funktionalität zur Verfügung. <br>
-     * Zu der Klasse <code>PropertyChangeSupport</code> werden alle Property-Change-Listener
-     * hinzugefügt und in <code>firePorpertyChange()</code> werden alle Listener benachrichtigt.
-     */
-    private static PropertyChangeSupport changeSupport = new PropertyChangeSupport(UserProperties.class);
-
-    ///////////////////////////////////////////////////
-    // Listener hinzufügen/entfernen/benachrichtigen //
-    ///////////////////////////////////////////////////
-
-    /**
-     * Fügt einen <code>PropertyChangeListener</code> hinzu
-     *
-     * @param listener
-     */
-    public static final void addPropertyChangeListener(final PropertyChangeListener listener) {
-        changeSupport.addPropertyChangeListener(listener);
-    }
-
-    /**
-     * Entfernt einen <code>PropertyChangeListener</code>
-     *
-     * @param listener
-     */
-    public static final void removePropertyChangeListener(final PropertyChangeListener listener) {
-        changeSupport.removePropertyChangeListener(listener);
-    }
-
-    /**
-     * Sendet an alle PropertyChangeListener das Ereignis, dass sich etwas geändert hat
-     *
-     * @param property
-     * @param oldValue
-     * @param newValue
-     */
-    public static final void firePropertyChange(final Object property, final String oldValue, final String newValue) {
-        changeSupport.firePropertyChange(property.toString(), oldValue, newValue);
-    }
-
-    /**
-     * Prüft, ob das ChangeEvent für das übergebene Property-Objekt ausgelöst wurde
-     *
-     * @param property
-     * @param event
-     * @return
-     */
-    private static final boolean isPropertyChange(final Object property, final PropertyChangeEvent event) {
-        return property.toString().equals(event.getPropertyName());
-    }
 
     /**
      * Liest die Benutzeroptionen ein.<br>
@@ -130,20 +58,6 @@ public class UserProperties {
         for (IntProperty property : IntProperty.values()) {
             put(property, property.getDefault());
         }
-    }
-
-    /**
-     * Fügt für die übergebene Property den übergebenen Wert hinzu
-     *
-     * @param key
-     * @param value
-     * @return the old value
-     */
-    private static Object put(final Object key, final Object value) {
-        String newValue = String.valueOf(value);
-        Object oldValue = properties.put(key.toString(), newValue);
-        firePropertyChange(key, oldValue == null ? null : oldValue.toString(), newValue);
-        return oldValue;
     }
 
     /**
@@ -305,7 +219,7 @@ public class UserProperties {
     }
 
     /**
-     * Ließt die benutzerspezifischen Informationen aus dem Benutzer-Home-Verzeichnis
+     * Liest die benutzerspezifischen Informationen aus dem Benutzer-Home-Verzeichnis
      * oder die Defaultdatei aus den Ressourcen.
      */
     private static void readUserInfo() {
@@ -472,7 +386,7 @@ public class UserProperties {
         /**
          * @return Default-Wert dieser Property
          */
-        private boolean getDefault() {
+        public boolean getDefault() {
             return DEFAULT_TRUE_PROERTIES.contains(this);
         }
 

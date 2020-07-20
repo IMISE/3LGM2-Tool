@@ -244,11 +244,12 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
     }
 
     /**
+     * @param metaModel
      * @param layerNode
      * @param treeLayerVisibleAbstractNodes
      * @param treeLayerVisibleInstancialeNodes
      */
-    private final void initLayer(final LGMTreeNode layerNode, final Class<? extends ModelElement>[] treeLayerVisibleAbstractNodes, final Iterable<Class<? extends ModelElement>> treeLayerVisibleInstancialeNodes) {
+    private final void initLayer(final MetaModel metaModel, final LGMTreeNode layerNode, final Class<? extends ModelElement>[] treeLayerVisibleAbstractNodes, final Iterable<Class<? extends ModelElement>> treeLayerVisibleInstancialeNodes) {
         //die abstracten Klassen holen, die in der Hierarchie des Baumes unterhalb des Layer-Knotens angezeigt werden sollen
         List<Class<? extends ModelElement>> abstractClasses = new ArrayList<>(Arrays.asList(treeLayerVisibleAbstractNodes));
         //diese Liste so sortieren, dass sichergestellt ist, dass alle Klassen die in der Liste vorkommen, die Unterklasse einer anderen
@@ -264,6 +265,9 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         //jetzt die ElementKnoten unter die abstrakten Knoten hängen oder unter den LayerKnoten selbst, wenn es keinen abstakten Oberklassenkoten gibt
         for (Class<? extends ModelElement> elementClass : treeLayerVisibleInstancialeNodes) {
             String label = elementsNameBuilder.getDisplayableName(elementClass);
+            if (metaModel.isPureTemplateElementClass(elementClass)) {
+                label = ElementsNameBuilder.appendTemplatePostfix(label);
+            }
             ElementClassTreeNode instanciableClassNode = new ElementClassTreeNode(elementClass, label, false); // muss nicht selbst sortieren, weil die Elemente bereits sortiert reinkommen
             elementClassToParentNode.put(elementClass, instanciableClassNode);
             boolean superClassFound = false;
@@ -312,9 +316,9 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         top.add(logicalLayer);
         top.add(physicalLayer);
         MetaModel metaModel = doc.getMetaModel();
-        initLayer(domainLayer, metaModel.getTreeDomainLayerVisibleAbstractNodes(), metaModel.treeDomainLayerNodes);
-        initLayer(logicalLayer, metaModel.getTreeLogicalLayerVisibleAbstractNodes(), metaModel.treeLogicalLayerNodes);
-        initLayer(physicalLayer, metaModel.getTreePhysicalLayerVisibleAbstractNodes(), metaModel.treePhysicalLayerNodes);
+        initLayer(metaModel, domainLayer, metaModel.getTreeDomainLayerVisibleAbstractNodes(), metaModel.treeDomainLayerNodes);
+        initLayer(metaModel, logicalLayer, metaModel.getTreeLogicalLayerVisibleAbstractNodes(), metaModel.treeLogicalLayerNodes);
+        initLayer(metaModel, physicalLayer, metaModel.getTreePhysicalLayerVisibleAbstractNodes(), metaModel.treePhysicalLayerNodes);
     }
 
     @Override
