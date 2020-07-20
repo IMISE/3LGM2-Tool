@@ -15,7 +15,18 @@ public interface SimpleResourceIconSource extends SimpleResourceFileLoader {
      * @param name
      * @return ImageIcon
      */
-    public ImageIcon getIcon(String name);
+    public default ImageIcon getIcon(final String name) {
+        Class<?> resourcePackageSource = getResourcePackageSource();
+        String iconFileName = getResourceFileName(resourcePackageSource == null ? getClass() : resourcePackageSource, name);
+        return SimpleResourceIconSource.getImageIcon(iconFileName);
+    }
+
+    /**
+     * @return
+     */
+    public default Class<?> getResourcePackageSource() {
+        return null;
+    }
 
     /**
      * Return the ImageIcon from the path of the package of the given class.
@@ -38,9 +49,30 @@ public interface SimpleResourceIconSource extends SimpleResourceFileLoader {
      * @return
      */
     public static ImageIcon getImageIcon(final String dir) {
-        URL url = ClassLoader.getSystemClassLoader().getResource(dir);
-        if (url == null && !dir.endsWith(".gif")) {
-            url = ClassLoader.getSystemClassLoader().getResource(dir + ".gif");
+        ImageIcon imageIcon = getImageIcon(dir, ".gif");
+        if (imageIcon == null) {
+            imageIcon = getImageIcon(dir, ".jpg");
+        }
+        if (imageIcon == null) {
+            imageIcon = getImageIcon(dir, ".jpeg");
+        }
+        return imageIcon;
+    }
+
+    /**
+     * Versucht ein {@link ImageIcon} aus dem spezifizierten Verzeichnis zu laden und es wiederzugeben
+     *
+     * @param dir
+     *            Verzeichnis des tatsächlichen Bilds
+     * @param extension
+     *            Erweiterung des tatsächlichen Bilds
+     * @return
+     */
+    public static ImageIcon getImageIcon(final String dir, final String extension) {
+        ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
+        URL url = systemClassLoader.getResource(dir);
+        if (url == null && !dir.endsWith(extension)) {
+            url = systemClassLoader.getResource(dir + extension);
         }
         ImageIcon icon;
         if (url != null) {
@@ -50,7 +82,7 @@ public interface SimpleResourceIconSource extends SimpleResourceFileLoader {
         }
         if (icon.getIconWidth() == -1 && icon.getIconHeight() == -1) {
             if (!dir.endsWith(".gif")) {
-                String nameWithGifEnding = dir + ".gif";
+                String nameWithGifEnding = dir + extension;
                 icon = new ImageIcon(nameWithGifEnding);
             }
             if (icon.getIconWidth() == -1 && icon.getIconHeight() == -1) {
