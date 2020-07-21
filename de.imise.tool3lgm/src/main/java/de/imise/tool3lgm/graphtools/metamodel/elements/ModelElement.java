@@ -2010,6 +2010,14 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     }
 
     /**
+     * @return <code>true</code> if {@link MetaModel#isPureTemplateElementClass(Class)}
+     *         returns <code>true</code> for the class of this element.
+     */
+    public boolean isPureTemplateElement() {
+        return metaModel.isPureTemplateElementClass(getClass());
+    }
+
+    /**
      * Ueberprueft, ob der Node ein untergeodnetes Element ist.
      *
      * @return
