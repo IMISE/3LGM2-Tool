@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.gui.menu;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.Component;
 
 import javax.swing.Action;
@@ -85,14 +87,14 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
         };
     }
 
-    //    private final JMenuItem createCopyToModelItem() {
-    //        JMenuItem item = new JMenuItem(getResString("inmodel"));
-    //        LGMGraphDocument template = getDoc();
-    //        LGMGraphDocument selectedDoc = Static.getSelectedDoc();
-    //        item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(template, selectedDoc));
-    //        return item;
-    //    }
-    //
+    private final JMenuItem createCopyToModelItem() {
+        JMenuItem item = new JMenuItem(getResString("inmodel"));
+        LGMGraphDocument template = getDoc();
+        LGMGraphDocument selectedDoc = Static.getSelectedDoc();
+        item.addActionListener(e -> LGMGraphDocument.copySelectedToModel(template, selectedDoc));
+        return item;
+    }
+
     /**
      * Kontextmenü eines Einzelknotens
      *
@@ -104,13 +106,14 @@ public class TemplateContextGenerator extends ElementSelectionContextGenerator {
         //      System.err.println("ContextGenerator.getSingleNodeContextMenu()");
         JPopupMenu menu = createUpdatingPopupMenu();
         ElementContainer ec = template.getLastSelected();
-        //        ModelElement me = ec.getElement();
         if (!(ec instanceof BendpointContainer)) {
             addMenuItem(menu, properties);
-            //addMenuItem(menu, createCopyToModelItem());
+            ModelElement me = ec.getElement();
+            if (!me.isPureTemplateElement()) {
+                addMenuItem(menu, createCopyToModelItem());
+            }
             //Anlegbare Pfade zu anderen Elementen anbieten
             menu.addSeparator();
-            ModelElement me = ec.getElement();
             addConnectMenuItems(menu, me);
             addNewInstanciationInstanceMenuItem(menu, me);
         }
