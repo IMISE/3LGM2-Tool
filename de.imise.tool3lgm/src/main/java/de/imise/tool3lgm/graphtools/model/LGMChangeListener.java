@@ -153,11 +153,11 @@ public interface LGMChangeListener {
                 //Sys.err(name() + " " + l.getClass() + "\n" + l);
                 deliverEvent(l, source, last_elem);
             }
-            //Das hier stellt die Verbindung zwischen dem globalen Listener des Tools und dem für ein GraphDocument bzw. einer GDCollection her
-            //Diese beiden Ereignisse werden von beiden Listenern weiter geleitet.
-            //der source null check ist notwendig, weil sonst beim Öffnen eines Modells diese Ereignisse hier fliegen und damit
-            //die Frames doppelt angelegt werden. Das Fällt zunächst gar nicht auf, da diese unnötigen Frames immer verborgen bleiben.
-            //Sie sind aber Listener, elegen Speicher und werden geupdated.
+            //Das hier stellt die Verbindung zwischen dem globalen Listener des Tools und dem für ein
+            //GraphDocument bzw. einer GDCollection her.
+            //Die folgenden Ereignisse werden von beiden Listenern weiter geleitet.
+            //Ser source null check ist notwendig, weil sonst beim Öffnen eines Modells diese Ereignisse
+            //hier fliegen und damit die Frames doppelt angelegt werden.
             if (deliverStatic && source != null) {
                 if (this == SZENARIO_ADDED) {
                     Static.distribute(MODEL_CHANGE_SZENARIO_ADDED, source);
