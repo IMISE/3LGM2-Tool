@@ -30,6 +30,7 @@ import javax.swing.JViewport;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
+import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -60,7 +61,7 @@ import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 /**
  * @author AXS (6 Aug 2019)
  */
-public final class MainFrameDesktopPane extends JPanel implements PropertyChangeListener, ViewPaneFrameComponentListener {
+public final class MainFrameDesktopPane extends JPanel implements PropertyChangeListener, ViewPaneFrameComponentListener, Tool3lgmChangeListener, LGMChangeListenerSimple {
 
     /** Panel with verticalSplitPane and werkzeugleiste */
     private final JPanel workarea = new JPanel();
@@ -88,14 +89,14 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     /** panel to hold one or more modelBrowsers */
     private final ModelBrowserPanel modelBrowserPanel;
 
-    /** panel to hold one or more modelBrowsers */
-    private TemplateBrowserPanel templateBrowserPanel;
-
     /** contain all windows of opened documents (JDesktopPane is a container used to create a multiple-document interface or a virtual desktop) */
     private final ViewPaneFrameComponentParent desktop;
 
     /** Frame component at desktop, which has the focus */
     private ViewPaneFrameComponent activeFrame = null;
+
+    /** View component for the templates */
+    private TemplateBrowserPanel templateBrowserPanel;
 
     /**
      * Diese Variable wird in <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht,
@@ -135,7 +136,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
         setShowStandardToolbar();
         UserProperties.addPropertyChangeListener(this);
-
+        addAsToolChangeListener();
     }
 
     /**
@@ -270,9 +271,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             if (rightSplitPane != null) {
                 return; //das Ding ist nur null, wenn der templateBroweser nicht angezeigt wird
             }
-            if (templateBrowserPanel == null) {
-                templateBrowserPanel = new TemplateBrowserPanel();
-            }
+            templateBrowserPanel = new TemplateBrowserPanel();
+
             rightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSplitPane, templateBrowserPanel);
             rightSplitPane.setOneTouchExpandable(true);
             rightSplitPane.setDividerSize(10);
@@ -632,6 +632,29 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         activeFrame = null;
         viewPaneToolbarManager.updateToolBar();
         mainFrameToolbar.update();
+    }
+
+    @Override
+    public void model_change_model_opened(final GraphDocument source) {
+        //add this panel to to every opened model as change listener
+        //to catch the elsection changed events for the template browser
+        source.addAllTransactionsListener(this);
+    }
+
+    @Override
+    public void model_change_selected_szenario_changed(final GraphDocument source) {
+        //if the selected model changed -> update the selection in the
+        //template browser
+        selectionChanged(source);
+    }
+
+    @Override
+    public void selectionChanged(final GraphDocument source) {
+        //on every selection changed event in the model
+        //the selection in the template browser mus be updated
+        if (templateBrowserPanel != null) {
+            templateBrowserPanel.updateSelection(source);
+        }
     }
 
 }

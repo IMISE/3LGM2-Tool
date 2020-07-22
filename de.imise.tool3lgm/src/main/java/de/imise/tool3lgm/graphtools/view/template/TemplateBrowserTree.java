@@ -2,29 +2,35 @@ package de.imise.tool3lgm.graphtools.view.template;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Collection;
 import java.util.Objects;
 
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
+import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
+import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
 import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.tool3lgm.graphtools.view.tree.DynamicTree;
 import de.imise.tool3lgm.graphtools.view.tree.TreeRenderer;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
+import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 import de.imise.tool3lgm.gui.menu.ContextGenerator;
 
 /**
  * @author AXS (05.09.2019)
  */
-public class TemplateBrowserTree extends DynamicTree implements PropertyChangeListener, AncestorListener {
+public class TemplateBrowserTree extends DynamicTree implements PropertyChangeListener, AncestorListener, TemplateView {
 
     /**
      *
@@ -147,6 +153,44 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
     @Override
     public void ancestorMoved(final AncestorEvent event) {
         //do nothing
+    }
+
+    @Override
+    public Collection<GDCollection> getDisplayedTemplates() {
+        return templateLibrariesManager.getAllActiveTemplates();
+    }
+
+    @Override
+    public void updateSelection() {
+        Collection<GDCollection> displayedTemplates = getDisplayedTemplates();
+        for (GDCollection templateModel : displayedTemplates) {
+            GraphDocument template = templateModel.getSelectedDoc();
+            selectObjects(template);
+        }
+    }
+
+    /**
+     * Selektiert im Baum alle Elemente, die im dazugehörigen Template selektiert sind.
+     */
+    public void selectObjects(final GraphDocument template) {
+        TreePath[] path = new TreePath[template.getSelectedRealElementContainerCount()];
+        int m = 0;
+        GraphDocument mainDoc = template.getMainDoc();
+        for (NodeContainer ec : template.getSelectedRealElementContainerIterable()) {
+            ModelElement me = ec.getElement();
+            ec = (NodeContainer) me.getContainer(template);
+            if (ec == null) {
+                ec = (NodeContainer) me.getContainer(mainDoc);
+            }
+            LGMTreeNode node = ec.getTreeNode();
+            if (node != null) {
+                path[m++] = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(node));
+            }
+        }
+        setSelectionPaths(path);
+        if (path.length > 0) {
+            scrollPathToVisible(path[path.length - 1]);
+        }
     }
 
 }

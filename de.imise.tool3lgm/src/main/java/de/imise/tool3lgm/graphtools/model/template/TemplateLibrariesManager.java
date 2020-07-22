@@ -4,6 +4,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -76,6 +77,14 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
      */
     public void setActiveTemplate(final GraphDocument activeTemplate) {
         this.activeTemplate = activeTemplate;
+    }
+
+    public Collection<GDCollection> getAllActiveTemplates() {
+        if (activeTemplate == null) {
+            return new ArrayList<>(0);
+        }
+        MetaModelContext activeMetaModelContext = activeTemplate.getMetaModelContext();
+        return getTemplates(activeMetaModelContext);
     }
 
     /**
