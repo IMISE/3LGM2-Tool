@@ -89,25 +89,33 @@ public class ModelConverter {
     private static void convert(final ModelConverterDefinition modelConverterDefinition, final GDCollection sourceModel, final GDCollection targetModel) {
         ModelConverter modelConverter = new ModelConverter(modelConverterDefinition, sourceModel, targetModel);
         modelConverter.prepareTargetModel();
+        modelConverter.beforeTransform(); // Fall 0
         modelConverter.convertDirectMappingNodes(); //Fall 1
         modelConverter.convertDirectMappingEdges(false); //Fall 2
         modelConverter.convertDirectMappingEdges(true); //Fall 3
         modelConverter.convertEdgesMappingMetaPaths(); //Fall 4
         modelConverter.convertMetaPathsMappingEdges(); //Fall 5
         modelConverter.convertMetaPathsMappingMetaPaths(); //Fall 6
-        modelConverter.transform(); //Fall 7
+        modelConverter.afterTransform(); //Fall 7
     }
 
     /**
      * Legt im Target-Model alle Teilmodelle an, die es auch im SourceModel gibt. Diese werden in der Map {@link #sourceSzenToTargetSzen} gespeichert.
      */
-    public void prepareTargetModel() {
+    private void prepareTargetModel() {
         boolean oldBulkMode = targetModel.setBulkMode(true);
         for (Szenario sourceSzen : sourceModel.getSzenarios()) {
             Szenario targetSzen = targetModel.createSzenario(sourceSzen.getTitle(), false, sourceSzen.getDescription(), sourceSzen.getHashString(), false);
             sourceSzenToTargetSzen.put(sourceSzen, targetSzen);
         }
         targetModel.setBulkMode(oldBulkMode);
+    }
+
+    /**
+     *
+     */
+    private void beforeTransform() {
+        modelConverterDefinition.beforeTransform(sourceModel, targetModel);
     }
 
     /**
@@ -254,8 +262,8 @@ public class ModelConverter {
     /**
      *
      */
-    private void transform() {
-        modelConverterDefinition.transform(sourceModel, targetModel);
+    private void afterTransform() {
+        modelConverterDefinition.afterTransform(sourceModel, targetModel);
     }
 
 }

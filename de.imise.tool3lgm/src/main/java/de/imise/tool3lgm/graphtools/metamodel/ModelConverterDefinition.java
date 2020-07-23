@@ -212,13 +212,22 @@ public abstract class ModelConverterDefinition {
     }
 
     /**
-     * Wandelt das Modell source in das Modell target um. Es ist so gedacht, dass hier all das noch getan werden kann, was die anderen Funktionen
-     * oben nicht abdecken. Das ist der Fall 7.
+     * Subclasses can do things here before the automatically transformation.
      *
      * @param source
      * @param target
      */
-    public void transform(final GDCollection source, final GDCollection target) {
+    public void beforeTransform(final GDCollection source, final GDCollection target) {
+        //subclasses can do special transforms here
+    }
+
+    /**
+     * Subclasses can do things here before the automatically transformation.
+     *
+     * @param source
+     * @param target
+     */
+    public void afterTransform(final GDCollection source, final GDCollection target) {
         //subclasses can do special transforms here
     }
 
