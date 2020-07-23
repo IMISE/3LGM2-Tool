@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
@@ -13,7 +14,7 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 /**
  * Class that manages to collect and serve all informations about elements
  * which should be highlighted in a special way for a selected element.
- * At the moment the highlight reacts only on single selctions.
+ * At the moment the highlight reacts only on single selections.
  *
  * @author AXS (05.06.2020)
  */
@@ -30,8 +31,13 @@ public class SelectionHighlighter implements LGMChangeListenerSimple {
      * @param doc the {@link GraphDocument} this highlighter reacts on selection changed events
      */
     public SelectionHighlighter(final GraphDocument doc) {
-        if (!(doc instanceof Szenario)) {
-            doc.addAllTransactionsListener(this); //add only for the main doc because these listeners are added to the GDCollection
+        //Should not be added to Template Models because when selecting elements that were created
+        //from a template element, this element is always also selected in the Template Browser
+        //and this selection then removes the highlight in the model.
+        if (doc.getModelCategory() == ModelCategory.REGULAR) {
+            if (!(doc instanceof Szenario)) {
+                doc.addAllTransactionsListener(this); //add only for the main doc because these listeners are added to the GDCollection
+            }
         }
     }
 
