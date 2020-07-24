@@ -101,6 +101,8 @@ public class IheRDFDataImporter extends RDFDataImporter {
     private void init() {
         //name von TransaktionsEdges soll OntProperty-Abkürzung (z.B. "ITI-8") + Leerzeichen + Label (z.B. "Patient Identity Feed") sein -> "ITI-8 Patient Identity Feed"
         addNamePattern(IheImportMetaModelDefinition.IheTransaction_Edge.class, new OntPropertyName("abbreviation"), " ", LABEL);
+        addNamePattern(IheImportMetaModelDefinition.IntegrationProfile.class, LABEL, " (", new OntPropertyName("abbreviation"), ")");
+        addNamePattern(IheImportMetaModelDefinition.Domain.class, LABEL, " (", new OntPropertyName("abbreviation"), ")");
     }
 
     @Override

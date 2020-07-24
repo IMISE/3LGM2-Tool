@@ -3126,19 +3126,30 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     //////////////////////////////////////////////////////////
 
     /**
+     * @param prefix
      * @param elementClass
      *            Typ der Elemente, für das eine nuer Name generiert werden soll. Der neue Namen ist
      *            in diesem GraphDocument eindeutig und besteht aus dem anzeigbaren Elementnamen, einem Leerzeichen
      *            und einer Zahl. Die Zahl ist die kleinste freie Nummer ab 1.
+     * @param appendElementClassName
+     *            Only if <code>true</code> the dispalyabe class name of the given class will be appended.
+     * @return
      */
-    protected String getNextNewName(String prefix, final Class<? extends ModelElement> elementClass) {
+    protected String getNextNewName(String prefix, final Class<? extends ModelElement> elementClass, final boolean appendElementClassName) {
         if (prefix == null) {
             prefix = "";
         }
         ElementsNameBuilder elementsNameBuilder = getElementsNameBuilder();
         GraphDocument mainDoc = gdcoll.getMainDoc();
         List<ModelElement> modelItems = mainDoc.getModelItems(elementClass);
-        String displayableName = elementsNameBuilder.getDisplayableName(elementClass);
+        if (!prefix.isEmpty()) {
+            int lastCharIndex = prefix.length() - 1;
+            char lastChar = prefix.charAt(lastCharIndex);
+            if (!Character.isWhitespace(lastChar)) {
+                prefix += " ";
+            }
+        }
+        String displayableName = appendElementClassName ? elementsNameBuilder.getDisplayableName(elementClass) : "";
         String name = prefix + displayableName + " ";
         String newName = CollectionUtils.getNextIndicatedName(name, modelItems);
         return newName;
@@ -3150,7 +3161,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
      * @return nächste nummerierte Standardname für diese Elementart
      */
     protected String getNextNewName(final Class<? extends ModelElement> elementClass) {
-        return getNextNewName("", elementClass);
+        return getNextNewName("", elementClass, true);
     }
 
     /**
@@ -3508,7 +3519,7 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
         String name = slaveName;
         if (slaveName == null || slaveName.trim().isEmpty()) {
             String masterName = master.getClearName();
-            name = doc.getNextNewName(masterName + "_", slaveClass);
+            name = doc.getNextNewName(masterName, slaveClass, true);
         }
         GDCollection gdcoll = doc.getCollection();
         GraphDocument mainDoc = gdcoll.getMainDoc();

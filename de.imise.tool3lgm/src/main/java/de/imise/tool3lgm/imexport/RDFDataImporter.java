@@ -59,6 +59,9 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     /** If <code>true</code> the importer will log the progress. */
     private final boolean logDebug = Tool3lgmMain.hasStartParameter("-log_rdf", "-log_all");
 
+    /**
+     * @author AXS (26 Jun 2019)
+     */
     public static enum NameCreationPatternStandardIndentifier {
         LOCAL_NAME,
         LABEL,
