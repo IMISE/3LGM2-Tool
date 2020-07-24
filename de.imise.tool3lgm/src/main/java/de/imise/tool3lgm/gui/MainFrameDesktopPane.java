@@ -231,6 +231,12 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         }
     }
 
+    private void checkViewComponentsVisibility() {
+        checkModelBrowserVisibility();
+        checkTemplateBrowserVisibility();
+        checkConsistencyTableVisibility();
+    }
+
     /**
      * Je nachdem, ob in den UserProperties die Konsitenzprüfung ein- oder ausgeschaltet ist, wird sie hier durchgeführt und die Fehlertabelle
      * angezeigt.
@@ -238,7 +244,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      * @return <code>true</code>, wenn dei Konsistenzprüfung durchgeführt und angezeigt wurde
      */
     private void checkConsistencyTableVisibility() {
-        boolean isCheckConsistency = OPTION_CHECK_CONSISTENCY.is() && Static.getSelectedGDCollection() != null;
+        boolean isCheckConsistency = OPTION_CHECK_CONSISTENCY.is();
         ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
         JSplitPane topComponent = rightSplitPane != null ? rightSplitPane : leftSplitPane;
         if (!isCheckConsistency) {
@@ -266,7 +272,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
     /** (De-)Aktiviert den TemplateBrowser */
     private final void checkTemplateBrowserVisibility() {
-        boolean isCheckConsistency = OPTION_CHECK_CONSISTENCY.is() && Static.getSelectedGDCollection() != null;
+        boolean isCheckConsistency = OPTION_CHECK_CONSISTENCY.is();
+        //show template browser
         if (OPTION_SHOW_TEMPLATE_BROWSER.is()) {
             if (rightSplitPane != null) {
                 return; //das Ding ist nur null, wenn der templateBroweser nicht angezeigt wird
@@ -469,7 +476,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         //Teilmodell-Tabs immer diese Funktion hier aufgerufen.
         //Es kann auch null sein, wenn das letzte Modell geschlossen wurde
         if (doc == null) {
-            checkConsistencyTableVisibility();
+            checkViewComponentsVisibility();
             return;
         }
 
@@ -504,7 +511,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         //beim nächsten Konextwechsel auch das nach Vorne holen des grafischen Views wieder einschalten
         this.activateGraphView = true;
 
-        checkConsistencyTableVisibility();
+        checkViewComponentsVisibility();
     }
 
     /**
@@ -567,7 +574,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         //the last open model (=GDCollection) was closed, so
         //the next call removes the consistency table or
         //updates it to the next open model if not null.
-        checkConsistencyTableVisibility();
+        checkViewComponentsVisibility();
     }
 
     ////////////////////////////////////
