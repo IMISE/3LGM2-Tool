@@ -4,7 +4,6 @@
 	<comment></comment>
 	<projects>
 		<project>axsutils</project>
-		<project>twatd-license</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
