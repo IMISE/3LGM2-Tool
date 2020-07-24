@@ -22,7 +22,9 @@ import java.io.File;
 import java.util.List;
 
 import javax.help.CSH;
+import javax.swing.BorderFactory;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -106,6 +108,11 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      * wäre.
      */
     private boolean activateGraphView = true;
+
+    private final JLabel modelBrowserDummyLabel = createDummyComponentLabel("PANEL_LABEL_MODEL_BROWSER");
+    private final JLabel graphViewDummyLabel = createDummyComponentLabel("PANEL_LABEL_GRAPH_VIEW");
+    private final JLabel templateViewDummyLabel = createDummyComponentLabel("PANEL_LABEL_TEMPLATE_VIEW");
+    private final JLabel consistencyTableDummyLabel = createDummyComponentLabel("PANEL_LABEL_CONSISTENCY_TABLE");
 
     /**
      *
@@ -662,6 +669,21 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         if (templateBrowserPanel != null) {
             templateBrowserPanel.updateSelection(source);
         }
+    }
+
+    /**
+     * @param resKey
+     * @return
+     */
+    private JLabel createDummyComponentLabel(final String resKey) {
+        StringBuilder labelText = new StringBuilder();
+        labelText.append("<HTML><CENTER>");
+        labelText.append(getResString(resKey + "_TITLE"));
+        labelText.append("</CENTER></HTML>");
+        JLabel label = new JLabel(labelText.toString());
+        label.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        //label.setVerticalAlignment(JLabel.TOP);
+        return label;
     }
 
 }
