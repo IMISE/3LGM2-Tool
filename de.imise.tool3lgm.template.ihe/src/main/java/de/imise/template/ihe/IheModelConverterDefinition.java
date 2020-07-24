@@ -54,6 +54,11 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
     }
 
     @Override
+    public void beforeTransform(final GDCollection source, final GDCollection target) {
+
+    }
+
+    @Override
     public Map<Class<? extends Node>, Class<? extends Node>> getSourceNodeClassesToTargetNodeClasses() {
         //Actor -> IheActor   Domain -> IheDomain    IntegrationProfile -> IheIntegrationProfile
         return ImmutableMap.of(Actor.class, IheActor.class, Domain.class, IheDomain.class, IntegrationProfile.class, IheIntegrationProfile.class);
@@ -110,8 +115,8 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
         //beide MetaPfade für die IheTransaction_Edge hinzufügen
         //       return ImmutableListMultimap.of(IheTransaction_Edge.class, def1, IheTransaction_Edge.class, def2);
         //Das funktioniert nicht:
-        //Problem ist das Joinen um Verlauf der Hintereinanderusführung des Anlegens der beiden Pfade. Das müsste komplett bereitigt werden
-        //und dadruch ersetzt werden, dass man die Pfade, die aus derselben Kante entstehen sollen, gleich das im Moment nicht umgesetzte
+        //Problem ist das Joinen im Verlauf der Hintereinanderusführung des Anlegens der beiden Pfade. Das müsste komplett beseitigt werden
+        //und dadruch ersetzt werden, dass man die Pfade, die aus derselben Kante entstehen sollen, gleich durch das im Moment nicht umgesetzte
         //Anlegen von Pararllelen Pfaden erzeugt.
         //Lösung hier (bzw. Workaround): Einfach die IheCommunicationLink_Edge zwischen allen Schnittstellen anlegen, die über Transaktionen
         //verbunden sind. Das sollte in diesem Fall hinhauen.
@@ -120,7 +125,7 @@ public class IheModelConverterDefinition extends ModelConverterDefinition {
     }
 
     @Override
-    public void transform(final GDCollection source, final GDCollection target) {
+    public void afterTransform(final GDCollection source, final GDCollection target) {
         createCommunicationLinks(target); //Kommunikationsbeziehungen zw. Schnittstellen erzeugen, die über eine Transaktion verbunden sind
         renameCommunicationInterfacesWithTransactionNames(source, target); //Schnittstellen mit dem Namen der Transaktion versehen
     }

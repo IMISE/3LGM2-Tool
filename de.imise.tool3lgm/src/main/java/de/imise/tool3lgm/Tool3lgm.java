@@ -193,10 +193,22 @@ public class Tool3lgm {
      * Lädt eine Modell-Datei
      *
      * @param file die zu ladende Datei
+     * @param fileChooserPathKey the identifier the {@link ExtendedFileChooser} needs to store and reopen the last used path
      * @return
      */
-    public boolean openModelFile(File file) {
-        file = chooseModelFile(file);
+    public boolean openModelFile(final File file) {
+        return openModelFile(file, null);
+    }
+
+    /**
+     * Lädt eine Modell-Datei
+     *
+     * @param file die zu ladende Datei
+     * @param fileChooserPathKey the identifier the {@link ExtendedFileChooser} needs to store and reopen the last used path
+     * @return
+     */
+    public boolean openModelFile(File file, final Object fileChooserPathKey) {
+        file = chooseModelFile(file, fileChooserPathKey);
         if (file != null && !file.isDirectory()) {
             try {
                 return openModel(file, null);
@@ -211,7 +223,12 @@ public class Tool3lgm {
      * @param file
      * @return
      */
-    private File chooseModelFile(File file) {
+    /**
+     * @param file
+     * @param fileChooserPathKey the identifier the {@link ExtendedFileChooser} needs to store and reopen the last used path
+     * @return
+     */
+    private File chooseModelFile(File file, final Object fileChooserPathKey) {
         if (file != null) {
             if (!file.isDirectory()) {
                 return file;
@@ -221,11 +238,13 @@ public class Tool3lgm {
             file = UserProperties.getWorkingDirectory();
         }
 
-        ExtendedFileChooser chooser = new ExtendedFileChooser(null, file);
+        ExtendedFileChooser chooser = new ExtendedFileChooser(fileChooserPathKey, file);
         chooser.setMultiSelectionEnabled(false);
         FileNameExtensionFilter[] lgmFileFilter = Tool3lgmConstants.getFileNameExtensionFilters(FileFilterType.LGM3, FileFilterType.LGM3_ZIP, FileFilterType.LGM3_UNZIPPED);
         int chooserAnswer = chooser.showOpenDialog(mainFrame, false, lgmFileFilter);
-        UserProperties.setWorkingDirectory(chooser.getCurrentDirectory());
+        if (fileChooserPathKey == null) {
+            UserProperties.setWorkingDirectory(chooser.getCurrentDirectory());
+        }
         if (chooserAnswer == ExtendedFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile();
             chooser.setVisible(false);

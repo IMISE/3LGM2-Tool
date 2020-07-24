@@ -713,7 +713,7 @@ public class ActionLibrary {
             @Override
             public void actionPerformed() {
                 File modelLibraryDir = Tool3lgmConstants.TEMPLATE_DIR;
-                getTool().openModelFile(modelLibraryDir);
+                getTool().openModelFile(modelLibraryDir, ActionIdentifier.ACTION_OPEN_FILE_CHOSSER_IN_MODEL_LIBRARY);
             }
         };
 
