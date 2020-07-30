@@ -126,6 +126,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
         // Direkthilfe für die einzelnen Baukastenteile
         CSH.setHelpIDString(modelBrowserPanel, "uebersicht_modellbrowser");
+
         checkModelBrowserVisibility();
         checkConsistencyTableVisibility();
         checkTemplateBrowserVisibility();
@@ -201,7 +202,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     /**
      * Restores the screen index, the width and the height from the corresponding UserPropertiy values.
      */
-    private void restorePositionAndSizeFromUserProperties() {
+    public void restorePositionAndSizeFromUserProperties() {
         setDividerLocation(OPTION_SHOW_MODEL_BROWSER, PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION, leftSplitPane, 0.2d, true);
         setDividerLocation(OPTION_SHOW_TEMPLATE_BROWSER, PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION, rightSplitPane, 0.8d, true);
         setDividerLocation(OPTION_CHECK_CONSISTENCY, PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION, bottomSplitPane, 0.7d, false);

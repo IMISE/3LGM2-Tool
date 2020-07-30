@@ -82,6 +82,7 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     public void setVisible(final boolean b) {
         if (b) {
             restorePositionAndSizeFromUserProperties();
+            contentPane.restorePositionAndSizeFromUserProperties();
         } else {
             savePositionAndSizeInUserProperties();
         }
