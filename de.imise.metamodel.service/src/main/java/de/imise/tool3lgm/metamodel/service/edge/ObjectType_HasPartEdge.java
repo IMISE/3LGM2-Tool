@@ -1,6 +1,5 @@
 package de.imise.tool3lgm.metamodel.service.edge;
 
-import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_ONE;
 import static de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality.ZERO_UNLIMITED;
 
 import de.imise.tool3lgm.graphtools.metamodel.EdgeCardinality;
@@ -15,7 +14,7 @@ public final class ObjectType_HasPartEdge extends PartitioningEdge {
 
     public static final Class<? extends ModelElement> STCL = ObjectType.class;
 
-    public static final EdgeCardinality SCARD = ZERO_ONE;
+    public static final EdgeCardinality SCARD = ZERO_UNLIMITED;
 
     public static final EdgeCardinality ECARD = ZERO_UNLIMITED;
 
