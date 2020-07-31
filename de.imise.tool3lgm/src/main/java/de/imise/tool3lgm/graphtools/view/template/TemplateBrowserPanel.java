@@ -35,6 +35,8 @@ public class TemplateBrowserPanel extends JPanel {
         tree = new TemplateBrowserTree();
         JScrollPane treeScrollPane = new JScrollPane(tree);
         add(treeScrollPane, BorderLayout.CENTER);
+        TemplateTreeSearchPanel searchPanel = new TemplateTreeSearchPanel(tree);
+        add(searchPanel, BorderLayout.NORTH);
     }
 
     /**
