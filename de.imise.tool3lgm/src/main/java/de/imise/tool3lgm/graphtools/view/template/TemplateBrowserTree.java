@@ -1,14 +1,19 @@
 package de.imise.tool3lgm.graphtools.view.template;
 
+import static de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree.PropertyChangeEventType.CONTENT_CHANGED;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreeNode;
 import javax.swing.tree.TreePath;
 
 import de.imise.tool3lgm.MetaModelContext;
@@ -31,6 +36,16 @@ import de.imise.tool3lgm.gui.menu.ContextGenerator;
  * @author AXS (05.09.2019)
  */
 public class TemplateBrowserTree extends DynamicTree implements PropertyChangeListener, AncestorListener, TemplateView {
+
+    /**
+     * The event type this tree fires to its
+     * PropertyChangeListeners.
+     *
+     * @author Ich (31.07.2020)
+     */
+    public enum PropertyChangeEventType {
+        CONTENT_CHANGED
+    }
 
     /**
      *
@@ -62,6 +77,14 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         setToggleClickCount(-1);
     }
 
+    /**
+     * @param propertyName
+     * @param listener
+     */
+    public void addPropertyChangeListener(final PropertyChangeEventType propertyName, final PropertyChangeListener listener) {
+        super.addPropertyChangeListener(propertyName.name(), listener);
+    }
+
     @Override
     public GraphDocument getGraphDocument() {
         GraphDocument doc = null;
@@ -81,8 +104,32 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         return Static.templateContextGenerator;
     }
 
+    /**
+     * @return
+     */
+    public boolean hasContent() {
+        Object root = pathTreeModel.getRoot();
+        if (root == null) {
+            return false;
+        }
+        if (!(root instanceof DefaultMutableTreeNode)) {
+            return false;
+        }
+        DefaultMutableTreeNode rootNode = (DefaultMutableTreeNode) root;
+        int rootChildCount = rootNode.getChildCount();
+        if (rootChildCount == 0) {
+            return false;
+        }
+        if (rootChildCount == 1) {
+            TreeNode singleRootChild = rootNode.getChildAt(0);
+            return singleRootChild.getChildCount() > 0;
+        }
+        return true;
+    }
+
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
+        boolean oldValueHasContent = hasContent();
         MetaModelContext currentMetaModelContext = pathTreeModel.getMetaModelContext();
         MetaModelContext newMetaModelContext = Static.getSelectedMetaModelContext();
         if (Objects.equals(currentMetaModelContext, newMetaModelContext)) {
@@ -98,6 +145,8 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         setSelectionListenerActive(true);
         setRootVisible(false);
         restoreExpansionState(templateTreeDefinition);
+        boolean newValueHasContent = hasContent();
+        firePropertyChange(CONTENT_CHANGED.name(), oldValueHasContent, newValueHasContent);
     }
 
     //    /**
@@ -157,7 +206,7 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
 
     @Override
     public Collection<GDCollection> getDisplayedTemplates() {
-        return templateLibrariesManager.getAllActiveTemplates();
+        return templateLibrariesManager == null ? new ArrayList<>() : templateLibrariesManager.getAllActiveTemplates();
     }
 
     @Override
