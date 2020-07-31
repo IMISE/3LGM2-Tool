@@ -2,11 +2,14 @@ package de.imise.util.swing.component;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.Action;
+import javax.swing.ComboBoxEditor;
 import javax.swing.JComboBox;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
 import de.imise.util.swing.component.text.TextComponentStandardPopup;
@@ -30,18 +33,29 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
     private ActionEvent enterActionEvent;
 
     /**
-     * 
+     *
      */
     public HistoryComboBox() {
-        super();
         setEditable(true);
         Component editorComp = getEditor().getEditorComponent();
         if (editorComp instanceof JTextComponent) {
             TextComponentStandardPopup.addPopupMenuTo((JTextComponent) editorComp, false);
         }
         addKeyListener(this);
-        getEditor().getEditorComponent().addKeyListener(this);
         //((JTextComponent)getEditor().getEditorComponent()).getDocument().addDocumentListener(this);
+    }
+
+    @Override
+    public synchronized void addKeyListener(final KeyListener l) {
+        super.addKeyListener(l);
+        getEditor().getEditorComponent().addKeyListener(this);
+    }
+
+    /**
+     * @param documentListener
+     */
+    public synchronized void addDocumentListener(final DocumentListener documentListener) {
+        ((JTextComponent) getEditor().getEditorComponent()).getDocument().addDocumentListener(documentListener);
     }
 
     /**
@@ -80,32 +94,77 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
     /**
      * Hinzufügen des selektierten Eintrages zur History
      *
-     * @param jbc
+     * @param historyComboBox
      */
-    public static void addToHistory(final HistoryComboBox jbc) {
+    public static void addToHistory(final HistoryComboBox historyComboBox) {
         // Bei Suchen über Enter ist das selektierte Objekt noch nicht als selectedObject verfügbar, dann muss über getEditor gegangen werden
-        jbc.setSelectedItem(((JTextComponent) jbc.getEditor().getEditorComponent()).getText());
-        if (jbc.getItemCount() > 0 || jbc.getSelectedObjects().length > 0) {
-            boolean found = false;
-            for (int i = 0; i < jbc.getItemCount(); i++) {
-                if (jbc.getSelectedItem().equals(jbc.getItemAt(i))) {
-                    found = true;
-                }
-            }
-            if (!found) {
-                //wenn historylänge überschritten, letztes löschen
-                if (jbc.historyLength < jbc.getItemCount() + 1) {
-                    jbc.removeItemAt(jbc.historyLength - 1);
-                }
-                jbc.insertItemAt(jbc.getSelectedItem(), 0);
+        ComboBoxEditor comboBoxEditor = historyComboBox.getEditor();
+        JTextComponent textComponent = (JTextComponent) comboBoxEditor.getEditorComponent();
+        String text = textComponent.getText();
+
+        int itemIndex = getItemIndex(historyComboBox, text);
+        if (itemIndex == 0) {
+            return;
+        }
+        ItemListener[] itemListeners = historyComboBox.getItemListeners();
+        for (ItemListener itemListener : itemListeners) {
+            historyComboBox.removeItemListener(itemListener);
+        }
+        if (itemIndex > 0) {
+            historyComboBox.removeItemAt(itemIndex);
+        }
+        historyComboBox.insertItemAt(text, 0);
+        for (ItemListener itemListener : itemListeners) {
+            historyComboBox.addItemListener(itemListener);
+        }
+        historyComboBox.setSelectedIndex(0);
+
+        //        boolean hasItems = historyComboBox.getItemCount() > 0;
+        //        if (!hasItems) {
+        //            Object[] selectedObjects = historyComboBox.getSelectedObjects();
+        //            int selectionCount = selectedObjects.length;
+        //            hasItems = selectionCount > 0;
+        //
+        //        }
+        //        if (hasItems) {
+        //            boolean found = false;
+        //            for (int i = 0; i < historyComboBox.getItemCount(); i++) {
+        //                selectedItem = historyComboBox.getSelectedItem();
+        //                Object itemAtIndex = historyComboBox.getItemAt(i);
+        //                if (selectedItem.equals(itemAtIndex)) {
+        //                    found = true;
+        //                }
+        //            }
+        //            if (!found) {
+        //                //wenn historylänge überschritten, letztes löschen
+        //                int itemCount = historyComboBox.getItemCount();
+        //                if (historyComboBox.historyLength < itemCount + 1) {
+        //                    historyComboBox.removeItemAt(historyComboBox.historyLength - 1);
+        //                }
+        //                selectedItem = historyComboBox.getSelectedItem();
+        //                historyComboBox.insertItemAt(selectedItem, 0);
+        //            }
+        //        }
+    }
+
+    /**
+     * @param comboBox
+     * @param item
+     * @return
+     */
+    private static int getItemIndex(final HistoryComboBox comboBox, final String item) {
+        for (int i = 0; i < comboBox.getItemCount(); i++) {
+            Object itemAtIndex = comboBox.getItemAt(i);
+            if (String.valueOf(item).equals(itemAtIndex)) {
+                return i;
             }
         }
+        return -1;
     }
 
     /**
      * Lösung funktionierte nicht
      */
-    @Deprecated
     //	public void addToHistory() {
     //		String selectedItem = (String) getSelectedItem();
     //		if (selectedItem == null)
@@ -120,7 +179,7 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
     //		while (getItemCount() > historyLength)
     //			removeItemAt(getItemCount() - 1);
     //		setSelectedIndex(0);
-    //			
+    //
     //	}
 
     /**
@@ -143,10 +202,12 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
 
     @Override
     public void keyPressed(final KeyEvent e) {
+        boolean enterPressed = e.getKeyCode() == KeyEvent.VK_ENTER;
+        hier weiter
         if (enterAction == null || enterActionEvent == null) {
             return;
         }
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+        if (enterPressed) {
             enterAction.actionPerformed(enterActionEvent);
         }
     }
@@ -155,7 +216,7 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
     public void keyReleased(final KeyEvent e) {
     }
 
-    //	muss erstmal raus, lagt sonst in großen Modellen	
+    //	muss erstmal raus, lagt sonst in großen Modellen
     //	TODO: später debuggen -> Lösung?
     //	@Override
     //	public void insertUpdate(DocumentEvent e) {
