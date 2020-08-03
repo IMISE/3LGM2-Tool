@@ -106,17 +106,17 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     /** für Spaltensortierungszustand Type */
     private static boolean sortTypeAsc = true;
 
-    /** Konstante für Checkboxen Suchen (aktivierte und deaktivierte) */
-    final static int CHECKBOXMODE_ALL = 0;
-
-    /** Konstante für aktivierte Checkboxen */
-    final static int CHECKBOXMODE_ACTIVATED = 1;
-
-    /** Konstante für deaktivierte Checkboxen Suchen */
-    final static int CHECKBOXMODE_NOT_ACTIVATED = 2;
+    private enum CheckBoxSelectionMode {
+        /** Konstante für Checkboxen Suchen (aktivierte und deaktivierte) */
+        CHECKBOXMODE_ALL,
+        /** Konstante für aktivierte Checkboxen */
+        CHECKBOXMODE_ACTIVATED,
+        /** Konstante für deaktivierte Checkboxen Suchen */
+        CHECKBOXMODE_NOT_ACTIVATED;
+    }
 
     /** beinhaltet den Wert der oberen Konstanten */
-    private int checkBoxMode = 0;
+    private CheckBoxSelectionMode checkBoxMode = CheckBoxSelectionMode.CHECKBOXMODE_ALL;
 
     /** Checkbox für ignore case Bezeichnung */
     private final JCheckBox checkNameCaseSensitive = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInName);
@@ -463,17 +463,20 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     }
 
     /**
-     * @param patternUserField
+     * @param patternUserFields
      * @param ec
+     * @param caseSensitive
+     * @param searchUserFieldStyle if <code>null</code> then all userfield types are searched for
+     *            matches otherwise only the specified type will be searched
+     * @param checkBoxMode
      * @return
      */
-    private boolean matchesUserField(Pattern patternUserFields, final ElementContainer ec) {
-        Object searchUserFieldType = userFieldTypeComboBox.getSelectedObject();
-        boolean searchAllUserFields = searchUserFieldType.equals(getResString("SEARCH_DIALOG_USERFIELD_all"));
+    private static boolean matchesUserField(Pattern patternUserFields, final ElementContainer ec, final boolean caseSensitive, final UserField.Style searchUserFieldStyle, final CheckBoxSelectionMode checkBoxMode) {
+        boolean searchAllUserFields = searchUserFieldStyle == null;
         if (patternUserFields == null && searchAllUserFields) {
             return true;
         }
-        if (patternUserFields != null || searchUserFieldType.equals(CHECK_BOX)) {
+        if (patternUserFields != null || searchUserFieldStyle.equals(CHECK_BOX)) {
             ModelElement me = ec.getElement();
             if (me.getUserFieldInputValueKeys().isEmpty()) {
                 return false;
@@ -496,31 +499,30 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                 // + zusätzlich muss label stimmen
                 Style currentUserFieldStyle = userField.getStyle();
                 boolean currentUserFieldIsCheckBox = CHECK_BOX.equals(currentUserFieldStyle);
-                boolean isSearchCheckBoxUserFields = CHECK_BOX.equals(searchUserFieldType);
+                boolean isSearchCheckBoxUserFields = CHECK_BOX.equals(searchUserFieldStyle);
                 if ((searchAllUserFields || isSearchCheckBoxUserFields) && currentUserFieldIsCheckBox) {
                     // -> Checkbox suchen + zusätzlich muss label stimmen
                     String userFieldName = userField.getName();
-                    if (!checkUserFieldCaseSensitive.isSelected()) {
+                    if (!caseSensitive) {
                         userFieldName = toNonNullLowserCaseString(userFieldName);
                     }
                     Matcher matchNameOfCheckBox = patternUserFields.matcher(userFieldName);
                     if (matchNameOfCheckBox.find()) {
-                        if (checkBoxMode == CHECKBOXMODE_ACTIVATED && userFieldInputValue.equals("true")) {
+                        if (checkBoxMode == CheckBoxSelectionMode.CHECKBOXMODE_ACTIVATED && userFieldInputValue.equals("true")) {
                             return true;
-                        } else if (checkBoxMode == CHECKBOXMODE_NOT_ACTIVATED && userFieldInputValue.equals("false")) {
+                        } else if (checkBoxMode == CheckBoxSelectionMode.CHECKBOXMODE_NOT_ACTIVATED && userFieldInputValue.equals("false")) {
                             return true;
-                        } else if (checkBoxMode == CHECKBOXMODE_ALL) {
+                        } else if (checkBoxMode == CheckBoxSelectionMode.CHECKBOXMODE_ALL) {
                             return true;
                         }
                     }
                 }
                 // im allmodus und wenn der Attributtyp übereinstimmt muss im Inhalt gesucht werden
-                if (searchAllUserFields || !isSearchCheckBoxUserFields && currentUserFieldStyle.equals(searchUserFieldType)) {
+                if (searchAllUserFields || !isSearchCheckBoxUserFields && currentUserFieldStyle.equals(searchUserFieldStyle)) {
                     // -> keine Checkbox suchen, sondern Inhalte Punkte in Kommas umwandeln
                     if (Pattern.matches("[0-9]+\\.[0-9]+", userFieldInputValue)) {
                         userFieldInputValue = userFieldInputValue.replaceAll("\\.", ",");
                     }
-                    boolean caseSensitive = checkUserFieldCaseSensitive.isSelected();
                     userFieldInputValue = caseSensitive ? userFieldInputValue : toNonNullLowserCaseString(userFieldInputValue);
                     Matcher matchUserFieldValue = patternUserFields.matcher(userFieldInputValue);
                     if (matchUserFieldValue.find()) {
@@ -540,16 +542,20 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * @param patternDescription
      * @param caseSensitiveDescription
      * @param patternUserFields
+     * @param caseSensitive
+     * @param searchUserFieldStyle
+     * @param checkBoxMode
      * @return
      */
-    private boolean matchesAnd(final ElementContainer ec, final Pattern patternName, final boolean caseSensitiveName, final Pattern patternDescription, final boolean caseSensitiveDescription, final Pattern patternUserFields) {
+    private boolean matchesAnd(final ElementContainer ec, final Pattern patternName, final boolean caseSensitiveName, final Pattern patternDescription, final boolean caseSensitiveDescription, final Pattern patternUserFields, final boolean caseSensitive,
+            final UserField.Style searchUserFieldStyle, final CheckBoxSelectionMode checkBoxMode) {
         if (!matchesName(patternName, ec, caseSensitiveName)) {
             return false;
         }
         if (!matchesDescription(patternDescription, ec, caseSensitiveDescription)) {
             return false;
         }
-        if (!matchesUserField(patternUserFields, ec)) {
+        if (!matchesUserField(patternUserFields, ec, caseSensitive, searchUserFieldStyle, checkBoxMode)) {
             return false;
         }
         return true;
@@ -576,7 +582,11 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
             boolean caseSensitiveName = checkNameCaseSensitive.isSelected();
             boolean caseSensitiveDescription = checkDescriptionCaseSensitive.isSelected();
-            if (!matchesAnd(ec, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields)) {
+            boolean caseSensitiveUserFields = checkUserFieldCaseSensitive.isSelected();
+            Object userFieldType = userFieldTypeComboBox.getSelectedObject();
+            UserField.Style userFieldStyle = userFieldType instanceof Style ? (Style) userFieldType : null;
+
+            if (!matchesAnd(ec, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields, caseSensitiveUserFields, userFieldStyle, checkBoxMode)) {
                 searchSet.remove(i);
                 continue;
             }
@@ -951,9 +961,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
         // Checkboxmodus (Suche Alle/aktivierte/nicht aktivierte)
         if (checkBoxAuswahl.getSelectedIndex() > 0) {
-            checkBoxMode = checkBoxAuswahl.getSelectedItem().equals(getResString("SEARCH_DIALOG_USERFIELD_activated")) ? CHECKBOXMODE_ACTIVATED : CHECKBOXMODE_NOT_ACTIVATED;
+            checkBoxMode = checkBoxAuswahl.getSelectedItem().equals(getResString("SEARCH_DIALOG_USERFIELD_activated")) ? CheckBoxSelectionMode.CHECKBOXMODE_ACTIVATED : CheckBoxSelectionMode.CHECKBOXMODE_NOT_ACTIVATED;
         } else {
-            checkBoxMode = CHECKBOXMODE_ALL;
+            checkBoxMode = CheckBoxSelectionMode.CHECKBOXMODE_ALL;
         }
 
     }
