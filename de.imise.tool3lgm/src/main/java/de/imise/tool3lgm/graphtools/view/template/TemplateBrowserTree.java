@@ -236,7 +236,7 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
                 path[m++] = new TreePath(((DefaultTreeModel) treeModel).getPathToRoot(node));
             }
         }
-        setSelectionPaths(path);
+        addSelectionPaths(path);
         if (path.length > 0) {
             scrollPathToVisible(path[path.length - 1]);
         }

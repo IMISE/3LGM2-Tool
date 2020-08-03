@@ -8,13 +8,16 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.util.Sys;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.swing.component.HistoryComboBox;
 
 /**
@@ -76,10 +79,13 @@ public class TemplateTreeSearchPanel extends JPanel implements ItemListener {
      *
      */
     private void selectMatchesInTree() {
-        Object selectedItem = searchComboBox.getSelectedItem();
-        String selectedItemString = selectedItem.toString();
-
-        Sys.err1("select " + selectedItemString);
+        deselectMatchesInTree();
+        for (GDCollection template : tree.getDisplayedTemplates()) {
+            GraphDocument selectedTemplateDoc = template.getSelectedDoc();
+            List<ElementContainer> result = SearchDialog.getResult(selectedTemplateDoc, searchComboBox);
+            template.addToSelection(result);
+        }
+        tree.updateSelection();
     }
 
 }
