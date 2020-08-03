@@ -340,7 +340,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * @param caseSensitive
      * @return
      */
-    public String getInputSearchPattern(final HistoryComboBox comboBox, final JCheckBox caseSensitive) {
+    public Pattern getInputSearchPattern(final HistoryComboBox comboBox, final JCheckBox caseSensitive) {
         return getInputSearchPattern(comboBox, caseSensitive.isSelected());
     }
 
@@ -349,17 +349,27 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * @param caseSensitive
      * @return
      */
-    public String getInputSearchPattern(final HistoryComboBox comboBox, final boolean caseSensitive) {
+    public Pattern getInputSearchPattern(final HistoryComboBox comboBox, final boolean caseSensitive) {
         Object selectedItem = comboBox.getSelectedItem();
         if (selectedItem == null) {
-            return "";
+            return null;
         }
         String value = String.valueOf(selectedItem);
         if (!caseSensitive) {
             value = cleanName(value);
         }
         value = value.replaceAll("\\*", ".*").replaceAll("\\?", ".");
-        return value;
+
+        Pattern pattern = null;
+        if (!value.equals("")) {
+            try {
+                pattern = Pattern.compile(value);
+            } catch (PatternSyntaxException error) {
+                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
+            }
+        }
+
+        return pattern;
     }
 
     /**
@@ -384,64 +394,42 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
 
         // wenn Groß-/KLeinschreibung ignorieren, dann wandle in kleine namen um
-        String name = getInputSearchPattern(elementName, elementName_cb);
-        String bez = getInputSearchPattern(elementDescription, elementDescription_cb);
-        String ud = getInputSearchPattern(elementUserField, elementUserField_cb);
+        Pattern patternName = getInputSearchPattern(elementName, elementName_cb);
+        Pattern patternDescription = getInputSearchPattern(elementDescription, elementDescription_cb);
+        Pattern patternUserFields = getInputSearchPattern(elementUserField, elementUserField_cb);
 
         // beim aufruf des fensters nicht suchen (listener feuern aber beim öffnen des fensters
         // bereits)
-        if (table == null || name.equals("") && bez.equals("") && ud.equals("")) {
+        if (table == null || patternName == null && patternDescription == null && patternUserFields == null) {
             return;
         }
 
-        List<ElementContainer> searchSet = doc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true);
+        Class<? extends ModelElement> searchedElementType = (Class<? extends ModelElement>) elementClassBox.getSelectedObject();
+
+        List<ElementContainer> searchSet = doc.getElementContainers(searchedElementType, true);
+        doc.getCollection();
         GraphDocument mainDoc = doc.getCollection().getMainDoc();
         if (doc != mainDoc) {
-            for (ElementContainer ec : mainDoc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true)) {
+            for (ElementContainer ec : mainDoc.getElementContainers(searchedElementType, true)) {
                 if (ec.isUnique()) {
                     Alphabetical.insert(searchSet, ec);
                 }
             }
         }
 
-        Pattern re1 = null;
-        if (!name.equals("")) {
-            try {
-                re1 = Pattern.compile(name);
-            } catch (PatternSyntaxException error) {
-                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
-            }
-        }
-        Pattern re2 = null;
-        if (!bez.equals("")) {
-            try {
-                re2 = Pattern.compile(bez);
-            } catch (PatternSyntaxException error) {
-                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
-            }
-        }
-        Pattern re3 = null;
-        if (!ud.equals("")) {
-            try {
-                re3 = Pattern.compile(ud);
-            } catch (PatternSyntaxException error) {
-                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
-            }
-        }
-
         for (int i = searchSet.size() - 1; i >= 0; i--) {
             ModelElement me = searchSet.get(i).getElement();
-            if (re1 != null) {
+            if (patternName != null) {
                 String string = elementName_cb.isSelected() ? me.getName() : cleanName(me.getName());
-                Matcher match1 = re1.matcher(string);
+                Matcher match1 = patternName.matcher(string);
                 if (!match1.find()) {
                     searchSet.remove(i);
                     continue;
                 }
             }
-            if (re2 != null) {
+            if (patternDescription != null) {
                 String string = elementDescription_cb.isSelected() ? me.getDescription() : cleanName(me.getDescription());
-                Matcher match2 = re2.matcher(string);
+                Matcher match2 = patternDescription.matcher(string);
                 if (!match2.find()) {
                     searchSet.remove(i);
                 }
@@ -450,15 +438,15 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
             // re3 muss gesetzt werden, sonst wird nie etwas removed, wenn z.b. auf checkboxen
             // eingeschränkt wird
-            if (re3 == null && !userFieldTypeComboBox.getSelectedObject().equals(getResString("SEARCH_DIALOG_USERFIELD_all"))) {
+            if (patternUserFields == null && !userFieldTypeComboBox.getSelectedObject().equals(getResString("SEARCH_DIALOG_USERFIELD_all"))) {
                 try {
-                    re3 = Pattern.compile(" ");
+                    patternUserFields = Pattern.compile(" ");
                 } catch (PatternSyntaxException e1) {
                     e1.printStackTrace();
                 }
             }
 
-            if (re3 != null || userFieldTypeComboBox.getSelectedObject().equals(UserField.Style.CHECK_BOX)) {
+            if (patternUserFields != null || userFieldTypeComboBox.getSelectedObject().equals(UserField.Style.CHECK_BOX)) {
                 if (me.getUserFieldInputValueKeys().size() == 0) {
                     searchSet.remove(i);
                 } else {
@@ -474,7 +462,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
 
                             boolean nameOfCheckBoxMatched = false;// (+ zusätzlich muss label
                                                                   // stimmen)
-                            Matcher matchNameOfCheckBox = re3.matcher(key.getName());
+                            Matcher matchNameOfCheckBox = patternUserFields.matcher(key.getName());
                             if (matchNameOfCheckBox != null) {
                                 nameOfCheckBoxMatched = true;
                             }
@@ -498,7 +486,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                             }
 
                             string = elementUserField_cb.isSelected() ? string : cleanName(string);
-                            Matcher match3 = re3.matcher(string);
+                            Matcher match3 = patternUserFields.matcher(string);
                             if (!match3.find()) {
                                 continue;
                             }
