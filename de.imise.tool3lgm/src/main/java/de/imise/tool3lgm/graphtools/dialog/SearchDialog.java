@@ -397,7 +397,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * @param searchedElementType
      * @return all ElementContainer of the given type in the given {@link GraphDocument}
      */
-    private List<ElementContainer> getInitialTargetElements(final GraphDocument doc, final Class<? extends ModelElement> searchedElementType) {
+    private static List<ElementContainer> getInitialTargetElements(final GraphDocument doc, final Class<? extends ModelElement> searchedElementType) {
         List<ElementContainer> initialTargetElements = doc.getElementContainers(searchedElementType, true);
         GDCollection gdcoll = doc.getCollection();
         GraphDocument mainDoc = gdcoll.getMainDoc();
@@ -460,6 +460,15 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         Pattern patternDescription = getInputSearchPattern(elementDescription, checkDescriptionCaseSensitive);
         Pattern patternUserFields = getUserFieldsSearchPattern();
         return getResult(doc, patternName, patternDescription, patternUserFields);
+    }
+
+    /**
+     * @param doc
+     * @param namePatternSource
+     */
+    public static List<ElementContainer> getResult(final GraphDocument doc, final HistoryComboBox namePatternSource) {
+        Pattern namePattern = SearchDialog.getInputSearchPattern(namePatternSource, false);
+        return getResult(doc, ModelElement.class, namePattern, false, null, false, null, false, null, null);
     }
 
     /**
@@ -547,8 +556,8 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * @param checkBoxMode
      * @return
      */
-    private boolean matchesAnd(final ElementContainer ec, final Pattern patternName, final boolean caseSensitiveName, final Pattern patternDescription, final boolean caseSensitiveDescription, final Pattern patternUserFields, final boolean caseSensitive,
-            final UserField.Style searchUserFieldStyle, final CheckBoxSelectionMode checkBoxMode) {
+    private static boolean matchesAnd(final ElementContainer ec, final Pattern patternName, final boolean caseSensitiveName, final Pattern patternDescription, final boolean caseSensitiveDescription, final Pattern patternUserFields,
+            final boolean caseSensitive, final UserField.Style searchUserFieldStyle, final CheckBoxSelectionMode checkBoxMode) {
         if (!matchesName(patternName, ec, caseSensitiveName)) {
             return false;
         }
@@ -574,17 +583,36 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             return new ArrayList<>();
         }
 
-        Class<? extends ModelElement> searchedElementType = (Class<? extends ModelElement>) elementClassBox.getSelectedObject();
-        List<ElementContainer> searchSet = getInitialTargetElements(doc, searchedElementType);
+        boolean caseSensitiveName = checkNameCaseSensitive.isSelected();
+        boolean caseSensitiveDescription = checkDescriptionCaseSensitive.isSelected();
+        boolean caseSensitiveUserFields = checkUserFieldCaseSensitive.isSelected();
+        Object userFieldType = userFieldTypeComboBox.getSelectedObject();
+        UserField.Style userFieldStyle = userFieldType instanceof Style ? (Style) userFieldType : null;
 
+        Class<? extends ModelElement> searchedElementType = (Class<? extends ModelElement>) elementClassBox.getSelectedObject();
+
+        return getResult(doc, searchedElementType, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields, caseSensitiveUserFields, userFieldStyle, checkBoxMode);
+
+    }
+
+    /**
+     * @param doc
+     * @param searchedElementType
+     * @param patternName
+     * @param caseSensitiveName
+     * @param patternDescription
+     * @param caseSensitiveDescription
+     * @param patternUserFields
+     * @param caseSensitiveUserFields
+     * @param userFieldStyle
+     * @param checkBoxMode
+     * @return
+     */
+    private static List<ElementContainer> getResult(final GraphDocument doc, final Class<? extends ModelElement> searchedElementType, final Pattern patternName, final boolean caseSensitiveName, final Pattern patternDescription,
+            final boolean caseSensitiveDescription, final Pattern patternUserFields, final boolean caseSensitiveUserFields, final UserField.Style userFieldStyle, final CheckBoxSelectionMode checkBoxMode) {
+        List<ElementContainer> searchSet = getInitialTargetElements(doc, searchedElementType);
         for (int i = searchSet.size() - 1; i >= 0; i--) {
             ElementContainer ec = searchSet.get(i);
-
-            boolean caseSensitiveName = checkNameCaseSensitive.isSelected();
-            boolean caseSensitiveDescription = checkDescriptionCaseSensitive.isSelected();
-            boolean caseSensitiveUserFields = checkUserFieldCaseSensitive.isSelected();
-            Object userFieldType = userFieldTypeComboBox.getSelectedObject();
-            UserField.Style userFieldStyle = userFieldType instanceof Style ? (Style) userFieldType : null;
 
             if (!matchesAnd(ec, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields, caseSensitiveUserFields, userFieldStyle, checkBoxMode)) {
                 searchSet.remove(i);
@@ -594,7 +622,6 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
 
         return searchSet;
-
     }
 
     /**
