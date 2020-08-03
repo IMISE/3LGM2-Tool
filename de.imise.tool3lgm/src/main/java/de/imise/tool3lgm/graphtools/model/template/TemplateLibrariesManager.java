@@ -24,6 +24,9 @@ import de.imise.util.event.PropertyChangeHandler;
  *
  * @author AXS (11.08.2019)
  */
+/**
+ * @author Ich (03.08.2020)
+ */
 public class TemplateLibrariesManager extends PropertyChangeHandler implements PropertyChangeListener, Tool3lgmChangeListener {
 
     /** Data model to store the loaded template libraries */
@@ -33,6 +36,11 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
      *
      */
     private GraphDocument activeTemplate;
+
+    /**
+     *
+     */
+    private MetaModelContext activeMetaModelContext;
 
     /**
      *
@@ -58,6 +66,7 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
     @Override
     public void model_change_selected_szenario_changed(final GraphDocument source) {
         loadOrUnloadTemplates();
+        activeMetaModelContext = source == null ? null : source.getMetaModelContext();
     }
 
     @Override
@@ -79,11 +88,13 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
         this.activeTemplate = activeTemplate;
     }
 
+    /**
+     * @return
+     */
     public Collection<GDCollection> getAllActiveTemplates() {
-        if (activeTemplate == null) {
+        if (activeMetaModelContext == null) {
             return new ArrayList<>(0);
         }
-        MetaModelContext activeMetaModelContext = activeTemplate.getMetaModelContext();
         return getTemplates(activeMetaModelContext);
     }
 
