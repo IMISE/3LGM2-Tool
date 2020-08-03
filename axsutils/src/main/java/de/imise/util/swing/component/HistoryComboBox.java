@@ -2,172 +2,234 @@ package de.imise.util.swing.component;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.Action;
+import javax.swing.ComboBoxEditor;
 import javax.swing.JComboBox;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
 import de.imise.util.swing.component.text.TextComponentStandardPopup;
 
 /**
  * Editierbare JComboBox, die sich in der Liste die lestzetn Eingaben merken kann.
+ *
  * @author AXS, STKR
  */
-public class HistoryComboBox extends JComboBox implements KeyListener/*, DocumentListener*/{
+public class HistoryComboBox extends JComboBox implements KeyListener/* , DocumentListener */ {
 
-	/** Konstante für die Maximalzahl der Historyeinträge */
-	private static final int MAX_HISTORY_ENTRIES = Integer.MAX_VALUE;
-	
-	/*** Maximale Anzahl von Einträgen in der Histotry-Liste */
-	private int historyLength = MAX_HISTORY_ENTRIES;
+    /** Konstante für die Maximalzahl der Historyeinträge */
+    private static final int MAX_HISTORY_ENTRIES = Integer.MAX_VALUE;
 
-	/** Die Aktion, die beim Drücken von Enrter ausgeführt werden soll */
-	private Action enterAction = null;
+    /*** Maximale Anzahl von Einträgen in der Histotry-Liste */
+    private int historyLength = MAX_HISTORY_ENTRIES;
 
-	private ActionEvent enterActionEvent;
-	
-	/**
-	 * 
-	 */
-	public HistoryComboBox() {
-		super();
-		this.setEditable(true);
-		Component editorComp = this.getEditor().getEditorComponent();
-		if (editorComp instanceof JTextComponent) {
-			TextComponentStandardPopup.addPopupMenuTo((JTextComponent) editorComp, false);
-		}
-		addKeyListener(this);
-		getEditor().getEditorComponent().addKeyListener(this);
-		//((JTextComponent)getEditor().getEditorComponent()).getDocument().addDocumentListener(this);
-	}
+    /** Die Aktion, die beim Drücken von Enrter ausgeführt werden soll */
+    private Action enterAction = null;
 
-	/**
-	 * @param historyLength
-	 * 		Maximale Anzahl der Einträge in der History-Liste
-	 * @param initialListValues
-	 * 		Am Anfang vorhandene Listenwerte
-	 */
-	
-	public HistoryComboBox(int historyLength, String... initialListValues) {
-		this();
-		this.historyLength = historyLength;
-		if (initialListValues != null) {
-			for (int i = 0; i < initialListValues.length ; i++) {
-				this.insertItemAt(initialListValues[i], i);
-			}
-		}
-	}
+    private ActionEvent enterActionEvent;
 
-	/**
-	 * @param initialListValues
-	 * 		Am Anfang vorhandene Listenwerte
-	 */
-	public HistoryComboBox(String... initialListValues) {
-		this(MAX_HISTORY_ENTRIES, initialListValues);
-	}
+    /**
+     *
+     */
+    public HistoryComboBox() {
+        setEditable(true);
+        Component editorComp = getEditor().getEditorComponent();
+        if (editorComp instanceof JTextComponent) {
+            TextComponentStandardPopup.addPopupMenuTo((JTextComponent) editorComp, false);
+        }
+        addKeyListener(this);
+        //((JTextComponent)getEditor().getEditorComponent()).getDocument().addDocumentListener(this);
+    }
 
-	/**
-	 * @param historyLength
-	 * 		Maximale Anzahl der Einträge in der History-Liste
-	 */
-	public HistoryComboBox(int historyLength) {
-		this(historyLength, (String[])null);
-	}
+    @Override
+    public synchronized void addKeyListener(final KeyListener l) {
+        super.addKeyListener(l);
+        getEditor().getEditorComponent().addKeyListener(this);
+    }
 
-	/**
-	 * Hinzufügen des selektierten Eintrages zur History
-	 * @param jbc
-	 */
-	public static void addToHistory(HistoryComboBox jbc) {
-		// Bei Suchen über Enter ist das selektierte Objekt noch nicht als selectedObject verfügbar, dann muss über getEditor gegangen werden
-		jbc.setSelectedItem(((JTextComponent) jbc.getEditor().getEditorComponent()).getText());
-		if (jbc.getItemCount() > 0 || jbc.getSelectedObjects().length > 0) {
-			boolean found = false;
-			for (int i = 0; i < jbc.getItemCount(); i++) {
-				if (jbc.getSelectedItem().equals(jbc.getItemAt(i))) {
-					found = true;
-				}
-			}
-			if (!found) {
-				//wenn historylänge überschritten, letztes löschen
-				if (jbc.historyLength < jbc.getItemCount() + 1)
-					jbc.removeItemAt(jbc.historyLength - 1);
-				jbc.insertItemAt(jbc.getSelectedItem(), 0);
-			}
-		}
-	}
-	
-	/**
-	 * Lösung funktionierte nicht
-	 */
-	/*
-	@Deprecated
-	public void addToHistory() {
-		String selectedItem = (String) getSelectedItem();
-		if (selectedItem == null)
-			return;
-		for (int i = 0; i < getItemCount(); i++) {
-			if (selectedItem.equals(getItemAt(i))) {
-				removeItemAt(i);
-				break;
-			}
-		}
-		insertItemAt(selectedItem, 0);
-		while (getItemCount() > historyLength)
-			removeItemAt(getItemCount() - 1);
-		setSelectedIndex(0);
-			
-	}
-	*/
-	
-	/**
-	 * @param enterAction the enterAction to set
-	 */
-	public final void setEnterAction(Action enterAction) {
-		this.enterAction = enterAction;
-	}
+    /**
+     * @param documentListener
+     */
+    public synchronized void addDocumentListener(final DocumentListener documentListener) {
+        ((JTextComponent) getEditor().getEditorComponent()).getDocument().addDocumentListener(documentListener);
+    }
 
-	/**
-	 * @param enterAction the enterAction to set
-	 */
-	public final void setActionEvent(ActionEvent enterActionEvent) {
-		this.enterActionEvent = enterActionEvent;
-	}
+    /**
+     * @param historyLength
+     *            Maximale Anzahl der Einträge in der History-Liste
+     * @param initialListValues
+     *            Am Anfang vorhandene Listenwerte
+     */
 
-	@Override
-	public void keyTyped(KeyEvent e) {
-	}
+    public HistoryComboBox(final int historyLength, final String... initialListValues) {
+        this();
+        this.historyLength = historyLength;
+        if (initialListValues != null) {
+            for (int i = 0; i < initialListValues.length; i++) {
+                insertItemAt(initialListValues[i], i);
+            }
+        }
+    }
 
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if (enterAction == null || enterActionEvent == null)
-			return;
-		if (e.getKeyCode() == KeyEvent.VK_ENTER)
-			enterAction.actionPerformed(enterActionEvent);
-	}
+    /**
+     * @param initialListValues
+     *            Am Anfang vorhandene Listenwerte
+     */
+    public HistoryComboBox(final String... initialListValues) {
+        this(MAX_HISTORY_ENTRIES, initialListValues);
+    }
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-	}
-/*	
-	muss erstmal raus, lagt sonst in großen Modellen	
-	TODO: später debuggen -> Lösung?
-	@Override
-	public void insertUpdate(DocumentEvent e) {
-		fireActionEvent();
-	}
+    /**
+     * @param historyLength
+     *            Maximale Anzahl der Einträge in der History-Liste
+     */
+    public HistoryComboBox(final int historyLength) {
+        this(historyLength, (String[]) null);
+    }
 
-	@Override
-	public void removeUpdate(DocumentEvent e) {
-		fireActionEvent();
-	}
+    /**
+     * Hinzufügen des selektierten Eintrages zur History
+     *
+     * @param historyComboBox
+     */
+    public static void addToHistory(final HistoryComboBox historyComboBox) {
+        // Bei Suchen über Enter ist das selektierte Objekt noch nicht als selectedObject verfügbar, dann muss über getEditor gegangen werden
+        ComboBoxEditor comboBoxEditor = historyComboBox.getEditor();
+        JTextComponent textComponent = (JTextComponent) comboBoxEditor.getEditorComponent();
+        String text = textComponent.getText();
 
-	@Override
-	public void changedUpdate(DocumentEvent e) {
-		fireActionEvent();
-	}
-*/	
-	
+        int itemIndex = getItemIndex(historyComboBox, text);
+        if (itemIndex == 0) {
+            return;
+        }
+        ItemListener[] itemListeners = historyComboBox.getItemListeners();
+        for (ItemListener itemListener : itemListeners) {
+            historyComboBox.removeItemListener(itemListener);
+        }
+        if (itemIndex > 0) {
+            historyComboBox.removeItemAt(itemIndex);
+        }
+        historyComboBox.insertItemAt(text, 0);
+        for (ItemListener itemListener : itemListeners) {
+            historyComboBox.addItemListener(itemListener);
+        }
+        historyComboBox.setSelectedIndex(0);
+
+        //        boolean hasItems = historyComboBox.getItemCount() > 0;
+        //        if (!hasItems) {
+        //            Object[] selectedObjects = historyComboBox.getSelectedObjects();
+        //            int selectionCount = selectedObjects.length;
+        //            hasItems = selectionCount > 0;
+        //
+        //        }
+        //        if (hasItems) {
+        //            boolean found = false;
+        //            for (int i = 0; i < historyComboBox.getItemCount(); i++) {
+        //                selectedItem = historyComboBox.getSelectedItem();
+        //                Object itemAtIndex = historyComboBox.getItemAt(i);
+        //                if (selectedItem.equals(itemAtIndex)) {
+        //                    found = true;
+        //                }
+        //            }
+        //            if (!found) {
+        //                //wenn historylänge überschritten, letztes löschen
+        //                int itemCount = historyComboBox.getItemCount();
+        //                if (historyComboBox.historyLength < itemCount + 1) {
+        //                    historyComboBox.removeItemAt(historyComboBox.historyLength - 1);
+        //                }
+        //                selectedItem = historyComboBox.getSelectedItem();
+        //                historyComboBox.insertItemAt(selectedItem, 0);
+        //            }
+        //        }
+    }
+
+    /**
+     * @param comboBox
+     * @param item
+     * @return
+     */
+    private static int getItemIndex(final HistoryComboBox comboBox, final String item) {
+        for (int i = 0; i < comboBox.getItemCount(); i++) {
+            Object itemAtIndex = comboBox.getItemAt(i);
+            if (String.valueOf(item).equals(itemAtIndex)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Lösung funktionierte nicht
+     */
+    //	public void addToHistory() {
+    //		String selectedItem = (String) getSelectedItem();
+    //		if (selectedItem == null)
+    //			return;
+    //		for (int i = 0; i < getItemCount(); i++) {
+    //			if (selectedItem.equals(getItemAt(i))) {
+    //				removeItemAt(i);
+    //				break;
+    //			}
+    //		}
+    //		insertItemAt(selectedItem, 0);
+    //		while (getItemCount() > historyLength)
+    //			removeItemAt(getItemCount() - 1);
+    //		setSelectedIndex(0);
+    //
+    //	}
+
+    /**
+     * @param enterAction the enterAction to set
+     */
+    public final void setEnterAction(final Action enterAction) {
+        this.enterAction = enterAction;
+    }
+
+    /**
+     * @param enterAction the enterAction to set
+     */
+    public final void setActionEvent(final ActionEvent enterActionEvent) {
+        this.enterActionEvent = enterActionEvent;
+    }
+
+    @Override
+    public void keyTyped(final KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(final KeyEvent e) {
+        boolean enterPressed = e.getKeyCode() == KeyEvent.VK_ENTER;
+        if (enterAction == null || enterActionEvent == null) {
+            return;
+        }
+        if (enterPressed) {
+            enterAction.actionPerformed(enterActionEvent);
+        }
+    }
+
+    @Override
+    public void keyReleased(final KeyEvent e) {
+    }
+
+    //	muss erstmal raus, lagt sonst in großen Modellen
+    //	TODO: später debuggen -> Lösung?
+    //	@Override
+    //	public void insertUpdate(DocumentEvent e) {
+    //		fireActionEvent();
+    //	}
+    //
+    //	@Override
+    //	public void removeUpdate(DocumentEvent e) {
+    //		fireActionEvent();
+    //	}
+    //
+    //	@Override
+    //	public void changedUpdate(DocumentEvent e) {
+    //		fireActionEvent();
+    //	}
+
 }

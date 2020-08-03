@@ -711,6 +711,21 @@ public abstract class ElementContainer extends JLabel implements Cloneable, Grap
     }
 
     /**
+     * @return the name of the modelelement
+     */
+    @Override
+    public final String getName() {
+        return me.getName();
+    }
+
+    /**
+     * @return the description of the modelelement
+     */
+    public final String getDescription() {
+        return me.getDescription();
+    }
+
+    /**
      * @return
      */
     public final String getHashString() {

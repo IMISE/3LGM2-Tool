@@ -2,6 +2,7 @@ package de.imise.tool3lgm.graphtools.dialog;
 
 import static de.imise.tool3lgm.Static.contextGenerator;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.graphtools.userfield.UserField.Style.CHECK_BOX;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -69,6 +70,7 @@ import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
+import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
 import de.imise.util.Alphabetical;
@@ -104,26 +106,26 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     /** für Spaltensortierungszustand Type */
     private static boolean sortTypeAsc = true;
 
-    /** Konstante für Checkboxen Suchen (aktivierte und deaktivierte) */
-    final static int CHECKBOXMODE_ALL = 0;
-
-    /** Konstante für aktivierte Checkboxen */
-    final static int CHECKBOXMODE_ACTIVATED = 1;
-
-    /** Konstante für deaktivierte Checkboxen Suchen */
-    final static int CHECKBOXMODE_NOT_ACTIVATED = 2;
+    private enum CheckBoxSelectionMode {
+        /** Konstante für Checkboxen Suchen (aktivierte und deaktivierte) */
+        CHECKBOXMODE_ALL,
+        /** Konstante für aktivierte Checkboxen */
+        CHECKBOXMODE_ACTIVATED,
+        /** Konstante für deaktivierte Checkboxen Suchen */
+        CHECKBOXMODE_NOT_ACTIVATED;
+    }
 
     /** beinhaltet den Wert der oberen Konstanten */
-    private int checkBoxMode = 0;
+    private CheckBoxSelectionMode checkBoxMode = CheckBoxSelectionMode.CHECKBOXMODE_ALL;
 
     /** Checkbox für ignore case Bezeichnung */
-    private final JCheckBox elementName_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInName);
+    private final JCheckBox checkNameCaseSensitive = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInName);
 
     /** Checkbox für ignore case Beschreibung */
-    private final JCheckBox elementDescription_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInDescription);
+    private final JCheckBox checkDescriptionCaseSensitive = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInDescription);
 
     /** Checkbox für ignore case Benutzerdef Eigenschaften */
-    private final JCheckBox elementUserField_cb = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInUserField);
+    private final JCheckBox checkUserFieldCaseSensitive = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInUserField);
 
     /** Checkbox Checkboxsuche */
     private JComboBox<String> checkBoxAuswahl = new AlphabeticalComboBox();
@@ -233,9 +235,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         constraints.gridy++;
         constraints.gridy++;
 
-        inputPane.add(elementName_cb, constraints);
+        inputPane.add(checkNameCaseSensitive, constraints);
         constraints.gridy++;
-        inputPane.add(elementDescription_cb, constraints);
+        inputPane.add(checkDescriptionCaseSensitive, constraints);
         constraints.gridy++;
 
         // Subpanel für benutzerdefinierte Eigenschaften
@@ -282,7 +284,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         constraints.gridx++;
         constraints.fill = GridBagConstraints.NONE;
         constraints.weightx = 1;
-        userFieldPanel.add(elementUserField_cb, constraints);
+        userFieldPanel.add(checkUserFieldCaseSensitive, constraints);
 
         // Zeile 3 Checkboxsuche
         constraints.gridx = 0;
@@ -336,12 +338,305 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     }
 
     /**
+     * @param comboBox
+     * @param caseSensitive
+     * @return
+     */
+    public Pattern getInputSearchPattern(final HistoryComboBox comboBox, final JCheckBox caseSensitive) {
+        return getInputSearchPattern(comboBox, caseSensitive.isSelected());
+    }
+
+    /**
+     * @return
+     */
+    public Pattern getUserFieldsSearchPattern() {
+        return getInputSearchPattern(elementUserField, checkUserFieldCaseSensitive);
+    }
+
+    /**
+     * @param comboBox
+     * @param caseSensitive
+     * @return
+     */
+    public static Pattern getInputSearchPattern(final HistoryComboBox comboBox, final boolean caseSensitive) {
+        Object selectedItem = comboBox.getSelectedItem();
+        if (selectedItem == null) {
+            return null;
+        }
+        String value = String.valueOf(selectedItem);
+        if (!caseSensitive) {
+            value = toNonNullLowserCaseString(value);
+        }
+        value = value.replaceAll("\\*", ".*").replaceAll("\\?", ".");
+
+        Pattern pattern = null;
+        if (!value.equals("")) {
+            try {
+                pattern = Pattern.compile(value);
+            } catch (PatternSyntaxException error) {
+                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
+            }
+        }
+
+        return pattern;
+    }
+
+    /**
+     * @param str
+     * @return
+     */
+    public static final String toNonNullLowserCaseString(final String str) {
+        if (str == null) {
+            return "";
+        }
+        return str.toLowerCase();
+    }
+
+    /**
+     * @param doc
+     * @param searchedElementType
+     * @return all ElementContainer of the given type in the given {@link GraphDocument}
+     */
+    private static List<ElementContainer> getInitialTargetElements(final GraphDocument doc, final Class<? extends ModelElement> searchedElementType) {
+        List<ElementContainer> initialTargetElements = doc.getElementContainers(searchedElementType, true);
+        GDCollection gdcoll = doc.getCollection();
+        GraphDocument mainDoc = gdcoll.getMainDoc();
+        if (doc != mainDoc) {
+            for (ElementContainer ec : mainDoc.getElementContainers(searchedElementType, true)) {
+                if (ec.isUnique()) {
+                    Alphabetical.insert(initialTargetElements, ec);
+                }
+            }
+        }
+        return initialTargetElements;
+    }
+
+    /**
+     * @param pattern
+     * @param string
+     * @param caseSensitive
+     * @return
+     */
+    private static final boolean matches(final Pattern pattern, String string, final boolean caseSensitive) {
+        if (pattern != null) {
+            if (!caseSensitive) {
+                string = toNonNullLowserCaseString(string);
+            }
+            Matcher match = pattern.matcher(string);
+            return match.find();
+        }
+        return true;
+    }
+
+    /**
+     * @param pattern
+     * @param ec
+     * @param caseSensitive
+     * @return
+     */
+    public static final boolean matchesName(final Pattern pattern, final ElementContainer ec, final boolean caseSensitive) {
+        String matchingString = ec.getName();
+        return matches(pattern, matchingString, caseSensitive);
+    }
+
+    /**
+     * @param pattern
+     * @param ec
+     * @param caseSensitive
+     * @return
+     */
+    public static final boolean matchesDescription(final Pattern pattern, final ElementContainer ec, final boolean caseSensitive) {
+        String matchingString = ec.getDescription();
+        return matches(pattern, matchingString, caseSensitive);
+    }
+
+    /**
+     * @param doc
+     * @return
+     */
+    public List<ElementContainer> getResult(final GraphDocument doc) {
+        // wenn Groß-/KLeinschreibung ignorieren, dann wandle in kleine namen um
+        Pattern patternName = getInputSearchPattern(elementName, checkNameCaseSensitive);
+        Pattern patternDescription = getInputSearchPattern(elementDescription, checkDescriptionCaseSensitive);
+        Pattern patternUserFields = getUserFieldsSearchPattern();
+        return getResult(doc, patternName, patternDescription, patternUserFields);
+    }
+
+    /**
+     * @param doc
+     * @param namePatternSource
+     */
+    public static List<ElementContainer> getResult(final GraphDocument doc, final HistoryComboBox namePatternSource) {
+        Pattern namePattern = SearchDialog.getInputSearchPattern(namePatternSource, false);
+        return getResult(doc, ModelElement.class, namePattern, false, null, false, null, false, null, null);
+    }
+
+    /**
+     * @param patternUserFields
+     * @param ec
+     * @param caseSensitive
+     * @param searchUserFieldStyle if <code>null</code> then all userfield types are searched for
+     *            matches otherwise only the specified type will be searched
+     * @param checkBoxMode
+     * @return
+     */
+    private static boolean matchesUserField(Pattern patternUserFields, final ElementContainer ec, final boolean caseSensitive, final UserField.Style searchUserFieldStyle, final CheckBoxSelectionMode checkBoxMode) {
+        boolean searchAllUserFields = searchUserFieldStyle == null;
+        if (patternUserFields == null && searchAllUserFields) {
+            return true;
+        }
+        if (patternUserFields != null || searchUserFieldStyle.equals(CHECK_BOX)) {
+            ModelElement me = ec.getElement();
+            if (me.getUserFieldInputValueKeys().isEmpty()) {
+                return false;
+            }
+
+            // patternUserFields muss gesetzt werden, sonst wird nie etwas removed, wenn
+            //z.b. auf checkboxen eingeschränkt wird
+            if (patternUserFields == null && !searchAllUserFields) {
+                try {
+                    patternUserFields = Pattern.compile(" ");
+                } catch (PatternSyntaxException e1) {
+                    e1.printStackTrace();
+                }
+            }
+
+            for (UserField userField : me.getUserFieldInputValueKeys()) {
+
+                String userFieldInputValue = me.getUserFieldInputValue(userField);
+                // im all-modus und im checkboxmodus muss auf TRUE/FALSE abgefragt werden
+                // + zusätzlich muss label stimmen
+                Style currentUserFieldStyle = userField.getStyle();
+                boolean currentUserFieldIsCheckBox = CHECK_BOX.equals(currentUserFieldStyle);
+                boolean isSearchCheckBoxUserFields = CHECK_BOX.equals(searchUserFieldStyle);
+                if ((searchAllUserFields || isSearchCheckBoxUserFields) && currentUserFieldIsCheckBox) {
+                    // -> Checkbox suchen + zusätzlich muss label stimmen
+                    String userFieldName = userField.getName();
+                    if (!caseSensitive) {
+                        userFieldName = toNonNullLowserCaseString(userFieldName);
+                    }
+                    Matcher matchNameOfCheckBox = patternUserFields.matcher(userFieldName);
+                    if (matchNameOfCheckBox.find()) {
+                        if (checkBoxMode == CheckBoxSelectionMode.CHECKBOXMODE_ACTIVATED && userFieldInputValue.equals("true")) {
+                            return true;
+                        } else if (checkBoxMode == CheckBoxSelectionMode.CHECKBOXMODE_NOT_ACTIVATED && userFieldInputValue.equals("false")) {
+                            return true;
+                        } else if (checkBoxMode == CheckBoxSelectionMode.CHECKBOXMODE_ALL) {
+                            return true;
+                        }
+                    }
+                }
+                // im allmodus und wenn der Attributtyp übereinstimmt muss im Inhalt gesucht werden
+                if (searchAllUserFields || !isSearchCheckBoxUserFields && currentUserFieldStyle.equals(searchUserFieldStyle)) {
+                    // -> keine Checkbox suchen, sondern Inhalte Punkte in Kommas umwandeln
+                    if (Pattern.matches("[0-9]+\\.[0-9]+", userFieldInputValue)) {
+                        userFieldInputValue = userFieldInputValue.replaceAll("\\.", ",");
+                    }
+                    userFieldInputValue = caseSensitive ? userFieldInputValue : toNonNullLowserCaseString(userFieldInputValue);
+                    Matcher matchUserFieldValue = patternUserFields.matcher(userFieldInputValue);
+                    if (matchUserFieldValue.find()) {
+                        return true;
+                    }
+                }
+
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param ec
+     * @param patternName
+     * @param caseSensitiveName
+     * @param patternDescription
+     * @param caseSensitiveDescription
+     * @param patternUserFields
+     * @param caseSensitive
+     * @param searchUserFieldStyle
+     * @param checkBoxMode
+     * @return
+     */
+    private static boolean matchesAnd(final ElementContainer ec, final Pattern patternName, final boolean caseSensitiveName, final Pattern patternDescription, final boolean caseSensitiveDescription, final Pattern patternUserFields,
+            final boolean caseSensitive, final UserField.Style searchUserFieldStyle, final CheckBoxSelectionMode checkBoxMode) {
+        if (!matchesName(patternName, ec, caseSensitiveName)) {
+            return false;
+        }
+        if (!matchesDescription(patternDescription, ec, caseSensitiveDescription)) {
+            return false;
+        }
+        if (!matchesUserField(patternUserFields, ec, caseSensitive, searchUserFieldStyle, checkBoxMode)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * @param doc
+     * @param patternName
+     * @param patternDescription
+     * @param patternUserFields
+     * @return
+     */
+    private List<ElementContainer> getResult(final GraphDocument doc, final Pattern patternName, final Pattern patternDescription, final Pattern patternUserFields) {
+
+        if (patternName == null && patternDescription == null && patternUserFields == null) {
+            return new ArrayList<>();
+        }
+
+        boolean caseSensitiveName = checkNameCaseSensitive.isSelected();
+        boolean caseSensitiveDescription = checkDescriptionCaseSensitive.isSelected();
+        boolean caseSensitiveUserFields = checkUserFieldCaseSensitive.isSelected();
+        Object userFieldType = userFieldTypeComboBox.getSelectedObject();
+        UserField.Style userFieldStyle = userFieldType instanceof Style ? (Style) userFieldType : null;
+
+        Class<? extends ModelElement> searchedElementType = (Class<? extends ModelElement>) elementClassBox.getSelectedObject();
+
+        return getResult(doc, searchedElementType, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields, caseSensitiveUserFields, userFieldStyle, checkBoxMode);
+
+    }
+
+    /**
+     * @param doc
+     * @param searchedElementType
+     * @param patternName
+     * @param caseSensitiveName
+     * @param patternDescription
+     * @param caseSensitiveDescription
+     * @param patternUserFields
+     * @param caseSensitiveUserFields
+     * @param userFieldStyle
+     * @param checkBoxMode
+     * @return
+     */
+    private static List<ElementContainer> getResult(final GraphDocument doc, final Class<? extends ModelElement> searchedElementType, final Pattern patternName, final boolean caseSensitiveName, final Pattern patternDescription,
+            final boolean caseSensitiveDescription, final Pattern patternUserFields, final boolean caseSensitiveUserFields, final UserField.Style userFieldStyle, final CheckBoxSelectionMode checkBoxMode) {
+        List<ElementContainer> searchSet = getInitialTargetElements(doc, searchedElementType);
+        for (int i = searchSet.size() - 1; i >= 0; i--) {
+            ElementContainer ec = searchSet.get(i);
+
+            if (!matchesAnd(ec, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields, caseSensitiveUserFields, userFieldStyle, checkBoxMode)) {
+                searchSet.remove(i);
+                continue;
+            }
+
+        }
+
+        return searchSet;
+    }
+
+    /**
      * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des Teilmodels landen in <code>searchSet</code> Nicht erfüllte
      * Suchkriterium werden herausgefiltert mittels <code>searchSet.remove</code>
      *
      * @param e - übergebener ActionEvent
      */
     private void callSearch(final ActionEvent e) {
+
+        // beim Aufruf des Fensters nicht suchen (listener feuern aber beim Öffnen des Fensters
+        // bereits -> table null check)
+        if (table == null) {
+            return;
+        }
 
         HistoryComboBox.addToHistory(elementName);
         HistoryComboBox.addToHistory(elementUserField);
@@ -356,154 +651,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
             fillElementClassBox();
         }
 
-        // wenn Groß-/KLeinschreibung ignorieren, dann wandle in kleine namen um
-        String name = elementName_cb.isSelected() ? (String) elementName.getSelectedItem() : cleanName((String) elementName.getSelectedItem());
-        String bez = elementDescription_cb.isSelected() ? (String) elementDescription.getSelectedItem() : cleanName((String) elementDescription.getSelectedItem());
-        String ud = elementUserField_cb.isSelected() ? (String) elementUserField.getSelectedItem() : cleanName((String) elementUserField.getSelectedItem());
-
-        // Null abfangen
-        if (name == null || name.equals("")) {
-            //            name = ".*";
-            name = "";
-        } else {
-            name = name.replaceAll("\\*", ".*").replaceAll("\\?", ".");
-        }
-        if (bez == null) {
-            bez = "";
-        } else {
-            bez = bez.replaceAll("\\*", ".*").replaceAll("\\?", ".");
-        }
-        if (ud == null) {
-            ud = "";
-        } else {
-            ud = ud.replaceAll("\\*", ".*").replaceAll("\\?", ".");
-        }
-
-        // beim aufruf des fensters nicht suchen (listener feuern aber beim öffnen des fensters
-        // bereits)
-        if (table == null || name.equals("") && bez.equals("") && ud.equals("")) {
-            return;
-        }
-
-        List<ElementContainer> searchSet = doc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true);
-        GraphDocument mainDoc = doc.getCollection().getMainDoc();
-        if (doc != mainDoc) {
-            for (ElementContainer ec : mainDoc.getElementContainers((Class<? extends ModelElement>) elementClassBox.getSelectedObject(), true)) {
-                if (ec.isUnique()) {
-                    Alphabetical.insert(searchSet, ec);
-                }
-            }
-        }
-
-        Pattern re1 = null;
-        if (!name.equals("")) {
-            try {
-                re1 = Pattern.compile(name);
-            } catch (PatternSyntaxException error) {
-                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
-            }
-        }
-        Pattern re2 = null;
-        if (!bez.equals("")) {
-            try {
-                re2 = Pattern.compile(bez);
-            } catch (PatternSyntaxException error) {
-                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
-            }
-        }
-        Pattern re3 = null;
-        if (!ud.equals("")) {
-            try {
-                re3 = Pattern.compile(ud);
-            } catch (PatternSyntaxException error) {
-                Log.show(Log.FATAL, getResString("SEARCH_DIALOG_REGEXP_HINT") + "\n" + error, error);
-            }
-        }
-
-        for (int i = searchSet.size() - 1; i >= 0; i--) {
-            ModelElement me = searchSet.get(i).getElement();
-            if (re1 != null) {
-                String string = elementName_cb.isSelected() ? me.getName() : cleanName(me.getName());
-                Matcher match1 = re1.matcher(string);
-                if (!match1.find()) {
-                    searchSet.remove(i);
-                    continue;
-                }
-            }
-            if (re2 != null) {
-                String string = elementDescription_cb.isSelected() ? me.getDescription() : cleanName(me.getDescription());
-                Matcher match2 = re2.matcher(string);
-                if (!match2.find()) {
-                    searchSet.remove(i);
-                }
-                continue;
-            }
-
-            // re3 muss gesetzt werden, sonst wird nie etwas removed, wenn z.b. auf checkboxen
-            // eingeschränkt wird
-            if (re3 == null && !userFieldTypeComboBox.getSelectedObject().equals(getResString("SEARCH_DIALOG_USERFIELD_all"))) {
-                try {
-                    re3 = Pattern.compile(" ");
-                } catch (PatternSyntaxException e1) {
-                    e1.printStackTrace();
-                }
-            }
-
-            if (re3 != null || userFieldTypeComboBox.getSelectedObject().equals(UserField.Style.CHECK_BOX)) {
-                if (me.getUserFieldInputValueKeys().size() == 0) {
-                    searchSet.remove(i);
-                } else {
-                    boolean found = false;
-                    for (UserField key : me.getUserFieldInputValueKeys()) {
-
-                        String string = me.getUserFieldInputValue(key);
-                        // im all-modus und im checkboxmodus muss auf TRUE/FALSE abgefragt werden
-                        // + zusätzlich muss label stimmen
-                        if (userFieldTypeComboBox.getSelectedObject().equals(getResString("SEARCH_DIALOG_USERFIELD_all"))
-                                || ((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(UserField.Style.CHECK_BOX) && key.getStyle().equals(UserField.Style.CHECK_BOX)) {
-                            // -> Checkbox suchen
-
-                            boolean nameOfCheckBoxMatched = false;// (+ zusätzlich muss label
-                                                                  // stimmen)
-                            Matcher matchNameOfCheckBox = re3.matcher(key.getName());
-                            if (matchNameOfCheckBox != null) {
-                                nameOfCheckBoxMatched = true;
-                            }
-
-                            if (checkBoxMode == CHECKBOXMODE_ACTIVATED && string.equals("true") && nameOfCheckBoxMatched) {
-                                found = true;
-                            } else if (checkBoxMode == CHECKBOXMODE_NOT_ACTIVATED && string.equals("false") && nameOfCheckBoxMatched) {
-                                found = true;
-                            } else if (checkBoxMode == CHECKBOXMODE_ALL && nameOfCheckBoxMatched) {
-                                found = true;
-                            }
-                        }
-                        // im allmodus und wenn der attributtyp übereinstimmt muss im inhalt gesucht
-                        // werden
-                        if (userFieldTypeComboBox.getSelectedObject().equals(getResString("SEARCH_DIALOG_USERFIELD_all"))
-                                || !((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(UserField.Style.CHECK_BOX) && ((UserField.Style) userFieldTypeComboBox.getSelectedObject()).equals(key.getStyle())) {
-                            // -> keine Checkbox suchen, sondern Inhalte
-                            // Punkte in Kommas umwandeln
-                            if (Pattern.matches("[0-9]+\\.[0-9]+", string)) {
-                                string = string.replaceAll("\\.", ",");
-                            }
-
-                            string = elementUserField_cb.isSelected() ? string : cleanName(string);
-                            Matcher match3 = re3.matcher(string);
-                            if (!match3.find()) {
-                                continue;
-                            }
-                            found = true;
-                        }
-
-                    }
-                    // nur einmal entfernen
-                    if (!found) {
-                        searchSet.remove(i);
-                    }
-                }
-            }
-        }
+        List<ElementContainer> searchSet = getResult(doc);
 
         mod = (DefaultTableModel) table.getModel();
         int anzahl = mod.getRowCount();
@@ -794,17 +942,6 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     }
 
     /**
-     * @param str
-     * @return
-     */
-    public String cleanName(final String str) {
-        if (str == null) {
-            return "";
-        }
-        return str.toLowerCase();
-    }
-
-    /**
      *
      */
     public void showDialog() {
@@ -851,9 +988,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
         // Checkboxmodus (Suche Alle/aktivierte/nicht aktivierte)
         if (checkBoxAuswahl.getSelectedIndex() > 0) {
-            checkBoxMode = checkBoxAuswahl.getSelectedItem().equals(getResString("SEARCH_DIALOG_USERFIELD_activated")) ? CHECKBOXMODE_ACTIVATED : CHECKBOXMODE_NOT_ACTIVATED;
+            checkBoxMode = checkBoxAuswahl.getSelectedItem().equals(getResString("SEARCH_DIALOG_USERFIELD_activated")) ? CheckBoxSelectionMode.CHECKBOXMODE_ACTIVATED : CheckBoxSelectionMode.CHECKBOXMODE_NOT_ACTIVATED;
         } else {
-            checkBoxMode = CHECKBOXMODE_ALL;
+            checkBoxMode = CheckBoxSelectionMode.CHECKBOXMODE_ALL;
         }
 
     }
@@ -895,9 +1032,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     }
 
     private void addCBListeners() {
-        elementName_cb.addActionListener(e -> ignoreCaseInName = !elementName_cb.isSelected());
-        elementDescription_cb.addActionListener(e -> ignoreCaseInDescription = !elementDescription_cb.isSelected());
-        elementUserField_cb.addActionListener(e -> ignoreCaseInUserField = !elementUserField_cb.isSelected());
+        checkNameCaseSensitive.addActionListener(e -> ignoreCaseInName = !checkNameCaseSensitive.isSelected());
+        checkDescriptionCaseSensitive.addActionListener(e -> ignoreCaseInDescription = !checkDescriptionCaseSensitive.isSelected());
+        checkUserFieldCaseSensitive.addActionListener(e -> ignoreCaseInUserField = !checkUserFieldCaseSensitive.isSelected());
 
     }
 

@@ -1,10 +1,13 @@
 package de.imise.tool3lgm.graphtools.view.template;
 
 import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+import static de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree.PropertyChangeEventType.CONTENT_CHANGED;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_ELEMENTS_IN_MODEL_BROWSER;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,10 +25,15 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 /**
  * @author AXS (23.08.2019)
  */
-public class TemplateBrowserPanel extends JPanel {
+public class TemplateBrowserPanel extends JPanel implements PropertyChangeListener {
 
     /** */
     private final TemplateBrowserTree tree;
+
+    /**
+     *
+     */
+    private final TemplateTreeSearchPanel searchPanel;
 
     /**
      *
@@ -34,7 +42,10 @@ public class TemplateBrowserPanel extends JPanel {
         setLayout(new BorderLayout());
         tree = new TemplateBrowserTree();
         JScrollPane treeScrollPane = new JScrollPane(tree);
+        searchPanel = new TemplateTreeSearchPanel(tree);
         add(treeScrollPane, BorderLayout.CENTER);
+        tree.addPropertyChangeListener(CONTENT_CHANGED, this);
+        checkSearchFieldVisibility();
     }
 
     /**
@@ -92,6 +103,27 @@ public class TemplateBrowserPanel extends JPanel {
         String elementHash = me.getHashString();
         for (GraphDocument template : templates) {
             template.addToSelection(elementHash, STANDARD_PID);
+        }
+    }
+
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        checkSearchFieldVisibility();
+    }
+
+    /**
+     *
+     */
+    private void checkSearchFieldVisibility() {
+        boolean showSearchPanel = tree.hasContent();
+        if (showSearchPanel) {
+            if (searchPanel.getParent() == null) {
+                add(searchPanel, BorderLayout.NORTH);
+            }
+        } else {
+            if (searchPanel.getParent() != null) {
+                remove(searchPanel);
+            }
         }
     }
 
