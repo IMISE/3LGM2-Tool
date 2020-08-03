@@ -12,8 +12,9 @@ import java.awt.event.ItemListener;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.util.Sys;
 import de.imise.util.swing.component.HistoryComboBox;
 
 /**
@@ -52,12 +53,12 @@ public class TemplateTreeSearchPanel extends JPanel implements ItemListener {
         if (stateChange == ItemEvent.DESELECTED) {
             deselectMatchesInTree();
         } else if (stateChange == ItemEvent.SELECTED) {
-            JPopupMenu componentPopupMenu = searchComboBox.getComponentPopupMenu();
-            System.err.println(componentPopupMenu != null && componentPopupMenu.isVisible());
+            //            JPopupMenu componentPopupMenu = searchComboBox.getComponentPopupMenu();
+            //            System.err.println(componentPopupMenu != null && componentPopupMenu.isVisible());
 
             HistoryComboBox.addToHistory(searchComboBox);
             selectMatchesInTree();
-            System.err.println(e);
+            //            System.err.println(e);
         }
     }
 
@@ -65,7 +66,10 @@ public class TemplateTreeSearchPanel extends JPanel implements ItemListener {
      *
      */
     private void deselectMatchesInTree() {
-
+        for (GDCollection template : tree.getDisplayedTemplates()) {
+            template.deselectAll();
+        }
+        tree.updateSelection();
     }
 
     /**
@@ -74,7 +78,8 @@ public class TemplateTreeSearchPanel extends JPanel implements ItemListener {
     private void selectMatchesInTree() {
         Object selectedItem = searchComboBox.getSelectedItem();
         String selectedItemString = selectedItem.toString();
-        System.err.println(selectedItemString);
+
+        Sys.err1("select " + selectedItemString);
     }
 
 }

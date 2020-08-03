@@ -203,7 +203,6 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
     @Override
     public void keyPressed(final KeyEvent e) {
         boolean enterPressed = e.getKeyCode() == KeyEvent.VK_ENTER;
-        hier weiter
         if (enterAction == null || enterActionEvent == null) {
             return;
         }

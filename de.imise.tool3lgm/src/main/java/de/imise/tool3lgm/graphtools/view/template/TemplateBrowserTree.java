@@ -221,7 +221,7 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
     /**
      * Selektiert im Baum alle Elemente, die im dazugehörigen Template selektiert sind.
      */
-    public void selectObjects(final GraphDocument template) {
+    private void selectObjects(final GraphDocument template) {
         TreePath[] path = new TreePath[template.getSelectedRealElementContainerCount()];
         int m = 0;
         GraphDocument mainDoc = template.getMainDoc();
