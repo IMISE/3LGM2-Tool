@@ -92,7 +92,7 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
                 }
             }
         }
-        tree.updateSelection();
+        tree.addSelection();
     }
 
     /**

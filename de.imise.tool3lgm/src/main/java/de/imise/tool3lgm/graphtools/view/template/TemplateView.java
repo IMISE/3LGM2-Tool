@@ -21,5 +21,10 @@ public interface TemplateView {
      *
      * @param selectionSource
      */
-    public void updateSelection();
+    public void addSelection();
+
+    /**
+     * Deselects all elements in the view
+     */
+    public void clearSelection();
 }

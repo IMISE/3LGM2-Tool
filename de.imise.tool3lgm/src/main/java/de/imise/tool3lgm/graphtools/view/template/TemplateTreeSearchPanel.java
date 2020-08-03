@@ -72,20 +72,21 @@ public class TemplateTreeSearchPanel extends JPanel implements ItemListener {
         for (GDCollection template : tree.getDisplayedTemplates()) {
             template.deselectAll();
         }
-        tree.updateSelection();
+        tree.clearSelection();
     }
 
     /**
      *
      */
     private void selectMatchesInTree() {
-        deselectMatchesInTree();
+        tree.clearSelection();
         for (GDCollection template : tree.getDisplayedTemplates()) {
+            template.deselectAll();
             GraphDocument selectedTemplateDoc = template.getSelectedDoc();
             List<ElementContainer> result = SearchDialog.getResult(selectedTemplateDoc, searchComboBox);
             template.addToSelection(result);
         }
-        tree.updateSelection();
+        tree.addSelection();
     }
 
 }
