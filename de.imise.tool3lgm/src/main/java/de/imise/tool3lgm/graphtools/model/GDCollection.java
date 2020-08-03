@@ -2561,6 +2561,17 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     }
 
     /**
+     * @param elementContainers
+     */
+    public void addToSelection(final Collection<ElementContainer> elementContainers) {
+        boolean oldBulkMode = setBulkMode(true);
+        for (ElementContainer ec : elementContainers) {
+            addToSelection(ec);
+        }
+        setBulkMode(oldBulkMode);
+    }
+
+    /**
      * @param ec
      */
     public boolean deselect(final ElementContainer ec) {
