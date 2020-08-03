@@ -336,6 +336,33 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     }
 
     /**
+     * @param comboBox
+     * @param caseSensitive
+     * @return
+     */
+    public String getInputSearchPattern(final HistoryComboBox comboBox, final JCheckBox caseSensitive) {
+        return getInputSearchPattern(comboBox, caseSensitive.isSelected());
+    }
+
+    /**
+     * @param comboBox
+     * @param caseSensitive
+     * @return
+     */
+    public String getInputSearchPattern(final HistoryComboBox comboBox, final boolean caseSensitive) {
+        Object selectedItem = comboBox.getSelectedItem();
+        if (selectedItem == null) {
+            return "";
+        }
+        String value = String.valueOf(selectedItem);
+        if (!caseSensitive) {
+            value = cleanName(value);
+        }
+        value = value.replaceAll("\\*", ".*").replaceAll("\\?", ".");
+        return value;
+    }
+
+    /**
      * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des Teilmodels landen in <code>searchSet</code> Nicht erfüllte
      * Suchkriterium werden herausgefiltert mittels <code>searchSet.remove</code>
      *
@@ -357,27 +384,9 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         }
 
         // wenn Groß-/KLeinschreibung ignorieren, dann wandle in kleine namen um
-        String name = elementName_cb.isSelected() ? (String) elementName.getSelectedItem() : cleanName((String) elementName.getSelectedItem());
-        String bez = elementDescription_cb.isSelected() ? (String) elementDescription.getSelectedItem() : cleanName((String) elementDescription.getSelectedItem());
-        String ud = elementUserField_cb.isSelected() ? (String) elementUserField.getSelectedItem() : cleanName((String) elementUserField.getSelectedItem());
-
-        // Null abfangen
-        if (name == null || name.equals("")) {
-            //            name = ".*";
-            name = "";
-        } else {
-            name = name.replaceAll("\\*", ".*").replaceAll("\\?", ".");
-        }
-        if (bez == null) {
-            bez = "";
-        } else {
-            bez = bez.replaceAll("\\*", ".*").replaceAll("\\?", ".");
-        }
-        if (ud == null) {
-            ud = "";
-        } else {
-            ud = ud.replaceAll("\\*", ".*").replaceAll("\\?", ".");
-        }
+        String name = getInputSearchPattern(elementName, elementName_cb);
+        String bez = getInputSearchPattern(elementDescription, elementDescription_cb);
+        String ud = getInputSearchPattern(elementUserField, elementUserField_cb);
 
         // beim aufruf des fensters nicht suchen (listener feuern aber beim öffnen des fensters
         // bereits)
