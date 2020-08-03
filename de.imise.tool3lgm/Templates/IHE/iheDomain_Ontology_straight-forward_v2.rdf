@@ -1130,7 +1130,7 @@
     <!-- http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#APPC -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#APPC">
-        <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#IntegrationProfile"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ContentModule"/>
         <iheDomain rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI"/>
         <status rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Trial Implementation</status>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">APPC</ontology:abbreviation>
@@ -1268,7 +1268,7 @@
     <!-- http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#BPPC -->
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#BPPC">
-        <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#IntegrationProfile"/>
+        <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ContentModule"/>
         <iheDomain rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ITI"/>
         <status>Final Text</status>
         <ontology:abbreviation>BPPC</ontology:abbreviation>
@@ -1433,7 +1433,6 @@
         <iti-53 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#DSUB_DM_NOTIF_RECIPIENT"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DSUB</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DM_NOTIF_BROKER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Metadata Notification Broker is the receiver of the Document Metadata Subscribe transaction containing a subscription request, or a subscription cancellation. It keeps track of all subscriptions in the Metadata Notification domain, including the time limits of subscriptions. Based on the metadata associated with document registrations, this actor sends notifications to interested subscribers.</terms:description>
@@ -1449,7 +1448,6 @@
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#DSUB"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DSUB</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DM_NOTIF_RECIPIENT</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Metadata Notification Recipient actor receives the notification about an event, when the subscription filters specified for this Document Metadata Notification Recipient are satisfied.</terms:description>
@@ -1466,7 +1464,6 @@
         <iti-54 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#DSUB_DM_NOTIF_BROKER"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DSUB</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DM_PUBLISHER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Metadata Publisher actor sends a Document Metadata Publish transaction to the Document Metadata Notification Broker for any event for which a subscription exists.</terms:description>
@@ -1489,7 +1486,6 @@
         <iti-52 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#DSUB_DM_NOTIF_BROKER"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DSUB</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DM_SUBSCRIBER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Metadata Subscriber actor initiates and terminates subscriptions on behalf of a Document Metadata Notification Recipient.</terms:description>
@@ -1844,7 +1840,6 @@ The profile involves a set of transactions, to maintain the consistency of order
         <iti-51 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#MPQ_DOC_REGISTRY"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">MPQ</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DOC_CONSUMER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Consumer Actor queries a Document Registry Actor for documents meeting certain criteria, and retrieves selected documents from one or more Document Repository actors.</terms:description>
@@ -1860,7 +1855,6 @@ The profile involves a set of transactions, to maintain the consistency of order
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#MPQ"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">MPQ</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DOC_REGISTRY</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Registry Actor maintains metadata about each registered document in a document entry. This includes a link to the Document in the Repository where it is stored. The Document Registry responds to queries from Document Consumer actors about documents meeting specific criteria. It also enforces some healthcare specific technical policies at the time of document registration.</terms:description>
@@ -1939,6 +1933,8 @@ The PAM Profile supports two patient encounter management scenarios: either one 
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PAM"/>
         <iti-31 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PAM_PEC"/>
+        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PAM_PDC"/>
+        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PAM_PDS"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PAM_PES</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system responsible for adding, updating and maintaining encounter information about a patient. It supplies new and updated information to the Patient Encounter Consumer. It must be grouped with either the Patient Demographics Source or the Patient Demographics Consumer.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Patient Encounter Supplier (PAM)</rdfs:label>
@@ -2043,6 +2039,12 @@ The PAM Profile supports two patient encounter management scenarios: either one 
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This actor allows a user to associate information with a patient at the point of care.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Patient Demographics Consumer (PDQ)</rdfs:label>
     </owl:NamedIndividual>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PDQ_PDC"/>
+        <owl:annotatedProperty rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-22"/>
+        <owl:annotatedTarget rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PDQ_PDS"/>
+        <saref4ee:optionalSlot rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">optional</saref4ee:optionalSlot>
+    </owl:Axiom>
     
 
 
@@ -2168,6 +2170,7 @@ By specifying the above transactions among specific actors, this integration pro
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3"/>
         <iti-44 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PIX_MANAGER"/>
+        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PIXV3_PAT_IDENTITY_SRC</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Each Patient Identification Domain requires this Actor to assign patient identities and to notify a Patient Identity Cross-reference Manager Actor of all events related to patient identification (creation, update, merge, etc.). For example, the Registration (ADT) Actor defined by the radiology Scheduled Workflow Profile would likely be a Patient Identity Source.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Patient Identity Source (PIXV3)</rdfs:label>
@@ -2181,6 +2184,7 @@ By specifying the above transactions among specific actors, this integration pro
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3"/>
         <iti-45 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PIX_MANAGER"/>
+        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PIXV3_PIX_CONSUMER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">This actor allows a system in a Patient Identification Domain to find out the identification of a patient in a different Patient Identification Domain by using the services of a Patient Identity Cross-Reference Manager Actor.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Patient Identifier Cross-reference Consumer (PIXV3)</rdfs:label>
@@ -2194,11 +2198,17 @@ By specifying the above transactions among specific actors, this integration pro
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3"/>
         <iti-46 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PIX_CONSUMER"/>
-        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PIXV3_
-PIX_MANAGER</ontology:abbreviation>
+        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
+        <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">PIXV3_PIX_MANAGER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Serves a well-defined set of Patient Identification Domains. Based on information provided by in each Patient Identification Domain by a Patient Identification Source Actor, it manages the cross-referencing of patient identifiers across Patient Identification Domains.</terms:description>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Patient Identity Cross-reference Manager (PIXV3)</rdfs:label>
     </owl:NamedIndividual>
+    <owl:Axiom>
+        <owl:annotatedSource rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PIX_MANAGER"/>
+        <owl:annotatedProperty rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-46"/>
+        <owl:annotatedTarget rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#PIXV3_PIX_CONSUMER"/>
+        <saref4ee:optionalSlot rdf:datatype="http://www.w3.org/2000/01/rdf-schema#Literal">optional</saref4ee:optionalSlot>
+    </owl:Axiom>
     
 
 
@@ -2566,7 +2576,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RID</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">DISPLAY</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system that offers requesting of specific information or documents for display the healthcare information returned</terms:description>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Display</rdfs:label>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Display (RID)</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -2579,7 +2589,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RID</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INFO_SRC</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system that responds to requests for specific information or documents and returns ready for presentation information to be displays on the requesting actor.</terms:description>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Information Source</rdfs:label>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Information Source (RID)</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -2627,15 +2637,15 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS_VALUE_SET_CONSUMER">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
-		<iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS"/>
-		<iti-48 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS_VALUE_SET_REPOSITORY"/>
-		<iti-60 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS_VALUE_SET_REPOSITORY"/>
+        <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS"/>
+        <iti-48 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS_VALUE_SET_REPOSITORY"/>
+        <iti-60 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS_VALUE_SET_REPOSITORY"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SVS</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">VALUE_SET_CONSUMER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Retrieves Expanded Value Sets based on its OID and possibly its version if the latter is available.</terms:description>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Value Set Consumer</rdfs:label>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Value Set Consumer (SVS)</rdfs:label>
     </owl:NamedIndividual>
-	<owl:Axiom>
+    <owl:Axiom>
         <owl:annotatedSource rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS_VALUE_SET_CONSUMER"/>
         <owl:annotatedProperty rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#iti-60"/>
         <owl:annotatedTarget rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS_VALUE_SET_REPOSITORY"/>
@@ -2648,14 +2658,13 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS_VALUE_SET_REPOSITORY">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
-		<iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS"/>
-		<mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
+        <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#SVS"/>
+        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">SVS</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">VALUE_SET_REPOSITORY</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Provides Expanded Value Sets</terms:description>
-        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Value Set Repository</rdfs:label>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Value Set Repository (SVS)</rdfs:label>
     </owl:NamedIndividual>
     
 
@@ -2809,7 +2818,6 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <iti-39 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XCA_RESP_GATEWAY"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XCA</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INIT_GATEWAY</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></terms:description>
@@ -2825,7 +2833,6 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XCA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XCA</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RESP_GATEWAY</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"></terms:description>
@@ -2855,7 +2862,6 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <iti-63 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XCF_RESP_GATEWAY"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XUA_X-SERVICE-USER"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XCF</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INIT_GATEWAY</ontology:abbreviation>
@@ -2869,9 +2875,6 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XCF_RESP_GATEWAY">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XCF"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XUA_X-SERVICE-PROVIDER"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XCF</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RESP_GATEWAY</ontology:abbreviation>
@@ -2902,7 +2905,6 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <iti-56 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XCPD_RESP_GATEWAY"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XCPD</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">INIT_GATEWAY</ontology:abbreviation>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Initiating Gateway (XCPD)</rdfs:label>
@@ -2917,7 +2919,6 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XCPD"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XCPD</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">RESP_GATEWAY</ontology:abbreviation>
         <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Responding Gateway (XCPD)</rdfs:label>
@@ -3000,6 +3001,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR"/>
+        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDR_DOC_RECIPIENT</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">A system that receives documents and metadata sent by another actor.</terms:description>
@@ -3014,6 +3016,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR"/>
         <iti-41 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT"/>
+        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDR_DOC_SOURCE</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Document Source is the producer and publisher of documents and metadata.</terms:description>
@@ -3027,6 +3030,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_METADATA_LTD_DOC_SOURCE">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR"/>
+        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDR_METADATA_LTD_DOC_SOURCE</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">The Metadata-Limited Document Source sends documents and metadata similar to a Document Source but is limited in the quantity of metadata it is able to provide.</terms:description>
@@ -3184,6 +3188,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD_CONTENT_CONSUMER">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD"/>
+        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDM_PMI"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_RECIPIENT"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_CONSUMER"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDS-SD_CONTENT_CONSUMER</ontology:abbreviation>
@@ -3198,6 +3203,7 @@ This profile does not assume Patient Identifier Cross-reference Manager has the 
     <owl:NamedIndividual rdf:about="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD_CONTENT_CREATOR">
         <rdf:type rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#Actor"/>
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDS-SD"/>
+        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDM_PMC"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDR_DOC_SOURCE"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XDSB_DOC_SOURCE"/>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XDS-SD_CONTENT_CREATOR</ontology:abbreviation>
@@ -3410,7 +3416,6 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <iheIntegrationProfile rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XUA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XUA</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">X-SERVICE-PROVIDER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">X-Service Provider</terms:description>
@@ -3427,7 +3432,6 @@ The XDS.b Integration Profile assumes that these enterprises belong to one or mo
         <iti-40 rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#XUA_X-SERVICE-PROVIDER"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SA"/>
         <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#ATNA_SN"/>
-        <mustBeGroupedWith rdf:resource="http://www.semanticweb.org/sippe/ontologies/2017/1/3lgm2ihe#CT_TIME_CLIENT"/>
         <integrationProfile_dataProperty rdf:datatype="http://www.w3.org/2001/XMLSchema#string">XUA</integrationProfile_dataProperty>
         <ontology:abbreviation rdf:datatype="http://www.w3.org/2001/XMLSchema#string">X-SERVICE-USER</ontology:abbreviation>
         <terms:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">X-Service User</terms:description>
