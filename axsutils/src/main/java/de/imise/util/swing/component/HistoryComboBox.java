@@ -19,13 +19,13 @@ import de.imise.util.swing.component.text.TextComponentStandardPopup;
  *
  * @author AXS, STKR
  */
-public class HistoryComboBox extends JComboBox implements KeyListener/* , DocumentListener */ {
+public class HistoryComboBox extends JComboBox<String> implements KeyListener {
 
     /** Konstante für die Maximalzahl der Historyeinträge */
     private static final int MAX_HISTORY_ENTRIES = Integer.MAX_VALUE;
 
     /*** Maximale Anzahl von Einträgen in der Histotry-Liste */
-    private int historyLength = MAX_HISTORY_ENTRIES;
+    private int maxHistoryLength = MAX_HISTORY_ENTRIES;
 
     /** Die Aktion, die beim Drücken von Enrter ausgeführt werden soll */
     private Action enterAction = null;
@@ -65,7 +65,7 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
 
     public HistoryComboBox(final int historyLength, final String... initialListValues) {
         this();
-        this.historyLength = historyLength;
+        maxHistoryLength = historyLength;
         if (initialListValues != null) {
             for (int i = 0; i < initialListValues.length; i++) {
                 insertItemAt(initialListValues[i], i);
@@ -117,32 +117,11 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
         }
         historyComboBox.setSelectedIndex(0);
 
-        //        boolean hasItems = historyComboBox.getItemCount() > 0;
-        //        if (!hasItems) {
-        //            Object[] selectedObjects = historyComboBox.getSelectedObjects();
-        //            int selectionCount = selectedObjects.length;
-        //            hasItems = selectionCount > 0;
-        //
-        //        }
-        //        if (hasItems) {
-        //            boolean found = false;
-        //            for (int i = 0; i < historyComboBox.getItemCount(); i++) {
-        //                selectedItem = historyComboBox.getSelectedItem();
-        //                Object itemAtIndex = historyComboBox.getItemAt(i);
-        //                if (selectedItem.equals(itemAtIndex)) {
-        //                    found = true;
-        //                }
-        //            }
-        //            if (!found) {
-        //                //wenn historylänge überschritten, letztes löschen
-        //                int itemCount = historyComboBox.getItemCount();
-        //                if (historyComboBox.historyLength < itemCount + 1) {
-        //                    historyComboBox.removeItemAt(historyComboBox.historyLength - 1);
-        //                }
-        //                selectedItem = historyComboBox.getSelectedItem();
-        //                historyComboBox.insertItemAt(selectedItem, 0);
-        //            }
-        //        }
+        int itemCount = historyComboBox.getItemCount();
+        if (itemCount > historyComboBox.maxHistoryLength) {
+            historyComboBox.removeItemAt(itemCount - 1);
+        }
+
     }
 
     /**
@@ -159,26 +138,6 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
         }
         return -1;
     }
-
-    /**
-     * Lösung funktionierte nicht
-     */
-    //	public void addToHistory() {
-    //		String selectedItem = (String) getSelectedItem();
-    //		if (selectedItem == null)
-    //			return;
-    //		for (int i = 0; i < getItemCount(); i++) {
-    //			if (selectedItem.equals(getItemAt(i))) {
-    //				removeItemAt(i);
-    //				break;
-    //			}
-    //		}
-    //		insertItemAt(selectedItem, 0);
-    //		while (getItemCount() > historyLength)
-    //			removeItemAt(getItemCount() - 1);
-    //		setSelectedIndex(0);
-    //
-    //	}
 
     /**
      * @param enterAction the enterAction to set
@@ -207,22 +166,5 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
     @Override
     public void keyReleased(final KeyEvent e) {
     }
-
-    //	muss erstmal raus, lagt sonst in großen Modellen
-    //	TODO: später debuggen -> Lösung?
-    //	@Override
-    //	public void insertUpdate(DocumentEvent e) {
-    //		fireActionEvent();
-    //	}
-    //
-    //	@Override
-    //	public void removeUpdate(DocumentEvent e) {
-    //		fireActionEvent();
-    //	}
-    //
-    //	@Override
-    //	public void changedUpdate(DocumentEvent e) {
-    //		fireActionEvent();
-    //	}
 
 }
