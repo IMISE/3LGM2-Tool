@@ -860,7 +860,7 @@ public class SearchDialog extends JDialog implements ListSelectionListener, Wind
             if (Modifier.isAbstract(elementClass.getModifiers())) {
                 continue;
             }
-            elementClassBox.addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
+            elementClassBox.addItem(elementClass, elementsNameBuilder.getDisplayableFullName(elementClass));
         }
         elementClassBox.addSeparator(true);
         elementClassBox.addItem(Edge.class, getResString("SEARCH_DIALOG_USERFIELD_AlleKanten"));

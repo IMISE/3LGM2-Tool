@@ -767,6 +767,18 @@ public final class MetaModel extends CoreMetaModel {
      *         via en template to a model
      */
     public final boolean isPureTemplateElementClass(final Class<? extends ModelElement> elementClass) {
+        if (Edge.class.isAssignableFrom(elementClass)) {
+            Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
+            Class<? extends ModelElement> startClass = Edge.getStartClass(edgeClass);
+            if (!isPureTemplateElementClass(startClass)) {
+                return false;
+            }
+            Class<? extends ModelElement> endClass = Edge.getEndClass(edgeClass);
+            if (!isPureTemplateElementClass(endClass)) {
+                return false;
+            }
+            return true;
+        }
         return pureTemplateElementClasses.contains(elementClass);
     }
 

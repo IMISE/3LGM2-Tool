@@ -16,6 +16,7 @@ import com.google.common.base.Strings;
 
 import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.ModelConstants;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge.ConnectionState;
@@ -149,6 +150,24 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
         return name;
     }
 
+    private boolean mustAppendTemplatePostfix(final String name, final Class<? extends ModelElement> elementClass, final boolean plural) {
+        //If the elementClass is a master type of an InstanciationEdge (start class of the edge type) then
+        //check the dispalyable name of the instance type (end class of the edge type). If they have the
+        //same displayable name, so append " (Template)" to the name of the master. This ensures that they
+        //can be distinguished.
+        if (metaModel.isPureTemplateElementClass(elementClass)) {
+            Class<? extends Edge>[] edgeTypes = metaModel.getEdgeTypes(elementClass);
+            for (Class<? extends Edge> edgeClass : edgeTypes) {
+                Class<? extends ModelElement> other = MetaModel.getOther(edgeClass, elementClass);
+                String otherDisplayableName = getDisplayableName(other, plural, false);
+                if (otherDisplayableName.equals(name)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * @param elementClass
      * @param plural
@@ -166,18 +185,8 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
                 }
                 String name = metaModelContext.getResString(resKey);
                 if (appendTemplatePostfix) {
-                    //If the elementClass is a master type of an InstanciationEdge (start class of the edge type) then
-                    //check the dispalyable name of the instance type (end class of the edge type). If they have the
-                    //same displayable name, so append " (Template)" to the name of the master. This ensures that they
-                    //can be distinguished.
-                    List<Class<InstanciationEdge>> instanciationEdgeTypesAsMaster = metaModel.getInstanciationEdgeTypesAsMaster(elementClass);
-                    for (Class<InstanciationEdge> instanciationEdgeType : instanciationEdgeTypesAsMaster) {
-                        Class<? extends ModelElement> instanciationInstanceType = InstanciationEdge.getInstanciationInstance(instanciationEdgeType);
-                        String instanceTypeDisplayableName = getDisplayableName(instanciationInstanceType, plural, false);
-                        if (instanceTypeDisplayableName.equals(name)) {
-                            name = appendTemplatePostfix(name);
-                            break;
-                        }
+                    if (mustAppendTemplatePostfix(name, elementClass, plural)) {
+                        name = appendTemplatePostfix(name);
                     }
                 }
                 return name;
