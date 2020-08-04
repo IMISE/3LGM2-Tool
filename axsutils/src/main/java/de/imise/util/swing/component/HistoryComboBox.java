@@ -27,7 +27,7 @@ public class HistoryComboBox extends JComboBox<String> implements KeyListener {
     /*** Maximale Anzahl von Einträgen in der Histotry-Liste */
     private int maxHistoryLength = MAX_HISTORY_ENTRIES;
 
-    /** Die Aktion, die beim Drücken von Enrter ausgeführt werden soll */
+    /** Die Aktion, die beim Drücken von Enter ausgeführt werden soll */
     private Action enterAction = null;
 
     /**
@@ -40,7 +40,6 @@ public class HistoryComboBox extends JComboBox<String> implements KeyListener {
             TextComponentStandardPopup.addPopupMenuTo((JTextComponent) editorComp, false);
         }
         addKeyListener(this);
-        //((JTextComponent)getEditor().getEditorComponent()).getDocument().addDocumentListener(this);
     }
 
     @Override
