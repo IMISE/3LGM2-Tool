@@ -41,7 +41,7 @@ public class TemplateTreeSearchPanel extends JPanel {
     public TemplateTreeSearchPanel(final TemplateBrowserTree tree) {
         super(new BorderLayout());
         this.tree = tree;
-        searchComboBox = new HistoryComboBox(100);
+        searchComboBox = new HistoryComboBox(50);
         add(searchComboBox, BorderLayout.CENTER);
         String searchLabelText = getResString("TEMPLATE_BROWSER_LABEL_SEARCH");
         JLabel searchLabel = new JLabel(searchLabelText);
