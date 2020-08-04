@@ -27,7 +27,7 @@ public class UserFieldDeclarationDialogClassComboBox extends AlphabeticalComboBo
         //alle nicht abstracten Knotenklassen hinzufügen
         for (Class<? extends ModelElement> elementClass : metaModel.allNodesSet) {
             if (!MetaModel.isAbstract(elementClass)) {
-                addItem(elementClass, elementsNameBuilder.getDisplayableName(elementClass));
+                addItem(elementClass, elementsNameBuilder.getDisplayableFullName(elementClass));
             }
         }
         addSeparator(true);
