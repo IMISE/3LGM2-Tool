@@ -23,7 +23,7 @@ import de.imise.util.swing.component.HistoryComboBox;
 /**
  * @author Ich (31.07.2020)
  */
-public class TemplateTreeSearchPanel extends JPanel /* implements ItemListener, */ {
+public class TemplateTreeSearchPanel extends JPanel {
 
     /**
      *
@@ -47,40 +47,13 @@ public class TemplateTreeSearchPanel extends JPanel /* implements ItemListener, 
         JLabel searchLabel = new JLabel(searchLabelText);
         searchLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         add(searchLabel, BorderLayout.WEST);
-        //        searchComboBox.addItemListener(this);
         searchComboBox.setEnterAction(new AbstractAction() {
-
             @Override
             public void actionPerformed(final ActionEvent e) {
                 selectMatchesInTree();
             }
         });
     }
-
-    //    @Override
-    //    public void itemStateChanged(final ItemEvent e) {
-    //        int stateChange = e.getStateChange();
-    //        if (stateChange == ItemEvent.DESELECTED) {
-    //            deselectMatchesInTree();
-    //        } else if (stateChange == ItemEvent.SELECTED) {
-    //            //            JPopupMenu componentPopupMenu = searchComboBox.getComponentPopupMenu();
-    //            //            System.err.println(componentPopupMenu != null && componentPopupMenu.isVisible());
-    //
-    //            HistoryComboBox.addToHistory(searchComboBox);
-    //            selectMatchesInTree();
-    //            //            System.err.println(e);
-    //        }
-    //    }
-
-    //    /**
-    //     *
-    //     */
-    //    private void deselectMatchesInTree() {
-    //        for (GDCollection template : tree.getDisplayedTemplates()) {
-    //            template.deselectAll();
-    //        }
-    //        tree.clearSelection();
-    //    }
 
     /**
      *
