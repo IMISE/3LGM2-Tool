@@ -144,7 +144,7 @@ public final class ElementsNameBuilder extends MetaModelSpecificAdapter {
      * @param name
      * @return the name with the appendix "(Template)"
      */
-    public static final String appendTemplatePostfix(String name) {
+    private static final String appendTemplatePostfix(String name) {
         name += " (" + Tool3lgmConstants.getResString("instanciaton_template") + ")";
         return name;
     }

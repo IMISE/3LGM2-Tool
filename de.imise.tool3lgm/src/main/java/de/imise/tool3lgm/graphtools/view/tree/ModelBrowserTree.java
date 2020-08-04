@@ -264,10 +264,7 @@ public final class ModelBrowserTree extends DynamicTree implements UserFieldList
         }
         //jetzt die ElementKnoten unter die abstrakten Knoten hängen oder unter den LayerKnoten selbst, wenn es keinen abstakten Oberklassenkoten gibt
         for (Class<? extends ModelElement> elementClass : treeLayerVisibleInstancialeNodes) {
-            String label = elementsNameBuilder.getDisplayableName(elementClass);
-            if (metaModel.isPureTemplateElementClass(elementClass)) {
-                label = ElementsNameBuilder.appendTemplatePostfix(label);
-            }
+            String label = elementsNameBuilder.getDisplayableFullName(elementClass);
             ElementClassTreeNode instanciableClassNode = new ElementClassTreeNode(elementClass, label, false); // muss nicht selbst sortieren, weil die Elemente bereits sortiert reinkommen
             elementClassToParentNode.put(elementClass, instanciableClassNode);
             boolean superClassFound = false;

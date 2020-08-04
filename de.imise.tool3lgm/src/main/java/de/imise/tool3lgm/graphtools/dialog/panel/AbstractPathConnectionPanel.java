@@ -31,7 +31,6 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
-import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMMouseListener;
@@ -238,7 +237,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 if (metaModel.isPureTemplateElementClass(nameSourceClass)) {
                     String dialogElementDisplayableName = elementsNameBuilder.getDisplayableName(plural, dialogModelElementClass);
                     if (dialogElementDisplayableName.equals(westLabelText)) {
-                        westLabelText = ElementsNameBuilder.appendTemplatePostfix(westLabelText);
+                        westLabelText = elementsNameBuilder.getDisplayableFullName(plural, dialogModelElementClass);
                     }
                 }
             }

@@ -11,7 +11,6 @@ import java.awt.GridBagLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 
-import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.DoubleMeaningEdge;
@@ -112,12 +111,9 @@ public class ElementDialogHeaderPanel extends ElementDialogPanel {
     public void update() {
         ModelElement me = getModelElement();
         if (me instanceof Node) {
-            String displayableName = elementsNameBuilder.getDisplayableName(me);
-            Class<? extends ModelElement> dialogElementClass = me.getClass();
             MetaModel metaModel = getMetaModel();
-            if (metaModel.isPureTemplateElementClass(dialogElementClass)) {
-                displayableName = ElementsNameBuilder.appendTemplatePostfix(displayableName);
-            }
+            Class<? extends ModelElement> dialogElementClass = me.getClass();
+            String displayableName = elementsNameBuilder.getDisplayableFullName(dialogElementClass);
             typeLabel.setText(displayableName);
             labelLabel.setText("<html><b>" + me.getClearName() + "</b></html>");
             GDCollection gdcoll = getCollection();
