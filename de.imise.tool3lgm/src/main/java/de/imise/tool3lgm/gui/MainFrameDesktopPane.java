@@ -109,6 +109,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      */
     private boolean activateGraphView = true;
 
+    /** This labels will be shown at the beginning if no model is opened */
     private final JLabel modelBrowserDummyLabel = createDummyComponentLabel("PANEL_LABEL_MODEL_BROWSER");
     private final JLabel graphViewDummyLabel = createDummyComponentLabel("PANEL_LABEL_GRAPH_VIEW");
     private final JLabel templateViewDummyLabel = createDummyComponentLabel("PANEL_LABEL_TEMPLATE_VIEW");
@@ -127,7 +128,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             desktop = new MainFrameDesktopInternalFramesPane();
         }
 
-        leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, (JComponent) desktop);
+        leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserDummyLabel, graphViewDummyLabel);
+
         leftSplitPane.setOneTouchExpandable(true);
         leftSplitPane.setDividerSize(10);
 
@@ -146,6 +148,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         UserProperties.addPropertyChangeListener(this);
         addAsToolChangeListener();
     }
+
+    private boolean firstStart = true;
 
     /**
      * @return das gerade aktive Interne Fenster
@@ -267,7 +271,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             workarea.add(topComponent, BorderLayout.CENTER);
         } else {
             if (bottomSplitPane == null) {
-                bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topComponent, new JScrollPane(consistencyChecker.getErrorTable()));
+                JComponent errorTableComponent = firstStart ? consistencyTableDummyLabel : consistencyChecker.getScrollableErrorTable();
+                bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topComponent, errorTableComponent);
                 bottomSplitPane.setOneTouchExpandable(true);
                 bottomSplitPane.setDividerSize(10);
                 workarea.add(bottomSplitPane, BorderLayout.CENTER);
@@ -287,8 +292,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
                 return; //das Ding ist nur null, wenn der templateBroweser nicht angezeigt wird
             }
             templateBrowserPanel = new TemplateBrowserPanel();
-
-            rightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSplitPane, templateBrowserPanel);
+            JComponent templateBrowserComponent = firstStart ? templateViewDummyLabel : templateBrowserPanel;
+            rightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSplitPane, templateBrowserComponent);
             rightSplitPane.setOneTouchExpandable(true);
             rightSplitPane.setDividerSize(10);
             if (!isCheckConsistency) {
@@ -320,7 +325,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     /** (De-)Aktiviert den ModelBrowser */
     private final void checkModelBrowserVisibility() {
         if (OPTION_SHOW_MODEL_BROWSER.is()) {
-            leftSplitPane.setLeftComponent(modelBrowserPanel);
+            JComponent modelBrowserComponent = firstStart ? modelBrowserDummyLabel : modelBrowserPanel;
+            leftSplitPane.setLeftComponent(modelBrowserComponent);
             restorePositionAndSizeFromUserProperties();
         } else {
             leftSplitPane.remove(leftSplitPane.getLeftComponent());
@@ -651,8 +657,21 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
     @Override
     public void model_change_model_opened(final GraphDocument source) {
+        if (desktop.getParent() == null) {
+            firstStart = false;
+            leftSplitPane.setRightComponent((JComponent) desktop);
+            leftSplitPane.setLeftComponent(modelBrowserPanel);
+            if (rightSplitPane != null) {
+                rightSplitPane.setRightComponent(templateBrowserPanel);
+            }
+            if (bottomSplitPane != null) {
+                ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
+                bottomSplitPane.setBottomComponent(consistencyChecker.getScrollableErrorTable());
+            }
+        }
+
         //add this panel to to every opened model as change listener
-        //to catch the elsection changed events for the template browser
+        //to catch the selection changed events for the template browser
         source.addAllTransactionsListener(this);
     }
 
@@ -676,14 +695,17 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      * @param resKey
      * @return
      */
-    private JLabel createDummyComponentLabel(final String resKey) {
+    public static final JLabel createDummyComponentLabel(final String resKey) {
         StringBuilder labelText = new StringBuilder();
-        labelText.append("<HTML><CENTER>");
+        labelText.append("<HTML><CENTER><B>");
         labelText.append(getResString(resKey + "_TITLE"));
+        labelText.append("</B><BR>");
+        labelText.append(getResString(resKey + "_DESCRIPTION"));
         labelText.append("</CENTER></HTML>");
         JLabel label = new JLabel(labelText.toString());
         label.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        //label.setVerticalAlignment(JLabel.TOP);
+        label.setVerticalAlignment(JLabel.TOP);
+        label.setHorizontalAlignment(JLabel.CENTER);
         return label;
     }
 

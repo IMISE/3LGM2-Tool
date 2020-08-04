@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import com.google.common.collect.ImmutableList;
@@ -226,6 +227,16 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
             tableGenerator = new ConsistencyErrorTableGenerator(this);
         }
         return tableGenerator.getTable();
+    }
+
+    /**
+     * Liefert einen JTable, in dem alle Inkonsistenzen aufgelistet werden in einem {@link JScrollPane}.
+     *
+     * @return
+     */
+    public JScrollPane getScrollableErrorTable() {
+        JTable errorTable = getErrorTable();
+        return new JScrollPane(errorTable);
     }
 
     /**

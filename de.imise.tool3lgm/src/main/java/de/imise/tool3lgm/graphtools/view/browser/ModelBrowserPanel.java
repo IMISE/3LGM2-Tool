@@ -40,7 +40,6 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
      *
      */
     public ModelBrowserPanel() {
-        super();
         setLayout(new GridLayout(1, 1, 0, 0));
         showModelsInSeparateBrowser = OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER.is();
         inactiveColor = new ModelBrowser(TabbedPane.SCROLL_TAB_LAYOUT).getForeground();
@@ -105,8 +104,8 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     }
 
     /**
-     * Entfernt ein Teil-Modell aus dem dazugehörigen Browser. Wenn das letzte Teilmodell eines Modells entfernt wird, dann wird das ganze Modell
-     * entfernt.
+     * Entfernt ein Teil-Modell aus dem dazugehörigen Browser. Wenn das letzte
+     * Teilmodell eines Modells entfernt wird, dann wird das ganze Modell entfernt.
      *
      * @param doc
      */
@@ -148,7 +147,7 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     /**
      * Aktiviert die Baumansicht für das übergebene <code>GraphDocument</code>
      */
-    public void setCurrentDoc(final GraphDocument doc) {
+    private void setCurrentDoc(final GraphDocument doc) {
         GDCollection gdcoll = doc.getCollection();
         ModelBrowser modelBrowser = getModelBrowser(gdcoll);
         if (modelBrowser != null) {

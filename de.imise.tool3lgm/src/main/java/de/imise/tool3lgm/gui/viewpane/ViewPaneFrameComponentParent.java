@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.gui.viewpane;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -78,6 +80,18 @@ public interface ViewPaneFrameComponentParent {
     public default boolean hasViewPaneFrameComponents() {
         List<ViewPaneFrameComponent> children = getAllViewPaneFrameComponents();
         return !children.isEmpty();
+    }
+
+    /**
+     * @return the parent {@link Container} if this is a {@link Component}
+     */
+    public default Container getParent() {
+        Container parent = null;
+        if (this instanceof Component) {
+            Component component = (Component) this;
+            parent = component.getParent();
+        }
+        return parent;
     }
 
 }
