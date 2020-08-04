@@ -6,10 +6,10 @@ package de.imise.tool3lgm.graphtools.view.template;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.BorderLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.ActionEvent;
 import java.util.List;
 
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,7 +23,7 @@ import de.imise.util.swing.component.HistoryComboBox;
 /**
  * @author Ich (31.07.2020)
  */
-public class TemplateTreeSearchPanel extends JPanel implements ItemListener {
+public class TemplateTreeSearchPanel extends JPanel /* implements ItemListener, */ {
 
     /**
      *
@@ -47,33 +47,40 @@ public class TemplateTreeSearchPanel extends JPanel implements ItemListener {
         JLabel searchLabel = new JLabel(searchLabelText);
         searchLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         add(searchLabel, BorderLayout.WEST);
-        searchComboBox.addItemListener(this);
+        //        searchComboBox.addItemListener(this);
+        searchComboBox.setEnterAction(new AbstractAction() {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                selectMatchesInTree();
+            }
+        });
     }
 
-    @Override
-    public void itemStateChanged(final ItemEvent e) {
-        int stateChange = e.getStateChange();
-        if (stateChange == ItemEvent.DESELECTED) {
-            deselectMatchesInTree();
-        } else if (stateChange == ItemEvent.SELECTED) {
-            //            JPopupMenu componentPopupMenu = searchComboBox.getComponentPopupMenu();
-            //            System.err.println(componentPopupMenu != null && componentPopupMenu.isVisible());
+    //    @Override
+    //    public void itemStateChanged(final ItemEvent e) {
+    //        int stateChange = e.getStateChange();
+    //        if (stateChange == ItemEvent.DESELECTED) {
+    //            deselectMatchesInTree();
+    //        } else if (stateChange == ItemEvent.SELECTED) {
+    //            //            JPopupMenu componentPopupMenu = searchComboBox.getComponentPopupMenu();
+    //            //            System.err.println(componentPopupMenu != null && componentPopupMenu.isVisible());
+    //
+    //            HistoryComboBox.addToHistory(searchComboBox);
+    //            selectMatchesInTree();
+    //            //            System.err.println(e);
+    //        }
+    //    }
 
-            HistoryComboBox.addToHistory(searchComboBox);
-            selectMatchesInTree();
-            //            System.err.println(e);
-        }
-    }
-
-    /**
-     *
-     */
-    private void deselectMatchesInTree() {
-        for (GDCollection template : tree.getDisplayedTemplates()) {
-            template.deselectAll();
-        }
-        tree.clearSelection();
-    }
+    //    /**
+    //     *
+    //     */
+    //    private void deselectMatchesInTree() {
+    //        for (GDCollection template : tree.getDisplayedTemplates()) {
+    //            template.deselectAll();
+    //        }
+    //        tree.clearSelection();
+    //    }
 
     /**
      *

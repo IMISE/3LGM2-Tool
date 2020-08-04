@@ -13,7 +13,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -31,8 +30,10 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
+import javax.swing.ComboBoxEditor;
 import javax.swing.ComponentInputMap;
 import javax.swing.InputMap;
 import javax.swing.JButton;
@@ -77,7 +78,7 @@ import de.imise.util.Alphabetical;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
 
-public class SearchDialog extends JDialog implements ActionListener, ListSelectionListener, WindowListener, ItemListener {
+public class SearchDialog extends JDialog implements ListSelectionListener, WindowListener, ItemListener {
 
     /** Eingabefeld Bezeichnung */
     private static HistoryComboBox elementName = new HistoryComboBox();
@@ -143,7 +144,23 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     private final AlphabeticalComboBox subModelBox = new AlphabeticalComboBox();
 
     /** Suchknopf */
-    private final JButton searchButton = new JButton(getResString("SEARCH_DIALOG_USERFIELD_Button"));
+    private final JButton searchButton = new JButton();
+
+    /** The defalut action that will only perform the search (where the action source is irrelevant) */
+    private final Action searchActionDefault = new AbstractAction(getResString("SEARCH_DIALOG_USERFIELD_Button")) {
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+            callSearch(false);
+        }
+    };
+
+    /** The action that will perform the search and refreshes the submodel and class boxes */
+    private final Action searchActionWithUpdateSubmodelAndClassBoxes = new AbstractAction() {
+        @Override
+        public void actionPerformed(final ActionEvent e) {
+            callSearch(true);
+        }
+    };
 
     /** Ergebnistabelle */
     private static JTable table;
@@ -167,10 +184,10 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         addSearchButtonKeyListener();
         addJCBListeners();
         addCBListeners();
-        searchButton.addActionListener(this);
-        elementClassBox.addActionListener(this);
-        modelBox.addActionListener(this);
-        subModelBox.addActionListener(this);
+        searchButton.setAction(searchActionDefault);
+        elementClassBox.setAction(searchActionDefault);
+        modelBox.setAction(searchActionWithUpdateSubmodelAndClassBoxes);
+        subModelBox.setAction(searchActionDefault);
 
         setTitle(getResString("SEARCH_DIALOG_TITLE"));
 
@@ -361,7 +378,15 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     public static Pattern getInputSearchPattern(final HistoryComboBox comboBox, final boolean caseSensitive) {
         Object selectedItem = comboBox.getSelectedItem();
         if (selectedItem == null) {
-            return null;
+            ComboBoxEditor editor = comboBox.getEditor();
+            Component editorComponent = editor.getEditorComponent();
+            if (editorComponent instanceof JTextComponent) {
+                JTextComponent textEditorComponent = (JTextComponent) editorComponent;
+                selectedItem = textEditorComponent.getText();
+            }
+            if (selectedItem == null) {
+                return null;
+            }
         }
         String value = String.valueOf(selectedItem);
         if (!caseSensitive) {
@@ -627,10 +652,18 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     /**
      * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des Teilmodels landen in <code>searchSet</code> Nicht erfüllte
      * Suchkriterium werden herausgefiltert mittels <code>searchSet.remove</code>
-     *
-     * @param e - übergebener ActionEvent
      */
-    private void callSearch(final ActionEvent e) {
+    private void callSearch() {
+        callSearch(false);
+    }
+
+    /**
+     * Die zentrale Suchmethode die aufgerufen wird. Prinzip: Alle Elemente des Teilmodels landen in <code>searchSet</code> Nicht erfüllte
+     * Suchkriterium werden herausgefiltert mittels <code>searchSet.remove</code>
+     *
+     * @param refreshSubModelAndClassBox
+     */
+    private void callSearch(final boolean refreshSubModelAndClassBox) {
 
         // beim Aufruf des Fensters nicht suchen (listener feuern aber beim Öffnen des Fensters
         // bereits -> table null check)
@@ -646,7 +679,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         if (doc == null) {
             return;
         }
-        if (e.getSource() == modelBox) {
+        if (refreshSubModelAndClassBox) {
             fillSubModelBox();
             fillElementClassBox();
         }
@@ -757,7 +790,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
                             JMenuItem jmi = (JMenuItem) component;
                             // Nur wenn nicht Eigenschaften: Suche starten
                             if (!jmi.getText().equals(getResString("eigenschaften"))) {
-                                jmi.addActionListener(e1 -> SwingUtilities.invokeLater(() -> callSearch(new ActionEvent(searchButton, 0, ""))));
+                                jmi.addActionListener(e1 -> SwingUtilities.invokeLater(() -> callSearch()));
                             }
                         }
                     }
@@ -875,12 +908,7 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
         keyMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), actionKeyStartSearch);
         keyMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0), actionKeyStartSearch);
         ActionMap actionMap = new ActionMapUIResource();
-        actionMap.put(actionKeyStartSearch, new AbstractAction() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                callSearch(new ActionEvent(searchButton, 0, ""));
-            }
-        });
+        actionMap.put(actionKeyStartSearch, searchActionDefault);
         SwingUtilities.replaceUIActionMap(searchButton, actionMap);
         SwingUtilities.replaceUIInputMap(searchButton, JComponent.WHEN_IN_FOCUSED_WINDOW, keyMap);
     }
@@ -949,11 +977,6 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
     }
 
     @Override
-    public void actionPerformed(final ActionEvent e) {
-        callSearch(e);
-    }
-
-    @Override
     public void valueChanged(final ListSelectionEvent e) {
         int[] selected = table.getSelectedRows();
         TableModel tablemodel = table.getModel();
@@ -999,43 +1022,15 @@ public class SearchDialog extends JDialog implements ActionListener, ListSelecti
      * ActionListener an die JCBs
      */
     private void addJCBListeners() {
-
-        elementName.setEnterAction(new AbstractAction() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                callSearch(new ActionEvent(searchButton, 0, ""));
-
-            }
-        });
-
-        elementName.setActionEvent(new ActionEvent(searchButton, 0, ""));
-
-        elementDescription.setEnterAction(new AbstractAction() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (!elementName.isPopupVisible()) {
-                    callSearch(new ActionEvent(searchButton, 0, ""));
-                }
-            }
-        });
-        elementDescription.setActionEvent(new ActionEvent(searchButton, 0, ""));
-
-        elementUserField.setEnterAction(new AbstractAction() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                callSearch(new ActionEvent(searchButton, 0, ""));
-
-            }
-        });
-        elementUserField.setActionEvent(new ActionEvent(searchButton, 0, ""));
-
+        elementName.setEnterAction(searchActionDefault);
+        elementDescription.setEnterAction(searchActionDefault);
+        elementUserField.setEnterAction(searchActionDefault);
     }
 
     private void addCBListeners() {
         checkNameCaseSensitive.addActionListener(e -> ignoreCaseInName = !checkNameCaseSensitive.isSelected());
         checkDescriptionCaseSensitive.addActionListener(e -> ignoreCaseInDescription = !checkDescriptionCaseSensitive.isSelected());
         checkUserFieldCaseSensitive.addActionListener(e -> ignoreCaseInUserField = !checkUserFieldCaseSensitive.isSelected());
-
     }
 
     @Override

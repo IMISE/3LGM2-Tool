@@ -30,8 +30,6 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
     /** Die Aktion, die beim Drücken von Enrter ausgeführt werden soll */
     private Action enterAction = null;
 
-    private ActionEvent enterActionEvent;
-
     /**
      *
      */
@@ -189,13 +187,6 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
         this.enterAction = enterAction;
     }
 
-    /**
-     * @param enterAction the enterAction to set
-     */
-    public final void setActionEvent(final ActionEvent enterActionEvent) {
-        this.enterActionEvent = enterActionEvent;
-    }
-
     @Override
     public void keyTyped(final KeyEvent e) {
     }
@@ -203,11 +194,13 @@ public class HistoryComboBox extends JComboBox implements KeyListener/* , Docume
     @Override
     public void keyPressed(final KeyEvent e) {
         boolean enterPressed = e.getKeyCode() == KeyEvent.VK_ENTER;
-        if (enterAction == null || enterActionEvent == null) {
+        if (enterAction == null) {
             return;
         }
         if (enterPressed) {
-            enterAction.actionPerformed(enterActionEvent);
+            ActionEvent event = new ActionEvent(this, 0, "");
+            enterAction.actionPerformed(event);
+            addToHistory(this);
         }
     }
 
