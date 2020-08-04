@@ -89,6 +89,24 @@ public class HistoryComboBox extends JComboBox<String> implements KeyListener {
     }
 
     /**
+     * @param enterAction
+     */
+    public HistoryComboBox(final Action enterAction) {
+        this();
+        setEnterAction(enterAction);
+    }
+
+    /**
+     * @param historyLength
+     *            Maximale Anzahl der Einträge in der History-Liste
+     * @param enterAction
+     */
+    public HistoryComboBox(final int historyLength, final Action enterAction) {
+        this(historyLength);
+        setEnterAction(enterAction);
+    }
+
+    /**
      * Hinzufügen des selektierten Eintrages zur History
      *
      * @param historyComboBox

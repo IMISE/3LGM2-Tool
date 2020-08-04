@@ -10,8 +10,7 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 
 import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
@@ -36,23 +35,30 @@ public class TemplateTreeSearchPanel extends JPanel {
     private final HistoryComboBox searchComboBox;
 
     /**
+     *
+     */
+    private final JButton searchButton;
+
+    /**
      * @param tree
      */
     public TemplateTreeSearchPanel(final TemplateBrowserTree tree) {
         super(new BorderLayout());
         this.tree = tree;
-        searchComboBox = new HistoryComboBox(50);
-        add(searchComboBox, BorderLayout.CENTER);
+
         String searchLabelText = getResString("TEMPLATE_BROWSER_LABEL_SEARCH");
-        JLabel searchLabel = new JLabel(searchLabelText);
-        searchLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        add(searchLabel, BorderLayout.WEST);
-        searchComboBox.setEnterAction(new AbstractAction() {
+        AbstractAction searchAction = new AbstractAction(searchLabelText) {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 selectMatchesInTree();
             }
-        });
+        };
+
+        searchComboBox = new HistoryComboBox(50, searchAction);
+        searchButton = new JButton(searchAction);
+
+        add(searchButton, BorderLayout.WEST);
+        add(searchComboBox, BorderLayout.CENTER);
     }
 
     /**
