@@ -1,10 +1,14 @@
 package de.imise.tool3lgm.gui.tabbedframe;
 
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Insets;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JTabbedPane;
+import javax.swing.plaf.TabbedPaneUI;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -23,11 +27,14 @@ import de.imise.util.swing.component.JTabbedPaneWithCloseIcons;
  */
 public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIcons implements ViewPaneFrameComponentParent, LGMChangeListenerSimple {
 
+    private TabbedPaneUI defaultTabbedPaneUI;
+
     /**
      *
      */
     public MainFrameDesktopTabbedPane() {
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        updateBorder();
     }
 
     @Override
@@ -43,6 +50,29 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIcons implem
             }
         }
         return null;
+    }
+
+    /**
+     *
+     */
+    private void updateBorder() {
+        if (getTabCount() == 0) {
+
+            defaultTabbedPaneUI = getUI();
+            setUI(new BasicTabbedPaneUI() {
+                private final Insets borderInsets = new Insets(0, 0, 0, 0);
+                @Override
+                protected void paintContentBorder(final Graphics g, final int tabPlacement, final int selectedIndex) {
+                }
+                @Override
+                protected Insets getContentBorderInsets(final int tabPlacement) {
+                    return borderInsets;
+                }
+            });
+        } else {
+            setUI(defaultTabbedPaneUI);
+        }
+
     }
 
     @Override
@@ -99,6 +129,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIcons implem
         GraphDocument doc = tabComponent.getGraphDocument();
         doc.addAllTransactionsListener(this);
         setSelected(tabComponent);
+        updateBorder();
     }
 
     @Override
@@ -135,6 +166,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIcons implem
         //super.removeTabAt(index); donn't call setSelectedIndex() so we have to call
         //the viewActivated(...) function explicitly
         setSelectedTabAsActiveView();
+        updateBorder();
     }
 
     @Override
