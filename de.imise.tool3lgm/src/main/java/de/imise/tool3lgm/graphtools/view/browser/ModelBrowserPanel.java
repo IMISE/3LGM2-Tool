@@ -20,7 +20,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.util.swing.component.TabbedPane;
+import de.imise.util.swing.component.tab.TabbedPane;
 
 /**
  * @author Rudi, AXS

@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.util.swing.component.TabbedPane;
+import de.imise.util.swing.component.tab.TabbedPane;
 
 /**
  * @author AXS (15.02.2018)

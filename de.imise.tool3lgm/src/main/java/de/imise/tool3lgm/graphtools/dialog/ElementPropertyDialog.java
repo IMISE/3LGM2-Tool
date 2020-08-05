@@ -32,7 +32,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
-import de.imise.util.swing.component.TabbedPane;
+import de.imise.util.swing.component.tab.TabbedPane;
 
 /**
  * Eigenschaftsdialog für Modellelemnte, also Node und Kanten.<br>

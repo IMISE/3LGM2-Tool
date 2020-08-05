@@ -1,4 +1,4 @@
-package de.imise.util.swing.component;
+package de.imise.util.swing.component.tab;
 
 import java.awt.Color;
 import java.awt.Component;

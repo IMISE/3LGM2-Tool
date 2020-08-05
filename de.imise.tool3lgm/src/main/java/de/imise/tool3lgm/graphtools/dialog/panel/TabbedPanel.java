@@ -7,7 +7,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.util.swing.component.TabbedPane;
+import de.imise.util.swing.component.tab.TabbedPane;
 
 /**
  * EIn {@link ElementDialogPanel}, das andere {@link ElementDialogPanel} auf Tabs in sich aufnehmen

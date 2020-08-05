@@ -14,7 +14,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.util.swing.component.TabbedPane;
+import de.imise.util.swing.component.tab.TabbedPane;
 
 /** Erzeugt ModelBrowser für 3lgm */
 public final class ModelBrowser extends TabbedPane implements ChangeListener, FocusListener {

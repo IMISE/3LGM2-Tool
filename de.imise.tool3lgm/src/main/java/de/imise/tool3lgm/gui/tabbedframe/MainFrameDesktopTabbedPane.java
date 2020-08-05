@@ -20,7 +20,7 @@ import de.imise.tool3lgm.gui.viewpane.ViewPaneToolbarManager;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPane;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
-import de.imise.util.swing.component.JTabbedPaneWithCloseIcons;
+import de.imise.util.swing.component.tab.JTabbedPaneWithCloseIcons;
 
 /**
  * @author AXS (27.05.2020)

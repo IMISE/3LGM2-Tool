@@ -1,4 +1,4 @@
-package de.imise.util.swing.component;
+package de.imise.util.swing.component.tab;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -16,9 +16,9 @@ import javax.swing.JTabbedPane;
  * To have an extra icon on each tab (e.g. like in JBuilder, showing the file type) use
  * the method addTab(String, Component, Icon). Only clicking the 'X' closes the tab.
  */
-public class JTabbedPaneWithCloseIcons extends JTabbedPane implements MouseListener {
+public class JTabbedPaneWithCloseIcons2 extends JTabbedPane implements MouseListener {
 
-    public JTabbedPaneWithCloseIcons() {
+    public JTabbedPaneWithCloseIcons2() {
         super();
         addMouseListener(this);
     }
