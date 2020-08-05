@@ -169,11 +169,11 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
         if (OPTION_CHECK_CONSISTENCY.isChanged(evt)) {
-            checkConsistencyTableVisibility();
+            checkViewComponentsVisibility();
         } else if (OPTION_SHOW_TEMPLATE_BROWSER.isChanged(evt)) {
-            checkTemplateBrowserVisibility();
+            checkViewComponentsVisibility();
         } else if (OPTION_SHOW_MODEL_BROWSER.isChanged(evt)) {
-            checkModelBrowserVisibility();
+            checkViewComponentsVisibility();
         } else if (OPTION_SHOW_VIEW_COMPONENT_TITLES.isChanged(evt)) {
             updateTitledBorders();
         } else if (OPTION_SHOW_PAINTING_TOOLBAR.isChanged(evt)) {
@@ -250,21 +250,6 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         checkConsistencyTableVisibility();
         checkTemplateBrowserVisibility();
         updateTitledBorders();
-        //remove the table of the consistency error view
-        if (consistencyErrorTableBorderPanel != null) {
-            if (Static.getSelectedDoc() == null) {
-                if (consistencyErrorTable != null) {
-                    consistencyErrorTableBorderPanel.remove(consistencyErrorTable);
-                    consistencyErrorTable = null;
-                }
-            } else {
-                if (consistencyErrorTable == null) {
-                    ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
-                    consistencyErrorTable = consistencyChecker.getScrollableErrorTable();
-                    consistencyErrorTableBorderPanel.add(consistencyErrorTable, BorderLayout.CENTER);
-                }
-            }
-        }
     }
 
     /**
@@ -296,6 +281,20 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
                 bottomSplitPane.setDividerSize(10);
                 workarea.add(bottomSplitPane, BorderLayout.CENTER);
                 restorePositionAndSizeFromUserProperties();
+            }
+        }
+        //remove the table of the consistency error view
+        if (consistencyErrorTableBorderPanel != null) {
+            if (Static.getSelectedDoc() == null) {
+                if (consistencyErrorTable != null) {
+                    consistencyErrorTableBorderPanel.remove(consistencyErrorTable);
+                    consistencyErrorTable = null;
+                }
+            } else {
+                if (consistencyErrorTable == null) {
+                    consistencyErrorTable = consistencyChecker.getScrollableErrorTable();
+                    consistencyErrorTableBorderPanel.add(consistencyErrorTable, BorderLayout.CENTER);
+                }
             }
         }
         revalidate();
