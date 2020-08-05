@@ -100,6 +100,9 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     /** View component for the templates */
     private TemplateBrowserPanel templateBrowserPanel;
 
+    /** The panel that displays the consistency error table */
+    private JPanel consistencyErrorTableBorderPanel;
+
     /**
      * Diese Variable wird in <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht,
      * um beim Aktivieren eines Matix-Fensters zwar den dazugehörigen ModelBrowser in den
@@ -115,14 +118,12 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     public MainFrameDesktopPane() {
         workarea.setLayout(new BorderLayout());
         modelBrowserPanel = new ModelBrowserPanel();
-        createTitlesBorder(modelBrowserPanel, "PANEL_LABEL_MODEL_BROWSER_TITLE");
 
         if (Tool3lgm.DESKTOP_WITH_TABS_INSTEAD_OF_INTERNAL_FRAMES) {
             desktop = new MainFrameDesktopTabbedPane();
         } else {
             desktop = new MainFrameDesktopInternalFramesPane();
         }
-
         leftSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, modelBrowserPanel, (JComponent) desktop);
 
         leftSplitPane.setOneTouchExpandable(true);
@@ -131,10 +132,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         // Direkthilfe für die einzelnen Baukastenteile
         CSH.setHelpIDString(modelBrowserPanel, "uebersicht_modellbrowser");
 
-        checkModelBrowserVisibility();
-        checkConsistencyTableVisibility();
-        checkTemplateBrowserVisibility();
-
+        checkViewComponentsVisibility();
         setLayout(new BorderLayout());
         add(workarea, BorderLayout.CENTER);
         //add(new StatusBar(), BorderLayout.SOUTH);
@@ -236,10 +234,15 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         }
     }
 
+    /**
+     *
+     */
     private void checkViewComponentsVisibility() {
+        //the order is relevant!
         checkModelBrowserVisibility();
-        checkTemplateBrowserVisibility();
         checkConsistencyTableVisibility();
+        checkTemplateBrowserVisibility();
+        addTitledBorders();
     }
 
     /**
@@ -260,13 +263,13 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             if (bottomSplitPane != null) {
                 workarea.remove(bottomSplitPane);
                 bottomSplitPane = null;
+                consistencyErrorTableBorderPanel = null;
             }
             workarea.add(topComponent, BorderLayout.CENTER);
         } else {
             if (bottomSplitPane == null) {
                 JScrollPane consistencyErrorTable = consistencyChecker.getScrollableErrorTable();
-                JPanel consistencyErrorTableBorderPanel = new JPanel(new BorderLayout());
-                createTitlesBorder(consistencyErrorTableBorderPanel, "PANEL_LABEL_CONSISTENCY_TABLE_TITLE");
+                consistencyErrorTableBorderPanel = new JPanel(new BorderLayout());
                 consistencyErrorTableBorderPanel.add(consistencyErrorTable, BorderLayout.CENTER);
                 bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topComponent, consistencyErrorTableBorderPanel);
                 bottomSplitPane.setOneTouchExpandable(true);
@@ -288,7 +291,6 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
                 return; //das Ding ist nur null, wenn der templateBroweser nicht angezeigt wird
             }
             templateBrowserPanel = new TemplateBrowserPanel();
-            createTitlesBorder(templateBrowserPanel, "PANEL_LABEL_TEMPLATE_BROWSER_TITLE");
             rightSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftSplitPane, templateBrowserPanel);
             rightSplitPane.setOneTouchExpandable(true);
             rightSplitPane.setDividerSize(10);
@@ -674,13 +676,53 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     }
 
     /**
+     *
+     */
+    private void addTitledBorders() {
+        if (Static.getSelectedDoc() == null) {
+            createTitledBorder(desktop, "PANEL_LABEL_GRAPH_VIEW_TITLE");
+        } else {
+            removeTitledBorder(desktop);
+        }
+        createTitledBorder(modelBrowserPanel, "PANEL_LABEL_MODEL_BROWSER_TITLE");
+        createTitledBorder(templateBrowserPanel, "PANEL_LABEL_TEMPLATE_BROWSER_TITLE");
+        createTitledBorder(consistencyErrorTableBorderPanel, "PANEL_LABEL_CONSISTENCY_TABLE_TITLE");
+    }
+
+    /**
      * @param component
      * @param titleResKey
      */
-    private static final void createTitlesBorder(final JComponent component, final String titleResKey) {
-        String borderTitle = Tool3lgmConstants.getResString(titleResKey);
-        TitledBorder titledBorder = BorderFactory.createTitledBorder(borderTitle);
-        component.setBorder(titledBorder);
+    private static final void createTitledBorder(final ViewPaneFrameComponentParent component, final String titleResKey) {
+        createTitledBorder((JComponent) component, titleResKey);
+    }
+
+    /**
+     * @param component
+     * @param titleResKey
+     */
+    private static final void createTitledBorder(final JComponent component, final String titleResKey) {
+        if (component != null) {
+            String borderTitle = Tool3lgmConstants.getResString(titleResKey);
+            TitledBorder titledBorder = BorderFactory.createTitledBorder(borderTitle);
+            component.setBorder(titledBorder);
+        }
+    }
+
+    /**
+     * @param component
+     */
+    private static final void removeTitledBorder(final ViewPaneFrameComponentParent component) {
+        removeTitledBorder((JComponent) component);
+    }
+
+    /**
+     * @param component
+     */
+    private static final void removeTitledBorder(final JComponent component) {
+        if (component != null) {
+            component.setBorder(null);
+        }
     }
 
 }
