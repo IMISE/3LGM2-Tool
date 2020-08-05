@@ -686,6 +686,9 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         } else {
             removeTitledBorders();
         }
+        if (templateBrowserPanel != null) {
+            templateBrowserPanel.updateComponents();
+        }
     }
 
     /**

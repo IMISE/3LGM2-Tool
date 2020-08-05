@@ -12,9 +12,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
@@ -38,14 +40,17 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
     /**
      *
      */
+    private final JComponent treeScrollPane;
+
+    /**
+     *
+     */
     public TemplateBrowserPanel() {
         setLayout(new BorderLayout());
         tree = new TemplateBrowserTree();
-        JScrollPane treeScrollPane = new JScrollPane(tree);
+        treeScrollPane = new JScrollPane(tree);
         searchPanel = new TemplateTreeSearchPanel(tree);
-        add(treeScrollPane, BorderLayout.CENTER);
         tree.addPropertyChangeListener(CONTENT_CHANGED, this);
-        checkSearchFieldVisibility();
     }
 
     /**
@@ -125,6 +130,19 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
                 remove(searchPanel);
             }
         }
+    }
+
+    /**
+     *
+     */
+    public void updateComponents() {
+        checkSearchFieldVisibility();
+        if (Static.getSelectedDoc() == null) {
+            remove(treeScrollPane);
+        } else {
+            add(treeScrollPane, BorderLayout.CENTER);
+        }
+
     }
 
 }
