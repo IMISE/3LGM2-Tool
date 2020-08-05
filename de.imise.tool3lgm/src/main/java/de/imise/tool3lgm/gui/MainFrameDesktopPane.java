@@ -105,6 +105,9 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     /** The panel that displays the consistency error table */
     private JPanel consistencyErrorTableBorderPanel;
 
+    /** The scroll pane surrounding the table */
+    private JComponent consistencyErrorTable;
+
     /**
      * Diese Variable wird in <code>setSelectedDoc(LGMGraphDocument, boolean)</code> gebraucht,
      * um beim Aktivieren eines Matix-Fensters zwar den dazugehörigen ModelBrowser in den
@@ -247,6 +250,21 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         checkConsistencyTableVisibility();
         checkTemplateBrowserVisibility();
         updateTitledBorders();
+        //remove the table of the consistency error view
+        if (consistencyErrorTableBorderPanel != null) {
+            if (Static.getSelectedDoc() == null) {
+                if (consistencyErrorTable != null) {
+                    consistencyErrorTableBorderPanel.remove(consistencyErrorTable);
+                    consistencyErrorTable = null;
+                }
+            } else {
+                if (consistencyErrorTable == null) {
+                    ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
+                    consistencyErrorTable = consistencyChecker.getScrollableErrorTable();
+                    consistencyErrorTableBorderPanel.add(consistencyErrorTable, BorderLayout.CENTER);
+                }
+            }
+        }
     }
 
     /**
@@ -272,9 +290,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             workarea.add(topComponent, BorderLayout.CENTER);
         } else {
             if (bottomSplitPane == null) {
-                JScrollPane consistencyErrorTable = consistencyChecker.getScrollableErrorTable();
                 consistencyErrorTableBorderPanel = new JPanel(new BorderLayout());
-                consistencyErrorTableBorderPanel.add(consistencyErrorTable, BorderLayout.CENTER);
                 bottomSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topComponent, consistencyErrorTableBorderPanel);
                 bottomSplitPane.setOneTouchExpandable(true);
                 bottomSplitPane.setDividerSize(10);
