@@ -7,6 +7,7 @@ import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OP
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_VIEW_COMPONENT_TITLES;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION;
 import static de.imise.tool3lgm.userproperties.UserProperties.IntProperty.PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION;
@@ -28,6 +29,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JViewport;
+import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import de.imise.tool3lgm.Static;
@@ -169,6 +171,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             checkTemplateBrowserVisibility();
         } else if (OPTION_SHOW_MODEL_BROWSER.isChanged(evt)) {
             checkModelBrowserVisibility();
+        } else if (OPTION_SHOW_VIEW_COMPONENT_TITLES.isChanged(evt)) {
+            updateTitledBorders();
         } else if (OPTION_SHOW_PAINTING_TOOLBAR.isChanged(evt)) {
             viewPaneToolbarManager.setToolBarVisibility();
         } else if (OPTION_SHOW_STANDARD_TOOLBAR.isChanged(evt)) {
@@ -242,7 +246,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         checkModelBrowserVisibility();
         checkConsistencyTableVisibility();
         checkTemplateBrowserVisibility();
-        addTitledBorders();
+        updateTitledBorders();
     }
 
     /**
@@ -618,6 +622,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         }
         workarea.revalidate();
         viewPaneToolbarManager.updateToolBar();
+        updateTitledBorders();
     }
 
     @Override
@@ -675,11 +680,20 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         }
     }
 
+    private void updateTitledBorders() {
+        if (OPTION_SHOW_VIEW_COMPONENT_TITLES.is()) {
+            addTitledBorders();
+        } else {
+            removeTitledBorders();
+        }
+    }
+
     /**
      *
      */
     private void addTitledBorders() {
-        if (Static.getSelectedDoc() == null) {
+        //show the the graph view border only if there is no active model
+        if (!desktop.hasViewPaneFrameComponents()) {
             createTitledBorder(desktop, "PANEL_LABEL_GRAPH_VIEW_TITLE");
         } else {
             removeTitledBorder(desktop);
@@ -687,6 +701,16 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         createTitledBorder(modelBrowserPanel, "PANEL_LABEL_MODEL_BROWSER_TITLE");
         createTitledBorder(templateBrowserPanel, "PANEL_LABEL_TEMPLATE_BROWSER_TITLE");
         createTitledBorder(consistencyErrorTableBorderPanel, "PANEL_LABEL_CONSISTENCY_TABLE_TITLE");
+    }
+
+    /**
+     *
+     */
+    private void removeTitledBorders() {
+        removeTitledBorder(desktop);
+        removeTitledBorder(modelBrowserPanel);
+        removeTitledBorder(templateBrowserPanel);
+        removeTitledBorder(consistencyErrorTableBorderPanel);
     }
 
     /**
@@ -703,6 +727,11 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      */
     private static final void createTitledBorder(final JComponent component, final String titleResKey) {
         if (component != null) {
+            //create only new titled border if there is not already a titled border
+            Border border = component.getBorder();
+            if (border != null && border instanceof TitledBorder) {
+                return;
+            }
             String borderTitle = Tool3lgmConstants.getResString(titleResKey);
             TitledBorder titledBorder = BorderFactory.createTitledBorder(borderTitle);
             component.setBorder(titledBorder);
