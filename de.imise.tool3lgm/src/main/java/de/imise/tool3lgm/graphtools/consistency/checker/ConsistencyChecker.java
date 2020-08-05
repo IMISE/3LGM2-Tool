@@ -222,7 +222,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      *
      * @return
      */
-    public JTable getErrorTable() {
+    private JTable getErrorTable() {
         if (tableGenerator == null) {
             tableGenerator = new ConsistencyErrorTableGenerator(this);
         }
