@@ -62,9 +62,9 @@ public class MenuCollection {
             GDCommands.MODEL_ACTION_CUT, GDCommands.MODEL_ACTION_PASTE, new JSeparator(), GDCommands.MODEL_ACTION_DELETE_FROM_SUBMODEL, GDCommands.MODEL_ACTION_DELETE_FROM_MODEL);
 
     /** Das Ansicht-Menu */
-    public static final JMenu VIEW_MENU = createMenu("viewMenu", ViewSubMenus.TOOLBAR_MENU, BooleanProperty.OPTION_SHOW_MODEL_BROWSER, BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER, BooleanProperty.OPTION_SHOW_VIEW_COMPONENT_TITLES, new JSeparator(),
-            ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE, ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_LAYER, ViewActions.ACTION_ACTIVATE_PHYSICAL_LAYER,
-            ViewActions.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, new JSeparator(), ViewActions.ACTION_OPEN_MATRIX_VIEW);
+    public static final JMenu VIEW_MENU = createMenu("viewMenu", ViewSubMenus.TOOLBAR_MENU, BooleanProperty.OPTION_SHOW_MODEL_BROWSER, BooleanProperty.OPTION_SHOW_TEMPLATE_BROWSER, BooleanProperty.OPTION_CHECK_CONSISTENCY,
+            BooleanProperty.OPTION_SHOW_VIEW_COMPONENT_TITLES, new JSeparator(), ViewActions.ACTION_GRAPH_SWITCH_ONE_LAYER_AND_THREE_LAYER_PERSPECTIVE, ViewActions.ACTION_ACTIVATE_DOMAIN_LAYER, ViewActions.ACTION_ACTIVATE_LOGICAL_LAYER,
+            ViewActions.ACTION_ACTIVATE_PHYSICAL_LAYER, ViewActions.ACTION_OPEN_GRAPH_VIEW_SETTINGS_DIALOG, new JSeparator(), ViewActions.ACTION_OPEN_MATRIX_VIEW);
 
     /** Das Einfügen-Menu */
     public static final JMenu INSERT_MENU = new InsertMenu();
@@ -97,7 +97,7 @@ public class MenuCollection {
 
     /** Das Extras-Menu */
     public static final JMenu EXTRAS_MENU = new DynamicMenu(getResString("extras"), ExtrasActions.ACTION_OPEN_USERFIELD_DEFINITION_DIALOG, ExtrasActions.ACTION_OPEN_USERFIELD_VALUE_EDITOR_DIALOG,
-            BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION, new JSeparator(), new DynamicMenuPlaceholder(), new JSeparator(), BooleanProperty.OPTION_CHECK_CONSISTENCY, ExtrasSubMenus.PLUGIN_MENU) {
+            BooleanProperty.OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION, new JSeparator(), new DynamicMenuPlaceholder(), new JSeparator(), ExtrasSubMenus.PLUGIN_MENU) {
 
         @Override
         protected void updateItems(final DynamicMenuPlaceholder placeholder) { // es gibt nur einen Placeholder in diesem Menu -> es ist eindeutig, welcher es hier ist
