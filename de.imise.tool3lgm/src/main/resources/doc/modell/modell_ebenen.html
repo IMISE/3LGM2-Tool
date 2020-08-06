@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Interebenen-Beziehungen zwischen statischen Komponenten</title>
+</head>
+
+<body>
+
+<h1>Interebenen-Beziehungen zwischen statischen Komponenten</h1>
+
+<p>
+Wie sich schon an der einen oder anderen Stelle gezeigt hat, existieren die drei Ebenen nicht 
+unabh&auml;ngig voneinander. Die vielf&auml;ltigen Beziehungen zwischen den Ebenen bezeichnen wir als 
+Inter-Ebenen-Beziehungen. In den Klassendiagrammen der Ebenen sind sie als gepunktete Klassen 
+und Assoziationsbeziehungen sichtbar. Sowohl zwischen der Fachlichen Ebene und der Logischen 
+Werkzeugebene als auch zwischen der Logischen und der Physischen Werkzeugebene k&ouml;nnen wir 
+Zusammenh&auml;nge feststellen. 
+</p>
+<br>
+<br>
+
+<h2>Beziehungen zwischen fachlicher Ebene und logischer Werkzeugebene</h2>
+<p>
+<h3>Aufgabe - Anwendungsbaustein</h3>
+Innerhalb eines Krankenhauses kann eine Aufgabe unterst&uuml;tzt werden durch
+
+<ul>
+<li>mehrere Anwendungsbausteine gemeinsam,</li>
+<li>durch ein einzelnen Anwendungsbaustein, </li>
+<li>durch Kombinationen davon. </li>
+</ul>
+
+Dieser Sachverhalt dr&uuml;ckt sich in der Anwendungsbausteinkonfiguration aus. 
+Die Anwendungsbausteinkonfigurationen lassen sich wie folgt ermitteln:
+<ol type="1">
+<li><i>Welche Anwendungsbausteine sind gemeinsam notwendig, um die Aufgabe unterst&uuml;tzen zu k&ouml;nnen?</i><br>
+Eine Anwendungsbausteinkonfiguration enth&auml;lt also alle die Anwendungsbausteine, die zur 
+Unterst&uuml;tzung der Aufgabe unmittelbar erforderlich sind. Unmittelbar bezieht sich dabei 
+auf die reine Funktionalit&auml;t, nicht auf die Lieferung von Daten. Wenn man einen Anwendungsbaustein 
+aus einer Konfiguration entfernt, wird die Aufgabe nicht mehr unterst&uuml;tzt.</li>
+<li><i>Welche m&ouml;glichen Alternativen gibt es zur Unterst&uuml;tzung der Aufgabe?</i><br>
+Eine Aufgabe kann durch mehrere Anwendungsbausteinkonfigurationen unterst&uuml;tzt werden. Wenn 
+man eine Anwendungsbausteinkonfiguration wegnimmt, kann die Aufgabe trotzdem noch durch eine 
+der verbleibenden erledigt werden, ggf. unter Einschr&auml;nkung der Qualit&auml;t. Wenn dies nicht so 
+ist, kann dies ein Indiz daf&uuml;r sein, dass auf der Fachlichen Ebene nicht ad&auml;quat (z.B. nicht 
+fein genug) modelliert wurde.</li>
+</ol>
+</p>
+
+<p>
+<a href="#abb1">Abb. 1</a> zeigt ein Beispiel einer Anwendungsbausteinkonfiguration.
+<div align="center">
+<a name="abb1">
+<img src="../bilder/bez_fachlich_logisch.gif" width=439 height=194 border=0 align="bottom" alt="">
+</a>
+<br>Abb. 1:	Anwendungsbausteinkonfigurationen (Beispiel)
+</div>
+</p>
+
+<p>
+Anwendungsbaustein-Konfigurationen k&ouml;nnen Hinweise auf Redundanzen auf der logischen Werkzeugebene 
+geben, aber auch Hinweise auf Schw&auml;chen im Modell der fachlichen Ebene. Dies wird in den folgenden 
+Anmerkungen nochmals diskutiert. Abb. 12 zeigt ein Beispiel f&uuml;r Anwendungsbausteinkonfigurationen. 
+Die Aufgabe PATIENTENAUFNAHME wird unterst&uuml;tzt durch zwei Anwendungsbausteinkonfigurationen. 
+Die hellgraue besteht aus dem PVS - das allerdings keine eigene Datenbank enth&auml;lt - und MED DB 
+das die zentrale Datenbank enth&auml;lt, in der die Aufnahmedaten gespeichert werden. Die Aufgabe 
+PATIENTENAUFNAHME kann also nur ausgef&uuml;hrt werden, wenn beide Anwendungsbausteine, PVS und MED 
+DB verf&uuml;gbar sind. Die dunkelgraue Anwendungsbausteinkonfiguration besteht aus genau einem 
+Anwendungsbaustein, der ausreicht, um die Aufgabe PATIENTENAUFNAHME zu unterst&uuml;tzen. 
+</p>
+
+<p><i>
+Anmerkungen zu dem Konzept der Anwendungsbausteinkonfigurationen: In der folgenden <a href="#abb2">Abb. 2</a> 
+sieht es zun&auml;chst so aus, als k&ouml;nnte das AB Laboratory das AB Radiology ersetzen. Das dies nicht 
+so ist, ist offensichtlich. Es liegt also ein Modellierungsproblem vor. Um dies zu beheben, 
+bieten sich zwei M&ouml;glichkeiten an:
+</p></i>
+<ul>
+<li><i>Wir verfeinern auf der fachlichen Ebene die Aufgabe Diagnostik in Labordiagnostik, Radiologiediagnostik und Pathologische Diagnostik. Jede dieser Aufgabe erh&auml;lt dann den entsprechenden Anwendungsbaustein zugeordnet.</i></li>
+<li><i>Wir vergr&ouml;bern auf der logischen Werkzeugebene und fassen die Anwendungsbausteine f&uuml;r die Diagnostik zu einem Anwendungsbaustein zusammen.</i></li>
+<li><i>Eine dritte M&ouml;glichkeit ergibt sich daraus, dass man - wie in der aktuellen Version des Metamodells getan - Organisationseinheiten einf&uuml;hrt. Ber&uuml;cksichtigt man diese sp&auml;ter bei der Zuordnung der Anwendungsbausteinkonfigurationen - so wie im Metamodell vorgeschlagen - so kann man diese Problematik umgehen.</i></li>
+</ul>
+<p><i>
+Hieraus kann man sich leicht klarmachen, dass die Verwendung von Anwendungsbausteinkonfigurationen 
+im Prinzip &auml;quivalent ist zur Vergr&ouml;berung und Verfeinerung von Anwendungsbausteinen. 
+Man will mit der Verwendung von Anwendungsbausteinkonfigurationen allerdings umgehen, 
+'k&uuml;nstliche' Anwendungsbausteine einf&uuml;hren zu m&uuml;ssen und m&ouml;chte diesen Sachverhalt lieber 
+explizit als anderes Konzept modellieren.
+</i>
+
+<div align="center">
+<a name="abb2">
+<img src="../bilder/bausteinkonfig.gif" width=369 height=206 border=0 align="bottom" alt="">
+</a>
+<br>Abb. 2: Anwendungsbausteinkonfigurationen mit Hinweis auf nicht ad&auml;quate Modellierung
+</div>
+</p>
+
+<p><i>
+Hat man andererseits eine Aufgabe, die tats&auml;chlich alternativ durch zwei Anwendungsbausteine 
+unterst&uuml;tzt wird (siehe <a href="#abb3">Abb. 3</a>), wird man folgende &Uuml;berlegungen durchf&uuml;hren m&uuml;ssen:
+</i></p>
+<ul>
+<li><i>Handelt es sich tats&auml;chlich um dieselbe Aufgabe?</i></li>
+<li><i>Sind die Alternativen tats&auml;chlich notwendig (beispielsweise aufgrund &auml;u&szlig;erer Gegebenheiten, 
+oder weil einer der Anwendungsbausteine noch eine zus&auml;tzliche Aufgabe unterst&uuml;tzt)?</i></li>
+</ul>
+
+<div align="center">
+<a name="abb3">
+<img src="../bilder/bausteinkonfigAlternativ.gif" width=373 height=206 border=0 align="bottom" alt="">
+</a>
+<br>Abb. 3: Anwendungsbausteinkonfigurationen Alternativen
+</div>
+
+<p><i>
+Im Beispiel von <a href="#abb3">Abb. 3</a> sehen wir die Aufgabe Laboratory Services durch zwei Anwendungsbausteine 
+alternativ unterst&uuml;tzt, die auch noch auf zwei verschiedenen Softwareprodukten basieren 
+(die Softwareprodukte sind in Klammern angegeben). Hier k&ouml;nnte es aber durchaus sein, dass 
+einer der Anwendungsbausteine zus&auml;tzlich noch in der Lehre eingesetzt wird, also eine weitere 
+Aufgabe unterst&uuml;tzt. Allerdings m&uuml;ssen wir uns dann fragen, ob nicht wenigsten Anwendungsbausteine 
+basierend auf dem gleichen Softwareprodukt verwendet werden sollen
+</i></p>
+
+<p><i>
+Ein weiteres Beispiel ist die Aufgabe Terminplanung. Zwar gibt es z.B. sowohl im Rahmen der 
+OP-Planung eine Terminplanung als auch in einer Radiologischen Abteilung. Die entsprechenden 
+Anwendungsbausteine k&ouml;nnen einander aber nicht ersetzen. Offenbar muss daher die Aufgabe 
+Terminplanung verfeinert werden, oder als Teilaufgaben der Aufgaben OP-Planung und Radiologische
+Dienste verstanden werden. Entfernt man sich aber vom abteilungsorientierten Denken hin zum 
+diensteorientierten Denken, so kann es tats&auml;chlich einen generischen Dienst Terminplanung geben, 
+der je nachdem wo er verwendet wird, unterschiedlich arbeitet. 
+</i></p>
+
+There are some other important inter-layer-relationships between concepts of the 
+domain and the logical tool layer which we will shortly describe in the following:
+
+<p>
+<h3><a name="objekttyp">Objekttyp</a> - <a name="dbs">Datenbanksystem</a></h3>
+Einem Objekttyp kann zugeordnet werden, welches Datenbanksystem / welche <a name="dokumentensammlung">Dokumentensammlung</a> f&uuml;r diesen Objekttyp Master 
+ist (Beziehung hat_als_Master). Daten zu diesem Objekttypen d&uuml;rfen ausschlie&szlig;lich in 
+diesem 'Master-Datenbanksystem' / dieser 'Master-Dokumentensammlung' eingef&uuml;gt, ge&auml;ndert 
+oder gel&ouml;scht werden. Alle anderen Datenbanksysteme / Dokumentensammlungen, die ebenfalls 
+Daten zu diesen Objekttyp speichern, m&uuml;ssen &uuml;ber Kommunikation zwischen den 
+entsprechenden Anwendungsbausteinen ihre Datenbest&auml;nde mit diesem Datenbanksystem / 
+Dokumentensammlung abgleichen, wenn Daten ge&auml;ndert, hinzugef&uuml;gt oder gel&ouml;scht 
+werden, da sonst die Datenintegrit&auml;t nicht gew&auml;hrleistet ist. Bei Dokumentensammlungen 
+ist dies nat&uuml;rlich besonders problematisch!.
+</p>
+
+<p>
+<h3>Objekttyp - <a name="repraesent">Repr&auml;sentationsform</a></h3>
+Objekttypen k&ouml;nnen logisch repr&auml;sentiert werden durch Datensatztypen, durch <a name="dokumententyp">Dokumententypen</a> und 
+durch Nachrichtentypen. Datensatztypen beschreiben welche Informationen repr&auml;sentiert als 
+Objekttypen in einem Datenbanksystem gespeichert werden. Dokumententypen beschreiben, welche 
+Informationen repr&auml;sentiert als Objekttypen in einer Dokumentensammlung gespeichert, und welche 
+Informationen &uuml;ber eine Kommunikationsverbindung transportiert werden. Ein Nachrichtentyp 
+beschreibt welche Informationen bei nachrichtenbasierter Kommunikation transportiert werden. 
+</p>
+
+<p>
+<h3>Aufgabe - <a name="softwareprodukt">Softwareprodukt</a></h3>
+Ein Softwareprodukt unterst&uuml;tzt die Durchf&uuml;hrung bestimmter Aufgaben. Entsprechend einer 
+bestimmten Parametrierung kann es aber sein, dass ein auf einem bestimmten Softwareprodukt 
+basierender Anwendungsbaustein nicht alle diese Aufgaben unterst&uuml;tzt. Diese Beziehung beschreibt 
+also nicht, welche Aufgaben ein Anwendungsbaustein basierend auf einem Softwareprodukt tats&auml;chlich 
+unterst&uuml;tzt, sondern lediglich das Potential, das ein bestimmtes Softwareprodukt bietet. 
+</p>
+
+<p>
+<h3>Aufgabe - Ereignis</h3>
+Die Beendigung einer Aktivit&auml;t einer Aufgabe kann ein Ereignis eines bestimmten <a name="ereignistyp">Ereignistyps</a> 
+ausl&ouml;sen, das wiederum das Versenden einer Nachricht eines bestimmten Nachrichtentyps steuert. 
+Diese Beziehung erm&ouml;glicht es insbesondere nachrichtenbasierte Kommunikation zu beschreiben.
+</p>
+<br>
+<br>
+
+<h2>Beziehungen zwischen logischer Werkzeugebene und physischer Werkzeugebene</h2>
+<p>
+<h3>Anwendungsbausteine - <a name="dv_baustein">Physische Datenverarbeitungsbausteine</a></h3>
+Ein rechnerbasierter Anwendungsbaustein kann installiert sein auf:
+<ul>
+<li>mehrere physischen Datenverarbeitungsbausteinen gemeinsam,</li>
+<li>auf einem einzelnen physischen Datenverarbeitungsbausteinen,</li>
+<li>auf Kombinationen davon.</li>
+</ul>
+</p>
+
+<p>
+Dieser Sachverhalt dr&uuml;ckt sich in der Datenverarbeitungsbaustein-Konfiguration aus. 
+Die Datenverarbeitungsbaustein-Konfigurationen lassen sich wie folgt ermitteln:
+<ol type="1">
+<li><i>Welche Datenverarbeitungsbausteine sind gemeinsam notwendig, um den Anwendungsbaustein installieren zu k&ouml;nnen?</i><br>
+Eine Datenverarbeitungsbaustein-Konfiguration enth&auml;lt also alle die Datenverarbeitungsbausteine, 
+die zur Installation des Anwendungsbausteins erforderlich sind. Wenn man einen 
+Datenverarbeitungsbaustein aus einer Konfiguration entfernt, ist der Anwendungsbaustein nicht mehr 
+nutzbar.</li>
+<li><i>Welche m&ouml;glichen Alternativen gibt es zur Nutzung eines Anwendungsbausteins?</i><br>
+Ein Anwendungsbaustein kann durch mehrere Datenverarbeitungsbaustein-Konfigurationen nutzbar 
+gemacht werden. Wenn man eine Datenverarbeitungsbaustein-Konfiguration wegnimmt, kann der 
+Anwendungsbaustein trotzdem noch durch eine der verbleibenden genutzt werden, ggf. unter 
+Einschr&auml;nkung der Qualit&auml;t. Dies ist dann nicht der Fall, wenn ein Datenverarbeitungsbaustein 
+ausf&auml;llt, der in beiden Konfigurationen enthalten ist.</li>
+</ol>
+
+<div align="center">
+<a name="abb4">
+<img src="../bilder/bez_logisch_physisch.gif" width=549 height=203 border=0 alt="" align="bottom">
+</a>
+<br>Abb. 4:	Datenverarbeitungsbaustein-Konfigurationen (Beispiel)
+</div>
+
+<p>
+In unserem Beispiel in <a href="#abb4">Abb. 4</a> gibt es f&uuml;r den Anwendungsbaustein WARD zwei alternative 
+Konfigurationen. F&auml;llt beispielsweise der PDVB WARD PC1 aus, so kann zwar mit Konfiguration 1 
+nicht mehr gearbeitet werden, aber mit Konfiguration 2. F&auml;llt dagegen der PDVB DB Server aus, 
+so ist keine Konfiguration mehr nutzbar.
+</p>
+
+</body>
+</html>

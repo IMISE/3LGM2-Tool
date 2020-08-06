@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Statische Sicht der Fachlichen Ebene</title>
+</head>
+
+<body>
+<h1>Statische Sicht der Fachlichen Ebene</h1>
+<p>
+Die fachliche Ebene eines Krankenhausinformationssystems ergibt sich aus den Aufgaben des 
+Krankenhauses, deren Erledigung das Krankenhausinformationssystem unterst&uuml;tzt, und den 
+Objekttypen, die im Rahmen der Erledigung der Aufgaben jeweils bearbeitet bzw. interpretiert werden.
+Sie beschreibt damit die fachlichen Konsequenzen aus den Unternehmenszielen und abstrahiert dabei 
+von den Werkzeugen, die zur Erledigung der Aufgaben eingesetzt werden.
+</p>
+
+<p><i>
+Anmerkung: Das Modell der Fachlichen Ebene geht von der Vorstellung aus, dass sich die zu 
+bearbeitenden Objekte alle in der betrachteten Welt befinden. Das macht die Vorstellung &uuml;berfl&uuml;ssig,
+man m&uuml;sse auf der fachlichen Ebene Objekttypen zwischen Aufgaben, bzw. Objekte zwischen Aktivit&auml;ten 
+flie&szlig;en lassen. Es wird nur noch dargestellt, im Rahmen welcher Aufgabe etwas bearbeitet wird, das 
+im Rahmen welcher (anderen) Aufgabe m&ouml;glicherweise interpretiert werden muss. Das bedeutet dann, 
+dass darauf verzichtet wird, die Beziehungen zwischen Aufgaben zu modellieren und dies letztlich 
+der Prozesssicht &uuml;berlassen wird.
+</i></p>
+
+<p>
+Die folgende Abbildung zeigt die UML-Notation der fachlichen Ebene.
+<div align="center">
+<a name="abb1">
+<img src="../bilder/metamodellFachlich.gif" width=413 height=191 border=0 alt="" align="bottom">
+</a>
+<br>Abb. 1: Das Metamodell der fachlichen Ebene.
+</div>
+</p>
+
+<p>
+<h2><a name="objekttyp">Objekttypen</a></h2>
+Informationen beziehen sich auf Objekte. Objekte sind physische oder virtuelle Dinge eines 
+Krankenhauses (vgl. &quot;part of the perceivable or conceivable universe&quot; <a href="literatur.html#a15">[15]</a>),
+die durch Daten repr&auml;sentiert werden. Objekte k&ouml;nnen durch Merkmale beschrieben werden. 
+Objekte mit denselben Merkmalsarten werden als Objekttyp zusammengefa&szlig;t; Objekttypen werden durch ihre Merkmalsarten 
+repr&auml;sentiert (vgl. &quot;concept&quot; als &quot;unit of thought constituted through abstraction on the basis 
+of properties common to a set of objects&quot; <a href="literatur.html#a15">[15]</a>). Durch Objekttypen kann daher beschrieben werden,
+welcher Art Informationen sind, die zur Bearbeitung einer Aufgabe ben&ouml;tigt werden oder nach 
+Bearbeitung der Aufgabe bereitgestellt werden k&ouml;nnen. Objekttypen k&ouml;nnen verfeinert werden
+</p>
+
+<p>
+<h2><a name="aufgaben">Aufgaben</a></h2>
+Eine (Unternehmens-) Aufgabe <a href="literatur.html#a17">[17]</a> (&quot;enterprise function&quot; <a href="literatur.html#a18">[18]</a>) 
+ist nach [19], S. 147 eine Zielvorschrift f&uuml;r menschliches oder maschinelles Handeln. 
+Das durch das Handeln zu erreichende Ziel deckt sich mit einem oder unterst&uuml;tzt die Erreichung 
+eines (Teil-) Ziels des Unternehmens. Eine Aufgabe hat keinen definierten Anfang und kein 
+definiertes Ende. Aufgaben lassen sich in Teilaufgaben gliedern.
+</p>
+
+<p>
+Man kann eine Aufgabe und damit auch eine Teilaufgabe als Pflicht auffassen, die sich aus den 
+Unternehmenszielen mehr oder weniger zwingend ergibt.
+</p>
+
+<p>
+Das Handeln im Rahmen einer Aufgabe ist das Erf&uuml;llen der Zielvorschrift und erfolgt im Rahmen von 
+Aktivit&auml;ten. Eine Aktivit&auml;t der Aufgabe ist die einmalige Anwendung oder Durchf&uuml;hrung eines 
+<i>Verfahrens</i>, das zur Erledigung der Aufgabe zur Verf&uuml;gung steht. 
+</p>
+
+<p>
+Aktivit&auml;ten bearbeiten Objekte, indem sie die Merkmalsauspr&auml;gungen ver&auml;ndern. Hierzu werden ggf. 
+Informationen ben&ouml;tigt, die aus den Merkmalen der bearbeiteten oder anderer Objekte gewonnen werden. 
+Ein Objekttyp, dessen Objekte von den Aktivit&auml;ten einer Aufgabe bearbeitet werden, hei&szlig;t <i>'zu 
+bearbeitender Objekttyp einer Aufgabe</i>'. Ein Objekttyp, von dessen Objekten die Aktivit&auml;ten 
+einer Aufgabe Informationen gewinnen, hei&szlig;t <i>'zu interpretierender Objekttyp einer Aufgabe'</i>.
+</p>
+
+<p>
+Im Rahmen dieser Arbeit wird zun&auml;chst darauf verzichtet, &uuml;ber dieses statische Modell hinaus 
+eine Reihenfolge der Bearbeitung von Objekten durch Aktivit&auml;ten der Aufgaben zu modellieren. 
+Dies bleibt der Erweiterung zu einem dynamischen Modell vorbehalten. F&uuml;r Planung und &Uuml;berwachung 
+im strategischen Informationsmanagement ist es aber wichtig, dass f&uuml;r jeden Objekttyp die Aufgaben 
+abgeleitet werden k&ouml;nnen, bei deren Erledigung der Objekttyp bearbeitet oder interpretiert wird und 
+umgekehrt. 
+</p>
+
+<p>
+<h2><a name="organisationseinheit">Organisationseinheit</a></h2>
+Aufgaben werden in bestimmten Organisationseinheiten erledigt. Dies ist sp&auml;ter insbesondere bei der 
+Zuordnung von Anwendungsbausteinen bedeutsam.
+</p>
+
+<p>
+<h2><a name="rolle">Rollen</a></h2>
+Rollen geben an, in welcher beruflichen Position sich eine Mitarbeiterin / ein Mitarbeiter 
+befinden. Typische Rollen in einem Krankenhaus sind Oberarzt, Pflegepersonal; Med.-technische 
+Assistentin etc.
+</p>
+
+<p>
+Auf der fachlichen Ebene werden Anforderungen an die logische und physische Werkzeugebene 
+formuliert. Aus diesem Grund k&ouml;nnen allein f&uuml;r diese Ebene keine semantischen Qualit&auml;tskriterien 
+angegeben werden. Allerdings k&ouml;nnen auf der fachlichen Ebene Referenzmodelle beschrieben werden, 
+die dann f&uuml;r die Modellierung eines konkreten Krankenhausinformationssystems lediglich noch 
+modifiziert werden m&uuml;ssen. Referenzmodelle der fachlichen Ebene sind beispielsweise der 
+Anforderungskatalog f&uuml;r die Informationsverarbeitung im Krankenhaus, das 
+Good Electronic Health Record, das Reference Information Model das Kommunikationsstandards HL7, 
+HISA oder die Europ&auml;ische Electronic Healthcare Record Architecture (EHCRA). 
+</p>
+
+<p>
+<a href="#abb2">Abb. 2</a> zeigt ein Beispiel einer fachlichen Ebene, das als eine Auspr&auml;gung des in <a href="#abb1">Abb. 1</a> 
+dargestellten Meta-Modells zu betrachten ist. Rechtecke repr&auml;sentieren dabei Aufgaben, Ovale 
+stehen f&uuml;r Objekttypen. Ein Pfeil von einem Objekttyp zu einer Aufgabe markiert einen 
+interpretierenden Zugriff, ein Pfeil von einer Aufgabe zu einem Objekttyp einen bearbeitenden 
+Zugriff. Verfeinerungen sind dargestellt als Rechtecke, die in anderen Rechtecken enthalten sind. 
+Typische Aufgaben eines Krankenhauses sind hier die KRANKENHAUSVERWALTUNG, die PATIENTENBEHANDLUNG 
+oder die VERWALTUNG VON PATIENTENAKTEN. Die Aufgabe PATIENTENBEHANDLUNG ist verfeinert in weitere 
+Aufgaben. Typische Objekttypen sind PATIENT, LEISTUNGSANFORDERUNG oder FALL. 
+</p>
+
+<div align="center">
+<a name="abb2">
+<img src="../bilder/bspFachlich.gif" width=604 height=310 border=0 alt="" align="bottom">
+</a>
+<br>Abb. 3: Beispiel einer fachlichen Ebene.
+</div>
+
+<p>
+Die Aufgaben werden von den in einem Krankenhaus t&auml;tigen <i>Personen</i> erledigt. 
+Diese benutzen daf&uuml;r <i>informationsverarbeitende Werkzeuge</i>. Wir unterscheiden im folgenden 
+logische Werkzeuge, die auf <a name="softwareprodukt">Softwareprodukten</a> oder Organisationspl&auml;nen basieren und physische 
+Werkzeuge wie Rechnersysteme oder konventionelle Werkzeuge.
+</p>
+
+
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Elemente hinzuf&uuml;gen</title>
+</head>
+
+<body>
+<h1>Elemente hinzuf&uuml;gen</h1>
+In diesem Abschnitt soll Ihnen gezeigt werden, wie neue Elemente in ein Modell eingef&uuml;gt werden
+k&ouml;nnen. Dazu &ouml;ffnen Sie am besten das dieser Hilfe beiligende 
+<a href="../beispieldateien/oeffnen.html">Beispielmodell</a>.<br>
+
+<p>
+Das Einf&uuml;gen von Elementen soll im Folgenden an einer Aufgabe beispielhaft dargestellt werden.
+Andere Elemente des Baukastens lassen sich auf &auml;hnliche Weise in ein Modell einf&uuml;gen.<br>
+Schalten Sie zuerst die Einzelebenenansicht ein und wechseln Sie auf die Fachliche Ebene.
+</p>
+<p>
+Wenn Sie nun in der <a href="../baukasten/uebersicht.html#menueleiste">Men&uuml;leiste</a> den
+Men&uuml;punkt <i>Einf&uuml;gen</i> ausw&auml;hlen, sehen Sie alle Elemente, die Sie in die
+Fachliche Ebene einf&uuml;gen k&ouml;nnen. (Haben Sie eine andere Ebene gew&auml;hlt, so erscheinen
+unter <i>Einf&uuml;gen</i> die Elemente, die Sie in der gew&auml;hlten Ebene hinzuf&uuml;gen k&ouml;nnen.)<br>
+W&auml;hlen Sie nun den Men&uuml;punkt <i>Aufgabe</i> aus. Es erscheint ein Dialog, in dem Sie
+aufgefordert werden den Namen der Aufgabe anuzugeben. Geben Sie der Aufgabe den Namen 
+<nobr>'Befundanforderung Zentrallabor'</nobr> und klicken Sie auf die Schaltfl&auml;che <i>OK</i>.<br>
+Die Aufgabe erscheint nun in der Ansicht der Fachlichen Ebene im Dokumentfenster und kann durch klicken und
+halten der linken Maustaste auf der Aufgabe in der Ebene verschoben werden.
+</p>
+<p>
+Gleichzeitigt mit dem Erscheinen der Aufgabe im Dokumentfenster wird die Aufgabe in der Fachlichen Ebene
+unter <i>Aufgabe</i> im Dokumentfenster angezeigt.
+</p>
+<p>
+Elemente die im Dokumentfenster grafisch angezeigt werden k&ouml;nnen Sie &uuml;brigens auch schnell unter
+Verwendung der <a>Zeichensymbolleiste</a> einf&uuml;gen.
+</p>
+<p>
+Folgendes soll nun modelliert werden:<br>
+Die Aufgabe 'Befundanforderung Zentrallabor' wird durch einen Patienten erledigt (interpretiert) und erzeugt
+bzw. ver&auml;ndert (bearbeitet) das Objekt 'Anforderungsdokument Zentrallabor'.<br>
+Die Aufgabe 'Befundanforderung Zentrallabor' ist au&szlig;erdem ein Teil der Aufgabe 'Befundanforderung'.
+</p>
+<p>
+Um dieses Verhalten zu modellieren, klicken Sie mit der linken Maustaste auf das Objekt 'Patient' und dann mit der rechten Maustaste
+auf die Aufgabe 'Anforderung Zentrallabor'. W&auml;hlen Sie nun aus dem erscheinenden Kontextmen&uuml; den
+Punkt <i>interpretiert</i> aus. Es wird ein Pfeil vom Objekt Patient zur Aufgabe 'Befundanforderung Zentrallabor'
+gezeichnet. Damit ist die Beziehung <i>Patient interpretiert Aufgabe 'Befundanforderung Zentrallabor'</i> modelliert.<br>
+Um den zweiten Sachverhalt <i>Aufgabe bearbeitet 'Anforderungsdokument Zentrallabor'</i> zu modellieren
+klicken Sie mit der linken Maustaste auf die Aufgabe 'Befundanforderung Zentrallabor' und mit der rechten
+Maustaste auf das Objekt 'Anforderungsdokument Zentrallabor'. Im erscheinenden Kontextmen&uuml; w&auml;hlen Sie
+<i>Bearbeitet</i> nun aus.
+</p>
+<p>
+Um nun noch die Aufgabe 'Befundanforderung Zentrallabor' als Teil der Aufgabe 'Befundanforderung' zu modellieren
+klicken Sie zuerst mit der linken Maustaste auf die Aufgabe 'Befundanforderung Zentrallabor' und dann mit
+der rechten Maustaste auf die Aufgabe 'Befundanforderung'. W&auml;hlen Sie im erscheinenden Kontextdialog
+<i>N&auml;chstes Fenster / Ist Teil von</i> aus.
+<p>
+<p>
+Ihr Modell sollte nun folgenderma&szlig;en aussehen:<br>
+<img src="../bilder/beispiel1.jpg" width=496 height=305 border=0 alt="" vspace=20 align="top">
+</p>
+<p>
+Damit w&auml;re die oben geschilderte Situation modelliert. Sie k&ouml;nnen nun in den
+<a href="../baukasten/dialoge.html">Eigenschaftsdialogen</a> der einzelnen Elemente nachsehen, 
+wie die soeben modellierten Verbindungen hier repr&auml;sentiert werden.
+</p>
+<p>
+Andere Elemente auf anderen Ebenen lassen sich &auml;hnlich dem oben angegebenen Schema
+einf&uuml;gen und ver&auml;ndern.
+</p>
+
+</body>
+</html>

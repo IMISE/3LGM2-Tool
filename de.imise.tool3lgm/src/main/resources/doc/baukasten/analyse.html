@@ -1,0 +1,518 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Modellanalyse</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<h1>Modellanalyse</h1>
+<p>
+Mit Hilfe der Modellanalyse k&ouml;nnen Sie die Verbindungen der Elemente Ihres Modells untersuchen.
+Da ein 3LGM&sup2;-Modell durch seine Komplexit&auml;t schnell un&uuml;bersichtlich wird, haben Sie hier
+die M&ouml;glichkeit Teile des Modells aus dem Gesamtmodell zu extrahieren.
+</p>
+
+<p>
+<h2><a name="dialog">Analysedialog</a></h2>
+Der Analysedialog soll Ihnen das schnelle erzeugen einer Analyse erm&ouml;glichen. Sie k&ouml;nnen Pfade
+in Ihrem Modell verfolgen indem Sie zwei Typen angeben. Au&szlig;erdem mu&szlig; angegeben werden, ob diese
+zwei Typen miteinander verbunden sein sollen oder nicht. Mit Hilfe der Analyse k&ouml;nnen Sie sich dann
+aufzeigen lassen, zwischen welchen Elementen dieses Typs in Ihrem Modell die Verbindung besteht bzw. nicht
+besteht. Um mehrerer solcher Verbindungen zu definieren klicken Sie auf die Schaltfl&auml;che <i>Erweitern</i>.
+Sie haben dann die M&ouml;glichkeit weitere Pfade zu definieren.<br>
+Durch Analyse starten, starten Sie die Analyse. Sie k&ouml;nnen die Analyse aber auch durch klick auf die Schaltfl&auml;che
+<i>Ins Analyseverzeichnis</i>, im Analyseverzeichnis speichern.
+Der Name der Analyse, den Sie beim Speichern vergeben, erscheint dann unter den Analysen welche im Analyseverzeichnisdialog
+angezeigt werden. Auf diese Weise k&ouml;nnen Sie eine einmal erzeugte Analyse immer wieder verwenden.<br>
+Wollen Sie, dass das Ergebnis einer Analyse als Teilmodell in Ihrem Modell abgelegt wird, so aktivieren Sie die Option 
+<i>F&uuml;r Analyseergebnis neues Teilmodell anlegen</i> im <a href="uebersicht.html#optionen">Men&uuml; Optionen</a>.<br>
+</p>
+
+<p>
+<h2><a name="verzeichnis">Analyseverzeichnisdialog</a></h2>
+Im Analyseverzeichnisdialog k&ouml;nnen Sie eine Analyse ausw&auml;hlen und starten, eine neue Analyse
+erzeugen oder vorhandene Analysen &auml;ndern. Nach &ouml;ffnen des Dialogs &uuml;ber das 
+<a href="uebersicht.html#analyse">Men&uuml; Analyse</a> werden Ihnen in einer Tabelle die vorhandenen
+Analysen angezeigt. In der ersten Spalte ist eine Liste der Knoten aufgef&uuml;hrt, f&uuml;r die eine
+Analyse gilt und in der zweiten Spalte befindet sich der Name der Analyse.<br>
+<b>Eine Analyse ausf&uuml;hren.</b> Um eine Analyse auszuf&uuml;hren klicken Sie in die entsprechende
+Zeile der Tabelle. Die Analyse in der Tabelle ist jetzt farblich hinterlegt. Dr&uuml;cken Sie auf den
+Knopf <i>Analyse starten</i> und die Analyse wird ausgef&uuml;hrt.<br>
+<b>Mehrere Analysen zugleich ausf&uuml;hren.</b> Um mehrere Analysen auszuf&uuml;hren markieren Sie alle
+gew&uuml;nschten Analysen in der Tabelle und dr&uuml;cken auf <i>Analyse starten</i>.<br>
+<b>&Auml;ndern von Analysen.</b> Wenn Sie eine Analyse &auml;ndern
+wollen klicken Sie in der dritten Spalte auf die Analyse. Es &ouml;ffnet sich ein Editor, der den
+Analysetext anzeigt. Um den Analysetext zu verstehen, lesen Sie bitte den folgenden Abschnitt
+<a href="#analysetext">Der Analysetext</a>. Nach dem editieren der Analyse k&ouml;nnen Sie das 
+Editorfenster mit einem Klick auf <i>OK</i> schlie&szlig;en. Wenn Ihre Analyse wie gew&uuml;nscht
+arbeitet, schlie&szlig;en Sie den Analyseverzeichnisdialog mit <i>OK</i> um die &Auml;nderungen
+an der Analyse wirksam werden zu lassen.
+</p>
+
+<p>
+<h2><a name="analysetext">Der Analysetext</a></h2>
+Der Text der Analyse wird in xml verfasst. Eine einfache Analyse, welche alle Anwendungsbausteine
+und Physische Datenverarbeitungsbausteine ausgibt, die zu Erf&uuml;llung einer Aufgabe ben&ouml;tigt
+werden, sieht folgenderma&szlig;en aus:<br>
+<pre>
+&lt;analyse>
+	&lt;startknoten name="Aufgabe"/>
+	&lt;suche>
+		&lt;typ>
+			&lt;eintrag>AufOrgKombination&lt;/eintrag>
+		&lt;/typ>
+		&lt;verbundenstate>wahr&lt;/verbundenstate>
+	&lt;/suche>
+	&lt;suche>
+		&lt;typ>
+			&lt;eintrag>ABKonfiguration&lt;/eintrag>
+		&lt;/typ>
+		&lt;verbundenstate>true&lt;/verbundenstate>
+	&lt;/suche>
+	&lt;suche>
+		&lt;typ>
+			&lt;eintrag>Anwendungsbaustein&lt;/eintrag>
+			&lt;eintrag>KonAnwendungsbaustein&lt;/eintrag>
+			&lt;eintrag>RechAnwendungsbaustein&lt;/eintrag>
+		&lt;/typ>
+		&lt;verbundenstate>true&lt;/verbundenstate>
+	&lt;/suche>
+	&lt;suche>
+		&lt;typ>
+			&lt;eintrag>DBKonfiguration&lt;/eintrag>
+		&lt;/typ>
+		&lt;verbundenstate>true&lt;/verbundenstate>
+	&lt;/suche>
+	&lt;suche>
+		&lt;typ>
+			&lt;eintrag>PhysischerDVBaustein&lt;/eintrag>
+		&lt;/typ>
+		&lt;verbundenstate>true&lt;/verbundenstate>
+	&lt;/suche>
+&lt;/analyse>
+</pre>
+<br>
+Eine Erkl&auml;rung der Tags finden Sie in der folgenden Tabelle:<br><br>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=43*>
+	<COL WIDTH=70*>
+	<COL WIDTH=52*>
+	<COL WIDTH=36*>
+	<COL WIDTH=54*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=17%>
+				<P STYLE="font-style: normal">Tag</P>
+			</TH>
+			<TH WIDTH=27%>
+				<P STYLE="font-style: normal">Bedeutung</P>
+			</TH>
+			<TH WIDTH=20%>
+				<P STYLE="font-style: normal">erlaubt innerhalb</P>
+			</TH>
+			<TH WIDTH=14%>
+				<P STYLE="font-style: normal">Inhalt</P>
+			</TH>
+			<TH WIDTH=21%>
+				<P STYLE="font-style: normal">Attribute</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>Analyse</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>Analysebeschreibung</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>top-level</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>kein</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>keine</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>startknoten</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>Angabe des Knotens, von dem die Analyse ausgeht.</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>Analyse</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>kein</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>name=&quot;&lt;Element&gt;&quot;</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>suche</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>Eine Analyse kann aus mehreren Suchen bestehen.</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>Analyse</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>kein</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>keine</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>typ</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>Angabe von Typen innerhalb eine Suche.</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>suche</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>kein</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>keine</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>eintrag</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>Angabe eines Elementes.</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>typ</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>Name des Elementes.</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>keine</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=17%>
+				<P>verbundenstate</P>
+			</TD>
+			<TD WIDTH=27%>
+				<P>Angabe, ob die  Elemente  dieser Suche mit dem  Startknoten
+				verbunden sein sollen oder nicht.</P>
+			</TD>
+			<TD WIDTH=20%>
+				<P>suche</P>
+			</TD>
+			<TD WIDTH=14%>
+				<P>false</P>
+				<P>true</P>
+			</TD>
+			<TD WIDTH=21%>
+				<P>keine</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+<br>
+Die Namen der Elemente, welche Sie in einer Analyse verwenden k&ouml;nnen sind in der folgenden Tabelle
+aufgelistet. In der ersten Spalte befinden sich die Namen der Elemente in ausgeschriebener Form und 
+in der zweiten Spalte die Bezeichnungen der Elemente, wie sie in der Analyse verwendet werden.<br>
+Bezeichner, die sich vom Namen des Elementes unterscheiden, sind kursiv gedruckt.
+<br><br>
+<TABLE WIDTH=100% BORDER=1 BORDERCOLOR="#000000" CELLPADDING=4 CELLSPACING=0>
+	<COL WIDTH=128*>
+	<COL WIDTH=128*>
+	<THEAD>
+		<TR VALIGN=TOP>
+			<TH WIDTH=50%>
+				<P>Element</P>
+			</TH>
+			<TH WIDTH=50%>
+				<P>Bezeichnung</P>
+			</TH>
+		</TR>
+	</THEAD>
+	<TBODY>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Anwendungsbausteinkonfiguration</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>ABKonfiguration</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Gemischter Anwendungsbaustein</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>Anwendungsbaustein</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Anwendungsprogramm</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Anwendungsprogramm</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Aufgabe</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Aufgabe</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Kombination Aufgabe-Organisationseinheit</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>AufOrgKombination</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Bausteinschnittstelle</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Bausteinschnittstelle</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Bausteintyp</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Bausteintyp</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Benutzungsschnittstelle</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Benutzungsschnittstelle</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Datenbanksystem</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Datenbanksystem</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Datensatztyp</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Datensatztyp</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Datenbankkonfiguration</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>DBKonfiguration</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Datenbankverwaltungssystem</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>DBVerwaltungssystem</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Dokumentensammlung</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Dokumentensammlung</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Dokumententyp</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Dokumententyp</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Ereignistyp</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Ereignistyp</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>ETNT-Kombination</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>ETNTKombination</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Kommunikationsprozess</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Kommunikationsprozess</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Kommunikationsstandard</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Kommunikationsstandard</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Konventioneller Anwendungsbaustein</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>KonAnwendungsbaustein</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Nachrichtentyp</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Nachrichtentyp</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Netzprotokoll</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Netzprotokoll</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Netztyp</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Netztyp</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Objekttyp</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Objekttyp</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Organisationseinheit</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Organisationseinheit</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Organisationsplan</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Organisationsplan</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Physischer Datenverarbeitungsbaustein</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>PhysischerDVBaustein</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Prozess</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Prozess</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Rechnerbasierter Anwendungsbaustein</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P><I>RechAnwendungsbaustein</I></P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Rolle</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Rolle</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Schnittstelle</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Schnittstelle</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Softwareprodukt</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Softwareprodukt</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Standort</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Standort</P>
+			</TD>
+		</TR>
+		<TR VALIGN=TOP>
+			<TD WIDTH=50%>
+				<P>Subnetz</P>
+			</TD>
+			<TD WIDTH=50%>
+				<P>Subnetz</P>
+			</TD>
+		</TR>
+	</TBODY>
+</TABLE>
+
+</body>
+</html>

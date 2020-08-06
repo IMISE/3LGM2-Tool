@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Importieren und Exportieren von Modellen</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<h1>Importieren und Exportieren von Modellen</h1>
+<p>
+<h2><a name="import">Importieren von Modellen</a></h2>
+Die Importfunktionen erhalten Sie &uuml;ber das Men&uuml; <nobr><i>Datei > Import...</i></nobr>
+Sie haben zwei M&ouml;glichkeiten Modelle zu importieren. &Uuml;ber den Men&uuml;punkt <i>Teilmodelle importieren...</i>
+k&ouml;nnen Sie ein oder mehrere Teilmodelle eines bestehenden Modells importieren. &Uuml;ber <i>Gesamtmodell importieren</i>
+k&ouml;nnen Sie ein vollst&auml;ndiges Modell in Ihr Modell importieren.
+</p>
+<p>
+<h3>Teilmodell importieren</h3>
+Wenn Sie <nobr><i>Datei > Import... > Teilmodell importieren...</i></nobr> gew&auml;hlt haben, erscheint ein Dialog, 
+in dem Sie eine Modelldatei &ouml;ffnen k&ouml;nnen.<br>
+Nach dem Einlesen der Datei, werden Ihnen die Teilmodelle aus diesem Modell in einer Liste aufgezeigt.
+W&auml;hlen Sie die zu importierenden Teilmodelle durch setzen eines H&auml;kchens vor das entsprechende
+Teilmodell aus. Klicken Sie auf <i>Teilmodelle importieren</i> um die ausgew&auml;hlten 
+Teilmodelle zu Ihrem Modell hinzuzuf&uuml;gen.
+</p>
+
+<p>
+<h3>Gesamtmodell importieren</h3>
+Um ein Gesamtmodell zu importieren w&auml;hlen Sie <nobr><i>Datei > Import... > Gesamtmodell importieren...</i></nobr>.<br>
+Das gew&auml;hlte Modell wird dann Ihrem Modell hinzugef&uuml;gt.
+</p>
+
+<p>
+<h2><a name="export">Exportieren von Modellen</a></h2>
+Die Exportfunktionen erhalten Sie &uuml;ber das Men&uuml; <nobr><i>Datei > Export...</i></nobr>
+Es stehen Ihnen mehrere M&ouml;glichkeiten zur Verf&uuml;gung ein Modell oder Teilmodelle zu exportieren.
+</p>
+<p>
+<h3>Als Grafik exportieren</h3>
+Wird im Dokumentfenster ein Modell angezeigt, so k&ouml;nnen Sie dieses als Grafik exportieren.
+Nach Auswahl von <nobr><i>Datei > Exportieren... > Als Grafik exportieren...</i></nobr> wird Ihnen 
+ein Dialogfenster angezeigt, in dem Sie der zu exportierenden Datei einen Namen geben und ein Verzeichnis 
+ausw&auml;hlen k&ouml;nnen.<br>
+Unter Dateityp k&ouml;nnen Sie den Dateityp der Grafikdatei ausw&auml;hlen.<br>
+Durch Klick auf Speichern wird die Datei exportiert.
+</p>
+
+<p>
+<h3>Export &uuml;ber XSLT</h3>
+Die M&ouml;glichkeit &uuml;ber XSLT zu exportieren erhalten Sie nach Auswahl des Men&uuml;s
+<nobr><i>Datei > Exportieren > Export &uuml;ber XSLT...</i></nobr><br>
+Mit Hilfe von XSLT haben Sie die M&ouml;glichkeit ein ganzes Modell oder einzelne Teilmodelle in verschiedene
+Formate zu exportieren. Im Moment wird diese Funktion verwendet um 3LGM&sup2;-Modelle in HTML Beschreibung zu
+konvertieren, welche in einem Browser angezeigt werden kann. Die dazu notwendigen XSLT Skripte stehen im 3LGM&sup2;-Baukasten
+zur Verf&uuml;gung.
+</p>
+
+<p>
+<img src="../bilder/xslt_export.jpg" width=738 height=506 border=0 alt="" align="bottom">
+Abb.: Dialogfenster 'Export &uuml;ber XSLT'
+</p>
+
+<p>
+Im Dialogfenster <i>Export &uuml;ber XSLT</i> wird Ihnen zuoberst die zu exportierende Quelle angezeigt. Dies
+ist Ihr aktuelles Modell. In einer Tabelle sind alle Teilmodelle dieses Modells aufgelistet. Standardm&auml;&szlig;ig 
+sind alle Modelle zum Export ausgew&auml;hlt. Dies erkennen Sie an dem H&auml;kchen in der Spalte mit dem
+Namen <i>einbeziehen</i>. Wollen Sie eines der Teilmodelle aus dem Export ausschlie&szlig;en, so deaktivieren Sie das
+H&auml;kchen.<br>
+In der darunter liegenden Tabelle finden Sie eine Auswahl von Skripten. Sie k&ouml;nnen jeweils eines der Skripte
+ausf&uuml;hren. W&auml;hlen Sie das auszuf&uuml;hrende Skript durch Auswahl der Zeile in der Tabelle.
+Sie k&ouml;nnen nun das Ergebnis des Exports in einer Datei speichern und, falls es sich bei dem Export um eine
+Datei vom Typ HTML handelt, im Browser anzeigen lassen. W&auml;hlen Sie dazu die Schaltfl&auml;chen <i>Ergebnis im 
+Browser anzeigen</i> oder <i>Ergebnis in Datei speichern</i> aus.<br>
+Starten Sie den Export &uuml;ber die Schaltfl&auml;che <i>Exportskript ausf&uuml;hren</i>.
+</p>
+<p>
+Die angezeigten Exportskripte werden aus einem Verzeichnis oder mehreren Verzeichnissen geladen. Mit dem Knopf <i>Verzeichnis
+der XSLT Skripte</i> k&ouml;nnen Sie die Verzeichnisse, in denen nach XSLT Skripten gesucht werden soll, &auml;ndern.
+</p>
+<p>
+<i>
+Anmerkung: &Uuml;ber den Knopf </i>Exportskript l&ouml;schen<i> k&ouml;nnen Sie ein Exportskript aus der Liste der Skripte entfernen.
+Das Skript wird dann auch aus dem Verzeichnis, aus dem es geladen wurde, gel&ouml;scht.
+<!-- TODO: Anmerkungen zur Arbeit mit XSLT Skripten (Grundlagen, Einbinden usw.)</font> -->
+</i>
+</p>
+
+<p>
+<h3>Teilmodelle exportieren</h3>
+Diese Funktion erhalten Sie &uuml;ber <nobr><i>Datei > Export > Teilmodelle exportieren...</i></nobr>. Sie haben hier die M&ouml;glichkeit
+ein Teilmodell ihres Modells zu exportieren. Bei Aufruf dieser Funktion wird Ihnen eine Liste der Teilmodelle
+ihres aktuellen Modells pr&auml;sentiert. W&auml;hlen Sie zu exportierende Teilmodelle  durch 
+setzen eines H&auml;kchens in der Spalte <i>exportieren</i> aus. W&auml;hlen Sie eine Datei aus,
+in die die Modelle exportiert werden sollen. Tragen Sie unter <i>Ziel</i> den vollst&auml;ndigen Pfad
+der Datei ein, in welche die Teilmodelle exportiert werden sollen, oder geben Sie mit Hilfe des Dialogs
+<i>durchsuchen</i> einen Pfad und Dateinamen an.
+</p>
+
+<p>
+<h3>Gesamtmodell exportieren</h3>
+Mit dieser Funktion k&ouml;nnen Sie das gesamte Modell unter einem anderen Namen abspeichern.
+<!-- TODO: Unterschied zu speichern unter??? -->
+</p>
+
+<p>
+<h3>Web-Export</h3>
+Diese Funktion erhalten Sie &uuml;ber <nobr><i>Datei > Export > Web-Export...</i></nobr>.
+Der Web-Export ist ein XSLT Export, welcher ausschlie&szlig;lich HTML Dateien generiert. Sie haben dadurch
+die M&ouml;glichkeit Ihr Modell oder einzelne Elemente des Modells in HTML Format zu exportieren und
+im Browser anzeigen zu lassen. Im Dialog <i>Web-Export</i> werden in einer Tabelle alle exportierbaren
+Elemente angezeigt. Wollen Sie ein Element nicht exportieren, so entfernen Sie das H&auml;kchen in der Spalte
+<i>einbeziehen</i>.<br>
+Unter Ziel wird ein Ordner angegeben, in dem der Web-Export gespeichert wird.<br>
+Klicken Sie auf <i>OK</i> um den Web-Export zu starten.
+</p>
+<p>
+F&uuml;r die in der Tabelle angezeigten Elemente sind Exportskripte vorhanden. 
+Diese Exwerden aus einem Verzeichnis oder mehreren Verzeichnissen geladen. Mit dem Knopf <i>Verzeichnis
+der XSLT Skripte</i> k&ouml;nnen Sie die Verzeichnisse, in denen nach XSLT Skripten gesucht werden soll, &ouml;ndern.
+</p>
+
+</body>
+</html>

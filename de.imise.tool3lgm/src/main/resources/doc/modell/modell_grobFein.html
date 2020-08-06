@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Vergr&ouml;bern und Verfeinern eines Modells</title>
+</head>
+
+<body>
+
+<h1>Vergr&ouml;bern und Verfeinern eines Modells</h1>
+<p>
+&Uuml;ber die ist_Teil_von Beziehungen ist es m&ouml;glich Modelle zu vergr&ouml;bern und zu verfeinern. 
+Verfeinern und Vergr&ouml;bern ist keine Funktion, die im Rahmen der Modellierung verwendet wird 
+(&quot;Ich m&ouml;chte jetzt eine Aufgabe verfeinern&quot;) - dies ist lediglich durch die ist_Teil_von 
+Beziehungen m&ouml;glich -, sondern eine Funktion, die auf einem 'fertigen' Modell angewendet wird. 
+Hierdurch k&ouml;nnen Modelle besser visualisiert werden und auf einer beliebig groben Ebene analysiert 
+werden. Die Funktionen Vergr&ouml;bern und Verfeinern beziehen sich auf Modellelemente. 
+</p>
+
+F&uuml;r das Vergr&ouml;bern und Verfeinern gibt es folgende Regeln:
+<ul>
+<li>Beziehungen von Elementen sind auf einer m&ouml;glichst tiefen Hierarchiestufe zu modellieren.</li>
+<li>Beim Vergr&ouml;bern eines Modells werden Beziehungen der untergeordneten an das &uuml;bergeordnete 
+Element dynamisch &uuml;bergeben.</li>
+<li>Beim Verfeinern eines Modells werden Beziehungen, die dem &uuml;bergeordneten Element 
+aufgrund einer Vergr&ouml;berung auf der entsprechenden Hierarchieebene dynamisch zugerordnet wurden 
+wiederum an die untergeordneten Elemente (zur&uuml;ck-) gegeben; d.h. sie werden einfach dem 
+&uuml;bergeordneten Element wieder weggenommen.</li>
+<li>Analyse- und Exportfunktionen arbeiten immer auf dem jeweiligen aktuellen (vergr&ouml;berten oder 
+verfeinerten) Modell.</li>
+<li>F&uuml;r Anwendungsbausteinkonfigurationen gilt beim Vergr&ouml;bern folgendes: Die 
+Anwendungsbausteinkonfiguration der &uuml;bergeordneten Aufgaben entstehen durch Bildung des 
+Kreuzproduktes der Mengen der Anwendungsbausteinkonfigurationen der untergeordneten Aufgaben 
+(siehe <a href="#abb1">Abb. 1</a>). Anwendungsbausteinkonfigurationen, die der &uuml;bergeordneten Aufgabe bereits vorher 
+zugeordnet waren, bleiben erhalten. Dies kann bei einer gro&szlig;en Anzahl von ist_Teil_von Beziehungen 
+und einer gro&szlig;en Anzahl von Anwendungsbausteinkonfigurationen f&uuml;r die untergeordneten Aufgaben dazu 
+f&uuml;hren, dass dem &uuml;bergeordneten Anwendungsbaustein eine sehr gro&szlig;e Anzahl an AB-Konfigurationen 
+zugeordnet ist. Entsprechendes gilt f&uuml;r <a name="dvb_konf">Datenverarbeitungsbausteinkonfigurationen</a>.</li>
+</ul>
+
+<div align="center">
+<a name="abb1">
+<img src="../bilder/mod_vergroebern.gif" width=472 height=364 border=0 align="bottom" alt="">
+</a>
+<br>Abb. 1: Anwendungsbausteinkonfigurationen beim Vergr&ouml;bern eines 3LGM&sup2; Modells.
+</div>
+</body>
+</html>

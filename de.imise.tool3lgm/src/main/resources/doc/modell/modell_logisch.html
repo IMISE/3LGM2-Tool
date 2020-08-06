@@ -1,0 +1,135 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Statische Sicht der Logischen Werkzeugebene</title>
+</head>
+
+<body>
+
+<h1>Statische Sicht der Logischen Werkzeugebene</h1>
+<p>
+Auf der logischen Werkzeugebene stehen die Anwendungsbausteine im Mittelpunkt. 
+Anwendungsbausteine unterst&uuml;tzen Aufgaben und verarbeiten, speichern und transportieren Daten, 
+die Objekte bestimmter <a name="objekttyp">Objekttypen</a> repr&auml;sentieren. Besonders wichtiger Aspekt dieser Ebene ist, 
+wo Objekttypen logisch gespeichert werden und wie Anwendungsbausteine kommunizieren m&uuml;ssen, um zu 
+gew&auml;hrleisten, dass bei der Durchf&uuml;hrung der Aufgaben der ben&ouml;tigte Zugriff auf Informationen 
+gesichert ist. 
+</p>
+<p>
+<i>Anwendungsbausteine</i> (engl. application component) sind Werkzeuge der 
+Informationsverarbeitung, die von den Nutzern des Krankenhausinformationssystems unmittelbar oder 
+mittelbar f&uuml;r die Erledigung der Aufgaben des Krankenhauses verwendet werden. Ein 
+Anwendungsbaustein kann die Erledigung einer oder mehrerer Aufgaben ganz oder auch jeweils nur 
+teilweise unterst&uuml;tzen. Im letzteren Fall unterst&uuml;tzen m&ouml;glicherweise mehrere Anwendungsbausteine 
+gemeinsam die Erledigung einer bestimmten Aufgabe. Anwendungsbausteine geh&ouml;ren zu den logischen 
+Werkzeugen. Zur Realisierung eines logischen Werkzeugs der Informationsverarbeitung sind physische 
+Werkzeuge erforderlich (siehe <a href="modell_physisch.html">Statische Sicht der Physischen 
+Werkzeugebene</a>). Im Gegensatz zu den logischen Werkzeugen, sind diese - wie z.B. ein 
+Arbeitsplatzrechner - zwar physisch greifbar - aber unmittelbar, d.h. ohne installierten 
+Anwendungsbaustein, f&uuml;r den Nutzer als Werkzeug nicht nutzbar.
+</p>
+
+Ein Anwendungsbaustein wird realisiert durch 
+<ul>
+<li>Installation, Adaptation und Inbetriebnahme von <i><a name="softwareprodukt">Softwareprodukten</a></i> auf Rechnersystemen oder</li>
+<li>die Verabschiedung von <i>Organisationspl&auml;nen</i>, die mit Hilfe eines Systems physischer Werkzeuge, die keine Rechnersysteme sind (konventionelle Werkzeuge) durchgef&uuml;hrt werden.</li>
+</ul>
+
+Falls f&uuml;r ein Anwendungsbaustein ausschlie&szlig;lich der erste Fall gilt, wird der Anwendungsbaustein als <i>rechnerbasiert</i>, sonst als <i>papierbasier</i>t bezeichnet. 
+Anwendungsbausteine k&ouml;nnen durch folgende Begriffe n&auml;her beschrieben werden:
+<ul>
+<li>Ein rechnerbasierter Anwendungsbaustein wird gesteuert durch ein <i><a name="anwendungsprogramm">Anwendungsprogramm</a></i>, das auf einem <i>Softwareprodukt</i> basiert. Anders herum formuliert ist ein Anwendungsprogramm ein adaptiertes Softwareprodukt. Ein papierbasierter Anwendungsbaustein wird von einem <i><a name="organisationsplan">Organisationsplan</a></i> gesteuert. </li>
+<li>Ein <i>Softwareprodukt</i> ist ein abgeschlossenes, erworbenes oder eigenentwickeltes Programm oder Programmpaket, das auf Rechnersystemen (siehe <a href="modell_physisch.html">Statische Sicht der Physischen Werkzeugebene</a>) installiert werden kann.</li>
+<li>Ein <i>Organisationsplan</i> kann ein schriftliches Dokument sein, in dem in Form von Arbeitsanweisungen beschrieben ist, wie bestimmte Aufgaben zu erledigen sind. In den meisten F&auml;llen wird es sich aber eher um m&uuml;ndliche Vereinbarungen handeln. </li>
+<li>Werden bei der <i>Adaptation</i> des Softwareprodukts dessen Konstruktion nicht ver&auml;ndert und lediglich Tabelleneintr&auml;ge vorgenommen, spricht man von <i>Adaptation durch Parametrierung</i> oder engl. customizing. In diesem Fall ist das Anwendungsprogramm des Anwendungsbausteins identisch mit dem Softwareprodukt.</li>
+<li>Ein Anwendungsbaustein kann &uuml;ber ein eigenes Ged&auml;chtnis verf&uuml;gen, das die Speicherung von Daten erlaubt. Das Ged&auml;chtnis wird durch ein <i><a name="dbs">Datenbanksystem</a></i> beschrieben, wenn der Anwendungsbaustein rechnerbasiert ist, und durch eine <i><a name="dokumentensammlung">Dokumentensammlung</a></i>, wenn der Anwendungsbaustein papierbasiert ist.</li>
+<li>Ein Datenbanksystem speichert Datens&auml;tze bestimmter <i><a name="datensatztyp">Datensatztypen</a></i>. Sie wird gesteuert durch eine <i><a name="db_system">Datenbankverwaltungssystem</a></i>. </li>
+<li>Einer Dokumentensammlung werden Dokumente bestimmter <i><a name="dokumententyp">Dokumententypen</a></i> abgelegt. </li>
+<li>Anwendungsbausteine k&ouml;nnen &uuml;ber <i><a name="benutzer_s">Benutzungsschnittstellen</a></i> Daten mit Benutzern austauschen. </li>
+<li>Anwendungsbausteine k&ouml;nnen untereinander &uuml;ber <i><a name="baustein_s">Bausteinschnittstellen</a></i> Nachrichten austauschen. Eine Bausteinschnittstelle wird gegebenenfalls beschrieben durch den unterst&uuml;tzten <i><a name="komm_standard">Kommunikationsstandard</a></i> und die <i>Ereignis-Nachrichtentypen</i> bzw. <i>Ereignis-Dokumenttypen</i>, die versendet oder empfangen werden k&ouml;nnen.</li>
+<li>Datensatztyp, Dokumenttyp und Nachrichtentyp sind <i>Repr&auml;sentationsformen</i> f&uuml;r Objekttypen und sind daher insbesondere f&uuml;r bestimmte Inter-Ebenen-Beziehungen von Bedeutung (siehe Abschnitt Inter-Ebenen-Beziehungen). Ein Datensatztyp beschreibt wie Objekttypen in einem Datenbanksystem (eines rechnerbasierten Anwendungsbausteins) gespeichert werden. Ein Datensatztyp entspricht bei relationalen Datenbanken einem Relationsschema. Ein <a name="nachrichtentyp">Nachrichtentyp</a> beschreibt eine Klasse von Nachrichten im Falle nachrichtenbasierter Kommunikation zwischen rechnerbasierten Anwendungsbausteinen. Nachrichtentypen werden h&auml;ufig im Rahmen von Kommunikationsstandards definiert (z.B. HL7 Nachrichtentypen). Ein Dokumententyp (z. B. der Dokumententyp 'Arztbrief') beschreibt eine Klasse von Dokumenten, die in Dokumentensammlungen gespeichert werden und / oder innerhalb des nicht rechnerunterst&uuml;tzten Teil eines Informationssystems kommuniziert werden. </li>
+<li>Ist ein Anwendungsbaustein dazu in der Lage, &uuml;ber Bausteinschnittstellen unmittelbar einem anderen Anwendungsbaustein Nachrichten zu senden, besteht zwischen diesen Anwendungsbausteinen eine <i>Kommunikationsbeziehung</i>. 'Unmittelbar' bedeutet dabei, dass f&uuml;r den Transport der Nachrichten kein dritter Anwendungsbaustein eingesetzt wird. Innerhalb einer Kommunikationsbeziehung befindet sich ein Bausteinschnittstelle in der Rolle des <i>Senders</i> und die andere Bausteinschnittstelle in der Rolle des <i>Empf&auml;ngers</i>. Hierdurch wird auch eine Richtung der Kommunikation vorgegeben. F&uuml;r eine Kommunikationsbeziehung wird auch angegeben, welche Ereignis-Nachrichtentypen bzw. Ereignis-Dokumenttypen tats&auml;chlich ausgetauscht werden. Sind sowohl Sender als auch Empf&auml;nger rechnerbasierte Anwendungsbausteine werden Ereignis-Nachrichtentypen ausgetauscht, ist entweder Sender oder Empf&auml;nger ein papierbasierter Anwendungsbaustein, werden Ereignis-Dokumenttypen ausgetauscht. </li>
+<li>Eine Menge von Anwendungsbausteinen (<i><a name="awb_konf">Anwendungsbausteinkonfiguration</a></i>) unterst&uuml;tzt eine oder mehrere Aufgaben (ausf&uuml;hrliche Beschreibung von Anwendungsbaustein-Konfigurationen siehe im Abschnitt Inter-Ebenen-Beziehungen). Hinweis: Eine Anwendungsbausteinkonfiguration kann auch aus lediglich einem Anwendungsbaustein bestehen. In diesem Fall unterst&uuml;tzt ein Anwendungsbaustein eine Aufgabe komplett.</li>
+</ul>
+
+
+<p><i>
+Anmerkung: Der Zusammenhang Anwendungsbaustein - Anwendungsprogramm - Softwareprodukt soll an 
+folgendem Beispiel verdeutlich werden: Wenn ein Krankenhaus z.B. ein Archivverwaltungssystem 
+f&uuml;r Patientenaktenarchive, nennen wir es ArchiMed, von der Firma Graecia GmbH kauft, ist das 
+Archivverwaltungssystem zun&auml;chst 'leer'. Die Disketten oder CD-ROMs, die an andere Krankenh&auml;user 
+ausgeliefert werden, haben &uuml;blicherweise denselben Inhalt. Die krankenhausspezifischen Anpassungen 
+m&uuml;ssen erst noch durchgef&uuml;hrt werden, z.B. muss parametriert werden, d.h. mit Daten 'gef&uuml;llt', 
+wie die Akten sortiert werden, welche Abteilungen es gibt mit welchen Kostenstellennummern, auch 
+nat&uuml;rlich, wie das Krankenhaus hei&szlig;t, damit der Name auf dem Bildschirm oder auf Briefen erscheinen 
+kann. Nach diesen Anpassungen - auch Adaptierung genannt -, der Installation und der 
+Inbetriebnahme, wird aus dem Softwareprodukt ArchiMed der Firma Graecia GmbH ein f&uuml;r dieses 
+Krankenhaus spezifischer und nutzbarer Anwendungsbaustein, der etwa mit ARCHIV bezeichnet werden 
+kann.
+</i></p>
+
+<p><i>
+Anmerkung: Dasselbe Softwareprodukt kann mehrfach auf demselben oder unterschiedlichen Rechnern 
+installiert werden. Dadurch entstehen unterschiedliche Anwendungsbausteine. Im Falle mehrfacher 
+Installation auf verschiedenen Rechnern und jeweils identischer Adaptation lassen sich die 
+Anwendungsbausteine (ausschlie&szlig;lich) durch die physischen Rechnersysteme unterscheiden, auf denen 
+sie installiert sind. Ist ein Softwareprodukt mehrfach mit identischer Adaptation auf dem selbem 
+Rechner installiert, ist eine Unterscheidung nicht so ohne weiteres m&ouml;glich. 
+</i></p>
+
+<p>
+<a href="#abb1">Abb. 1</a> zeigt das Metamodell der logischen Werkzeugebene eines Krankenhausinformationssystems. 
+Die gepunkteten Klassen und Assoziationsbeziehungen zeigen den Zusammenhang zwischen Fachlicher 
+Ebene und Logischer Werkzeugebene (vgl. <a href="modell_ebenen.html">Inter-Ebenen-Beziehungen</a>).
+<div align="center">
+<a name="abb1">
+<img src="../bilder/metamodellLogisch.gif" width=643 height=457 border=0 align="bottom" alt="">
+</a>
+<br>Abb. 1: Das Metamodell der Logischen Werkzeugebene. Gepunktete Linien und Symbole repr&auml;sentieren Inter-Ebenen-Beziehungen.
+</div>
+</p>
+
+<p>
+Ein Beispiel einer logischen Werkzeugebene eines Krankenhausinformationssystems findet sich 
+in <a href="#abb2">Abb. 2</a>. Die abgerundeten Rechtecke zeigen hier Anwendungsbausteine, die kleinen Ovale 
+innerhalb der Anwendungsbausteine zeigen die Bausteinschnittstellen. Die gerichteten Kanten 
+zwischen Bausteinschnittstellen unterschiedlicher Anwendungsbausteine  repr&auml;sentieren die 
+Kommunikationsbeziehungen. 
+</p>
+
+<p>
+Der linke Teil der Abbildung zeigt den rechnerunterst&uuml;tzten Teil eines 
+Krankenhausinformationssystems: ein Patientenverwaltungssystem (PVS), ein 
+Radiologie-Informationssystem (RIS), ein Labor-Informationssystem (LIS), ein Kommunikationsserver 
+(KomServ), ein Krankenhausverwaltungssystem und weitere nicht n&auml;her spezifizierte 
+Abteilungsinformationssysteme. Der rechte Teil zeigt papierbasierte Anwendungsbausteine, die 
+(papierbasierte) Post und einen papierbasierten klinischen Arbeitsplatz.
+</p>
+
+<p>
+Dieses Beispiel ist vereinfacht und fiktiv. Allerdings zeigt es eine ganz typische Situation. 
+W&auml;hrend die Krankenhausverwaltung und die Funktionsbereiche durch rechnerbasierte 
+Anwendungsbausteine unterst&uuml;tzt werden, existieren f&uuml;r typische klinische Aufgaben lediglich 
+papierbasierte Anwendungsbausteine. F&uuml;r die Kommunikation zwischen den rechnerbasierten 
+Anwendungsbausteinen ist ein Kommunikationsserver verf&uuml;gbar, der aber offensichtlich nicht von 
+allen Anwendungsbausteinen genutzt wird oder genutzt werden kann. Als Konsequenz werden auch 
+propriet&auml;re Bausteinschnittstellen gebracht. Die Tatsache, dass typische klinische Aufgaben 
+nicht durch rechnerbasierte Anwendungsbausteine unterst&uuml;tzt werden erfordert eine gro&szlig;e Anzahl 
+Bausteinschnittstellen zwischen dem rechnerunterst&uuml;tzten Teil des KIS und dem nicht 
+rechnerunterst&uuml;tzten Teil, die zu Problemen beispielsweise hinsichtlich Medienbr&uuml;chen, f&uuml;hren k&ouml;nnen. 
+Solche Digital-Analog-Schnittstellen werden z.B. durch Drucker und Belegleser bzw. der 
+entsprechenden Software realisiert
+</p>
+
+<div align="center">
+<a name="abb2">
+<img src="../bilder/bspLogisch.gif" width=478 height=255 border=0 alt="" align="bottom">
+</a>
+<br>Abb. 2: Beispiel einer Logischen Werkzeugebene
+</div>
+
+
+
+</body>
+</html>

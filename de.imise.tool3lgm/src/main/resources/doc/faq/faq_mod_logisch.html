@@ -1,0 +1,175 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>FAQ zur Modellierung - Logische Werkzeugebene</title>
+
+</head>
+
+<body>
+<h1>FAQ zur Modellierung - Logische Werkzeugebene</h1>
+
+<p align="left">
+<h2><a name="f1">1.</a> Wie modelliere ich eine Datenbank, die zu
+keinem Anwendungsbaustein geh&ouml;rt?</h2>
+Gemeint ist hier wohl ein <i>Datenbanksystem</i>.
+Ein <i>Datenbanksystem</i> kann im weitesten Sinne selbst Anwendungsbaustein sein. 
+In diesem Fall muss aber zun&auml;chst ein Anwendungsbaustein definiert werden, 
+der sozusagen als H&uuml;lle dient. Diesem Anwendungsbaustein wird dann ein Datenbanksystem
+zugeordnet. Der Anwendungsbaustein erh&auml;lt Bausteinschnittstellen,
+&uuml;ber die andere Anwendungsbausteine dann auf das Datenbanksystem
+zugreifen k&ouml;nnen. </p>
+
+<p align="left">
+<h2><a name="f2">2.</a> Besteht die M&ouml;glichkeit f&uuml;r einen
+Anwendungsbaustein mehrere Datenbank-
+systeme zu erstellen?</h2>
+Nach unserem Metamodell gibt es keine
+M&ouml;glichkeit, einem Anwendungsbaustein mehrere Datenbanksysteme
+zuzuordnen. Dies ist aus unserer Erfahrung heraus nicht notwendig, da
+die uns bekannten Anwendungsbausteine auch immer nur ein
+Datenbanksystem besitzen. Allerdings kann es durchaus m&ouml;glich
+sein, dass ein Anwendungsbaustein auf mehrere Datenbanksysteme
+zugreift. In diesem Fall sind zuerst die Datenbanksysteme und die sie
+besitzenden Anwendungsbausteine (siehe auch <a href="#f5">FAQ 5.</a>)
+zu modellieren. Der Zugriff muss dann &uuml;ber Bausteinschnittstellen
+und Kommunikationsbeziehungen modelliert werden. </p>
+
+<h2><a name="f3">3.</a> Gibt es Modellierungsrichtlinien auf der
+logischen Werkzeugebenebene f&uuml;r papierbasierte Anwendungsbausteine?</h2>
+
+<p align="left">
+<h2><a name="f4">4.</a> Wann ist eine Schnittstelle
+Benutzungsschnittstelle und wann Bausteinschnittstelle?</h2>
+Eine Schnittstelle ist immer dann eine
+Bausteinschnittstelle, wenn damit eine Kommunikationsbeziehung zu einem
+anderen Anwendungsbaustein modelliert werden soll. Eine
+Benutzungsschnittstelle bezieht sich auf die
+Mensch-Maschine-Interaktion und betrachtet mehr softwareergonomische
+Aspekte. </p>
+
+<p align="left">
+<h2><a name="f5">5.</a> Warum wird im Objekttyp/Eigenschaftendialog der
+Nachrichtentyp mit dem Objekttyp verbunden? Geh&ouml;rt der
+Nachrichtentyp nicht eher mit dem Datensatztyp bzw. dem Dokumententyp
+verbunden (z.B. Nachrichtentyp &#8222;ADT-Meldung&quot; &#8211; Datensatztyp
+&#8222;Patientenstammdaten&quot; anstelle von Objekt &#8222;Patient&quot;)</h2>
+Nach unserem Metamodell gibt es drei
+M&ouml;glichkeiten, wie ein Objekttyp auf der logischen Werkzeugebene
+repr&auml;sentiert werden kann: als Nachrichtentyp, als Datensatztyp
+oder als Dokumententyp. Die Repr&auml;sentation als Datensatztyp
+bezieht sich auf die Speicherung in einem Datenbanksystem. Die
+Repr&auml;sentation als Nachrichtentyp bezieht sich auf die
+Kommunikation zwischen zwei rechnerbasierten Anwendungsbausteinen. Die
+Repr&auml;sentation als Dokumententyp bezieht sich auf die Speicherung
+in einer Dokumentensammlung und die Kommunikation zwischen zwei
+Anwendungsbausteinen, von denen mindestens einer papierbasiert ist. </p>
+
+<p align="left">
+<h2><a name="f6">6.</a> Kann ich unter dem Master-DBS das
+Datenbankverwaltungssystem verstehen, wie es im Modellbrowser benannt
+ist?</h2>
+Nein. 
+</p>
+
+<p align="left">
+<h2><a name="f7">7.</a> Wann ist es notwendig, nicht
+rechnerunterst&uuml;tzte Bausteinschnittstellen zu modellieren? (z. B.
+wenn zun&auml;chst etwas auf Papier dokumentiert und sp&auml;ter mit
+einen rechnerbasierten Anwendungsbaustein erfasst wird &#8211;
+Leistungsanordnung)</h2>
+Typisches Beispiel f&uuml;r die Datenkommunikation
+zwischen einem rechnerbasierten und einem papierbasierten
+Anwendungsbaustein ist das Auftreten von Medienbr&uuml;chen. Will man
+dieses modellieren/sehen, so sind f&uuml;r die Schnittstellen folgende
+Fragen zu stellen:
+<ul>
+  <li>Werden Daten im papierbasierten Bereich erfasst, die
+anschlie&szlig;end manuell in ein rechnerbasiertes Anwendungssystem
+eingegeben werden?</li>
+  <li>Werden Daten aus einem rechnerbasierten Anwendungssystem
+ausgedruckt und auf Papier weiter verwendet?</li>
+</ul>
+Tipp: Da im 3LGM&sup2;-Baukasten in der Regel keine Benutzer modelliert
+werden, wird die Benutzung des rechnerbasierten Anwendungsbausteins
+nicht explizit modelliert. Wird also ein Papier ausgedruckt, gelesen
+und dann vernichtet, wird das in der Regel nicht modelliert. Das Lesen
+w&auml;re auch am Bildschirm m&ouml;glich gewesen. Soll dieser Fall
+modelliert werden, um z.B. den Verdacht des unn&ouml;tig hohen
+Papieraufkommens zu bekr&auml;ftigen, kann man einen papierbasierten
+Anwendungsbaustein &#8222;Betrieb&quot; modellieren mit einer Dokumentensammlung
+&#8222;Papierkorb&quot;.
+</p>
+
+<p align="left">
+<h2><a name="f8">8.</a> Nach meinem Verst&auml;ndnis gibt es keine
+Schnittstellen, die sowohl Sende- als auch Empfangsschnittstelle sein
+k&ouml;nnen. Trotzdem l&auml;sst das Meta-Modell und der Baukasten dies
+zu. Warum?</h2>
+Unser Metamodell l&auml;sst es zu, dass ein und
+dieselbe Schnittstelle sowohl Sende- als auch Empfangsschnittstelle
+sein kann. Dies ist zun&auml;chst nicht einsichtig, da realistische
+Schnittstellen i. a. entweder Sende- oder Empfangsschnittstelle sind.
+Allerdings ist zu bedenken, dass es w&uuml;nschenswert sein wird,
+abstrakter modellieren zu wollen. M&ouml;chte man beispielsweise
+lediglich darstellen, dass zwei Anwendungsbausteine in beide Richtungen
+miteinander kommunizieren, wird man f&uuml;r jeden AB eine
+Schnittstelle definieren und diese in beide Richtungen verbinden. Das
+Meta-Modell l&auml;sst hier bewusst M&ouml;glichkeiten offen, um es dem
+Modellierer zu erm&ouml;glichen sein IS unter verschiedenen
+Zielsetzungen und Abstraktionsgraden zu modellieren. </p>
+
+<p align="left">
+<h2><a name="f9">9.</a> Wie kann ich auf der logischen Ebene meinem
+Datenbanksystem seine Master-
+DBS zuordnen?</h2>
+Das geht nicht. Siehe auch <a href="#f1">1.</a></p>
+
+<p align="left">
+<h2><a name="f10">10.</a> Beim Datensatztyp wird ETNT nicht angeboten,
+sondern nur beim Dokumententyp. Wie kann ich das dann bei zwei
+rechnerbasierten Anwendungsbausteinen modellieren?</h2>
+Das ist so gewollt. Dahinter steckt folgendes: Wenn
+wir uns im rein rechnerbasierten Bereich befinden, erfolgt die
+Kommunikation ausschlie&szlig;lich &uuml;ber Nachrichtentypen, eine
+ETNT-Kombination ist daher beim Datensatztyp gar nicht notwendig. Der
+Datensatztyp repr&auml;sentiert nur wie Objekttypen gespeichert werden.
+Im paper-basierten Bereich dagegen wird die Repr&auml;sentationsform
+Dokumententyp sowohl f&uuml;r die Kommunikation als auch f&uuml;r die
+Speicherung von Objekttypen verwendet. Daher ben&ouml;tigen wir auch
+eine ETNT-Kombination (, die eigentlich ETDT-Kombination hei&szlig;en
+m&uuml;sste). </p>
+
+<p align="left">
+<h2><a name="f11">11.</a> Im Eigenschaftendialog f&uuml;r
+Softwareprodukte im Modellbrowser werden die Softwareprodukte Aufgaben
+und nicht Anwendungsbausteinen zugeordnet. Ist das richtig?</h2>
+Das ist so richtig. Im Metamodell entspricht das der
+Beziehung 'kann_unterst&uuml;tzen'. Damit ist man in der Lage eine
+Zusatzinformation zum Softwareprodukt selbst zu modellieren. Nicht alle
+Aufgaben, die ein Softwareprodukt unterst&uuml;tzen <b>kann</b>,
+werden nach der Installation auch tats&auml;chlich unterst&uuml;tzt.
+Dies h&auml;ngt beispielsweise von der Parametrierung ab. Dadurch ist
+es theoretisch m&ouml;glich, festzustellen, ob nicht weitere Aufgaben
+von einem auf einem bestimmten Softwareprodukt basierenden
+Anwendungsbaustein unterst&uuml;tzt werden sollten, beispielsweise um
+den Grad der Heterogenit&auml;t zu senken. </p>
+
+<p align="left">
+<h2><a name="f12">12.</a> Warum werden Anwendungsprogramme
+Softwareprodukten und Anwendungsbausteinen zugeordnet? Ich dachte
+Anwendungsprogramme sind adaptierte Softwareprodukte (spez.
+Parametereinstellungen,...)</h2>
+Ein Anwendungsbaustein wird gesteuert durch eine
+Anwendungsprogramm (Beziehung wird_gesteuert_durch im Metamodell.). Ein
+Anwendungsprogramm ist ein adaptiertes Softwareprodukt (Beziehung
+basiert_auf im Metamodell). Der Einfachheit halber kann man nun im
+Eigenschaftendialog eines Anwendungsbausteins direkt ein
+Softwareprodukt zuordnen, diese wird aber tats&auml;chlich dem
+Anwendungsprogramm dieses Anwendungsbausteins zugeordnet. Allerdings
+ist die Modellierung dieser Beziehungen ziemlich wenig intuitiv und
+dazu auch noch fehlerhaft. So kann man derzeit beispielsweise im
+Eigenschaftendialog eines Anwendungsbausteins mehrere Softwareprodukte
+zuordnen, ohne das man das im Eigenschaftendialog sieht.</p>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<title>Statische Sicht der Physischen Werkzeugebene</title>
+</head>
+
+<body>
+
+<h1>Statische Sicht der Physischen Werkzeugebene</h1>
+<p>
+Die physische Werkzeugebene besteht aus einer Menge von <a name="dv_baustein">physischen Datenverarbeitungsbausteinen</a>. 
+Ein physischer Datenverarbeitungsbaustein eines Krankenhausinformationssystems ist entweder 
+<ul>
+<li>ein System von Personen und konventionellen Werkzeugen (wie z.B. Archivregale, Posteingangs- 
+und Postausgangsk&ouml;rbe) der Informationsverarbeitung (nicht-rechnerbasierter physischer 
+Datenverarbeitungsbaustein) oder</li>
+<li>ein rechnerbasierter physischer Datenverarbeitungsbaustein, z.B. Rechnersysteme (PCs, Server), 
+Monitore, Drucker, Switches, Router, Subnetze, Netzwerkkarten, Netzanschlusspunkte). </li>
+</ul>
+
+<p>
+Die physischen Datenverarbeitungsbausteine k&ouml;nnen &uuml;ber Daten&uuml;bertragungsverbindungen miteinander 
+kommunizieren. Zwischen rechnerbasierten physischen Datenverarbeitungsbausteinen sind dies 
+typischerweise Datenkabel. Betrachtet man allerdings Funknetze, sind diese 
+Daten&uuml;bertragungsverbindungen lediglich virtueller Art (also nicht greifbar) und lediglich durch 
+die beiden Knoten zwischen denen sie besteht definiert. &Auml;hnliches gilt auch f&uuml;r 
+Daten&uuml;bertragungsverbindungen zwischen nicht rechnerbasierten Datenverarbeitungsbausteinen.  
+</p>
+
+<p>
+Die Konstellation dieser Daten&uuml;bertragungsverbindungen f&uuml;r zu physischen Netzwerken, die auf 
+<a name="netzprotokoll">Netzprotokollen</a> basieren. <a name="subnetz">Subnetze</a> k&ouml;nnen definiert werden als Projektion auf das gesamte Netzwerk. 
+Es ist zu beachten, dass auf der physischen Werkzeugebene sowohl 'echte' physische Netzwerke 
+beschrieben werden k&ouml;nnen, die lediglich die bestehenden Datenverarbeitungsbausteine und ihre 
+Daten&uuml;bertragungsverbindungen darstellen, als auch 'logische Netzwerke', die ber&uuml;cksichtigen, dass 
+bestimmte Datenverarbeitungsbausteine auch zu bestimmten Zonen geh&ouml;ren, in denen bestimmte 
+Zugriffsrechte vergeben sind. 
+</p>
+
+<p>
+Die physische Werkzeugebene stellt also die physischen Werkzeuge bereit, die f&uuml;r den Betrieb von 
+Anwendungsbausteinen erforderlich sind. Physische Datenverarbeitungsbausteine lassen sich ggf. 
+wiederum in physische Datenverarbeitungsbausteine gliedern. 
+</p>
+
+<p>
+Insbesondere Rechnersysteme k&ouml;nnen z B. durch folgende Attribute der Klasse 
+'Physische Datenverarbeitungsbausteine n&auml;her beschrieben werden (diese sind im UML-Klassendiagramm 
+nicht dargestellt):
+<ul>
+<li>Inventarnummer</li>
+<li>Seriennummer</li>
+<li>Typ</li>
+<li>Betriebssystem </li>
+<li>Festplattenspeicher </li>
+<li>Arbeitsspeicher</li>
+<li>Prozessor</li>
+</ul>
+
+<a href="#abb1">Abb. 1</a> zeigt die UML-Notation der physischen Werkzeugebene.
+<div align="center">
+<a name="abb1">
+<img src="../bilder/metamodellPhysisch.gif" width=491 height=238 border=0 align="bottom" alt="">
+</a>
+<br>Abb. 1:	Klassendiagramm 'Physische Werkzeugebene'. Gepunktete Linien und Symbole repr&auml;sentieren Inter-Ebenen-Beziehungen.
+</div>
+
+<p><i>
+Anmerkung: Das Meta-Modell der physischen Werkzeugebene ist wesentlich offener gestaltet, d. h. es 
+steckt inhaltlich wesentlich weniger drin als im Meta-Modell der logischen Werkzeugebene. W&auml;hrend 
+dort z.B. Schnittstellen explizit modelliert sind, k&ouml;nnen Schnittstellen (z. B: Netzwerkkarten) 
+auf der physischen Werkzeugebene als physischer Datenverarbeitungsbaustein modelliert werden, der 
+wiederum Teil eines Rechnersystems ist.
+</i></p>
+
+<p><i>
+Anmerkung: Bei konventionellen Datenverarbeitungsbausteinen kann man unter dem Betriebssystem die 
+intellektuellen F&auml;higkeiten der beteiligten Personen verstehen. So sind beispielsweise bei einem 
+Krankenaktenarchiv neben den R&auml;umen und Regalanlagen Menschen notwendig, die grundlegende 
+Kulturtechniken wie Ordnung halten, freundlicher Umgang mit Kunden und Mitarbeitern etc. 
+beherrschen. Nur auf dieser Grundlage kann mit Hilfe eines Organisationsplans und den Anweisungen 
+einer Leitung ein funktionierendes Archiv als nicht-rechnerbasierter Anwendungsbaustein realisiert 
+werden.
+</i></p>
+
+<p>
+<a href="#abb2">Abb. 2</a> zeigt ein Beispiel einer physischen Werkzeugebene. In diesem Beispiel 
+gibt es je einen Server f&uuml;r die verschiedenen Anwendungsbausteine der Funktionsabteilungen 
+(einen LIS Server, einen RIS Server und die Server f&uuml;r die nicht weiter spezifizierten 
+Anwendungsbaustein und einen zentralen Server, auf dem das PVS und das Krankenhausverwaltungssystem 
+installiert sind. Jeder Server ist verbunden mit einigen PCs. Die schwarzen Punkte repr&auml;sentieren 
+Netzwerkkomponenten, &uuml;ber die die Server miteinander verbunden sind und damit das Gesamtnetzwerk 
+bilden. Die Daten&uuml;bertragung vom und zum paper-basierten Teil das KIS wird hier lediglich am 
+Beispiel der LIS dargestellt. Eine Laboranforderung (als Dokument) geht &uuml;ber den Postausgangskorb 
+des klinischen Arbeitsplatzes zum Posteingangskorb des Labors und wird von einem Formularleser 
+eingelesen. Das Ergebnis (also der Befund) wird ausgedruckt und geht wiederum &uuml;ber den Ausgangskorb 
+des Labors zum Eingangskorb des klinischen Arbeitsplatzes. In diesem Beispiel sind keine Subnetze 
+spezifiziert und es werden keine Informationen &uuml;ber den <a name="netztyp">Netztyp</a>, das Netzprotokoll oder den 
+Standort dargestellt. 
+</p>
+
+<div align="center">
+<a name="abb2">
+<img src="../bilder/bspPhysisch.gif" width=604 height=344 border=0 align="bottom" alt="">
+</a>
+<br>Abb. 2 Beispiel einer physischen Werkzeugebene
+</div>
+
+
+
+</body>
+</html>
