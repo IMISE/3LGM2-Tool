@@ -11,7 +11,7 @@ import javax.swing.JTabbedPane;
  * To have an extra icon on each tab (e.g. like in JBuilder, showing the file type) use
  * the method addTab(String, Component, Icon). Only clicking the 'X' closes the tab.
  */
-public class JTabbedPaneWithCloseIcons extends JTabbedPane {
+public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
 
     @Override
     public void addTab(final String title, final Component component) {
@@ -31,6 +31,9 @@ public class JTabbedPaneWithCloseIcons extends JTabbedPane {
         initLastTabComponent();
     }
 
+    /**
+     *
+     */
     private void initLastTabComponent() {
         int lastTabComponentIndex = getTabCount() - 1;
         setTabComponentAt(lastTabComponentIndex, new ButtonTabComponent(this));

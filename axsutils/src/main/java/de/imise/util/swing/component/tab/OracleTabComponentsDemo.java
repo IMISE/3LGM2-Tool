@@ -49,7 +49,7 @@ import javax.swing.UIManager;
 /*
  * Creating and using TabComponentsDemo example
  */
-public class TabComponentsDemo extends JFrame {
+public class OracleTabComponentsDemo extends JFrame {
 
     private final int tabNumber = 5;
     private final JTabbedPane pane = new JTabbedPane();
@@ -64,12 +64,12 @@ public class TabComponentsDemo extends JFrame {
             public void run() {
                 //Turn off metal's use of bold fonts
                 UIManager.put("swing.boldMetal", Boolean.FALSE);
-                new TabComponentsDemo("TabComponentsDemo").runTest();
+                new OracleTabComponentsDemo("TabComponentsDemo").runTest();
             }
         });
     }
 
-    public TabComponentsDemo(final String title) {
+    public OracleTabComponentsDemo(final String title) {
         super(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initMenu();

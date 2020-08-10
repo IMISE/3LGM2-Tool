@@ -14,10 +14,10 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.util.swing.component.tab.TabbedPane;
+import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /** Erzeugt ModelBrowser für 3lgm */
-public final class ModelBrowser extends TabbedPane implements ChangeListener, FocusListener {
+public final class ModelBrowser extends ReorderableTabbedPane implements ChangeListener, FocusListener {
 
     /** xmlText color for tab with model of active frame */
     private final static Color activeColor = Color.BLUE;
@@ -32,7 +32,7 @@ public final class ModelBrowser extends TabbedPane implements ChangeListener, Fo
      * Ein neuer Browser
      */
     protected ModelBrowser(final int tabLayoutPolicy) {
-        super(TabbedPane.TOP, tabLayoutPolicy);
+        super(ReorderableTabbedPane.TOP, tabLayoutPolicy);
         setMinimumSize(new Dimension(10, 10));
         addFocusListener(this);
         inactiveColor = getForeground();

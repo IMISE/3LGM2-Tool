@@ -7,7 +7,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.util.swing.component.tab.TabbedPane;
+import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
  * EIn {@link ElementDialogPanel}, das andere {@link ElementDialogPanel} auf Tabs in sich aufnehmen
@@ -20,7 +20,7 @@ public class TabbedPanel extends ElementDialogPanel implements ChangeListener {
     /**
      * COMMENTME
      */
-    private final TabbedPane rf;
+    private final ReorderableTabbedPane rf;
 
     /**
      * @param dialog
@@ -29,7 +29,7 @@ public class TabbedPanel extends ElementDialogPanel implements ChangeListener {
     public TabbedPanel(final ElementPropertyDialog dialog, final ElementDialogPanel... dialogPanels) {
         super(dialog);
 
-        rf = new TabbedPane();
+        rf = new ReorderableTabbedPane();
         rf.addChangeListener(this);
 
         for (ElementDialogPanel dialogPanel : dialogPanels) {
@@ -65,7 +65,7 @@ public class TabbedPanel extends ElementDialogPanel implements ChangeListener {
 
     @Override
     public void stateChanged(final ChangeEvent e) {
-        TabbedPane t = (TabbedPane) e.getSource();
+        ReorderableTabbedPane t = (ReorderableTabbedPane) e.getSource();
         Object o = t.getSelectedComponent();
         if (o instanceof ElementDialogPanel) {
             ((ElementDialogPanel) o).update();

@@ -21,17 +21,17 @@ import javax.swing.event.MouseInputListener;
  * 
  * @author dsmalley (Dave)
  */
-public class TabbedPane extends JTabbedPane {
+public class ReorderableTabbedPane extends JTabbedPane {
 
-    public TabbedPane() {
+    public ReorderableTabbedPane() {
         this(TOP);
     }
 
-    public TabbedPane(final int tabPlacement) {
+    public ReorderableTabbedPane(final int tabPlacement) {
         this(tabPlacement, WRAP_TAB_LAYOUT);
     }
 
-    public TabbedPane(final int tabPlacement, final int tabLayoutPolicy) {
+    public ReorderableTabbedPane(final int tabPlacement, final int tabLayoutPolicy) {
         super(tabPlacement, tabLayoutPolicy);
         mouseHandler = new MouseHandler();
         addMouseListener(mouseHandler);
