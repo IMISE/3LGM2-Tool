@@ -36,7 +36,7 @@ public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
      */
     private void initLastTabComponent() {
         int lastTabComponentIndex = getTabCount() - 1;
-        setTabComponentAt(lastTabComponentIndex, new ButtonTabComponent(this));
+        setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this));
     }
 
 }
