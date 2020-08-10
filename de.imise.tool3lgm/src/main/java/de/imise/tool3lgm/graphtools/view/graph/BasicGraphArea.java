@@ -619,7 +619,7 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
                     LayerContainer active_graph = szenario.getLayer(ModelConstants.LAYERS[c]);
                     active_graph.setShift(effective_x_shift, effective_y_shift);
                     active_graph.setMultiView(true);
-                    active_graph.paint(gc);
+                    paintWithTryCatchOrNormal(active_graph, gc);
                     if (c != 1 && c != 3) {
                         //Selektion nicht darstellen, wenn das Ergebnisbild als Datei gespeichert werden soll
                         if (paintState == PaintState.REGULAR && active_graph == szenario.getActiveLayer() && mouse_selection) {
@@ -635,6 +635,37 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * If <code>true</code> the function {@link #paintWithTryCatchOrNormal(LayerContainer, Graphics2D)}
+     * paints the area surrounded with try-cath. If <code>false</code> without the try-catch. This
+     * varibale is <code>true</code> at teh beginning and swutched to <code>false</code> after the
+     * first paint without an exception druing the paint.
+     */
+    private static boolean paintWithTryCatch = true;
+
+    /**
+     * If we load a model via start parameter an swing internal NullPointerException
+     * occurs at java.desktop/sun.java2d.SunGraphics2D.getClipBounds(SunGraphics2D.java:1831).
+     * After one correct paint without an exception the exception never happens again.
+     *
+     * @param lc
+     * @param gc
+     */
+    private static final void paintWithTryCatchOrNormal(final LayerContainer lc, final Graphics2D gc) {
+        if (paintWithTryCatch) {
+            try {
+                lc.paint(gc);
+                paintWithTryCatch = false;
+            } catch (Exception e) {
+                // ignore. Here happens a NullpointerException at
+                //java.desktop/sun.java2d.SunGraphics2D.getClipBounds(SunGraphics2D.java:1831)
+                //if we load a model via run configuration parameter.
+            }
+        } else {
+            lc.paint(gc);
         }
     }
 
