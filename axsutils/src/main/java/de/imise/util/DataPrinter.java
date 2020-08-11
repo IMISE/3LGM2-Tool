@@ -1,8 +1,5 @@
 package de.imise.util;
 
-import java.io.PrintStream;
-import java.util.Iterator;
-
 /**
  * Einfaches Interface um schnell Debug-Ausgaben zu bekommen.
  *
@@ -16,57 +13,32 @@ public interface DataPrinter {
         return DEBUG;
     }
 
-    public default void print(final Iterator<?> it, final boolean err) {
-        if (isDebug()) {
-            @SuppressWarnings("resource")
-            PrintStream stream = err ? System.err : System.out;
-            while (it.hasNext()) {
-                Object next = it.next();
-                stream.print(next);
-                stream.print("\t");
-            }
-            stream.println();
-        }
-    }
-
-    public default void print(final Object o, final boolean err) {
-        if (isDebug()) {
-            @SuppressWarnings("resource")
-            PrintStream stream = err ? System.err : System.out;
-            stream.println(String.valueOf(o));
-        }
-    }
-
-    public default void print(final boolean err) { // da der err-Printer und der out-Printer nichr synchron laufen, muss auch das hier mit dem richtigen Parameter versehen sein
-        if (isDebug()) {
-            @SuppressWarnings("resource")
-            PrintStream stream = err ? System.err : System.out;
-            stream.println();
-        }
-    }
-
-    public default void print(final Iterator<?> it) {
-        print(it, false);
+    public default boolean isDebugErrors() {
+        return isDebug();
     }
 
     public default void print(final Object o) {
-        print(o, false);
+        if (isDebug()) {
+            Sys.outn(0, o);
+        }
     }
 
     public default void print() {
-        print(false);
-    }
-
-    public default void printe(final Iterator<?> it) {
-        print(it, true);
+        if (isDebug()) {
+            Sys.outn(0, "");
+        }
     }
 
     public default void printe(final Object o) {
-        print(o, true);
+        if (isDebugErrors()) {
+            Sys.errm(1, 1, o);
+        }
     }
 
     public default void printe() {
-        print(true);
+        if (isDebugErrors()) {
+            Sys.errm(1, 1, "");
+        }
     }
 
 }
