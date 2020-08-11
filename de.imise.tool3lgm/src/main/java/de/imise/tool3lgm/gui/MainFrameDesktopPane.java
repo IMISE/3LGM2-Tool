@@ -711,11 +711,11 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      */
     private void addTitledBorders() {
         //show the the graph view border only if there is no active model
-        if (!desktop.hasViewPaneFrameComponents()) {
-            createTitledBorder(desktop, "PANEL_LABEL_GRAPH_VIEW_TITLE");
-        } else {
-            removeTitledBorder(desktop);
-        }
+        //        if (!desktop.hasViewPaneFrameComponents()) {
+        createTitledBorder(desktop, "PANEL_LABEL_GRAPH_VIEW_TITLE");
+        //        } else {
+        //            removeTitledBorder(desktop);
+        //        }
         createTitledBorder(modelBrowserPanel, "PANEL_LABEL_MODEL_BROWSER_TITLE");
         createTitledBorder(templateBrowserPanel, "PANEL_LABEL_TEMPLATE_BROWSER_TITLE");
         createTitledBorder(consistencyErrorTableBorderPanel, "PANEL_LABEL_CONSISTENCY_TABLE_TITLE");
