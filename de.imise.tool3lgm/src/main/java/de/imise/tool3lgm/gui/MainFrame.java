@@ -3,7 +3,6 @@ package de.imise.tool3lgm.gui;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Cursor;
-import java.awt.GraphicsConfiguration;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -109,15 +108,15 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
      * Restores the screen index, the width and the height from the corresponding UserPropertiy values.
      */
     private void restorePositionAndSizeFromUserProperties() {
-        GraphicsConfiguration graphicsConfiguration = getGraphicsConfiguration();
-        int jFrameTitlebarHight = SwingUtils.getJFrameTitlebarHight(graphicsConfiguration);
         int frameX = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.get();
         int frameY = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.get();
         int frameWidth = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.get();
         int frameHeight = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT.get();
-        Rectangle screenBounds = graphicsConfiguration.getBounds();
-        if (frameHeight <= jFrameTitlebarHight * 2) { // if the frame has only at maximum the double titlebar height
-            setBounds(screenBounds); //full sreen
+
+        int frameTitleBarHeight = SwingUtils.getFrameTitleBarHeight();
+        if (frameHeight <= frameTitleBarHeight || !SwingUtils.canDisplayFrameAtCoordinates(frameX, frameY, frameWidth)) {
+            Rectangle maximumWindowBounds = SwingUtils.getMaximumFrameBounds();
+            setBounds(maximumWindowBounds);
         } else {
             setBounds(frameX, frameY, frameWidth, frameHeight); //last height
         }

@@ -5,8 +5,11 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Rectangle;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -121,14 +124,57 @@ public class SwingUtils {
     }
 
     /**
-     * @param graphicsConfiguration
-     * @return the height of the titleBar oj a {@link JFrame} with the given {@link GraphicsConfiguration}.
+     * @param x
+     * @param y
+     * @param w
+     * @return
      */
-    public static final int getJFrameTitlebarHight(final GraphicsConfiguration graphicsConfiguration) {
-        JFrame jFrame = new JFrame(graphicsConfiguration);
-        jFrame.pack();
-        Insets insets = jFrame.getInsets();
-        return insets.top;
+    public static boolean canDisplayFrameAtCoordinates(final int x, final int y, final int w) {
+        GraphicsDevice[] screens = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
+        JFrame frame = new JFrame();
+        frame.pack();
+        Insets frameInsets = frame.getInsets();
+        int h = frameInsets.top; //title bar height
+        for (GraphicsDevice screen : screens) {
+            GraphicsConfiguration screenConfiguration = screen.getDefaultConfiguration();
+            Rectangle screenBounds = screenConfiguration.getBounds();
+            if (screenBounds.contains(x, y) || screenBounds.contains(x, y + h) || screenBounds.contains(x + w, y) || screenBounds.contains(x + w, y + h)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return the height of the titlebar of a {@link JFrame}
+     */
+    public static int getFrameTitleBarHeight() {
+        Insets frameInsets = getFrameInsets();
+        int h = frameInsets.top; //title bar height
+        return h;
+    }
+
+    /**
+     * @return the Insets of a {@link JFrame}
+     */
+    public static final Insets getFrameInsets() {
+        JFrame frame = new JFrame();
+        frame.pack();
+        Insets frameInsets = frame.getInsets();
+        return frameInsets;
+    }
+
+    /**
+     * @return the maxmumim frame bounds
+     */
+    public static Rectangle getMaximumFrameBounds() {
+        GraphicsEnvironment localGraphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        Rectangle maximumFrameBounds = localGraphicsEnvironment.getMaximumWindowBounds();
+        Insets frameInsets = getFrameInsets();
+        maximumFrameBounds.x -= frameInsets.left;
+        maximumFrameBounds.width += frameInsets.right + frameInsets.left;
+        maximumFrameBounds.height += frameInsets.bottom;
+        return maximumFrameBounds;
     }
 
 }
