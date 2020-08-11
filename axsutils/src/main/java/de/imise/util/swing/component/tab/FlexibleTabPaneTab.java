@@ -62,7 +62,17 @@ public class FlexibleTabPaneTab extends JPanel {
                 return tabIndex == selectedIndex ? activeForegroundColor : super.getForeground();
             }
 
+            @Override
+            public String getToolTipText() {
+                return FlexibleTabPaneTab.this.getToolTipText();
+            }
+
         };
+
+        //we must set an irrelevant  dummy tooltip to enable the
+        //showing if tooltips on the label. Without that the
+        //tabLabel.getTooltipText() is never called.
+        tabLabel.setToolTipText("Dummy Tooltip");
 
         add(tabLabel);
         tabLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
@@ -168,6 +178,10 @@ public class FlexibleTabPaneTab extends JPanel {
 
         }
 
+    @Override
+    public String getToolTipText() {
+        int tabIndex = getTabIndex();
+        return tabIndex >= 0 ? tabbedPane.getToolTipTextAt(tabIndex) : null;
     }
 
     /**
