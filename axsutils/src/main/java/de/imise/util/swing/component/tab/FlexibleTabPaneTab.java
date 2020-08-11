@@ -18,6 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import de.imise.util.resource.SimpleResourceBundleSourceAdapter;
+
 /**
  * @author Ich (10.08.2020)
  */
@@ -101,7 +103,9 @@ public class FlexibleTabPaneTab extends JPanel {
             //If we don't set an irrelevant default preferred size > 0 the paintComponent(g) will never be called
             int size = 17;
             setPreferredSize(new Dimension(size, size));
-            setToolTipText("close this tab");
+            SimpleResourceBundleSourceAdapter resourceHandler = new SimpleResourceBundleSourceAdapter(FlexibleTabPaneTab.class);
+            String tooltip = resourceHandler.getResString("close_tab");
+            setToolTipText(tooltip);
             //the BasicButtonUI enables rollover and mouse clicked events
             setUI(new BasicButtonUI());
             //transparent button -> buttons backgound == tab background
