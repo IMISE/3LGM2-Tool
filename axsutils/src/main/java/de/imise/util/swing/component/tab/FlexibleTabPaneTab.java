@@ -1,7 +1,6 @@
 package de.imise.util.swing.component.tab;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -9,11 +8,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -38,9 +35,15 @@ public class FlexibleTabPaneTab extends JPanel {
     private final JLabel tabLabel;
 
     /**
-     * @param tabbedPane
+     *
      */
-    public FlexibleTabPaneTab(final JTabbedPane tabbedPane) {
+    private boolean isRollover;
+
+    /**
+     * @param tabbedPane
+     * @param activeColor
+     */
+    public FlexibleTabPaneTab(final JTabbedPane tabbedPane, final Color activeForegroundColor) {
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         this.tabbedPane = tabbedPane;
         setOpaque(false);
@@ -48,9 +51,17 @@ public class FlexibleTabPaneTab extends JPanel {
         tabLabel = new JLabel() {
             @Override
             public String getText() {
-                int tabIndex = tabbedPane.indexOfTabComponent(FlexibleTabPaneTab.this);
+                int tabIndex = getTabIndex();
                 return tabIndex >= 0 ? tabbedPane.getTitleAt(tabIndex) : null;
             }
+
+            @Override
+            public Color getForeground() {
+                int tabIndex = getTabIndex();
+                int selectedIndex = getSelectedTabIndex();
+                return tabIndex == selectedIndex ? activeForegroundColor : super.getForeground();
+            }
+
         };
 
         add(tabLabel);
@@ -60,6 +71,8 @@ public class FlexibleTabPaneTab extends JPanel {
         add(closeButton);
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
 
+        addMouseListener(mouseListener);
+        closeButton.addMouseListener(mouseListener);
     }
 
     /**
@@ -89,13 +102,12 @@ public class FlexibleTabPaneTab extends JPanel {
             setBorderPainted(false);
             //Making nice rollover effect
             //we use the same listener for all buttons
-            addMouseListener(buttonMouseListener);
             setRolloverEnabled(true);
             //Close the proper tab by clicking the button
             addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
-                    int tabIndex = tabbedPane.indexOfTabComponent(FlexibleTabPaneTab.this);
+                    int tabIndex = getTabIndex();
                     if (tabIndex != -1) {
                         tabbedPane.remove(tabIndex);
                     }
@@ -128,45 +140,102 @@ public class FlexibleTabPaneTab extends JPanel {
                 h = h / 2 * 2;
                 sizeAndImageInsets = h - tabLabelFontSize;
             }
-            g2.setColor(Color.BLACK);
-            if (getModel().isRollover()) {
-                g2.setColor(Color.MAGENTA);
+            boolean selected = isSelectedTab();
+            if (isRollover || selected) {
+                g2.setColor(Color.BLACK);
+
+                if (model.isRollover()) {
+                    //this isRollover() is only for the button. The global
+                    //variable isRollover is for the whole tab inclusive the
+                    //border, label and button.
+                    g2.setColor(Color.MAGENTA);
+                }
+
+                int x1 = sizeAndImageInsets;
+                int y1 = sizeAndImageInsets;
+                int x2 = w - sizeAndImageInsets;
+                int y2 = h - sizeAndImageInsets;
+
+                g2.drawLine(x1, y1, x2, y2);
+                g2.drawLine(x1 + 1, y1, x2, y2 - 1);
+                g2.drawLine(x1, y1 + 1, x2 - 1, y2);
+
+                g2.drawLine(x1, y2, x2, y1);
+                g2.drawLine(x1, y2 - 1, x2 - 1, y1);
+                g2.drawLine(x1 + 1, y2, x2, y1 + 1);
+                g2.dispose();
             }
-
-            int x1 = sizeAndImageInsets;
-            int y1 = sizeAndImageInsets;
-            int x2 = w - sizeAndImageInsets;
-            int y2 = h - sizeAndImageInsets;
-
-            g2.drawLine(x1, y1, x2, y2);
-            g2.drawLine(x1 + 1, y1, x2, y2 - 1);
-            g2.drawLine(x1, y1 + 1, x2 - 1, y2);
-
-            g2.drawLine(x1, y2, x2, y1);
-            g2.drawLine(x1, y2 - 1, x2 - 1, y1);
-            g2.drawLine(x1 + 1, y2, x2, y1 + 1);
-            g2.dispose();
 
         }
+
     }
 
-    private final static MouseListener buttonMouseListener = new MouseAdapter() {
+    /**
+     * @return
+     */
+    private final int getTabIndex() {
+        int tabIndex = tabbedPane.indexOfTabComponent(FlexibleTabPaneTab.this);
+        return tabIndex;
+    }
+
+    /**
+     * @return
+     */
+    private final int getSelectedTabIndex() {
+        int selectedTabIndex = tabbedPane.getSelectedIndex();
+        return selectedTabIndex;
+    }
+
+    /**
+     * @return
+     */
+    private boolean isSelectedTab() {
+        int tabIndex = getTabIndex();
+        int selectedTabIndex = getSelectedTabIndex();
+        return tabIndex == selectedTabIndex;
+    }
+
+    /**
+     * @param index
+     */
+    private void setSelectedTabIndex(final int index) {
+        tabbedPane.setSelectedIndex(index);
+    }
+
+    /**
+     *
+     */
+    private final MouseListener mouseListener = new MouseListener() {
+
+        @Override
+        public void mouseReleased(final MouseEvent e) {
+        }
+
+        @Override
+        public void mousePressed(final MouseEvent e) {
+            //if we add this mouseListener to this Jpanel component
+            //the default behaviour of selecting the clicked tab
+            //is deactivated. This fixes it.
+            int tabIndex = getTabIndex();
+            setSelectedTabIndex(tabIndex);
+        }
+
+        @Override
+        public void mouseClicked(final MouseEvent e) {
+        }
+
         @Override
         public void mouseEntered(final MouseEvent e) {
-            Component component = e.getComponent();
-            if (component instanceof AbstractButton) {
-                AbstractButton button = (AbstractButton) component;
-                button.setBorderPainted(true);
-            }
+            isRollover = true;
+            revalidate();
+            repaint();
         }
 
         @Override
         public void mouseExited(final MouseEvent e) {
-            Component component = e.getComponent();
-            if (component instanceof AbstractButton) {
-                AbstractButton button = (AbstractButton) component;
-                button.setBorderPainted(false);
-            }
+            isRollover = false;
+            revalidate();
+            repaint();
         }
     };
 }

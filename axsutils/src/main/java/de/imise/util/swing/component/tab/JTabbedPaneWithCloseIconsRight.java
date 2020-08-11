@@ -1,7 +1,9 @@
 package de.imise.util.swing.component.tab;
 
+import java.awt.Color;
 import java.awt.Component;
 
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JTabbedPane;
 
@@ -12,6 +14,18 @@ import javax.swing.JTabbedPane;
  * the method addTab(String, Component, Icon). Only clicking the 'X' closes the tab.
  */
 public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
+
+    /**
+     *
+     */
+    private Color activeForegroundColor;
+
+    /**
+     * @param activeForegroundColor
+     */
+    public JTabbedPaneWithCloseIconsRight(final Color activeForegroundColor) {
+        this.activeForegroundColor = activeForegroundColor;
+    }
 
     @Override
     public void addTab(final String title, final Component component) {
@@ -35,8 +49,25 @@ public class JTabbedPaneWithCloseIconsRight extends JTabbedPane {
      *
      */
     private void initLastTabComponent() {
+        //without this border sometimes a Nullpointer occurs at the
+        //start if the tool loads a model via start parameter2911
+        setBorder(BorderFactory.createEmptyBorder());
         int lastTabComponentIndex = getTabCount() - 1;
-        setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this));
+        setTabComponentAt(lastTabComponentIndex, new FlexibleTabPaneTab(this, activeForegroundColor));
+    }
+
+    /**
+     * @return
+     */
+    public Color getActiveForegroundColor() {
+        return activeForegroundColor;
+    }
+
+    /**
+     * @param activeForegroundColor
+     */
+    public void setActiveForegroundColor(final Color activeForegroundColor) {
+        this.activeForegroundColor = activeForegroundColor;
     }
 
 }
