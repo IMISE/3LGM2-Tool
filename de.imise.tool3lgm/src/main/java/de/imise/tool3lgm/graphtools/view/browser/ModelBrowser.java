@@ -1,5 +1,6 @@
 package de.imise.tool3lgm.graphtools.view.browser;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.ACTIVE_TAB_FOREGROUND_COLOR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER;
 
 import java.awt.Color;
@@ -18,9 +19,6 @@ import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /** Erzeugt ModelBrowser für 3lgm */
 public final class ModelBrowser extends ReorderableTabbedPane implements ChangeListener, FocusListener {
-
-    /** xmlText color for tab with model of active frame */
-    private final static Color activeColor = Color.BLUE;
 
     /** xmlText color for tabs with models of non-active frames */
     private static Color inactiveColor;
@@ -171,7 +169,7 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
                 index = lastActiveBrowser.getSelectedIndex();
             } else {
                 for (int i = 0; i < lastActiveBrowser.getTabCount(); i++) {
-                    if (lastActiveBrowser.getForegroundAt(i) == activeColor) {
+                    if (lastActiveBrowser.getForegroundAt(i) == ACTIVE_TAB_FOREGROUND_COLOR) {
                         index = i;
                         break;
                     }
@@ -185,7 +183,7 @@ public final class ModelBrowser extends ReorderableTabbedPane implements ChangeL
         index = getSelectedIndex();
         if (index >= 0) {
             setIconAt(index, Tool3lgmConstants.TOOL_ICON_13);
-            setForegroundAt(index, activeColor);
+            setForegroundAt(index, ACTIVE_TAB_FOREGROUND_COLOR);
         }
 
         lastActiveBrowser = this;

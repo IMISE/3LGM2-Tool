@@ -30,9 +30,6 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     /** show ModelBrowsers sidy by side or all models in one browser */
     protected boolean showModelsInSeparateBrowser = false;
 
-    /** xmlText color for tab with model of active frame */
-    protected final static Color activeColor = Color.BLUE;
-
     /** xmlText color for tabs with models of non-active frames */
     protected static Color inactiveColor;
 

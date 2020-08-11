@@ -11,6 +11,7 @@ import javax.swing.plaf.TabbedPaneUI;
 import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.gui.viewpane.ViewPaneFrameComponent;
@@ -33,6 +34,7 @@ public class MainFrameDesktopTabbedPane extends JTabbedPaneWithCloseIconsRight i
      *
      */
     public MainFrameDesktopTabbedPane() {
+        super(Tool3lgmConstants.ACTIVE_TAB_FOREGROUND_COLOR);
         setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         updateBorder();
     }
