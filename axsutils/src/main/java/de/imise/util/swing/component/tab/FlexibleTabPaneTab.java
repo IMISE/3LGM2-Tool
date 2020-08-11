@@ -77,11 +77,11 @@ public class FlexibleTabPaneTab extends JPanel {
         add(tabLabel);
         tabLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
         JButton closeButton = new CloseButton();
-        closeButton.setBorder(BorderFactory.createEmptyBorder());
         add(closeButton);
         setBorder(BorderFactory.createEmptyBorder(2, 0, 0, 0));
 
         addMouseListener(mouseListener);
+        tabLabel.addMouseListener(mouseListener);
         closeButton.addMouseListener(mouseListener);
     }
 
@@ -102,18 +102,14 @@ public class FlexibleTabPaneTab extends JPanel {
             int size = 17;
             setPreferredSize(new Dimension(size, size));
             setToolTipText("close this tab");
-            //Make the button looks the same for all Laf's
+            //the BasicButtonUI enables rollover and mouse clicked events
             setUI(new BasicButtonUI());
-            //Make it transparent
+            //transparent button -> buttons backgound == tab background
             setContentAreaFilled(false);
-            //No need to be focusable
             setFocusable(false);
-            setBorder(BorderFactory.createEtchedBorder());
-            setBorderPainted(false);
-            //Making nice rollover effect
-            //we use the same listener for all buttons
             setRolloverEnabled(true);
-            //Close the proper tab by clicking the button
+            setBorderPainted(false);
+            //close tab when clicking the button
             addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
@@ -134,10 +130,6 @@ public class FlexibleTabPaneTab extends JPanel {
         @Override
         protected void paintComponent(final Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
-            if (getModel().isPressed()) {
-                //shift the image for pressed buttons
-                g2.translate(1, 1);
-            }
             Dimension labelSize = tabLabel.getSize();
             int labelHeight = labelSize.height;
             if (w != labelHeight || h != labelHeight) {
@@ -149,16 +141,26 @@ public class FlexibleTabPaneTab extends JPanel {
                 w = w / 2 * 2;
                 h = h / 2 * 2;
                 sizeAndImageInsets = h - tabLabelFontSize;
+                //after resetting the preferred size we must
+                //revalidate and repaint the whole tab to
+                //ensure the buttons first paint has the
+                //correct size data
+                revalidate();
+                repaint();
+                return;
             }
-            boolean selected = isSelectedTab();
-            if (isRollover || selected) {
-                g2.setColor(Color.BLACK);
-
-                if (model.isRollover()) {
+            if (isRollover || isSelectedTab()) {
+                if (getModel().isPressed()) {
+                    //shift the image for pressed buttons
+                    g2.translate(1, 1);
+                }
+                if (getModel().isRollover()) {
                     //this isRollover() is only for the button. The global
                     //variable isRollover is for the whole tab inclusive the
                     //border, label and button.
                     g2.setColor(Color.MAGENTA);
+                } else {
+                    g2.setColor(Color.BLACK);
                 }
 
                 int x1 = sizeAndImageInsets;
@@ -175,8 +177,9 @@ public class FlexibleTabPaneTab extends JPanel {
                 g2.drawLine(x1 + 1, y2, x2, y1 + 1);
                 g2.dispose();
             }
-
         }
+
+    }
 
     @Override
     public String getToolTipText() {
