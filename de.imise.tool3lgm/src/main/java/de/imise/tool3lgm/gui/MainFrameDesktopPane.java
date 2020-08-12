@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.gui;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_CONSISTENCY_TABLE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_MODEL_BROWSER;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR;
@@ -168,7 +168,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (OPTION_CHECK_CONSISTENCY.isChanged(evt)) {
+        if (OPTION_SHOW_CONSISTENCY_TABLE.isChanged(evt)) {
             checkViewComponentsVisibility();
         } else if (OPTION_SHOW_TEMPLATE_BROWSER.isChanged(evt)) {
             checkViewComponentsVisibility();
@@ -202,7 +202,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             int dividerLocation = rightSplitPane.getDividerLocation();
             IntProperty.PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION.set(dividerLocation);
         }
-        if (OPTION_CHECK_CONSISTENCY.is() && bottomSplitPane != null && bottomSplitPane.isVisible()) {
+        if (OPTION_SHOW_CONSISTENCY_TABLE.is() && bottomSplitPane != null && bottomSplitPane.isVisible()) {
             int dividerLocation = bottomSplitPane.getDividerLocation();
             IntProperty.PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION.set(dividerLocation);
         }
@@ -214,7 +214,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     public void restorePositionAndSizeFromUserProperties() {
         setDividerLocation(OPTION_SHOW_MODEL_BROWSER, PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION, leftSplitPane, 0.2d, true);
         setDividerLocation(OPTION_SHOW_TEMPLATE_BROWSER, PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION, rightSplitPane, 0.8d, true);
-        setDividerLocation(OPTION_CHECK_CONSISTENCY, PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION, bottomSplitPane, 0.7d, false);
+        setDividerLocation(OPTION_SHOW_CONSISTENCY_TABLE, PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION, bottomSplitPane, 0.7d, false);
     }
 
     /**
@@ -259,7 +259,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      * @return <code>true</code>, wenn dei Konsistenzprüfung durchgeführt und angezeigt wurde
      */
     private void checkConsistencyTableVisibility() {
-        boolean isCheckConsistency = OPTION_CHECK_CONSISTENCY.is();
+        boolean isCheckConsistency = OPTION_SHOW_CONSISTENCY_TABLE.is();
         ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
         JSplitPane topComponent = rightSplitPane != null ? rightSplitPane : leftSplitPane;
         if (!isCheckConsistency) {
@@ -303,7 +303,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
     /** (De-)Aktiviert den TemplateBrowser */
     private final void checkTemplateBrowserVisibility() {
-        boolean isCheckConsistency = OPTION_CHECK_CONSISTENCY.is();
+        boolean isCheckConsistency = OPTION_SHOW_CONSISTENCY_TABLE.is();
         //show template browser
         if (OPTION_SHOW_TEMPLATE_BROWSER.is()) {
             if (rightSplitPane != null) {

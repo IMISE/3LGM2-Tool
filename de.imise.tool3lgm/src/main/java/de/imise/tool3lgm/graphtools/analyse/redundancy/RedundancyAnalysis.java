@@ -4,8 +4,8 @@
 package de.imise.tool3lgm.graphtools.analyse.redundancy;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_CONSISTENCY_TABLE;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -218,8 +218,8 @@ public class RedundancyAnalysis extends WindowAdapter {
             };
             int answer = JOptionPane.showOptionDialog(Static.getMainFrame(), getResString("ana_fr_error_message"), getResString("ana_fr_error_message_title"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
             if (answer == JOptionPane.YES_OPTION) {
-                if (!OPTION_CHECK_CONSISTENCY.is()) {
-                    OPTION_CHECK_CONSISTENCY.set(true);
+                if (!OPTION_SHOW_CONSISTENCY_TABLE.is()) {
+                    OPTION_SHOW_CONSISTENCY_TABLE.set(true);
                 } else {
                     consistencyChecker.dataChanged(selectedDoc);
                 }
