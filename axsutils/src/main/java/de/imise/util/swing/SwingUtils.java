@@ -131,13 +131,12 @@ public class SwingUtils {
      */
     public static boolean canDisplayFrameAtCoordinates(final int x, final int y, final int w) {
         GraphicsDevice[] screens = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
-        JFrame frame = new JFrame();
-        frame.pack();
-        Insets frameInsets = frame.getInsets();
+        Insets frameInsets = getFrameInsets();
         int h = frameInsets.top; //title bar height
         for (GraphicsDevice screen : screens) {
             GraphicsConfiguration screenConfiguration = screen.getDefaultConfiguration();
             Rectangle screenBounds = screenConfiguration.getBounds();
+            expandRectWithInsets(screenBounds, frameInsets);
             if (screenBounds.contains(x, y) || screenBounds.contains(x, y + h) || screenBounds.contains(x + w, y) || screenBounds.contains(x + w, y + h)) {
                 return true;
             }
@@ -165,16 +164,33 @@ public class SwingUtils {
     }
 
     /**
+     * For unknown reasons Windows places a frame posiotioned at (0, 0) not in the upper
+     * left corner. And the full screen size is in Windows not the whole wide. So we
+     * have to correct the points (0, 0) with the insets af o {@link JFrame} to
+     * (0 - insets.left, 0) and the point (xScreenMax, yScreenMax) to the point
+     * (xScreenMax + insets.right + insets.left, yScreenMax + insets.bottom).
+     * Only the insets.top = high of the frame title bar is irrelevant in this case.
+     *
      * @return the maxmumim frame bounds
      */
     public static Rectangle getMaximumFrameBounds() {
         GraphicsEnvironment localGraphicsEnvironment = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Rectangle maximumFrameBounds = localGraphicsEnvironment.getMaximumWindowBounds();
         Insets frameInsets = getFrameInsets();
+        expandRectWithInsets(maximumFrameBounds, frameInsets);
+        return maximumFrameBounds;
+    }
+
+    /**
+     * Expands the given rectangle left, right and bottom with the given insets.
+     *
+     * @param maximumFrameBounds
+     * @param frameInsets
+     */
+    private static final void expandRectWithInsets(final Rectangle maximumFrameBounds, final Insets frameInsets) {
         maximumFrameBounds.x -= frameInsets.left;
         maximumFrameBounds.width += frameInsets.right + frameInsets.left;
         maximumFrameBounds.height += frameInsets.bottom;
-        return maximumFrameBounds;
     }
 
 }

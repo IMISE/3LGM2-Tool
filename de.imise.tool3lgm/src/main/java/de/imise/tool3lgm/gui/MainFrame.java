@@ -80,10 +80,10 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     @Override
     public void setVisible(final boolean b) {
         if (b) {
-            restorePositionAndSizeFromUserProperties();
+            restoreBoundsAndExtendedStateFromUserProperties();
             contentPane.restorePositionAndSizeFromUserProperties();
         } else {
-            savePositionAndSizeInUserProperties();
+            saveBoundsAndExtendedStateInUserProperties();
         }
         super.setVisible(b);
     }
@@ -96,18 +96,24 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     /**
      * Sets the corresponding UserPropertiy values for the screen index, the width and the height.
      */
-    public void savePositionAndSizeInUserProperties() {
+    public void saveBoundsAndExtendedStateInUserProperties() {
         Rectangle bounds = getBounds();
-        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.set(bounds.x);
-        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.set(bounds.y);
-        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.set(bounds.width);
-        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT.set(bounds.height);
+        int extendedState = getExtendedState();
+        if (extendedState == JFrame.MAXIMIZED_BOTH) {
+            IntProperty.PROPERTY_INT_MAINFRAME_EXTENDED_STATE.set(extendedState);
+        } else if (extendedState == JFrame.NORMAL) {
+            IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.set(bounds.x);
+            IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.set(bounds.y);
+            IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.set(bounds.width);
+            IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT.set(bounds.height);
+            IntProperty.PROPERTY_INT_MAINFRAME_EXTENDED_STATE.set(extendedState);
+        }
     }
 
     /**
      * Restores the screen index, the width and the height from the corresponding UserPropertiy values.
      */
-    private void restorePositionAndSizeFromUserProperties() {
+    private void restoreBoundsAndExtendedStateFromUserProperties() {
         int frameX = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.get();
         int frameY = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.get();
         int frameWidth = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.get();
@@ -119,6 +125,10 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
             setBounds(maximumWindowBounds);
         } else {
             setBounds(frameX, frameY, frameWidth, frameHeight); //last height
+            int extendedState = IntProperty.PROPERTY_INT_MAINFRAME_EXTENDED_STATE.get();
+            if (extendedState == JFrame.MAXIMIZED_BOTH) {
+                setExtendedState(extendedState);
+            }
         }
     }
 
@@ -250,12 +260,12 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
 
     @Override
     public void componentResized(final ComponentEvent e) {
-        savePositionAndSizeInUserProperties();
+        saveBoundsAndExtendedStateInUserProperties();
     }
 
     @Override
     public void componentMoved(final ComponentEvent e) {
-        savePositionAndSizeInUserProperties();
+        saveBoundsAndExtendedStateInUserProperties();
     }
 
     @Override

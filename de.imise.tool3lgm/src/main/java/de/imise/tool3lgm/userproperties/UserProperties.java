@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.swing.JFrame;
 import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.collections4.map.Flat3Map;
@@ -455,6 +456,14 @@ public class UserProperties extends AbstractUserProperties {
         PROPERTY_INT_MAINFRAME_SCREEN_POSY,
         PROPERTY_INT_MAINFRAME_SCREEN_WIDTH,
         PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT,
+
+        PROPERTY_INT_MAINFRAME_EXTENDED_STATE {
+            @Override
+            public int getDefault() {
+                return JFrame.NORMAL;
+            }
+        },
+
         PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION,
         PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION,
         PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION,
