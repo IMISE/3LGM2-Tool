@@ -1,7 +1,5 @@
 package de.imise.tool3lgm.graphtools.consistency.checker;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,7 +40,6 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
  * Die Klasse prüft die Konsistenz eines Modells. Es werden alle Kardinalitäten überprüft und
@@ -53,7 +50,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * @author AXS (23.03.2020)
  */
-public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3lgmChangeListener, PropertyChangeListener {
+public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3lgmChangeListener {
 
     /**
      * Checks the consistency of a model. This instance is used for the current selected Model
@@ -121,7 +118,6 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         } else if (consistencyChecker.gdcoll != gdcoll) {
             consistencyChecker.changeContext(gdcoll);
         }
-        UserProperties.addPropertyChangeListener(consistencyChecker);
         consistencyChecker.addAsToolChangeListener();
         return consistencyChecker;
     }
@@ -140,9 +136,9 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
             if (this.gdcoll != null) {
                 gdcoll.addAllTransactionsListener(this);
             }
+            resetConsistencyDefinition();
+            updateErrorTable();
         }
-        resetConsistencyDefinition();
-        updateErrorTable();
     }
 
     /**
@@ -157,6 +153,11 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      */
     public ConsistencyDefinition getConsistencyDefinition() {
         return consistencyDefinition;
+    }
+
+    @Override
+    public void model_change_changed(final GraphDocument source) {
+        changeContext(gdcoll);
     }
 
     /**
@@ -422,13 +423,4 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         }
     }
 
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        if (!UserProperties.BooleanProperty.OPTION_CHECK_CONSISTENCY.is()) {
-            //die statische Instanz überall als Listener deregistrieren
-            changeContext(null);
-            removeAsToolChangeListener();
-            UserProperties.removePropertyChangeListener(this);
-        }
-    }
 }
