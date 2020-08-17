@@ -6,7 +6,8 @@ This means, that when inserting actors in application systems, there might be a 
 The sources for these groupings are the technical frameworks released on the [IHE website](https://www.ihe.net/resources/technical_frameworks/#top).
 
 
-Coming to an example:
+## Example ##
+
 In the following image we modeled a Patient Management System.
 
 Starting from the bottom, first we will create the **application system** for patient management.
