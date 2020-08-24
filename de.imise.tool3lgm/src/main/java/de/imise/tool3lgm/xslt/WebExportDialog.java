@@ -403,7 +403,7 @@ public class WebExportDialog extends JDialog {
      * @return
      */
     private boolean hasInconsistencies() {
-        return new ConsistencyChecker(collection).hasCardinalityInconsistencies();
+        return new ConsistencyChecker(collection).hasInconsistencies();
     }
 
     /**
