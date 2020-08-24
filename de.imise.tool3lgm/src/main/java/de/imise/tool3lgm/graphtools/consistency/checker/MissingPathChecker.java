@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPa
 public class MissingPathChecker implements ConsistencyErrorChecker {
 
     @Override
-    public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll) {
+    public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll, final boolean checkOnly) {
         ArrayList<AbstractConsistencyError> errors = new ArrayList<>();
         MetaModel metaModel = gdcoll.getMetaModel();
         Map<ConsistencyCheckSectionMetaPath, Class<? extends Edge>> consistencyConditionMissingConnectedElementsMetaPathsMap = metaModel.getConsistencyConditionMissingConnectedElementsMetaPaths();
@@ -48,6 +48,9 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
                     if (connectedElements.isEmpty()) {
                         MissingPathError error = new MissingPathError(me, consistencyConditionSectionMetaPath, gdcoll, neededElements);
                         errors.add(error);
+                        if (checkOnly) {
+                            return errors;
+                        }
                     }
                 }
             }

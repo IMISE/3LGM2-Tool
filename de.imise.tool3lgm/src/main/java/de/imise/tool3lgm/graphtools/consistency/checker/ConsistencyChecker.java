@@ -262,7 +262,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
 
     /** Gibt wieder, ob Kardinalitäts-Inkonsistenzen im Modell bestehen */
     public boolean hasCardinalityInconsistencies() {
-        return getInconsistencies(AbstractCardinalityError.class).size() > 0;
+        return !getInconsistencies(AbstractCardinalityError.class).isEmpty();
     }
 
     /**

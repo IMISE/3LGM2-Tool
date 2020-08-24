@@ -45,11 +45,11 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
     }
 
     @Override
-    public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll) {
+    public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll, final boolean checkOnly) {
         GraphDocument doc = gdcoll.getMainDoc();
         Collection<AbstractConsistencyError> errors = new ArrayList<>();
         for (ModelElement me : doc.getModelItems(ModelElement.class, true)) {
-            addCardinalityErrors(gdcoll, me, errors);
+            addCardinalityErrors(gdcoll, me, errors, checkOnly);
         }
         return errors;
     }
@@ -60,8 +60,9 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
      * @param gdcoll
      * @param me
      * @param returnList
+     * @param checkOnly if <code>true</code> not all but only the first error will be added to the return list
      */
-    private void addCardinalityErrors(final GDCollection gdcoll, final ModelElement me, final Collection<AbstractConsistencyError> returnList) {
+    private void addCardinalityErrors(final GDCollection gdcoll, final ModelElement me, final Collection<AbstractConsistencyError> returnList, final boolean checkOnly) {
         if (!isValid()) {
             return;
         }
@@ -143,6 +144,9 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
                 }
             } else {
                 System.err.println("Die Edge darf gar nicht für dieses Element existieren!");
+            }
+            if (checkOnly && !returnList.isEmpty()) {
+                return;
             }
         }
     }
