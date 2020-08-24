@@ -28,12 +28,18 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
     /**
      *
      */
-    private final ConsistencyDefinition consistencyDefinition;
+    private ConsistencyDefinition consistencyDefinition;
 
     /**
      * @param consistencyDefinition
      */
-    public EdgeCardinalityChecker(final ConsistencyDefinition consistencyDefinition) {
+    public EdgeCardinalityChecker() {
+    }
+
+    /**
+     * @param consistencyDefinition
+     */
+    public void setConsistencyDefinition(final ConsistencyDefinition consistencyDefinition) {
         this.consistencyDefinition = consistencyDefinition;
     }
 
