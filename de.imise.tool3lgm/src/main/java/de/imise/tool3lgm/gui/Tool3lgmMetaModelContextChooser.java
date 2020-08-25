@@ -4,35 +4,26 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_CHOOSE_METAMODEL_DIALOG;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
 import javax.swing.text.JTextComponent;
 
 import de.imise.tool3lgm.MetaModelContext;
-import de.imise.tool3lgm.Static;
-import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.swing.component.AlphabeticalComboBox;
-import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
  * Privides a dialog to choose the standard MetaModelContext.
@@ -58,16 +49,15 @@ public class Tool3lgmMetaModelContextChooser {
      */
     public final Tool3lgmModelType chooseModelType() {
         //MetaModelChooser ComboBox
-        JComponent chooseMetaModelComboBoxPanel = getTitledPanel("MODEL_TYPE", chooseMetaModelComboBox, false, false, -1, -1);
+        JComponent chooseMetaModelComboBoxPanel = GeneralDialogCreator.getTitledPanel("MODEL_TYPE", chooseMetaModelComboBox, false, false, -1, -1);
 
         //Description text field with titled border in a scroll pane
-        JComponent descriptionPanel = getTitledPanel("description", descriptionLabel, true, false, 200, 150);
+        JComponent descriptionPanel = GeneralDialogCreator.getTitledPanel("description", descriptionLabel, true, false, 200, 150);
         //add listener to the combobox to update the metamodel description
         addDescriptionUpdateListener();
 
         //create the optionPane
-        MultipleOptionPane optionPane = createOptionPane(chooseMetaModelComboBoxPanel, descriptionPanel, expertModeCreateAsTemplateCheckBox, showThisDialogAgainCheckBox);
-        int answer = showDialog("choose_meta_model_dialog_title", optionPane);
+        int answer = showDialog("choose_meta_model_dialog_title", chooseMetaModelComboBoxPanel, descriptionPanel, expertModeCreateAsTemplateCheckBox, showThisDialogAgainCheckBox);
         Tool3lgmModelType modelType = answer == JOptionPane.OK_OPTION ? getModelType() : null;
         return modelType;
     }
@@ -87,40 +77,18 @@ public class Tool3lgmMetaModelContextChooser {
 
     /**
      * @param titleOrResKey
-     * @param optionPane
-     * @return
-     */
-    private static int showDialog(final String titleOrResKey, final MultipleOptionPane optionPane) {
-        String title = Tool3lgmConstants.getResStringWithoutError(titleOrResKey);
-        JDialog dialog = optionPane.createDialog(Static.getMainFrame(), title);
-        dialog.setVisible(true);
-        int answer = optionPane.getAnswer();
-        return answer;
-    }
-
-    /**
      * @param chooseMetaModelComboBoxPanel
      * @param descriptionPanel
      * @param expertModeCreateAsTemplateCheckBox
      * @param showThisDialogAgainCheckBox
      * @return
      */
-    private static MultipleOptionPane createOptionPane(final JComponent chooseMetaModelComboBoxPanel, final JComponent descriptionPanel, final JCheckBox expertModeCreateAsTemplateCheckBox, final JCheckBox showThisDialogAgainCheckBox) {
-        MultipleOptionPane optionPane = new MultipleOptionPane();
-        if (expertModeCreateAsTemplateCheckBox == null) {
-            Object msg[] = {
-                    chooseMetaModelComboBoxPanel, descriptionPanel, showThisDialogAgainCheckBox
-            };
-            optionPane.setMessage(msg);
-        } else {
-            Object msg[] = {
-                    chooseMetaModelComboBoxPanel, descriptionPanel, expertModeCreateAsTemplateCheckBox, new JSeparator(), showThisDialogAgainCheckBox
-            };
-            optionPane.setMessage(msg);
-        }
-        optionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
-        optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
-        return optionPane;
+    private static int showDialog(final String titleOrResKey, final JComponent chooseMetaModelComboBoxPanel, final JComponent descriptionPanel, final JCheckBox expertModeCreateAsTemplateCheckBox, final JCheckBox showThisDialogAgainCheckBox) {
+        //null values are ignored in the msg object
+        Object message[] = {
+                chooseMetaModelComboBoxPanel, descriptionPanel, expertModeCreateAsTemplateCheckBox, expertModeCreateAsTemplateCheckBox == null ? null : new JSeparator(), showThisDialogAgainCheckBox
+        };
+        return GeneralDialogCreator.showDialog(titleOrResKey, message);
     }
 
     /**
@@ -203,41 +171,6 @@ public class Tool3lgmMetaModelContextChooser {
         Border emptyBorder = BorderFactory.createEmptyBorder(5, 10, 5, 10);
         descriptionLabel.setBorder(emptyBorder);
         return descriptionLabel;
-    }
-
-    /**
-     * @param resKeyOrTitle
-     * @param content
-     * @param scroll
-     * @param fillContent
-     * @param preferredWidth
-     * @param preferredHeight
-     * @return a panel with a border with the given title
-     */
-    private static JComponent getTitledPanel(final String resKeyOrTitle, final JComponent content, final boolean scroll, final boolean fillContent, final int preferredWidth, final int preferredHeight) {
-        JComponent panel;
-        if (scroll) {
-            panel = new JScrollPane(content);
-        } else {
-            panel = new JPanel();
-            if (fillContent) {
-                panel.setLayout(new BorderLayout());
-            }
-            panel.add(content);
-        }
-        String title = Tool3lgmConstants.getResStringWithoutError(resKeyOrTitle);
-        TitledBorder titledBorder = BorderFactory.createTitledBorder(title);
-        panel.setBorder(titledBorder);
-
-        Dimension preferredSize = panel.getPreferredSize();
-        if (preferredWidth > 0) {
-            preferredSize.width = preferredWidth;
-        }
-        if (preferredHeight > 0) {
-            preferredSize.height = preferredHeight;
-        }
-        panel.setPreferredSize(preferredSize);
-        return panel;
     }
 
 }
