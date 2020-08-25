@@ -103,7 +103,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      *
      * @param gdcoll
      */
-    public ConsistencyChecker(final GDCollection gdcoll) {
+    private ConsistencyChecker(final GDCollection gdcoll) {
         this(gdcoll, true);
     }
 
@@ -114,11 +114,20 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         GDCollection gdcoll = Static.getSelectedGDCollection();
         if (consistencyChecker == null) {
             consistencyChecker = new ConsistencyChecker(gdcoll);
+            consistencyChecker.addAsToolChangeListener();
         } else if (consistencyChecker.gdcoll != gdcoll) {
             consistencyChecker.changeContext(gdcoll);
         }
-        consistencyChecker.addAsToolChangeListener();
         return consistencyChecker;
+    }
+
+    /**
+     * @param gdcoll
+     * @return
+     */
+    public static final boolean hasInconsistencies(final GDCollection gdcoll) {
+        ConsistencyChecker consistencyChecker = new ConsistencyChecker(gdcoll);
+        return consistencyChecker.hasInconsistencies();
     }
 
     /**
