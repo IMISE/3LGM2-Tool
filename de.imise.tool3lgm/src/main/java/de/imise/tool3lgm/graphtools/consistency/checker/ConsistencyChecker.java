@@ -311,6 +311,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
             //if the error type is not directly contained in the errorToCheckerMap -> check all checkers whether they can return this error type
             for (Class<? extends AbstractConsistencyError> errorClassFromMap : errorClassToCheckerMap.keySet()) {
                 if (errorClass.isAssignableFrom(errorClassFromMap)) {
+                    consistencyErrorChecker = errorClassToCheckerMap.get(errorClassFromMap);
                     Collection<AbstractConsistencyError> errors = getInconsistencies(consistencyErrorChecker, checkOnly);
                     if (checkOnly && !errors.isEmpty()) {
                         return errors;
