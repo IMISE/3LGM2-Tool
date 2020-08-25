@@ -36,6 +36,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.consistency.SuggestShowConsistencyTableHandler;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -699,6 +700,11 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         if (templateBrowserPanel != null) {
             templateBrowserPanel.updateSelection(source);
         }
+    }
+
+    @Override
+    public void dataChanged(final GraphDocument source) {
+        SuggestShowConsistencyTableHandler.suggestShowConsistencyTable();
     }
 
     private void updateTitledBorders() {
