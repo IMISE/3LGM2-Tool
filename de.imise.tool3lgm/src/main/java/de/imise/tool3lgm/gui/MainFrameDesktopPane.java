@@ -193,7 +193,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      * @return
      */
     private boolean isShowConsistencyTable() {
-        return OPTION_SHOW_CONSISTENCY_TABLE.is() || Static.getSelectedDoc() == null;
+        return OPTION_SHOW_CONSISTENCY_TABLE.is();
     }
 
     /**
