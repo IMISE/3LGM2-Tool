@@ -5,6 +5,8 @@ This means, that when inserting actors in application systems, there might be a 
 
 The sources for these groupings are the technical frameworks released on the [IHE website](https://www.ihe.net/resources/technical_frameworks/#top).
 
+3LGM supports this by having these attributes stored in each actor. The tool will display error messages, when actors aren't grouped with the necessary actors.
+
 
 ## Example ##
 
