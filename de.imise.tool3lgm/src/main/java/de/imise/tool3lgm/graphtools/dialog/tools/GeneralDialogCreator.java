@@ -18,6 +18,8 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
+ * Class to create OK-Cancel-Dialogs
+ *
  * @author AXS (25.08.2020)
  */
 public class GeneralDialogCreator {
@@ -87,6 +89,10 @@ public class GeneralDialogCreator {
      */
     public static JComponent getLabelPanel(final String resKeyOrText, final boolean scroll, final boolean fillContent, final int preferredWidth, final int preferredHeight) {
         String labelText = Tool3lgmConstants.getResStringWithoutError(resKeyOrText);
+        labelText = labelText.replaceAll("\n", "<br>");
+        if (!labelText.toLowerCase().startsWith("<html>")) {
+            labelText = "<html>" + labelText + "</html>";
+        }
         JLabel content = new JLabel(labelText);
         return getTitledPanel(null, content, scroll, fillContent, preferredWidth, preferredHeight);
     }
