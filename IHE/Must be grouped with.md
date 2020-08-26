@@ -31,6 +31,7 @@ we get following **error message** on the **bottom of the 3LGM tool** (Consisten
 
 The error message states, that the actor **needs to be grouped with another actor**. To resolve this you have three options:
 You can view these options by **right clicking on the error**.
+
 ![rightClick.PNG](https://bitbucket.org/repo/9L6rMz/images/1091715669-rightClick.PNG)
 
 ### Property dialog for error-correcting
