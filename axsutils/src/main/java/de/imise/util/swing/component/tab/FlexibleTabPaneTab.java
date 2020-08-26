@@ -135,7 +135,7 @@ public class FlexibleTabPaneTab extends JPanel {
         protected void paintComponent(final Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
             Dimension labelSize = tabLabel.getSize();
-            int labelHeight = labelSize.height;
+            int labelHeight = labelSize.height / 2 * 2;
             if (w != labelHeight || h != labelHeight) {
                 setPreferredSize(new Dimension(labelHeight, labelHeight));
                 Font tabLabelFont = tabLabel.getFont();
