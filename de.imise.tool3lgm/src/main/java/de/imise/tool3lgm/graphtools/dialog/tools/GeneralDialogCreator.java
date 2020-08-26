@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.gui;
+package de.imise.tool3lgm.graphtools.dialog.tools;
 
 import java.awt.BorderLayout;
 import java.awt.Component;

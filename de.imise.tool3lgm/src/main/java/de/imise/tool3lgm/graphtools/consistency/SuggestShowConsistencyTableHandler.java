@@ -12,7 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
-import de.imise.tool3lgm.gui.GeneralDialogCreator;
+import de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**

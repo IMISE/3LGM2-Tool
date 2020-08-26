@@ -22,6 +22,7 @@ import de.imise.tool3lgm.MetaModelContext;
 import de.imise.tool3lgm.Tool3lgmMetaModelContext;
 import de.imise.tool3lgm.Tool3lgmModelType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
+import de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator;
 import de.imise.tool3lgm.userproperties.UserProperties.StringProperty;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 
