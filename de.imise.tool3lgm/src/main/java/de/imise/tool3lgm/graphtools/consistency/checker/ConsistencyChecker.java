@@ -1,11 +1,11 @@
 package de.imise.tool3lgm.graphtools.consistency.checker;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -42,7 +42,6 @@ import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
-import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
  * Die Klasse prüft die Konsistenz eines Modells. Es werden alle Kardinalitäten überprüft und
@@ -53,7 +52,7 @@ import de.imise.tool3lgm.userproperties.UserProperties;
 /**
  * @author AXS (23.03.2020)
  */
-public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3lgmChangeListener, PropertyChangeListener {
+public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3lgmChangeListener {
 
     /**
      * Checks the consistency of a model. This instance is used for the current selected Model
@@ -66,22 +65,16 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     private GDCollection gdcoll;
 
     /**
+     * Maps from an error type to the checker which can find this type of errors
+     */
+    private final Map<Class<? extends AbstractConsistencyError>, ConsistencyErrorChecker> errorClassToCheckerMap;
+
+    /**
      * Die Kardinalitäts und Fehlerdefinitionen für die bei der Prüfung relevanten Kanten. Wenn
      * diese Variable <code>null</code> ist, werden alle Kanten mit ihren Originalen Kardinalitäten
      * geprüft.
      */
     private ConsistencyDefinition consistencyDefinition;
-
-    /**
-     *
-     */
-    private final UniqueIDChecker idChecker;
-
-    /**
-     * @param gdcoll
-     * @param changeContext
-     */
-    private final MissingPathChecker missingPathChecker;
 
     /**
      * Erzeugt einen neuen <code>ConsistencyChecker</code> mit initialisierter <code>ErrorSolutionLibraryVersion</code>.
@@ -90,8 +83,11 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      * @param changeContext
      */
     private ConsistencyChecker(final GDCollection gdcoll, final boolean changeContext) {
-        idChecker = new UniqueIDChecker();
-        missingPathChecker = new MissingPathChecker();
+        errorClassToCheckerMap = new HashMap<>();
+        errorClassToCheckerMap.put(AbstractCardinalityError.class, new EdgeCardinalityChecker());
+        errorClassToCheckerMap.put(MissingPathError.class, new MissingPathChecker());
+        errorClassToCheckerMap.put(AbstractIDError.class, new UniqueIDChecker());
+
         consistencyDefinition = gdcoll == null ? null : new ConsistencyDefinition(gdcoll.getMetaModel());
         if (changeContext) {
             changeContext(gdcoll);
@@ -107,7 +103,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      *
      * @param gdcoll
      */
-    public ConsistencyChecker(final GDCollection gdcoll) {
+    private ConsistencyChecker(final GDCollection gdcoll) {
         this(gdcoll, true);
     }
 
@@ -118,12 +114,20 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         GDCollection gdcoll = Static.getSelectedGDCollection();
         if (consistencyChecker == null) {
             consistencyChecker = new ConsistencyChecker(gdcoll);
+            consistencyChecker.addAsToolChangeListener();
         } else if (consistencyChecker.gdcoll != gdcoll) {
             consistencyChecker.changeContext(gdcoll);
         }
-        UserProperties.addPropertyChangeListener(consistencyChecker);
-        consistencyChecker.addAsToolChangeListener();
         return consistencyChecker;
+    }
+
+    /**
+     * @param gdcoll
+     * @return
+     */
+    public static final boolean hasInconsistencies(final GDCollection gdcoll) {
+        ConsistencyChecker consistencyChecker = new ConsistencyChecker(gdcoll);
+        return consistencyChecker.hasInconsistencies();
     }
 
     /**
@@ -140,9 +144,9 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
             if (this.gdcoll != null) {
                 gdcoll.addAllTransactionsListener(this);
             }
+            resetConsistencyDefinition();
+            updateErrorTable();
         }
-        resetConsistencyDefinition();
-        updateErrorTable();
     }
 
     /**
@@ -157,6 +161,11 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      */
     public ConsistencyDefinition getConsistencyDefinition() {
         return consistencyDefinition;
+    }
+
+    @Override
+    public void model_change_changed(final GraphDocument source) {
+        changeContext(gdcoll);
     }
 
     /**
@@ -260,8 +269,8 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     }
 
     /** Gibt wieder, ob Kardinalitäts-Inkonsistenzen im Modell bestehen */
-    public boolean hasCardinalityInconsistencies() {
-        return getInconsistencies(AbstractCardinalityError.class).size() > 0;
+    public boolean hasInconsistencies() {
+        return !getInconsistencies(AbstractConsistencyError.class, true).isEmpty();
     }
 
     /**
@@ -279,40 +288,53 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     }
 
     /**
-     * @return
-     */
-    public Collection<AbstractConsistencyError> getIDInconsistencies() {
-        return getInconsistencies(AbstractIDError.class);
-    }
-
-    /**
-     * @return
-     */
-    public Collection<AbstractConsistencyError> getMissingPathInconsistencies() {
-        return getInconsistencies(MissingPathError.class);
-    }
-
-    /**
-     * @param errorClass
+     * @param errorClass the class of the returned errors
      * @return
      */
     private Collection<AbstractConsistencyError> getInconsistencies(final Class<? extends AbstractConsistencyError> errorClass) {
-        Collection<AbstractConsistencyError> errors = new ArrayList<>();
+        return getInconsistencies(errorClass, false);
+    }
+
+    /**
+     * @param errorClass the type of the returned errors
+     * @param checkOnly if <code>true</code> not all but only the first error will be added to the return list
+     * @return
+     */
+    private Collection<AbstractConsistencyError> getInconsistencies(final Class<? extends AbstractConsistencyError> errorClass, final boolean checkOnly) {
         if (gdcoll != null) {
-            if (errorClass.isAssignableFrom(AbstractCardinalityError.class)) {
-                EdgeCardinalityChecker edgeCardinalityChecker = new EdgeCardinalityChecker(consistencyDefinition);
-                errors = edgeCardinalityChecker.getErrors(gdcoll);
+            ConsistencyErrorChecker consistencyErrorChecker = errorClassToCheckerMap.get(errorClass);
+            //if there is a checker directky registered for this error type -> only return the result of this checker
+            if (consistencyErrorChecker != null) {
+                return getInconsistencies(consistencyErrorChecker, checkOnly);
             }
-            if (errorClass.isAssignableFrom(AbstractIDError.class)) {
-                Collection<AbstractConsistencyError> idErrors = idChecker.getErrors(gdcoll);
-                errors.addAll(idErrors);
+            Collection<AbstractConsistencyError> allErrors = new ArrayList<>();
+            //if the error type is not directly contained in the errorToCheckerMap -> check all checkers whether they can return this error type
+            for (Class<? extends AbstractConsistencyError> errorClassFromMap : errorClassToCheckerMap.keySet()) {
+                if (errorClass.isAssignableFrom(errorClassFromMap)) {
+                    consistencyErrorChecker = errorClassToCheckerMap.get(errorClassFromMap);
+                    Collection<AbstractConsistencyError> errors = getInconsistencies(consistencyErrorChecker, checkOnly);
+                    if (checkOnly && !errors.isEmpty()) {
+                        return errors;
+                    }
+                    allErrors.addAll(errors);
+                }
             }
-            if (errorClass.isAssignableFrom(MissingPathError.class)) {
-                Collection<AbstractConsistencyError> missingPathErrors = missingPathChecker.getErrors(gdcoll);
-                errors.addAll(missingPathErrors);
-            }
+            return allErrors;
         }
-        return errors;
+        return new ArrayList<>();
+    }
+
+    /**
+     * @param consistencyErrorChecker
+     * @param checkOnly if <code>true</code> not all but only the first error will be added to the return list
+     * @return
+     */
+    private Collection<AbstractConsistencyError> getInconsistencies(final ConsistencyErrorChecker consistencyErrorChecker, final boolean checkOnly) {
+        if (consistencyErrorChecker instanceof EdgeCardinalityChecker) {
+            EdgeCardinalityChecker edgeCardinalityChecker = (EdgeCardinalityChecker) consistencyErrorChecker;
+            edgeCardinalityChecker.setConsistencyDefinition(consistencyDefinition);
+        }
+        return consistencyErrorChecker.getErrors(gdcoll, checkOnly);
     }
 
     /**
@@ -422,13 +444,4 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         }
     }
 
-    @Override
-    public void propertyChange(final PropertyChangeEvent evt) {
-        if (!UserProperties.BooleanProperty.OPTION_CHECK_CONSISTENCY.is()) {
-            //die statische Instanz überall als Listener deregistrieren
-            changeContext(null);
-            removeAsToolChangeListener();
-            UserProperties.removePropertyChangeListener(this);
-        }
-    }
 }

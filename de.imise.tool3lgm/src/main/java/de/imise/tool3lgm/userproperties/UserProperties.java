@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.swing.JFrame;
 import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.collections4.map.Flat3Map;
@@ -342,8 +343,10 @@ public class UserProperties extends AbstractUserProperties {
         OPTION_CREATE_NEW_SUBMODEL_FOR_ANALYSIS_RESULT,
         /** Kennzahlberechnung an/aus */
         OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION,
-        /** Konsistenzcheck an/aus */
-        OPTION_CHECK_CONSISTENCY,
+        /** Show consistency table */
+        OPTION_SHOW_CONSISTENCY_TABLE,
+        /** Ask user to show the consistency table if the model contains errors */
+        TRANSIENT_OPTION_ASK_SHOW_CONSISTENCY_TABLE,
         /** Warnung vor dem Löschen von Elementen aus dem Gesamtmodell */
         OPTION_SHOW_REMOVE_WARNING,
 
@@ -355,9 +358,11 @@ public class UserProperties extends AbstractUserProperties {
         OPTION_SHOW_MODEL_BROWSER,
         /** TemplateBrowser an/aus */
         OPTION_SHOW_TEMPLATE_BROWSER,
+        /** Ask user to show the the template browser if new model is opened and templates exist for this model type */
+        TRANSIENT_OPTION_ASK_SHOW_TEMPLATE_BROWSER,
         /** TemplateBrowser an/aus */
         OPTION_SHOW_VIEW_COMPONENT_TITLES,
-        /** Beim Start den Abfrgadedialog anzeigen, mit dem man das Metamodell wählen kann an/aus */
+        /** Beim Start den Abfragedialog anzeigen, mit dem man das Metamodell wählen kann an/aus */
         OPTION_SHOW_CHOOSE_METAMODEL_DIALOG,
 
         /**
@@ -383,7 +388,8 @@ public class UserProperties extends AbstractUserProperties {
          */
         private static final Set<BooleanProperty> DEFAULT_TRUE_PROERTIES = ImmutableSet.of(OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, OPTION_GRAPH_MOVE_SUBELEMENTS, OPTION_SHOW_PAINTING_TOOLBAR,
                 OPTION_SHOW_STANDARD_TOOLBAR, OPTION_SHOW_VIEW_COMPONENT_TITLES, OPTION_SHOW_MODEL_BROWSER, OPTION_ENABLE_SUBMODEL_BROWSER, OPTION_SHOW_PART_OF_HIERARCHY, OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER, OPTION_USE_PROPERTY_COLORS,
-                OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING, OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, TRANSIENT_OPTION_SHOW_EXPANSION_SIGN);
+                OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING, OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, TRANSIENT_OPTION_SHOW_EXPANSION_SIGN, TRANSIENT_OPTION_ASK_SHOW_CONSISTENCY_TABLE,
+                TRANSIENT_OPTION_ASK_SHOW_TEMPLATE_BROWSER);
 
         /**
          * @return Default-Wert dieser Property
@@ -455,6 +461,14 @@ public class UserProperties extends AbstractUserProperties {
         PROPERTY_INT_MAINFRAME_SCREEN_POSY,
         PROPERTY_INT_MAINFRAME_SCREEN_WIDTH,
         PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT,
+
+        PROPERTY_INT_MAINFRAME_EXTENDED_STATE {
+            @Override
+            public int getDefault() {
+                return JFrame.NORMAL;
+            }
+        },
+
         PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION,
         PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION,
         PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION,

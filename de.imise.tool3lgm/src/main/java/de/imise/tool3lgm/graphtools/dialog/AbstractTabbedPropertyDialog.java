@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.util.swing.component.TabbedPane;
+import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
  * @author AXS (15.02.2018)
@@ -20,14 +20,14 @@ import de.imise.util.swing.component.TabbedPane;
 public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialog {
 
     /** TabbedPane in das alle Panels kommen */
-    protected final TabbedPane tabbedPane;
+    protected final ReorderableTabbedPane tabbedPane;
 
     /**
      * @param gdcoll
      */
     public AbstractTabbedPropertyDialog(final GDCollection gdcoll) {
         super(gdcoll);
-        tabbedPane = new TabbedPane();
+        tabbedPane = new ReorderableTabbedPane();
     }
 
     /**
@@ -36,7 +36,7 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      */
     public AbstractTabbedPropertyDialog(final Frame owner, final GDCollection gdcoll) {
         super(owner, gdcoll);
-        tabbedPane = new TabbedPane();
+        tabbedPane = new ReorderableTabbedPane();
     }
 
     /**
@@ -45,7 +45,7 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
      */
     public AbstractTabbedPropertyDialog(final Dialog owner, final GDCollection gdcoll) {
         super(owner, gdcoll);
-        tabbedPane = new TabbedPane();
+        tabbedPane = new ReorderableTabbedPane();
     }
 
     /**

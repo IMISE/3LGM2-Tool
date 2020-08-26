@@ -1,5 +1,6 @@
 package de.imise.tool3lgm;
 
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.event.InputEvent;
@@ -229,6 +230,9 @@ public abstract class Tool3lgmConstants {
 
     /** Locale, mit der der Baukasten gestartet wurde. */
     public static final Locale START_LOCALE = UserProperties.getLocale();
+
+    /** text color for active tabs in tab panes */
+    public static final Color ACTIVE_TAB_FOREGROUND_COLOR = Color.BLUE;
 
     /**
      * für die Sanduhr...

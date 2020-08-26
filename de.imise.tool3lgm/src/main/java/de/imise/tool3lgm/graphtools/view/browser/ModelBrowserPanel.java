@@ -20,7 +20,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.util.swing.component.TabbedPane;
+import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
  * @author Rudi, AXS
@@ -29,9 +29,6 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
 
     /** show ModelBrowsers sidy by side or all models in one browser */
     protected boolean showModelsInSeparateBrowser = false;
-
-    /** xmlText color for tab with model of active frame */
-    protected final static Color activeColor = Color.BLUE;
 
     /** xmlText color for tabs with models of non-active frames */
     protected static Color inactiveColor;
@@ -42,7 +39,7 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     public ModelBrowserPanel() {
         setLayout(new GridLayout(1, 1, 0, 0));
         showModelsInSeparateBrowser = OPTION_SHOW_MODELS_IN_SEPARATE_BROWSER.is();
-        inactiveColor = new ModelBrowser(TabbedPane.SCROLL_TAB_LAYOUT).getForeground();
+        inactiveColor = new ModelBrowser(ReorderableTabbedPane.SCROLL_TAB_LAYOUT).getForeground();
         UserProperties.addPropertyChangeListener(this);
     }
 
@@ -53,14 +50,14 @@ public final class ModelBrowserPanel extends JPanel implements PropertyChangeLis
     public final void addCollection(final GDCollection gdcoll) {
         ModelBrowser modelBrowser;
         if (showModelsInSeparateBrowser) {
-            modelBrowser = new ModelBrowser(TabbedPane.WRAP_TAB_LAYOUT); //WRAP -> never show the scroll buttons even if the space is not enough for the single tab in this pane
+            modelBrowser = new ModelBrowser(ReorderableTabbedPane.WRAP_TAB_LAYOUT); //WRAP -> never show the scroll buttons even if the space is not enough for the single tab in this pane
             modelBrowser.addCollection(gdcoll);
             ((GridLayout) getLayout()).setColumns(((GridLayout) getLayout()).getColumns() + 1);
             add(modelBrowser);
         } else {
             modelBrowser = getFirstBrowser();
             if (modelBrowser == null) {
-                modelBrowser = new ModelBrowser(TabbedPane.SCROLL_TAB_LAYOUT);
+                modelBrowser = new ModelBrowser(ReorderableTabbedPane.SCROLL_TAB_LAYOUT);
                 add(modelBrowser);
             }
             modelBrowser.addCollection(gdcoll);

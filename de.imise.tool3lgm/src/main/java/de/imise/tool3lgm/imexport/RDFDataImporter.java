@@ -42,7 +42,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.util.DataPrinter;
 import de.imise.util.StringUtils;
-import de.imise.util.Sys;
 import de.imise.util.collections.ExtendedMap;
 
 /**
@@ -59,6 +58,9 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     /** If <code>true</code> the importer will log the progress. */
     private final boolean logDebug = Tool3lgmMain.hasStartParameter("-log_rdf", "-log_all");
 
+    /** If <code>true</code> all warnings and errors durcing the rdf import process are logged */
+    private final boolean logWarningsAndErrors = Tool3lgmMain.hasStartParameter("-log_rdf_err");
+
     /**
      * @author AXS (26 Jun 2019)
      */
@@ -70,6 +72,11 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     @Override
     public boolean isDebug() {
         return logDebug;
+    }
+
+    @Override
+    public boolean isDebugErrors() {
+        return logDebug || logWarningsAndErrors;
     }
 
     /**
@@ -291,7 +298,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     String description = descriptionPropertyResolver.getValue(ontNode);
                     String hashString = ontNode.getURI(); //originale URI übernehmen
                     Node lgmNode = addNode(ontNode, lgmNodeClass, name, description, hashString);
-                    printe(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
+                    print(i++ + "\t" + ontClassName + " -> " + ontNode + "  ->  " + lgmNode);
                     //Wenn die Ontologie nicht ganz richtig modelliert ist(oder irgendwas andere nicht stimmt), kann es vorkommen,
                     //dass ontClass.listInstances(true) auch Instanzen anderer als der eigentlichen Zielklasse zurück liefert.
                     //Oder es kann vorkommen, dass Individuen bei getOntClass() nicht die Klasse zurück liefern, die sie müssten
@@ -299,11 +306,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                     //Wemm das auftritt, dann wird hier auf jeden Fall eine Warnung ausgegeben.
                     if (!individualOntClass.equals(ontClass)) {
                         String message = "WARNING: Individial returns wrong class " + individual + "   --->   " + individualOntClass + "  !=  " + ontClass;
-                        if (isDebug()) {
-                            printe(message);
-                        } else {
-                            Sys.err1(message);
-                        }
+                        printe(message);
                     }
                 }
             }
@@ -340,7 +343,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     private void importEdges(final OntModel ontModel, final OntPropertyResolver descriptionPropertyResolver) {
         //ObjectProperty -> Kantenklassenname
         Map<ObjectProperty, String> importableObjectPropertiesToTargetEdgeClassName = getImportableObjetctProperties(ontModel);
-        printe(importableObjectPropertiesToTargetEdgeClassName);
+        print(importableObjectPropertiesToTargetEdgeClassName);
         int i = 1;
         print("Statements");
         for (StmtIterator statements = ontModel.listStatements(); statements.hasNext();) {
@@ -368,7 +371,7 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
                             Edge lgmEdge = addEdge(targetEdgeClassName, name, edgeHash, startNode, endNode);
                             lgmEdge.setDescription(description);
                             String resultEdgeHash = lgmEdge.getHashString();
-                            printe(i++ + "\t" + targetEdgeClassName + " (" + resultEdgeHash + ")" + " | Edge: StartNode=" + startNode + "  ->  EndNode=" + endNode + "  | EdgeName=" + lgmEdge + " | EdgeDescription=" + description);
+                            print(i++ + "\t" + targetEdgeClassName + " (" + resultEdgeHash + ")" + " | Edge: StartNode=" + startNode + "  ->  EndNode=" + endNode + "  | EdgeName=" + lgmEdge + " | EdgeDescription=" + description);
                             if (!edgeHash.equals(resultEdgeHash)) {
                                 printe("\tWARNING: Another edge hides this edge (statement predicate). Maybe you forgot to mark the edge class " + targetEdgeClassName + " as de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge?");
                                 printe("\t" + edgeHash + "  IS HIDDEN BY  " + resultEdgeHash);

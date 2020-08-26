@@ -1,8 +1,8 @@
 package de.imise.tool3lgm.gui;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_CHECK_CONSISTENCY;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ENABLE_EXPERT_MODE;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_CONSISTENCY_TABLE;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_MODEL_BROWSER;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_PAINTING_TOOLBAR;
 import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SHOW_STANDARD_TOOLBAR;
@@ -36,6 +36,7 @@ import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgm;
 import de.imise.tool3lgm.Tool3lgmChangeListener;
 import de.imise.tool3lgm.Tool3lgmConstants;
+import de.imise.tool3lgm.graphtools.consistency.SuggestShowConsistencyTableHandler;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
@@ -59,7 +60,6 @@ import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
 import de.imise.tool3lgm.log.Log;
 import de.imise.tool3lgm.userproperties.UserProperties;
-import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.tool3lgm.userproperties.UserProperties.IntProperty;
 
 /**
@@ -168,7 +168,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
     @Override
     public void propertyChange(final PropertyChangeEvent evt) {
-        if (OPTION_CHECK_CONSISTENCY.isChanged(evt)) {
+        if (OPTION_SHOW_CONSISTENCY_TABLE.isChanged(evt)) {
             checkViewComponentsVisibility();
         } else if (OPTION_SHOW_TEMPLATE_BROWSER.isChanged(evt)) {
             checkViewComponentsVisibility();
@@ -191,6 +191,13 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
     }
 
     /**
+     * @return
+     */
+    private boolean isShowConsistencyTable() {
+        return OPTION_SHOW_CONSISTENCY_TABLE.is();
+    }
+
+    /**
      * Sets the corresponding UserPropertiy values for the screen index, the width and the height.
      */
     private void savePositionAndSizeInUserProperties() {
@@ -202,7 +209,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
             int dividerLocation = rightSplitPane.getDividerLocation();
             IntProperty.PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION.set(dividerLocation);
         }
-        if (OPTION_CHECK_CONSISTENCY.is() && bottomSplitPane != null && bottomSplitPane.isVisible()) {
+        if (isShowConsistencyTable() && bottomSplitPane != null && bottomSplitPane.isVisible()) {
             int dividerLocation = bottomSplitPane.getDividerLocation();
             IntProperty.PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION.set(dividerLocation);
         }
@@ -212,9 +219,9 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      * Restores the screen index, the width and the height from the corresponding UserPropertiy values.
      */
     public void restorePositionAndSizeFromUserProperties() {
-        setDividerLocation(OPTION_SHOW_MODEL_BROWSER, PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION, leftSplitPane, 0.2d, true);
-        setDividerLocation(OPTION_SHOW_TEMPLATE_BROWSER, PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION, rightSplitPane, 0.8d, true);
-        setDividerLocation(OPTION_CHECK_CONSISTENCY, PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION, bottomSplitPane, 0.7d, false);
+        setDividerLocation(OPTION_SHOW_MODEL_BROWSER.is(), PROPERTY_INT_MODELBRWOSER_GRAPHVIEW_DIVIDER_LOCATION, leftSplitPane, 0.2d, true);
+        setDividerLocation(OPTION_SHOW_TEMPLATE_BROWSER.is(), PROPERTY_INT_GRAPHVIEW_TEMPLATEBROWSER_DIVIDER_LOCATION, rightSplitPane, 0.8d, true);
+        setDividerLocation(isShowConsistencyTable(), PROPERTY_INT_GRAPHVIEW_CONSISTENCY_TABLE_DIVIDER_LOCATION, bottomSplitPane, 0.7d, false);
     }
 
     /**
@@ -224,8 +231,8 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      * @param mainFramePart
      * @param width
      */
-    private void setDividerLocation(final BooleanProperty dividerVisibleProperty, final IntProperty dividerLocationProperty, final JSplitPane splitPane, final double mainFramePart, final boolean width) {
-        if (dividerVisibleProperty.is() && splitPane != null) {
+    private void setDividerLocation(final boolean propertyValeShow, final IntProperty dividerLocationProperty, final JSplitPane splitPane, final double mainFramePart, final boolean width) {
+        if (propertyValeShow && splitPane != null) {
             int dividerLocation = dividerLocationProperty.get();
             int dividerSize = splitPane.getDividerSize();
             if (dividerLocation < dividerSize) {
@@ -259,7 +266,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      * @return <code>true</code>, wenn dei Konsistenzprüfung durchgeführt und angezeigt wurde
      */
     private void checkConsistencyTableVisibility() {
-        boolean isCheckConsistency = OPTION_CHECK_CONSISTENCY.is();
+        boolean isCheckConsistency = isShowConsistencyTable();
         ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
         JSplitPane topComponent = rightSplitPane != null ? rightSplitPane : leftSplitPane;
         if (!isCheckConsistency) {
@@ -271,6 +278,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
                 workarea.remove(bottomSplitPane);
                 bottomSplitPane = null;
                 consistencyErrorTableBorderPanel = null;
+                consistencyErrorTable = null;
             }
             workarea.add(topComponent, BorderLayout.CENTER);
         } else {
@@ -303,7 +311,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
 
     /** (De-)Aktiviert den TemplateBrowser */
     private final void checkTemplateBrowserVisibility() {
-        boolean isCheckConsistency = OPTION_CHECK_CONSISTENCY.is();
+        boolean isCheckConsistency = isShowConsistencyTable();
         //show template browser
         if (OPTION_SHOW_TEMPLATE_BROWSER.is()) {
             if (rightSplitPane != null) {
@@ -677,6 +685,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         //add this panel to to every opened model as change listener
         //to catch the selection changed events for the template browser
         source.addAllTransactionsListener(this);
+        SuggestShowTemplateBrowserHandler.suggestShowTemplateBrowser();
     }
 
     @Override
@@ -695,6 +704,11 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         }
     }
 
+    @Override
+    public void dataChanged(final GraphDocument source) {
+        SuggestShowConsistencyTableHandler.suggestShowConsistencyTable();
+    }
+
     private void updateTitledBorders() {
         if (OPTION_SHOW_VIEW_COMPONENT_TITLES.is()) {
             addTitledBorders();
@@ -711,11 +725,11 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
      */
     private void addTitledBorders() {
         //show the the graph view border only if there is no active model
-        if (!desktop.hasViewPaneFrameComponents()) {
-            createTitledBorder(desktop, "PANEL_LABEL_GRAPH_VIEW_TITLE");
-        } else {
-            removeTitledBorder(desktop);
-        }
+        //        if (!desktop.hasViewPaneFrameComponents()) {
+        createTitledBorder(desktop, "PANEL_LABEL_GRAPH_VIEW_TITLE");
+        //        } else {
+        //            removeTitledBorder(desktop);
+        //        }
         createTitledBorder(modelBrowserPanel, "PANEL_LABEL_MODEL_BROWSER_TITLE");
         createTitledBorder(templateBrowserPanel, "PANEL_LABEL_TEMPLATE_BROWSER_TITLE");
         createTitledBorder(consistencyErrorTableBorderPanel, "PANEL_LABEL_CONSISTENCY_TABLE_TITLE");

@@ -23,14 +23,8 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
  */
 public class UniqueIDChecker implements ConsistencyErrorChecker {
 
-    /**
-     * Liefert eine Liste aller {@link AbstractIDError} in dem übergebenen Modell
-     *
-     * @param gdcoll
-     * @return
-     */
     @Override
-    public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll) {
+    public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll, final boolean checkOnly) {
         List<AbstractConsistencyError> idErrors = new ArrayList<>();
         UserFieldDefinitions ufd = gdcoll.getUserFieldDefinitions();
         GraphDocument doc = gdcoll.getMainDoc();
@@ -57,6 +51,9 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
                     if (UserField.EMPTY_STRING.equals(idValue)) {
                         AbstractIDError idError = new IDEmptyError(me, idUserField, gdcoll);
                         idErrors.add(idError);
+                        if (checkOnly) {
+                            return idErrors;
+                        }
                     } else {
                         idValueToElements.put(idValue, me);
                     }
@@ -68,6 +65,9 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
                             Collection<ModelElement> allWithSameID = new ArrayList<>(elementsWithSameID);
                             AbstractIDError idError = new IDNotUniqueError(me, idUserField, gdcoll, allWithSameID);
                             idErrors.add(idError);
+                            if (checkOnly) {
+                                return idErrors;
+                            }
                         }
                     }
                 }

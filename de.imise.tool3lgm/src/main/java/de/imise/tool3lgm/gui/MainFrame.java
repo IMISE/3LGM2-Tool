@@ -3,7 +3,6 @@ package de.imise.tool3lgm.gui;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
 import java.awt.Cursor;
-import java.awt.GraphicsConfiguration;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -81,10 +80,10 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     @Override
     public void setVisible(final boolean b) {
         if (b) {
-            restorePositionAndSizeFromUserProperties();
+            restoreBoundsAndExtendedStateFromUserProperties();
             contentPane.restorePositionAndSizeFromUserProperties();
         } else {
-            savePositionAndSizeInUserProperties();
+            saveBoundsAndExtendedStateInUserProperties();
         }
         super.setVisible(b);
     }
@@ -97,29 +96,39 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
     /**
      * Sets the corresponding UserPropertiy values for the screen index, the width and the height.
      */
-    public void savePositionAndSizeInUserProperties() {
+    public void saveBoundsAndExtendedStateInUserProperties() {
         Rectangle bounds = getBounds();
-        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.set(bounds.x);
-        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.set(bounds.y);
-        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.set(bounds.width);
-        IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT.set(bounds.height);
+        int extendedState = getExtendedState();
+        if (extendedState == JFrame.MAXIMIZED_BOTH) {
+            IntProperty.PROPERTY_INT_MAINFRAME_EXTENDED_STATE.set(extendedState);
+        } else if (extendedState == JFrame.NORMAL) {
+            IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.set(bounds.x);
+            IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.set(bounds.y);
+            IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.set(bounds.width);
+            IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT.set(bounds.height);
+            IntProperty.PROPERTY_INT_MAINFRAME_EXTENDED_STATE.set(extendedState);
+        }
     }
 
     /**
      * Restores the screen index, the width and the height from the corresponding UserPropertiy values.
      */
-    private void restorePositionAndSizeFromUserProperties() {
-        GraphicsConfiguration graphicsConfiguration = getGraphicsConfiguration();
-        int jFrameTitlebarHight = SwingUtils.getJFrameTitlebarHight(graphicsConfiguration);
+    private void restoreBoundsAndExtendedStateFromUserProperties() {
         int frameX = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSX.get();
         int frameY = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_POSY.get();
         int frameWidth = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_WIDTH.get();
         int frameHeight = IntProperty.PROPERTY_INT_MAINFRAME_SCREEN_HEIGHT.get();
-        Rectangle screenBounds = graphicsConfiguration.getBounds();
-        if (frameHeight <= jFrameTitlebarHight * 2) { // if the frame has only at maximum the double titlebar height
-            setBounds(screenBounds); //full sreen
+
+        int frameTitleBarHeight = SwingUtils.getFrameTitleBarHeight();
+        if (frameHeight <= frameTitleBarHeight || !SwingUtils.canDisplayFrameAtCoordinates(frameX, frameY, frameWidth)) {
+            Rectangle maximumWindowBounds = SwingUtils.getMaximumFrameBounds();
+            setBounds(maximumWindowBounds);
         } else {
             setBounds(frameX, frameY, frameWidth, frameHeight); //last height
+            int extendedState = IntProperty.PROPERTY_INT_MAINFRAME_EXTENDED_STATE.get();
+            if (extendedState == JFrame.MAXIMIZED_BOTH) {
+                setExtendedState(extendedState);
+            }
         }
     }
 
@@ -251,12 +260,12 @@ public class MainFrame extends JFrame implements Tool3lgmChangeListener, Compone
 
     @Override
     public void componentResized(final ComponentEvent e) {
-        savePositionAndSizeInUserProperties();
+        saveBoundsAndExtendedStateInUserProperties();
     }
 
     @Override
     public void componentMoved(final ComponentEvent e) {
-        savePositionAndSizeInUserProperties();
+        saveBoundsAndExtendedStateInUserProperties();
     }
 
     @Override

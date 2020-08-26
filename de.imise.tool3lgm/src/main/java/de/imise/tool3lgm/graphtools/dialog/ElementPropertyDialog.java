@@ -32,7 +32,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
-import de.imise.util.swing.component.TabbedPane;
+import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
  * Eigenschaftsdialog für Modellelemnte, also Node und Kanten.<br>
@@ -620,8 +620,8 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
             TabbedPanel tabbedPanel = (TabbedPanel) comp;
             if (tabbedPanel.getComponentCount() == 1) {
                 comp = tabbedPanel.getComponent(0);
-                if (tabbedPanel.getComponent(0) instanceof TabbedPane) {
-                    TabbedPane tabbedPane = (TabbedPane) comp;
+                if (tabbedPanel.getComponent(0) instanceof ReorderableTabbedPane) {
+                    ReorderableTabbedPane tabbedPane = (ReorderableTabbedPane) comp;
                     int componentCount = tabbedPane.getComponentCount();
                     return componentCount == 0;
                 }
