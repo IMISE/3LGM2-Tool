@@ -29,10 +29,21 @@ we get following **error message** on the **bottom of the 3LGM tool** (Consisten
 
 ![groupingError.PNG](https://bitbucket.org/repo/9L6rMz/images/2745019955-groupingError.PNG)
 
-The error message states, that the actor **needs to be grouped with another actor**. To resolve this you can **right click on the error** and **add the missing actors** to the application system.
+The error message states, that the actor **needs to be grouped with another actor**. To resolve this you have three options:
+You can view these options by **right clicking on the error**.
+![rightClick.PNG](https://bitbucket.org/repo/9L6rMz/images/1091715669-rightClick.PNG)
+
+### Property dialog for error-correcting
+The first option will open the property dialogue window showing the vacant IHE Actors on the right.
+![propertyDialog2.PNG](https://bitbucket.org/repo/9L6rMz/images/2481542849-propertyDialog2.PNG)
+
+Select the vacant Actor, in this case the Time Client and add it to your application system by clicking on the ![addButton.PNG](https://bitbucket.org/repo/9L6rMz/images/3799513291-addButton.PNG) button.
+
+### Remove inconsistent Element
+This option will just remove the element, which generated the inconsistency error.
+
+### Connect
 
 ![groupingErrorResolve.PNG](https://bitbucket.org/repo/9L6rMz/images/3594253812-groupingErrorResolve.PNG)
 
 This will add the missing actor to the application system. There might be a need for readjusting the position but the error message will be resolved by this.
-
-_<ToDo: die weiteren Optionen zur Behebung der Konsistenz Fehlermeldung mit Screenshots+Text beschreiben.>_
