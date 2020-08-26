@@ -278,6 +278,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
                 workarea.remove(bottomSplitPane);
                 bottomSplitPane = null;
                 consistencyErrorTableBorderPanel = null;
+                consistencyErrorTable = null;
             }
             workarea.add(topComponent, BorderLayout.CENTER);
         } else {
