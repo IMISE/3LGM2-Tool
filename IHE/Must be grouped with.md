@@ -15,7 +15,7 @@ In the following image we modeled a Patient Management System.
 Starting from the bottom, first we will create the **application system** for patient management.
 For the Patient Management System we will add the **Patient Identity Source** from the **Patient Identifier Cross-referencing profile (PIX)**
 
-_<ToDo: Bild des/der Anwendungssystem(e) hier einfügen>_
+![patientManagementSystem.PNG](https://bitbucket.org/repo/9L6rMz/images/3102863631-patientManagementSystem.PNG)
 
 The **technical framework** states following groupings for the actors in the **Patient Identity Source** (PIX) profile.
 
