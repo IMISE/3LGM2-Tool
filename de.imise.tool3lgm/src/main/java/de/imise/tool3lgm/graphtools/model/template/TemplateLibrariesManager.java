@@ -110,13 +110,33 @@ public class TemplateLibrariesManager extends PropertyChangeHandler implements P
                 templateLibrariesContext.clear();
                 setActiveTemplate(null);
             } else if (!templateLibrariesContext.contains(selectedMetaModelContext)) { //templates already loaded?
-                Class<? extends MetaModelDefinition> metaModelDefinitionClass = selectedMetaModelContext.getMetaModelDefinitionClass();
-                List<TemplateLibraryProvider> templateLibraryProviders = Static.loadPlugins(TemplateLibraryProvider.class);
-                removeUnfittingTemplateLibraryProviders(templateLibraryProviders, metaModelDefinitionClass);
+                List<TemplateLibraryProvider> templateLibraryProviders = getTemplateLibraryProviders();
                 addTemplateLibraries(templateLibraryProviders);
             }
         }
         firePropertyChange();
+    }
+
+    /**
+     * @return all {@link TemplateLibraryProvider} which fitting the currently selectd model type
+     */
+    private List<TemplateLibraryProvider> getTemplateLibraryProviders() {
+        MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
+        Class<? extends MetaModelDefinition> metaModelDefinitionClass = selectedMetaModelContext.getMetaModelDefinitionClass();
+        List<TemplateLibraryProvider> templateLibraryProviders = Static.loadPlugins(TemplateLibraryProvider.class);
+        removeUnfittingTemplateLibraryProviders(templateLibraryProviders, metaModelDefinitionClass);
+        return templateLibraryProviders;
+    }
+
+    /**
+     * @return <code>true</code> if there are available templates for the currently selected model type
+     */
+    public final boolean hasAvailableTemplatesForCurrentModelType() {
+        MetaModelContext selectedMetaModelContext = Static.getSelectedMetaModelContext();
+        if (templateLibrariesContext.contains(selectedMetaModelContext)) {
+            return true;
+        }
+        return !getTemplateLibraryProviders().isEmpty();
     }
 
     /**
