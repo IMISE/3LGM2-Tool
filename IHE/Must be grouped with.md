@@ -21,7 +21,7 @@ The **technical framework** states following groupings for the actors in the **P
 
 ![mustbegroupedwith.PNG](https://bitbucket.org/repo/9L6rMz/images/3600768256-mustbegroupedwith.PNG)
 
-So when we **add** the **Patient Identity Source** from the Template-Browser
+So when we **add** the **Patient Identity Source** from the Template Browser
 
 ![addingPIXSource.PNG](https://bitbucket.org/repo/9L6rMz/images/4292716758-addingPIXSource.PNG)
 
