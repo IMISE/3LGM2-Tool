@@ -18,7 +18,7 @@ import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.util.swing.dialog.MultipleOptionPane;
 
 /**
- * Class to create OK-Cancel-Dialogs
+ * Class to create YES-NO-Dialogs
  *
  * @author AXS (25.08.2020)
  */
@@ -32,7 +32,7 @@ public class GeneralDialogCreator {
         MultipleOptionPane optionPane = new MultipleOptionPane();
         optionPane.setMessage(message);
         optionPane.setMessageType(JOptionPane.QUESTION_MESSAGE);
-        optionPane.setOptionType(JOptionPane.OK_CANCEL_OPTION);
+        optionPane.setOptionType(JOptionPane.YES_NO_OPTION);
         return optionPane;
     }
 
