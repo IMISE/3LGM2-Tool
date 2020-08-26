@@ -345,7 +345,7 @@ public class UserProperties extends AbstractUserProperties {
         OPTION_ENABLE_CLASSIFICATION_NUMBER_CALCULATION,
         /** Show consistency table */
         OPTION_SHOW_CONSISTENCY_TABLE,
-        /** Ask user to show the consistency table if new consistency occur */
+        /** Ask user to show the consistency table if the model contains errors */
         TRANSIENT_OPTION_ASK_SHOW_CONSISTENCY_TABLE,
         /** Warnung vor dem Löschen von Elementen aus dem Gesamtmodell */
         OPTION_SHOW_REMOVE_WARNING,
@@ -358,9 +358,11 @@ public class UserProperties extends AbstractUserProperties {
         OPTION_SHOW_MODEL_BROWSER,
         /** TemplateBrowser an/aus */
         OPTION_SHOW_TEMPLATE_BROWSER,
+        /** Ask user to show the the template browser if new model is opened and templates exist for this model type */
+        TRANSIENT_OPTION_ASK_SHOW_TEMPLATE_BROWSER,
         /** TemplateBrowser an/aus */
         OPTION_SHOW_VIEW_COMPONENT_TITLES,
-        /** Beim Start den Abfrgadedialog anzeigen, mit dem man das Metamodell wählen kann an/aus */
+        /** Beim Start den Abfragedialog anzeigen, mit dem man das Metamodell wählen kann an/aus */
         OPTION_SHOW_CHOOSE_METAMODEL_DIALOG,
 
         /**
@@ -386,7 +388,8 @@ public class UserProperties extends AbstractUserProperties {
          */
         private static final Set<BooleanProperty> DEFAULT_TRUE_PROERTIES = ImmutableSet.of(OPTION_SHOW_LINKED_WITH_SUBMODEL_SYMBOLS, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS, OPTION_GRAPH_MOVE_SUBELEMENTS, OPTION_SHOW_PAINTING_TOOLBAR,
                 OPTION_SHOW_STANDARD_TOOLBAR, OPTION_SHOW_VIEW_COMPONENT_TITLES, OPTION_SHOW_MODEL_BROWSER, OPTION_ENABLE_SUBMODEL_BROWSER, OPTION_SHOW_PART_OF_HIERARCHY, OPTION_SUBORDINATE_COMPOSITION_ELEMENTS_IN_MODEL_BROWSER, OPTION_USE_PROPERTY_COLORS,
-                OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING, OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, TRANSIENT_OPTION_SHOW_EXPANSION_SIGN, TRANSIENT_OPTION_ASK_SHOW_CONSISTENCY_TABLE);
+                OPTION_USE_RASTER, OPTION_ASSIGN_CONFIGURATION_COLORS, OPTION_SHOW_REMOVE_WARNING, OPTION_SHOW_CHOOSE_METAMODEL_DIALOG, TRANSIENT_OPTION_SHOW_EXPANSION_SIGN, TRANSIENT_OPTION_ASK_SHOW_CONSISTENCY_TABLE,
+                TRANSIENT_OPTION_ASK_SHOW_TEMPLATE_BROWSER);
 
         /**
          * @return Default-Wert dieser Property

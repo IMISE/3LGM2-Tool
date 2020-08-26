@@ -685,6 +685,7 @@ public final class MainFrameDesktopPane extends JPanel implements PropertyChange
         //add this panel to to every opened model as change listener
         //to catch the selection changed events for the template browser
         source.addAllTransactionsListener(this);
+        SuggestShowTemplateBrowserHandler.suggestShowTemplateBrowser();
     }
 
     @Override
