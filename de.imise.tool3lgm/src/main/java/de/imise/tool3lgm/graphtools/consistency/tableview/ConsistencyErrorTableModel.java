@@ -56,15 +56,15 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
      * @param checker
      */
     public void setErrors(final ConsistencyChecker checker) {
-        Collection<AbstractConsistencyError> errors = checker.getAllInconsistencies();
+        //ignore unfixable missingPath errors. They can be only fixed
+        //with other fixable missingPathErrors (if defined)
+        Collection<AbstractConsistencyError> errors = checker.getFixableInconsistencies();
         dataVector.clear();
         setRowCount(errors.size());
 
         int i = 0;
         for (AbstractConsistencyError error : errors) {
 
-            //ignore unfixable missingPath errors. They can be only fixed
-            //with other fixable missingPathErrors (if defined)
             if (error instanceof MissingPathError) {
                 if (!checker.isSolutionExecuteable(error)) {
                     int rowCount = getRowCount();

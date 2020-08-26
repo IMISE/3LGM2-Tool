@@ -270,7 +270,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         //nicht, dessen Eigenschaftsdialog man öffnen könnte, um den Fehler zu beheben (denn das geht nur durch Öffnen des Dialoes für das zugehörige
         //Anwendungssystem, was ja nicht da ist). Dadurch gilt dieser Fehler automatisch als nicht behebbar. Dadurch würde die IheActorInsance beim Einlesen
         //eines solchen fehlerhaften Modells automatisch gelöscht werden (in #clearUnfixableErrors()), was nur dadurch verhindert wird, dass alle diese
-        //MissingPathErrors in #clearUnfixableErrors() ignoriert werden. Das ist auch ok so, weil bei beliebig langen Pafden nie weiß, warum der Fehler
+        //MissingPathErrors in #clearUnfixableErrors() ignoriert werden. Das ist auch ok so, weil bei beliebig langen Pfaden nie weiß, warum der Fehler
         //aufgetreten ist und das Element somit nicht einfach löschen sollte.
         //Es gab mehrere Möglichkeiten, das nicht erwünschte Löschen zu umgehen:
         // 1.) den Fehler nicht aus Sicht der IheActorInsance sondern für das Anwenundungssystem generieren. Dann kommt der Fehler nur, wenn auch tatsächlich

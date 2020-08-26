@@ -70,7 +70,7 @@ public class SuggestShowConsistencyTableHandler implements PropertyChangeListene
         }
 
         ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
-        if (consistencyChecker.hasInconsistencies()) {
+        if (consistencyChecker.hasFixableInconsistencies()) {
             JComponent message = GeneralDialogCreator.getLabelPanel("SUGGEST_SHOW_CONSISTENCY_TABLE_DIALOG_MESSAGE", true);
             String title = getResString("message_do_not_ask_again");
             JCheckBox dontAskAgain = new JCheckBox(title, false);
