@@ -53,16 +53,6 @@ public class TemplateLibrariesContext {
     }
 
     /**
-     * Registers this metaModelContext with no available templates. Use this
-     * to store the information that for this metaModelContext
-     *
-     * @param metaModelContext
-     */
-    public void setNoTemplatesAvailable(final MetaModelContext metaModelContext) {
-        metaModelContextsWithLoadedTemplates.add(metaModelContext);
-    }
-
-    /**
      * @param metaModelContext
      */
     public void remove(final MetaModelContext metaModelContext) {
