@@ -37,7 +37,11 @@ You can view these options by **right clicking on the error**.
 The first option will open the property dialogue window showing the vacant IHE Actors on the right.
 ![propertyDialog2.PNG](https://bitbucket.org/repo/9L6rMz/images/2481542849-propertyDialog2.PNG)
 
-Select the vacant Actor, in this case the Time Client and add it to your application system by clicking on the ![addButton.PNG](https://bitbucket.org/repo/9L6rMz/images/3799513291-addButton.PNG) button.
+Doubleclick on the added Actor (Patient Identity Source) and it will open another window. Here go to the tab **Grouping** to find out which actors have to be grouped with the current one. 
+
+![groupingWindow.PNG](https://bitbucket.org/repo/9L6rMz/images/3097820435-groupingWindow.PNG)
+
+Now got back to the first window and select the vacant Actor(s), in this case the Time Client and add it to your application system by clicking on the ![addButton.PNG](https://bitbucket.org/repo/9L6rMz/images/3799513291-addButton.PNG) button.
 
 ### Remove inconsistent Element
 This option will just remove the element, which generated the inconsistency error.
