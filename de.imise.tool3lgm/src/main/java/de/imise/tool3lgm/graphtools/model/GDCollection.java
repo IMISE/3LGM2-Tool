@@ -140,7 +140,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private MetaModel metaModel;
 
     /** The undo-redo-manager */
-    protected TransactionManager tman = new TransactionManager();
+    protected final TransactionManager tman;
 
     /** The data structure to store all model changing transactions for the undo-redo-manager */
     private final TransactionStackTable transStackTable = new TransactionStackTable();
@@ -275,6 +275,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public GDCollection() {
         fileHandler = new GDCollectionFileHandler(this);
         imExportHandler = new GDCollectionImExportHandler(this);
+        tman = new TransactionManager(this);
     }
 
     /**
