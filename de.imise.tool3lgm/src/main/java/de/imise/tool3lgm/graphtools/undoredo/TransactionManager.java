@@ -405,8 +405,7 @@ public class TransactionManager {
             System.out.println("transaction-index: " + j);
         }
         GDCollection gdcoll = doc.getCollection();
-        boolean bulkMode = gdcoll.isBulkMode();
-        gdcoll.setBulkMode(true);
+        boolean bulkMode = gdcoll.setBulkMode(true);
 
         is_doing = true;
         boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
@@ -446,7 +445,7 @@ public class TransactionManager {
         }
         cur_pos--;
 
-        doc.getCollection().setAutomaticMode(lastAutomaticMode);
+        gdcoll.setAutomaticMode(lastAutomaticMode);
         if (doc.isVerificationMode()) {
             printQueue(10);
         }
