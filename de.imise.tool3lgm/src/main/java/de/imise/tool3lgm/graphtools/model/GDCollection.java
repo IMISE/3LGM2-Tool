@@ -1362,6 +1362,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (lockAndForceDelete) {
             lockInferenceEgdeCreation = true;
         }
+        boolean oldBulkMode = setBulkMode(true);
         //Sys.outn(15, "REMOVE   Model name=" + getName() + " (" + getModelCategory().name() + ")");
         //get all InferenceEdge classes
         Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
@@ -1399,6 +1400,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 }
             }
         }
+        setBulkMode(oldBulkMode);
     }
 
     /**
@@ -1427,6 +1429,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (lockInferenceEgdeCreation) {
             return;
         }
+        boolean oldBulkMode = setBulkMode(true);
         //Sys.outn(15, "CREATE   Model name=" + getName() + " (" + getModelCategory().name() + ")");
         //get all InferenceEdge classes
         Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
@@ -1457,6 +1460,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 }
             }
         }
+        setBulkMode(oldBulkMode);
     }
 
     /**
