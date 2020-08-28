@@ -2,4 +2,4 @@
 
 [IHE/1. Introduction](IHE/1. Introduction "Introduction IHE chapter")
 
-[IHE/Must be grouped with](IHE/"Must be grouped with" functionality)
+[IHE/Must be grouped with](IHE/Must be grouped with "Must be grouped with" functionality)
