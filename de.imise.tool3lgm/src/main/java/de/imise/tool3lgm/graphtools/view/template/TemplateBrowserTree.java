@@ -210,7 +210,8 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
     }
 
     @Override
-    public void addSelection() {
+    public void setSelection() {
+        clearSelection();
         Collection<GDCollection> displayedTemplates = getDisplayedTemplates();
         for (GDCollection templateModel : displayedTemplates) {
             GraphDocument template = templateModel.getSelectedDoc();
