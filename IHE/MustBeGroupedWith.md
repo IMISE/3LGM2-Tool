@@ -29,12 +29,11 @@ we get following **error message** on the **bottom of the 3LGM tool** (Consisten
 
 ![groupingError.PNG](https://bitbucket.org/repo/9L6rMz/images/2745019955-groupingError.PNG)
 
-The error message states, that the actor **needs to be grouped with another actor**. To resolve this you have three options:
-You can view these options by **right clicking on the error**.
+The error message states, that the actor **needs to be grouped with another actor**. By **right clicking on the error** you have three options to resolv this issue.
 
+### 1. Option: Property dialog for error-correcting
 ![rightClick.PNG](https://bitbucket.org/repo/9L6rMz/images/1091715669-rightClick.PNG)
 
-### Property dialog for error-correcting
 The first option will open the property dialogue window showing the vacant IHE Actors on the right.
 ![propertyDialog2.PNG](https://bitbucket.org/repo/9L6rMz/images/2481542849-propertyDialog2.PNG)
 
@@ -44,10 +43,12 @@ Doubleclick on the added Actor (Patient Identity Source) and it will open anothe
 
 Now got back to the first window and select the vacant Actor(s), in this case the Time Client and add it to your application system by clicking on the ![addButton.PNG](https://bitbucket.org/repo/9L6rMz/images/3799513291-addButton.PNG) button.
 
-### Remove inconsistent Element
+### 2. Option: Remove inconsistent Element
+![rightClick.PNG](https://bitbucket.org/repo/9L6rMz/images/1091715669-rightClick.PNG)
+
 This option will just remove the element, which generated the inconsistency error.
 
-### Connect
+### 3. Option: Connect
 
 ![groupingErrorResolve.PNG](https://bitbucket.org/repo/9L6rMz/images/3594253812-groupingErrorResolve.PNG)
 
