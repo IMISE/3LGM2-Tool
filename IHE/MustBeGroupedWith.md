@@ -32,19 +32,21 @@ we get following **error message** on the **bottom of the 3LGM tool** (Consisten
 The error message states, that the actor **needs to be grouped with another actor**. By **right clicking on the error** you have three options to resolv this issue.
 
 ### 1. Option: Property dialog for error-correcting
-![rightClick.PNG](https://bitbucket.org/repo/9L6rMz/images/1091715669-rightClick.PNG)
+![firstOption.PNG](https://bitbucket.org/repo/9L6rMz/images/1190603611-firstOption.PNG)
 
 The first option will open the property dialogue window showing the vacant IHE Actors on the right.
-![propertyDialog2.PNG](https://bitbucket.org/repo/9L6rMz/images/2481542849-propertyDialog2.PNG)
+![pDialogue.PNG](https://bitbucket.org/repo/9L6rMz/images/2123300710-pDialogue.PNG)
 
 Doubleclick on the added Actor (Patient Identity Source) and it will open another window. Here go to the tab **Grouping** to find out which actors have to be grouped with the current one. 
 
-![groupingWindow.PNG](https://bitbucket.org/repo/9L6rMz/images/3097820435-groupingWindow.PNG)
+![pDialogue2.PNG](https://bitbucket.org/repo/9L6rMz/images/3957901489-pDialogue2.PNG)
 
-Now got back to the first window and select the vacant Actor(s), in this case the Time Client and add it to your application system by clicking on the ![addButton.PNG](https://bitbucket.org/repo/9L6rMz/images/3799513291-addButton.PNG) button.
+Now go back to the first window and select the vacant Actor(s), in this case the Time Client and add it to your application system by clicking on the **<** button.
+
+![pDialogue3.PNG](https://bitbucket.org/repo/9L6rMz/images/2229559516-pDialogue3.PNG)
 
 ### 2. Option: Remove inconsistent Element
-![rightClick.PNG](https://bitbucket.org/repo/9L6rMz/images/1091715669-rightClick.PNG)
+![secondOption.PNG](https://bitbucket.org/repo/9L6rMz/images/4130889738-secondOption.PNG)
 
 This option will just remove the element, which generated the inconsistency error.
 
