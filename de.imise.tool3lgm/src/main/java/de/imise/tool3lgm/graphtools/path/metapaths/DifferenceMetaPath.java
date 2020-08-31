@@ -77,4 +77,9 @@ public class DifferenceMetaPath extends ParallelMetaPath {
         return false;
     }
 
+    @Override
+    public DifferenceMetaPath createInstance(final AbstractMetaPath... subMetaPaths) {
+        return new DifferenceMetaPath(subMetaPaths);
+    }
+
 }

@@ -64,4 +64,9 @@ public class UnionMetaPath extends ParallelMetaPath {
         return true;
     }
 
+    @Override
+    public UnionMetaPath createInstance(final AbstractMetaPath... subMetaPaths) {
+        return new UnionMetaPath(subMetaPaths);
+    }
+
 }
