@@ -71,7 +71,7 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
      *
      * @param source
      */
-    public void selectElementsWithSameHashAndInstaniationMasterElements(final GraphDocument source) {
+    private void selectElementsWithSameHashAndInstaniationMasterElements(final GraphDocument source) {
         Collection<GDCollection> displayedTemplateModels = tree.getDisplayedTemplates();
         Collection<GraphDocument> displayedTemplates = new ArrayList<>(displayedTemplateModels.size());
         for (GDCollection template : displayedTemplateModels) {
