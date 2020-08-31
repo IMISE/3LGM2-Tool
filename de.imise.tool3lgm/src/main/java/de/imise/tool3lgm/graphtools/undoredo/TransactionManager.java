@@ -543,11 +543,11 @@ public class TransactionManager {
                 //                sb.append(i);
                 //                sb.append(")\t--- nicht belegt ---\n");
                 //                j++;
-            if (i == cur_pos) {
-                sb.append("(current undo action)");
+                if (i == cur_pos) {
+                    sb.append("(current undo action)");
+                }
+                sb.append("\n");
             }
-            sb.append("\n");
-        }
         }
         return sb.toString();
     }

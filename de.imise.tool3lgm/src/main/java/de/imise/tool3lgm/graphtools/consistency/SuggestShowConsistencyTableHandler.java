@@ -11,8 +11,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
+import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.dialog.tools.GeneralDialogCreator;
+import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.userproperties.UserProperties;
 
 /**
@@ -26,10 +29,21 @@ public class SuggestShowConsistencyTableHandler implements PropertyChangeListene
     private static long lastDialogCloseTime = 0;
 
     /**
+     *
+     */
+    private static long lastCheckTime = 0;
+
+    /**
      * To prevent the user from being asked too often, at least 10 seconds
      * must elapse between 2 requests.
      */
     private static final long minTimeBetweenLastShowDialogAndNextShowDialog = 10000;
+
+    /**
+     * To prevent this function is called at every data_changed-Event, at
+     * least 1 second must elapse between 2 requests.
+     */
+    private static final long minTimeBetweenLastCheckAndNextCheck = 1000;
 
     /**
      * Single instance of this
@@ -68,6 +82,19 @@ public class SuggestShowConsistencyTableHandler implements PropertyChangeListene
         if (currentTimeMillis - lastDialogCloseTime < minTimeBetweenLastShowDialogAndNextShowDialog) {
             return;
         }
+        if (currentTimeMillis - lastCheckTime < minTimeBetweenLastCheckAndNextCheck) {
+            return;
+        }
+        GDCollection selectedGDCollection = Static.getSelectedGDCollection();
+        if (selectedGDCollection == null) {
+            return;
+        }
+        TransactionManager transactionManager = selectedGDCollection.getTman();
+        if (transactionManager.isInTransaction()) {
+            return;
+        }
+
+        lastCheckTime = currentTimeMillis;
 
         ConsistencyChecker consistencyChecker = ConsistencyChecker.getConsistencyChecker();
         if (consistencyChecker.hasFixableInconsistencies()) {
