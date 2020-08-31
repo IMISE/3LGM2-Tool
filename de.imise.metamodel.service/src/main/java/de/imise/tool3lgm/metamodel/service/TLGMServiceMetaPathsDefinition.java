@@ -18,6 +18,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.DifferenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
@@ -88,9 +89,12 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     @Override
     public final Map<Class<? extends Edge>, AbstractMetaPath> getSoftConditionMetaPaths() {
         //IheActorInstanceCommunicationLink_Edge (best connectable ActorInstanceInterfaces should be connected with IheInterfaces which are connected via an IheCommunicationInterface)
-        SimpleMetaPath cmp1 = smp(IheActorInstanceInvokingInterface.class, IheActorInstanceProvidingInterface.class, IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class, IheCommunicationLink_Edge.class,
+        SimpleMetaPath includeCondition1 = smp(IheActorInstanceInvokingInterface.class, IheActorInstanceProvidingInterface.class, IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class, IheCommunicationLink_Edge.class,
                 IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class);
-        return ImmutableMap.of(IheActorInstanceCommunicationLink_Edge.class, cmp1);
+        SimpleMetaPath excludeCondition1 = smp(IheActorInstanceInvokingInterface.class, IheActorInstanceProvidingInterface.class, IheActorInstance_IheActorInstanceInterface_Edge.class, IheActorInstance_IheActorInstanceInterface_Edge.class);
+        DifferenceMetaPath differenceMetaPath1 = new DifferenceMetaPath(includeCondition1, excludeCondition1);
+
+        return ImmutableMap.of(IheActorInstanceCommunicationLink_Edge.class, differenceMetaPath1);
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////////
