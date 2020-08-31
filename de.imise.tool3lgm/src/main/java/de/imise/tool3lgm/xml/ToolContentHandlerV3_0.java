@@ -267,6 +267,14 @@ public class ToolContentHandlerV3_0 implements ContentHandler {
                 }
 
                 if (element != null) {
+                    if (isCopyAndPaste()) {
+                        String originalElementHash = atts.getValue("hash");
+                        ModelElement existingElementWithSameHash = doc.findElementCoded(originalElementHash);
+                        if (existingElementWithSameHash == null) {
+                            element.setHashString(originalElementHash);
+                        }
+                    }
+
                     String hashString = atts.getValue("hash");
                     if (isCopyAndPaste()) {
                         String newHashString = element.getHashString();
