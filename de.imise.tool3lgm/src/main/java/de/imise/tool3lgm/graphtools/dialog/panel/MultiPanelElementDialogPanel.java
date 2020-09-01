@@ -24,7 +24,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.Pan
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
- * Panel, das mehrere andere Panels aufnehmen kann.
+ * Panel, which can hold several other panels.
  *
  * @author AXS (21.01.2020)
  */
@@ -55,15 +55,19 @@ public class MultiPanelElementDialogPanel extends ElementDialogPanel implements 
     private JButton panelButton;
 
     /**
-     * @param dialog
+     * Panel, which can hold several other panels.
+     *
+     * @param dialog dialog the dialog which contains this panel
      */
     public MultiPanelElementDialogPanel(final AbstractElementPropertyDialog dialog) {
         this(dialog, (String) null);
     }
 
     /**
-     * @param dialog
-     * @param name
+     * Panel, which can hold several other panels.
+     *
+     * @param dialog the dialog which contains this panel
+     * @param name displayed panel name on the tab
      */
     public MultiPanelElementDialogPanel(final AbstractElementPropertyDialog dialog, final String name) {
         super(dialog, name);
