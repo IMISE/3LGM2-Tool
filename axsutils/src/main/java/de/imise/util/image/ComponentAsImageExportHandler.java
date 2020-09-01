@@ -10,6 +10,8 @@ import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -142,6 +144,40 @@ public class ComponentAsImageExportHandler {
         Dimension preferredSize = comp.getPreferredSize();
         int w = preferredSize.width;
         int h = preferredSize.height;
+
+        BigDecimal tempW = BigDecimal.valueOf(w);
+        BigDecimal tempH = BigDecimal.valueOf(h);
+        BigDecimal tempSize = tempW.multiply(BigDecimal.valueOf(3)).multiply(BigDecimal.valueOf(h-1)).add(BigDecimal.valueOf(3*w));
+        System.out.println(tempSize);
+
+        if (tempSize.compareTo(BigDecimal.valueOf(2147483647)) == 1) {
+            BigDecimal scaleDown = tempSize.divide(BigDecimal.valueOf(2147483647), 2, RoundingMode.HALF_DOWN);
+            System.out.println("Scaledown" + scaleDown + " - " + w + " - " + h);
+            double zoomScale = ((ZoomableComponent) comp).getZoom() / Math.sqrt(scaleDown.doubleValue());
+            System.out.println(((ZoomableComponent) comp).getZoom());
+            System.out.println(zoomScale);
+            ((ZoomableComponent) comp).setZoom(zoomScale);
+            preferredSize = comp.getPreferredSize();
+            w = preferredSize.width;
+            h = preferredSize.height;
+            System.out.println(w + " - " + h);
+            tempSize = BigDecimal.valueOf(w).multiply(BigDecimal.valueOf(3)).multiply(BigDecimal.valueOf(h-1)).add(BigDecimal.valueOf(3*w));
+        }
+
+        System.out.println(Runtime.getRuntime().freeMemory());
+        long freeHeapSpace = Runtime.getRuntime().freeMemory();
+        //        if (tempSize.longValue() > freeHeapSpace)
+        //        {
+        //            BigDecimal scaleDown = tempSize.add(BigDecimal.valueOf(50)).divide(BigDecimal.valueOf(freeHeapSpace), 2, RoundingMode.HALF_DOWN);
+        //            double zoomScale = ((ZoomableComponent) comp).getZoom() / scaleDown.doubleValue();
+        //            System.out.println(((ZoomableComponent) comp).getZoom());
+        //            System.out.println(zoomScale);
+        //            ((ZoomableComponent) comp).setZoom(zoomScale);
+        //            preferredSize = comp.getPreferredSize();
+        //            w = preferredSize.width;
+        //            h = preferredSize.height;
+        //            System.out.println(w + " - " + h);
+        //        }
 
         BufferedImage buffer = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
         Graphics og = buffer.getGraphics();
