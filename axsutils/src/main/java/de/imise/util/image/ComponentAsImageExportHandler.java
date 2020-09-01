@@ -153,7 +153,7 @@ public class ComponentAsImageExportHandler {
         if (tempSize.compareTo(BigDecimal.valueOf(2147483647)) == 1) {
             BigDecimal scaleDown = tempSize.divide(BigDecimal.valueOf(2147483647), 2, RoundingMode.HALF_DOWN);
             System.out.println("Scaledown" + scaleDown + " - " + w + " - " + h);
-            double zoomScale = ((ZoomableComponent) comp).getZoom() / Math.sqrt(scaleDown.doubleValue());
+            double zoomScale = ((ZoomableComponent) comp).getZoom() / scaleDown.doubleValue();
             System.out.println(((ZoomableComponent) comp).getZoom());
             System.out.println(zoomScale);
             ((ZoomableComponent) comp).setZoom(zoomScale);
