@@ -569,6 +569,15 @@ public abstract class GraphDocument extends ElementSelectionContext implements G
     }
 
     /**
+     * @param hasString
+     * @return
+     */
+    public boolean isMyElement(final String hasString) {
+        ModelElement me = findElementCoded(hasString);
+        return me != null;
+    }
+
+    /**
      * @param ec
      * @return
      */

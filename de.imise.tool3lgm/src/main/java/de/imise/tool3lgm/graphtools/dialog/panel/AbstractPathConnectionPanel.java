@@ -42,6 +42,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
+import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
 import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
@@ -590,7 +591,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      *
      * @return
      */
-    protected List<ElementContainer> getAvailableConnectables() {
+    protected final List<ElementContainer> getAvailableConnectables() {
         List<ElementContainer> available = null;
         //Pfad des Panels besteht aus genau einer Kante
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
@@ -600,7 +601,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
             MetaModel metaModel = mainDoc.getMetaModel();
             SimpleMetaPath conditionMetaPath = metaModel.getConditionMetaPath(edgeClass);
-            //für diese eine Kante ist ein ConditionMetaPath angegeben
+            //for this edge is a condition metapath defined
             if (conditionMetaPath != null) {
                 if (elementaryMetaPath.getDirection() == BACKWARD) {
                     conditionMetaPath = conditionMetaPath.getOtherDirection();
@@ -609,13 +610,17 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                 Collection<ModelElement> conditionElements = PathFunctions.getConnectedElements(me, conditionMetaPath);
                 available = new ArrayList<>(conditionElements.size());
                 for (ModelElement conditionElement : conditionElements) {
-                    available.add(conditionElement.getContainer(mainDoc));
+                    ElementContainer conditionElementContainer = conditionElement.getContainer(mainDoc);
+                    available.add(conditionElementContainer);
                 }
             }
             if (available == null) {
                 available = mainDoc.getElementContainers(searchElementClass, true);
             }
-            //alle available entfernen, für die die Kante nicht mehr gelten soll
+            addAvailablesFromTemplate(available);
+            //remove all available that must not have the edge to be created here according
+            //to the metamodel (some subclasses do not inherit some edges of their
+            //superclasses, which is checked by metamodel.isStartClass(...)
             for (int i = available.size() - 1; i >= 0; i--) {
                 ElementContainer ec = available.get(i);
                 ModelElement availableMe = ec.getElement();
@@ -632,8 +637,39 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             }
         } else {
             available = mainDoc.getElementContainers(searchElementClass, true);
+            addAvailablesFromTemplate(available);
         }
+        MetaModel metaModel = getMetaModel();
         return available;
+    }
+
+    /**
+     * If the searchElement is a pure template class, then all elements from
+     * the template that do not occur in the model are also added here to the
+     * connectable elements.
+     *
+     * @param availables
+     *            the list of connectable elements which will be filled with
+     *            template elements if the searchElementClass is a pure
+     *            template class
+     */
+    private void addAvailablesFromTemplate(final List<ElementContainer> availables) {
+        MetaModel metaModel = getMetaModel();
+        if (metaModel.isPureTemplateElementClass(searchElementClass)) {
+            TemplateLibrariesManager templateLibrariesManager = Static.getTemplateLibrariesManager();
+            Collection<GDCollection> allActiveTemplates = templateLibrariesManager.getAllActiveTemplates();
+            LGMGraphDocument targetMainDoc = getMainDoc();
+            for (GDCollection template : allActiveTemplates) {
+                LGMGraphDocument templateMainDoc = template.getMainDoc();
+                List<ElementContainer> templateAvalibales = templateMainDoc.getElementContainers(searchElementClass, true);
+                for (ElementContainer templateAvalibale : templateAvalibales) {
+                    String templateAvalibaleHashString = templateAvalibale.getHashString();
+                    if (!targetMainDoc.isMyElement(templateAvalibaleHashString)) {
+                        availables.add(templateAvalibale);
+                    }
+                }
+            }
+        }
     }
 
     protected final MouseListener mouseListener = new LGMMouseListener(null, null, null, getMouseClickedAction(), null);
