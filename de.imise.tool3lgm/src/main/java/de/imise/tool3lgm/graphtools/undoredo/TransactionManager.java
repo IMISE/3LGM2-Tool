@@ -34,7 +34,7 @@ public class TransactionManager {
     /**
      * Maximale Größe der Transaktionsliste <code>trans_q</code>.
      */
-    private static final int TRANSQ_SIZE = 100;
+    private static final int TRANSQ_SIZE = 50;
 
     /**
      * Wert von <code>cur_pos</code>, wenn es keine Transaktion gibt, die sich zurücknehmen lässt.
