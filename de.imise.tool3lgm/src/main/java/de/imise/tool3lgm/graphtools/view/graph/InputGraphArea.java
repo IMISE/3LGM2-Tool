@@ -62,7 +62,7 @@ import de.imise.util.math.Maths;
  *
  * @author N.N., AXS
  */
-public class InputGraphArea extends BasicGraphArea implements MouseListener, MouseMotionListener, MouseWheelListener {
+public final class InputGraphArea extends BasicGraphArea implements MouseListener, MouseMotionListener, MouseWheelListener {
 
     /**
      * Toleranz in Pixel, die im Abstand zwischen 2 Knickpunten in beiden Dimensionen unterschritten

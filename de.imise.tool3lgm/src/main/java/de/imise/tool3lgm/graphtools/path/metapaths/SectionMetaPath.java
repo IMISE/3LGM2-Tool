@@ -49,4 +49,9 @@ public class SectionMetaPath extends ParallelMetaPath {
         return true;
     }
 
+    @Override
+    public SectionMetaPath createInstance(final AbstractMetaPath... subMetaPaths) {
+        return new SectionMetaPath(subMetaPaths);
+    }
+
 }

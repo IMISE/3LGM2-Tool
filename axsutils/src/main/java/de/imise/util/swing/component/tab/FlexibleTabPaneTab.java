@@ -144,7 +144,7 @@ public class FlexibleTabPaneTab extends JPanel {
                 h = labelHeight;
                 w = w / 2 * 2;
                 h = h / 2 * 2;
-                sizeAndImageInsets = h - tabLabelFontSize;
+                sizeAndImageInsets = h - tabLabelFontSize + 1;
                 //after resetting the preferred size we must
                 //revalidate and repaint the whole tab to
                 //ensure the buttons first paint has the

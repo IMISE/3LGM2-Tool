@@ -140,7 +140,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private MetaModel metaModel;
 
     /** The undo-redo-manager */
-    protected TransactionManager tman = new TransactionManager();
+    protected final TransactionManager tman;
 
     /** The data structure to store all model changing transactions for the undo-redo-manager */
     private final TransactionStackTable transStackTable = new TransactionStackTable();
@@ -275,6 +275,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     public GDCollection() {
         fileHandler = new GDCollectionFileHandler(this);
         imExportHandler = new GDCollectionImExportHandler(this);
+        tman = new TransactionManager(this);
     }
 
     /**
@@ -1361,6 +1362,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (lockAndForceDelete) {
             lockInferenceEgdeCreation = true;
         }
+        boolean oldBulkMode = setBulkMode(true);
         //Sys.outn(15, "REMOVE   Model name=" + getName() + " (" + getModelCategory().name() + ")");
         //get all InferenceEdge classes
         Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
@@ -1398,6 +1400,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 }
             }
         }
+        setBulkMode(oldBulkMode);
     }
 
     /**
@@ -1426,6 +1429,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (lockInferenceEgdeCreation) {
             return;
         }
+        boolean oldBulkMode = setBulkMode(true);
         //Sys.outn(15, "CREATE   Model name=" + getName() + " (" + getModelCategory().name() + ")");
         //get all InferenceEdge classes
         Collection<Class<? extends InferenceEdge>> inferenceEdgeClasses = metaModel.getInferenceEdgeClasses();
@@ -1456,6 +1460,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 }
             }
         }
+        setBulkMode(oldBulkMode);
     }
 
     /**

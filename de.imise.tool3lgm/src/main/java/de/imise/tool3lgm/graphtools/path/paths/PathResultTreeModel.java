@@ -19,6 +19,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.DifferenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
+import de.imise.tool3lgm.graphtools.path.metapaths.ListMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ParallelMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
@@ -511,6 +512,27 @@ public class PathResultTreeModel extends DefaultTreeModel {
      * @return
      */
     private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final SectionMetaPath metaPath, final boolean isSubStep) {
+        return addPath(startNode, metaPath, true, isSubStep);
+    }
+
+    /**
+     * @param startNode
+     * @param metaPath
+     * @param isSubStep
+     * @return
+     */
+    private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final DifferenceMetaPath metaPath, final boolean isSubStep) {
+        return addPath(startNode, metaPath, false, isSubStep);
+    }
+
+    /**
+     * @param startNode
+     * @param metaPath
+     * @param sectionAndNotDifference
+     * @param isSubStep
+     * @return
+     */
+    private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final ListMetaPath metaPath, final boolean sectionAndNotDifference, final boolean isSubStep) {
         List<PathResultTreeNode> resultNodes = new ArrayList<>();
         AbstractMetaPath firstMetaPath = null;
         //1. Pfad anhängen, dann von allen weiteren die Endelemente prüfen, ob jedes der EndElemente in jedem der
@@ -527,34 +549,25 @@ public class PathResultTreeModel extends DefaultTreeModel {
                 nextPathResultNodes.addAll(pathResultTreeNodes);
             }
         }
-        //Set aller Elemente, die Ergebiselemente des Pfades sein können
-        Set<ModelElement> possiblePathEndElements = new HashSet<>();
-        for (PathResultTreeNode resultNode : nextPathResultNodes) {
-            ModelElement endElement = resultNode.getEndElement();
-            possiblePathEndElements.add(endElement);
+        //Set aller Elemente, die Ergenis der MetaPfade nach dem ersten MetaPfad sind
+        Set<ModelElement> nextPathsEndElements = new HashSet<>();
+        for (PathResultTreeNode notResultNode : nextPathResultNodes) {
+            ModelElement endElement = notResultNode.getEndElement();
+            nextPathsEndElements.add(endElement);
         }
 
-        //alle Zweige im Baum löschen, bei denen das EndElement nicht in beiden Listen vorkommt und auch von hinten aus der Gesamtliste löschen
+        //alle Zweige im Baum löschen, bei denen das EndElement in der 2. Liste
+        //vorkommt oder nicht vorkommt je nachdem, ob man eine Schnitt- oder eine
+        //Differenzmenge brechnet und auch von hinten aus der Gesamtliste löschen
         for (int i = resultNodes.size() - 1; i >= 0; i--) {
             PathResultTreeNode resultNode = resultNodes.get(i);
             ModelElement endElement = resultNode.getEndElement();
-            if (!possiblePathEndElements.contains(endElement)) {
+            boolean contains = nextPathsEndElements.contains(endElement);
+            if (sectionAndNotDifference && !contains || !sectionAndNotDifference && contains) {
                 deleteBranch(resultNode);
                 resultNodes.remove(resultNode);
             }
         }
-
-        return resultNodes;
-    }
-
-    /**
-     * @param startNode
-     * @param metaPath
-     * @param isSubStep
-     * @return
-     */
-    private List<PathResultTreeNode> addPath(final PathResultTreeNode startNode, final DifferenceMetaPath metaPath, final boolean isSubStep) {
-        List<PathResultTreeNode> resultNodes = new ArrayList<>();
         return resultNodes;
     }
 

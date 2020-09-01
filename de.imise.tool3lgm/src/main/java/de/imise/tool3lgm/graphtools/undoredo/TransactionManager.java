@@ -17,6 +17,11 @@ import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 public class TransactionManager {
 
     /**
+     *
+     */
+    private final GDCollection gdcoll;
+
+    /**
      * Liste aller <code>TransactionListener</code>
      */
     private final Set<TransactionListener> transactionListeners = new HashSet<>(3);
@@ -68,7 +73,8 @@ public class TransactionManager {
     /**
      *
      */
-    public TransactionManager() {
+    public TransactionManager(final GDCollection gdcoll) {
+        this.gdcoll = gdcoll;
         cur_pos = last_pos = INVALID_POS;
         trans_q = new Transaction[TRANSQ_SIZE];
         clearTransactionQueue();
@@ -405,8 +411,7 @@ public class TransactionManager {
             System.out.println("transaction-index: " + j);
         }
         GDCollection gdcoll = doc.getCollection();
-        boolean bulkMode = gdcoll.isBulkMode();
-        gdcoll.setBulkMode(true);
+        boolean bulkMode = gdcoll.setBulkMode(true);
 
         is_doing = true;
         boolean lastAutomaticMode = gdcoll.setAutomaticMode(true);
@@ -446,7 +451,7 @@ public class TransactionManager {
         }
         cur_pos--;
 
-        doc.getCollection().setAutomaticMode(lastAutomaticMode);
+        gdcoll.setAutomaticMode(lastAutomaticMode);
         if (doc.isVerificationMode()) {
             printQueue(10);
         }
@@ -517,16 +522,13 @@ public class TransactionManager {
      * @return lesbaren String des Transaktionsstacks
      */
     public final String getQueue(final int entryCount) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("Current transactions of: ");
+        sb.append(gdcoll);
+        sb.append("\n");
         int i = 0;
         int j = 0;
         for (i = 0; i < TRANSQ_SIZE && j < entryCount; i++) {
-            if (trans_q[i] == null) {
-                sb.append("(");
-                sb.append(i);
-                sb.append(")\t--- nicht belegt ---\n");
-                j++;
-            } else {
+            if (trans_q[i] != null) {
                 sb.append("(");
                 sb.append(i);
                 sb.append(")\t");
@@ -536,11 +538,16 @@ public class TransactionManager {
                 sb.append(", ");
                 sb.append(trans_q[i].isOpen() ? "open" : "closed");
                 sb.append(")\n");
+                //            } else {
+                //                sb.append("(");
+                //                sb.append(i);
+                //                sb.append(")\t--- nicht belegt ---\n");
+                //                j++;
+                if (i == cur_pos) {
+                    sb.append("(current undo action)");
+                }
+                sb.append("\n");
             }
-            if (i == cur_pos) {
-                sb.append("(current undo action)");
-            }
-            sb.append("\n");
         }
         return sb.toString();
     }

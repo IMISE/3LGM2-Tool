@@ -125,9 +125,9 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
      * @param gdcoll
      * @return
      */
-    public static final boolean hasInconsistencies(final GDCollection gdcoll) {
+    public static final boolean hasFixableInconsistencies(final GDCollection gdcoll) {
         ConsistencyChecker consistencyChecker = new ConsistencyChecker(gdcoll);
-        return consistencyChecker.hasInconsistencies();
+        return consistencyChecker.hasFixableInconsistencies();
     }
 
     /**
@@ -198,7 +198,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         //ignore MissingPathErrors resp. check only AbstractCardinalityErrors and AbstractIDErrors
         List<Class<? extends AbstractConsistencyError>> errorTypes = ImmutableList.of(AbstractCardinalityError.class, AbstractIDError.class);
         for (Class<? extends AbstractConsistencyError> errorType : errorTypes) {
-            for (AbstractConsistencyError err : checker.getInconsistencies(errorType)) {
+            for (AbstractConsistencyError err : checker.getInconsistencies(errorType, false)) {
                 if (!checker.isSolutionExecuteable(err)) {
                     ModelElement errorElement = err.getModelElement();
                     checker.gdcoll.deleteElement(errorElement, TransactionManager.STANDARD_PID);
@@ -269,50 +269,52 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     }
 
     /** Gibt wieder, ob Kardinalitäts-Inkonsistenzen im Modell bestehen */
-    public boolean hasInconsistencies() {
+    public boolean hasFixableInconsistencies() {
         return !getInconsistencies(AbstractConsistencyError.class, true).isEmpty();
     }
 
     /**
      * @return
      */
-    public Collection<AbstractConsistencyError> getAllInconsistencies() {
-        return getInconsistencies(AbstractConsistencyError.class);
+    public Collection<AbstractConsistencyError> getFixableInconsistencies() {
+        return getInconsistencies(AbstractConsistencyError.class, true);
     }
 
     /**
      * @return
      */
-    public Collection<AbstractConsistencyError> getCardinalityInconsistencies() {
-        return getInconsistencies(AbstractCardinalityError.class);
+    public Collection<AbstractConsistencyError> getFixableCardinalityInconsistencies() {
+        return getInconsistencies(AbstractCardinalityError.class, true);
     }
 
     /**
      * @param errorClass the class of the returned errors
+     * @param fixableOnly
      * @return
      */
-    private Collection<AbstractConsistencyError> getInconsistencies(final Class<? extends AbstractConsistencyError> errorClass) {
-        return getInconsistencies(errorClass, false);
+    private Collection<AbstractConsistencyError> getInconsistencies(final Class<? extends AbstractConsistencyError> errorClass, final boolean fixableOnly) {
+        return getInconsistencies(errorClass, false, fixableOnly);
     }
 
     /**
      * @param errorClass the type of the returned errors
      * @param checkOnly if <code>true</code> not all but only the first error will be added to the return list
+     * @param fixableOnly
      * @return
      */
-    private Collection<AbstractConsistencyError> getInconsistencies(final Class<? extends AbstractConsistencyError> errorClass, final boolean checkOnly) {
+    private Collection<AbstractConsistencyError> getInconsistencies(final Class<? extends AbstractConsistencyError> errorClass, final boolean checkOnly, final boolean fixableOnly) {
         if (gdcoll != null) {
             ConsistencyErrorChecker consistencyErrorChecker = errorClassToCheckerMap.get(errorClass);
             //if there is a checker directky registered for this error type -> only return the result of this checker
             if (consistencyErrorChecker != null) {
-                return getInconsistencies(consistencyErrorChecker, checkOnly);
+                return getInconsistencies(consistencyErrorChecker, checkOnly, fixableOnly);
             }
             Collection<AbstractConsistencyError> allErrors = new ArrayList<>();
             //if the error type is not directly contained in the errorToCheckerMap -> check all checkers whether they can return this error type
             for (Class<? extends AbstractConsistencyError> errorClassFromMap : errorClassToCheckerMap.keySet()) {
                 if (errorClass.isAssignableFrom(errorClassFromMap)) {
                     consistencyErrorChecker = errorClassToCheckerMap.get(errorClassFromMap);
-                    Collection<AbstractConsistencyError> errors = getInconsistencies(consistencyErrorChecker, checkOnly);
+                    Collection<AbstractConsistencyError> errors = getInconsistencies(consistencyErrorChecker, checkOnly, fixableOnly);
                     if (checkOnly && !errors.isEmpty()) {
                         return errors;
                     }
@@ -327,14 +329,25 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
     /**
      * @param consistencyErrorChecker
      * @param checkOnly if <code>true</code> not all but only the first error will be added to the return list
+     * @param fixableOnly
      * @return
      */
-    private Collection<AbstractConsistencyError> getInconsistencies(final ConsistencyErrorChecker consistencyErrorChecker, final boolean checkOnly) {
+    private Collection<AbstractConsistencyError> getInconsistencies(final ConsistencyErrorChecker consistencyErrorChecker, final boolean checkOnly, final boolean fixableOnly) {
         if (consistencyErrorChecker instanceof EdgeCardinalityChecker) {
             EdgeCardinalityChecker edgeCardinalityChecker = (EdgeCardinalityChecker) consistencyErrorChecker;
             edgeCardinalityChecker.setConsistencyDefinition(consistencyDefinition);
         }
-        return consistencyErrorChecker.getErrors(gdcoll, checkOnly);
+        Collection<AbstractConsistencyError> errors = consistencyErrorChecker.getErrors(gdcoll, checkOnly);
+        if (!fixableOnly) {
+            return errors;
+        }
+        Collection<AbstractConsistencyError> fixableErrors = new ArrayList<>();
+        for (AbstractConsistencyError error : errors) {
+            if (isSolutionExecuteable(error)) {
+                fixableErrors.add(error);
+            }
+        }
+        return fixableErrors;
     }
 
     /**
@@ -369,7 +382,7 @@ public final class ConsistencyChecker implements LGMChangeListenerSimple, Tool3l
         ModelElement me = error.getModelElement();
         if (pathToDialogElement != null) {
             Collection<ModelElement> connected = PathFunctions.getConnectedElements(me, pathToDialogElement);
-            if (connected.size() == 0) {
+            if (connected.isEmpty()) {
                 return null;
             }
             return connected;

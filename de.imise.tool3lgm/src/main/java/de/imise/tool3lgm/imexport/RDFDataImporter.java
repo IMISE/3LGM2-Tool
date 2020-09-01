@@ -181,11 +181,15 @@ public abstract class RDFDataImporter extends UrlSourceDataImporter<Object> impl
     public boolean importData(final URL url) {
         OntModel ontModel = ModelFactory.createOntologyModel();
         String urlString = url.toString();
-        ontModel.read(urlString);
-        String descriptionPropertyNameOrUri = getDescriptionPropertyUriOrLocalName();
-        OntPropertyResolver descriptionPropertyResolver = new OntPropertyResolver(ontModel, descriptionPropertyNameOrUri);
-        importNodes(ontModel, descriptionPropertyResolver);
-        importEdges(ontModel, descriptionPropertyResolver);
+        try {
+            ontModel.read(urlString);
+            String descriptionPropertyNameOrUri = getDescriptionPropertyUriOrLocalName();
+            OntPropertyResolver descriptionPropertyResolver = new OntPropertyResolver(ontModel, descriptionPropertyNameOrUri);
+            importNodes(ontModel, descriptionPropertyResolver);
+            importEdges(ontModel, descriptionPropertyResolver);
+        } catch (Exception e) {
+            // Here you could (but don't have to) show a message that a/the template could not be loaded
+        }
         return true;
     }
 

@@ -16,6 +16,11 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 public abstract class ParallelMetaPath extends ListMetaPath {
 
     /**
+     * Wahr, wenn sobald einmal verscht wurde, die Gegenrichtung dieses Pfades anzulegen
+     */
+    protected boolean otherDirectionInitilized = false;
+
+    /**
      * @param subMetaPaths
      */
     public ParallelMetaPath(final ParallelMetaPath other) {
@@ -73,6 +78,53 @@ public abstract class ParallelMetaPath extends ListMetaPath {
         ParallelMetaPath other = (ParallelMetaPath) obj;
         return other.subMetaPaths.equals(subMetaPaths);
     }
+
+    @Override
+    public AbstractMetaPath getOtherDirection() {
+        // wenn noch nicht bereits einmal versucht wurde den Gegenrichtungspfad zusammenzubauen
+        if (!otherDirectionInitilized) {
+            otherDirectionInitilized = true;
+            // versuchen, die Gegenrichtung zusammen zu bauen
+            AbstractMetaPath[] otherDirectionSubMetaPaths = getOtherDirectionMetaPaths();
+            // Gegenrichtung für diesen und den Gegenrichtungspfad setzen, wenn es die Gegenrichtung gibt
+            if (otherDirectionSubMetaPaths != null) {
+                ParallelMetaPath other = createInstance(otherDirectionSubMetaPaths);
+                other.otherDirection = this;
+                other.otherDirectionInitilized = true;
+                super.otherDirection = other;
+            }
+        }
+        return super.otherDirection;
+    }
+
+    /**
+     * @return
+     */
+    private final AbstractMetaPath[] getOtherDirectionMetaPaths() {
+        //these kind of constructing the other direction of a metapath makes not
+        //sense in every case but only in some very special cases. One condition
+        //for sense is that all submetapaths have the same start- and endelements,
+        //if the metapath is a DifferenceMetaPath or SectionMetaPath.
+        //The only point where it is used at the moment (01.09.2020) is the
+        //TLGMServiceMetaPathsDefinition in the Service-metamodel plugin for the
+        //(at the moment) only use of a DifferenceMetaPath.
+        AbstractMetaPath[] otherDirectionMetaPaths = new AbstractMetaPath[subMetaPaths.size()];
+        for (int i = 0; i < otherDirectionMetaPaths.length; i++) {
+            AbstractMetaPath subMetaPath = subMetaPaths.get(i);
+            AbstractMetaPath subMetaPathOtherDirection = subMetaPath.getOtherDirection();
+            if (subMetaPathOtherDirection == null) {
+                return null;
+            }
+            otherDirectionMetaPaths[i] = subMetaPathOtherDirection;
+        }
+        return otherDirectionMetaPaths;
+    }
+
+    /**
+     * @param subMetaPaths
+     * @return
+     */
+    public abstract ParallelMetaPath createInstance(AbstractMetaPath... subMetaPaths);
 
     @Override
     public boolean isRemoveable(final boolean checkEndElement) {

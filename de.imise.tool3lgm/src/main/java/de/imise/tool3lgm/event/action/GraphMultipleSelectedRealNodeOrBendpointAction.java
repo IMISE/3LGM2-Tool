@@ -10,13 +10,13 @@ import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
  *
  * @author AXS
  */
-public class GraphMultipleSelectedRealNodeAction extends GraphFrameAction {
+public class GraphMultipleSelectedRealNodeOrBendpointAction extends GraphFrameAction {
 
     /**
      * @param identifier
      * @param i
      */
-    public GraphMultipleSelectedRealNodeAction(final GDCommands identifier) {
+    public GraphMultipleSelectedRealNodeOrBendpointAction(final GDCommands identifier) {
         super(identifier);
     }
 
@@ -27,8 +27,14 @@ public class GraphMultipleSelectedRealNodeAction extends GraphFrameAction {
         }
         int selected = 0;
         for (ElementContainer ec : Static.iterableSelectedRealElementContainer()) {
-            //TODO: testen, ob visible hier reicht
             if (ec.getElement().isPaintable() && ec.isVisible()) {
+                if (++selected == 2) {
+                    return true;
+                }
+            }
+        }
+        for (ElementContainer ec : Static.iterableSelectedBendpointContainer()) {
+            if (ec.isVisible()) {
                 if (++selected == 2) {
                     return true;
                 }

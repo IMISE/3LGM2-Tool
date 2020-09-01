@@ -65,14 +65,13 @@ public class TemplateTreeSearchPanel extends JPanel {
      *
      */
     private void selectMatchesInTree() {
-        tree.clearSelection();
         for (GDCollection template : tree.getDisplayedTemplates()) {
             template.deselectAll();
             GraphDocument selectedTemplateDoc = template.getSelectedDoc();
             List<ElementContainer> result = SearchDialog.getResult(selectedTemplateDoc, searchComboBox);
             template.addToSelection(result);
         }
-        tree.addSelection();
+        tree.setSelection();
     }
 
 }
