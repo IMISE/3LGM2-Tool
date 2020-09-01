@@ -29,6 +29,10 @@ public class Sys {
         outInternal(maxTraceSteps, false, message);
     }
 
+    public static void outm(final int maxTraceSteps, final int hideTraceSteps, final Object... message) {
+        printInternal(maxTraceSteps, System.out, hideTraceSteps + 3, false, message);
+    }
+
     public static void errn(final int maxTraceSteps, final Object... message) {
         errInternal(maxTraceSteps, false, message);
     }

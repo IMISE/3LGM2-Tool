@@ -160,7 +160,7 @@ public class GDCollectionPrinter {
     }
 
     public static final void print(final GDCollection gdcoll) {
-        Sys.outn(2, new GDCollectionPrinter(gdcoll, true));
+        Sys.outm(1, 1, new GDCollectionPrinter(gdcoll, true));
     }
 
     public static final void print(final GDCollectionOwner gdcollOwner) {
