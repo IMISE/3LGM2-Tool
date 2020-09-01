@@ -32,6 +32,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
+import de.imise.tool3lgm.graphtools.view.container.BendpointContainer;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.tool3lgm.graphtools.view.graph.GraphViewParameter;
@@ -540,6 +541,19 @@ public class Static {
             return new ArrayList<>(0);
         }
         return selectedDoc.getSelectedRealElementContainerIterable();
+    }
+
+    /**
+     * Gibt zurück, ob wenigstens ein richtiger Node selektiert ist
+     *
+     * @see GraphDocument#isSelectedAtLeastOneRealNode()
+     */
+    public static final Iterable<BendpointContainer> iterableSelectedBendpointContainer() {
+        GraphDocument selectedDoc = getSelectedDoc();
+        if (selectedDoc == null) {
+            return new ArrayList<>(0);
+        }
+        return selectedDoc.getSelectedBendpointContainerIterable();
     }
 
     // MessageDialoge //

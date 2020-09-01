@@ -331,8 +331,6 @@ public class LGMGraphDocument extends GraphDocument {
         sourceCollection.removeInferenceEdges(true, STANDARD_PID);
         targetCollection.removeInferenceEdges(true, STANDARD_PID);
 
-        boolean targetCollectionBulkMode = targetCollection.setBulkMode(true);
-
         List<ModelElement> sourceElementsAndDependents = new ArrayList<>();
         HashSet<UserField> sourceUserFields = new HashSet<>();
         CopyDependencyResolver copyDependencyResolver = sourceCollection.getCopyDependencyResolver();
@@ -415,10 +413,12 @@ public class LGMGraphDocument extends GraphDocument {
                         //create container for the szenario and adds this container to the
                         //container map of the element
                         ElementContainer targetContainer = sourceContainer.clone(false, targetDoc);
+                        targetContainer.setElement(targetElement);
                         if (targetElement instanceof Bendpoint) {
                             //bendpoints separately too
                             bendpoints.add((BendpointContainer) targetContainer);
                         } else {
+                            targetElement.updateHTMLName(targetContainer);
                             //add the container to the layer of the szenario
                             targetContainer.refreshText();
                             LayerContainer targetDocLayer = targetDoc.getLayer(layer);
@@ -499,15 +499,15 @@ public class LGMGraphDocument extends GraphDocument {
         }
         sourceDoc.finish_transaction(TransactionManager.STANDARD_PID, false);
         sourceDoc.distributeEvent(SELECTION_CHANGED);
-        targetCollection.setBulkMode(targetCollectionBulkMode);
 
         sourceCollection.createInferenceEdges(true, STANDARD_PID);
         targetCollection.createInferenceEdges(true, STANDARD_PID);
 
-        //bei Bdarf anschalten, um zu sehen, wie das Modell danach aussieht
+        //bei Bedarf anschalten, um zu sehen, wie das Modell danach aussieht
         //GDCollectionPrinter.print(targetCollection);
 
         targetDoc.distributeEvent(DATA_CHANGED);
+
     }
 
     /**

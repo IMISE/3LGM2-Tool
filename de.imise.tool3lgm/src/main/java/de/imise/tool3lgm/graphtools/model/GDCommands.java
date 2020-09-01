@@ -3,7 +3,7 @@ package de.imise.tool3lgm.graphtools.model;
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.event.action.GraphDocumentAction;
 import de.imise.tool3lgm.event.action.GraphFrameAction;
-import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeAction;
+import de.imise.tool3lgm.event.action.GraphMultipleSelectedRealNodeOrBendpointAction;
 import de.imise.tool3lgm.event.action.GraphSelectedRealNodeAction;
 import de.imise.tool3lgm.event.action.ModelOptionAction;
 import de.imise.tool3lgm.event.action.SelectedRealNodeAction;
@@ -191,15 +191,15 @@ public enum GDCommands implements ActionSource {
         ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_NONE);
         ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_HALF);
         ActionSource.put(GraphFrameAction.class, MODEL_ACTION_SET_LAYER_TRANSPARENCY_FULL);
-        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_LEFT);
-        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_CENTER);
-        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_RIGHT);
-        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_TOP);
-        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_CENTER);
-        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_BOTTOM);
-        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH);
-        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH);
-        ActionSource.put(GraphMultipleSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH);
+        ActionSource.put(GraphMultipleSelectedRealNodeOrBendpointAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_LEFT);
+        ActionSource.put(GraphMultipleSelectedRealNodeOrBendpointAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_CENTER);
+        ActionSource.put(GraphMultipleSelectedRealNodeOrBendpointAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_HORIZONTAL_RIGHT);
+        ActionSource.put(GraphMultipleSelectedRealNodeOrBendpointAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_TOP);
+        ActionSource.put(GraphMultipleSelectedRealNodeOrBendpointAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_CENTER);
+        ActionSource.put(GraphMultipleSelectedRealNodeOrBendpointAction.class, MODEL_ACTION_SET_ELEMENTS_POSITION_VERTICAL_BOTTOM);
+        ActionSource.put(GraphMultipleSelectedRealNodeOrBendpointAction.class, MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH);
+        ActionSource.put(GraphMultipleSelectedRealNodeOrBendpointAction.class, MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_HEIGTH);
+        ActionSource.put(GraphMultipleSelectedRealNodeOrBendpointAction.class, MODEL_ACTION_SET_ELEMENT_ALIGNMENT_SIZE_WIDTH_AND_HEIGTH);
         ActionSource.put(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ICON_NONE);
         ActionSource.putInteractive(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_ICON);//dialog set icon
         ActionSource.putInteractive(GraphSelectedRealNodeAction.class, MODEL_ACTION_SET_ELEMENT_FONT); //dialog set font

@@ -40,6 +40,8 @@ public class DifferenceMetaPath extends ParallelMetaPath {
         ImmutableSet.Builder<Class<? extends ModelElement>> endElementClassesBuilder = ImmutableSet.builder();
         startElementClassesBuilder.addAll(subMetaPaths.get(0).startElementClasses);
         endElementClassesBuilder.addAll(subMetaPaths.get(0).endElementClasses);
+        startElementClasses = startElementClassesBuilder.build();
+        endElementClasses = endElementClassesBuilder.build();
     }
 
     @Override
@@ -73,6 +75,11 @@ public class DifferenceMetaPath extends ParallelMetaPath {
     @Override
     public boolean isCreatable(final boolean checkCreateEndElement) {
         return false;
+    }
+
+    @Override
+    public DifferenceMetaPath createInstance(final AbstractMetaPath... subMetaPaths) {
+        return new DifferenceMetaPath(subMetaPaths);
     }
 
 }

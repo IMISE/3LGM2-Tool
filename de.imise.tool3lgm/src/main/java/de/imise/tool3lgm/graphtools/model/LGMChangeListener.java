@@ -15,6 +15,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.gui.viewpane.graph.GraphViewPaneFrameComponent;
 import de.imise.tool3lgm.gui.viewpane.matrix.MatrixViewPaneFrameComponent;
+import de.imise.util.Sys;
 
 public interface LGMChangeListener {
 
@@ -238,7 +239,7 @@ public interface LGMChangeListener {
     public static void distributeEvent(final LGMChangeType changeType, final List<LGMChangeListener> listeners, final GraphDocument source, final ElementContainer last_elem, final boolean deliverStatic) {
         if (source != null) {
             if (source.isVerificationMode()) {
-                System.out.println("distributeEvent: " + changeType);
+                Sys.out1("distributeEvent: " + changeType);
             }
         }
         changeType.deliverEvent(listeners, source, last_elem, deliverStatic);
