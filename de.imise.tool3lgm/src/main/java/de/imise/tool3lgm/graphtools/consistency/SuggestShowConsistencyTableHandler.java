@@ -90,7 +90,7 @@ public class SuggestShowConsistencyTableHandler implements PropertyChangeListene
             return;
         }
         TransactionManager transactionManager = selectedGDCollection.getTman();
-        if (transactionManager.isInTransaction()) {
+        if (transactionManager.isDeepInTransaction()) {
             return;
         }
 

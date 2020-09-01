@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.undoredo;
 
+import static de.imise.tool3lgm.graphtools.undoredo.TransactionManager.STANDARD_PID;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -266,6 +268,32 @@ public class Transaction {
      */
     public boolean isOpen() {
         return open > 0;
+    }
+
+    /**
+     * @return <code>true</code> only if the transaction have the
+     *         {@link TransactionManager#STANDARD_PID} and the
+     *         transaction is still running (open counter must be
+     *         at least 1)
+     */
+    public boolean isOpenStandardPidTransaction() {
+        return hasStandardPid() && open > 0;
+    }
+
+    /**
+     * @return <code>true</code> only if the transaction does not have the
+     *         {@link TransactionManager#STANDARD_PID} and at least one
+     *         inner transaction is open (open counter must be at least 2)
+     */
+    public boolean isOpenDialogTransaction() {
+        return !hasStandardPid() && open > 1;
+    }
+
+    /**
+     * @return
+     */
+    public boolean hasStandardPid() {
+        return pid == STANDARD_PID;
     }
 
     /**
