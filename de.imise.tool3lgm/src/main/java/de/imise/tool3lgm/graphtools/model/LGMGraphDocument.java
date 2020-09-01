@@ -653,7 +653,8 @@ public class LGMGraphDocument extends GraphDocument {
             ModelElement instance = instanceContainer.getElement();
             String masterDescription = master.getDescription();
             instance.setDescription(masterDescription);
-            gdcoll.link(instanciationEdgeClass, master, instance, pid);
+            GDCollection targetGDColl = targetDoc.getCollection();
+            targetGDColl.link(instanciationEdgeClass, master, instance, pid);
 
             //Ebenfalls zu instanziierende Nebenpfade anlegen
             MetaModel metaModel = getMetaModel();
