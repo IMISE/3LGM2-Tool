@@ -49,6 +49,10 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
     public final boolean startImport(final ModelCategory modelCategory) {
         Class<? extends MetaModelDefinition> importMetaModelDefinitionClass = getImportMetaModelDefinitionClass();
         gdcoll = createModel(importMetaModelDefinitionClass, modelCategory);
+        String importModelDefaultName = getImportModelDefaultName();
+        if (!Strings.isNullOrEmpty(importModelDefaultName)) {
+            gdcoll.setName(importModelDefaultName);
+        }
         boolean importData = importData();
         gdcoll.setBulkMode(false);
         Tool3lgmMetaModelContext.removeAllImportMetaModels();
@@ -61,6 +65,14 @@ public abstract class DataImporter<T> implements GDCollectionOwner, MetaModelSpe
      * @return <code>true</code>, wenn der Import geklappt hat, sonst <code>false</code>
      */
     protected abstract boolean importData();
+
+    /**
+     * @return the default name for the imported {@link GDCollection}. If it returns <code>null</code>
+     *         the tools default name for a new {@link GDCollection} will not be changed.
+     */
+    protected String getImportModelDefaultName() {
+        return null;
+    }
 
     /**
      * @return Klasse des Metamodells, das dem Modell (der {@link GDCollection}) zugrunde liegt, in die importiert wird.

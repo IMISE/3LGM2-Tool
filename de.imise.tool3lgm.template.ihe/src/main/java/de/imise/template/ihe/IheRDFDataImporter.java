@@ -23,6 +23,8 @@ public class IheRDFDataImporter extends RDFDataImporter {
     public static final File TEST_FILE = getRdfFile();
     //     /Users/astruebi/Projekte/eclipse/IMISE/tool-3l gm2/de.imise.tool3lgm/Templates/IHE/iheDomain_Ontology_straight-forward_v2.rdf
 
+    public static final String IHE_RDF_FILE_NAME = "/IHE/iheDomain_Ontology_straight-forward_v2.rdf";
+
     static File getRdfFile() {
         File templateDir = Tool3lgmConstants.TEMPLATE_DIR;
         String templateDirName = templateDir.getAbsolutePath();
@@ -33,7 +35,7 @@ public class IheRDFDataImporter extends RDFDataImporter {
             sb.replace(replaceStart, replaceStart + thisProjectNameSuffix.length(), "");
             templateDirName = sb.toString();
         }
-        return new File(templateDirName, "/IHE/iheDomain_Ontology_straight-forward_v2.rdf");
+        return new File(templateDirName, IHE_RDF_FILE_NAME);
     }
 
     /**
@@ -41,6 +43,11 @@ public class IheRDFDataImporter extends RDFDataImporter {
      * sorgen.
      */
     private static final String TLGM_EDGE_CLASS_NAME_POSTFIX = "_Edge";
+
+    @Override
+    protected String getImportModelDefaultName() {
+        return IHE_RDF_FILE_NAME;
+    }
 
     /**
      * Nur für Testzwecke
