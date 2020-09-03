@@ -371,8 +371,8 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
      */
     public void execSolution(final AbstractConsistencyError error) {
         // 'es' ist null, wenn für den Fehler keine Solution hinterlegt wurde. Das gilt nur
-        // für Fehler, für die im Eigenschaftsdialog des Elementes dann ein zusätzliches
-        // OneToNUndirectedConnectionPanel angezeigt werden soll, in dem man den Fehler beheben kann
+        // für Fehler, für die im Eigenschaftsdialog des Elementes dann ein zusätzlicher
+        // Tab angezeigt werden soll, in dem man den Fehler beheben kann
         if (error instanceof AbstractPathError) {
             MetaModel metaModel = gdcoll.getMetaModel();
             ErrorSolutionLibrary solutionsLibrary = metaModel.getErrorSolutionLibrary();
@@ -401,7 +401,7 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
                 dialog.showDialog();
             } else {
                 Collection<ModelElement> solutionPropertyDialogElement = getSolutionPropertyDialogElement(error);
-                if (solutionPropertyDialogElement == null || solutionPropertyDialogElement.size() == 0) {
+                if (solutionPropertyDialogElement == null || solutionPropertyDialogElement.isEmpty()) {
                     return;
                 }
                 for (ModelElement connected : solutionPropertyDialogElement) {
