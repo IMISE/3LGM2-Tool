@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.consistency.tableview;
 
 import java.awt.Component;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.JComponent;
 import javax.swing.JTable;
@@ -25,7 +27,7 @@ import de.imise.util.swing.ToolTipShowTimeHandler;
  * @author AXS
  * @created 13.09.2008
  */
-public class ConsistencyErrorTableGenerator {
+public class ConsistencyErrorTableGenerator implements PropertyChangeListener {
 
     /**
      * Der Baum, der aufgebaut wird
@@ -38,10 +40,18 @@ public class ConsistencyErrorTableGenerator {
     private final ConsistencyChecker checker;
 
     /**
+     *
+     */
+    public ConsistencyErrorTableGenerator() {
+        this(ConsistencyChecker.getConsistencyChecker());
+    }
+
+    /**
      * @param checker Konsistenzprüfer, der alle Fehler liefert
      */
-    public ConsistencyErrorTableGenerator(final ConsistencyChecker checker) {
+    private ConsistencyErrorTableGenerator(final ConsistencyChecker checker) {
         this.checker = checker;
+        checker.addPropertyChangeListener(this);
 
         //TableModel
         ConsistencyErrorTableModel tableModel = new ConsistencyErrorTableModel();
@@ -115,6 +125,9 @@ public class ConsistencyErrorTableGenerator {
         });
     }
 
+    /**
+     * @author AXS
+     */
     private static class DescriptionCellRenderer extends DefaultTableCellRenderer {
         @Override
         public Component getTableCellRendererComponent(final JTable table, final Object value, final boolean isSelected, final boolean hasFocus, final int row, final int column) {
@@ -149,6 +162,14 @@ public class ConsistencyErrorTableGenerator {
         return table;
     }
 
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        updateTable();
+    }
+
+    public void dispose() {
+        checker.removePropertyChangeListener(this);
+    }
     // /////////////////
     // MouseListener //
     // /////////////////

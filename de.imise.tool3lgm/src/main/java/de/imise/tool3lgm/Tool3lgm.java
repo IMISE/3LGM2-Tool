@@ -80,6 +80,12 @@ public class Tool3lgm {
         } catch (InterruptedException e) {
         }
 
+        //The ConsistencyChecker should be the first Tool3lgmChangeListener so
+        //that it is the first to be informed when the active model is changed
+        //and recalculates these consistency errors before all views
+        //representing the consistency errors.
+        ConsistencyChecker.init();
+
         // der templateLibrariesManager muss vor dem MainFrame initilaisiert werden, weil er vor dem
         // eventuell sichtbaren TemplateBrowser als Tool3lgmChangeListener registriert sein muuss, damit
         // er sich korrekt updated, bevor der TemplateBrowser beim selben Ereignis (selectedModelChanged)
