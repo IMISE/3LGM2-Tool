@@ -29,10 +29,10 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
     public static enum ColumnNames {
         NUMBER,
         ERROR_TYPE,
-        ELEMENT_TYPE,
+        DESCRIPTION,
         ELEMENT,
-        CONNECTION_TYPE,
-        DESCRIPTION;
+        ELEMENT_TYPE,
+        CONNECTION_TYPE;
 
         public String getDisplayableName() {
             return getResString("ColumnNames_" + name());
