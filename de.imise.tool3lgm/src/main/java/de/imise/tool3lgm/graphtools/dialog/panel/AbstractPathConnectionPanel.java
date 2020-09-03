@@ -639,7 +639,6 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             available = mainDoc.getElementContainers(searchElementClass, true);
             addAvailablesFromTemplate(available);
         }
-        MetaModel metaModel = getMetaModel();
         return available;
     }
 
