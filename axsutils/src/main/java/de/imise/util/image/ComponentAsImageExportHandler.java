@@ -151,9 +151,9 @@ public class ComponentAsImageExportHandler {
         System.out.println(tempSize);
 
         if (tempSize.compareTo(BigDecimal.valueOf(2147483647)) == 1) {
-            BigDecimal scaleDown = tempSize.divide(BigDecimal.valueOf(2147483647), 2, RoundingMode.HALF_DOWN);
+            BigDecimal scaleDown = tempSize.divide(BigDecimal.valueOf(2147483647), 8, RoundingMode.HALF_DOWN);
             System.out.println("Scaledown" + scaleDown + " - " + w + " - " + h);
-            double zoomScale = ((ZoomableComponent) comp).getZoom() / Math.sqrt(scaleDown.doubleValue());
+            double zoomScale = ((ZoomableComponent) comp).getZoom() / scaleDown.doubleValue();
             System.out.println(((ZoomableComponent) comp).getZoom());
             System.out.println(zoomScale);
             ((ZoomableComponent) comp).setZoom(zoomScale);
@@ -164,6 +164,7 @@ public class ComponentAsImageExportHandler {
             tempSize = BigDecimal.valueOf(w).multiply(BigDecimal.valueOf(3)).multiply(BigDecimal.valueOf(h-1)).add(BigDecimal.valueOf(3*w));
         }
 
+        System.out.println(tempSize);
         System.out.println(Runtime.getRuntime().freeMemory());
         long freeHeapSpace = Runtime.getRuntime().freeMemory();
         //        if (tempSize.longValue() > freeHeapSpace)
