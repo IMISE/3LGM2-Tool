@@ -239,7 +239,6 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
         }
         TransactionManager transactionManager = gdcoll.getTman();
         if (transactionManager.isDeepInTransaction()) {
-            firePropertyChange();
             return;
         }
         for (Class<? extends AbstractConsistencyError> errorType : errorClassToCheckerMap.keySet()) {
