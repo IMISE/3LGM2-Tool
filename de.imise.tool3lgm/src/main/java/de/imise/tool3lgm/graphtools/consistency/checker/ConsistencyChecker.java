@@ -268,27 +268,27 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
      * @param gdcoll
      * @return
      */
-    public static final boolean hasFixableInconsistencies(final GDCollection gdcoll) {
+    public static final boolean hasInconsistencies(final GDCollection gdcoll) {
         ConsistencyChecker consistencyChecker = new ConsistencyChecker(gdcoll);
-        return consistencyChecker.hasFixableInconsistencies();
+        return consistencyChecker.hasInconsistencies();
     }
 
     /** Gibt wieder, ob Kardinalitäts-Inkonsistenzen im Modell bestehen */
-    public boolean hasFixableInconsistencies() {
+    public boolean hasInconsistencies() {
         return !consistencyErrorTypeToConsistencyErrors.isEmpty();
     }
 
     /**
      * @return
      */
-    public Collection<AbstractConsistencyError> getFixableInconsistencies() {
+    public Collection<AbstractConsistencyError> getInconsistencies() {
         return consistencyErrorTypeToConsistencyErrors.values();
     }
 
     /**
      * @return
      */
-    public Collection<AbstractConsistencyError> getFixableCardinalityInconsistencies() {
+    public Collection<AbstractConsistencyError> getCardinalityInconsistencies() {
         return consistencyErrorTypeToConsistencyErrors.get(AbstractCardinalityError.class);
     }
 

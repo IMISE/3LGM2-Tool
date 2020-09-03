@@ -209,7 +209,7 @@ public class RedundancyAnalysis extends WindowAdapter {
             cardinalityDefinition.setNewForwardCardinality(edgeClass, definition.getNewForwardCardinality(edgeClass));
             cardinalityDefinition.setNewBackwardCardinality(edgeClass, definition.getNewBackwardCardinality(edgeClass));
         }
-        Collection<AbstractConsistencyError> errors = consistencyChecker.getFixableCardinalityInconsistencies();
+        Collection<AbstractConsistencyError> errors = consistencyChecker.getCardinalityInconsistencies();
         // wenn es relevante Fehler gibt
         if (!errors.isEmpty()) {
             // Custom button xmlText
