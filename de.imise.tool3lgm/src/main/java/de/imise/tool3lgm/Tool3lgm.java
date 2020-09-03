@@ -113,6 +113,14 @@ public class Tool3lgm {
     }
 
     /**
+     * @param o
+     * @return
+     */
+    public boolean isAddedToolChangeListener(final Object o) {
+        return toolChangeListenerSupport.contains(o);
+    }
+
+    /**
      * @param changeType
      * @param source
      */
