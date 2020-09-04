@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 
 import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.util.htmlxml.ParseSaveStringHandler;
 import de.imise.util.swing.component.text.ExtendedTextPane;
 
@@ -35,7 +35,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      * @param dialog
      * @param simpleMetaPath
      */
-    public DescriptedSingleConnectionPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+    public DescriptedSingleConnectionPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, metaPath);
     }
 
@@ -50,7 +50,7 @@ public class DescriptedSingleConnectionPanel extends SingleConnectionPanel {
      *            </ul>
      * @param metaPath
      */
-    public DescriptedSingleConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final AbstractMetaPath metaPath) {
+    public DescriptedSingleConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final MetaPath metaPath) {
         super(dialog, panelLabelOption, metaPath);
     }
 

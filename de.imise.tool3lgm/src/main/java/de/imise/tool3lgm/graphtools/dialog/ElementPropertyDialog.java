@@ -29,7 +29,7 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
@@ -330,7 +330,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     /**
      * @param metaPath
      */
-    public final void addDescriptedSingleConnectionPanel(final AbstractMetaPath metaPath) {
+    public final void addDescriptedSingleConnectionPanel(final MetaPath metaPath) {
         DescriptedSingleConnectionPanel panel = new DescriptedSingleConnectionPanel(this, metaPath);
         addTab(panel);
     }
@@ -382,7 +382,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
     /**
      * @param edgeClasses
      */
-    public final void addPathConnectionPanel(final AbstractMetaPath metaPath) {
+    public final void addPathConnectionPanel(final MetaPath metaPath) {
         addPathConnectionPanel(metaPath, false);
     }
 
@@ -390,7 +390,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param metaPath
      * @param showMultipleConnectionEvenIfMetaPathIsSingleConnection
      */
-    public final void addPathConnectionPanel(final AbstractMetaPath metaPath, final boolean showMultipleConnectionEvenIfMetaPathIsSingleConnection) {
+    public final void addPathConnectionPanel(final MetaPath metaPath, final boolean showMultipleConnectionEvenIfMetaPathIsSingleConnection) {
         addPathConnectionPanel(LABEL_END_ELEMENT_TYPE, LABEL_LAST_EDGE_CONNECTION_NAME, metaPath, showMultipleConnectionEvenIfMetaPathIsSingleConnection);
     }
 
@@ -430,7 +430,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param westLabelOption
      * @param metaPath
      */
-    public final void addPathConnectionPanel(final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath) {
+    public final void addPathConnectionPanel(final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final MetaPath metaPath) {
         addPathConnectionPanel(titleLabelOption, westLabelOption, metaPath, false);
     }
 
@@ -440,7 +440,7 @@ public class ElementPropertyDialog extends AbstractElementPropertyDialog impleme
      * @param metaPath
      * @param showMultipleConnectionEvenIfMetaPathIsSingleConnection
      */
-    public final void addPathConnectionPanel(final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath, final boolean showMultipleConnectionEvenIfMetaPathIsSingleConnection) {
+    public final void addPathConnectionPanel(final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final MetaPath metaPath, final boolean showMultipleConnectionEvenIfMetaPathIsSingleConnection) {
         MetaModel metaModel = getMetaModel();
         if (metaModel.isVisible(metaPath)) {
             boolean singleConnection = !showMultipleConnectionEvenIfMetaPathIsSingleConnection && metaPath.isSingleConnection();

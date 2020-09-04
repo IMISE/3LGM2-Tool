@@ -19,7 +19,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -107,8 +107,8 @@ public class ConnectedElementsTableModel extends DefaultTableModel {
                         colName = OptionalEdge.getOptionalityName();
                     } else {
                         Collection<String> colNameParts = new ArrayList<>();
-                        List<AbstractMetaPath> metaPaths = columnHeaderReferencePath.getSubMetaPaths();
-                        for (AbstractMetaPath metaPath : metaPaths) {
+                        List<MetaPath> metaPaths = columnHeaderReferencePath.getSubMetaPaths();
+                        for (MetaPath metaPath : metaPaths) {
                             List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
                             int pathStepIndex = columnDefinition.getPathStepIndex();
                             ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(pathStepIndex);

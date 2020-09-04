@@ -36,7 +36,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions;
@@ -83,27 +83,27 @@ public class PathConnectionPanel extends AbstractExpandablePanel {
 
     private final LGMAction newElementAction;
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         this(dialog, -1, metaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final MetaPath metaPath) {
         this(dialog, titleLabelOption, westLabelOption, false, metaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final AbstractMetaPath metaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final MetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, false, metaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final boolean renderLeftTreeAsList, final AbstractMetaPath metaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final boolean renderLeftTreeAsList, final MetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, renderLeftTreeAsList, metaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final boolean renderLeftTreeAsList, final AbstractMetaPath metaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final boolean renderLeftTreeAsList, final MetaPath metaPath) {
         this(dialog, titleLabelOption, westLabelOption, -1, renderLeftTreeAsList, metaPath);
     }
 
-    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final boolean renderLeftTreeAsList, final AbstractMetaPath metaPath) {
+    public PathConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final boolean renderLeftTreeAsList, final MetaPath metaPath) {
         super(dialog, titleLabelOption, westLabelOption, metaPath);
         showRightTree = isEditable();
         if (!showRightTree) {

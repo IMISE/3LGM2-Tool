@@ -14,7 +14,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions;
 import de.imise.tool3lgm.log.Log;
 
@@ -45,7 +45,7 @@ public class TableModel implements Iterable<TableCell> {
     private Class<? extends ModelElement> colClass;
 
     /** MetaPfad über den Zeilen- und Spaltenklasse verbunden sein sollen */
-    private List<AbstractMetaPath> metaPaths;
+    private List<MetaPath> metaPaths;
 
     /** Legt fest, ob nur absolte Teilelemente angezeigt werden sollen */
     private boolean absolutePartsOnly = false;
@@ -98,7 +98,7 @@ public class TableModel implements Iterable<TableCell> {
      *            legt fest, ob in der Matrix nur Elemente auftauchen sollen, die im
      *            Gesamtmodell keine Teilelemente besitzen
      */
-    private void fillTableModelIntern(final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final List<AbstractMetaPath> metaPaths, final boolean absolutePartsOnly) {
+    private void fillTableModelIntern(final Class<? extends ModelElement> rowClass, final Class<? extends ModelElement> colClass, final List<MetaPath> metaPaths, final boolean absolutePartsOnly) {
         this.rowClass = rowClass;
         this.colClass = colClass;
         this.metaPaths = metaPaths;
@@ -195,7 +195,7 @@ public class TableModel implements Iterable<TableCell> {
         if (rowClass == null || colClass == null || metaPaths == null) {
             return false;
         }
-        for (AbstractMetaPath metaPath : metaPaths) {
+        for (MetaPath metaPath : metaPaths) {
             if (metaPath == null) {
                 return false;
             }
@@ -220,7 +220,7 @@ public class TableModel implements Iterable<TableCell> {
                 try {
                     int connectionBitPattern = -1;
                     for (int k = 0; k < metaPaths.size(); k++) {
-                        AbstractMetaPath metaPath = metaPaths.get(k);
+                        MetaPath metaPath = metaPaths.get(k);
                         boolean containsPartOf = metaPath.containsPropertyTransferEdge();
                         boolean connected = false;
                         if (containsPartOf) {
@@ -247,7 +247,7 @@ public class TableModel implements Iterable<TableCell> {
     /**
      * @return Returns the MetaPath of the metaPathSelector.
      */
-    public List<AbstractMetaPath> getMetaPaths() {
+    public List<MetaPath> getMetaPaths() {
         return metaPaths;
     }
 

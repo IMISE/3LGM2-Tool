@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * Special {@link SectionMetaPath} for missing path consistency checks. The path always consists
- * of only two sub MetaPaths. The first is an {@link AbstractMetaPath} which leads to all elements
+ * of only two sub MetaPaths. The first is an {@link MetaPath} which leads to all elements
  * which can be connected. The second sub MetaPath must be a creatable {@link SimpleMetaPath} which
  * leads to all elements, which are really connected. If there is an consistency issue because not
  * enough elements are connected over the second metapath which are marked as needed through the
@@ -30,7 +30,7 @@ public class ConsistencyCheckSectionMetaPath extends SectionMetaPath {
 
     /**
      * Special {@link SectionMetaPath} for missing path consistency checks. The path always consists
-     * of only two sub MetaPaths. The first is an {@link AbstractMetaPath} which leads to all elements
+     * of only two sub MetaPaths. The first is an {@link MetaPath} which leads to all elements
      * which can be connected. The second sub MetaPath must be a creatable {@link SimpleMetaPath} which
      * leads to all elements, which are really connected. If there is an consistency issue because not
      * enough elements are connected over the second metapath which are marked as needed through the
@@ -41,7 +41,7 @@ public class ConsistencyCheckSectionMetaPath extends SectionMetaPath {
      * @param firstMetaPathToConnectableElements
      * @param secondMetaPathToConnectedElements
      */
-    public ConsistencyCheckSectionMetaPath(final String baseResKeyOrName, final AbstractMetaPath firstMetaPathToConnectableElements, final SimpleMetaPath secondSubMetaPathToConnectedElements) {
+    public ConsistencyCheckSectionMetaPath(final String baseResKeyOrName, final MetaPath firstMetaPathToConnectableElements, final SimpleMetaPath secondSubMetaPathToConnectedElements) {
         super(baseResKeyOrName, firstMetaPathToConnectableElements, secondSubMetaPathToConnectedElements);
         if (!isCreatable(secondSubMetaPathToConnectedElements)) {
             throw new IllegalArgumentException(secondSubMetaPathToConnectedElements.getFullName());
@@ -51,7 +51,7 @@ public class ConsistencyCheckSectionMetaPath extends SectionMetaPath {
     /**
      * @return
      */
-    public final AbstractMetaPath getFirstSubMetaPathToConnectableElements() {
+    public final MetaPath getFirstSubMetaPathToConnectableElements() {
         return subMetaPaths.get(0);
     }
 

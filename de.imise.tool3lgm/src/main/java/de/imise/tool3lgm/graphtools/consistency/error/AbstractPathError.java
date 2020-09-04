@@ -2,7 +2,7 @@ package de.imise.tool3lgm.graphtools.consistency.error;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
 /**
  * @author AXS (Sa, 21.03.2020, 8:14' (Corona time...))
@@ -29,15 +29,15 @@ public abstract class AbstractPathError extends AbstractConsistencyError {
      * @param cardValue
      * @param gdcoll
      */
-    public AbstractPathError(final ModelElement me, final AbstractMetaPath metaPath, final GDCollection gdcoll) {
+    public AbstractPathError(final ModelElement me, final MetaPath metaPath, final GDCollection gdcoll) {
         super(me, metaPath, gdcoll);
     }
 
     /**
      * @return
      */
-    public AbstractMetaPath getMetaPath() {
-        return (AbstractMetaPath) errorField;
+    public MetaPath getMetaPath() {
+        return (MetaPath) errorField;
     }
 
 }

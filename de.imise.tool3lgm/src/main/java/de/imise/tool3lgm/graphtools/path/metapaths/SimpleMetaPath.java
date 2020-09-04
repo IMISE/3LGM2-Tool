@@ -141,7 +141,7 @@ public class SimpleMetaPath extends SequenceMetaPath {
     @Override
     protected ElementaryMetaPath[] getOtherDirectionMetaPaths() {
         ElementaryMetaPath[] otherDirectionElementaryMetaPaths = null;
-        AbstractMetaPath[] otherDirectionMetaPaths = super.getOtherDirectionMetaPaths();
+        MetaPath[] otherDirectionMetaPaths = super.getOtherDirectionMetaPaths();
         if (otherDirectionMetaPaths != null) {
             otherDirectionElementaryMetaPaths = Arrays.copyOf(otherDirectionMetaPaths, otherDirectionMetaPaths.length, ElementaryMetaPath[].class);
         }

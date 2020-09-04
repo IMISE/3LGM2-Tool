@@ -28,7 +28,7 @@ import de.imise.util.ReflectionUtils;
  * @author AXS
  * @create 12.10.2010
  */
-public final class ElementaryMetaPath extends AbstractMetaPath {
+public final class ElementaryMetaPath extends MetaPath {
 
     /**
      * Mögliche Arten eines {@link ElementaryMetaPath}.
@@ -561,8 +561,8 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
 
     @SuppressWarnings("unchecked")
     @Override
-    public final List<AbstractMetaPath> getSubMetaPaths() {
-        return (List<AbstractMetaPath>) (List<?>) getElementaryMetaPaths();
+    public final List<MetaPath> getSubMetaPaths() {
+        return (List<MetaPath>) (List<?>) getElementaryMetaPaths();
     }
 
     @Override

@@ -18,7 +18,7 @@ import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.tree.node.LGMTreeNode;
 
@@ -38,19 +38,19 @@ public class PathConnectionLeafPanel extends PathConnectionPanel {
      */
     protected Map<LGMTreeNode, ModelElement> nodeToParentModelElement;
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, metaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final AbstractMetaPath metaPath) {
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final MetaPath metaPath) {
         this(dialog, titleLabelOption, westLabelOption, -1, metaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final AbstractMetaPath metaPath) {
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final int maxLines, final MetaPath metaPath) {
         this(dialog, LABEL_END_ELEMENT_TYPE, LABEL_END_ELEMENT_TYPE, maxLines, metaPath);
     }
 
-    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final AbstractMetaPath metaPath) {
+    public PathConnectionLeafPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption titleLabelOption, final PanelLabelOption westLabelOption, final int maxLines, final MetaPath metaPath) {
         super(dialog, titleLabelOption, westLabelOption, maxLines, false, metaPath);
         //die Treenodes nicht einrücken, da ja nur eine Liste dargestellt werden soll
         BasicTreeUI basicTreeUI = (BasicTreeUI) ltree.getUI();

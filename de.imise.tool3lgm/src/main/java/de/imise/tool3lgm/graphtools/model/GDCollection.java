@@ -102,7 +102,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.paths.AbstractPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
@@ -1372,7 +1372,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 //get the InferenceEdge class as Edge class
                 Class<? extends Edge> edgeClass = inferenceEdgeClass.asSubclass(Edge.class);
                 //get the condition metapath of this InferenceEdge
-                AbstractMetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+                MetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
                 //get the start and end element class of this InferencenEdge class
                 Class<? extends ModelElement> edgeStartClass = Edge.getStartClass(edgeClass);
                 Class<? extends ModelElement> edgeEndClass = Edge.getEndClass(edgeClass);
@@ -1439,7 +1439,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 //get the InferenceEdge class as Edge class
                 Class<? extends Edge> edgeClass = inferenceEdgeClass.asSubclass(Edge.class);
                 //get the condition metapath of this InferenceEdge
-                AbstractMetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+                MetaPath conditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
                 //get all startClasses of the condition metapath
                 Set<Class<? extends ModelElement>> startClasses = conditionMetaPath.getStartClasses();
                 //get all model elements of this startclasses
@@ -1719,7 +1719,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     //hole die Bedingungspfade
                     OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement = new OutParamObject<>(startElement);
                     OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement = new OutParamObject<>(endElement);
-                    AbstractMetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
+                    MetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
                     if (!inferenceEdgeConditionMetaPath.isConnected(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value)) {
                         if (!inferenceEdgeConditionMetaPath.isCreatable(false)) {
                             mainDoc.finish_transaction(pid);
@@ -1813,10 +1813,10 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
      *         the given elements in the correct order that the second triple element is the start element
      *         of the condition path and the third triple element is the end element of the condition path
      */
-    private AbstractMetaPath getInferenceEdgeConditionMetaPathWithCorrectElementOrder(final Class<? extends Edge> potencialInferenceEdgeClass, final OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement,
+    private MetaPath getInferenceEdgeConditionMetaPathWithCorrectElementOrder(final Class<? extends Edge> potencialInferenceEdgeClass, final OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement,
             final OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement) {
         Class<? extends InferenceEdge> inferenceEdgeClass = potencialInferenceEdgeClass.asSubclass(InferenceEdge.class);
-        AbstractMetaPath inferenceEdgeConditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+        MetaPath inferenceEdgeConditionMetaPath = metaModel.getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
         //es kann sein, dass die Bedingungspfade genau andersrum als die Kante (also mit verdrehtem Start- und Endelement) definiert sind
         ModelElement startElement = inferenceEdgeConditionMetaPathStartElement.value;
         ModelElement endElement = inferenceEdgeConditionMetaPathEndElement.value;
@@ -1836,7 +1836,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
     private String getNewEdgeName(final Edge edge) {
         String name = null;
         Class<? extends Edge> edgeClass = edge.getClass();
-        AbstractMetaPath initialCreatedNameSourcePath = metaModel.getInitialCreatedNameSourcePath(edgeClass);
+        MetaPath initialCreatedNameSourcePath = metaModel.getInitialCreatedNameSourcePath(edgeClass);
         if (initialCreatedNameSourcePath != null) {
             Collection<ModelElement> nameSources = initialCreatedNameSourcePath.getConnectedElements(edge);
             if (!nameSources.isEmpty()) {
@@ -1998,7 +1998,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         if (InferenceEdge.class.isAssignableFrom(absoluteEdgeClass)) {
             OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement = new OutParamObject<>(me1);
             OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement = new OutParamObject<>(me2);
-            AbstractMetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
+            MetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
 
             //TODO: Remove Inference Egdes implementieren
             ///////////////////////////////////////////////////////////////////////////////////////////

@@ -32,7 +32,7 @@ import de.imise.util.collections.CollectionUtils;
  * @author AXS
  * @create 12.10.2010
  */
-public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
+public abstract class MetaPath extends MetaModelSpecificAdapter {
 
     /**
      * Leere Elementarpfadliste
@@ -63,7 +63,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * MataPath für die Gegenrichtung dieses Pfades. Der ist nur nicht <code>null</code>, wenn er sich tatsächlich
      * feststellen lässt.
      */
-    protected AbstractMetaPath otherDirection = null;
+    protected MetaPath otherDirection = null;
 
     /**
      * Dieses Objekt gibt den Grund an, warum ein MetaPath nicht valide ist. Ist der darin enthaltene InvalidReason <code>null</code>, gilt der
@@ -83,7 +83,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
     /**
      * @param metaModel
      */
-    public AbstractMetaPath(final MetaModel metaModel) {
+    public MetaPath(final MetaModel metaModel) {
         this(metaModel, null);
     }
 
@@ -92,7 +92,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @param name
      *            Anzeigenamen
      */
-    public AbstractMetaPath(final MetaModel metaModel, final String name) {
+    public MetaPath(final MetaModel metaModel, final String name) {
         this(metaModel, (Class<? extends ModelElement>) null, (Class<? extends ModelElement>) null, name);
     }
 
@@ -101,7 +101,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @param startElementClass
      * @param endElementClass
      */
-    public AbstractMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
+    public MetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
         this(metaModel, startElementClass, endElementClass, null);
 
     }
@@ -112,7 +112,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @param endElementClass
      * @param name
      */
-    public AbstractMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
+    public MetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
         this(metaModel, startElementClass != null ? ImmutableSet.of(startElementClass) : null, endElementClass != null ? ImmutableSet.of(endElementClass) : null, name);
 
     }
@@ -123,7 +123,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @param endElementClasses
      * @param name
      */
-    public AbstractMetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
+    public MetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
         super(metaModel);
         this.metaModel = metaModel;
         this.startElementClasses = CollectionUtils.ensureImmutable(startElementClasses);
@@ -362,7 +362,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        AbstractMetaPath other = (AbstractMetaPath) obj;
+        MetaPath other = (MetaPath) obj;
         if (endElementClasses == null) {
             if (other.endElementClasses != null) {
                 return false;
@@ -549,7 +549,7 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      *
      * @return the otherDirectionPath
      */
-    public AbstractMetaPath getOtherDirection() {
+    public MetaPath getOtherDirection() {
         return otherDirection;
     }
 
@@ -592,9 +592,9 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
     }
 
     /**
-     * @return Liste aller {@link AbstractMetaPath}, die dieser MetaPfad enthält.
+     * @return Liste aller {@link MetaPath}, die dieser MetaPfad enthält.
      */
-    public abstract List<AbstractMetaPath> getSubMetaPaths();
+    public abstract List<MetaPath> getSubMetaPaths();
 
     /**
      * @return the number of contained metapaths

@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.util.ReflectionUtils;
@@ -207,7 +207,7 @@ public abstract class ModelConverterDefinition {
      *
      * @return Map von direkt aufeinander abbildbaren Knotenklassen
      */
-    public Map<AbstractMetaPath, SimpleMetaPath> getSourceMetaPathsToTargetMetaPaths() {
+    public Map<MetaPath, SimpleMetaPath> getSourceMetaPathsToTargetMetaPaths() {
         return new HashMap<>();
     }
 

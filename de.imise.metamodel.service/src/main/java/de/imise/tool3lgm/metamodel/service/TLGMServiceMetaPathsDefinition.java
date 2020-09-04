@@ -16,7 +16,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InferenceEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.DifferenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
@@ -87,7 +87,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     }
 
     @Override
-    public final Map<Class<? extends Edge>, AbstractMetaPath> getSoftConditionMetaPaths() {
+    public final Map<Class<? extends Edge>, MetaPath> getSoftConditionMetaPaths() {
         //IheActorInstanceCommunicationLink_Edge (best connectable ActorInstanceInterfaces should be connected with IheInterfaces which are connected via an IheCommunicationInterface)
         SimpleMetaPath includeCondition1 = smp(IheActorInstanceInvokingInterface.class, IheActorInstanceProvidingInterface.class, IheInvokingInterface_IheActorInstanceInvokingInterface_Edge.class, IheCommunicationLink_Edge.class,
                 IheProvidingInterface_IheActorInstanceProvidingInterface_Edge.class);
@@ -132,14 +132,14 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     ////////////////////////////////////////////////////////////////////////
 
     @Override
-    public Map<Class<? extends ModelElement>, AbstractMetaPath> getElementClassToNameExtensionPath() {
+    public Map<Class<? extends ModelElement>, MetaPath> getElementClassToNameExtensionPath() {
         SimpleMetaPath applicationsSystemNameExtensionPath = smp(ApplicationSystem.class, SoftwareProduct.class, ApplicationSystem_SoftwareProduct_Edge.class);
         SimpleMetaPath iheActorInstanceNameExtensionPath = smp(IheActorInstance.class, IheActor.class, IheActor_IheActorInstance_Edge.class);
         return ImmutableMap.of(ApplicationSystem.class, applicationsSystemNameExtensionPath, IheActorInstance.class, iheActorInstanceNameExtensionPath);
     }
 
     @Override
-    public Map<Class<? extends Edge>, AbstractMetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
+    public Map<Class<? extends Edge>, MetaPath> getEdgeClassToInitialCreatedNameSourcePath() {
         MetaModel metaModel = getMetaModel();
         ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
 
@@ -157,7 +157,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         ElementaryMetaPath iheCommunicationLink_nameMetaPath2_pathStep2 = emph.getMetaPath(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
         SimpleMetaPath iheCommunicationLink_nameMetaPath2 = new SimpleMetaPath(iheCommunicationLink_nameMetaPath2_pathStep1, iheCommunicationLink_nameMetaPath2_pathStep2);
 
-        AbstractMetaPath iheCommunicationLink_nameMetaPath = new SectionMetaPath(iheCommunicationLink_nameMetaPath1, iheCommunicationLink_nameMetaPath2);
+        MetaPath iheCommunicationLink_nameMetaPath = new SectionMetaPath(iheCommunicationLink_nameMetaPath1, iheCommunicationLink_nameMetaPath2);
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         // IheActorInstanceCommunicationLink_Edge -> bekommt Name der Transaktion, die über ihre Schnittstellen verbunden ist //
@@ -183,7 +183,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         SimpleMetaPath iheActorInstanceCommunicationLink_nameMetaPath2 = new SimpleMetaPath(iheActorInstanceCommunicationLink_nameMetaPath2_pathStep1, iheActorInstanceCommunicationLink_nameMetaPath2_pathStep2,
                 iheActorInstanceCommunicationLink_nameMetaPath2_pathStep3);
 
-        AbstractMetaPath iheActorInstanceCommunicationLink_nameMetaPath = new SectionMetaPath(iheActorInstanceCommunicationLink_nameMetaPath1, iheActorInstanceCommunicationLink_nameMetaPath2);
+        MetaPath iheActorInstanceCommunicationLink_nameMetaPath = new SectionMetaPath(iheActorInstanceCommunicationLink_nameMetaPath1, iheActorInstanceCommunicationLink_nameMetaPath2);
         return ImmutableMap.of(IheCommunicationLink_Edge.class, iheCommunicationLink_nameMetaPath, IheActorInstanceCommunicationLink_Edge.class, iheActorInstanceCommunicationLink_nameMetaPath);
     }
 
@@ -192,7 +192,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
     ////////////////////////////////////////////////////////////////////////////////
 
     @Override
-    public final Map<Class<? extends InferenceEdge>, AbstractMetaPath> getInferenceEdgeToConditionMetaPath() {
+    public final Map<Class<? extends InferenceEdge>, MetaPath> getInferenceEdgeToConditionMetaPath() {
 
         MetaModel metaModel = getMetaModel();
         ElementaryMetaPathHandler emph = metaModel.getElementaryMetaPathHandler();
@@ -211,7 +211,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         ElementaryMetaPath service_CommunicationLink_InferenceMetaPath2_pathStep2 = emph.getMetaPath(InvokingInterface.class, Service_ProvidingInterface_Edge.class, Direction.BACKWARD, Service.class);
         SimpleMetaPath service_CommunicationLink_InferenceMetaPath2 = new SimpleMetaPath(service_CommunicationLink_InferenceMetaPath2_pathStep1, service_CommunicationLink_InferenceMetaPath2_pathStep2);
         //   (*A1) Service_CommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
-        AbstractMetaPath service_CommunicationLink_InferenceMetaPath = new SectionMetaPath(service_CommunicationLink_InferenceMetaPath1, service_CommunicationLink_InferenceMetaPath2);
+        MetaPath service_CommunicationLink_InferenceMetaPath = new SectionMetaPath(service_CommunicationLink_InferenceMetaPath1, service_CommunicationLink_InferenceMetaPath2);
 
         // Edge between IheTransaction and IheCommunicationLink_Edge = IheTransaction_IheCommunicationLink_Edge
         //   (*A2) IheTransaction_IheCommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
@@ -227,7 +227,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
         ElementaryMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep2 = emph.getMetaPath(IheProvidingInterface.class, IheProvidingInterface_IheTransaction_Edge.class, Direction.FORWARD, IheTransaction.class);
         SimpleMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath2 = new SimpleMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep1, iheTransaction_IheCommunicationLink_InferenceMetaPath2_pathStep2);
         //   (*A2) IheTransaction_IheCommunicationLink_Edge is inferred by Section-MetaPath of MetaPaths 1 and 2:
-        AbstractMetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath1, iheTransaction_IheCommunicationLink_InferenceMetaPath2);
+        MetaPath iheTransaction_IheCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheTransaction_IheCommunicationLink_InferenceMetaPath1, iheTransaction_IheCommunicationLink_InferenceMetaPath2);
 
         // Edge between IheCommunicationLink_Edge and IheActorInstanceCommunicationLink_Edge= IheCommunicationLink_IheActorInstanceCommunicationLink_Edge
         //    (*A3) IheCommunicationLink_IheActorInstanceCommunicationLink_Edge InferenceEdge is inferred by Section-MetaPath of MetaPaths 1 and 2:
@@ -254,7 +254,7 @@ public class TLGMServiceMetaPathsDefinition extends MetaPathDefinition {
                 iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2_pathStep2, iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2_pathStep3);
 
         //    (*A3) IheCommunicationLink_IheActorInstanceCommunicationLink_Edge InferenceEdge is inferred by Section-MetaPath of MetaPaths 1 and 2:
-        AbstractMetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1,
+        MetaPath iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath = new SectionMetaPath(iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath1,
                 iheCommunicationLink_IheActorInstanceCommunicationLink_InferenceMetaPath2);
 
         return ImmutableMap.of(Service_CommunicationLink_Edge.class, service_CommunicationLink_InferenceMetaPath, IheTransaction_IheCommunicationLink_Edge.class, iheTransaction_IheCommunicationLink_InferenceMetaPath,

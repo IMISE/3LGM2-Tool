@@ -48,7 +48,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.path.MetaPathDefinition;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPathHandler;
@@ -223,7 +223,7 @@ public final class MetaModel extends CoreMetaModel {
      * @param edgeClass
      * @return
      */
-    private final Map<Class<? extends Edge>, AbstractMetaPath> edgeClassToSoftConditionMetaPath;
+    private final Map<Class<? extends Edge>, MetaPath> edgeClassToSoftConditionMetaPath;
 
     /**
      * Sammlung aller MetaPfade, die ausgehend vom Startelement dieser Kante ebenfalls angelegt werden sollen, wenn eine Instanziierung über
@@ -251,12 +251,12 @@ public final class MetaModel extends CoreMetaModel {
      * Mappt von Elementklassen, bei denen der Name verbundendener Elemente in der Grafik in Klammern unter der eigentlichen Elementart angezeigt
      * werden soll, auf den MetaPfad zu den anzuzeigenden, verbundenen Elementen.
      */
-    private final Map<Class<? extends ModelElement>, AbstractMetaPath> elementClassToNameExtensionPath;
+    private final Map<Class<? extends ModelElement>, MetaPath> elementClassToNameExtensionPath;
 
     /**
      * Mappt von einer InferenceEdge-Klasse auf den MetaPath, aus dem diese Inference-Kante abgeleitet wird.
      */
-    private final Map<Class<? extends InferenceEdge>, AbstractMetaPath> inferenceEdgeClassToConditionMetaPath;
+    private final Map<Class<? extends InferenceEdge>, MetaPath> inferenceEdgeClassToConditionMetaPath;
 
     /**
      * Metapaths which are used to ensure model consistency. This paths say that a model element must be connected
@@ -310,7 +310,7 @@ public final class MetaModel extends CoreMetaModel {
      * Das funktioniert im Moment nur bei Kanten, da bei Knoten zum Zeitpunkt des Festlegens des Namens der Knoten
      * noch mit gar nichts verbunden ist.
      */
-    private final Map<Class<? extends Edge>, AbstractMetaPath> edgeClassToInitialCreatedNameSourcePath;
+    private final Map<Class<? extends Edge>, MetaPath> edgeClassToInitialCreatedNameSourcePath;
 
     //////////////////////////
     // Weitere Definitionen //
@@ -930,7 +930,7 @@ public final class MetaModel extends CoreMetaModel {
      * @return
      */
     public boolean isInferenceCreateable(final Class<? extends InferenceEdge> inferenceEdgeClass) {
-        AbstractMetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
+        MetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPath(inferenceEdgeClass);
         return inferenceEdgeConditionMetaPath.isCreatable(false);
     }
 
@@ -969,7 +969,7 @@ public final class MetaModel extends CoreMetaModel {
      * @param metaPath
      * @return
      */
-    public final boolean isVisible(final AbstractMetaPath metaPath) {
+    public final boolean isVisible(final MetaPath metaPath) {
         if (Static.isExpertMode()) {
             return true;
         }
@@ -1098,7 +1098,7 @@ public final class MetaModel extends CoreMetaModel {
      * @return
      * @see #getBestConnectableMetPath(Class)
      */
-    public AbstractMetaPath getSoftConditionMetaPath(final Class<? extends Edge> edgeClass) {
+    public MetaPath getSoftConditionMetaPath(final Class<? extends Edge> edgeClass) {
         return edgeClassToSoftConditionMetaPath.get(edgeClass);
     }
 
@@ -1109,10 +1109,10 @@ public final class MetaModel extends CoreMetaModel {
      * @param elenentClass
      * @return best connectable element types
      */
-    public Collection<AbstractMetaPath> getBestConnectableMetPath(final Class<? extends ModelElement> elementClass) {
-        List<AbstractMetaPath> bestConnectableMetaPaths = new ArrayList<>();
+    public Collection<MetaPath> getBestConnectableMetPath(final Class<? extends ModelElement> elementClass) {
+        List<MetaPath> bestConnectableMetaPaths = new ArrayList<>();
         for (Class<? extends Edge> edgeClass : edgeClassToSoftConditionMetaPath.keySet()) {
-            AbstractMetaPath metaPath = edgeClassToSoftConditionMetaPath.get(edgeClass);
+            MetaPath metaPath = edgeClassToSoftConditionMetaPath.get(edgeClass);
             if (metaPath.isStartClass(elementClass)) {
                 bestConnectableMetaPaths.add(metaPath);
             }
@@ -1793,7 +1793,7 @@ public final class MetaModel extends CoreMetaModel {
      * @param elementClass
      * @return
      */
-    public final AbstractMetaPath getInitialCreatedNameSourcePath(final Class<? extends Edge> edgeClass) {
+    public final MetaPath getInitialCreatedNameSourcePath(final Class<? extends Edge> edgeClass) {
         return edgeClassToInitialCreatedNameSourcePath.get(edgeClass);
     }
 
@@ -1808,14 +1808,14 @@ public final class MetaModel extends CoreMetaModel {
     /**
      * @return Collection aller Bedingungspfade für Ableitungskanten (InferenceEdges)
      */
-    public Collection<AbstractMetaPath> getInferenceEdgeConditionMetaPaths() {
+    public Collection<MetaPath> getInferenceEdgeConditionMetaPaths() {
         return inferenceEdgeClassToConditionMetaPath.values();
     }
 
     /**
      * @return Bedingungspfad für eine Ableitungskante (InferenceEdge)
      */
-    public AbstractMetaPath getInferenceEdgeConditionMetaPath(final Class<? extends InferenceEdge> inferenceEdgeClass) {
+    public MetaPath getInferenceEdgeConditionMetaPath(final Class<? extends InferenceEdge> inferenceEdgeClass) {
         return inferenceEdgeClassToConditionMetaPath.get(inferenceEdgeClass);
     }
 
@@ -1862,7 +1862,7 @@ public final class MetaModel extends CoreMetaModel {
      *
      * @return
      */
-    public AbstractMetaPath getNameExtensionPath(final Class<? extends ModelElement> elementClass) {
+    public MetaPath getNameExtensionPath(final Class<? extends ModelElement> elementClass) {
         return elementClassToNameExtensionPath.get(elementClass);
     }
 

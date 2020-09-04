@@ -102,7 +102,7 @@ public class PathFunctions {
      * @param checkConsistency
      * @return
      */
-    static final boolean isCreatable(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean checkConsistency) {
+    static final boolean isCreatable(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final boolean checkConsistency) {
         if (!metaPath.isCreatable(false)) {
             return false;
         }
@@ -114,16 +114,16 @@ public class PathFunctions {
             return endElement.isForwardLinkable(startElement, elemMetaPath.getEdgeClass(), checkConsistency);
         } else if (metaPath instanceof SequenceMetaPath) {
             SequenceMetaPath sequenceMetaPath = (SequenceMetaPath) metaPath;
-            AbstractMetaPath firstMetaPath = sequenceMetaPath.getSubMetaPaths().get(0);
+            MetaPath firstMetaPath = sequenceMetaPath.getSubMetaPaths().get(0);
             while (firstMetaPath instanceof SequenceMetaPath) {
                 firstMetaPath = ((SequenceMetaPath) firstMetaPath).getSubMetaPaths().get(0);
             }
             if (!(firstMetaPath instanceof ElementaryMetaPath)) {
                 return false;
             }
-            AbstractMetaPath lastMetaPath = sequenceMetaPath.getSubMetaPaths().get(sequenceMetaPath.getSubMetaPaths().size() - 1);
+            MetaPath lastMetaPath = sequenceMetaPath.getSubMetaPaths().get(sequenceMetaPath.getSubMetaPaths().size() - 1);
             while (lastMetaPath instanceof SequenceMetaPath) {
-                List<AbstractMetaPath> lastSequenceMetaPathList = ((SequenceMetaPath) lastMetaPath).getSubMetaPaths();
+                List<MetaPath> lastSequenceMetaPathList = ((SequenceMetaPath) lastMetaPath).getSubMetaPaths();
                 lastMetaPath = lastSequenceMetaPathList.get(lastSequenceMetaPathList.size() - 1);
             }
             if (!(lastMetaPath instanceof ElementaryMetaPath)) {
@@ -146,12 +146,12 @@ public class PathFunctions {
             //            Anlegen zu allen Elementen genügend Edgen hat. Initialsubtypes müssen auch beachtet werden usw.
             //            Das ist aber erstmal nicht so wichtig
             //            if (checkConsistency) {
-            //                List<AbstractMetaPath> metaPaths = sequenceMetaPath.getSubMetaPaths();
+            //                List<MetaPath> metaPaths = sequenceMetaPath.getSubMetaPaths();
             //                for (int i = 0; i < metaPaths.size(); i++) {
-            //                    AbstractMetaPath mp = metaPaths.get(i);
+            //                    MetaPath mp = metaPaths.get(i);
             //                    //prüfen, ob die Zwischenelemente angelegt werden können
             //                    if (i + 1 < metaPaths.size()) {
-            //                        AbstractMetaPath nextMetaPath = metaPaths.get(i + 1);
+            //                        MetaPath nextMetaPath = metaPaths.get(i + 1);
             //                        boolean creatableMetaPathEndClass = mp.getEndClasses().size() == 1;
             //                        boolean creatableNextMetaPathStartClass = nextMetaPath.getStartClasses().size() == 1;
             //                        //Keine eindeutige Folgeklasse
@@ -182,7 +182,7 @@ public class PathFunctions {
      * @param metaPath
      * @return
      */
-    static final boolean pathExists(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
+    static final boolean pathExists(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath) {
         //TODO: implementieren
         if (true) {
             throw new Error("TODO: Implementieren");
@@ -207,7 +207,7 @@ public class PathFunctions {
      * @param metaPath
      * @return
      */
-    static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath) {
+    static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath) {
         return PathFunctions.getPathConnectionState(startElement, endElement, metaPath, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is());
     }
 
@@ -219,7 +219,7 @@ public class PathFunctions {
      * @param searchParts
      * @return
      */
-    static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final AbstractMetaPath metaPath, final boolean searchParents, final boolean searchParts) {
+    static final PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final MetaPath metaPath, final boolean searchParents, final boolean searchParts) {
         List<ModelElement> startElements = null;
         startElements = new ArrayList<>(1);
         startElements.add(startElement);
@@ -277,7 +277,7 @@ public class PathFunctions {
      * @param metaPath
      * @return
      */
-    static boolean isConnected(final List<ModelElement> startElements, final List<ModelElement> endElements, final AbstractMetaPath metaPath) {
+    static boolean isConnected(final List<ModelElement> startElements, final List<ModelElement> endElements, final MetaPath metaPath) {
         Collection<ModelElement> connected = metaPath.getConnectedElements(startElements);
         for (ModelElement endElement : endElements) {
             if (connected.contains(endElement)) {

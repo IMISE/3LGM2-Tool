@@ -24,7 +24,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
 import de.imise.util.NamedObjectContainer;
@@ -77,7 +77,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      * @param dialog
      * @param metaPath
      */
-    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final AbstractMetaPath metaPath) {
+    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final MetaPath metaPath) {
         this(dialog, PanelLabelOption.LABEL_END_ELEMENT_TYPE, metaPath);
     }
 
@@ -92,7 +92,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      *            </ul>
      * @param metaPath
      */
-    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final AbstractMetaPath metaPath) {
+    public SingleConnectionPanel(final AbstractElementPropertyDialog dialog, final PanelLabelOption panelLabelOption, final MetaPath metaPath) {
         super(dialog, panelLabelOption, panelLabelOption, metaPath);
         setLayout(new BorderLayout());
         update(); //connectedElement initial setzen!

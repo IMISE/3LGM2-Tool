@@ -12,7 +12,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
 
 /**
@@ -36,7 +36,7 @@ public class MissingPathChecker implements ConsistencyErrorChecker {
             //for every of these elements
             for (ModelElement me : possibleInconsistentElements) {
                 //the first sub metapath of the SectionMetaPath describes the connection to the needed elements -> get the first
-                AbstractMetaPath metaPathToNeededElements = consistencyConditionSectionMetaPath.getFirstSubMetaPathToConnectableElements();
+                MetaPath metaPathToNeededElements = consistencyConditionSectionMetaPath.getFirstSubMetaPathToConnectableElements();
                 //get the elements which should be connected over the other subpaths too
                 Collection<ModelElement> neededElements = metaPathToNeededElements.getConnectedElements(me);
                 //if there are needed elements
