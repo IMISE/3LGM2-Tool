@@ -224,9 +224,9 @@ public class TableModel implements Iterable<TableCell> {
                         boolean containsPartOf = metaPath.containsPropertyTransferEdge();
                         boolean connected = false;
                         if (containsPartOf) {
-                            connected = PathFunctions.getPathConnectionState(rowHeader.get(i), colHeader.get(j), metaPath, false, false) != PathFunctions.PathConnectionState.NOT_CONNECTED;
+                            connected = metaPath.getPathConnectionState(rowHeader.get(i), colHeader.get(j), false, false) != PathFunctions.PathConnectionState.NOT_CONNECTED;
                         } else {
-                            connected = PathFunctions.getPathConnectionState(rowHeader.get(i), colHeader.get(j), metaPath, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(),
+                            connected = metaPath.getPathConnectionState(rowHeader.get(i), colHeader.get(j), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(),
                                     OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is()) != PathFunctions.PathConnectionState.NOT_CONNECTED;
                         }
                         if (connected) {

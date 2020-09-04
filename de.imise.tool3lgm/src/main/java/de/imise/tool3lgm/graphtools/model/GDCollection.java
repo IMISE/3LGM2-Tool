@@ -103,7 +103,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.paths.AbstractPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
@@ -1391,7 +1390,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                         //is the condition metapath defined in the same direction like the edge?
                         boolean readEdgeForward = conditionMetaPath.isStartAndEndClass(edgeStartClass, edgeEndClass);
                         //is the condition for this InferenceEdge still fulfilled?
-                        remove = !PathFunctions.isDirectConnected(readEdgeForward ? edgeStart : edgeEnd, readEdgeForward ? edgeEnd : edgeStart, conditionMetaPath);
+                        remove = !conditionMetaPath.isDirectConnected(readEdgeForward ? edgeStart : edgeEnd, readEdgeForward ? edgeEnd : edgeStart);
                     }
                     //if not -> remove the InferenceEdge
                     if (remove) {
@@ -1721,7 +1720,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                     OutParamObject<ModelElement> inferenceEdgeConditionMetaPathStartElement = new OutParamObject<>(startElement);
                     OutParamObject<ModelElement> inferenceEdgeConditionMetaPathEndElement = new OutParamObject<>(endElement);
                     AbstractMetaPath inferenceEdgeConditionMetaPath = getInferenceEdgeConditionMetaPathWithCorrectElementOrder(edgeClass, inferenceEdgeConditionMetaPathStartElement, inferenceEdgeConditionMetaPathEndElement);
-                    if (!PathFunctions.isConnected(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value, inferenceEdgeConditionMetaPath)) {
+                    if (!inferenceEdgeConditionMetaPath.isConnected(inferenceEdgeConditionMetaPathStartElement.value, inferenceEdgeConditionMetaPathEndElement.value)) {
                         if (!inferenceEdgeConditionMetaPath.isCreatable(false)) {
                             mainDoc.finish_transaction(pid);
                             return null;

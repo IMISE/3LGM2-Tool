@@ -3,6 +3,8 @@ package de.imise.tool3lgm.graphtools.path.metapaths;
 import static de.imise.util.ReflectionUtils.getMostSpecialClass;
 
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -17,6 +19,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.PropertyTransferEdge;
+import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -604,4 +607,27 @@ public final class ElementaryMetaPath extends AbstractMetaPath {
     public String toString() {
         return getFullName();
     }
+
+    @Override
+    public final List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final boolean multiple) {
+        List<ModelElement> returnList = new ArrayList<>();
+        Direction direction = getDirection();
+        Class<? extends Edge> edgeClass = getEdgeClass();
+        for (ModelElement me : modelElements) {
+            List<ModelElement> connectedElements = me.getConnectedElements(edgeClass, direction);
+            if (multiple) {
+                returnList.addAll(connectedElements);
+            } else {
+                for (ModelElement connected : connectedElements) {
+                    if (!returnList.contains(connected)) {
+                        returnList.add(connected);
+                    }
+                }
+            }
+            return returnList;
+        }
+        PathResultTreeModel resultTree = getResultTree(modelElements);
+        return resultTree.getConnectedElements(multiple);
+    }
+
 }

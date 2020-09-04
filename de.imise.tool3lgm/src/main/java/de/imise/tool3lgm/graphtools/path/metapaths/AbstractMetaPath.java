@@ -1,5 +1,9 @@
 package de.imise.tool3lgm.graphtools.path.metapaths;
 
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS;
+
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +20,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions.PathConnectionState;
+import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
@@ -620,9 +626,9 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      */
     public abstract boolean containsPropertyTransferEdge();
 
-    /////////////////////////////////////////////////////////////////////////////////////
-    //PathFinder delegates  ->  getConnectedElements(...) + getConnectedContainer(...) //
-    /////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    //getConnectedElements(...) + getConnectedContainer(...) + getResultTree //
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
@@ -635,15 +641,17 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @return
      */
     public List<ModelElement> getConnectedElements(final ModelElement me, final boolean multiple) {
-        return PathFunctions.getConnectedElements(me, this, multiple);
+        List<ModelElement> modelElements = new ArrayList<>();
+        modelElements.add(me);
+        return getConnectedElements(modelElements, multiple);
     }
 
     /**
      * @param me
      * @return
      */
-    public final List<ModelElement> getConnectedElements(final ModelElement me) {
-        return PathFunctions.getConnectedElements(me, this, false);
+    public List<ModelElement> getConnectedElements(final ModelElement me) {
+        return getConnectedElements(me, false);
     }
 
     /**
@@ -652,8 +660,23 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @param modelElements
      * @return
      */
-    public final List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements) {
-        return PathFunctions.getConnectedElements(modelElements, this, false);
+    public List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements) {
+        return getConnectedElements(modelElements, false);
+    }
+
+    /**
+     * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den übergebenen Elementen verbunden sind.
+     *
+     * @param modelElements
+     *            Ausgangselemente
+     * @param multiple
+     *            Wenn <code>true</code> enthält die Rückgabesammlung dieselben Elemente sooft, wie sie mit Elementen der
+     *            Ausgangliste über diesen Pfad verbunden sind. Bei <code>false</code> ist jedes Element nur einmal enthalten.
+     * @return
+     */
+    public List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final boolean multiple) {
+        PathResultTreeModel resultTree = getResultTree(modelElements);
+        return resultTree.getConnectedElements(multiple);
     }
 
     /**
@@ -661,8 +684,8 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @param doc
      * @return
      */
-    public final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc) {
-        return PathFunctions.getConnectedContainer(me, doc, this, false);
+    public List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc) {
+        return getConnectedContainer(me, doc, false);
     }
 
     /**
@@ -671,8 +694,103 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @param forlast
      * @return
      */
-    public final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final boolean forlast) {
-        return PathFunctions.getConnectedContainer(me, doc, this, forlast);
+    public List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final boolean forlast) {
+        return getConnectedContainer(me, doc, forlast);
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @param searchParents
+     * @param searchParts
+     * @return
+     */
+    public PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement, final boolean searchParents, final boolean searchParts) {
+        return PathFunctions.getPathConnectionState(startElement, endElement, this, searchParents, searchParts);
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @return
+     */
+    public PathConnectionState getPathConnectionState(final ModelElement startElement, final ModelElement endElement) {
+        return PathFunctions.getPathConnectionState(startElement, endElement, this, OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARENTS.is(), OPTION_ELEMENTS_RECEIVE_PROPERTIES_FROM_PARTS.is());
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @return
+     */
+    public boolean isConnected(final ModelElement startElement, final ModelElement endElement) {
+        return getPathConnectionState(startElement, endElement) != PathConnectionState.NOT_CONNECTED;
+    }
+
+    /**
+     * @param startElement
+     * @param endElement
+     * @return
+     */
+    public boolean isDirectConnected(final ModelElement startElement, final ModelElement endElement) {
+        return getPathConnectionState(startElement, endElement, false, false) != PathConnectionState.NOT_CONNECTED;
+    }
+
+    /**
+     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade ausgehend vom
+     * übergebenen Element aufspannt
+     *
+     * @param startElement
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final ModelElement startElement) {
+        return new PathResultTreeModel(this, startElement);
+    }
+
+    /**
+     * Liefert einen Ergebnisbaum, der alle eventuell vorhandenen Pfade ausgehend vom
+     * übergebenen Element aufspannt
+     *
+     * @param startElement
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final ModelElement startElement, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(this, startElement, keepIncompleteBranches);
+    }
+
+    /**
+     * @param startElements
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final Collection<ModelElement> startElements) {
+        return new PathResultTreeModel(this, startElements);
+    }
+
+    /**
+     * @param startElements
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final Collection<ModelElement> startElements, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(this, startElements, keepIncompleteBranches);
+    }
+
+    /**
+     * @param startElements
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements) {
+        return new PathResultTreeModel(this, startElements);
+    }
+
+    /**
+     * @param startElements
+     * @param keepIncompleteBranches
+     * @return
+     */
+    public PathResultTreeModel getResultTree(final List<Collection<ModelElement>> startElements, final boolean keepIncompleteBranches) {
+        return new PathResultTreeModel(this, startElements, keepIncompleteBranches);
     }
 
 }
