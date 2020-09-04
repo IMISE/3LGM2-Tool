@@ -7,7 +7,6 @@ import java.util.List;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 
@@ -69,7 +68,7 @@ public class SelectionHighlighter implements LGMChangeListenerSimple {
         MetaModel metaModel = doc.getMetaModel();
         Collection<AbstractMetaPath> bestConnectableMetPath = metaModel.getBestConnectableMetPath(meClass);
         for (AbstractMetaPath metaPath : bestConnectableMetPath) {
-            List<ElementContainer> connectedContainer = PathFunctions.getConnectedContainer(me, doc, metaPath);
+            List<ElementContainer> connectedContainer = metaPath.getConnectedContainer(me, doc);
             addHighlight(connectedContainer);
         }
     }

@@ -34,7 +34,6 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GDCollectionOwner;
 import de.imise.tool3lgm.graphtools.model.GDCommands;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
@@ -467,7 +466,7 @@ public abstract class ModelElement extends UserFieldTarget implements MetaModelS
     private void updateHTMLNameSuffixBuffer(final AbstractMetaPath nameExtension) {
         suffixBuf.setLength(0);
         if (nameExtension != null) {
-            Collection<ModelElement> directConnectedElements = PathFunctions.getConnectedElements(this, nameExtension);
+            Collection<ModelElement> directConnectedElements = nameExtension.getConnectedElements(this);
             //Kein Element, dessen Namen in Klammern angezeigt werden soll verbunden -> weiter
             if (!directConnectedElements.isEmpty()) {
                 //genau ein Element verbunden, das denselben Namen hat wie dieses Element -> weiter (damit in der Grafik nicht

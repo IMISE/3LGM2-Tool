@@ -43,10 +43,10 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.model.template.TemplateLibrariesManager;
-import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPathFunctions;
+import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
@@ -607,7 +607,7 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
                     conditionMetaPath = conditionMetaPath.getOtherDirection();
                 }
                 ModelElement me = getModelElement();
-                Collection<ModelElement> conditionElements = PathFunctions.getConnectedElements(me, conditionMetaPath);
+                Collection<ModelElement> conditionElements = conditionMetaPath.getConnectedElements(me);
                 available = new ArrayList<>(conditionElements.size());
                 for (ModelElement conditionElement : conditionElements) {
                     ElementContainer conditionElementContainer = conditionElement.getContainer(mainDoc);

@@ -34,7 +34,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath.Type;
@@ -669,7 +668,7 @@ public class LGMGraphDocument extends GraphDocument {
                 }
                 //für diesen Pfadteil müssen die verbundenen Elemente herausgesucht werden
                 SimpleMetaPath subPathConnected = metaPath.getSubPath(0, path2CreateStartIndex);
-                Collection<ModelElement> connectedElements = PathFunctions.getConnectedElements(master, subPathConnected);
+                Collection<ModelElement> connectedElements = subPathConnected.getConnectedElements(master);
                 for (ModelElement me : connectedElements) {
                     //ab diesem Pfadteil muss neu angelegt werden
                     SimpleMetaPath subPathCreate = metaPath.getSubPath(path2CreateStartIndex);

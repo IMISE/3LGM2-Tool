@@ -102,8 +102,8 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.MultipleEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.paths.AbstractPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionStackTable;
@@ -1448,7 +1448,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
                 //for every of this model elements
                 for (ModelElement pathStartElement : pathStartElements) {
                     //get all elements which are conected over the path with the pathStartElement
-                    Collection<ModelElement> pathEndElements = PathFunctions.getConnectedElements(pathStartElement, conditionMetaPath);
+                    Collection<ModelElement> pathEndElements = conditionMetaPath.getConnectedElements(pathStartElement);
                     //for every of this connected elements
                     for (ModelElement pathEndElement : pathEndElements) {
                         //if the resulting InferenceEdge dosn't exists -> create the link
@@ -1839,7 +1839,7 @@ public final class GDCollection extends UserFieldTarget implements MetaModelSpec
         Class<? extends Edge> edgeClass = edge.getClass();
         AbstractMetaPath initialCreatedNameSourcePath = metaModel.getInitialCreatedNameSourcePath(edgeClass);
         if (initialCreatedNameSourcePath != null) {
-            Collection<ModelElement> nameSources = PathFunctions.getConnectedElements(edge, initialCreatedNameSourcePath);
+            Collection<ModelElement> nameSources = initialCreatedNameSourcePath.getConnectedElements(edge);
             if (!nameSources.isEmpty()) {
                 name = StringUtils.createCollectionString(nameSources, ", ");
             }

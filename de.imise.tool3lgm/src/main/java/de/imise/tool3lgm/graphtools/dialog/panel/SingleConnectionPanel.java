@@ -24,7 +24,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -268,7 +267,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     private Collection<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
         ModelElement me = getModelElement();
         GraphDocument mainDoc = getMainDoc();
-        return PathFunctions.getConnectedContainer(me, mainDoc, metaPath, forelastInPath);
+        return metaPath.getConnectedContainer(me, mainDoc, forelastInPath);
     }
 
     //    /**

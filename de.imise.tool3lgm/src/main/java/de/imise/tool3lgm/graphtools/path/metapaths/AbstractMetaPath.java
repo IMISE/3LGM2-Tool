@@ -15,6 +15,8 @@ import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
@@ -617,5 +619,60 @@ public abstract class AbstractMetaPath extends MetaModelSpecificAdapter {
      * @return
      */
     public abstract boolean containsPropertyTransferEdge();
+
+    /////////////////////////////////////////////////////////////////////////////////////
+    //PathFinder delegates  ->  getConnectedElements(...) + getConnectedContainer(...) //
+    /////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Liefert alle mit dem übergebenen Element über diesen MetaPfad verbundenen Elemente.
+     *
+     * @param me
+     *            Ausgangselement
+     * @param multiple
+     *            Wenn <code>true</code> sind mehrfach verbundene Element auch mehrfach in der Ergebnisliste, bei <code>false</code> ist jedes Element
+     *            nur einmal enthalten.
+     * @return
+     */
+    public List<ModelElement> getConnectedElements(final ModelElement me, final boolean multiple) {
+        return PathFunctions.getConnectedElements(me, this, multiple);
+    }
+
+    /**
+     * @param me
+     * @return
+     */
+    public final List<ModelElement> getConnectedElements(final ModelElement me) {
+        return PathFunctions.getConnectedElements(me, this, false);
+    }
+
+    /**
+     * Liefert eine Sammlung aller Elemente, die über diesen Pfad mit den übergebenen Elementen verbunden sind.
+     *
+     * @param modelElements
+     * @return
+     */
+    public final List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements) {
+        return PathFunctions.getConnectedElements(modelElements, this, false);
+    }
+
+    /**
+     * @param me
+     * @param doc
+     * @return
+     */
+    public final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc) {
+        return PathFunctions.getConnectedContainer(me, doc, this, false);
+    }
+
+    /**
+     * @param me
+     * @param doc
+     * @param forlast
+     * @return
+     */
+    public final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final boolean forlast) {
+        return PathFunctions.getConnectedContainer(me, doc, this, forlast);
+    }
 
 }

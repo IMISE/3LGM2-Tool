@@ -22,7 +22,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
+import de.imise.tool3lgm.graphtools.path.metapaths.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeNode;

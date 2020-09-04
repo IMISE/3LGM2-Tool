@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.path;
+package de.imise.tool3lgm.graphtools.path.metapaths;
 
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.BACKWARD;
 import static de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction.FORWARD;
@@ -19,9 +19,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
-import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.graphtools.view.container.NodeContainer;
@@ -131,7 +128,7 @@ public class PathFunctions {
      *            nur einmal enthalten.
      * @return
      */
-    public static final List<ModelElement> getConnectedElements(final ModelElement me, final AbstractMetaPath metaPath, final boolean multiple) {
+    static final List<ModelElement> getConnectedElements(final ModelElement me, final AbstractMetaPath metaPath, final boolean multiple) {
         List<ModelElement> modelElements = new ArrayList<>();
         modelElements.add(me);
         return PathFunctions.getConnectedElements(modelElements, metaPath, multiple);
@@ -142,7 +139,7 @@ public class PathFunctions {
      * @param metaPath
      * @return
      */
-    public static final List<ModelElement> getConnectedElements(final ModelElement me, final AbstractMetaPath metaPath) {
+    static final List<ModelElement> getConnectedElements(final ModelElement me, final AbstractMetaPath metaPath) {
         return getConnectedElements(me, metaPath, false);
     }
 
@@ -153,7 +150,7 @@ public class PathFunctions {
      * @param metaPath
      * @return
      */
-    public static final List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final AbstractMetaPath metaPath) {
+    static final List<ModelElement> getConnectedElements(final Collection<ModelElement> modelElements, final AbstractMetaPath metaPath) {
         return PathFunctions.getConnectedElements(modelElements, metaPath, false);
     }
 
@@ -198,7 +195,7 @@ public class PathFunctions {
      * @param metaPath
      * @return
      */
-    public static final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final AbstractMetaPath metaPath) {
+    static final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final AbstractMetaPath metaPath) {
         return PathFunctions.getConnectedContainer(me, doc, metaPath, false);
     }
 
@@ -209,7 +206,7 @@ public class PathFunctions {
      * @param forlast
      * @return
      */
-    public static final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final AbstractMetaPath metaPath, final boolean forlast) {
+    static final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final AbstractMetaPath metaPath, final boolean forlast) {
         if (metaPath instanceof ElementaryMetaPath) {
             List<ElementContainer> returnList = new ArrayList<>();
             if (forlast) { //das hier ist nicht sinnvoll (Elementarpfad und von den verbundenen den vorletzten = das übergebene Element), muss aber der Vollständigkeit halber sein

@@ -17,7 +17,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -169,7 +168,7 @@ public class InstanciationPathPanel extends PathConnectionPanel {
                     //das ist der Index der Edge im Pfad, ab der entfernt werden soll
                     int treePathEdgeIndex = path2disconnect[i].getPathCount() - 2;
                     ModelElement instanceElement = PathConnectionPanel.getPathModelElement(path2disconnect[i]);
-                    List<ModelElement> instanciationMasters = PathFunctions.getConnectedElements(instanceElement, lastElementaryMetaPathWithBackwardInstanciationEdge);
+                    List<ModelElement> instanciationMasters = lastElementaryMetaPathWithBackwardInstanciationEdge.getConnectedElements(instanceElement);
                     for (ModelElement instanciationMaster : instanciationMasters) {
                         panel.disconnect(instanceElement, instanciationMaster, treePathEdgeIndex + 1);
                     }

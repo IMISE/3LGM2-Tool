@@ -5,7 +5,6 @@ import java.util.Collection;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -66,7 +65,7 @@ public class MissingPathError extends AbstractPathError {
             if (subMetaPathToRealStartElement != null) {
                 //this can only be one because the subMetaPathToRealStartElement is
                 //only not null if the path is a single connection.
-                Collection<ModelElement> realStartElement = PathFunctions.getConnectedElements(missingPathStartElement, subMetaPathToRealStartElement);
+                Collection<ModelElement> realStartElement = subMetaPathToRealStartElement.getConnectedElements(missingPathStartElement);
                 if (!realStartElement.isEmpty()) {
                     missingPathStartElement = realStartElement.iterator().next();
                 }

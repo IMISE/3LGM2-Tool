@@ -39,7 +39,6 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.LGMGraphDocument;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector;
 import de.imise.tool3lgm.graphtools.path.MetaPathSelector.MetaPathSelection;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.WrapperMetaPath;
@@ -392,7 +391,7 @@ public class RedundancyAnalysis extends WindowAdapter {
         if (expandedNamePath != null) {
             StringBuilder sb = new StringBuilder(retVal);
             sb.append(" (");
-            for (ModelElement connected : PathFunctions.getConnectedElements(me, expandedNamePath)) {
+            for (ModelElement connected : expandedNamePath.getConnectedElements(me)) {
                 sb.append(getElementName(connected, analysisDefinition));
                 sb.append(", ");
             }

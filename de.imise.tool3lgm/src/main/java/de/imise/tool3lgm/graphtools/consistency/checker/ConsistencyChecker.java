@@ -34,7 +34,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
-import de.imise.tool3lgm.graphtools.path.PathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
@@ -344,7 +343,7 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
         SimpleMetaPath pathToDialogElement = es.getPathToPropertyDialogElement();
         ModelElement me = error.getModelElement();
         if (pathToDialogElement != null) {
-            Collection<ModelElement> connected = PathFunctions.getConnectedElements(me, pathToDialogElement);
+            Collection<ModelElement> connected = pathToDialogElement.getConnectedElements(me);
             if (connected.isEmpty()) {
                 return null;
             }
