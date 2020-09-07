@@ -382,9 +382,9 @@ public abstract class MetaPath extends BasiclMetaPath {
      * @return
      */
     public List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final boolean forlast) {
-        return getConnectedContainer(me, doc, forlast);
+        PathResultTreeModel resultTree = getResultTree(me);
+        return resultTree.getConnectedContainer(doc, forlast);
     }
-
     /**
      * @param startElement
      * @param endElement

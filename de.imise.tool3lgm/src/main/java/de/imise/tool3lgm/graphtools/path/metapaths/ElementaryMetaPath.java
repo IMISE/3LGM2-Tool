@@ -19,7 +19,9 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.PropertyTransferEdge;
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.path.paths.PathResultTreeModel;
+import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -628,6 +630,28 @@ public final class ElementaryMetaPath extends MetaPath {
         }
         PathResultTreeModel resultTree = getResultTree(modelElements);
         return resultTree.getConnectedElements(multiple);
+    }
+
+    @Override
+    public final List<ElementContainer> getConnectedContainer(final ModelElement me, final GraphDocument doc, final boolean forlast) {
+        List<ElementContainer> returnList = new ArrayList<>();
+        if (forlast) { //das hier ist nicht sinnvoll (Elementarpfad und von den verbundenen den vorletzten = das übergebene Element), muss aber der Vollständigkeit halber sein
+            ElementContainer ec = me.getContainer(doc);
+            if (ec != null) {
+                returnList.add(ec);
+            }
+            return returnList;
+        }
+        ElementaryMetaPath elementaryMetaPath = this;
+        Direction direction = elementaryMetaPath.getDirection();
+        Class<? extends Edge> edgeClass = elementaryMetaPath.getEdgeClass();
+        List<ElementContainer> connectedContainer = me.getConnectedContainers(doc, edgeClass, direction);
+        for (ElementContainer connected : connectedContainer) {
+            if (!returnList.contains(connected)) {
+                returnList.add(connected);
+            }
+        }
+        return returnList;
     }
 
 }
