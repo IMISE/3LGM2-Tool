@@ -17,7 +17,7 @@ import de.imise.util.io.FileHandler;
  * <p>
  * Probleme:<br>
  * Der in der Zwischenablage befindliche, durch Programme wie etwa Excel erzeugte html-String
- * ist nicht xml-konform. Damit ist das Erstellen eines {@link Document}s mittels des
+ * ist nicht xml-konform. Damit ist das Erstellen eines Documents mittels des
  * {@link SAXBuilder}s nicht möglich. Demnach gibt es auch keine Möglichkeit eine xsl-
  * Transformation auf diesem html-Inhalt durchzuführen. <br>
  * Programme wie "HTMLCleaner" oder "CyberNeko" schaffen es auch nicht, die Inhalte
@@ -28,7 +28,7 @@ import de.imise.util.io.FileHandler;
  * <p>
  * Lösungsvorschläge:
  * <li>eventuell {@link CleanerProperties} besser konfigurieren
- * <li>das {@link Document} manuell erstellen
+ * <li>das Document manuell erstellen
  * <li>einen eigenen Wandler von html in xml schreiben
  *
  * @author Frank
