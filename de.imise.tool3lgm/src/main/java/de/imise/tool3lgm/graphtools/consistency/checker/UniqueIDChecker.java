@@ -24,6 +24,11 @@ import de.imise.tool3lgm.graphtools.userfield.UserFieldTarget;
 public class UniqueIDChecker implements ConsistencyErrorChecker {
 
     @Override
+    public Class<? extends AbstractConsistencyError> getErrorType() {
+        return AbstractIDError.class;
+    }
+
+    @Override
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll, final boolean checkOnly) {
         List<AbstractConsistencyError> idErrors = new ArrayList<>();
         UserFieldDefinitions ufd = gdcoll.getUserFieldDefinitions();

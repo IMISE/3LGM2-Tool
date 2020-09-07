@@ -2,10 +2,8 @@ package de.imise.tool3lgm.graphtools.consistency.checker;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
@@ -25,7 +23,6 @@ import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractPathError;
 import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
-import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
@@ -65,7 +62,7 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
     /**
      * Maps from an error type to the checker which can find this type of errors
      */
-    private final Map<Class<? extends AbstractConsistencyError>, ConsistencyErrorChecker> errorClassToCheckerMap;
+    private final Collection<ConsistencyErrorChecker> checkers;
 
     /**
      * Die Kardinalitäts und Fehlerdefinitionen für die bei der Prüfung relevanten Kanten. Wenn
@@ -86,10 +83,10 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
      * @param changeContext
      */
     private ConsistencyChecker(final GDCollection gdcoll, final boolean changeContext) {
-        errorClassToCheckerMap = new HashMap<>();
-        errorClassToCheckerMap.put(AbstractCardinalityError.class, new EdgeCardinalityChecker());
-        errorClassToCheckerMap.put(MissingPathError.class, new MissingPathChecker());
-        errorClassToCheckerMap.put(AbstractIDError.class, new UniqueIDChecker());
+        checkers = new ArrayList<>();
+        checkers.add(new EdgeCardinalityChecker());
+        checkers.add(new MissingPathChecker());
+        checkers.add(new UniqueIDChecker());
         consistencyErrorTypeToConsistencyErrors = ArrayListMultimap.create();
         if (changeContext) {
             changeContext(gdcoll);
@@ -137,7 +134,7 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
      */
     public static void registerChecker(final Class<? extends AbstractConsistencyError> errorType, final ConsistencyErrorChecker errorTypeChecker) {
         ConsistencyChecker consistencyChecker = getConsistencyChecker();
-        consistencyChecker.errorClassToCheckerMap.put(errorType, errorTypeChecker);
+        consistencyChecker.checkers.add(errorTypeChecker);
     }
 
     /**
@@ -240,13 +237,13 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
         if (transactionManager.isDeepInTransaction()) {
             return;
         }
-        for (Class<? extends AbstractConsistencyError> errorType : errorClassToCheckerMap.keySet()) {
-            ConsistencyErrorChecker consistencyErrorChecker = errorClassToCheckerMap.get(errorType);
+        for (ConsistencyErrorChecker consistencyErrorChecker : checkers) {
             if (consistencyErrorChecker instanceof EdgeCardinalityChecker) {
                 EdgeCardinalityChecker edgeCardinalityChecker = (EdgeCardinalityChecker) consistencyErrorChecker;
                 edgeCardinalityChecker.setConsistencyDefinition(consistencyDefinition);
             }
             Collection<AbstractConsistencyError> consistencyErrors = consistencyErrorChecker.getErrors(gdcoll);
+            Class<? extends AbstractConsistencyError> errorType = consistencyErrorChecker.getErrorType();
             consistencyErrorTypeToConsistencyErrors.putAll(errorType, consistencyErrors);
         }
         firePropertyChange();

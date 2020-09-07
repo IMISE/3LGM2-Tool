@@ -21,6 +21,11 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 public class MissingPathChecker implements ConsistencyErrorChecker {
 
     @Override
+    public Class<? extends AbstractConsistencyError> getErrorType() {
+        return MissingPathError.class;
+    }
+
+    @Override
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll, final boolean checkOnly) {
         ArrayList<AbstractConsistencyError> errors = new ArrayList<>();
         MetaModel metaModel = gdcoll.getMetaModel();

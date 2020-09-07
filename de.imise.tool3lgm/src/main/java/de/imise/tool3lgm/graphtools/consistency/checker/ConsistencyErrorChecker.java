@@ -33,4 +33,9 @@ public interface ConsistencyErrorChecker {
      */
     public Collection<AbstractConsistencyError> getErrors(final GDCollection gdcoll, final boolean checkOnly);
 
+    /**
+     * @return the type of the errors returned by this checker
+     */
+    public Class<? extends AbstractConsistencyError> getErrorType();
+
 }

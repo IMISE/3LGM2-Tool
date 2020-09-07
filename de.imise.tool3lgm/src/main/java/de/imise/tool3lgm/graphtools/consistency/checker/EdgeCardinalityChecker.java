@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.consistency.ConsistencyDefinition;
+import de.imise.tool3lgm.graphtools.consistency.error.AbstractCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
 import de.imise.tool3lgm.graphtools.consistency.error.MinCardinalityError;
@@ -30,10 +31,9 @@ public class EdgeCardinalityChecker implements ConsistencyErrorChecker {
      */
     private ConsistencyDefinition consistencyDefinition;
 
-    /**
-     * @param consistencyDefinition
-     */
-    public EdgeCardinalityChecker() {
+    @Override
+    public Class<? extends AbstractConsistencyError> getErrorType() {
+        return AbstractCardinalityError.class;
     }
 
     /**
