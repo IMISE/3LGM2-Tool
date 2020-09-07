@@ -15,7 +15,7 @@ import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath.InvalidityCheckResul
 import de.imise.util.ReflectionUtils;
 import de.imise.util.collections.CollectionUtils;
 
-public abstract class BasiclMetaPath extends MetaModelSpecificAdapter {
+public abstract class BasicMetaPath extends MetaModelSpecificAdapter {
 
     /**
      * Leere Elementarpfadliste
@@ -66,7 +66,7 @@ public abstract class BasiclMetaPath extends MetaModelSpecificAdapter {
     /**
      * @param metaModel
      */
-    public BasiclMetaPath(final MetaModel metaModel) {
+    public BasicMetaPath(final MetaModel metaModel) {
         this(metaModel, null);
     }
 
@@ -75,7 +75,7 @@ public abstract class BasiclMetaPath extends MetaModelSpecificAdapter {
      * @param name
      *            Anzeigenamen
      */
-    public BasiclMetaPath(final MetaModel metaModel, final String name) {
+    public BasicMetaPath(final MetaModel metaModel, final String name) {
         this(metaModel, (Class<? extends ModelElement>) null, (Class<? extends ModelElement>) null, name);
     }
 
@@ -84,7 +84,7 @@ public abstract class BasiclMetaPath extends MetaModelSpecificAdapter {
      * @param startElementClass
      * @param endElementClass
      */
-    public BasiclMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
+    public BasicMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass) {
         this(metaModel, startElementClass, endElementClass, null);
 
     }
@@ -95,7 +95,7 @@ public abstract class BasiclMetaPath extends MetaModelSpecificAdapter {
      * @param endElementClass
      * @param name
      */
-    public BasiclMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
+    public BasicMetaPath(final MetaModel metaModel, final Class<? extends ModelElement> startElementClass, final Class<? extends ModelElement> endElementClass, final String name) {
         this(metaModel, startElementClass != null ? ImmutableSet.of(startElementClass) : null, endElementClass != null ? ImmutableSet.of(endElementClass) : null, name);
 
     }
@@ -106,7 +106,7 @@ public abstract class BasiclMetaPath extends MetaModelSpecificAdapter {
      * @param endElementClasses
      * @param name
      */
-    public BasiclMetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
+    public BasicMetaPath(final MetaModel metaModel, final Set<Class<? extends ModelElement>> startElementClasses, final Set<Class<? extends ModelElement>> endElementClasses, final String name) {
         super(metaModel);
         this.metaModel = metaModel;
         this.startElementClasses = CollectionUtils.ensureImmutable(startElementClasses);
