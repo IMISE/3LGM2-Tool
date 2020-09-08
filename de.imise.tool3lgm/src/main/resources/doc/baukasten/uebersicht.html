@@ -274,21 +274,43 @@ Unter diesem Men&uuml;punkt befinden sich einige Funktionen zur Arbeit mit Teilm
 <h3><a name="analyse">Analyse</a></h3>
 <table border="1" bordercolor="Silver">
 	<tr valign="TOP">
-		<td>Verzeichnis</td>
-		<td>&Ouml;ffnet den Analyseverzeichnisdialog. Zum Umgang mit der Modellanalyse und dem
-		<a href="analyse.html#verzeichnis">Analyseverzeichnisdialog</a> lesen Sie bitte 
-		unter <a href="analyse.html">Modellanalyse</a>.</td>
+		<td>Repository</td>
+		<td>zeigt eine Auflistung der vordefinierten Analysen.</td>
 	</tr>
 	<tr valign="TOP">
-		<td>Dialog</td>
-		<td>&Ouml;ffnet den Analysedialog. Zum Umgang mit der Modellanalyse und dem
-		<a href="analyse.html#dialog">Analysedialog</a> lesen Sie bitte 
-		unter <a href="analyse.html">Modellanalyse</a>.</td>
+		<td>Editor</td>
+		<td>&Ouml;ffnet einen Dialog zur Erzeugung neuer Analysen.</td>
 	</tr>
 	<tr valign="TOP">
 		<td>Analyseergebnis zur&uuml;cksetzen</td>
-		<td>&Uuml;ber diesen Men&uuml;punkt k&ouml;nnen Sie das Analyseergebnis, welches normalerweise
+		<td>&Uuml;ber diesen Men&uuml;punkt k&ouml;nnen Sie das Analyseergebnis, welches auch
 		direkt im Modell angezeigt wird, zur&uuml;cksetzen.</td>
+	</tr>
+<tr valign="TOP">
+		<td>F&uuml;r Analyseergebnis neues Teilmodell anlegen</td>
+		<td>Wenn diese Option ausgew&auml;hlt ist, wird f&uuml;r jedes Analyseergebnis ein neues Teilmodell
+		angelegt. Vor dem Start der Analyse werden Sie aufgefordert einen neuen Namen f&uuml;r das entstehende Modell zu vergeben.<br>
+		Mehr zum Thema <a href="analyse.html">Analyse</a>.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Analysefarbe w&auml;hlen</td>
+		<td>hier k&ouml;nnen Sie die Farbe der Analyse ausw&auml;len </td>
+	</tr>
+	<tr valign="TOP">
+		<td>Redundanzanalyse</td>
+		<td>bei diesem Men&uuml;punkt, werden die Analysen auf Redundanz gepr&uuml;ft</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Redundanz von Aufgaben bez&uuml;glich Anwendungsbausteinkonfigurationen</td>
+		<td>hier werden die Redundanz von Aufgaben bez&uuml;glich Anwendungsbausteinkonfigurationen angezeigt</td>
+	</tr>
+<tr valign="TOP">
+		<td>Redundanz von Objekttypen bez&uuml;glich Logische Speicher</td>
+		<td>hier werden die Redundanz von Objekttypen bez&uuml;glich Logische Speicher angezeigt</td>
+	</tr>
+	<tr valign="TOP">
+		<td>Daten Verf&uuml;gbarkeit</td>
+		<td>hier werden die Daten auf Verf&uuml;gbarkeit geprüft </td>
 	</tr>
 </table>
 </p>
@@ -297,47 +319,40 @@ Unter diesem Men&uuml;punkt befinden sich einige Funktionen zur Arbeit mit Teilm
 <h3><a name="optionen">Optionen</a></h3>
 <table border="1" bordercolor="Silver">
 	<tr valign="TOP">
-		<td nowrap>Grafik-Eigenschaften...</td>
+		<td nowrap>Allgemein</td>
+		<td>&Ouml;ffnet einen Dialog, in dem Sie einige allgemeine Einstellungen vornehmen k&ouml;nnen.</td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Modell-Browser</td>
+		<td>&Ouml;ffnet einen Dialog, in dem Sie einige Einstellung zur Darstellung des Modellbrowsers
+		vornehmen k&ouml;nnen.</td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Grafik</td>
 		<td>&Ouml;ffnet einen Dialog, in dem Sie einige Einstellung zur Darstellung der Grafiken im Dokumentfenster
 		vornehmen k&ouml;nnen.</td>
 	</tr>
 	<tr valign="TOP">
-		<td>Ist-Teil-von-Beziehungen im Browser hierarchisch anzeigen</td>
-		<td>Ist diese Funktion ausgew&auml;hlt, so werden untergeordnete Teile eines Bausteins im Modellbrowser als
-		Unterpunkte des Bausteins dargestellt. Dies funktioniert allerdings nur dann, wenn Super- und Subelement vom gleichen Elemententyp sind.</td>
+		<td>RMI - Eigenschaften</td>
+		<td></td>
 	</tr>
 	<tr valign="TOP">
-		<td nowrap>Vergr&ouml;berung kennzeichnen</td>
-		<td>Wenn Sie Vergr&ouml;berung und Verfeinerung in Ihrem Modell verwenden (siehe auch 
-		<a href="../modell/modell_grobFein.html">Vergr&ouml;bern und Verfeinern eines Modells</a>), dann k&ouml;nnen
-		Sie einen verfeinerten Baustein zuklappen. 
-		Ist die Option Vergr&ouml;berung kennzeichnen ausgew&auml;hlt, so wird unter dem Namen des zugeklappten Bausteins
-		ein <i>+</i> angezeigt. Dieses <i>+</i> weist nun darauf hin, dass es sich hierbei um einen vergr&ouml;berten Baustein handelt,
-		dessen verfeinerte Teile durch aufklappen des Bausteins sichtbar gemacht werden k&ouml;nnen.</td>
+		<td nowrap>Standard Modelltyp festlegen...</td>
+		<td>&Ouml;ffnet einen Dialog, wo Sie entscheiden k&ouml;nnen, welcher Modelltyp gebraucht wird.</td>
 	</tr>
 	<tr valign="TOP">
 		<td nowrap>Rahmen um Textfelder anzeigen</td>
 		<td>Wenn Sie Textfelder angelegt haben k&ouml;nnen Sie mit dieser Option
 		festlegen, ob ein Rahmen um die Textfelder angezeigt werden soll.</td>
 	</tr>
+	
 	<tr valign="TOP">
-		<td>F&uuml;r Analyseergebnis neues Teilmodell anlegen</td>
-		<td>Wenn diese Option ausgew&auml;hlt ist, wird f&uuml;r jedes Analyseergebnis ein neues Teilmodell
-		angelegt. Vor dem Start der Analyse werden Sie aufgefordert einen neuen Namen f&uuml;r das entstehende Modell zu vergeben.<br>
-		Mehr zum Thema <a href="analyse.html">Analyse</a>.</td>
+		<td>Sprache (Language)</td>
+		<td>hier w&auml;hlen Sie Ihre beliebte Sprache.</td>
 	</tr>
 	<tr valign="TOP">
-		<td>letzte Befehle in Kontextmen&uuml;s anh&auml;ngen</td>
-		<td>Wenn diese Option ausgew&auml;hlt ist, so werden die letzten Befehle, die Sie aus einem 
-		Kontextmen&uuml; aufgerufen haben haben, an dieses Kontextmen&uuml; angehangen. Dadurch k&ouml;nnen
-		Sie Ihre letzten Befehle schnell wiederholen.</td>
-	</tr>
-	<tr valign="TOP">
-		<td>Dateisperren benutzen</td>
-		<td>Mit dieser Funktion k&ouml;nnen Sie sichern, dass Sie der einzige Nutzer des ge&ouml;ffneten Modells sind.
-		Aktivieren Sie dazu zuerst die Option Dateisperren benutzen und &ouml;ffnen Sie dann die Datei, mit der Sie arbeiten wollen.
-		Wenn nun ein anderer Nutzer versucht, auf die von Ihnen ge&ouml;ffnete Datei zuzugreifen, wird ihm der Zugriff verweigert. Sie
-		k&ouml;nnen Ihre Datei nur durch schlie&szlig;en des Modells (der Datei) wieder freigeben.</td>
+		<td>Experten Modus</td>
+		<td>Mit dieser Funktion werden Ihnen zus&auml;tzlichen Elemente im Modell angezeigt.</td>
 	</tr>
 </table>
 </p>
@@ -346,7 +361,19 @@ Unter diesem Men&uuml;punkt befinden sich einige Funktionen zur Arbeit mit Teilm
 <h3><a name="extras">Extras</a></h3>
 <table border="1" bordercolor="Silver">
 	<tr valign="TOP">
-		<td>send- und empfangbare ETNT-Komb. automatisch zu Kommunikationsbez. zuweisen</td>
+		<td nowrap>Benutzerdefinierte Eigenschaftsfelder...</td>
+		<td></td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Attribut - Editor...</td>
+		<td>&Ouml;ffnet einen Dialog, in dem Sie Attributen editieren k&ouml;nnen.</td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Kennzahlberechnung einschalten </td>
+		<td>hiermit k&ouml;nnen die Kennzahlberechnung einschalten.</td>
+	</tr>
+	<tr valign="TOP">
+		<td>ETNT-Kombinationen automatisch zuweisen</td>
 		<td>Bei Auswahl dieser Option werden die ETNT-Kombinationen der Schnittstellen automatisch den angeschlossenen
 		Kommunikationsbeziehungen zugewiesen. Dabei gilt, dass jeder Kommunikationsbeziehung genau die ETNT-Beziehungen zugewiesen
 		werden, f&uuml;r die gilt, dass die Schnittstelle, von der die Kommunikationsbeziehung ausgeht, diese ETNT-Kombination sendet 
@@ -359,6 +386,10 @@ Unter diesem Men&uuml;punkt befinden sich einige Funktionen zur Arbeit mit Teilm
 		<i>Anmerkung: In &auml;lteren Versionen des 3LGM bestand noch keine M&ouml;glichkeit Kommunikationsverbindungen ETNT-Kombinationen 
 		zuzuweisen. Durch automatische Zuweisung der ETNT-Kombinationen zu den Kommunikationsbeziehungen haben k&ouml;nnen Sie diese fehlenden
 		Eintragungen auf schnellem Wege erzeugen.</i></td>
+	</tr>
+	<tr valign="TOP">
+		<td nowrap>Plugin</td>
+		<td>&Ouml;ffnet eine Auswahl von Plugins.</td>
 	</tr>
 </table>	
 </p>
@@ -458,21 +489,21 @@ Die Kn&ouml;pfe der Standardsymbolleiste haben folgende Funktion:
 		</td>
 	</tr>
 	<tr>
-		<td valign="TOP"><img src="../bilder/standardsymbolleiste/fe.gif" width=24 height=24 border=0 alt=""></td>
+		<td valign="TOP"><img src="../bilder/standardsymbolleiste/fachlich.png" width=35 height=33 border=0 alt=""></td>
 		<td>
 		<h3><a name="fachlich">Fachliche Ebene</a></h3>
 		W&auml;hlt die Fachliche Ebene aus.
 		</td>
 	</tr>
 	<tr>
-		<td valign="TOP"><img src="../bilder/standardsymbolleiste/lwe.gif" width=24 height=24 border=0 alt=""></td>
+		<td valign="TOP"><img src="../bilder/standardsymbolleiste/logisch.png" width=35 height=35 border=0 alt=""></td>
 		<td>
 		<h3><a name="logisch">Logische Werkzeugebene</a></h3>
 		W&auml;hlt die Logische Werkzeugebene aus.
 		</td>
 	</tr>
 	<tr>
-		<td valign="TOP"><img src="../bilder/standardsymbolleiste/pwe.gif" width=24 height=24 border=0 alt=""></td>
+		<td valign="TOP"><img src="../bilder/standardsymbolleiste/physisch.png" width=34 height=32 border=0 alt=""></td>
 		<td>
 		<h3><a name="physisch">Physische Werkzeugebene</a></h3>
 		W&auml;hlt die Physische Werkzeugebene aus.
