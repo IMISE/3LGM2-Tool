@@ -1,11 +1,9 @@
 package de.imise.tool3lgm.graphtools.consistency;
 
-import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 
 /**
  * @author AXS (20.03.2008)
@@ -42,45 +40,13 @@ public class ErrorSolution {
     private final SimpleMetaPath panelMetaPath;
 
     /**
-     * @param metaModel
-     * @param targetClass
-     * @param edgeClass
-     * @param pathToPropertyDialogElement
-     * @param edgeClass an edge class that is equivalent to the metapath that must be
-     *            {@link MetaPath#isAssignable(MetaPath)} to the MetaPath of the panel
-     *            which should be opened to solve the error
-     */
-    public ErrorSolution(final MetaModel metaModel, final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final MetaPath pathToPropertyDialogElement, final Class<? extends Edge> egdeClass) {
-        this(metaModel, targetClass, edgeClass, pathToPropertyDialogElement, createPanelMetaPath(metaModel, pathToPropertyDialogElement, egdeClass));
-    }
-
-    /**
-     * Creates a {@link SimpleMetaPath} from the end class of the given
-     * pathToPropertyDialogElement as the start class of the given edge
-     * class over the edge class to the end class of the edge class.
-     * The direction of the edge class is derived by the start class.
-     *
-     * @param metaModel
-     * @param pathToPropertyDialogElement
-     * @param edgeClass
-     * @return
-     */
-    public static SimpleMetaPath createPanelMetaPath(final MetaModel metaModel, final MetaPath pathToPropertyDialogElement, final Class<? extends Edge> edgeClass) {
-        Class<? extends ModelElement> startClass = pathToPropertyDialogElement.getEndClass();
-        SimpleMetaPath panelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, startClass, ModelElement.class, edgeClass);
-        return panelMetaPath;
-    }
-
-    /**
-     * @param metaModel
-     * @param targetClass
      * @param edgeClass
      * @param pathToPropertyDialogElement
      * @param panelMetaPath the metapath that must be {@link MetaPath#isAssignable(MetaPath)}
      *            to the MetaPath of the panel which should be opened to solve the error
      */
-    public ErrorSolution(final MetaModel metaModel, final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final MetaPath pathToPropertyDialogElement, final SimpleMetaPath panelMetaPath) {
-        this.targetClass = targetClass;
+    public ErrorSolution(final Class<? extends Edge> edgeClass, final MetaPath pathToPropertyDialogElement, final SimpleMetaPath panelMetaPath) {
+        targetClass = pathToPropertyDialogElement.getStartClass();
         this.edgeClass = edgeClass;
         this.pathToPropertyDialogElement = pathToPropertyDialogElement;
         this.panelMetaPath = panelMetaPath;

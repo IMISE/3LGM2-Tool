@@ -36,7 +36,7 @@ public class TLGMServiceErrorSolutionLibrary extends ErrorSolutionLibrary {
 
         pathToPropertyDialogElement = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, IheActorInstance.class, ApplicationSystem.class, ApplicationSystem_IheActorInstance_Edge.class);
         panelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
-        ErrorSolution solution1 = new ErrorSolution(metaModel, IheActorInstance.class, IheActor_IheActor_MustBeGroupedWith_Edge.class, pathToPropertyDialogElement, panelMetaPath);
+        ErrorSolution solution1 = new ErrorSolution(IheActor_IheActor_MustBeGroupedWith_Edge.class, pathToPropertyDialogElement, panelMetaPath);
 
         return ImmutableList.of(solution1);
     }
