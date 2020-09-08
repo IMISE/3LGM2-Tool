@@ -185,38 +185,6 @@ public class SimpleMetaPath extends SequenceMetaPath {
     }
 
     /**
-     * @param other
-     * @return <code>true</code> if this metaPath contains the given other metapath as a sub metapath or is equals.
-     */
-    public boolean equalsOrContainsSubPath(final SimpleMetaPath other) {
-        if (this.equals(other)) {
-            return true;
-        }
-        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
-        List<ElementaryMetaPath> otherElementaryMetaPaths = other.getElementaryMetaPaths();
-        int elementaryMetaPathsCount = elementaryMetaPaths.size();
-        int otherElementaryMetaPathsCount = otherElementaryMetaPaths.size();
-        for (int i = 0; i < elementaryMetaPathsCount; i++) {
-            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
-            if (i + otherElementaryMetaPathsCount > elementaryMetaPathsCount) {
-                return false;
-            }
-            boolean containsSubPath = true;
-            for (int j = 0; j < otherElementaryMetaPathsCount; j++) {
-                ElementaryMetaPath otherElementaryMetaPath = otherElementaryMetaPaths.get(j);
-                if (!elementaryMetaPath.equals(otherElementaryMetaPath)) {
-                    containsSubPath = false;
-                    break;
-                }
-            }
-            if (containsSubPath) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Liefert den Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
      * super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
      *
