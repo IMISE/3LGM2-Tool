@@ -1,6 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dialog;
 import java.awt.Frame;
 import java.util.List;
@@ -10,8 +11,11 @@ import javax.swing.JTabbedPane;
 
 import com.google.common.collect.ImmutableList;
 
+import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel;
 import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.panel.MultiPanelElementDialogPanel;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**
@@ -171,6 +175,54 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     public ElementDialogPanel getSelectedElementDialogPanel() {
         Component selectedComponent = tabbedPane.getSelectedComponent();
         return selectedComponent instanceof ElementDialogPanel ? (ElementDialogPanel) selectedComponent : null;
+    }
+
+    /**
+     * @param metaPath
+     */
+    public final int selectTab(final MetaPath metaPath) {
+        Container panel = getPanel(metaPath);
+        while (panel != null) {
+            Container parent = panel.getParent();
+            if (parent == tabbedPane) {
+                tabbedPane.setSelectedComponent(panel);
+                return tabbedPane.getSelectedIndex();
+            }
+            panel = parent;
+        }
+        return -1;
+    }
+
+    /**
+     * @param metaPath
+     * @return the panel with the given metapath
+     */
+    public AbstractPathConnectionPanel getPanel(final MetaPath metaPath) {
+        return getPanel(tabbedPane, metaPath);
+    }
+
+    /**
+     * @param pane
+     * @param metaPath
+     * @return
+     */
+    private static AbstractPathConnectionPanel getPanel(final Container pane, final MetaPath metaPath) {
+        for (int i = 0; i < pane.getComponentCount(); i++) {
+            Component comp = pane.getComponent(i);
+            if (comp instanceof AbstractPathConnectionPanel) {
+                AbstractPathConnectionPanel panel = (AbstractPathConnectionPanel) comp;
+                if (panel.hasMetaPath(metaPath)) {
+                    return panel;
+                }
+            } else if (comp instanceof MultiPanelElementDialogPanel) {
+                MultiPanelElementDialogPanel panel = (MultiPanelElementDialogPanel) comp;
+                AbstractPathConnectionPanel subpanel = getPanel(panel, metaPath);
+                if (subpanel != null) {
+                    return subpanel;
+                }
+            }
+        }
+        return null;
     }
 
     /**

@@ -376,23 +376,21 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
             ImageIcon icon = Tool3lgmConstants.getIcon("error.gif");
             if (es == null) {
                 AbstractPathError pathError = (AbstractPathError) error;
-                MetaPath elementaryMetaPath = pathError.getMetaPath();
+                MetaPath metaPath = pathError.getMetaPath();
                 ModelElement me = pathError.getModelElement();
                 ElementPropertyDialog dialog = me.getPropertyDialog();
-                Class<? extends ModelElement> errorConnectedClass = elementaryMetaPath.getEndClass();
-                ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
-                String tabName = elementaryMetaPath.isSingleConnection() ? elementsNameBuilder.getDisplayableName(errorConnectedClass) : elementsNameBuilder.getDisplayablePluralName(errorConnectedClass);
-                //das folgende haut nicht hin. Die Tabs werden anscheinend immer doppelt angezeigt bzw. neu hinzugefügt, auch wenn ein identischer bereits ex.
-                int existingTabIndex = dialog.selectTab(tabName, PathConnectionPanel.class);
-                if (existingTabIndex < 0) {
+                int selectedTabIndex = dialog.selectTab(metaPath);
+                if (selectedTabIndex < 0) {
+                    Class<? extends ModelElement> errorConnectedClass = metaPath.getEndClass();
+                    ElementsNameBuilder elementsNameBuilder = gdcoll.getElementsNameBuilder();
+                    String tabName = metaPath.isSingleConnection() ? elementsNameBuilder.getDisplayableName(errorConnectedClass) : elementsNameBuilder.getDisplayablePluralName(errorConnectedClass);
                     //if the maximum cardinality is exceeded -> show always a multiple connection panel
-                    dialog.addPathConnectionPanel(elementaryMetaPath, error instanceof MaxCardinalityError);
+                    dialog.addPathConnectionPanel(metaPath, error instanceof MaxCardinalityError);
                     dialog.setLastTabIcon(icon);
                     dialog.setLastTabTitle(tabName);
                     dialog.selectTab(tabName, PathConnectionPanel.class);
                 } else {
-                    dialog.setTabIcon(existingTabIndex, icon);
-                    dialog.setTabTitle(existingTabIndex, tabName);
+                    dialog.setTabIcon(selectedTabIndex, icon);
                 }
                 dialog.showDialog();
             } else {

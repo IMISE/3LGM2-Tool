@@ -289,6 +289,14 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     }
 
     /**
+     * @param metaPath
+     * @return
+     */
+    public boolean hasMetaPath(final MetaPath metaPath) {
+        return this.metaPath.isAssignable(metaPath);
+    }
+
+    /**
      * @return
      */
     public Class<? extends Edge> getLastEdgeClassInPath() {
