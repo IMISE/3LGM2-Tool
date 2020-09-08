@@ -6,7 +6,6 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
-import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
@@ -20,6 +19,7 @@ import de.imise.tool3lgm.metamodel.original.node.ABKonfiguration;
 import de.imise.tool3lgm.metamodel.original.node.Anwendungsbaustein;
 import de.imise.tool3lgm.metamodel.original.node.Aufgabe;
 import de.imise.tool3lgm.metamodel.original.node.DBKonfiguration;
+import de.imise.tool3lgm.metamodel.original.node.PhysischerDVBaustein;
 
 /**
  * @author AXS (24.03.2020)
@@ -36,15 +36,19 @@ public class TLGMOriginalErrorSolutionLibrary extends ErrorSolutionLibrary {
     protected final Collection<ErrorSolution> getErrorSolutions() {
         MetaModel metaModel = getMetaModel();
         SimpleMetaPath pathToPropertyDialogElement;
+        SimpleMetaPath panelMetaPath;
 
         pathToPropertyDialogElement = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ABKonfiguration.class, Aufgabe.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
-        ErrorSolution solution1 = new ErrorSolution(metaModel, ABKonfiguration.class, AwbAwbkVerbindung.class, pathToPropertyDialogElement, PathConnectionPanel.class, "Anwendungsbaustein_p");
+        panelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Aufgabe.class, Anwendungsbaustein.class, AufAufOrgVerbindung.class, AwbkAufOrgVerbindung.class, AwbAwbkVerbindung.class);
+        ErrorSolution solution1 = new ErrorSolution(metaModel, ABKonfiguration.class, AwbAwbkVerbindung.class, pathToPropertyDialogElement, panelMetaPath);
 
         pathToPropertyDialogElement = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ABKonfiguration.class, Anwendungsbaustein.class, AwbAwbkVerbindung.class);
-        ErrorSolution solution2 = new ErrorSolution(metaModel, ABKonfiguration.class, AwbkAufOrgVerbindung.class, pathToPropertyDialogElement, PathConnectionPanel.class, "Aufgabe_p");
+        panelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Anwendungsbaustein.class, Aufgabe.class, AwbAwbkVerbindung.class, AwbkAufOrgVerbindung.class, AufAufOrgVerbindung.class);
+        ErrorSolution solution2 = new ErrorSolution(metaModel, ABKonfiguration.class, AwbkAufOrgVerbindung.class, pathToPropertyDialogElement, panelMetaPath);
 
         pathToPropertyDialogElement = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, DBKonfiguration.class, Anwendungsbaustein.class, PdvbkAwbVerbindung.class);
-        ErrorSolution solution3 = new ErrorSolution(metaModel, DBKonfiguration.class, PdvbPdvbkVerbindung.class, pathToPropertyDialogElement, PathConnectionPanel.class, "PhysischerDVBaustein_p");
+        panelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, Anwendungsbaustein.class, PhysischerDVBaustein.class, PdvbkAwbVerbindung.class, PdvbPdvbkVerbindung.class);
+        ErrorSolution solution3 = new ErrorSolution(metaModel, DBKonfiguration.class, PdvbPdvbkVerbindung.class, pathToPropertyDialogElement, panelMetaPath);
         return ImmutableList.of(solution1, solution2, solution3);
     }
 

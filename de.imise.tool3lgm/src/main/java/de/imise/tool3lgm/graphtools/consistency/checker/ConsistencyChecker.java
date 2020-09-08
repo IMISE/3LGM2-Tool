@@ -24,14 +24,13 @@ import de.imise.tool3lgm.graphtools.consistency.error.AbstractIDError;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractPathError;
 import de.imise.tool3lgm.graphtools.consistency.error.MaxCardinalityError;
 import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.LGMChangeListenerSimple;
 import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.userfield.dialog.valueinput.panel.PropertyDialogUserFieldPanel;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -387,7 +386,7 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
                     dialog.addPathConnectionPanel(metaPath, error instanceof MaxCardinalityError);
                     dialog.setLastTabIcon(icon);
                     dialog.setLastTabTitle(tabName);
-                    dialog.selectTab(tabName, PathConnectionPanel.class);
+                    dialog.selectLastTab();
                 } else {
                     dialog.setTabIcon(selectedTabIndex, icon);
                 }
@@ -399,9 +398,8 @@ public final class ConsistencyChecker extends PropertyChangeHandler implements L
                 }
                 for (ModelElement connected : solutionPropertyDialogElement) {
                     ElementPropertyDialog dialog = connected.getPropertyDialog();
-                    String panelName = es.getPanelName();
-                    Class<? extends ElementDialogPanel> panelClass = es.getPanelClass();
-                    int selectedTabIndex = dialog.selectTab(panelName, panelClass);
+                    SimpleMetaPath panelMetaPath = es.getPanelMetaPath();
+                    int selectedTabIndex = dialog.selectTab(panelMetaPath);
                     dialog.setTabIcon(selectedTabIndex, icon);
                     dialog.showDialog();
                 }

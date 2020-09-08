@@ -131,23 +131,24 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
     }
 
     /**
-     * Bringt den Tab mit dem angegebenen Titel in den Vordergrund, wenn zusätzlich noch die
-     * übergebene Klasse mit der Klasse der Componente in dem Tab zuweisungskompatibel ist. Die
-     * Klasse der im Tabpanel enthaltenen Componente muss die gleiche oder eine Unterklasse der
-     * übergebenen Klasse sein.
-     *
-     * @param title Titel des zu selektierenden Tabs. Wird <code>null</code> übergeben, wird der
-     *            erstbeste passende Tab herausgesucht
-     * @param tabComponentClass Oberklasse der Komponente in dem zu selektierenden Tab
-     * @return Index des Tabs, wenn ein Tab der angegebenen Art gefunden und in den Vordergund
-     *         geracht werden konnte
+     * Selects the last tab
      */
-    public int selectTab(final String title, final Class<? extends Component> tabComponentClass) {
+    public void selectLastTab() {
+        tabbedPane.setSelectedIndex(tabbedPane.getTabCount() - 1);
+
+    }
+
+    /**
+     * Selects the first tab of the contained tabbed pane where the component
+     * of this tab is an instance of the given class.
+     *
+     * @param tabComponentClass
+     * @return index of the selected tab
+     * @see #selectTab(String, Class)
+     */
+    public int selectTab(final Class<? extends Component> tabComponentClass) {
         for (int i = 0; i < tabbedPane.getComponentCount(); i++) {
             Component comp = tabbedPane.getComponent(i);
-            if (title != null && !tabbedPane.getTitleAt(i).equals(title)) {
-                continue;
-            }
             if (!tabComponentClass.isAssignableFrom(comp.getClass())) {
                 continue;
             }
@@ -155,18 +156,6 @@ public abstract class AbstractTabbedPropertyDialog extends AbstractPropertyDialo
             return i;
         }
         return -1;
-    }
-
-    /**
-     * Selects the first tab of the contained tabbed pane where the component of this tab is
-     * an instance of the given class.
-     *
-     * @param tabComponentClass
-     * @return
-     * @see #selectTab(String, Class)
-     */
-    public int selectTab(final Class<? extends Component> tabComponentClass) {
-        return selectTab(null, tabComponentClass);
     }
 
     /**

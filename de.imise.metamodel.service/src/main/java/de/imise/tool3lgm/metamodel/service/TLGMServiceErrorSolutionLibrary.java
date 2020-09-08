@@ -6,14 +6,15 @@ import com.google.common.collect.ImmutableList;
 
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolution;
 import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
-import de.imise.tool3lgm.graphtools.dialog.panel.InstanciationPathPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPathCreator;
 import de.imise.tool3lgm.metamodel.service.edge.ApplicationSystem_IheActorInstance_Edge;
+import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActorInstance_Edge;
 import de.imise.tool3lgm.metamodel.service.edge.IheActor_IheActor_MustBeGroupedWith_Edge;
 import de.imise.tool3lgm.metamodel.service.node.ApplicationSystem;
+import de.imise.tool3lgm.metamodel.service.node.IheActor;
 import de.imise.tool3lgm.metamodel.service.node.IheActorInstance;
 
 /**
@@ -31,9 +32,11 @@ public class TLGMServiceErrorSolutionLibrary extends ErrorSolutionLibrary {
     protected final Collection<ErrorSolution> getErrorSolutions() {
         MetaModel metaModel = getMetaModel();
         SimpleMetaPath pathToPropertyDialogElement;
+        SimpleMetaPath panelMetaPath;
 
         pathToPropertyDialogElement = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, IheActorInstance.class, ApplicationSystem.class, ApplicationSystem_IheActorInstance_Edge.class);
-        ErrorSolution solution1 = new ErrorSolution(metaModel, IheActorInstance.class, IheActor_IheActor_MustBeGroupedWith_Edge.class, pathToPropertyDialogElement, InstanciationPathPanel.class, "IheActor_p");
+        panelMetaPath = SimpleMetaPathCreator.createSimpleMetaPath(metaModel, ApplicationSystem.class, IheActor.class, ApplicationSystem_IheActorInstance_Edge.class, IheActor_IheActorInstance_Edge.class);
+        ErrorSolution solution1 = new ErrorSolution(metaModel, IheActorInstance.class, IheActor_IheActor_MustBeGroupedWith_Edge.class, pathToPropertyDialogElement, panelMetaPath);
 
         return ImmutableList.of(solution1);
     }
