@@ -374,6 +374,42 @@ public final class ElementaryMetaPath extends MetaPath {
         return type;
     }
 
+    /**
+     * @param other
+     * @return only <code>true</code> if this and the other metapath have an assignable
+     *         start class, an assignable end class, an assignable edge class, the same
+     *         direction and the same type. Assignable only means that one of the class
+     *         must be a subclass of the other (which is sub and which super dosn't
+     *         matters).
+     */
+    @Override
+    public boolean isAssignable(final MetaPath otherMetaPath) {
+        List<ElementaryMetaPath> elementaryMetaPaths = otherMetaPath.getElementaryMetaPaths();
+        if (elementaryMetaPaths.size() != 1) {
+            return false;
+        }
+        ElementaryMetaPath other = elementaryMetaPaths.get(0);
+        if (!isStartClass(other.startClass)) {
+            return false;
+        }
+        if (!isEndClass(other.endClass)) {
+            return false;
+        }
+        if (!hasEdgeClass(other.edgeClass)) {
+            return false;
+        }
+        if (!hasDirection(other.direction)) {
+            return false;
+        }
+        if (connectionState != other.connectionState) {
+            return false;
+        }
+        if (type != other.type) {
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;

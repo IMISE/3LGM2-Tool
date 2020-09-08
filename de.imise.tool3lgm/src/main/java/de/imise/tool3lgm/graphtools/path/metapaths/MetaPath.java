@@ -313,6 +313,20 @@ public abstract class MetaPath extends BasicMetaPath {
      */
     public abstract boolean containsPropertyTransferEdge();
 
+    /**
+     * @param other
+     * @return only <code>true</code> if this and the other metapath have an assignable
+     *         start class, an assignable end class, an assignable edge class, the same
+     *         direction and the same type. Assignable only means that one of the class
+     *         must be a subclass of the other (which is sub and which super dosn't
+     *         matters).
+     */
+    public boolean isAssignable(final MetaPath other) {
+        //Maybe there would be an useful expression here for general MetaPath too, but
+        //we only need this function for SimpleMetaPaths and ElementaryMetaPaths
+        return false;
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     //getConnectedElements(...) + getConnectedContainer(...) + getResultTree //
     ///////////////////////////////////////////////////////////////////////////

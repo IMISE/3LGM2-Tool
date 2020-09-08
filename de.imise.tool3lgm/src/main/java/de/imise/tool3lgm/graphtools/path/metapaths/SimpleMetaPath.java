@@ -184,6 +184,24 @@ public class SimpleMetaPath extends SequenceMetaPath {
         return new SimpleMetaPath(subMetaPathsArray);
     }
 
+    @Override
+    public boolean isAssignable(final MetaPath other) {
+        List<ElementaryMetaPath> elementaryMetaPaths = getElementaryMetaPaths();
+        List<ElementaryMetaPath> otherElementaryMetaPaths = other.getElementaryMetaPaths();
+        int subMetaPathCount = elementaryMetaPaths.size();
+        if (subMetaPathCount != otherElementaryMetaPaths.size()) {
+            return false;
+        }
+        for (int i = 0; i < subMetaPathCount; i++) {
+            ElementaryMetaPath elementaryMetaPath = elementaryMetaPaths.get(i);
+            ElementaryMetaPath otherElementaryMetaPath = otherElementaryMetaPaths.get(i);
+            if (!elementaryMetaPath.isAssignable(otherElementaryMetaPath)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     /**
      * Liefert den Index des Elementarpfadschrittes, der den Namen des Gesamtpfades festlegt. Ist er kleiner 0 läuft die Namensgenerierung über den
      * super-Namensmechanismus, der den baseResKeyOrName auswertet und wenn er damit auch nichts findet "ist verbunden mit" ausgibt.
