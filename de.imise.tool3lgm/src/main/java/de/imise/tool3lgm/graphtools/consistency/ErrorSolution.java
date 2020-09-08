@@ -4,7 +4,7 @@ import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
-import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 
 /**
  * @author AXS (20.03.2008)
@@ -32,7 +32,7 @@ public class ErrorSolution {
      * das keinen eigenen Eigenschaftsdialog hat, wie zum Beipsiel <code>AWBKonfiguration</code>.
      * Sie werden im Eigenschaftsdialog von Aufgaben angezeigt und zusammengesetzt.
      */
-    private final SimpleMetaPath pathToPropertyDialogElement;
+    private final MetaPath pathToPropertyDialogElement;
 
     /**
      * Klasse des Panels, in dem man den Fehler anzeigen bzw. beheben kann. Die Kombination aus
@@ -54,7 +54,7 @@ public class ErrorSolution {
      * @param panelClass
      * @param panelNameResKey
      */
-    public ErrorSolution(final MetaModel metaModel, final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final SimpleMetaPath pathToPropertyDialogElement, final Class<? extends ElementDialogPanel> panelClass,
+    public ErrorSolution(final MetaModel metaModel, final Class<? extends ModelElement> targetClass, final Class<? extends Edge> edgeClass, final MetaPath pathToPropertyDialogElement, final Class<? extends ElementDialogPanel> panelClass,
             final String panelNameResKey) {
         this.targetClass = targetClass;
         this.edgeClass = edgeClass;
@@ -80,7 +80,7 @@ public class ErrorSolution {
     /**
      * @return the pathToPropertyDialogElement
      */
-    public SimpleMetaPath getPathToPropertyDialogElement() {
+    public MetaPath getPathToPropertyDialogElement() {
         return pathToPropertyDialogElement;
     }
 
