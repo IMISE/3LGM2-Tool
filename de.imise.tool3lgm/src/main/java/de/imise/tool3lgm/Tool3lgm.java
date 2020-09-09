@@ -21,6 +21,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import de.imise.tool3lgm.Tool3lgmChangeListener.Tool3lgmChangeType;
 import de.imise.tool3lgm.Tool3lgmConstants.FileFilterType;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.consistency.ModelCleaner;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.dialog.ElemenPropertyDialogsContext;
@@ -311,7 +312,7 @@ public class Tool3lgm {
         collections.add(gdcoll);
         distribute(MODEL_CHANGE_MODEL_OPENED, gdcoll);
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
-        ConsistencyChecker.clearUnfixableErrors(gdcoll);
+        ErrorSolutionLibrary.clearUnfixableErrors(gdcoll);
         gdcoll.initSelectedDocByViewParameterFromFile();
         gdcoll.setUnchanged();
         System.gc();

@@ -17,7 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 
-import de.imise.tool3lgm.Static;
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
@@ -25,6 +25,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
+import de.imise.tool3lgm.gui.menu.ElementSelectionContextGenerator;
 import de.imise.util.NamedObjectContainer;
 
 /**
@@ -103,7 +104,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
             Object value = table.getValueAt(clickedRow, column);
             NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) value;
             AbstractConsistencyError error = errContainer.getObject();
-            checker.execSolution(error);
+            ErrorSolutionLibrary.execSolution(error);
         }
 
     }
@@ -127,7 +128,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         //dialog to remove the error".
         boolean solutionAvailable = false;
         for (AbstractConsistencyError error : errors) {
-            if (checker.isSolutionExecuteable(error)) {
+            if (ErrorSolutionLibrary.isSolutionExecuteable(error)) {
                 solutionAvailable = true;
                 break;
             }
@@ -137,7 +138,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     for (AbstractConsistencyError err : errors) {
-                        checker.execSolution(err);
+                        ErrorSolutionLibrary.execSolution(err);
                     }
                 }
             });
@@ -174,7 +175,7 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
                 ModelElement missingPathStartElement = missingPathError.getMissingPathStartElement();
                 SimpleMetaPath errorCorrectingCreatableMetaPath = missingPathError.getErrorCorrectingCreatableMetaPath();
                 Collection<ModelElement> missingElements = missingPathError.getMissingElements();
-                Static.contextGenerator.addConnectMenuItems(menu, missingPathStartElement, errorCorrectingCreatableMetaPath, missingElements);
+                ElementSelectionContextGenerator.addConnectMenuItems(menu, missingPathStartElement, errorCorrectingCreatableMetaPath, missingElements);
             }
 
         }

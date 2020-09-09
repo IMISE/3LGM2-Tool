@@ -11,6 +11,7 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.consistency.ErrorSolutionLibrary;
 import de.imise.tool3lgm.graphtools.consistency.checker.ConsistencyChecker;
 import de.imise.tool3lgm.graphtools.consistency.error.AbstractConsistencyError;
 import de.imise.tool3lgm.graphtools.consistency.error.MissingPathError;
@@ -66,7 +67,7 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         for (AbstractConsistencyError error : errors) {
 
             if (error instanceof MissingPathError) {
-                if (!checker.isSolutionExecuteable(error)) {
+                if (!ErrorSolutionLibrary.isSolutionExecuteable(error)) {
                     int rowCount = getRowCount();
                     setRowCount(rowCount - 1);
                     continue;
