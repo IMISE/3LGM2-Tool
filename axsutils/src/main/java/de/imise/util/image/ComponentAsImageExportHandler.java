@@ -11,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -146,17 +145,35 @@ public class ComponentAsImageExportHandler {
         int h = preferredSize.height;
 
         BigDecimal tempW = BigDecimal.valueOf(w);
-        BigDecimal tempH = BigDecimal.valueOf(h);
         BigDecimal tempSize = tempW.multiply(BigDecimal.valueOf(3)).multiply(BigDecimal.valueOf(h-1)).add(BigDecimal.valueOf(3*w));
-        System.out.println(tempSize);
 
-        if (tempSize.compareTo(BigDecimal.valueOf(2147483647)) == 1) {
-            BigDecimal scaleDown = tempSize.divide(BigDecimal.valueOf(2147483647), 8, RoundingMode.HALF_DOWN);
-            System.out.println("Scaledown" + scaleDown + " - " + w + " - " + h);
-            double zoomScale = ((ZoomableComponent) comp).getZoom() / scaleDown.doubleValue();
-            System.out.println(((ZoomableComponent) comp).getZoom());
-            System.out.println(zoomScale);
-            ((ZoomableComponent) comp).setZoom(zoomScale);
+        while (tempSize.compareTo(BigDecimal.valueOf(2147483647)) == 1) {
+            double tempWidth = w;
+            double tempHeight = h;
+            double tempRatio = tempWidth/tempHeight;
+            double maxWidth = Math.sqrt(2147483647*tempRatio/3);
+            double zoomRatio = maxWidth / tempWidth;
+            double scaleZoom = ((ZoomableComponent) comp).getZoom()*zoomRatio;
+            ((ZoomableComponent) comp).setZoom(scaleZoom);
+            preferredSize = comp.getPreferredSize();
+            w = preferredSize.width;
+            h = preferredSize.height;
+            tempSize = BigDecimal.valueOf(w).multiply(BigDecimal.valueOf(3)).multiply(BigDecimal.valueOf(h-1)).add(BigDecimal.valueOf(3*w));
+        }
+
+        long freeHeapSpace = 360000000;
+        if (tempSize.longValue() > freeHeapSpace)
+        {
+            double tempWidth = w;
+            double tempHeight = h;
+            double tempRatio = tempWidth/tempHeight;
+            double maxWidth = Math.sqrt(freeHeapSpace*tempRatio/3);
+            double maxHeight = maxWidth / tempRatio;
+            double zoomRatio = maxWidth / tempWidth;
+            double scaleZoom = ((ZoomableComponent) comp).getZoom()*zoomRatio;
+            ((ZoomableComponent) comp).setZoom(scaleZoom);
+            System.out.println(w + " - " + h);
+            System.out.println(maxWidth + " - " + maxHeight);
             preferredSize = comp.getPreferredSize();
             w = preferredSize.width;
             h = preferredSize.height;
@@ -164,9 +181,6 @@ public class ComponentAsImageExportHandler {
             tempSize = BigDecimal.valueOf(w).multiply(BigDecimal.valueOf(3)).multiply(BigDecimal.valueOf(h-1)).add(BigDecimal.valueOf(3*w));
         }
 
-        System.out.println(tempSize);
-        System.out.println(Runtime.getRuntime().freeMemory());
-        long freeHeapSpace = Runtime.getRuntime().freeMemory();
         //        if (tempSize.longValue() > freeHeapSpace)
         //        {
         //            BigDecimal scaleDown = tempSize.add(BigDecimal.valueOf(50)).divide(BigDecimal.valueOf(freeHeapSpace), 2, RoundingMode.HALF_DOWN);
