@@ -106,7 +106,7 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
      * @param error
      * @return
      */
-    private static Collection<ModelElement> getSolutionPropertyDialogElement(final AbstractConsistencyError error) {
+    private Collection<ModelElement> getSolutionPropertyDialogElement(final AbstractConsistencyError error) {
         if (error == null) {
             return null;
         }
@@ -137,7 +137,7 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
      * @param error
      * @return
      */
-    public static boolean isSolutionExecuteable(final AbstractConsistencyError error) {
+    public boolean isSolutionExecuteable(final AbstractConsistencyError error) {
         return getSolutionPropertyDialogElement(error) != null;
     }
 
@@ -145,7 +145,7 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
      * @param error
      * @return
      */
-    public static void execSolution(final AbstractConsistencyError error) {
+    public void execSolution(final AbstractConsistencyError error) {
         // 'es' ist null, wenn für den Fehler keine Solution hinterlegt wurde. Das gilt nur
         // für Fehler, für die im Eigenschaftsdialog des Elementes dann ein zusätzlicher
         // Tab angezeigt werden soll, in dem man den Fehler beheben kann
@@ -217,7 +217,7 @@ public abstract class ErrorSolutionLibrary implements MetaModelSpecific {
      * nicht, dessen Eigenschaftsdialog zur Fehlerbehebung man öffnen sollte. Deswegen darf das als
      * fehlerhaft geltende Element aber trotzdem nicht einfach gelöscht werden.
      */
-    public static void clearUnfixableErrors(final GDCollection gdcoll) {
+    public void clearUnfixableErrors(final GDCollection gdcoll) {
         ConsistencyChecker checker = new ConsistencyChecker(gdcoll, false);
         // dieses Löschen muss man nicht rückgängig machen können -> BulkMode einschalten
         boolean oldBulkMode = gdcoll.setBulkMode(true);

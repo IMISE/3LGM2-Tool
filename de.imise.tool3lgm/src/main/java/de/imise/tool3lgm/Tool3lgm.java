@@ -312,7 +312,8 @@ public class Tool3lgm {
         collections.add(gdcoll);
         distribute(MODEL_CHANGE_MODEL_OPENED, gdcoll);
         //vor dem Selektieren des aktuellen Teilmodells alle nicht behebbaren Fehler löschen
-        ErrorSolutionLibrary.clearUnfixableErrors(gdcoll);
+        ErrorSolutionLibrary errorSolutionLibrary = gdcoll.getErrorSolutionLibrary();
+        errorSolutionLibrary.clearUnfixableErrors(gdcoll);
         gdcoll.initSelectedDocByViewParameterFromFile();
         gdcoll.setUnchanged();
         System.gc();

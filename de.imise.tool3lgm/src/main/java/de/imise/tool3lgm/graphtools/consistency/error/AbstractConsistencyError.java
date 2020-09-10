@@ -1,7 +1,7 @@
 package de.imise.tool3lgm.graphtools.consistency.error;
 
-import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
-
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelDefinition;
+import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecific;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 
@@ -11,7 +11,7 @@ import de.imise.tool3lgm.graphtools.model.GDCollection;
  *
  * @author AXS (20.03.2008)
  */
-public abstract class AbstractConsistencyError extends Error {
+public abstract class AbstractConsistencyError extends Error implements MetaModelSpecific {
 
     /**
      * Suffix, der an den SimpleClassName gehängt wird, um die genaue BEschreibung des Fehlers
@@ -133,6 +133,11 @@ public abstract class AbstractConsistencyError extends Error {
      */
     public final GDCollection getCollection() {
         return gdcoll;
+    }
+
+    @Override
+    public final Class<? extends MetaModelDefinition> getMetaModelDefinitionClass() {
+        return me.getMetaModelDefinitionClass();
     }
 
     /**

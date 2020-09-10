@@ -104,7 +104,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
             Object value = table.getValueAt(clickedRow, column);
             NamedObjectContainer<AbstractConsistencyError> errContainer = (NamedObjectContainer<AbstractConsistencyError>) value;
             AbstractConsistencyError error = errContainer.getObject();
-            ErrorSolutionLibrary.execSolution(error);
+            ErrorSolutionLibrary errorSolutionLibrary = error.getErrorSolutionLibrary();
+            errorSolutionLibrary.execSolution(error);
         }
 
     }
@@ -128,7 +129,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
         //dialog to remove the error".
         boolean solutionAvailable = false;
         for (AbstractConsistencyError error : errors) {
-            if (ErrorSolutionLibrary.isSolutionExecuteable(error)) {
+            ErrorSolutionLibrary errorSolutionLibrary = error.getErrorSolutionLibrary();
+            if (errorSolutionLibrary.isSolutionExecuteable(error)) {
                 solutionAvailable = true;
                 break;
             }
@@ -138,7 +140,8 @@ public class ConsistencyErrorTableMouseListener extends MouseAdapter {
                 @Override
                 public void actionPerformed(final ActionEvent e) {
                     for (AbstractConsistencyError err : errors) {
-                        ErrorSolutionLibrary.execSolution(err);
+                        ErrorSolutionLibrary errorSolutionLibrary = err.getErrorSolutionLibrary();
+                        errorSolutionLibrary.execSolution(err);
                     }
                 }
             });

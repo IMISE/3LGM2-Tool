@@ -67,7 +67,8 @@ public class ConsistencyErrorTableModel extends DefaultTableModel {
         for (AbstractConsistencyError error : errors) {
 
             if (error instanceof MissingPathError) {
-                if (!ErrorSolutionLibrary.isSolutionExecuteable(error)) {
+                ErrorSolutionLibrary errorSolutionLibrary = error.getErrorSolutionLibrary();
+                if (!errorSolutionLibrary.isSolutionExecuteable(error)) {
                     int rowCount = getRowCount();
                     setRowCount(rowCount - 1);
                     continue;
