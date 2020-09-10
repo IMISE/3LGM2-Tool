@@ -1,6 +1,12 @@
-package de.imise.tool3lgm.graphtools.path.metapaths;
+package de.imise.tool3lgm.graphtools.consistency.metapath;
 
 import java.util.List;
+
+import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SequenceMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
 /**
  * Special {@link SectionMetaPath} for missing path consistency checks. The path always consists
@@ -36,7 +42,7 @@ public class ConsistencyCheckSectionMetaPath extends SectionMetaPath {
      * enough elements are connected over the second metapath which are marked as needed through the
      * first metapath, so the solution is to create paths to the needed element over the creatable
      * second MetaPath.
-     * 
+     *
      * @param baseResKeyOrName
      * @param firstMetaPathToConnectableElements
      * @param secondMetaPathToConnectedElements
