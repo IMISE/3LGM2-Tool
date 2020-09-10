@@ -7,6 +7,11 @@ The sources for these groupings are the technical frameworks released on the [IH
 
 3LGM supports this by having these attributes stored in each actor. The tool will display error messages, when actors aren't grouped with the necessary actors.
 
+The tool offers three options to resolve this error:
+1. Option: Property dialog for error-correcting
+2. Option: Remove inconsistent Element
+3. Option: Connect
+
 
 ## Example ##
 
