@@ -54,7 +54,7 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
                 for (ModelElement me : userFieldTargetClassElements) {
                     String idValue = me.getUserFieldInputValue(idUserField);
                     if (UserField.EMPTY_STRING.equals(idValue)) {
-                        AbstractIDError idError = new IDEmptyError(me, idUserField, gdcoll);
+                        AbstractIDError idError = new IDEmptyError(me, idUserField);
                         idErrors.add(idError);
                         if (checkOnly) {
                             return idErrors;
@@ -68,7 +68,7 @@ public class UniqueIDChecker implements ConsistencyErrorChecker {
                     if (elementsWithSameID.size() > 1) {
                         for (ModelElement me : elementsWithSameID) {
                             Collection<ModelElement> allWithSameID = new ArrayList<>(elementsWithSameID);
-                            AbstractIDError idError = new IDNotUniqueError(me, idUserField, gdcoll, allWithSameID);
+                            AbstractIDError idError = new IDNotUniqueError(me, idUserField, allWithSameID);
                             idErrors.add(idError);
                             if (checkOnly) {
                                 return idErrors;

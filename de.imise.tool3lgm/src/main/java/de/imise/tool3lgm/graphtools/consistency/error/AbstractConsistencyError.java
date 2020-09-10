@@ -45,19 +45,13 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
     protected Object errorField;
 
     /**
-     * Das Modell in dem der Fehler auftrat
-     */
-    protected GDCollection gdcoll;
-
-    /**
      * @param me
      * @param errorField
      * @param gdcoll
      */
-    public AbstractConsistencyError(final ModelElement me, final Object errorField, final GDCollection gdcoll) {
+    public AbstractConsistencyError(final ModelElement me, final Object errorField) {
         this.me = me;
         this.errorField = errorField;
-        this.gdcoll = gdcoll;
     }
 
     @Override
@@ -132,7 +126,7 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
      * @return the gdcoll
      */
     public final GDCollection getCollection() {
-        return gdcoll;
+        return me.getCollection();
     }
 
     @Override
@@ -173,7 +167,6 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
         final int prime = 31;
         int result = 1;
         result = prime * result + (errorField == null ? 0 : errorField.hashCode());
-        result = prime * result + (gdcoll == null ? 0 : gdcoll.hashCode());
         result = prime * result + (me == null ? 0 : me.hashCode());
         return result;
     }
@@ -195,13 +188,6 @@ public abstract class AbstractConsistencyError extends Error implements MetaMode
                 return false;
             }
         } else if (!errorField.equals(other.errorField)) {
-            return false;
-        }
-        if (gdcoll == null) {
-            if (other.gdcoll != null) {
-                return false;
-            }
-        } else if (!gdcoll.equals(other.gdcoll)) {
             return false;
         }
         if (me == null) {
