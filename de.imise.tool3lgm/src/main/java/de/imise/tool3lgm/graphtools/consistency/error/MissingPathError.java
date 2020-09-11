@@ -5,6 +5,7 @@ import java.util.Collection;
 import de.imise.tool3lgm.graphtools.consistency.metapath.ConsistencyCheckSectionMetaPath;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.metapaths.MetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SectionMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 
@@ -58,7 +59,7 @@ public class MissingPathError extends AbstractPathError {
     public ModelElement getMissingPathStartElement() {
         if (missingPathStartElement == null) {
             ConsistencyCheckSectionMetaPath metaPath = getMetaPath();
-            SimpleMetaPath subMetaPathToRealStartElement = metaPath.getSubMetaPathToRealStartElement();
+            MetaPath subMetaPathToRealStartElement = metaPath.getSubMetaPathToRealStartElement();
             missingPathStartElement = getModelElement();
             if (subMetaPathToRealStartElement != null) {
                 //this can only be one because the subMetaPathToRealStartElement is

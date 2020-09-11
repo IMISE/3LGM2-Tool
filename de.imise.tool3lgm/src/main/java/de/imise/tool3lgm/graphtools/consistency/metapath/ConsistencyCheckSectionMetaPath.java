@@ -25,7 +25,7 @@ public class ConsistencyCheckSectionMetaPath extends SectionMetaPath {
      * If the {@link #errorCorrectingCreatableMetaPath} is not the whole
      * secondSubMetaPathToConnectedElements then
      */
-    private SimpleMetaPath subMetaPathToRealStartElement;
+    private MetaPath subMetaPathToRealStartElement;
 
     /**
      * This SimpleMetaPath is equals to the secondSubMetaPathToConnectedElements
@@ -111,7 +111,7 @@ public class ConsistencyCheckSectionMetaPath extends SectionMetaPath {
     /**
      * @return the subMetaPathToRealStartElements
      */
-    public SimpleMetaPath getSubMetaPathToRealStartElement() {
+    public MetaPath getSubMetaPathToRealStartElement() {
         return subMetaPathToRealStartElement;
     }
 
