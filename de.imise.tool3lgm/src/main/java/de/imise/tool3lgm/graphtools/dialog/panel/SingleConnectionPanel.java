@@ -271,28 +271,6 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         return PathFunctions.getConnectedContainer(me, mainDoc, metaPath, forelastInPath);
     }
 
-    //    /**
-    //     * Liefert die mit dem ModelElement des Dialoges über die angegebenen Kanten verbundenen Elemente.
-    //     *
-    //     * @param forelastInPath wenn <code>true</code> werden nicht die letzten, sondern die vorletzten im
-    //     *            Pfad zurück gegeben. Bei Pfaden, die nur aus einer Edge bestehen ist das das
-    //     *            Ausgangselement des Pfades, also das ModelElement des Dialoges.
-    //     * @return
-    //     */
-    //    private List<ElementContainer> getConnectedContainer(final boolean forelastInPath) {
-    //        List<ElementContainer> connectedElements = new ArrayList<>();
-    //        connectedElements.add(dialog.getModelElement().getContainer(mainDoc));
-    //        int edgeSearchStopIndex = forelastInPath ? edgeClasses.length - 1 : edgeClasses.length;
-    //        for (int i = 0; i < edgeSearchStopIndex; i++) {
-    //            List<ElementContainer> tempConnectedElements = new ArrayList<>();
-    //            for (ElementContainer ec : connectedElements) {
-    //                tempConnectedElements.addAll(ec.getElement().getConnectedContainer(ModelElement.class, mainDoc, edgeClasses[i], directions[i]));
-    //            }
-    //            connectedElements = tempConnectedElements;
-    //        }
-    //        return connectedElements;
-    //    }
-
     /**
      * Liefert alle Elemente der searchElementClass, die mit dem Ausgangselement direkt verbunden sind.
      *
