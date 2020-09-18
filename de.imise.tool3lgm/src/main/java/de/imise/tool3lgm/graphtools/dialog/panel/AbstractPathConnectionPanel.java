@@ -453,8 +453,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * gefunden wird. Wenn der Pfad schon existiert, passiert nichts. Wenn er zu Teilen besteht, wird der Rest
      * angelegt.
      *
-     * @param element2Connect wenn hier ein nicht null-Element übergeben wird, dann wird dieses als letztes verknüpft.
-     *            Ist es null wird auch das letzte Element des Pfades neu angelegt.
+     * @param element2Connect
+     *            wenn hier ein nicht <code>null</code>-Element übergeben wird, dann wird dieses
+     *            als letztes verknüpft. Ist es <code>null</code> wird auch das letzte Element
+     *            des Pfades neu angelegt.
      */
     protected void connectToFirstPath(final ModelElement element2Connect) {
         ModelElement me = getModelElement();
