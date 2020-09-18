@@ -98,7 +98,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         setLayout(new BorderLayout());
         update(); //connectedElement initial setzen!
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(false); // für editable reicht es, wenn der Pfad zw. bestehenden Elementen entfernt oder angehängt werden kann. Das zu verbindende Element muss nicht neu erzeugt werden können
-        if (!editable || !metaPath.isRemoveable(true) && connectedElement != null) {
+        if (!editable) {
             connectedElementsBox = null;
             itemListener = null;
             connectedElementName = new LimitedSizeScrollTextPane(4, false); //wenn man hier true übergibt, kann man den Namen des verbundenen Elementes ändern. Aber dann funktionieren die Maus-Actions nicht mehr, weil dann die Komponente eigene Mausaktionen für den Text macht
@@ -295,17 +295,20 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
      */
     private final void unlinkAll() {
         Collection<ElementContainer> searchElementConnectedContainer = getForelastConnectedContainer();
-        GDCollection gdcoll = getCollection();
-        for (ElementContainer ec : searchElementConnectedContainer) {
-            //da das in der Regel nur 1 Element ist, kann man die Variablen alle in der Schleife anlegen
+        if (!searchElementConnectedContainer.isEmpty()) {
+            GDCollection gdcoll = getCollection();
+            gdcoll.setIgnoreInconsistenciesOnDeleteEgdesMode(true);
             Class<? extends Edge> lastEdgeInPath = getLastEdgeClassInPath();
             Direction lastDirectionInPath = getLastDirectionInPath();
-            ModelElement me = ec.getElement();
-            List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, lastDirectionInPath);
-            for (ModelElement connected : connectedElements) {
-                int pid = getTransactionID();
-                gdcoll.unlink(me, connected, lastEdgeInPath, lastDirectionInPath, pid);
+            for (ElementContainer ec : searchElementConnectedContainer) {
+                ModelElement me = ec.getElement();
+                List<ModelElement> connectedElements = me.getConnectedElements(searchElementClass, lastEdgeInPath, lastDirectionInPath);
+                for (ModelElement connected : connectedElements) {
+                    int pid = getTransactionID();
+                    gdcoll.unlink(me, connected, lastEdgeInPath, lastDirectionInPath, pid);
+                }
             }
+            gdcoll.setIgnoreInconsistenciesOnDeleteEgdesMode(false);
         }
     }
 
