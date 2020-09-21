@@ -22,9 +22,6 @@ import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
-import com.sun.media.jai.codec.ImageEncodeParam;
-import com.sun.media.jai.codec.ImageEncoder;
-
 import de.imise.util.StringUtils;
 import de.imise.util.swing.dialog.DialogResourceHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
@@ -176,8 +173,6 @@ public class ComponentAsImageExportHandler {
 
         BufferedImage buffer = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
         Graphics og = buffer.getGraphics();
-        ImageEncoder encoder;
-        ImageEncodeParam param;
         og.setColor(new Color(255, 255, 255, 255));
         og.fillRect(0, 0, w, h);
         comp.printAll(og);
