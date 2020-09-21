@@ -9,9 +9,9 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.RandomAccessFile;
 import java.math.BigDecimal;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JComponent;
@@ -22,14 +22,8 @@ import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
-import com.sun.media.jai.codec.BMPEncodeParam;
-import com.sun.media.jai.codec.ImageCodec;
 import com.sun.media.jai.codec.ImageEncodeParam;
 import com.sun.media.jai.codec.ImageEncoder;
-import com.sun.media.jai.codec.JPEGEncodeParam;
-import com.sun.media.jai.codec.PNGEncodeParam;
-import com.sun.media.jai.codec.SeekableOutputStream;
-import com.sun.media.jai.codec.TIFFEncodeParam;
 
 import de.imise.util.StringUtils;
 import de.imise.util.swing.dialog.DialogResourceHandler;
@@ -194,40 +188,28 @@ public class ComponentAsImageExportHandler {
         }
 
         try {
-            RandomAccessFile raf = new RandomAccessFile(filename, "rw");
-            SeekableOutputStream os = new SeekableOutputStream(raf);
             switch (fileFormat) {
             case JPEG:
-                param = new JPEGEncodeParam();
-                ((JPEGEncodeParam) param).setQuality(1);
-                encoder = ImageCodec.createImageEncoder("JPEG", os, param);
+                ImageIO.write(buffer, "jpg", new File(filename.toString()));
                 break;
             case TIFF:
-                param = new TIFFEncodeParam();
-                ((TIFFEncodeParam) param).setCompression(TIFFEncodeParam.COMPRESSION_PACKBITS);
-                encoder = ImageCodec.createImageEncoder("TIFF", os, param);
+                ImageIO.write(buffer, "jpg", new File(filename.toString()));
                 break;
             case BMP:
-                param = new BMPEncodeParam();
-                ((BMPEncodeParam) param).setCompressed(true);
-                encoder = ImageCodec.createImageEncoder("BMP", os, param);
+                ImageIO.write(buffer, "bmp", new File(filename.toString()));
                 break;
             case PNG:
-                param = new PNGEncodeParam.RGB();
-                encoder = ImageCodec.createImageEncoder("PNG", os, param);
+                ImageIO.write(buffer, "png", new File(filename.toString()));
                 break;
             default:
-                os.close();
                 return;
             }
-            encoder.encode(buffer);
-            os.close();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
         } catch (Error err) {
-            err.printStackTrace();
             JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
         }
+
     }
 
     /**
