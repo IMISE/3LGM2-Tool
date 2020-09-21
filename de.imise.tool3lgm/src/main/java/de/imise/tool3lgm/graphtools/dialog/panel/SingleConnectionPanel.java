@@ -132,7 +132,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             boolean isLastPathElementDependent = metaPath.isLastPathElementDependent();
             connectedElementsBox.removeItemListener(itemListener);
             connectedElementsBox.removeAllItems();
-            if (metaPath.isRemoveable(true)) {//Abhängen nur anbieten, wenn dadurch das Element selbst und das letzte Element im Pfad nicht inkonsistent wird
+            if (metaPath.isRemoveable(false)) {//Abhängen nur anbieten, wenn dadurch das Element selbst und das letzte Element im Pfad nicht inkonsistent wird
                 connectedElementsBox.addItem(" ");
             }
             //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle bzw. alle, die über den ConditionMetaPath verbunden sind
