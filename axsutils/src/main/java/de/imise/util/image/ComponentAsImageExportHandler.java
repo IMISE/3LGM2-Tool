@@ -135,21 +135,20 @@ public class ComponentAsImageExportHandler {
         int w = preferredSize.width;
         int h = preferredSize.height;
 
-        BigDecimal tempW = BigDecimal.valueOf(w);
-        BigDecimal tempSize = tempW.multiply(BigDecimal.valueOf(3)).multiply(BigDecimal.valueOf(h - 1)).add(BigDecimal.valueOf(3 * w));
+        BigDecimal tempSize = getTempHeapSize(w, h);
         // skaliert das Bild runter, sodass die später berechnete Größe nicht den Integer Wert überschreitet (Negative Array Length error)
-        while (tempSize.compareTo(BigDecimal.valueOf(2147483647)) == 1) {
+        while (tempSize.compareTo(BigDecimal.valueOf(Integer.MAX_VALUE)) == 1) {
             double tempWidth = w;
             double tempHeight = h;
             double tempRatio = tempWidth / tempHeight;
-            double maxWidth = Math.sqrt(2147483647 * tempRatio / 3);
+            double maxWidth = Math.sqrt(Integer.MAX_VALUE * tempRatio / 3);
             double zoomRatio = maxWidth / tempWidth;
             double scaleZoom = ((ZoomableComponent) comp).getZoom() * zoomRatio;
             ((ZoomableComponent) comp).setZoom(scaleZoom);
             preferredSize = comp.getPreferredSize();
             w = preferredSize.width;
             h = preferredSize.height;
-            tempSize = BigDecimal.valueOf(w).multiply(BigDecimal.valueOf(3)).multiply(BigDecimal.valueOf(h - 1)).add(BigDecimal.valueOf(3 * w));
+            tempSize = getTempHeapSize(w, h);
         }
 
         // da die Runtime.getRuntime().freeMemory(), sehr unzuverlässig ist, wird einfach etwas weniger als das Maximum des verfügbaren Speichers genommen
@@ -161,14 +160,13 @@ public class ComponentAsImageExportHandler {
             double tempHeight = h;
             double tempRatio = tempWidth / tempHeight;
             double maxWidth = Math.sqrt(freeHeapSpace * tempRatio / 3);
-            double maxHeight = maxWidth / tempRatio;
             double zoomRatio = maxWidth / tempWidth;
             double scaleZoom = ((ZoomableComponent) comp).getZoom() * zoomRatio;
             ((ZoomableComponent) comp).setZoom(scaleZoom);
             preferredSize = comp.getPreferredSize();
             w = preferredSize.width;
             h = preferredSize.height;
-            tempSize = BigDecimal.valueOf(w).multiply(BigDecimal.valueOf(3)).multiply(BigDecimal.valueOf(h - 1)).add(BigDecimal.valueOf(3 * w));
+            tempSize = getTempHeapSize(w, h);
         }
 
         BufferedImage buffer = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
@@ -205,6 +203,22 @@ public class ComponentAsImageExportHandler {
             JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
         }
 
+    }
+
+    /**
+     * @param w
+     * @param h
+     * @return
+     */
+    private static BigDecimal getTempHeapSize(final int w, final int h) {
+        BigDecimal tempSize = BigDecimal.valueOf(w);
+        BigDecimal three = BigDecimal.valueOf(3);
+        tempSize = tempSize.multiply(three);
+        BigDecimal hMinus1 = BigDecimal.valueOf(h - 1);
+        tempSize.multiply(hMinus1);
+        BigDecimal wMult3 = BigDecimal.valueOf(3 * w);
+        tempSize.add(wMult3);
+        return tempSize;
     }
 
     /**
