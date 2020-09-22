@@ -135,16 +135,12 @@ public class ComponentAsImageExportHandler {
             comp.setSize(comp.getPreferredSize());
         }
         Dimension preferredSize = comp.getPreferredSize();
-        int w = preferredSize.width;
-        int h = preferredSize.height;
 
-        BigDecimal tempSize = getTempHeapSize(w, h);
+        BigDecimal tempSize = getTempHeapSize(preferredSize);
         // skaliert das Bild runter, sodass die später berechnete Größe nicht den Integer Wert überschreitet (Negative Array Length error)
         while (tempSize.compareTo(BigDecimal.valueOf(Integer.MAX_VALUE)) == 1) {
-            preferredSize = downscaleSize(comp, w, h, Integer.MAX_VALUE);
-            w = preferredSize.width;
-            h = preferredSize.height;
-            tempSize = getTempHeapSize(w, h);
+            preferredSize = downscaleSize(comp, preferredSize, Integer.MAX_VALUE);
+            tempSize = getTempHeapSize(preferredSize);
         }
 
         // da die Runtime.getRuntime().freeMemory(), sehr unzuverlässig ist, wird einfach etwas weniger als das Maximum des verfügbaren Speichers genommen
@@ -152,15 +148,13 @@ public class ComponentAsImageExportHandler {
         long freeHeapSpace = (Runtime.getRuntime().maxMemory() - 100000000) / 2;
         // skaliert das Bild runter, sodass es in den Heap passt
         if (tempSize.longValue() > freeHeapSpace) {
-            preferredSize = downscaleSize(comp, w, h, freeHeapSpace);
-            w = preferredSize.width;
-            h = preferredSize.height;
+            preferredSize = downscaleSize(comp, preferredSize, freeHeapSpace);
         }
 
-        BufferedImage buffer = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
+        BufferedImage buffer = new BufferedImage(preferredSize.width, preferredSize.height, BufferedImage.TYPE_3BYTE_BGR);
         Graphics og = buffer.getGraphics();
         og.setColor(new Color(255, 255, 255, 255));
-        og.fillRect(0, 0, w, h);
+        og.fillRect(0, 0, preferredSize.width, preferredSize.height);
         comp.printAll(og);
         //ggf. Zoom auf alten Wert zurück setzen
         if (maximizeSize) {
@@ -189,11 +183,12 @@ public class ComponentAsImageExportHandler {
      * createInterleavedRaster(int dataType, int w, int h, int scanlineStride, int pixelStride, int[] bandOffsets, Point location)
      * int size = scanlineStride * (h - 1) + pixelStride * w;
      *
-     * @param w
-     * @param h
+     * @param preferredSize
      * @return
      */
-    private static BigDecimal getTempHeapSize(final int w, final int h) {
+    private static BigDecimal getTempHeapSize(final Dimension preferredSize) {
+        int w = preferredSize.width;
+        int h = preferredSize.height;
         BigDecimal tempSize = BigDecimal.valueOf(w);
         BigDecimal bigThree = BigDecimal.valueOf(3);
         tempSize = tempSize.multiply(bigThree);
@@ -218,14 +213,13 @@ public class ComponentAsImageExportHandler {
      * => width = sqrt( size * tempRation / 3 )
      *
      * @param comp
-     * @param w
-     * @param h
+     * @param preferredSize
      * @param freeSpace
      * @return
      */
-    private final Dimension downscaleSize(final JComponent comp, final int w, final int h, final long freeSpace) {
-        double tempWidth = w;
-        double tempHeight = h;
+    private final Dimension downscaleSize(final JComponent comp, final Dimension preferredSize, final long freeSpace) {
+        double tempWidth = preferredSize.width;
+        double tempHeight = preferredSize.height;
         double tempRatio = tempWidth / tempHeight;
         double maxWidth = Math.sqrt(freeSpace * tempRatio / 3);
         double zoomRatio = maxWidth / tempWidth;
