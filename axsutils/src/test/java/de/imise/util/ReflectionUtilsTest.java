@@ -324,11 +324,11 @@ public class ReflectionUtilsTest {
 
         aClasses = Sets.newHashSet(A1.class, A2.class, A11.class, A12.class, A21.class, A111.class, A121.class, A211.class);
         ReflectionUtils.removeSubClasses(aClasses);
-        assertThat(aClasses, contains(A1.class, A2.class));
+        assertThat(aClasses, containsInAnyOrder(A1.class, A2.class));
 
         aClasses = Sets.newHashSet(A1.class, A2.class);
         ReflectionUtils.removeSubClasses(aClasses);
-        assertThat(aClasses, contains(A1.class, A2.class));
+        assertThat(aClasses, containsInAnyOrder(A1.class, A2.class));
 
         aClasses = Sets.newHashSet(A111.class, A211.class);
         ReflectionUtils.removeSubClasses(aClasses);
