@@ -33,14 +33,17 @@ import de.imise.util.swing.dialog.ExtendedFileChooser;
 public class ComponentAsImageExportHandler {
 
     /**
-     * Mögliche Typen der FileFilter, die dieser Dialog anzeigen kann. Für alle diese Typen gibt es
-     * Ressourcen-Strings, deren Key für die Beschreibung sich über den zusammengebausten String aus
-     * {@link FILE_FILTER_RESOURCE_PREFIX} + {@link FileFilterType#toString()} ergbibt.
-     * Für die Liste der akzeptierten Erweiterungen wird der gleiche Key-String gebildet und noch der
-     * {@link FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} angehängt.
+     * Possible types of FileFilters this dialog can display. For all these
+     * types there are resource strings, whose key for the description results
+     * from the assembled string {@link FILE_FILTER_RESOURCE_PREFIX} +
+     * {@link FileFilterType#toString()}.
+     * For the list of accepted extensions, the same key-string is formed and
+     * the {@link FILE_FILTER_RESOURCE_EXTENSION_POSTFIX} is appended.
+     * Furthermore, the names of these enum entries correspond exactly to the
+     * names ImageIO wants to have for identifying the codec to be used.
      */
     public static enum FileFilterType {
-        JPEG,
+        JPG,
         TIFF,
         BMP,
         PNG
@@ -86,7 +89,7 @@ public class ComponentAsImageExportHandler {
      * @param fileName
      */
     public static final void createFile(final JComponent comp, final String fileName) {
-        createFile(comp, FileFilterType.JPEG, fileName);
+        createFile(comp, FileFilterType.JPG, fileName);
     }
 
     /**
@@ -165,27 +168,11 @@ public class ComponentAsImageExportHandler {
             comp.setSize(size);
         }
 
+        File saveFile = new File(filename);
+        String exportFileType = fileFormat.name();
         try {
-            File saveFile = new File(filename);
-            switch (fileFormat) {
-            case JPEG:
-                ImageIO.write(buffer, "jpg", saveFile);
-                break;
-            case TIFF:
-                ImageIO.write(buffer, "tiff", saveFile);
-                break;
-            case BMP:
-                ImageIO.write(buffer, "bmp", saveFile);
-                break;
-            case PNG:
-                ImageIO.write(buffer, "png", saveFile);
-                break;
-            default:
-                return;
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
-        } catch (Error err) {
+            ImageIO.write(buffer, exportFileType, saveFile);
+        } catch (Throwable e) {
             JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
         }
 
