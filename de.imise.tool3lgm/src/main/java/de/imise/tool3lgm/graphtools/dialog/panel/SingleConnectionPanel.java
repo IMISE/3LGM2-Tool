@@ -64,10 +64,14 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     /** Cache zur Speicherung, ob der Name des verbundenen Elementes geändert wurde */
     private String oldname = "";
 
-    /**
-     * COMMENTME
-     */
-    private final NamedObjectContainer<?> createNew;
+    /** Menu entry */
+    private final NamedObjectContainer<?> createNewMenuItem;
+
+    /** Menu entry to unlink (is set to one whitepsace) */
+    private final String unlinkMenuItem;
+
+    /** Menu entry to delete the connetced element */
+    private NamedObjectContainer<?> deleteConnectedMenuItem;
 
     /**
      * COMMENTME
@@ -98,6 +102,7 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
         setLayout(new BorderLayout());
         update(); //connectedElement initial setzen!
         boolean editable = !dialog.isInfoDialog() && metaPath.isCreatable(false); // für editable reicht es, wenn der Pfad zw. bestehenden Elementen entfernt oder angehängt werden kann. Das zu verbindende Element muss nicht neu erzeugt werden können
+        editable &= !(metaPath.getSubMetaPathCount() == 1 && metaPath.isFirstPathElementDependent()); //bei untergeordneten Elementen nicht das Abhängen/Löschen/Ändern des übergeordneten anbieten
         if (!editable) {
             connectedElementsBox = null;
             itemListener = null;
@@ -106,18 +111,21 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             //Doppelklick-Action und Kontextmenü anghängen
             addMouseActions(connectedElementName);
             add(connectedElementName, BorderLayout.CENTER);
+            unlinkMenuItem = null;
+            deleteConnectedMenuItem = null;
         } else {
             connectedElementsBox = new AlphabeticalComboBox();
             itemListener = new LGMItemListener(getItemStateChangedAction(this));
             connectedElementName = null;
             connectedElementViewComponent = connectedElementsBox;
+            unlinkMenuItem = " ";
 
             connectedElementsBox.addItemListener(itemListener);
             //Doppelklick-Action und Kontextmenü anghängen
             addMouseActions(connectedElementsBox);
             add(connectedElementsBox, BorderLayout.CENTER);
         }
-        createNew = editable && metaPath.isCreatable(true) ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + elementsNameBuilder.getDisplayableName(searchElementClass)) : null;
+        createNewMenuItem = editable && metaPath.isCreatable(true) ? new NamedObjectContainer<Object>(this, getResString("new") + ": " + elementsNameBuilder.getDisplayableName(searchElementClass)) : null;
     }
 
     @Override
@@ -132,22 +140,27 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
             boolean isLastPathElementDependent = metaPath.isLastPathElementDependent();
             connectedElementsBox.removeItemListener(itemListener);
             connectedElementsBox.removeAllItems();
-            if (metaPath.isRemoveable(false)) {//Abhängen nur anbieten, wenn dadurch das Element selbst und das letzte Element im Pfad nicht inkonsistent wird
-                connectedElementsBox.addItem(" ");
+            if (unlinkMenuItem != null) {
+                connectedElementsBox.addItem(unlinkMenuItem);
+                if (connectedElement != null) {
+                    connectedElementsBox.addSeparator(false); //prevent reordering of the first 3 entries
+                    deleteConnectedMenuItem = new NamedObjectContainer<Object>(this, getResString("delete") + ": " + connectedElement);
+                    connectedElementsBox.addItem(deleteConnectedMenuItem);
+                }
             }
             //bei abhängigen Elementen werden in der Auswahlbox nur die angezeigt, die mit dem Element des Dialoges/Panels verbunden sind, sonst alle bzw. alle, die über den ConditionMetaPath verbunden sind
-            Collection<ElementContainer> available = isLastPathElementDependent && !allConnectedContainers.isEmpty() ? allConnectedContainers : getAvailableConnectables();
+            Collection<ElementContainer> available = getAvailableConnectables();
 
             //neues Element anlegen und verknüpfen soll nur gezeigt werden, wenn der Pfad an sich anlegbar ist. Ist die searchElementClass
             //abhängig von der Existenz des Elementes davor im Pfad, dann soll auch kein Neu-Anlegen-Eintrag kommen
-            boolean showNewEntry = createNew != null;
+            boolean showNewEntry = createNewMenuItem != null;
             if (showNewEntry && isLastPathElementDependent && !allConnectedContainers.isEmpty()) {
                 showNewEntry = false;
             }
             if (showNewEntry) {
-                connectedElementsBox.addItem(createNew);
+                connectedElementsBox.addItem(createNewMenuItem);
             }
-            connectedElementsBox.addSeparator(false);
+            connectedElementsBox.addSeparator(true);
             connectedElementsBox.addAll(available);
             for (ElementContainer ec : allConnectedContainers) {
                 connectedElementsBox.removeItem(ec);
@@ -220,34 +233,31 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                 if (!(eo instanceof ItemEvent)) {
                     return;
                 }
+                ItemEvent e = (ItemEvent) eo;
+                int stateChange = e.getStateChange();
+                //vor jedem Selected gibt es ein Deselected
+                if (stateChange == ItemEvent.DESELECTED) {
+                    return;
+                }
                 GraphDocument mainDoc = panel.getMainDoc();
                 ModelElement me = panel.getModelElement();
 
-                ItemEvent e = (ItemEvent) eo;
                 Object selected = e.getItem();
                 int pid = panel.getTransactionID();
                 mainDoc.start_transaction(pid);
 
-                // vor jedem select gibt es ein Deselect, wenn erst etwas selektiert war -> alte
-                // Verbindung trennen
-                if (e.getStateChange() == ItemEvent.DESELECTED) {
-                    if (selected instanceof NodeContainer) {
-                        panel.unlinkAll();
-                        ElementContainer ec = me.getContainer(mainDoc);
-                        ec.refreshText();
-                        mainDoc.finish_transaction(pid);
-                        return;
-                    }
-                }
-
                 // Neues Element anlegen
-                if (selected == panel.createNew) {
+                if (selected == panel.createNewMenuItem) {
                     panel.connectToFirstPath(null);
                     panel.update();
                 } else if (selected instanceof NodeContainer) { //vorhandemes Element verknüpfen
                     ElementContainer container2Connect = (ElementContainer) selected;
                     ModelElement element2Connect = container2Connect.getElement();
                     panel.connectToFirstPath(element2Connect);
+                } else if (selected == panel.unlinkMenuItem) {
+                    panel.unlinkAll(false);
+                } else if (selected == panel.deleteConnectedMenuItem) {
+                    panel.unlinkAll(true);
                 }
                 ElementContainer ec = me.getContainer(mainDoc);
                 ec.refreshText();
@@ -291,12 +301,18 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
     }
 
     /**
-     * Trennt alle Verbindungen zwischen den vorletzten Elementen im Kanten-Pfad und den searchElementen.
+     * Removes all connections between the penultimate and searchElements,
+     * which are connected to the dialog element via the panel path.
+     *
+     * @param deleteUnlinked
+     *            if <code>true</code> the previously connected element is deleted
      */
-    private final void unlinkAll() {
+    private final void unlinkAll(final boolean deleteUnlinked) {
         Collection<ElementContainer> searchElementConnectedContainer = getForelastConnectedContainer();
         if (!searchElementConnectedContainer.isEmpty()) {
             GDCollection gdcoll = getCollection();
+            //prevent automatically deleting the dialog element and closing the dialog
+            //if the removing of the connection causes an inconsistency in the dialog element
             gdcoll.setIgnoreInconsistenciesOnDeleteEgdesMode(true);
             Class<? extends Edge> lastEdgeInPath = getLastEdgeClassInPath();
             Direction lastDirectionInPath = getLastDirectionInPath();
@@ -306,6 +322,9 @@ public class SingleConnectionPanel extends AbstractPathConnectionPanel {
                 for (ModelElement connected : connectedElements) {
                     int pid = getTransactionID();
                     gdcoll.unlink(me, connected, lastEdgeInPath, lastDirectionInPath, pid);
+                    if (deleteUnlinked) {
+                        gdcoll.deleteElement(connected, pid);
+                    }
                 }
             }
             gdcoll.setIgnoreInconsistenciesOnDeleteEgdesMode(false);
