@@ -138,14 +138,7 @@ public class ComponentAsImageExportHandler {
         BigDecimal tempSize = getTempHeapSize(w, h);
         // skaliert das Bild runter, sodass die später berechnete Größe nicht den Integer Wert überschreitet (Negative Array Length error)
         while (tempSize.compareTo(BigDecimal.valueOf(Integer.MAX_VALUE)) == 1) {
-            double tempWidth = w;
-            double tempHeight = h;
-            double tempRatio = tempWidth / tempHeight;
-            double maxWidth = Math.sqrt(Integer.MAX_VALUE * tempRatio / 3);
-            double zoomRatio = maxWidth / tempWidth;
-            double scaleZoom = ((ZoomableComponent) comp).getZoom() * zoomRatio;
-            ((ZoomableComponent) comp).setZoom(scaleZoom);
-            preferredSize = comp.getPreferredSize();
+            preferredSize = downscaleSize(comp, w, h, Integer.MAX_VALUE);
             w = preferredSize.width;
             h = preferredSize.height;
             tempSize = getTempHeapSize(w, h);
@@ -153,20 +146,12 @@ public class ComponentAsImageExportHandler {
 
         // da die Runtime.getRuntime().freeMemory(), sehr unzuverlässig ist, wird einfach etwas weniger als das Maximum des verfügbaren Speichers genommen
         // und anschließend noch halbiert, da es später beim Speichern auch nochmal eingespeichert werden musss
-        long freeHeapSpace = 360000000;
+        long freeHeapSpace = (Runtime.getRuntime().maxMemory() - 100000000) / 2;
         // skaliert das Bild runter, sodass es in den Heap passt
         if (tempSize.longValue() > freeHeapSpace) {
-            double tempWidth = w;
-            double tempHeight = h;
-            double tempRatio = tempWidth / tempHeight;
-            double maxWidth = Math.sqrt(freeHeapSpace * tempRatio / 3);
-            double zoomRatio = maxWidth / tempWidth;
-            double scaleZoom = ((ZoomableComponent) comp).getZoom() * zoomRatio;
-            ((ZoomableComponent) comp).setZoom(scaleZoom);
-            preferredSize = comp.getPreferredSize();
+            preferredSize = downscaleSize(comp, w, h, freeHeapSpace);
             w = preferredSize.width;
             h = preferredSize.height;
-            tempSize = getTempHeapSize(w, h);
         }
 
         BufferedImage buffer = new BufferedImage(w, h, BufferedImage.TYPE_3BYTE_BGR);
@@ -181,18 +166,19 @@ public class ComponentAsImageExportHandler {
         }
 
         try {
+            File saveFile = new File(filename);
             switch (fileFormat) {
             case JPEG:
-                ImageIO.write(buffer, "jpg", new File(filename.toString()));
+                ImageIO.write(buffer, "jpg", saveFile);
                 break;
             case TIFF:
-                ImageIO.write(buffer, "jpg", new File(filename.toString()));
+                ImageIO.write(buffer, "tiff", saveFile);
                 break;
             case BMP:
-                ImageIO.write(buffer, "bmp", new File(filename.toString()));
+                ImageIO.write(buffer, "bmp", saveFile);
                 break;
             case PNG:
-                ImageIO.write(buffer, "png", new File(filename.toString()));
+                ImageIO.write(buffer, "png", saveFile);
                 break;
             default:
                 return;
@@ -206,19 +192,59 @@ public class ComponentAsImageExportHandler {
     }
 
     /**
+     * diese Berechnung wird durchgeführt, da für das BufferedImage mittels der Breite und der Höhe
+     * eine "size" berechnet wird und diese anschließend in ein Byte Array eingespeist wird.
+     * Daher sollte die "size" den maximalen Integer Wert und den offenen Heapspace nicht überschreiten.
+     * folgende Formel ist in der Klasse Raster.java zu finden und wirt mit folgenden Eingaben aufgerufen:
+     * BufferedImage.java:
+     * raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, width*3, 3, bOffs, null);
+     * Raster.java:
+     * createInterleavedRaster(int dataType, int w, int h, int scanlineStride, int pixelStride, int[] bandOffsets, Point location)
+     * int size = scanlineStride * (h - 1) + pixelStride * w;
+     *
      * @param w
      * @param h
      * @return
      */
     private static BigDecimal getTempHeapSize(final int w, final int h) {
         BigDecimal tempSize = BigDecimal.valueOf(w);
-        BigDecimal three = BigDecimal.valueOf(3);
-        tempSize = tempSize.multiply(three);
+        BigDecimal bigThree = BigDecimal.valueOf(3);
+        tempSize = tempSize.multiply(bigThree);
         BigDecimal hMinus1 = BigDecimal.valueOf(h - 1);
-        tempSize.multiply(hMinus1);
+        tempSize = tempSize.multiply(hMinus1);
         BigDecimal wMult3 = BigDecimal.valueOf(3 * w);
-        tempSize.add(wMult3);
+        tempSize = tempSize.add(wMult3);
         return tempSize;
+    }
+
+    /**
+     * skaliert das bild runter, indem der Zoom angepasst wird
+     * hierzu wird eine Berechnung durchgeführt, aus folgender Formel hergeleitet wurde:
+     * size = scanlineStride * (h - 1) + pixelStride * w;
+     * => size = width * 3 * (h - 1) + 3 * width
+     * da das Verhältnis von Breite zu Höhe bekannt ist kann man durch das tempRatio die Höhe ersetzen
+     * tempRatio = width / height
+     * => size = width * 3 * (width / tempRatio - 1) + 3 * width
+     * => size = 3 * width^2 / tempRatio - 3 * width + 3 * width
+     * => size = 3 * width^2 / tempRatio
+     * da die maximale Größe schon vorher bekannt ist (maximaler Integer Wert oder verfügbarer Heap Space)
+     * => width = sqrt( size * tempRation / 3 )
+     *
+     * @param comp
+     * @param w
+     * @param h
+     * @param freeSpace
+     * @return
+     */
+    private final Dimension downscaleSize(final JComponent comp, final int w, final int h, final long freeSpace) {
+        double tempWidth = w;
+        double tempHeight = h;
+        double tempRatio = tempWidth / tempHeight;
+        double maxWidth = Math.sqrt(freeSpace * tempRatio / 3);
+        double zoomRatio = maxWidth / tempWidth;
+        double scaleZoom = ((ZoomableComponent) comp).getZoom() * zoomRatio;
+        ((ZoomableComponent) comp).setZoom(scaleZoom);
+        return comp.getPreferredSize();
     }
 
     /**
