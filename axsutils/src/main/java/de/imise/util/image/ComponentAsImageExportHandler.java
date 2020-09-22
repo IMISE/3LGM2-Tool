@@ -9,7 +9,7 @@ import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -136,9 +136,9 @@ public class ComponentAsImageExportHandler {
         }
         Dimension preferredSize = comp.getPreferredSize();
 
-        BigDecimal tempSize = getTempHeapSize(preferredSize);
+        BigInteger tempSize = getTempHeapSize(preferredSize);
         // skaliert das Bild runter, sodass die später berechnete Größe nicht den Integer Wert überschreitet (Negative Array Length error)
-        while (tempSize.compareTo(BigDecimal.valueOf(Integer.MAX_VALUE)) == 1) {
+        while (tempSize.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) == 1) {
             preferredSize = downscaleSize(comp, preferredSize, Integer.MAX_VALUE);
             tempSize = getTempHeapSize(preferredSize);
         }
@@ -186,15 +186,13 @@ public class ComponentAsImageExportHandler {
      * @param preferredSize
      * @return
      */
-    private static BigDecimal getTempHeapSize(final Dimension preferredSize) {
-        int w = preferredSize.width;
-        int h = preferredSize.height;
-        BigDecimal tempSize = BigDecimal.valueOf(w);
-        BigDecimal bigThree = BigDecimal.valueOf(3);
+    private static BigInteger getTempHeapSize(final Dimension preferredSize) {
+        BigInteger tempSize = BigInteger.valueOf(preferredSize.width);
+        BigInteger bigThree = BigInteger.valueOf(3);
         tempSize = tempSize.multiply(bigThree);
-        BigDecimal hMinus1 = BigDecimal.valueOf(h - 1);
+        BigInteger hMinus1 = BigInteger.valueOf(preferredSize.height - 1);
         tempSize = tempSize.multiply(hMinus1);
-        BigDecimal wMult3 = BigDecimal.valueOf(3 * w);
+        BigInteger wMult3 = BigInteger.valueOf(3 * preferredSize.width);
         tempSize = tempSize.add(wMult3);
         return tempSize;
     }
