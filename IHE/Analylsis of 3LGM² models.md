@@ -59,3 +59,22 @@ Depending on the element type there are different questions offered by the analy
 ***Software product:***
 
 * On which application components it is installed?
+
+
+### Accessing the analysis function ###
+There are two main ways to access these functions.
+The first option would be the **Analysis** option on the top menu bar.
+
+![analysisMenuBar.PNG](https://bitbucket.org/repo/9L6rMz/images/817250633-analysisMenuBar.PNG)
+
+**Repository**
+This opens following window:
+
+![analysisRepository.PNG](https://bitbucket.org/repo/9L6rMz/images/3171069154-analysisRepository.PNG)
+
+Here you can select the wanted analysis. If you have selected an element beforehand, the analysis will be done for the selected element. Otherwise the Analysis will be done for every component.
+
+**Right Click**
+It is also possible to just right click on the component you want to analyze. This will offer you the analysis options available for this element type.
+
+![analysisRightClick.PNG](https://bitbucket.org/repo/9L6rMz/images/175494577-analysisRightClick.PNG)
