@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.dialog;
+package de.imise.tool3lgm.graphtools.dialog.search;
 
 import static de.imise.tool3lgm.Static.contextGenerator;
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;

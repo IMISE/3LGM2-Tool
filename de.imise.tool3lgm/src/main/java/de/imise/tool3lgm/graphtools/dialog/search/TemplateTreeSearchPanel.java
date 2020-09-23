@@ -1,7 +1,7 @@
 /**
  *
  */
-package de.imise.tool3lgm.graphtools.view.template;
+package de.imise.tool3lgm.graphtools.dialog.search;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
@@ -13,10 +13,10 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import de.imise.tool3lgm.graphtools.dialog.SearchDialog;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
+import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
 import de.imise.util.swing.component.HistoryComboBox;
 
 /**

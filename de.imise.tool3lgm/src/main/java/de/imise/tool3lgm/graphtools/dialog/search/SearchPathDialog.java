@@ -2,7 +2,7 @@
  * Created on 17.12.2003 To change the template for this generated file go to
  * Window&gt;Preferences&gt;Java&gt;Code Generation&gt;Code and Comments
  */
-package de.imise.tool3lgm.graphtools.dialog;
+package de.imise.tool3lgm.graphtools.dialog.search;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 
