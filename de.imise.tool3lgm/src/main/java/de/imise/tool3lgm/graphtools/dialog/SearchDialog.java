@@ -120,13 +120,13 @@ public class SearchDialog extends JDialog implements ListSelectionListener, Wind
     private CheckBoxSelectionMode checkBoxMode = CheckBoxSelectionMode.CHECKBOXMODE_ALL;
 
     /** Checkbox für ignore case Bezeichnung */
-    private final JCheckBox checkNameCaseSensitive = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInName);
+    private final JCheckBox checkNameCaseSensitive = createCaseSensitiveCheckBox(!SearchDialog.ignoreCaseInName);
 
     /** Checkbox für ignore case Beschreibung */
-    private final JCheckBox checkDescriptionCaseSensitive = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInDescription);
+    private final JCheckBox checkDescriptionCaseSensitive = createCaseSensitiveCheckBox(!SearchDialog.ignoreCaseInDescription);
 
     /** Checkbox für ignore case Benutzerdef Eigenschaften */
-    private final JCheckBox checkUserFieldCaseSensitive = new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), !SearchDialog.ignoreCaseInUserField);
+    private final JCheckBox checkUserFieldCaseSensitive = createCaseSensitiveCheckBox(!SearchDialog.ignoreCaseInUserField);
 
     /** Checkbox Checkboxsuche */
     private JComboBox<String> checkBoxAuswahl = new AlphabeticalComboBox();
@@ -352,6 +352,16 @@ public class SearchDialog extends JDialog implements ListSelectionListener, Wind
         getContentPane().add(sp, BorderLayout.CENTER);
 
         pack();
+    }
+
+    /**
+     * Creates a new JCheckbox wit the label "Case sensitive"
+     *
+     * @param selected inital seletion state
+     * @return
+     */
+    public static JCheckBox createCaseSensitiveCheckBox(final boolean selected) {
+        return new JCheckBox(getResString("SEARCH_DIALOG_USERFIELD_CaseSensitive"), selected);
     }
 
     /**
