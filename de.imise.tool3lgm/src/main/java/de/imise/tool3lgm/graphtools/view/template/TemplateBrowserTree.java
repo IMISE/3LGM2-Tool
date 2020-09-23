@@ -104,6 +104,11 @@ public class TemplateBrowserTree extends DynamicTree implements PropertyChangeLi
         return Static.templateContextGenerator;
     }
 
+    @Override
+    public PathTreeModel getModel() {
+        return pathTreeModel;
+    }
+
     /**
      * @return
      */
