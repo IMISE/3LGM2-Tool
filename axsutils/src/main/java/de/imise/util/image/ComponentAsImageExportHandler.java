@@ -1,15 +1,13 @@
 package de.imise.util.image;
 
-import static de.imise.util.swing.component.ParentComponentFinder.getFrameOrDialog;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.math.BigInteger;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -22,7 +20,9 @@ import javax.swing.JRadioButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
+import de.imise.util.MemoryHandler;
 import de.imise.util.StringUtils;
+import de.imise.util.swing.component.ParentComponentFinder;
 import de.imise.util.swing.dialog.DialogResourceHandler;
 import de.imise.util.swing.dialog.ExtendedFileChooser;
 
@@ -60,13 +60,6 @@ public class ComponentAsImageExportHandler {
 
     /** Ressourcenhandler */
     private final DialogResourceHandler drh = new DialogResourceHandler(ComponentAsImageExportHandler.class);
-
-    /**
-     *
-     */
-    private ComponentAsImageExportHandler() {
-        super();
-    }
 
     /**
      * Liefert für die übergebenen filterNamen ein Array von FileFiltern, wenn die Beschreibung und die Liste
@@ -123,43 +116,32 @@ public class ComponentAsImageExportHandler {
         if (fileFormat == null) {
             return;
         }
+        ZoomableComponent zoomComp = comp instanceof ZoomableComponent ? (ZoomableComponent) comp : null;
+
         //wenn das Bild mit maximaler Größe gespeichert werden soll und das Bild auch maximierbar ist
-        maximizeSize = comp instanceof ZoomableComponent && maximizeSize;
-        double zoom = 0d;
-        Dimension size = null;
+        maximizeSize = zoomComp != null && maximizeSize;
+        double originalZoom = zoomComp != null ? zoomComp.getZoom() : -1d;
+
         //maximale Bildgröße speichern?
         if (maximizeSize) {
             //vollen Zoom setzen und alten zoom merken
-            zoom = ((ZoomableComponent) comp).setZoomToMaximum();
-            size = comp.getSize();
-            comp.setSize(comp.getPreferredSize());
+            zoomComp.setZoomToMaximum();
         }
+        setHeapAvailableMaximumExportSize(comp);
         Dimension preferredSize = comp.getPreferredSize();
 
-        BigInteger tempSize = getTempHeapSize(preferredSize);
-        // skaliert das Bild runter, sodass die später berechnete Größe nicht den Integer Wert überschreitet (Negative Array Length error)
-        while (tempSize.compareTo(BigInteger.valueOf(Integer.MAX_VALUE)) == 1) {
-            preferredSize = downscaleSize(comp, preferredSize, Integer.MAX_VALUE);
-            tempSize = getTempHeapSize(preferredSize);
-        }
-
-        // da die Runtime.getRuntime().freeMemory(), sehr unzuverlässig ist, wird einfach etwas weniger als das Maximum des verfügbaren Speichers genommen
-        // und anschließend noch halbiert, da es später beim Speichern auch nochmal eingespeichert werden musss
-        long freeHeapSpace = (Runtime.getRuntime().maxMemory() - 100000000) / 2;
-        // skaliert das Bild runter, sodass es in den Heap passt
-        if (tempSize.longValue() > freeHeapSpace) {
-            preferredSize = downscaleSize(comp, preferredSize, freeHeapSpace);
-        }
-
+        //MemoryHandler.printMaxNowAvailableMemory();
+        //this here is the critical memory opration
         BufferedImage buffer = new BufferedImage(preferredSize.width, preferredSize.height, BufferedImage.TYPE_3BYTE_BGR);
+        //MemoryHandler.printMaxNowAvailableMemory();
+
         Graphics og = buffer.getGraphics();
         og.setColor(new Color(255, 255, 255, 255));
         og.fillRect(0, 0, preferredSize.width, preferredSize.height);
         comp.printAll(og);
         //ggf. Zoom auf alten Wert zurück setzen
-        if (maximizeSize) {
-            ((ZoomableComponent) comp).setZoom(zoom);
-            comp.setSize(size);
+        if (originalZoom >= 0d) {
+            zoomComp.setZoom(originalZoom);
         }
 
         File saveFile = new File(filename);
@@ -167,63 +149,90 @@ public class ComponentAsImageExportHandler {
         try {
             ImageIO.write(buffer, exportFileType, saveFile);
         } catch (Throwable e) {
-            JOptionPane.showMessageDialog(getFrameOrDialog(comp), drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
+            Component parent = ParentComponentFinder.getFrameOrDialog(comp);
+            JOptionPane.showMessageDialog(parent, drh.getResString("ERROR_MESSAGE"), drh.getResString("ERROR_TITLE"), JOptionPane.ERROR_MESSAGE);
         }
-
     }
 
     /**
-     * diese Berechnung wird durchgeführt, da für das BufferedImage mittels der Breite und der Höhe
-     * eine "size" berechnet wird und diese anschließend in ein Byte Array eingespeist wird.
-     * Daher sollte die "size" den maximalen Integer Wert und den offenen Heapspace nicht überschreiten.
-     * folgende Formel ist in der Klasse Raster.java zu finden und wirt mit folgenden Eingaben aufgerufen:
-     * BufferedImage.java:
-     * raster = Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, width*3, 3, bOffs, null);
-     * Raster.java:
-     * createInterleavedRaster(int dataType, int w, int h, int scanlineStride, int pixelStride, int[] bandOffsets, Point location)
-     * int size = scanlineStride * (h - 1) + pixelStride * w;
-     *
      * @param preferredSize
-     * @return
+     * @return a scaled size of the given size in the same aspect ratio
+     *         that will fit in memory when exporting an image of that
+     *         size
      */
-    private static BigInteger getTempHeapSize(final Dimension preferredSize) {
-        BigInteger tempSize = BigInteger.valueOf(preferredSize.width);
-        BigInteger bigThree = BigInteger.valueOf(3);
-        tempSize = tempSize.multiply(bigThree);
-        BigInteger hMinus1 = BigInteger.valueOf(preferredSize.height - 1);
-        tempSize = tempSize.multiply(hMinus1);
-        BigInteger wMult3 = BigInteger.valueOf(3 * preferredSize.width);
-        tempSize = tempSize.add(wMult3);
-        return tempSize;
+    private Dimension getMaxHeapAvailableSize(final Dimension preferredSize) {
+        Dimension maxAvailableImageSize = preferredSize;
+        //70% as memory buffer for other processes during export (tested with -Xmx768m -Xss64m)
+        //lower buffer values than 61% will cause an OutOfMemory exception -> 9% buffer buffer :)
+        long maxImageHeapSize = MemoryHandler.getMaxNowAvailableMemory(70);
+        long imageHeapSize = getImageHeapSize(preferredSize);
+        if (maxImageHeapSize < imageHeapSize) {
+            long squareMax = Double.valueOf(Math.sqrt(maxImageHeapSize)).longValue(); //= max possible side length in a square (rounding dosn't matter here)
+            long widthPlusHeightSquare = squareMax * 2; //= width + height from the square
+            long width = preferredSize.width;
+            long height = preferredSize.height;
+            long widthPlusHeight = width + height;
+            long realWidth = widthPlusHeightSquare * width / widthPlusHeight;
+            long realHeight = widthPlusHeightSquare + height / widthPlusHeight;
+            //this (width or height > Integer.MAX_VALUE) will probably never happen, but one thing is certain
+            long maxInt = Integer.MAX_VALUE;
+            if (realWidth > maxInt) {
+                realHeight = realHeight * maxInt / realWidth;
+                realWidth = maxInt;
+            }
+            if (realHeight > maxInt) {
+                realWidth = realWidth * maxInt / realHeight;
+                realHeight = maxInt;
+            }
+            //these long values are always < Integer.MAX_VALUE -> hard cast
+            int w = (int) realWidth;
+            int h = (int) realHeight;
+            maxAvailableImageSize = new Dimension(w, h);
+        }
+        return maxAvailableImageSize;
     }
 
     /**
-     * skaliert das bild runter, indem der Zoom angepasst wird
-     * hierzu wird eine Berechnung durchgeführt, aus folgender Formel hergeleitet wurde:
-     * size = scanlineStride * (h - 1) + pixelStride * w;
-     * => size = width * 3 * (h - 1) + 3 * width
-     * da das Verhältnis von Breite zu Höhe bekannt ist kann man durch das tempRatio die Höhe ersetzen
-     * tempRatio = width / height
-     * => size = width * 3 * (width / tempRatio - 1) + 3 * width
-     * => size = 3 * width^2 / tempRatio - 3 * width + 3 * width
-     * => size = 3 * width^2 / tempRatio
-     * da die maximale Größe schon vorher bekannt ist (maximaler Integer Wert oder verfügbarer Heap Space)
-     * => width = sqrt( size * tempRation / 3 )
+     * Sets the maximum available size for the component so that the
+     * image to be exported fits in memory and the export process can
+     * be executed without memory overflow.
      *
      * @param comp
+     */
+    private void setHeapAvailableMaximumExportSize(final JComponent comp) {
+        comp.getPreferredSize();
+        Dimension preferredSize = comp.getPreferredSize();
+        Dimension availableSize = getMaxHeapAvailableSize(preferredSize);
+        double preferredWidth = preferredSize.getWidth();
+        double availableWidth = availableSize.getWidth();
+        if (comp instanceof ZoomableComponent) {
+            if (preferredWidth > availableWidth) {
+                ZoomableComponent zComp = (ZoomableComponent) comp;
+                double scaleFactor = availableWidth / preferredWidth;
+                double zoom = zComp.getZoom();
+                zoom *= scaleFactor;
+                zComp.setZoom(zoom);
+                preferredSize = comp.getPreferredSize();
+            }
+        } else if (preferredWidth > availableWidth) {
+            preferredSize = availableSize;
+            comp.setPreferredSize(preferredSize);
+            comp.setSize(preferredSize);
+        }
+    }
+
+    /**
+     * Calculates the size of the image in the memory. The size results
+     * from the width multiplied by the height multiplied by 3, since
+     * each pixel of a {@link BufferedImage#TYPE_3BYTE_BGR} consumes 3
+     * bytes per pixel.
+     *
      * @param preferredSize
-     * @param freeSpace
      * @return
      */
-    private final Dimension downscaleSize(final JComponent comp, final Dimension preferredSize, final long freeSpace) {
-        double tempWidth = preferredSize.width;
-        double tempHeight = preferredSize.height;
-        double tempRatio = tempWidth / tempHeight;
-        double maxWidth = Math.sqrt(freeSpace * tempRatio / 3);
-        double zoomRatio = maxWidth / tempWidth;
-        double scaleZoom = ((ZoomableComponent) comp).getZoom() * zoomRatio;
-        ((ZoomableComponent) comp).setZoom(scaleZoom);
-        return comp.getPreferredSize();
+    private static long getImageHeapSize(final Dimension preferredImageSize) {
+        long heapSize = preferredImageSize.width * preferredImageSize.height * 3l;
+        return heapSize;
     }
 
     /**
