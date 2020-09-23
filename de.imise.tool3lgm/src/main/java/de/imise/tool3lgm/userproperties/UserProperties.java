@@ -364,6 +364,12 @@ public class UserProperties extends AbstractUserProperties {
         OPTION_SHOW_VIEW_COMPONENT_TITLES,
         /** Beim Start den Abfragedialog anzeigen, mit dem man das Metamodell wählen kann an/aus */
         OPTION_SHOW_CHOOSE_METAMODEL_DIALOG,
+        /** search the element names in the search dialog case sensitive on/off */
+        OPTION_SEARCH_DIALOG_CASE_SENSITIVE_NAME,
+        /** search the element descriptions in the search dialog case sensitive on/off */
+        OPTION_SEARCH_DIALOG_CASE_SENSITIVE_DESCRIPTION,
+        /** search the element userfields in the search dialog case sensitive on/off */
+        OPTION_SEARCH_DIALOG_CASE_SENSITIVE_USERFIELDS,
 
         /**
          * Schaltet einige Editieroptionen frei, die im normalen Modus verborgen sind. Das ist z.B. dafür gedacht, dass man in diesem Modus IheActors

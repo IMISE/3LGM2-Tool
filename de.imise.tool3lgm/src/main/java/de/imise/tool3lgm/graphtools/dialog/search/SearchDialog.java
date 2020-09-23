@@ -74,6 +74,7 @@ import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
 import de.imise.tool3lgm.log.Log;
+import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.Alphabetical;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
@@ -81,31 +82,22 @@ import de.imise.util.swing.component.HistoryComboBox;
 public class SearchDialog extends JDialog implements ListSelectionListener, WindowListener, ItemListener {
 
     /** Eingabefeld Bezeichnung */
-    private static HistoryComboBox elementName = new HistoryComboBox();
+    private final HistoryComboBox elementName = new HistoryComboBox();
 
     /** Eingabefeld Beschreibung */
-    private static HistoryComboBox elementDescription = new HistoryComboBox();
+    private final HistoryComboBox elementDescription = new HistoryComboBox();
 
     /** Eingabefeld Benutzerdef Eigenschaften */
-    private static HistoryComboBox elementUserField = new HistoryComboBox();
-
-    /** Groß/Kleinschreibung Bezeichnung */
-    private static boolean ignoreCaseInName = true;
-
-    /** Groß/Kleinschreibung Beschreibung */
-    private static boolean ignoreCaseInDescription = true;
-
-    /** Groß/Kleinschreibung benutzerdef. Eigenschaften */
-    private static boolean ignoreCaseInUserField = true;
+    private final HistoryComboBox elementUserField = new HistoryComboBox();
 
     /** für Spaltensortierungszustand ID */
-    private static boolean sortIdAsc = true;
+    private boolean sortIdAsc = true;
 
     /** für Spaltensortierungszustand Name */
-    private static boolean sortNameAsc = true;
+    private boolean sortNameAsc = true;
 
     /** für Spaltensortierungszustand Type */
-    private static boolean sortTypeAsc = true;
+    private boolean sortTypeAsc = true;
 
     private enum CheckBoxSelectionMode {
         /** Konstante für Checkboxen Suchen (aktivierte und deaktivierte) */
@@ -120,13 +112,13 @@ public class SearchDialog extends JDialog implements ListSelectionListener, Wind
     private CheckBoxSelectionMode checkBoxMode = CheckBoxSelectionMode.CHECKBOXMODE_ALL;
 
     /** Checkbox für ignore case Bezeichnung */
-    private final JCheckBox checkNameCaseSensitive = createCaseSensitiveCheckBox(!SearchDialog.ignoreCaseInName);
+    private final JCheckBox checkNameCaseSensitive = createCaseSensitiveCheckBox(BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_NAME.is());
 
     /** Checkbox für ignore case Beschreibung */
-    private final JCheckBox checkDescriptionCaseSensitive = createCaseSensitiveCheckBox(!SearchDialog.ignoreCaseInDescription);
+    private final JCheckBox checkDescriptionCaseSensitive = createCaseSensitiveCheckBox(BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_DESCRIPTION.is());
 
     /** Checkbox für ignore case Benutzerdef Eigenschaften */
-    private final JCheckBox checkUserFieldCaseSensitive = createCaseSensitiveCheckBox(!SearchDialog.ignoreCaseInUserField);
+    private final JCheckBox checkUserFieldCaseSensitive = createCaseSensitiveCheckBox(BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_USERFIELDS.is());
 
     /** Checkbox Checkboxsuche */
     private JComboBox<String> checkBoxAuswahl = new AlphabeticalComboBox();
@@ -163,10 +155,10 @@ public class SearchDialog extends JDialog implements ListSelectionListener, Wind
     };
 
     /** Ergebnistabelle */
-    private static JTable table;
+    private JTable table;
 
     /** TableModel der Ergebnistabelle */
-    private static DefaultTableModel mod;
+    private DefaultTableModel mod;
 
     /**
      * Konstruiert auf dem Frame den Dialog.
@@ -886,7 +878,7 @@ public class SearchDialog extends JDialog implements ListSelectionListener, Wind
     /**
      * Suchfelder leeren
      */
-    private static final void removeSearchItems() {
+    private final void removeSearchItems() {
         if (elementName.getEditor().getEditorComponent() instanceof JTextComponent) {
             ((JTextComponent) elementName.getEditor().getEditorComponent()).setText("");
         }
@@ -1038,9 +1030,9 @@ public class SearchDialog extends JDialog implements ListSelectionListener, Wind
     }
 
     private void addCBListeners() {
-        checkNameCaseSensitive.addActionListener(e -> ignoreCaseInName = !checkNameCaseSensitive.isSelected());
-        checkDescriptionCaseSensitive.addActionListener(e -> ignoreCaseInDescription = !checkDescriptionCaseSensitive.isSelected());
-        checkUserFieldCaseSensitive.addActionListener(e -> ignoreCaseInUserField = !checkUserFieldCaseSensitive.isSelected());
+        checkNameCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_NAME.set(checkNameCaseSensitive.isSelected()));
+        checkDescriptionCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_DESCRIPTION.set(checkDescriptionCaseSensitive.isSelected()));
+        checkUserFieldCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_USERFIELDS.set(checkUserFieldCaseSensitive.isSelected()));
     }
 
     @Override
