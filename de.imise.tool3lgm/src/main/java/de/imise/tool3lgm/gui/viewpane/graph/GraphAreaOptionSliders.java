@@ -12,6 +12,7 @@ import javax.swing.event.ChangeListener;
 
 import com.google.common.base.Strings;
 
+import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.view.graph.BasicGraphArea;
 import de.imise.tool3lgm.graphtools.view.graph.InputGraphArea;
@@ -37,7 +38,7 @@ public class GraphAreaOptionSliders implements ChangeListener {
         sliderDegree = new SliderWithTextField(0, 80, preferredSizeWidth, preferredSizeHeight, "winkel");
         sliderZoom = new SliderWithTextField((int) (BasicGraphArea.ZOOM_FACTOR_MINIMUM * 100), (int) (BasicGraphArea.ZOOM_FACTOR_MAXIMUM * 100), preferredSizeWidth, preferredSizeHeight, "zoom");
         sliderGap = new SliderWithTextField(0, getSliderGapMaximum(), preferredSizeWidth, preferredSizeHeight, "abstand");
-        sliderPageSizeFactor = new SliderWithTextField(100, 1000, preferredSizeWidth, preferredSizeHeight, "page_zoom");
+        sliderPageSizeFactor = new SliderWithTextField(100, 100 * GraphDocument.MAX_PAGE_SIZE_FACTOR, preferredSizeWidth, preferredSizeHeight, "page_zoom");
         updateValues();
     }
 
@@ -57,10 +58,10 @@ public class GraphAreaOptionSliders implements ChangeListener {
 
     private int getSliderGapMaximum() {
         //den maximalen Abstand in Anhängigkeit von der Ebenengröße berechnen
-        GraphViewPane graphViewPane = (GraphViewPane) frame.getViewPane();
+        GraphViewPane graphViewPane = frame.getViewPane();
         Szenario szen = graphViewPane.getSzenario();
         double pageSizeFactor = szen.getPageSizeFactor();
-        int maxPageSizeFactor = Double.valueOf(800d * pageSizeFactor).intValue();
+        int maxPageSizeFactor = Double.valueOf((GraphDocument.INITIAL_PAGE_HEIGHT + BasicGraphArea.GRAPH_BORDER.top) * pageSizeFactor).intValue();
         return maxPageSizeFactor;
     }
 

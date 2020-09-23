@@ -572,8 +572,9 @@ public class BasicGraphArea extends JComponent implements ZoomableComponent, Gra
         if (c.left > -frameWidth / 2) {
             c.left = -frameWidth / 2;
         }
-        setPreferredSize(new Dimension(c.right - c.left, c.bottom - c.top));
-
+        Dimension preferredSize = new Dimension(c.right - c.left, c.bottom - c.top);
+        setPreferredSize(preferredSize);
+        setSize(preferredSize);
         middleX = -c.left;
         middleY = -c.top;
         revalidateRepaint();

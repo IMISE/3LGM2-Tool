@@ -17,6 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 
 import de.imise.util.io.FileHandler;
+import de.imise.util.swing.component.ParentComponentFinder;
 
 /**
  * Erweitert die Funktionalität des {@link JFileChooser} dahin, dass im Konstruktor FileSystemView
@@ -183,13 +184,13 @@ public class ExtendedFileChooser extends JFileChooser {
     }
 
     /**
-     * @param parent
+     * @param parentComponent
      * @param title
      * @param showAllFileFilter
      * @param fileFilters
      * @return
      */
-    public int showSaveDialog(final Component parent, final String title, final boolean showAllFileFilter, final FileNameExtensionFilter... fileFilters) {
+    public int showSaveDialog(final Object parentComponent, final String title, final boolean showAllFileFilter, final FileNameExtensionFilter... fileFilters) {
         setDialogType(SAVE_DIALOG);
         if (title != null) {
             setDialogTitle(title);
@@ -200,6 +201,7 @@ public class ExtendedFileChooser extends JFileChooser {
         int returnValue = ERROR_OPTION;
         //der Dialog wird solange wiederholt, bis eine beschreibbare Datei ausgewählt wurde oder Abbrechen gedrückt wurde
         while (!correctFileName && returnValue != CANCEL_OPTION) {
+            Component parent = ParentComponentFinder.getFrameOrDialog(parentComponent);
             returnValue = showDialog(parent, null);
 
             //wenn nicht OK gedückt wurde -> raus
