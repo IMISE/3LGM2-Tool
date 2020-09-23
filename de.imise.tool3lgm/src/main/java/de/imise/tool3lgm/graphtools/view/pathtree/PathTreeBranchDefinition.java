@@ -2,11 +2,13 @@ package de.imise.tool3lgm.graphtools.view.pathtree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModelSpecificAdapter;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.path.MetaPathFunctions;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementClassTreeNode;
 import de.imise.tool3lgm.graphtools.view.tree.node.ElementContainerTreeNode;
@@ -140,6 +142,14 @@ public final class PathTreeBranchDefinition extends MetaModelSpecificAdapter imp
             return false;
         }
         return true;
+    }
+
+    /**
+     * @return a set of all classes which are defined as vissible through
+     *         this tree branch
+     */
+    public final Set<Class<? extends ModelElement>> getVisibleElementTypes() {
+        return MetaPathFunctions.getAllPathStepsSartAndEndClasses(elementsPath);
     }
 
 }

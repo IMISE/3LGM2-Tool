@@ -1,6 +1,8 @@
 package de.imise.tool3lgm.graphtools.path;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
@@ -10,6 +12,7 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.InstanciationEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.path.metapaths.AbstractMetaPath;
 import de.imise.tool3lgm.graphtools.path.metapaths.ElementaryMetaPath;
+import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 import de.imise.util.ReflectionUtils;
 
 /**
@@ -165,6 +168,21 @@ public class MetaPathFunctions {
             }
         }
         return true;
+    }
+
+    /**
+     * @param simpleMetaPath
+     * @return a set of all classes in the metapath. These are only the
+     *         path step connecting classes and not the edge classes.
+     */
+    public static final Set<Class<? extends ModelElement>> getAllPathStepsSartAndEndClasses(final SimpleMetaPath simpleMetaPath) {
+        Set<Class<? extends ModelElement>> returnSet = new HashSet<>();
+        returnSet.add(simpleMetaPath.getStartClass());
+        for (int i = 0; i < simpleMetaPath.length() - 1; i++) {
+            Class<? extends ModelElement> pathStepElementClass = simpleMetaPath.getPathStepElementClass(i);
+            returnSet.add(pathStepElementClass);
+        }
+        return returnSet;
     }
 
 }
