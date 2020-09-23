@@ -1,7 +1,7 @@
-package de.imise.tool3lgm.graphtools.dialog.panel;
+package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
-import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
-import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_START_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_START_ELEMENT_TYPE;
 
 import java.util.Collection;
 import java.util.EventObject;
@@ -9,9 +9,9 @@ import java.util.List;
 
 import javax.swing.tree.TreePath;
 
-import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
-import de.imise.tool3lgm.graphtools.dialog.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
+import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.DialogActionCommands;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;

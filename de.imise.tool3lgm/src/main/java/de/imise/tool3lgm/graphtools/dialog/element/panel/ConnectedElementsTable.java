@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.dialog.panel;
+package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
@@ -19,8 +19,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.ColumnType;
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableDefinition.ColumnType;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;

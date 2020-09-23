@@ -1,10 +1,10 @@
-package de.imise.tool3lgm.graphtools.dialog.panel;
+package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableDefinition.SingleColumnDefinition;
 import de.imise.tool3lgm.graphtools.metamodel.elements.OptionalEdge;
 import de.imise.tool3lgm.graphtools.path.metapaths.SimpleMetaPath;
 

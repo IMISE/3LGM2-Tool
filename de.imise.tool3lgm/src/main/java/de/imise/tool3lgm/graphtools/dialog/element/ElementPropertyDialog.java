@@ -1,7 +1,7 @@
-package de.imise.tool3lgm.graphtools.dialog;
+package de.imise.tool3lgm.graphtools.dialog.element;
 
-import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
-import static de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_END_ELEMENT_TYPE;
+import static de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption.LABEL_LAST_EDGE_CONNECTION_NAME;
 
 import java.awt.Component;
 import java.awt.event.ActionListener;
@@ -13,18 +13,18 @@ import javax.swing.JPanel;
 
 import de.imise.tool3lgm.Tool3lgmConstants;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.AbstractPathConnectionPanel.PanelLabelOption;
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTableDefinition;
-import de.imise.tool3lgm.graphtools.dialog.panel.ConnectedElementsTablePanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.DescriptedSingleConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.DoubleMeaningEdgePanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.InstanciationPathPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.MultiPanelElementDialogPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.MutipleCompositionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionLeafPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.PathConnectionPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.TabbedPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTableDefinition;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ConnectedElementsTablePanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.DescriptedSingleConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.DoubleMeaningEdgePanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.InstanciationPathPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.MultiPanelElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.MutipleCompositionPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionLeafPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.PathConnectionPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.TabbedPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.AbstractPathConnectionPanel.PanelLabelOption;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.CompositionEdge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;

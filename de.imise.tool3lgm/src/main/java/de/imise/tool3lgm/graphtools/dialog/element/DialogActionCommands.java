@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.dialog;
+package de.imise.tool3lgm.graphtools.dialog.element;
 
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.util.swing.event.ActionSource;

@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.dialog.panel;
+package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -6,7 +6,7 @@ import java.awt.GridLayout;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.imise.tool3lgm.graphtools.dialog.ElementPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.ElementPropertyDialog;
 import de.imise.util.swing.component.tab.ReorderableTabbedPane;
 
 /**

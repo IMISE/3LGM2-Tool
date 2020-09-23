@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.dialog;
+package de.imise.tool3lgm.graphtools.dialog.element;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import static de.imise.tool3lgm.graphtools.model.LGMChangeListener.LGMChangeType.DATA_CHANGED;
@@ -28,10 +28,11 @@ import org.apache.jena.ext.com.google.common.collect.Lists;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.Tool3lgmModelType.ModelCategory;
-import de.imise.tool3lgm.graphtools.dialog.panel.DescripPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogHeaderPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.ElementDialogPanel;
-import de.imise.tool3lgm.graphtools.dialog.panel.StructurePanel;
+import de.imise.tool3lgm.graphtools.dialog.AbstractTabbedPropertyDialog;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.DescripPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogHeaderPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.ElementDialogPanel;
+import de.imise.tool3lgm.graphtools.dialog.element.panel.StructurePanel;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.HasPartEdge;

@@ -2,7 +2,7 @@
  * Created on 08.01.2004 To change the template for this generated file go to
  * Window>Preferences>Java>Code Generation>Code and Comments
  */
-package de.imise.tool3lgm.graphtools.dialog.panel;
+package de.imise.tool3lgm.graphtools.dialog.element.panel;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -17,11 +17,11 @@ import javax.swing.JPanel;
 import javax.swing.JTree;
 
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
-import de.imise.tool3lgm.graphtools.dialog.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMAction;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMActionLibrary;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMComponentListener;
 import de.imise.tool3lgm.graphtools.dialog.action.LGMWindowListener;
+import de.imise.tool3lgm.graphtools.dialog.element.AbstractElementPropertyDialog;
 import de.imise.tool3lgm.graphtools.metamodel.MetaModel;
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GDCollection;

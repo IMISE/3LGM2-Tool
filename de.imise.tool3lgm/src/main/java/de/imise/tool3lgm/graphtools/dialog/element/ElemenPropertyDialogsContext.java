@@ -1,4 +1,4 @@
-package de.imise.tool3lgm.graphtools.dialog;
+package de.imise.tool3lgm.graphtools.dialog.element;
 
 import java.util.ArrayList;
 import java.util.List;
