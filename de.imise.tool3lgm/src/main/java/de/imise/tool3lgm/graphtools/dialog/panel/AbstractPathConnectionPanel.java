@@ -420,12 +420,6 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
     protected final void connect(final ModelElement startElement, final Iterable<ModelElement> elements2Connect, final int startEdgeIndex) {
         int pid = getTransactionID();
 
-        //Ausnahme für Mac-Java-Bug: wenn Dialoge auf dem MAC aus einem Drag&Drop-Ereignis heraus gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
-        //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach nicht angezeigt und der Name generiert.
-        boolean dragNDropOnMac = Static.isDragNDropOnMac();
-        GDCollection gdcoll = getCollection();
-        boolean lastAutomaticMode = gdcoll.setAutomaticMode(dragNDropOnMac);
-
         List<ElementaryMetaPath> elementaryMetaPaths = metaPath.getElementaryMetaPaths();
         if (!elementaryMetaPaths.isEmpty()) {
             SimpleMetaPath path2Create;
@@ -438,14 +432,18 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
             }
             LGMGraphDocument selectedDoc = getSelectedDoc();
             if (elements2Connect == null) {
-                selectedDoc.createPath(startElement, null, path2Create, pid);
+                //Ausnahme für Mac-Java-Bug: wenn Dialoge auf dem MAC aus einem Drag&Drop-Ereignis heraus
+                //gestartet werden, kann man sie nicht mehr mit der Maus ansprechen. Nur mit Tasten.
+                //Da dieser Bug nicht so einfach zu umgehen ist, wird in diesem Fall der Dialog einfach
+                //nicht angezeigt und der Name generiert.
+                boolean dragNDropOnMac = Static.isDragNDropOnMac();
+                selectedDoc.createPath(startElement, null, path2Create, !dragNDropOnMac, pid);
             } else {
                 for (ModelElement endElement : elements2Connect) {
                     selectedDoc.createPath(startElement, endElement, path2Create, pid);
                 }
             }
         }
-        gdcoll.setAutomaticMode(lastAutomaticMode);
     }
 
     /**
@@ -453,8 +451,10 @@ public abstract class AbstractPathConnectionPanel extends ConnectedElementsPanel
      * gefunden wird. Wenn der Pfad schon existiert, passiert nichts. Wenn er zu Teilen besteht, wird der Rest
      * angelegt.
      *
-     * @param element2Connect wenn hier ein nicht null-Element übergeben wird, dann wird dieses als letztes verknüpft.
-     *            Ist es null wird auch das letzte Element des Pfades neu angelegt.
+     * @param element2Connect
+     *            wenn hier ein nicht <code>null</code>-Element übergeben wird, dann wird dieses
+     *            als letztes verknüpft. Ist es <code>null</code> wird auch das letzte Element
+     *            des Pfades neu angelegt.
      */
     protected void connectToFirstPath(final ModelElement element2Connect) {
         ModelElement me = getModelElement();
