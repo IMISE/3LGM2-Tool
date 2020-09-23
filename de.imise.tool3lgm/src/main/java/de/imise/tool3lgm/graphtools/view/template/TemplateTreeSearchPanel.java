@@ -50,6 +50,7 @@ public class TemplateTreeSearchPanel extends JPanel {
         AbstractAction searchAction = new AbstractAction(searchLabelText) {
             @Override
             public void actionPerformed(final ActionEvent e) {
+                collapseTree();
                 selectMatchesInTree();
             }
         };
@@ -59,6 +60,15 @@ public class TemplateTreeSearchPanel extends JPanel {
 
         add(searchButton, BorderLayout.WEST);
         add(searchComboBox, BorderLayout.CENTER);
+    }
+
+    /**
+     *
+     */
+    private void collapseTree() {
+        for (int i = tree.getRowCount() - 1; i > 0; i--) {
+            tree.collapseRow(i);
+        }
     }
 
     /**
