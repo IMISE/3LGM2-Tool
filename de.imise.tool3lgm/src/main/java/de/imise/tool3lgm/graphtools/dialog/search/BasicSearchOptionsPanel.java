@@ -36,7 +36,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
-import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
@@ -300,22 +299,18 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         // Auswahlmodi für die benutzerdef. Eigenschaften
         userFieldStyleComboBox = new AlphabeticalComboBox();
         userFieldStyleComboBox.addItem(null, getResString("SEARCH_DIALOG_USERFIELD_all"));
-        userFieldStyleComboBox.addItem(UserField.Style.CHECK_BOX, CostingUtil.getDisplayableStyleName(UserField.Style.CHECK_BOX));
-        userFieldStyleComboBox.addItem(UserField.Style.COMBO_BOX, CostingUtil.getDisplayableStyleName(UserField.Style.COMBO_BOX));
-        userFieldStyleComboBox.addItem(UserField.Style.HYPERLINK, CostingUtil.getDisplayableStyleName(UserField.Style.HYPERLINK));
-        userFieldStyleComboBox.addItem(UserField.Style.CLASSIFICATION_NUMBER, CostingUtil.getDisplayableStyleName(UserField.Style.CLASSIFICATION_NUMBER));
-        userFieldStyleComboBox.addItem(UserField.Style.MULTI_LINE, CostingUtil.getDisplayableStyleName(UserField.Style.MULTI_LINE));
-        userFieldStyleComboBox.addItem(UserField.Style.RADIO_BUTTON, CostingUtil.getDisplayableStyleName(UserField.Style.RADIO_BUTTON));
-        userFieldStyleComboBox.addItem(UserField.Style.SEPARATOR, CostingUtil.getDisplayableStyleName(UserField.Style.SEPARATOR));
-        userFieldStyleComboBox.addItem(UserField.Style.SINGLE_LINE, CostingUtil.getDisplayableStyleName(UserField.Style.SINGLE_LINE));
-        userFieldStyleComboBox.addItem(UserField.Style.ID, CostingUtil.getDisplayableStyleName(UserField.Style.ID));
+        for (Style style : Style.values()) {
+            if (style != Style.FORMAT) {
+                userFieldStyleComboBox.addItem(style);
+            }
+        }
         userFieldStyleComboBox.setSelectedIndex(0);
 
         // Auswahlmodi für die Checkboxen
         userFieldCheckBoxStateComboBox = new JComboBox<>();
-        userFieldCheckBoxStateComboBox.addItem(UserFieldCheckBoxState.CHECKBOXMODE_ALL);
-        userFieldCheckBoxStateComboBox.addItem(UserFieldCheckBoxState.CHECKBOXMODE_ACTIVATED);
-        userFieldCheckBoxStateComboBox.addItem(UserFieldCheckBoxState.CHECKBOXMODE_NOT_ACTIVATED);
+        for (UserFieldCheckBoxState state : UserFieldCheckBoxState.values()) {
+            userFieldCheckBoxStateComboBox.addItem(state);
+        }
 
         userFieldStyleComboBox.addItemListener(this);
         userFieldCheckBoxStateComboBox.addItemListener(this);

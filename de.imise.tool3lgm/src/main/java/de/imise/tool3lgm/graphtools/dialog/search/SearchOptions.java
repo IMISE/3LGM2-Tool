@@ -17,7 +17,8 @@ import de.imise.util.swing.component.HistoryComboBox;
 public class SearchOptions {
 
     /**
-     *
+     * The order is importent. Its the same order they are
+     * displayed in the {@link BasicSearchOptionsPanel}
      */
     protected enum UserFieldCheckBoxState {
         /** Konstante für Checkboxen Suchen (aktivierte und deaktivierte) */

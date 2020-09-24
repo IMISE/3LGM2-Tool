@@ -27,7 +27,6 @@ import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge.Direction;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Node;
 import de.imise.tool3lgm.graphtools.model.GDCollection;
-import de.imise.tool3lgm.graphtools.userfield.CostingUtil;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
 import de.imise.tool3lgm.graphtools.userfield.UserFieldDefinitions;
@@ -142,7 +141,7 @@ public final class UserFieldDefinitionDialog extends AbstractPropertyDialog impl
         sb.append(label);
         sb.append(":  ");
         Style style = userField.getStyle();
-        sb.append(CostingUtil.getDisplayableStyleName(style));
+        sb.append(style);
         JLabel topLabel = new JLabel(sb.toString());
         topLabel.setFont(topLabel.getFont().deriveFont(14f).deriveFont(Font.BOLD));
         pane.add(topLabel, gbc);
