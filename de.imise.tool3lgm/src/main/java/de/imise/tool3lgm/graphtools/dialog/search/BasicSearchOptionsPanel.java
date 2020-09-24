@@ -196,7 +196,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     /**
      * Befüllt die elementClassBox
      */
-    private void fillElementClassBox() {
+    protected void fillElementClassBox() {
 
         elementClassBox.removeAllItems();
         elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_USERFIELD_AlleElementeArten"));

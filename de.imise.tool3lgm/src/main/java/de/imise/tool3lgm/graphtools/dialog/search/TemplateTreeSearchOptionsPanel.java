@@ -3,11 +3,17 @@
  */
 package de.imise.tool3lgm.graphtools.dialog.search;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.awt.BorderLayout;
 
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
+import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
+import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeDefinition;
+import de.imise.tool3lgm.graphtools.view.pathtree.PathTreeModel;
 import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
 
 /**
@@ -60,6 +66,25 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
 
         });
 
+    }
+
+    /**
+     * Befüllt die elementClassBox
+     */
+    @Override
+    protected void fillElementClassBox() {
+
+        elementClassBox.removeAllItems();
+        elementClassBox.addItem(ModelElement.class, getResString("SEARCH_DIALOG_USERFIELD_AlleElementeArten"));
+        elementClassBox.addSeparator(true);
+
+        PathTreeModel model = ((TemplateBrowserTree) resultTargetView).getModel();
+        PathTreeDefinition pathTreeDefinition = model.getPathTreeDefinition();
+        ElementsNameBuilder elementsNameBuilder = pathTreeDefinition.getElementsNameBuilder();
+        for (Class<? extends ModelElement> elementClass : pathTreeDefinition.getVisibleElementTypes()) {
+            elementClassBox.addItem(elementClass, elementsNameBuilder.getDisplayableFullName(elementClass));
+        }
+        elementClassBox.setSelectedObject(ModelElement.class);
     }
 
 }
