@@ -1,6 +1,9 @@
 package de.imise.tool3lgm.graphtools.dialog.search;
 
 import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_DESCRIPTION;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_NAME;
+import static de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_USERFIELDS;
 
 import java.awt.Component;
 import java.awt.LayoutManager;
@@ -38,6 +41,7 @@ import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.model.Szenario;
 import de.imise.tool3lgm.graphtools.userfield.UserField;
 import de.imise.tool3lgm.graphtools.userfield.UserField.Style;
+import de.imise.tool3lgm.userproperties.UserProperties;
 import de.imise.tool3lgm.userproperties.UserProperties.BooleanProperty;
 import de.imise.util.swing.component.AlphabeticalComboBox;
 import de.imise.util.swing.component.HistoryComboBox;
@@ -123,6 +127,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
 
         addComboboxListeners();
         addCheckBoxListeners();
+
     }
 
     /**
@@ -331,7 +336,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         } else {
             userFieldCheckBoxState = UserFieldCheckBoxState.CHECKBOXMODE_ALL;
         }
-
+        callSearch();
     }
 
     ////////////////////////////////////////////////
@@ -339,12 +344,22 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     ////////////////////////////////////////////////
 
     /**
-     * Adds the ActionListener to the case sensitive CheckBoxes
+     * Adds the ActionListener to the case sensitive CheckBoxes which save
+     * the cureent state in the {@link UserProperties} and start the search.
      */
     private void addCheckBoxListeners() {
-        checkNameCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_NAME.set(checkNameCaseSensitive.isSelected()));
-        checkDescriptionCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_DESCRIPTION.set(checkDescriptionCaseSensitive.isSelected()));
-        checkUserFieldCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_USERFIELDS.set(checkUserFieldCaseSensitive.isSelected()));
+        checkNameCaseSensitive.addActionListener(e -> saveCheckBoxStateInUserPropertiesAndCallSearch(checkNameCaseSensitive, OPTION_SEARCH_DIALOG_CASE_SENSITIVE_NAME));
+        checkDescriptionCaseSensitive.addActionListener(e -> saveCheckBoxStateInUserPropertiesAndCallSearch(checkDescriptionCaseSensitive, OPTION_SEARCH_DIALOG_CASE_SENSITIVE_DESCRIPTION));
+        checkUserFieldCaseSensitive.addActionListener(e -> saveCheckBoxStateInUserPropertiesAndCallSearch(checkUserFieldCaseSensitive, OPTION_SEARCH_DIALOG_CASE_SENSITIVE_USERFIELDS));
+    }
+
+    /**
+     * @param checkbox
+     * @param booleanProperty
+     */
+    private void saveCheckBoxStateInUserPropertiesAndCallSearch(final JCheckBox checkbox, final BooleanProperty booleanProperty) {
+        booleanProperty.set(checkbox.isSelected());
+        callSearch();
     }
 
     private void addComboboxListeners() {
