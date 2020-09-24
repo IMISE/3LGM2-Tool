@@ -431,8 +431,12 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         checkDescriptionCaseSensitive.setSelected(searchOptions.caseSensitiveDescription);
         checkUserFieldCaseSensitive.setSelected(searchOptions.caseSensitiveUserFields);
         elementClassBox.setSelectedItem(searchOptions.searchedElementType);
-        userFieldStyleComboBox.setSelectedItem(searchOptions.userFieldStyle);
-        userFieldCheckBoxStateComboBox.setSelectedItem(searchOptions.userFieldCheckBoxState);
+        if (userFieldStyleComboBox != null) {
+            userFieldStyleComboBox.setSelectedItem(searchOptions.userFieldStyle);
+        }
+        if (userFieldCheckBoxStateComboBox != null) {
+            userFieldCheckBoxStateComboBox.setSelectedItem(searchOptions.userFieldCheckBoxState);
+        }
         elementName.setHistory(searchOptions.inputHistoryName);
         elementDescription.setHistory(searchOptions.inputHistoryDescription);
         elementUserField.setHistory(searchOptions.inputHistoryUserFields);

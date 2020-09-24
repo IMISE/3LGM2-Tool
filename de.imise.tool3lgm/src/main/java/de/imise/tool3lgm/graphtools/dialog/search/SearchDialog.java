@@ -60,7 +60,6 @@ public class SearchDialog extends JDialog {
             @Override
             public void windowClosing(final WindowEvent e) {
                 lastSearchOptions = searchOptionsPanel.getSearchOptions(true);
-                super.windowClosing(e);
             }
 
             @Override
@@ -69,7 +68,6 @@ public class SearchDialog extends JDialog {
                     searchOptionsPanel.restoreSearchOptions(lastSearchOptions);
                     lastSearchOptions = null;
                 }
-                super.windowOpened(e);
             }
         });
     }
