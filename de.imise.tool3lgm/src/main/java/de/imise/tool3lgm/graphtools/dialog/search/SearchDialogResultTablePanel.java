@@ -6,6 +6,7 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,18 +20,22 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import de.imise.tool3lgm.Static;
 import de.imise.tool3lgm.graphtools.ElementsNameBuilder;
 import de.imise.tool3lgm.graphtools.metamodel.elements.Edge;
+import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
 import de.imise.tool3lgm.graphtools.model.GraphDocument;
 import de.imise.tool3lgm.graphtools.undoredo.TransactionManager;
 import de.imise.tool3lgm.graphtools.view.container.ElementContainer;
@@ -109,32 +114,44 @@ public class SearchDialogResultTablePanel extends JPanel implements SearchResult
             }
         };
         table.setAutoResizeMode(JTable.AUTO_RESIZE_NEXT_COLUMN);
-        table.getColumnModel().getColumn(0).setMaxWidth(80);
-        table.getSelectionModel().addListSelectionListener(this);
+
+        TableColumnModel columnModel = table.getColumnModel();
+        TableColumn column = columnModel.getColumn(0);
+        column.setMaxWidth(80);
+
+        final ListSelectionModel selectionModel = table.getSelectionModel();
+        selectionModel.addListSelectionListener(this);
 
         // Listener dranhängen
         table.addMouseListener(new MouseAdapter() {
             private boolean isPopupTrigger(final MouseEvent e) {
 
+                Point clickedPoint = e.getPoint();
+                int rowAtPoint = table.rowAtPoint(clickedPoint);
+
                 // Manuell selektieren
                 if (!(table.getSelectedRow() > -1)) {
-                    table.getSelectionModel().setSelectionInterval(table.rowAtPoint(e.getPoint()), table.rowAtPoint(e.getPoint()));
+                    selectionModel.setSelectionInterval(rowAtPoint, rowAtPoint);
                 }
                 // Nur wenn nicht mehr als eine Zeile markiert
                 if (table.getSelectedRowCount() > 0) {
-                    if ((e.getModifiersEx() & InputEvent.BUTTON1_DOWN_MASK) == InputEvent.BUTTON1_DOWN_MASK) {
+                    //do not switch this to e.getModifiersEx() und InputEvent.BUTTON1_DOWN_MASK
+                    //this will not work because modifiersEx result is here always 0 and never
+                    //the button if it is called with a MouseClicked-Event!
+                    int modifiers = e.getModifiers();
+                    if ((modifiers & InputEvent.BUTTON1_MASK) != 0) {
                         return false;
                     }
                     // Nur wenn wirklich markiertes angewählt wurde, sonst passiert nichts
                     int[] rows = table.getSelectedRows();
                     for (int i = 0; i < rows.length; i++) {
-                        if (table.isRowSelected(table.rowAtPoint(e.getPoint()))) {
+                        if (table.isRowSelected(rowAtPoint)) {
                             return true;
                         }
                     }
                     // Nichts gefunden
                     // -> singlerow selektieren und menü anzeigen
-                    table.getSelectionModel().setSelectionInterval(table.rowAtPoint(e.getPoint()), table.rowAtPoint(e.getPoint()));
+                    selectionModel.setSelectionInterval(rowAtPoint, rowAtPoint);
                     return true;
                 }
                 return false;
@@ -226,13 +243,15 @@ public class SearchDialogResultTablePanel extends JPanel implements SearchResult
             int rowCounter = 1;
             Object[] data = new Object[3];
             for (ElementContainer ec : result) {
+                ModelElement me = ec.getElement();
                 data[0] = rowCounter;
                 data[1] = ec;
-                // data[2] = ec.getGraphDocument().getTitle();
+                data[2] = elementsNameBuilder.getDisplayableName(me);
                 if (ec.getElement() instanceof Edge) {
-                    data[2] = elementsNameBuilder.getDisplayableName(ec.getElement()) + ": " + elementsNameBuilder.getFullForwardMetaAssociationName(ec.getElement().getClass().asSubclass(Edge.class));
-                } else {
-                    data[2] = elementsNameBuilder.getDisplayableName(ec.getElement());
+                    Class<? extends ModelElement> elementClass = me.getClass();
+                    Class<? extends Edge> edgeClass = elementClass.asSubclass(Edge.class);
+                    String fullEdgeDispayName = elementsNameBuilder.getFullForwardMetaAssociationName(edgeClass);
+                    data[2] = data[2] + ": " + fullEdgeDispayName;
                 }
                 tableModel.addRow(data);
                 rowCounter++;
