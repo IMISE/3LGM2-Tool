@@ -184,4 +184,32 @@ public class HistoryComboBox extends JComboBox<String> implements KeyListener {
     public void keyReleased(final KeyEvent e) {
     }
 
+    /**
+     * @return the string of the selected icon
+     */
+    public String getText() {
+        return getText(this);
+    }
+
+    /**
+     * @param comboBox
+     * @return the string of the selected icon in the combobox
+     */
+    public static String getText(final JComboBox<?> comboBox) {
+        Object selectedItem = comboBox.getSelectedItem();
+        if (selectedItem == null) {
+            ComboBoxEditor editor = comboBox.getEditor();
+            Component editorComponent = editor.getEditorComponent();
+            if (editorComponent instanceof JTextComponent) {
+                JTextComponent textEditorComponent = (JTextComponent) editorComponent;
+                selectedItem = textEditorComponent.getText();
+            }
+            if (selectedItem == null) {
+                return null;
+            }
+        }
+        String value = String.valueOf(selectedItem);
+        return value;
+    }
+
 }
