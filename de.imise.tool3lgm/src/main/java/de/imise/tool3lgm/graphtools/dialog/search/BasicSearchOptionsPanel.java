@@ -112,18 +112,16 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     public BasicSearchOptionsPanel(final SearchResultView resultTargetView, final LayoutManager layout) {
         super(layout);
         this.resultTargetView = resultTargetView;
+        // Selectboxen befüllen
+        fillModelBox();
+        addToolTips();
+
         addSearchButtonKeyListener();
-        addJCBListeners();
-        addCBListeners();
         searchButton.setAction(searchActionDefault);
         elementClassBox.setAction(searchActionDefault);
         modelBox.setAction(searchActionWithUpdateSubmodelAndClassBoxes);
         subModelBox.setAction(searchActionDefault);
-
-        addToolTips();
-        // Selectboxen befüllen
-        fillModelBox();
-
+        addListeners();
     }
 
     /**
@@ -167,7 +165,6 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      * @param refreshSubModelAndClassBox
      */
     private void callSearch(final boolean refreshSubModelAndClassBox) {
-
         HistoryComboBox.addToHistory(elementName);
         HistoryComboBox.addToHistory(elementUserField);
         HistoryComboBox.addToHistory(elementDescription);
@@ -344,13 +341,10 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     /**
      * ActionListener an die JCBs
      */
-    private void addJCBListeners() {
+    private void addListeners() {
         elementName.setEnterAction(searchActionDefault);
         elementDescription.setEnterAction(searchActionDefault);
         elementUserField.setEnterAction(searchActionDefault);
-    }
-
-    private void addCBListeners() {
         checkNameCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_NAME.set(checkNameCaseSensitive.isSelected()));
         checkDescriptionCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_DESCRIPTION.set(checkDescriptionCaseSensitive.isSelected()));
         checkUserFieldCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_USERFIELDS.set(checkUserFieldCaseSensitive.isSelected()));
