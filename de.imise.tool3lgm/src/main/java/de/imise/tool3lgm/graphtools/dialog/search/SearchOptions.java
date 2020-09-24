@@ -30,25 +30,16 @@ public class SearchOptions {
     private String inputStringName;
 
     /** */
-    //    private Pattern patternName;
-
-    /** */
     private boolean caseSensitiveName;
 
     /** */
     private String inputStringDescription;
 
     /** */
-    //    private Pattern patternDescription;
-
-    /** */
     private boolean caseSensitiveDescription;
 
     /** */
     private String inputStringUserFields;
-
-    /** */
-    //    private Pattern patternUserFields;
 
     /** */
     private boolean caseSensitiveUserFields;
@@ -73,7 +64,6 @@ public class SearchOptions {
     public final void setInputStringName(final String inputStringName, final boolean caseSensitive) {
         this.inputStringName = inputStringName;
         caseSensitiveName = caseSensitive;
-        //        patternName = SearchFunctions.compilePattern(inputStringName, caseSensitive);
     }
 
     /**
@@ -90,7 +80,6 @@ public class SearchOptions {
     public final void setInputStringDescription(final String inputStringDescription, final boolean caseSensitive) {
         this.inputStringDescription = inputStringDescription;
         caseSensitiveDescription = caseSensitive;
-        //        patternDescription = SearchFunctions.compilePattern(inputStringDescription, caseSensitive);
     }
 
     /**
@@ -107,30 +96,8 @@ public class SearchOptions {
     public final void setInputStringUserFields(final String inputStringUserFields, final boolean caseSensitive) {
         this.inputStringUserFields = inputStringUserFields;
         caseSensitiveUserFields = caseSensitive;
-        //        patternUserFields = SearchFunctions.compilePattern(inputStringUserFields, caseSensitive);
     }
 
-    //    /**
-    //     * @return the patternName
-    //     */
-    //    public final Pattern getPatternName() {
-    //        return patternName;
-    //    }
-    //
-    //    /**
-    //     * @return the patternDescription
-    //     */
-    //    public final Pattern getPatternDescription() {
-    //        return patternDescription;
-    //    }
-    //
-    //    /**
-    //     * @return the patternUserFields
-    //     */
-    //    public final Pattern getPatternUserFields() {
-    //        return patternUserFields;
-    //    }
-    //
     /**
      * @return the caseSensitiveName
      */
