@@ -70,7 +70,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     protected final JCheckBox checkUserFieldCaseSensitive = createCaseSensitiveCheckBox(BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_USERFIELDS.is());
 
     /** Checkbox Checkboxsuche */
-    protected JComboBox<String> userFieldCheckBoxStateComboBox = new AlphabeticalComboBox();
+    protected JComboBox<UserFieldCheckBoxState> userFieldCheckBoxStateComboBox;
 
     /** Typbox der benutzerdef. Eigenschaften wie Checkbox, Textfeld usw. */
     protected AlphabeticalComboBox userFieldStyleComboBox;
@@ -297,9 +297,9 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      */
     protected void createUserFieldTypeComboBox() {
 
-        // auswahlmodi für die benutzerdef. eigenschaften
+        // Auswahlmodi für die benutzerdef. Eigenschaften
         userFieldStyleComboBox = new AlphabeticalComboBox();
-        userFieldStyleComboBox.addItem(getResString("SEARCH_DIALOG_USERFIELD_all"));
+        userFieldStyleComboBox.addItem(null, getResString("SEARCH_DIALOG_USERFIELD_all"));
         userFieldStyleComboBox.addItem(UserField.Style.CHECK_BOX, CostingUtil.getDisplayableStyleName(UserField.Style.CHECK_BOX));
         userFieldStyleComboBox.addItem(UserField.Style.COMBO_BOX, CostingUtil.getDisplayableStyleName(UserField.Style.COMBO_BOX));
         userFieldStyleComboBox.addItem(UserField.Style.HYPERLINK, CostingUtil.getDisplayableStyleName(UserField.Style.HYPERLINK));
@@ -309,13 +309,16 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         userFieldStyleComboBox.addItem(UserField.Style.SEPARATOR, CostingUtil.getDisplayableStyleName(UserField.Style.SEPARATOR));
         userFieldStyleComboBox.addItem(UserField.Style.SINGLE_LINE, CostingUtil.getDisplayableStyleName(UserField.Style.SINGLE_LINE));
         userFieldStyleComboBox.addItem(UserField.Style.ID, CostingUtil.getDisplayableStyleName(UserField.Style.ID));
+        userFieldStyleComboBox.setSelectedIndex(0);
 
-        // auswahlmodi für die checkboxen
+        // Auswahlmodi für die Checkboxen
         userFieldCheckBoxStateComboBox = new JComboBox<>();
-        userFieldCheckBoxStateComboBox.addItem(getResString("SEARCH_DIALOG_USERFIELD_activated_deactivated"));
-        userFieldCheckBoxStateComboBox.addItem(getResString("SEARCH_DIALOG_USERFIELD_activated"));
-        userFieldCheckBoxStateComboBox.addItem(getResString("SEARCH_DIALOG_USERFIELD_deactivated"));
+        userFieldCheckBoxStateComboBox.addItem(UserFieldCheckBoxState.CHECKBOXMODE_ALL);
+        userFieldCheckBoxStateComboBox.addItem(UserFieldCheckBoxState.CHECKBOXMODE_ACTIVATED);
+        userFieldCheckBoxStateComboBox.addItem(UserFieldCheckBoxState.CHECKBOXMODE_NOT_ACTIVATED);
 
+        userFieldStyleComboBox.addItemListener(this);
+        userFieldCheckBoxStateComboBox.addItemListener(this);
     }
 
     /*
@@ -323,16 +326,13 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      */
     @Override
     public void itemStateChanged(final ItemEvent arg0) {
-        if (userFieldStyleComboBox.getSelectedItem().equals(getResString("SEARCH_DIALOG_USERFIELD_all")) || userFieldStyleComboBox.getSelectedObject().equals(UserField.Style.CHECK_BOX)) {
-            userFieldCheckBoxStateComboBox.setEnabled(true);
-        }
-
-        else {
-            userFieldCheckBoxStateComboBox.setEnabled(false);
-        }
+        Object selectedUserFieldStyle = userFieldStyleComboBox.getSelectedObject();
+        boolean userFieldCheckBoxStateEnabledState = selectedUserFieldStyle == null || selectedUserFieldStyle == UserField.Style.CHECK_BOX;
+        userFieldCheckBoxStateComboBox.setEnabled(userFieldCheckBoxStateEnabledState);
         // Checkboxmodus (Suche Alle/aktivierte/nicht aktivierte)
-        if (userFieldCheckBoxStateComboBox.getSelectedIndex() > 0) {
-            userFieldCheckBoxState = userFieldCheckBoxStateComboBox.getSelectedItem().equals(getResString("SEARCH_DIALOG_USERFIELD_activated")) ? UserFieldCheckBoxState.CHECKBOXMODE_ACTIVATED : UserFieldCheckBoxState.CHECKBOXMODE_NOT_ACTIVATED;
+        int userFieldCheckBoxStateSelectedIndex = userFieldCheckBoxStateComboBox.getSelectedIndex();
+        if (userFieldCheckBoxStateSelectedIndex >= 0) {
+            userFieldCheckBoxState = userFieldCheckBoxStateComboBox.getItemAt(userFieldCheckBoxStateSelectedIndex);
         } else {
             userFieldCheckBoxState = UserFieldCheckBoxState.CHECKBOXMODE_ALL;
         }
@@ -361,7 +361,8 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
     }
 
     /**
-     * Adds the ActionListener to the HistoryComboBoxes
+     * Adds or removes the ItemListener and Action to or from
+     * the HistoryComboBoxes
      *
      * @param delete If <code>true</code> all listeners are removed.
      *            If <code>false</code> a change will start a search.
@@ -371,14 +372,23 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         elementName.setEnterAction(enterAction);
         elementDescription.setEnterAction(enterAction);
         elementUserField.setEnterAction(enterAction);
-        if (userFieldStyleComboBox != null) {
-            if (remove) {
+        if (remove) {
+            elementName.removeItemListener(this);
+            elementDescription.removeItemListener(this);
+            elementUserField.removeItemListener(this);
+            if (userFieldStyleComboBox != null) {
                 userFieldStyleComboBox.removeItemListener(this);
                 userFieldCheckBoxStateComboBox.removeItemListener(this);
-            } else {
+            }
+        } else {
+            elementName.addItemListener(this);
+            elementDescription.addItemListener(this);
+            elementUserField.addItemListener(this);
+            if (userFieldStyleComboBox != null) {
                 userFieldStyleComboBox.addItemListener(this);
                 userFieldCheckBoxStateComboBox.addItemListener(this);
             }
+
         }
     }
 

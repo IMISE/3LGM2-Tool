@@ -1,5 +1,7 @@
 package de.imise.tool3lgm.graphtools.dialog.search;
 
+import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
+
 import java.util.List;
 
 import de.imise.tool3lgm.graphtools.metamodel.elements.ModelElement;
@@ -24,6 +26,11 @@ public class SearchOptions {
         CHECKBOXMODE_ACTIVATED,
         /** Konstante für deaktivierte Checkboxen Suchen */
         CHECKBOXMODE_NOT_ACTIVATED;
+
+        @Override
+        public String toString() {
+            return getResString(this);
+        }
     }
 
     /** */
