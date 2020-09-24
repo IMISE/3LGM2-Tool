@@ -218,9 +218,8 @@ public class SearchDialogResultTablePanel extends JPanel implements SearchResult
      */
     public void setSearchResult(final Collection<ElementContainer> result) {
         tableModel = (DefaultTableModel) table.getModel();
-        int resultCount = result.size();
-        tableModel.setRowCount(resultCount);
-        if (resultCount > 0) {
+        tableModel.setRowCount(0);
+        if (!result.isEmpty()) {
             ElementContainer firstResultElement = result.iterator().next();
             GraphDocument doc = firstResultElement.getGraphDocument();
             ElementsNameBuilder elementsNameBuilder = doc.getElementsNameBuilder();
