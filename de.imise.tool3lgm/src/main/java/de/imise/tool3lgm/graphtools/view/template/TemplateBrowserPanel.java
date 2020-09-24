@@ -36,7 +36,7 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
     /**
      *
      */
-    private final TemplateTreeSearchOptionsPanel searchPanel;
+    private TemplateTreeSearchOptionsPanel searchPanel;
 
     /**
      *
@@ -50,7 +50,6 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
         setLayout(new BorderLayout());
         tree = new TemplateBrowserTree();
         treeScrollPane = new JScrollPane(tree);
-        searchPanel = new TemplateTreeSearchOptionsPanel(tree);
         tree.addPropertyChangeListener(CONTENT_CHANGED, this);
     }
 
@@ -123,12 +122,14 @@ public class TemplateBrowserPanel extends JPanel implements PropertyChangeListen
     private void checkSearchFieldVisibility() {
         boolean showSearchPanel = tree.hasContent();
         if (showSearchPanel) {
-            if (searchPanel.getParent() == null) {
+            if (searchPanel == null) {
+                searchPanel = new TemplateTreeSearchOptionsPanel(tree);
                 add(searchPanel, BorderLayout.NORTH);
             }
         } else {
-            if (searchPanel.getParent() != null) {
+            if (searchPanel != null) {
                 remove(searchPanel);
+                searchPanel = null;
             }
         }
     }
