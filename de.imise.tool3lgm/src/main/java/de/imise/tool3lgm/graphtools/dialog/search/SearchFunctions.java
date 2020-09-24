@@ -119,14 +119,14 @@ public class SearchFunctions {
      * @return
      */
     public static List<ElementContainer> getResult(final GraphDocument doc, final SearchOptions searchOptions) {
-        String inputStringName = searchOptions.getInputStringName();
-        boolean caseSensitiveName = searchOptions.isCaseSensitiveName();
+        String inputStringName = searchOptions.inputStringName;
+        boolean caseSensitiveName = searchOptions.caseSensitiveName;
         Pattern patternName = compilePattern(inputStringName, caseSensitiveName);
-        String inputStringDescription = searchOptions.getInputStringDescription();
-        boolean caseSensitiveDescription = searchOptions.isCaseSensitiveDescription();
+        String inputStringDescription = searchOptions.inputStringDescription;
+        boolean caseSensitiveDescription = searchOptions.caseSensitiveDescription;
         Pattern patternDescription = compilePattern(inputStringDescription, caseSensitiveDescription);
-        String inputStringUserFields = searchOptions.getInputStringUserFields();
-        boolean caseSensitiveUserField = searchOptions.isCaseSensitiveUserFields();
+        String inputStringUserFields = searchOptions.inputStringUserFields;
+        boolean caseSensitiveUserField = searchOptions.caseSensitiveUserFields;
         Pattern patternUserFields = compilePattern(inputStringUserFields, caseSensitiveUserField);
         return getResult(doc, searchOptions.searchedElementType, patternName, caseSensitiveName, patternDescription, caseSensitiveDescription, patternUserFields, caseSensitiveUserField, searchOptions.userFieldStyle, searchOptions.userFieldCheckBoxState);
     }

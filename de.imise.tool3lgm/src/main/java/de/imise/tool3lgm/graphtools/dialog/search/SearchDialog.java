@@ -7,6 +7,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JDialog;
 
@@ -45,6 +47,31 @@ public class SearchDialog extends JDialog {
         contentPane.add(resultTablePanel, BorderLayout.CENTER);
 
         pack();
+
+        addWindowListenerToRestoreOldStates();
+    }
+
+    /**
+     * Store/restore the old values of all input
+     * components if the dialog is closed/opened
+     */
+    private void addWindowListenerToRestoreOldStates() {
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(final WindowEvent e) {
+                lastSearchOptions = searchOptionsPanel.getSearchOptions(true);
+                super.windowClosing(e);
+            }
+
+            @Override
+            public void windowOpened(final WindowEvent e) {
+                if (lastSearchOptions != null) {
+                    searchOptionsPanel.restoreSearchOptions(lastSearchOptions);
+                    lastSearchOptions = null;
+                }
+                super.windowOpened(e);
+            }
+        });
     }
 
     /**
@@ -52,20 +79,6 @@ public class SearchDialog extends JDialog {
      */
     public void showDialog() {
         setVisible(true);
-    }
-
-    @Override
-    public void setVisible(final boolean b) {
-        if (true && lastSearchOptions != null) {
-            searchOptionsPanel.setSearchOptions(lastSearchOptions);
-        }
-        super.setVisible(b);
-    }
-
-    @Override
-    public void dispose() {
-        lastSearchOptions = searchOptionsPanel.getSearchOptions();
-        super.dispose();
     }
 
 }

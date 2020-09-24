@@ -121,7 +121,9 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
         elementClassBox.setAction(searchActionDefault);
         modelBox.setAction(searchActionWithUpdateSubmodelAndClassBoxes);
         subModelBox.setAction(searchActionDefault);
-        addListeners();
+
+        addComboboxListeners();
+        addCheckBoxListeners();
     }
 
     /**
@@ -175,7 +177,7 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
             fillElementClassBox();
         }
 
-        SearchOptions searchOptions = getSearchOptions();
+        SearchOptions searchOptions = getSearchOptions(false);
         resultTargetView.showResult(doc, searchOptions);
 
     }
@@ -321,7 +323,6 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
      */
     @Override
     public void itemStateChanged(final ItemEvent arg0) {
-
         if (userFieldStyleComboBox.getSelectedItem().equals(getResString("SEARCH_DIALOG_USERFIELD_all")) || userFieldStyleComboBox.getSelectedObject().equals(UserField.Style.CHECK_BOX)) {
             userFieldCheckBoxStateComboBox.setEnabled(true);
         }
@@ -338,32 +339,69 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
 
     }
 
+    ////////////////////////////////////////////////
+    // Add / Remove ActionListener + ItemListener //
+    ////////////////////////////////////////////////
+
     /**
-     * ActionListener an die JCBs
+     * Adds the ActionListener to the case sensitive CheckBoxes
      */
-    private void addListeners() {
-        elementName.setEnterAction(searchActionDefault);
-        elementDescription.setEnterAction(searchActionDefault);
-        elementUserField.setEnterAction(searchActionDefault);
+    private void addCheckBoxListeners() {
         checkNameCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_NAME.set(checkNameCaseSensitive.isSelected()));
         checkDescriptionCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_DESCRIPTION.set(checkDescriptionCaseSensitive.isSelected()));
         checkUserFieldCaseSensitive.addActionListener(e -> BooleanProperty.OPTION_SEARCH_DIALOG_CASE_SENSITIVE_USERFIELDS.set(checkUserFieldCaseSensitive.isSelected()));
     }
 
+    private void addComboboxListeners() {
+        setComboboxListeners(false);
+    }
+
+    private void removeComboboxListeners() {
+        setComboboxListeners(true);
+    }
+
     /**
-     * @return
+     * Adds the ActionListener to the HistoryComboBoxes
+     *
+     * @param delete If <code>true</code> all listeners are removed.
+     *            If <code>false</code> a change will start a search.
      */
-    public SearchOptions getSearchOptions() {
+    private void setComboboxListeners(final boolean remove) {
+        Action enterAction = remove ? null : searchActionDefault;
+        elementName.setEnterAction(enterAction);
+        elementDescription.setEnterAction(enterAction);
+        elementUserField.setEnterAction(enterAction);
+        if (userFieldStyleComboBox != null) {
+            if (remove) {
+                userFieldStyleComboBox.removeItemListener(this);
+                userFieldCheckBoxStateComboBox.removeItemListener(this);
+            } else {
+                userFieldStyleComboBox.addItemListener(this);
+                userFieldCheckBoxStateComboBox.addItemListener(this);
+            }
+        }
+    }
+
+    ///////////////////
+    // SearchOptions //
+    ///////////////////
+
+    /**
+     * @param withHistory if <code>true</code> the fields that store the
+     *            history of the {@link HistoryComboBox}es will be filled too
+     * @return the SearchOptions object that represent the current state of
+     *         all gui input fields
+     */
+    public SearchOptions getSearchOptions(final boolean withHistory) {
         SearchOptions searchOptions = new SearchOptions();
-        String inputStringName = elementName.getText();
-        boolean caseSensitiveName = checkNameCaseSensitive.isSelected();
-        searchOptions.setInputStringName(inputStringName, caseSensitiveName);
-        String inputStringDescription = elementDescription.getText();
-        boolean caseSensitiveDescription = checkDescriptionCaseSensitive.isSelected();
-        searchOptions.setInputStringDescription(inputStringDescription, caseSensitiveDescription);
-        String inputUserField = elementUserField.getText();
-        boolean caseSensitiveuserField = checkUserFieldCaseSensitive.isSelected();
-        searchOptions.setInputStringUserFields(inputUserField, caseSensitiveuserField);
+        searchOptions.inputStringName = elementName.getText();
+        searchOptions.caseSensitiveName = checkNameCaseSensitive.isSelected();
+
+        searchOptions.inputStringDescription = elementDescription.getText();
+        searchOptions.caseSensitiveDescription = checkDescriptionCaseSensitive.isSelected();
+
+        searchOptions.inputStringUserFields = elementUserField.getText();
+        searchOptions.caseSensitiveUserFields = checkUserFieldCaseSensitive.isSelected();
 
         Object selectedElementClass = elementClassBox.getSelectedObject();
         searchOptions.searchedElementType = selectedElementClass instanceof Class<?> ? ((Class<?>) selectedElementClass).asSubclass(ModelElement.class) : ModelElement.class;
@@ -373,32 +411,33 @@ public abstract class BasicSearchOptionsPanel extends JPanel implements ItemList
 
         searchOptions.userFieldCheckBoxState = userFieldCheckBoxState;
 
+        if (withHistory) {
+            searchOptions.inputHistoryName = elementName.getHistory();
+            searchOptions.inputHistoryDescription = elementDescription.getHistory();
+            searchOptions.inputHistoryUserFields = elementUserField.getHistory();
+        }
+
         return searchOptions;
     }
 
     /**
      * @param searchOptions
      */
-    public void setSearchOptions(final SearchOptions searchOptions) {
-        //        String inputStringName = searchOptions.getInputStringName();
-        //        elementName.setSelectedItem(inputStringName);
-        //        String inputStringDescription = searchOptions.getInputStringDescription();
-        //        elementDescription.setSelectedItem(inputStringDescription);
-        //        String inputStringUserFields = searchOptions.getInputStringUserFields();
-        //        elementUserField.setSelectedItem(inputStringUserFields);
-        boolean caseSensitiveName = searchOptions.isCaseSensitiveName();
-        checkNameCaseSensitive.setSelected(caseSensitiveName);
-        boolean caseSensitiveDescription = searchOptions.isCaseSensitiveDescription();
-        checkDescriptionCaseSensitive.setSelected(caseSensitiveDescription);
-        boolean caseSensitiveUserFields = searchOptions.isCaseSensitiveUserFields();
-        checkUserFieldCaseSensitive.setSelected(caseSensitiveUserFields);
-
+    public void restoreSearchOptions(final SearchOptions searchOptions) {
+        //we have to remove the listeners to prevent updates/Nullpointer
+        //during the restore process
+        removeComboboxListeners();
+        checkNameCaseSensitive.setSelected(searchOptions.caseSensitiveName);
+        checkDescriptionCaseSensitive.setSelected(searchOptions.caseSensitiveDescription);
+        checkUserFieldCaseSensitive.setSelected(searchOptions.caseSensitiveUserFields);
         elementClassBox.setSelectedItem(searchOptions.searchedElementType);
-
         userFieldStyleComboBox.setSelectedItem(searchOptions.userFieldStyle);
-
         userFieldCheckBoxStateComboBox.setSelectedItem(searchOptions.userFieldCheckBoxState);
-
+        elementName.setHistory(searchOptions.inputHistoryName);
+        elementDescription.setHistory(searchOptions.inputHistoryDescription);
+        elementUserField.setHistory(searchOptions.inputHistoryUserFields);
+        //readd the listeners to the comboboxes
+        addComboboxListeners();
     }
 
 }
