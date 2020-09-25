@@ -5,7 +5,9 @@ import static de.imise.tool3lgm.Tool3lgmConstants.getResString;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.border.Border;
 import javax.swing.event.AncestorEvent;
 import javax.swing.event.AncestorListener;
 
@@ -21,7 +23,7 @@ import de.imise.tool3lgm.graphtools.view.template.TemplateBrowserTree;
 public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
 
     /**  */
-    private final JButton expandOptions;
+    private final JButton expandButton;
 
     /** stores information if the panel has been expanded or not */
     private static boolean expanded;
@@ -38,7 +40,7 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     public TemplateTreeSearchOptionsPanel(final TemplateBrowserTree tree) {
         super(tree, new GridBagLayout());
         expanded = false;
-        expandOptions = new JButton(">>");
+        expandButton = new JButton("|");
         GridBagConstraints constraints = new GridBagConstraints();
 
         constraints.gridy = 0;
@@ -53,9 +55,9 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
 
         constraints.gridx = 4;
         constraints.weightx = 0;
-        add(expandOptions, constraints);
-        //        add(filterOptionPanel, constraints);
-        expandOptions.addActionListener(arg0 -> showFullPanel(expanded));
+        constraints.ipadx = -10; //Causes the button to display only 3 points
+        add(expandButton, constraints);
+        expandButton.addActionListener(arg0 -> showFullPanel(expanded));
 
         addListenerToRestoreSearchOptions();
     }
@@ -103,25 +105,54 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
     }
 
     /**
+     * @param constraints
+     * @param insets
+     */
+    private static void setLefRightInsets(final GridBagConstraints constraints, final int insets) {
+        constraints.insets.left = insets;
+        constraints.insets.right = insets;
+    }
+
+    /**
+     * @param constraints
+     * @param top
+     * @param bottom
+     */
+    private static void setTopBottomInsest(final GridBagConstraints constraints, final int top, final int bottom) {
+        constraints.insets.top = top;
+        constraints.insets.bottom = bottom;
+    }
+
+    /**
      * expands the panel with more filter options
      */
     protected void showFullPanel() {
         GridBagConstraints constraints = new GridBagConstraints();
 
+        int labelInsets = 5;
+        int checkboxBottomInsets = 7;
+        int checkboxTopInsets = -3;
+
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.gridx = 1;
         constraints.gridy = 0;
         constraints.weightx = 0;
+        setLefRightInsets(constraints, labelInsets);
         add(labelName, constraints);
+        setLefRightInsets(constraints, 0);
 
         constraints.gridx = 2;
         constraints.gridy++;
+        setTopBottomInsest(constraints, checkboxTopInsets, checkboxBottomInsets);
         add(checkNameCaseSensitive, constraints);
+        setTopBottomInsest(constraints, 0, 0);
 
         constraints.gridx = 1;
         constraints.gridy++;
         constraints.weightx = 0;
+        setLefRightInsets(constraints, labelInsets);
         add(labelDescription, constraints);
+        setLefRightInsets(constraints, 0);
 
         constraints.gridx = 2;
         constraints.weightx = 1;
@@ -130,16 +161,23 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
         constraints.gridx = 2;
         constraints.gridy++;
         constraints.weightx = 0;
+        setTopBottomInsest(constraints, checkboxTopInsets, checkboxBottomInsets);
         add(checkDescriptionCaseSensitive, constraints);
+        setTopBottomInsest(constraints, 0, 0);
 
         constraints.gridx = 1;
         constraints.gridy++;
         constraints.weightx = 0;
+        setLefRightInsets(constraints, labelInsets);
         add(labelElementType, constraints);
+        setLefRightInsets(constraints, 0);
 
         constraints.gridx = 2;
         constraints.weightx = 1;
         add(elementClassBox, constraints);
+
+        Border emptyBorder = BorderFactory.createEmptyBorder(0, 0, 8, 0);
+        setBorder(emptyBorder);
 
         expanded = true;
     }
@@ -155,6 +193,9 @@ public class TemplateTreeSearchOptionsPanel extends BasicSearchOptionsPanel {
         remove(checkDescriptionCaseSensitive);
         remove(labelElementType);
         remove(elementClassBox);
+
+        Border emptyBorder = BorderFactory.createEmptyBorder();
+        setBorder(emptyBorder);
 
         expanded = false;
     }
